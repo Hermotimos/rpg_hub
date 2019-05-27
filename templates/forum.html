@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Narady</h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Temat</th>
+                <th>Narady</th>
+                <th>Wypowiedzi</th>
+                <th>Ostatnia wypowiedź</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for board in boards %}
+            <tr>
+                <td>
+                    {{ board.name }}
+                    <br>
+                    <small style="color: #888">{{ board.description }}</small>
+                </td>
+                <td>0</td>
+                <td>0</td>
+                <td>...</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+
+
+
+{% endblock content %}
