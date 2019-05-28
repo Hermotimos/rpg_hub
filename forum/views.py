@@ -3,8 +3,9 @@ from .models import Board, Topic, Post
 
 
 def forum_view(request):
-    boards = Board.objects.all()
     title = 'Narady'
+    boards = Board.objects.all()
+
     context = {
         'boards': boards,
         'title': title
@@ -14,8 +15,11 @@ def forum_view(request):
 
 def board_view(request, board_id):
     board = Board.objects.get(id=board_id)
+    title = board.name
+
     topics = board.topics.all()
     context = {
+        'title': title,
         'board': board,
         'topics': topics,
     }
