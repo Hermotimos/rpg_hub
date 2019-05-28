@@ -14,7 +14,7 @@ def forum_view(request):
 
 def board_view(request, board_id):
     board = Board.objects.get(id=board_id)
-    topics = Topic.objects.all()
+    topics = board.topics.all()
     context = {
         'board': board,
         'topics': topics,

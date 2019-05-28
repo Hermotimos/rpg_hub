@@ -7,8 +7,9 @@
     <table border="1">
         <thead>
             <tr>
-                <th>Tytuły narad</th>
-                <th>Licznik wypowiedzi dla danej narady</th>
+                <th>Tytuł narady</th>
+                <th>Inicjator</th>
+                <th>Głosy w naradzie</th>
                 <th>Ostatnia wypowiedź</th>
             </tr>
         </thead>
@@ -19,11 +20,11 @@
                 <td>
                     {{ topic.topic_name }}
                     <br>
-                    <small style="color: #888">{{ board.description }}</small>
                 </td>
-                <td>0</td>
+                <td>...</td>
                 <td>0</td>
                 <td>...</td>
+
             </tr>
 <!--        {% endfor %}-->
         </tbody>
