@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Narady</h1>
+    <h1>Wieczorne narady</h1><br>
 
     <table border="1">
         <thead>
@@ -17,7 +17,7 @@
         {% for board in boards %}
             <tr>
                 <td>
-                    {{ board.name }}
+                    <a href="/forum/board/{{ board.id }}">{{ board.name }}</a>
                     <br>
                     <small style="color: #888">{{ board.description }}</small>
                 </td>
