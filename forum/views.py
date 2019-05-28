@@ -13,9 +13,9 @@ def forum_view(request):
     return render(request, 'forum.html', context)
 
 
-def board_topics_view(request, board_id):
-    board = Board.objects.get(id=board_id)
-    title = board.name
+def board_topics_view(request, slug):
+    board = Board.objects.get(slug=slug)
+    title = board.title
 
     topics = board.topics.all()
     context = {

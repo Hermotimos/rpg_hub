@@ -17,11 +17,11 @@
         {% for board in boards %}
             <tr>
                 <td>
-                    <a href="/forum/board/{{ board.id }}">{{ board.name }}</a>
+                    <a href="/forum/{{ board.slug }}/">{{ board.title }}</a>
                     <br>
                     <small style="color: #888">{{ board.description }}</small>
                 </td>
-                <td>0</td>
+                <td>{{ board.topics.aggregate }}</td>
                 <td>0</td>
                 <td>...</td>
             </tr>
