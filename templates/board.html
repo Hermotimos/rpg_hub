@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ board.name }}</h1><br>
+    <h4>{{ board.description }}</h4><br>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Tytuły narad</th>
+                <th>Licznik wypowiedzi dla danej narady</th>
+                <th>Ostatnia wypowiedź</th>
+            </tr>
+        </thead>
+
+        <tbody>
+<!--        {% for topic in topics %}-->
+            <tr>
+                <td>
+                    {{ topic.topic_name }}
+                    <br>
+                    <small style="color: #888">{{ board.description }}</small>
+                </td>
+                <td>0</td>
+                <td>0</td>
+                <td>...</td>
+            </tr>
+<!--        {% endfor %}-->
+        </tbody>
+    </table>
+
+{% endblock content %}
