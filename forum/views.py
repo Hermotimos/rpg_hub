@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import Board
 
 
-def boards_view(request):
+def forum_view(request):
     boards = Board.objects.all()
     title = 'Narady'
     context = {
