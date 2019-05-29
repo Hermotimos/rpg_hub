@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render
 from .models import Board, Topic, Post
 
@@ -10,7 +11,7 @@ def forum_view(request):
         'boards': boards,
         'title': title
     }
-    return render(request, 'forum.html', context)
+    return render(request, 'forum/forum.html', context)
 
 
 def board_topics_view(request, slug):
@@ -23,4 +24,4 @@ def board_topics_view(request, slug):
         'board': board,
         'topics': topics,
     }
-    return render(request, 'board.html', context)
+    return render(request, 'forum/board.html', context)
