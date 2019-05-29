@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+<!-- load dict_lookup from custom_filters.py in forum/templatetags -->
+{% load custom_filters %}
 
 {% block content %}
     <h1>Wieczorne narady</h1><br>
@@ -22,7 +24,7 @@
                     <small style="color: #888">{{ board.description }}</small>
                 </td>
                 <td>{{ board.topics.count }}</td>
-                <td>0</td>
+                <td>{{ boards_with_posts_sum|dict_lookup:board.title }}</td>
                 <td>...</td>
             </tr>
         {% endfor %}
