@@ -1,5 +1,6 @@
 from django.http import Http404
 from django.shortcuts import render
+from django.db.models import Max
 from .models import Board, Topic, Post
 
 
@@ -12,12 +13,17 @@ def forum_view(request):
         posts_sum = 0
         for topic in board.topics.all():
             posts_sum += topic.posts.all().count()
-        boards_with_posts_sum[board.title] = posts_sum
+        boards_with_posts_sum[board] = posts_sum
+
+    boards_with_last_updated = {}
+    for board in boards:
+        boards_with_last_updated[board] = board.topics.all().aggregate(Max('last_updated'))['last_updated__max']
 
     context = {
         'boards': boards,
         'title': title,
         'boards_with_posts_sum': boards_with_posts_sum,
+        'boards_with_last_updated': boards_with_last_updated
     }
     return render(request, 'forum/forum.html', context)
 

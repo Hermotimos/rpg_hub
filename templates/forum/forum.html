@@ -24,8 +24,8 @@
                     <small style="color: #888">{{ board.description }}</small>
                 </td>
                 <td>{{ board.topics.count }}</td>
-                <td>{{ boards_with_posts_sum|dict_lookup:board.title }}</td>
-                <td>...</td>
+                <td>{{ boards_with_posts_sum|dict_lookup:board }}</td>
+                <td>{{ boards_with_last_updated|dict_lookup:board|date:'d-M-Y, H:i' }}</td>
             </tr>
         {% endfor %}
         </tbody>
