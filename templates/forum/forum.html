@@ -17,7 +17,7 @@
         {% for board in boards %}
             <tr>
                 <td>
-                    <a href="/forum/{{ board.slug }}/">{{ board.title }}</a>
+                    <a href="{% url 'board' board.slug %}">{{ board.title }}</a>
                     <br>
                     <small style="color: #888">{{ board.description }}</small>
                 </td>
