@@ -15,10 +15,14 @@ def forum_view(request):
 
 
 def board_topics_view(request, slug):
-    board = Board.objects.get(slug=slug)
-    title = board.title
+    try:
+        board = Board.objects.get(slug=slug)
+    except Board.DoesNotExist:
+        raise Http404('Temat nie istnieje')
 
+    title = board.title
     topics = board.topics.all()
+
     context = {
         'title': title,
         'board': board,
