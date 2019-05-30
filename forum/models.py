@@ -23,7 +23,8 @@ class Board(models.Model):
 
 
 class Topic(models.Model):
-    topic_name = models.CharField(max_length=255, unique=True)
+    topic_name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=50, unique=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
     board = models.ForeignKey(Board, related_name='topics', on_delete=models.CASCADE)
@@ -31,6 +32,15 @@ class Topic(models.Model):
 
     def __str__(self):
         return self.topic_name
+
+    def _get_unique_slug(self):
+        slug = slugify(self.topic_name)
+        return slug
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = self._get_unique_slug()
+        super().save(*args, *kwargs)
 
 
 class Post(models.Model):
