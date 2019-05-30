@@ -6,7 +6,6 @@ from datetime import datetime, timezone
 
 
 def forum_view(request):
-    title = 'Wieczorne narady'
     boards = Board.objects.all()
     posts = Post.objects.all()
 
@@ -43,7 +42,7 @@ def forum_view(request):
         boards_with_last_active_user[board] = last_active_user
 
     context = {
-        'title': title,
+        'page_title': 'Wieczorne narady',
         'boards': boards,
         'boards_with_posts_sum': boards_with_posts_sum,
         'boards_with_created_date': boards_with_created_date,
@@ -59,13 +58,10 @@ def board_topics_view(request, slug):
     except Board.DoesNotExist:
         raise Http404('Temat nie istnieje')
 
-    title = board.title
-    topics = board.topics.all()
-
     context = {
-        'title': title,
+        'page_title': board.title,
         'board': board,
-        'topics': topics,
+        'topics': board.topics.all(),
     }
     return render(request, 'forum/board.html', context)
 
@@ -76,13 +72,10 @@ def topic_posts_view(request, topic_name):
     except Topic.DoesNotExist:
         raise Http404('Taka narada nie istnieje')
 
-    title = topic.topic.name
-    posts = topic.posts.all()
-
     context = {
-        'title': title,
+        'page_title': topic.topic.name,
         'topic': topic,
-        'posts': posts
+        'posts': topic.posts.all()
 
     }
     return render(request, 'forum/topic.html', context)
