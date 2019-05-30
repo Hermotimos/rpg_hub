@@ -66,14 +66,14 @@ def board_topics_view(request, slug):
     return render(request, 'forum/board.html', context)
 
 
-def topic_posts_view(request, topic_name):
+def topic_posts_view(request, id):
     try:
-        topic = Topic.objects.get(topic_name=topic_name)
+        topic = Topic.objects.get(id=id)
     except Topic.DoesNotExist:
         raise Http404('Taka narada nie istnieje')
 
     context = {
-        'page_title': topic.topic.name,
+        'page_title': topic.topic_name,
         'topic': topic,
         'posts': topic.posts.all()
 

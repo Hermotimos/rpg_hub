@@ -25,7 +25,7 @@
         {% for topic in topics %}
             <tr>
                 <td>
-                    <a href="#">{{ topic.topic_name }}</a>
+                    <a href="{% url 'topic' topic.id %}">{{ topic.topic_name }}</a>
                     <br>
                 </td>
                 <td>...</td>

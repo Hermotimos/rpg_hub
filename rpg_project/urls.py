@@ -23,5 +23,5 @@ urlpatterns = [
     path('', home_view, name='home'),
     path('forum/', forum_view, name='forum'),
     path('forum/<slug:slug>/', board_topics_view, name='board'),
-    # path('forum/<slug:slug>/<slug:slug>/', topic_posts_view, name='topic')
+    path('forum//<int:id>/', topic_posts_view, name='topic')
 ]
