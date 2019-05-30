@@ -3,11 +3,17 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 
 
+STATUS = (
+    (0, 'Awaiting'),
+    (1, 'Approved')
+)
+
+
 class Board(models.Model):
     title = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(max_length=50, unique=True, blank=True)
     description = models.CharField(max_length=100)
-    # allowed_users = TODO ??????????????
+    # publish_status = models.IntegerField(choices=STATUS, default=0)
 
     def __str__(self):
         return self.title
