@@ -2,42 +2,51 @@
 <!-- load dict_lookup from custom_filters.py in forum/templatetags -->
 {% load custom_filters %}
 
-{% block breadcrumb %}
-  <li class="breadcrumb-item active">Wieczorne narady</li>
-{% endblock %}
+<!--{% block breadcrumb %}-->
+<!--  <li class="breadcrumb-item active">Wieczorne narady</li>-->
+<!--{% endblock %}-->
 
 {% block content %}
     <h1>Wieczorne narady</h1><br>
 
+    {% for board in boards %}
+    <h4>{{ board.title }}</h4>
+    <small style="color: #888">{{ board.description }}</small>
+    <br><br>
+
     <table border="1">
         <thead>
             <tr>
-                <th>Temat</th>
-                <th>Ilość narad</th>
-                <th>Ilość wypowiedzi</th>
-                <th>Pierwsza narada</th>
-                <th>Ostatni głos</th>
+                <th>Narada</th>
+                <th>Inicjator</th>
+                <th>Głosy w naradzie</th>
+                <th>Uczestnicy</th>
+                <th>Ostatnie słowo</th>
             </tr>
         </thead>
 
+
         <tbody>
-        {% for board in boards %}
+            {% for topic in board.topics.filter %}
             <tr>
                 <td>
-                    <a href="{% url 'board' board.slug %}">{{ board.title }}</a>
-                    <br>
-                    <small style="color: #888">{{ board.description }}</small>
+                    <h5>{{ topic.topic_name }}</h5>
                 </td>
-                <td>{{ board.topics.count }}</td>
-                <td>{{ boards_with_posts_sum|dict_lookup:board }}</td>
-                <td>{{ boards_with_created_date|dict_lookup:board|date:'d-M-Y' }}</td>
-<!--                todo add user name for last activity-->
                 <td>
-                    {{ boards_with_last_post_date|dict_lookup:board|date:'d-M-Y, H:i' }}
-                    {{ boards_with_last_active_user|dict_lookup:board }}
+                    {{ topic.starter }}<br>
+                    <small style="color: #888">{{ topic.created_date|date:'d-M-Y' }}</small>
+                </td>
+
+                <td>{{ topic.posts.count }}</td>
+                <td>{{ topics_with_participants|dict_lookup:topic }}</td>
+                <td>
+                    {{ topics_with_last_active_user|dict_lookup:topic }}<br>
+                    <small style="color: #888">{{ topics_with_last_post_date|dict_lookup:topic|date:'d-M-Y' }}</small>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+    <br><br>
+    {% endfor %}
 {% endblock content %}
