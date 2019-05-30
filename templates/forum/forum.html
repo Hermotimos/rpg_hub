@@ -15,7 +15,8 @@
                 <th>Temat</th>
                 <th>Ilość narad</th>
                 <th>Ilość wypowiedzi</th>
-                <th>Ostatnia aktywność</th>
+                <th>Pierwsza narada</th>
+                <th>Ostatni głos</th>
             </tr>
         </thead>
 
@@ -31,6 +32,7 @@
                 <td>{{ boards_with_posts_sum|dict_lookup:board }}</td>
                 <td>{{ boards_with_last_updated|dict_lookup:board|date:'d-M-Y, H:i' }}</td>
 <!--                todo add user name for last activity-->
+                <td></td>
             </tr>
         {% endfor %}
         </tbody>
