@@ -18,6 +18,7 @@
 </head>
 
 <body>
+    <!--  HEADER  -->
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
@@ -27,7 +28,7 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="{% url 'forum' %}">Narady</a>
+              <a class="nav-item nav-link" href="{% url 'forum' %}">Wieczorne narady</a>
               <a class="nav-item nav-link" href="#">Cośss</a>
             </div>
             <!-- Navbar Right Side -->
@@ -40,6 +41,15 @@
       </nav>
     </header>
 
+    <!--  BREADCRUMBS  -->
+    <div class="container">
+      <ol class="breadcrumb my-4">
+        {% block breadcrumb %}
+        {% endblock %}
+      </ol>
+    </div>
+
+    <!--  NAVIGATION BAR  -->
     <main role="main" class="container">
       <div class="row">
         <div class="col-md-8">
