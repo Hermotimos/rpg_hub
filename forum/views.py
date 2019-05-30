@@ -1,6 +1,6 @@
 from django.http import Http404
 from django.shortcuts import render
-from django.db.models import Max
+from django.db.models import Max, Sum
 from .models import Board, Topic, Post
 
 
@@ -10,10 +10,8 @@ def forum_view(request):
 
     boards_with_posts_sum = {}
     for board in boards:
-        posts_sum = 0
-        for topic in board.topics.all():
-            posts_sum += topic.posts.all().count()
-        boards_with_posts_sum[board] = posts_sum
+        boards_with_posts_sum[board] = int(0 if board.topics.all().aggregate(Sum('id'))['id__sum'] is None
+                                           else board.topics.all().aggregate(Sum('id'))['id__sum'])
 
     boards_with_last_updated = {}
     for board in boards:
