@@ -30,9 +30,9 @@
                 </td>
                 <td>{{ board.topics.count }}</td>
                 <td>{{ boards_with_posts_sum|dict_lookup:board }}</td>
-                <td>{{ boards_with_last_updated|dict_lookup:board|date:'d-M-Y, H:i' }}</td>
+                <td>{{ boards_with_created_date|dict_lookup:board|date:'d-M-Y' }}</td>
 <!--                todo add user name for last activity-->
-                <td></td>
+                <td>{{ boards_with_updated_date|dict_lookup:board|date:'d-M-Y, H:i' }}</td>
             </tr>
         {% endfor %}
         </tbody>
