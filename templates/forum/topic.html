@@ -8,5 +8,24 @@
 
 
 {% block content %}
-  <p> tu coś będzie </p>
+  <h1>{{ page_title }}</h1><br>
+  {% for post in topic_posts %}
+  <table border="1">
+    <thead>
+      <tr>
+        <td>
+          {{ post.author }}<br>
+          {{ post.rpg_time }}<br>
+          <small style="color: #888">{{ post.date_posted|date:'d-M-Y' }}</small>
+        </td>
+        <td>
+          {{ post.text }}
+        </td>
+
+      </tr>
+
+    </thead>
+  </table>
+  <br>
+  {% endfor %}
 {% endblock content %}

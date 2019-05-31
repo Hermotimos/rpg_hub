@@ -45,6 +45,6 @@ def posts_in_topic_view(request, topic_slug):
     context = {
         'page_title': topic.topic_name,
         'topic': topic,
-        'posts': topic.posts.all()
+        'topic_posts': topic.posts.all()
     }
     return render(request, 'forum/topic.html', context)
