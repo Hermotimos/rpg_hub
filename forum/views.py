@@ -36,30 +36,15 @@ def forum_view(request):
     return render(request, 'forum/forum.html', context)
 
 
-# def board_topics_view(request, slug):
-#     try:
-#         board = Board.objects.get(slug=slug)
-#     except Board.DoesNotExist:
-#         raise Http404('Temat nie istnieje')
-#
-#     context = {
-#         'page_title': board.title,
-#         'board': board,
-#         'topics': board.topics.all(),
-#     }
-#     return render(request, 'forum/board.html', context)
-#
-#
-# def topic_posts_view(request, id):
-#     try:
-#         topic = Topic.objects.get(id=id)
-#     except Topic.DoesNotExist:
-#         raise Http404('Taka narada nie istnieje')
-#
-#     context = {
-#         'page_title': topic.topic_name,
-#         'topic': topic,
-#         'posts': topic.posts.all()
-#
-#     }
-#     return render(request, 'forum/topic.html', context)
+def posts_in_topic_view(request, topic_slug):
+    try:
+        topic = Topic.objects.get(slug=topic_slug)
+    except Topic.DoesNotExist:
+        raise Http404('Taka narada nie istnieje')
+
+    context = {
+        'page_title': topic.topic_name,
+        'topic': topic,
+        'posts': topic.posts.all()
+    }
+    return render(request, 'forum/topic.html', context)

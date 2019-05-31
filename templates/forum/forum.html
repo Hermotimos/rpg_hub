@@ -19,7 +19,7 @@
             <tr>
                 <th>Narada</th>
                 <th>Inicjator</th>
-                <th>Głosy w naradzie</th>
+                <th>Wypowiedzi</th>
                 <th>Uczestnicy</th>
                 <th>Ostatnie słowo</th>
             </tr>
@@ -30,7 +30,7 @@
             {% for topic in board.topics.filter %}
             <tr>
                 <td>
-                    <h5>{{ topic.topic_name }}</h5>
+                    <a href="{% url 'topic' topic.slug %}">{{ topic.topic_name }}</a>
                 </td>
                 <td>
                     {{ topic.starter }}<br>
