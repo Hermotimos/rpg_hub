@@ -1,5 +1,4 @@
-from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.db.models import Max, Min, Sum
 from .models import Board, Topic, Post
 
@@ -9,10 +8,10 @@ def forum_view(request):
     topics = Topic.objects.all()
     posts = Post.objects.all()
 
-    topics_with_last_post_date = {}
-    for topic in topics:
-        topics_with_last_post_date[topic] = topic.posts.all().aggregate(Max('date_posted'))['date_posted__max']
-
+    # with dict comprehension
+    topics_with_last_post_date = {topic: topic.posts.all().aggregate(Max('date_posted'))['date_posted__max']
+                                  for topic in topics}
+    # with for loop
     topics_with_last_active_user = {}
     for topic in topics:
         last_post = topic.posts.filter(date_posted=topics_with_last_post_date[topic])
@@ -37,10 +36,7 @@ def forum_view(request):
 
 
 def posts_in_topic_view(request, topic_slug):
-    try:
-        topic = Topic.objects.get(slug=topic_slug)
-    except Topic.DoesNotExist:
-        raise Http404('Taka narada nie istnieje')
+    topic = get_object_or_404(Topic, slug=topic_slug)
 
     context = {
         'page_title': topic.topic_name,
