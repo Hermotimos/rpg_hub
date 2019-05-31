@@ -22,8 +22,8 @@ def forum_view(request):
     for topic in topics:
         participants = ''
         for post in posts:
-            if post.topic == topic:
-                participants += str(post.author.username) + '\n'
+            if post.topic == topic and str(post.author.username) not in participants:
+                participants += str(post.author.username) + ' '
         topics_with_participants[topic] = participants
 
     context = {
