@@ -1,12 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from multiselectfield import MultiSelectField       # pip install django-multiselectfield
 
 
 STATUS = (
     (0, 'Awaiting'),
     (1, 'Approved')
 )
+
+USERS = [(user.username, user.username) for user in User.objects.all()]
 
 
 class Board(models.Model):
@@ -35,6 +38,7 @@ class Topic(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
     board = models.ForeignKey(Board, related_name='topics', on_delete=models.CASCADE)
     starter = models.ForeignKey(User, related_name='topics', on_delete=models.CASCADE)
+    allowed_users = MultiSelectField(max_length=10, choices=USERS)
 
     def __str__(self):
         return self.topic_name
