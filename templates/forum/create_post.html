@@ -5,8 +5,9 @@
 <!--{% endblock %}-->
 
 {% block content %}
-    <form method="POST">{% csrf_token %}
-        {{ post.as_ul }}
+    <form method="POST">
+        {% csrf_token %}
+        {{ post.as_p }}
         <input type="submit" value="Save"/>
     </form>
 {% endblock content %}
