@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+<!--{% block breadcrumb %}-->
+<!--  <li class="breadcrumb-item active">Wieczorne narady</li>-->
+<!--{% endblock %}-->
+
+{% block content %}
+    <form method="POST">{% csrf_token %}
+        {{ post.as_ul }}
+        <input type="submit" value="Save"/>
+    </form>
+{% endblock content %}
