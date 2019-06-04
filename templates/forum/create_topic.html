@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+<!--{% block breadcrumb %}-->
+<!--  <li class="breadcrumb-item active">Wieczorne narady</li>-->
+<!--{% endblock %}-->
+
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ topic.as_p }}
+
+        <input type="submit" value="Save"/>
+
+    </form>
+{% endblock content %}
+
+<!-- TODO this can't be done with forms because MultiSelectField -->

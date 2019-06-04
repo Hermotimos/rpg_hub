@@ -1,6 +1,7 @@
 from django import forms
 
-from .models import Post, Topic
+from .models import Post, Topic, Board
+from multiselectfield import MultiSelectField
 
 
 class CreatePostForm(forms.ModelForm):
@@ -46,3 +47,30 @@ class CreatePostForm(forms.ModelForm):
         return data
         # This does not work at all. The overriden error message does not show.
         # Couldn't find answer why.
+
+
+class CreateTopicForm(forms.ModelForm):
+    class Meta:
+        model = Topic
+        fields = [
+            'board',
+            'topic_name',
+            'allowed_users'
+        ]
+
+    board = forms.ModelChoiceField(
+        label='Wybierz temat narady:',
+        queryset=Board.objects.all()
+    )
+
+    topic_name = forms.CharField(
+        max_length=100,
+        label='',
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Tytuł narady',
+                'size': '60'
+            }
+        )
+    )
+

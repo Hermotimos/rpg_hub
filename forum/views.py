@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Max, Min, Sum
 from .models import Board, Topic, Post
-from .forms import CreatePostForm
+from .forms import CreatePostForm, CreateTopicForm
 
 
 def forum_view(request):
@@ -52,9 +52,22 @@ def create_post_view(request):
     # post = CreatePostForm(request.POST or None)       # needs way to set author=authenticated user
     if post.is_valid():
         post.save()
-        post = CreatePostForm
+        post = CreatePostForm()
 
     context = {
         'post': post
     }
     return render(request, 'forum/create_post.html', context)
+
+
+def create_topic_view(request):
+    topic = CreateTopicForm()
+    # topic = CreateTopicForm(request.POST or None)       # needs way to set author=authenticated user
+    if topic.is_valid():
+        topic.save()
+        topic = CreateTopicForm()
+
+    context = {
+        'topic': topic
+    }
+    return render(request, 'forum/create_topic.html', context)
