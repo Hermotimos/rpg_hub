@@ -16,12 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from home.views import home_view
-from forum.views import forum_view, posts_in_topic_view, create_post_view
+from forum.views import forum_view, posts_in_topic_view, create_post_view, create_topic_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home'),
     path('forum/', forum_view, name='forum'),
     path('forum/<slug:topic_slug>/', posts_in_topic_view, name='topic'),
-    path('forum/create_post', create_post_view, name='create_post')
+    path('forum/create_post', create_post_view, name='create_post'),
+    path('forum/create_topic', create_topic_view, name='create_topic')
 ]
