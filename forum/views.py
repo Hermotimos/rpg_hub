@@ -48,7 +48,7 @@ def posts_in_topic_view(request, topic_slug):
 
 
 def create_post_view(request):
-    post = CreatePostForm()
+    post = CreatePostForm()     # equals to: post = CreatePostForm(request.GET)  ==> because GET is the default method
     # post = CreatePostForm(request.POST or None)       # needs way to set author=authenticated user
     if post.is_valid():
         post.save()
