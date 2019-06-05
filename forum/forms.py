@@ -24,7 +24,7 @@ class CreatePostForm(forms.ModelForm):
         widget=forms.Textarea(
             attrs={
                 'placeholder': 'Głos w naradzie',
-                'rows': 30,
+                'rows': 20,
                 'cols': 70
             }
         )
