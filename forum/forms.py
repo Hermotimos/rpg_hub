@@ -1,7 +1,6 @@
 from django import forms
 
 from .models import Post, Topic, Board
-from multiselectfield import MultiSelectField
 
 
 class CreatePostForm(forms.ModelForm):
@@ -16,7 +15,6 @@ class CreatePostForm(forms.ModelForm):
     topic = forms.ModelChoiceField(
         label='Wybierz tytuł narady',
         queryset=Topic.objects.all(),
-        # initial='-'
     )
 
     text = forms.CharField(
@@ -40,13 +38,13 @@ class CreatePostForm(forms.ModelForm):
         )
     )
 
-    def clean_rpg_time(self):
-        data = self.cleaned_data
-        if not data.get['rpg_time']:
-            raise forms.ValidationError('Wybierz temat narady, w której chcesz zabrać głos:')
-        return data
-        # This does not work at all. The overriden error message does not show.
-        # Couldn't find answer why.
+    # def clean_rpg_time(self):
+    #     data = self.cleaned_data
+    #     if not data.get['rpg_time']:
+    #         raise forms.ValidationError('Wybierz temat narady, w której chcesz zabrać głos:')
+    #     return data
+    # This does not work at all. The overriden error message does not show.
+    # Couldn't find answer why.
 
 
 class CreateTopicForm(forms.ModelForm):
@@ -74,9 +72,10 @@ class CreateTopicForm(forms.ModelForm):
         max_length=4000,
         widget=forms.Textarea(
             attrs={
-                'placeholder': 'Głos w naradzie',
+                'placeholder': 'Pierwszy głos w naradzie',
                 'rows': 20,
                 'cols': 70
             }
         )
     )
+
