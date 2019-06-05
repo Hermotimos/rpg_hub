@@ -26,7 +26,7 @@
             {% for topic in board.topics.filter %}
             <tr>
                 <td>
-                    <a href="{% url 'topic' topic.slug %}">{{ topic.topic_name }}</a>
+                    <a href="{% url 'topic' board.slug topic.slug %}">{{ topic.topic_name }}</a>
                 </td>
                 <td>
                     {{ topic.starter }}<br>
