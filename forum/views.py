@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Max, Min, Sum
 from .models import Board, Topic, Post, User
 from .forms import CreatePostForm, CreateTopicForm
@@ -36,12 +36,14 @@ def forum_view(request):
     return render(request, 'forum/forum.html', context)
 
 
-def posts_in_topic_view(request, topic_slug):
+def posts_in_topic_view(request, board_slug, topic_slug):
+    board = get_object_or_404(Board, slug=board_slug)
     topic = get_object_or_404(Topic, slug=topic_slug)
 
     context = {
-        'page_title': topic.topic_name,
+        'board': board,
         'topic': topic,
+        'page_title': topic.topic_name,
         'topic_posts': topic.posts.all()
     }
     return render(request, 'forum/topic.html', context)
@@ -71,8 +73,18 @@ def create_topic_view(request, board_slug):
             topic.board = board
             topic.starter = logged_user
             topic.save()
-            # topic = CreateTopicForm()
+
+            Post.objects.create(
+                text=form.cleaned_data.get('first_post'),
+                topic=topic,
+                author=logged_user
+            )
+            return redirect('topic', board_slug=board.slug, topic_slug=topic.slug)
     else:
         form = CreateTopicForm()
 
-    return render(request, 'forum/create_topic.html', {'topic': form, 'board': form})
+    context = {
+        'topic': form,
+        'board': form
+    }
+    return render(request, 'forum/create_topic.html', context)

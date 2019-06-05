@@ -54,7 +54,8 @@ class CreateTopicForm(forms.ModelForm):
         model = Topic
         fields = [
             'topic_name',
-            'allowed_users'
+            'allowed_users',
+            'first_post'
         ]
 
     topic_name = forms.CharField(
@@ -68,3 +69,14 @@ class CreateTopicForm(forms.ModelForm):
         )
     )
 
+    first_post = forms.CharField(
+        label='',
+        max_length=4000,
+        widget=forms.Textarea(
+            attrs={
+                'placeholder': 'Głos w naradzie',
+                'rows': 20,
+                'cols': 70
+            }
+        )
+    )
