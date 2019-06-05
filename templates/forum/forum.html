@@ -34,7 +34,7 @@
                 </td>
 
                 <td>{{ topic.posts.count }}</td>
-                <td>{{ topics_with_participants|dict_lookup:topic }}</td>
+                <td>{{ topic.allowed_users }}</td>
                 <td>
                     {{ topics_with_last_active_user|dict_lookup:topic }}<br>
                     <small style="color: #888">{{ topics_with_last_post_date|dict_lookup:topic|date:'d-M-Y' }}</small>
