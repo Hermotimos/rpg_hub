@@ -8,7 +8,8 @@
 
 
 {% block content %}
-  <h1>{{ page_title }}</h1><br>
+  <h1>{{ board }}</h1><br>
+  <h3>Narada: {{ page_title }}</h3><br>
   {% for post in topic_posts %}
   <table border="0">
     <thead>
@@ -28,4 +29,9 @@
   </table>
   <br>
   {% endfor %}
+
+    <div class="mb-4">
+        <a href="{% url 'create_topic' board.slug %}" class="btn btn-primary">Odpowiedz</a>
+    </div>
+
 {% endblock content %}
