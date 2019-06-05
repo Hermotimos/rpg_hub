@@ -23,6 +23,7 @@ urlpatterns = [
     path('', home_view, name='home'),
     path('forum/', forum_view, name='forum'),
     path('forum/<slug:topic_slug>/', posts_in_topic_view, name='topic'),
+    path('forum/<slug:board_slug>/create_topic/', create_topic_view, name='create_topic'),
     path('forum/create_post', create_post_view, name='create_post'),
-    path('forum/create_topic', create_topic_view, name='create_topic')
+
 ]

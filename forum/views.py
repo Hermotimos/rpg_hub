@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Max, Min, Sum
-from .models import Board, Topic, Post
+from .models import Board, Topic, Post, User
 from .forms import CreatePostForm, CreateTopicForm
 
 
@@ -60,14 +60,19 @@ def create_post_view(request):
     return render(request, 'forum/create_post.html', context)
 
 
-def create_topic_view(request):
-    topic = CreateTopicForm()
-    # topic = CreateTopicForm(request.POST or None)       # needs way to set author=authenticated user
-    if topic.is_valid():
-        topic.save()
-        topic = CreateTopicForm()
+def create_topic_view(request, board_slug):
+    board = get_object_or_404(Board, slug=board_slug)
+    logged_user = User.objects.first()                 # TODO get currently logged in user (now it's just first one)
 
-    context = {
-        'topic': topic
-    }
-    return render(request, 'forum/create_topic.html', context)
+    if request.method == 'POST':
+        form = CreateTopicForm(request.POST or None)       # needs way to set author=authenticated user
+        if form.is_valid():
+            topic = form.save(commit=False)
+            topic.board = board
+            topic.starter = logged_user
+            topic.save()
+            # topic = CreateTopicForm()
+    else:
+        form = CreateTopicForm()
+
+    return render(request, 'forum/create_topic.html', {'topic': form, 'board': form})

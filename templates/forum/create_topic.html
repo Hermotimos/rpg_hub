@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<h2>{{ board.title }}</h2><br>
     <form method="POST">
         {% csrf_token %}
         {{ topic.as_p }}
 
-        <input type="submit" value="Zapisz"/>
+        <input type="submit" value="Rozpocznij naradę"/>
 
     </form>
 {% endblock content %}

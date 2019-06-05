@@ -53,15 +53,9 @@ class CreateTopicForm(forms.ModelForm):
     class Meta:
         model = Topic
         fields = [
-            'board',
             'topic_name',
             'allowed_users'
         ]
-
-    board = forms.ModelChoiceField(
-        label='Wybierz temat narady:',
-        queryset=Board.objects.all()
-    )
 
     topic_name = forms.CharField(
         max_length=100,
