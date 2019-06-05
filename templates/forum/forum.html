@@ -23,7 +23,7 @@
 
 
         <tbody>
-            {% for topic in board.topics.filter %}
+            {% for topic in board.topics.all %}
             <tr>
                 <td>
                     <a href="{% url 'topic' board.slug topic.slug %}">{{ topic.topic_name }}</a>
@@ -50,5 +50,3 @@
     <br><br>
     {% endfor %}
 {% endblock content %}
-
-<!---->
