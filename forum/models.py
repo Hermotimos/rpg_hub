@@ -58,7 +58,6 @@ class Post(models.Model):
     topic = models.ForeignKey(Topic, related_name='posts', on_delete=models.CASCADE)
     date_posted = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
-    rpg_time = models.CharField(max_length=100)
 
     def __str__(self):
         return self.text[:30]
