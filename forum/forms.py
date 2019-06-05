@@ -68,7 +68,7 @@ class CreateTopicForm(forms.ModelForm):
         label='',
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'Tytuł narady',
+                'placeholder': 'Tytuł nowej narady',
                 'size': '60'
             }
         )
