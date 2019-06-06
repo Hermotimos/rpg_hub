@@ -29,10 +29,9 @@ def posts_in_topic_view(request, board_slug, topic_slug):
     topic = get_object_or_404(Topic, slug=topic_slug)
 
     context = {
+        'page_title': topic.topic_name,
         'board': board,
         'topic': topic,
-        'page_title': topic.topic_name,
-        'topic_posts_list': topic.posts.all(),
     }
     return render(request, 'forum/topic.html', context)
 
@@ -59,8 +58,9 @@ def create_topic_view(request, board_slug):
         form = CreateTopicForm()
 
     context = {
+        'page_title': 'Nowa narada',
         'topic': form,
-        'board': form
+        'board': board
     }
     return render(request, 'forum/create_topic.html', context)
 
