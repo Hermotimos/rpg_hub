@@ -8,9 +8,8 @@ def forum_view(request):
     boards_list = Board.objects.all()
     topics_list = Topic.objects.all()
 
-    # dict comprehension
     topics_with_last_post_date_dict = {topic: topic.posts.all().aggregate(Max('date_posted'))['date_posted__max']
-                                  for topic in topics_list}
+                                       for topic in topics_list}
     topics_with_last_active_user_dict = {}
     for topic in topics_list:
         last_post = topic.posts.filter(date_posted=topics_with_last_post_date_dict[topic])
