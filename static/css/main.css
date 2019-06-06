@@ -83,6 +83,9 @@ a.article-title:hover {
   font-size: 2.5rem;
 }
 
+
+/* ----- CUSTOM ----- */
+
 table {
 
 }
@@ -91,7 +94,6 @@ th {
     background-color: #8CCBD3;
     border: 1px solid black;
     padding: 10px 15px;
-
 }
 
 td {
@@ -106,4 +108,8 @@ tr:nth-child(even) {
 small {
     color: #888;
     white-space: nowrap;
+}
+
+.post-text-in-topic {
+    vertical-align: top;
 }

@@ -5,19 +5,19 @@
   <h3>Narada: {{ topic.topic_name }}</h3><br>
   {% for post in topic.posts.all %}
   <table border="0">
-    <thead>
+    <tbody>
       <tr>
         <td>
-          {{ post.author }}<br>
-          <small style="color: #888">{{ post.date_posted|date:'d-M-Y' }}</small>
+            <p>{{ post.author }}</p>
+            <small style="color: #888">{{ post.date_posted|date:'d-M-Y' }}</small>
         </td>
-        <td>
-          {{ post.text }}
+        <td class="post-text-in-topic">
+            <p>{{ post.text }}</p>
         </td>
 
       </tr>
 
-    </thead>
+    </tbody>
   </table>
   <br>
   {% endfor %}
