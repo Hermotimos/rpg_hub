@@ -10,7 +10,7 @@
     <small style="color: #888">{{ board.description }}</small>
     <br><br>
 
-    <table border="1">
+    <table>
         <thead>
             <tr>
                 <th>Narada</th>
@@ -30,7 +30,7 @@
                 </td>
                 <td>
                     {{ topic.starter }}<br>
-                    <small style="color: #888">{{ topic.created_date|date:'d-M-Y' }}</small>
+                    <small>{{ topic.created_date|date:'d-M-Y' }}</small>
                 </td>
                 <td>{{ topic.allowed_users }}</td>
                 <td>{{ topic.posts.count }}</td>
