@@ -22,8 +22,12 @@
   <br>
   {% endfor %}
 
-    <div class="mb-4">
-        <a href="#" class="btn btn-primary">Odpowiedz</a>
-    </div>
+  <form method="POST">
+    {% csrf_token %}
+    {{ new_post }}
+    <br>
+    <input type="submit" value="Tak rzeknij"}}>
+    <br><br><br><br>
+  </form>
 
 {% endblock content %}

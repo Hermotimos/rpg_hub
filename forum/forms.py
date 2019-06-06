@@ -14,21 +14,12 @@ class CreatePostForm(forms.ModelForm):
         label='',
         widget=forms.Textarea(
             attrs={
-                'placeholder': 'Głos w naradzie',
-                'rows': 20,
+                'placeholder': 'Twój głos w naradzie',
+                'rows': 10,
                 'cols': 70
             }
         )
     )
-
-
-    # def clean_rpg_time(self):
-    #     data = self.cleaned_data
-    #     if not data.get['rpg_time']:
-    #         raise forms.ValidationError('Wybierz temat narady, w której chcesz zabrać głos:')
-    #     return data
-    # This does not work at all. The overriden error message does not show.
-    # Couldn't find answer why.
 
 
 class CreateTopicForm(forms.ModelForm):
