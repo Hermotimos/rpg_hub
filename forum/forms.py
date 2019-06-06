@@ -7,15 +7,8 @@ class CreatePostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = [
-            'topic',
             'text',
-            'rpg_time'
         ]
-
-    topic = forms.ModelChoiceField(
-        label='Wybierz tytuł narady',
-        queryset=Topic.objects.all(),
-    )
 
     text = forms.CharField(
         label='',
@@ -28,15 +21,6 @@ class CreatePostForm(forms.ModelForm):
         )
     )
 
-    rpg_time = forms.CharField(
-        label='Czas RPG',
-        widget=forms.Textarea(
-            attrs={'placeholder': 'np. 80. Jesieni 20. roku Archonatu Nemetha Samatiana',
-                   'rows': 1,
-                   'cols': 40
-                   }
-        )
-    )
 
     # def clean_rpg_time(self):
     #     data = self.cleaned_data
