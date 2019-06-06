@@ -15,8 +15,8 @@
             <tr>
                 <th>Narada</th>
                 <th>Inicjator</th>
-                <th>Wypowiedzi</th>
                 <th>Uczestnicy</th>
+                <th>Wypowiedzi</th>
                 <th>Ostatnie słowo</th>
             </tr>
         </thead>
@@ -32,12 +32,11 @@
                     {{ topic.starter }}<br>
                     <small style="color: #888">{{ topic.created_date|date:'d-M-Y' }}</small>
                 </td>
-
-                <td>{{ topic.posts.count }}</td>
                 <td>{{ topic.allowed_users }}</td>
+                <td>{{ topic.posts.count }}</td>
                 <td>
                     {{ topics_with_last_active_user_dict|dict_lookup:topic }}<br>
-                    <small style="color: #888">{{ topics_with_last_post_date_dict|dict_lookup:topic|date:'d-M-Y' }}</small>
+                    <small>{{ topics_with_last_post_date_dict|dict_lookup:topic|date:'d-M-Y' }}</small>
                 </td>
             </tr>
         {% endfor %}
