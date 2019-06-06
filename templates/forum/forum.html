@@ -5,7 +5,7 @@
 {% block content %}
     <h1>Wieczorne narady</h1><br>
 
-    {% for board in boards %}
+    {% for board in boards_list %}
     <h4>{{ board.title }}</h4>
     <small style="color: #888">{{ board.description }}</small>
     <br><br>
@@ -36,8 +36,8 @@
                 <td>{{ topic.posts.count }}</td>
                 <td>{{ topic.allowed_users }}</td>
                 <td>
-                    {{ topics_with_last_active_user|dict_lookup:topic }}<br>
-                    <small style="color: #888">{{ topics_with_last_post_date|dict_lookup:topic|date:'d-M-Y' }}</small>
+                    {{ topics_with_last_active_user_dict|dict_lookup:topic }}<br>
+                    <small style="color: #888">{{ topics_with_last_post_date_dict|dict_lookup:topic|date:'d-M-Y' }}</small>
                 </td>
             </tr>
         {% endfor %}

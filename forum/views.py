@@ -5,22 +5,22 @@ from .forms import CreatePostForm, CreateTopicForm
 
 
 def forum_view(request):
-    boards = Board.objects.all()
-    topics = Topic.objects.all()
+    boards_list = Board.objects.all()
+    topics_list = Topic.objects.all()
 
     # dict comprehension
-    topics_with_last_post_date = {topic: topic.posts.all().aggregate(Max('date_posted'))['date_posted__max']
-                                  for topic in topics}
-    topics_with_last_active_user = {}
-    for topic in topics:
-        last_post = topic.posts.filter(date_posted=topics_with_last_post_date[topic])
-        topics_with_last_active_user[topic] = last_post[0].author if last_post else ''
+    topics_with_last_post_date_dict = {topic: topic.posts.all().aggregate(Max('date_posted'))['date_posted__max']
+                                  for topic in topics_list}
+    topics_with_last_active_user_dict = {}
+    for topic in topics_list:
+        last_post = topic.posts.filter(date_posted=topics_with_last_post_date_dict[topic])
+        topics_with_last_active_user_dict[topic] = last_post[0].author if last_post else ''
 
     context = {
         'page_title': 'Wieczorne narady',
-        'boards': boards,
-        'topics_with_last_post_date': topics_with_last_post_date,
-        'topics_with_last_active_user': topics_with_last_active_user,
+        'boards_list': boards_list,
+        'topics_with_last_post_date_dict': topics_with_last_post_date_dict,
+        'topics_with_last_active_user_dict': topics_with_last_active_user_dict,
     }
     return render(request, 'forum/forum.html', context)
 
@@ -33,7 +33,7 @@ def posts_in_topic_view(request, board_slug, topic_slug):
         'board': board,
         'topic': topic,
         'page_title': topic.topic_name,
-        'topic_posts': topic.posts.all(),
+        'topic_posts_list': topic.posts.all(),
     }
     return render(request, 'forum/topic.html', context)
 
