@@ -4,8 +4,13 @@
 <h2>{{ board.title }}</h2><br>
     <form method="POST">
         {% csrf_token %}
-        {{ topic.as_p }}
-
+        {{ topic.topic_name }}<br><br>
+        <p>Włącz uczestników do narady: </p>
+        {% for user in topic.allowed_users %}
+            <p>{{ user }}</p>
+        {% endfor %}<br>
+        {{ topic.first_post }}
+        <br><br>
         <input type="submit" value="Rozpocznij naradę"/>
 
     </form>
