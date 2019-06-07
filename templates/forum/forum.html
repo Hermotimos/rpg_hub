@@ -3,11 +3,16 @@
 {% load custom_filters %}
 
 {% block content %}
-    <h1>Wieczorne narady</h1><br>
+    <h1>Wieczorne narady</h1>
+    <br>
+    <div class="mb-4">
+        <a href="{% url 'create_board' %}" class="btn btn-dark">Nowy temat narad</a>
+    </div>
 
+    <br>
     {% for board in boards_list %}
-    <h4>{{ board.title }}</h4>
-    <small style="color: #888">{{ board.description }}</small>
+    <h3>{{ board.title }}</h3>
+    <small>{{ board.description }}</small>
     <br><br>
 
     <table>
@@ -44,7 +49,7 @@
     </table>
     <br>
     <div class="mb-4">
-        <a href="{% url 'create_topic' board.slug %}" class="btn btn-primary">Nowa narada</a>
+        <a href="{% url 'create_topic' board.slug %}" class="btn btn-info">Nowa narada</a>
     </div>
     <br><br>
     {% endfor %}

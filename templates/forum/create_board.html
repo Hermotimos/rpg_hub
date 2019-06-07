@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Tworzenie nowego tematu narad</h2><br>
+    <form method="POST">
+        {% csrf_token %}
+        {{ board.title }}<br><br>
+        {{ board.description }}<br><br><br>
+        <input type="submit" value="Stwórz temat i zapoczątkuj naradę"/>
+
+    </form>
+{% endblock content %}

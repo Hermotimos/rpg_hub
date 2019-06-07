@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Post, Topic, Board
+from .models import Post, Topic, Board, MultiSelectField
 
 
 class CreatePostForm(forms.ModelForm):
@@ -54,3 +54,33 @@ class CreateTopicForm(forms.ModelForm):
         )
     )
 
+
+class CreateBoardForm(forms.ModelForm):
+    class Meta:
+        model = Board
+        fields = [
+            'title',
+            'description'
+        ]
+
+    title = forms.CharField(
+        max_length=50,
+        label='',
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Nowy temat narad',
+                'size': '60'
+            }
+        )
+    )
+
+    description = forms.CharField(
+        max_length=100,
+        label='',
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Krótki opis',
+                'size': '60'
+            }
+        )
+    )

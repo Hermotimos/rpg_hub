@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.db.models import Max, Min, Sum
+from django.db.models import Max
 from .models import Board, Topic, Post, User
-from .forms import CreatePostForm, CreateTopicForm
+from .forms import CreatePostForm, CreateTopicForm, CreateBoardForm
 
 
 def forum_view(request):
@@ -76,3 +76,19 @@ def create_topic_view(request, board_slug):
         'board': board,
     }
     return render(request, 'forum/create_topic.html', context)
+
+
+def create_board_view(request):
+    if request.method == 'POST':
+        form = CreateBoardForm(request.POST or None)
+        if form.is_valid():
+            board = form.save()
+            return redirect('create_topic', board_slug=board.slug)
+    else:
+        form = CreateBoardForm()
+
+    context = {
+        'page_title': 'Nowy temat',
+        'board': form,
+    }
+    return render(request, 'forum/create_board.html', context)
