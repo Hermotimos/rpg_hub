@@ -42,8 +42,10 @@ INSTALLED_APPS = [
     'multiselectfield',
 
     # own
+    'home',
     'forum',
-    'news'
+    'news',
+    'users.apps.UsersConfig'    # just another way of doing this
 ]
 
 MIDDLEWARE = [
