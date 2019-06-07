@@ -11,46 +11,48 @@
 
     <br>
     {% for board in boards_list %}
-    <h3>{{ board.title }}</h3>
-    <small>{{ board.description }}</small>
-    <br><br>
+        <h3>{{ board.title }}</h3>
+        {% if board.description %}
+            <small>{{ board.description }}</small> <br>
+        {% endif %}
+        <br>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Narada</th>
-                <th>Inicjator</th>
-                <th>Uczestnicy</th>
-                <th>Wypowiedzi</th>
-                <th>Ostatnie słowo</th>
-            </tr>
-        </thead>
+        <table>
+            <thead>
+                <tr>
+                    <th>Narada</th>
+                    <th>Inicjator</th>
+                    <th>Uczestnicy</th>
+                    <th>Wypowiedzi</th>
+                    <th>Ostatnie słowo</th>
+                </tr>
+            </thead>
 
 
-        <tbody>
-            {% for topic in board.topics.all %}
-            <tr>
-                <td>
-                    <a href="{% url 'topic' board.slug topic.slug %}">{{ topic.topic_name }}</a>
-                </td>
-                <td>
-                    {{ topic.starter }}<br>
-                    <small>{{ topic.created_date|date:'d-M-Y' }}</small>
-                </td>
-                <td>{{ topic.allowed_users }}</td>
-                <td>{{ topic.posts.count }}</td>
-                <td>
-                    {{ topics_with_last_active_user_dict|dict_lookup:topic }}<br>
-                    <small>{{ topics_with_last_post_date_dict|dict_lookup:topic|date:'d-M-Y' }}</small>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    <div class="mb-4">
-        <a href="{% url 'create_topic' board.slug %}" class="btn btn-info">Nowa narada</a>
-    </div>
-    <br><br>
+            <tbody>
+                {% for topic in board.topics.all %}
+                <tr>
+                    <td>
+                        <a href="{% url 'topic' board.slug topic.slug %}">{{ topic.topic_name }}</a>
+                    </td>
+                    <td>
+                        {{ topic.starter }}<br>
+                        <small>{{ topic.created_date|date:'d-M-Y' }}</small>
+                    </td>
+                    <td>{{ topic.allowed_users }}</td>
+                    <td>{{ topic.posts.count }}</td>
+                    <td>
+                        {{ topics_with_last_active_user_dict|dict_lookup:topic }}<br>
+                        <small>{{ topics_with_last_post_date_dict|dict_lookup:topic|date:'d-M-Y' }}</small>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <div class="mb-4">
+            <a href="{% url 'create_topic' board.slug %}" class="btn btn-info">Nowa narada</a>
+        </div>
+        <br><br>
     {% endfor %}
 {% endblock content %}

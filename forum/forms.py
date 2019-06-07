@@ -77,10 +77,11 @@ class CreateBoardForm(forms.ModelForm):
     description = forms.CharField(
         max_length=100,
         label='',
+        required=False,
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'Krótki opis',
-                'size': '60'
+                'placeholder': 'Krótki opis [opcjonalnie]',
+                'size': '60',
             }
         )
     )
