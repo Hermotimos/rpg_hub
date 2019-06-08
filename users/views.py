@@ -4,7 +4,7 @@ from .forms import UserRegistrationForm
 from django.contrib.auth.views import *
 
 
-def register(request):
+def register_view(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST or None)
         if form.is_valid():
@@ -20,6 +20,9 @@ def register(request):
         'form': form
     }
     return render(request, 'users/register.html', context)
+
+
+
 
 
 # from django.contrib.auth.views import * (in order to provide other functions used in LoginView)
