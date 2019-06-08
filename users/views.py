@@ -145,8 +145,8 @@ class LogoutView(SuccessURLAllowedHostsMixin, TemplateView):
         context.update({
             'site': current_site,
             'site_name': current_site.name,
-            'topic_name': _('Logged out'),
+            'topic_name': 'Logged out',
             **(self.extra_context or {}),
-            'page_title': 'Wylogowanie',
+            'page_title': 'Wylogowanie'
         })
         return context
