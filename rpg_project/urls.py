@@ -26,6 +26,7 @@ urlpatterns = [
     path('', home_view, name='home'),
     path('forum/', include('forum.urls')),
     path('users/', include('users.urls')),
+    path('news/', include('news.urls')),
 
     path('login/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
 ]

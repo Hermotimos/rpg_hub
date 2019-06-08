@@ -29,13 +29,13 @@
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
                 <a class="nav-item nav-link" href="{% url 'forum' %}">- Wieczorne narady -</a>
-                <a class="nav-item nav-link" href="#">- Słup ogłoszeń -</a>
+                <a class="nav-item nav-link" href="{% url 'news-main' %}">- Słup ogłoszeń -</a>
                 <a class="nav-item nav-link" href="#">- Zasady i tabele -</a>
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
                 <a class="nav-item nav-link" href="{% url 'register' %}">Rejestracja</a>
-                <a class="nav-item nav-link" href="#">LOG ON</a>
+                <a class="nav-item nav-link" href="{% url 'login' %}">LOGOWANIE</a>
             </div>
           </div>
         </div>
