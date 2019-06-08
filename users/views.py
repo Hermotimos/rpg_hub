@@ -22,7 +22,11 @@ def register_view(request):
     return render(request, 'users/register.html', context)
 
 
-
+def profile_view(request):
+    context = {
+        'page_title': 'Profil',
+    }
+    return render(request, 'users/profile.html', context)
 
 
 # from django.contrib.auth.views import * (in order to provide other functions used in LoginView)
