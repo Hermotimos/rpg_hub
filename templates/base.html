@@ -63,6 +63,10 @@
                     </div>
                 {% endfor %}
             {% endif %}
+            <div class="border-bottom pt-3">
+                <h2>{{ page_title }}</h2>
+            </div>
+            <!--    CONTENT        -->
             {% block content %}{% endblock %}
         </div>
         <div class="col-md-4">
@@ -79,7 +83,6 @@
                 <li class="list-group-item list-group-item-light">Wiedza</li>
                 <li class="list-group-item list-group-item-light">Notatki</li>
                 <li class="list-group-item list-group-item-light">Karta postaci</li>
-
               </ul>
             </p>
           </div>

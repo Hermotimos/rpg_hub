@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>{{ board.title }}</h2><br>
+    <br>
     <form method="POST">
         {% csrf_token %}
         {{ topic.topic_name }}<br><br>

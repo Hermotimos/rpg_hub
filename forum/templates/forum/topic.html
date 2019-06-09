@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>{{ board.title }}</h1><br>
-  <h3>Narada: {{ topic.topic_name }}</h3><br>
+  <small>W temacie: {{ board.title }}</small>
+  <br><br><br>
   {% for post in topic.posts.all %}
   <table border="0">
     <tbody>
