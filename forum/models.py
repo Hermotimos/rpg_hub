@@ -3,12 +3,6 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 from multiselectfield import MultiSelectField       # pip install django-multiselectfield
 
-
-STATUS = (
-    (0, 'Awaiting'),
-    (1, 'Approved')
-)
-
 USERS = [(user.username, user.username) for user in User.objects.all()]
 
 
