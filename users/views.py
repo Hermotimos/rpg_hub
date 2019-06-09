@@ -38,6 +38,7 @@ def profile_view(request):
 
 # from django.contrib.auth.views import * (in order to provide other functions used in LoginView)
 # (added page_title to context, changed template_name = 'users/login.html')
+
 class LoginView(SuccessURLAllowedHostsMixin, FormView):
     """
     Display the login form and handle the login action.
@@ -46,7 +47,7 @@ class LoginView(SuccessURLAllowedHostsMixin, FormView):
     authentication_form = None
     redirect_field_name = REDIRECT_FIELD_NAME
     template_name = 'users/login.html'
-    redirect_authenticated_user = False
+    redirect_authenticated_user = True
     extra_context = None
 
     @method_decorator(sensitive_post_parameters())
