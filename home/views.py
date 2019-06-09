@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 
 def home_view(request):
     context = {
         'page_title': 'Home'
     }
-    return render(request, 'home/home.html', context)
+    return redirect('login')
