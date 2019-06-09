@@ -22,7 +22,7 @@ def register_view(request):
         form = UserRegistrationForm
 
     context = {
-        'page_title': 'Rejestracja',
+        'page_title': 'Nowa postać',
         'form': form
     }
     return render(request, 'users/register.html', context)
