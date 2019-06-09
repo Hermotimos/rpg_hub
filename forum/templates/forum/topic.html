@@ -4,19 +4,20 @@
   <small>W temacie: {{ board.title }}</small>
   <br><br><br>
   {% for post in topic.posts.all %}
-  <table border="0">
+  <table class="topic-posts">
     <tbody>
-      <tr>
+      <div class="border-bottom pt-3">
+      <tr class="post-in-topic">
         <td>
+            <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
             <p>{{ post.author }}</p>
             <small style="color: #888">{{ post.date_posted|date:'d-M-Y' }}</small>
         </td>
-        <td class="post-text-in-topic">
+        <td>
             <p>{{ post.text }}</p>
         </td>
-
       </tr>
-
+      </div>
     </tbody>
   </table>
   <br>
