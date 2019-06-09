@@ -113,3 +113,7 @@ small {
 .post-text-in-topic {
     vertical-align: top;
 }
+
+.btn-space {
+    margin: 2px;
+}
