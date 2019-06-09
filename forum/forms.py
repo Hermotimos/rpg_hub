@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Post, Topic, Board, MultiSelectField
+from .models import Post, Topic, Board
 
 
 class CreatePostForm(forms.ModelForm):
@@ -16,7 +16,7 @@ class CreatePostForm(forms.ModelForm):
             attrs={
                 'placeholder': 'Twój głos w naradzie',
                 'rows': 10,
-                'cols': 70
+                'cols': 60
             }
         )
     )
@@ -48,8 +48,8 @@ class CreateTopicForm(forms.ModelForm):
         widget=forms.Textarea(
             attrs={
                 'placeholder': 'Pierwszy głos w naradzie',
-                'rows': 20,
-                'cols': 70
+                'rows': 10,
+                'cols': 60
             }
         )
     )

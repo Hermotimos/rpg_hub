@@ -5,13 +5,17 @@
     <form method="POST">
         {% csrf_token %}
         {{ topic.topic_name }}<br><br>
-        <p>Włącz uczestników do narady: </p>
+        <p>Włącz uczestników do narady:</p>
+        <small>1) Włączaj tylko postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji.</small>
+        <small>2) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small>
+        <small>3) Jeśli czekasz na sposobny moment, przekaż to MG.</small>
+        <br><br>
         {% for user in topic.allowed_users %}
             <p>{{ user }}</p>
         {% endfor %}<br>
         {{ topic.first_post }}
         <br><br>
         <input type="submit" value="Rozpocznij naradę"/>
-
     </form>
+    <br><br><br><br><br><br><br>
 {% endblock content %}
