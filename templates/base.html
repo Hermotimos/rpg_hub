@@ -63,30 +63,40 @@
                     </div>
                 {% endfor %}
             {% endif %}
-            <div class="border-bottom pt-3">
-                <h2>{{ page_title }}</h2>
-            </div>
+
             <!--    CONTENT        -->
-            {% block content %}{% endblock %}
+            {% if user.is_authenticated or 'log' in request.path or 'register' in request.path %}
+                <div class="border-bottom pt-3">
+                    <h2>{{ page_title }}</h2>
+                </div>
+                {% block content %}{% endblock %}
+            {% else %}
+                <small class="text-muted">
+                <a class="ml-2" href="{% url 'login' %}">Logowanie</a>
+                </small>
+            {% endif %}
         </div>
+
+        {% if user.is_authenticated %}
         <div class="col-md-4">
-          <div class="content-section">
-            <h3>{{ user.username }}</h3>
-            <img class="account-img" src="{{ user.profile.image.url }}">
-            <p class='text-muted'>
-                Przydomki i funkcje
-                <br>
-                Dalsze przydomki i funkcje
-              <ul class="list-group">
-                <li class="list-group-item list-group-item-light">Biografia</li>
-                <li class="list-group-item list-group-item-light">Historia w drużynie</li>
-                <li class="list-group-item list-group-item-light">Wiedza</li>
-                <li class="list-group-item list-group-item-light">Notatki</li>
-                <li class="list-group-item list-group-item-light">Karta postaci</li>
-              </ul>
-            </p>
-          </div>
+            <div class="content-section">
+                <h3>{{ user.username }}</h3>
+                <img class="account-img" src="{{ user.profile.image.url }}">
+                <p class='text-muted'>
+                    Przydomki i funkcje
+                    <br>
+                    Dalsze przydomki i funkcje
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-light">Biografia</li>
+                    <li class="list-group-item list-group-item-light">Historia w drużynie</li>
+                    <li class="list-group-item list-group-item-light">Wiedza</li>
+                    <li class="list-group-item list-group-item-light">Notatki</li>
+                    <li class="list-group-item list-group-item-light">Karta postaci</li>
+                </ul>
+                </p>
+            </div>
         </div>
+       {% endif %}
       </div>
     </main>
 
