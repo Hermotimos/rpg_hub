@@ -11,6 +11,7 @@ class News(models.Model):
     title = models.CharField(max_length=100, unique=True)
     text = models.TextField(max_length=4000)
     date_posted = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, related_name='news', on_delete=models.CASCADE)
     allowed_users = MultiSelectField(max_length=100, choices=PLAYERS)
 

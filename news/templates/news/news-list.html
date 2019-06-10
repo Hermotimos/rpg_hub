@@ -3,5 +3,18 @@
 
 {% block content %}
     <br>
-    <p>Ogłoszenia</p>
+    <div class="mb-4">
+        <a href="{% url 'news-create' %}" class="btn btn-dark">Nowe ogłoszenie</a>
+    </div>
+
+    <br>
+    {% for news in news_list %}
+        <img class="rounded-circle col-xs-3 col-sm-2 float-left" src="{{ user.profile.image.url }}">
+        <small>Ostatnia aktywność: {{ news.date_updated|date:'d-M-Y, H:i' }}</small>
+        <h3>{{ news.title }}</h3>
+        <small>Dodano: {{ news.date_posted|date:'d-M-Y' }}</small><br>
+        <small> <a href="#">{{ news.text|slice:':30' }}...</a></small>
+        <br><br>
+
+    {% endfor %}
 {% endblock content %}
