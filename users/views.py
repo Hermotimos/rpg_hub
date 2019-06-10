@@ -19,7 +19,7 @@ def register_view(request):
             messages.success(request, f'Utworzono konto dla {username}! Zaloguj się!')
             return redirect('login')
     else:
-        form = UserRegistrationForm
+        form = UserRegistrationForm()
 
     context = {
         'page_title': 'Nowa postać',
