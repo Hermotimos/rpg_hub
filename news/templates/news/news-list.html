@@ -7,14 +7,27 @@
         <a href="{% url 'news-create' %}" class="btn btn-dark">Nowe ogłoszenie</a>
     </div>
 
-    <br>
     {% for news in news_list %}
-        <img class="rounded-circle col-xs-3 col-sm-2 float-left" src="{{ user.profile.image.url }}">
-        <small>Ostatnia aktywność: {{ news.date_updated|date:'d-M-Y, H:i' }}</small>
-        <h3>{{ news.title }}</h3>
-        <small>Dodano: {{ news.date_posted|date:'d-M-Y' }}</small><br>
-        <small> <a href="{% url 'news-detail' news.slug %}">{{ news.text|slice:':30' }}...</a></small>
-        <br><br>
+    <table>
+        <tbody class="posts-and-news">
 
+            <tr class="posts-and-news">
+                <td>
+                    <img class="rounded-circle article-img" src="{{ news.author.profile.image.url }}">
+                    <p>{{ post.author }}</p>
+                    <small>{{ news.date_posted|date:'d-M-Y' }}</small>
+                </td>
+                <td>
+                    <small>Ostatnia aktywność: {{ news.date_updated|date:'d-M-Y, H:i' }}</small>
+                    <h3>{{ news.title }}</h3>
+                    <a href="{% url 'news-detail' news.slug %}">{{ news.text|slice:':30' }}...</a><br>
+                </td>
+            </tr>
+            <br>
+
+        </tbody>
+    </table>
     {% endfor %}
+
+
 {% endblock content %}

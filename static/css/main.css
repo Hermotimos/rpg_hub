@@ -98,7 +98,7 @@ td {
     padding: 10px;
 }
 
-.topic-posts td {
+.posts-and-news td {
     border: 0px;
 }
 
@@ -111,7 +111,7 @@ small {
     white-space: nowrap;
 }
 
-.post-in-topic {
+.posts-and-news {
     vertical-align: top;
 }
 

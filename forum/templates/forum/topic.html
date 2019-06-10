@@ -4,10 +4,10 @@
   <small>W temacie: {{ board.title }}</small>
   <br><br><br>
   {% for post in topic.posts.all %}
-  <table class="topic-posts">
+  <table class="posts-and-news">
     <tbody>
       <div class="border-bottom pt-3">
-      <tr class="post-in-topic">
+      <tr class="posts-and-news">
         <td>
             <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
             <p>{{ post.author }}</p>

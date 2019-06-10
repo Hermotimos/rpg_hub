@@ -19,11 +19,11 @@ def create_news_view(request):
     return render(request, 'news/news-create.html', context)
 
 
-def news_detail_vew(request, slug):
+def news_detail_view(request, slug):
     news_details = News.objects.filter(slug=slug)
 
     context = {
-        'page_title': news_details.title[:30] + '...',
+        'page_title': news_details.title[:30],
         'news_details': news_details
     }
     return render(request, 'news/news-detail', context)

@@ -3,5 +3,23 @@
 
 {% block content %}
     <br>
-    <p>Utwórz ogłoszenie</p>
+    <form method="POST">
+        {% csrf_token %}
+        <p>Wybierz adresatów ogłoszenia:</p>
+        <br><br>
+
+
+
+        {% for user in topic.allowed_users %}
+            <p>{{ user }}</p>
+        {% endfor %}<br>
+        {{ topic.first_post }}
+
+
+
+
+        <br><br>
+        <input type="submit" value="Dodaj ogłoszenie"/>
+    </form>
+    <br><br><br><br><br><br><br>
 {% endblock content %}
