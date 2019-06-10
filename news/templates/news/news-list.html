@@ -13,7 +13,7 @@
         <small>Ostatnia aktywność: {{ news.date_updated|date:'d-M-Y, H:i' }}</small>
         <h3>{{ news.title }}</h3>
         <small>Dodano: {{ news.date_posted|date:'d-M-Y' }}</small><br>
-        <small> <a href="#">{{ news.text|slice:':30' }}...</a></small>
+        <small> <a href="{% url 'news-detail' news.slug %}">{{ news.text|slice:':30' }}...</a></small>
         <br><br>
 
     {% endfor %}

@@ -17,3 +17,13 @@ def create_news_view(request):
         'page_title': 'Nowe ogłoszenie'
     }
     return render(request, 'news/news-create.html', context)
+
+
+def news_detail_vew(request, slug):
+    news_details = News.objects.filter(slug=slug)
+
+    context = {
+        'page_title': news_details.title[:30] + '...',
+        'news_details': news_details
+    }
+    return render(request, 'news/news-detail', context)
