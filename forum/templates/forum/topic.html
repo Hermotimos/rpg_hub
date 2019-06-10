@@ -20,14 +20,15 @@
       </div>
     </tbody>
   </table>
-  <br>
   {% endfor %}
 
-  <form method="POST">
-    {% csrf_token %}
-    {{ new_post }}
-    <br>
-    <input type="submit" value="Tak rzeknij"}}>
-  </form>
+  <div  id="page-bottom">
+    <form method="POST" action=".#page-bottom">
+      {% csrf_token %}
+      {{ new_post }}
+      <br>
+      <input type="submit" value="Tak rzeknij"}}>
+    </form>
+  </div>
   <br><br><br><br><br><br><br>
 {% endblock content %}
