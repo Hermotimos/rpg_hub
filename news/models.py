@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from users.models import Profile
 from multiselectfield import MultiSelectField
 
-PLAYERS = [(player.user.username, player.user.username) for player in Profile.objects.filter(character_status='player')]
+PLAYERS = [(profile.user.username, profile.user.username)
+           for profile in Profile.objects.filter(character_status='player')]
 
 
 class News(models.Model):
@@ -15,3 +16,5 @@ class News(models.Model):
 
     def __str__(self):
         return self.title[:50] + '...'
+
+
