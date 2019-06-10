@@ -1,7 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.utils.text import slugify
-from multiselectfield import MultiSelectField       # pip install django-multiselectfield
+from multiselectfield import MultiSelectField
+
+from django.contrib.auth.models import User
 
 USERS = [(user.username, user.username) for user in User.objects.all()]
 
