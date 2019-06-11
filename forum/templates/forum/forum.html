@@ -35,7 +35,7 @@
                         <a href="{% url 'topic' board.slug topic.slug %}">{{ topic.topic_name }}</a>
                     </td>
                     <td>
-                        {{ topic.starter }}<br>
+                        {{ topic.starter.username|underscore_to_space }}<br>
                         <small>{{ topic.created_date|date:'d-M-Y' }}</small>
                     </td>
                     <td>{{ topic.allowed_users }}</td>

@@ -10,3 +10,8 @@ def dict_lookup(dict_, index):
     if index in dict_:
         return dict_[index]
     return ''
+
+
+@register.filter
+def underscore_to_space(string):
+    return string.replace('_', ' ')
