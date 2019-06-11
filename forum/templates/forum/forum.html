@@ -38,7 +38,13 @@
                         {{ topic.starter.username|underscore_to_space }}<br>
                         <small>{{ topic.created_date|date:'d-M-Y' }}</small>
                     </td>
-                    <td>{{ topic.allowed_users }}</td>
+                    <td>
+                        {% for profile in topic.allowed_users %}
+                            {% if profile != 'MG' %}
+                                <small>{{ profile }}</small><br>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                     <td>{{ topic.posts.count }}</td>
                     <td>
                         {{ topics_with_last_active_user_dict|dict_lookup:topic }}<br>
