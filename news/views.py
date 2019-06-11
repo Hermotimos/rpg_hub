@@ -20,10 +20,11 @@ def create_news_view(request):
 
 
 def news_detail_view(request, slug):
-    news_details = News.objects.filter(slug=slug)
+    news_details = News.objects.get(slug=slug)
+    page_title = news_details.title[:30] + '...' if len(news_details.title) > 30 else news_details.title
 
     context = {
-        'page_title': news_details.title[:30],
+        'page_title': page_title,
         'news_details': news_details
     }
-    return render(request, 'news/news-detail', context)
+    return render(request, 'news/news-detail.html', context)
