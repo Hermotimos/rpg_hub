@@ -41,10 +41,10 @@
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
                 {% if user.is_authenticated %}
-                    <a class="btn btn-dark btn-space" href="{% url 'logout' %}">Wyloguj</a>
+                    <a class="btn btn-default btn-space" href="{% url 'logout' %}">Wyloguj</a>
                 {% else %}
-                    <a class="btn btn-dark btn-space" href="{% url 'register' %}">Nowa postać :(</a>
-                    <a class="btn btn-dark btn-space" href="{% url 'login' %}">Zaloguj</a>
+                    <a class="btn btn-default btn-space" href="{% url 'register' %}">Nowa postać :(</a>
+                    <a class="btn btn-default btn-space" href="{% url 'login' %}">Zaloguj</a>
                 {% endif %}
             </div>
           </div>
