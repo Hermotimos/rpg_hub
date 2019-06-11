@@ -10,8 +10,8 @@
         <small>2) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small>
         <small>3) Jeśli czekasz na sposobny moment, przekaż to MG.</small>
         <br><br>
-        {% for user in topic.allowed_users %}
-            <p>{{ user }}</p>
+        {% for profile_character_name in topic.allowed_users %}
+            {{ profile_character_name }}<br>
         {% endfor %}<br>
         {{ topic.first_post }}
         <br><br>

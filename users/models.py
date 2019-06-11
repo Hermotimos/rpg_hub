@@ -12,8 +12,8 @@ STATUS = [
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
-    character_name = models.CharField(max_length=50, default='!!!')
-    character_status = models.CharField(max_length=20, choices=STATUS, default='none')
+    character_name = models.CharField(max_length=50, default='')
+    character_status = models.CharField(max_length=20, choices=STATUS, default='npc')
 
     def __str__(self):
         return f'{self.user.username}'
