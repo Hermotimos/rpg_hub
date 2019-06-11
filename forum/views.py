@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Max
-from .models import Board, Topic, Post, User
+from .models import Board, Topic, Post
 from .forms import CreatePostForm, CreateTopicForm, CreateBoardForm
 
 
@@ -27,7 +27,7 @@ def forum_view(request):
 def posts_in_topic_view(request, board_slug, topic_slug):
     # board = get_object_or_404(Board, slug=board_slug)
     topic = get_object_or_404(Topic, slug=topic_slug)
-    logged_user = User.objects.first()
+    logged_user = request.user
 
     if request.method == 'POST':
         form = CreatePostForm(request.POST or None)
@@ -51,10 +51,10 @@ def posts_in_topic_view(request, board_slug, topic_slug):
 
 def create_topic_view(request, board_slug):
     # board = get_object_or_404(Board, slug=board_slug)
-    logged_user = User.objects.first()                 # TODO get currently logged in user (now it's just first one)
+    logged_user = request.user
 
     if request.method == 'POST':
-        form = CreateTopicForm(request.POST or None)       # needs way to set author=authenticated user
+        form = CreateTopicForm(request.POST or None)
         if form.is_valid():
             topic = form.save(commit=False)
             topic.board = Board.objects.get(slug=board_slug)
