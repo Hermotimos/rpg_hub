@@ -44,7 +44,7 @@ def profile_view(request):
         profile_form = ProfileUpdateForm(instance=request.user.profile)
 
     context = {
-        'page_title': 'Postać',
+        'page_title': 'Profil',
         'user_form': user_form,
         'profile_form': profile_form
     }
