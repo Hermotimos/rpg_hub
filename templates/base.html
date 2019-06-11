@@ -24,7 +24,7 @@
         <div class="container">
           <a class="navbar-brand mr-4" href="/">
               {% if user.is_authenticated %}
-                {{ user.username}}
+                {{ user.profile.character_name}}
               {% else %}
                 RPG
               {% endif %}
@@ -80,7 +80,7 @@
         {% if user.is_authenticated %}
         <div class="col-md-4">
             <div class="content-section">
-                <h3>{{ user.username }}</h3>
+                <h3>{{ user.profile.character_name }}</h3>
                 <img class="account-img" src="{{ user.profile.image.url }}">
                 <p class='text-muted'>
                     Przydomki i funkcje

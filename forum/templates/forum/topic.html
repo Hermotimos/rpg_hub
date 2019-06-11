@@ -10,7 +10,7 @@
       <tr class="posts-and-news">
         <td>
             <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
-            <p>{{ post.author }}</p>
+            <p>{{ post.author.profile.character_name }}</p>
             <small style="color: #888">{{ post.date_posted|date:'d-M-Y' }}</small>
         </td>
         <td>

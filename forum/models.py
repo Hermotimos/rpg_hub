@@ -3,8 +3,9 @@ from django.utils.text import slugify
 from multiselectfield import MultiSelectField
 
 from django.contrib.auth.models import User
+from users.models import Profile
 
-USERS = [(user.username, user.username) for user in User.objects.all()]
+USERS = [(profile.character_name, profile.character_name) for profile in Profile.objects.all()]
 
 
 class Board(models.Model):

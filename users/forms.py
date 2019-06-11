@@ -31,4 +31,12 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['image']
+        fields = [
+            'character_name',
+            'image'
+        ]
+
+    character_name = forms.CharField(
+        label='Imię postaci',
+        max_length=50,
+    )
