@@ -25,7 +25,7 @@ def forum_view(request):
 
 
 def posts_in_topic_view(request, board_slug, topic_slug):
-    board = get_object_or_404(Board, slug=board_slug)
+    # board = get_object_or_404(Board, slug=board_slug)
     topic = get_object_or_404(Topic, slug=topic_slug)
     logged_user = User.objects.first()
 
@@ -36,13 +36,13 @@ def posts_in_topic_view(request, board_slug, topic_slug):
             new_post.topic = topic
             new_post.author = logged_user
             new_post.save()
-            return redirect('topic', board_slug=board.slug, topic_slug=topic.slug)
+            return redirect('topic', board_slug=board_slug, topic_slug=topic.slug)
     else:
         form = CreatePostForm()
 
     context = {
         'page_title': topic.topic_name,
-        'board': board,
+        # 'board': board,
         'topic': topic,
         'new_post': form,
     }
@@ -50,14 +50,14 @@ def posts_in_topic_view(request, board_slug, topic_slug):
 
 
 def create_topic_view(request, board_slug):
-    board = get_object_or_404(Board, slug=board_slug)
+    # board = get_object_or_404(Board, slug=board_slug)
     logged_user = User.objects.first()                 # TODO get currently logged in user (now it's just first one)
 
     if request.method == 'POST':
         form = CreateTopicForm(request.POST or None)       # needs way to set author=authenticated user
         if form.is_valid():
             topic = form.save(commit=False)
-            topic.board = board
+            topic.board = Board.objects.get(slug=board_slug)
             topic.starter = logged_user
             topic.save()
 
@@ -66,14 +66,14 @@ def create_topic_view(request, board_slug):
                 topic=topic,
                 author=logged_user
             )
-            return redirect('topic', board_slug=board.slug, topic_slug=topic.slug)
+            return redirect('topic', board_slug=board_slug, topic_slug=topic.slug)
     else:
         form = CreateTopicForm()
 
     context = {
         'page_title': 'Nowa narada',
         'topic': form,
-        'board': board,
+        # 'board': board,
     }
     return render(request, 'forum/create_topic.html', context)
 

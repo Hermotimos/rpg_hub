@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <small>W temacie: {{ board.title }}</small>
+  <small>W temacie: {{ topic.board.title }}</small>
   <br><br><br>
   {% for post in topic.posts.all %}
   <table class="posts-and-news">
