@@ -15,7 +15,7 @@
                 <td>
                     <img class="rounded-circle article-img" src="{{ news.author.profile.image.url }}">
                     <p>{{ post.author }}</p>
-                    <small>{{ news.date_posted|date:'d-M-Y' }}</small>
+                    <small>Dodano:<br>{{ news.date_posted|date:'d-M-Y' }}</small>
                 </td>
                 <td>
                     <small>Ostatnia aktywność: {{ news.date_updated|date:'d-M-Y, H:i' }}</small>
