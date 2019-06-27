@@ -47,6 +47,9 @@ class Topic(models.Model):
             self.slug = self._get_unique_slug()
         super().save(*args, *kwargs)
 
+    def get_absolute_url(self):
+        return f'/forum/{self.board.slug}/{self.slug}'
+
 
 class Post(models.Model):
     text = models.TextField(max_length=4000)

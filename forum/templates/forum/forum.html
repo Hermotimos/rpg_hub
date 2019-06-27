@@ -32,7 +32,7 @@
                 {% for topic in board.topics.all %}
                 <tr>
                     <td>
-                        <a href="{% url 'topic' board.slug topic.slug %}">{{ topic.topic_name }}</a>
+                        <a href="{{ topic.get_absolute_url }}">{{ topic.topic_name }}</a>
                     </td>
                     <td>
                         {{ topic.starter.username|underscore_to_space }}<br>
