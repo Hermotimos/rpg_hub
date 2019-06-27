@@ -1,26 +1,44 @@
 {% extends 'base.html' %}
+{% load custom_filters %}
 
 {% block content %}
   <small>W temacie: {{ topic.board.title }}</small>
-  <br><br><br>
+  <br><br>
+  <h5>Inicjator: {{ topic.starter }}</h5>
+  <h5>Uczestnicy: {{ topic.allowed_users }}</h5>
+  <br>
   {% for post in topic.posts.all %}
-  <table class="posts-and-news">
-    <tbody>
-      <div class="border-bottom pt-3">
-      <tr class="posts-and-news">
-        <td>
-            <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
-            <small><p>{{ post.author.profile.character_name }}</p></small>
+      {% if post.author.profile.character_name == 'MG' %}
+          <table class="posts-and-news">
+          <tbody>
+              <div class="border-bottom pt-3">
+                  <tr class="posts-and-news-mg">
+                      <td>
+                          <p>{{ post.text }}</p>
+                      </td>
+                  </tr>
+              </div>
+          </tbody>
+          </table>
 
-        </td>
-        <td>
-            <small>{{ post.date_posted|date:'d-M-Y' }}</small>
-            <p>{{ post.text }}</p>
-        </td>
-      </tr>
-      </div>
-    </tbody>
-  </table>
+      {% else %}
+          <table class="posts-and-news">
+              <tbody>
+                  <div class="border-bottom pt-3">
+                  <tr class="posts-and-news">
+                      <td>
+                          <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+                          <small><p>{{ post.author.profile.character_name }}</p></small>
+                      </td>
+                      <td>
+                          <small>{{ post.date_posted|date:'d-M-Y' }}</small>
+                          <p>{{ post.text|capfirst }}</p>
+                      </td>
+                  </tr>
+                  </div>
+              </tbody>
+          </table>
+      {% endif %}
   {% endfor %}
 
   <br><br>
