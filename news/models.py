@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.db import models
 from django.utils.text import slugify
 from multiselectfield import MultiSelectField
@@ -32,4 +33,5 @@ class News(models.Model):
         super().save(*args, *kwargs)
 
     def get_absolute_url(self):
-        return f'/news/{self.slug}'
+        # return f'/news/{self.slug}'                               # one way
+        return reverse('news-detail', kwargs={'slug': self.slug})   # another way
