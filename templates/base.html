@@ -35,18 +35,9 @@
                 {% endfor %}
             {% endif %}
 
-            <!--   CONTENT  -->
-            {% if user.is_authenticated or 'log' in request.path or 'register' in request.path %}
-                <div class="border-bottom pt-3">
-                    <h2>{{ page_title }}</h2>
-                </div>
-                {% block content %}{% endblock %}<br><br><br><br>
-            {% else %}
-                <small class="text-muted">
-                <a class="ml-2 btn btn-primary" href="{% url 'login' %}">Logowanie</a>
-                </small>
-            {% endif %}
-        </div>
+                <!--   CONTENT  -->
+                    {% block content %}{% endblock %}<br><br><br><br>
+            </div>
 
         <!--     SIDEBAR       -->
         {% include 'sidebar.html' %}

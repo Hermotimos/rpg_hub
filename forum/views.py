@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 from .models import Board, Topic, Post
 from .forms import CreatePostForm, CreateTopicForm, CreateBoardForm
 
 
+@login_required
 def forum_view(request):
     boards_list = Board.objects.all()
     topics_list = Topic.objects.all()
@@ -24,6 +26,7 @@ def forum_view(request):
     return render(request, 'forum/forum.html', context)
 
 
+@login_required
 def posts_in_topic_view(request, board_slug, topic_slug):
     topic = get_object_or_404(Topic, slug=topic_slug)
     logged_user = request.user
@@ -47,6 +50,7 @@ def posts_in_topic_view(request, board_slug, topic_slug):
     return render(request, 'forum/topic.html', context)
 
 
+@login_required
 def create_topic_view(request, board_slug):
     logged_user = request.user
 
@@ -74,6 +78,7 @@ def create_topic_view(request, board_slug):
     return render(request, 'forum/create_topic.html', context)
 
 
+@login_required
 def create_board_view(request):
     if request.method == 'POST':
         form = CreateBoardForm(request.POST or None)
