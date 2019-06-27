@@ -27,3 +27,10 @@ class Profile(models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.image.path)
+
+
+# class CharacterSheet(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     character_class = models.CharField(max_length=200, blank=True, null=True)
+#     character_nickname = models.CharField(max_length=200, blank=True, null=True)
+
