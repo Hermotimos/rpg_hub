@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+
 urlpatterns = [
     path('', views.forum_view, name='forum'),
     path('create_board/', views.create_board_view, name='create_board'),
