@@ -25,7 +25,6 @@ def forum_view(request):
 
 
 def posts_in_topic_view(request, board_slug, topic_slug):
-    # board = get_object_or_404(Board, slug=board_slug)
     topic = get_object_or_404(Topic, slug=topic_slug)
     logged_user = request.user
 
@@ -42,7 +41,6 @@ def posts_in_topic_view(request, board_slug, topic_slug):
 
     context = {
         'page_title': topic.topic_name,
-        # 'board': board,
         'topic': topic,
         'new_post': form,
     }
@@ -50,7 +48,6 @@ def posts_in_topic_view(request, board_slug, topic_slug):
 
 
 def create_topic_view(request, board_slug):
-    # board = get_object_or_404(Board, slug=board_slug)
     logged_user = request.user
 
     if request.method == 'POST':
@@ -73,7 +70,6 @@ def create_topic_view(request, board_slug):
     context = {
         'page_title': 'Nowa narada',
         'topic': form,
-        # 'board': board,
     }
     return render(request, 'forum/create_topic.html', context)
 
