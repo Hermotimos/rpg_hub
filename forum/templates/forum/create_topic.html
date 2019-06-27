@@ -8,13 +8,16 @@
         <p>Włącz uczestników do narady:</p>
         <small>1) Włączaj tylko postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji.</small>
         <small>2) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small>
-        <small>3) Jeśli czekasz na sposobny moment, przekaż to MG.</small>
+        <small>3) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small>
+
         <br><br>
         {% for profile_character_name in topic.allowed_users %}
             {{ profile_character_name }}<br>
-        {% endfor %}<br>
+        {% endfor %}
+        <small>*Jeśli chcesz się naradzić z postacią, której nie ma na liście, powiadom MG.</small><br><br>
         {{ topic.first_post }}
         <br><br>
+
         <div class="mb-4">
             <input class="btn btn-outline-success" type="submit" value="Rozpocznij naradę"/>
         </div>
