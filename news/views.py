@@ -5,11 +5,11 @@ from .models import News
 
 @login_required
 def news_view(request):
-    news_list = News.objects.all()
+    queryset = News.objects.all()
 
     context = {
         'page_title': 'Słup ogłoszeń',
-        'news_list': news_list,
+        'news_list': queryset,
     }
     return render(request, 'news/news-list.html', context)
 
@@ -24,11 +24,11 @@ def create_news_view(request):
 
 @login_required
 def news_detail_view(request, slug):
-    news_details = News.objects.get(slug=slug)
-    page_title = news_details.title[:30] + '...' if len(news_details.title) > 30 else news_details.title
+    queryset = News.objects.get(slug=slug)
+    page_title = queryset.title[:30] + '...' if len(queryset.title) > 30 else queryset.title
 
     context = {
         'page_title': page_title,
-        'news_details': news_details
+        'news_details': queryset
     }
     return render(request, 'news/news-detail.html', context)

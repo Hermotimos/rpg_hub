@@ -7,7 +7,7 @@ from .forms import CreatePostForm, CreateTopicForm, CreateBoardForm
 
 @login_required
 def forum_view(request):
-    boards_list = Board.objects.all()
+    queryset = Board.objects.all()
     topics_list = Topic.objects.all()
 
     topics_with_last_post_date_dict = {topic: topic.posts.all().aggregate(Max('date_posted'))['date_posted__max']
@@ -19,7 +19,7 @@ def forum_view(request):
 
     context = {
         'page_title': 'Wieczorne narady',
-        'boards_list': boards_list,
+        'boards_list': queryset,
         'topics_with_last_post_date_dict': topics_with_last_post_date_dict,
         'topics_with_last_active_user_dict': topics_with_last_active_user_dict,
     }
@@ -28,23 +28,23 @@ def forum_view(request):
 
 @login_required
 def posts_in_topic_view(request, board_slug, topic_slug):
-    topic = get_object_or_404(Topic, slug=topic_slug)
+    current_topic = get_object_or_404(Topic, slug=topic_slug)
     logged_user = request.user
 
     if request.method == 'POST':
         form = CreatePostForm(request.POST or None)
         if form.is_valid():
             new_post = form.save(commit=False)
-            new_post.topic = topic
+            new_post.topic = current_topic
             new_post.author = logged_user
             new_post.save()
-            return redirect('topic', board_slug=board_slug, topic_slug=topic.slug)
+            return redirect('topic', board_slug=board_slug, topic_slug=current_topic.slug)
     else:
         form = CreatePostForm()                     # equals to: form = CreatePostForm(request.GET) - GET is the default
 
     context = {
-        'page_title': topic.topic_name,
-        'topic': topic,
+        'page_title': current_topic.topic_name,
+        'topic': current_topic,
         'new_post': form,
     }
     return render(request, 'forum/topic.html', context)
