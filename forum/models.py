@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.db import models
 from django.utils.text import slugify
 from multiselectfield import MultiSelectField
@@ -48,7 +49,8 @@ class Topic(models.Model):
         super().save(*args, *kwargs)
 
     def get_absolute_url(self):
-        return f'/forum/{self.board.slug}/{self.slug}'
+        # return f'/forum/{self.board.slug}/{self.slug}'                                            # one way
+        return reverse('topic', kwargs={'board_slug': self.board.slug, 'topic_slug': self.slug})    # another way
 
 
 class Post(models.Model):
