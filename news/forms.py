@@ -17,7 +17,7 @@ class CreateNewsForm(forms.ModelForm):
         label='',
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'Tytuł ogłoszenia',
+                'placeholder': f'Tytuł ogłoszenia (max. 100 znaków)',
                 'size': '60'
             }
         )
@@ -28,7 +28,7 @@ class CreateNewsForm(forms.ModelForm):
         max_length=4000,
         widget=forms.Textarea(
             attrs={
-                'placeholder': 'Twoje ogłoszenie',
+                'placeholder': 'Twoje ogłoszenie (max. 4000 znaków)',
                 'rows': 10,
                 'cols': 60
             }
