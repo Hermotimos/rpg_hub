@@ -38,7 +38,7 @@ def posts_in_topic_view(request, board_slug, topic_slug):
             new_post.save()
             return redirect('topic', board_slug=board_slug, topic_slug=topic.slug)
     else:
-        form = CreatePostForm()
+        form = CreatePostForm()                     # equals to: form = CreatePostForm(request.GET) - GET is the default
 
     context = {
         'page_title': topic.topic_name,
@@ -68,7 +68,7 @@ def create_topic_view(request, board_slug):
             )
             return redirect('topic', board_slug=board_slug, topic_slug=topic.slug)
     else:
-        form = CreateTopicForm()
+        form = CreateTopicForm()                   # equals to: form = CreateTopicForm(request.GET) - GET is the default
 
     context = {
         'page_title': 'Nowa narada',
@@ -85,7 +85,7 @@ def create_board_view(request):
             board = form.save()
             return redirect('create_topic', board_slug=board.slug)
     else:
-        form = CreateBoardForm()
+        form = CreateBoardForm()                   # equals to: form = CreateBoardForm(request.GET) - GET is the default
 
     context = {
         'page_title': 'Nowy temat',
