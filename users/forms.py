@@ -39,4 +39,10 @@ class ProfileUpdateForm(forms.ModelForm):
     character_name = forms.CharField(
         label='Imię postaci',
         max_length=50,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'max. 50 znaków',
+                'size': '60'
+            }
+        )
     )
