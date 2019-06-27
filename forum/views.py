@@ -7,7 +7,7 @@ from .forms import CreatePostForm, CreateTopicForm, CreateBoardForm
 
 @login_required
 def forum_view(request):
-    queryset = Board.objects.all()
+    boards_list = Board.objects.all()
     topics_list = Topic.objects.all()
 
     topics_with_last_post_date_dict = {topic: topic.posts.all().aggregate(Max('date_posted'))['date_posted__max']
@@ -19,7 +19,7 @@ def forum_view(request):
 
     context = {
         'page_title': 'Wieczorne narady',
-        'boards_list': queryset,
+        'boards_list': boards_list,
         'topics_with_last_post_date_dict': topics_with_last_post_date_dict,
         'topics_with_last_active_user_dict': topics_with_last_active_user_dict,
     }
