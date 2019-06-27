@@ -14,7 +14,7 @@ class UserRegistrationForm(UserCreationForm):
             'password2'
         ]
 
-    email = forms.EmailField(required=False)
+    email = forms.EmailField(required=True)
 
 
 class UserUpdateForm(forms.ModelForm):
@@ -25,7 +25,7 @@ class UserUpdateForm(forms.ModelForm):
             'email',
         ]
 
-    email = forms.EmailField(required=False)
+    email = forms.EmailField(required=True)
 
 
 class ProfileUpdateForm(forms.ModelForm):
