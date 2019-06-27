@@ -1,14 +1,14 @@
 <header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+    <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-          <a class="navbar-brand mr-4" href="/">
-              {% if user.is_authenticated %}
-                {{ user.profile.character_name}}
-              {% else %}
-                RPG
-              {% endif %}
-          </a>
-          <div class="collapse navbar-collapse" id="navbarToggle">
+            <a class="navbar-brand mr-4" href="/">
+                {% if user.is_authenticated %}
+                    {{ user.profile.character_name}}
+                {% else %}
+                    RPG
+                {% endif %}
+            </a>
+            <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
                 <a class="nav-item nav-link" href="{% url 'forum' %}">- Wieczorne narady -</a>
                 <a class="nav-item nav-link" href="{% url 'news-main' %}">- Słup ogłoszeń -</a>
@@ -25,5 +25,5 @@
             </div>
           </div>
         </div>
-      </nav>
-    </header>
+    </nav>
+</header>
