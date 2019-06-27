@@ -14,7 +14,7 @@ class CreatePostForm(forms.ModelForm):
         label='',
         widget=forms.Textarea(
             attrs={
-                'placeholder': 'Twój głos w naradzie',
+                'placeholder': 'Twój głos w naradzie (max. 4000 znaków)',
                 'rows': 10,
                 'cols': 60
             }
@@ -32,11 +32,11 @@ class CreateTopicForm(forms.ModelForm):
         ]
 
     topic_name = forms.CharField(
-        max_length=100,
         label='',
+        max_length=100,
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'Tytuł nowej narady',
+                'placeholder': 'Tytuł nowej narady (max. 100 znaków)',
                 'size': '60'
             }
         )
@@ -47,7 +47,7 @@ class CreateTopicForm(forms.ModelForm):
         max_length=4000,
         widget=forms.Textarea(
             attrs={
-                'placeholder': 'Pierwszy głos w naradzie',
+                'placeholder': 'Pierwszy głos w naradzie (max. 4000 znaków)',
                 'rows': 10,
                 'cols': 60
             }
@@ -68,7 +68,7 @@ class CreateBoardForm(forms.ModelForm):
         label='',
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'Nowy temat narad',
+                'placeholder': 'Nowy temat narad (max. 50 znaków)',
                 'size': '60'
             }
         )
@@ -80,7 +80,7 @@ class CreateBoardForm(forms.ModelForm):
         required=False,
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'Krótki opis [opcjonalnie]',
+                'placeholder': '[opcjonalnie] Krótki opis  (max. 100 znaków)',
                 'size': '60',
             }
         )
