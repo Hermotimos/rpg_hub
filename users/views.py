@@ -128,7 +128,7 @@ class LogoutView(SuccessURLAllowedHostsMixin, TemplateView):
     """
     next_page = None
     redirect_field_name = REDIRECT_FIELD_NAME
-    template_name = 'users/logout.html'
+    template_name = 'users/login.html'
     extra_context = None
 
     @method_decorator(never_cache)
