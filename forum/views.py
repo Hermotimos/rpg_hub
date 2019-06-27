@@ -17,11 +17,19 @@ def forum_view(request):
         last_post = topic.posts.filter(date_posted=topics_with_last_post_date_dict[topic])
         topics_with_last_active_user_dict[topic] = last_post[0].author if last_post else ''
 
+    boards_with_allowed_users_dict = {}
+    for board in boards_list:
+        allowed_users_as_str = ''
+        for topic in board.topics.all():
+            allowed_users_as_str += str(topic.allowed_users)
+        boards_with_allowed_users_dict[board] = allowed_users_as_str
+
     context = {
         'page_title': 'Wieczorne narady',
         'boards_list': boards_list,
         'topics_with_last_post_date_dict': topics_with_last_post_date_dict,
         'topics_with_last_active_user_dict': topics_with_last_active_user_dict,
+        'boards_with_allowed_users_dict': boards_with_allowed_users_dict,
     }
     return render(request, 'forum/forum.html', context)
 
