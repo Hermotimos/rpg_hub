@@ -19,8 +19,9 @@
                 </td>
                 <td>
                     <small>Ostatnia aktywność: {{ news.date_updated|date:'d-M-Y, H:i' }}</small>
-                    <h3>{{ news.title }}</h3>
-                    <a href="{% url 'news-detail' news.slug %}">{{ news.text|slice:':30' }}...</a><br>
+                    <h3><a href="{{ news.get_absolute_url }}">{{ news.title }}</a></h3>
+                    {{ news.text|slice:':50' }}...<br>
+
                 </td>
             </tr>
             <br>
@@ -28,6 +29,5 @@
         </tbody>
     </table>
     {% endfor %}
-
 
 {% endblock content %}

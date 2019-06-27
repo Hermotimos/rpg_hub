@@ -30,3 +30,6 @@ class News(models.Model):
         if not self.slug:
             self.slug = self._get_unique_slug()
         super().save(*args, *kwargs)
+
+    def get_absolute_url(self):
+        return f'/news/{self.slug}'
