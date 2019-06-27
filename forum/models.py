@@ -12,6 +12,8 @@ USERS = [(profile.character_name, profile.character_name) for profile in Profile
 class Board(models.Model):
     title = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(max_length=50, unique=True, blank=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
     description = models.CharField(max_length=100)
 
     def __str__(self):
@@ -25,6 +27,9 @@ class Board(models.Model):
         if not self.slug:
             self.slug = self._get_unique_slug()
         super().save(*args, *kwargs)
+
+    class Meta:
+        ordering = ['-updated_date']
 
 
 class Topic(models.Model):
