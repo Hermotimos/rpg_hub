@@ -52,6 +52,9 @@ class Topic(models.Model):
         # return f'/forum/{self.board.slug}/{self.slug}'                                            # one way
         return reverse('topic', kwargs={'board_slug': self.board.slug, 'topic_slug': self.slug})    # another way
 
+    class Meta:
+        ordering = ['-updated_date']
+
 
 class Post(models.Model):
     text = models.TextField(max_length=4000)
