@@ -163,8 +163,7 @@ class LogoutView(SuccessURLAllowedHostsMixin, TemplateView):
                 allowed_hosts=self.get_success_url_allowed_hosts(),
                 require_https=self.request.is_secure(),
             )
-            # Security check -- Ensure the user-originating redirection URL is
-            # safe.
+            # Security check -- Ensure the user-originating redirection URL is safe.
             if not url_is_safe:
                 next_page = self.request.path
         return next_page
