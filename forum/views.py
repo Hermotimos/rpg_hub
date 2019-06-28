@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 from .models import Board, Topic, Post
-from .forms import CreatePostForm, CreateTopicForm, CreateBoardForm
+from .forms import CreatePostForm, CreateTopicForm, CreateBoardForm, TopicUpdateAllowedUsersForm
 
 
 @login_required
@@ -38,22 +38,33 @@ def forum_view(request):
 def posts_in_topic_view(request, board_slug, topic_slug):
     current_topic = get_object_or_404(Topic, slug=topic_slug)
     logged_user = request.user
+    allowed_users_current = current_topic.allowed_users
 
     if request.method == 'POST':
-        form = CreatePostForm(request.POST or None)
-        if form.is_valid():
-            new_post = form.save(commit=False)
+        new_post_form = CreatePostForm(request.POST or None)
+        allowed_users_update_form = TopicUpdateAllowedUsersForm(request.POST, instance=current_topic)
+
+        if new_post_form.is_valid():
+            new_post = new_post_form.save(commit=False)
             new_post.topic = current_topic
             new_post.author = logged_user
             new_post.save()
             return redirect('topic', board_slug=board_slug, topic_slug=current_topic.slug)
+
+        if allowed_users_update_form.is_valid():
+            allowed_users_update_form.save()
+            return redirect('topic', board_slug=board_slug, topic_slug=current_topic.slug)
+
     else:
-        form = CreatePostForm()                     # equals to: form = CreatePostForm(request.GET) - GET is the default
+        new_post_form = CreatePostForm()            # equals to: form = CreatePostForm(request.GET) - GET is the default
+        allowed_users_update_form = TopicUpdateAllowedUsersForm()
 
     context = {
         'page_title': current_topic.topic_name,
         'topic': current_topic,
-        'new_post': form,
+        'new_post': new_post_form,
+        'allowed_users_current': allowed_users_current,
+        'allowed_users_update_form': allowed_users_update_form
     }
     return render(request, 'forum/topic.html', context)
 

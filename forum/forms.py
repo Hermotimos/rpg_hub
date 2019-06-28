@@ -22,6 +22,12 @@ class CreatePostForm(forms.ModelForm):
     )
 
 
+class TopicUpdateAllowedUsersForm(forms.ModelForm):
+    class Meta:
+        model = Topic
+        fields = ['allowed_users']
+
+
 class CreateTopicForm(forms.ModelForm):
     class Meta:
         model = Topic
