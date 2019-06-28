@@ -11,7 +11,12 @@ def dict_lookup(dict_, index):
         return dict_[index]
     return ''
 
+#
+# @register.filter
+# def underscore_to_space(text):
+#     text = str(text)
+#     return text.replace('_', ' ')
 
 @register.filter
-def underscore_to_space(string):
-    return string.replace('_', ' ')
+def get_first_word(text):
+    return text.split(' ', 1)[0]

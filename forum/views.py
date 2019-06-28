@@ -15,7 +15,7 @@ def forum_view(request):
     topics_with_last_active_user_dict = {}
     for topic in topics_list:
         last_post = topic.posts.filter(date_posted=topics_with_last_post_date_dict[topic])
-        topics_with_last_active_user_dict[topic] = last_post[0].author if last_post else ''
+        topics_with_last_active_user_dict[topic] = last_post[0].author.profile.character_name if last_post else ''
 
     boards_with_allowed_users_dict = {}
     for board in boards_list:

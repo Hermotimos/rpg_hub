@@ -37,7 +37,7 @@
                             <a href="{{ topic.get_absolute_url }}">{{ topic.topic_name }}</a>
                         </td>
                         <td>
-                            {{ topic.starter.username|underscore_to_space }}<br>
+                            {{ topic.starter.profile.character_name|get_first_word  }}<br>
                             <small>{{ topic.created_date|date:'d-M-Y' }}</small>
                         </td>
                         <td>
@@ -49,7 +49,7 @@
                         </td>
                         <td>{{ topic.posts.count }}</td>
                         <td>
-                            {{ topics_with_last_active_user_dict|dict_lookup:topic }}<br>
+                            {{ topics_with_last_active_user_dict|dict_lookup:topic|get_first_word }}<br>
                             <small>{{ topics_with_last_post_date_dict|dict_lookup:topic|date:'d-M-Y' }}</small>
                         </td>
                     </tr>

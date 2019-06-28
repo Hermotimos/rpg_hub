@@ -2,10 +2,9 @@
 {% load custom_filters %}
 
 {% block content %}
-  <small>W temacie: {{ topic.board.title }}</small>
-  <br><br>
-  <h5>Inicjator: {{ topic.starter }}</h5>
-  <h5>Uczestnicy: {{ topic.allowed_users }}</h5>
+  <small>W temacie: {{ topic.board.title }}</small><br><br>
+  <h6>Inicjator: {{ topic.starter.profile.character_name }}</h6>
+  <h6>Uczestnicy: {{ topic.allowed_users }}</h6>
   <br>
   {% for post in topic.posts.all %}
       {% if post.author.profile.character_name == 'MG' %}
