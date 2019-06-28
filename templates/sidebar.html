@@ -1,7 +1,7 @@
 {% if user.is_authenticated %}
 <div class="col-md-4">
     <div class="content-section">
-        <h3><a href="/users/profile">{{ user.profile.character_name }}</a></h3>
+        <h3>{{ user.profile.character_name }}</h3>
         <img class="account-img" src="{{ user.profile.image.url }}">
         <p class='text-muted'>
             Przydomki i funkcje
