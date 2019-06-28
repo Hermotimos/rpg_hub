@@ -17,6 +17,8 @@ def dict_lookup(dict_, index):
 #     text = str(text)
 #     return text.replace('_', ' ')
 
+
 @register.filter
 def get_first_word(text):
     return text.split(' ', 1)[0]
+
