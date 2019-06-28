@@ -22,7 +22,7 @@ class CreatePostForm(forms.ModelForm):
     )
 
 
-class TopicUpdateAllowedUsersForm(forms.ModelForm):
+class UpdateTopicForm(forms.ModelForm):
     class Meta:
         model = Topic
         fields = ['allowed_profiles']
@@ -33,7 +33,7 @@ class CreateTopicForm(forms.ModelForm):
         model = Topic
         fields = [
             'topic_name',
-            'allowed_users',
+            'allowed_profiles',
             'first_post'
         ]
 

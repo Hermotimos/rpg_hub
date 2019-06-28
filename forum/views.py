@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 from .models import Board, Topic, Post
-from .forms import CreatePostForm, CreateTopicForm, CreateBoardForm, TopicUpdateAllowedUsersForm
+from .forms import CreatePostForm, CreateTopicForm, CreateBoardForm, UpdateTopicForm
 
 
 @login_required
@@ -42,7 +42,7 @@ def posts_in_topic_view(request, board_slug, topic_slug):
 
     if request.method == 'POST':
         new_post_form = CreatePostForm(request.POST or None)
-        allowed_users_update_form = TopicUpdateAllowedUsersForm(request.POST, instance=current_topic)
+        topic_update_form = UpdateTopicForm(request.POST, instance=current_topic)
 
         if new_post_form.is_valid():
             new_post = new_post_form.save(commit=False)
@@ -51,20 +51,20 @@ def posts_in_topic_view(request, board_slug, topic_slug):
             new_post.save()
             return redirect('topic', board_slug=board_slug, topic_slug=current_topic.slug)
 
-        if allowed_users_update_form.is_valid():
-            allowed_users_update_form.save()
+        if topic_update_form.is_valid():
+            topic_update_form.save()
             return redirect('topic', board_slug=board_slug, topic_slug=current_topic.slug)
 
     else:
         new_post_form = CreatePostForm()            # equals to: form = CreatePostForm(request.GET) - GET is the default
-        allowed_users_update_form = TopicUpdateAllowedUsersForm()
+        topic_update_form = UpdateTopicForm()
 
     context = {
         'page_title': current_topic.topic_name,
         'topic': current_topic,
         'new_post': new_post_form,
         'allowed_users_current': allowed_users_current,
-        'allowed_users_update_form': allowed_users_update_form
+        'topic_update_form': topic_update_form
     }
     return render(request, 'forum/topic.html', context)
 
@@ -92,7 +92,7 @@ def create_topic_view(request, board_slug):
 
     context = {
         'page_title': 'Nowa narada',
-        'topic': form,
+        'topic_form': form,
     }
     return render(request, 'forum/create_topic.html', context)
 

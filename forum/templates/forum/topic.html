@@ -70,9 +70,7 @@
     <div class="allowed-users-form" id="page-bottom">
         <form method="POST" action=".#page-bottom">
             {% csrf_token %}
-            {% for field in allowed_users_update_form %}
-               {{ field }}
-            {% endfor %}
+            {{ topic_update_form.allowed_profiles }}
             <br>
             <small>*Aby zaznaczyć wielu uczestników - wciśnij CTRL.</small>
             <br><br>

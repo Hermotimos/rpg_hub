@@ -2,20 +2,19 @@
 
 {% block content %}
     <br>
-    <form method="POST">
+    <form class="allowed-users-form" method="POST">
         {% csrf_token %}
-        {{ topic.topic_name }}<br><br>
+        {{ topic_form.topic_name }}<br><br>
         <p>Włącz uczestników do narady:</p>
         <small>1) Włączaj tylko postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji.</small>
         <small>2) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small>
         <small>3) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small>
 
         <br><br>
-        {% for profile_character_name in topic.allowed_users %}
-            {{ profile_character_name }}<br>
-        {% endfor %}
+        {{ topic_form.allowed_profiles }}
+        <br>
         <small>*Jeśli chcesz się naradzić z postacią, której nie ma na liście, powiadom MG.</small><br><br>
-        {{ topic.first_post }}
+        {{ topic_form.first_post }}
         <br><br>
 
         <div class="mb-4">
