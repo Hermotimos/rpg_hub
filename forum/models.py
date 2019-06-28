@@ -40,7 +40,7 @@ class Topic(models.Model):
     board = models.ForeignKey(Board, related_name='topics', on_delete=models.CASCADE)
     starter = models.ForeignKey(User, related_name='topics', on_delete=models.CASCADE)
     allowed_users = MultiSelectField(max_length=100, choices=USERS, default='MG')
-    # allowed_profiles = models.ManyToManyField(Profile)
+    allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_topics')
 
     def __str__(self):
         return self.topic_name

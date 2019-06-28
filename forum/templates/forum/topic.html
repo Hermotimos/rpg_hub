@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load custom_filters %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 {% if request.user.profile.character_name not in topic.allowed_users %}
@@ -56,7 +57,7 @@
     {% endfor %}
     <br><br>
 
-    <div  id="page-bottom">
+    <div id="page-bottom">
         <form method="POST" action=".#page-bottom">
             {% csrf_token %}
             {{ new_post }}
@@ -66,13 +67,17 @@
     </div>
 
     <br><br>
-    <div  id="page-bottom">
-     <form method="POST" action=".#page-bottom">
-          {% csrf_token %}
-          {{ allowed_users_update_form }}
-          <br><br>
-          <input class="btn btn-success" type="submit" value="Dodaj uczestników narady"}}>
-      </form>
+    <div class="allowed-users-form" id="page-bottom">
+        <form method="POST" action=".#page-bottom">
+            {% csrf_token %}
+            {% for field in allowed_users_update_form %}
+               {{ field }}
+            {% endfor %}
+            <br>
+            <small>*Aby zaznaczyć wielu uczestników - wciśnij CTRL.</small>
+            <br><br>
+            <input class="btn btn-success" type="submit" value="Dodaj uczestników narady"}}>
+        </form>
     </div>
 {% endif %}
 {% endblock content %}

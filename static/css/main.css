@@ -125,3 +125,8 @@ small {
 .btn-space {
     margin: 2px;
 }
+
+.allowed-users-form select {
+    min-height: 300px;
+    width: 400px;
+}
