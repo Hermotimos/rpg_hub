@@ -16,7 +16,7 @@ class Profile(models.Model):
     character_status = models.CharField(max_length=20, choices=STATUS, default='npc')
 
     def __str__(self):
-        return f'{self.user.username}'
+        return f'{self.character_name}'
 
     def save(self, *args, **kwargs):
         super().save()
