@@ -8,18 +8,16 @@
       Uczestnicy:
       {% for profile in topic.allowed_users %}
         {% if profile != 'MG' %}
-        <td>
             {% if forloop.counter > 1 %}
                 / {{ profile }}
             {% else %}
                 {{ profile }}
             {% endif %}
-        </td>
         {% endif %}
       {% endfor %}
-
   </h6>
   <br>
+
   {% for post in topic.posts.all %}
       {% if post.author.profile.character_name == 'MG' %}
           <table class="posts-and-news">

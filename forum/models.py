@@ -6,8 +6,6 @@ from multiselectfield import MultiSelectField
 from django.contrib.auth.models import User
 from users.models import Profile
 
-USERS = [(profile.character_name, profile.character_name) for profile in Profile.objects.all()]
-
 
 class Board(models.Model):
     title = models.CharField(max_length=50, unique=True)
@@ -33,6 +31,8 @@ class Board(models.Model):
 
 
 class Topic(models.Model):
+    USERS = [(profile.character_name, profile.character_name) for profile in Profile.objects.all()]
+
     topic_name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=50, unique=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
