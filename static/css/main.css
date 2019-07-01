@@ -126,7 +126,7 @@ small {
     margin: 2px;
 }
 
-.allowed-users-form select {
+.allowed-profiles-form select {
     min-height: 300px;
     width: 400px;
 }
