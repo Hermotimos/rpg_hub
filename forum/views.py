@@ -62,6 +62,7 @@ def posts_in_topic_view(request, board_slug, topic_slug):
     return render(request, 'forum/topic.html', context)
 
 
+@login_required
 def add_allowed_profiles_view(request, board_slug, topic_slug):
     current_topic = get_object_or_404(Topic, slug=topic_slug)
 
