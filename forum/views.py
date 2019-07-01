@@ -41,7 +41,6 @@ def posts_in_topic_view(request, board_slug, topic_slug):
 
     if request.method == 'POST':
         new_post_form = CreatePostForm(request.POST or None)
-        topic_update_form = UpdateTopicForm(request.POST, instance=current_topic)
 
         if new_post_form.is_valid():
             new_post = new_post_form.save(commit=False)
@@ -50,21 +49,35 @@ def posts_in_topic_view(request, board_slug, topic_slug):
             new_post.save()
             return redirect('topic', board_slug=board_slug, topic_slug=current_topic.slug)
 
-        if topic_update_form.is_valid():
-            topic_update_form.save()
-            return redirect('topic', board_slug=board_slug, topic_slug=current_topic.slug)
-
     else:
         new_post_form = CreatePostForm()            # equals to: form = CreatePostForm(request.GET) - GET is the default
-        topic_update_form = UpdateTopicForm()
 
     context = {
         'page_title': current_topic.topic_name,
         'topic': current_topic,
-        'new_post_form': new_post_form,
-        'topic_update_form': topic_update_form
+        'new_post_form': new_post_form
     }
     return render(request, 'forum/topic.html', context)
+
+
+def add_allowed_profiles_view(request, board_slug, topic_slug):
+    current_topic = get_object_or_404(Topic, slug=topic_slug)
+
+    if request.method == 'POST':
+        topic_update_form = UpdateTopicForm(request.POST, instance=current_topic)
+
+        if topic_update_form.is_valid():
+            topic_update_form.save()
+            return redirect('topic', board_slug=board_slug, topic_slug=current_topic.slug)
+    else:
+        topic_update_form = UpdateTopicForm()
+
+    context = {
+        'page_title': 'Dodaj uczestników narady ' + '"' + current_topic.topic_name + '"',
+        'topic': current_topic,
+        'topic_update_form': topic_update_form
+    }
+    return render(request, 'forum/topic_update_users.html', context)
 
 
 @login_required
