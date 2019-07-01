@@ -38,7 +38,6 @@ def forum_view(request):
 def posts_in_topic_view(request, board_slug, topic_slug):
     current_topic = get_object_or_404(Topic, slug=topic_slug)
     logged_user = request.user
-    allowed_users_current = current_topic.allowed_users
 
     if request.method == 'POST':
         new_post_form = CreatePostForm(request.POST or None)
@@ -62,8 +61,7 @@ def posts_in_topic_view(request, board_slug, topic_slug):
     context = {
         'page_title': current_topic.topic_name,
         'topic': current_topic,
-        'new_post': new_post_form,
-        'allowed_users_current': allowed_users_current,
+        'new_post_form': new_post_form,
         'topic_update_form': topic_update_form
     }
     return render(request, 'forum/topic.html', context)

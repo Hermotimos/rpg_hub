@@ -60,7 +60,7 @@
     <div id="page-bottom">
         <form method="POST" action=".#page-bottom">
             {% csrf_token %}
-            {{ new_post }}
+            {{ new_post_form }}
             <br><br>
             <input class="btn btn-success" type="submit" value="Tak rzeknij"}}>
         </form>
@@ -74,7 +74,7 @@
             <br>
             <small>*Aby zaznaczyć wielu uczestników - wciśnij CTRL.</small>
             <br><br>
-            <input class="btn btn-success" type="submit" value="Dodaj uczestników narady"}}>
+            <input class="btn btn-success" type="submit" value="Dodaj uczestników narady">
         </form>
     </div>
 {% endif %}
