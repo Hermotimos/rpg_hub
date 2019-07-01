@@ -60,6 +60,15 @@ class CreateTopicForm(forms.ModelForm):
         )
     )
 
+    def save(self, commit=True):
+        topic = super(CreateTopicForm, self).save(commit=False)
+        if commit:
+            # for profile in self.cleaned_data['allowed_profiles']:
+            #     topic.allowed_profiles.add(profile)
+            topic.save()
+            topic.allowed_profiles.set(self.cleaned_data['allowed_profiles'])
+        return topic
+
 
 class CreateBoardForm(forms.ModelForm):
     class Meta:
