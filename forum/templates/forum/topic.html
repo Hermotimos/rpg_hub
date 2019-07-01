@@ -3,79 +3,73 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-{% if request.user.profile.character_name not in topic.allowed_users %}
-    <br><h4>Nie jesteś uczestnikiem tej narady</h4>
-{% else %}
-    <small>W temacie: {{ topic.board.title }}</small><br><br>
-    <h6>Inicjator: <small>{{ topic.starter.profile.character_name }}</small></h6>
-    <h6>
-        Uczestnicy:
-        {% for profile in topic.allowed_profiles.all %}
-            {% if profile.character_name != 'MG' %}
-                {% if forloop.counter > 1 %}
-                    <small>/ {{ profile }}</small>
-                {% else %}
-                    <small>{{ profile }}</small>
+     <br>
+    {% if request.user.profile.character_name not in topic.allowed_users %}
+       <h4>Nie jesteś uczestnikiem tej narady</h4>
+    {% else %}
+        <h6>Temat: <small>{{ topic.board.title }}</small></h6>
+        <h6>Inicjator: <small>{{ topic.starter.profile.character_name }}</small></h6>
+        <h6>
+            Uczestnicy:
+            {% for profile in topic.allowed_profiles.all %}
+                {% if profile.character_name != 'MG' %}
+                    {% if forloop.counter > 1 %}
+                        <small>/ {{ profile }}</small>
+                    {% else %}
+                        <small>{{ profile }}</small>
+                    {% endif %}
                 {% endif %}
-            {% endif %}
-          {% endfor %}
-    </h6>
-    <br>
+              {% endfor %}
+        </h6>
+        <br>
+        <div class="mb-4">
+            <a href="{% url 'update_topic' topic.board.slug topic.slug %}" class="btn btn-success">Dodaj uczestników narady</a>
+        </div>
+        <br>
 
-    {% for post in topic.posts.all %}
-        {% if post.author.profile.character_name == 'MG' %}
-            <table class="posts-and-news">
-            <tbody>
-                <div class="border-bottom pt-3">
-                    <tr class="posts-and-news-mg">
-                        <td>
-                            <p>{{ post.text }}</p>
-                        </td>
-                    </tr>
-                </div>
-            </tbody>
-            </table>
-
-        {% else %}
-            <table class="posts-and-news">
+        {% for post in topic.posts.all %}
+            {% if post.author.profile.character_name == 'MG' %}
+                <table class="posts-and-news">
                 <tbody>
                     <div class="border-bottom pt-3">
-                    <tr class="posts-and-news">
-                        <td>
-                            <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
-                            <small><p>{{ post.author.profile.character_name }}</p></small>
-                        </td>
-                        <td>
-                            <small>{{ post.date_posted|date:'d-M-Y' }}</small>
-                            <p>{{ post.text|capfirst }}</p>
-                        </td>
-                    </tr>
+                        <tr class="posts-and-news-mg">
+                            <td>
+                                <p>{{ post.text }}</p>
+                            </td>
+                        </tr>
                     </div>
                 </tbody>
-            </table>
-        {% endif %}
-    {% endfor %}
-    <br><br>
+                </table>
 
-    <div id="page-bottom">
-        <form method="POST" action=".#page-bottom">
-            {% csrf_token %}
-            {{ new_post_form }}
-            <br><br>
-            <input class="btn btn-success" type="submit" value="Tak rzeknij"}}>
-        </form>
-    </div>
+            {% else %}
+                <table class="posts-and-news">
+                    <tbody>
+                        <div class="border-bottom pt-3">
+                        <tr class="posts-and-news">
+                            <td>
+                                <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+                                <small><p>{{ post.author.profile.character_name }}</p></small>
+                            </td>
+                            <td>
+                                <small>{{ post.date_posted|date:'d-M-Y' }}</small>
+                                <p>{{ post.text|capfirst }}</p>
+                            </td>
+                        </tr>
+                        </div>
+                    </tbody>
+                </table>
+            {% endif %}
+        {% endfor %}
+        <br><br>
 
-    <br><br>
-    <div class="allowed-users-form" id="page-bottom">
-        <form method="POST" action=".#page-bottom">
-            {% csrf_token %}
-            {{ topic_update_form.allowed_profiles }}
-            <br>
-            <small>*Aby zaznaczyć wielu uczestników - wciśnij CTRL.</small>
-            <br><br>
-            <input class="btn btn-success" type="submit" value="Dodaj uczestników narady">
-        </form>
-    </div>
-{% endif %}
+        <div id="page-bottom">
+            <form method="POST" action=".#page-bottom">
+                {% csrf_token %}
+                {{ new_post_form }}
+                <br><br>
+                <input class="btn btn-success" type="submit" value="Tak rzeknij"}}>
+            </form>
+        </div>
+
+    {% endif %}
 {% endblock content %}
