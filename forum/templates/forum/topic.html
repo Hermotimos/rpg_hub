@@ -4,7 +4,7 @@
 
 {% block content %}
      <br>
-    {% if request.user.profile.character_name not in topic.allowed_users %}
+    {% if request.user.profile not in topic.allowed_profiles.all %}
        <h4>Nie jesteś uczestnikiem tej narady</h4>
     {% else %}
         <h6>Temat: <small>{{ topic.board.title }}</small></h6>
