@@ -17,19 +17,29 @@ def forum_view(request):
         last_post = topic.posts.filter(date_posted=topics_with_last_post_date_dict[topic])
         topics_with_last_active_user_dict[topic] = last_post[0].author.profile.character_name if last_post else ''
 
-    boards_with_allowed_users_dict = {}
+    # boards_with_allowed_users_dict = {}
+    # for board in boards_list:
+    #     allowed_users_as_str = ''
+    #     for topic in board.topics.all():
+    #         allowed_users_as_str += str(topic.allowed_users)
+    #     boards_with_allowed_users_dict[board] = allowed_users_as_str
+
+    boards_with_allowed_profiles_dict = {}
     for board in boards_list:
-        allowed_users_as_str = ''
+        allowed_profiles = ''
         for topic in board.topics.all():
-            allowed_users_as_str += str(topic.allowed_users)
-        boards_with_allowed_users_dict[board] = allowed_users_as_str
+            for profile in topic.allowed_profiles.all():
+                if profile.character_name not in allowed_profiles:
+                    allowed_profiles += profile.character_name + ', '
+        boards_with_allowed_profiles_dict[board] = allowed_profiles
 
     context = {
         'page_title': 'Wieczorne narady',
         'boards_list': boards_list,
         'topics_with_last_post_date_dict': topics_with_last_post_date_dict,
         'topics_with_last_active_user_dict': topics_with_last_active_user_dict,
-        'boards_with_allowed_users_dict': boards_with_allowed_users_dict,
+        # 'boards_with_allowed_users_dict': boards_with_allowed_users_dict,
+        'boards_with_allowed_profiles_dict': boards_with_allowed_profiles_dict
     }
     return render(request, 'forum/forum.html', context)
 

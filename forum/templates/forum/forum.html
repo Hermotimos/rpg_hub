@@ -10,7 +10,7 @@
 
     <br>
     {% for board in boards_list %}
-    {% if request.user.profile.character_name in boards_with_allowed_users_dict|dict_lookup:board %}
+    {% if request.user.profile.character_name in boards_with_allowed_profiles_dict|dict_lookup:board %}
 
         <h3>{{ board.title }}</h3>
         {% if board.description %}
@@ -31,7 +31,7 @@
 
             <tbody>
             {% for topic in board.topics.all %}
-                {% if request.user.profile in topic.allowed_profiles.all %}
+                {% if request.user.profile.character_name in topic.allowed_users %}
                     <tr>
                         <td>
                             <a href="{{ topic.get_absolute_url }}">{{ topic.topic_name }}</a>
