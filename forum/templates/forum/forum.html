@@ -31,7 +31,7 @@
 
             <tbody>
             {% for topic in board.topics.all %}
-                {% if request.user.profile.character_name in topic.allowed_users %}
+                {% if request.user.profile in topic.allowed_profiles.all %}
                     <tr>
                         <td>
                             <a href="{{ topic.get_absolute_url }}">{{ topic.topic_name }}</a>
