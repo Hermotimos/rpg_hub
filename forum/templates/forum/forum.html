@@ -31,7 +31,7 @@
 
             <tbody>
             {% for topic in board.topics.all %}
-                {% if request.user.profile.character_name in topic.allowed_users %}
+                {% if request.user.profile in topic.allowed_profiles.all %}
                     <tr>
                         <td>
                             <a href="{{ topic.get_absolute_url }}">{{ topic.topic_name }}</a>
@@ -41,8 +41,8 @@
                             <small>{{ topic.created_date|date:'d-M-Y' }}</small>
                         </td>
                         <td>
-                            {% for profile in topic.allowed_users %}
-                                {% if profile != 'MG' %}
+                            {% for profile in topic.allowed_profiles.all %}
+                                {% if profile.character_name != 'MG' %}
                                     <small>{{ profile }}</small><br>
                                 {% endif %}
                             {% endfor %}

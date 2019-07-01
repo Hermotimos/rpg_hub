@@ -7,15 +7,15 @@
     <br><h4>Nie jesteś uczestnikiem tej narady</h4>
 {% else %}
     <small>W temacie: {{ topic.board.title }}</small><br><br>
-    <h6>Inicjator: {{ topic.starter.profile.character_name }}</h6>
+    <h6>Inicjator: <small>{{ topic.starter.profile.character_name }}</small></h6>
     <h6>
         Uczestnicy:
-        {% for profile in topic.allowed_users %}
-            {% if profile != 'MG' %}
+        {% for profile in topic.allowed_profiles.all %}
+            {% if profile.character_name != 'MG' %}
                 {% if forloop.counter > 1 %}
-                    / {{ profile }}
+                    <small>/ {{ profile }}</small>
                 {% else %}
-                    {{ profile }}
+                    <small>{{ profile }}</small>
                 {% endif %}
             {% endif %}
           {% endfor %}
