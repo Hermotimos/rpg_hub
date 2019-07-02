@@ -24,7 +24,7 @@
         {{ topic_form.allowed_profiles }}
     </form>
 
-    <div class="allowed-users-form" id="page-bottom">
+    <div class="allowed-profiles-form" id="page-bottom">
         <form method="POST" action=".#page-bottom">
             {% csrf_token %}
             {{ topic_update_form.allowed_profiles }}
