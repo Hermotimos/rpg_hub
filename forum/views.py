@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 from .models import Board, Topic, Post
+from users.models import Profile
 from .forms import CreatePostForm, CreateTopicForm, CreateBoardForm, UpdateTopicForm
 
 
@@ -70,7 +71,11 @@ def add_allowed_profiles_view(request, board_slug, topic_slug):
             topic_update_form.save()
             return redirect('topic', board_slug=board_slug, topic_slug=current_topic.slug)
     else:
-        topic_update_form = UpdateTopicForm()
+        topic_update_form = UpdateTopicForm(
+            initial={
+                'allowed_profiles': [p for p in Profile.objects.all() if p in current_topic.allowed_profiles.all()]
+            }
+        )
 
     context = {
         'page_title': 'Dodaj uczestników narady ' + '"' + current_topic.topic_name + '"',
