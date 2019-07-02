@@ -22,10 +22,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '8bb8lkqy+^)!8i-ft*+1hb9&h&imr*n7yhwm#!3cwp6=^(expj'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WA
+# RNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -141,3 +142,9 @@ LOGIN_REDIRECT_URL = 'profile'
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'login'
 
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'localhost'
+# EMAIL_USE_TLS = True
+# EMAIL_PORT = 1025
+# EMAIL_HOST_USER = 'motorhead616@gmail.com'
+# EMAIL_HOST_PASSWORD = 'badanianaukowe'
