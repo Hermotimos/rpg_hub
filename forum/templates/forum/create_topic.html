@@ -5,8 +5,9 @@
     <form class="allowed-profiles-form" method="POST">
         {% csrf_token %}
 
-        {{ topic_form.topic_name }}
-        <br><br>
+        {{ topic_form.topic_name }}<br>
+        {{ topic_form.topic_name.errors }}
+        <br>
 
         <p>Włącz uczestników do narady:</p>
         <small>1) Włączaj tylko postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji.</small>

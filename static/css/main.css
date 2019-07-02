@@ -130,3 +130,7 @@ small {
     min-height: 300px;
     width: 400px;
 }
+
+.errorlist {
+    color: red;
+}
