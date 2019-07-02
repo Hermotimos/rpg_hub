@@ -43,14 +43,12 @@ def posts_in_topic_view(request, board_slug, topic_slug):
 
     if request.method == 'POST':
         post_form = CreatePostForm(request.POST or None)
-
         if post_form.is_valid():
             post = post_form.save(commit=False)
             post.topic = current_topic
             post.author = logged_user
             post.save()
             return redirect('topic', board_slug=board_slug, topic_slug=current_topic.slug)
-
     else:
         post_form = CreatePostForm()            # equals to: form = CreatePostForm(request.GET) - GET is the default
 
@@ -125,6 +123,6 @@ def create_board_view(request):
 
     context = {
         'page_title': 'Nowy temat',
-        'board': board_form,
+        'board_form': board_form,
     }
     return render(request, 'forum/create_board.html', context)
