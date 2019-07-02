@@ -87,12 +87,14 @@ def create_topic_view(request, board_slug):
     if request.method == 'POST':
         topic_form = CreateTopicForm(request.POST or None)
         if topic_form.is_valid():
-            allowed_profiles = topic_form.cleaned_data['allowed_profiles']
+
             topic = topic_form.save(commit=False)
             topic.board = Board.objects.get(slug=board_slug)
             topic.starter = logged_user
             topic.save()
-            topic.allowed_profiles.set(allowed_profiles)
+
+            allowed_profiles_cleaned = topic_form.cleaned_data['allowed_profiles']
+            topic.allowed_profiles.set(allowed_profiles_cleaned)
             topic.save()
 
             Post.objects.create(
