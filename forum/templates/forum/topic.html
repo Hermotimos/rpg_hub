@@ -35,7 +35,9 @@
                         <tr class="posts-and-news-mg">
                             <td>
                                 <p>{{ post.text }}</p>
-                                <p>{{ post.image }}</p>
+                                {% if post.image %}
+                                    <img src="{{ post.image.url }}">
+                                {% endif %}
                             </td>
                         </tr>
                     </div>
@@ -54,7 +56,9 @@
                             <td>
                                 <small>{{ post.date_posted|date:'d-M-Y' }}</small>
                                 <p>{{ post.text|capfirst }}</p>
-                                <p>{{ post.image }}</p>
+                                {% if post.image %}
+                                    <img src="{{ post.image.url }}">
+                                {% endif %}
                             </td>
                         </tr>
                         </div>
