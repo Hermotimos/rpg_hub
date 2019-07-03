@@ -110,12 +110,12 @@ def create_topic_view(request, board_slug):
                 author=logged_user
             )
 
-            # subject = f"[RPG] Nowa narada: {topic_form.cleaned_data['topic_name']}"
-            # message = f"{request.user.profile} chce się z Tobą naradzić."
-            # sender = 'lukas.kozicki@gmail.com'
-            # receivers_list = ['lukas.kozicki@gmail.com', 'nephilim7@o2.pl']
-            #
-            # send_mail(subject, message, sender, receivers_list)
+            subject = f"[RPG] Nowa narada: {topic_form.cleaned_data['topic_name']}"
+            message = f"{request.user.profile} rozpoczął nową naradę z Twoim udziałem."
+            sender = settings.EMAIL_HOST_USER
+            receivers_list = ['lukas.kozicki@gmail.com', 'nephilim7@o2.pl']
+
+            send_mail(subject, message, sender, receivers_list)
             return redirect('topic', board_slug=board_slug, topic_slug=topic.slug)
     else:
         topic_form = CreateTopicForm()            # equals to: form = CreateTopicForm(request.GET) - GET is the default
