@@ -111,9 +111,11 @@ def create_topic_view(request, board_slug):
             )
 
             subject = f"[RPG] Nowa narada: {topic_form.cleaned_data['topic_name']}"
-            message = f"{request.user.profile} rozpoczął nową naradę z Twoim udziałem."
+            message = f"{request.user.profile} dołączył Cię do narady.\n" \
+                      f"Narada '{topic.topic_name}' w temacie '{topic.board}'.\n" \
+                      f"Link: http://127.0.0.1:8000/forum/{topic.board.slug}/{topic.slug}/"
             sender = settings.EMAIL_HOST_USER
-            receivers_list = ['lukas.kozicki@gmail.com']
+            receivers_list = []
             for user in User.objects.all():
                 if user.profile in topic.allowed_profiles.all():
                     receivers_list.append(user.email)
