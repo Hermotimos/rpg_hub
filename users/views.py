@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
-
 # imports for LoginView and LogoutView
 from django.contrib.auth.views import (SuccessURLAllowedHostsMixin, FormView, TemplateView, AuthenticationForm,
                                        REDIRECT_FIELD_NAME, HttpResponseRedirect, resolve_url, settings, is_safe_url,
                                        get_current_site, never_cache, auth_logout, method_decorator, csrf_protect,
                                        auth_login, sensitive_post_parameters)
+
+from .forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
+
+
 
 
 def register_view(request):
