@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Max
-from .models import Board, Topic, Post
-from users.models import Profile, User
-from .forms import CreatePostForm, CreateTopicForm, CreateBoardForm, UpdateTopicForm
 from django.core.mail import send_mail
 from django.conf import settings
+
+from forum.models import Board, Topic, Post
+from users.models import Profile, User
+from forum.forms import CreatePostForm, CreateTopicForm, CreateBoardForm, UpdateTopicForm
 
 
 @login_required
@@ -50,7 +51,6 @@ def posts_in_topic_view(request, board_slug, topic_slug):
             post = post_form.save(commit=False)
             post.topic = current_topic
             post.author = logged_user
-            # post.image = request.FILES
             post.save()
             return redirect('topic', board_slug=board_slug, topic_slug=current_topic.slug)
     else:
