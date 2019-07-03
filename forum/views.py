@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 from .models import Board, Topic, Post
-from users.models import Profile
+from users.models import Profile, User
 from .forms import CreatePostForm, CreateTopicForm, CreateBoardForm, UpdateTopicForm
 from django.core.mail import send_mail
 from django.conf import settings
@@ -113,7 +113,12 @@ def create_topic_view(request, board_slug):
             subject = f"[RPG] Nowa narada: {topic_form.cleaned_data['topic_name']}"
             message = f"{request.user.profile} rozpoczął nową naradę z Twoim udziałem."
             sender = settings.EMAIL_HOST_USER
-            receivers_list = ['lukas.kozicki@gmail.com', 'nephilim7@o2.pl']
+            receivers_list = ['lukas.kozicki@gmail.com']
+            for user in User.objects.all():
+                if user.profile in topic.allowed_profiles.all():
+                    receivers_list.append(user.email)
+            if logged_user.profile.character_status != 'MG':
+                receivers_list.append('lukas.kozicki@gmail.com')
 
             send_mail(subject, message, sender, receivers_list)
             return redirect('topic', board_slug=board_slug, topic_slug=topic.slug)
