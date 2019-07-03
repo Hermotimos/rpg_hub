@@ -1,9 +1,8 @@
 from django.urls import reverse
 from django.db import models
 from django.utils.text import slugify
-from multiselectfield import MultiSelectField
-
 from django.contrib.auth.models import User
+from multiselectfield import MultiSelectField
 from users.models import Profile
 
 
@@ -18,7 +17,7 @@ class News(models.Model):
     date_posted = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, related_name='news', on_delete=models.CASCADE)
-    allowed_users = MultiSelectField(max_length=100, choices=PLAYERS)
+    # allowed_users = MultiSelectField(max_length=100, choices=PLAYERS)               # TODO change to allowed profiles
 
     def __str__(self):
         return self.title[:50] + '...'

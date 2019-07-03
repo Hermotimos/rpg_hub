@@ -6,7 +6,6 @@ from django.contrib.auth.views import (SuccessURLAllowedHostsMixin, FormView, Te
                                        REDIRECT_FIELD_NAME, HttpResponseRedirect, resolve_url, settings, is_safe_url,
                                        get_current_site, never_cache, auth_logout, method_decorator, csrf_protect,
                                        auth_login, sensitive_post_parameters)
-
 from .forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
 
 

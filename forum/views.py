@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 from django.core.mail import send_mail
 from django.conf import settings
-
 from forum.models import Board, Topic, Post
 from users.models import Profile, User
 from forum.forms import CreatePostForm, CreateTopicForm, CreateBoardForm, UpdateTopicForm

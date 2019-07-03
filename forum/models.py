@@ -2,10 +2,8 @@ from django.urls import reverse
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
-
 from multiselectfield import MultiSelectField
 from PIL import Image
-
 from users.models import Profile
 
 
