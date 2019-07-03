@@ -45,11 +45,12 @@ def posts_in_topic_view(request, board_slug, topic_slug):
     logged_user = request.user
 
     if request.method == 'POST':
-        post_form = CreatePostForm(request.POST or None)
+        post_form = CreatePostForm(request.POST, request.FILES)             # TODO what is wrong ???
         if post_form.is_valid():
             post = post_form.save(commit=False)
             post.topic = current_topic
             post.author = logged_user
+            # post.image = request.FILES
             post.save()
             return redirect('topic', board_slug=board_slug, topic_slug=current_topic.slug)
     else:

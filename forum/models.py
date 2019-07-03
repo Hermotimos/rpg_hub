@@ -67,6 +67,7 @@ class Post(models.Model):
     topic = models.ForeignKey(Topic, related_name='posts', on_delete=models.CASCADE)
     date_posted = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
+    image = models.ImageField(blank=True, null=True, upload_to='post_pics/')
 
     def __str__(self):
         return self.text[:30]

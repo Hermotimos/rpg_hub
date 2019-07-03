@@ -35,6 +35,7 @@
                         <tr class="posts-and-news-mg">
                             <td>
                                 <p>{{ post.text }}</p>
+                                <p>{{ post.image }}</p>
                             </td>
                         </tr>
                     </div>
@@ -53,6 +54,7 @@
                             <td>
                                 <small>{{ post.date_posted|date:'d-M-Y' }}</small>
                                 <p>{{ post.text|capfirst }}</p>
+                                <p>{{ post.image }}</p>
                             </td>
                         </tr>
                         </div>
@@ -63,9 +65,9 @@
         <br><br>
 
         <div id="page-bottom">
-            <form method="POST" action=".#page-bottom">
+            <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ post_form }}
+                {{ post_form|crispy }}
                 <br><br>
                 <input class="btn btn-success" type="submit" value="Tak rzeknij"}}>
             </form>

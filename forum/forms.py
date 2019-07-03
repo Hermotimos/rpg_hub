@@ -8,6 +8,7 @@ class CreatePostForm(forms.ModelForm):
         model = Post
         fields = [
             'text',
+            'image'
         ]
 
     text = forms.CharField(
@@ -19,6 +20,11 @@ class CreatePostForm(forms.ModelForm):
                 'cols': 60
             }
         )
+    )
+
+    image = forms.ImageField(
+        label='',
+        required=False,
     )
 
 
