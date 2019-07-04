@@ -46,3 +46,7 @@ class ProfileUpdateForm(forms.ModelForm):
             }
         )
     )
+
+    image = forms.ImageField(
+        label='Awatar'
+    )
