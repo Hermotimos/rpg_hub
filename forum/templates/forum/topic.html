@@ -38,7 +38,7 @@
                     <div>
                         <tr class="posts-and-news-mg">
                             <td>
-                                <p>{{ post.text|linebreaks }}</p>
+                                <p>{{ post.text|capfirst|linebreaks }}</p>
                                 {% if post.image %}
                                     <img src="{{ post.image.url }}">
                                 {% endif %}
@@ -59,7 +59,7 @@
                             </td>
                             <td>
                                 <small>{{ post.date_posted|date:'d-M-Y' }}</small>
-                                <p>{{ post.text|capfirst }}</p>
+                                <p>{{ post.text|capfirst|linebreaks }}</p>
                                 {% if post.image %}
                                     <img src="{{ post.image.url }}">
                                 {% endif %}
