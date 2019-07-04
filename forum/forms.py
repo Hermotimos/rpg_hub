@@ -1,5 +1,6 @@
 from django import forms
 from .models import Post, Topic, Board
+from pagedown.widgets import PagedownWidget
 
 
 class CreatePostForm(forms.ModelForm):
@@ -12,7 +13,7 @@ class CreatePostForm(forms.ModelForm):
 
     text = forms.CharField(
         label='',
-        widget=forms.Textarea(
+        widget=PagedownWidget(
             attrs={
                 'placeholder': 'Twój głos w naradzie (max. 4000 znaków)',
                 'rows': 10,
