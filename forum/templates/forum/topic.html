@@ -2,6 +2,10 @@
 {% load custom_filters %}
 {% load crispy_forms_tags %}
 
+{% block head_extra %}
+{{ post_form.media }}
+{% endblock head_extra %}
+
 {% block content %}
      <br>
     {% if request.user.profile not in topic.allowed_profiles.all %}
@@ -31,10 +35,10 @@
             {% if post.author.profile.character_name == 'MG' %}
                 <table class="posts-and-news">
                 <tbody>
-                    <div class="border-bottom pt-3">
+                    <div>
                         <tr class="posts-and-news-mg">
                             <td>
-                                <p>{{ post.text }}</p>
+                                <p>{{ post.text|linebreaks }}</p>
                                 {% if post.image %}
                                     <img src="{{ post.image.url }}">
                                 {% endif %}
@@ -47,7 +51,7 @@
             {% else %}
                 <table class="posts-and-news">
                     <tbody>
-                        <div class="border-bottom pt-3">
+                        <div>
                         <tr class="posts-and-news">
                             <td>
                                 <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
