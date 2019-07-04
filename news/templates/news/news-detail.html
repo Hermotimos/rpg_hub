@@ -3,6 +3,6 @@
 
 {% block content %}
     <br>
-    {{ news_details.text|linebreaks }}
+    {{ news_details.text|capfirst|linebreaks }}
 
 {% endblock content %}
