@@ -1,14 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-# imports for LoginView and LogoutView
+# imports for LoginView and LogoutView:
 from django.contrib.auth.views import (SuccessURLAllowedHostsMixin, FormView, TemplateView, AuthenticationForm,
                                        REDIRECT_FIELD_NAME, HttpResponseRedirect, resolve_url, settings, is_safe_url,
                                        get_current_site, never_cache, auth_logout, method_decorator, csrf_protect,
                                        auth_login, sensitive_post_parameters)
 from .forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
-
-
 
 
 def register_view(request):
@@ -52,9 +50,7 @@ def profile_view(request):
     return render(request, 'users/profile.html', context)
 
 
-# from django.contrib.auth.views import * (in order to provide other functions used in LoginView)
 # (added page_title to context, changed template_name = 'users/login.html')
-
 class LoginView(SuccessURLAllowedHostsMixin, FormView):
     """
     Display the login form and handle the login action.
