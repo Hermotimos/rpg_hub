@@ -23,7 +23,7 @@ class CreatePostForm(forms.ModelForm):
     )
 
     image = forms.ImageField(
-        label='',
+        label='Załącz obraz:',
         required=False,
     )
 
