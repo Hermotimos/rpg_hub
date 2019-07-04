@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block head_extra %}
+{{ first_post.media }}
+{% endblock head_extra %}
+
 {% block content %}
     <br>
     <form class="allowed-profiles-form" method="POST">

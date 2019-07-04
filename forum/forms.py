@@ -57,7 +57,7 @@ class CreateTopicForm(forms.ModelForm):
     first_post = forms.CharField(
         label='',
         max_length=4000,
-        widget=forms.Textarea(
+        widget=PagedownWidget(
             attrs={
                 'placeholder': 'Pierwszy głos w naradzie (max. 4000 znaków)',
                 'rows': 10,
