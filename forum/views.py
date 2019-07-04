@@ -93,22 +93,21 @@ def create_topic_view(request, board_slug):
 
     if request.method == 'POST':
         topic_form = CreateTopicForm(request.POST or None)
-        if topic_form.is_valid():
+        post_form = CreatePostForm(request.POST, request.FILES)
+        if topic_form.is_valid() and post_form.is_valid():
 
             topic = topic_form.save(commit=False)
             topic.board = Board.objects.get(slug=board_slug)
             topic.starter = logged_user
             topic.save()
-
             allowed_profiles_cleaned = topic_form.cleaned_data['allowed_profiles']
             topic.allowed_profiles.set(allowed_profiles_cleaned)
             topic.save()
 
-            Post.objects.create(
-                text=topic_form.cleaned_data.get('first_post'),
-                topic=topic,
-                author=logged_user
-            )
+            post = post_form.save(commit=False)
+            post.topic = topic
+            post.author = logged_user
+            post.save()
 
             subject = f"[RPG] Nowa narada: {topic_form.cleaned_data['topic_name']}"
             message = f"{request.user.profile} dołączył Cię do narady.\n" \
@@ -126,10 +125,12 @@ def create_topic_view(request, board_slug):
             return redirect('topic', board_slug=board_slug, topic_slug=topic.slug)
     else:
         topic_form = CreateTopicForm()            # equals to: form = CreateTopicForm(request.GET) - GET is the default
+        post_form = CreatePostForm()
 
     context = {
         'page_title': 'Nowa narada',
         'topic_form': topic_form,
+        'post_form': post_form
     }
     return render(request, 'forum/create_topic.html', context)
 
