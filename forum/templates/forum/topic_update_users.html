@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'forum' %}">Wieczorne narady</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'topic' topic.board.slug topic.slug %}">{{ topic.board.title }}: {{ topic.topic_name }}</a></li>
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
 {% block content %}
     <br>
     <form class="allowed-users-form" method="POST">

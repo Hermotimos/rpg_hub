@@ -6,6 +6,11 @@
 {{ post_form.media }}
 {% endblock head_extra %}
 
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'forum' %}">Wieczorne narady</a></li>
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
 {% block content %}
      <br>
     {% if request.user.profile not in topic.allowed_profiles.all %}

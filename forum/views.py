@@ -90,6 +90,7 @@ def add_allowed_profiles_view(request, board_slug, topic_slug):
 @login_required
 def create_topic_view(request, board_slug):
     logged_user = request.user
+    board = Board.objects.get(slug=board_slug)
 
     if request.method == 'POST':
         topic_form = CreateTopicForm(request.POST or None)
@@ -130,7 +131,8 @@ def create_topic_view(request, board_slug):
     context = {
         'page_title': 'Nowa narada',
         'topic_form': topic_form,
-        'post_form': post_form
+        'post_form': post_form,
+        'board': board
     }
     return render(request, 'forum/create_topic.html', context)
 
@@ -146,7 +148,7 @@ def create_board_view(request):
         board_form = CreateBoardForm()             # equals to: form = CreateBoardForm(request.GET) - GET is the default
 
     context = {
-        'page_title': 'Nowy temat',
+        'page_title': 'Nowy temat narad',
         'board_form': board_form,
     }
     return render(request, 'forum/create_board.html', context)

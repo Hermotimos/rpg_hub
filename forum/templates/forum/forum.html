@@ -2,6 +2,10 @@
 <!-- load dict_lookup from custom_filters.py in forum/templatetags -->
 {% load custom_filters %}
 
+{% block breadcrumb %}
+    <li class="breadcrumb-item active">Wieczorne narady</li>
+{% endblock breadcrumb %}
+
 {% block content %}
     <br>
     {% if request.user.profile.character_name == '' %}
