@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block breadcrumb %}
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
 {% block content %}
     <br>
     <a href="{% url 'login' %}">Zaloguj</a>
