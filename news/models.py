@@ -2,7 +2,6 @@ from django.urls import reverse
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
-from multiselectfield import MultiSelectField
 from users.models import Profile
 
 
@@ -14,10 +13,10 @@ class News(models.Model):
     title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=50, unique=True, blank=True)
     text = models.TextField(max_length=4000)
-    date_posted = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, related_name='news', on_delete=models.CASCADE)
-    # allowed_users = MultiSelectField(max_length=100, choices=PLAYERS)               # TODO change to allowed profiles
+    allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_news')
 
     def __str__(self):
         return self.title[:50] + '...'
@@ -34,3 +33,6 @@ class News(models.Model):
     def get_absolute_url(self):
         # return f'/news/{self.slug}'                               # one way
         return reverse('news-detail', kwargs={'slug': self.slug})   # another way
+
+    class Meta:
+        ordering = ['-date_updated']
