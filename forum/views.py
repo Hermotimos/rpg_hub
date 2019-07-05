@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 from django.core.mail import send_mail
 from django.conf import settings
-from forum.models import Board, Topic, Post
+from forum.models import Board, Topic
 from users.models import Profile, User
 from forum.forms import CreatePostForm, CreateTopicForm, CreateBoardForm, UpdateTopicForm
 
@@ -15,6 +15,7 @@ def forum_view(request):
 
     topics_with_last_post_date_dict = {topic: topic.posts.all().aggregate(Max('date_posted'))['date_posted__max']
                                        for topic in topics_list}
+
     topics_with_last_active_user_dict = {}
     for topic in topics_list:
         last_post = topic.posts.filter(date_posted=topics_with_last_post_date_dict[topic])
@@ -42,14 +43,13 @@ def forum_view(request):
 @login_required
 def posts_in_topic_view(request, board_slug, topic_slug):
     current_topic = get_object_or_404(Topic, slug=topic_slug)
-    logged_user = request.user
 
     if request.method == 'POST':
         post_form = CreatePostForm(request.POST, request.FILES)
         if post_form.is_valid():
             post = post_form.save(commit=False)
             post.topic = current_topic
-            post.author = logged_user
+            post.author = request.user
             post.save()
             return redirect('topic', board_slug=board_slug, topic_slug=current_topic.slug)
     else:
@@ -104,7 +104,6 @@ def add_allowed_profiles_view(request, board_slug, topic_slug):
 
 @login_required
 def create_topic_view(request, board_slug):
-    logged_user = request.user
     board = Board.objects.get(slug=board_slug)
 
     if request.method == 'POST':
@@ -114,7 +113,7 @@ def create_topic_view(request, board_slug):
 
             topic = topic_form.save(commit=False)
             topic.board = Board.objects.get(slug=board_slug)
-            topic.starter = logged_user
+            topic.starter = request.user
             topic.save()
             allowed_profiles_cleaned = topic_form.cleaned_data['allowed_profiles']
             topic.allowed_profiles.set(allowed_profiles_cleaned)
@@ -122,7 +121,7 @@ def create_topic_view(request, board_slug):
 
             post = post_form.save(commit=False)
             post.topic = topic
-            post.author = logged_user
+            post.author = request.user
             post.save()
 
             subject = f"[RPG] Nowa narada: {topic_form.cleaned_data['topic_name']}"
@@ -135,7 +134,7 @@ def create_topic_view(request, board_slug):
             for user in User.objects.all():
                 if user.profile in topic.allowed_profiles.all():
                     receivers_list.append(user.email)
-            if logged_user.profile.character_status != 'MG':
+            if request.user.profile.character_status != 'MG':
                 receivers_list.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers_list)
 
