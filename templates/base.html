@@ -24,7 +24,6 @@
     <!--  NAVBAR  -->
     {% include 'navbar.html' %}
 
-
     <main role="main" class="container">
         <div class="row">
             <div class="col-md-8">
@@ -38,11 +37,20 @@
                     {% endfor %}
                 {% endif %}
 
-                <!--   CONTENT  -->
+                <!--   PAGE TITLE   -->
                     <div class="border-bottom pt-3">
                         <h2>{{ page_title }}</h2>
                     </div>
-                    {% block content %}{% endblock %}<br><br><br><br>
+
+                <!--   BREADCRUMBS   -->
+                    <ol class="breadcrumb my-1">
+                        {% block breadcrumb %}
+                        {% endblock breadcrumb %}
+                    </ol>
+
+                <!--   CONTENT   -->
+                    {% block content %}
+                    {% endblock content %}<br><br><br><br>
             </div>
 
             <!--     SIDEBAR       -->
