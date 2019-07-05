@@ -72,11 +72,10 @@ def add_allowed_profiles_view(request, board_slug, topic_slug):
         if topic_update_form.is_valid():
             topic_update_form.save()
 
-            subject = f"[RPG] Dołączenie do narady: {current_topic.topic_name}"
-            message = f"{request.user.profile} dołączył Cię do narady.\n" \
+            subject = f"[RPG] Dołączenie uczestnika do narady: {current_topic.topic_name}"
+            message = f"{request.user.profile} dołączył uczestnika/-ów do narady.\n" \
                       f"Narada '{current_topic.topic_name}' w temacie '{current_topic.board}'.\n" \
-                      f"Narada toczyła się już bez Ciebie. Teraz masz możliwość zapoznać się z jej przebiegiem " \
-                      f"zanim zabierzesz głos.\n" \
+                      f"Uczestnicy: {[p.character_name for p in topic_update_form.cleaned_data['allowed_profiles']]}" \
                       f"Link do narady: http://127.0.0.1:8000/forum/{current_topic.board.slug}/{current_topic.slug}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
@@ -129,6 +128,7 @@ def create_topic_view(request, board_slug):
             subject = f"[RPG] Nowa narada: {topic_form.cleaned_data['topic_name']}"
             message = f"{request.user.profile} dołączył Cię do narady.\n" \
                       f"Narada '{topic.topic_name}' w temacie '{topic.board}'.\n" \
+                      f"Uczestnicy: {topic.allowed_profiles.all()}" \
                       f"Link do narady: http://127.0.0.1:8000/forum/{topic.board.slug}/{topic.slug}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
