@@ -45,7 +45,7 @@ def posts_in_topic_view(request, board_slug, topic_slug):
     logged_user = request.user
 
     if request.method == 'POST':
-        post_form = CreatePostForm(request.POST, request.FILES)             # TODO what is wrong ???
+        post_form = CreatePostForm(request.POST, request.FILES)
         if post_form.is_valid():
             post = post_form.save(commit=False)
             post.topic = current_topic
@@ -71,6 +71,22 @@ def add_allowed_profiles_view(request, board_slug, topic_slug):
         topic_update_form = UpdateTopicForm(request.POST, instance=current_topic)
         if topic_update_form.is_valid():
             topic_update_form.save()
+
+            subject = f"[RPG] Dołączenie do narady: {current_topic.topic_name}"
+            message = f"{request.user.profile} dołączył Cię do narady.\n" \
+                      f"Narada '{current_topic.topic_name}' w temacie '{current_topic.board}'.\n" \
+                      f"Narada toczyła się już bez Ciebie. Teraz masz możliwość zapoznać się z jej przebiegiem " \
+                      f"zanim zabierzesz głos.\n" \
+                      f"Link do narady: http://127.0.0.1:8000/forum/{current_topic.board.slug}/{current_topic.slug}/"
+            sender = settings.EMAIL_HOST_USER
+            receivers_list = []
+            for user in User.objects.all():
+                if user.profile in topic_update_form.cleaned_data['allowed_profiles']:
+                    receivers_list.append(user.email)
+            if request.user.profile.character_status != 'MG':
+                receivers_list.append('lukas.kozicki@gmail.com')
+            send_mail(subject, message, sender, receivers_list)
+
             return redirect('topic', board_slug=board_slug, topic_slug=current_topic.slug)
     else:
         topic_update_form = UpdateTopicForm(
@@ -113,7 +129,7 @@ def create_topic_view(request, board_slug):
             subject = f"[RPG] Nowa narada: {topic_form.cleaned_data['topic_name']}"
             message = f"{request.user.profile} dołączył Cię do narady.\n" \
                       f"Narada '{topic.topic_name}' w temacie '{topic.board}'.\n" \
-                      f"Link: http://127.0.0.1:8000/forum/{topic.board.slug}/{topic.slug}/"
+                      f"Link do narady: http://127.0.0.1:8000/forum/{topic.board.slug}/{topic.slug}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
             for user in User.objects.all():
@@ -121,8 +137,8 @@ def create_topic_view(request, board_slug):
                     receivers_list.append(user.email)
             if logged_user.profile.character_status != 'MG':
                 receivers_list.append('lukas.kozicki@gmail.com')
-
             send_mail(subject, message, sender, receivers_list)
+
             return redirect('topic', board_slug=board_slug, topic_slug=topic.slug)
     else:
         topic_form = CreateTopicForm()            # equals to: form = CreateTopicForm(request.GET) - GET is the default
