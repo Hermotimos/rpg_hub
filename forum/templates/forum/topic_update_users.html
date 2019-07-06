@@ -11,6 +11,8 @@
     <form class="allowed-users-form" method="POST">
         {% csrf_token %}
         <h6>
+            Temat: <small>{{ topic.board.title }}</small><br>
+            Narada: <small>{{ topic.topic_name }}</small><br>
             Dotychczasowi uczestnicy:
             {% for profile in topic.allowed_profiles.all %}
                 {% if profile.character_name != 'MG' %}
@@ -21,11 +23,15 @@
                     {% endif %}
                 {% endif %}
               {% endfor %}
-        </h6>
-        <small>1) Włączaj tylko postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji.</small>
-        <small>2) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small>
-        <small>3) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small>
-        <small style="color: red;">4) Nie wyłączaj uczestników z narady bez konsultacji (chyba że siebie samego).</small>
+        </h6><br>
+        <h5>Instrukcja:</h5>
+        <small>1) Nowi uczestnicy uzyskają dostęp do całości narady.</small>
+        <small>2) Włączaj tylko postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji.</small>
+        <small>3) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small>
+        <small>4) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small>
+        <small>5) Jeśli chcesz się naradzić z postacią, której nie ma na liście, powiadom MG.</small>
+        <small style="color: red;">6) Nie wyłączaj uczestników z narady bez konsultacji (chyba że siebie samego).<br>
+                    &nbsp&nbsp&nbsp*Wyłączony uczestnik całkowicie utraci dostęp do narady!</small>
 
         <br><br>
         {{ topic_form.allowed_profiles }}
@@ -36,10 +42,8 @@
             {% csrf_token %}
             {{ topic_update_form.allowed_profiles }}
             <br>
-            <small>*Aby zaznaczyć wielu uczestników - użyj CTRL albo SHIFT.</small><br>
-            <small>*Jeśli chcesz się naradzić z postacią, której nie ma na liście, powiadom MG.</small><br><br>
-            <input class="btn btn-outline-success" type="submit" value="Dodaj uczestników narady"><br>
-            <small>*Nowi uczestnicy będą mieli dostęp do całości narady.</small><br><br>
+            <small>*Aby zaznaczyć wielu uczestników - użyj CTRL albo SHIFT.</small><br><br>
+            <input class="btn btn-outline-success" type="submit" value="Dodaj uczestników narady">
         </form>
     </div>
 {% endblock content %}
