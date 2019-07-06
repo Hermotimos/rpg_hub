@@ -8,12 +8,6 @@ from news.forms import CreateNewsForm
 def news_view(request):
     queryset = News.objects.all()
 
-    if request.method == 'POST':
-        news_form = CreateNewsForm(request.POST or None)
-        if news_form.is_valid():
-            news = news_form.save()
-            return redirect('news-detail', news_slug=news.slug)
-
     context = {
         'page_title': 'Słup ogłoszeń',
         'news_list': queryset,
@@ -23,8 +17,17 @@ def news_view(request):
 
 @login_required
 def create_news_view(request):
+    if request.method == 'POST':
+        news_form = CreateNewsForm(request.POST or None)
+        if news_form.is_valid():
+            news = news_form.save()
+            return redirect('news-detail', news_slug=news.slug)
+    else:
+        news_form = CreateNewsForm()
+
     context = {
-        'page_title': 'Nowe ogłoszenie'
+        'page_title': 'Nowe ogłoszenie',
+        'news_form': news_form
     }
     return render(request, 'news/news-create.html', context)
 

@@ -8,23 +8,24 @@
 
 {% block content %}
     <br>
-    <form method="POST">
+    <form class="allowed-profiles-form" method="POST">
         {% csrf_token %}
-        <p>Wybierz adresatów ogłoszenia:</p>
+
+        {{ news_form.title }}<br><br>
+        {{ news_form.title.errors }}
+        {{ news_form.text }}<br><br>
+
+        <p>Wybierz adresatów ogłoszenia (tylko oni je zobaczą):</p>
+        {{ news_form.allowed_profiles }}
+        <br>
+        <small>*Aby zaznaczyć wielu adresatów - użyj CTRL albo SHIFT.</small><br><br>
+
+        {{ news_form.image }}
+
+
+
         <br><br>
-
-
-
-        {% for user in topic.allowed_users %}
-            <p>{{ user }}</p>
-        {% endfor %}<br>
-        {{ topic.first_post }}
-
-
-
-
-        <br><br>
-        <input type="submit" value="Dodaj ogłoszenie"/>
+        <input class="btn btn-outline-danger" type="submit" value="Dodaj ogłoszenie"/>
     </form>
     <br><br><br><br><br><br><br>
 {% endblock content %}
