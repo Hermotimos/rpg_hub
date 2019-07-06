@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
+{% block head_extra %}
+{{ news_form.media }}
+{% endblock head_extra %}
+
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'news-list' %}">Słup ogłoszeń</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
@@ -21,10 +25,8 @@
         <small>*Aby zaznaczyć wielu adresatów - użyj CTRL albo SHIFT.</small><br><br>
 
         {{ news_form.image }}
-
-
-
         <br><br>
+
         <input class="btn btn-outline-danger" type="submit" value="Dodaj ogłoszenie"/>
     </form>
     <br><br><br><br><br><br><br>
