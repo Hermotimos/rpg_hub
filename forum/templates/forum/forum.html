@@ -13,7 +13,7 @@
     {% else %}
         <div class="mb-4">
             <a href="{% url 'create_board' %}" class="btn btn-dark">Nowy temat narad</a>
-        </div><br>
+        </div><br><br>
         {% for board in boards_list %}
         {% if request.user.profile.character_name in boards_with_allowed_profiles_dict|dict_lookup:board %}
 
@@ -65,7 +65,7 @@
             <br>
             <div class="mb-4">
                 <a href="{% url 'create_topic' board.slug %}" class="btn btn-info">Nowa narada</a>
-            </div>
+            </div><br><br>
         {% endif %}
         {% endfor %}
     {% endif %}
