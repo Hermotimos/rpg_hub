@@ -118,6 +118,13 @@ small {
     white-space: nowrap;
 }
 
+.breadcrumbs small {
+    color: #888;
+    white-space: nowrap;
+    font-size: 10px;
+}
+
+
 .posts-and-news {
     vertical-align: top;
 }

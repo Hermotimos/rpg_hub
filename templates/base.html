@@ -43,12 +43,14 @@
                     </div>
 
                 <!--   BREADCRUMBS   -->
-                    <small>
-                    <ol class="breadcrumb my-1">
-                        {% block breadcrumb %}
-                        {% endblock breadcrumb %}
-                    </ol>
-                    </small>
+                    <div class="breadcrumbs">
+                        <small>
+                        <ol class="breadcrumb my-1">
+                            {% block breadcrumb %}
+                            {% endblock breadcrumb %}
+                        </ol>
+                        </small>
+                    </div>
                 <!--   CONTENT   -->
                     {% block content %}
                     {% endblock content %}<br><br><br><br>
