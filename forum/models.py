@@ -10,8 +10,8 @@ from users.models import Profile
 class Board(models.Model):
     title = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(max_length=50, unique=True, blank=True)
-    created_date = models.DateTimeField(auto_now_add=True)
-    updated_date = models.DateTimeField(auto_now=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
     description = models.CharField(max_length=100)
 
     def __str__(self):
@@ -27,7 +27,7 @@ class Board(models.Model):
         super().save(*args, *kwargs)
 
     class Meta:
-        ordering = ['-updated_date']
+        ordering = ['-date_updated']
 
 
 class Topic(models.Model):
@@ -35,8 +35,8 @@ class Topic(models.Model):
 
     topic_name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=50, unique=True, blank=True)
-    created_date = models.DateTimeField(auto_now_add=True)
-    updated_date = models.DateTimeField(auto_now=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
     board = models.ForeignKey(Board, related_name='topics', on_delete=models.CASCADE)
     starter = models.ForeignKey(User, related_name='topics', on_delete=models.CASCADE)
     allowed_users = MultiSelectField(max_length=100, choices=USERS, default='MG')
@@ -59,7 +59,7 @@ class Topic(models.Model):
         return reverse('topic', kwargs={'board_slug': self.board.slug, 'topic_slug': self.slug})    # another way
 
     class Meta:
-        ordering = ['-updated_date']
+        ordering = ['-date_updated']
 
 
 class Post(models.Model):

@@ -43,7 +43,7 @@
                             </td>
                             <td>
                                 {{ topic.starter.profile.character_name|get_first_word  }}<br>
-                                <small>{{ topic.created_date|date:'d-M-Y' }}</small>
+                                <small>{{ topic.date_created|date:'d-M-Y' }}</small>
                             </td>
                             <td>
                                 {% for profile in topic.allowed_profiles.all %}

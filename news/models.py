@@ -13,7 +13,7 @@ class News(models.Model):
     title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=50, unique=True, blank=True)
     text = models.TextField(max_length=4000)
-    date_updated = models.DateTimeField(auto_now_add=True)
+    date_posted = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, related_name='news', on_delete=models.CASCADE)
     allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_news')
