@@ -18,7 +18,7 @@ class News(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, related_name='news', on_delete=models.CASCADE)
     allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_news')
-    image = models.ImageField(blank=True, null=True, upload_to='post_pics')
+    image = models.ImageField(blank=True, null=True, upload_to='news_pics')
 
     def __str__(self):
         return self.title[:50] + '...'
