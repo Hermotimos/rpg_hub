@@ -8,33 +8,30 @@
 
 {% block content %}
     <br>
-    <form class="allowed-users-form" method="POST">
-        {% csrf_token %}
-        <h6>
-            Temat: <small>{{ topic.board.title }}</small><br>
-            Narada: <small>{{ topic.topic_name }}</small><br>
-            Dotychczasowi uczestnicy:
-            {% for profile in topic.allowed_profiles.all %}
-                {% if profile.character_name != 'MG' %}
-                    {% if forloop.counter > 1 %}
-                        <small>/ {{ profile }}</small>
-                    {% else %}
-                        <small>{{ profile }}</small>
-                    {% endif %}
+    <h6>
+        Temat: <small>{{ topic.board.title }}</small><br>
+        Narada: <small>{{ topic.topic_name }}</small><br>
+        Dotychczasowi uczestnicy:
+        {% for profile in topic.allowed_profiles.all %}
+            {% if profile.character_name != 'MG' %}
+                {% if forloop.counter > 1 %}
+                    <small>/ {{ profile }}</small>
+                {% else %}
+                    <small>{{ profile }}</small>
                 {% endif %}
-              {% endfor %}
-        </h6><br>
+            {% endif %}
+          {% endfor %}
+    </h6><br>
 
-        <h5>Włącz uczestników do narady:</h5>
-        <small>1) Nowi uczestnicy uzyskają dostęp do całości narady.</small>
-        <small>2) Włączaj tylko postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji.</small>
-        <small>3) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small>
-        <small>4) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small>
-        <small>5) Jeśli chcesz się naradzić z postacią, której nie ma na liście, powiadom MG.</small>
-        <small style="color: red;">6) Nie wyłączaj uczestników z narady bez konsultacji (chyba że siebie samego).<br>
-                    &nbsp&nbsp&nbsp*Wyłączony uczestnik całkowicie utraci dostęp do narady!</small>
-        <br><br>
-    </form>
+    <h5>Włącz uczestników do narady:</h5>
+    <small>1) Nowi uczestnicy uzyskają dostęp do całości narady.</small>
+    <small>2) Włączaj tylko postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji.</small>
+    <small>3) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small>
+    <small>4) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small>
+    <small>5) Jeśli chcesz się naradzić z postacią, której nie ma na liście, powiadom MG.</small>
+    <small style="color: red;">6) Nie wyłączaj uczestników z narady bez konsultacji (chyba że siebie samego).<br>
+                &nbsp&nbsp&nbsp*Wyłączony uczestnik całkowicie utraci dostęp do narady!</small>
+    <br><br>
 
     <div class="allowed-profiles-form" id="page-bottom">
         <form method="POST" action=".#page-bottom">
