@@ -1,5 +1,5 @@
 from django import forms
-from .models import News
+from news.models import News
 
 
 class CreateNewsForm(forms.ModelForm):
@@ -39,3 +39,4 @@ class CreateNewsForm(forms.ModelForm):
         label='Załącz obraz:',
         required=False,
     )
+# TODO why image doesn't affect actual form ?? no label, required=False could be absent...
