@@ -95,7 +95,7 @@ def add_allowed_profiles_view(request, board_slug, topic_slug):
         )
 
     context = {
-        'page_title': 'Dodaj uczestników narady ' + '"' + current_topic.topic_name + '"',
+        'page_title': 'Dodaj uczestników narady',
         'topic': current_topic,
         'topic_update_form': topic_update_form
     }
