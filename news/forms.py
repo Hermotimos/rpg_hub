@@ -8,7 +8,8 @@ class CreateNewsForm(forms.ModelForm):
         fields = [
             'title',
             'text',
-            'allowed_users'
+            'allowed_profiles',
+            'image'
         ]
 
     title = forms.CharField(
@@ -32,4 +33,9 @@ class CreateNewsForm(forms.ModelForm):
                 'cols': 60
             }
         )
+    )
+
+    image = forms.ImageField(
+        label='Załącz obraz:',
+        required=False,
     )

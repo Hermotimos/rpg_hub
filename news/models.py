@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 from users.models import Profile
+from PIL import Image
 
 
 PLAYERS = [(profile.user.username, profile.user.username)
@@ -17,6 +18,7 @@ class News(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, related_name='news', on_delete=models.CASCADE)
     allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_news')
+    image = models.ImageField(blank=True, null=True, upload_to='post_pics')
 
     def __str__(self):
         return self.title[:50] + '...'
@@ -29,6 +31,13 @@ class News(models.Model):
         if not self.slug:
             self.slug = self._get_unique_slug()
         super().save(*args, *kwargs)
+
+        if self.image:
+            img = Image.open(self.image.path)
+            if img.height > 700 or img.width > 700:
+                output_size = (700, 700)
+                img.thumbnail(output_size)
+                img.save(self.image.path)
 
     def get_absolute_url(self):
         # return f'/news/{self.slug}'                               # one way
