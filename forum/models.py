@@ -78,6 +78,6 @@ class Post(models.Model):
         if self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:
-                output_size = (1000, 1000)
+                output_size = (700, 700)
                 img.thumbnail(output_size)
                 img.save(self.image.path)
