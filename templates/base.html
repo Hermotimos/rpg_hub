@@ -37,11 +37,6 @@
                     {% endfor %}
                 {% endif %}
 
-                <!--   PAGE TITLE   -->
-                    <div class="border-bottom pt-3">
-                        <h2>{{ page_title }}</h2>
-                    </div>
-
                 <!--   BREADCRUMBS   -->
                     <div class="breadcrumbs">
                         <small>
@@ -50,6 +45,11 @@
                             {% endblock breadcrumb %}
                         </ol>
                         </small>
+                    </div><br>
+
+                <!--   PAGE TITLE   -->
+                    <div class="border-bottom pt-3">
+                        <h2>{{ page_title }}</h2>
                     </div>
                 <!--   CONTENT   -->
                     {% block content %}
