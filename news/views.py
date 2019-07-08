@@ -27,7 +27,7 @@ def create_news_view(request):
             news.author = request.user
             news = news_form.save()
 
-            subject = "[RPG] Nowe ogłoszenie"
+            subject = f"[RPG] Nowe ogłoszenie: {news.title[:30]}..."
             message = f"{request.user.profile} przybił coś do słupa ogłoszeń.\n" \
                       f"Podejdź bliżej, aby zobaczyć: http://127.0.0.1:8000/news/{news.slug}/"
             sender = settings.EMAIL_HOST_USER
