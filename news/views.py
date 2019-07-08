@@ -43,6 +43,7 @@ def news_detail_view(request, news_slug):
         response_form = CreateResponseForm(request.POST, request.FILES)
         if response_form.is_valid():
             response = response_form.save(commit=False)
+            response.news = queryset
             response.author = request.user
             response_form.save()
             return redirect('news-detail', news_slug=news_slug)
