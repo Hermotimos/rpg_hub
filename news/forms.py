@@ -18,7 +18,7 @@ class CreateNewsForm(forms.ModelForm):
         max_length=100,
         widget=forms.TextInput(
             attrs={
-                'placeholder': f'Tytuł ogłoszenia (max. 100 znaków)',
+                'placeholder': f'Tytuł ogłoszenia (max. 100 znaków)*',
                 'size': '60'
             }
         )
@@ -29,7 +29,7 @@ class CreateNewsForm(forms.ModelForm):
         max_length=4000,
         widget=PagedownWidget(
             attrs={
-                'placeholder': 'Twoje ogłoszenie (max. 4000 znaków)',
+                'placeholder': 'Twoje ogłoszenie (max. 4000 znaków)*',
                 'rows': 10,
                 'cols': 60
             }
