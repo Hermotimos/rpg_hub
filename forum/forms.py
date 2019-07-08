@@ -15,7 +15,7 @@ class CreatePostForm(forms.ModelForm):
         label='',
         widget=PagedownWidget(
             attrs={
-                'placeholder': 'Twój głos w naradzie (max. 4000 znaków)',
+                'placeholder': 'Twój głos w naradzie (max. 4000 znaków)*',
                 'rows': 10,
                 'cols': 60
             }
@@ -47,7 +47,7 @@ class CreateTopicForm(forms.ModelForm):
         max_length=100,
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'Tytuł nowej narady (max. 100 znaków)',
+                'placeholder': 'Tytuł nowej narady (max. 100 znaków)*',
                 'size': '60'
             }
         )
@@ -67,7 +67,7 @@ class CreateBoardForm(forms.ModelForm):
         label='',
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'Nowy temat narad (max. 50 znaków)',
+                'placeholder': 'Nowy temat narad (max. 50 znaków)*',
                 'size': '60'
             }
         )
@@ -79,7 +79,7 @@ class CreateBoardForm(forms.ModelForm):
         required=False,
         widget=forms.TextInput(
             attrs={
-                'placeholder': '[opcjonalnie] Krótki opis  (max. 100 znaków)',
+                'placeholder': 'Opis  (max. 100 znaków)',
                 'size': '60',
             }
         )
