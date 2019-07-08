@@ -8,7 +8,7 @@
 
 {% block content %}
     <br>
-    {% if request.user.profile not in news_details.allowed_profiles.all %}
+    {% if request.user.profile not in news_details.allowed_profiles.all and request.user.profile.character_status != 'gm' %}
         <h4>To ogłoszenie jest dla Ciebie kompletnie nieczytelne.</h4>
     {% else %}
         <h6>Ogłoszeniodawca: <small>{{ news_details.author.profile }}</small></h6>

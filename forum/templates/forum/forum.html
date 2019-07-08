@@ -15,7 +15,7 @@
             <a href="{% url 'create_board' %}" class="btn btn-dark">Nowy temat narad</a>
         </div><br><br>
         {% for board in boards_list %}
-        {% if request.user.profile.character_name in boards_with_allowed_profiles_dict|dict_lookup:board %}
+        {% if request.user.profile.character_name in boards_with_allowed_profiles_dict|dict_lookup:board or request.user.profile.character_status == 'gm' %}
 
             <h3>{{ board.title }}</h3>
             {% if board.description %}
@@ -36,7 +36,7 @@
 
                 <tbody>
                 {% for topic in board.topics.all %}
-                    {% if request.user.profile in topic.allowed_profiles.all %}
+                    {% if request.user.profile in topic.allowed_profiles.all or request.user.profile.character_status == 'gm' %}
                         <tr>
                             <td>
                                 <a href="{{ topic.get_absolute_url }}">{{ topic.topic_name }}</a>
