@@ -35,7 +35,7 @@ def create_news_view(request):
             for user in User.objects.all():
                 if user.profile in news.allowed_profiles.all():
                     receivers_list.append(user.email)
-            if request.user.profile.character_status != 'MG':
+            if request.user.profile.character_status != 'gm':
                 receivers_list.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers_list)
 
