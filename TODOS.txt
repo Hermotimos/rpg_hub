@@ -1,0 +1,5 @@
+
+PRODUCTION:
+1. settings.py - DEBUG = FALSE
+2. change url of links in send_email (currently it's base at localhost)
+3. urls.py in project dir: path to MEDIA_ROOT - must be change for production (for what?)
