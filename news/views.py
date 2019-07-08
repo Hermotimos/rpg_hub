@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.conf import settings
 from news.models import News
+from users.models import User
 from news.forms import CreateNewsForm, CreateResponseForm
 
 
@@ -23,6 +26,19 @@ def create_news_view(request):
             news = news_form.save(commit=False)
             news.author = request.user
             news = news_form.save()
+
+            subject = "[RPG] Nowe ogłoszenie"
+            message = f"{request.user.profile} przybił coś do słupa ogłoszeń.\n" \
+                      f"Podejdź bliżej, aby zobaczyć: http://127.0.0.1:8000/news/{news.slug}/"
+            sender = settings.EMAIL_HOST_USER
+            receivers_list = []
+            for user in User.objects.all():
+                if user.profile in news.allowed_profiles.all():
+                    receivers_list.append(user.email)
+            if request.user.profile.character_status != 'MG':
+                receivers_list.append('lukas.kozicki@gmail.com')
+            send_mail(subject, message, sender, receivers_list)
+
             return redirect('news-detail', news_slug=news.slug)
     else:
         news_form = CreateNewsForm()
