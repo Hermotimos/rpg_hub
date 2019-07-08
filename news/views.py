@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from news.models import News
-from news.forms import CreateNewsForm
+from news.forms import CreateNewsForm, CreateResponseForm
 
 
 @login_required
@@ -39,8 +39,19 @@ def news_detail_view(request, news_slug):
     queryset = News.objects.get(slug=news_slug)
     page_title = queryset.title[:30] + '...' if len(queryset.title) > 30 else queryset.title
 
+    if request.method == 'POST':
+        response_form = CreateResponseForm(request.POST, request.FILES)
+        if response_form.is_valid():
+            response = response_form.save(commit=False)
+            response.author = request.user
+            response_form.save()
+            return redirect('news-detail', news_slug=news_slug)
+    else:
+        response_form = CreateResponseForm()
+
     context = {
         'page_title': page_title,
-        'news_details': queryset
+        'news_details': queryset,
+        'response_form': response_form
     }
     return render(request, 'news/news-detail.html', context)
