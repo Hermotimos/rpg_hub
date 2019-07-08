@@ -120,7 +120,7 @@ a.article-title:hover {
     vertical-align: top;
 }
 
-.posts-and-news-mg td {
+.posts-and-news-mg td, p {
     border: 0px;
     font-style: italic;
     font-weight: bold;
