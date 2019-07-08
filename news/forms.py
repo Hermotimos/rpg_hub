@@ -1,5 +1,6 @@
 from django import forms
 from news.models import News
+from pagedown.widgets import PagedownWidget
 
 
 class CreateNewsForm(forms.ModelForm):
@@ -26,7 +27,7 @@ class CreateNewsForm(forms.ModelForm):
     text = forms.CharField(
         label='',
         max_length=4000,
-        widget=forms.Textarea(
+        widget=PagedownWidget(
             attrs={
                 'placeholder': 'Twoje ogłoszenie (max. 4000 znaków)',
                 'rows': 10,
