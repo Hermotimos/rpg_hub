@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.conf import settings
+from django.db.models import Max
 from news.models import News
 from users.models import User
 from news.forms import CreateNewsForm, CreateResponseForm
@@ -9,11 +10,15 @@ from news.forms import CreateNewsForm, CreateResponseForm
 
 @login_required
 def news_view(request):
-    queryset = News.objects.all()
+    news_list = News.objects.all()
+
+    news_with_last_activity_dict = {news: news.responses.all().aggregate(Max('date_posted'))['date_posted__max']
+                                       for news in news_list}
 
     context = {
         'page_title': 'Słup ogłoszeń',
-        'news_list': queryset,
+        'news_list': news_list,
+        'news_with_last_activity_dict': news_with_last_activity_dict
     }
     return render(request, 'news/news-list.html', context)
 

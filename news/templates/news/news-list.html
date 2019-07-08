@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load custom_filters %}
 
 {% block breadcrumb %}
     <li class="breadcrumb-item active">{{ page_title }}</li>
@@ -23,7 +24,13 @@
                             <small>{{ news.date_posted|date:'d-M-Y' }}</small>
                         </td>
                         <td>
-                            <small>Ostatnia aktywność: {{ news.date_updated|date:'d-M-Y, H:i' }}</small>
+                            <small>Ostatnia aktywność:
+                                {% if news_with_last_activity_dict|dict_lookup:news %}
+                                    {{ news_with_last_activity_dict|dict_lookup:news|date:'d-M-Y, H:i' }}
+                                {% else %}
+                                    {{ news.date_updated|date:'d-M-Y, H:i' }}
+                                {% endif %}
+                            </small>
                             <h3><a href="{{ news.get_absolute_url }}">{{ news.title }}</a></h3>
                             {{ news.text|slice:':50'|capfirst|linebreaks }}...<br>
                         </td>
