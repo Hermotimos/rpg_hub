@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
+{% load custom_filters %}
 {% load crispy_forms_tags %}
+
+{% block head_extra %}
+{{ post_form.media }}
+{% endblock head_extra %}
 
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'news-list' %}">Słup ogłoszeń</a></li>
@@ -27,5 +32,35 @@
         <div class="post-and-news-mg">
             <p>{{ news_details.text|capfirst|linebreaks }}</p>
         </div>
+
+        {% for response in news_details.responses.all %}
+            <table class="posts-and-news">
+                    <tbody>
+                        <div>
+                        <tr class="posts-and-news">
+                            <td>
+                                <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+                                <small><p>{{ response.author.profile.character_name }}</p></small>
+                            </td>
+                            <td>
+                                <small>{{ response.date_posted|date:'d-M-Y' }}</small>
+                                <p>{{ response.text|capfirst|linebreaks }}</p>
+                                {% if response.image %}
+                                    <img src="{{ response.image.url }}">
+                                {% endif %}
+                            </td>
+                        </tr>
+                        </div>
+                    </tbody>
+                </table>
+        {% endfor %}
+        <br><br>
+
+        <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ response_form|crispy }}
+            <input class="btn btn-outline-danger" type="submit" value="Odpowiedz"}}>
+        </form>
+
     {% endif %}
 {% endblock content %}
