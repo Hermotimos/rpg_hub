@@ -34,8 +34,8 @@ class News(models.Model):
 
         if self.image:
             img = Image.open(self.image.path)
-            if img.height > 700 or img.width > 700:
-                output_size = (700, 700)
+            if img.height > 1000 or img.width > 1000:
+                output_size = (1000, 1000)
                 img.thumbnail(output_size)
                 img.save(self.image.path)
 
@@ -62,7 +62,7 @@ class Response(models.Model):
 
         if self.image:
             img = Image.open(self.image.path)
-            if img.height > 700 or img.width > 700:
-                output_size = (700, 700)
+            if img.height > 1000 or img.width > 1000:
+                output_size = (1000, 1000)
                 img.thumbnail(output_size)
                 img.save(self.image.path)
