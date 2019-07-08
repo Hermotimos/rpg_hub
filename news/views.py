@@ -20,6 +20,8 @@ def create_news_view(request):
     if request.method == 'POST':
         news_form = CreateNewsForm(request.POST or None)
         if news_form.is_valid():
+            news = news_form.save(commit=False)
+            news.author = request.user
             news = news_form.save()
             return redirect('news-detail', news_slug=news.slug)
     else:
