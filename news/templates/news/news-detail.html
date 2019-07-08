@@ -31,6 +31,9 @@
         </h6>
         <div class="post-and-news-mg">
             <p>{{ news_details.text|capfirst|linebreaks }}</p>
+            {% if news_details.image %}
+                <img src="{{ news_details.image.url }}">
+            {% endif %}
         </div>
 
         {% for response in news_details.responses.all %}
