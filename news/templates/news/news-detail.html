@@ -42,7 +42,7 @@
                         <div>
                         <tr class="posts-and-news">
                             <td>
-                                <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+                                <img class="rounded-circle article-img" src="{{ response.author.profile.image.url }}">
                                 <small><p>{{ response.author.profile.character_name }}</p></small>
                             </td>
                             <td>
@@ -52,7 +52,7 @@
                                     <img src="{{ response.image.url }}">
                                 {% endif %}
                             </td>
-                        </tr>
+                        </tr><br>
                         </div>
                     </tbody>
                 </table>
