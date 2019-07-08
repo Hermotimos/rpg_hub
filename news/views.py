@@ -18,7 +18,7 @@ def news_view(request):
 @login_required
 def create_news_view(request):
     if request.method == 'POST':
-        news_form = CreateNewsForm(request.POST or None)
+        news_form = CreateNewsForm(request.POST, request.FILES)
         if news_form.is_valid():
             news = news_form.save(commit=False)
             news.author = request.user

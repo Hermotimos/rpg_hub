@@ -12,7 +12,7 @@
 
 {% block content %}
     <br>
-    <form class="allowed-profiles-form" method="POST" enctype='multipart/form-data'>
+    <form class="allowed-profiles-form" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
         {{ topic_form.topic_name }}<br>
