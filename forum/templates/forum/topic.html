@@ -21,7 +21,7 @@
         <h6>
             Uczestnicy:
             {% for profile in topic.allowed_profiles.all %}
-                {% if profile.character_name != 'MG' %}
+                {% if profile.character_status != 'gm' %}
                     {% if forloop.counter > 1 %}
                         <small>/ {{ profile }}</small>
                     {% else %}
@@ -37,7 +37,7 @@
         <br>
 
         {% for post in topic.posts.all %}
-            {% if post.author.profile.character_name == 'MG' %}
+            {% if post.author.profile.character_status != 'gm' %}
                 <table class="posts-and-news">
                 <tbody>
                     <div>

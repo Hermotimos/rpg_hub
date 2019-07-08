@@ -47,7 +47,7 @@
                             </td>
                             <td>
                                 {% for profile in topic.allowed_profiles.all %}
-                                    {% if profile.character_name != 'MG' %}
+                                    {% if profile.character_status != 'gm' %}
                                         <small>{{ profile }}</small><br>
                                     {% endif %}
                                 {% endfor %}

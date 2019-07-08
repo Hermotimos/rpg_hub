@@ -20,7 +20,7 @@
         <h6>
             Adresaci:
             {% for profile in news_details.allowed_profiles.all %}
-                {% if profile.character_name != 'MG' %}
+                {% if profile.character_status != 'gm' %}
                     {% if forloop.counter > 1 %}
                         <small>/ {{ profile }}</small>
                     {% else %}

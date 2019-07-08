@@ -82,7 +82,7 @@ def add_allowed_profiles_view(request, board_slug, topic_slug):
             for user in User.objects.all():
                 if user.profile in topic_update_form.cleaned_data['allowed_profiles']:
                     receivers_list.append(user.email)
-            if request.user.profile.character_status != 'MG':
+            if request.user.profile.character_status != 'gm':
                 receivers_list.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers_list)
 
@@ -134,7 +134,7 @@ def create_topic_view(request, board_slug):
             for user in User.objects.all():
                 if user.profile in topic.allowed_profiles.all():
                     receivers_list.append(user.email)
-            if request.user.profile.character_status != 'MG':
+            if request.user.profile.character_status != 'gm':
                 receivers_list.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers_list)
 
