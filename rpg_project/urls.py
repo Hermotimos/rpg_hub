@@ -28,7 +28,7 @@ urlpatterns = [
     path('forum/', include('forum.urls')),
     path('users/', include('users.urls')),
     path('news/', include('news.urls')),
-
+    # path('timeline/', include('timeline.urls')),
 ]
 
 # only for development phase (= when DEBUG is True), not suitable for production

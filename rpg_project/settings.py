@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'home',
     'forum',
     'news',
-    'users.apps.UsersConfig'    # just another way of doing this
+    'users.apps.UsersConfig',    # just another way of doing this
+    'timeline'
 ]
 
 MIDDLEWARE = [
