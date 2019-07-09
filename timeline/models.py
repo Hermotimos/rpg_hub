@@ -9,8 +9,8 @@ class Event(models.Model):
     day_start = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(90)])
     day_end = models.PositiveSmallIntegerField(blank=True, null=True, default=day_start,
                                                validators=[MinValueValidator(1), MaxValueValidator(90)])
-    thread = models.TextField(max_length=200)
-    description = models.CharField(max_length=4000)
+    thread = models.CharField(max_length=200)
+    description = models.TextField(max_length=4000)
     participants = models.ManyToManyField(to=Profile, related_name='events_participated', blank=True, null=True)
     informed = models.ManyToManyField(to=Profile, related_name='events_informed', blank=True, null=True)
     location1 = models.CharField(max_length=200)
