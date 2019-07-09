@@ -2,7 +2,6 @@ from django.urls import reverse
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
-from multiselectfield import MultiSelectField
 from PIL import Image
 from users.models import Profile
 
@@ -39,7 +38,6 @@ class Topic(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
     board = models.ForeignKey(Board, related_name='topics', on_delete=models.CASCADE)
     starter = models.ForeignKey(User, related_name='topics', on_delete=models.CASCADE)
-    allowed_users = MultiSelectField(max_length=100, choices=USERS, default='MG')
     allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_topics')
 
     def __str__(self):
