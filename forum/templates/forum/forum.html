@@ -15,58 +15,58 @@
             <a href="{% url 'create_board' %}" class="btn btn-dark">Nowy temat narad</a>
         </div><br><br>
         {% for board in boards_list %}
-        {% if request.user.profile.character_name in boards_with_allowed_profiles_dict|dict_lookup:board or request.user.profile.character_status == 'gm' %}
+            {% if request.user.profile.character_name in boards_with_allowed_profiles_dict|dict_lookup:board or request.user.profile.character_status == 'gm' %}
 
-            <h3>{{ board.title }}</h3>
-            {% if board.description %}
-                <small>{{ board.description }}</small> <br>
-            {% endif %}<br>
+                <h3>{{ board.title }}</h3>
+                {% if board.description %}
+                    <small>{{ board.description }}</small> <br>
+                {% endif %}<br>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Narada</th>
-                        <th>Inicjator</th>
-                        <th>Uczestnicy</th>
-                        <th>Wypowiedzi</th>
-                        <th>Ostatnie słowo</th>
-                    </tr>
-                </thead>
-
-
-                <tbody>
-                {% for topic in board.topics.all %}
-                    {% if request.user.profile in topic.allowed_profiles.all or request.user.profile.character_status == 'gm' %}
+                <table>
+                    <thead>
                         <tr>
-                            <td>
-                                <a href="{{ topic.get_absolute_url }}">{{ topic.topic_name }}</a>
-                            </td>
-                            <td>
-                                {{ topic.starter.profile.character_name|get_first_word  }}<br>
-                                <small>{{ topic.date_created|date:'d-M-Y' }}</small>
-                            </td>
-                            <td>
-                                {% for profile in topic.allowed_profiles.all %}
-                                    {% if profile.character_status != 'gm' %}
-                                        <small>{{ profile }}</small><br>
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>{{ topic.posts.count }}</td>
-                            <td>
-                                {{ topics_with_last_active_user_dict|dict_lookup:topic|get_first_word }}<br>
-                                <small>{{ topics_with_last_post_date_dict|dict_lookup:topic|date:'d-M-Y' }}</small>
-                            </td>
+                            <th>Narada</th>
+                            <th>Inicjator</th>
+                            <th>Uczestnicy</th>
+                            <th>Wypowiedzi</th>
+                            <th>Ostatnie słowo</th>
                         </tr>
-                    {% endif %}
-                {% endfor %}
-                </tbody>
-            </table>
-            <br>
-            <div class="mb-4">
-                <a href="{% url 'create_topic' board.slug %}" class="btn btn-info">Nowa narada</a>
-            </div>
-        {% endif %}
+                    </thead>
+
+
+                    <tbody>
+                    {% for topic in board.topics.all %}
+                        {% if request.user.profile in topic.allowed_profiles.all or request.user.profile.character_status == 'gm' %}
+                            <tr>
+                                <td>
+                                    <a href="{{ topic.get_absolute_url }}">{{ topic.topic_name }}</a>
+                                </td>
+                                <td>
+                                    {{ topic.starter.profile.character_name|get_first_word  }}<br>
+                                    <small>{{ topic.date_created|date:'d-M-Y' }}</small>
+                                </td>
+                                <td>
+                                    {% for profile in topic.allowed_profiles.all %}
+                                        {% if profile.character_status != 'gm' %}
+                                            <small>{{ profile }}</small><br>
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>{{ topic.posts.count }}</td>
+                                <td>
+                                    {{ topics_with_last_active_user_dict|dict_lookup:topic|get_first_word }}<br>
+                                    <small>{{ topics_with_last_post_date_dict|dict_lookup:topic|date:'d-M-Y' }}</small>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <br>
+                <div class="mb-4">
+                    <a href="{% url 'create_topic' board.slug %}" class="btn btn-info">Nowa narada</a>
+                </div>
+            {% endif %}
         {% endfor %}
     {% endif %}
 {% endblock content %}
