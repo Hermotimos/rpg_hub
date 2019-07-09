@@ -13,4 +13,41 @@
 {% block content %}
     <br>
 
+    <table>
+        <thead>
+            <tr>
+                <th>**</th>
+                <th>**</th>
+                <th>Wątek</th>
+                <th>Wydarzenie</th>
+                <th>Uczestnicy</th>
+                <th>Lokacja</th>
+                <th>Sesja</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for event in event_list %}
+            {% if request.user.profile in event.participants.all or request.user.profile in event.informed.all %}
+                <tr>
+                    <td>{{ event.year }}</td>
+                    <td>{{ event.day_start }}-{{ event_day_end }}</td>
+                    <td>{{ event.thread }}</td>
+                    <td>{{ event.description }}</td>
+                    <td>
+                        {% for profile in event.participants.all %}
+                            {% if profile.character_status != 'gm' %}
+                                <small>{{ profile.character_name|get_first_word }}</small>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ event.location1 }}/{{ event.location2 }}</td>
+                    <td>{{ event.game_no }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+    <br>
+
 {% endblock content %}
