@@ -44,7 +44,7 @@ class News(models.Model):
         return reverse('news-detail', kwargs={'news_slug': self.slug})   # another way
 
     class Meta:
-        ordering = ['-date_updated']
+        ordering = ['-date_posted']
 
 
 class Response(models.Model):
