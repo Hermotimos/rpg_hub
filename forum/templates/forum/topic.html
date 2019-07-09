@@ -37,7 +37,7 @@
         <br>
 
         {% for post in topic.posts.all %}
-            {% if post.author.profile.character_status != 'gm' %}
+            {% if post.author.profile.character_status == 'gm' %}
                 <table class="posts-and-news">
                 <tbody>
                     <div>
