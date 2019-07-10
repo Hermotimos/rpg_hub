@@ -130,6 +130,22 @@ img {
     object-fit: contain;
 }
 
+td.season-spring  {
+    background-color: #8cd98c
+}
+
+td.season-summer  {
+    background-color: #ffff99
+}
+
+td.season-autumn {
+    background-color: #d2a679
+}
+
+td.season-winter  {
+    background-color: #99ccff
+}
+
 small {
     color: #888;
     white-space: nowrap;
@@ -158,8 +174,14 @@ tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
-th {
+.forum th {
     background-color: #8CCBD3;
+    border: 1px solid black;
+    padding: 10px 15px;
+}
+
+.timeline th {
+    background-color: #66998c;
     border: 1px solid black;
     padding: 10px 15px;
 }
