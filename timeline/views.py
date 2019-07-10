@@ -17,7 +17,7 @@ def timeline_view(request):
 @login_required
 def timeline__filtered_view(request, year=None, thread=None, participants_choice=None, location1=None, location2=None):
     event_list = Event.objects.all()
-    criteria = thread, participants_choice, location1, location2
+    criteria = year, thread, participants_choice, location1, location2
     for criterion in criteria:
         if criterion is not None:
             event_list = Event.objects.get(criterion=criterion)
