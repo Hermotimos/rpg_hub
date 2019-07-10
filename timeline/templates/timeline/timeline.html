@@ -34,7 +34,7 @@
                     <td>{{ event.day_start }}-{{ event_day_end }}</td>
                     <td>{{ event.thread }}</td>
                     <td>{{ event.description }}</td>
-                    <td>
+                    <td class="timeline-small">
                         {% for profile in event.participants.all %}
                             {% if profile.character_status != 'gm' %}
                                 <small>{{ profile.character_name|get_first_word }}</small>

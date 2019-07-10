@@ -140,6 +140,10 @@ td {
     padding: 10px;
 }
 
+.timeline-small {
+    font-size: 11px;
+}
+
 tr:nth-child(even) {
     background-color: #f2f2f2;
 }
