@@ -17,7 +17,8 @@ class News(models.Model):
     date_posted = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, related_name='news', on_delete=models.CASCADE)
-    allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_news')
+    allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_news',
+                                              limit_choices_to={'character_status': 'player'})
     image = models.ImageField(blank=True, null=True, upload_to='news_pics')
 
     def __str__(self):

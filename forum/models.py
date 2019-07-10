@@ -2,6 +2,7 @@ from django.urls import reverse
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
+from django.db.models import Q
 from PIL import Image
 from users.models import Profile
 
@@ -30,15 +31,14 @@ class Board(models.Model):
 
 
 class Topic(models.Model):
-    USERS = [(profile.character_name, profile.character_name) for profile in Profile.objects.all()]
-
     topic_name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=50, unique=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     board = models.ForeignKey(Board, related_name='topics', on_delete=models.CASCADE)
     starter = models.ForeignKey(User, related_name='topics', on_delete=models.CASCADE)
-    allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_topics')
+    allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_topics',
+                                              limit_choices_to=Q(character_status='player') | Q(character_status='npc'))
 
     def __str__(self):
         return self.topic_name
