@@ -29,7 +29,7 @@
                 {% endif %}
               {% endfor %}
         </h6><br>
-        <div class="post-and-news-mg">
+        <div class="post-and-news">
             <p>{{ news_details.text|capfirst|linebreaks }}</p>
             {% if news_details.image %}
                 <img src="{{ news_details.image.url }}">
@@ -37,17 +37,17 @@
         </div><br>
 
         {% for response in news_details.responses.all %}
-            <table class="posts-and-news">
+            <table>
                     <tbody>
                         <div>
                         <tr class="posts-and-news">
                             <td>
                                 <img class="rounded-circle article-img" src="{{ response.author.profile.image.url }}">
-                                <small><p>{{ response.author.profile.character_name }}</p></small>
+                                <small>{{ response.author.profile.character_name }}</small>
                             </td>
                             <td>
                                 <small>{{ response.date_posted|date:'d-M-Y' }}</small>
-                                <p>{{ response.text|capfirst|linebreaks }}</p>
+                                {{ response.text|capfirst|linebreaks }}
                                 {% if response.image %}
                                     <img src="{{ response.image.url }}">
                                 {% endif %}

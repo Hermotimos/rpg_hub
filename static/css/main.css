@@ -107,12 +107,6 @@ a.article-title:hover {
     color: red;
 }
 
-.post-and_news-img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
 img {
   display: block;
   max-width: 100%;
@@ -123,19 +117,17 @@ img {
     padding: 5px;
 }
 
-.posts-and-news td {
-    border: 0px;
-    font-style: italic;
-}
-
-.posts-and-news {
-    vertical-align: top;
-}
-
-.posts-and-news-mg td, p {
+.posts-and-news td, p {
     border: 0px;
     font-style: italic;
     font-weight: bold;
+    vertical-align: top;
+}
+
+.post-and_news-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 small {
