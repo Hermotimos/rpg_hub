@@ -12,3 +12,17 @@ def timeline_view(request):
         'event_list': event_list
     }
     return render(request, 'timeline/timeline.html', context)
+
+
+@login_required
+def timeline__filtered_view(request, thread=None, participants_choice=None, location1=None, location2=None):
+    criteria = thread, participants_choice, location1, location2
+    for criterion in criteria:
+        if criterion is not None:
+            event_list = Event.objects.get(criterion=criterion)
+
+    context = {
+        'page_title': 'Kalendarium',
+        'event_list': event_list
+    }
+    return render(request, 'timeline/timeline.html', context)
