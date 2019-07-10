@@ -22,3 +22,14 @@ def dict_lookup(dict_, index):
 def get_first_word(text):
     return text.split(' ', 1)[0]
 
+
+# @register.filter
+# def rtrim(data, number_of_digits):
+#     data = str(data)
+#     return data[:-number_of_digits]
+#
+#
+# @register.filter
+# def ltrim(data, number_of_digits):
+#     data = str(data)
+#     return data[number_of_digits:]
