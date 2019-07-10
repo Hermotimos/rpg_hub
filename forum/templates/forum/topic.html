@@ -77,11 +77,13 @@
         {% endfor %}
         <br><br>
 
-        <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ post_form|crispy }}
-            <input class="btn btn-outline-info" type="submit" value="Tak rzeknij">
-        </form>
+        <div id="page-bottom">
+            <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ post_form|crispy }}
+                <input class="btn btn-outline-info" type="submit" value="Tak rzeknij">
+            </form>
+        </div>
 
     {% endif %}
 {% endblock content %}
