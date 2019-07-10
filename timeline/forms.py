@@ -18,4 +18,3 @@ class CreateOrEditEvent(forms.ModelForm):
             'location2',
             'game_no'
         ]
-
