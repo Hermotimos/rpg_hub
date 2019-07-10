@@ -15,7 +15,7 @@ class Event(models.Model):
     year = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
     season = models.CharField(max_length=100, choices=SEASONS)
     day_start = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(90)])
-    day_end = models.PositiveSmallIntegerField(blank=True, null=True, default=day_start,
+    day_end = models.PositiveSmallIntegerField(blank=True, null=True,
                                                validators=[MinValueValidator(1), MaxValueValidator(90)])
     thread = models.CharField(max_length=200)
     description = models.TextField(max_length=4000)
