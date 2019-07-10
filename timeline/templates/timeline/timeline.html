@@ -20,7 +20,7 @@
                 <th>Dni</th>
                 <th>Wątek</th>
                 <th>Wydarzenie</th>
-                <th>Uczestnicy</th>
+                <th>Udział<br><small>------</small><br>Info</th>
                 <th>Lokacja</th>
                 <th>Sesja</th>
             </tr>
@@ -38,14 +38,22 @@
                             {{ event.day_start }}
                         {% endif %}
                     </td>
-                    <td>{{ event.thread }}</td>
-                    <td>{{ event.description }}</td>
+                    <td class="timeline-thread">{{ event.thread }}</td>
+                    <td class="timeline-description">{{ event.description }}</td>
                     <td class="timeline-small">
                         {% for profile in event.participants.all %}
                             {% if profile.character_status != 'gm' %}
                                 <small>{{ profile.character_name|get_first_word }}</small><br>
                             {% endif %}
                         {% endfor %}
+                        {% if event.informed.all %}
+                            <small>------</small><br>
+                            {% for profile in event.informed.all %}
+                                {% if profile.character_status != 'gm' %}
+                                    <small>{{ profile.character_name|get_first_word }}</small><br>
+                                {% endif %}
+                        {% endfor %}
+                        {% endif %}
                     </td>
                     <td>{{ event.location1 }}<br>{{ event.location2 }}</td>
                     <td>{{ event.game_no }}</td>

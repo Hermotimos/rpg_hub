@@ -140,8 +140,18 @@ td {
     padding: 10px;
 }
 
+.timeline-description {
+    font-style: italic;
+    font-size: 13px;
+}
+
 .timeline-small {
     font-size: 11px;
+}
+
+.timeline-thread {
+    font-style: italic;
+    font-size: 15px;
 }
 
 tr:nth-child(even) {
