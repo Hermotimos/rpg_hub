@@ -35,8 +35,8 @@ class News(models.Model):
 
         if self.image:
             img = Image.open(self.image.path)
-            if img.height > 1000 or img.width > 1000:
-                output_size = (1000, 1000)
+            if img.height > 800 or img.width > 800:
+                output_size = (800, 800)
                 img.thumbnail(output_size)
                 img.save(self.image.path)
 
