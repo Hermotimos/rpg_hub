@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-from .password import PASSWORD
+from rpg_project.etc.password import PASSWORD
+from rpg_project.etc.secretkey import SECRETKEY
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,13 +22,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '8bb8lkqy+^)!8i-ft*+1hb9&h&imr*n7yhwm#!3cwp6=^(expj'
+# SECRET_KEY = ''
+SECRET_KEY = SECRETKEY
 
 # SECURITY WA
-# RNING: don't run with debug turned on in production!
-DEBUG = True
+# WARNING: don't run with debug turned on in production!
+DEBUG = False
 
-# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.pythonanywhere.com']
 
 
 # Application definition
@@ -153,3 +155,5 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'lukas.kozicki@gmail.com'
 EMAIL_HOST_PASSWORD = PASSWORD
+
+CSRF_COOKIE_SECURE = True

@@ -1,0 +1,5 @@
+Django==2.2.1
+django-crispy-forms==1.7.2
+django-pagedown==1.0.6
+Pillow==6.0.0
+pytz==2019.1
