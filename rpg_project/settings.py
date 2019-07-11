@@ -25,9 +25,9 @@ SECRET_KEY = '8bb8lkqy+^)!8i-ft*+1hb9&h&imr*n7yhwm#!3cwp6=^(expj'
 
 
 # WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'hermos.pythonanywhere.com']
 
 
 # Application definition
