@@ -130,6 +130,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+# [custom] Following configuration is suitable for development:
 STATIC_ROOT = 'rpg_project/static'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
