@@ -4,4 +4,3 @@ __pycache__
 mvenv
 .DS_Store
 .idea
-password.py
