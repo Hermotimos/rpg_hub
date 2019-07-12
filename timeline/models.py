@@ -10,6 +10,13 @@ SEASONS = (
 )
 
 
+class Thread(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
+
 class Event(models.Model):
     # TODO in templates: year + 19 ['rok Archonatu Nemetha Samatiana' jako dymek]
     year = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
@@ -17,7 +24,7 @@ class Event(models.Model):
     day_start = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(90)])
     day_end = models.PositiveSmallIntegerField(blank=True, null=True,
                                                validators=[MinValueValidator(1), MaxValueValidator(90)])
-    thread = models.CharField(max_length=200)
+    thread = models.ManyToManyField(to=Thread, related_name='events_participated', blank=True)
     description = models.TextField(max_length=4000)
     participants = models.ManyToManyField(to=Profile, related_name='events_participated',
                                           limit_choices_to={'character_status': 'player'}, blank=True)
@@ -31,4 +38,4 @@ class Event(models.Model):
         return f'{self.thread}: {self.description[0:20]}...'
 
     class Meta:
-        ordering = ['year', 'season', 'day_start', 'day_end', 'thread']
+        ordering = ['year', 'season', 'day_start', 'day_end']
