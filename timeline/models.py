@@ -73,7 +73,7 @@ class Event(models.Model):
 
     class Meta:
         ordering = ['year', 'season', 'day_start', 'day_end', 'game_no']
-
+    #
 
 
 
