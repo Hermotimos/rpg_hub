@@ -41,14 +41,19 @@ class GameSession(models.Model):
         return f'{self.game_no} - {self.title}'
 
 
-# class EventDescription(models.Model):
-#     """
-#     This model is not connected with Event model. There is not 121 or M2M relationships between them.
-#     Event model serves to create events in timeline view (chronology).
-#     EventDescription serves to create events in the full history text of the game.
-#     Lack or correspondence between the two is intentional for flexibility.
-#     """
-#     game
+class DescribedEvent(models.Model):
+    """
+    This model is not connected with Event model. There is not 121 or M2M relationships between them.
+    Event model serves to create events in timeline view (chronology).
+    EventDescription serves to create events in the full history text of the game.
+    Lack or correspondence between the two is intentional for flexibility.
+    """
+    game_no = models.ForeignKey(GameSession, related_name='described_events', blank=True, null=True, on_delete=models.CASCADE)
+    text = models.TextField(max_length=4000)
+    participants = models.ManyToManyField(Profile, related_name='described_events_participated',
+                                          limit_choices_to={'character_status': 'player'}, blank=True)
+    informed = models.ManyToManyField(Profile, related_name='described_events_informed',
+                                      limit_choices_to={'character_status': 'player'}, blank=True)
 
 
 class Event(models.Model):
@@ -73,19 +78,9 @@ class Event(models.Model):
 
     class Meta:
         ordering = ['year', 'season', 'day_start', 'day_end', 'game_no']
-    #
 
-
-
-"""
-Steps to migrate these models:
-0) if needed delete migration files
-1) migrate Events without any M2M fields or ForeignKeys.
-2) add GeneralLocation field to Event and LocationGeneralClass (upon question for one-off default type: 1) + migrate
-3) add class SpecificLocation and migrate
-4) add specific_location field to Event(upon question for one-off default type: 1) + migrate
-5) delete from sqlite db all tables that cause error like:
-
-    django.db.utils.OperationalError: table "timeline_gamesession" already exists
-
-"""
+    # Steps to migrate these models:
+    # 1) delete migration files, delete tables in db, DELETE FROM django_migrations WHERE app="timeline";
+    # 2) comment out all other models than Event
+    # 1) migrate Events without any M2M fields or ForeignKeys.
+    # 2) uncomment other fields and classes and migrate.
