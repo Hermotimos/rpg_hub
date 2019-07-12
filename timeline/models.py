@@ -74,7 +74,7 @@ class Event(models.Model):
     game_no = models.ForeignKey(GameSession, related_name='events', blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.thread}: {self.description[0:20]}...'
+        return f'{self.description[0:20]}...'
 
     class Meta:
         ordering = ['year', 'season', 'day_start', 'day_end', 'game_no']

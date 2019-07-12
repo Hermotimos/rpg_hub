@@ -59,7 +59,11 @@
                         {% endif %}
                     </td>
 
-                    <td class="timeline-thread">{{ event.thread }}</td>
+                    <td class="timeline-thread">
+                        {% for thread in event.thread.all %}
+                            {{ thread }}<br>
+                        {% endfor %}
+                    </td>
                     <td class="timeline-description">{{ event.description }}</td>
                     <td class="timeline-small">
                         {% for profile in event.participants.all %}
@@ -76,7 +80,7 @@
                         {% endfor %}
                         {% endif %}
                     </td>
-                    <td>{{ event.location1 }}<br>{{ event.location2 }}</td>
+                    <td>{{ event.general_location }}<br>{{ event.specific_location }}</td>
                     <td>{{ event.game_no }}</td>
                 </tr>
             {% endif %}
