@@ -23,6 +23,9 @@ class GeneralLocation(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ['name']
+
 
 class SpecificLocation(models.Model):
     name = models.CharField(max_length=200)
@@ -31,14 +34,20 @@ class SpecificLocation(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ['name']
+
 
 class GameSession(models.Model):
     game_no = models.PositiveSmallIntegerField(primary_key=True)
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, blank=True, null=True)
     date = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return f'{self.game_no} - {self.title}'
+
+    class Meta:
+        ordering = ['game_no']
 
 
 class DescribedEvent(models.Model):
@@ -70,14 +79,14 @@ class Event(models.Model):
     informed = models.ManyToManyField(Profile, related_name='events_informed',
                                       limit_choices_to={'character_status': 'player'}, blank=True)
     general_location = models.ForeignKey(GeneralLocation, on_delete=models.CASCADE)
-    specific_location = models.ForeignKey(SpecificLocation, on_delete=models.CASCADE)
+    specific_location = models.ManyToManyField(SpecificLocation, related_name='events')
     game_no = models.ForeignKey(GameSession, related_name='events', blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.description[0:20]}...'
 
     class Meta:
-        ordering = ['year', 'season', 'day_start', 'day_end', 'game_no']
+        ordering = ['year', 'season', 'day_start', 'day_end', 'id', 'game_no']
 
     # Steps to migrate these models:
     # 1) delete migration files, delete tables in db, DELETE FROM django_migrations WHERE app="timeline";
