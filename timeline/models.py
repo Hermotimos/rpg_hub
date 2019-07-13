@@ -27,7 +27,7 @@ class GeneralLocation(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['id']
+        ordering = ['name']
 
 
 class SpecificLocation(models.Model):
@@ -61,15 +61,20 @@ class DescribedEvent(models.Model):
     Lack or correspondence between the two is intentional for flexibility.
     """
     game_no = models.ForeignKey(GameSession, related_name='described_events', blank=True, null=True, on_delete=models.CASCADE)
-    text = models.TextField(max_length=4000)
+    description = models.TextField(max_length=4000)
     participants = models.ManyToManyField(Profile, related_name='described_events_participated',
                                           limit_choices_to={'character_status': 'player'}, blank=True)
     informed = models.ManyToManyField(Profile, related_name='described_events_informed',
                                       limit_choices_to={'character_status': 'player'}, blank=True)
 
+    def __str__(self):
+        return f'{self.description[0:50]}...'
+
+    class Meta:
+        ordering = ['game_no']
+
 
 class Event(models.Model):
-    # TODO in templates: year + 19 ['rok Archonatu Nemetha Samatiana' jako dymek]
     year = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
     season = models.CharField(max_length=100, choices=SEASONS)
     day_start = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(90)])
@@ -86,7 +91,7 @@ class Event(models.Model):
     game_no = models.ForeignKey(GameSession, related_name='events', blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.description[0:20]}...'
+        return f'{self.description[0:50]}...'
 
     class Meta:
         ordering = ['year', 'season', 'day_start', 'day_end', 'id', 'game_no']
