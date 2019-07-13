@@ -80,8 +80,13 @@
                         {% endfor %}
                         {% endif %}
                     </td>
-                    <td>{{ event.general_location }}<br>{{ event.specific_location }}</td>
-                    <td>{{ event.game_no }}</td>
+                    <td>
+                        {{ event.general_location }}<br>
+                        {% for location in event.specific_location.all %}
+                            <small>{{ location }}</small><br>
+                        {% endfor %}
+                    </td>
+                    <td>{{ event.game_no.game_no }}</td>
                 </tr>
             {% endif %}
         {% endfor %}
