@@ -15,7 +15,17 @@
     <br>
     <small>Wydarzenia są widoczne tylko dla uczestników <strike>oraz postaci poinformowanych przez któregoś z uczestników.</strike></small><br>
     <small>W celu stworzenia nowego wątku lub dodania wątku do wydarzenia - skontaktuj się z MG.</small><br><br>
-    <table data-toggle="table" class="timeline table-sm" data-search="true">
+    <table data-toggle="table" id="timeline" class="timeline table-sm" data-search="true">
+        <colgroup>
+            <col class="year">
+            <col class="day">
+            <col class="thread">
+            <col class="description">
+            <col class="participants">
+            <col class="locations">
+            <col class="game">
+            <col class="actions">
+        </colgroup>
         <thead>
             <tr>
                 <th>R</th>
@@ -25,6 +35,7 @@
                 <th>Udział</th>
                 <th>Lokacja</th>
                 <th>S</th>
+                <th>Akcja</th>
             </tr>
         </thead>
 
@@ -81,18 +92,20 @@
                         {% endfor %}
                         {% endif %}
                     </td>
-                    <td>
+                    <td >
                         {{ event.general_location }}<br>
                         {% for location in event.specific_locations.all %}
-                            <small>{{ location }}</small><br>
+                            <a id="location">{{ location }}</a><br>
                         {% endfor %}
                     </td>
                     <td><small>{{ event.game_no.game_no }}</small></td>
-                    <td class="small-img" >
+                    <td id="small-img">
                         <p><img src="{% static 'img/inform.png' %}"></p>
                         <p><img src="{% static 'img/note.png' %}"></p>
                         {% if request.user.profile.character_status == 'gm' %}
-                            <p><img src="{% static 'img/modify.png' %}"></p>
+                            <p><img src="{% static 'img/edit.png' %}"></p>
+                        {% else %}
+                            <p><img src="{% static 'img/report.png' %}"></p>
                         {% endif %}
                     </td>
                 </tr>

@@ -151,15 +151,6 @@ td.small-img {
     text-align: center;
 }
 
-td img{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 30%;
-    height: auto;
-    padding: 0px
-    vertical-align: top;
-}
 
 small {
     color: #888;
@@ -171,28 +162,65 @@ tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
+
 /* TIMELINE */
+
+table.timeline {
+    width: 100%;
+
+}
+
+.year {;}
+.day {width: %;}
+.thread {min-width: 15%;}
+.description {width: %;}
+.participants {max-width: %;}
+.locations {min-width: %;}
+.game {width: %;}
+.actions {width: 7%;}
+
+#location {
+    color: #808080;
+    font-style: normal;
+    font-size: 11px;
+    font-weight: normal;
+
+}
 
 .timeline-event {
     font-style: italic;
     font-size: 13px;
 }
 
-.timeline thead {
-    background-color: #66998c;
-}
-
 .timeline-small {
     font-size: 11px;
 }
 
+.timeline thead {
+    background-color: #66998c;
+    padding: 20px;
+}
+
 .timeline th {
     border: 1px solid black;
+    padding: 10px;
 }
 
 .timeline td {
     border: 1px solid black;
 }
+
+
+td img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
+    height: auto;
+    padding: 0px
+}
+
+#small-img {vertical-align: top}
 
 
 /* FORUM - Narady */
