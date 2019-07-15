@@ -17,7 +17,7 @@ class Thread(models.Model):
 
 
 class GeneralLocation(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
@@ -30,7 +30,7 @@ class GeneralLocation(models.Model):
 
 
 class SpecificLocation(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=100)
     location_main = models.ForeignKey(GeneralLocation, on_delete=models.CASCADE)
 
     def __str__(self):
