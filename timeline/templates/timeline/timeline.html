@@ -60,7 +60,7 @@
                     </td>
 
                     <td class="timeline-event">
-                        {% for thread in event.thread.all %}
+                        {% for thread in event.threads.all %}
                             {{ thread }}<br>
                         {% endfor %}
                     </td>
@@ -82,7 +82,7 @@
                     </td>
                     <td>
                         {{ event.general_location }}<br>
-                        {% for location in event.specific_location.all %}
+                        {% for location in event.specific_locations.all %}
                             <small>{{ location }}</small><br>
                         {% endfor %}
                     </td>
