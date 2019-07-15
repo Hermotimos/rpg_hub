@@ -61,7 +61,7 @@
 
                     <td class="timeline-event">
                         {% for thread in event.threads.all %}
-                            {{ thread }}<br>
+                            <a href="{% url 'thread' thread %}">{{ thread }}</a><br>
                         {% endfor %}
                     </td>
                     <td class="timeline-event">{{ event.description|linebreaksbr }}</td>

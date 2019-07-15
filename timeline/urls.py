@@ -1,5 +1,5 @@
 from django.urls import path
-from timeline.views import timeline_view, timeline__filtered_view
+from timeline.views import timeline_view
 
 
 urlpatterns = [

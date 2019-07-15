@@ -9,8 +9,8 @@ class Thread(models.Model):
     def __str__(self):
         return self.name
 
-    def get_absolute_url(self):
-        return f'/timeline/{self.name}'
+    # def get_absolute_url(self):
+    #     return f'/timeline/{self.name}'
 
     class Meta:
         ordering = ['name']
