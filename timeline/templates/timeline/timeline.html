@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load custom_filters %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block head_extra %}
 {{ post_form.media }}
@@ -14,14 +15,14 @@
     <br>
     <small>Wydarzenia są widoczne tylko dla uczestników <strike>oraz postaci poinformowanych przez któregoś z uczestników.</strike></small><br>
     <small>W celu stworzenia nowego wątku lub dodania wątku do wydarzenia - skontaktuj się z MG.</small><br><br>
-    <table data-toggle="table" class="timeline table" data-search="true">
+    <table data-toggle="table" class="timeline table-sm" data-search="true">
         <thead>
             <tr>
                 <th>R</th>
                 <th>D</th>
                 <th>Wątek</th>
                 <th>Wydarzenie</th>
-                <th>Udział<br>Info</th>
+                <th>Udział</th>
                 <th>Lokacja</th>
                 <th>S</th>
             </tr>
@@ -87,6 +88,13 @@
                         {% endfor %}
                     </td>
                     <td><small>{{ event.game_no.game_no }}</small></td>
+                    <td class="small-img" >
+                        <p><img src="{% static 'img/inform.png' %}"></p>
+                        <p><img src="{% static 'img/note.png' %}"></p>
+                        {% if request.user.profile.character_status == 'gm' %}
+                            <p><img src="{% static 'img/modify.png' %}"></p>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endif %}
         {% endfor %}
