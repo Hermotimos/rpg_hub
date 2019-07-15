@@ -12,8 +12,8 @@
 
 {% block content %}
     <br>
-    <small>Wydarzenia są widoczne tylko dla uczestników oraz postaci poinformowanych o nich.</small><br>
-    <small><strike>Uczestnik wydarzenia może poinformować o nim innych członków drużyny.</strike></small><br><br>
+    <small>Wydarzenia są widoczne tylko dla uczestników <strike>oraz postaci poinformowanych przez któregoś z uczestników.</strike></small><br>
+    <small>W celu stworzenia nowego wątku lub dodania wątku do wydarzenia - skontaktuj się z MG.</small><br><br>
     <table class="timeline">
         <thead>
             <tr>
@@ -59,12 +59,12 @@
                         {% endif %}
                     </td>
 
-                    <td class="timeline-thread">
+                    <td class="timeline-event">
                         {% for thread in event.thread.all %}
                             {{ thread }}<br>
                         {% endfor %}
                     </td>
-                    <td class="timeline-description">{{ event.description|linebreaksbr }}</td>
+                    <td class="timeline-event">{{ event.description|linebreaksbr }}</td>
                     <td class="timeline-small">
                         {% for profile in event.participants.all %}
                             {% if profile.character_status != 'gm' %}
@@ -86,7 +86,7 @@
                             <small>{{ location }}</small><br>
                         {% endfor %}
                     </td>
-                    <td>{{ event.game_no.game_no }}</td>
+                    <td><small>{{ event.game_no.game_no }}</small></td>
                 </tr>
             {% endif %}
         {% endfor %}
