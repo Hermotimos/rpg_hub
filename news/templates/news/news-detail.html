@@ -22,9 +22,9 @@
             {% for profile in news_details.allowed_profiles.all %}
                 {% if profile.character_status != 'gm' %}
                     {% if forloop.counter > 1 %}
-                        <small>/ {{ profile }}</small>
+                        <small>/ {{ profile.character_name|get_first_word }}</small>
                     {% else %}
-                        <small>{{ profile }}</small>
+                        <small>{{ profile.character_name|get_first_word }}</small>
                     {% endif %}
                 {% endif %}
               {% endfor %}

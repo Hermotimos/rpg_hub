@@ -48,7 +48,7 @@
                                 <td>
                                     {% for profile in topic.allowed_profiles.all %}
                                         {% if profile.character_status != 'gm' %}
-                                            <small>{{ profile }}</small><br>
+                                            <small>{{ profile.character_name|get_first_word }}</small><br>
                                         {% endif %}
                                     {% endfor %}
                                 </td>
