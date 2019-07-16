@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'forum' %}">Wieczorne narady</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'topic' topic.board.slug topic.slug %}">{{ topic.board.title }}: {{ topic.topic_name }}</a></li>
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br>
+        <h6>
+        Wątki: <small>{{ event.threads }}</small><br>
+        Wydarzenie: <small>{{ event.description }}</small><br>
+        Uczestnicy:
+        {% for profile in event.participants.all %}
+            {% if forloop.counter > 1 %}
+                <small>/ {{ profile }}</small>
+            {% else %}
+                <small>{{ profile }}</small>
+            {% endif %}
+          {% endfor %}
+    </h6><br>
+
+    <h5>Poinformuj towarzyszy o wydarzeniu:</h5>
+    <small class="red">1) Jeśli ktoś już jest poinformowany - nie usuwaj go!</small><br>
+    <small class="red">2) Nie dodawaj postaci, które były uczestnikami wydarzeń.</small><br>
+    <br><br>
+
+
+
+
+    <!--  DO MODYFIKACJI !!!!!!  -->
+    <div class="allowed-profiles-form" id="page-bottom">
+        <form method="POST" action=".#page-bottom">
+            {% csrf_token %}
+            {{ topic_update_form.allowed_profiles }}
+            <br>
+            <small>***Aby zaznaczyć wielu uczestników - użyj CTRL albo SHIFT.</small><br><br>
+            <input class="btn btn-outline-info" type="submit" value="Dodaj uczestników narady">
+        </form>
+    </div>
+{% endblock content %}
