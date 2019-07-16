@@ -1,165 +1,145 @@
 body {
-  background: #fafafa;
-  color: #333333;
-  margin-top: 5rem;
+        background: #fafafa;
+        color: #333333;
+        margin-top: 5rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #444444;
+        color: #444444;
 }
 
 ul {
-  margin: 0;
+        margin: 0;
 }
 
 .bg-steel {
-  background-color: #5f788a;
+        background-color: #5f788a;
 }
 
 .site-header .navbar-nav .nav-link {
-  color: #cbd5db;
+        color: #cbd5db;
 }
 
 .site-header .navbar-nav .nav-link:hover {
-  color: #ffffff;
+        color: #ffffff;
 }
 
 .site-header .navbar-nav .nav-link.active {
-  font-weight: 500;
+        font-weight: 500;
 }
 
 .content-section {
-  background: #ffffff;
-  padding: 10px 20px;
-  border: 1px solid #dddddd;
-  border-radius: 3px;
-  margin-bottom: 20px;
+        background: #ffffff;
+        padding: 10px 20px;
+        border: 1px solid #dddddd;
+        border-radius: 3px;
+        margin-bottom: 20px;
 }
 
 .article-title {
-  color: #444444;
+        color: #444444;
 }
 
 a.article-title:hover {
-  color: #428bca;
-  text-decoration: none;
+        color: #428bca;
+        text-decoration: none;
 }
 
 .article-content {
-  white-space: pre-line;
+        white-space: pre-line;
 }
 
 .article-img {
-  height: 65px;
-  width: 65px;
-  margin-right: 16px;
+        height: 65px;
+        width: 65px;
+        margin-right: 16px;
 }
 
 .article-metadata {
-  padding-bottom: 1px;
-  margin-bottom: 4px;
-  border-bottom: 1px solid #e3e3e3
+        padding-bottom: 1px;
+        margin-bottom: 4px;
+        border-bottom: 1px solid #e3e3e3
 }
 
 .article-metadata a:hover {
-  color: #333;
-  text-decoration: none;
+        color: #333;
+        text-decoration: none;
 }
 
 .article-svg {
-  width: 25px;
-  height: 25px;
-  vertical-align: middle;
+        width: 25px;
+        height: 25px;
+        vertical-align: middle;
 }
 
 .account-img {
-  height: 125px;
-  width: 125px;
-  margin-right: 20px;
-  margin-bottom: 16px;
+        height: 125px;
+        width: 125px;
+        margin-right: 20px;
+        margin-bottom: 16px;
 }
 
 .account-heading {
-  font-size: 2.5rem;
+        font-size: 2.5rem;
 }
-
 
 
 
 /* ----- CUSTOM ----- */
 
 .allowed-profiles-form select {
-    min-height: 300px;
-    width: 400px;
+        min-height: 300px;
+        width: 400px;
 }
 
 .breadcrumbs small {
-    color: #888;
-    white-space: nowrap;
-    font-size: 11px;
+        color: #888;
+        white-space: nowrap;
+        font-size: 11px;
 }
 
 .btn-space {
-    margin: 2px;
+        margin: 2px;
 }
 
 .errorlist {
-    color: red;
-}
-
-img {
-  display: block;
-  max-width: 100%;
-  height: auto;
+        color: red;
 }
 
 .my-1 {
-    padding: 5px;
+        padding: 5px;
 }
 
 .posts-and-news td, p {
-    border: 0px;
-    font-style: italic;
-    font-weight: bold;
-    vertical-align: top;
-}
-
-.post-and_news-img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+        border: 0px;
+        font-style: italic;
+        font-weight: bold;
+        vertical-align: top;
 }
 
 td.season-spring  {
-    background-color: #8cd98c
+        background-color: #8cd98c
 }
 
 td.season-summer  {
-    background-color: #ffff99
+        background-color: #ffff99
 }
 
 td.season-autumn {
-    background-color: #d2a679
+        background-color: #d2a679
 }
 
 td.season-winter  {
-    background-color: #99ccff
+        background-color: #99ccff
 }
-
-td.small-img {
-    padding: 3px;
-    text-align: center;
-}
-
 
 small {
-    color: #888;
-    white-space: nowrap;
+        color: #888;
+        white-space: nowrap;
 }
 
-
 tr:nth-child(even) {
-    background-color: #f2f2f2;
+        background-color: #f2f2f2;
 }
 
 
@@ -176,60 +156,65 @@ tr:nth-child(even) {
 .actions {width: 6%;}
 
 #location {
-    color: #808080;
-    font-style: normal;
-    font-size: 11px;
-    font-weight: normal;
+        color: #808080;
+        font-style: normal;
+        font-size: 11px;
+        font-weight: normal;
 
 }
 
 .timeline-event {
-    font-style: italic;
-    font-size: 13px;
+        font-style: italic;
+        font-size: 13px;
 }
 
 .timeline-small {
-    font-size: 11px;
+        font-size: 11px;
 }
 
 .timeline thead {
-    background-color: #66998c;
-    padding: 20px;
+        background-color: #66998c;
+        padding: 20px;
 }
 
 .timeline th {
-    border: 1px solid black;
-    padding: 10px;
+        border: 1px solid black;
+        padding: 10px;
 }
 
 .timeline td {
-    border: 1px solid black;
+        border: 1px solid black;
 }
 
-
-td img{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 30%;
-    height: auto;
-    padding: 0px
+.small-img {
+        display: block;
+        height: auto;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3px;
+        text-align: center;
+        width: 40%;
 }
+
+td img {
+        display: block;
+}
+
 
 
 /* FORUM - Narady */
 
 .forum th {
-    background-color: #8CCBD3;
-    border: 1px solid black;
-    padding: 10px;
+        background-color: #8CCBD3;
+        border: 1px solid black;
+        padding: 10px;
 }
 
 .forum td {
-    border: 1px solid black;
-    padding: 5px;
+        border: 1px solid black;
+        padding: 5px;
 }
 
 small.red {
-    color: red;
+        color: red;
 }
