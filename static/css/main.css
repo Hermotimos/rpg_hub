@@ -173,7 +173,7 @@ tr:nth-child(even) {
 .participants {max-width: %;}
 .locations {min-width: %;}
 .game {width: %;}
-.actions {width: 4%;}
+.actions {width: 6%;}
 
 #location {
     color: #808080;
@@ -211,7 +211,7 @@ td img{
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 25%;
+    width: 30%;
     height: auto;
     padding: 0px
 }
