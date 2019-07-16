@@ -42,7 +42,7 @@
                     <tbody>
                         <tr class="posts-and-news">
                             <td>
-                                <p>{{ post.text|capfirst|linebreaks }}</p>
+                                {{ post.text|capfirst|linebreaks }}
                                 {% if post.image %}
                                     <img src="{{ post.image.url }}">
                                 {% endif %}
@@ -55,7 +55,7 @@
                 <table>
                     <tbody>
                         <tr class="posts-and-news">
-                            <td>
+                            <td class="center">
                                 <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
                                 <small>{{ post.author.profile.character_name }}</small>
                             </td>
@@ -71,7 +71,7 @@
                 </table><br>
             {% endif %}
         {% endfor %}
-        <br><br>
+        <br>
 
         <div id="page-bottom">
             <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
