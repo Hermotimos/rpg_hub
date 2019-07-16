@@ -71,11 +71,11 @@ class Post(models.Model):
         return self.text[:30]
 
     def save(self, *args, **kwargs):
-        super().save()
+        super().save(*args, **kwargs)
 
         if self.image:
             img = Image.open(self.image.path)
-            if img.height > 800 or img.width > 800:
-                output_size = (800, 800)
+            if img.height > 700 or img.width > 700:
+                output_size = (700, 700)
                 img.thumbnail(output_size)
                 img.save(self.image.path)
