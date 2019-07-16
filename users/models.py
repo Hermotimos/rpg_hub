@@ -28,6 +28,9 @@ class Profile(models.Model):
             img.thumbnail(output_size)
             img.save(self.image.path)
 
+    class Meta:
+        ordering = ['character_name']
+
 
 # class CharacterSheet(models.Model):
 #     user = models.OneToOneField(User, on_delete=models.CASCADE)
