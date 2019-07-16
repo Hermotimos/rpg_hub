@@ -229,3 +229,7 @@ td img{
     border: 1px solid black;
     padding: 5px;
 }
+
+small.red {
+    color: red;
+}
