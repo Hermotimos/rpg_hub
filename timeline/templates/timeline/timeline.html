@@ -44,25 +44,25 @@
             {% if request.user.profile in event.participants.all or request.user.profile in event.informed.all or request.user.profile.character_status == 'gm' %}
                 <tr>
                     {% if event.season == '1' %}
-                        <td class="season-spring">
+                        <td class="center season-spring">
                     {% elif event.season == '2' %}
-                        <td class="season-summer">
+                        <td class="center season-summer">
                     {% elif event.season == '3' %}
-                        <td class="season-autumn">
+                        <td class="center season-autumn">
                     {% elif event.season == '4' %}
-                        <td class="season-winter">
+                        <td class="center season-winter">
                     {% endif %}
                             {{ event.year }}
                     </td>
 
                     {% if event.season == '1' %}
-                        <td class="season-spring">
+                        <td class="center season-spring">
                     {% elif event.season == '2' %}
-                        <td class="season-summer">
+                        <td class="center season-summer">
                     {% elif event.season == '3' %}
-                        <td class="season-autumn">
+                        <td class="center season-autumn">
                     {% elif event.season == '4' %}
-                        <td class="season-winter">
+                        <td class="center season-winter">
                     {% endif %}
                         {% if event.day_end %}
                             {{ event.day_start }}-{{ event.day_end }}
@@ -98,7 +98,7 @@
                             <small>{{ location }}</small><br>
                         {% endfor %}
                     </td>
-                    <td><small>{{ event.game_no.game_no }}</small></td>
+                    <td class="center"><small>{{ event.game_no.game_no }}</small></td>
                     <td>
                         <h6><a href="#"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
                         <h6><a href="#"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>

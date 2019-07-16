@@ -187,6 +187,10 @@ tr:nth-child(even) {
         width: 40%;
 }
 
+td.center {
+        text-align: center;
+}
+
 td img {
         display: block;
 }
