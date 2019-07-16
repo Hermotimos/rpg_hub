@@ -12,3 +12,14 @@ def timeline_view(request):
         'event_list': event_list
     }
     return render(request, 'timeline/timeline.html', context)
+
+
+@login_required
+def event_add_informed_view(request, event_id):
+    event = Event.objects.get(id=event_id)
+
+    context = {
+        'page_title': 'Kalendarium: poinformuj',
+        'event': event
+    }
+    return render(request, 'timeline/timeline.html', context)
