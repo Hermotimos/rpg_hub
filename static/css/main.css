@@ -135,7 +135,6 @@ td.season-winter  {
 
 small {
         color: #888;
-        white-space: nowrap;
 }
 
 tr:nth-child(even) {
@@ -154,14 +153,6 @@ tr:nth-child(even) {
 .locations {min-width: %;}
 .game {width: %;}
 .actions {width: 6%;}
-
-#location {
-        color: #808080;
-        font-style: normal;
-        font-size: 11px;
-        font-weight: normal;
-
-}
 
 .timeline-event {
         font-style: italic;

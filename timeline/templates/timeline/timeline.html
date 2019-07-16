@@ -95,7 +95,7 @@
                     <td >
                         {{ event.general_location }}<br>
                         {% for location in event.specific_locations.all %}
-                            <a id="location">{{ location }}</a><br>
+                            <small>{{ location }}</small><br>
                         {% endfor %}
                     </td>
                     <td><small>{{ event.game_no.game_no }}</small></td>
