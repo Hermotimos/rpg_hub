@@ -165,10 +165,6 @@ tr:nth-child(even) {
 
 /* TIMELINE */
 
-table.timeline {
-    width: 100%;
-
-}
 
 .year {;}
 .day {width: %;}
@@ -177,7 +173,7 @@ table.timeline {
 .participants {max-width: %;}
 .locations {min-width: %;}
 .game {width: %;}
-.actions {width: 7%;}
+.actions {width: 4%;}
 
 #location {
     color: #808080;
@@ -219,8 +215,6 @@ td img{
     height: auto;
     padding: 0px
 }
-
-#small-img {vertical-align: top}
 
 
 /* FORUM - Narady */
