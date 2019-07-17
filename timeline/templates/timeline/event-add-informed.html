@@ -9,7 +9,6 @@
 {% block content %}
     <br>
         <h6>
-        Wątki: <small>{{ event.threads }}</small><br>
         Wydarzenie: <small>{{ event.description }}</small><br>
         Uczestnicy:
         {% for profile in event.participants.all %}
@@ -31,7 +30,7 @@
 
     <!--  DO MODYFIKACJI !!!!!!  -->
     <div class="allowed-profiles-form" id="page-bottom">
-        <form method="POST" action=".#page-bottom">
+        <form method="POST">
             {% csrf_token %}
             {{ topic_update_form.allowed_profiles }}
             <br>
