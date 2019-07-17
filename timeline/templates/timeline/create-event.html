@@ -14,7 +14,7 @@
 
 {% block content %}
     <br>
-    <form class="allowed-profiles-form" method="POST" enctype="multipart/form-data">
+    <form method="POST">
         {% csrf_token %}
         {% for field in event_form %}
             <label for="{{ forloop.counter }}">{{ field.label }}:</label>
