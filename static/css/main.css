@@ -123,21 +123,6 @@ a.article-title:hover {
         white-space: nowrap;
 }
 
-td.season-spring  {
-        background-color: #8cd98c
-}
-
-td.season-summer  {
-        background-color: #ffff99
-}
-
-td.season-autumn {
-        background-color: #d2a679
-}
-
-td.season-winter  {
-        background-color: #99ccff
-}
 
 small {
         color: #888;
@@ -159,6 +144,17 @@ tr:nth-child(even) {
 .locations {min-width: %;}
 .game {width: %;}
 .actions {width: 6%;}
+
+
+.small-img {
+        display: block;
+        height: auto;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3px;
+        text-align: center;
+        width: 40%;
+}
 
 .timeline-event {
         font-style: italic;
@@ -183,16 +179,6 @@ tr:nth-child(even) {
         border: 1px solid black;
 }
 
-.small-img {
-        display: block;
-        height: auto;
-        margin-left: auto;
-        margin-right: auto;
-        padding: 3px;
-        text-align: center;
-        width: 40%;
-}
-
 td.center {
         text-align: center;
 }
@@ -201,7 +187,22 @@ td img {
         display: block;
 }
 
+td.season-spring  {
+        background-color: #8cd98c
+}
+td.season-summer  {
+        background-color: #ffff99
+}
+td.season-autumn {
+        background-color: #d2a679
+}
+td.season-winter  {
+        background-color: #99ccff
+}
 
+td.padding {
+    padding: 5px;
+}
 
 /* FORUM - Narady */
 
