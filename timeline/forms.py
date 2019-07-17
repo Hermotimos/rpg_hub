@@ -10,14 +10,11 @@ class CreateOrEditEvent(forms.ModelForm):
             'season',
             'day_start',
             'day_end',
-            'thread',
+            'threads',
             'description',
             'participants',
             'informed',
-            'location1',
-            'location2',
+            'general_location',
+            'specific_locations',
             'game_no'
         ]
-
-
-# class EventAddInformed(forms.ModelForm)
