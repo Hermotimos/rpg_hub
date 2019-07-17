@@ -81,7 +81,7 @@ def event_add_informed_view(request, event_id):
         )
         # TODO adde message !!!!
     context = {
-        'page_title': 'Kalendarium: poinformuj',
+        'page_title': 'Poinformuj o wydarzeniu',
         'add_informed_form': add_informed_form,
         'current_event': current_event
     }
