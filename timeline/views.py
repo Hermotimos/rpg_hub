@@ -20,23 +20,11 @@ def create_event_view(request):
     if request.method == 'POST':
         event_form = CreateOrEditEvent(request.POST or None)
         if event_form.is_valid():
-            event = event_form.save(commit=False)
-            # event.general_location = GeneralLocation.objects.get(name=event_form.cleaned_data['general_location'])
-            # event.game_no = GameSession.objects.get()
-            event.save()
-
-            threads_cleaned = event_form.cleaned_data['threads']
-            event.threads.set(threads_cleaned)
-
-            participants_cleaned = event_form.cleaned_data['participants']
-            event.participants.set(participants_cleaned)
-
-            informed_cleaned = event_form.cleaned_data['informed']
-            event.informed.set(informed_cleaned)
-
-            specific_locations_cleaned = event_form.cleaned_data['specific_locations']
-            event.specific_locations.set(specific_locations_cleaned)
-
+            event = event_form.save()
+            event.threads.set(event_form.cleaned_data['threads'])
+            event.participants.set(event_form.cleaned_data['participants'])
+            event.informed.set(event_form.cleaned_data['informed'])
+            event.specific_locations.set(event_form.cleaned_data['specific_locations'])
             event.save()
             return redirect('timeline')
     else:

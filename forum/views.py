@@ -115,8 +115,7 @@ def create_topic_view(request, board_slug):
             topic.board = Board.objects.get(slug=board_slug)
             topic.starter = request.user
             topic.save()
-            allowed_profiles_cleaned = topic_form.cleaned_data['allowed_profiles']
-            topic.allowed_profiles.set(allowed_profiles_cleaned)
+            topic.allowed_profiles.set(topic_form.cleaned_data['allowed_profiles'])
             topic.save()
 
             post = post_form.save(commit=False)
