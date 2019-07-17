@@ -16,11 +16,18 @@
     <br>
     <form method="POST">
         {% csrf_token %}
+        <table>
         {% for field in event_form %}
-            <label for="{{ forloop.counter }}">{{ field.label }}:</label>
-            <p id="{{ forloop.counter }}">{{ field }}</p>
+            <tr>
+                <td class="padding">
+                    <label for="{{ forloop.counter }}">{{ field.label }}:</label>
+                </td>
+                <td class="padding">
+                    <a id="{{ forloop.counter }}">{{ field }}</a>
+                </td>
+            </tr>
         {% endfor %}
-
+        </table>
         <br>
         <input class="btn btn-outline-info" type="submit" value="Utwórz wydarzenie"/>
     </form>
