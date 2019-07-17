@@ -3,14 +3,19 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from users.models import Profile
 
 
+SEASONS = (
+        ('1', 'Wiosna'),
+        ('2', 'Lato'),
+        ('3', 'Jesień'),
+        ('4', 'Zima')
+    )
+
+
 class Thread(models.Model):
     name = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name
-
-    # def get_absolute_url(self):
-    #     return f'/timeline/{self.name}'
 
     class Meta:
         ordering = ['name']
@@ -22,9 +27,6 @@ class GeneralLocation(models.Model):
     def __str__(self):
         return self.name
 
-    def get_absolute_url(self):
-        return f'/timeline/{self.name}'
-
     class Meta:
         ordering = ['name']
 
@@ -35,9 +37,6 @@ class SpecificLocation(models.Model):
 
     def __str__(self):
         return self.name
-
-    def get_absolute_url(self):
-        return f'/timeline/{self.location_main.name}/{self.name}'
 
     class Meta:
         ordering = ['name']
@@ -77,14 +76,8 @@ class DescribedEvent(models.Model):
 
 
 class Event(models.Model):
-    SEASONS = (
-        ('1', 'Wiosna'),
-        ('2', 'Lato'),
-        ('3', 'Jesień'),
-        ('4', 'Zima')
-    )
     year = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
-    season = models.CharField(max_length=100, choices=SEASONS)
+    season = models.CharField(max_length=10, choices=SEASONS)
     day_start = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(90)])
     day_end = models.PositiveSmallIntegerField(blank=True, null=True,
                                                validators=[MinValueValidator(1), MaxValueValidator(90)])
