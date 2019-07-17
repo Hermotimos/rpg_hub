@@ -4,7 +4,7 @@ from django.db.models import Max
 from django.core.mail import send_mail
 from django.conf import settings
 from forum.models import Board, Topic
-from users.models import Profile, User
+from users.models import User, Profile
 from forum.forms import CreatePostForm, CreateTopicForm, CreateBoardForm, UpdateTopicForm
 
 
