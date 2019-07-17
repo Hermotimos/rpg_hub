@@ -9,16 +9,15 @@
 
 {% block content %}
     <br>
-        <h6>
-        Wydarzenie: <small>{{ current_event.description }}</small><br>
-        Uczestnicy:
+    <h6>Wydarzenie: <small>{{ current_event.description }}</small></h6>
+    <h6>Uczestnicy:
         {% for profile in current_event.participants.all %}
             {% if forloop.counter > 1 %}
                 <small>/ {{ profile }}</small>
             {% else %}
                 <small>{{ profile }}</small>
             {% endif %}
-          {% endfor %}
+        {% endfor %}
     </h6><br>
 
     <h5>Poinformuj towarzyszy o wydarzeniu:</h5>
