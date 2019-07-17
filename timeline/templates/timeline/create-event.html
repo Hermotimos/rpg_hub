@@ -16,7 +16,11 @@
     <br>
     <form class="allowed-profiles-form" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ event_form|crispy }}
+        {% for field in event_form %}
+            <label for="{{ forloop.counter }}">{{ field.label }}:</label>
+            <p id="{{ forloop.counter }}">{{ field }}</p>
+        {% endfor %}
+
         <br>
         <input class="btn btn-outline-info" type="submit" value="Utwórz wydarzenie"/>
     </form>
