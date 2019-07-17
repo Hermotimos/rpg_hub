@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{% url 'forum' %}">Wieczorne narady</a></li>
-    <li class="breadcrumb-item"><a href="{% url 'topic' topic.board.slug topic.slug %}">{{ topic.board.title }}: {{ topic.topic_name }}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'timeline' %}">Kalendarium</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
 {% block content %}
     <br>
         <h6>
-        Wydarzenie: <small>{{ event.description }}</small><br>
+        Wydarzenie: <small>{{ current_event.description }}</small><br>
         Uczestnicy:
-        {% for profile in event.participants.all %}
+        {% for profile in current_event.participants.all %}
             {% if forloop.counter > 1 %}
                 <small>/ {{ profile }}</small>
             {% else %}
@@ -23,7 +24,7 @@
     <h5>Poinformuj towarzyszy o wydarzeniu:</h5>
     <small class="red">1) Jeśli ktoś już jest poinformowany - nie usuwaj go!</small><br>
     <small class="red">2) Nie dodawaj postaci, które były uczestnikami wydarzeń.</small><br>
-    <br><br>
+    <br>
 
 
 
@@ -32,10 +33,11 @@
     <div class="allowed-profiles-form" id="page-bottom">
         <form method="POST">
             {% csrf_token %}
-            {{ topic_update_form.allowed_profiles }}
-            <br>
-            <small>***Aby zaznaczyć wielu uczestników - użyj CTRL albo SHIFT.</small><br><br>
-            <input class="btn btn-outline-info" type="submit" value="Dodaj uczestników narady">
+
+            {{ add_informed_form|crispy }}
+
+            <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
+            <input class="btn btn-outline-info" type="submit" value="Poinformuj towarzyszy">
         </form>
     </div>
 {% endblock content %}

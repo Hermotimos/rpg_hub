@@ -2,19 +2,17 @@ from django import forms
 from timeline.models import Event
 
 
-class CreateOrEditEvent(forms.ModelForm):
+class CreateEventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = [
-            'year',
-            'season',
-            'day_start',
-            'day_end',
-            'threads',
-            'description',
-            'participants',
-            'informed',
-            'general_location',
-            'specific_locations',
-            'game_no'
-        ]
+        exclude = ()
+
+
+class EventAddInformedForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ['informed']
+
+    def __init__(self, *args, **kwargs):
+        super(EventAddInformedForm, self).__init__(*args, **kwargs)
+        self.fields['informed'].label = ''
