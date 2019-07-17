@@ -15,6 +15,13 @@
     <br>
     <small>Wydarzenia są widoczne tylko dla uczestników <strike>oraz postaci poinformowanych przez któregoś z uczestników.</strike></small><br>
     <small>W celu stworzenia nowego wątku lub dodania wątku do wydarzenia - skontaktuj się z MG.</small><br><br>
+
+    {% if request.user.profile.character_name == 'MG' %}
+        <div class="mb-4">
+            <a href="{% url 'create_event' %}" class="btn btn-dark">Nowe wydarzenie</a>
+        </div><br>
+    {% endif %}
+
     <table data-toggle="table" id="timeline" class="timeline table-sm" data-search="true">
         <colgroup>
             <col class="year">
