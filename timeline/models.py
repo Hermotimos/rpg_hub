@@ -4,11 +4,21 @@ from users.models import Profile
 
 
 SEASONS = (
-        ('1', 'Wiosna'),
-        ('2', 'Lato'),
-        ('3', 'Jesień'),
-        ('4', 'Zima')
-    )
+    ('1', 'Wiosna'),
+    ('2', 'Lato'),
+    ('3', 'Jesień'),
+    ('4', 'Zima')
+)
+COLORS = (
+    ('#808080', 'szary'),
+    ('#000000', 'czarny'),
+    ('#C70039', 'czerwony'),
+    ('#FFC300', 'pomarańczowy'),
+    ('#229954', 'zielony'),
+    ('#2e86c1', 'niebieski'),
+    ('#000080', 'granatowy'),
+    ('#800080', 'fioletowy')
+)
 
 
 class Thread(models.Model):
@@ -102,3 +112,13 @@ class Event(models.Model):
     # 2) comment out all other models than Event
     # 1) migrate Events without any M2M fields or ForeignKeys.
     # 2) uncomment other fields and classes and migrate.
+
+
+class EventAnnotation(models.Model):
+    author = models.ForeignKey(Profile, related_name='annotation_authors', on_delete=models.CASCADE)
+    text = models.TextField(max_length=4000)
+    event = models.ForeignKey(Event, related_name='annotations', on_delete=models.CASCADE)
+    color = models.CharField(max_length=20, choices=COLORS)
+
+    def __str__(self):
+        return f'{self.text[0:50]}...'
