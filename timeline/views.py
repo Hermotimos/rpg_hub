@@ -80,8 +80,7 @@ def event_add_informed_view(request, event_id):
 
             return redirect('timeline')
     else:
-        add_informed_form = EventAddInformedForm(instance=current_event
-        )
+        add_informed_form = EventAddInformedForm(instance=current_event)
 
     context = {
         'page_title': 'Poinformuj o wydarzeniu',
@@ -132,7 +131,7 @@ def report_view(request, event_id):
             message = f"{request.user.profile}:\n" \
                       f"Wydarzenie: {current_event.description}\n" \
                       f"Zgłoszenie: {report_form.cleaned_data['text']}\n" \
-                      f"Link do edycji wydarzenia: http://127.0.0.1:8000/timeline/{current_event.id}/edit-event/"
+                      f"Link do edycji wydarzenia: {request.get_host()}/timeline/{current_event.id}/edit-event/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = ['lukas.kozicki@gmail.com']
             send_mail(subject, message, sender, receivers_list)
