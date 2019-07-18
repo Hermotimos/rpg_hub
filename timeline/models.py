@@ -114,7 +114,7 @@ class Event(models.Model):
     # 2) uncomment other fields and classes and migrate.
 
 
-class EventAnnotation(models.Model):
+class EventNote(models.Model):
     author = models.ForeignKey(Profile, related_name='annotation_authors', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000)
     event = models.ForeignKey(Event, related_name='annotations', on_delete=models.CASCADE)
