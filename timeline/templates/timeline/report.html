@@ -12,27 +12,44 @@
 
 {% block content %}
     <br>
-    <h6>Wydarzenie: <small>{{ current_event.description }}</small></h6>
-    <h6>
-        Uczestnicy:
-        {% for profile in current_event.participants.all %}
-            {% if forloop.counter > 1 %}
-                <small>/ {{ profile }}</small>
-            {% else %}
-                <small>{{ profile }}</small>
-            {% endif %}
-        {% endfor %}
-    </h6>
-    <h6>
-        Poinformowani:
-        {% for profile in current_event.informed.all %}
-            {% if forloop.counter > 1 %}
-                <small>/ {{ profile }}</small>
-            {% else %}
-                <small>{{ profile }}</small>
-            {% endif %}
-        {% endfor %}
-    </h6><br>
+    <table class="forms">
+        <tr>
+            <td>
+                <h6>Wydarzenie:</h6>
+            </td>
+            <td>
+                <small>{{ current_event.description }}</small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h6>Uczestnicy:</h6>
+            </td>
+            <td>
+                {% for profile in current_event.participants.all %}
+                    {% if forloop.counter > 1 %}
+                        <small>/ {{ profile }}</small>
+                    {% else %}
+                        <small>{{ profile }}</small>
+                    {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h6>Poinformowani:</h6>
+            </td>
+            <td>
+                {% for profile in current_event.informed.all %}
+                    {% if forloop.counter > 1 %}
+                        <small>/ {{ profile }}</small>
+                    {% else %}
+                        <small>{{ profile }}</small>
+                    {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+    </table><br><br>
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
