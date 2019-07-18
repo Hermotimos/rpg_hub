@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from users.models import User
 from timeline.models import Event, EventNote
-from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm
+from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm, ReportForm
 
 
 @login_required
@@ -118,3 +118,31 @@ def event_note_view(request, event_id):
         'note_form': note_form
     }
     return render(request, 'timeline/event_note.html', context)
+
+
+@login_required
+def report_view(request, event_id):
+    current_event = get_object_or_404(Event, id=event_id)
+
+    if request.method == 'POST':
+        report_form = ReportForm(request.POST or None)
+        if report_form.is_valid():
+
+            subject = f"[RPG] {request.user.profile} zgłosił problem"
+            message = f"{request.user.profile}:\n" \
+                      f"Wydarzenie: {current_event.description}\n" \
+                      f"Zgłoszenie: {report_form.cleaned_data['text']}\n" \
+                      f"Link do edycji wydarzenia: http://127.0.0.1:8000/timeline/{current_event.id}/edit-event/"
+            sender = settings.EMAIL_HOST_USER
+            receivers_list = ['lukas.kozicki@gmail.com']
+            send_mail(subject, message, sender, receivers_list)
+            return redirect('timeline')
+    else:
+        report_form = ReportForm()
+
+    context = {
+        'page_title': 'Zgłoś problem',
+        'report_form': report_form,
+        'current_event': current_event
+    }
+    return render(request, 'timeline/report.html', context)
