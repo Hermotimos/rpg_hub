@@ -116,7 +116,7 @@ class Event(models.Model):
 
 class EventNote(models.Model):
     author = models.ForeignKey(User, related_name='notes', on_delete=models.CASCADE)
-    text = models.TextField(max_length=4000)
+    text = models.TextField(max_length=4000, blank=True, null=True)
     event = models.ForeignKey(Event, related_name='notes', on_delete=models.CASCADE)
     color = models.CharField(max_length=20, choices=COLORS, default='#C70039')
 

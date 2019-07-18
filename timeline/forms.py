@@ -51,6 +51,7 @@ class EventNoteForm(forms.ModelForm):
 
     text = forms.CharField(
         label='',
+        required=False,
         widget=PagedownWidget(
             attrs={
                 'placeholder': 'Twoja notatka (max. 4000 znaków)*',

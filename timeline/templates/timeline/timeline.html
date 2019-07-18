@@ -86,8 +86,10 @@
                         {{ event.description|linebreaksbr }}
                         {% for note in event.notes.all %}
                             {% if request.user == note.author %}
-                                <br>----</br>
-                                <a style="color:{{ note.color }}">{{ note|linebreaksbr }}</a>
+                                {% if note.text != '' %}
+                                    <br>----</br>
+                                    <a style="color:{{ note.color }}">Notatka: {{ note.text|linebreaksbr }}</a>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                     </td>
