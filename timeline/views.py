@@ -59,7 +59,6 @@ def edit_event_view(request, event_id):
     return render(request, 'timeline/edit_event.html', context)
 
 
-
 @login_required
 def event_add_informed_view(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
@@ -85,7 +84,7 @@ def event_add_informed_view(request, event_id):
                 'informed': [p for p in Profile.objects.all() if p in current_event.informed.all()]
             }
         )
-        # TODO adde message !!!!
+
     context = {
         'page_title': 'Poinformuj o wydarzeniu',
         'add_informed_form': add_informed_form,
