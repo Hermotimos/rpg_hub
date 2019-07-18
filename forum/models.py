@@ -38,7 +38,11 @@ class Topic(models.Model):
     board = models.ForeignKey(Board, related_name='topics', on_delete=models.CASCADE)
     starter = models.ForeignKey(User, related_name='topics', on_delete=models.CASCADE)
     allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_topics',
-                                              limit_choices_to=Q(character_status='player') | Q(character_status='npc'))
+                                              limit_choices_to=
+                                              Q(character_status='active_player') |
+                                              Q(character_status='inactive_player') |
+                                              Q(character_status='living_npc')
+                                              )
 
     def __str__(self):
         return self.topic_name

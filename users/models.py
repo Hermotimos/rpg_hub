@@ -5,7 +5,9 @@ from PIL import Image
 STATUS = [
     ('active_player', 'Postać gracza'),
     ('inactive_player', 'Dawna postać gracza'),
-    ('npc', 'Bohater niezależny'),
+    ('dead_player', 'Martwa postać gracza'),
+    ('living_npc', 'Bohater niezależny'),
+    ('dead_npc', 'Martwy bohater niezależny'),
     ('gm', 'Mistrz gry')
 ]
 
@@ -30,7 +32,7 @@ class Profile(models.Model):
             img.save(self.image.path)
 
     class Meta:
-        ordering = ['-character_status', 'character_name']
+        ordering = ['character_status', 'character_name']
 
 
 # maybe move to separate app ?

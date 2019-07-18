@@ -97,10 +97,14 @@ class Event(models.Model):
     participants = models.ManyToManyField(Profile, related_name='events_participated',
                                           limit_choices_to=
                                           Q(character_status='active_player') |
-                                          Q(character_status='inactive_player'),
+                                          Q(character_status='inactive_player') |
+                                          Q(character_status='dead_player'),
                                           blank=True)
     informed = models.ManyToManyField(Profile, related_name='events_informed',
-                                      limit_choices_to={'character_status': 'active_player'}, blank=True)
+                                      limit_choices_to=
+                                      Q(character_status='active_player') |
+                                      Q(character_status='inactive_player'),
+                                      blank=True)
     general_location = models.ForeignKey(GeneralLocation, on_delete=models.CASCADE)
     specific_locations = models.ManyToManyField(SpecificLocation, related_name='events')
     game_no = models.ForeignKey(GameSession, related_name='events', blank=True, null=True, on_delete=models.CASCADE)
