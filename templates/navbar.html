@@ -24,10 +24,10 @@
                     {% else %}
                         <a class="navbar-brand mr-4" href="/users/profile">Profil</a>
                     {% endif %}
-                    <a class="btn btn-default btn-space" href="{% url 'logout' %}">Wyloguj</a>
+                    <a class="btn btn-outline-light btn-space" href="{% url 'logout' %}">Wyloguj</a>
                 {% else %}
-                    <a class="btn btn-default btn-space" href="{% url 'register' %}">Nowa postać</a>
-                    <a class="btn btn-default btn-space" href="{% url 'login' %}">Zaloguj</a>
+                    <a class="btn btn-outline-light btn-space" href="{% url 'register' %}">Nowa postać</a>
+                    <a class="btn btn-outline-light btn-space" href="{% url 'login' %}">Zaloguj</a>
                 {% endif %}
             </div>
           </div>
