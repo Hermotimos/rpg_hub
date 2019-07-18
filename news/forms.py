@@ -18,7 +18,7 @@ class CreateNewsForm(forms.ModelForm):
         max_length=100,
         widget=forms.TextInput(
             attrs={
-                'placeholder': f'Tytuł ogłoszenia (max. 100 znaków)*',
+                'placeholder': 'Tytuł ogłoszenia (max. 100 znaków)*',
                 'size': '60'
             }
         )
@@ -40,7 +40,6 @@ class CreateNewsForm(forms.ModelForm):
         label='Załącz obraz:',
         required=False,
     )
-# TODO why image doesn't affect actual form ?? no label, required=False could be absent...
 
 
 class CreateResponseForm(forms.ModelForm):
