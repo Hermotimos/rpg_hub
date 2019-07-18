@@ -13,8 +13,8 @@ def report_view(request):
         if report_form.is_valid():
 
             subject = f"[RPG] Problem"
-            message = f"{request.user.profile} zgłosił problem:\n" \
-                      f"Zgłoszenie: {report_form.cleaned_data['text']}\n"
+            message = f"{request.user.profile} zgłasza problem:\n" \
+                      f"Zgłoszenie:\n{report_form.cleaned_data['text']}"
             sender = settings.EMAIL_HOST_USER
             receivers_list = ['lukas.kozicki@gmail.com']
             send_mail(subject, message, sender, receivers_list)

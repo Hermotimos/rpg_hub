@@ -89,7 +89,12 @@ a.article-title:hover {
 /* ----- CUSTOM ----- */
 
 .allowed-profiles-form select {
-        min-height: 300px;
+        min-height: 200px;
+        width: 400px;
+}
+
+.allowed-profiles-form-topic select {
+        min-height: 400px;
         width: 400px;
 }
 
