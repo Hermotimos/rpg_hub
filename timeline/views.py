@@ -48,12 +48,10 @@ def edit_event_view(request, event_id):
         edit_event_form = EditEventForm(request.POST, instance=current_event)
         if edit_event_form.is_valid():
             edit_event_form.save()
+            return redirect('timeline')
     else:
-        edit_event_form = EditEventForm(instance=current_event
-            # initial={
-            #     'informed': [p for p in Profile.objects.all() if p in current_event.informed.all()]
-            # }
-        )
+        edit_event_form = EditEventForm(instance=current_event)
+
     context = {
         'page_title': 'Edycja wydarzenia',
         'edit_event_form': edit_event_form
