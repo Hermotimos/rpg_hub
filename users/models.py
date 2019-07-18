@@ -30,9 +30,10 @@ class Profile(models.Model):
             img.save(self.image.path)
 
     class Meta:
-        ordering = ['character_status', 'character_name']
+        ordering = ['-character_status', 'character_name']
 
 
+# maybe move to separate app ?
 # class CharacterSheet(models.Model):
 #     user = models.OneToOneField(User, on_delete=models.CASCADE)
 #     character_class = models.CharField(max_length=200, blank=True, null=True)
