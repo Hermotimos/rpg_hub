@@ -6,10 +6,6 @@ from users.models import Profile
 from PIL import Image
 
 
-PLAYERS = [(profile.user.username, profile.user.username)
-           for profile in Profile.objects.filter(character_status='player')]
-
-
 class News(models.Model):
     title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=50, unique=True, blank=True)
@@ -18,7 +14,7 @@ class News(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, related_name='news', on_delete=models.CASCADE)
     allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_news',
-                                              limit_choices_to={'character_status': 'player'})
+                                              limit_choices_to={'character_status': 'active_player'})
     image = models.ImageField(blank=True, null=True, upload_to='news_pics')
 
     def __str__(self):

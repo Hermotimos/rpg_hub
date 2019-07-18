@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.core.validators import MaxValueValidator, MinValueValidator
 from users.models import User, Profile
 
@@ -94,9 +95,12 @@ class Event(models.Model):
     threads = models.ManyToManyField(Thread, related_name='events', blank=True)
     description = models.TextField(max_length=4000)
     participants = models.ManyToManyField(Profile, related_name='events_participated',
-                                          limit_choices_to={'character_status': 'player'}, blank=True)
+                                          limit_choices_to=
+                                          Q(character_status='active_player') |
+                                          Q(character_status='inactive_player'),
+                                          blank=True)
     informed = models.ManyToManyField(Profile, related_name='events_informed',
-                                      limit_choices_to={'character_status': 'player'}, blank=True)
+                                      limit_choices_to={'character_status': 'active_player'}, blank=True)
     general_location = models.ForeignKey(GeneralLocation, on_delete=models.CASCADE)
     specific_locations = models.ManyToManyField(SpecificLocation, related_name='events')
     game_no = models.ForeignKey(GameSession, related_name='events', blank=True, null=True, on_delete=models.CASCADE)
