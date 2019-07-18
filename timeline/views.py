@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from users.models import User, Profile
 from timeline.models import Event
-from timeline.forms import CreateEventForm, EventAddInformedForm
+from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm
 
 
 @login_required
@@ -40,17 +40,25 @@ def create_event_view(request):
     return render(request, 'timeline/create_event.html', context)
 
 
+@login_required
+def edit_event_view(request, event_id):
+    current_event = get_object_or_404(Event, id=event_id)
 
-
-# @login_required
-# def edit_event_view(request, event_id):
-#     event = get_object_or_404(Event, id=event_id)
-#
-#     context = {
-#         'page_title': 'Edycja wydarzenia',
-#         'event': event
-#     }
-#     return render(request, 'timeline/edit-event.html', context)
+    if request.method == 'POST':
+        edit_event_form = EditEventForm(request.POST, instance=current_event)
+        if edit_event_form.is_valid():
+            edit_event_form.save()
+    else:
+        edit_event_form = EditEventForm(instance=current_event
+            # initial={
+            #     'informed': [p for p in Profile.objects.all() if p in current_event.informed.all()]
+            # }
+        )
+    context = {
+        'page_title': 'Edycja wydarzenia',
+        'edit_event_form': edit_event_form
+    }
+    return render(request, 'timeline/edit_event.html', context)
 
 
 

@@ -14,5 +14,22 @@
 
 {% block content %}
     <br>
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+        {% for field in edit_event_form %}
+            <tr>
+                <td class="padding">
+                    <label for="{{ forloop.counter }}">{{ field.label }}:</label>
+                </td>
+                <td class="padding">
+                    <a id="{{ forloop.counter }}">{{ field }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+        <br>
+        <input class="btn btn-outline-secondary" type="submit" value="Zapisz zmiany"/>
+    </form>
 
 {% endblock content %}
