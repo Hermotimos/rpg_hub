@@ -1,6 +1,6 @@
 from django.urls import path
 from timeline.views import timeline_view, create_event_view, edit_event_view, event_add_informed_view, \
-    event_note_view, report_view
+    event_note_view
 
 
 urlpatterns = [
