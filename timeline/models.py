@@ -115,10 +115,10 @@ class Event(models.Model):
 
 
 class EventNote(models.Model):
-    author = models.ForeignKey(Profile, related_name='annotation_authors', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, related_name='notes', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000)
-    event = models.ForeignKey(Event, related_name='annotations', on_delete=models.CASCADE)
-    color = models.CharField(max_length=20, choices=COLORS)
+    event = models.ForeignKey(Event, related_name='notes', on_delete=models.CASCADE)
+    color = models.CharField(max_length=20, choices=COLORS, default='#C70039')
 
     def __str__(self):
         return f'{self.text[0:50]}...'

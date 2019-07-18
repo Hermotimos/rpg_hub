@@ -24,7 +24,7 @@
     <form method="POST">
         {% csrf_token %}
 
-        {{ add_informed_form|crispy }}
+        {{ note_form|crispy }}
 
         <input class="btn btn-outline-secondary" type="submit" value="Zanotuj">
     </form>

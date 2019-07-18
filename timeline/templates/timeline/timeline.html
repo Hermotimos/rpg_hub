@@ -82,7 +82,15 @@
                             *{{ thread }}<br>
                         {% endfor %}
                     </td>
-                    <td class="timeline-event">{{ event.description|linebreaksbr }}</td>
+                    <td class="timeline-event">
+                        {{ event.description|linebreaksbr }}
+                        {% for note in event.notes.all %}
+                            {% if request.user == note.author %}
+                                <br>----</br>
+                                {{ note }}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                     <td class="timeline-small">
                         {% for profile in event.participants.all %}
                             {% if profile.character_status != 'gm' %}

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import send_mail
-from users.models import User, Profile
+from users.models import User
 from timeline.models import Event
 from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm
 
