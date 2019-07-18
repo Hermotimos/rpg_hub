@@ -18,6 +18,16 @@
                 <small>{{ profile }}</small>
             {% endif %}
         {% endfor %}
+    </h6>
+    <h6>
+        Poinformowani:
+        {% for profile in current_event.informed.all %}
+            {% if forloop.counter > 1 %}
+                <small>/ {{ profile }}</small>
+            {% else %}
+                <small>{{ profile }}</small>
+            {% endif %}
+        {% endfor %}
     </h6><br>
 
     <h6>Poinformuj towarzyszy o wydarzeniu:</h6>
