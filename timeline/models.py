@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-from users.models import Profile
+from users.models import User, Profile
 
 
 SEASONS = (
@@ -10,14 +10,14 @@ SEASONS = (
     ('4', 'Zima')
 )
 COLORS = (
-    ('#808080', 'szary'),
     ('#000000', 'czarny'),
     ('#C70039', 'czerwony'),
-    ('#FFC300', 'pomarańczowy'),
-    ('#229954', 'zielony'),
-    ('#2e86c1', 'niebieski'),
+    ('#800080', 'fioletowy'),
     ('#000080', 'granatowy'),
-    ('#800080', 'fioletowy')
+    ('#2e86c1', 'niebieski'),
+    ('#FFC300', 'pomarańczowy'),
+    ('#808080', 'szary'),
+    ('#229954', 'zielony'),
 )
 
 
