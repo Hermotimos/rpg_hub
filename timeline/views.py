@@ -71,8 +71,25 @@ def event_add_informed_view(request, event_id):
         if add_informed_form.is_valid():
             add_informed_form.save()
 
-            subject = f"[RPG] {request.user.profile} opowiedział Ci o swoich przygodach"
-            message = f"{request.user.profile} dołączył uczestnika/-ów do narady.\n"
+            if current_event.season == 'spring':
+                season = 'Wiosny'
+            elif current_event.season == 'summer':
+                season = 'Lata'
+            elif current_event.season == 'autumn':
+                season = 'Jesieni'
+            else:
+                season = 'Zimy'
+
+            subject = f"[RPG] {request.user.profile} opowiedział o swoich przygodach"
+            message = f"{request.user.profile} znów rozprawia o swoich przygodach.\n" \
+                      f"Oto kto już o nich słyszał: " \
+                      f"{[p.character_name for p in add_informed_form.cleaned_data['informed']]}\n\n" \
+                      f"{current_event.day_start}{'-' + current_event.day_end if current_event.day_end else ''}" \
+                      f" dnia {season} {current_event.year + 19}. " \
+                      f"roku Archonatu Nemetha Samatiana rozegrało się co następuje:\n {current_event.description}\n" \
+                      f"A było to w miejscu: {current_event.general_location}, " \
+                      f"{[l.name for l in current_event.specific_locations.all()]}.\n" \
+                      f"Tak było i nie inaczej..."
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
             for user in User.objects.all():
