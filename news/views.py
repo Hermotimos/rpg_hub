@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.conf import settings
@@ -44,6 +45,7 @@ def create_news_view(request):
                 receivers_list.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers_list)
 
+            messages.success(request, f'Utworzono nowe ogłoszenie!')
             return redirect('news-detail', news_slug=news.slug)
     else:
         news_form = CreateNewsForm()

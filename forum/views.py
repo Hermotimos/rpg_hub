@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 from django.core.mail import send_mail
@@ -137,6 +138,7 @@ def create_topic_view(request, board_slug):
                 receivers_list.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers_list)
 
+            messages.success(request, f'Utworzono nową naradę!')
             return redirect('topic', board_slug=board_slug, topic_slug=topic.slug)
     else:
         topic_form = CreateTopicForm()            # equals to: form = CreateTopicForm(request.GET) - GET is the default
@@ -157,6 +159,7 @@ def create_board_view(request):
         board_form = CreateBoardForm(request.POST or None)
         if board_form.is_valid():
             board = board_form.save()
+            messages.success(request, f'Utworzono nowy temat narad!')
             return redirect('create_topic', board_slug=board.slug)
     else:
         board_form = CreateBoardForm()             # equals to: form = CreateBoardForm(request.GET) - GET is the default
