@@ -3,9 +3,10 @@ from django.contrib.auth.models import User
 from PIL import Image
 
 STATUS = [
-    ('player', 'Postać gracza'),
-    ('npc', 'BN'),
-    ('gm', 'MG')
+    ('active_player', 'Postać gracza'),
+    ('inactive_player', 'Dawna postać gracza'),
+    ('npc', 'Bohater niezależny'),
+    ('gm', 'Mistrz gry')
 ]
 
 
@@ -29,7 +30,7 @@ class Profile(models.Model):
             img.save(self.image.path)
 
     class Meta:
-        ordering = ['character_name']
+        ordering = ['character_status', 'character_name']
 
 
 # class CharacterSheet(models.Model):
