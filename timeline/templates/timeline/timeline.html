@@ -107,7 +107,7 @@
                     <td class="center"><small>{{ event.game_no.game_no }}</small></td>
                     <td>
                         <h6><a href="{% url 'add_informed' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
-                        <h6><a href="#"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
+                        <h6><a href="{% url 'event_note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
                         {% if request.user.profile.character_status == 'gm' %}
                             <h6><a href="{% url 'edit_event' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
                         {% else %}

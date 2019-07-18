@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'timeline' %}">Kalendarium</a></li>
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br>
+    <h6>Wydarzenie: <small>{{ current_event.description }}</small></h6>
+    <h6>Uczestnicy:
+        {% for profile in current_event.participants.all %}
+            {% if forloop.counter > 1 %}
+                <small>/ {{ profile }}</small>
+            {% else %}
+                <small>{{ profile }}</small>
+            {% endif %}
+        {% endfor %}
+    </h6><br>
+
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ add_informed_form|crispy }}
+
+        <input class="btn btn-outline-secondary" type="submit" value="Zanotuj">
+    </form>
+{% endblock content %}

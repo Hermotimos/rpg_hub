@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from users.models import User, Profile
 from timeline.models import Event
-from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm
+from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm
 
 
 @login_required
@@ -79,10 +79,7 @@ def event_add_informed_view(request, event_id):
 
             return redirect('timeline')
     else:
-        add_informed_form = EventAddInformedForm(
-            initial={
-                'informed': [p for p in Profile.objects.all() if p in current_event.informed.all()]
-            }
+        add_informed_form = EventAddInformedForm(instance=current_event
         )
 
     context = {
@@ -91,3 +88,26 @@ def event_add_informed_view(request, event_id):
         'current_event': current_event
     }
     return render(request, 'timeline/event_add_informed.html', context)
+
+
+@login_required
+def event_note_view(request, event_id):
+    current_event = get_object_or_404(Event, id=event_id)
+
+    if request.method == 'POST':
+        note_form = EventNoteForm(request.POST, instance=current_event)
+        if note_form.is_valid():
+            note = note_form.save(commit=False)
+            note.author = request.user
+            note.event = current_event
+            note.save()
+            return redirect('timeline')
+    else:
+        note_form = EventNoteForm(instance=current_event)
+
+    context = {
+        'page_title': 'Notatka',
+        'current_event': current_event,
+        'note_form': note_form
+    }
+    return render(request, 'timeline/event_note.html', context)
