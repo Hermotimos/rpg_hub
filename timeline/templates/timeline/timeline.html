@@ -119,8 +119,6 @@
                         <h6><a href="{% url 'event_note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
                         {% if request.user.profile.character_status == 'gm' %}
                             <h6><a href="{% url 'edit_event' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
-                        {% else %}
-                            <h6><a href="{% url 'report' event.id %}"><img src="{% static 'img/report.png' %}" class="small-img"></a></h6>
                         {% endif %}
                     </td>
                 </tr>

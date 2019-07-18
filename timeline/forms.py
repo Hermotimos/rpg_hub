@@ -60,20 +60,3 @@ class EventNoteForm(forms.ModelForm):
             }
         )
     )
-
-
-class ReportForm(forms.ModelForm):
-    class Meta:
-        model = EventNote
-        fields = ['text']
-
-    text = forms.CharField(
-        label='',
-        widget=PagedownWidget(
-            attrs={
-                'placeholder': 'Zgłoś problem (max. 4000 znaków)*',
-                'rows': 10,
-                'cols': 60
-            }
-        )
-    )

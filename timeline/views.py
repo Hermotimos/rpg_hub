@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from users.models import User
 from timeline.models import Event, EventNote
-from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm, ReportForm
+from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm
 
 
 @login_required

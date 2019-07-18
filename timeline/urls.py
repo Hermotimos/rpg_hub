@@ -9,5 +9,4 @@ urlpatterns = [
     path('<int:event_id>/edit-event/', edit_event_view, name='edit_event'),
     path('<int:event_id>/event-add-informed/', event_add_informed_view, name='add_informed'),
     path('<int:event_id>/event-note/', event_note_view, name='event_note'),
-    path('<int:event_id>/report/', report_view, name='report')
 ]
