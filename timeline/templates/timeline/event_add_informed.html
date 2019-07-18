@@ -28,8 +28,9 @@
     <div class="allowed-profiles-form">
         <form method="POST">
             {% csrf_token %}
-            {{ add_informed_form.informed }}
-            <br>
+
+            {{ add_informed_form.informed }}<br>
+
             <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
             <input class="btn btn-outline-secondary" type="submit" value="Poinformuj">
         </form>
