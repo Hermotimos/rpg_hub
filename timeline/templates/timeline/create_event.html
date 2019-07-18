@@ -16,7 +16,7 @@
     <br>
     <form method="POST">
         {% csrf_token %}
-        <table>
+        <table class="create-event">
         {% for field in event_form %}
             <tr>
                 <td class="padding">
