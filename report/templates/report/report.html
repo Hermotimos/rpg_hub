@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block head_extra %}
+{{ report_form.media }}
+{% endblock head_extra %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'timeline' %}">Kalendarium</a></li>
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br><br>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ report_form|crispy }}
+
+        <input class="btn btn-outline-secondary" type="submit" value="Zgłoś">
+    </form>
+{% endblock content %}
