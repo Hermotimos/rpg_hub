@@ -76,7 +76,7 @@ def add_allowed_profiles_view(request, board_slug, topic_slug):
             subject = f"[RPG] Dołączenie uczestnika do narady: {current_topic.topic_name}"
             message = f"{request.user.profile} dołączył uczestnika/-ów do narady.\n" \
                       f"Narada '{current_topic.topic_name}' w temacie '{current_topic.board}'.\n" \
-                      f"Uczestnicy: {[p.character_name for p in topic_update_form.cleaned_data['allowed_profiles']]}" \
+                      f"Uczestnicy: {[p.character_name for p in topic_update_form.cleaned_data['allowed_profiles']]}\n"\
                       f"Link do narady: {request.get_host()}/forum/{current_topic.board.slug}/{current_topic.slug}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
