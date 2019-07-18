@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
+{% block head_extra %}
+{{ note_form.media }}
+{% endblock head_extra %}
 
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'timeline' %}">Kalendarium</a></li>
@@ -21,7 +24,7 @@
     </h6><br>
 
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
         {{ note_form|crispy }}

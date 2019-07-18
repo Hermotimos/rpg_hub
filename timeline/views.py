@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import send_mail
 from users.models import User
-from timeline.models import Event
+from timeline.models import Event, EventNote
 from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm
 
 
@@ -93,9 +94,15 @@ def event_add_informed_view(request, event_id):
 @login_required
 def event_note_view(request, event_id):
     current_event = get_object_or_404(Event, id=event_id)
+    current_note = None
+
+    try:
+        current_note = EventNote.objects.get(event=current_event, author=request.user)
+    except EventNote.DoesNotExist:
+        pass
 
     if request.method == 'POST':
-        note_form = EventNoteForm(request.POST, instance=current_event)
+        note_form = EventNoteForm(request.POST, instance=current_note)
         if note_form.is_valid():
             note = note_form.save(commit=False)
             note.author = request.user
@@ -103,7 +110,7 @@ def event_note_view(request, event_id):
             note.save()
             return redirect('timeline')
     else:
-        note_form = EventNoteForm(instance=current_event)
+        note_form = EventNoteForm(instance=current_note)
 
     context = {
         'page_title': 'Notatka',

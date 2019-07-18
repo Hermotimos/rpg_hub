@@ -87,7 +87,7 @@
                         {% for note in event.notes.all %}
                             {% if request.user == note.author %}
                                 <br>----</br>
-                                {{ note }}
+                                <a style="color:{{ note.color }}">{{ note|linebreaksbr }}</a>
                             {% endif %}
                         {% endfor %}
                     </td>
