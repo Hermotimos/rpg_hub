@@ -32,10 +32,12 @@
                 &nbsp&nbsp&nbsp*Wyłączony uczestnik całkowicie utraci dostęp do narady!</small>
     <br><br>
 
-    <div class="allowed-profiles-form" id="page-bottom">
+    <div class="allowed-profiles-form">
         <form method="POST" action=".#page-bottom">
             {% csrf_token %}
+
             {{ topic_update_form.allowed_profiles }}
+
             <br>
             <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
             <input class="btn btn-outline-info" type="submit" value="Dodaj uczestników narady">
