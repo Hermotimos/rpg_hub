@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import Http404
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import send_mail
@@ -49,6 +49,7 @@ def edit_event_view(request, event_id):
         edit_event_form = EditEventForm(request.POST, instance=current_event)
         if edit_event_form.is_valid():
             edit_event_form.save()
+            messages.success(request, f'Zmodyfikowano wydarzenie!')
             return redirect('timeline')
     else:
         edit_event_form = EditEventForm(instance=current_event)
@@ -78,6 +79,7 @@ def event_add_informed_view(request, event_id):
                     receivers_list.append(user.email)
             send_mail(subject, message, sender, receivers_list)
 
+            messages.success(request, f'Poinformowano wybrane postaci!')
             return redirect('timeline')
     else:
         add_informed_form = EventAddInformedForm(instance=current_event)
@@ -107,6 +109,7 @@ def event_note_view(request, event_id):
             note.author = request.user
             note.event = current_event
             note.save()
+            messages.success(request, f'Dodano notatkę!')
             return redirect('timeline')
     else:
         note_form = EventNoteForm(instance=current_note)
@@ -135,6 +138,8 @@ def report_view(request, event_id):
             sender = settings.EMAIL_HOST_USER
             receivers_list = ['lukas.kozicki@gmail.com']
             send_mail(subject, message, sender, receivers_list)
+
+            messages.success(request, f'MG został poinformowany o problemie!')
             return redirect('timeline')
     else:
         report_form = ReportForm()
