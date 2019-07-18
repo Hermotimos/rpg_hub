@@ -30,6 +30,7 @@ def create_event_view(request):
             event.informed.set(event_form.cleaned_data['informed'])
             event.specific_locations.set(event_form.cleaned_data['specific_locations'])
             event.save()
+            messages.success(request, f'Dodano wydarzenie!')
             return redirect('timeline')
     else:
         event_form = CreateEventForm()
