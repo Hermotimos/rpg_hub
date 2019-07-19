@@ -60,3 +60,7 @@ class EventNoteForm(forms.ModelForm):
             }
         )
     )
+
+    def __init__(self, *args, **kwargs):
+        super(EventNoteForm, self).__init__(*args, **kwargs)
+        self.fields['color'].label = 'Kolor'
