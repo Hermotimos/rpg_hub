@@ -16,19 +16,34 @@
     {% if request.user.profile not in news_details.allowed_profiles.all and request.user.profile.character_status != 'gm' %}
         <h4>To ogłoszenie jest dla Ciebie kompletnie nieczytelne.</h4>
     {% else %}
-        <h6>Ogłoszeniodawca: <small>{{ news_details.author.profile }}</small></h6>
-        <h6>
-            Adresaci:
-            {% for profile in news_details.allowed_profiles.all %}
-                {% if profile.character_status != 'gm' %}
-                    {% if forloop.counter > 1 %}
-                        <small>/ {{ profile.character_name|get_first_word }}</small>
-                    {% else %}
-                        <small>{{ profile.character_name|get_first_word }}</small>
-                    {% endif %}
-                {% endif %}
-              {% endfor %}
-        </h6><br>
+        <table class="forms">
+            <tr>
+                <td>
+                    <h6>Ogłoszeniodawca:</h6>
+                </td>
+                <td>
+                    <small>{{ news_details.author.profile }}</small>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h6>Adresaci:</h6>
+                </td>
+                <td>
+                    {% for profile in news_details.allowed_profiles.all %}
+                        {% if profile.character_status != 'gm' %}
+                            {% if forloop.counter > 1 %}
+                                <small>/ {{ profile.character_name|get_first_word }}</small>
+                            {% else %}
+                                <small>{{ profile.character_name|get_first_word }}</small>
+                            {% endif %}
+                        {% endif %}
+                      {% endfor %}
+                </td>
+            </tr>
+        </table>
+
+        <br>
         <div class="post-and-news">
             <p>{{ news_details.text|capfirst|linebreaks }}</p>
             {% if news_details.image %}
