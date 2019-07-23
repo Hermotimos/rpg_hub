@@ -4,7 +4,7 @@
 {% load static %}
 
 {% block head_extra %}
-{{ post_form.media }}
+{{ form.media }}
 {% endblock head_extra %}
 
 {% block breadcrumb %}
@@ -17,7 +17,7 @@
     <form method="POST">
         {% csrf_token %}
         <table>
-        {% for field in edit_event_form %}
+        {% for field in form %}
             <tr>
                 <td class="padding">
                     <label for="{{ forloop.counter }}">{{ field.label }}:</label>

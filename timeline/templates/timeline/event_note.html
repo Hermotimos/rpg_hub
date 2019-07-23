@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block head_extra %}
-{{ note_form.media }}
+{{ form.media }}
 {% endblock head_extra %}
 
 {% block breadcrumb %}
@@ -40,7 +40,7 @@
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
-        {{ note_form|crispy }}
+        {{ form|crispy }}
 
         <input class="btn btn-outline-secondary" type="submit" value="Zanotuj">
     </form>
