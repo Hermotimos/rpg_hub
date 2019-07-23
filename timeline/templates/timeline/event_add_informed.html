@@ -16,7 +16,7 @@
                 <h6>Wydarzenie:</h6>
             </td>
             <td>
-                <small>{{ current_event.description }}</small>
+                <small>{{ event.description }}</small>
             </td>
         </tr>
         <tr>
@@ -24,7 +24,7 @@
                 <h6>Uczestnicy:</h6>
             </td>
             <td>
-                {% for profile in current_event.participants.all %}
+                {% for profile in event.participants.all %}
                     {% if forloop.counter > 1 %}
                         <small>/ {{ profile }}</small>
                     {% else %}
@@ -38,7 +38,7 @@
                 <h6>Poinformowani:</h6>
             </td>
             <td>
-                {% for profile in current_event.informed.all %}
+                {% for profile in event.informed.all %}
                     {% if forloop.counter > 1 %}
                         <small>/ {{ profile }}</small>
                     {% else %}

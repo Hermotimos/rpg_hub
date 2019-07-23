@@ -11,19 +11,18 @@ from forum.forms import CreatePostForm, CreateTopicForm, CreateBoardForm, Update
 
 @login_required
 def forum_view(request):
-    boards_qs = Board.objects.all()
-    topics_qs = Topic.objects.all()
+    queryset = Board.objects.all()
 
     topics_with_last_post_date_dict = {topic: topic.posts.all().aggregate(Max('date_posted'))['date_posted__max']
-                                       for topic in topics_qs}
+                                       for topic in Topic.objects.all()}
 
     topics_with_last_active_user_dict = {}
-    for topic in topics_qs:
+    for topic in Topic.objects.all():
         last_post = topic.posts.filter(date_posted=topics_with_last_post_date_dict[topic])
         topics_with_last_active_user_dict[topic] = last_post[0].author.profile.character_name if last_post else ''
 
     boards_with_allowed_profiles_dict = {}
-    for board in boards_qs:
+    for board in queryset:
         allowed_profiles = ''
         for topic in board.topics.all():
             for profile in topic.allowed_profiles.all():
@@ -33,7 +32,7 @@ def forum_view(request):
 
     context = {
         'page_title': 'Wieczorne narady',
-        'boards_qs': boards_qs,
+        'queryset': queryset,
         'topics_with_last_post_date_dict': topics_with_last_post_date_dict,
         'topics_with_last_active_user_dict': topics_with_last_active_user_dict,
         'boards_with_allowed_profiles_dict': boards_with_allowed_profiles_dict
@@ -43,22 +42,22 @@ def forum_view(request):
 
 @login_required
 def posts_in_topic_view(request, board_slug, topic_slug):
-    current_topic = get_object_or_404(Topic, slug=topic_slug)
+    obj = get_object_or_404(Topic, slug=topic_slug)
 
     if request.method == 'POST':
         form = CreatePostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
-            post.topic = current_topic
+            post.topic = obj
             post.author = request.user
             post.save()
-            return redirect('topic', board_slug=board_slug, topic_slug=current_topic.slug)
+            return redirect('topic', board_slug=board_slug, topic_slug=obj.slug)
     else:
         form = CreatePostForm()            # equals to: form = CreatePostForm(request.GET) - GET is the default
 
     context = {
-        'page_title': current_topic.topic_name,
-        'topic': current_topic,
+        'page_title': obj.topic_name,
+        'topic': obj,
         'form': form
     }
     return render(request, 'forum/topic.html', context)
@@ -66,18 +65,18 @@ def posts_in_topic_view(request, board_slug, topic_slug):
 
 @login_required
 def add_allowed_profiles_view(request, board_slug, topic_slug):
-    current_topic = get_object_or_404(Topic, slug=topic_slug)
+    obj = get_object_or_404(Topic, slug=topic_slug)
 
     if request.method == 'POST':
-        form = UpdateTopicForm(request.POST, instance=current_topic)
+        form = UpdateTopicForm(request.POST, instance=obj)
         if form.is_valid():
             form.save()
 
-            subject = f"[RPG] Dołączenie uczestnika do narady: {current_topic.topic_name}"
+            subject = f"[RPG] Dołączenie uczestnika do narady: {obj.topic_name}"
             message = f"{request.user.profile} dołączył uczestnika/-ów do narady.\n" \
-                      f"Narada '{current_topic.topic_name}' w temacie '{current_topic.board}'.\n" \
+                      f"Narada '{obj.topic_name}' w temacie '{obj.board}'.\n" \
                       f"Uczestnicy: {[p.character_name for p in form.cleaned_data['allowed_profiles']]}\n"\
-                      f"Link do narady: {request.get_host()}/forum/{current_topic.board.slug}/{current_topic.slug}/"
+                      f"Link do narady: {request.get_host()}/forum/{obj.board.slug}/{obj.slug}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
             for user in User.objects.all():
@@ -87,17 +86,17 @@ def add_allowed_profiles_view(request, board_slug, topic_slug):
                 receivers_list.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers_list)
 
-            return redirect('topic', board_slug=board_slug, topic_slug=current_topic.slug)
+            return redirect('topic', board_slug=board_slug, topic_slug=obj.slug)
     else:
         form = UpdateTopicForm(
             initial={
-                'allowed_profiles': [p for p in Profile.objects.all() if p in current_topic.allowed_profiles.all()]
+                'allowed_profiles': [p for p in Profile.objects.all() if p in obj.allowed_profiles.all()]
             }
         )
 
     context = {
         'page_title': 'Dodaj uczestników narady',
-        'topic': current_topic,
+        'topic': obj,
         'form': form
     }
     return render(request, 'forum/topic_update_users.html', context)
@@ -105,7 +104,7 @@ def add_allowed_profiles_view(request, board_slug, topic_slug):
 
 @login_required
 def create_topic_view(request, board_slug):
-    board = Board.objects.get(slug=board_slug)
+    obj = Board.objects.get(slug=board_slug)
 
     if request.method == 'POST':
         topic_form = CreateTopicForm(request.POST or None)
@@ -148,7 +147,7 @@ def create_topic_view(request, board_slug):
         'page_title': 'Nowa narada',
         'topic_form': topic_form,
         'post_form': post_form,
-        'board': board
+        'board': obj
     }
     return render(request, 'forum/create_topic.html', context)
 

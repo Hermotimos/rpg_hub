@@ -9,12 +9,12 @@ from report.forms import ReportForm
 @login_required
 def report_view(request):
     if request.method == 'POST':
-        report_form = ReportForm(request.POST or None)
-        if report_form.is_valid():
+        form = ReportForm(request.POST or None)
+        if form.is_valid():
 
             subject = f"[RPG] Problem"
             message = f"{request.user.profile} zgłasza problem:\n" \
-                      f"Zgłoszenie:\n{report_form.cleaned_data['text']}"
+                      f"Zgłoszenie:\n{form.cleaned_data['text']}"
             sender = settings.EMAIL_HOST_USER
             receivers_list = ['lukas.kozicki@gmail.com']
             send_mail(subject, message, sender, receivers_list)
@@ -22,10 +22,10 @@ def report_view(request):
             messages.info(request, f'MG został poinformowany o problemie!')
             return redirect('profile')
     else:
-        report_form = ReportForm()
+        form = ReportForm()
 
     context = {
         'page_title': 'Zgłoś problem',
-        'report_form': report_form,
+        'form': form,
     }
     return render(request, 'report/report.html', context)

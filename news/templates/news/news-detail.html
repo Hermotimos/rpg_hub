@@ -13,7 +13,7 @@
 
 {% block content %}
     <br>
-    {% if request.user.profile not in obj.allowed_profiles.all and request.user.profile.character_status != 'gm' %}
+    {% if request.user.profile not in news.allowed_profiles.all and request.user.profile.character_status != 'gm' %}
         <h4>To ogłoszenie jest dla Ciebie kompletnie nieczytelne.</h4>
     {% else %}
         <table class="forms">
@@ -22,7 +22,7 @@
                     <h6>Ogłoszeniodawca:</h6>
                 </td>
                 <td>
-                    <small>{{ obj.author.profile }}</small>
+                    <small>{{ news.author.profile }}</small>
                 </td>
             </tr>
             <tr>
@@ -30,7 +30,7 @@
                     <h6>Adresaci:</h6>
                 </td>
                 <td>
-                    {% for profile in obj.allowed_profiles.all %}
+                    {% for profile in news.allowed_profiles.all %}
                         {% if profile.character_status != 'gm' %}
                             {% if forloop.counter > 1 %}
                                 <small>/ {{ profile.character_name|get_first_word }}</small>
@@ -45,13 +45,13 @@
 
         <br>
         <div class="post-and-news">
-            <p>{{ obj.text|capfirst|linebreaks }}</p>
-            {% if obj.image %}
-                <img src="{{ obj.image.url }}">
+            <p>{{ news.text|capfirst|linebreaks }}</p>
+            {% if news.image %}
+                <img src="{{ news.image.url }}">
             {% endif %}
         </div><br>
 
-        {% for response in obj.responses.all %}
+        {% for response in news.responses.all %}
             <table>
                 <tbody>
                     <tr class="posts-and-news">

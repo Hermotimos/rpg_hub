@@ -75,7 +75,7 @@ def news_detail_view(request, news_slug):
 
     context = {
         'page_title': page_title,
-        'obj': obj,
+        'news': obj,
         'form': form
     }
     return render(request, 'news/news-detail.html', context)

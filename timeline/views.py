@@ -58,16 +58,16 @@ def create_event_view(request):
 
 @login_required
 def edit_event_view(request, event_id):
-    current_event = get_object_or_404(Event, id=event_id)
+    obj = get_object_or_404(Event, id=event_id)
 
     if request.method == 'POST':
-        form = EditEventForm(request.POST, instance=current_event)
+        form = EditEventForm(request.POST, instance=obj)
         if form.is_valid():
             form.save()
             messages.success(request, f'Zmodyfikowano wydarzenie!')
             return redirect('timeline')
     else:
-        form = EditEventForm(instance=current_event)
+        form = EditEventForm(instance=obj)
 
     context = {
         'page_title': 'Edycja wydarzenia',
@@ -78,18 +78,18 @@ def edit_event_view(request, event_id):
 
 @login_required
 def event_add_informed_view(request, event_id):
-    current_event = get_object_or_404(Event, id=event_id)
+    obj = get_object_or_404(Event, id=event_id)
 
     if request.method == 'POST':
-        form = EventAddInformedForm(request.POST, instance=current_event)
+        form = EventAddInformedForm(request.POST, instance=obj)
         if form.is_valid():
             form.save()
 
-            if current_event.season == 'spring':
+            if obj.season == 'spring':
                 season = 'Wiosny'
-            elif current_event.season == 'summer':
+            elif obj.season == 'summer':
                 season = 'Lata'
-            elif current_event.season == 'autumn':
+            elif obj.season == 'autumn':
                 season = 'Jesieni'
             else:
                 season = 'Zimy'
@@ -98,11 +98,11 @@ def event_add_informed_view(request, event_id):
             message = f"{request.user.profile} znów rozprawia o swoich przygodach.\n" \
                       f"Oto kto już o nich słyszał: " \
                       f"{[p.character_name for p in form.cleaned_data['informed']]}\n\n" \
-                      f"{current_event.day_start}{'-' + current_event.day_end if current_event.day_end else ''}" \
-                      f" dnia {season} {current_event.year + 19}. " \
-                      f"roku Archonatu Nemetha Samatiana rozegrało się co następuje:\n {current_event.description}\n" \
-                      f"A było to w miejscu: {current_event.general_location}, " \
-                      f"{[l.name for l in current_event.specific_locations.all()]}.\n" \
+                      f"{obj.day_start}{'-' + obj.day_end if obj.day_end else ''}" \
+                      f" dnia {season} {obj.year + 19}. " \
+                      f"roku Archonatu Nemetha Samatiana rozegrało się co następuje:\n {obj.description}\n" \
+                      f"A było to w miejscu: {obj.general_location}, " \
+                      f"{[l.name for l in obj.specific_locations.all()]}.\n" \
                       f"Tak było i nie inaczej..."
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
@@ -114,23 +114,23 @@ def event_add_informed_view(request, event_id):
             messages.success(request, f'Poinformowano wybrane postaci!')
             return redirect('timeline')
     else:
-        form = EventAddInformedForm(instance=current_event)
+        form = EventAddInformedForm(instance=obj)
 
     context = {
         'page_title': 'Poinformuj o wydarzeniu',
         'form': form,
-        'current_event': current_event
+        'event': obj
     }
     return render(request, 'timeline/event_add_informed.html', context)
 
 
 @login_required
 def event_note_view(request, event_id):
-    current_event = get_object_or_404(Event, id=event_id)
+    obj = get_object_or_404(Event, id=event_id)
     current_note = None
 
     try:
-        current_note = EventNote.objects.get(event=current_event, author=request.user)
+        current_note = EventNote.objects.get(event=obj, author=request.user)
     except EventNote.DoesNotExist:
         pass
 
@@ -139,7 +139,7 @@ def event_note_view(request, event_id):
         if form.is_valid():
             note = form.save(commit=False)
             note.author = request.user
-            note.event = current_event
+            note.event = obj
             note.save()
             messages.success(request, f'Dodano notatkę!')
             return redirect('timeline')
@@ -148,7 +148,7 @@ def event_note_view(request, event_id):
 
     context = {
         'page_title': 'Notatka',
-        'current_event': current_event,
+        'event': obj,
         'form': form
     }
     return render(request, 'timeline/event_note.html', context)
