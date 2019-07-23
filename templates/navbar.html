@@ -6,7 +6,7 @@
     <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
             <!-- Navbar Left Side -->
-            <title class="navbar-brand mr-4">RPG</title>
+            <small class="navbar-brand mr-4">RPG</small>
             <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
                 <a class="nav-item nav-link" href="{% url 'news-list' %}">●Ogłoszenia●</a>
@@ -19,15 +19,14 @@
             <div class="navbar-nav">
                 {% if user.is_authenticated %}
                     {% if user.profile.character_name != '' %}
-                        <a class="navbar-brand mr-4" href="/users/profile">{{ user.profile.character_name|get_first_word }}</a>
-                        <a href="{% url 'report'  %}"><img src="{% static 'img/report.png' %}" class="report-img"></a>
+                        <a class="navbar-brand mr-2" href="/users/profile">{{ user.profile.character_name|get_first_word }}</a>
+                        <a href="{% url 'report' %}"><img src="{% static 'img/report.png' %}" class="report-img mr-4"></a>
                     {% else %}
-                        <a class="navbar-brand mr-4" href="/users/profile">Profil</a>
+                        <a class="navbar-brand mr-2" href="/users/profile">Uzupełnij profil</a>
                     {% endif %}
                     <a class="btn btn-outline-light btn-space" href="{% url 'logout' %}">Wyloguj</a>
                 {% else %}
                     <a class="btn btn-outline-light btn-space" href="{% url 'register' %}">Nowa postać</a>
-                    <a class="btn btn-outline-light btn-space" href="{% url 'login' %}">Zaloguj</a>
                 {% endif %}
             </div>
           </div>
