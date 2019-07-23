@@ -12,15 +12,22 @@ from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm,
 def timeline_view(request):
 
     if request.user.profile == Profile.objects.get(character_status='gm'):
-        events_queryset = Event.objects.all()
+        events_qs = Event.objects.all()
     else:
-        events_participated_queryset = Profile.objects.get(user=request.user).events_participated.all()
-        events_informed_queryset = Profile.objects.get(user=request.user).events_informed.all()
-        events_queryset = (events_participated_queryset | events_informed_queryset).distinct()
+        participated_qs = Profile.objects.get(user=request.user).events_participated.all()
+        informed_qs = Profile.objects.get(user=request.user).events_informed.all()
+        events_qs = participated_qs.union(informed_qs).iterator()
+
+    seasons_with_styles_dict = {
+        '1': 'season-spring',
+        '2': 'season-summer',
+        '3': 'season-autumn',
+        '4': 'season-winter'
+    }
 
     context = {
         'page_title': 'Kalendarium',
-        'events_queryset': events_queryset,
+        'events_queryset': events_qs,
         'seasons_with_styles_dict': seasons_with_styles_dict,
     }
     return render(request, 'timeline/timeline.html', context)
