@@ -79,7 +79,10 @@ def edit_event_view(request, event_id):
 @login_required
 def event_add_informed_view(request, event_id):
     obj = get_object_or_404(Event, id=event_id)
-    already_informed = obj.informed.all()[::1]                  # enforces evaluation of lazy Queryset
+
+    participants = ', '.join(p.character_name for p in obj.participants.all())
+    already_informed = obj.informed.all()[::1]                  # enforces evaluation of lazy Queryset for message
+    informed = ', '.join(p.character_name for p in already_informed)
 
     if request.method == 'POST':
         form = EventAddInformedForm(request.POST, instance=obj)
@@ -123,6 +126,8 @@ def event_add_informed_view(request, event_id):
         'page_title': 'Poinformuj o wydarzeniu',
         'form': form,
         'event': obj,
+        'participants': participants,
+        'informed': informed
     }
     return render(request, 'timeline/event_add_informed.html', context)
 

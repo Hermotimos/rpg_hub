@@ -24,13 +24,7 @@
                 <h6>Uczestnicy:</h6>
             </td>
             <td>
-                {% for profile in event.participants.all %}
-                    {% if forloop.counter > 1 %}
-                        <small>/ {{ profile }}</small>
-                    {% else %}
-                        <small>{{ profile }}</small>
-                    {% endif %}
-                {% endfor %}
+                <small>{{ participants }}</small>
             </td>
         </tr>
         <tr>
@@ -38,13 +32,7 @@
                 <h6>Poinformowani:</h6>
             </td>
             <td>
-                {% for profile in event.informed.all %}
-                    {% if forloop.counter > 1 %}
-                        <small>/ {{ profile }}</small>
-                    {% else %}
-                        <small>{{ profile }}</small>
-                    {% endif %}
-                {% endfor %}
+                <small>{{ informed }}</small>
             </td>
         </tr>
     </table><br><br>
