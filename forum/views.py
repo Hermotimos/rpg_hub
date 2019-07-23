@@ -27,7 +27,7 @@ def forum_view(request):
         for topic in board.topics.all():
             for profile in topic.allowed_profiles.all():
                 if profile.character_name not in allowed_profiles:
-                    allowed_profiles += profile.character_name + ', '
+                    allowed_profiles += profile.character_name
         boards_with_allowed_profiles_dict[board] = allowed_profiles
 
     context = {
@@ -44,6 +44,8 @@ def forum_view(request):
 def posts_in_topic_view(request, board_slug, topic_slug):
     obj = get_object_or_404(Topic, slug=topic_slug)
 
+    allowed = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.allowed_profiles.all() if p.character_status != 'gm')
+
     if request.method == 'POST':
         form = CreatePostForm(request.POST, request.FILES)
         if form.is_valid():
@@ -58,7 +60,8 @@ def posts_in_topic_view(request, board_slug, topic_slug):
     context = {
         'page_title': obj.topic_name,
         'topic': obj,
-        'form': form
+        'form': form,
+        'allowed': allowed
     }
     return render(request, 'forum/topic.html', context)
 
@@ -66,7 +69,10 @@ def posts_in_topic_view(request, board_slug, topic_slug):
 @login_required
 def add_allowed_profiles_view(request, board_slug, topic_slug):
     obj = get_object_or_404(Topic, slug=topic_slug)
+
     already_allowed = obj.allowed_profiles.all()[::1]
+    allowed = ', '.join(p.character_name.split(' ', 1)[0] for p in already_allowed if p.character_status != 'gm')
+
 
     if request.method == 'POST':
         form = UpdateTopicForm(request.POST, instance=obj)
@@ -99,7 +105,8 @@ def add_allowed_profiles_view(request, board_slug, topic_slug):
     context = {
         'page_title': 'Dodaj uczestników narady',
         'topic': obj,
-        'form': form
+        'form': form,
+        'allowed': allowed
     }
     return render(request, 'forum/topic_update_users.html', context)
 

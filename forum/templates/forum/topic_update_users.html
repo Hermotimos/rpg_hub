@@ -29,15 +29,7 @@
                 <h6>Uczestnicy:</h6>
             </td>
             <td>
-                {% for profile in topic.allowed_profiles.all %}
-                    {% if profile.character_name != 'MG' %}
-                        {% if forloop.counter > 1 %}
-                            <small>/ {{ profile }}</small>
-                        {% else %}
-                            <small>{{ profile }}</small>
-                        {% endif %}
-                    {% endif %}
-                {% endfor %}
+                <small>{{ allowed }}</small>
             </td><br>
     </table><br><br>
 
