@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 # imports for LoginView and LogoutView:
 from django.contrib.auth.views import (SuccessURLAllowedHostsMixin, FormView, TemplateView, AuthenticationForm,
@@ -48,6 +50,26 @@ def profile_view(request):
         'profile_form': profile_form
     }
     return render(request, 'users/profile.html', context)
+
+
+def change_password_view(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Hasło zostało zaktualizowane!')
+            return redirect('profile')
+        else:
+            messages.error(request, 'Popraw poniższy błąd!')
+    else:
+        form = PasswordChangeForm(request.user)
+
+    context = {
+        'page_title': 'Zmiana hasła',
+        'form': form
+    }
+    return render(request, 'users/change_password.html', context)
 
 
 # (added page_title to context, changed template_name = 'users/login.html')

@@ -13,6 +13,7 @@
             <div class="media-body">
                 <h2 class="account-heading">{{ user.profile.character_name }}</h2>
                 <p class="text-secondary">{{ user.email }}</p>
+                <a href="{% url 'change_password' %}" class="btn btn-success">Zmiana hasła</a>
             </div>
         </div>
         <br>
