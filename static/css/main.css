@@ -1,15 +1,10 @@
 body {
         background: #fafafa;
-        color: #333333;
-        margin-top: 5rem;
+        margin-top: 4rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
         color: #444444;
-}
-
-ul {
-        margin: 0;
 }
 
 .bg-steel {
@@ -122,16 +117,15 @@ a.article-title:hover {
 }
 
 .posts-and-news td, p {
-        border: 0px;
-        font-family: Niconne;
-        font-size: 24px;
+        font-size: 20px;
+        font-style: italic;
         vertical-align: top;
         padding: 5px;
 }
 
 .forms td {
         vertical-align: top;
-        padding: 5px;
+        padding: 4px;
         background-color: #f2f2f2
 }
 
@@ -163,14 +157,11 @@ small {
 /* TIMELINE */
 
 
-.year {;}
+.year {%;}
 .day {width: %;}
 .thread {min-width: 18%;}
-.description {width: %;}
-.participants {max-width: %;}
-.locations {min-width: %;}
-.game {width: %;}
-.actions {width: 6%;}
+.participants {width: 5%;}
+.actions {width: 5%;}
 
 
 .small-img {
@@ -178,9 +169,8 @@ small {
         height: auto;
         margin-left: auto;
         margin-right: auto;
-        padding: 3px;
         text-align: center;
-        width: 40%;
+        width: 25%;
 }
 
 .timeline-event {
@@ -189,21 +179,20 @@ small {
 }
 
 .timeline-small {
-        font-size: 12px;
+        font-size: 13px;
 }
 
 .timeline thead {
         background-color: #66998c;
-        padding: 20px;
 }
 
 .timeline th {
         border: 1px solid black;
-        padding: 10px;
 }
 
 .timeline td {
         border: 1px solid black;
+        padding: 4px;
 }
 
 td.center {
@@ -226,7 +215,6 @@ td.season-autumn {
 td.season-winter  {
         background-color: #99ccff
 }
-
 
 
 /* FORUM - Narady */
