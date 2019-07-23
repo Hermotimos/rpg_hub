@@ -46,20 +46,20 @@ def posts_in_topic_view(request, board_slug, topic_slug):
     current_topic = get_object_or_404(Topic, slug=topic_slug)
 
     if request.method == 'POST':
-        post_form = CreatePostForm(request.POST, request.FILES)
-        if post_form.is_valid():
-            post = post_form.save(commit=False)
+        form = CreatePostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
             post.topic = current_topic
             post.author = request.user
             post.save()
             return redirect('topic', board_slug=board_slug, topic_slug=current_topic.slug)
     else:
-        post_form = CreatePostForm()            # equals to: form = CreatePostForm(request.GET) - GET is the default
+        form = CreatePostForm()            # equals to: form = CreatePostForm(request.GET) - GET is the default
 
     context = {
         'page_title': current_topic.topic_name,
         'topic': current_topic,
-        'post_form': post_form
+        'form': form
     }
     return render(request, 'forum/topic.html', context)
 
@@ -69,19 +69,19 @@ def add_allowed_profiles_view(request, board_slug, topic_slug):
     current_topic = get_object_or_404(Topic, slug=topic_slug)
 
     if request.method == 'POST':
-        topic_update_form = UpdateTopicForm(request.POST, instance=current_topic)
-        if topic_update_form.is_valid():
-            topic_update_form.save()
+        form = UpdateTopicForm(request.POST, instance=current_topic)
+        if form.is_valid():
+            form.save()
 
             subject = f"[RPG] Dołączenie uczestnika do narady: {current_topic.topic_name}"
             message = f"{request.user.profile} dołączył uczestnika/-ów do narady.\n" \
                       f"Narada '{current_topic.topic_name}' w temacie '{current_topic.board}'.\n" \
-                      f"Uczestnicy: {[p.character_name for p in topic_update_form.cleaned_data['allowed_profiles']]}\n"\
+                      f"Uczestnicy: {[p.character_name for p in form.cleaned_data['allowed_profiles']]}\n"\
                       f"Link do narady: {request.get_host()}/forum/{current_topic.board.slug}/{current_topic.slug}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
             for user in User.objects.all():
-                if user.profile in topic_update_form.cleaned_data['allowed_profiles']:
+                if user.profile in form.cleaned_data['allowed_profiles']:
                     receivers_list.append(user.email)
             if request.user.profile.character_status != 'gm':
                 receivers_list.append('lukas.kozicki@gmail.com')
@@ -89,7 +89,7 @@ def add_allowed_profiles_view(request, board_slug, topic_slug):
 
             return redirect('topic', board_slug=board_slug, topic_slug=current_topic.slug)
     else:
-        topic_update_form = UpdateTopicForm(
+        form = UpdateTopicForm(
             initial={
                 'allowed_profiles': [p for p in Profile.objects.all() if p in current_topic.allowed_profiles.all()]
             }
@@ -98,7 +98,7 @@ def add_allowed_profiles_view(request, board_slug, topic_slug):
     context = {
         'page_title': 'Dodaj uczestników narady',
         'topic': current_topic,
-        'topic_update_form': topic_update_form
+        'form': form
     }
     return render(request, 'forum/topic_update_users.html', context)
 
@@ -156,16 +156,16 @@ def create_topic_view(request, board_slug):
 @login_required
 def create_board_view(request):
     if request.method == 'POST':
-        board_form = CreateBoardForm(request.POST or None)
-        if board_form.is_valid():
-            board = board_form.save()
+        form = CreateBoardForm(request.POST or None)
+        if form.is_valid():
+            board = form.save()
             messages.success(request, f'Utworzono nowy temat narad!')
             return redirect('create_topic', board_slug=board.slug)
     else:
-        board_form = CreateBoardForm()             # equals to: form = CreateBoardForm(request.GET) - GET is the default
+        form = CreateBoardForm()             # equals to: form = CreateBoardForm(request.GET) - GET is the default
 
     context = {
         'page_title': 'Nowy temat narad',
-        'board_form': board_form,
+        'form': form,
     }
     return render(request, 'forum/create_board.html', context)

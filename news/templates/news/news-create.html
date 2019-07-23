@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block head_extra %}
-{{ news_form.media }}
+{{ form.media }}
 {% endblock head_extra %}
 
 {% block breadcrumb %}
@@ -15,19 +15,20 @@
     <form class="allowed-profiles-form" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
-        {{ news_form.title }}<br><br>
-        {{ news_form.title.errors }}
-        {{ news_form.text }}<br><br>
+        {{ form.title }}<br><br>
+        {{ form.title.errors }}
+        {{ form.text }}<br><br>
 
         <h5>Wybierz adresatów ogłoszenia:</h5>
         <small>1) Tylko wybrani adresaci zobaczą ogłoszenie.</small><br>
         <small>2) Późniejsze dodanie adresatów - przez MG.</small>
 
         <br><br>
-        {{ news_form.allowed_profiles }}<br>
+        {{ form.allowed_profiles }}<br>
         <small>***Aby zaznaczyć wielu adresatów - użyj CTRL albo SHIFT.</small><br><br>
 
-        {{ news_form.image }}<br><br>
+        {{ form.image.label }}<br>
+        {{ form.image }}<br><br>
 
         <input class="btn btn-outline-danger" type="submit" value="Dodaj ogłoszenie"/>
     </form>

@@ -27,11 +27,11 @@ def news_view(request):
 @login_required
 def create_news_view(request):
     if request.method == 'POST':
-        news_form = CreateNewsForm(request.POST, request.FILES)
-        if news_form.is_valid():
-            news = news_form.save(commit=False)
+        form = CreateNewsForm(request.POST, request.FILES)
+        if form.is_valid():
+            news = form.save(commit=False)
             news.author = request.user
-            news = news_form.save()
+            news = form.save()
 
             subject = f"[RPG] Nowe ogłoszenie: {news.title[:30]}..."
             message = f"{request.user.profile} przybił coś do słupa ogłoszeń.\n" \
@@ -48,11 +48,11 @@ def create_news_view(request):
             messages.success(request, f'Utworzono nowe ogłoszenie!')
             return redirect('news-detail', news_slug=news.slug)
     else:
-        news_form = CreateNewsForm()
+        form = CreateNewsForm()
 
     context = {
         'page_title': 'Nowe ogłoszenie',
-        'news_form': news_form
+        'form': form
     }
     return render(request, 'news/news-create.html', context)
 
@@ -63,19 +63,19 @@ def news_detail_view(request, news_slug):
     page_title = queryset.title[:30] + '...' if len(queryset.title) > 30 else queryset.title
 
     if request.method == 'POST':
-        response_form = CreateResponseForm(request.POST, request.FILES)
-        if response_form.is_valid():
-            response = response_form.save(commit=False)
+        form = CreateResponseForm(request.POST, request.FILES)
+        if form.is_valid():
+            response = form.save(commit=False)
             response.news = queryset
             response.author = request.user
-            response_form.save()
+            form.save()
             return redirect('news-detail', news_slug=news_slug)
     else:
-        response_form = CreateResponseForm()
+        form = CreateResponseForm()
 
     context = {
         'page_title': page_title,
         'news_details': queryset,
-        'response_form': response_form
+        'form': form
     }
     return render(request, 'news/news-detail.html', context)

@@ -9,8 +9,10 @@
     <br>
     <form method="POST">
         {% csrf_token %}
-        {{ board_form.title }}<br><br>
-        {{ board_form.description }}<br><br>
+
+        {{ form.title }}<br><br>
+        {{ form.description }}<br><br>
+
         <input class="btn btn-outline-dark" type="submit" value="Stwórz temat i zapoczątkuj naradę"/>
     </form>
 

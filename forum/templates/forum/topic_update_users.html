@@ -55,7 +55,7 @@
         <form method="POST" action=".#page-bottom">
             {% csrf_token %}
 
-            {{ topic_update_form.allowed_profiles }}
+            {{ form.allowed_profiles }}
 
             <br>
             <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
