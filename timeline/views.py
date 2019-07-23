@@ -3,18 +3,32 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import send_mail
-from users.models import User
+from users.models import User, Profile
 from timeline.models import Event, EventNote
 from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm
 
 
 @login_required
 def timeline_view(request):
-    event_list = Event.objects.all()
+
+    seasons_with_styles_dict = {
+        '1': 'season-spring',
+        '2': 'season-summer',
+        '3': 'season-autumn',
+        '4': 'season-winter'
+    }
+
+    if request.user.profile == Profile.objects.get(character_status='gm'):
+        events_queryset = Event.objects.all()
+    else:
+        events_participated_queryset = Profile.objects.get(user=request.user).events_participated.all()
+        events_informed_queryset = Profile.objects.get(user=request.user).events_informed.all()
+        events_queryset = (events_participated_queryset | events_informed_queryset).distinct()
 
     context = {
         'page_title': 'Kalendarium',
-        'event_list': event_list
+        'events_queryset': events_queryset,
+        'seasons_with_styles_dict': seasons_with_styles_dict,
     }
     return render(request, 'timeline/timeline.html', context)
 

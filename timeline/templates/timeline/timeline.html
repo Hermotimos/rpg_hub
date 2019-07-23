@@ -12,9 +12,7 @@
 
 {% block content %}
     <br>
-    <small>Wydarzenia są widoczne tylko dla uczestników <strike>oraz postaci poinformowanych przez któregoś z uczestników.</strike></small><br>
-    <small>W celu stworzenia nowego wątku lub dodania wątku do wydarzenia - skontaktuj się z MG.</small><br><br>
-
+    {{ events }}
     {% if request.user.profile.character_name == 'MG' %}
         <div class="mb-4">
             <a href="{% url 'create_event' %}" class="btn btn-secondary">Nowe wydarzenie</a>
@@ -46,83 +44,56 @@
         </thead>
 
         <tbody>
-        {% for event in event_list %}
-            {% if request.user.profile in event.participants.all or request.user.profile in event.informed.all or request.user.profile.character_status == 'gm' %}
-                <tr>
-                    {% if event.season == '1' %}
-                        <td class="center season-spring">
-                    {% elif event.season == '2' %}
-                        <td class="center season-summer">
-                    {% elif event.season == '3' %}
-                        <td class="center season-autumn">
-                    {% elif event.season == '4' %}
-                        <td class="center season-winter">
+        {% for event in events_queryset %}
+            <tr>
+                <td class="center {{ seasons_with_styles_dict|dict_lookup:event.season }}">
+                    {{ event.year }}
+                </td>
+                <td class="center {{ seasons_with_styles_dict|dict_lookup:event.season }}">
+                    {% if event.day_end %}
+                        {{ event.day_start }}-{{ event.day_end }}
+                    {% else %}
+                        {{ event.day_start }}
                     {% endif %}
-                            {{ event.year }}
-                    </td>
-
-                    {% if event.season == '1' %}
-                        <td class="center season-spring">
-                    {% elif event.season == '2' %}
-                        <td class="center season-summer">
-                    {% elif event.season == '3' %}
-                        <td class="center season-autumn">
-                    {% elif event.season == '4' %}
-                        <td class="center season-winter">
+                </td>
+                <td class="timeline-event">
+                    {% for thread in event.threads.all %}
+                        *{{ thread }}<br>
+                    {% endfor %}
+                </td>
+                <td class="timeline-event">
+                    {{ event.description|linebreaksbr }}
+                    {% for note in event.notes.all %}
+                        {% if request.user == note.author %}
+                            {% if note.text != '' %}
+                                <a style="color:{{ note.color }}"><br>Notatka:<br>{{ note.text|linebreaksbr }}</a>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td class="timeline-small">
+                    {% for profile in event.participants.all %}
+                        <small>{{ profile.character_name|get_first_word }}</small><br>
+                    {% endfor %}
+                    {% for profile in event.informed.all %}
+                        <small>+{{ profile.character_name|get_first_word }}</small><br>
+                    {% endfor %}
+                </td>
+                <td >
+                    {{ event.general_location }}<br>
+                    {% for location in event.specific_locations.all %}
+                        <small>{{ location }}</small><br>
+                    {% endfor %}
+                </td>
+                <td class="center"><small>{{ event.game_no.game_no }}</small></td>
+                <td>
+                    <h6><a href="{% url 'add_informed' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
+                    <h6><a href="{% url 'event_note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
+                    {% if request.user.profile.character_status == 'gm' %}
+                        <h6><a href="{% url 'edit_event' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
                     {% endif %}
-                        {% if event.day_end %}
-                            {{ event.day_start }}-{{ event.day_end }}
-                        {% else %}
-                            {{ event.day_start }}
-                        {% endif %}
-                    </td>
-
-                    <td class="timeline-event">
-                        {% for thread in event.threads.all %}
-                            *{{ thread }}<br>
-                        {% endfor %}
-                    </td>
-                    <td class="timeline-event">
-                        {{ event.description|linebreaksbr }}
-                        {% for note in event.notes.all %}
-                            {% if request.user == note.author %}
-                                {% if note.text != '' %}
-                                    <a style="color:{{ note.color }}"><br>Notatka:<br>{{ note.text|linebreaksbr }}</a>
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    </td>
-                    <td class="timeline-small">
-                        {% for profile in event.participants.all %}
-                            {% if profile.character_status != 'gm' %}
-                                <small>{{ profile.character_name|get_first_word }}</small><br>
-                            {% endif %}
-                        {% endfor %}
-                        {% if event.informed.all %}
-                            <small>------</small><br>
-                            {% for profile in event.informed.all %}
-                                {% if profile.character_status != 'gm' %}
-                                    <small>{{ profile.character_name|get_first_word }}</small><br>
-                                {% endif %}
-                        {% endfor %}
-                        {% endif %}
-                    </td>
-                    <td >
-                        {{ event.general_location }}<br>
-                        {% for location in event.specific_locations.all %}
-                            <small>{{ location }}</small><br>
-                        {% endfor %}
-                    </td>
-                    <td class="center"><small>{{ event.game_no.game_no }}</small></td>
-                    <td>
-                        <h6><a href="{% url 'add_informed' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
-                        <h6><a href="{% url 'event_note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
-                        {% if request.user.profile.character_status == 'gm' %}
-                            <h6><a href="{% url 'edit_event' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endif %}
+                </td>
+            </tr>
         {% endfor %}
         </tbody>
     </table>
