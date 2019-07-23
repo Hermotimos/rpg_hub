@@ -14,7 +14,7 @@
         <div class="mb-4">
             <a href="{% url 'create_board' %}" class="btn btn-dark">Nowy temat narad</a>
         </div><br><br>
-        {% for board in boards_list %}
+        {% for board in boards_qs %}
             {% if request.user.profile.character_name in boards_with_allowed_profiles_dict|dict_lookup:board or request.user.profile.character_status == 'gm' %}
 
                 <h3>{{ board.title }}</h3>

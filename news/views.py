@@ -11,14 +11,14 @@ from news.forms import CreateNewsForm, CreateResponseForm
 
 @login_required
 def news_view(request):
-    news_list = News.objects.all()
+    queryset = News.objects.all()
 
     news_with_last_activity_dict = {news: news.responses.all().aggregate(Max('date_posted'))['date_posted__max']
-                                       for news in news_list}
+                                    for news in queryset}
 
     context = {
         'page_title': 'Słup ogłoszeń',
-        'news_list': news_list,
+        'queryset': queryset,
         'news_with_last_activity_dict': news_with_last_activity_dict
     }
     return render(request, 'news/news-list.html', context)
@@ -59,14 +59,14 @@ def create_news_view(request):
 
 @login_required
 def news_detail_view(request, news_slug):
-    queryset = News.objects.get(slug=news_slug)
-    page_title = queryset.title[:30] + '...' if len(queryset.title) > 30 else queryset.title
+    obj = News.objects.get(slug=news_slug)
+    page_title = obj.title[:30] + '...' if len(obj.title) > 30 else obj.title
 
     if request.method == 'POST':
         form = CreateResponseForm(request.POST, request.FILES)
         if form.is_valid():
             response = form.save(commit=False)
-            response.news = queryset
+            response.news = obj
             response.author = request.user
             form.save()
             return redirect('news-detail', news_slug=news_slug)
@@ -75,7 +75,7 @@ def news_detail_view(request, news_slug):
 
     context = {
         'page_title': page_title,
-        'news_details': queryset,
+        'obj': obj,
         'form': form
     }
     return render(request, 'news/news-detail.html', context)

@@ -11,19 +11,19 @@ from forum.forms import CreatePostForm, CreateTopicForm, CreateBoardForm, Update
 
 @login_required
 def forum_view(request):
-    boards_list = Board.objects.all()
-    topics_list = Topic.objects.all()
+    boards_qs = Board.objects.all()
+    topics_qs = Topic.objects.all()
 
     topics_with_last_post_date_dict = {topic: topic.posts.all().aggregate(Max('date_posted'))['date_posted__max']
-                                       for topic in topics_list}
+                                       for topic in topics_qs}
 
     topics_with_last_active_user_dict = {}
-    for topic in topics_list:
+    for topic in topics_qs:
         last_post = topic.posts.filter(date_posted=topics_with_last_post_date_dict[topic])
         topics_with_last_active_user_dict[topic] = last_post[0].author.profile.character_name if last_post else ''
 
     boards_with_allowed_profiles_dict = {}
-    for board in boards_list:
+    for board in boards_qs:
         allowed_profiles = ''
         for topic in board.topics.all():
             for profile in topic.allowed_profiles.all():
@@ -33,7 +33,7 @@ def forum_view(request):
 
     context = {
         'page_title': 'Wieczorne narady',
-        'boards_list': boards_list,
+        'boards_qs': boards_qs,
         'topics_with_last_post_date_dict': topics_with_last_post_date_dict,
         'topics_with_last_active_user_dict': topics_with_last_active_user_dict,
         'boards_with_allowed_profiles_dict': boards_with_allowed_profiles_dict

@@ -44,7 +44,7 @@
         </thead>
 
         <tbody>
-        {% for event in events_queryset %}
+        {% for event in queryset %}
             <tr>
                 <td class="center {{ seasons_with_styles_dict|dict_lookup:event.season }}">
                     {{ event.year }}
