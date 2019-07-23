@@ -53,7 +53,7 @@
 
         <br>
         <div class="mb-4">
-            <a href="{% url 'update_topic' topic.board.slug topic.slug %}" class="btn btn-info">Dodaj uczestników narady</a>
+            <a href="{% url 'update_topic' topic.board.slug topic.slug %}" class="btn btn-outline-info">Dodaj uczestników narady</a>
         </div>
         <br>
 
@@ -98,7 +98,7 @@
             <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form|crispy }}
-                <input class="btn btn-outline-info" type="submit" value="Tak rzeknij">
+                <input class="btn btn-info" type="submit" value="Tak rzeknij">
             </form>
         </div>
 

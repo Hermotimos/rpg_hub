@@ -13,7 +13,7 @@
             <div class="media-body">
                 <h2 class="account-heading">{{ user.profile.character_name }}</h2>
                 <p class="text-secondary">{{ user.email }}</p>
-                <a href="{% url 'change_password' %}" class="btn btn-success">Zmiana hasła</a>
+                <a href="{% url 'change_password' %}" class="btn btn-outline-success">Zmiana hasła</a>
             </div>
         </div>
         <br>
@@ -23,7 +23,7 @@
                 {{ profile_form|crispy }}
             </fieldset>
             <div class="form-group">
-                <button class="btn btn-outline-success" type="submit">Zapisz</button>
+                <button class="btn btn-success" type="submit">Zapisz</button>
             </div>
         </form>
     </div>
