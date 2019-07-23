@@ -35,7 +35,7 @@ class EditEventForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(EditEventForm, self).__init__(*args, **kwargs)
         self.fields['threads'].widget.attrs = {'size': 10}
-        self.fields['description'].widget.attrs = {'cols': 50, 'rows': 5}
+        self.fields['description'].widget.attrs = {'cols': 60, 'rows': 10}
         self.fields['participants'].widget.attrs = {'size': 8}
         self.fields['informed'].widget.attrs = {'size': 8}
         self.fields['specific_locations'].widget.attrs = {'size': 10}
