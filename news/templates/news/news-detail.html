@@ -30,15 +30,7 @@
                     <h6>Adresaci:</h6>
                 </td>
                 <td>
-                    {% for profile in news.allowed_profiles.all %}
-                        {% if profile.character_status != 'gm' %}
-                            {% if forloop.counter > 1 %}
-                                <small>/ {{ profile.character_name|get_first_word }}</small>
-                            {% else %}
-                                <small>{{ profile.character_name|get_first_word }}</small>
-                            {% endif %}
-                        {% endif %}
-                      {% endfor %}
+                    <small>{{ allowed }}</small>
                 </td>
             </tr>
         </table>

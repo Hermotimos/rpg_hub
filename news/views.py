@@ -60,7 +60,11 @@ def create_news_view(request):
 @login_required
 def news_detail_view(request, news_slug):
     obj = News.objects.get(slug=news_slug)
+
     page_title = obj.title[:30] + '...' if len(obj.title) > 30 else obj.title
+    allowed = ', '.join(p.character_name.split(' ', 1)[0]
+                        for p in obj.allowed_profiles.all()
+                        if p.character_status != 'gm')
 
     if request.method == 'POST':
         form = CreateResponseForm(request.POST, request.FILES)
@@ -76,6 +80,7 @@ def news_detail_view(request, news_slug):
     context = {
         'page_title': page_title,
         'news': obj,
-        'form': form
+        'form': form,
+        'allowed': allowed
     }
     return render(request, 'news/news-detail.html', context)

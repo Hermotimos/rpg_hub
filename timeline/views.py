@@ -80,9 +80,9 @@ def edit_event_view(request, event_id):
 def event_add_informed_view(request, event_id):
     obj = get_object_or_404(Event, id=event_id)
 
-    participants = ', '.join(p.character_name for p in obj.participants.all())
+    participants = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
     already_informed = obj.informed.all()[::1]                  # enforces evaluation of lazy Queryset for message
-    informed = ', '.join(p.character_name for p in already_informed)
+    informed = ', '.join(p.character_name.split(' ', 1)[0] for p in already_informed)
 
     if request.method == 'POST':
         form = EventAddInformedForm(request.POST, instance=obj)
