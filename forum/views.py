@@ -66,26 +66,28 @@ def posts_in_topic_view(request, board_slug, topic_slug):
 @login_required
 def add_allowed_profiles_view(request, board_slug, topic_slug):
     obj = get_object_or_404(Topic, slug=topic_slug)
+    already_allowed = obj.allowed_profiles.all()[::1]
 
     if request.method == 'POST':
         form = UpdateTopicForm(request.POST, instance=obj)
         if form.is_valid():
             form.save()
 
-            subject = f"[RPG] Dołączenie uczestnika do narady: {obj.topic_name}"
+            subject = f"[RPG] Dołączenie do narady"
             message = f"{request.user.profile} dołączył uczestnika/-ów do narady.\n" \
                       f"Narada '{obj.topic_name}' w temacie '{obj.board}'.\n" \
-                      f"Uczestnicy: {[p.character_name for p in form.cleaned_data['allowed_profiles']]}\n"\
-                      f"Link do narady: {request.get_host()}/forum/{obj.board.slug}/{obj.slug}/"
+                      f"Uczestnicy: {', '.join(p.character_name for p in form.cleaned_data['allowed_profiles'])}\n"\
+                      f"Weź udział w naradzie: {request.get_host()}/forum/{obj.board.slug}/{obj.slug}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
-            for user in User.objects.all():
-                if user.profile in form.cleaned_data['allowed_profiles']:
-                    receivers_list.append(user.email)
+            for profile in Profile.objects.all():
+                if profile.user.email and profile in form.cleaned_data['allowed_profiles'] and profile not in already_allowed:
+                    receivers_list.append(profile.user.email)
             if request.user.profile.character_status != 'gm':
                 receivers_list.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers_list)
 
+            messages.success(request, f'Dodano do narady wybrane postaci!')
             return redirect('topic', board_slug=board_slug, topic_slug=obj.slug)
     else:
         form = UpdateTopicForm(
@@ -123,11 +125,11 @@ def create_topic_view(request, board_slug):
             post.author = request.user
             post.save()
 
-            subject = f"[RPG] Nowa narada: {topic_form.cleaned_data['topic_name']}"
-            message = f"{request.user.profile} dołączył Cię do narady.\n" \
+            subject = f"[RPG] Nowa narada: {topic.topic_name}"
+            message = f"{request.user.profile} włączył Cię do nowej narady.\n" \
                       f"Narada '{topic.topic_name}' w temacie '{topic.board}'.\n" \
-                      f"Uczestnicy: {topic.allowed_profiles.all()}" \
-                      f"Link do narady: {request.get_host()}/forum/{topic.board.slug}/{topic.slug}/"
+                      f"Uczestnicy: {', '.join(p.character_name for p in topic.allowed_profiles.all())}\n" \
+                      f"Weź udział w naradzie: {request.get_host()}/forum/{topic.board.slug}/{topic.slug}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
             for user in User.objects.all():

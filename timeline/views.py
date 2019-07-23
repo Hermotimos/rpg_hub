@@ -79,6 +79,7 @@ def edit_event_view(request, event_id):
 @login_required
 def event_add_informed_view(request, event_id):
     obj = get_object_or_404(Event, id=event_id)
+    already_informed = obj.informed.all()[::1]                  # enforces evaluation of lazy Queryset
 
     if request.method == 'POST':
         form = EventAddInformedForm(request.POST, instance=obj)
@@ -94,10 +95,10 @@ def event_add_informed_view(request, event_id):
             else:
                 season = 'Zimy'
 
-            subject = f"[RPG] {request.user.profile} opowiedział o swoich przygodach"
+            subject = f"[RPG] {request.user.profile} rozprawia o swoich przygodach"
             message = f"{request.user.profile} znów rozprawia o swoich przygodach.\n" \
                       f"Oto kto już o nich słyszał: " \
-                      f"{[p.character_name for p in form.cleaned_data['informed']]}\n\n" \
+                      f"{', '.join(p.character_name for p in form.cleaned_data['informed'])}\n\n" \
                       f"{obj.day_start}{'-' + obj.day_end if obj.day_end else ''}" \
                       f" dnia {season} {obj.year + 19}. " \
                       f"roku Archonatu Nemetha Samatiana rozegrało się co następuje:\n {obj.description}\n" \
@@ -106,9 +107,11 @@ def event_add_informed_view(request, event_id):
                       f"Tak było i nie inaczej..."
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
-            for user in User.objects.all():
-                if user.profile in form.cleaned_data['informed']:
-                    receivers_list.append(user.email)
+
+            currently_informed = form.cleaned_data['informed']
+            for profile in currently_informed.all():
+                if profile.user.email and profile in form.cleaned_data['informed'] and profile not in already_informed:
+                    receivers_list.append(profile.user.email)
             send_mail(subject, message, sender, receivers_list)
 
             messages.success(request, f'Poinformowano wybrane postaci!')
@@ -119,7 +122,7 @@ def event_add_informed_view(request, event_id):
     context = {
         'page_title': 'Poinformuj o wydarzeniu',
         'form': form,
-        'event': obj
+        'event': obj,
     }
     return render(request, 'timeline/event_add_informed.html', context)
 
