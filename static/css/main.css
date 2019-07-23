@@ -88,6 +88,11 @@ a.article-title:hover {
 
 /* ----- CUSTOM ----- */
 
+* {
+        font-family: 'IM Fell Great Primer', serif;
+}
+
+
 .allowed-profiles-form select {
         min-height: 200px;
         width: 400px;
@@ -118,8 +123,8 @@ a.article-title:hover {
 
 .posts-and-news td, p {
         border: 0px;
-        font-style: italic;
-        font-weight: bold;
+        font-family: Niconne;
+        font-size: 24px;
         vertical-align: top;
         padding: 5px;
 }
@@ -184,7 +189,7 @@ small {
 }
 
 .timeline-small {
-        font-size: 11px;
+        font-size: 12px;
 }
 
 .timeline thead {
@@ -222,9 +227,7 @@ td.season-winter  {
         background-color: #99ccff
 }
 
-td.padding {
-    padding: 5px;
-}
+
 
 /* FORUM - Narady */
 
