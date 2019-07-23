@@ -26,15 +26,19 @@
                 <h6>Uczestnicy:</h6>
             </td>
             <td>
-                {% for profile in event.participants.all %}
-                    {% if forloop.counter > 1 %}
-                        <small>/ {{ profile }}</small>
-                    {% else %}
-                        <small>{{ profile }}</small>
-                    {% endif %}
-                {% endfor %}
+                <small>{{ participants }}</small>
             </td>
         </tr>
+        {% if informed %}
+            <tr>
+                <td>
+                    <h6>Poinformowani:</h6>
+                </td>
+                <td>
+                    <small>{{ informed }}</small>
+                </td>
+            </tr>
+        {% endif %}
     </table><br><br>
 
     <form method="POST" enctype="multipart/form-data">

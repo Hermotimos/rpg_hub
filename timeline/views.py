@@ -135,7 +135,10 @@ def event_add_informed_view(request, event_id):
 @login_required
 def event_note_view(request, event_id):
     obj = get_object_or_404(Event, id=event_id)
+
     current_note = None
+    participants = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
+    informed = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.informed.all())
 
     try:
         current_note = EventNote.objects.get(event=obj, author=request.user)
@@ -157,6 +160,8 @@ def event_note_view(request, event_id):
     context = {
         'page_title': 'Notatka',
         'event': obj,
-        'form': form
+        'form': form,
+        'participants': participants,
+        'informed': informed
     }
     return render(request, 'timeline/event_note.html', context)
