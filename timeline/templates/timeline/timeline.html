@@ -61,7 +61,7 @@
                         *{{ thread }}<br>
                     {% endfor %}
                 </td>
-                <td class="timeline-event">
+                <td class="timeline-event justify">
                     {{ event.description|linebreaksbr }}
                     {% for note in event.notes.all %}
                         {% if request.user == note.author %}

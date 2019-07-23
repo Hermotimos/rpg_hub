@@ -112,6 +112,10 @@ a.article-title:hover {
         color: red;
 }
 
+.justify {
+        text-align: justify;
+}
+
 .my-1 {
         padding: 5px;
 }
@@ -121,6 +125,7 @@ a.article-title:hover {
         font-style: italic;
         vertical-align: top;
         padding: 5px;
+        text-align: justify;
 }
 
 .forms td {
