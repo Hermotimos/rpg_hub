@@ -16,7 +16,7 @@ def timeline_view(request):
     else:
         participated_qs = Profile.objects.get(user=request.user).events_participated.all()
         informed_qs = Profile.objects.get(user=request.user).events_informed.all()
-        queryset = participated_qs.union(informed_qs).iterator()
+        queryset = (participated_qs | informed_qs).distinct()
 
     seasons_with_styles_dict = {
         '1': 'season-spring',
