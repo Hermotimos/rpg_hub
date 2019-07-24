@@ -162,11 +162,14 @@ small {
 /* TIMELINE */
 
 
-.year {%;}
-.day {width: %;}
-.thread {width: 18%;}
-.participants {width: 5%;}
-.actions {width: 5%;}
+.timeline .year {%;}
+.timeline .day {width: %;}
+.timeline .thread {width: 18%;}
+.timeline .participants {width: 5%;}
+.timeline .actions {width: 5%;}
+
+.chronicles .description {width: %;}
+.chronicles .actions {width: %;}
 
 
 .small-img {
@@ -175,7 +178,13 @@ small {
         margin-left: auto;
         margin-right: auto;
         text-align: center;
-        width: 33%;
+}
+.timeline .small-img {
+        width: 40%;
+}
+
+.chronicles .small-img {
+        width: 100%;
 }
 
 .timeline-event {

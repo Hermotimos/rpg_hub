@@ -9,21 +9,40 @@
 {% block content %}
     <br>
 
-     {% if request.user.profile.character_name == 'MG' %}
+    {% if request.user.profile.character_name == 'MG' %}
         <div class="mb-4">
             <a href="{% url 'create_event' %}" class="btn btn-outline-secondary">Nowe wydarzenie</a>
         </div><br>
     {% endif %}
 
-    <table class="timeline" data-search="true" data-toggle="table">
+    <table class="chronicles" data-search="true" data-toggle="table">
+        <colgroup>
+            <col class="description">
+            <col class="actions">
         {% for game in allowed_games_list %}
-            <tr><td><h4><strong>{{ game.title }}</strong></h4></td></tr>
+            <tr>
+                <td>
+                    <h4><strong>{{ game.title }}</strong></h4>
+                </td>
+                <td class="align-top">
+                    <a href="#"><img src="{% static 'img/inform.png' %}" class="small-img"></a>
+                </td>
+            </tr>
                 {% for event in game.described_events.all %}
                     {% if request.user in event.participants or request.user in event.informed or request.user.profile.character_status == 'gm'%}
-                        <tr><td><p>{{ event.description }}</p></td></tr>
+                        <tr>
+                            <td>
+                                <p>{{ event.description }}</p>
+                            </td>
+                            <td class="align-top">
+                                <h6><a href="#"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
+                                <h6><a href="#"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
+                                {% if request.user.profile.character_status == 'gm' %}
+                                    <h6><a href="#"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
+                                {% endif %}
+                            </td>
                     {% endif %}
                 {% endfor %}
-            <tr><td></td></tr>
         {% endfor %}
 
     </table>
