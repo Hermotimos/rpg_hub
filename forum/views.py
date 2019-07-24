@@ -73,21 +73,21 @@ def add_allowed_profiles_view(request, board_slug, topic_slug):
     already_allowed = obj.allowed_profiles.all()[::1]
     allowed = ', '.join(p.character_name.split(' ', 1)[0] for p in already_allowed if p.character_status != 'gm')
 
-
     if request.method == 'POST':
         form = UpdateTopicForm(request.POST, instance=obj)
         if form.is_valid():
             form.save()
 
-            subject = f"[RPG] Dołączenie do narady"
-            message = f"{request.user.profile} dołączył uczestnika/-ów do narady.\n" \
-                      f"Narada '{obj.topic_name}' w temacie '{obj.board}'.\n" \
-                      f"Uczestnicy: {', '.join(p.character_name for p in form.cleaned_data['allowed_profiles'])}\n"\
+            subject = f"[RPG] Dołączenie do narady: '{obj.topic_name}'"
+            message = f"{request.user.profile} dołączył Cię do narady '{obj.topic_name}' w temacie '{obj.board}'.\n" \
+                      f"Uczestnicy: {', '.join(p.character_name for p in form.cleaned_data['allowed_profiles'])}\n" \
                       f"Weź udział w naradzie: {request.get_host()}/forum/{obj.board.slug}/{obj.slug}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
-            for profile in Profile.objects.all():
-                if profile.user.email and profile in form.cleaned_data['allowed_profiles'] and profile not in already_allowed:
+
+            newly_allowed = [p for p in form.cleaned_data['allowed_profiles'] if p not in already_allowed]
+            for profile in newly_allowed:
+                if profile.user.email:
                     receivers_list.append(profile.user.email)
             if request.user.profile.character_status != 'gm':
                 receivers_list.append('lukas.kozicki@gmail.com')
@@ -133,8 +133,8 @@ def create_topic_view(request, board_slug):
             post.save()
 
             subject = f"[RPG] Nowa narada: {topic.topic_name}"
-            message = f"{request.user.profile} włączył Cię do nowej narady.\n" \
-                      f"Narada '{topic.topic_name}' w temacie '{topic.board}'.\n" \
+            message = f"{request.user.profile} włączył Cię do nowej narady " \
+                      f"'{topic.topic_name}' w temacie '{topic.board}'.\n" \
                       f"Uczestnicy: {', '.join(p.character_name for p in topic.allowed_profiles.all())}\n" \
                       f"Weź udział w naradzie: {request.get_host()}/forum/{topic.board.slug}/{topic.slug}/"
             sender = settings.EMAIL_HOST_USER

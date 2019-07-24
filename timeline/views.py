@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import send_mail
-from users.models import User, Profile
+from users.models import Profile
 from timeline.models import Event, EventNote
 from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm
 
@@ -98,7 +98,7 @@ def event_add_informed_view(request, event_id):
             else:
                 season = 'Zimy'
 
-            subject = f"[RPG] {request.user.profile} rozprawia o swoich przygodach"
+            subject = f"[RPG] {request.user.profile} podzielił się z Tobą swoją historią!"
             message = f"{request.user.profile} znów rozprawia o swoich przygodach.\n" \
                       f"Oto kto już o nich słyszał: " \
                       f"{', '.join(p.character_name for p in form.cleaned_data['informed'])}\n\n" \

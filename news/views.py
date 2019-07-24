@@ -34,8 +34,9 @@ def create_news_view(request):
             news = form.save()
 
             subject = f"[RPG] Nowe ogłoszenie: {news.title[:30]}..."
-            message = f"{request.user.profile} przybił coś do słupa ogłoszeń.\n" \
-                      f"Podejdź bliżej, aby zobaczyć: {request.get_host()}/news/{news.slug}/"
+            message = f"{request.user.profile} przybił coś do słupa ogłoszeń.\n\n" \
+                      f"{news.text}\n\n" \
+                      f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/{news.slug}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
             for user in User.objects.all():
