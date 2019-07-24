@@ -128,6 +128,11 @@ a.article-title:hover {
         text-align: justify;
 }
 
+td.chronicle-event {
+        font-size: 10px;
+
+}
+
 .forms td {
         vertical-align: top;
         padding: 4px;
@@ -165,7 +170,10 @@ small {
 .timeline .year {%;}
 .timeline .day {width: %;}
 .timeline .thread {width: 18%;}
+.timeline .description {width: %;}
 .timeline .participants {width: 5%;}
+.timeline .locations {width: %;}
+.timeline .game {width: %;}
 .timeline .actions {width: 5%;}
 
 .chronicles .description {width: %;}
@@ -185,6 +193,11 @@ small {
 
 .chronicles .small-img {
         width: 100%;
+}
+
+.chronicles .small-img2 {
+        display: inline-block;
+        width: 5%;
 }
 
 .timeline-event {
