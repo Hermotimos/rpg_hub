@@ -46,22 +46,22 @@
         <tbody>
         {% for event in queryset %}
             <tr>
-                <td class="center {{ seasons_with_styles_dict|dict_lookup:event.season }}">
+                <td class="center align-top {{ seasons_with_styles_dict|dict_lookup:event.season }}">
                     {{ event.year }}
                 </td>
-                <td class="center {{ seasons_with_styles_dict|dict_lookup:event.season }}">
+                <td class="center align-top {{ seasons_with_styles_dict|dict_lookup:event.season }}">
                     {% if event.day_end %}
                         {{ event.day_start }}-{{ event.day_end }}
                     {% else %}
                         {{ event.day_start }}
                     {% endif %}
                 </td>
-                <td class="timeline-event">
+                <td class="timeline-event align-top">
                     {% for thread in event.threads.all %}
                         *{{ thread }}<br>
                     {% endfor %}
                 </td>
-                <td class="timeline-event justify">
+                <td class="timeline-event justify align-top">
                     {{ event.description|linebreaksbr }}
                     {% for note in event.notes.all %}
                         {% if request.user == note.author %}
@@ -71,7 +71,7 @@
                         {% endif %}
                     {% endfor %}
                 </td>
-                <td class="timeline-small">
+                <td class="timeline-small align-top">
                     {% for profile in event.participants.all %}
                         <small>{{ profile.character_name|get_first_word }}</small><br>
                     {% endfor %}
@@ -79,14 +79,14 @@
                         <small>+{{ profile.character_name|get_first_word }}</small><br>
                     {% endfor %}
                 </td>
-                <td >
+                <td class="align-top">
                     {{ event.general_location }}<br>
                     {% for location in event.specific_locations.all %}
                         <small>{{ location }}</small><br>
                     {% endfor %}
                 </td>
-                <td class="center"><small>{{ event.game_no.game_no }}</small></td>
-                <td>
+                <td class="center align-top"><small>{{ event.game_no.game_no }}</small></td>
+                <td class="align-top">
                     <h6><a href="{% url 'add_informed' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
                     <h6><a href="{% url 'event_note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
                     {% if request.user.profile.character_status == 'gm' %}

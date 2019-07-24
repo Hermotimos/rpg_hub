@@ -164,7 +164,7 @@ small {
 
 .year {%;}
 .day {width: %;}
-.thread {min-width: 18%;}
+.thread {width: 18%;}
 .participants {width: 5%;}
 .actions {width: 5%;}
 
@@ -175,7 +175,7 @@ small {
         margin-left: auto;
         margin-right: auto;
         text-align: center;
-        width: 25%;
+        width: 33%;
 }
 
 .timeline-event {
@@ -221,6 +221,9 @@ td.season-winter  {
         background-color: #99ccff
 }
 
+.bootstrap-table .fixed-table-container .table thead th .th-inner {
+        padding: 10px 3px;
+}
 
 /* FORUM - Narady */
 
