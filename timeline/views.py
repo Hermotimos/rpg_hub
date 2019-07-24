@@ -167,20 +167,20 @@ def event_note_view(request, event_id):
     return render(request, 'timeline/event_note.html', context)
 
 
+def is_allowed_game(_game, profile):
+    for event in _game.described_events.all():
+        if profile in event.participants.all() or profile in event.informed.all() or profile.character_status == 'gm':
+            return True
+    return False
+
+
 @login_required
 def chronicles_chapters_view(request):
-
-    def is_allowed_game(_game, profile):
-        for event in _game.described_events.all():
-            if profile in event.participants.all() or profile in event.informed.all() or profile.character_status == 'gm':
-                return True
-        return False
-
     games = GameSession.objects.all()
     allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile)]
 
     context = {
-        'page_title': 'Historia drużyny',
+        'page_title': 'Historia drużyny - rozdziały',
         'allowed_games_list': allowed_games_list
     }
     return render(request, 'timeline/chronicles_chapters.html', context)
@@ -188,13 +188,6 @@ def chronicles_chapters_view(request):
 
 @login_required
 def chronicles_all_view(request):
-
-    def is_allowed_game(_game, profile):
-        for event in _game.described_events.all():
-            if profile in event.participants.all() or profile in event.informed.all() or profile.character_status == 'gm':
-                return True
-        return False
-
     games = GameSession.objects.all()
     allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile)]
 
