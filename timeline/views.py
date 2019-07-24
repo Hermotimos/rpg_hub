@@ -203,3 +203,15 @@ def chronicles_all_view(request):
         'allowed_games_list': allowed_games_list
     }
     return render(request, 'timeline/chronicles_all.html', context)
+
+
+@login_required
+def chronicles_one_chapter_view(request, game_no):
+    obj = GameSession.objects.get(game_no=game_no)
+
+    context = {
+        'page_title': f'{obj.title.split(": ", 1)[0]}\n"{obj.title.split(": ", 1)[1]}"',
+
+        'game': obj
+    }
+    return render(request, 'timeline/chronicles_one_chapter.html', context)

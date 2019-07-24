@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% load static %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'chronicles_chapters' %}">Historia drużyny - rozdziały</a></li>
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br>
+
+    {{ game }}
+
+    </table>
+    <br>
+
+{% endblock content %}
