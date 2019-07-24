@@ -128,11 +128,6 @@ a.article-title:hover {
         text-align: justify;
 }
 
-td.chronicle-event {
-        font-size: 10px;
-
-}
-
 .forms td {
         vertical-align: top;
         padding: 4px;
@@ -179,7 +174,6 @@ small {
 .chronicles .description {width: %;}
 .chronicles .actions {width: %;}
 
-
 .small-img {
         display: block;
         height: auto;
@@ -193,6 +187,7 @@ small {
 
 .chronicles .small-img {
         width: 100%;
+        padding: 10px 5px 0px 0px;
 }
 
 .chronicles .small-img2 {
@@ -220,6 +215,16 @@ small {
 .timeline td {
         border: 1px solid black;
         padding: 4px;
+}
+
+.chronicles td {
+        margin: 0px;
+        padding: 0px 5px;
+}
+
+#chronicles td {
+        border-style: none;
+        font-size: 2px;
 }
 
 td.center {

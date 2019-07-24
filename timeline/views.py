@@ -168,7 +168,7 @@ def event_note_view(request, event_id):
 
 
 @login_required
-def chronicles_view(request):
+def chronicles_all_view(request):
     games = GameSession.objects.all()
 
     def is_allowed_game(_game, profile):
@@ -183,4 +183,4 @@ def chronicles_view(request):
         'page_title': 'Historia drużyny',
         'allowed_games_list': allowed_games_list
     }
-    return render(request, 'timeline/chronicles.html', context)
+    return render(request, 'timeline/chronicles_all.html', context)
