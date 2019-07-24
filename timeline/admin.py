@@ -8,4 +8,14 @@ admin.site.register(GeneralLocation)
 admin.site.register(SpecificLocation)
 admin.site.register(Event)
 admin.site.register(EventNote)
-admin.site.register(DescribedEvent)
+
+
+class DescribedEventAdmin(admin.ModelAdmin):
+    list_display = [
+        'game_no',
+        'event_no_in_game',
+        'description',
+    ]
+
+
+admin.site.register(DescribedEvent, DescribedEventAdmin)

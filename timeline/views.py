@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import send_mail
 from users.models import Profile
-from timeline.models import Event, EventNote
+from timeline.models import Event, EventNote, DescribedEvent, GameSession
 from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm
 
 
@@ -165,3 +165,30 @@ def event_note_view(request, event_id):
         'informed': informed
     }
     return render(request, 'timeline/event_note.html', context)
+
+
+@login_required
+def chronicles_view(request):
+    games = GameSession.objects.all()
+
+    def is_allowed_game(_game, profile):
+        for event in _game.described_events.all():
+            if profile in event.participants.all() or profile in event.informed.all() or profile.character_status == 'gm':
+                return True
+        return False
+
+    # if request.user.profile == Profile.objects.get(character_status='gm'):
+        # queryset = DescribedEvent.objects.all()
+    # else:
+    #     participated_qs = Profile.objects.get(user=request.user).described_events_participated.all()
+    #     informed_qs = Profile.objects.get(user=request.user).described_events_informed.all()
+        # queryset = (participated_qs | informed_qs).distinct()
+
+    allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile)]
+
+
+    context = {
+        'page_title': 'Historia drużyny',
+        'allowed_games_list': allowed_games_list
+    }
+    return render(request, 'timeline/chronicles.html', context)
