@@ -177,15 +177,7 @@ def chronicles_view(request):
                 return True
         return False
 
-    # if request.user.profile == Profile.objects.get(character_status='gm'):
-        # queryset = DescribedEvent.objects.all()
-    # else:
-    #     participated_qs = Profile.objects.get(user=request.user).described_events_participated.all()
-    #     informed_qs = Profile.objects.get(user=request.user).described_events_informed.all()
-        # queryset = (participated_qs | informed_qs).distinct()
-
     allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile)]
-
 
     context = {
         'page_title': 'Historia drużyny',

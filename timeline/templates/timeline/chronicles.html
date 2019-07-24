@@ -30,7 +30,7 @@
                 </td>
             </tr>
                 {% for event in game.described_events.all %}
-                    {% if request.user in event.participants or request.user in event.informed or request.user.profile.character_status == 'gm'%}
+                    {% if event in request.user.profile.described_events_participated.all or event in request.user.profile.described_events_participated.all or request.user.profile.character_status == 'gm' %}
                         <tr>
                             <td class="chronicle-event">
                                 <p>{{ event.description }}</p>
