@@ -73,17 +73,26 @@ class DescribedEvent(models.Model):
     Lack or correspondence between the two is intentional for flexibility.
     """
     game_no = models.ForeignKey(GameSession, related_name='described_events', blank=True, null=True, on_delete=models.CASCADE)
+    event_no_in_game = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
     description = models.TextField(max_length=4000)
     participants = models.ManyToManyField(Profile, related_name='described_events_participated',
-                                          limit_choices_to={'character_status': 'player'}, blank=True)
+                                          limit_choices_to=
+                                          Q(character_status='active_player') |
+                                          Q(character_status='inactive_player') |
+                                          Q(character_status='dead_player'),
+                                          blank=True)
     informed = models.ManyToManyField(Profile, related_name='described_events_informed',
-                                      limit_choices_to={'character_status': 'player'}, blank=True)
+                                      limit_choices_to=
+                                      Q(character_status='active_player') |
+                                      Q(character_status='inactive_player') |
+                                      Q(character_status='dead_player'),
+                                      blank=True)
 
     def __str__(self):
-        return f'{self.description[0:50]}...'
+        return f'{self.description[0:100]}...'
 
     class Meta:
-        ordering = ['game_no']
+        ordering = ['game_no', 'event_no_in_game']
 
 
 class Event(models.Model):
