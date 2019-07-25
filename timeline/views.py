@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import send_mail
+from django.http import HttpResponseRedirect
 from users.models import Profile
 from timeline.models import Event, EventNote, DescribedEvent, DescribedEventNote, GameSession
 from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm, DescribedEventNoteForm
@@ -188,7 +189,8 @@ def described_event_note_view(request, event_id):
             note.event = obj
             note.save()
             messages.success(request, f'Dodano notatkę!')
-            return redirect('timeline')                             # TODO
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)                             # TODO
     else:
         form = DescribedEventNoteForm(instance=current_note)
 

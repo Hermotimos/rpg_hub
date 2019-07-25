@@ -12,6 +12,7 @@
 {% endblock breadcrumb %}
 
 {% block content %}
+{{ request.META.HTTP_REFERER }}
     <br>
     <table class="forms">
         <tr>
@@ -47,7 +48,7 @@
 
         {{ form|crispy }}
 
-        <input type="hidden" name="next" value="javascript:history.go(-1)">
+        <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
         <input class="btn btn-secondary" type="submit" value="Zanotuj">
     </form>
 {% endblock content %}
