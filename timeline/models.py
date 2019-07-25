@@ -4,6 +4,24 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from users.models import User, Profile
 
 
+# ------ GameSession model ------
+
+
+class GameSession(models.Model):
+    game_no = models.PositiveSmallIntegerField(primary_key=True)
+    title = models.CharField(max_length=200, blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.game_no} - {self.title}'
+
+    class Meta:
+        ordering = ['game_no']
+
+
+# ------ Event model and connected models ------
+
+
 SEASONS = (
     ('1', 'Wiosna'),
     ('2', 'Lato'),
@@ -53,48 +71,6 @@ class SpecificLocation(models.Model):
         ordering = ['name']
 
 
-class GameSession(models.Model):
-    game_no = models.PositiveSmallIntegerField(primary_key=True)
-    title = models.CharField(max_length=200, blank=True, null=True)
-    date = models.DateField(blank=True, null=True)
-
-    def __str__(self):
-        return f'{self.game_no} - {self.title}'
-
-    class Meta:
-        ordering = ['game_no']
-
-
-class DescribedEvent(models.Model):
-    """
-    This model is not connected with Event model. There is not 121 or M2M relationships between them.
-    Event model serves to create events in timeline view (chronology).
-    EventDescription serves to create events in the full history text of the game.
-    Lack or correspondence between the two is intentional for flexibility.
-    """
-    game_no = models.ForeignKey(GameSession, related_name='described_events', blank=True, null=True, on_delete=models.CASCADE)
-    event_no_in_game = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
-    description = models.TextField(max_length=4000)
-    participants = models.ManyToManyField(Profile, related_name='described_events_participated',
-                                          limit_choices_to=
-                                          Q(character_status='active_player') |
-                                          Q(character_status='inactive_player') |
-                                          Q(character_status='dead_player'),
-                                          blank=True)
-    informed = models.ManyToManyField(Profile, related_name='described_events_informed',
-                                      limit_choices_to=
-                                      Q(character_status='active_player') |
-                                      Q(character_status='inactive_player') |
-                                      Q(character_status='dead_player'),
-                                      blank=True)
-
-    def __str__(self):
-        return f'{self.description[0:100]}...'
-
-    class Meta:
-        ordering = ['game_no', 'event_no_in_game']
-
-
 class Event(models.Model):
     year = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
     season = models.CharField(max_length=10, choices=SEASONS)
@@ -103,13 +79,15 @@ class Event(models.Model):
                                                validators=[MinValueValidator(1), MaxValueValidator(90)])
     threads = models.ManyToManyField(Thread, related_name='events', blank=True)
     description = models.TextField(max_length=4000)
-    participants = models.ManyToManyField(Profile, related_name='events_participated',
+    participants = models.ManyToManyField(Profile,
+                                          related_name='events_participated',
                                           limit_choices_to=
                                           Q(character_status='active_player') |
                                           Q(character_status='inactive_player') |
                                           Q(character_status='dead_player'),
                                           blank=True)
-    informed = models.ManyToManyField(Profile, related_name='events_informed',
+    informed = models.ManyToManyField(Profile,
+                                      related_name='events_informed',
                                       limit_choices_to=
                                       Q(character_status='active_player') |
                                       Q(character_status='inactive_player'),
@@ -139,6 +117,41 @@ class EventNote(models.Model):
 
     def __str__(self):
         return f'{self.text[0:50]}...'
+
+
+# ------ DescribedEvent model and connected models ------
+
+
+class DescribedEvent(models.Model):
+    """
+    This model is not connected with Event model. There is not 121 or M2M relationships between them.
+    Event model serves to create events in timeline view (chronology).
+    EventDescription serves to create events in the full history text of the game.
+    Lack or correspondence between the two is intentional for flexibility.
+    """
+    game_no = models.ForeignKey(GameSession, related_name='described_events', blank=True, null=True, on_delete=models.CASCADE)
+    event_no_in_game = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
+    description = models.TextField(max_length=4000)
+    participants = models.ManyToManyField(Profile,
+                                          related_name='described_events_participated',
+                                          limit_choices_to=
+                                          Q(character_status='active_player') |
+                                          Q(character_status='inactive_player') |
+                                          Q(character_status='dead_player'),
+                                          blank=True)
+    informed = models.ManyToManyField(Profile,
+                                      related_name='described_events_informed',
+                                      limit_choices_to=
+                                      Q(character_status='active_player') |
+                                      Q(character_status='inactive_player') |
+                                      Q(character_status='dead_player'),
+                                      blank=True)
+
+    def __str__(self):
+        return f'{self.description[0:100]}...'
+
+    class Meta:
+        ordering = ['game_no', 'event_no_in_game']
 
 
 class DescribedEventNote(models.Model):
