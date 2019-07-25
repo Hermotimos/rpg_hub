@@ -81,7 +81,11 @@
                         <small>{{ location }}</small><br>
                     {% endfor %}
                 </td>
-                <td class="center align-top"><small>{{ event.game_no.game_no }}</small></td>
+                <td class="center align-top">
+                    {% if event.game_no %}
+                        <small><a href="{% url 'chronicles_one_chapter' event.game_no.game_no %}">{{ event.game_no.game_no }}</a></small>
+                    {% endif %}
+                </td>
                 <td class="align-top">
                     <h6><a href="{% url 'add_informed' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
                     <h6><a href="{% url 'event_note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
