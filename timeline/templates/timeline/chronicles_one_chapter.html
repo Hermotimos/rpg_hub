@@ -16,19 +16,29 @@
         </colgroup>
 
         {% for event in game.described_events.all %}
-            {% if event in request.user.profile.described_events_participated.all or event in request.user.profile.described_events_participated.all or request.user.profile.character_status == 'gm' %}
-                <tr>
-                    <td class="chronicle-event">
-                        <p>{{ event.description }}</p>
-                    </td>
-                    <td class="align-top">
-                        <h6><a href="#"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
-                        <h6><a href="#"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
-                        {% if request.user.profile.character_status == 'gm' %}
-                            <h6><a href="#"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
-                        {% endif %}
-                    </td>
-            {% endif %}
+                    {% if event in request.user.profile.described_events_participated.all or event in request.user.profile.described_events_informed.all or request.user.profile.character_status == 'gm' %}
+                        <tr>
+                            <td class="chronicle-event">
+                                {% if event in request.user.profile.described_events_informed.all %}
+                                    <p>
+                                        <small>(Znasz z opowieści)</small>
+                                        {{ event.description }}
+                                    </p>
+                                {% else %}
+                                    <p>
+                                        {{ event.description }}
+                                    </p>
+                                {% endif %}
+                            </td>
+                            <td class="align-top">
+                                <h6><a href="#"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
+                                <h6><a href="#"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
+                                {% if request.user.profile.character_status == 'gm' %}
+                                    <h6><a href="#"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
         {% endfor %}
     </table>
     <br>
