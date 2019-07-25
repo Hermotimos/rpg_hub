@@ -33,20 +33,25 @@
                     {% if event in request.user.profile.described_events_participated.all or event in request.user.profile.described_events_informed.all or request.user.profile.character_status == 'gm' %}
                         <tr>
                             <td class="chronicle-event">
-                                {% if event in request.user.profile.described_events_informed.all %}
-                                    <p>
+                                <p>
+                                    {% if event in request.user.profile.described_events_informed.all %}
                                         <small>(Znasz z opowieści)</small>
-                                        {{ event.description }}
-                                    </p>
-                                {% else %}
-                                    <p>
-                                        {{ event.description }}
-                                    </p>
-                                {% endif %}
+                                    {% endif %}
+
+                                    {{ event.description|linebreaksbr }}
+
+                                    {% for note in event.notes.all %}
+                                        {% if request.user == note.author %}
+                                            {% if note.text != '' %}
+                                                <a style="color:{{ note.color }}"><br>Notatka:<br>{{ note.text|linebreaksbr }}</a>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </p>
                             </td>
                             <td class="align-top">
                                 <h6><a href="#"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
-                                <h6><a href="#"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
+                                <h6><a href="{% url 'described_event_note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
                                 {% if request.user.profile.character_status == 'gm' %}
                                     <h6><a href="#"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
                                 {% endif %}
