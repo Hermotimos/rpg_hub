@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from users.models import Profile
 from timeline.models import Event, EventNote, DescribedEvent, DescribedEventNote, GameSession
 from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm, DescribedEventNoteForm,\
-    CreateDescribedEventForm, DescribedEventAddInformedForm
+    CreateDescribedEventForm, DescribedEventAddInformedForm, EditDescribedEventForm
 
 
 @login_required
@@ -194,6 +194,27 @@ def create_described_event_view(request):
         'form': form
     }
     return render(request, 'timeline/create_described_event.html', context)
+
+
+@login_required
+def edit_described_event_view(request, event_id):
+    obj = get_object_or_404(DescribedEvent, id=event_id)
+
+    if request.method == 'POST':
+        form = EditDescribedEventForm(request.POST, instance=obj)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Zmodyfikowano wydarzenie!')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+    else:
+        form = EditDescribedEventForm(instance=obj)
+
+    context = {
+        'page_title': 'Edycja wydarzenia',
+        'form': form
+    }
+    return render(request, 'timeline/edit_described_event.html', context)
 
 
 @login_required

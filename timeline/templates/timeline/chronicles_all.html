@@ -53,7 +53,7 @@
                                 <h6><a href="{% url 'described_event_add_informed' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
                                 <h6><a href="{% url 'described_event_note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
                                 {% if request.user.profile.character_status == 'gm' %}
-                                    <h6><a href="#"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
+                                    <h6><a href="{% url 'edit_described_event' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
                                 {% endif %}
                             </td>
                         </tr>

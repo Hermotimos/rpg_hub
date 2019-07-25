@@ -84,9 +84,21 @@ class CreateDescribedEventForm(forms.ModelForm):
         self.fields['informed'].widget.attrs = {'size': 8}
 
 
+class EditDescribedEventForm(forms.ModelForm):
+    class Meta:
+        model = DescribedEvent
+        exclude = ()
+
+    def __init__(self, *args, **kwargs):
+        super(EditDescribedEventForm, self).__init__(*args, **kwargs)
+        self.fields['description'].widget.attrs = {'cols': 60, 'rows': 10}
+        self.fields['participants'].widget.attrs = {'size': 8}
+        self.fields['informed'].widget.attrs = {'size': 8}
+
+
 class DescribedEventAddInformedForm(forms.ModelForm):
     class Meta:
-        model = Event
+        model = DescribedEvent
         fields = ['informed']
 
     def __init__(self, *args, **kwargs):
