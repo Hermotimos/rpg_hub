@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'timeline' %}">Kalendarium</a></li>
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br>
+
+    <table class="forms">
+        <tr>
+            <td>
+                <h6>Wydarzenie:</h6>
+            </td>
+            <td>
+                <small>{{ event.description }}</small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h6>Uczestnicy:</h6>
+            </td>
+            <td>
+                <small>{{ participants }}</small>
+            </td>
+        </tr>
+        {% if informed %}
+            <tr>
+                <td>
+                    <h6>Poinformowani:</h6>
+                </td>
+                <td>
+                    <small>{{ informed }}</small>
+                </td>
+            </tr>
+        {% endif %}
+    </table><br><br>
+
+    <h6>Poinformuj towarzyszy o wydarzeniu:</h6>
+    <small>1) Opowiadaj swoje losy tylko towarzyszom obecnym przy Tobie w chwili zakończenia sesji!</small><br>
+    <small class="red">2) Jeśli ktoś już jest poinformowany - nie usuwaj go!</small><br>
+    <br>
+
+    <div class="allowed-profiles-form">
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.informed }}<br>
+
+            <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
+            <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
+            <input class="btn btn-secondary" type="submit" value="Poinformuj">
+        </form>
+    </div>
+{% endblock content %}

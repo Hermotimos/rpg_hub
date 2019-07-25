@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from users.models import Profile
 from timeline.models import Event, EventNote, DescribedEvent, DescribedEventNote, GameSession
 from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm, DescribedEventNoteForm,\
-    CreateDescribedEventForm
+    CreateDescribedEventForm, DescribedEventAddInformedForm
 
 
 @login_required
@@ -194,6 +194,50 @@ def create_described_event_view(request):
         'form': form
     }
     return render(request, 'timeline/create_described_event.html', context)
+
+
+@login_required
+def described_event_add_informed_view(request, event_id):
+    obj = get_object_or_404(DescribedEvent, id=event_id)
+
+    participants = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
+    already_informed = obj.informed.all()[::1]                  # enforces evaluation of lazy Queryset for message
+    informed = ', '.join(p.character_name.split(' ', 1)[0] for p in already_informed)
+
+    if request.method == 'POST':
+        form = DescribedEventAddInformedForm(request.POST, instance=obj)
+        if form.is_valid():
+            form.save()
+
+            subject = f"[RPG] {request.user.profile} podzielił się z Tobą swoją historią!"
+            message = f"{request.user.profile} znów rozprawia o swoich przygodach.\n" \
+                      f"Oto kto już o nich słyszał: " \
+                      f"{', '.join(p.character_name for p in form.cleaned_data['informed'])}\n\n" \
+                      f"Podczas przygody '{obj.game_no.title}' rozegrało się co następuje:\n {obj.description}\n" \
+                      f"Tak było i nie inaczej..."
+            sender = settings.EMAIL_HOST_USER
+            receivers_list = []
+
+            currently_informed = form.cleaned_data['informed']
+            for profile in currently_informed.all():
+                if profile.user.email and profile in form.cleaned_data['informed'] and profile not in already_informed:
+                    receivers_list.append(profile.user.email)
+            send_mail(subject, message, sender, receivers_list)
+
+            messages.success(request, f'Poinformowano wybrane postaci!')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+    else:
+        form = DescribedEventAddInformedForm(instance=obj)
+
+    context = {
+        'page_title': 'Poinformuj o wydarzeniu',
+        'form': form,
+        'event': obj,
+        'participants': participants,
+        'informed': informed
+    }
+    return render(request, 'timeline/described_event_add_informed.html', context)
 
 
 def is_allowed_game(_game, profile):

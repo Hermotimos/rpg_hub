@@ -84,6 +84,16 @@ class CreateDescribedEventForm(forms.ModelForm):
         self.fields['informed'].widget.attrs = {'size': 8}
 
 
+class DescribedEventAddInformedForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ['informed']
+
+    def __init__(self, *args, **kwargs):
+        super(DescribedEventAddInformedForm, self).__init__(*args, **kwargs)
+        self.fields['informed'].label = ''
+
+
 class DescribedEventNoteForm(forms.ModelForm):
     class Meta:
         model = DescribedEventNote
