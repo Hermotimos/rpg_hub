@@ -112,6 +112,10 @@ a.article-title:hover {
         color: red;
 }
 
+.hide tr {
+        display: none;
+}
+
 .justify {
         text-align: justify;
 }
