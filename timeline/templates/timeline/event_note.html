@@ -13,31 +13,70 @@
 {% block content %}
     <br>
     <table class="forms">
+        {% if event.game_no %}
         <tr>
-            <td>
-                <h6>Wydarzenie:</h6>
-            </td>
+            <td><h6>Sesja:</h6></td>
+            <td class="justify"><small>{{ event.game_no }}</small></td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td><h6>Data:</h6></td>
             <td class="justify">
-                <small>{{ event.description }}</small>
+                <small>
+                    Rok: {{ event.year }}  [{{ event.year|add:19 }}. rok Archonatu Nemetha Samatiana]<br>
+                    Pora roku:
+                    {% if event.season == '1' %}
+                        Wiosna
+                    {% elif event.season == '2' %}
+                        Lato
+                    {% elif event.season == '3' %}
+                        Jesień
+                    {% elif event.season == '4' %}
+                        Zima
+                    {% endif %}
+                    <br>
+                    Dzień:
+                    {% if event.day_end %}
+                        {{ event.day_start }}-{{ event.day_end }}
+                    {% else %}
+                        {{ event.day_start }}
+                    {% endif %}
+                </small>
             </td>
         </tr>
         <tr>
-            <td>
-                <h6>Uczestnicy:</h6>
+            <td><h6>Wątki:</h6></td>
+            <td class="justify">
+                <small>
+                    {% for thread in event.threads.all %}
+                    *{{ thread }}<br>
+                    {% endfor %}
+                </small>
             </td>
-            <td>
-                <small>{{ participants }}</small>
+        </tr>
+        <tr>
+            <td><h6>Lokacja:</h6></td>
+            <td class="justify">
+                <small>{{ event.general_location }}:
+                    {% for loc in event.specific_locations.all %}
+                    {{ loc }}
+                    {% endfor %}
+                </small>
             </td>
+        </tr>
+        <tr>
+            <td><h6>Wydarzenie:</h6></td>
+            <td class="justify"><small>{{ event.description }}</small></td>
+        </tr>
+        <tr>
+            <td><h6>Uczestnicy:</h6></td>
+            <td><small>{{ participants }}</small></td>
         </tr>
         {% if informed %}
-            <tr>
-                <td>
-                    <h6>Poinformowani:</h6>
-                </td>
-                <td>
-                    <small>{{ informed }}</small>
-                </td>
-            </tr>
+        <tr>
+            <td><h6>Poinformowani:</h6></td>
+            <td><small>{{ informed }}</small></td>
+        </tr>
         {% endif %}
     </table><br><br>
 

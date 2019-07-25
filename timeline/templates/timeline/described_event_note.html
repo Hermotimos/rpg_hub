@@ -7,38 +7,32 @@
 
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'chronicles_chapters' %}">Historia</a></li>
-    <li class="breadcrumb-item"><a href="javascript:history.go(-1)">Rozdział / Pełna historia drużyny</a></li>
+    <li class="breadcrumb-item"><a href="javascript:history.go(-1)">Sesja / Pełna historia drużyny</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
 {% block content %}
     <br>
     <table class="forms">
+        {% if event.game_no %}
         <tr>
-            <td>
-                <h6>Wydarzenie:</h6>
-            </td>
-            <td class="justify">
-                <small>{{ event.description }}</small>
-            </td>
+            <td><h6>Sesja:</h6></td>
+            <td class="justify"><small>{{ event.game_no }}</small></td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td><h6>Wydarzenie:</h6></td>
+            <td class="justify"><small>{{ event.description }}</small></td>
         </tr>
         <tr>
-            <td>
-                <h6>Uczestnicy:</h6>
-            </td>
-            <td>
-                <small>{{ participants }}</small>
-            </td>
+            <td><h6>Uczestnicy:</h6></td>
+            <td><small>{{ participants }}</small></td>
         </tr>
         {% if informed %}
-            <tr>
-                <td>
-                    <h6>Poinformowani:</h6>
-                </td>
-                <td>
-                    <small>{{ informed }}</small>
-                </td>
-            </tr>
+        <tr>
+            <td><h6>Poinformowani:</h6></td>
+            <td><small>{{ informed }}</small></td>
+        </tr>
         {% endif %}
     </table><br><br>
 
