@@ -12,9 +12,9 @@
     {% for game in allowed_games_list %}
         <tr>
             <td>
-                <h3 class="unblue">
-                    <strong><a href="{% url 'chronicles_one_chapter' game.game_no %}">{{ game.title }}</a></strong>
-                </h3>
+                <h4 class="unblue">
+                    <a href="{% url 'chronicles_one_chapter' game.game_no %}">{{ game.title }}</a>
+                </h4>
             </td>
         </tr>
     {% endfor %}

@@ -180,7 +180,7 @@ def chronicles_chapters_view(request):
     allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile)]
 
     context = {
-        'page_title': 'Historia drużyny - rozdziały',
+        'page_title': 'Historia',
         'allowed_games_list': allowed_games_list
     }
     return render(request, 'timeline/chronicles_chapters.html', context)
@@ -192,7 +192,7 @@ def chronicles_all_view(request):
     allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile)]
 
     context = {
-        'page_title': 'Historia drużyny',
+        'page_title': 'Pełna historia',
         'allowed_games_list': allowed_games_list
     }
     return render(request, 'timeline/chronicles_all.html', context)
