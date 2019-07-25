@@ -31,7 +31,7 @@ def forum_view(request):
         boards_with_allowed_profiles_dict[board] = allowed_profiles
 
     context = {
-        'page_title': 'Wieczorne narady',
+        'page_title': 'Narady',
         'queryset': queryset,
         'topics_with_last_post_date_dict': topics_with_last_post_date_dict,
         'topics_with_last_active_user_dict': topics_with_last_active_user_dict,

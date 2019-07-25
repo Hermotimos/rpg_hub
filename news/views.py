@@ -17,7 +17,7 @@ def news_view(request):
                                     for news in queryset}
 
     context = {
-        'page_title': 'Słup ogłoszeń',
+        'page_title': 'Ogłoszenia',
         'queryset': queryset,
         'news_with_last_activity_dict': news_with_last_activity_dict
     }
