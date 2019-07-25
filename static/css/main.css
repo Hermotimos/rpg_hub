@@ -192,13 +192,8 @@ small {
 }
 
 .chronicles .small-img {
-        width: 100%;
-        padding: 10px 5px 0px 0px;
-}
-
-.chronicles .small-img2 {
-        display: inline-block;
-        width: 5%;
+        width: 70%;
+        padding: 0px 0px 0px 0px;
 }
 
 .timeline-event {
