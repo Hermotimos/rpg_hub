@@ -286,7 +286,7 @@ def chronicles_all_view(request):
     allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile)]
 
     context = {
-        'page_title': 'Pełna historia',
+        'page_title': 'Pełna historia drużyny',
         'allowed_games_list': allowed_games_list
     }
     return render(request, 'timeline/chronicles_all.html', context)
