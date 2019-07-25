@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import send_mail
 from users.models import Profile
-from timeline.models import Event, EventNote, DescribedEvent, GameSession
-from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm
+from timeline.models import Event, EventNote, DescribedEvent, DescribedEventNote, GameSession
+from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm, DescribedEventNoteForm
 
 
 @login_required
@@ -165,6 +165,41 @@ def event_note_view(request, event_id):
         'informed': informed
     }
     return render(request, 'timeline/event_note.html', context)
+
+
+@login_required
+def described_event_note_view(request, event_id):
+    obj = get_object_or_404(DescribedEvent, id=event_id)
+
+    current_note = None
+    participants = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
+    informed = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.informed.all())
+
+    try:
+        current_note = DescribedEventNote.objects.get(event=obj, author=request.user)
+    except DescribedEventNote.DoesNotExist:
+        pass
+
+    if request.method == 'POST':
+        form = DescribedEventNoteForm(request.POST, instance=current_note)
+        if form.is_valid():
+            note = form.save(commit=False)
+            note.author = request.user
+            note.event = obj
+            note.save()
+            messages.success(request, f'Dodano notatkę!')
+            return redirect('timeline')                             # TODO
+    else:
+        form = DescribedEventNoteForm(instance=current_note)
+
+    context = {
+        'page_title': 'Notatka',
+        'event': obj,
+        'form': form,
+        'participants': participants,
+        'informed': informed
+    }
+    return render(request, 'timeline/described_event_note.html', context)
 
 
 def is_allowed_game(_game, profile):

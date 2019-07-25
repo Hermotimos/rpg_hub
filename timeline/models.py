@@ -132,9 +132,19 @@ class Event(models.Model):
 
 
 class EventNote(models.Model):
-    author = models.ForeignKey(User, related_name='notes', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, related_name='events_notes', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000, blank=True, null=True)
     event = models.ForeignKey(Event, related_name='notes', on_delete=models.CASCADE)
+    color = models.CharField(max_length=20, choices=COLORS, default='#C70039')
+
+    def __str__(self):
+        return f'{self.text[0:50]}...'
+
+
+class DescribedEventNote(models.Model):
+    author = models.ForeignKey(User, related_name='described_events_notes', on_delete=models.CASCADE)
+    text = models.TextField(max_length=4000, blank=True, null=True)
+    event = models.ForeignKey(DescribedEvent, related_name='notes', on_delete=models.CASCADE)
     color = models.CharField(max_length=20, choices=COLORS, default='#C70039')
 
     def __str__(self):

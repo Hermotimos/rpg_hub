@@ -1,6 +1,6 @@
 from django.contrib import admin
 from timeline.models import Thread, GameSession, GeneralLocation, SpecificLocation, Event, EventNote, \
-    DescribedEvent
+    DescribedEvent, DescribedEventNote
 
 admin.site.register(Thread)
 admin.site.register(GameSession)
@@ -19,3 +19,4 @@ class DescribedEventAdmin(admin.ModelAdmin):
 
 
 admin.site.register(DescribedEvent, DescribedEventAdmin)
+admin.site.register(DescribedEventNote)

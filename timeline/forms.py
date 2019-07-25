@@ -1,6 +1,6 @@
 from django import forms
 from pagedown.widgets import PagedownWidget
-from timeline.models import Event, EventNote
+from timeline.models import Event, EventNote, DescribedEventNote
 
 
 class CreateEventForm(forms.ModelForm):
@@ -63,4 +63,29 @@ class EventNoteForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(EventNoteForm, self).__init__(*args, **kwargs)
+        self.fields['color'].label = 'Kolor'
+
+
+class DescribedEventNoteForm(forms.ModelForm):
+    class Meta:
+        model = DescribedEventNote
+        fields = [
+            'text',
+            'color'
+        ]
+
+    text = forms.CharField(
+        label='',
+        required=False,
+        widget=PagedownWidget(
+            attrs={
+                'placeholder': 'Twoja notatka (max. 4000 znaków)*',
+                'rows': 10,
+                'cols': 60
+            }
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(DescribedEventNoteForm, self).__init__(*args, **kwargs)
         self.fields['color'].label = 'Kolor'

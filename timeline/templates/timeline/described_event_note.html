@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block head_extra %}
+{{ form.media }}
+{% endblock head_extra %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="#">###</a></li>
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br>
+    <table class="forms">
+        <tr>
+            <td>
+                <h6>Wydarzenie:</h6>
+            </td>
+            <td>
+                <small>{{ event.description }}</small>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h6>Uczestnicy:</h6>
+            </td>
+            <td>
+                <small>{{ participants }}</small>
+            </td>
+        </tr>
+        {% if informed %}
+            <tr>
+                <td>
+                    <h6>Poinformowani:</h6>
+                </td>
+                <td>
+                    <small>{{ informed }}</small>
+                </td>
+            </tr>
+        {% endif %}
+    </table><br><br>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form|crispy }}
+
+        <input class="btn btn-secondary" type="submit" value="Zanotuj">
+    </form>
+{% endblock content %}
