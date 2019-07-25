@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block head_extra %}
+{{ form.media }}
+{% endblock head_extra %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="javascript:history.go(-2)">Historia</a></li>
+    <li class="breadcrumb-item"><a href="javascript:history.go(-1)">Pełna historia</a></li>
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br>
+    <form method="POST">
+        {% csrf_token %}
+        <table class="create-event">
+        {% for field in form %}
+            <tr>
+                <td class="padding">
+                    <label for="{{ forloop.counter }}">{{ field.label }}:</label>
+                </td>
+                <td class="padding">
+                    <a id="{{ forloop.counter }}">{{ field }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+        <br>
+        <input class="btn btn-secondary" type="submit" value="Utwórz wydarzenie"/>
+    </form>
+{% endblock content %}

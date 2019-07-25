@@ -1,6 +1,9 @@
 from django import forms
 from pagedown.widgets import PagedownWidget
-from timeline.models import Event, EventNote, DescribedEventNote
+from timeline.models import Event, EventNote, DescribedEvent, DescribedEventNote
+
+
+# ------ Event model ------
 
 
 class CreateEventForm(forms.ModelForm):
@@ -64,6 +67,21 @@ class EventNoteForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(EventNoteForm, self).__init__(*args, **kwargs)
         self.fields['color'].label = 'Kolor'
+
+
+# ------ DescribedEvent model -----
+
+
+class CreateDescribedEventForm(forms.ModelForm):
+    class Meta:
+        model = DescribedEvent
+        exclude = ()
+
+    def __init__(self, *args, **kwargs):
+        super(CreateDescribedEventForm, self).__init__(*args, **kwargs)
+        self.fields['description'].widget.attrs = {'cols': 50, 'rows': 5}
+        self.fields['participants'].widget.attrs = {'size': 8}
+        self.fields['informed'].widget.attrs = {'size': 8}
 
 
 class DescribedEventNoteForm(forms.ModelForm):

@@ -11,7 +11,7 @@
     <br>
     {% if request.user.profile.character_name == 'MG' %}
         <div class="mb-4">
-            <a href="#" class="btn btn-outline-secondary">Nowe wydarzenie</a>
+            <a href="{% url 'create_described_event' %}" class="btn btn-outline-secondary">Nowe wydarzenie</a>
         </div><br>
     {% endif %}
 

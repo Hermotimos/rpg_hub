@@ -6,7 +6,8 @@ from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from users.models import Profile
 from timeline.models import Event, EventNote, DescribedEvent, DescribedEventNote, GameSession
-from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm, DescribedEventNoteForm
+from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm, DescribedEventNoteForm,\
+    CreateDescribedEventForm
 
 
 @login_required
@@ -32,6 +33,9 @@ def timeline_view(request):
         'seasons_with_styles_dict': seasons_with_styles_dict,
     }
     return render(request, 'timeline/timeline.html', context)
+
+
+# ------ Event model based views ------
 
 
 @login_required
@@ -168,40 +172,28 @@ def event_note_view(request, event_id):
     return render(request, 'timeline/event_note.html', context)
 
 
+# ------ DescribedEvent model based views ------
+
+
 @login_required
-def described_event_note_view(request, event_id):
-    obj = get_object_or_404(DescribedEvent, id=event_id)
-
-    current_note = None
-    participants = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
-    informed = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.informed.all())
-
-    try:
-        current_note = DescribedEventNote.objects.get(event=obj, author=request.user)
-    except DescribedEventNote.DoesNotExist:
-        pass
-
+def create_described_event_view(request):
     if request.method == 'POST':
-        form = DescribedEventNoteForm(request.POST, instance=current_note)
+        form = CreateDescribedEventForm(request.POST or None)
         if form.is_valid():
-            note = form.save(commit=False)
-            note.author = request.user
-            note.event = obj
-            note.save()
-            messages.success(request, f'Dodano notatkę!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)                             # TODO
+            event = form.save()
+            event.participants.set(form.cleaned_data['participants'])
+            event.informed.set(form.cleaned_data['informed'])
+            event.save()
+            messages.success(request, f'Dodano wydarzenie!')
+            return redirect('chronicles_all')
     else:
-        form = DescribedEventNoteForm(instance=current_note)
+        form = CreateDescribedEventForm()
 
     context = {
-        'page_title': 'Notatka',
-        'event': obj,
-        'form': form,
-        'participants': participants,
-        'informed': informed
+        'page_title': 'Nowe wydarzenie',
+        'form': form
     }
-    return render(request, 'timeline/described_event_note.html', context)
+    return render(request, 'timeline/create_described_event.html', context)
 
 
 def is_allowed_game(_game, profile):
@@ -245,3 +237,39 @@ def chronicles_one_chapter_view(request, game_no):
         'game': obj
     }
     return render(request, 'timeline/chronicles_one_chapter.html', context)
+
+
+@login_required
+def described_event_note_view(request, event_id):
+    obj = get_object_or_404(DescribedEvent, id=event_id)
+
+    current_note = None
+    participants = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
+    informed = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.informed.all())
+
+    try:
+        current_note = DescribedEventNote.objects.get(event=obj, author=request.user)
+    except DescribedEventNote.DoesNotExist:
+        pass
+
+    if request.method == 'POST':
+        form = DescribedEventNoteForm(request.POST, instance=current_note)
+        if form.is_valid():
+            note = form.save(commit=False)
+            note.author = request.user
+            note.event = obj
+            note.save()
+            messages.success(request, f'Dodano notatkę!')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+    else:
+        form = DescribedEventNoteForm(instance=current_note)
+
+    context = {
+        'page_title': 'Notatka',
+        'event': obj,
+        'form': form,
+        'participants': participants,
+        'informed': informed
+    }
+    return render(request, 'timeline/described_event_note.html', context)
