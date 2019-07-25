@@ -9,7 +9,6 @@
 
 {% block content %}
     <br>
-
     {% if request.user.profile.character_name == 'MG' %}
         <div class="mb-4">
             <a href="#" class="btn btn-outline-secondary">Nowe wydarzenie</a>
@@ -24,10 +23,10 @@
         {% for game in allowed_games_list %}
             <tr>
                 <td>
-                    <h3>
+                    <h4>
                         <strong><br><br>{{ game.title }}</strong>&nbsp&nbsp
-                        <a href="#"><img src="{% static 'img/inform.png' %}" class="small-img2"></a>
-                    </h3>
+                        <a href="#"><img src="{% static 'img/inform.png' %}" class="small-img2"></a><br><br>
+                    </h4>
                 </td>
             </tr>
                 {% for event in game.described_events.all %}
@@ -46,8 +45,5 @@
                     {% endif %}
                 {% endfor %}
         {% endfor %}
-
     </table>
-    <br>
-
 {% endblock content %}

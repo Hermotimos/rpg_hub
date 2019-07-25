@@ -8,7 +8,6 @@
 
 {% block content %}
     <br>
-
     {% for game in allowed_games_list %}
         <tr>
             <td>
@@ -22,6 +21,4 @@
     <h3 class="unblue">
         <strong><a href="{% url 'chronicles_all' %}">Pełna historia</a></strong>
     </h3>
-    <br>
-
 {% endblock content %}
