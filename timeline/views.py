@@ -13,7 +13,7 @@ from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm,
 @login_required
 def timeline_view(request):
 
-    if request.user.profile == Profile.objects.get(character_status='gm'):
+    if request.user.profile in Profile.objects.filter(character_status='gm'):
         queryset = Event.objects.all()
     else:
         participated_qs = Profile.objects.get(user=request.user).events_participated.all()
