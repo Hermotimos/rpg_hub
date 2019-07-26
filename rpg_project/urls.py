@@ -30,6 +30,7 @@ urlpatterns = [
     path('news/', include('news.urls')),
     path('timeline/', include('timeline.urls')),
     path('report/', include('report.urls')),
+    path('rules/', include('rules.urls')),
 ]
 
 # only for development phase (= when DEBUG is True), not suitable for production
