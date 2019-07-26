@@ -75,7 +75,7 @@
                         <small>+{{ profile.character_name|get_first_word }}</small><br>
                     {% endfor %}
                 </td>
-                <td class="align-top">
+                <td class="timeline-small align-top">
                     {{ event.general_location }}<br>
                     {% for location in event.specific_locations.all %}
                         <small>{{ location }}</small><br>
