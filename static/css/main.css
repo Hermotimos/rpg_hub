@@ -142,15 +142,6 @@ a.article-title:hover {
         white-space: nowrap;
 }
 
-.report-img {
-        display: block;
-        height: auto;
-        margin-left: auto;
-        margin-right: auto;
-        padding: 3px;
-        text-align: center;
-}
-
 small {
         color: #888;
 }
