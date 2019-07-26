@@ -4,7 +4,7 @@ from PIL import Image
 
 STATUS = [
     ('active_player', 'Postać gracza'),
-    ('inactive_player', 'Dawna postać gracza'),
+    ('inactive_player', 'Nieaktywna postać gracza'),
     ('dead_player', 'Martwa postać gracza'),
     ('living_npc', 'Bohater niezależny'),
     ('dead_npc', 'Martwy bohater niezależny'),
