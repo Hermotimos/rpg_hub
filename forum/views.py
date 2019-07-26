@@ -41,7 +41,7 @@ def forum_view(request):
 
 
 @login_required
-def posts_in_topic_view(request, board_slug, topic_slug):
+def topic_view(request, board_slug, topic_slug):
     obj = get_object_or_404(Topic, slug=topic_slug)
 
     allowed = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.allowed_profiles.all() if p.character_status != 'gm')
