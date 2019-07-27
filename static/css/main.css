@@ -260,3 +260,10 @@ td.season-winter  {
 small.red {
         color: red;
 }
+
+
+/* Rules - Zasady */
+
+h1, h2, h3, h4, h5, h6 {
+        font-weight: bold;
+}
