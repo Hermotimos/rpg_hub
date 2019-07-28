@@ -264,6 +264,6 @@ small.red {
 
 /* Rules - Zasady */
 
-h1, h2, h3, h4, h5, h6 {
+h1.rules, h2.rules, h3.rules, h4.rules, h5.rules, h6.rules {
         font-weight: bold;
 }
