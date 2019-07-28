@@ -72,6 +72,7 @@ class SpecificLocation(models.Model):
 
 
 class Event(models.Model):
+    game_no = models.ForeignKey(GameSession, related_name='events', blank=True, null=True, on_delete=models.PROTECT)
     year = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
     season = models.CharField(max_length=10, choices=SEASONS)
     day_start = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(90)])
@@ -112,7 +113,7 @@ class Event(models.Model):
 class EventNote(models.Model):
     author = models.ForeignKey(User, related_name='events_notes', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000, blank=True, null=True)
-    event = models.ForeignKey(Event, related_name='notes', on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, related_name='notes', on_delete=models.PROTECT)
     color = models.CharField(max_length=20, choices=COLORS, default='#C70039')
 
     def __str__(self):
@@ -129,7 +130,7 @@ class DescribedEvent(models.Model):
     EventDescription serves to create events in the full history text of the game.
     Lack or correspondence between the two is intentional for flexibility.
     """
-    game_no = models.ForeignKey(GameSession, related_name='described_events', blank=True, null=True, on_delete=models.CASCADE)
+    game_no = models.ForeignKey(GameSession, related_name='described_events', on_delete=models.PROTECT)
     event_no_in_game = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
     description = models.TextField(max_length=4000)
     participants = models.ManyToManyField(Profile,
@@ -157,7 +158,7 @@ class DescribedEvent(models.Model):
 class DescribedEventNote(models.Model):
     author = models.ForeignKey(User, related_name='described_events_notes', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000, blank=True, null=True)
-    event = models.ForeignKey(DescribedEvent, related_name='notes', on_delete=models.CASCADE)
+    event = models.ForeignKey(DescribedEvent, related_name='notes', on_delete=models.PROTECT)
     color = models.CharField(max_length=20, choices=COLORS, default='#C70039')
 
     def __str__(self):
