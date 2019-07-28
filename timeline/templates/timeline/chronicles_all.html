@@ -30,11 +30,55 @@
         </thead>
 
         <tbody>
+
+            <!--    BIOS    -->
+            {% for game in allowed_bios_list %}
+                <tr>
+                    <td>
+                        <h4>
+                            <strong><br><br>0. {{ game }}</strong><br><br>
+                        </h4>
+                    </td>
+                </tr>
+                {% for event in game.described_events.all %}
+                    {% if event in request.user.profile.described_events_participated.all or event in request.user.profile.described_events_informed.all or request.user.profile.character_status == 'gm' %}
+                        <tr>
+                            <td class="chronicle-event">
+                                <p>
+                                    {% if event in request.user.profile.described_events_informed.all %}
+                                        <small>(Znasz z opowieści)</small>
+                                    {% endif %}
+
+                                    {{ event.description|linebreaksbr }}
+
+                                    {% for note in event.notes.all %}
+                                        {% if request.user == note.author %}
+                                            {% if note.text != '' %}
+                                                <a style="color:{{ note.color }}"><br>Notatka:<br>{{ note.text|linebreaksbr }}</a>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </p>
+                            </td>
+                            <td class="align-top">
+                                <h6><a href="{% url 'described_event_add_informed' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
+                                <h6><a href="{% url 'described_event_note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
+                                {% if request.user.profile.character_status == 'gm' %}
+                                    <h6><a href="{% url 'edit_described_event' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+
+
+            <!--    GAMES    -->
             {% for game in allowed_games_list %}
                 <tr>
                     <td>
                         <h4>
-                            <strong><br><br>{{ game }}</strong><br><br>
+                            <strong><br><br>{{ forloop.counter }}. {{ game }}</strong><br><br>
                         </h4>
                     </td>
                 </tr>

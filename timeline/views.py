@@ -271,10 +271,12 @@ def is_allowed_game(_game, profile):
 @login_required
 def chronicles_chapters_view(request):
     games = GameSession.objects.all()
-    allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile)]
+    allowed_bios_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no < 0]
+    allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no > 0]
 
     context = {
         'page_title': 'Historia',
+        'allowed_bios_list': allowed_bios_list,
         'allowed_games_list': allowed_games_list
     }
     return render(request, 'timeline/chronicles_chapters.html', context)
@@ -283,10 +285,12 @@ def chronicles_chapters_view(request):
 @login_required
 def chronicles_all_view(request):
     games = GameSession.objects.all()
-    allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile)]
+    allowed_bios_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no < 0]
+    allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no > 0]
 
     context = {
         'page_title': 'Pełna historia drużyny',
+        'allowed_bios_list': allowed_bios_list,
         'allowed_games_list': allowed_games_list
     }
     return render(request, 'timeline/chronicles_all.html', context)
@@ -297,7 +301,7 @@ def chronicles_one_chapter_view(request, game_id):
     obj = get_object_or_404(GameSession, id=game_id)
 
     context = {
-        'page_title': f'{obj.game_no}. {obj.title.split(": ", 1)[0]}:\n"{obj.title.split(": ", 1)[1]}"',
+        'page_title': f'{obj.title.split(": ", 1)[0]}:\n"{obj.title.split(": ", 1)[1]}"',
         'game': obj
     }
     return render(request, 'timeline/chronicles_one_chapter.html', context)

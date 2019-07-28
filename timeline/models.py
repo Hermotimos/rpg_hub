@@ -13,7 +13,7 @@ class GameSession(models.Model):
     date = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return f'{self.game_no}. {self.title}'
+        return self.title
 
     class Meta:
         ordering = ['game_no']

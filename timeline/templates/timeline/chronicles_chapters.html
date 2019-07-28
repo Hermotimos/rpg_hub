@@ -12,6 +12,17 @@
         <strong><a href="{% url 'chronicles_all' %}">Pełna historia drużyny</a></strong>
     </h3>
     <br>
+    {% for game in allowed_bios_list %}
+        <tr>
+            <td>
+                <h5 class="unblue">
+                    0.
+                    <a href="{% url 'chronicles_one_chapter' game.id %}">{{ game.title }}</a>
+                </h5>
+            </td>
+        </tr>
+    {% endfor %}
+
     {% for game in allowed_games_list %}
         <tr>
             <td>
