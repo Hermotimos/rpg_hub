@@ -293,8 +293,8 @@ def chronicles_all_view(request):
 
 
 @login_required
-def chronicles_one_chapter_view(request, game_no):
-    obj = get_object_or_404(GameSession, game_no=game_no)
+def chronicles_one_chapter_view(request, game_id):
+    obj = get_object_or_404(GameSession, id=game_id)
 
     context = {
         'page_title': f'{obj.game_no}. {obj.title.split(": ", 1)[0]}:\n"{obj.title.split(": ", 1)[1]}"',

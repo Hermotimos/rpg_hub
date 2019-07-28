@@ -16,7 +16,7 @@ urlpatterns = [
 
     path('chronicles_chapters/', chronicles_chapters_view, name='chronicles_chapters'),
     path('chronicles_chapters/chronicles_all/', chronicles_all_view, name='chronicles_all'),
-    path('chronicles_chapters/<int:game_no>/chapter/', chronicles_one_chapter_view, name='chronicles_one_chapter'),
+    path('chronicles_chapters/<int:game_id>/chapter/', chronicles_one_chapter_view, name='chronicles_one_chapter'),
 
     path('create-described-event/', create_described_event_view, name='create_described_event'),
     path('<int:event_id>/described-event-add-informed/', described_event_add_informed_view, name='described_event_add_informed'),
