@@ -8,7 +8,7 @@ from users.models import User, Profile
 
 
 class GameSession(models.Model):
-    game_no = models.PositiveSmallIntegerField(primary_key=True)
+    game_no = models.IntegerField(null=True)
     title = models.CharField(max_length=200, blank=True, null=True)
     date = models.DateField(blank=True, null=True)
 
@@ -72,7 +72,7 @@ class SpecificLocation(models.Model):
 
 class Event(models.Model):
     game_no = models.ForeignKey(GameSession, related_name='events', blank=True, null=True, on_delete=models.PROTECT)
-    year = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
+    year = models.IntegerField()
     season = models.CharField(max_length=10, choices=SEASONS)
     day_start = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(90)])
     day_end = models.PositiveSmallIntegerField(blank=True, null=True,
