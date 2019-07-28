@@ -82,8 +82,10 @@
                     {% endfor %}
                 </td>
                 <td class="center align-top unblue">
-                    {% if event.game_no %}
+                    {% if event.game_no.game_no > 0 %}
                         <small><a href="{% url 'chronicles_one_chapter' event.game_no.game_no %}">{{ event.game_no.game_no }}</a></small>
+                    {% else %}
+                        <small><a href="{% url 'chronicles_one_chapter' event.game_no.game_no %}">0</a></small>
                     {% endif %}
                 </td>
                 <td class="align-top">
