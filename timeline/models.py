@@ -13,7 +13,7 @@ class GameSession(models.Model):
     date = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self.title
+        return f'{self.game_no} - {self.title}'
 
     class Meta:
         ordering = ['game_no']
@@ -99,7 +99,8 @@ class Event(models.Model):
         return f'{self.description[0:50]}...'
 
     class Meta:
-        ordering = ['year', 'season', 'day_start', 'day_end', 'id', 'game_no']
+        # ordering via 'description' to leave flexibility for events with later 'id'-s
+        ordering = ['year', 'season', 'day_start', 'day_end', 'description', 'game_no']
 
     # Steps to migrate these models:
     # 1) delete migration files, delete tables in db, DELETE FROM django_migrations WHERE app="timeline";
