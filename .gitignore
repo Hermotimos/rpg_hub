@@ -5,3 +5,4 @@ mvenv
 .DS_Store
 .idea
 credentials.py
+db.sqlite3
