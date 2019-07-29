@@ -40,7 +40,7 @@
                     {% for topic in board.topics.all %}
                         {% if request.user.profile in topic.allowed_profiles.all or request.user.profile.character_status == 'gm' %}
                             <tr>
-                                <td>
+                                <td class="unblue">
                                     <a href="{{ topic.get_absolute_url }}">{{ topic.topic_name }}</a>
                                 </td>
                                 <td>
