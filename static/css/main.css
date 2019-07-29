@@ -205,11 +205,13 @@ small {
 }
 
 .timeline thead {
-        background-color: #66998c;
+        background-color: #363636;
+        color: #ffffff;
 }
 
 .timeline th {
         border: 1px solid black;
+        font-weight: normal;
 }
 
 .timeline td {
@@ -236,16 +238,16 @@ td img {
 }
 
 td.season-spring  {
-        background-color: #8cd98c
+        background-color: #cbe39a;
 }
 td.season-summer  {
-        background-color: #ffff99
+        background-color: #ffe9ab
 }
 td.season-autumn {
-        background-color: #d2a679
+        background-color: #d1b384;
 }
 td.season-winter  {
-        background-color: #99ccff
+        background-color: #99b9c2
 }
 
 .bootstrap-table .fixed-table-container .table thead th .th-inner {
