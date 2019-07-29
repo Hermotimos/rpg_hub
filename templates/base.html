@@ -1,5 +1,6 @@
-{% load static %}
 <!DOCTYPE html>
+
+{% load static %}
 <html lang="pl">
 <head>
     <!-- Required meta tags -->
@@ -19,6 +20,8 @@
     {% endif %}
 
     {% block head_extra %}
+        <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
+        <link rel="icon" href="{% static 'img/favicon.ico' %}" />
     {% endblock head_extra %}
 </head>
 
