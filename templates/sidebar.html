@@ -1,8 +1,9 @@
 {% if user.is_authenticated %}
 <div class="col-md-3">
     <div class="content-section">
+        <br>
+        <img class="account-img-sidebar border-double" src="{{ user.profile.image.url }}">
         <h3>{{ user.profile.character_name }}</h3>
-        <img class="account-img border-double" src="{{ user.profile.image.url }}">
         <p class='text-muted'></p>
         <br>
         <ul class="list-group unblue">
@@ -11,6 +12,7 @@
             <li class="list-group-item list-group-item-light"><a href="#"><strike>Notatki</strike></a></li>
             <li class="list-group-item list-group-item-light"><a href="#"><strike>Karta postaci</strike></a></li>
         </ul>
+        <br>
     </div>
 </div>
 {% endif %}

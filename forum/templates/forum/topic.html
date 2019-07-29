@@ -57,7 +57,7 @@
                             <td>
                                 {{ post.text|capfirst|linebreaks }}
                                 {% if post.image %}
-                                    <img src="{{ post.image.url }}">
+                                    <img src="{{ post.image.url }}" class="border-double">
                                 {% endif %}
                             </td>
                         </tr>
@@ -76,7 +76,7 @@
                                 <small>{{ post.date_posted|date:'d-M-Y' }}</small>
                                 {{ post.text|capfirst|linebreaks }}
                                 {% if post.image %}
-                                    <img src="{{ post.image.url }}">
+                                    <img src="{{ post.image.url }}" class="border-double">
                                 {% endif %}
                             </td>
                         </tr>
