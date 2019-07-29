@@ -301,7 +301,8 @@ def chronicles_one_chapter_view(request, game_id):
     obj = get_object_or_404(GameSession, id=game_id)
 
     context = {
-        'page_title': f'{obj.title.split(": ", 1)[0] if ":" in obj.title else obj.title}:\n"{obj.title.split(": ", 1)[1]}"',
+        'page_title': f'{obj.title.split(": ", 1)[0] if ":" in obj.title else obj.title}:\n'
+                      f'"{obj.title.split(": ", 1)[1] if ":" in obj.title else ""}"',
         'game': obj
     }
     return render(request, 'timeline/chronicles_one_chapter.html', context)
