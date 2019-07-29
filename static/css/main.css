@@ -263,10 +263,17 @@ td.season-winter  {
 
 /* FORUM - Narady */
 
+
+
 .forum th {
-        background-color: #8CCBD3;
         border: 1px solid black;
+        font-weight: normal;
         padding: 10px;
+}
+
+.forum thead {
+        background-color: #363636;
+        color: #ffffff;
 }
 
 .forum td {
