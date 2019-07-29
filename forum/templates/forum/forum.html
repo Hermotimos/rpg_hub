@@ -13,7 +13,9 @@
     {% else %}
         <div class="mb-4">
             <a href="{% url 'create-board' %}" class="btn btn-outline-dark">Nowy temat narad</a>
-        </div><br><br>
+        </div>
+
+        <br><br>
         {% for board in queryset %}
             {% if request.user.profile.character_name in boards_with_allowed_profiles_dict|dict_lookup:board or request.user.profile.character_status == 'gm' %}
 
