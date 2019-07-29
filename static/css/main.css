@@ -187,12 +187,11 @@ small {
         text-align: center;
 }
 .timeline .small-img {
-        width: 40%;
+        width: 35%;
 }
 
 .chronicles .small-img {
-        width: 70%;
-        padding: 0px 0px 0px 0px;
+        padding: 10px 0px 0px 0px;
 }
 
 .timeline-event {
