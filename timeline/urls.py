@@ -1,5 +1,5 @@
 from django.urls import path
-from timeline.views import timeline_main_view, timeline_all_view, create_event_view, edit_event_view, event_add_informed_view, \
+from timeline.views import timeline_main_view, timeline_events_view, timeline_by_thread_view, create_event_view, edit_event_view, event_add_informed_view, \
     event_note_view, described_event_note_view, chronicles_chapters_view, chronicles_all_view, \
     chronicles_one_chapter_view, create_described_event_view, described_event_add_informed_view,\
     edit_described_event_view
@@ -7,7 +7,8 @@ from timeline.views import timeline_main_view, timeline_all_view, create_event_v
 
 urlpatterns = [
     path('', timeline_main_view, name='timeline-main'),
-    path('timeline-all/', timeline_all_view, name='timeline-all'),
+    path('timeline-events/', timeline_events_view, name='timeline-events'),
+    path('timeline-by-thread/<int:thread_id>/', timeline_by_thread_view, name='timeline-by-thread'),
 
     path('create-event/', create_event_view, name='create-event'),
     path('<int:event_id>/event-add-informed/', event_add_informed_view, name='add-informed'),

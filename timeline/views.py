@@ -6,7 +6,8 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from users.models import Profile
-from timeline.models import Event, EventNote, DescribedEvent, DescribedEventNote, GameSession
+from timeline.models import Event, EventNote, DescribedEvent, DescribedEventNote, GameSession, Thread, GeneralLocation,\
+    SpecificLocation
 from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm, DescribedEventNoteForm,\
     CreateDescribedEventForm, DescribedEventAddInformedForm, EditDescribedEventForm
 
@@ -82,7 +83,7 @@ def timeline_main_view(request):
 
 
 @login_required
-def timeline_all_view(request):
+def timeline_events_view(request):
     if request.user.profile in Profile.objects.filter(character_status='gm'):
         queryset = Event.objects.all()
     else:
@@ -95,8 +96,66 @@ def timeline_all_view(request):
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
-    return render(request, 'timeline/timeline_all.html', context)
+    return render(request, 'timeline/timeline_events.html', context)
 
+
+@login_required
+def timeline_by_thread_view(request, thread_id):
+    thread = Thread.objects.get(id=thread_id)
+    events_by_thread_qs = thread.events.all()
+
+    if request.user.profile in Profile.objects.filter(character_status='gm'):
+        queryset = events_by_thread_qs
+    else:
+        participated_qs = Profile.objects.get(user=request.user).events_participated.all()
+        informed_qs = Profile.objects.get(user=request.user).events_informed.all()
+        events_by_user = (participated_qs | informed_qs).distinct()
+        queryset = [e for e in events_by_user if e in events_by_thread_qs]
+
+    context = {
+        'page_title': f'Kalendarium: {thread.name}',
+        'queryset': queryset,
+        'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
+
+    }
+    return render(request, 'timeline/timeline_events.html', context)
+
+#
+# @login_required
+# def timeline_by_participant_view(request, participant_id):
+#
+#     context = {
+#         'page_title': 'XXXXXXXXXXX',
+#     }
+#     return render(request, 'timeline/XXXXX.html', context)
+#
+#
+# @login_required
+# def timeline_by_location_general_view(request, location_general_id):
+#
+#     context = {
+#         'page_title': 'XXXXXXXXXXX',
+#     }
+#     return render(request, 'timeline/XXXXX.html', context)
+#
+#
+# @login_required
+# def timeline_by_location_specific_view(request, location_specific_id):
+#
+#     context = {
+#         'page_title': 'XXXXXXXXXXX',
+#     }
+#     return render(request, 'timeline/XXXXX.html', context)
+#
+#
+# @login_required
+# def timeline_by_year_view(request, year):
+#
+#     context = {
+#         'page_title': 'XXXXXXXXXXX',
+#     }
+#     return render(request, 'timeline/XXXXX.html', context)
+#
 
 @login_required
 def create_event_view(request):
@@ -110,7 +169,7 @@ def create_event_view(request):
             event.specific_locations.set(form.cleaned_data['specific_locations'])
             event.save()
             messages.success(request, f'Dodano wydarzenie!')
-            return redirect('timeline')
+            return redirect('timeline-main')
     else:
         form = CreateEventForm()
 
@@ -130,7 +189,7 @@ def edit_event_view(request, event_id):
         if form.is_valid():
             form.save()
             messages.success(request, f'Zmodyfikowano wydarzenie!')
-            return redirect('timeline')
+            return redirect('timeline-main')
     else:
         form = EditEventForm(instance=obj)
 
@@ -183,7 +242,7 @@ def event_add_informed_view(request, event_id):
             send_mail(subject, message, sender, receivers_list)
 
             messages.success(request, f'Poinformowano wybrane postaci!')
-            return redirect('timeline')
+            return redirect('timeline-main')
     else:
         form = EventAddInformedForm(instance=obj)
 
@@ -218,7 +277,7 @@ def event_note_view(request, event_id):
             note.event = obj
             note.save()
             messages.success(request, f'Dodano notatkę!')
-            return redirect('timeline')
+            return redirect('timeline-main')
     else:
         form = EventNoteForm(instance=current_note)
 

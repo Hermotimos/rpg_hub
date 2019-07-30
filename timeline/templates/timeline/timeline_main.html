@@ -17,7 +17,7 @@
     <br>
 
     <h3 class="unblue">
-        <strong><a href="{% url 'timeline-all' %}">Pełne Kalendarium</a></strong>
+        <strong><a href="{% url 'timeline-events' %}">Pełne Kalendarium</a></strong>
     </h3>
     <br><br>
 
@@ -26,8 +26,8 @@
     <table>
         <tr>
         {% for t in threads %}
-            <td>
-                &#10023; {{ t.0 }}&emsp;&emsp;
+            <td class="unblue">
+                &#10023; <a href="{% url 'timeline-by-thread' t.1.id %}">{{ t.0 }}</a>&emsp;&emsp;
             </td>
             {% if forloop.counter|divisibleby:3 %}
                 </tr>
