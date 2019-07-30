@@ -8,7 +8,6 @@
 
 {% block content %}
     <br>
-    <br>
     {% if request.user.profile.character_name == 'MG' %}
         <div class="mb-4">
             <a href="{% url 'create-event' %}" class="btn btn-outline-dark">Nowe wydarzenie</a>
