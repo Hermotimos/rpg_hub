@@ -279,7 +279,7 @@ def chronicles_chapters_view(request):
         'allowed_bios_list': allowed_bios_list,
         'allowed_games_list': allowed_games_list
     }
-    return render(request, 'timeline/chronicles.html', context)
+    return render(request, 'timeline/chronicles_main.html', context)
 
 
 @login_required
