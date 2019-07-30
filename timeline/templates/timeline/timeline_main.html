@@ -56,8 +56,8 @@
     <table>
         {% for gl in general_locs_with_specific_locs_list %}
             <tr>
-                <td>
-                    <br><h5>&#10037; {{ gl.0 }}&emsp;&emsp;</h5>
+                <td class="unblue">
+                    <br><h5>&#10037; <a href="{% url 'timeline-by-general-location' gl.0.id %}">{{ gl.0 }}</a>&emsp;&emsp;</h5>
                 </td>
             </tr>
             <tr>

@@ -148,19 +148,32 @@ def timeline_by_participant_view(request, participant_id):
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
     return render(request, 'timeline/timeline_events.html', context)
+
+
+@login_required
+def timeline_by_general_location_view(request, general_location_id):
+    general_location = GeneralLocation.objects.get(id=general_location_id)
+    events_by_general_location_qs = Event.objects.filter(general_location=general_location)
+
+    if request.user.profile in Profile.objects.filter(character_status='gm'):
+        queryset = events_by_general_location_qs
+    else:
+        participated_qs = Profile.objects.get(user=request.user).events_participated.all()
+        informed_qs = Profile.objects.get(user=request.user).events_informed.all()
+        events_by_user = (participated_qs | informed_qs).distinct()
+        queryset = [e for e in events_by_user if e in events_by_general_location_qs]
+
+    context = {
+        'page_title': f'Kalendarium: {general_location.name}',
+        'header': f'{general_location.name}... Zastanawiasz się, jak to miejsce odcisnęło się na Twoim losie...',
+        'queryset': queryset,
+        'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
+    }
+    return render(request, 'timeline/timeline_events.html', context)
 #
 #
 # @login_required
-# def timeline_by_location_general_view(request, location_general_id):
-#
-#     context = {
-#         'page_title': 'XXXXXXXXXXX',
-#     }
-#     return render(request, 'timeline/XXXXX.html', context)
-#
-#
-# @login_required
-# def timeline_by_location_specific_view(request, location_specific_id):
+# def timeline_by_specific_location_view(request, location_specific_id):
 #
 #     context = {
 #         'page_title': 'XXXXXXXXXXX',
