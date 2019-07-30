@@ -321,7 +321,7 @@ def chronicles_chapters_view(request):
         'allowed_bios_list': allowed_bios_list,
         'allowed_games_list': allowed_games_list
     }
-    return render(request, 'chronicles/chronicles_main.html', context)
+    return render(request, 'chronicles/chronicles_chapters.html', context)
 
 
 @login_required
