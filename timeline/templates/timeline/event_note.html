@@ -6,7 +6,8 @@
 {% endblock head_extra %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{% url 'timeline-all' %}">Kalendarium</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'timeline-main' %}">Kalendarium</a></li>
+    <li class="breadcrumb-item"><a href="javascript:history.go(-1)">Kalendarium: wydarzenia</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
