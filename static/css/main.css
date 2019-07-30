@@ -245,6 +245,10 @@ table.timeline {
         padding: 5px;
 }
 
+.timeline-sort:hover {
+        filter: invert(50%);
+}
+
 .chronicles td {
         margin: 0px;
         padding: 0px 5px;

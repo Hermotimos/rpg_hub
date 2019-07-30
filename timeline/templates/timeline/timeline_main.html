@@ -20,39 +20,41 @@
     </h3>
     <br><br>
 
-    <h3>Wątki</h3>
+    <h3 class="timeline-sort" data-toggle="collapse" data-target="#threads"><b>Wątki</b></h3>
     <small>Wykaz wątków splątanych z Twoim losem</small><br><br>
-    <table>
+    <table id="threads" class="collapse">
         <tr>
         {% for t in threads %}
             <td class="unblue">
                 &#10023; <a href="{% url 'timeline-by-thread' t.1.id %}">{{ t.0 }}</a>&emsp;&emsp;
             </td>
             {% if forloop.counter|divisibleby:3 %}
-                </tr>
+                </tr><tr>
             {% endif %}
         {% endfor %}
+        </tr>
     </table>
-    <br><br><br>
+    <br><br>
 
-    <h3>Uczestnicy</h3>
+    <h3 class="timeline-sort" data-toggle="collapse" data-target="#participants"><b>Uczestnicy</b></h3>
     <small>Członkowie drużyny współuczestniczący w Twoich przygodach</small><br><br>
-    <table>
+    <table id="participants" class="collapse">
         <tr>
         {% for p in participants %}
             <td class="unblue">
                 &#10023; <a href="{% url 'timeline-by-participant' p.1.id %}">{{ p.0 }}</a>&emsp;&emsp;
             </td>
             {% if forloop.counter|divisibleby:4 %}
-                </tr>
+                </tr><tr>
             {% endif %}
         {% endfor %}
+        </tr>
     </table>
-    <br><br><br>
+    <br><br>
 
-    <h3>Krainy</h3>
+    <h3 class="timeline-sort" data-toggle="collapse" data-target="#general_locations"><b>Krainy</b></h3>
     <small>Wykaz znanych Ci krain i lokacji występujących w Kalendarium</small><br>
-    <table>
+    <table id="general_locations" class="collapse">
         {% for gl in general_locs_with_specific_locs_list %}
             <tr>
                 <td class="unblue">
@@ -65,16 +67,18 @@
                     &#10023;  <a href="{% url 'timeline-by-specific-location' sl.1.id %}">{{ sl.0 }}</a>&emsp;&emsp;
                 </td>
                 {% if forloop.counter|divisibleby:4 %}
-                        </tr>
+                    </tr><tr>
                 {% endif %}
             {% endfor %}
+            </tr>
         {% endfor %}
-    </table><br><br><br>
+    </table>
+    <br><br><br>
 
-    <h3>Lata</h3>
+    <h3 class="timeline-sort" data-toggle="collapse" data-target="#years"><b>Lata</b></h3>
     <small>Chronologia według Archonatu Nemetha Samatiana w Ebbonie</small><br><br>
-    <table>
-        <tr class="chronicles">
+    <table id="years" class="collapse">
+        <tr>
         {% for y in years %}
             <td class="unblue">
                 <a href="{% url 'timeline-by-year' y %}">{{ y }}</a>&emsp;&emsp;
@@ -84,6 +88,6 @@
             <!--{% endif %}-->
         {% endfor %}
     </table>
-    <br><br><br>
+    <br><br>
 
 {% endblock content %}
