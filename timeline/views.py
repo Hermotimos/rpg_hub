@@ -193,14 +193,26 @@ def timeline_by_specific_location_view(request, specific_location_id):
     return render(request, 'timeline/timeline_events.html', context)
 
 
-# @login_required
-# def timeline_by_year_view(request, year):
-#
-#     context = {
-#         'page_title': 'XXXXXXXXXXX',
-#     }
-#     return render(request, 'timeline/XXXXX.html', context)
-#
+@login_required
+def timeline_by_year_view(request, year):
+    events_by_year_qs = Event.objects.filter(year=year)
+
+    if request.user.profile in Profile.objects.filter(character_status='gm'):
+        queryset = events_by_year_qs
+    else:
+        participated_qs = Profile.objects.get(user=request.user).events_participated.all()
+        informed_qs = Profile.objects.get(user=request.user).events_informed.all()
+        events_by_user = (participated_qs | informed_qs).distinct()
+        queryset = [e for e in events_by_user if e in events_by_year_qs]
+
+    context = {
+        'page_title': f'Kalendarium: {year}. rok Archonatu Nemetha Samatiana',
+        'header': f'To wcale nie wydaje się aż tak dawno temu...',
+        'queryset': queryset,
+        'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
+    }
+    return render(request, 'timeline/timeline_events.html', context)
+
 
 @login_required
 def create_event_view(request):

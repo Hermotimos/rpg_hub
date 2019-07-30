@@ -77,8 +77,8 @@
     <table>
         <tr class="chronicles">
         {% for y in years %}
-            <td>
-                {{ y }}&emsp;&emsp;
+            <td class="unblue">
+                <a href="{% url 'timeline-by-year' y %}">{{ y }}</a>&emsp;&emsp;
             </td>
             <!--{% if forloop.counter|divisibleby:5 %}-->
                 </tr>
