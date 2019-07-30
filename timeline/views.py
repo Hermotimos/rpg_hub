@@ -193,7 +193,7 @@ def create_described_event_view(request):
         'page_title': 'Nowe wydarzenie',
         'form': form
     }
-    return render(request, 'timeline/create_described_event.html', context)
+    return render(request, 'chronicles/create_described_event.html', context)
 
 
 @login_required
@@ -214,7 +214,7 @@ def edit_described_event_view(request, event_id):
         'page_title': 'Edycja wydarzenia',
         'form': form
     }
-    return render(request, 'timeline/edit_described_event.html', context)
+    return render(request, 'chronicles/edit_described_event.html', context)
 
 
 @login_required
@@ -258,7 +258,7 @@ def described_event_add_informed_view(request, event_id):
         'participants': participants,
         'informed': informed
     }
-    return render(request, 'timeline/described_event_add_informed.html', context)
+    return render(request, 'chronicles/described_event_add_informed.html', context)
 
 
 def is_allowed_game(_game, profile):
@@ -279,7 +279,7 @@ def chronicles_chapters_view(request):
         'allowed_bios_list': allowed_bios_list,
         'allowed_games_list': allowed_games_list
     }
-    return render(request, 'timeline/chronicles_main.html', context)
+    return render(request, 'chronicles/chronicles_main.html', context)
 
 
 @login_required
@@ -293,7 +293,7 @@ def chronicles_all_view(request):
         'allowed_bios_list': allowed_bios_list,
         'allowed_games_list': allowed_games_list
     }
-    return render(request, 'timeline/chronicles_all.html', context)
+    return render(request, 'chronicles/chronicles_all.html', context)
 
 
 @login_required
@@ -309,7 +309,7 @@ def chronicles_one_chapter_view(request, game_id):
         'page_title': page_title,
         'game': obj
     }
-    return render(request, 'timeline/chronicles_one_chapter.html', context)
+    return render(request, 'chronicles/chronicles_one_chapter.html', context)
 
 
 @login_required
@@ -345,4 +345,4 @@ def described_event_note_view(request, event_id):
         'participants': participants,
         'informed': informed
     }
-    return render(request, 'timeline/described_event_note.html', context)
+    return render(request, 'chronicles/described_event_note.html', context)
