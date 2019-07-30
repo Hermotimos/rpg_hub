@@ -12,14 +12,40 @@ from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm,
 
 # #################### TIMELINE: model Event ####################
 
+SEASONS_WITH_STYLES_DICT = {
+    '1': 'season-spring',
+    '2': 'season-summer',
+    '3': 'season-autumn',
+    '4': 'season-winter'
+}
+
 
 @login_required
 def timeline_main_view(request):
+    if request.user.profile in Profile.objects.filter(character_status='gm'):
+        queryset = Event.objects.all()
+    else:
+        participated_qs = Profile.objects.get(user=request.user).events_participated.all()
+        informed_qs = Profile.objects.get(user=request.user).events_informed.all()
+        queryset = (participated_qs | informed_qs).distinct()
+
+    years_set = {e.year for e in queryset}
+    threads_set = {t for t in [e.threads.all() for e in queryset]}
+    participants_set = {p for p in [e.participants.all() for e in queryset]}
+    general_locations_set = {e.general_location for e in queryset}
+    specific_locations_set = {sl for sl in [e.specific_locations.all() for e in queryset]}
 
     context = {
-        'page_title': 'Kalendarium'
+        'page_title': 'Kalendarium',
+        'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
+        'years': years_set,
+        'threads': threads_set,
+        'participants': participants_set,
+        'general_locations': general_locations_set,
+        'specific_locations': specific_locations_set
     }
     return render(request, 'timeline/timeline_main.html', context)
+
 
 @login_required
 def timeline_all_view(request):
@@ -30,17 +56,12 @@ def timeline_all_view(request):
         informed_qs = Profile.objects.get(user=request.user).events_informed.all()
         queryset = (participated_qs | informed_qs).distinct()
 
-    seasons_with_styles_dict = {
-        '1': 'season-spring',
-        '2': 'season-summer',
-        '3': 'season-autumn',
-        '4': 'season-winter'
-    }
+
 
     context = {
         'page_title': 'Pełne Kalendarium',
         'queryset': queryset,
-        'seasons_with_styles_dict': seasons_with_styles_dict,
+        'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
     return render(request, 'timeline/timeline_all.html', context)
 
