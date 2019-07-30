@@ -62,6 +62,7 @@ class GeneralLocation(models.Model):
 
 class SpecificLocation(models.Model):
     name = models.CharField(max_length=100)
+    general_location = models.ForeignKey(GeneralLocation, related_name='specific_locations', on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name
