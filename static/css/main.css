@@ -1,15 +1,16 @@
 body {
         background: #fafafa;
         margin-top: 4rem;
+
 }
 
 h1, h2, h3, h4, h5, h6 {
-        color: #444444;
+        color: #444444;                                             /* <h1>-<h6> COLOR */
 }
 
-.bg-steel {
-        background-color: #363636;
-
+/* MOTIVE */
+.bg-navbar {
+        background-color: #363636;                                /* NAVBAR COLOR # */
 }
 
 .site-header .navbar-nav .nav-link {
@@ -18,7 +19,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .site-header .navbar-nav .nav-link:hover {
         color: #ffffff;
-
 }
 
 .site-header .navbar-nav .nav-link.active {
