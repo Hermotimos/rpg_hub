@@ -62,7 +62,7 @@ def timeline_main_view(request):
     specific_locations_name_and_obj_list = [(t.name, t) for t in specific_locations_set]
     specific_locations_name_and_obj_list.sort()
 
-    # general locations with their specific locations
+    # general locations with their specific locations: LEFT UNSORTED TO REFLECT SUBSEQUNT GENERAL LOCATIONS IN GAME
     general_locations_set = {event.general_location for event in queryset}
     general_locs_with_specific_locs_list = []
     for gl in general_locations_set:
