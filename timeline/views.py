@@ -93,6 +93,8 @@ def timeline_events_view(request):
 
     context = {
         'page_title': 'Pełne Kalendarium',
+        'header': 'Opisane tu wydarzenia rozpoczęły swój bieg 20. roku Archonatu Nemetha Samatiana w Ebbonie, '
+                  'choć zarodki wielu z nich sięgają znacznie odleglejszych czasów...',
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
@@ -114,6 +116,7 @@ def timeline_by_thread_view(request, thread_id):
 
     context = {
         'page_title': f'Kalendarium: {thread.name}',
+        'header': f'{thread.name}... Próbujesz przypomnieć sobie, od czego się to wszystko zaczęło?',
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
@@ -133,8 +136,14 @@ def timeline_by_participant_view(request, participant_id):
         events_by_user = (participated_qs | informed_qs).distinct()
         queryset = [e for e in events_by_user if e in events_by_participant_qs]
 
+    if request.user.profile == participant:
+        header = 'Są czasy, gdy ogarnia Cię zaduma nad Twoim zawikłanym losem...'
+    else:
+        header = f'{participant.character_name.split(" ", 1)[0]}... Niejedno już razem przeżyliście. Na dobre i na złe...'
+
     context = {
         'page_title': f'Kalendarium: {participant.character_name}',
+        'header': header,
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
