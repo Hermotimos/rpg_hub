@@ -15,42 +15,78 @@
         </div><br>
     {% endif %}
 
-    <h4>Lata:</h4>
-    <ul>
+    <h3>Lata:  </h3>
+    <small>Chronologia według Archonatu Nemetha Samatiana w Ebbonie</small><br><br>
+    <table>
+        <tr class="chronicles">
         {% for y in years %}
-            <li>{{ y }}</li>
+            <td>
+                {{ y }}&emsp;&emsp;
+            </td>
+            {% if forloop.counter|divisibleby:5 %}
+                </tr>
+            {% endif %}
         {% endfor %}
-    </ul>
+    </table>
+    <br><br>
 
-
-
-    <h4>Wątki:</h4>
-    <ul>
+    <h3>Wątki:</h3>
+    <small>Wykaz wątków, w jakie uwikłane są Twoje losy</small><br><br>
+    <table>
+        <tr>
         {% for t in threads %}
-            <li>{{ t }}</li>
+            <td>
+                ● {{ t }}&emsp;&emsp;
+            </td>
+            {% if forloop.counter|divisibleby:3 %}
+                </tr>
+            {% endif %}
         {% endfor %}
-    </ul>
+    </table>
+    <br><br>
 
-    <h4>Uczestnicy:</h4>
-    <ul>
+    <h3>Uczestnicy:</h3>
+    <small>Członkowie drużyny współuczestniczący w wydarzeniach</small><br><br>
+    <table>
+        <tr>
         {% for p in participants %}
-            <li>{{ p }}</li>
+            <td>
+                ● {{ p }}&emsp;&emsp;
+            </td>
+            {% if forloop.counter|divisibleby:3 %}
+                </tr>
+            {% endif %}
         {% endfor %}
-    </ul>
+    </table>
+    <br><br>
 
-    <h4>Lokacje:</h4>
-    <ul>
+    <h3>Krainy:</h3>
+    <small>Wwykaz krain, jakie odwiedziła Twoja postać</small><br><br>
+    <table>
+        <tr>
         {% for gl in general_locations %}
-            <li>{{ gl }}</li>
+            <td>
+                ● {{ gl }}&emsp;&emsp;
+            </td>
+            {% if forloop.counter|divisibleby:5 %}
+                </tr>
+            {% endif %}
         {% endfor %}
-    </ul>
+    </table>
+    <br><br>
 
-    <h4>Lokacje szczegółowe:</h4>
-    <ul>
+    <h3>Lokacje:</h3>
+    <table>
+        <tr>
         {% for sl in specific_locations %}
-            <li>{{ sl }}</li>
+            <td>
+                ● {{ sl }}&emsp;&emsp;
+            </td>
+            {% if forloop.counter|divisibleby:4 %}
+                </tr>
+            {% endif %}
         {% endfor %}
-    </ul>
+    </table>
 
     <br>
 

@@ -249,9 +249,10 @@ table.timeline {
 .chronicles td {
         margin: 0px;
         padding: 0px 5px;
+        color: #444444;
 }
 
-#chronicles td {
+#chronicles td {                            /* delete> */
         border-style: none;
         font-size: 2px;
 }
