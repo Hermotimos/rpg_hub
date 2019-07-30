@@ -1,3 +1,4 @@
+import locale
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -29,35 +30,52 @@ def timeline_main_view(request):
         informed_qs = Profile.objects.get(user=request.user).events_informed.all()
         queryset = (participated_qs | informed_qs).distinct()
 
+    # years
     years_set = {e.year for e in queryset.all()}
-    general_locations_set = {e.general_location for e in queryset}
+    years_sorted_list = list(years_set)
+    years_sorted_list.sort()
 
+    # threads
     threads_set = set()
-    threads_querysets_list = [e.threads.all() for e in queryset]
+    threads_querysets_list = [event.threads.all() for event in queryset]
     for qs in threads_querysets_list:
         for th in qs:
             threads_set.add(th)
+    threads_name_and_obj_list = [(t.name, t) for t in threads_set]
+    threads_name_and_obj_list.sort()
 
+    # participants
     participants_set = set()
-    participants_querysets_list = [e.participants.all() for e in queryset]
+    participants_querysets_list = [event.participants.all() for event in queryset]
     for qs in participants_querysets_list:
         for p in qs:
             participants_set.add(p)
+    participants_name_and_obj_list = [(t.character_name, t) for t in participants_set]
+    participants_name_and_obj_list.sort()
 
+    # specific locations
     specific_locations_set = set()
-    specific_locations_querysets_list = [e.specific_locations.all() for e in queryset]
+    specific_locations_querysets_list = [event.specific_locations.all() for event in queryset]
     for qs in specific_locations_querysets_list:
         for sl in qs:
             specific_locations_set.add(sl)
+    specific_locations_name_and_obj_list = [(t.name, t) for t in specific_locations_set]
+    specific_locations_name_and_obj_list.sort()
+
+    # general locations with their specific locations
+    general_locations_set = {event.general_location for event in queryset}
+    general_locs_with_specific_locs_list = []
+    for gl in general_locations_set:
+        general_loc_with_specific_locs_list = [gl, [sl for sl in specific_locations_name_and_obj_list if sl[1].general_location == gl]]
+        general_locs_with_specific_locs_list.append(general_loc_with_specific_locs_list)
 
     context = {
         'page_title': 'Kalendarium',
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
-        'years': years_set,
-        'threads': threads_set,
-        'participants': participants_set,
-        'general_locations': general_locations_set,
-        'specific_locations': specific_locations_set,
+        'years': years_sorted_list,
+        'threads': threads_name_and_obj_list,
+        'participants': participants_name_and_obj_list,
+        'general_locs_with_specific_locs_list': general_locs_with_specific_locs_list,
         'queryset': queryset
     }
     return render(request, 'timeline/timeline_main.html', context)

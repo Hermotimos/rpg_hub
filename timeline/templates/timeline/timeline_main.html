@@ -14,7 +14,7 @@
             <a href="{% url 'create-event' %}" class="btn btn-outline-dark">Nowe wydarzenie</a>
         </div><br>
     {% endif %}
-    <br><br><br>
+    <br>
 
     <h3>Lata:  </h3>
     <small>Chronologia według Archonatu Nemetha Samatiana w Ebbonie</small><br><br>
@@ -24,12 +24,12 @@
             <td>
                 {{ y }}&emsp;&emsp;
             </td>
-            {% if forloop.counter|divisibleby:5 %}
+            <!--{% if forloop.counter|divisibleby:5 %}-->
                 </tr>
-            {% endif %}
+            <!--{% endif %}-->
         {% endfor %}
     </table>
-    <br><br>
+    <br><br><br>
 
     <h3>Wątki:</h3>
     <small>Wykaz wątków, w jakie uwikłane są Twoje losy</small><br><br>
@@ -37,14 +37,14 @@
         <tr>
         {% for t in threads %}
             <td>
-                ● {{ t }}&emsp;&emsp;
+                &#10023; {{ t.0 }}&emsp;&emsp;
             </td>
             {% if forloop.counter|divisibleby:3 %}
                 </tr>
             {% endif %}
         {% endfor %}
     </table>
-    <br><br>
+    <br><br><br>
 
     <h3>Uczestnicy:</h3>
     <small>Członkowie drużyny współuczestniczący w wydarzeniach</small><br><br>
@@ -52,44 +52,33 @@
         <tr>
         {% for p in participants %}
             <td>
-                ● {{ p }}&emsp;&emsp;
-            </td>
-            {% if forloop.counter|divisibleby:3 %}
-                </tr>
-            {% endif %}
-        {% endfor %}
-    </table>
-    <br><br>
-
-    <h3>Krainy:</h3>
-    <small>Wwykaz znanych Twojej postaci krain występujących w Kalendarium</small><br><br>
-    <table>
-        <tr>
-        {% for gl in general_locations %}
-            <td>
-                ● {{ gl }}&emsp;&emsp;
-            </td>
-            {% if forloop.counter|divisibleby:5 %}
-                </tr>
-            {% endif %}
-        {% endfor %}
-    </table>
-    <br><br>
-
-    <h3>Lokacje:</h3>
-    <small>Wykaz znanych Twojej postaci lokacji występujących w Kalendarium</small><br><br>
-    <table>
-        <tr>
-        {% for sl in specific_locations %}
-            <td>
-                ● {{ sl }}&emsp;&emsp;
+                &#10023; {{ p.0 }}&emsp;&emsp;
             </td>
             {% if forloop.counter|divisibleby:4 %}
                 </tr>
             {% endif %}
         {% endfor %}
     </table>
+    <br><br><br>
 
-    <br>
-
+    <h3>Krainy:</h3>
+    <small>Wykaz znanych Twojej postaci krain występujących w Kalendarium</small><br>
+    <table>
+        {% for gl in general_locs_with_specific_locs_list %}
+            <tr>
+                <td>
+                    <br><h5>&#10037; {{ gl.0 }}&emsp;&emsp;</h5>
+                </td>
+            </tr>
+            <tr>
+            {% for sl in gl.1 %}
+                <td>
+                    &#10023; {{ sl.0 }}&emsp;&emsp;
+                </td>
+                {% if forloop.counter|divisibleby:4 %}
+                        </tr>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </table><br><br>
 {% endblock content %}
