@@ -16,22 +16,10 @@
     {% endif %}
     <br>
 
-    <h3>Lata:  </h3>
-    <small>Chronologia według Archonatu Nemetha Samatiana w Ebbonie</small><br><br>
-    <table>
-        <tr class="chronicles">
-        {% for y in years %}
-            <td>
-                {{ y }}&emsp;&emsp;
-            </td>
-            <!--{% if forloop.counter|divisibleby:5 %}-->
-                </tr>
-            <!--{% endif %}-->
-        {% endfor %}
-    </table>
-    <br><br><br>
+    <h3><b>Pełne Kalendarium</b></h3>
+    <br><br>
 
-    <h3>Wątki:</h3>
+    <h3>Wątki</h3>
     <small>Wykaz wątków, w jakie uwikłane są Twoje losy</small><br><br>
     <table>
         <tr>
@@ -46,7 +34,7 @@
     </table>
     <br><br><br>
 
-    <h3>Uczestnicy:</h3>
+    <h3>Uczestnicy</h3>
     <small>Członkowie drużyny współuczestniczący w wydarzeniach</small><br><br>
     <table>
         <tr>
@@ -61,7 +49,7 @@
     </table>
     <br><br><br>
 
-    <h3>Krainy:</h3>
+    <h3>Krainy</h3>
     <small>Wykaz znanych Twojej postaci krain występujących w Kalendarium</small><br>
     <table>
         {% for gl in general_locs_with_specific_locs_list %}
@@ -80,5 +68,21 @@
                 {% endif %}
             {% endfor %}
         {% endfor %}
-    </table><br><br>
+    </table><br><br><br>
+
+    <h3>Lata</h3>
+    <small>Chronologia według Archonatu Nemetha Samatiana w Ebbonie</small><br><br>
+    <table>
+        <tr class="chronicles">
+        {% for y in years %}
+            <td>
+                {{ y }}&emsp;&emsp;
+            </td>
+            <!--{% if forloop.counter|divisibleby:5 %}-->
+                </tr>
+            <!--{% endif %}-->
+        {% endfor %}
+    </table>
+    <br><br><br>
+
 {% endblock content %}
