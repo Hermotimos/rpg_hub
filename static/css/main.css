@@ -39,7 +39,6 @@ nav.navbar {
 }
 
 .content-section-sidebar {
-        position: fixed;
         width: 250px;
         background: #ffffff;
         padding: 10px 20px;
