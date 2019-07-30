@@ -116,7 +116,7 @@ a.article-title:hover {
         border-style: double;
 }
 
-.border-custom {
+.border-custom-base {
         border-bottom: 1px solid #363636;
 }
 
