@@ -164,7 +164,7 @@ def timeline_by_general_location_view(request, general_location_id):
 
     context = {
         'page_title': f'Kalendarium: {general_location.name}',
-        'header': f'{general_location.name}... Zastanawiasz się, jak to miejsce odcisnęło się na Twoim losie...',
+        'header': f'{general_location.name}... Zastanawiasz się, jakie piętno wywarła na Tobie ta kraina...',
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
