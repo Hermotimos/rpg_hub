@@ -116,18 +116,29 @@ def timeline_by_thread_view(request, thread_id):
         'page_title': f'Kalendarium: {thread.name}',
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
-
     }
     return render(request, 'timeline/timeline_events.html', context)
 
-#
-# @login_required
-# def timeline_by_participant_view(request, participant_id):
-#
-#     context = {
-#         'page_title': 'XXXXXXXXXXX',
-#     }
-#     return render(request, 'timeline/XXXXX.html', context)
+
+@login_required
+def timeline_by_participant_view(request, participant_id):
+    participant = Profile.objects.get(id=participant_id)
+    events_by_participant_qs = participant.events_participated.all()
+
+    if request.user.profile in Profile.objects.filter(character_status='gm'):
+        queryset = events_by_participant_qs
+    else:
+        participated_qs = Profile.objects.get(user=request.user).events_participated.all()
+        informed_qs = Profile.objects.get(user=request.user).events_informed.all()
+        events_by_user = (participated_qs | informed_qs).distinct()
+        queryset = [e for e in events_by_user if e in events_by_participant_qs]
+
+    context = {
+        'page_title': f'Kalendarium: {participant.character_name}',
+        'queryset': queryset,
+        'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
+    }
+    return render(request, 'timeline/timeline_events.html', context)
 #
 #
 # @login_required
