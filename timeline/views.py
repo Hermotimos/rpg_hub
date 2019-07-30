@@ -10,9 +10,19 @@ from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm,
     CreateDescribedEventForm, DescribedEventAddInformedForm, EditDescribedEventForm
 
 
+# #################### TIMELINE: model Event ####################
+
+
+@login_required
+def timeline_main_view(request):
+
+    context = {
+        'page_title': 'Kalendarium'
+    }
+    return render(request, 'timeline/timeline_main.html', context)
+
 @login_required
 def timeline_all_view(request):
-
     if request.user.profile in Profile.objects.filter(character_status='gm'):
         queryset = Event.objects.all()
     else:
@@ -28,14 +38,11 @@ def timeline_all_view(request):
     }
 
     context = {
-        'page_title': 'Kalendarium',
+        'page_title': 'Pełne Kalendarium',
         'queryset': queryset,
         'seasons_with_styles_dict': seasons_with_styles_dict,
     }
     return render(request, 'timeline/timeline_all.html', context)
-
-
-# ------ Event model based views ------
 
 
 @login_required
@@ -172,7 +179,7 @@ def event_note_view(request, event_id):
     return render(request, 'timeline/event_note.html', context)
 
 
-# ------ DescribedEvent model based views ------
+# #################### CHRONICLES: model DescribedEvent ####################
 
 
 @login_required

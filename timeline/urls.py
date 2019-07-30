@@ -7,7 +7,7 @@ from timeline.views import timeline_all_view, create_event_view, edit_event_view
 
 urlpatterns = [
     # path('', timeline_view, name='timeline'),
-    path('', timeline_all_view, name='timeline_all'),
+    path('timeline-all/', timeline_all_view, name='timeline-all'),
 
     path('create-event/', create_event_view, name='create-event'),
     path('<int:event_id>/event-add-informed/', event_add_informed_view, name='add-informed'),
