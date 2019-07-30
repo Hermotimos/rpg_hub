@@ -1,12 +1,13 @@
 from django.urls import path
-from timeline.views import timeline_view, create_event_view, edit_event_view, event_add_informed_view, \
+from timeline.views import timeline_all_view, create_event_view, edit_event_view, event_add_informed_view, \
     event_note_view, described_event_note_view, chronicles_chapters_view, chronicles_all_view, \
     chronicles_one_chapter_view, create_described_event_view, described_event_add_informed_view,\
     edit_described_event_view
 
 
 urlpatterns = [
-    path('', timeline_view, name='timeline'),
+    # path('', timeline_view, name='timeline'),
+    path('', timeline_all_view, name='timeline_all'),
 
     path('create-event/', create_event_view, name='create-event'),
     path('<int:event_id>/event-add-informed/', event_add_informed_view, name='add-informed'),

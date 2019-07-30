@@ -11,7 +11,7 @@ from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm,
 
 
 @login_required
-def timeline_view(request):
+def timeline_all_view(request):
 
     if request.user.profile in Profile.objects.filter(character_status='gm'):
         queryset = Event.objects.all()
@@ -32,7 +32,7 @@ def timeline_view(request):
         'queryset': queryset,
         'seasons_with_styles_dict': seasons_with_styles_dict,
     }
-    return render(request, 'timeline/timeline.html', context)
+    return render(request, 'timeline/timeline_all.html', context)
 
 
 # ------ Event model based views ------
