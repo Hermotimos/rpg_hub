@@ -16,7 +16,9 @@
     {% endif %}
     <br>
 
-    <h3><b>Pełne Kalendarium</b></h3>
+    <h3 class="unblue">
+        <strong><a href="{% url 'timeline-all' %}">Pełne Kalendarium</a></strong>
+    </h3>
     <br><br>
 
     <h3>Wątki</h3>
@@ -50,7 +52,7 @@
     <br><br><br>
 
     <h3>Krainy</h3>
-    <small>Wykaz znanych Twojej postaci krain występujących w Kalendarium</small><br>
+    <small>Wykaz znanych Ci krain i lokacji występujących w Kalendarium</small><br>
     <table>
         {% for gl in general_locs_with_specific_locs_list %}
             <tr>
