@@ -30,6 +30,7 @@
         {% endfor %}
         </table>
         <br>
+        <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
         <input class="btn btn-dark" type="submit" value="Zapisz zmiany"/>
     </form>
 

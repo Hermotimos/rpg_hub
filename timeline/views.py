@@ -226,7 +226,9 @@ def create_event_view(request):
             event.specific_locations.set(form.cleaned_data['specific_locations'])
             event.save()
             messages.success(request, f'Dodano wydarzenie!')
-            return redirect('timeline-main')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+
     else:
         form = CreateEventForm()
 
@@ -246,7 +248,8 @@ def edit_event_view(request, event_id):
         if form.is_valid():
             form.save()
             messages.success(request, f'Zmodyfikowano wydarzenie!')
-            return redirect('timeline-main')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
     else:
         form = EditEventForm(instance=obj)
 
@@ -299,7 +302,9 @@ def event_add_informed_view(request, event_id):
             send_mail(subject, message, sender, receivers_list)
 
             messages.success(request, f'Poinformowano wybrane postaci!')
-            return redirect('timeline-main')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+
     else:
         form = EventAddInformedForm(instance=obj)
 
@@ -334,7 +339,9 @@ def event_note_view(request, event_id):
             note.event = obj
             note.save()
             messages.success(request, f'Dodano notatkę!')
-            return redirect('timeline-main')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+
     else:
         form = EventNoteForm(instance=current_note)
 
