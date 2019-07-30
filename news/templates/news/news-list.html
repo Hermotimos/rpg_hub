@@ -11,7 +11,7 @@
     <div class="mb-4">
         <a href="{% url 'news-create' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
     </div>
-    <br>
+    <br><br><br>
 
     {% for news in queryset %}
         {% if request.user.profile in news.allowed_profiles.all or request.user.profile.character_status == 'gm' %}

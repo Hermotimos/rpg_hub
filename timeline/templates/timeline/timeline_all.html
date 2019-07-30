@@ -9,12 +9,14 @@
 
 {% block content %}
     <br>
-
+    <p>Opisane tu wydarzenia rozpoczęły swój bieg 20. roku Archonatu Nemetha Samatiana w Ebbonie, choć zarodki wielu z nich sięgają znacznie odleglejszych czasów...</p>
+    <br>
     {% if request.user.profile.character_name == 'MG' %}
         <div class="mb-4">
             <a href="{% url 'create-event' %}" class="btn btn-outline-dark">Nowe wydarzenie</a>
         </div><br>
     {% endif %}
+    <br><br><br>
 
     <table class="timeline" data-search="true" data-toggle="table">
         <colgroup>

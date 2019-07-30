@@ -12,7 +12,7 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br>
+    <br><br><br>
     {% if request.user.profile not in news.allowed_profiles.all and request.user.profile.character_status != 'gm' %}
         <h4>To ogłoszenie jest dla Ciebie kompletnie nieczytelne.</h4>
     {% else %}
