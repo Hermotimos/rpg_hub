@@ -1,4 +1,3 @@
-import locale
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -170,17 +169,30 @@ def timeline_by_general_location_view(request, general_location_id):
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
     return render(request, 'timeline/timeline_events.html', context)
-#
-#
-# @login_required
-# def timeline_by_specific_location_view(request, location_specific_id):
-#
-#     context = {
-#         'page_title': 'XXXXXXXXXXX',
-#     }
-#     return render(request, 'timeline/XXXXX.html', context)
-#
-#
+
+
+@login_required
+def timeline_by_specific_location_view(request, specific_location_id):
+    specific_location = SpecificLocation.objects.get(id=specific_location_id)
+    events_by_specific_location_qs = specific_location.events.all()
+
+    if request.user.profile in Profile.objects.filter(character_status='gm'):
+        queryset = events_by_specific_location_qs
+    else:
+        participated_qs = Profile.objects.get(user=request.user).events_participated.all()
+        informed_qs = Profile.objects.get(user=request.user).events_informed.all()
+        events_by_user = (participated_qs | informed_qs).distinct()
+        queryset = [e for e in events_by_user if e in events_by_specific_location_qs]
+
+    context = {
+        'page_title': f'Kalendarium: {specific_location.name}',
+        'header': f'{specific_location.name}... Zastanawiasz się, jak to miejsce odcisnęło się na Twoim losie...',
+        'queryset': queryset,
+        'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
+    }
+    return render(request, 'timeline/timeline_events.html', context)
+
+
 # @login_required
 # def timeline_by_year_view(request, year):
 #
