@@ -15,6 +15,42 @@
         </div><br>
     {% endif %}
 
+    <h4>Lata:</h4>
+    <ul>
+        {% for y in years %}
+            <li>{{ y }}</li>
+        {% endfor %}
+    </ul>
+
+
+
+    <h4>Wątki:</h4>
+    <ul>
+        {% for t in threads %}
+            <li>{{ t }}</li>
+        {% endfor %}
+    </ul>
+
+    <h4>Uczestnicy:</h4>
+    <ul>
+        {% for p in participants %}
+            <li>{{ p }}</li>
+        {% endfor %}
+    </ul>
+
+    <h4>Lokacje:</h4>
+    <ul>
+        {% for gl in general_locations %}
+            <li>{{ gl }}</li>
+        {% endfor %}
+    </ul>
+
+    <h4>Lokacje szczegółowe:</h4>
+    <ul>
+        {% for sl in specific_locations %}
+            <li>{{ sl }}</li>
+        {% endfor %}
+    </ul>
 
     <br>
 

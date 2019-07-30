@@ -29,11 +29,26 @@ def timeline_main_view(request):
         informed_qs = Profile.objects.get(user=request.user).events_informed.all()
         queryset = (participated_qs | informed_qs).distinct()
 
-    years_set = {e.year for e in queryset}
-    threads_set = {t for t in [e.threads.all() for e in queryset]}
-    participants_set = {p for p in [e.participants.all() for e in queryset]}
+    years_set = {e.year for e in queryset.all()}
     general_locations_set = {e.general_location for e in queryset}
-    specific_locations_set = {sl for sl in [e.specific_locations.all() for e in queryset]}
+
+    threads_set = set()
+    threads_querysets_list = [e.threads.all() for e in queryset]
+    for qs in threads_querysets_list:
+        for th in qs:
+            threads_set.add(th)
+
+    participants_set = set()
+    participants_querysets_list = [e.participants.all() for e in queryset]
+    for qs in participants_querysets_list:
+        for p in qs:
+            participants_set.add(p)
+
+    specific_locations_set = set()
+    specific_locations_querysets_list = [e.specific_locations.all() for e in queryset]
+    for qs in specific_locations_querysets_list:
+        for sl in qs:
+            specific_locations_set.add(sl)
 
     context = {
         'page_title': 'Kalendarium',
@@ -42,7 +57,8 @@ def timeline_main_view(request):
         'threads': threads_set,
         'participants': participants_set,
         'general_locations': general_locations_set,
-        'specific_locations': specific_locations_set
+        'specific_locations': specific_locations_set,
+        'queryset': queryset
     }
     return render(request, 'timeline/timeline_main.html', context)
 
@@ -55,8 +71,6 @@ def timeline_all_view(request):
         participated_qs = Profile.objects.get(user=request.user).events_participated.all()
         informed_qs = Profile.objects.get(user=request.user).events_informed.all()
         queryset = (participated_qs | informed_qs).distinct()
-
-
 
     context = {
         'page_title': 'Pełne Kalendarium',
