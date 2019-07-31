@@ -257,8 +257,8 @@ table.timeline {
         padding: 5px;
 }
 
-.timeline-sort:hover {
-        filter: invert(50%);
+.hover-blue:hover {
+        color: #3366cc;
         cursor: pointer;
 }
 
@@ -293,7 +293,7 @@ td.season-autumn {
         background-color: #d1b384;
 }
 td.season-winter  {
-        background-color: #99b9c2
+        background-color: #99b9c2;
 }
 
 .bootstrap-table .fixed-table-container .table thead th .th-inner {
