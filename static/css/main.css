@@ -190,10 +190,12 @@ small {
         color: #444444;
 }
 
+.hover-pointer li:hover, a:hover {
+        cursor: pointer;
+}
 
-/* SIDEBAR */
-
-.hover-pointer li:hover {
+.hover-blue:hover {
+        color: #3366cc;
         cursor: pointer;
 }
 
@@ -255,11 +257,6 @@ table.timeline {
 .timeline td {
         border: 1px solid black;
         padding: 5px;
-}
-
-.hover-blue:hover {
-        color: #3366cc;
-        cursor: pointer;
 }
 
 .chronicles td {
