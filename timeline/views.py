@@ -115,7 +115,7 @@ def timeline_by_thread_view(request, thread_id):
 
     context = {
         'page_title': f'Kalendarium: {thread.name}',
-        'header': f'{thread.name}... Próbujesz przypomnieć sobie, od czego się to wszystko zaczęło?',
+        'header': f'{thread.name}... Próbujesz sobie przypomnieć, od czego się to wszystko zaczęło?',
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
@@ -186,7 +186,7 @@ def timeline_by_specific_location_view(request, specific_location_id):
 
     context = {
         'page_title': f'Kalendarium: {specific_location.name}',
-        'header': f'{specific_location.name}... Zastanawiasz się, jak to miejsce odcisnęło się na Twoim losie...',
+        'header': f'{specific_location.name}... Czy to miejsce odcisnęło się na Twoim losie?',
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
@@ -207,7 +207,7 @@ def timeline_by_year_view(request, year):
 
     context = {
         'page_title': f'Kalendarium: {year}. rok Archonatu Nemetha Samatiana',
-        'header': f'To wcale nie wydaje się aż tak dawno temu...',
+        'header': f'Nie wydaje się to wcale aż tak dawno temu...',
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
