@@ -251,11 +251,11 @@ table.timeline {
 
 .timeline thead {
         background-color: #363636;
+        border-bottom: double;
         color: #ffffff;
 }
 
 .timeline th {
-        border: 1px solid black;
         font-weight: normal;
 }
 
@@ -269,11 +269,12 @@ table.timeline {
         padding: 0px 5px;
         color: #444444;
 }
-
-#chronicles td {                            /* delete> */
-        border-style: none;
+/*
+#chronicles td {
+        border-style: none;         DELETE?
         font-size: 2px;
 }
+*/
 
 td.center {
         text-align: center;
