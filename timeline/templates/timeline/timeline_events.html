@@ -13,7 +13,7 @@
     {% if request.user.profile.character_name == 'MG' %}
         <div class="mb-4">
             <a href="{% url 'create-event' %}" class="btn btn-outline-dark">Nowe wydarzenie</a>
-        </div><br>
+        </div>
     {% endif %}
     <br><br><br>
 
@@ -103,4 +103,10 @@
     </table>
     <br>
 
+setTimeout(function() {
+    $('input[type="text"][placeholder="Szukaj"]')
+        .val("bootstrap")
+        .trigger('keyup');
+},0);
 {% endblock content %}
+
