@@ -16,11 +16,14 @@
     <br><br>
 
     <h3 class="unblue">
-        <strong><a href="{% url 'timeline-events' %}">Pełne Kalendarium</a></strong>
+        <a href="{% url 'timeline-events' %}"><b>Pełne Kalendarium</b></a>
     </h3>
+    <small>Pełne kalendarium losów Twojej postaci oraz znanych jej wydarzeń</small><br><br>
     <br><br>
 
-    <h3 class="hover-blue" data-toggle="collapse" data-target="#threads"><b>Wątki</b></h3>
+    <h3 class="hover-blue" data-toggle="collapse" data-target="#threads">
+        <b>Wątki</b>
+    </h3>
     <small>Wykaz wątków splątanych z Twoim losem</small><br><br>
     <table id="threads" class="collapse">
         <tr>
@@ -36,7 +39,9 @@
     </table>
     <br><br>
 
-    <h3 class="hover-blue" data-toggle="collapse" data-target="#participants"><b>Uczestnicy</b></h3>
+    <h3 class="hover-blue" data-toggle="collapse" data-target="#participants">
+        <b>Uczestnicy</b>
+    </h3>
     <small>Członkowie drużyny współuczestniczący w Twoich przygodach</small><br><br>
     <table id="participants" class="collapse">
         <tr>
@@ -52,7 +57,9 @@
     </table>
     <br><br>
 
-    <h3 class="hover-blue" data-toggle="collapse" data-target="#general_locations"><b>Lokacje</b></h3>
+    <h3 class="hover-blue" data-toggle="collapse" data-target="#general_locations">
+        <b>Lokacje</b>
+    </h3>
     <small>Wykaz znanych Ci krain i lokacji występujących w Kalendarium</small><br>
     <table id="general_locations" class="collapse">
         {% for gl in general_locs_with_specific_locs_list %}
@@ -75,7 +82,9 @@
     </table>
     <br><br><br>
 
-    <h3 class="hover-blue" data-toggle="collapse" data-target="#years"><b>Lata</b></h3>
+    <h3 class="hover-blue" data-toggle="collapse" data-target="#years">
+        <b>Lata</b>
+    </h3>
     <small>Chronologia według Archonatu Nemetha Samatiana w Ebbonie</small><br><br>
     <table id="years" class="collapse">
         <tr>
