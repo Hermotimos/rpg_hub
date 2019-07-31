@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Max
+from django.db.models import Max, Q
 from django.core.mail import send_mail
 from django.conf import settings
 from forum.models import Board, Topic
@@ -13,13 +13,25 @@ from forum.forms import CreatePostForm, CreateTopicForm, CreateBoardForm, Update
 def forum_view(request):
     queryset = Board.objects.all()
 
-    topics_with_last_post_date_dict = {topic: topic.posts.all().aggregate(Max('date_posted'))['date_posted__max']
-                                       for topic in Topic.objects.all()}
-
+    topics_with_last_post_date_dict = {}
     topics_with_last_active_user_dict = {}
+    topics_with_posts_by_characters_count = {}
+
     for topic in Topic.objects.all():
+
+        # last post dates
+        topics_with_last_post_date_dict[topic] = topic.posts.all().aggregate(Max('date_posted'))['date_posted__max']
+
+        # last active users
         last_post = topic.posts.filter(date_posted=topics_with_last_post_date_dict[topic])
         topics_with_last_active_user_dict[topic] = last_post[0].author.profile.character_name if last_post else ''
+
+        # count of posts by users
+        cnt = 0
+        for post in topic.posts.all():
+            if post.author not in (u for u in User.objects.all() if u.profile.character_status == 'gm'):
+                cnt += 1
+        topics_with_posts_by_characters_count[topic] = cnt
 
     boards_with_allowed_profiles_dict = {}
     for board in queryset:
@@ -35,7 +47,8 @@ def forum_view(request):
         'queryset': queryset,
         'topics_with_last_post_date_dict': topics_with_last_post_date_dict,
         'topics_with_last_active_user_dict': topics_with_last_active_user_dict,
-        'boards_with_allowed_profiles_dict': boards_with_allowed_profiles_dict
+        'boards_with_allowed_profiles_dict': boards_with_allowed_profiles_dict,
+        'topics_with_posts_by_characters_count': topics_with_posts_by_characters_count
     }
     return render(request, 'forum/forum.html', context)
 

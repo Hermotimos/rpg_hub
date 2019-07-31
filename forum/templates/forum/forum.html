@@ -54,7 +54,7 @@
                                         {% endif %}
                                     {% endfor %}
                                 </td>
-                                <td>{{ topic.posts.count }}</td>
+                                <td>{{ topics_with_posts_by_characters_count|dict_lookup:topic }}</td>
                                 <td>
                                     {{ topics_with_last_active_user_dict|dict_lookup:topic|get_first_word }}<br>
                                     <small>{{ topics_with_last_post_date_dict|dict_lookup:topic|date:'d-M-Y' }}</small>
