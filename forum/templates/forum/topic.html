@@ -7,7 +7,7 @@
 {% endblock head_extra %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{% url 'forum' %}">WNarady</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'forum' %}">Narady</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
@@ -75,7 +75,7 @@
         <br>
 
         {% if topic.is_ended %}
-            <h4><b>Tak oto zakończyła się narada.</b></h4><br>
+            <h4><b>Tak oto zakończyła się Wasza rozmowa.</b></h4><br>
         {% else %}
             <div id="page-bottom">
                 <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
