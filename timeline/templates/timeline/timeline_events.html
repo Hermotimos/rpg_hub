@@ -44,8 +44,8 @@
         <tbody>
         {% for event in queryset %}
             <tr>
-                <td class="center align-top {{ seasons_with_styles_dict|dict_lookup:event.season }}">
-                    <a class="hover-pointer">{{ event.year }}</a>
+                <td class="center align-top unblue {{ seasons_with_styles_dict|dict_lookup:event.season }}">
+                    <a class="hover-pointer" href="{% url 'timeline-by-year' event.year %}">{{ event.year }}</a>
                 </td>
                 <td class="center align-top {{ seasons_with_styles_dict|dict_lookup:event.season }}">
                     {% if event.day_end %}
@@ -54,9 +54,9 @@
                         {{ event.day_start }}
                     {% endif %}
                 </td>
-                <td class="timeline-event align-top">
+                <td class="timeline-event align-top unblue">
                     {% for thread in event.threads.all %}
-                        <a class="hover-pointer">*{{ thread }}</a><br>
+                        <a class="hover-pointer" href="{% url 'timeline-by-thread' thread.id %}">*{{ thread }}</a><br>
                     {% endfor %}
                 </td>
                 <td class="timeline-event justify align-top">
@@ -69,18 +69,18 @@
                         {% endif %}
                     {% endfor %}
                 </td>
-                <td class="timeline-small align-top">
+                <td class="timeline-small align-top unblue">
                     {% for profile in event.participants.all %}
-                        <a class="hover-pointer"><small>{{ profile.character_name|get_first_word }}</small></a><br>
+                        <a class="hover-pointer" href="{% url 'timeline-by-participant' profile.id %}"><small>{{ profile.character_name|get_first_word }}</small></a><br>
                     {% endfor %}
                     {% for profile in event.informed.all %}
-                        <a class="hover-pointer"><small>+{{ profile.character_name|get_first_word }}</small></a><br>
+                        <a class="hover-pointer" href="{% url 'timeline-by-participant' profile.id %}"><small>+{{ profile.character_name|get_first_word }}</small></a><br>
                     {% endfor %}
                 </td>
-                <td class="timeline-small align-top">
-                    <a class="hover-pointer">{{ event.general_location }}</a><br>
+                <td class="timeline-small align-top unblue">
+                    <a class="hover-pointer"  href="{% url 'timeline-by-general-location' event.general_location.id %}">{{ event.general_location }}</a><br>
                     {% for location in event.specific_locations.all %}
-                        <a class="hover-pointer"><small>{{ location }}</small></a><br>
+                        <a class="hover-pointer" href="{% url 'timeline-by-specific-location' location.id %}"><small>{{ location }}</small></a><br>
                     {% endfor %}
                 </td>
                 <td class="center align-top unblue">
