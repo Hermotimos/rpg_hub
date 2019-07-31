@@ -39,7 +39,8 @@ class CreateTopicForm(forms.ModelForm):
         model = Topic
         fields = [
             'topic_name',
-            'allowed_profiles'
+            'allowed_profiles',
+            'is_individual'
         ]
 
     topic_name = forms.CharField(

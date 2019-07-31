@@ -43,6 +43,8 @@ class Topic(models.Model):
                                               Q(character_status='inactive_player') |
                                               Q(character_status='living_npc')
                                               )
+    is_ended = models.BooleanField(default=False)
+    is_individual = models.BooleanField(default=False)
 
     def __str__(self):
         return self.topic_name

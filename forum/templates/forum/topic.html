@@ -74,13 +74,16 @@
         {% endfor %}
         <br>
 
-        <div id="page-bottom">
-            <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form|crispy }}
-                <input class="btn btn-dark" type="submit" value="Tak rzeknij">
-            </form>
-        </div>
-
+        {% if topic.is_ended %}
+            <h4><b>Tak oto zakończyła się narada.</b></h4><br>
+        {% else %}
+            <div id="page-bottom">
+                <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <input class="btn btn-dark" type="submit" value="Tak rzeknij">
+                </form>
+            </div>
+        {% endif %}
     {% endif %}
 {% endblock content %}

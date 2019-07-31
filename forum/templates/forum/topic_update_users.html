@@ -23,25 +23,31 @@
         </tr>
     </table><br><br>
 
-    <h6>Włącz uczestników do narady:</h6>
-    <small>1) Nowi uczestnicy uzyskają dostęp do całości narady.</small><br>
-    <small>2) Włączaj tylko postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji.</small><br>
-    <small>3) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small><br>
-    <small>4) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small><br>
-    <small>5) Jeśli chcesz się naradzić z postacią, której nie ma na liście, powiadom MG.</small><br>
-    <small class="red">6) Nie wyłączaj uczestników z narady bez konsultacji (chyba że siebie samego).<br>
-                &nbsp&nbsp&nbsp*Wyłączony uczestnik całkowicie utraci dostęp do narady!</small>
-    <br><br>
+    {% if topic.is_individual %}
+        <h4><b>Nie możesz dodać uczestników do tej rozmowy.</b></h4>
+    {% elif topic.is_ended %}
+        <h4><b>Ta narada już się zakończyła.</b></h4>
+    {% else %}
+        <h6>Włącz uczestników do narady:</h6>
+        <small>1) Nowi uczestnicy uzyskają dostęp do całości narady.</small><br>
+        <small>2) Włączaj tylko postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji.</small><br>
+        <small>3) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small><br>
+        <small>4) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small><br>
+        <small>5) Jeśli chcesz się naradzić z postacią, której nie ma na liście, powiadom MG.</small><br>
+        <small class="red">6) Nie wyłączaj uczestników z narady bez konsultacji (chyba że siebie samego).<br>
+                    &nbsp&nbsp&nbsp*Wyłączony uczestnik całkowicie utraci dostęp do narady!</small>
+        <br><br>
 
-    <div class="allowed-profiles-form-topic">
-        <form method="POST" action=".#page-bottom">
-            {% csrf_token %}
+        <div class="allowed-profiles-form-topic">
+            <form method="POST" action=".#page-bottom">
+                {% csrf_token %}
 
-            {{ form.allowed_profiles }}
+                {{ form.allowed_profiles }}
 
-            <br>
-            <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
-            <input class="btn btn-dark" type="submit" value="Dodaj uczestników narady">
-        </form>
-    </div>
+                <br>
+                <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
+                <input class="btn btn-dark" type="submit" value="Dodaj uczestników narady">
+            </form>
+        </div>
+    {% endif %}
 {% endblock content %}

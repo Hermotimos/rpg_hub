@@ -29,6 +29,11 @@
         <br>
         <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
 
+        {% if request.user.profile.character_status == 'gm' %}
+            {{ topic_form.is_individual }}
+            <label>Dyskusja indywidualna?</label><br><br>
+        {% endif %}
+
         {{ post_form|crispy }}
 
         <input class="btn btn-dark" type="submit" value="Rozpocznij naradę"/>
