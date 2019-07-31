@@ -191,10 +191,12 @@ small {
 }
 
 
+/* SIDEBAR */
 
 .hover-pointer li:hover {
         cursor: pointer;
 }
+
 
 /* TIMELINE */
 
@@ -257,6 +259,7 @@ table.timeline {
 
 .timeline-sort:hover {
         filter: invert(50%);
+        cursor: pointer;
 }
 
 .chronicles td {
