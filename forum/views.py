@@ -168,7 +168,7 @@ def create_board_view(request):
         if form.is_valid():
             board = form.save()
             messages.success(request, f'Utworzono nowy temat narad!')
-            return redirect('create_topic', board_slug=board.slug)
+            return redirect('create-topic', board_slug=board.slug)
     else:
         form = CreateBoardForm()             # equals to: form = CreateBoardForm(request.GET) - GET is the default
 
