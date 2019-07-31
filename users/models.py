@@ -16,7 +16,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='profile_pics/profile_default.jpg', upload_to='profile_pics')
     character_name = models.CharField(max_length=50, default='')
-    character_status = models.CharField(max_length=20, choices=STATUS, default='npc')
+    character_status = models.CharField(max_length=20, choices=STATUS, default='living_npc')
 
     def __str__(self):
         return f'{self.character_name}'
@@ -33,11 +33,3 @@ class Profile(models.Model):
 
     class Meta:
         ordering = ['character_status', 'character_name']
-
-
-# maybe move to separate app ?
-# class CharacterSheet(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     character_class = models.CharField(max_length=200, blank=True, null=True)
-#     character_nickname = models.CharField(max_length=200, blank=True, null=True)
-
