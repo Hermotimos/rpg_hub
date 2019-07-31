@@ -18,28 +18,16 @@
     {% else %}
         <table class="forms">
             <tr>
-                <td>
-                    <h6>Temat:</h6>
-                </td>
-                <td>
-                    <small>{{ topic.board.title }}</small>
-                </td>
+                <td><h6>Temat:</h6></td>
+                <td><small>{{ topic.board.title }}</small></td>
             </tr>
             <tr>
-                <td>
-                    <h6>Inicjator:</h6>
-                </td>
-                <td>
-                    <small>{{ topic.starter.profile.character_name|get_first_word }}</small>
-                </td>
+                <td><h6>Inicjator:</h6></td>
+                <td><small>{{ topic.starter.profile.character_name|get_first_word }}</small></td>
             </tr>
             <tr>
-                <td>
-                    <h6>Uczestnicy:</h6>
-                </td>
-                <td>
-                    <small>{{ allowed }}</small>
-                </td>
+                <td><h6>Uczestnicy:</h6></td>
+                <td><small>{{ allowed }}</small></td>
             </tr>
         </table>
 
