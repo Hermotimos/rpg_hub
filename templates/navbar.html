@@ -5,7 +5,7 @@
 <header class="site-header">
     <nav class="navbar navbar-expand-md navbar-dark bg-navbar fixed-top">
         <div class="container">
-            <div class="collapse navbar-collapse" id="navbarToggle">         <!-- removed -->
+            <div class="collapse navbar-collapse" id="navbarToggle">
 
                 <!-- Navbar Left Side -->
                 <small class="navbar-brand mr-4">RPG</small>
@@ -23,7 +23,7 @@
                         {% if user.profile.character_name != '' %}
                             <a class="navbar-brand mr-2" href="/users/profile">{{ user.profile.character_name|get_first_word }}</a>
                             {% if request.user.profile.character_status == 'gm' %}
-                                <a href="{% url 'report' %}"><img src="{% static 'img/mailing.png' %}" class=" "></a>
+                                <a href="{% url 'report' %}"><img src="{% static 'img/mailing.png' %}"></a>
                             {% endif %}
                             <a href="{% url 'report' %}"><img src="{% static 'img/report.png' %}" class="mr-4"></a>
                         {% else %}
@@ -34,7 +34,6 @@
                         <a class="btn btn-outline-light btn-space" href="{% url 'register' %}">Nowa postać</a>
                     {% endif %}
                 </div>
-
             </div>
         </div>
     </nav>
