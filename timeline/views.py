@@ -186,7 +186,7 @@ def timeline_by_specific_location_view(request, specific_location_id):
 
     context = {
         'page_title': f'Kalendarium: {specific_location.name}',
-        'header': f'{specific_location.name}... Czy to miejsce odcisnęło się na Twoim losie?',
+        'header': f'{specific_location.name}... Jak odcisnęło się na Twoim losie to miejsce?',
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
@@ -205,8 +205,13 @@ def timeline_by_year_view(request, year):
         events_by_user = (participated_qs | informed_qs).distinct()
         queryset = [e for e in events_by_user if e in events_by_year_qs]
 
+    if year > 0:
+        page_title = f'Kalendarium: {year}. rok Archonatu Nemetha Samatiana'
+    else:
+        page_title = f'Kalendarium: {abs(year)}. lat przed Archonatem Nemetha Samatiana'
+
     context = {
-        'page_title': f'Kalendarium: {year}. rok Archonatu Nemetha Samatiana',
+        'page_title': page_title,
         'header': f'Nie wydaje się to wcale aż tak dawno temu...',
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
