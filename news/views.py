@@ -46,7 +46,7 @@ def create_news_view(request):
                 receivers_list.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers_list)
 
-            messages.success(request, f'Utworzono nowe ogłoszenie!')
+            messages.info(request, f'Utworzono nowe ogłoszenie!')
             return redirect('news-detail', news_slug=news.slug)
     else:
         form = CreateNewsForm()

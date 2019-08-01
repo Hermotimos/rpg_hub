@@ -106,7 +106,7 @@ def add_allowed_profiles_view(request, board_slug, topic_slug):
                 receivers_list.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers_list)
 
-            messages.success(request, f'Dodano do narady wybrane postaci!')
+            messages.info(request, f'Wybrane postaci zostały dodane do narady!')
             return redirect('topic', board_slug=board_slug, topic_slug=obj.slug)
     else:
         form = UpdateTopicForm(
@@ -159,7 +159,7 @@ def create_topic_view(request, board_slug):
                 receivers_list.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers_list)
 
-            messages.success(request, f'Utworzono nową naradę!')
+            messages.info(request, f'Utworzono nową naradę!')
             return redirect('topic', board_slug=board_slug, topic_slug=topic.slug)
     else:
         topic_form = CreateTopicForm()            # equals to: form = CreateTopicForm(request.GET) - GET is the default
@@ -180,7 +180,7 @@ def create_board_view(request):
         form = CreateBoardForm(request.POST or None)
         if form.is_valid():
             board = form.save()
-            messages.success(request, f'Utworzono nowy temat narad!')
+            messages.info(request, f'Utworzono nowy temat narad!')
             return redirect('create-topic', board_slug=board.slug)
     else:
         form = CreateBoardForm()             # equals to: form = CreateBoardForm(request.GET) - GET is the default

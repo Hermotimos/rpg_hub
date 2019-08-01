@@ -225,7 +225,7 @@ def create_event_view(request):
             event.informed.set(form.cleaned_data['informed'])
             event.specific_locations.set(form.cleaned_data['specific_locations'])
             event.save()
-            messages.success(request, f'Dodano wydarzenie!')
+            messages.info(request, f'Dodano nowe wydarzenie!')
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
 
@@ -247,7 +247,7 @@ def edit_event_view(request, event_id):
         form = EditEventForm(request.POST, instance=obj)
         if form.is_valid():
             form.save()
-            messages.success(request, f'Zmodyfikowano wydarzenie!')
+            messages.info(request, f'Zmodyfikowano wydarzenie!')
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
     else:
@@ -301,7 +301,7 @@ def event_add_informed_view(request, event_id):
                     receivers_list.append(profile.user.email)
             send_mail(subject, message, sender, receivers_list)
 
-            messages.success(request, f'Poinformowano wybrane postaci!')
+            messages.info(request, f'Poinformowałeś wybrane postaci!')
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
 
@@ -338,7 +338,7 @@ def event_note_view(request, event_id):
             note.author = request.user
             note.event = obj
             note.save()
-            messages.success(request, f'Dodano notatkę!')
+            messages.info(request, f'Dodano/zmieniono notatkę!')
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
 
@@ -367,7 +367,7 @@ def create_described_event_view(request):
             event.participants.set(form.cleaned_data['participants'])
             event.informed.set(form.cleaned_data['informed'])
             event.save()
-            messages.success(request, f'Dodano wydarzenie!')
+            messages.info(request, f'Dodano nowe wydarzenie!')
             return redirect('chronicles_all')
     else:
         form = CreateDescribedEventForm()
@@ -387,7 +387,7 @@ def edit_described_event_view(request, event_id):
         form = EditDescribedEventForm(request.POST, instance=obj)
         if form.is_valid():
             form.save()
-            messages.success(request, f'Zmodyfikowano wydarzenie!')
+            messages.info(request, f'Zmodyfikowano wydarzenie!')
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
     else:
@@ -428,7 +428,7 @@ def described_event_add_informed_view(request, event_id):
                     receivers_list.append(profile.user.email)
             send_mail(subject, message, sender, receivers_list)
 
-            messages.success(request, f'Poinformowano wybrane postaci!')
+            messages.info(request, f'Poinformowałeś wybrane postaci!')
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
     else:
@@ -515,7 +515,7 @@ def described_event_note_view(request, event_id):
             note.author = request.user
             note.event = obj
             note.save()
-            messages.success(request, f'Dodano notatkę!')
+            messages.info(request, f'Dodano/zmieniono notatkę!')
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
     else:
