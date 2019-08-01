@@ -21,12 +21,12 @@ urlpatterns = [
     path('<int:event_id>/edit-event/', edit_event_view, name='edit-event'),
 
 
-    path('chronicles_chapters/', chronicles_chapters_view, name='chronicles-chapters'),
-    path('chronicles_chapters/chronicles_all/', chronicles_all_view, name='chronicles-all'),
-    path('chronicles_chapters/<int:game_id>/chapter/', chronicles_one_chapter_view, name='chronicles-one-chapter'),
+    path('chronicles/', chronicles_chapters_view, name='chronicles-chapters'),
+    path('chronicles/all_chapters/', chronicles_all_view, name='chronicles-all'),
+    path('chronicles/chapter<int:game_id>/', chronicles_one_chapter_view, name='chronicles-one-chapter'),
 
-    path('create-described-event/', create_described_event_view, name='create-described-event'),
-    path('<int:event_id>/described-event-add-informed/', described_event_add_informed_view, name='described-event-add-informed'),
-    path('<int:event_id>/described-event-note/', described_event_note_view, name='described-event-note'),
-    path('<int:event_id>/edit-described-event/', edit_described_event_view, name='edit-described-event'),
+    path('chronicles/create-described-event/', create_described_event_view, name='create-described-event'),
+    path('chronicles/<int:event_id>/described-event-add-informed/', described_event_add_informed_view, name='described-event-add-informed'),
+    path('chronicles/<int:event_id>/described-event-note/', described_event_note_view, name='described-event-note'),
+    path('chronicles/<int:event_id>/edit-described-event/', edit_described_event_view, name='edit-described-event'),
 ]
