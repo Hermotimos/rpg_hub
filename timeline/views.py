@@ -233,6 +233,8 @@ def create_event_view(request):
             messages.info(request, f'Dodano nowe wydarzenie!')
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
+        else:
+            messages.warning(request, 'Popraw poniższy błąd!')
 
     else:
         form = CreateEventForm()
@@ -375,6 +377,8 @@ def create_described_event_view(request):
             messages.info(request, f'Dodano nowe wydarzenie!')
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
+        else:
+            messages.warning(request, 'Popraw poniższy błąd!')
     else:
         form = CreateDescribedEventForm()
 

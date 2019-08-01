@@ -25,6 +25,7 @@
                 </td>
                 <td class="padding">
                     <a id="{{ forloop.counter }}">{{ field }}</a>
+                    {{ field.errors }}
                 </td>
             </tr>
         {% endfor %}
