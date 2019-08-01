@@ -90,7 +90,7 @@
         {% for y in years_with_seasons_dict %}
             <tr>
                 <td class="unblue">
-                    <a href="{% url 'timeline-by-year' y %}">{{ y }}</a>&emsp;
+                    <a href="{% url 'timeline-by-year-and-season' y '0' %}">{{ y }}</a>&emsp;
                 </td>
                 <td class="unblue">
                     {% if '1' in years_with_seasons_dict|dict_lookup:y %}

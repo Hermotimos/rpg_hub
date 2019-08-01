@@ -45,7 +45,7 @@
         {% for event in queryset %}
             <tr>
                 <td class="center align-top unblue {{ seasons_with_styles_dict|dict_lookup:event.season }}">
-                    <a class="hover-pointer" href="{% url 'timeline-by-year' event.year %}">{{ event.year }}</a>
+                    <a class="hover-pointer" href="{% url 'timeline-by-year-and-season' event.year '0' %}">{{ event.year }}</a>
                 </td>
                 <td class="center align-top unblue {{ seasons_with_styles_dict|dict_lookup:event.season }}">
                     <a href="{% url 'timeline-by-year-and-season' event.year event.season %}">

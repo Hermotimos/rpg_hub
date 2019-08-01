@@ -203,51 +203,33 @@ def timeline_by_specific_location_view(request, specific_location_id):
 
 
 @login_required
-def timeline_by_year_view(request, year):
-    events_by_year_qs = Event.objects.filter(year=year)
+def timeline_by_year_and_season_view(request, year, season='0'):
+
+    if season == '0':
+        page_title = f'Kalendarium: {year}. rok Archonatu Nemetha Samatiana'
+        events_qs = Event.objects.filter(year=year)
+    else:
+        if season == '1':
+            season_name = 'Wiosna'
+        elif season == '2':
+            season_name = "Lato"
+        elif season == '3':
+            season_name = "Jesień"
+        else:
+            season_name = "Zima"
+        events_qs = Event.objects.filter(year=year, season=season)
+        page_title = f'Kalendarium: {season_name} {year}. roku Archonatu Nemetha Samatiana'
 
     if request.user.profile in Profile.objects.filter(character_status='gm'):
-        queryset = events_by_year_qs
+        queryset = events_qs
     else:
         participated_qs = Profile.objects.get(user=request.user).events_participated.all()
         informed_qs = Profile.objects.get(user=request.user).events_informed.all()
         events_by_user = (participated_qs | informed_qs).distinct()
-        queryset = [e for e in events_by_user if e in events_by_year_qs]
+        queryset = [e for e in events_by_user if e in events_qs]
 
     context = {
-        'page_title': f'Kalendarium: {year}. rok Archonatu Nemetha Samatiana',
-        'header': f'Nie wydaje się to wcale aż tak dawno temu...',
-        'queryset': queryset,
-        'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
-    }
-    return render(request, 'timeline/timeline_events.html', context)
-
-
-@login_required
-def timeline_by_year_and_season_view(request, year, season):
-    events_by_year_qs = Event.objects.filter(year=year, season=season)
-
-    if request.user.profile in Profile.objects.filter(character_status='gm'):
-        queryset = events_by_year_qs
-    else:
-        participated_qs = Profile.objects.get(user=request.user).events_participated.all()
-        informed_qs = Profile.objects.get(user=request.user).events_informed.all()
-        events_by_user = (participated_qs | informed_qs).distinct()
-        queryset = [e for e in events_by_user if e in events_by_year_qs]
-
-    if season == '1':
-        season_name = 'Wiosna'
-    elif season == '2':
-        season_name = "Lato"
-    elif season == '3':
-        season_name = "Jesień"
-    elif season == '4':
-        season_name = "Zima"
-    else:
-        pass
-
-    context = {
-        'page_title': f'Kalendarium: {season_name} {year}. roku Archonatu Nemetha Samatiana',
+        'page_title': page_title,
         'header': f'Nie wydaje się to wcale aż tak dawno temu...',
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
