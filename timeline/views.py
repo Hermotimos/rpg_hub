@@ -35,6 +35,14 @@ def timeline_main_view(request):
     years_sorted_list = list(years_set)
     years_sorted_list.sort()
 
+    # years with their seasons
+    years_with_seasons_dict = {}
+    for y in years_sorted_list:
+        seasons_set = {e.season for e in queryset.all() if e.year == y}
+        seasons_sorted_list = list(seasons_set)
+        seasons_sorted_list.sort()
+        years_with_seasons_dict[y] = seasons_sorted_list
+
     # threads
     threads_set = set()
     threads_querysets_list = [event.threads.all() for event in queryset]
@@ -73,6 +81,7 @@ def timeline_main_view(request):
         'page_title': 'Kalendarium',
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
         'years': years_sorted_list,
+        'years_with_seasons_dict': years_with_seasons_dict,
         'threads': threads_name_and_obj_list,
         'participants': participants_name_and_obj_list,
         'general_locs_with_specific_locs_list': general_locs_with_specific_locs_list,
@@ -205,13 +214,40 @@ def timeline_by_year_view(request, year):
         events_by_user = (participated_qs | informed_qs).distinct()
         queryset = [e for e in events_by_user if e in events_by_year_qs]
 
-    if year > 0:
-        page_title = f'Kalendarium: {year}. rok Archonatu Nemetha Samatiana'
+    context = {
+        'page_title': f'Kalendarium: {year}. rok Archonatu Nemetha Samatiana',
+        'header': f'Nie wydaje się to wcale aż tak dawno temu...',
+        'queryset': queryset,
+        'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
+    }
+    return render(request, 'timeline/timeline_events.html', context)
+
+
+@login_required
+def timeline_by_year_and_season_view(request, year, season):
+    events_by_year_qs = Event.objects.filter(year=year, season=season)
+
+    if request.user.profile in Profile.objects.filter(character_status='gm'):
+        queryset = events_by_year_qs
     else:
-        page_title = f'Kalendarium: {abs(year)}. lat przed Archonatem Nemetha Samatiana'
+        participated_qs = Profile.objects.get(user=request.user).events_participated.all()
+        informed_qs = Profile.objects.get(user=request.user).events_informed.all()
+        events_by_user = (participated_qs | informed_qs).distinct()
+        queryset = [e for e in events_by_user if e in events_by_year_qs]
+
+    if season == '1':
+        season_name = 'Wiosna'
+    elif season == '2':
+        season_name = "Lato"
+    elif season == '3':
+        season_name = "Jesień"
+    elif season == '4':
+        season_name = "Zima"
+    else:
+        pass
 
     context = {
-        'page_title': page_title,
+        'page_title': f'Kalendarium: {season_name} {year}. roku Archonatu Nemetha Samatiana',
         'header': f'Nie wydaje się to wcale aż tak dawno temu...',
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,

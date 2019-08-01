@@ -65,7 +65,7 @@
         {% for gl in general_locs_with_specific_locs_list %}
             <tr>
                 <td class="unblue">
-                    <br><h5>&#10037; <a href="{% url 'timeline-by-general-location' gl.0.id %}">{{ gl.0 }}</a>&emsp;&emsp;</h5>
+                    <br><h4>&#10037; <a href="{% url 'timeline-by-general-location' gl.0.id %}">{{ gl.0 }}</a>&emsp;&emsp;</h4>
                 </td>
             </tr>
             <tr>
@@ -87,15 +87,37 @@
     </h3>
     <small>Chronologia według Archonatu Nemetha Samatiana w Ebbonie</small><br><br>
     <table id="years" class="collapse">
-        <tr>
-        {% for y in years %}
-            <td class="unblue">
-                <a href="{% url 'timeline-by-year' y %}">{{ y }}</a>&emsp;&emsp;
-            </td>
-            <!--{% if forloop.counter|divisibleby:5 %}-->
-                </tr>
-            <!--{% endif %}-->
+        {% for y in years_with_seasons_dict %}
+            <tr>
+                <td class="unblue">
+                    <a href="{% url 'timeline-by-year' y %}">{{ y }}</a>&emsp;
+                </td>
+                <td class="unblue">
+                    {% if '1' in years_with_seasons_dict|dict_lookup:y %}
+                    <a href="{% url 'timeline-by-year-and-season' y '1' %}">Wiosna</a>&emsp;
+                    {% endif %}
+                </td>
+                <td class="unblue">
+                    {% if '2' in years_with_seasons_dict|dict_lookup:y %}
+                    <a href="{% url 'timeline-by-year-and-season' y '2' %}">Lato</a>&emsp;
+                    {% endif %}
+                </td>
+                <td class="unblue">
+                    {% if '3' in years_with_seasons_dict|dict_lookup:y %}
+                    <a href="{% url 'timeline-by-year-and-season' y '3' %}">Jesień</a>&emsp;
+                    {% endif %}
+                </td>
+                <td class="unblue">
+                    {% if '4' in years_with_seasons_dict|dict_lookup:y %}
+                    <a href="{% url 'timeline-by-year-and-season' y '4' %}">Zima</a>&emsp;
+                    {% endif %}
+                </td>
+
+
+            </tr>
         {% endfor %}
+
+
     </table>
     <br><br>
 
