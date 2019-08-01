@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'news',
     'users.apps.UsersConfig',    # just another way of doing this
     'timeline',
-    'report',
+    'contact',
     'rules'
 ]
 

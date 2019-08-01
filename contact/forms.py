@@ -1,6 +1,6 @@
 from django import forms
 from pagedown.widgets import PagedownWidget
-from report.models import Report
+from contact.models import Report
 
 
 class ReportForm(forms.ModelForm):

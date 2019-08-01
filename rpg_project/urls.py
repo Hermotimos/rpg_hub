@@ -29,7 +29,7 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('news/', include('news.urls')),
     path('timeline/', include('timeline.urls')),
-    path('report/', include('report.urls')),
+    path('contact/', include('contact.urls')),
     path('rules/', include('rules.urls')),
 ]
 
