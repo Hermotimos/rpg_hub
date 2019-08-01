@@ -74,7 +74,8 @@ class SpecificLocation(models.Model):
 class Event(models.Model):
     # default=0 for events outside of game session:
     game_no = models.ForeignKey(GameSession, related_name='events', on_delete=models.PROTECT)
-    year = models.IntegerField()
+    # year has to be > 0, for url patterns (they accept positive nums only):
+    year = models.IntegerField(validators=[MinValueValidator(1)])
     season = models.CharField(max_length=10, choices=SEASONS)
     day_start = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(90)])
     day_end = models.PositiveSmallIntegerField(blank=True, null=True,
@@ -98,7 +99,7 @@ class Event(models.Model):
     specific_locations = models.ManyToManyField(SpecificLocation, related_name='events')
 
     def __str__(self):
-        return f'{self.description[0:50]}...'
+        return f'{self.description[0:100]}...'
 
     class Meta:
         # ordering via 'description' to leave flexibility for events with later 'id'-s
