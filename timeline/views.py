@@ -373,7 +373,8 @@ def create_described_event_view(request):
             event.informed.set(form.cleaned_data['informed'])
             event.save()
             messages.info(request, f'Dodano nowe wydarzenie!')
-            return redirect('chronicles_all')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
     else:
         form = CreateDescribedEventForm()
 
