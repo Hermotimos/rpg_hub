@@ -41,9 +41,7 @@
         <div class="allowed-profiles-form-topic">
             <form method="POST" action=".#page-bottom">
                 {% csrf_token %}
-
                 {{ form.allowed_profiles }}
-
                 <br>
                 <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
                 <input class="btn btn-dark" type="submit" value="Dodaj uczestników narady">
