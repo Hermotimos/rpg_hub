@@ -58,7 +58,7 @@
                 </td>
                 <td class="timeline-event align-top unblue-black">
                     {% for thread in event.threads.all %}
-                        <a class="hover-pointer" href="{% url 'timeline-by-thread' thread.id %}">*{{ thread }}</a><br>
+                        <a class="hover-pointer" href="{% url 'timeline-by-thread' thread.id %}">&#10023;{{ thread }}</a><br>
                     {% endfor %}
                 </td>
                 <td class="timeline-event justify align-top">
@@ -81,19 +81,19 @@
                 </td>
                 <td class="timeline-small align-top unblue-black">
                     <a class="hover-pointer"  href="{% url 'timeline-by-general-location' event.general_location.id %}">{{ event.general_location }}</a><br>
-                    {% for location in event.specific_locations.all %}
-                        <a class="hover-pointer" href="{% url 'timeline-by-specific-location' location.id %}"><small>{{ location }}</small></a><br>
+                    {% for loc in event.specific_locations.all %}
+                        <a class="hover-pointer" href="{% url 'timeline-by-specific-location' loc.id %}"><small>{{ loc }}</small></a><br>
                     {% endfor %}
                 </td>
                 <td class="center align-top unblue-black">
                     {% if event.game_no.game_no > 0 %}
                         <small><a href="{% url 'chronicles-one-chapter' event.game_no.id %}">
-                            {{ event.game_no.game_no }}
+                            -{{ event.game_no.game_no }}-
                         </a></small>
                     {% elif event.game_no.game_no == 0 %}
-                        <small><a href="{% url 'chronicles-one-chapter' event.game_no.id %}">*</a></small>
+                        <small><b>-*-</b></small>
                     {% else %}
-                        <small><a href="{% url 'chronicles-one-chapter' event.game_no.id %}">X</a></small>
+                        <small><a href="{% url 'chronicles-one-chapter' event.game_no.id %}">-X-</a></small>
                     {% endif %}
                 </td>
                 <td class="align-top">
