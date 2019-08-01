@@ -91,7 +91,7 @@
                             -{{ event.game_no.game_no }}-
                         </a></small>
                     {% elif event.game_no.game_no == 0 %}
-                        <small><b>-*-</b></small>
+                        <small hidden><b>***</b></small>
                     {% else %}
                         <small><a href="{% url 'chronicles-one-chapter' event.game_no.id %}">-X-</a></small>
                     {% endif %}
