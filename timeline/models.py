@@ -73,7 +73,7 @@ class SpecificLocation(models.Model):
 
 class Event(models.Model):
     # default=0 for events outside of game session:
-    game_no = models.ForeignKey(GameSession, related_name='events', default=0, on_delete=models.PROTECT)
+    game_no = models.ForeignKey(GameSession, related_name='events', on_delete=models.PROTECT)
     year = models.IntegerField()
     season = models.CharField(max_length=10, choices=SEASONS)
     day_start = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(90)])
