@@ -14,11 +14,13 @@
 
                 <!-- Navbar Left Side -->
                 <div class="navbar-nav mr-auto">
-                    <a class="nav-item nav-link " href="{% url 'news-list' %}">●Ogłoszenia●</a>
-                    <a class="nav-item nav-link" href="{% url 'rules-main' %}">●Zasady●</a>
-                    <a class="nav-item nav-link" href="{% url 'timeline-main' %}">●Kalendarium●</a>
-                    <a class="nav-item nav-link" href="{% url 'chronicles-chapters' %}">●Historia●</a>
-                    <a class="nav-item nav-link" href="{% url 'forum' %}">●Narady●</a>
+                    <a class="nav-item nav-link " href="{% url 'news-list' %}">&#10037;Ogłoszenia&#10037;</a>
+                    <a class="nav-item nav-link" href="{% url 'rules-main' %}">&#10037;Zasady&#10037;</a>
+                    &emsp;&emsp;&emsp;
+                    <a class="nav-item nav-link" href="{% url 'timeline-main' %}">&#10037;Kalendarium&#10037;</a>
+                    <a class="nav-item nav-link" href="{% url 'chronicles-chapters' %}">&#10037;Historia&#10037;</a>
+                    <a class="nav-item nav-link" href="{% url 'forum' %}">&#10037;Narady&#10037;</a>
+                    &emsp;&emsp;
                 </div>
 
                 <!-- Navbar Right Side -->
@@ -30,6 +32,7 @@
                                 <a href="{% url 'report' %}"><img src="{% static 'img/mailing.png' %}" class="mr-2 mt-1"></a>
                             {% endif %}
                             <a href="{% url 'report' %}"><img src="{% static 'img/report.png' %}" class="mr-3 mt-2"></a>
+                            &emsp;
                         {% else %}
                             <a class="navbar-brand mr-2" href="/users/profile">Uzupełnij profil</a>
                         {% endif %}
