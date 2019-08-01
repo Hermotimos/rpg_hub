@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'timeline-main' %}">Kalendarium</a></li>
-    <li class="breadcrumb-item"><a href="javascript:history.go(-1)">Kalendarium: wydarzenia</a></li>
+    <li class="breadcrumb-item"><a href="javascript:history.go(-1)">(...)</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
