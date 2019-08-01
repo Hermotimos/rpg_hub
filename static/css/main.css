@@ -190,10 +190,13 @@ small {
         color: #444444;
 }
 
-.unblue a:hover {
-        color: #3366cc;
+.unblue-black a {
+        color: black;
 }
 
+.unblue a:hover, .unblue-dark a:hover {
+        color: #3366cc;
+}
 
 .hover-pointer li:hover, a:hover {
         cursor: pointer;

@@ -44,10 +44,10 @@
         <tbody>
         {% for event in queryset %}
             <tr>
-                <td class="center align-top unblue {{ seasons_with_styles_dict|dict_lookup:event.season }}">
+                <td class="center align-top unblue-black {{ seasons_with_styles_dict|dict_lookup:event.season }}">
                     <a class="hover-pointer" href="{% url 'timeline-by-year-and-season' event.year '0' %}">{{ event.year }}</a>
                 </td>
-                <td class="center align-top unblue {{ seasons_with_styles_dict|dict_lookup:event.season }}">
+                <td class="center align-top unblue-black {{ seasons_with_styles_dict|dict_lookup:event.season }}">
                     <a href="{% url 'timeline-by-year-and-season' event.year event.season %}">
                     {% if event.day_end %}
                         {{ event.day_start }}-{{ event.day_end }}
@@ -56,7 +56,7 @@
                     {% endif %}
                     </a>
                 </td>
-                <td class="timeline-event align-top unblue">
+                <td class="timeline-event align-top unblue-black">
                     {% for thread in event.threads.all %}
                         <a class="hover-pointer" href="{% url 'timeline-by-thread' thread.id %}">*{{ thread }}</a><br>
                     {% endfor %}
@@ -79,13 +79,13 @@
                         <a class="hover-pointer" href="{% url 'timeline-by-participant' profile.id %}"><small>+{{ profile.character_name|get_first_word }}</small></a><br>
                     {% endfor %}
                 </td>
-                <td class="timeline-small align-top unblue">
+                <td class="timeline-small align-top unblue-black">
                     <a class="hover-pointer"  href="{% url 'timeline-by-general-location' event.general_location.id %}">{{ event.general_location }}</a><br>
                     {% for location in event.specific_locations.all %}
                         <a class="hover-pointer" href="{% url 'timeline-by-specific-location' location.id %}"><small>{{ location }}</small></a><br>
                     {% endfor %}
                 </td>
-                <td class="center align-top unblue">
+                <td class="center align-top unblue-black">
                     {% if event.game_no.game_no > 0 %}
                         <small><a href="{% url 'chronicles-one-chapter' event.game_no.id %}">
                             {{ event.game_no.game_no }}
