@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.forms import TextInput, Textarea
+from django.db import models
 from timeline.models import GameSession, Thread, GeneralLocation, SpecificLocation, Event, EventNote, DescribedEvent, \
     DescribedEventNote
 
@@ -10,6 +12,11 @@ admin.site.register(SpecificLocation)
 class InlineEvent(admin.TabularInline):
     model = Event
     extra = 2
+
+    # override attrs of form field when rendered as Inline:
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 50})},
+    }
 
 
 admin.site.register(Event)
