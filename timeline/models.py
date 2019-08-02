@@ -134,7 +134,7 @@ class DescribedEvent(models.Model):
     """
     game_no = models.ForeignKey(GameSession, related_name='described_events', on_delete=models.PROTECT)
     event_no_in_game = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
-    description = models.TextField(max_length=4000)
+    description = models.TextField(max_length=10000)
     participants = models.ManyToManyField(Profile,
                                           related_name='described_events_participated',
                                           limit_choices_to=
