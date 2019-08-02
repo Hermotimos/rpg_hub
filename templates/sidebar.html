@@ -6,6 +6,8 @@
         <h3>{{ user.profile.character_name }}</h3>
         <p class='text-muted'></p>
 
+        {% if user.profile.character_status != 'gm' %}
+        <!-- For players -->
         <ul class="list-group hover-pointer">
             <li class="list-group-item list-group-item-light" data-toggle="collapse" data-target="#character_sheet"><h6><strike>Karta postaci</strike></h6></li>
                 <ul id="character_sheet" class="list-group collapse unblue">
@@ -32,6 +34,27 @@
                     <a href="#"><li class="list-group-item list-group-item-light"><strike><small>Dziennik</small></strike></li></a>
                     <a href="#"><li class="list-group-item list-group-item-light"><strike><small>Synteza</small></strike></li></a>
                 </ul>
+
+        {% else %}
+        <!-- For game master -->
+        <ul class="list-group hover-pointer unblue">
+            <li class="list-group-item list-group-item-light"><h6><a href="http://hyllemath.pythonanywhere.com/admin/">KREATORIUM</a></h6></li>
+            <li class="list-group-item list-group-item-light" data-toggle="collapse" data-target="#timeline"><h6><strike>WYDARZENIA</strike></h6></li>
+                <ul id="timeline" class="list-group collapse unblue">
+                    <a href="http://hyllemath.pythonanywhere.com/admin/timeline/gamesession/add/"><li class="list-group-item list-group-item-light"><strike><small>+ SESJA</small></strike></li></a>
+                    <a href="{% url 'create-event' %}"><li class="list-group-item list-group-item-light"><strike><small>+ Wydarzenie | Kalendarium</small></strike></li></a>
+                    <a href="{% url 'create-described-event' %}"><li class="list-group-item list-group-item-light"><strike><small>+ Wydarzenie | Historia</small></strike></li></a>
+                </ul>
+            <li class="list-group-item list-group-item-light" data-toggle="collapse" data-target="#knowledge"><h6><strike>???</strike></h6></li>
+                <ul id="##" class="list-group collapse unblue">
+                    <a href="#"><li class="list-group-item list-group-item-light"><strike><small>Prosoponomikon</small></strike></li></a>
+                </ul>
+            <li class="list-group-item list-group-item-light" data-toggle="collapse" data-target="#notes"><h6><strike>TODO</strike></h6></li>
+                <ul id="notes" class="list-group collapse unblue">
+                    <a href="#"><li class="list-group-item list-group-item-light"><strike><small>Dziennik</small></strike></li></a>
+                </ul>
+
+        {% endif %}
         </ul>
         <br>
     </div>

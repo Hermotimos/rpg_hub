@@ -10,11 +10,6 @@
 {% block content %}
     <br>
     <p>{{ header }}</p>
-    {% if request.user.profile.character_name == 'MG' %}
-        <div class="mb-4">
-            <a href="{% url 'create-event' %}" class="btn btn-outline-dark">Nowe wydarzenie</a>
-        </div>
-    {% endif %}
     <br><br><br>
 
     <table class="timeline" data-search="true" data-toggle="table">

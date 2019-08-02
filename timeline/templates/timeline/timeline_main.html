@@ -7,13 +7,7 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br>
-    {% if request.user.profile.character_name == 'MG' %}
-        <div class="mb-4">
-            <a href="{% url 'create-event' %}" class="btn btn-outline-dark">Nowe wydarzenie</a>
-        </div><br>
-    {% endif %}
-    <br><br>
+    <br><br><br>
 
     <h3 class="unblue">
         <a href="{% url 'timeline-events' %}"><b>Pełne Kalendarium</b></a>

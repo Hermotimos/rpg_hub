@@ -7,13 +7,7 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br>
-    {% if request.user.profile.character_name == 'MG' %}
-        <div class="mb-4">
-            <a href="{% url 'create-described-event' %}" class="btn btn-outline-dark">Nowe wydarzenie</a>
-        </div><br>
-    {% endif %}
-    <br><br>
+    <br><br><br>
 
     <h3 class="unblue">
         <strong><a href="{% url 'chronicles-all' %}">Pełna historia drużyny</a></strong>
