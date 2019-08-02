@@ -258,7 +258,7 @@ def create_event_view(request):
         form = CreateEventForm()
 
     context = {
-        'page_title': 'Nowe wydarzenie',
+        'page_title': 'Nowe wydarzenie: Kalendarium',
         'form': form
     }
     return render(request, 'timeline/create_event.html', context)
@@ -401,7 +401,7 @@ def create_described_event_view(request):
         form = CreateDescribedEventForm()
 
     context = {
-        'page_title': 'Nowe wydarzenie',
+        'page_title': 'Nowe wydarzenie: Historia',
         'form': form
     }
     return render(request, 'chronicles/create_described_event.html', context)
