@@ -54,10 +54,10 @@
                                         {% endif %}
                                     {% endfor %}
                                 </td>
-                                <td>{{ topics_with_posts_by_characters_count|dict_lookup:topic }}</td>
+                                <td>{{ topics_with_remarks_by_players_count|dict_lookup:topic }}</td>
                                 <td>
                                     {{ topics_with_last_active_user_dict|dict_lookup:topic|get_first_word }}<br>
-                                    <small>{{ topics_with_last_post_date_dict|dict_lookup:topic|date:'d-M-Y' }}</small>
+                                    <small>{{ topics_with_last_remark_date_dict|dict_lookup:topic|date:'d-M-Y' }}</small>
                                 </td>
                             </tr>
                         {% endif %}

@@ -38,15 +38,15 @@
         </div>
         <br>
 
-        {% for post in topic.posts.all %}
-            {% if post.author.profile.character_status == 'gm' %}
+        {% for remark in topic.remarks.all %}
+            {% if remark.author.profile.character_status == 'gm' %}
                 <table>
                     <tbody>
                         <tr class="posts-and-news">
                             <td>
-                                {{ post.text|capfirst|linebreaks }}
-                                {% if post.image %}
-                                    <img src="{{ post.image.url }}" class="border-double">
+                                {{ remark.text|capfirst|linebreaks }}
+                                {% if remark.image %}
+                                    <img src="{{ remark.image.url }}" class="border-double">
                                 {% endif %}
                             </td>
                         </tr>
@@ -59,12 +59,12 @@
                         <tr class="posts-and-news">
                             <td class="center">
                                 <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
-                                <small>{{ post.author.profile.character_name }}</small>
+                                <small>{{ remark.author.profile.character_name }}</small>
                             </td>
                             <td>
-                                <small>{{ post.date_posted|date:'d-M-Y' }}</small>
-                                {{ post.text|capfirst|linebreaks }}
-                                {% if post.image %}
+                                <small>{{ remark.date_posted|date:'d-M-Y' }}</small>
+                                {{ remark.text|capfirst|linebreaks }}
+                                {% if remark.image %}
                                     <img src="{{ post.image.url }}" class="border-double">
                                 {% endif %}
                             </td>

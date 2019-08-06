@@ -60,17 +60,17 @@ class Topic(models.Model):
 
     def get_absolute_url(self):
         # return f'/debates/{self.board.slug}/{self.slug}'                                            # one way
-        return reverse('topic', kwargs={'board_slug': self.board.slug, 'topic_slug': self.slug})    # another way
+        return reverse('topic', kwargs={'board_slug': self.board.slug, 'topic_slug': self.slug})      # another way
 
     class Meta:
         ordering = ['-date_updated']
 
 
-class Post(models.Model):
+class Remark(models.Model):
     text = models.TextField(max_length=4000)
-    topic = models.ForeignKey(Topic, related_name='posts', on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topic, related_name='remarks', on_delete=models.CASCADE)
     date_posted = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, related_name='remarks', on_delete=models.CASCADE)
     image = models.ImageField(blank=True, null=True, upload_to='post_pics')
 
     def __str__(self):

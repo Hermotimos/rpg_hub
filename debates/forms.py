@@ -1,11 +1,11 @@
 from django import forms
-from .models import Post, Topic, Board
+from .models import Remark, Topic, Board
 from pagedown.widgets import PagedownWidget
 
 
-class CreatePostForm(forms.ModelForm):
+class CreateRemarkForm(forms.ModelForm):
     class Meta:
-        model = Post
+        model = Remark
         fields = [
             'text',
             'image'

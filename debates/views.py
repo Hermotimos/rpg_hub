@@ -6,32 +6,32 @@ from django.core.mail import send_mail
 from django.conf import settings
 from debates.models import Board, Topic
 from users.models import User, Profile
-from debates.forms import CreatePostForm, CreateTopicForm, CreateBoardForm, UpdateTopicForm
+from debates.forms import CreateRemarkForm, CreateTopicForm, CreateBoardForm, UpdateTopicForm
 
 
 @login_required
 def forum_view(request):
     queryset = Board.objects.all()
 
-    topics_with_last_post_date_dict = {}
+    topics_with_last_remark_date_dict = {}
     topics_with_last_active_user_dict = {}
-    topics_with_posts_by_characters_count = {}
+    topics_with_remarks_by_players_count = {}
 
     for topic in Topic.objects.all():
 
-        # last post dates
-        topics_with_last_post_date_dict[topic] = topic.posts.all().aggregate(Max('date_posted'))['date_posted__max']
+        # last remark dates
+        topics_with_last_remark_date_dict[topic] = topic.remarks.all().aggregate(Max('date_posted'))['date_posted__max']
 
         # last active users
-        last_post = topic.posts.filter(date_posted=topics_with_last_post_date_dict[topic])
-        topics_with_last_active_user_dict[topic] = last_post[0].author.profile.character_name if last_post else ''
+        last_remark = topic.remarks.filter(date_posted=topics_with_last_remark_date_dict[topic])
+        topics_with_last_active_user_dict[topic] = last_remark[0].author.profile.character_name if last_remark else ''
 
-        # count of posts by users
+        # count of remarks by users
         cnt = 0
-        for post in topic.posts.all():
-            if post.author not in (u for u in User.objects.all() if u.profile.character_status == 'gm'):
+        for remark in topic.remarks.all():
+            if remark.author not in (u for u in User.objects.all() if u.profile.character_status == 'gm'):
                 cnt += 1
-        topics_with_posts_by_characters_count[topic] = cnt
+        topics_with_remarks_by_players_count[topic] = cnt
 
     boards_with_allowed_profiles_dict = {}
     for board in queryset:
@@ -45,10 +45,10 @@ def forum_view(request):
     context = {
         'page_title': 'Narady',
         'queryset': queryset,
-        'topics_with_last_post_date_dict': topics_with_last_post_date_dict,
+        'topics_with_last_remark_date_dict': topics_with_last_remark_date_dict,
         'topics_with_last_active_user_dict': topics_with_last_active_user_dict,
         'boards_with_allowed_profiles_dict': boards_with_allowed_profiles_dict,
-        'topics_with_posts_by_characters_count': topics_with_posts_by_characters_count
+        'topics_with_remarks_by_players_count': topics_with_remarks_by_players_count
     }
     return render(request, 'debates/debates_main.html', context)
 
@@ -60,15 +60,15 @@ def topic_view(request, board_slug, topic_slug):
     allowed = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.allowed_profiles.all() if p.character_status != 'gm')
 
     if request.method == 'POST':
-        form = CreatePostForm(request.POST, request.FILES)
+        form = CreateRemarkForm(request.POST, request.FILES)
         if form.is_valid():
-            post = form.save(commit=False)
-            post.topic = obj
-            post.author = request.user
-            post.save()
+            remark = form.save(commit=False)
+            remark.topic = obj
+            remark.author = request.user
+            remark.save()
             return redirect('topic', board_slug=board_slug, topic_slug=obj.slug)
     else:
-        form = CreatePostForm()            # equals to: form = CreatePostForm(request.GET) - GET is the default
+        form = CreateRemarkForm()            # equals to: form = CreateRemarkForm(request.GET) - GET is the default
 
     context = {
         'page_title': obj.topic_name,
@@ -130,8 +130,8 @@ def create_topic_view(request, board_slug):
 
     if request.method == 'POST':
         topic_form = CreateTopicForm(request.POST or None)
-        post_form = CreatePostForm(request.POST, request.FILES)
-        if topic_form.is_valid() and post_form.is_valid():
+        remark_form = CreateRemarkForm(request.POST, request.FILES)
+        if topic_form.is_valid() and remark_form.is_valid():
 
             topic = topic_form.save(commit=False)
             topic.board = Board.objects.get(slug=board_slug)
@@ -140,10 +140,10 @@ def create_topic_view(request, board_slug):
             topic.allowed_profiles.set(topic_form.cleaned_data['allowed_profiles'])
             topic.save()
 
-            post = post_form.save(commit=False)
-            post.topic = topic
-            post.author = request.user
-            post.save()
+            remark = remark_form.save(commit=False)
+            remark.topic = topic
+            remark.author = request.user
+            remark.save()
 
             subject = f"[RPG] Nowa narada: {topic.topic_name}"
             message = f"{request.user.profile} włączył Cię do nowej narady " \
@@ -163,12 +163,12 @@ def create_topic_view(request, board_slug):
             return redirect('topic', board_slug=board_slug, topic_slug=topic.slug)
     else:
         topic_form = CreateTopicForm()            # equals to: form = CreateTopicForm(request.GET) - GET is the default
-        post_form = CreatePostForm()
+        remark_form = CreateRemarkForm()
 
     context = {
         'page_title': 'Nowa narada',
         'topic_form': topic_form,
-        'post_form': post_form,
+        'remark_form': remark_form,
         'board': obj
     }
     return render(request, 'debates/create_topic.html', context)
