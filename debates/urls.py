@@ -4,8 +4,8 @@ from debates import views
 
 urlpatterns = [
     path('', views.debates_main_view, name='debates-main'),
-    path('<slug:topic_slug>/<slug:debate_slug>/', views.debate_view, name='debate'),
+    path('<int:topic_id>/<int:debate_id>/', views.debate_view, name='debate'),
     path('create_topic/', views.create_topic_view, name='create-topic'),
-    path('<slug:topic_slug>/create-debate/', views.create_debate_view, name='create-debate'),
-    path('<slug:topic_slug>/<slug:debate_slug>/update-debate/', views.add_allowed_profiles_view, name='update-debate')
+    path('topic:<int:topic_id>/create-debate/', views.create_debate_view, name='create-debate'),
+    path('<int:topic_id>/<int:debate_id>/update-debate/', views.add_allowed_profiles_view, name='update-debate')
 ]

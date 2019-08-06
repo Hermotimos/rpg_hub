@@ -54,8 +54,8 @@ def debates_main_view(request):
 
 
 @login_required
-def debate_view(request, topic_slug, debate_slug):
-    obj = get_object_or_404(Debate, slug=debate_slug)
+def debate_view(request, topic_id, debate_id):
+    obj = get_object_or_404(Debate, id=debate_id)
 
     allowed = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.allowed_profiles.all() if p.character_status != 'gm')
 
@@ -66,7 +66,7 @@ def debate_view(request, topic_slug, debate_slug):
             remark.debate = obj
             remark.author = request.user
             remark.save()
-            return redirect('debate', topic_slug=topic_slug, debate_slug=obj.slug)
+            return redirect('debate', topic_id=topic_id, debate_id=debate_id)
     else:
         form = CreateRemarkForm()            # equals to: form = CreateRemarkForm(request.GET) - GET is the default
 
@@ -80,8 +80,8 @@ def debate_view(request, topic_slug, debate_slug):
 
 
 @login_required
-def add_allowed_profiles_view(request, topic_slug, debate_slug):
-    obj = get_object_or_404(Debate, slug=debate_slug)
+def add_allowed_profiles_view(request, topic_id, debate_id):
+    obj = get_object_or_404(Debate, id=debate_id)
 
     already_allowed = obj.allowed_profiles.all()[::1]
     allowed = ', '.join(p.character_name.split(' ', 1)[0] for p in already_allowed if p.character_status != 'gm')
@@ -94,7 +94,7 @@ def add_allowed_profiles_view(request, topic_slug, debate_slug):
             subject = f"[RPG] Dołączenie do narady: '{obj.title}'"
             message = f"{request.user.profile} dołączył Cię do narady '{obj.title}' w temacie '{obj.topic}'.\n" \
                       f"Uczestnicy: {', '.join(p.character_name for p in form.cleaned_data['allowed_profiles'])}\n" \
-                      f"Weź udział w naradzie: {request.get_host()}/debates/{obj.topic.slug}/{obj.slug}/"
+                      f"Weź udział w naradzie: {request.get_host()}/debates/{obj.topic.id}/{obj.id}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
 
@@ -107,7 +107,7 @@ def add_allowed_profiles_view(request, topic_slug, debate_slug):
             send_mail(subject, message, sender, receivers_list)
 
             messages.info(request, f'Wybrane postaci zostały dodane do narady!')
-            return redirect('debate', topic_slug=topic_slug, debate_slug=obj.slug)
+            return redirect('debate', topic_id=topic_id, debate_id=debate_id)
     else:
         form = UpdateDebateForm(
             initial={
@@ -125,8 +125,8 @@ def add_allowed_profiles_view(request, topic_slug, debate_slug):
 
 
 @login_required
-def create_debate_view(request, topic_slug):
-    obj = get_object_or_404(Topic, slug=topic_slug)
+def create_debate_view(request, topic_id):
+    obj = get_object_or_404(Topic, id=topic_id)
 
     if request.method == 'POST':
         debate_form = CreateDebateForm(request.POST or None)
@@ -134,7 +134,7 @@ def create_debate_view(request, topic_slug):
         if debate_form.is_valid() and remark_form.is_valid():
 
             debate = debate_form.save(commit=False)
-            debate.topic = Topic.objects.get(slug=topic_slug)
+            debate.topic = Topic.objects.get(id=topic_id)
             debate.starter = request.user
             debate.save()
             debate.allowed_profiles.set(debate_form.cleaned_data['allowed_profiles'])
@@ -149,7 +149,7 @@ def create_debate_view(request, topic_slug):
             message = f"{request.user.profile} włączył Cię do nowej narady " \
                       f"'{debate.title}' w temacie '{debate.topic}'.\n" \
                       f"Uczestnicy: {', '.join(p.character_name for p in debate.allowed_profiles.all())}\n" \
-                      f"Weź udział w naradzie: {request.get_host()}/debates/{debate.topic.slug}/{debate.slug}/"
+                      f"Weź udział w naradzie: {request.get_host()}/debates/{debate.topic.id}/{debate.id}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
             for user in User.objects.all():
@@ -160,7 +160,7 @@ def create_debate_view(request, topic_slug):
             send_mail(subject, message, sender, receivers_list)
 
             messages.info(request, f'Utworzono nową naradę!')
-            return redirect('debate', topic_slug=topic_slug, debate_slug=debate.slug)
+            return redirect('debate', topic_id=topic_id, debate_id=debate.id)
     else:
         debate_form = CreateDebateForm()            # equals to: form = CreateDebateForm(request.GET) - GET is the default
         remark_form = CreateRemarkForm()
@@ -181,7 +181,7 @@ def create_topic_view(request):
         if form.is_valid():
             topic = form.save()
             messages.info(request, f'Utworzono nowy temat narad!')
-            return redirect('create-debate', topic_slug=topic.slug)
+            return redirect('create-debate', topic_id=topic.id)
     else:
         form = CreateTopicForm()             # equals to: form = CreateTopicForm(request.GET) - GET is the default
 

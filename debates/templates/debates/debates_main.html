@@ -41,7 +41,7 @@
                         {% if request.user.profile in debate.allowed_profiles.all or request.user.profile.character_status == 'gm' %}
                             <tr>
                                 <td class="unblue">
-                                    <a href="{% url 'debate' debate.topic.slug debate.slug %}">{{ debate.title }}</a>
+                                    <a href="{% url 'debate' debate.topic.id debate.id %}">{{ debate.title }}</a>
                                 </td>
                                 <td>
                                     {{ debate.starter.profile.character_name|get_first_word  }}<br>
@@ -66,7 +66,7 @@
                 </table>
                 <br>
                 <div class="mb-4">
-                    <a href="{% url 'create-debate' topic.slug %}" class="btn btn-outline-dark">Nowa narada</a>
+                    <a href="{% url 'create-debate' topic.id %}" class="btn btn-outline-dark">Nowa narada</a>
                 </div><br><br>
             {% endif %}
         {% endfor %}
