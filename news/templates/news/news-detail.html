@@ -8,7 +8,7 @@
 {% endblock head_extra %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{% url 'news-list' %}">Ogłoszenia</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'news-main' %}">Ogłoszenia</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
@@ -61,7 +61,7 @@
             <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form|crispy }}
-                <input class="btn btn-dark" type="submit" value="Odpowiedz"}}>
+                <input class="btn btn-dark" type="submit" value="Odpowiedz">
             </form>
         </div>
 

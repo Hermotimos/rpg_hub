@@ -21,7 +21,7 @@ def news_view(request):
         'queryset': queryset,
         'news_with_last_activity_dict': news_with_last_activity_dict
     }
-    return render(request, 'news/news-list.html', context)
+    return render(request, 'news/news-main.html', context)
 
 
 @login_required

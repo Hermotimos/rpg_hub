@@ -36,10 +36,6 @@ class News(models.Model):
                 img.thumbnail(output_size)
                 img.save(self.image.path)
 
-    def get_absolute_url(self):
-        # return f'/news/{self.slug}'                                    # one way
-        return reverse('news-detail', kwargs={'news_slug': self.slug})   # another way
-
     class Meta:
         ordering = ['-date_posted']
 
