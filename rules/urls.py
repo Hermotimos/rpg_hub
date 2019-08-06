@@ -1,8 +1,8 @@
 from django.urls import path
-from rules.views import rules_main_view
+from rules import views
 
 
 urlpatterns = [
-    path('', rules_main_view, name='rules-main'),
+    path('', views.rules_main_view, name='rules-main'),
 
 ]
