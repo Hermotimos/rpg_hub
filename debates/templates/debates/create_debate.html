@@ -8,7 +8,7 @@
 
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'debates-main' %}">Narady</a></li>
-    <li class="breadcrumb-item active">{{ board.title }}: {{ page_title }}</li>
+    <li class="breadcrumb-item active">{{ topic.title }}: {{ page_title }}</li>
 {% endblock breadcrumb %}
 
 {% block content %}

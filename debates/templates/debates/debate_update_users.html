@@ -3,7 +3,7 @@
 
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'debates-main' %}">Narady</a></li>
-    <li class="breadcrumb-item"><a href="{% url 'debate' debate.board.slug debate.slug %}">{{ debate.board.title }}: {{ debate.title }}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'debate' debate.topic.slug debate.slug %}">{{ debate.topic.title }}: {{ debate.title }}</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
@@ -12,7 +12,7 @@
     <table class="forms">
         <tr>
             <td><h6>Temat:</h6></td>
-            <td><small>{{ debate.board.title }}</small></td>
+            <td><small>{{ debate.topic.title }}</small></td>
         </tr>
         <tr>
             <td><h6>Narada:</h6></td>

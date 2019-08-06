@@ -12,16 +12,16 @@
         <p><a href="/users/profile">Uzupełnij imię postaci, aby móc uczestniczyć w naradach!</a></p>
     {% else %}
         <div class="mb-4">
-            <a href="{% url 'create-board' %}" class="btn btn-outline-dark">Nowy temat narad</a>
+            <a href="{% url 'create-topic' %}" class="btn btn-outline-dark">Nowy temat narad</a>
         </div>
 
         <br><br>
-        {% for board in queryset %}
-            {% if request.user.profile.character_name in boards_with_allowed_profiles_dict|dict_lookup:board or request.user.profile.character_status == 'gm' %}
+        {% for topic in queryset %}
+            {% if request.user.profile.character_name in topic_with_allowed_profiles_dict|dict_lookup:topic or request.user.profile.character_status == 'gm' %}
 
-                <h3>{{ board.title }}</h3>
-                {% if board.description %}
-                    <small>{{ board.description }}</small> <br>
+                <h3>{{ topic.title }}</h3>
+                {% if topic.description %}
+                    <small>{{ topic.description }}</small> <br>
                 {% endif %}<br>
 
                 <table class="forum">
@@ -37,7 +37,7 @@
 
 
                     <tbody>
-                    {% for debate in board.debates.all %}
+                    {% for debate in topic.debates.all %}
                         {% if request.user.profile in debate.allowed_profiles.all or request.user.profile.character_status == 'gm' %}
                             <tr>
                                 <td class="unblue">
@@ -66,7 +66,7 @@
                 </table>
                 <br>
                 <div class="mb-4">
-                    <a href="{% url 'create-debate' board.slug %}" class="btn btn-outline-dark">Nowa narada</a>
+                    <a href="{% url 'create-debate' topic.slug %}" class="btn btn-outline-dark">Nowa narada</a>
                 </div><br><br>
             {% endif %}
         {% endfor %}

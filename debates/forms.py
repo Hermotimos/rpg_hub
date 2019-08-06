@@ -1,5 +1,5 @@
 from django import forms
-from .models import Remark, Debate, Board
+from .models import Remark, Debate, Topic
 from pagedown.widgets import PagedownWidget
 
 
@@ -55,9 +55,9 @@ class UpdateDebateForm(forms.ModelForm):
         fields = ['allowed_profiles']
 
 
-class CreateBoardForm(forms.ModelForm):
+class CreateTopicForm(forms.ModelForm):
     class Meta:
-        model = Board
+        model = Topic
         fields = [
             'title',
             'description'

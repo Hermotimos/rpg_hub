@@ -7,7 +7,7 @@ from PIL import Image
 from users.models import Profile
 
 
-class Board(models.Model):
+class Topic(models.Model):
     title = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(max_length=50, unique=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -35,7 +35,7 @@ class Debate(models.Model):
     slug = models.SlugField(max_length=50, unique=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
-    board = models.ForeignKey(Board, related_name='debates', on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topic, related_name='debates', on_delete=models.CASCADE)
     starter = models.ForeignKey(User, related_name='debates', on_delete=models.CASCADE)
     allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_debates',
                                               limit_choices_to=
@@ -59,8 +59,8 @@ class Debate(models.Model):
         super().save(*args, *kwargs)
 
     def get_absolute_url(self):
-        # return f'/debates/{self.board.slug}/{self.slug}'                                            # one way
-        return reverse('debate', kwargs={'board_slug': self.board.slug, 'debate_slug': self.slug})      # another way
+        # return f'/debates/{self.topic.slug}/{self.slug}'                                            # one way
+        return reverse('debate', kwargs={'topic_slug': self.topic.slug, 'debate_slug': self.slug})      # another way
 
     class Meta:
         ordering = ['-date_updated']
