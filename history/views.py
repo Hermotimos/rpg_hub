@@ -91,7 +91,7 @@ def timeline_main_view(request):
 
 
 @login_required
-def timeline_events_view(request):
+def timeline_all_events_view(request):
     if request.user.profile in Profile.objects.filter(character_status='gm'):
         queryset = Event.objects.all()
     else:
@@ -110,7 +110,7 @@ def timeline_events_view(request):
 
 
 @login_required
-def timeline_by_thread_view(request, thread_id):
+def timeline_thread_view(request, thread_id):
     thread = Thread.objects.get(id=thread_id)
     events_by_thread_qs = thread.events.all()
 
@@ -132,7 +132,7 @@ def timeline_by_thread_view(request, thread_id):
 
 
 @login_required
-def timeline_by_participant_view(request, participant_id):
+def timeline_participant_view(request, participant_id):
     participant = Profile.objects.get(id=participant_id)
     events_by_participant_qs = participant.events_participated.all()
 
@@ -159,8 +159,8 @@ def timeline_by_participant_view(request, participant_id):
 
 
 @login_required
-def timeline_by_general_location_view(request, general_location_id):
-    general_location = GeneralLocation.objects.get(id=general_location_id)
+def timeline_general_location_view(request, gen_loc_id):
+    general_location = GeneralLocation.objects.get(id=gen_loc_id)
     events_by_general_location_qs = Event.objects.filter(general_location=general_location)
 
     if request.user.profile in Profile.objects.filter(character_status='gm'):
@@ -181,8 +181,8 @@ def timeline_by_general_location_view(request, general_location_id):
 
 
 @login_required
-def timeline_by_specific_location_view(request, specific_location_id):
-    specific_location = SpecificLocation.objects.get(id=specific_location_id)
+def timeline_specific_location_view(request, spec_loc_id):
+    specific_location = SpecificLocation.objects.get(id=spec_loc_id)
     events_by_specific_location_qs = specific_location.events.all()
 
     if request.user.profile in Profile.objects.filter(character_status='gm'):
@@ -203,7 +203,7 @@ def timeline_by_specific_location_view(request, specific_location_id):
 
 
 @login_required
-def timeline_by_year_and_season_view(request, year, season='0'):
+def timeline_date_view(request, year, season='0'):
 
     if season == '0':
         page_title = f'Kalendarium: {year}. rok Archonatu Nemetha Samatiana'
@@ -265,7 +265,7 @@ def create_event_view(request):
 
 
 @login_required
-def edit_event_view(request, event_id):
+def timeline_edit_view(request, event_id):
     obj = get_object_or_404(Event, id=event_id)
 
     if request.method == 'POST':
@@ -286,7 +286,7 @@ def edit_event_view(request, event_id):
 
 
 @login_required
-def event_add_informed_view(request, event_id):
+def timeline_inform_view(request, event_id):
     obj = get_object_or_404(Event, id=event_id)
 
     participants = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
@@ -344,7 +344,7 @@ def event_add_informed_view(request, event_id):
 
 
 @login_required
-def event_note_view(request, event_id):
+def timeline_note_view(request, event_id):
     obj = get_object_or_404(Event, id=event_id)
 
     current_note = None
@@ -384,7 +384,7 @@ def event_note_view(request, event_id):
 
 
 @login_required
-def create_described_event_view(request):
+def chronicle_create_view(request):
     if request.method == 'POST':
         form = CreateDescribedEventForm(request.POST or None)
         if form.is_valid():
@@ -408,7 +408,7 @@ def create_described_event_view(request):
 
 
 @login_required
-def edit_described_event_view(request, event_id):
+def chronicle_edit_view(request, event_id):
     obj = get_object_or_404(DescribedEvent, id=event_id)
 
     if request.method == 'POST':
@@ -429,7 +429,7 @@ def edit_described_event_view(request, event_id):
 
 
 @login_required
-def described_event_add_informed_view(request, event_id):
+def chronicle_inform_view(request, event_id):
     obj = get_object_or_404(DescribedEvent, id=event_id)
 
     participants = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
@@ -480,7 +480,7 @@ def is_allowed_game(_game, profile):
 
 
 @login_required
-def chronicles_chapters_view(request):
+def chronicle_main_view(request):
     games = GameSession.objects.all()
     allowed_bios_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no < 0]
     allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no > 0]
@@ -494,7 +494,7 @@ def chronicles_chapters_view(request):
 
 
 @login_required
-def chronicles_all_view(request):
+def chronicle_all_chapters_view(request):
     games = GameSession.objects.all()
     allowed_bios_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no < 0]
     allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no > 0]
@@ -508,7 +508,7 @@ def chronicles_all_view(request):
 
 
 @login_required
-def chronicles_one_chapter_view(request, game_id):
+def chronicle_one_chapter_view(request, game_id):
     obj = get_object_or_404(GameSession, id=game_id)
 
     if ':' in obj.title:
@@ -524,7 +524,7 @@ def chronicles_one_chapter_view(request, game_id):
 
 
 @login_required
-def described_event_note_view(request, event_id):
+def chronicle_note_view(request, event_id):
     obj = get_object_or_404(DescribedEvent, id=event_id)
 
     current_note = None

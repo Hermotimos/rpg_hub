@@ -10,7 +10,7 @@
     <br><br><br>
 
     <h3 class="unblue">
-        <strong><a href="{% url 'chronicle-chapters-all' %}">Pełna historia drużyny</a></strong>
+        <strong><a href="{% url 'chronicle-all-chapters' %}">Pełna historia drużyny</a></strong>
     </h3>
     <br>
     {% for game in allowed_bios_list %}
@@ -18,7 +18,7 @@
             <td>
                 <h5 class="unblue">
                     0.
-                    <a href="{% url 'chronicle-chapter' game.id %}">{{ game.title }}</a>
+                    <a href="{% url 'chronicle-one-chapter' game.id %}">{{ game.title }}</a>
                 </h5>
             </td>
         </tr>
@@ -29,7 +29,7 @@
             <td>
                 <h5 class="unblue">
                     {{ forloop.counter }}.
-                    <a href="{% url 'chronicle-chapter' game.id %}">{{ game.title }}</a>
+                    <a href="{% url 'chronicle-one-chapter' game.id %}">{{ game.title }}</a>
                 </h5>
             </td>
         </tr>
