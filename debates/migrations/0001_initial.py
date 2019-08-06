@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                 ('created_date', models.DateTimeField(auto_now_add=True)),
                 ('updated_date', models.DateTimeField(auto_now=True)),
                 ('allowed_users', models.CharField(max_length=100)),
-                ('board', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='topics', to='forum.Board')),
+                ('board', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='topics', to='debates.Board')),
                 ('starter', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='topics', to=settings.AUTH_USER_MODEL)),
             ],
         ),
@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
                 ('text', models.TextField(max_length=4000)),
                 ('date_posted', models.DateTimeField(auto_now_add=True)),
                 ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='posts', to=settings.AUTH_USER_MODEL)),
-                ('topic', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='posts', to='forum.Topic')),
+                ('topic', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='posts', to='debates.Topic')),
             ],
         ),
     ]

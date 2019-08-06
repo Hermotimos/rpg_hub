@@ -59,7 +59,7 @@ class Topic(models.Model):
         super().save(*args, *kwargs)
 
     def get_absolute_url(self):
-        # return f'/forum/{self.board.slug}/{self.slug}'                                            # one way
+        # return f'/debates/{self.board.slug}/{self.slug}'                                            # one way
         return reverse('topic', kwargs={'board_slug': self.board.slug, 'topic_slug': self.slug})    # another way
 
     class Meta:

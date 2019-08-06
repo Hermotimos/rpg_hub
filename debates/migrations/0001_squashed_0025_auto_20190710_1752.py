@@ -8,7 +8,7 @@ import django.utils.timezone
 
 class Migration(migrations.Migration):
 
-    replaces = [('forum', '0001_initial'), ('forum', '0002_auto_20190625_1739'), ('forum', '0003_auto_20190627_1508'), ('forum', '0004_auto_20190627_1641'), ('forum', '0005_auto_20190627_1754'), ('forum', '0006_auto_20190628_1244'), ('forum', '0007_auto_20190628_1245'), ('forum', '0008_topic_allowed_profiles'), ('forum', '0009_auto_20190628_1510'), ('forum', '0010_auto_20190703_1440'), ('forum', '0011_post_image'), ('forum', '0012_auto_20190703_1635'), ('forum', '0013_auto_20190703_1636'), ('forum', '0014_auto_20190703_1707'), ('forum', '0015_post_text_editor'), ('forum', '0016_remove_post_text_editor'), ('forum', '0017_auto_20190705_1907'), ('forum', '0018_auto_20190706_1158'), ('forum', '0019_remove_topic_allowed_users'), ('forum', '0020_auto_20190710_1733'), ('forum', '0021_auto_20190710_1733'), ('forum', '0022_auto_20190710_1749'), ('forum', '0023_auto_20190710_1749'), ('forum', '0024_auto_20190710_1750'), ('forum', '0025_auto_20190710_1752')]
+    replaces = [('debates', '0001_initial'), ('debates', '0002_auto_20190625_1739'), ('debates', '0003_auto_20190627_1508'), ('debates', '0004_auto_20190627_1641'), ('debates', '0005_auto_20190627_1754'), ('debates', '0006_auto_20190628_1244'), ('debates', '0007_auto_20190628_1245'), ('debates', '0008_topic_allowed_profiles'), ('debates', '0009_auto_20190628_1510'), ('debates', '0010_auto_20190703_1440'), ('debates', '0011_post_image'), ('debates', '0012_auto_20190703_1635'), ('debates', '0013_auto_20190703_1636'), ('debates', '0014_auto_20190703_1707'), ('debates', '0015_post_text_editor'), ('debates', '0016_remove_post_text_editor'), ('debates', '0017_auto_20190705_1907'), ('debates', '0018_auto_20190706_1158'), ('debates', '0019_remove_topic_allowed_users'), ('debates', '0020_auto_20190710_1733'), ('debates', '0021_auto_20190710_1733'), ('debates', '0022_auto_20190710_1749'), ('debates', '0023_auto_20190710_1749'), ('debates', '0024_auto_20190710_1750'), ('debates', '0025_auto_20190710_1752')]
 
     initial = True
 
@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
                 ('slug', models.SlugField(blank=True, unique=True)),
                 ('date_created', models.DateTimeField(auto_now_add=True)),
                 ('date_updated', models.DateTimeField(auto_now=True)),
-                ('board', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='topics', to='forum.Board')),
+                ('board', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='topics', to='debates.Board')),
                 ('starter', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='topics', to=settings.AUTH_USER_MODEL)),
                 ('allowed_profiles', models.ManyToManyField(limit_choices_to=models.Q(('character_status', 'player'), ('character_status', 'npc'), _connector='OR'), related_name='allowed_topics', to='users.Profile')),
             ],
@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
                 ('text', models.TextField(max_length=4000)),
                 ('date_posted', models.DateTimeField(auto_now_add=True)),
                 ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='posts', to=settings.AUTH_USER_MODEL)),
-                ('topic', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='posts', to='forum.Topic')),
+                ('topic', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='posts', to='debates.Topic')),
                 ('image', models.ImageField(blank=True, null=True, upload_to='post_pics')),
             ],
         ),

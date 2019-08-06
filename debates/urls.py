@@ -1,5 +1,5 @@
 from django.urls import path
-from forum import views
+from debates import views
 
 
 urlpatterns = [

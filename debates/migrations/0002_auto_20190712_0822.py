@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('forum', '0001_squashed_0025_auto_20190710_1752'),
+        ('debates', '0001_squashed_0025_auto_20190710_1752'),
     ]
 
     operations = [

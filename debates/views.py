@@ -4,9 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Max, Q
 from django.core.mail import send_mail
 from django.conf import settings
-from forum.models import Board, Topic
+from debates.models import Board, Topic
 from users.models import User, Profile
-from forum.forms import CreatePostForm, CreateTopicForm, CreateBoardForm, UpdateTopicForm
+from debates.forms import CreatePostForm, CreateTopicForm, CreateBoardForm, UpdateTopicForm
 
 
 @login_required
@@ -50,7 +50,7 @@ def forum_view(request):
         'boards_with_allowed_profiles_dict': boards_with_allowed_profiles_dict,
         'topics_with_posts_by_characters_count': topics_with_posts_by_characters_count
     }
-    return render(request, 'forum/forum.html', context)
+    return render(request, 'debates/debates_main.html', context)
 
 
 @login_required
@@ -76,7 +76,7 @@ def topic_view(request, board_slug, topic_slug):
         'form': form,
         'allowed': allowed
     }
-    return render(request, 'forum/topic.html', context)
+    return render(request, 'debates/topic.html', context)
 
 
 @login_required
@@ -94,7 +94,7 @@ def add_allowed_profiles_view(request, board_slug, topic_slug):
             subject = f"[RPG] Dołączenie do narady: '{obj.topic_name}'"
             message = f"{request.user.profile} dołączył Cię do narady '{obj.topic_name}' w temacie '{obj.board}'.\n" \
                       f"Uczestnicy: {', '.join(p.character_name for p in form.cleaned_data['allowed_profiles'])}\n" \
-                      f"Weź udział w naradzie: {request.get_host()}/forum/{obj.board.slug}/{obj.slug}/"
+                      f"Weź udział w naradzie: {request.get_host()}/debates/{obj.board.slug}/{obj.slug}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
 
@@ -121,7 +121,7 @@ def add_allowed_profiles_view(request, board_slug, topic_slug):
         'form': form,
         'allowed': allowed
     }
-    return render(request, 'forum/topic_update_users.html', context)
+    return render(request, 'debates/topic_update_users.html', context)
 
 
 @login_required
@@ -149,7 +149,7 @@ def create_topic_view(request, board_slug):
             message = f"{request.user.profile} włączył Cię do nowej narady " \
                       f"'{topic.topic_name}' w temacie '{topic.board}'.\n" \
                       f"Uczestnicy: {', '.join(p.character_name for p in topic.allowed_profiles.all())}\n" \
-                      f"Weź udział w naradzie: {request.get_host()}/forum/{topic.board.slug}/{topic.slug}/"
+                      f"Weź udział w naradzie: {request.get_host()}/debates/{topic.board.slug}/{topic.slug}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
             for user in User.objects.all():
@@ -171,7 +171,7 @@ def create_topic_view(request, board_slug):
         'post_form': post_form,
         'board': obj
     }
-    return render(request, 'forum/create_topic.html', context)
+    return render(request, 'debates/create_topic.html', context)
 
 
 @login_required
@@ -189,4 +189,4 @@ def create_board_view(request):
         'page_title': 'Nowy temat narad',
         'form': form,
     }
-    return render(request, 'forum/create_board.html', context)
+    return render(request, 'debates/create_board.html', context)

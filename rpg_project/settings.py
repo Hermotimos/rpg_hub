@@ -46,7 +46,7 @@ INSTALLED_APPS = [
 
     # own
     'home',
-    'forum',
+    'debates',
     'news',
     'users.apps.UsersConfig',    # just another way of doing this
     'history',
