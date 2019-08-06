@@ -58,14 +58,14 @@
                     <tbody>
                         <tr class="posts-and-news">
                             <td class="center">
-                                <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+                                <img class="rounded-circle article-img" src="{{ remark.author.profile.image.url }}">
                                 <small>{{ remark.author.profile.character_name }}</small>
                             </td>
                             <td>
                                 <small>{{ remark.date_posted|date:'d-M-Y' }}</small>
                                 {{ remark.text|capfirst|linebreaks }}
                                 {% if remark.image %}
-                                    <img src="{{ post.image.url }}" class="border-double">
+                                    <img src="{{ remark.image.url }}" class="border-double">
                                 {% endif %}
                             </td>
                         </tr>
