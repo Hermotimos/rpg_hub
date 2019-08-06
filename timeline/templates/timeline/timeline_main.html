@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load custom_filters %}
-{% load static %}
 
 {% block breadcrumb %}
     <li class="breadcrumb-item active">{{ page_title }}</li>
@@ -23,7 +22,7 @@
         <tr>
         {% for t in threads %}
             <td class="unblue">
-                &#10023; <a href="{% url 'timeline-by-thread' t.1.id %}">{{ t.0 }}</a>&emsp;&emsp;
+                &#10023;<a href="{% url 'timeline-by-thread' t.1.id %}">{{ t.0 }}</a>&emsp;&emsp;
             </td>
             {% if forloop.counter|divisibleby:3 %}
                 </tr><tr>
@@ -41,7 +40,7 @@
         <tr>
         {% for p in participants %}
             <td class="unblue">
-                &#10023; <a href="{% url 'timeline-by-participant' p.1.id %}">{{ p.0 }}</a>&emsp;&emsp;
+                &#10023;<a href="{% url 'timeline-by-participant' p.1.id %}">{{ p.0 }}</a>&emsp;&emsp;
             </td>
             {% if forloop.counter|divisibleby:4 %}
                 </tr><tr>
@@ -59,13 +58,13 @@
         {% for gl in general_locs_with_specific_locs_list %}
             <tr>
                 <td class="unblue" colspan="4">
-                    <br><h4>&#10037; <a href="{% url 'timeline-by-general-location' gl.0.id %}">{{ gl.0 }}</a>&emsp;&emsp;</h4>
+                    <br><h4>&#10037;<a href="{% url 'timeline-by-general-location' gl.0.id %}">{{ gl.0 }}</a>&emsp;&emsp;</h4>
                 </td>
             </tr>
             <tr>
             {% for sl in gl.1 %}
                 <td class="unblue">
-                    &#10023;  <a href="{% url 'timeline-by-specific-location' sl.1.id %}">{{ sl.0 }}</a>&emsp;&emsp;
+                    &#10023;<a href="{% url 'timeline-by-specific-location' sl.1.id %}">{{ sl.0 }}</a>&emsp;&emsp;
                 </td>
                 {% if forloop.counter|divisibleby:4 %}
                     </tr><tr>
@@ -88,30 +87,26 @@
                 </td>
                 <td class="unblue">
                     {% if '1' in years_with_seasons_dict|dict_lookup:y %}
-                    <a href="{% url 'timeline-by-year-and-season' y '1' %}">Wiosna</a>&emsp;
+                        <a href="{% url 'timeline-by-year-and-season' y '1' %}">Wiosna</a>&emsp;
                     {% endif %}
                 </td>
                 <td class="unblue">
                     {% if '2' in years_with_seasons_dict|dict_lookup:y %}
-                    <a href="{% url 'timeline-by-year-and-season' y '2' %}">Lato</a>&emsp;
+                        <a href="{% url 'timeline-by-year-and-season' y '2' %}">Lato</a>&emsp;
                     {% endif %}
                 </td>
                 <td class="unblue">
                     {% if '3' in years_with_seasons_dict|dict_lookup:y %}
-                    <a href="{% url 'timeline-by-year-and-season' y '3' %}">Jesień</a>&emsp;
+                        <a href="{% url 'timeline-by-year-and-season' y '3' %}">Jesień</a>&emsp;
                     {% endif %}
                 </td>
                 <td class="unblue">
                     {% if '4' in years_with_seasons_dict|dict_lookup:y %}
-                    <a href="{% url 'timeline-by-year-and-season' y '4' %}">Zima</a>&emsp;
+                        <a href="{% url 'timeline-by-year-and-season' y '4' %}">Zima</a>&emsp;
                     {% endif %}
                 </td>
-
-
             </tr>
         {% endfor %}
-
-
     </table>
     <br><br>
 
