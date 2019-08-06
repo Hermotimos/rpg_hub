@@ -3,14 +3,14 @@
 {% load custom_filters %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{% url 'chronicles-chapters' %}">Historia</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'chronicle-chapters' %}">Historia</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
 {% block content %}
     <br><br><br><br>
 
-    <table class="chronicles" id="chronicles" data-search="true" data-toggle="table">
+    <table class="chronicle" id="chronicle" data-search="true" data-toggle="table">
 
         <colgroup>
             <col class="description">

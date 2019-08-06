@@ -261,7 +261,7 @@ def create_event_view(request):
         'page_title': 'Nowe wydarzenie: Kalendarium',
         'form': form
     }
-    return render(request, 'timeline/create_event.html', context)
+    return render(request, 'timeline/timeline_create.html', context)
 
 
 @login_required
@@ -282,7 +282,7 @@ def edit_event_view(request, event_id):
         'page_title': 'Edycja wydarzenia',
         'form': form
     }
-    return render(request, 'timeline/edit_event.html', context)
+    return render(request, 'timeline/timeline_edit.html', context)
 
 
 @login_required
@@ -340,7 +340,7 @@ def event_add_informed_view(request, event_id):
         'participants': participants,
         'informed': informed
     }
-    return render(request, 'timeline/event_add_informed.html', context)
+    return render(request, 'timeline/timeline_add_informed.html', context)
 
 
 @login_required
@@ -377,7 +377,7 @@ def event_note_view(request, event_id):
         'participants': participants,
         'informed': informed
     }
-    return render(request, 'timeline/event_note.html', context)
+    return render(request, 'timeline/timeline_note.html', context)
 
 
 # #################### CHRONICLES: model DescribedEvent ####################
@@ -404,7 +404,7 @@ def create_described_event_view(request):
         'page_title': 'Nowe wydarzenie: Historia',
         'form': form
     }
-    return render(request, 'chronicles/create_described_event.html', context)
+    return render(request, 'chronicle/chronicle_create.html', context)
 
 
 @login_required
@@ -425,7 +425,7 @@ def edit_described_event_view(request, event_id):
         'page_title': 'Edycja wydarzenia',
         'form': form
     }
-    return render(request, 'chronicles/edit_described_event.html', context)
+    return render(request, 'chronicle/chronicle_edit.html', context)
 
 
 @login_required
@@ -469,7 +469,7 @@ def described_event_add_informed_view(request, event_id):
         'participants': participants,
         'informed': informed
     }
-    return render(request, 'chronicles/described_event_add_informed.html', context)
+    return render(request, 'chronicle/chronicle_add_informed.html', context)
 
 
 def is_allowed_game(_game, profile):
@@ -490,7 +490,7 @@ def chronicles_chapters_view(request):
         'allowed_bios_list': allowed_bios_list,
         'allowed_games_list': allowed_games_list
     }
-    return render(request, 'chronicles/chronicles_chapters.html', context)
+    return render(request, 'chronicle/chronicle_chapters_all.html', context)
 
 
 @login_required
@@ -504,7 +504,7 @@ def chronicles_all_view(request):
         'allowed_bios_list': allowed_bios_list,
         'allowed_games_list': allowed_games_list
     }
-    return render(request, 'chronicles/chronicles_all.html', context)
+    return render(request, 'chronicle/chronicle_main.html', context)
 
 
 @login_required
@@ -520,7 +520,7 @@ def chronicles_one_chapter_view(request, game_id):
         'page_title': page_title,
         'game': obj
     }
-    return render(request, 'chronicles/chronicles_one_chapter.html', context)
+    return render(request, 'chronicle/chronicle_chapter.html', context)
 
 
 @login_required
@@ -556,4 +556,4 @@ def described_event_note_view(request, event_id):
         'participants': participants,
         'informed': informed
     }
-    return render(request, 'chronicles/described_event_note.html', context)
+    return render(request, 'chronicle/chronicle_note.html', context)

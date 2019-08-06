@@ -220,8 +220,8 @@ small {
 .timeline .game {width: %;}
 .timeline .actions {width: 5%;}
 
-.chronicles .description {width: %;}
-.chronicles .actions {width: %;}
+.chronicle .description {width: %;}
+.chronicle .actions {width: %;}
 
 .small-img {
         display: block;
@@ -234,7 +234,7 @@ small {
         width: 35%;
 }
 
-.chronicles .small-img {
+.chronicle .small-img {
         padding: 10px 0px 0px 0px;
 }
 
@@ -266,13 +266,13 @@ table.timeline {
         padding: 5px;
 }
 
-.chronicles td {
+.chronicle td {
         margin: 0px;
         padding: 0px 5px;
         color: #444444;
 }
 /*
-#chronicles td {
+#chronicle td {
         border-style: none;         DELETE?
         font-size: 2px;
 }
