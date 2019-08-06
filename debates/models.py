@@ -7,7 +7,6 @@ from users.models import Profile
 
 class Topic(models.Model):
     title = models.CharField(max_length=50, unique=True, verbose_name='tytuł tematu')
-    # slug = models.SlugField(max_length=50, unique=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     description = models.CharField(max_length=100, verbose_name='opis tematu')
@@ -15,22 +14,12 @@ class Topic(models.Model):
     def __str__(self):
         return self.title
 
-    # def _get_unique_slug(self):
-    #     slug = slugify(self.title)
-    #     return slug
-    #
-    # def save(self, *args, **kwargs):
-    #     if not self.slug:
-    #         self.slug = self._get_unique_slug()
-    #     super().save(*args, *kwargs)
-
     class Meta:
         ordering = ['-date_updated']
 
 
 class Debate(models.Model):
     title = models.CharField(max_length=100, unique=True, verbose_name='tytuł narady')
-    # slug = models.SlugField(max_length=50, unique=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     topic = models.ForeignKey(Topic, related_name='debates', on_delete=models.CASCADE)
@@ -45,15 +34,6 @@ class Debate(models.Model):
 
     def __str__(self):
         return self.title
-    #
-    # def _get_unique_slug(self):
-    #     slug = slugify(self.title)
-    #     return slug
-    #
-    # def save(self, *args, **kwargs):
-    #     if not self.slug:
-    #         self.slug = self._get_unique_slug()
-    #     super().save(*args, *kwargs)
 
     class Meta:
         ordering = ['-date_updated']
