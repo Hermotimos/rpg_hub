@@ -126,7 +126,7 @@ def add_allowed_profiles_view(request, topic_slug, debate_slug):
 
 @login_required
 def create_debate_view(request, topic_slug):
-    obj = Topic.objects.get(slug=topic_slug)
+    obj = get_object_or_404(Topic, slug=topic_slug)
 
     if request.method == 'POST':
         debate_form = CreateDebateForm(request.POST or None)

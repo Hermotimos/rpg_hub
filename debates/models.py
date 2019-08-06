@@ -58,9 +58,9 @@ class Debate(models.Model):
             self.slug = self._get_unique_slug()
         super().save(*args, *kwargs)
 
-    def get_absolute_url(self):
+    # def get_absolute_url(self):
         # return f'/debates/{self.topic.slug}/{self.slug}'                                            # one way
-        return reverse('debate', kwargs={'topic_slug': self.topic.slug, 'debate_slug': self.slug})      # another way
+        # return reverse('debate', kwargs={'topic_slug': self.topic.slug, 'debate_slug': self.slug})      # another way
 
     class Meta:
         ordering = ['-date_updated']

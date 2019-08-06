@@ -32,12 +32,12 @@ class CreateDebateForm(forms.ModelForm):
     class Meta:
         model = Debate
         fields = [
-            'topic_name',
+            'title',
             'allowed_profiles',
             'is_individual'
         ]
 
-    topic_name = forms.CharField(
+    title = forms.CharField(
         label='',
         max_length=100,
         widget=forms.TextInput(

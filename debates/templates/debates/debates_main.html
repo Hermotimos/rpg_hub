@@ -41,7 +41,7 @@
                         {% if request.user.profile in debate.allowed_profiles.all or request.user.profile.character_status == 'gm' %}
                             <tr>
                                 <td class="unblue">
-                                    <a href="{{ debate.get_absolute_url }}">{{ debate.title }}</a>
+                                    <a href="{% url 'debate' debate.topic.slug debate.slug %}">{{ debate.title }}</a>
                                 </td>
                                 <td>
                                     {{ debate.starter.profile.character_name|get_first_word  }}<br>
