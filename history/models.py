@@ -19,7 +19,7 @@ class GameSession(models.Model):
         ordering = ['game_no']
 
 
-# ------ Event model and connected models ------
+# ------ TimelineEvent model and connected models ------
 
 
 SEASONS = (
@@ -71,7 +71,7 @@ class SpecificLocation(models.Model):
         ordering = ['name']
 
 
-class Event(models.Model):
+class TimelineEvent(models.Model):
     # default=0 for events outside of game session:
     game_no = models.ForeignKey(GameSession, related_name='events', on_delete=models.PROTECT)
     # year has to be > 0, for url patterns (they accept positive nums only):
@@ -107,28 +107,28 @@ class Event(models.Model):
 
     # Steps to migrate these models:
     # 1) delete migration files, delete tables in db, DELETE FROM django_migrations WHERE app="history";
-    # 2) comment out all other models than Event
+    # 2) comment out all other models than TimelineEvent
     # 1) migrate Events without any M2M fields or ForeignKeys.
     # 2) uncomment other fields and classes and migrate.
 
 
-class EventNote(models.Model):
+class TimelineEventNote(models.Model):
     author = models.ForeignKey(User, related_name='events_notes', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000, blank=True, null=True)
-    event = models.ForeignKey(Event, related_name='notes', on_delete=models.PROTECT)
+    event = models.ForeignKey(TimelineEvent, related_name='notes', on_delete=models.PROTECT)
     color = models.CharField(max_length=20, choices=COLORS, default='#C70039')
 
     def __str__(self):
         return f'{self.text[0:50]}...'
 
 
-# ------ DescribedEvent model and connected models ------
+# ------ ChronicleEvent model and connected models ------
 
 
-class DescribedEvent(models.Model):
+class ChronicleEvent(models.Model):
     """
-    This model is not connected with Event model. There is not 121 or M2M relationships between them.
-    Event model serves to create events in history view (chronology).
+    This model is not connected with TimelineEvent model. There is not 121 or M2M relationships between them.
+    TimelineEvent model serves to create events in history view (chronology).
     EventDescription serves to create events in the full history text of the game.
     Lack or correspondence between the two is intentional for flexibility.
     """
@@ -157,10 +157,10 @@ class DescribedEvent(models.Model):
         ordering = ['game_no', 'event_no_in_game']
 
 
-class DescribedEventNote(models.Model):
+class ChronicleEventNote(models.Model):
     author = models.ForeignKey(User, related_name='described_events_notes', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000, blank=True, null=True)
-    event = models.ForeignKey(DescribedEvent, related_name='notes', on_delete=models.PROTECT)
+    event = models.ForeignKey(ChronicleEvent, related_name='notes', on_delete=models.PROTECT)
     color = models.CharField(max_length=20, choices=COLORS, default='#C70039')
 
     def __str__(self):

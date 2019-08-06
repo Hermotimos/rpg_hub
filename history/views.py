@@ -5,13 +5,25 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from users.models import Profile
-from history.models import Event, EventNote, DescribedEvent, DescribedEventNote, GameSession, Thread, GeneralLocation,\
-    SpecificLocation
-from history.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm, DescribedEventNoteForm,\
-    CreateDescribedEventForm, DescribedEventAddInformedForm, EditDescribedEventForm
+from history.models import (TimelineEvent,
+                            TimelineEventNote,
+                            ChronicleEvent,
+                            ChronicleEventNote,
+                            GameSession,
+                            Thread,
+                            GeneralLocation,
+                            SpecificLocation)
+from history.forms import (TimelineEventCreateForm,
+                           TimelineEventInformForm,
+                           TimelineEventEditForm,
+                           TimelineEventNoteForm,
+                           ChronicleEventNoteForm,
+                           ChronicleEventCreateForm,
+                           ChronicleEventInformForm,
+                           ChronicleEventEditForm)
 
 
-# #################### TIMELINE: model Event ####################
+# #################### TIMELINE: model TimelineEvent ####################
 
 SEASONS_WITH_STYLES_DICT = {
     '1': 'season-spring',
@@ -24,7 +36,7 @@ SEASONS_WITH_STYLES_DICT = {
 @login_required
 def timeline_main_view(request):
     if request.user.profile in Profile.objects.filter(character_status='gm'):
-        queryset = Event.objects.all()
+        queryset = TimelineEvent.objects.all()
     else:
         participated_qs = Profile.objects.get(user=request.user).events_participated.all()
         informed_qs = Profile.objects.get(user=request.user).events_informed.all()
@@ -62,20 +74,20 @@ def timeline_main_view(request):
     participants_name_and_obj_list.sort()
 
     # specific locations
-    specific_locations_set = set()
-    specific_locations_querysets_list = [event.specific_locations.all() for event in queryset]
-    for qs in specific_locations_querysets_list:
+    spec_locs_set = set()
+    spec_locs_querysets_list = [event.specific_locations.all() for event in queryset]
+    for qs in spec_locs_querysets_list:
         for sl in qs:
-            specific_locations_set.add(sl)
-    specific_locations_name_and_obj_list = [(t.name, t) for t in specific_locations_set]
-    specific_locations_name_and_obj_list.sort()
+            spec_locs_set.add(sl)
+    spec_locs_name_and_obj_list = [(t.name, t) for t in spec_locs_set]
+    spec_locs_name_and_obj_list.sort()
 
     # general locations with their specific locations: LEFT UNSORTED TO REFLECT SUBSEQUNT GENERAL LOCATIONS IN GAME
-    general_locations_set = {event.general_location for event in queryset}
-    general_locs_with_specific_locs_list = []
-    for gl in general_locations_set:
-        general_loc_with_specific_locs_list = [gl, [sl for sl in specific_locations_name_and_obj_list if sl[1].general_location == gl]]
-        general_locs_with_specific_locs_list.append(general_loc_with_specific_locs_list)
+    gen_locs_set = {event.general_location for event in queryset}
+    gen_locs_with_spec_locs_list = []
+    for gl in gen_locs_set:
+        gen_loc_with_spec_locs_list = [gl, [sl for sl in spec_locs_name_and_obj_list if sl[1].general_location == gl]]
+        gen_locs_with_spec_locs_list.append(gen_loc_with_spec_locs_list)
 
     context = {
         'page_title': 'Kalendarium',
@@ -84,7 +96,7 @@ def timeline_main_view(request):
         'years_with_seasons_dict': years_with_seasons_dict,
         'threads': threads_name_and_obj_list,
         'participants': participants_name_and_obj_list,
-        'general_locs_with_specific_locs_list': general_locs_with_specific_locs_list,
+        'gen_locs_with_spec_locs_list': gen_locs_with_spec_locs_list,
         'queryset': queryset
     }
     return render(request, 'history/timeline_main.html', context)
@@ -93,7 +105,7 @@ def timeline_main_view(request):
 @login_required
 def timeline_all_events_view(request):
     if request.user.profile in Profile.objects.filter(character_status='gm'):
-        queryset = Event.objects.all()
+        queryset = TimelineEvent.objects.all()
     else:
         participated_qs = Profile.objects.get(user=request.user).events_participated.all()
         informed_qs = Profile.objects.get(user=request.user).events_informed.all()
@@ -161,7 +173,7 @@ def timeline_participant_view(request, participant_id):
 @login_required
 def timeline_general_location_view(request, gen_loc_id):
     general_location = GeneralLocation.objects.get(id=gen_loc_id)
-    events_by_general_location_qs = Event.objects.filter(general_location=general_location)
+    events_by_general_location_qs = TimelineEvent.objects.filter(general_location=general_location)
 
     if request.user.profile in Profile.objects.filter(character_status='gm'):
         queryset = events_by_general_location_qs
@@ -207,7 +219,7 @@ def timeline_date_view(request, year, season='0'):
 
     if season == '0':
         page_title = f'Kalendarium: {year}. rok Archonatu Nemetha Samatiana'
-        events_qs = Event.objects.filter(year=year)
+        events_qs = TimelineEvent.objects.filter(year=year)
     else:
         if season == '1':
             season_name = 'Wiosna'
@@ -217,7 +229,7 @@ def timeline_date_view(request, year, season='0'):
             season_name = "Jesień"
         else:
             season_name = "Zima"
-        events_qs = Event.objects.filter(year=year, season=season)
+        events_qs = TimelineEvent.objects.filter(year=year, season=season)
         page_title = f'Kalendarium: {season_name} {year}. roku Archonatu Nemetha Samatiana'
 
     if request.user.profile in Profile.objects.filter(character_status='gm'):
@@ -240,7 +252,7 @@ def timeline_date_view(request, year, season='0'):
 @login_required
 def create_event_view(request):
     if request.method == 'POST':
-        form = CreateEventForm(request.POST or None)
+        form = TimelineEventCreateForm(request.POST or None)
         if form.is_valid():
             event = form.save()
             event.threads.set(form.cleaned_data['threads'])
@@ -255,7 +267,7 @@ def create_event_view(request):
             messages.warning(request, 'Popraw poniższy błąd!')
 
     else:
-        form = CreateEventForm()
+        form = TimelineEventCreateForm()
 
     context = {
         'page_title': 'Nowe wydarzenie: Kalendarium',
@@ -266,14 +278,14 @@ def create_event_view(request):
 
 @login_required
 def timeline_inform_view(request, event_id):
-    obj = get_object_or_404(Event, id=event_id)
+    obj = get_object_or_404(TimelineEvent, id=event_id)
 
     participants = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
     already_informed = obj.informed.all()[::1]                  # enforces evaluation of lazy Queryset for message
     informed = ', '.join(p.character_name.split(' ', 1)[0] for p in already_informed)
 
     if request.method == 'POST':
-        form = EventAddInformedForm(request.POST, instance=obj)
+        form = TimelineEventInformForm(request.POST, instance=obj)
         if form.is_valid():
             form.save()
 
@@ -310,7 +322,7 @@ def timeline_inform_view(request, event_id):
             return HttpResponseRedirect(_next)
 
     else:
-        form = EventAddInformedForm(instance=obj)
+        form = TimelineEventInformForm(instance=obj)
 
     context = {
         'page_title': 'Poinformuj o wydarzeniu',
@@ -324,19 +336,19 @@ def timeline_inform_view(request, event_id):
 
 @login_required
 def timeline_note_view(request, event_id):
-    obj = get_object_or_404(Event, id=event_id)
+    obj = get_object_or_404(TimelineEvent, id=event_id)
 
     current_note = None
     participants = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
     informed = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.informed.all())
 
     try:
-        current_note = EventNote.objects.get(event=obj, author=request.user)
-    except EventNote.DoesNotExist:
+        current_note = TimelineEventNote.objects.get(event=obj, author=request.user)
+    except TimelineEventNote.DoesNotExist:
         pass
 
     if request.method == 'POST':
-        form = EventNoteForm(request.POST, instance=current_note)
+        form = TimelineEventNoteForm(request.POST, instance=current_note)
         if form.is_valid():
             note = form.save(commit=False)
             note.author = request.user
@@ -347,7 +359,7 @@ def timeline_note_view(request, event_id):
             return HttpResponseRedirect(_next)
 
     else:
-        form = EventNoteForm(instance=current_note)
+        form = TimelineEventNoteForm(instance=current_note)
 
     context = {
         'page_title': 'Notatka',
@@ -361,17 +373,17 @@ def timeline_note_view(request, event_id):
 
 @login_required
 def timeline_edit_view(request, event_id):
-    obj = get_object_or_404(Event, id=event_id)
+    obj = get_object_or_404(TimelineEvent, id=event_id)
 
     if request.method == 'POST':
-        form = EditEventForm(request.POST, instance=obj)
+        form = TimelineEventEditForm(request.POST, instance=obj)
         if form.is_valid():
             form.save()
             messages.info(request, f'Zmodyfikowano wydarzenie!')
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
     else:
-        form = EditEventForm(instance=obj)
+        form = TimelineEventEditForm(instance=obj)
 
     context = {
         'page_title': 'Edycja wydarzenia',
@@ -380,7 +392,7 @@ def timeline_edit_view(request, event_id):
     return render(request, 'history/timeline_edit.html', context)
 
 
-# #################### CHRONICLE: model DescribedEvent ####################
+# #################### CHRONICLE: model ChronicleEvent ####################
 
 
 def is_allowed_game(_game, profile):
@@ -437,7 +449,7 @@ def chronicle_one_chapter_view(request, game_id):
 @login_required
 def chronicle_create_view(request):
     if request.method == 'POST':
-        form = CreateDescribedEventForm(request.POST or None)
+        form = ChronicleEventCreateForm(request.POST or None)
         if form.is_valid():
             event = form.save()
             event.participants.set(form.cleaned_data['participants'])
@@ -449,7 +461,7 @@ def chronicle_create_view(request):
         else:
             messages.warning(request, 'Popraw poniższy błąd!')
     else:
-        form = CreateDescribedEventForm()
+        form = ChronicleEventCreateForm()
 
     context = {
         'page_title': 'Nowe wydarzenie: Historia',
@@ -460,14 +472,14 @@ def chronicle_create_view(request):
 
 @login_required
 def chronicle_inform_view(request, event_id):
-    obj = get_object_or_404(DescribedEvent, id=event_id)
+    obj = get_object_or_404(ChronicleEvent, id=event_id)
 
     participants = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
     already_informed = obj.informed.all()[::1]                  # enforces evaluation of lazy Queryset for message
     informed = ', '.join(p.character_name.split(' ', 1)[0] for p in already_informed)
 
     if request.method == 'POST':
-        form = DescribedEventAddInformedForm(request.POST, instance=obj)
+        form = ChronicleEventInformForm(request.POST, instance=obj)
         if form.is_valid():
             form.save()
 
@@ -490,7 +502,7 @@ def chronicle_inform_view(request, event_id):
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
     else:
-        form = DescribedEventAddInformedForm(instance=obj)
+        form = ChronicleEventInformForm(instance=obj)
 
     context = {
         'page_title': 'Poinformuj o wydarzeniu',
@@ -504,19 +516,19 @@ def chronicle_inform_view(request, event_id):
 
 @login_required
 def chronicle_note_view(request, event_id):
-    obj = get_object_or_404(DescribedEvent, id=event_id)
+    obj = get_object_or_404(ChronicleEvent, id=event_id)
 
     current_note = None
     participants = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
     informed = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.informed.all())
 
     try:
-        current_note = DescribedEventNote.objects.get(event=obj, author=request.user)
-    except DescribedEventNote.DoesNotExist:
+        current_note = ChronicleEventNote.objects.get(event=obj, author=request.user)
+    except ChronicleEventNote.DoesNotExist:
         pass
 
     if request.method == 'POST':
-        form = DescribedEventNoteForm(request.POST, instance=current_note)
+        form = ChronicleEventNoteForm(request.POST, instance=current_note)
         if form.is_valid():
             note = form.save(commit=False)
             note.author = request.user
@@ -526,7 +538,7 @@ def chronicle_note_view(request, event_id):
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
     else:
-        form = DescribedEventNoteForm(instance=current_note)
+        form = ChronicleEventNoteForm(instance=current_note)
 
     context = {
         'page_title': 'Notatka',
@@ -540,17 +552,17 @@ def chronicle_note_view(request, event_id):
 
 @login_required
 def chronicle_edit_view(request, event_id):
-    obj = get_object_or_404(DescribedEvent, id=event_id)
+    obj = get_object_or_404(ChronicleEvent, id=event_id)
 
     if request.method == 'POST':
-        form = EditDescribedEventForm(request.POST, instance=obj)
+        form = ChronicleEventEditForm(request.POST, instance=obj)
         if form.is_valid():
             form.save()
             messages.info(request, f'Zmodyfikowano wydarzenie!')
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
     else:
-        form = EditDescribedEventForm(instance=obj)
+        form = ChronicleEventEditForm(instance=obj)
 
     context = {
         'page_title': 'Edycja wydarzenia',

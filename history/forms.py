@@ -1,18 +1,18 @@
 from django import forms
 from pagedown.widgets import PagedownWidget
-from history.models import Event, EventNote, DescribedEvent, DescribedEventNote
+from history.models import TimelineEvent, TimelineEventNote, ChronicleEvent, ChronicleEventNote
 
 
-# ------ Event model ------
+# ------ TimelineEvent model ------
 
 
-class CreateEventForm(forms.ModelForm):
+class TimelineEventCreateForm(forms.ModelForm):
     class Meta:
-        model = Event
+        model = TimelineEvent
         exclude = ()
 
     def __init__(self, *args, **kwargs):
-        super(CreateEventForm, self).__init__(*args, **kwargs)
+        super(TimelineEventCreateForm, self).__init__(*args, **kwargs)
         self.fields['threads'].widget.attrs = {'size': 10}
         self.fields['description'].widget.attrs = {'cols': 50, 'rows': 5}
         self.fields['participants'].widget.attrs = {'size': 8}
@@ -20,23 +20,23 @@ class CreateEventForm(forms.ModelForm):
         self.fields['specific_locations'].widget.attrs = {'size': 10}
 
 
-class EventAddInformedForm(forms.ModelForm):
+class TimelineEventInformForm(forms.ModelForm):
     class Meta:
-        model = Event
+        model = TimelineEvent
         fields = ['informed']
 
     def __init__(self, *args, **kwargs):
-        super(EventAddInformedForm, self).__init__(*args, **kwargs)
+        super(TimelineEventInformForm, self).__init__(*args, **kwargs)
         self.fields['informed'].label = ''
 
 
-class EditEventForm(forms.ModelForm):
+class TimelineEventEditForm(forms.ModelForm):
     class Meta:
-        model = Event
+        model = TimelineEvent
         exclude = ()
 
     def __init__(self, *args, **kwargs):
-        super(EditEventForm, self).__init__(*args, **kwargs)
+        super(TimelineEventEditForm, self).__init__(*args, **kwargs)
         self.fields['threads'].widget.attrs = {'size': 10}
         self.fields['description'].widget.attrs = {'cols': 60, 'rows': 10}
         self.fields['participants'].widget.attrs = {'size': 8}
@@ -44,9 +44,9 @@ class EditEventForm(forms.ModelForm):
         self.fields['specific_locations'].widget.attrs = {'size': 10}
 
 
-class EventNoteForm(forms.ModelForm):
+class TimelineEventNoteForm(forms.ModelForm):
     class Meta:
-        model = EventNote
+        model = TimelineEventNote
         fields = [
             'text',
             'color'
@@ -65,50 +65,50 @@ class EventNoteForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
-        super(EventNoteForm, self).__init__(*args, **kwargs)
+        super(TimelineEventNoteForm, self).__init__(*args, **kwargs)
         self.fields['color'].label = 'Kolor'
 
 
-# ------ DescribedEvent model -----
+# ------ ChronicleEvent model -----
 
 
-class CreateDescribedEventForm(forms.ModelForm):
+class ChronicleEventCreateForm(forms.ModelForm):
     class Meta:
-        model = DescribedEvent
+        model = ChronicleEvent
         exclude = ()
 
     def __init__(self, *args, **kwargs):
-        super(CreateDescribedEventForm, self).__init__(*args, **kwargs)
+        super(ChronicleEventCreateForm, self).__init__(*args, **kwargs)
         self.fields['description'].widget.attrs = {'cols': 50, 'rows': 5}
         self.fields['participants'].widget.attrs = {'size': 8}
         self.fields['informed'].widget.attrs = {'size': 8}
 
 
-class EditDescribedEventForm(forms.ModelForm):
+class ChronicleEventEditForm(forms.ModelForm):
     class Meta:
-        model = DescribedEvent
+        model = ChronicleEvent
         exclude = ()
 
     def __init__(self, *args, **kwargs):
-        super(EditDescribedEventForm, self).__init__(*args, **kwargs)
+        super(ChronicleEventEditForm, self).__init__(*args, **kwargs)
         self.fields['description'].widget.attrs = {'cols': 60, 'rows': 10}
         self.fields['participants'].widget.attrs = {'size': 8}
         self.fields['informed'].widget.attrs = {'size': 8}
 
 
-class DescribedEventAddInformedForm(forms.ModelForm):
+class ChronicleEventInformForm(forms.ModelForm):
     class Meta:
-        model = DescribedEvent
+        model = ChronicleEvent
         fields = ['informed']
 
     def __init__(self, *args, **kwargs):
-        super(DescribedEventAddInformedForm, self).__init__(*args, **kwargs)
+        super(ChronicleEventInformForm, self).__init__(*args, **kwargs)
         self.fields['informed'].label = ''
 
 
-class DescribedEventNoteForm(forms.ModelForm):
+class ChronicleEventNoteForm(forms.ModelForm):
     class Meta:
-        model = DescribedEventNote
+        model = ChronicleEventNote
         fields = [
             'text',
             'color'
@@ -127,5 +127,5 @@ class DescribedEventNoteForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
-        super(DescribedEventNoteForm, self).__init__(*args, **kwargs)
+        super(ChronicleEventNoteForm, self).__init__(*args, **kwargs)
         self.fields['color'].label = 'Kolor'

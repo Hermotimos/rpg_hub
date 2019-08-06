@@ -1,8 +1,15 @@
 from django.contrib import admin
-from django.forms import TextInput, Textarea
+from django.forms import Textarea
 from django.db import models
-from history.models import GameSession, Thread, GeneralLocation, SpecificLocation, Event, EventNote, DescribedEvent, \
-    DescribedEventNote
+from history.models import (GameSession,
+                            Thread,
+                            GeneralLocation,
+                            SpecificLocation,
+                            TimelineEvent,
+                            TimelineEventNote,
+                            ChronicleEvent,
+                            ChronicleEventNote)
+
 
 admin.site.register(Thread)
 admin.site.register(GeneralLocation)
@@ -10,7 +17,7 @@ admin.site.register(SpecificLocation)
 
 
 class InlineEvent(admin.TabularInline):
-    model = Event
+    model = TimelineEvent
     extra = 2
 
     # override attrs of form field when rendered as Inline:
@@ -19,13 +26,13 @@ class InlineEvent(admin.TabularInline):
     }
 
 
-admin.site.register(Event)
-admin.site.register(EventNote)
-admin.site.register(DescribedEventNote)
+admin.site.register(TimelineEvent)
+admin.site.register(TimelineEventNote)
+admin.site.register(ChronicleEventNote)
 
 
 class InlineDescribedEvent(admin.TabularInline):
-    model = DescribedEvent
+    model = ChronicleEvent
     extra = 2
 
 
@@ -76,5 +83,5 @@ class DescribedEventAdmin(admin.ModelAdmin):
     ]
 
 
-admin.site.register(DescribedEvent, DescribedEventAdmin)
+admin.site.register(ChronicleEvent, DescribedEventAdmin)
 
