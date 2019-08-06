@@ -1,6 +1,6 @@
 from django import forms
 from pagedown.widgets import PagedownWidget
-from timeline.models import Event, EventNote, DescribedEvent, DescribedEventNote
+from history.models import Event, EventNote, DescribedEvent, DescribedEventNote
 
 
 # ------ Event model ------

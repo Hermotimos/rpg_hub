@@ -28,7 +28,7 @@ urlpatterns = [
     path('forum/', include('forum.urls')),
     path('users/', include('users.urls')),
     path('news/', include('news.urls')),
-    path('timeline/', include('timeline.urls')),
+    path('history/', include('history.urls')),
     path('contact/', include('contact.urls')),
     path('rules/', include('rules.urls')),
 ]

@@ -106,7 +106,7 @@ class Event(models.Model):
         ordering = ['year', 'season', 'day_start', 'day_end', 'description', 'game_no']
 
     # Steps to migrate these models:
-    # 1) delete migration files, delete tables in db, DELETE FROM django_migrations WHERE app="timeline";
+    # 1) delete migration files, delete tables in db, DELETE FROM django_migrations WHERE app="history";
     # 2) comment out all other models than Event
     # 1) migrate Events without any M2M fields or ForeignKeys.
     # 2) uncomment other fields and classes and migrate.
@@ -128,7 +128,7 @@ class EventNote(models.Model):
 class DescribedEvent(models.Model):
     """
     This model is not connected with Event model. There is not 121 or M2M relationships between them.
-    Event model serves to create events in timeline view (chronology).
+    Event model serves to create events in history view (chronology).
     EventDescription serves to create events in the full history text of the game.
     Lack or correspondence between the two is intentional for flexibility.
     """

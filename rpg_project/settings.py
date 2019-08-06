@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'forum',
     'news',
     'users.apps.UsersConfig',    # just another way of doing this
-    'timeline',
+    'history',
     'contact',
     'rules'
 ]

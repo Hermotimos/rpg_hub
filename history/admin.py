@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.forms import TextInput, Textarea
 from django.db import models
-from timeline.models import GameSession, Thread, GeneralLocation, SpecificLocation, Event, EventNote, DescribedEvent, \
+from history.models import GameSession, Thread, GeneralLocation, SpecificLocation, Event, EventNote, DescribedEvent, \
     DescribedEventNote
 
 admin.site.register(Thread)

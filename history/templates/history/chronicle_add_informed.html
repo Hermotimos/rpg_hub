@@ -2,12 +2,8 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% block head_extra %}
-{{ form.media }}
-{% endblock head_extra %}
-
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{% url 'chronicle-chapters' %}">Historia</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'chronicle-main' %}">Historia</a></li>
     <li class="breadcrumb-item"><a href="javascript:history.go(-1)">(...)</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
@@ -37,10 +33,19 @@
         {% endif %}
     </table><br><br>
 
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
-        <input class="btn btn-dark" type="submit" value="Zanotuj">
-    </form>
+    <h6>Poinformuj towarzyszy o wydarzeniu:</h6>
+    <small>1) Opowiadaj swoje losy tylko towarzyszom obecnym przy Tobie w chwili zakończenia sesji!</small><br>
+    <small>2) Nie informuj uczestników zdarzeń!</small><br>
+    <small class="red">3) Jeśli ktoś już jest poinformowany - nie usuwaj go!</small><br>
+    <br>
+
+    <div class="allowed-profiles-form">
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.informed }}<br>
+            <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
+            <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
+            <input class="btn btn-dark" type="submit" value="Poinformuj">
+        </form>
+    </div>
 {% endblock content %}

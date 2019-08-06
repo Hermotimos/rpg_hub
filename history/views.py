@@ -5,9 +5,9 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from users.models import Profile
-from timeline.models import Event, EventNote, DescribedEvent, DescribedEventNote, GameSession, Thread, GeneralLocation,\
+from history.models import Event, EventNote, DescribedEvent, DescribedEventNote, GameSession, Thread, GeneralLocation,\
     SpecificLocation
-from timeline.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm, DescribedEventNoteForm,\
+from history.forms import CreateEventForm, EventAddInformedForm, EditEventForm, EventNoteForm, DescribedEventNoteForm,\
     CreateDescribedEventForm, DescribedEventAddInformedForm, EditDescribedEventForm
 
 
@@ -87,7 +87,7 @@ def timeline_main_view(request):
         'general_locs_with_specific_locs_list': general_locs_with_specific_locs_list,
         'queryset': queryset
     }
-    return render(request, 'timeline/timeline_main.html', context)
+    return render(request, 'history/timeline_main.html', context)
 
 
 @login_required
@@ -106,7 +106,7 @@ def timeline_events_view(request):
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
-    return render(request, 'timeline/timeline_events.html', context)
+    return render(request, 'history/timeline_events.html', context)
 
 
 @login_required
@@ -128,7 +128,7 @@ def timeline_by_thread_view(request, thread_id):
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
-    return render(request, 'timeline/timeline_events.html', context)
+    return render(request, 'history/timeline_events.html', context)
 
 
 @login_required
@@ -155,7 +155,7 @@ def timeline_by_participant_view(request, participant_id):
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
-    return render(request, 'timeline/timeline_events.html', context)
+    return render(request, 'history/timeline_events.html', context)
 
 
 @login_required
@@ -177,7 +177,7 @@ def timeline_by_general_location_view(request, general_location_id):
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
-    return render(request, 'timeline/timeline_events.html', context)
+    return render(request, 'history/timeline_events.html', context)
 
 
 @login_required
@@ -199,7 +199,7 @@ def timeline_by_specific_location_view(request, specific_location_id):
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
-    return render(request, 'timeline/timeline_events.html', context)
+    return render(request, 'history/timeline_events.html', context)
 
 
 @login_required
@@ -234,7 +234,7 @@ def timeline_by_year_and_season_view(request, year, season='0'):
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
-    return render(request, 'timeline/timeline_events.html', context)
+    return render(request, 'history/timeline_events.html', context)
 
 
 @login_required
@@ -261,7 +261,7 @@ def create_event_view(request):
         'page_title': 'Nowe wydarzenie: Kalendarium',
         'form': form
     }
-    return render(request, 'timeline/timeline_create.html', context)
+    return render(request, 'history/timeline_create.html', context)
 
 
 @login_required
@@ -282,7 +282,7 @@ def edit_event_view(request, event_id):
         'page_title': 'Edycja wydarzenia',
         'form': form
     }
-    return render(request, 'timeline/timeline_edit.html', context)
+    return render(request, 'history/timeline_edit.html', context)
 
 
 @login_required
@@ -340,7 +340,7 @@ def event_add_informed_view(request, event_id):
         'participants': participants,
         'informed': informed
     }
-    return render(request, 'timeline/timeline_add_informed.html', context)
+    return render(request, 'history/timeline_add_informed.html', context)
 
 
 @login_required
@@ -377,7 +377,7 @@ def event_note_view(request, event_id):
         'participants': participants,
         'informed': informed
     }
-    return render(request, 'timeline/timeline_note.html', context)
+    return render(request, 'history/timeline_note.html', context)
 
 
 # #################### CHRONICLES: model DescribedEvent ####################
@@ -404,7 +404,7 @@ def create_described_event_view(request):
         'page_title': 'Nowe wydarzenie: Historia',
         'form': form
     }
-    return render(request, 'chronicle/chronicle_create.html', context)
+    return render(request, 'history/chronicle_create.html', context)
 
 
 @login_required
@@ -425,7 +425,7 @@ def edit_described_event_view(request, event_id):
         'page_title': 'Edycja wydarzenia',
         'form': form
     }
-    return render(request, 'chronicle/chronicle_edit.html', context)
+    return render(request, 'history/chronicle_edit.html', context)
 
 
 @login_required
@@ -469,7 +469,7 @@ def described_event_add_informed_view(request, event_id):
         'participants': participants,
         'informed': informed
     }
-    return render(request, 'chronicle/chronicle_add_informed.html', context)
+    return render(request, 'history/chronicle_add_informed.html', context)
 
 
 def is_allowed_game(_game, profile):
@@ -490,7 +490,7 @@ def chronicles_chapters_view(request):
         'allowed_bios_list': allowed_bios_list,
         'allowed_games_list': allowed_games_list
     }
-    return render(request, 'chronicle/chronicle_chapters_all.html', context)
+    return render(request, 'history/chronicle_chapters_all.html', context)
 
 
 @login_required
@@ -504,7 +504,7 @@ def chronicles_all_view(request):
         'allowed_bios_list': allowed_bios_list,
         'allowed_games_list': allowed_games_list
     }
-    return render(request, 'chronicle/chronicle_main.html', context)
+    return render(request, 'history/chronicle_main.html', context)
 
 
 @login_required
@@ -520,7 +520,7 @@ def chronicles_one_chapter_view(request, game_id):
         'page_title': page_title,
         'game': obj
     }
-    return render(request, 'chronicle/chronicle_chapter.html', context)
+    return render(request, 'history/chronicle_chapter.html', context)
 
 
 @login_required
@@ -556,4 +556,4 @@ def described_event_note_view(request, event_id):
         'participants': participants,
         'informed': informed
     }
-    return render(request, 'chronicle/chronicle_note.html', context)
+    return render(request, 'history/chronicle_note.html', context)

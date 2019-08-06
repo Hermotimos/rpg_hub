@@ -92,10 +92,10 @@
                     {% endif %}
                 </td>
                 <td class="align-top">
-                    <h6><a href="{% url 'add-informed' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
-                    <h6><a href="{% url 'event-note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
+                    <h6><a href="{% url 'timeline-inform' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
+                    <h6><a href="{% url 'timeline-note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
                     {% if request.user.profile.character_status == 'gm' %}
-                        <h6><a href="{% url 'edit-event' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
+                        <h6><a href="{% url 'timeline-edit' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
                     {% endif %}
                 </td>
             </tr>
