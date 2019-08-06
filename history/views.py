@@ -123,7 +123,7 @@ def timeline_all_events_view(request):
 
 @login_required
 def timeline_thread_view(request, thread_id):
-    thread = Thread.objects.get(id=thread_id)
+    thread = get_object_or_404(Thread, id=thread_id)
     events_by_thread_qs = thread.events.all()
 
     if request.user.profile in Profile.objects.filter(character_status='gm'):
@@ -145,7 +145,7 @@ def timeline_thread_view(request, thread_id):
 
 @login_required
 def timeline_participant_view(request, participant_id):
-    participant = Profile.objects.get(id=participant_id)
+    participant = get_object_or_404(Profile, id=participant_id)
     events_by_participant_qs = participant.events_participated.all()
 
     if request.user.profile in Profile.objects.filter(character_status='gm'):
@@ -172,7 +172,7 @@ def timeline_participant_view(request, participant_id):
 
 @login_required
 def timeline_general_location_view(request, gen_loc_id):
-    general_location = GeneralLocation.objects.get(id=gen_loc_id)
+    general_location = get_object_or_404(GeneralLocation, id=gen_loc_id)
     events_by_general_location_qs = TimelineEvent.objects.filter(general_location=general_location)
 
     if request.user.profile in Profile.objects.filter(character_status='gm'):
@@ -194,7 +194,7 @@ def timeline_general_location_view(request, gen_loc_id):
 
 @login_required
 def timeline_specific_location_view(request, spec_loc_id):
-    specific_location = SpecificLocation.objects.get(id=spec_loc_id)
+    specific_location = get_object_or_404(SpecificLocation, id=spec_loc_id)
     events_by_specific_location_qs = specific_location.events.all()
 
     if request.user.profile in Profile.objects.filter(character_status='gm'):
