@@ -8,23 +8,23 @@
 {% endblock head_extra %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{% url 'forum' %}">Narady</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'debates-main' %}">Narady</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
 {% block content %}
     <br><br><br>
-    {% if request.user.profile not in topic.allowed_profiles.all and request.user.profile.character_status != 'gm' %}
+    {% if request.user.profile not in debate.allowed_profiles.all and request.user.profile.character_status != 'gm' %}
         <h4>Nie jesteś uczestnikiem tej narady</h4>
     {% else %}
         <table class="forms">
             <tr>
                 <td><h6>Temat:</h6></td>
-                <td><small>{{ topic.board.title }}</small></td>
+                <td><small>{{ debate.board.title }}</small></td>
             </tr>
             <tr>
                 <td><h6>Inicjator:</h6></td>
-                <td><small>{{ topic.starter.profile.character_name|get_first_word }}</small></td>
+                <td><small>{{ debate.starter.profile.character_name|get_first_word }}</small></td>
             </tr>
             <tr>
                 <td><h6>Uczestnicy:</h6></td>
@@ -34,11 +34,11 @@
 
         <br>
         <div class="mb-4">
-            <a href="{% url 'update-topic' topic.board.slug topic.slug %}" class="btn btn-outline-dark">Dodaj uczestników narady</a>
+            <a href="{% url 'update-debate' debate.board.slug debate.slug %}" class="btn btn-outline-dark">Dodaj uczestników narady</a>
         </div>
         <br>
 
-        {% for remark in topic.remarks.all %}
+        {% for remark in debate.remarks.all %}
             {% if remark.author.profile.character_status == 'gm' %}
                 <table>
                     <tbody>
@@ -75,7 +75,7 @@
         {% endfor %}
         <br>
 
-        {% if topic.is_ended %}
+        {% if debate.is_ended %}
             <h4><b>Tak oto zakończyła się Wasza rozmowa.</b></h4><br>
         {% else %}
             <div id="page-bottom">

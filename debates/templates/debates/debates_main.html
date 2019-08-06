@@ -37,27 +37,27 @@
 
 
                     <tbody>
-                    {% for topic in board.topics.all %}
-                        {% if request.user.profile in topic.allowed_profiles.all or request.user.profile.character_status == 'gm' %}
+                    {% for debate in board.debates.all %}
+                        {% if request.user.profile in debate.allowed_profiles.all or request.user.profile.character_status == 'gm' %}
                             <tr>
                                 <td class="unblue">
-                                    <a href="{{ topic.get_absolute_url }}">{{ topic.topic_name }}</a>
+                                    <a href="{{ debate.get_absolute_url }}">{{ debate.title }}</a>
                                 </td>
                                 <td>
-                                    {{ topic.starter.profile.character_name|get_first_word  }}<br>
-                                    <small>{{ topic.date_created|date:'d-M-Y' }}</small>
+                                    {{ debate.starter.profile.character_name|get_first_word  }}<br>
+                                    <small>{{ debate.date_created|date:'d-M-Y' }}</small>
                                 </td>
                                 <td>
-                                    {% for profile in topic.allowed_profiles.all %}
+                                    {% for profile in debate.allowed_profiles.all %}
                                         {% if profile.character_status != 'gm' %}
                                             <small>{{ profile.character_name|get_first_word }}</small><br>
                                         {% endif %}
                                     {% endfor %}
                                 </td>
-                                <td>{{ topics_with_remarks_by_players_count|dict_lookup:topic }}</td>
+                                <td>{{ debates_with_remarks_by_players_count|dict_lookup:debate }}</td>
                                 <td>
-                                    {{ topics_with_last_active_user_dict|dict_lookup:topic|get_first_word }}<br>
-                                    <small>{{ topics_with_last_remark_date_dict|dict_lookup:topic|date:'d-M-Y' }}</small>
+                                    {{ debates_with_last_active_user_dict|dict_lookup:debate|get_first_word }}<br>
+                                    <small>{{ debates_with_last_remark_date_dict|dict_lookup:debate|date:'d-M-Y' }}</small>
                                 </td>
                             </tr>
                         {% endif %}
@@ -66,7 +66,7 @@
                 </table>
                 <br>
                 <div class="mb-4">
-                    <a href="{% url 'create-topic' board.slug %}" class="btn btn-outline-dark">Nowa narada</a>
+                    <a href="{% url 'create-debate' board.slug %}" class="btn btn-outline-dark">Nowa narada</a>
                 </div><br><br>
             {% endif %}
         {% endfor %}

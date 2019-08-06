@@ -30,14 +30,14 @@ class Board(models.Model):
         ordering = ['-date_updated']
 
 
-class Topic(models.Model):
-    topic_name = models.CharField(max_length=100, unique=True)
+class Debate(models.Model):
+    title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=50, unique=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
-    board = models.ForeignKey(Board, related_name='topics', on_delete=models.CASCADE)
-    starter = models.ForeignKey(User, related_name='topics', on_delete=models.CASCADE)
-    allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_topics',
+    board = models.ForeignKey(Board, related_name='debates', on_delete=models.CASCADE)
+    starter = models.ForeignKey(User, related_name='debates', on_delete=models.CASCADE)
+    allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_debates',
                                               limit_choices_to=
                                               Q(character_status='active_player') |
                                               Q(character_status='inactive_player') |
@@ -47,10 +47,10 @@ class Topic(models.Model):
     is_individual = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.topic_name
+        return self.title
 
     def _get_unique_slug(self):
-        slug = slugify(self.topic_name)
+        slug = slugify(self.title)
         return slug
 
     def save(self, *args, **kwargs):
@@ -60,7 +60,7 @@ class Topic(models.Model):
 
     def get_absolute_url(self):
         # return f'/debates/{self.board.slug}/{self.slug}'                                            # one way
-        return reverse('topic', kwargs={'board_slug': self.board.slug, 'topic_slug': self.slug})      # another way
+        return reverse('debate', kwargs={'board_slug': self.board.slug, 'debate_slug': self.slug})      # another way
 
     class Meta:
         ordering = ['-date_updated']
@@ -68,7 +68,7 @@ class Topic(models.Model):
 
 class Remark(models.Model):
     text = models.TextField(max_length=4000)
-    topic = models.ForeignKey(Topic, related_name='remarks', on_delete=models.CASCADE)
+    debate = models.ForeignKey(Debate, related_name='remarks', on_delete=models.CASCADE)
     date_posted = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, related_name='remarks', on_delete=models.CASCADE)
     image = models.ImageField(blank=True, null=True, upload_to='post_pics')

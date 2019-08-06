@@ -2,8 +2,8 @@
 {% load static %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{% url 'forum' %}">Narady</a></li>
-    <li class="breadcrumb-item"><a href="{% url 'topic' topic.board.slug topic.slug %}">{{ topic.board.title }}: {{ topic.topic_name }}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'debates-main' %}">Narady</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'debate' debate.board.slug debate.slug %}">{{ debate.board.title }}: {{ debate.title }}</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
@@ -12,11 +12,11 @@
     <table class="forms">
         <tr>
             <td><h6>Temat:</h6></td>
-            <td><small>{{ topic.board.title }}</small></td>
+            <td><small>{{ debate.board.title }}</small></td>
         </tr>
         <tr>
             <td><h6>Narada:</h6></td>
-            <td><small>{{ topic.topic_name }}</small></td>
+            <td><small>{{ debate.title }}</small></td>
         </tr>
         <tr>
             <td><h6>Uczestnicy:</h6></td>
@@ -24,9 +24,9 @@
         </tr>
     </table><br><br>
 
-    {% if topic.is_individual %}
+    {% if debate.is_individual %}
         <h4><b>Nie możesz dodać uczestników do tej rozmowy.</b></h4>
-    {% elif topic.is_ended %}
+    {% elif debate.is_ended %}
         <h4><b>Ta narada już się zakończyła.</b></h4>
     {% else %}
         <h6>Włącz uczestników do narady:</h6>
@@ -39,7 +39,7 @@
                     &nbsp&nbsp&nbsp*Wyłączony uczestnik całkowicie utraci dostęp do narady!</small>
         <br><br>
 
-        <div class="allowed-profiles-form-topic">
+        <div class="allowed-profiles-form-debate">
             <form method="POST" action=".#page-bottom">
                 {% csrf_token %}
                 {{ form.allowed_profiles }}

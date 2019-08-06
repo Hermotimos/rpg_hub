@@ -1,5 +1,5 @@
 from django import forms
-from .models import Remark, Topic, Board
+from .models import Remark, Debate, Board
 from pagedown.widgets import PagedownWidget
 
 
@@ -28,15 +28,9 @@ class CreateRemarkForm(forms.ModelForm):
     )
 
 
-class UpdateTopicForm(forms.ModelForm):
+class CreateDebateForm(forms.ModelForm):
     class Meta:
-        model = Topic
-        fields = ['allowed_profiles']
-
-
-class CreateTopicForm(forms.ModelForm):
-    class Meta:
-        model = Topic
+        model = Debate
         fields = [
             'topic_name',
             'allowed_profiles',
@@ -53,6 +47,12 @@ class CreateTopicForm(forms.ModelForm):
             }
         )
     )
+
+
+class UpdateDebateForm(forms.ModelForm):
+    class Meta:
+        model = Debate
+        fields = ['allowed_profiles']
 
 
 class CreateBoardForm(forms.ModelForm):
