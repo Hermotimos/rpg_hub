@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
@@ -265,27 +265,6 @@ def create_event_view(request):
 
 
 @login_required
-def timeline_edit_view(request, event_id):
-    obj = get_object_or_404(Event, id=event_id)
-
-    if request.method == 'POST':
-        form = EditEventForm(request.POST, instance=obj)
-        if form.is_valid():
-            form.save()
-            messages.info(request, f'Zmodyfikowano wydarzenie!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-    else:
-        form = EditEventForm(instance=obj)
-
-    context = {
-        'page_title': 'Edycja wydarzenia',
-        'form': form
-    }
-    return render(request, 'history/timeline_edit.html', context)
-
-
-@login_required
 def timeline_inform_view(request, event_id):
     obj = get_object_or_404(Event, id=event_id)
 
@@ -380,96 +359,28 @@ def timeline_note_view(request, event_id):
     return render(request, 'history/timeline_note.html', context)
 
 
-# #################### CHRONICLES: model DescribedEvent ####################
-
-
 @login_required
-def chronicle_create_view(request):
-    if request.method == 'POST':
-        form = CreateDescribedEventForm(request.POST or None)
-        if form.is_valid():
-            event = form.save()
-            event.participants.set(form.cleaned_data['participants'])
-            event.informed.set(form.cleaned_data['informed'])
-            event.save()
-            messages.info(request, f'Dodano nowe wydarzenie!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-        else:
-            messages.warning(request, 'Popraw poniższy błąd!')
-    else:
-        form = CreateDescribedEventForm()
-
-    context = {
-        'page_title': 'Nowe wydarzenie: Historia',
-        'form': form
-    }
-    return render(request, 'history/chronicle_create.html', context)
-
-
-@login_required
-def chronicle_edit_view(request, event_id):
-    obj = get_object_or_404(DescribedEvent, id=event_id)
+def timeline_edit_view(request, event_id):
+    obj = get_object_or_404(Event, id=event_id)
 
     if request.method == 'POST':
-        form = EditDescribedEventForm(request.POST, instance=obj)
+        form = EditEventForm(request.POST, instance=obj)
         if form.is_valid():
             form.save()
             messages.info(request, f'Zmodyfikowano wydarzenie!')
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
     else:
-        form = EditDescribedEventForm(instance=obj)
+        form = EditEventForm(instance=obj)
 
     context = {
         'page_title': 'Edycja wydarzenia',
         'form': form
     }
-    return render(request, 'history/chronicle_edit.html', context)
+    return render(request, 'history/timeline_edit.html', context)
 
 
-@login_required
-def chronicle_inform_view(request, event_id):
-    obj = get_object_or_404(DescribedEvent, id=event_id)
-
-    participants = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
-    already_informed = obj.informed.all()[::1]                  # enforces evaluation of lazy Queryset for message
-    informed = ', '.join(p.character_name.split(' ', 1)[0] for p in already_informed)
-
-    if request.method == 'POST':
-        form = DescribedEventAddInformedForm(request.POST, instance=obj)
-        if form.is_valid():
-            form.save()
-
-            subject = f"[RPG] {request.user.profile} podzielił się z Tobą swoją historią!"
-            message = f"{request.user.profile} znów rozprawia o swoich przygodach.\n" \
-                      f"Oto kto już o nich słyszał: " \
-                      f"{', '.join(p.character_name for p in form.cleaned_data['informed'])}\n\n" \
-                      f"Podczas przygody '{obj.game_no.title}' rozegrało się co następuje:\n {obj.description}\n" \
-                      f"Tak było i nie inaczej..."
-            sender = settings.EMAIL_HOST_USER
-            receivers_list = []
-
-            currently_informed = form.cleaned_data['informed']
-            for profile in currently_informed.all():
-                if profile.user.email and profile in form.cleaned_data['informed'] and profile not in already_informed:
-                    receivers_list.append(profile.user.email)
-            send_mail(subject, message, sender, receivers_list)
-
-            messages.info(request, f'Poinformowałeś wybrane postaci!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-    else:
-        form = DescribedEventAddInformedForm(instance=obj)
-
-    context = {
-        'page_title': 'Poinformuj o wydarzeniu',
-        'form': form,
-        'event': obj,
-        'participants': participants,
-        'informed': informed
-    }
-    return render(request, 'history/chronicle_add_informed.html', context)
+# #################### CHRONICLE: model DescribedEvent ####################
 
 
 def is_allowed_game(_game, profile):
@@ -524,6 +435,74 @@ def chronicle_one_chapter_view(request, game_id):
 
 
 @login_required
+def chronicle_create_view(request):
+    if request.method == 'POST':
+        form = CreateDescribedEventForm(request.POST or None)
+        if form.is_valid():
+            event = form.save()
+            event.participants.set(form.cleaned_data['participants'])
+            event.informed.set(form.cleaned_data['informed'])
+            event.save()
+            messages.info(request, f'Dodano nowe wydarzenie!')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+        else:
+            messages.warning(request, 'Popraw poniższy błąd!')
+    else:
+        form = CreateDescribedEventForm()
+
+    context = {
+        'page_title': 'Nowe wydarzenie: Historia',
+        'form': form
+    }
+    return render(request, 'history/chronicle_create.html', context)
+
+
+@login_required
+def chronicle_inform_view(request, event_id):
+    obj = get_object_or_404(DescribedEvent, id=event_id)
+
+    participants = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
+    already_informed = obj.informed.all()[::1]                  # enforces evaluation of lazy Queryset for message
+    informed = ', '.join(p.character_name.split(' ', 1)[0] for p in already_informed)
+
+    if request.method == 'POST':
+        form = DescribedEventAddInformedForm(request.POST, instance=obj)
+        if form.is_valid():
+            form.save()
+
+            subject = f"[RPG] {request.user.profile} podzielił się z Tobą swoją historią!"
+            message = f"{request.user.profile} znów rozprawia o swoich przygodach.\n" \
+                      f"Oto kto już o nich słyszał: " \
+                      f"{', '.join(p.character_name for p in form.cleaned_data['informed'])}\n\n" \
+                      f"Podczas przygody '{obj.game_no.title}' rozegrało się co następuje:\n {obj.description}\n" \
+                      f"Tak było i nie inaczej..."
+            sender = settings.EMAIL_HOST_USER
+            receivers_list = []
+
+            currently_informed = form.cleaned_data['informed']
+            for profile in currently_informed.all():
+                if profile.user.email and profile in form.cleaned_data['informed'] and profile not in already_informed:
+                    receivers_list.append(profile.user.email)
+            send_mail(subject, message, sender, receivers_list)
+
+            messages.info(request, f'Poinformowałeś wybrane postaci!')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+    else:
+        form = DescribedEventAddInformedForm(instance=obj)
+
+    context = {
+        'page_title': 'Poinformuj o wydarzeniu',
+        'form': form,
+        'event': obj,
+        'participants': participants,
+        'informed': informed
+    }
+    return render(request, 'history/chronicle_add_informed.html', context)
+
+
+@login_required
 def chronicle_note_view(request, event_id):
     obj = get_object_or_404(DescribedEvent, id=event_id)
 
@@ -557,3 +536,24 @@ def chronicle_note_view(request, event_id):
         'informed': informed
     }
     return render(request, 'history/chronicle_note.html', context)
+
+
+@login_required
+def chronicle_edit_view(request, event_id):
+    obj = get_object_or_404(DescribedEvent, id=event_id)
+
+    if request.method == 'POST':
+        form = EditDescribedEventForm(request.POST, instance=obj)
+        if form.is_valid():
+            form.save()
+            messages.info(request, f'Zmodyfikowano wydarzenie!')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+    else:
+        form = EditDescribedEventForm(instance=obj)
+
+    context = {
+        'page_title': 'Edycja wydarzenia',
+        'form': form
+    }
+    return render(request, 'history/chronicle_edit.html', context)
