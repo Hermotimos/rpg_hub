@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-
 {% load static %}
 <html lang="pl">
+
 <head>
     <!-- Required meta tags -->
     <meta charset="UTF-8">
@@ -34,29 +34,29 @@
             <div class="col-md-9">
 
                 <!--   BREADCRUMBS   -->
-                    <div class="breadcrumbs">
-                        <small>
-                        <ol class="breadcrumb my-1">
-                            {% block breadcrumb %}
-                            {% endblock breadcrumb %}
-                        </ol>
-                        </small>
-                    </div><br>
+                <div class="breadcrumbs">
+                    <small>
+                    <ol class="breadcrumb my-1">
+                        {% block breadcrumb %}
+                        {% endblock breadcrumb %}
+                    </ol>
+                    </small>
+                </div><br>
 
                 <!--   PAGE TITLE   -->
-                    <br>
-                    <div class="border-custom-base page-title">
-                        <table>
-                            <tr>
-                                <td class="align-top">
-                                    <img src="{% static 'img/skadia_gray.png' %}" class="border-double">
-                                </td>
-                                <td class="pb-0 pl-2">
-                                    <h1><strong>{{ page_title|linebreaksbr }}</strong></h1>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                <br>
+                <div class="border-custom-base page-title">
+                    <table>
+                        <tr>
+                            <td class="align-top">
+                                <img src="{% static 'img/skadia_gray.png' %}" class="border-double">
+                            </td>
+                            <td class="pb-0 pl-2">
+                                <h1><strong>{{ page_title|linebreaksbr }}</strong></h1>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
 
                 <!--  MESSAGES  -->
                 {% if messages %}
