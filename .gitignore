@@ -6,6 +6,7 @@ mvenv
 .idea
 
 credentials.py
+requirements.txt
 
 db.sqlite3
 media
