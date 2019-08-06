@@ -1,4 +1,3 @@
-from django.urls import reverse
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
@@ -41,8 +40,7 @@ class Debate(models.Model):
                                               limit_choices_to=
                                               Q(character_status='active_player') |
                                               Q(character_status='inactive_player') |
-                                              Q(character_status='living_npc')
-                                              )
+                                              Q(character_status='living_npc'))
     is_ended = models.BooleanField(default=False)
     is_individual = models.BooleanField(default=False)
 
@@ -57,10 +55,6 @@ class Debate(models.Model):
         if not self.slug:
             self.slug = self._get_unique_slug()
         super().save(*args, *kwargs)
-
-    # def get_absolute_url(self):
-        # return f'/debates/{self.topic.slug}/{self.slug}'                                            # one way
-        # return reverse('debate', kwargs={'topic_slug': self.topic.slug, 'debate_slug': self.slug})      # another way
 
     class Meta:
         ordering = ['-date_updated']
