@@ -17,7 +17,7 @@ class Topic(models.Model):
     def __str__(self):
         return self.title
 
-    def allowed_profiles(self):
+    def allowed_list(self):
         allowed_profiles = []
         for debate in self.debates.all():
             for profile in debate.allowed_profiles.all():

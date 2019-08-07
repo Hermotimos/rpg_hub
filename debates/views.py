@@ -23,7 +23,7 @@ def debates_main_view(request):
 def debate_view(request, topic_id, debate_id):
     obj = get_object_or_404(Debate, id=debate_id)
 
-    allowed = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.allowed_profiles.all() if p.character_status != 'gm')
+    allowed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.allowed_profiles.all() if p.character_status != 'gm')
 
     if request.method == 'POST':
         form = CreateRemarkForm(request.POST, request.FILES)
@@ -40,7 +40,7 @@ def debate_view(request, topic_id, debate_id):
         'page_title': obj.title,
         'debate': obj,
         'form': form,
-        'allowed': allowed
+        'allowed': allowed_str
     }
     return render(request, 'debates/debate.html', context)
 
@@ -50,7 +50,7 @@ def add_allowed_profiles_view(request, topic_id, debate_id):
     obj = get_object_or_404(Debate, id=debate_id)
 
     already_allowed = obj.allowed_profiles.all()[::1]
-    allowed = ', '.join(p.character_name.split(' ', 1)[0] for p in already_allowed if p.character_status != 'gm')
+    allowed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in already_allowed if p.character_status != 'gm')
 
     if request.method == 'POST':
         form = UpdateDebateForm(request.POST, instance=obj)
@@ -85,7 +85,7 @@ def add_allowed_profiles_view(request, topic_id, debate_id):
         'page_title': 'Dodaj uczestników narady',
         'debate': obj,
         'form': form,
-        'allowed': allowed
+        'allowed': allowed_str
     }
     return render(request, 'debates/debate_update_users.html', context)
 
