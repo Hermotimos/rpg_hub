@@ -81,7 +81,7 @@
     </h3>
     <small>Chronologia według Archonatu Nemetha Samatiana w Ebbonie</small><br><br>
     <table id="years" class="collapse">
-        {% for y in timeline.years_sorted_list %}
+        {% for y in years_with_seasons_dict %}
             <tr>
                 <td class="unblue">
                     <a href="{% url 'history:timeline-date' y '0' %}">{{ y }}</a>&emsp;

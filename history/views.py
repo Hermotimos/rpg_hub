@@ -92,7 +92,6 @@ def timeline_main_view(request):
     context = {
         'page_title': 'Kalendarium',
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
-        'years': years_sorted_list,
         'years_with_seasons_dict': years_with_seasons_dict,
         'threads': threads_name_and_obj_list,
         'participants': participants_name_and_obj_list,
