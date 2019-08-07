@@ -53,7 +53,7 @@
                 </td>
                 <td class="timeline-event align-top unblue-black">
                     {% for thread in event.threads.all %}
-                        <a class="hover-pointer" href="{% url 'history:timeline-thread' thread.id %}">&#10023;{{ thread }}</a><br>
+                        &#10023;<a class="hover-pointer" href="{% url 'history:timeline-thread' thread.id %}">{{ thread }}</a><br>
                     {% endfor %}
                 </td>
                 <td class="timeline-event justify align-top">
