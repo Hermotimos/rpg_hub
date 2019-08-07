@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.forms import Textarea
 from django.db import models
 from history.models import (GameSession,
-                            Timeline,
                             Thread,
                             GeneralLocation,
                             SpecificLocation,
@@ -11,7 +10,6 @@ from history.models import (GameSession,
                             ChronicleEvent,
                             ChronicleEventNote)
 
-admin.site.register(Timeline)
 admin.site.register(Thread)
 admin.site.register(GeneralLocation)
 admin.site.register(SpecificLocation)
