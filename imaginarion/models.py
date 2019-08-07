@@ -3,10 +3,11 @@ from PIL import Image
 
 
 TYPES = (
-    ('person', 'person'),
-    ('place', 'place'),
-    ('thing', 'thing'),
-    ('knowledge', 'knowledge')
+    ('npc', 'npc'),
+    ('realia', 'realia'),
+    ('symbola', 'symbola'),
+    ('thera', 'thera'),
+    ('topoi', 'topoi'),
 )
 
 
