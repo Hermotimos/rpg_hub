@@ -2,6 +2,7 @@ from django.urls import path
 from history import views
 
 
+app_name = 'history'
 urlpatterns = [
 
     # timeline
@@ -26,3 +27,5 @@ urlpatterns = [
     path('chronicle/note:<int:event_id>/', views.chronicle_note_view, name='chronicle-note'),
     path('chronicle/edit:<int:event_id>/', views.chronicle_edit_view, name='chronicle-edit'),
 ]
+
+

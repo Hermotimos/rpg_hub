@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{% url 'chronicle-main' %}">Historia</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'history:chronicle-main' %}">Historia</a></li>
     <li class="breadcrumb-item"><a href="javascript:history.go(-1)">(...)</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}

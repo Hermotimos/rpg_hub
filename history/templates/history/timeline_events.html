@@ -3,7 +3,7 @@
 {% load custom_filters %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{% url 'timeline-main' %}">Kalendarium</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'history:timeline-main' %}">Kalendarium</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
@@ -40,10 +40,10 @@
         {% for event in queryset %}
             <tr>
                 <td class="center align-top unblue-black {{ seasons_with_styles_dict|dict_lookup:event.season }}">
-                    <a class="hover-pointer" href="{% url 'timeline-date' event.year '0' %}">{{ event.year }}</a>
+                    <a class="hover-pointer" href="{% url 'history:timeline-date' event.year '0' %}">{{ event.year }}</a>
                 </td>
                 <td class="center align-top unblue-black {{ seasons_with_styles_dict|dict_lookup:event.season }}">
-                    <a href="{% url 'timeline-date' event.year event.season %}">
+                    <a href="{% url 'history:timeline-date' event.year event.season %}">
                     {% if event.day_end %}
                         {{ event.day_start }}-{{ event.day_end }}
                     {% else %}
@@ -53,7 +53,7 @@
                 </td>
                 <td class="timeline-event align-top unblue-black">
                     {% for thread in event.threads.all %}
-                        <a class="hover-pointer" href="{% url 'timeline-thread' thread.id %}">&#10023;{{ thread }}</a><br>
+                        <a class="hover-pointer" href="{% url 'history:timeline-thread' thread.id %}">&#10023;{{ thread }}</a><br>
                     {% endfor %}
                 </td>
                 <td class="timeline-event justify align-top">
@@ -68,34 +68,34 @@
                 </td>
                 <td class="timeline-small align-top unblue">
                     {% for profile in event.participants.all %}
-                        <a class="hover-pointer" href="{% url 'timeline-participant' profile.id %}"><small>{{ profile.character_name|get_first_word }}</small></a><br>
+                        <a class="hover-pointer" href="{% url 'history:timeline-participant' profile.id %}"><small>{{ profile.character_name|get_first_word }}</small></a><br>
                     {% endfor %}
                     {% for profile in event.informed.all %}
                         <a class="hover-pointer" href="{% url 'timeline-participant' profile.id %}"><small>+{{ profile.character_name|get_first_word }}</small></a><br>
                     {% endfor %}
                 </td>
                 <td class="timeline-small align-top unblue-black">
-                    <a class="hover-pointer"  href="{% url 'timeline-gen-loc' event.general_location.id %}">{{ event.general_location }}</a><br>
+                    <a class="hover-pointer"  href="{% url 'history:timeline-gen-loc' event.general_location.id %}">{{ event.general_location }}</a><br>
                     {% for loc in event.specific_locations.all %}
-                        <a class="hover-pointer" href="{% url 'timeline-spec-loc' loc.id %}"><small>{{ loc }}</small></a><br>
+                        <a class="hover-pointer" href="{% url 'history:timeline-spec-loc' loc.id %}"><small>{{ loc }}</small></a><br>
                     {% endfor %}
                 </td>
                 <td class="center align-top unblue-black">
                     {% if event.game_no.game_no > 0 %}
-                        <small><a href="{% url 'chronicle-one-chapter' event.game_no.id %}">
+                        <small><a href="{% url 'history:chronicle-one-chapter' event.game_no.id %}">
                             -{{ event.game_no.game_no }}-
                         </a></small>
                     {% elif event.game_no.game_no == 0 %}
                         <small hidden><b>***</b></small>
                     {% else %}
-                        <small><a href="{% url 'chronicle-one-chapter' event.game_no.id %}">-X-</a></small>
+                        <small><a href="{% url 'history:chronicle-one-chapter' event.game_no.id %}">-X-</a></small>
                     {% endif %}
                 </td>
                 <td class="align-top">
-                    <h6><a href="{% url 'timeline-inform' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
-                    <h6><a href="{% url 'timeline-note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
+                    <h6><a href="{% url 'history:timeline-inform' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
+                    <h6><a href="{% url 'history:timeline-note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
                     {% if request.user.profile.character_status == 'gm' %}
-                        <h6><a href="{% url 'timeline-edit' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
+                        <h6><a href="{% url 'history:timeline-edit' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
                     {% endif %}
                 </td>
             </tr>

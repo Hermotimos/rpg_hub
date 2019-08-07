@@ -10,7 +10,7 @@
     <br><br><br>
 
     <h3 class="unblue">
-        <a href="{% url 'timeline-all-events' %}"><b>Pełne Kalendarium</b></a>
+        <a href="{% url 'history:timeline-all-events' %}"><b>Pełne Kalendarium</b></a>
     </h3>
     <small>Pełne kalendarium losów Twojej postaci oraz znanych jej wydarzeń</small><br><br>
     <br><br>
@@ -23,7 +23,7 @@
         <tr>
         {% for t in threads %}
             <td class="unblue">
-                &#10023;<a href="{% url 'timeline-thread' t.1.id %}">{{ t.0 }}</a>&emsp;&emsp;
+                &#10023;<a href="{% url 'history:timeline-thread' t.1.id %}">{{ t.0 }}</a>&emsp;&emsp;
             </td>
             {% if forloop.counter|divisibleby:3 %}
                 </tr><tr>
@@ -41,7 +41,7 @@
         <tr>
         {% for p in participants %}
             <td class="unblue">
-                &#10023;<a href="{% url 'timeline-participant' p.1.id %}">{{ p.0 }}</a>&emsp;&emsp;
+                &#10023;<a href="{% url 'history:timeline-participant' p.1.id %}">{{ p.0 }}</a>&emsp;&emsp;
             </td>
             {% if forloop.counter|divisibleby:4 %}
                 </tr><tr>
@@ -59,13 +59,13 @@
         {% for gl in gen_locs_with_spec_locs_list %}
             <tr>
                 <td class="unblue" colspan="4">
-                    <br><h4>&#10037;<a href="{% url 'timeline-gen-loc' gl.0.id %}">{{ gl.0 }}</a>&emsp;&emsp;</h4>
+                    <br><h4>&#10037;<a href="{% url 'history:timeline-gen-loc' gl.0.id %}">{{ gl.0 }}</a>&emsp;&emsp;</h4>
                 </td>
             </tr>
             <tr>
             {% for sl in gl.1 %}
                 <td class="unblue">
-                    &#10023;<a href="{% url 'timeline-spec-loc' sl.1.id %}">{{ sl.0 }}</a>&emsp;&emsp;
+                    &#10023;<a href="{% url 'history:timeline-spec-loc' sl.1.id %}">{{ sl.0 }}</a>&emsp;&emsp;
                 </td>
                 {% if forloop.counter|divisibleby:4 %}
                     </tr><tr>
@@ -84,26 +84,26 @@
         {% for y in years_with_seasons_dict %}
             <tr>
                 <td class="unblue">
-                    <a href="{% url 'timeline-date' y '0' %}">{{ y }}</a>&emsp;
+                    <a href="{% url 'history:timeline-date' y '0' %}">{{ y }}</a>&emsp;
                 </td>
                 <td class="unblue">
                     {% if '1' in years_with_seasons_dict|dict_lookup:y %}
-                        <a href="{% url 'timeline-date' y '1' %}">Wiosna</a>&emsp;
+                        <a href="{% url 'history:timeline-date' y '1' %}">Wiosna</a>&emsp;
                     {% endif %}
                 </td>
                 <td class="unblue">
                     {% if '2' in years_with_seasons_dict|dict_lookup:y %}
-                        <a href="{% url 'timeline-date' y '2' %}">Lato</a>&emsp;
+                        <a href="{% url 'history:timeline-date' y '2' %}">Lato</a>&emsp;
                     {% endif %}
                 </td>
                 <td class="unblue">
                     {% if '3' in years_with_seasons_dict|dict_lookup:y %}
-                        <a href="{% url 'timeline-date' y '3' %}">Jesień</a>&emsp;
+                        <a href="{% url 'history:timeline-date' y '3' %}">Jesień</a>&emsp;
                     {% endif %}
                 </td>
                 <td class="unblue">
                     {% if '4' in years_with_seasons_dict|dict_lookup:y %}
-                        <a href="{% url 'timeline-date' y '4' %}">Zima</a>&emsp;
+                        <a href="{% url 'history:timeline-date' y '4' %}">Zima</a>&emsp;
                     {% endif %}
                 </td>
             </tr>

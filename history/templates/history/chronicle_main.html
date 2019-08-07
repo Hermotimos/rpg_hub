@@ -3,7 +3,7 @@
 {% load custom_filters %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{% url 'chronicle-main' %}">Historia</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'history:chronicle-main' %}">Historia</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
@@ -56,10 +56,10 @@
                                 </p>
                             </td>
                             <td class="align-top">
-                                <h6><a href="{% url 'chronicle-inform' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
-                                <h6><a href="{% url 'chronicle-note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
+                                <h6><a href="{% url 'history:chronicle-inform' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
+                                <h6><a href="{% url 'history:chronicle-note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
                                 {% if request.user.profile.character_status == 'gm' %}
-                                    <h6><a href="{% url 'chronicle-edit' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
+                                    <h6><a href="{% url 'history:chronicle-edit' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
                                 {% endif %}
                             </td>
                         </tr>
@@ -98,10 +98,10 @@
                                 </p>
                             </td>
                             <td class="align-top">
-                                <h6><a href="{% url 'chronicle-inform' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
-                                <h6><a href="{% url 'chronicle-note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
+                                <h6><a href="{% url 'history:chronicle-inform' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
+                                <h6><a href="{% url 'history:chronicle-note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
                                 {% if request.user.profile.character_status == 'gm' %}
-                                    <h6><a href="{% url 'chronicle-edit' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
+                                    <h6><a href="{% url 'history:chronicle-edit' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
                                 {% endif %}
                             </td>
                         </tr>
