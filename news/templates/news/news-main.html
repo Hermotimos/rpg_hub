@@ -25,8 +25,8 @@
                         </td>
                         <td>
                             <small>Ostatnia aktywność:
-                                {% if news_with_last_activity_dict|dict_lookup:news %}
-                                    {{ news_with_last_activity_dict|dict_lookup:news|date:'d-M-Y, H:i' }}
+                                {% if news.last_activity %}
+                                    {{ news.last_activity|date:'d-M-Y, H:i' }}
                                 {% else %}
                                     {{ news.date_updated|date:'d-M-Y, H:i' }}
                                 {% endif %}

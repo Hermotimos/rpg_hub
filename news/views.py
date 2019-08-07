@@ -13,13 +13,9 @@ from news.forms import CreateNewsForm, CreateResponseForm
 def news_view(request):
     queryset = News.objects.all()
 
-    news_with_last_activity_dict = {news: news.responses.all().aggregate(Max('date_posted'))['date_posted__max']
-                                    for news in queryset}
-
     context = {
         'page_title': 'Ogłoszenia',
         'queryset': queryset,
-        'news_with_last_activity_dict': news_with_last_activity_dict
     }
     return render(request, 'news/news-main.html', context)
 

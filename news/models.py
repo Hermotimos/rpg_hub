@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
+from django.db.models import Max
 from users.models import Profile
 from PIL import Image
 
@@ -37,6 +38,9 @@ class News(models.Model):
 
     class Meta:
         ordering = ['-date_posted']
+
+    def last_activity(self):
+        return self.responses.all().aggregate(Max('date_posted'))['date_posted__max']
 
 
 class Response(models.Model):
