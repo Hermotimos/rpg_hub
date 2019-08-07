@@ -71,7 +71,7 @@
                         <a class="hover-pointer" href="{% url 'history:timeline-participant' profile.id %}"><small>{{ profile.character_name|get_first_word }}</small></a><br>
                     {% endfor %}
                     {% for profile in event.informed.all %}
-                        <a class="hover-pointer" href="{% url 'timeline-participant' profile.id %}"><small>+{{ profile.character_name|get_first_word }}</small></a><br>
+                        <a class="hover-pointer" href="{% url 'history:timeline-participant' profile.id %}"><small>+{{ profile.character_name|get_first_word }}</small></a><br>
                     {% endfor %}
                 </td>
                 <td class="timeline-small align-top unblue-black">
