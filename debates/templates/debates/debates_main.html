@@ -44,9 +44,8 @@
                                     <a href="{% url 'debates:debate' debate.topic.id debate.id %}">{{ debate.title }}</a>
                                 </td>
                                 <td>
-                                    .{{ debate.first_remark_by_player }}
-                                    {{ debate.starter.profile.character_name|get_first_word  }}<br>
-                                    <small>{{ debate.date_created|date:'d-M-Y' }}</small>
+                                    {{ debate.first_active_player|get_first_word  }}<br>
+                                    <small>{{ debate.first_player_remark_date|date:'d-M-Y' }}</small>
                                 </td>
                                 <td>
                                     {% for profile in debate.allowed_profiles.all %}
@@ -55,13 +54,10 @@
                                         {% endif %}
                                     {% endfor %}
                                 </td>
-                                <td>{{ debates_with_remarks_by_players_count|dict_lookup:debate }}</td>
+                                <td>{{ debate.player_remarks_count }}</td>
                                 <td>
-<!--                                    {{ debate.last_remark }}-->
-<!--                                    {{ debates_with_last_active_user_dict|dict_lookup:debate|get_first_word }}<br>-->
-<!--                                    <small>{{ debates_with_last_remark_date_dict|dict_lookup:debate|date:'d-M-Y' }}</small>-->
-                                    {{ debate.last_active_user|get_first_word }}<br>
-                                    <small>{{ debate.last_remark_date|date:'d-M-Y' }}</small>
+                                    {{ debate.last_active_player|get_first_word }}<br>
+                                    <small>{{ debate.last_player_remark_date|date:'d-M-Y' }}</small>
                                 </td>
                             </tr>
                         {% endif %}

@@ -38,41 +38,28 @@ class Debate(models.Model):
     class Meta:
         ordering = ['-date_updated']
 
-    def first_remark_by_player(self):
-        remarks_by_players = self.remarks.exclude(
-            author__in=User.objects.filter(
-                profile__in=Profile.objects.filter(
-                    character_status='gm'
-                )
-            )
-        )
-        first_remark_date = self.remarks.all().aggregate(Min('date_posted'))['date_posted__min']
-        return first_remark_date
+    def first_player_remark_date(self):
+        players_remarks = self.remarks.exclude(
+            author__profile__in=Profile.objects.filter(character_status='gm'))
+        return players_remarks.aggregate(Min('date_posted'))['date_posted__min']
 
+    def last_player_remark_date(self):
+        players_remarks = self.remarks.exclude(
+            author__profile__in=Profile.objects.filter(character_status='gm'))
+        return players_remarks.aggregate(Max('date_posted'))['date_posted__max']
 
+    def first_active_player(self):
+        remark = self.remarks.get(date_posted=self.first_player_remark_date())
+        return remark.author.profile.character_name if remark else ''
 
+    def last_active_player(self):
+        remark = self.remarks.get(date_posted=self.last_player_remark_date())
+        return remark.author.profile.character_name if remark else ''
 
-    def last_remark_date(self):
-        return self.remarks.all().aggregate(Max('date_posted'))['date_posted__max']
-
-    def last_remark(self):
-        last_remark = self.remarks.get(date_posted=self.remarks.all().aggregate(Max('date_posted'))['date_posted__max'])
-        return last_remark
-
-    def last_active_user(self):
-        last_remark = self.remarks.get(date_posted=self.remarks.all().aggregate(Max('date_posted'))['date_posted__max'])
-        if last_remark:
-            return last_remark.author.profile.character_name
-        return ''
-
-"""
-    debates_with_last_remark_date_dict = {}
-    debates_with_last_active_user_dict = {}
-        last_remark = debate.remarks.filter(date_posted=debates_with_last_remark_date_dict[debate])
-        debates_with_last_active_user_dict[debate] = last_remark[0].author.profile.character_name if last_remark else ''
-    debates_with_remarks_by_players_count = {}
-"""
-
+    def player_remarks_count(self):
+        players_remarks = self.remarks.exclude(
+            author__profile__in=Profile.objects.filter(character_status='gm'))
+        return players_remarks.count()
 
 
 class Remark(models.Model):

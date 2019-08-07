@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Max
 from django.core.mail import send_mail
 from django.conf import settings
 from debates.models import Topic, Debate
@@ -12,26 +11,6 @@ from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm, U
 @login_required
 def debates_main_view(request):
     queryset = Topic.objects.all()
-
-    debates_with_last_remark_date_dict = {}
-    debates_with_last_active_user_dict = {}
-    debates_with_remarks_by_players_count = {}
-
-    for debate in Debate.objects.all():
-
-        # last remark dates
-        debates_with_last_remark_date_dict[debate] = debate.remarks.all().aggregate(Max('date_posted'))['date_posted__max']
-
-        # last active users
-        last_remark = debate.remarks.filter(date_posted=debates_with_last_remark_date_dict[debate])
-        debates_with_last_active_user_dict[debate] = last_remark[0].author.profile.character_name if last_remark else ''
-
-        # count of remarks by users
-        cnt = 0
-        for remark in debate.remarks.all():
-            if remark.author not in (u for u in User.objects.all() if u.profile.character_status == 'gm'):
-                cnt += 1
-        debates_with_remarks_by_players_count[debate] = cnt
 
     topics_with_allowed_profiles_dict = {}
     for topic in queryset:
@@ -45,10 +24,7 @@ def debates_main_view(request):
     context = {
         'page_title': 'Narady',
         'queryset': queryset,
-        'debates_with_last_remark_date_dict': debates_with_last_remark_date_dict,
-        'debates_with_last_active_user_dict': debates_with_last_active_user_dict,
         'topics_with_allowed_profiles_dict': topics_with_allowed_profiles_dict,
-        'debates_with_remarks_by_players_count': debates_with_remarks_by_players_count
     }
     return render(request, 'debates/debates_main.html', context)
 
