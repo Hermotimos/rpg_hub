@@ -34,6 +34,23 @@
                                 {% endif %}
 
                                 {{ event.description|linebreaksbr }}
+                                {% if event.pictures.all %}
+                                    <table class="chronicle-img">
+                                        <tr>
+                                        {% for p in event.pictures.all %}
+                                            <td >
+                                                <img src="{{ p.image.url }}" class="border-double">
+                                                &nbsp;&nbsp;{{ p.description }}
+                                            </td>
+                                        {% endfor %}
+                                        </tr>
+                                    </table>
+                                {% endif %}
+
+<!--                                {% for p in event.pictures.all %}-->
+<!--                                    <img src="{{ p.image.url }}" class="border-double">-->
+<!--                                    {{ p.description }}<br><br>-->
+<!--                                {% endfor %}-->
 
                                 {% for note in event.notes.all %}
                                     {% if request.user == note.author %}

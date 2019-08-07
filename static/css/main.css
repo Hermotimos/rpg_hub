@@ -94,7 +94,7 @@ a.article-title:hover {
 }
 
 .account-img-sidebar {
-    display: block;
+        display: block;
         height: auto;
         width: 100%;
         margin-right: 20px;
@@ -271,12 +271,6 @@ table.timeline {
         padding: 0px 5px;
         color: #444444;
 }
-/*
-#chronicle td {
-        border-style: none;         DELETE?
-        font-size: 2px;
-}
-*/
 
 td.center {
         text-align: center;
@@ -286,6 +280,20 @@ td img {
         display: block;
         margin-left: auto;
         margin-right: auto;
+}
+
+.chronicle-img img {
+        display: block;
+        width: 95%;
+        height: auto;
+}
+
+.chronicle-img td {
+        border: none;
+}
+
+.chronicle-img td:hover {
+        pointer-events: none;
 }
 
 td.season-spring  {

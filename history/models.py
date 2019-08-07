@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Q
 from django.core.validators import MaxValueValidator, MinValueValidator
 from users.models import User, Profile
+from imaginarion.models import Picture
 
 
 # ------ GameSession model ------
@@ -149,6 +150,7 @@ class ChronicleEvent(models.Model):
                                       Q(character_status='inactive_player') |
                                       Q(character_status='dead_player'),
                                       blank=True)
+    pictures = models.ManyToManyField(Picture, related_name='chronicle_events_pics', blank=True)
 
     def __str__(self):
         return f'{self.description[0:100]}...'

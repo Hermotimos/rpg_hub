@@ -42,7 +42,7 @@ class GameSessionAdmin(admin.ModelAdmin):
 admin.site.register(GameSession, GameSessionAdmin)
 
 
-class DescribedEventAdmin(admin.ModelAdmin):
+class ChronicleEventAdmin(admin.ModelAdmin):
 
     # fields to be displayed in admin for each object
     fields = [
@@ -50,7 +50,8 @@ class DescribedEventAdmin(admin.ModelAdmin):
         'event_no_in_game',
         'description',
         'participants',
-        'informed'
+        'informed',
+        'pictures'
     ]
 
     # list of fields to show in overview table (cannot include M2M fields)
@@ -82,5 +83,4 @@ class DescribedEventAdmin(admin.ModelAdmin):
     ]
 
 
-admin.site.register(ChronicleEvent, DescribedEventAdmin)
-
+admin.site.register(ChronicleEvent, ChronicleEventAdmin)

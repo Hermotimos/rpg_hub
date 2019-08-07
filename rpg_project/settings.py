@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',    # just another way of doing this
     'history',
     'contact',
-    'rules'
+    'rules',
+    'imaginarion'
 ]
 
 MIDDLEWARE = [

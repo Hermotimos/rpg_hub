@@ -442,7 +442,7 @@ def chronicle_one_chapter_view(request, game_id):
         'page_title': page_title,
         'game': obj
     }
-    return render(request, 'history/chronicle_chapter.html', context)
+    return render(request, 'history/chronicle_one_chapter.html', context)
 
 
 @login_required
