@@ -11,11 +11,18 @@ class Topic(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
     description = models.CharField(max_length=100, verbose_name='opis tematu')
 
+    class Meta:
+        ordering = ['-date_updated']
+
     def __str__(self):
         return self.title
 
-    class Meta:
-        ordering = ['-date_updated']
+    def allowed_profiles(self):
+        allowed_profiles = []
+        for debate in self.debates.all():
+            for profile in debate.allowed_profiles.all():
+                allowed_profiles.append(profile)
+        return allowed_profiles
 
 
 class Debate(models.Model):
@@ -32,11 +39,11 @@ class Debate(models.Model):
     is_ended = models.BooleanField(default=False)
     is_individual = models.BooleanField(default=False)
 
-    def __str__(self):
-        return self.title
-
     class Meta:
         ordering = ['-date_updated']
+
+    def __str__(self):
+        return self.title
 
     def first_player_remark_date(self):
         players_remarks = self.remarks.exclude(

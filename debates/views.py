@@ -12,19 +12,9 @@ from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm, U
 def debates_main_view(request):
     queryset = Topic.objects.all()
 
-    topics_with_allowed_profiles_dict = {}
-    for topic in queryset:
-        allowed_profiles = ''
-        for debate in topic.debates.all():
-            for profile in debate.allowed_profiles.all():
-                if profile.character_name not in allowed_profiles:
-                    allowed_profiles += profile.character_name
-        topics_with_allowed_profiles_dict[topic] = allowed_profiles
-
     context = {
         'page_title': 'Narady',
         'queryset': queryset,
-        'topics_with_allowed_profiles_dict': topics_with_allowed_profiles_dict,
     }
     return render(request, 'debates/debates_main.html', context)
 

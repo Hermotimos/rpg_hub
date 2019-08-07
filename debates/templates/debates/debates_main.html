@@ -17,7 +17,7 @@
 
         <br><br>
         {% for topic in queryset %}
-            {% if request.user.profile.character_name in topics_with_allowed_profiles_dict|dict_lookup:topic or request.user.profile.character_status == 'gm' %}
+            {% if request.user.profile in topic.allowed_profiles or request.user.profile.character_status == 'gm' %}
 
                 <h3>{{ topic.title }}</h3>
                 {% if topic.description %}
