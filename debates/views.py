@@ -66,7 +66,7 @@ def debate_view(request, topic_id, debate_id):
             remark.debate = obj
             remark.author = request.user
             remark.save()
-            return redirect('debate', topic_id=topic_id, debate_id=debate_id)
+            return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
     else:
         form = CreateRemarkForm()            # equals to: form = CreateRemarkForm(request.GET) - GET is the default
 
@@ -107,7 +107,7 @@ def add_allowed_profiles_view(request, topic_id, debate_id):
             send_mail(subject, message, sender, receivers_list)
 
             messages.info(request, f'Wybrane postaci zostały dodane do narady!')
-            return redirect('debate', topic_id=topic_id, debate_id=debate_id)
+            return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
     else:
         form = UpdateDebateForm(
             initial={
@@ -160,7 +160,7 @@ def create_debate_view(request, topic_id):
             send_mail(subject, message, sender, receivers_list)
 
             messages.info(request, f'Utworzono nową naradę!')
-            return redirect('debate', topic_id=topic_id, debate_id=debate.id)
+            return redirect('debates:debate', topic_id=topic_id, debate_id=debate.id)
     else:
         debate_form = CreateDebateForm()            # equals to: form = CreateDebateForm(request.GET) - GET is the default
         remark_form = CreateRemarkForm()
@@ -181,7 +181,7 @@ def create_topic_view(request):
         if form.is_valid():
             topic = form.save()
             messages.info(request, f'Utworzono nowy temat narad!')
-            return redirect('create-debate', topic_id=topic.id)
+            return redirect('debates:create-debate', topic_id=topic.id)
     else:
         form = CreateTopicForm()             # equals to: form = CreateTopicForm(request.GET) - GET is the default
 

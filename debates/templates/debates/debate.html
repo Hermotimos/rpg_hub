@@ -8,7 +8,7 @@
 {% endblock head_extra %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{% url 'debates-main' %}">Narady</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'debates:main' %}">Narady</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
@@ -34,7 +34,7 @@
 
         <br>
         <div class="mb-4">
-            <a href="{% url 'update-debate' debate.topic.id debate.id %}" class="btn btn-outline-dark">Dodaj uczestników narady</a>
+            <a href="{% url 'debates:invite' debate.topic.id debate.id %}" class="btn btn-outline-dark">Dodaj uczestników narady</a>
         </div>
         <br>
 

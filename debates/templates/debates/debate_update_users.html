@@ -2,8 +2,8 @@
 {% load static %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{% url 'debates-main' %}">Narady</a></li>
-    <li class="breadcrumb-item"><a href="{% url 'debate' debate.topic.id debate.id %}">{{ debate.topic.title }}: {{ debate.title }}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'debates:main' %}">Narady</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'debates:debate' debate.topic.id debate.id %}">{{ debate.topic.title }}: {{ debate.title }}</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 

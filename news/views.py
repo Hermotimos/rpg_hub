@@ -47,7 +47,7 @@ def create_news_view(request):
             send_mail(subject, message, sender, receivers_list)
 
             messages.info(request, f'Utworzono nowe ogłoszenie!')
-            return redirect('news-detail', news_slug=news.slug)
+            return redirect('news:detail', news_slug=news.slug)
     else:
         form = CreateNewsForm()
 
@@ -73,7 +73,7 @@ def news_detail_view(request, news_slug):
             response.news = obj
             response.author = request.user
             form.save()
-            return redirect('news-detail', news_slug=news_slug)
+            return redirect('news:detail', news_slug=news_slug)
     else:
         form = CreateResponseForm()
 

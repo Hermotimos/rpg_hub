@@ -18,7 +18,7 @@ def register_view(request):
             form.save()
             username = form.cleaned_data.get('username')
             messages.info(request, f'Utworzono konto dla {username}! Zaloguj się!')
-            return redirect('login')
+            return redirect('users:login')
     else:
         form = UserRegistrationForm()
 
@@ -39,7 +39,7 @@ def profile_view(request):
             user_form.save()
             profile_form.save()
             messages.info(request, 'Zaktualizowano profil postaci!')
-            return redirect('profile')
+            return redirect('users:profile')
     else:
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
@@ -59,7 +59,7 @@ def change_password_view(request):
             user = form.save()
             update_session_auth_hash(request, user)
             messages.info(request, 'Hasło zostało zaktualizowane!')
-            return redirect('profile')
+            return redirect('users:profile')
         else:
             messages.warning(request, 'Popraw poniższy błąd!')
     else:

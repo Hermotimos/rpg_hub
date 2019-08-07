@@ -20,7 +20,7 @@ def report_view(request):
             send_mail(subject, message, sender, receivers_list)
 
             messages.info(request, f'MG został poinformowany o problemie!')
-            return redirect('profile')
+            return redirect('users:profile')
     else:
         form = ReportForm()
 

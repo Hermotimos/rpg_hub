@@ -14,12 +14,12 @@
 
                 <!-- Navbar Left Side -->
                 <div class="navbar-nav mr-auto">
-                    <a class="nav-item nav-link " href="{% url 'news-main' %}">Ogłoszenia</a>
-                    <a class="nav-item nav-link" href="{% url 'rules-main' %}">Zasady</a>
+                    <a class="nav-item nav-link " href="{% url 'news:main' %}">Ogłoszenia</a>
+                    <a class="nav-item nav-link" href="{% url 'rules:main' %}">Zasady</a>
                     &emsp;&emsp;&emsp;
                     <a class="nav-item nav-link" href="{% url 'chronicle-main' %}">Kronika</a>
                     <a class="nav-item nav-link" href="{% url 'timeline-main' %}">Kalendarium</a>
-                    <a class="nav-item nav-link" href="{% url 'debates-main' %}">Narady</a>
+                    <a class="nav-item nav-link" href="{% url 'debates:main' %}">Narady</a>
                     &emsp;&emsp;
                 </div>
 
@@ -27,18 +27,18 @@
                 <div class="navbar-nav">
                     {% if user.is_authenticated %}
                         {% if user.profile.character_name != '' %}
-                            <a class="navbar-brand mr-2" href="/users/profile">{{ user.profile.character_name|get_first_word }}</a>
+                            <a class="navbar-brand mr-2" href="{% url 'users:profile' %}">{{ user.profile.character_name|get_first_word }}</a>
                             {% if request.user.profile.character_status == 'gm' %}
-                                <a href="{% url 'report' %}"><img src="{% static 'img/mailing.png' %}" class="mr-2 mt-1"></a>
+                                <a href="{% url 'contact:report' %}"><img src="{% static 'img/mailing.png' %}" class="mr-2 mt-1"></a>
                             {% endif %}
-                            <a href="{% url 'report' %}"><img src="{% static 'img/report.png' %}" class="mr-3 mt-2"></a>
+                            <a href="{% url 'contact:report' %}"><img src="{% static 'img/report.png' %}" class="mr-3 mt-2"></a>
                             &emsp;
                         {% else %}
-                            <a class="navbar-brand mr-2" href="/users/profile">Uzupełnij profil</a>
+                            <a class="navbar-brand mr-2" href="{% url 'users:profile' %}">Uzupełnij profil</a>
                         {% endif %}
-                        <a class="btn btn-outline-light btn-space" href="{% url 'logout' %}">Wyloguj</a>
+                        <a class="btn btn-outline-light btn-space" href="{% url 'users:logout' %}">Wyloguj</a>
                     {% else %}
-                        <a class="btn btn-outline-light btn-space" href="{% url 'register' %}">Nowa postać</a>
+                        <a class="btn btn-outline-light btn-space" href="{% url 'users:register' %}">Nowa postać</a>
                     {% endif %}
                 </div>
             </div>

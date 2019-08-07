@@ -10,7 +10,7 @@
 {% block content %}
     <br>
     <div class="mb-4">
-        <a href="{% url 'news-create' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
+        <a href="{% url 'news:create' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
     </div>
     <br><br><br>
 
@@ -31,7 +31,7 @@
                                     {{ news.date_updated|date:'d-M-Y, H:i' }}
                                 {% endif %}
                             </small>
-                            <h3 class="unblue"><a href="{% url 'news-detail' news.slug %}">{{ news.title }}</a></h3>
+                            <h3 class="unblue"><a href="{% url 'news:detail' news.slug %}">{{ news.title }}</a></h3>
                         </td>
                     </tr>
                 </tbody>

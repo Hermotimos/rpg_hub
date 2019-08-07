@@ -14,7 +14,7 @@
             <div class="media-body">
                 <h4 class="account-heading d-flex justify-content-between">
                     {{ user.profile.character_name }}
-                    <a href="{% url 'change-password' %}" class="btn btn-outline-dark text-right">Zmiana hasła</a>
+                    <a href="{% url 'users:change-password' %}" class="btn btn-outline-dark text-right">Zmiana hasła</a>
                 </h4>
                 <p class="text-secondary">{{ user.email }}</p>
 
