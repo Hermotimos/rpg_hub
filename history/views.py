@@ -5,7 +5,8 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from users.models import Profile
-from history.models import (TimelineEvent,
+from history.models import (Timeline,
+                            TimelineEvent,
                             TimelineEventNote,
                             ChronicleEvent,
                             ChronicleEventNote,
@@ -33,7 +34,7 @@ SEASONS_WITH_STYLES_DICT = {
 }
 
 
-@login_required
+# @login_required
 def timeline_main_view(request):
     if request.user.profile in Profile.objects.filter(character_status='gm'):
         queryset = TimelineEvent.objects.all()
@@ -89,6 +90,8 @@ def timeline_main_view(request):
         gen_loc_with_spec_locs_list = [gl, [sl for sl in spec_locs_name_and_obj_list if sl[1].general_location == gl]]
         gen_locs_with_spec_locs_list.append(gen_loc_with_spec_locs_list)
 
+    timeline = Timeline.objects.get(id=1)
+
     context = {
         'page_title': 'Kalendarium',
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
@@ -97,7 +100,8 @@ def timeline_main_view(request):
         'threads': threads_name_and_obj_list,
         'participants': participants_name_and_obj_list,
         'gen_locs_with_spec_locs_list': gen_locs_with_spec_locs_list,
-        'queryset': queryset
+        'queryset': queryset,
+        'timeline': timeline
     }
     return render(request, 'history/timeline_main.html', context)
 

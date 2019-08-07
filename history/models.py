@@ -40,6 +40,30 @@ COLORS = (
 )
 
 
+class Timeline(models.Model):
+    number = models.IntegerField()
+
+    def __str__(self):
+        return str(self.number)
+
+    def years_sorted_list(self):
+        years_set = {e.year for e in self.all_timeline_events.all()}
+        years_list = list(years_set)
+        years_list.sort()
+        return years_list
+
+
+
+
+"""
+        'years': years_sorted_list,
+        'years_with_seasons_dict': years_with_seasons_dict,
+        'threads': threads_name_and_obj_list,
+        'participants': participants_name_and_obj_list,
+        'gen_locs_with_spec_locs_list': gen_locs_with_spec_locs_list,
+"""
+
+
 class Thread(models.Model):
     name = models.CharField(max_length=200)
 
@@ -72,6 +96,7 @@ class SpecificLocation(models.Model):
 
 
 class TimelineEvent(models.Model):
+    timeline = models.ForeignKey(Timeline, default=1, related_name='all_timeline_events', on_delete=models.PROTECT, null=True)
     # default=0 for events outside of game session:
     game_no = models.ForeignKey(GameSession, related_name='events', on_delete=models.PROTECT)
     # year has to be > 0, for url patterns (they accept positive nums only):
