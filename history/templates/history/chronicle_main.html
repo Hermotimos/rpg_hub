@@ -3,111 +3,37 @@
 {% load custom_filters %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{% url 'history:chronicle-main' %}">Historia</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br><br><br><br>
+    <br><br><br>
 
-    <table class="chronicle" id="chronicle" data-search="true" data-toggle="table">
+    <h3 class="unblue">
+        <strong><a href="{% url 'history:chronicle-all-chapters' %}">Pełna historia drużyny</a></strong>
+    </h3>
+    <br>
+    {% for game in allowed_bios_list %}
+        <tr>
+            <td>
+                <h5 class="unblue">
+                    0.
+                    <a href="{% url 'history:chronicle-one-chapter' game.id %}">{{ game.title }}</a>
+                </h5>
+            </td>
+        </tr>
+    {% endfor %}
 
-        <colgroup>
-            <col class="description">
-            <col class="actions">
-        </colgroup>
+    {% for game in allowed_games_list %}
+        <tr>
+            <td>
+                <h5 class="unblue">
+                    {{ forloop.counter }}.
+                    <a href="{% url 'history:chronicle-one-chapter' game.id %}">{{ game.title }}</a>
+                </h5>
+            </td>
+        </tr>
+    {% endfor %}
+    <br>
 
-        <thead class="hide">
-            <tr>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-
-        <tbody>
-
-            <!--    BIOS    -->
-            {% for game in allowed_bios_list %}
-                <tr>
-                    <td>
-                        <h4>
-                            <strong><br><br>0. {{ game.title }}</strong><br><br>
-                        </h4>
-                    </td>
-                </tr>
-                {% for event in game.described_events.all %}
-                    {% if event in request.user.profile.described_events_participated.all or event in request.user.profile.described_events_informed.all or request.user.profile.character_status == 'gm' %}
-                        <tr>
-                            <td class="chronicle-event">
-                                <p>
-                                    {% if event in request.user.profile.described_events_informed.all %}
-                                        <small>(Znasz z opowieści)</small>
-                                    {% endif %}
-
-                                    {{ event.description|linebreaksbr }}
-
-                                    {% for note in event.notes.all %}
-                                        {% if request.user == note.author %}
-                                            {% if note.text != '' %}
-                                                <a style="color:{{ note.color }}"><br>Notatka:<br>{{ note.text|linebreaksbr }}</a>
-                                            {% endif %}
-                                        {% endif %}
-                                    {% endfor %}
-                                </p>
-                            </td>
-                            <td class="align-top">
-                                <h6><a href="{% url 'history:chronicle-inform' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
-                                <h6><a href="{% url 'history:chronicle-note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
-                                {% if request.user.profile.character_status == 'gm' %}
-                                    <h6><a href="{% url 'history:chronicle-edit' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endif %}
-                {% endfor %}
-            {% endfor %}
-
-
-            <!--    GAMES    -->
-            {% for game in allowed_games_list %}
-                <tr>
-                    <td>
-                        <h4>
-                            <strong><br><br>{{ forloop.counter }}. {{ game.title }}</strong><br><br>
-                        </h4>
-                    </td>
-                </tr>
-                {% for event in game.described_events.all %}
-                    {% if event in request.user.profile.described_events_participated.all or event in request.user.profile.described_events_informed.all or request.user.profile.character_status == 'gm' %}
-                        <tr>
-                            <td class="chronicle-event">
-                                <p>
-                                    {% if event in request.user.profile.described_events_informed.all %}
-                                        <small>(Znasz z opowieści)</small>
-                                    {% endif %}
-
-                                    {{ event.description|linebreaksbr }}
-
-                                    {% for note in event.notes.all %}
-                                        {% if request.user == note.author %}
-                                            {% if note.text != '' %}
-                                                <a style="color:{{ note.color }}"><br>Notatka:<br>{{ note.text|linebreaksbr }}</a>
-                                            {% endif %}
-                                        {% endif %}
-                                    {% endfor %}
-                                </p>
-                            </td>
-                            <td class="align-top">
-                                <h6><a href="{% url 'history:chronicle-inform' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
-                                <h6><a href="{% url 'history:chronicle-note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
-                                {% if request.user.profile.character_status == 'gm' %}
-                                    <h6><a href="{% url 'history:chronicle-edit' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endif %}
-                {% endfor %}
-            {% endfor %}
-        </tbody>
-    </table>
 {% endblock content %}

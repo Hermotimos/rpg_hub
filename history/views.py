@@ -412,7 +412,7 @@ def chronicle_main_view(request):
         'allowed_bios_list': allowed_bios_list,
         'allowed_games_list': allowed_games_list
     }
-    return render(request, 'history/chronicle_chapters_all.html', context)
+    return render(request, 'history/chronicle_main.html', context)
 
 
 @login_required
@@ -426,7 +426,7 @@ def chronicle_all_chapters_view(request):
         'allowed_bios_list': allowed_bios_list,
         'allowed_games_list': allowed_games_list
     }
-    return render(request, 'history/chronicle_main.html', context)
+    return render(request, 'history/chronicle_all_chapters.html', context)
 
 
 @login_required
