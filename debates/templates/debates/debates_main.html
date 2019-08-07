@@ -17,7 +17,7 @@
 
         <br><br>
         {% for topic in queryset %}
-            {% if request.user.profile.character_name in topic_with_allowed_profiles_dict|dict_lookup:topic or request.user.profile.character_status == 'gm' %}
+            {% if request.user.profile.character_name in topics_with_allowed_profiles_dict|dict_lookup:topic or request.user.profile.character_status == 'gm' %}
 
                 <h3>{{ topic.title }}</h3>
                 {% if topic.description %}
@@ -44,6 +44,7 @@
                                     <a href="{% url 'debates:debate' debate.topic.id debate.id %}">{{ debate.title }}</a>
                                 </td>
                                 <td>
+                                    .{{ debate.first_remark_by_player }}
                                     {{ debate.starter.profile.character_name|get_first_word  }}<br>
                                     <small>{{ debate.date_created|date:'d-M-Y' }}</small>
                                 </td>
@@ -56,8 +57,11 @@
                                 </td>
                                 <td>{{ debates_with_remarks_by_players_count|dict_lookup:debate }}</td>
                                 <td>
-                                    {{ debates_with_last_active_user_dict|dict_lookup:debate|get_first_word }}<br>
-                                    <small>{{ debates_with_last_remark_date_dict|dict_lookup:debate|date:'d-M-Y' }}</small>
+<!--                                    {{ debate.last_remark }}-->
+<!--                                    {{ debates_with_last_active_user_dict|dict_lookup:debate|get_first_word }}<br>-->
+<!--                                    <small>{{ debates_with_last_remark_date_dict|dict_lookup:debate|date:'d-M-Y' }}</small>-->
+                                    {{ debate.last_active_user|get_first_word }}<br>
+                                    <small>{{ debate.last_remark_date|date:'d-M-Y' }}</small>
                                 </td>
                             </tr>
                         {% endif %}

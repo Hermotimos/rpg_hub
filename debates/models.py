@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.db.models import Q, Max, Min
 from PIL import Image
 from users.models import Profile
 
@@ -37,6 +37,42 @@ class Debate(models.Model):
 
     class Meta:
         ordering = ['-date_updated']
+
+    def first_remark_by_player(self):
+        remarks_by_players = self.remarks.exclude(
+            author__in=User.objects.filter(
+                profile__in=Profile.objects.filter(
+                    character_status='gm'
+                )
+            )
+        )
+        first_remark_date = self.remarks.all().aggregate(Min('date_posted'))['date_posted__min']
+        return first_remark_date
+
+
+
+
+    def last_remark_date(self):
+        return self.remarks.all().aggregate(Max('date_posted'))['date_posted__max']
+
+    def last_remark(self):
+        last_remark = self.remarks.get(date_posted=self.remarks.all().aggregate(Max('date_posted'))['date_posted__max'])
+        return last_remark
+
+    def last_active_user(self):
+        last_remark = self.remarks.get(date_posted=self.remarks.all().aggregate(Max('date_posted'))['date_posted__max'])
+        if last_remark:
+            return last_remark.author.profile.character_name
+        return ''
+
+"""
+    debates_with_last_remark_date_dict = {}
+    debates_with_last_active_user_dict = {}
+        last_remark = debate.remarks.filter(date_posted=debates_with_last_remark_date_dict[debate])
+        debates_with_last_active_user_dict[debate] = last_remark[0].author.profile.character_name if last_remark else ''
+    debates_with_remarks_by_players_count = {}
+"""
+
 
 
 class Remark(models.Model):
