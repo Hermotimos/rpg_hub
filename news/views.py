@@ -16,7 +16,7 @@ def news_view(request):
         'page_title': 'Ogłoszenia',
         'queryset': queryset,
     }
-    return render(request, 'news/news-main.html', context)
+    return render(request, 'news/main.html', context)
 
 
 @login_required
@@ -52,7 +52,7 @@ def create_news_view(request):
         'page_title': 'Nowe ogłoszenie',
         'form': form
     }
-    return render(request, 'news/news-create.html', context)
+    return render(request, 'news/create.html', context)
 
 
 @login_required
@@ -95,7 +95,7 @@ def news_detail_view(request, news_slug):
         'allowed': allowed_str,
         'followers': followers_str,
     }
-    return render(request, 'news/news-detail.html', context)
+    return render(request, 'news/detail.html', context)
 
 
 def unfollow_news_view(request, news_slug):

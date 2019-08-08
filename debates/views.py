@@ -16,7 +16,7 @@ def debates_main_view(request):
         'page_title': 'Narady',
         'queryset': queryset,
     }
-    return render(request, 'debates/debates_main.html', context)
+    return render(request, 'debates/main.html', context)
 
 
 @login_required
@@ -112,7 +112,7 @@ def add_allowed_profiles_view(request, topic_id, debate_id):
         'form': form,
         'allowed': allowed_str
     }
-    return render(request, 'debates/debate_update_users.html', context)
+    return render(request, 'debates/invite.html', context)
 
 
 @login_required

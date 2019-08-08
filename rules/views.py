@@ -8,5 +8,5 @@ def rules_main_view(request):
     context = {
         'page_title': 'Zasady'
     }
-    return render(request, 'rules/rules_main.html', context)
+    return render(request, 'rules/main.html', context)
 

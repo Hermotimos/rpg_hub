@@ -330,7 +330,7 @@ def timeline_inform_view(request, event_id):
         'participants': participants,
         'informed': informed
     }
-    return render(request, 'history/timeline_add_informed.html', context)
+    return render(request, 'history/timeline_inform.html', context)
 
 
 @login_required
@@ -510,7 +510,7 @@ def chronicle_inform_view(request, event_id):
         'participants': participants,
         'informed': informed
     }
-    return render(request, 'history/chronicle_add_informed.html', context)
+    return render(request, 'history/chronicle_inform.html', context)
 
 
 @login_required
