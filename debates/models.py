@@ -32,10 +32,11 @@ class Debate(models.Model):
     topic = models.ForeignKey(Topic, related_name='debates', on_delete=models.CASCADE)
     starter = models.ForeignKey(User, related_name='debates', on_delete=models.CASCADE)
     allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_debates',
-                                              limit_choices_to=
-                                              Q(character_status='active_player') |
-                                              Q(character_status='inactive_player') |
-                                              Q(character_status='living_npc'))
+                                              # limit_choices_to=
+                                              # Q(character_status='active_player') |
+                                              # Q(character_status='inactive_player') |
+                                              # Q(character_status='living_npc')
+                                              )
     is_ended = models.BooleanField(default=False)
     is_individual = models.BooleanField(default=False)
     followers = models.ManyToManyField(to=Profile, related_name='followed_debates', blank=True)

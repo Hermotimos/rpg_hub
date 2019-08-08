@@ -41,13 +41,13 @@ def debate_view(request, topic_id, debate_id):
 
             subject = f"[RPG] Głos w naradzie: '{debate.title[:30]}...'"
             message = f"{request.user.profile} zabrał/a głos w naradzie '{debate.title}':\n" \
-                      f"'{remark.text}'" \
+                      f"'{remark.text}'\n\n" \
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
 
             receivers_list = []
             for user in User.objects.all():
-                if user.profile in debate.followers.all():
+                if user.profile in debate.followers.all() and user != request.user:
                     receivers_list.append(user.email)
             if request.user.profile.character_status != 'gm':
                 receivers_list.append('lukas.kozicki@gmail.com')
@@ -120,7 +120,7 @@ def create_debate_view(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
 
     if request.method == 'POST':
-        debate_form = CreateDebateForm(request.POST or None)
+        debate_form = CreateDebateForm(authenticated_user=request.user, data=request.POST or None)
         remark_form = CreateRemarkForm(request.POST, request.FILES)
         if debate_form.is_valid() and remark_form.is_valid():
 
@@ -147,7 +147,7 @@ def create_debate_view(request, topic_id):
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
             for user in User.objects.all():
-                if user.profile in debate.allowed_profiles.all():
+                if user.profile in debate.allowed_profiles.all() and user != request.user:
                     receivers_list.append(user.email)
             if request.user.profile.character_status != 'gm':
                 receivers_list.append('lukas.kozicki@gmail.com')
@@ -156,7 +156,7 @@ def create_debate_view(request, topic_id):
             messages.info(request, f'Utworzono nową naradę!')
             return redirect('debates:debate', topic_id=topic_id, debate_id=debate.id)
     else:
-        debate_form = CreateDebateForm()          # equals to: form = CreateDebateForm(request.GET) - GET is the default
+        debate_form = CreateDebateForm(authenticated_user=request.user)
         remark_form = CreateRemarkForm()
 
     context = {
