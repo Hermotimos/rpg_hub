@@ -48,30 +48,33 @@
             {% if news.image %}
                 <img src="{{ news.image.url }}">
             {% endif %}
-        </div><br>
+        </div>
+        <br>
 
-        {% for response in news.responses.all %}
-            <table>
-                <tbody>
-                    <tr class="posts-and-news">
-                        <td class="center">
-                            <img class="rounded-circle article-img" src="{{ response.author.profile.image.url }}">
-                            <small>{{ response.author.profile.character_name }}</small>
-                        </td>
-                        <td>
-                            <small>{{ response.date_posted|date:'d-M-Y' }}</small>
-                            {{ response.text|capfirst|linebreaks }}
-                            {% if response.image %}
-                                <img src="{{ response.image.url }}">
-                            {% endif %}
-                        </td>
-                    </tr>
-                </tbody>
-            </table><br>
-        {% endfor %}
+        <table>
+            <tbody>
+            {% for response in news.responses.all %}
+                <tr class="posts-and-news">
+                    <td class="center">
+                        <img class="rounded-circle article-img" src="{{ response.author.profile.image.url }}">
+                        <small>{{ response.author.profile.character_name }}</small>
+                    </td>
+                    <td>
+                        <small>{{ response.date_posted|date:'d-M-Y' }}</small>
+                        {{ response.text|capfirst|linebreaks }}
+                        {% if response.image %}
+                            <img src="{{ response.image.url }}">
+                        {% endif %}
+                        <br>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
         <br><br>
 
-        <div id="page-bottom">
+        <div id="page-bottom" class="border-top">
+            <br>
             <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form|crispy }}

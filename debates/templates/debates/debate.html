@@ -47,24 +47,19 @@
         </div>
         <br>
 
-        {% for remark in debate.remarks.all %}
-            {% if remark.author.profile.character_status == 'gm' %}
-                <table>
-                    <tbody>
+        <table>
+            <tbody>
+                {% for remark in debate.remarks.all %}
+                    {% if remark.author.profile.character_status == 'gm' %}
                         <tr class="posts-and-news">
-                            <td>
+                            <td  colspan="2">
                                 {{ remark.text|capfirst|linebreaks }}
                                 {% if remark.image %}
                                     <img src="{{ remark.image.url }}" class="border-double">
                                 {% endif %}
                             </td>
                         </tr>
-                    </tbody>
-                </table><br>
-
-            {% else %}
-                <table>
-                    <tbody>
+                    {% else %}
                         <tr class="posts-and-news">
                             <td class="center">
                                 <img class="rounded-circle article-img" src="{{ remark.author.profile.image.url }}">
@@ -78,16 +73,17 @@
                                 {% endif %}
                             </td>
                         </tr>
-                    </tbody>
-                </table><br>
-            {% endif %}
-        {% endfor %}
-        <br>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        <br><br>
 
         {% if debate.is_ended %}
-            <h4><b>Tak oto zakończyła się Wasza rozmowa.</b></h4><br>
+            <h4><b>Tak zakończyła się Wasza rozmowa.</b></h4><br>
         {% else %}
-            <div id="page-bottom">
+            <div id="page-bottom" class="border-top">
+                <br>
                 <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form|crispy }}
