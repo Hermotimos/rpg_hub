@@ -115,13 +115,8 @@ def add_allowed_profiles_view(request, topic_id, debate_id):
             messages.info(request, f'Wybrane postaci zostały dodane do narady!')
             return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
     else:
-        form = UpdateDebateForm(
-            authenticated_user=request.user,
-            already_allowed_profiles_ids=old_allowed_profiles_ids,
-            initial={
-                'allowed_profiles': [p for p in Profile.objects.all() if p in debate.allowed_profiles.all()]
-            }
-        )
+        form = UpdateDebateForm(authenticated_user=request.user,
+                                already_allowed_profiles_ids=old_allowed_profiles_ids)
 
     context = {
         'page_title': 'Dodaj uczestników narady',
