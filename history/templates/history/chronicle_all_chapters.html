@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load custom_filters %}
+ <script src="myScript.js"></script>
 
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'history:chronicle-main' %}">Historia</a></li>
@@ -8,8 +9,7 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br><br><br><br>
-
+    <br><br><br>
     <table class="chronicle" id="chronicle" data-search="true" data-toggle="table">
 
         <colgroup>

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load custom_filters %}
+ <script src="myScript.js"></script>
 
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'history:chronicle-main' %}">Historia</a></li>
@@ -39,7 +40,14 @@
                                         <tr>
                                         {% for p in event.pictures.all %}
                                             <td >
-                                                <img src="{{ p.image.url }}" class="border-double">
+                                                <img id="myImg" src="{{ p.image.url }}" class="border-double">
+
+                                                <!-- Image Popup -->
+                                                <div id="myModal" class="modal">
+                                                    <span class="close">&times;</span>
+                                                    <img id="img01" class="modal-content">
+                                                    <div id="caption"></div>
+                                                </div>
                                                 &nbsp;&nbsp;{{ p.description }}
                                             </td>
                                         {% endfor %}
