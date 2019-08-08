@@ -64,10 +64,12 @@
                     {% else %}
                         <tr class="posts-and-news">
                             <td class="center">
+                                <br>
                                 <img class="rounded-circle article-img" src="{{ remark.author.profile.image.url }}">
                                 <small>{{ remark.author.profile.character_name }}</small>
                             </td>
                             <td>
+                                <br>
                                 <small>{{ remark.date_posted|date:'d-M-Y' }}</small>
                                 {{ remark.text|capfirst|linebreaks }}
                                 {% if remark.image %}
