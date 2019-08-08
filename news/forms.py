@@ -1,5 +1,6 @@
 from django import forms
 from news.models import News, Response
+from users.models import Profile
 from pagedown.widgets import PagedownWidget
 
 
@@ -66,3 +67,15 @@ class CreateResponseForm(forms.ModelForm):
         label='Załącz obraz:',
         required=False,
     )
+
+
+class ManageFollowedForm(forms.ModelForm):
+    class Meta:
+        model = News
+        fields = ['followers']
+
+    def __init__(self, *args, **kwargs):
+        authenticated_user = kwargs.pop('authenticated_user')
+        super(ManageFollowedForm, self).__init__(*args, **kwargs)
+        if authenticated_user:
+            self.fields['followers'].queryset = Profile.objects.filter(user=authenticated_user)

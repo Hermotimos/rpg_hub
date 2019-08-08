@@ -17,6 +17,8 @@ class News(models.Model):
                                               limit_choices_to={'character_status': 'active_player'})
     image = models.ImageField(blank=True, null=True, upload_to='news_pics')
 
+    followers = models.ManyToManyField(to=Profile, related_name='followed_news', blank=True)
+
     def __str__(self):
         return self.title[:50] + '...'
 

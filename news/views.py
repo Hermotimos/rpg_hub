@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from news.models import News
 from users.models import User
-from news.forms import CreateNewsForm, CreateResponseForm
+from news.forms import CreateNewsForm, CreateResponseForm, ManageFollowedForm
 
 
 @login_required
@@ -27,12 +27,14 @@ def create_news_view(request):
             news = form.save(commit=False)
             news.author = request.user
             news = form.save()
+            news.followers.set(news.allowed_profiles.all())
 
             subject = f"[RPG] Nowe ogłoszenie: {news.title[:30]}..."
             message = f"{request.user.profile} przybił coś do słupa ogłoszeń.\n" \
                       f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/{news.slug}/\n\n" \
                       f"{news.text}"
             sender = settings.EMAIL_HOST_USER
+
             receivers_list = []
             for user in User.objects.all():
                 if user.profile in news.allowed_profiles.all():
@@ -58,8 +60,10 @@ def news_detail_view(request, news_slug):
     obj = News.objects.get(slug=news_slug)
 
     allowed_str = ', '.join(p.character_name.split(' ', 1)[0]
-                            for p in obj.allowed_profiles.all()
-                            if p.character_status != 'gm')
+                            for p in obj.allowed_profiles.all())
+
+    followers_str = ', '.join(p.character_name.split(' ', 1)[0]
+                              for p in obj.followers.all())
 
     if request.method == 'POST':
         form = CreateResponseForm(request.POST, request.FILES)
@@ -76,6 +80,31 @@ def news_detail_view(request, news_slug):
         'page_title': obj.title,
         'news': obj,
         'form': form,
-        'allowed': allowed_str
+        'allowed': allowed_str,
+        'followers': followers_str
     }
     return render(request, 'news/news-detail.html', context)
+
+
+@login_required
+def manage_following_news_view(request, news_slug):
+    obj = News.objects.get(slug=news_slug)
+
+    if request.method == 'POST':
+        form = ManageFollowedForm(request.POST)
+        if form.is_valid():
+            form.save()
+            if request.user.profile in form.followers.all():
+                messages.info(request, f'Stałeś się aktywnym uczestnikiem!')
+            else:
+                messages.info(request, f'Przestałeś aktywnie uczestniczyć!')
+            return redirect('news:detail', news_slug=news_slug)
+    else:
+        form = ManageFollowedForm(authenticated_user=request.user)
+
+    context = {
+        'page_title': obj.title,
+        'news': obj,
+        'form': form,
+    }
+    return render(request, 'news/following.html', context)
