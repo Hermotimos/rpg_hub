@@ -3,7 +3,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.conf import settings
-from django.db.models import Max
 from news.models import News
 from users.models import User
 from news.forms import CreateNewsForm, CreateResponseForm
