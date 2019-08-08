@@ -74,8 +74,9 @@ class ManageFollowedForm(forms.ModelForm):
         model = News
         fields = ['followers']
 
-    def __init__(self, *args, **kwargs):
-        authenticated_user = kwargs.pop('authenticated_user')
-        super(ManageFollowedForm, self).__init__(*args, **kwargs)
-        if authenticated_user:
-            self.fields['followers'].queryset = Profile.objects.filter(user=authenticated_user)
+    # def __init__(self, *args, **kwargs):
+    #     authenticated_user = kwargs.pop('authenticated_user')
+    #     super(ManageFollowedForm, self).__init__(*args, **kwargs)
+    #     if authenticated_user:
+    #         self.fields['followers'].queryset = Profile.objects.filter(user=authenticated_user)
+    #         self.fields['followers'].label = ''

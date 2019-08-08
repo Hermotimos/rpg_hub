@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
-from django.db.models import Max
+from django.db.models import Max, Q
 from users.models import Profile
 from PIL import Image
 
@@ -14,7 +14,9 @@ class News(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, related_name='news', on_delete=models.CASCADE)
     allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_news',
-                                              limit_choices_to={'character_status': 'active_player'})
+                                              limit_choices_to=
+                                              Q(character_status='active_player') |
+                                              Q(character_status='inactive_player'))
     image = models.ImageField(blank=True, null=True, upload_to='news_pics')
 
     followers = models.ManyToManyField(to=Profile, related_name='followed_news', blank=True)

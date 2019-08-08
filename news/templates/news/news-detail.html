@@ -32,6 +32,13 @@
             </tr>
         </table>
 
+        {% if is_following %}
+            <a href="{% url 'news:following' news.slug %}">Przycisk: Nie obserwuj</a>
+        {% else %}
+            <a href="{% url 'news:following' news.slug %}">Przycisk: Obserwuj</a>
+        {% endif %}
+
+
         <br>
         <div class="post-and-news">
             <p>{{ news.text|capfirst|linebreaks }}</p>

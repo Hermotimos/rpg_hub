@@ -9,9 +9,15 @@
 
 {% block content %}
     <br><br><br>
+    {% if is_following %}
+        Odznacz, aby dezaktywować mailig.
+    {% else %}
+        Zaznacz, aby aktywować mailing.
+    {% endif %}
+
     <form class="allowed-profiles-form" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form|crispy }}<br><br>
+        {{ form }}<br><br>
         <input class="btn btn-dark" type="submit" value="Zapisz"/>
     </form>
 {% endblock content %}

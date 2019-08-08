@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.conf import settings
 from news.models import News
-from users.models import User
+from users.models import User, Profile
 from news.forms import CreateNewsForm, CreateResponseForm, ManageFollowedForm
 
 
@@ -76,12 +76,15 @@ def news_detail_view(request, news_slug):
     else:
         form = CreateResponseForm()
 
+    is_following = True if request.user.profile in obj.followers.all() else False
+
     context = {
         'page_title': obj.title,
         'news': obj,
         'form': form,
         'allowed': allowed_str,
-        'followers': followers_str
+        'followers': followers_str,
+        'is_following': is_following
     }
     return render(request, 'news/news-detail.html', context)
 
@@ -91,20 +94,30 @@ def manage_following_news_view(request, news_slug):
     obj = News.objects.get(slug=news_slug)
 
     if request.method == 'POST':
-        form = ManageFollowedForm(request.POST)
+        form = ManageFollowedForm(data=request.POST, instance=obj)  # authenticated_user=request.user,
         if form.is_valid():
+            news = form.save(commit=False)
+            news.author = request.user
             form.save()
-            if request.user.profile in form.followers.all():
+            if request.user.profile in news.followers.all():
                 messages.info(request, f'Stałeś się aktywnym uczestnikiem!')
             else:
                 messages.info(request, f'Przestałeś aktywnie uczestniczyć!')
             return redirect('news:detail', news_slug=news_slug)
     else:
-        form = ManageFollowedForm(authenticated_user=request.user)
+        form = ManageFollowedForm(
+            # authenticated_user=request.user,
+            initial={
+                'followers': [p for p in Profile.objects.all() if p in obj.followers.all()]
+            }
+        )
+
+    is_following = True if request.user.profile in obj.followers.all() else False
 
     context = {
         'page_title': obj.title,
         'news': obj,
         'form': form,
+        'is_following': is_following
     }
     return render(request, 'news/following.html', context)
