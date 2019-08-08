@@ -29,10 +29,10 @@ def create_news_view(request):
             news = form.save()
             news.followers.set(news.allowed_profiles.all())
 
-            subject = f"[RPG] Nowe ogłoszenie: {news.title[:30]}..."
+            subject = f"[RPG] Nowe ogłoszenie: '{news.title[:30]}...'"
             message = f"{request.user.profile} przybił coś do słupa ogłoszeń.\n" \
-                      f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/{news.slug}/\n\n" \
-                      f"{news.text}"
+                      f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/detail:{news.slug}/\n\n" \
+                      f"Ogłoszenie: {news.text}"
             sender = settings.EMAIL_HOST_USER
 
             receivers_list = []
@@ -72,6 +72,21 @@ def news_detail_view(request, news_slug):
             response.news = obj
             response.author = request.user
             form.save()
+
+            subject = f"[RPG] Odpowiedź na ogłoszenie: '{obj.title[:30]}...'"
+            message = f"{request.user.profile} odpowiedział na ogłoszenie '{obj.title}':\n" \
+                      f"Ogłoszenie: {request.get_host()}/news/detail:{obj.slug}/\n\n" \
+                      f"Odpowiedź: {response.text}"
+            sender = settings.EMAIL_HOST_USER
+
+            receivers_list = []
+            for user in User.objects.all():
+                if user.profile in obj.followers.all():
+                    receivers_list.append(user.email)
+            if request.user.profile.character_status != 'gm':
+                receivers_list.append('lukas.kozicki@gmail.com')
+            send_mail(subject, message, sender, receivers_list)
+
             return redirect('news:detail', news_slug=news_slug)
     else:
         form = CreateResponseForm()
@@ -99,10 +114,11 @@ def manage_following_news_view(request, news_slug):
             news = form.save(commit=False)
             news.author = request.user
             form.save()
+
             if request.user.profile in news.followers.all():
-                messages.info(request, f'Stałeś się aktywnym uczestnikiem!')
+                messages.info(request, f'Obserwujesz ogłoszenie!')
             else:
-                messages.info(request, f'Przestałeś aktywnie uczestniczyć!')
+                messages.info(request, f'Nie obserwujesz ogłoszenia!')
             return redirect('news:detail', news_slug=news_slug)
     else:
         form = ManageFollowedForm(
