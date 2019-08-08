@@ -18,7 +18,10 @@ class News(models.Model):
                                               Q(character_status='active_player') |
                                               Q(character_status='inactive_player'))
     image = models.ImageField(blank=True, null=True, upload_to='news_pics')
-    followers = models.ManyToManyField(to=Profile, related_name='followed_news', blank=True)
+    followers = models.ManyToManyField(to=Profile, related_name='followed_news', blank=True,
+                                       limit_choices_to=
+                                       Q(character_status='active_player') |
+                                       Q(character_status='inactive_player'))
 
     def __str__(self):
         return self.title[:50] + '...'
