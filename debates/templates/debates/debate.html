@@ -53,10 +53,12 @@
                     {% if remark.author.profile.character_status == 'gm' %}
                         <tr class="posts-and-news">
                             <td  colspan="2">
+                                <br>
                                 {{ remark.text|capfirst|linebreaks }}
                                 {% if remark.image %}
                                     <img src="{{ remark.image.url }}" class="border-double">
                                 {% endif %}
+                                <br>
                             </td>
                         </tr>
                     {% else %}
