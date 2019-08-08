@@ -292,11 +292,11 @@ td img {
 .chronicle-img td {
         border: none;
 }
-
+/*
 .chronicle-img td:hover {
-       /* pointer-events: none; */
+       pointer-events: none;
 }
-
+*/
 td.season-spring  {
         background-color: #87c5b5;
 }
