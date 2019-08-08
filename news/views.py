@@ -114,7 +114,6 @@ def unfollow_news_view(request, news_slug):
 
 def follow_news_view(request, news_slug):
     obj = News.objects.get(slug=news_slug)
-
     followers = obj.followers.all()
     new_follower = request.user.profile
     followers |= Profile.objects.filter(id=new_follower.id)
