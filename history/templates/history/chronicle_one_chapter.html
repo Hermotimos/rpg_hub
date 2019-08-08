@@ -2,14 +2,12 @@
 {% load static %}
 {% load custom_filters %}
 
-
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'history:chronicle-main' %}">Historia</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
 {% block content %}
- <script src="{% static 'myScript.js' %}"></script>
     <br><br><br>
     <table class="chronicle" id="chronicle" data-search="true" data-toggle="table">
 
@@ -40,26 +38,14 @@
                                     <table class="chronicle-img">
                                         <tr>
                                         {% for p in event.pictures.all %}
-                                            <td>
-                                                <img id="myImg" src="{{ p.image.url }}" class="border-double">
-
-                                                <!-- Image Popup -->
-                                                <div id="myModal" class="modal">
-                                                    <span class="close">&times;</span>
-                                                    <img id="img01" class="modal-content">
-                                                    <div id="caption"></div>
-                                                </div>
+                                            <td >
+                                                <img src="{{ p.image.url }}" class="border-double">
                                                 &nbsp;&nbsp;{{ p.description }}
                                             </td>
                                         {% endfor %}
                                         </tr>
                                     </table>
                                 {% endif %}
-
-<!--                                {% for p in event.pictures.all %}-->
-<!--                                    <img src="{{ p.image.url }}" class="border-double">-->
-<!--                                    {{ p.description }}<br><br>-->
-<!--                                {% endfor %}-->
 
                                 {% for note in event.notes.all %}
                                     {% if request.user == note.author %}
