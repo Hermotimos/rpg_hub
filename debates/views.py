@@ -72,24 +72,39 @@ def debate_view(request, topic_id, debate_id):
 def add_allowed_profiles_view(request, topic_id, debate_id):
     debate = get_object_or_404(Debate, id=debate_id)
 
-    already_allowed = debate.allowed_profiles.all()[::1]
+    old_allowed_profiles = debate.allowed_profiles.all()[::1]
+    old_allowed_profiles_ids = [p.id for p in old_allowed_profiles]
     allowed_str = ', '.join(p.character_name.split(' ', 1)[0]
-                            for p in already_allowed
+                            for p in old_allowed_profiles
                             if p.character_status != 'gm')
 
+    old_followers = debate.followers.all()
+
     if request.method == 'POST':
-        form = UpdateDebateForm(request.POST, instance=debate)
+        form = UpdateDebateForm(authenticated_user=request.user,
+                                already_allowed_profiles_ids=old_allowed_profiles_ids,
+                                data=request.POST, instance=debate)
         if form.is_valid():
-            form.save()
+            debate = form.save()
+
+            allowed_profiles = form.cleaned_data['allowed_profiles']
+            allowed_profiles |= Profile.objects.filter(id=request.user.id)
+            allowed_profiles |= Profile.objects.filter(id__in=old_allowed_profiles_ids)
+            debate.allowed_profiles.set(allowed_profiles)
+
+            new_followers_ids = [p.id for p in allowed_profiles if p not in old_allowed_profiles]
+            new_followers = old_followers
+            new_followers |= Profile.objects.filter(id__in=new_followers_ids)
+            debate.followers.set(new_followers)
 
             subject = f"[RPG] Dołączenie do narady: '{debate.title}'"
             message = f"{request.user.profile} dołączył/a Cię do narady '{debate.title}' w temacie '{debate.topic}'.\n"\
-                      f"Uczestnicy: {', '.join(p.character_name for p in form.cleaned_data['allowed_profiles'])}\n" \
+                      f"Uczestnicy: {', '.join(p.character_name for p in allowed_profiles)}\n" \
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
 
-            newly_allowed = [p for p in form.cleaned_data['allowed_profiles'] if p not in already_allowed]
+            newly_allowed = [p for p in form.cleaned_data['allowed_profiles'] if p not in old_allowed_profiles]
             for profile in newly_allowed:
                 if profile.user.email:
                     receivers_list.append(profile.user.email)
@@ -101,6 +116,8 @@ def add_allowed_profiles_view(request, topic_id, debate_id):
             return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
     else:
         form = UpdateDebateForm(
+            authenticated_user=request.user,
+            already_allowed_profiles_ids=old_allowed_profiles_ids,
             initial={
                 'allowed_profiles': [p for p in Profile.objects.all() if p in debate.allowed_profiles.all()]
             }

@@ -64,6 +64,17 @@ class UpdateDebateForm(forms.ModelForm):
         model = Debate
         fields = ['allowed_profiles']
 
+    def __init__(self, *args, **kwargs):
+        authenticated_user = kwargs.pop('authenticated_user')
+        already_allowed_profiles_ids = kwargs.pop('already_allowed_profiles_ids')
+
+        super(UpdateDebateForm, self).__init__(*args, **kwargs)
+        unallowable_profiles = Profile.objects.exclude(Q(user=authenticated_user) |
+                                                                           Q(character_status='dead_player') |
+                                                                           Q(character_status='dead_npc') |
+                                                                           Q(character_status='gm'))
+        self.fields['allowed_profiles'].queryset = unallowable_profiles.exclude(id__in=already_allowed_profiles_ids)
+
 
 class CreateTopicForm(forms.ModelForm):
     class Meta:
