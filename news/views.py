@@ -30,7 +30,7 @@ def create_news_view(request):
             news.followers.set(news.allowed_profiles.all())
 
             subject = f"[RPG] Nowe ogłoszenie: '{news.title[:30]}...'"
-            message = f"{request.user.profile} przybił coś do słupa ogłoszeń.\n" \
+            message = f"{request.user.profile} przybił/a coś do słupa ogłoszeń.\n" \
                       f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/detail:{news.slug}/\n\n" \
                       f"Ogłoszenie: {news.text}"
             sender = settings.EMAIL_HOST_USER
@@ -71,7 +71,7 @@ def news_detail_view(request, news_slug):
             form.save()
 
             subject = f"[RPG] Odpowiedź na ogłoszenie: '{obj.title[:30]}...'"
-            message = f"{request.user.profile} odpowiedział na ogłoszenie '{obj.title}':\n" \
+            message = f"{request.user.profile} odpowiedział/a na ogłoszenie '{obj.title}':\n" \
                       f"Ogłoszenie: {request.get_host()}/news/detail:{obj.slug}/\n\n" \
                       f"Odpowiedź: {response.text}"
             sender = settings.EMAIL_HOST_USER
