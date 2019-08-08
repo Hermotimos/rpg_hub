@@ -34,11 +34,13 @@
                             <strong><br><br>0. {{ game.title }}</strong><br><br>
                         </h4>
                     </td>
+                    <td></td>
                 </tr>
                 {% for event in game.described_events.all %}
                     {% if event in request.user.profile.described_events_participated.all or event in request.user.profile.described_events_informed.all or request.user.profile.character_status == 'gm' %}
                         <tr>
                             <td class="chronicle-event">
+                                <br>
                                 <p>
                                     {% if event in request.user.profile.described_events_informed.all %}
                                         <small>(Znasz z opowieści)</small>
@@ -49,7 +51,7 @@
                                         <table class="chronicle-img">
                                             <tr>
                                             {% for p in event.pictures.all %}
-                                                <td >
+                                                <td>
                                                     <img src="{{ p.image.url }}" class="border-double">
                                                     &nbsp;&nbsp;{{ p.description }}
                                                 </td>
