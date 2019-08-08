@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from news.models import News
 from users.models import User, Profile
-from news.forms import CreateNewsForm, CreateResponseForm, ManageFollowedForm
+from news.forms import CreateNewsForm, CreateResponseForm
 
 
 @login_required
@@ -104,36 +104,20 @@ def news_detail_view(request, news_slug):
     return render(request, 'news/news-detail.html', context)
 
 
-@login_required
-def manage_following_news_view(request, news_slug):
+def unfollow_news_view(request, news_slug):
+    obj = News.objects.get(slug=news_slug)
+    updated_followers = obj.followers.exclude(user=request.user)
+    obj.followers.set(updated_followers)
+    messages.info(request, 'Przestałeś obserwować ogłoszenie!')
+    return redirect('news:detail', news_slug=news_slug)
+
+
+def follow_news_view(request, news_slug):
     obj = News.objects.get(slug=news_slug)
 
-    if request.method == 'POST':
-        form = ManageFollowedForm(data=request.POST, instance=obj)  # authenticated_user=request.user,
-        if form.is_valid():
-            news = form.save(commit=False)
-            news.author = request.user
-            form.save()
-
-            if request.user.profile in news.followers.all():
-                messages.info(request, f'Obserwujesz ogłoszenie!')
-            else:
-                messages.info(request, f'Nie obserwujesz ogłoszenia!')
-            return redirect('news:detail', news_slug=news_slug)
-    else:
-        form = ManageFollowedForm(
-            # authenticated_user=request.user,
-            initial={
-                'followers': [p for p in Profile.objects.all() if p in obj.followers.all()]
-            }
-        )
-
-    is_following = True if request.user.profile in obj.followers.all() else False
-
-    context = {
-        'page_title': obj.title,
-        'news': obj,
-        'form': form,
-        'is_following': is_following
-    }
-    return render(request, 'news/following.html', context)
+    followers = obj.followers.all()
+    new_follower = request.user.profile
+    followers |= Profile.objects.filter(id=new_follower.id)
+    obj.followers.set(followers)
+    messages.info(request, 'Obserwujesz ogłoszenie!')
+    return redirect('news:detail', news_slug=news_slug)

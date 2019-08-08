@@ -13,10 +13,11 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br><br><br>
     {% if request.user.profile not in news.allowed_profiles.all and request.user.profile.character_status != 'gm' %}
+        <br><br><br>
         <h4>To ogłoszenie jest dla Ciebie kompletnie nieczytelne.</h4>
     {% else %}
+        <br><br><br>
         <table class="forms">
             <tr>
                 <td><h6>Ogłoszeniodawca:</h6></td>
@@ -31,12 +32,16 @@
                 <td><small>{{ followers }}</small></td>
             </tr>
         </table>
+        <br>
 
-        {% if is_following %}
-            <a href="{% url 'news:following' news.slug %}">Przycisk: Nie obserwuj</a>
-        {% else %}
-            <a href="{% url 'news:following' news.slug %}">Przycisk: Obserwuj</a>
-        {% endif %}
+        <div class="mb-4">
+            {% if request.user.profile in news.followers.all %}
+                <a href="{% url 'news:unfollow' news.slug %}" class="btn btn-dark">Przestań obserwować</a>
+            {% else %}
+                <a href="{% url 'news:follow' news.slug %}" class="btn btn-dark">Obserwuj</a>
+            {% endif %}
+        </div>
+
 
 
         <br>
