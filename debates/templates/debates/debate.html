@@ -40,9 +40,9 @@
         <div class="mb-4">
             <a href="{% url 'debates:invite' debate.topic.id debate.id %}" class="btn btn-outline-dark">Dodaj uczestników narady</a>&emsp;
             {% if request.user.profile in debate.followers.all %}
-                <a href="{% url 'debates:unfollow' topic.id debate.id %}" class="btn btn-dark">Przestań śledzić</a>
+                <a href="{% url 'debates:unfollow' topic.id debate.id %}" class="btn btn-dark">Nie obserwuj</a>
             {% else %}
-                <a href="{% url 'debates:follow' topic.id debate.id %}" class="btn btn-dark">Śledź naradę</a>
+                <a href="{% url 'debates:follow' topic.id debate.id %}" class="btn btn-dark">Obserwuj</a>
             {% endif %}
         </div>
         <br>
