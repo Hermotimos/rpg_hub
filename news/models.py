@@ -43,7 +43,7 @@ class News(models.Model):
                 img.save(self.image.path)
 
     class Meta:
-        ordering = ['-date_posted']
+        ordering = ['date_updated']
 
     def last_activity(self):
         return self.responses.all().aggregate(Max('date_posted'))['date_posted__max']
@@ -55,6 +55,9 @@ class Response(models.Model):
     author = models.ForeignKey(User, related_name='responses', on_delete=models.CASCADE)
     image = models.ImageField(blank=True, null=True, upload_to='news_pics')
     news = models.ForeignKey(News, related_name='responses', on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['date_posted']
 
     def __str__(self):
         return self.text

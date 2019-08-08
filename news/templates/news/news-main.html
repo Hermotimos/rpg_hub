@@ -28,7 +28,7 @@
                                 {% if news.last_activity %}
                                     {{ news.last_activity|date:'d-M-Y, H:i' }}
                                 {% else %}
-                                    {{ news.date_updated|date:'d-M-Y, H:i' }}
+                                    {{ news.date_posted|date:'d-M-Y, H:i' }}
                                 {% endif %}
                             </small>
                             <h3 class="unblue"><a href="{% url 'news:detail' news.slug %}">{{ news.title }}</a></h3>
