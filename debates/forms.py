@@ -1,5 +1,5 @@
 from django import forms
-from .models import Remark, Debate, Topic
+from debates.models import Remark, Debate, Topic
 from pagedown.widgets import PagedownWidget
 
 
