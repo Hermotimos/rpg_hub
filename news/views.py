@@ -102,6 +102,7 @@ def news_detail_view(request, news_slug):
     return render(request, 'news/detail.html', context)
 
 
+@login_required
 def unfollow_news_view(request, news_slug):
     obj = News.objects.get(slug=news_slug)
     updated_followers = obj.followers.exclude(user=request.user)
@@ -110,6 +111,7 @@ def unfollow_news_view(request, news_slug):
     return redirect('news:detail', news_slug=news_slug)
 
 
+@login_required
 def follow_news_view(request, news_slug):
     obj = News.objects.get(slug=news_slug)
     followers = obj.followers.all()

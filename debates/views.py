@@ -198,6 +198,7 @@ def create_topic_view(request):
     return render(request, 'debates/create_topic.html', context)
 
 
+@login_required
 def unfollow_debate_view(request, topic_id, debate_id):
     obj = Debate.objects.get(id=debate_id)
     updated_followers = obj.followers.exclude(user=request.user)
@@ -206,6 +207,7 @@ def unfollow_debate_view(request, topic_id, debate_id):
     return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
 
 
+@login_required
 def follow_debate_view(request, topic_id, debate_id):
     obj = Debate.objects.get(id=debate_id)
     followers = obj.followers.all()
