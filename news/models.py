@@ -18,7 +18,6 @@ class News(models.Model):
                                               Q(character_status='active_player') |
                                               Q(character_status='inactive_player'))
     image = models.ImageField(blank=True, null=True, upload_to='news_pics')
-
     followers = models.ManyToManyField(to=Profile, related_name='followed_news', blank=True)
 
     def __str__(self):

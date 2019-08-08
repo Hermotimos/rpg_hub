@@ -59,11 +59,8 @@ def create_news_view(request):
 def news_detail_view(request, news_slug):
     obj = News.objects.get(slug=news_slug)
 
-    allowed_str = ', '.join(p.character_name.split(' ', 1)[0]
-                            for p in obj.allowed_profiles.all())
-
-    followers_str = ', '.join(p.character_name.split(' ', 1)[0]
-                              for p in obj.followers.all())
+    allowed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.allowed_profiles.all())
+    followers_str = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.followers.all())
 
     if request.method == 'POST':
         form = CreateResponseForm(request.POST, request.FILES)
@@ -91,15 +88,12 @@ def news_detail_view(request, news_slug):
     else:
         form = CreateResponseForm()
 
-    is_following = True if request.user.profile in obj.followers.all() else False
-
     context = {
         'page_title': obj.title,
         'news': obj,
         'form': form,
         'allowed': allowed_str,
         'followers': followers_str,
-        'is_following': is_following
     }
     return render(request, 'news/news-detail.html', context)
 
