@@ -38,6 +38,7 @@ class Debate(models.Model):
                                               Q(character_status='living_npc'))
     is_ended = models.BooleanField(default=False)
     is_individual = models.BooleanField(default=False)
+    followers = models.ManyToManyField(to=Profile, related_name='followed_debates', blank=True)
 
     class Meta:
         ordering = ['-date_updated']

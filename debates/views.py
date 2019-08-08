@@ -21,50 +21,71 @@ def debates_main_view(request):
 
 @login_required
 def debate_view(request, topic_id, debate_id):
-    obj = get_object_or_404(Debate, id=debate_id)
+    topic = get_object_or_404(Topic, id=topic_id)
+    debate = get_object_or_404(Debate, id=debate_id)
 
     allowed_str = ', '.join(p.character_name.split(' ', 1)[0]
-                            for p in obj.allowed_profiles.all()
+                            for p in debate.allowed_profiles.all()
                             if p.character_status != 'gm')
+    followers_str = ', '.join(p.character_name.split(' ', 1)[0]
+                              for p in debate.followers.all()
+                              if p.character_status != 'gm')
 
     if request.method == 'POST':
         form = CreateRemarkForm(request.POST, request.FILES)
         if form.is_valid():
             remark = form.save(commit=False)
-            remark.debate = obj
+            remark.debate = debate
             remark.author = request.user
             remark.save()
+
+            subject = f"[RPG] Głos w naradzie: '{debate.title[:30]}...'"
+            message = f"{request.user.profile} zabrał/a głos w naradzie '{debate.title}':\n" \
+                      f"'{remark.text}'" \
+                      f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
+            sender = settings.EMAIL_HOST_USER
+
+            receivers_list = []
+            for user in User.objects.all():
+                if user.profile in debate.followers.all():
+                    receivers_list.append(user.email)
+            if request.user.profile.character_status != 'gm':
+                receivers_list.append('lukas.kozicki@gmail.com')
+            send_mail(subject, message, sender, receivers_list)
+
             return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
     else:
         form = CreateRemarkForm()            # equals to: form = CreateRemarkForm(request.GET) - GET is the default
 
     context = {
-        'page_title': obj.title,
-        'debate': obj,
+        'page_title': debate.title,
+        'topic': topic,
+        'debate': debate,
         'form': form,
-        'allowed': allowed_str
+        'allowed': allowed_str,
+        'followers': followers_str
     }
     return render(request, 'debates/debate.html', context)
 
 
 @login_required
 def add_allowed_profiles_view(request, topic_id, debate_id):
-    obj = get_object_or_404(Debate, id=debate_id)
+    debate = get_object_or_404(Debate, id=debate_id)
 
-    already_allowed = obj.allowed_profiles.all()[::1]
+    already_allowed = debate.allowed_profiles.all()[::1]
     allowed_str = ', '.join(p.character_name.split(' ', 1)[0]
                             for p in already_allowed
                             if p.character_status != 'gm')
 
     if request.method == 'POST':
-        form = UpdateDebateForm(request.POST, instance=obj)
+        form = UpdateDebateForm(request.POST, instance=debate)
         if form.is_valid():
             form.save()
 
-            subject = f"[RPG] Dołączenie do narady: '{obj.title}'"
-            message = f"{request.user.profile} dołączył Cię do narady '{obj.title}' w temacie '{obj.topic}'.\n" \
+            subject = f"[RPG] Dołączenie do narady: '{debate.title}'"
+            message = f"{request.user.profile} dołączył/a Cię do narady '{debate.title}' w temacie '{debate.topic}'.\n" \
                       f"Uczestnicy: {', '.join(p.character_name for p in form.cleaned_data['allowed_profiles'])}\n" \
-                      f"Weź udział w naradzie: {request.get_host()}/debates/{obj.topic.id}/{obj.id}/"
+                      f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
 
@@ -81,13 +102,13 @@ def add_allowed_profiles_view(request, topic_id, debate_id):
     else:
         form = UpdateDebateForm(
             initial={
-                'allowed_profiles': [p for p in Profile.objects.all() if p in obj.allowed_profiles.all()]
+                'allowed_profiles': [p for p in Profile.objects.all() if p in debate.allowed_profiles.all()]
             }
         )
 
     context = {
         'page_title': 'Dodaj uczestników narady',
-        'debate': obj,
+        'debate': debate,
         'form': form,
         'allowed': allowed_str
     }
@@ -96,7 +117,7 @@ def add_allowed_profiles_view(request, topic_id, debate_id):
 
 @login_required
 def create_debate_view(request, topic_id):
-    obj = get_object_or_404(Topic, id=topic_id)
+    topic = get_object_or_404(Topic, id=topic_id)
 
     if request.method == 'POST':
         debate_form = CreateDebateForm(request.POST or None)
@@ -108,6 +129,7 @@ def create_debate_view(request, topic_id):
             debate.starter = request.user
             debate.save()
             debate.allowed_profiles.set(debate_form.cleaned_data['allowed_profiles'])
+            debate.followers.set(debate.allowed_profiles.all())
             debate.save()
 
             remark = remark_form.save(commit=False)
@@ -116,10 +138,10 @@ def create_debate_view(request, topic_id):
             remark.save()
 
             subject = f"[RPG] Nowa narada: {debate.title}"
-            message = f"{request.user.profile} włączył Cię do nowej narady " \
+            message = f"{request.user.profile} włączył/a Cię do nowej narady " \
                       f"'{debate.title}' w temacie '{debate.topic}'.\n" \
                       f"Uczestnicy: {', '.join(p.character_name for p in debate.allowed_profiles.all())}\n" \
-                      f"Weź udział w naradzie: {request.get_host()}/debates/{debate.topic.id}/{debate.id}/"
+                      f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
             for user in User.objects.all():
@@ -132,14 +154,14 @@ def create_debate_view(request, topic_id):
             messages.info(request, f'Utworzono nową naradę!')
             return redirect('debates:debate', topic_id=topic_id, debate_id=debate.id)
     else:
-        debate_form = CreateDebateForm()            # equals to: form = CreateDebateForm(request.GET) - GET is the default
+        debate_form = CreateDebateForm()          # equals to: form = CreateDebateForm(request.GET) - GET is the default
         remark_form = CreateRemarkForm()
 
     context = {
         'page_title': 'Nowa narada',
         'debate_form': debate_form,
         'remark_form': remark_form,
-        'topic': obj
+        'topic': topic
     }
     return render(request, 'debates/create_debate.html', context)
 
@@ -160,3 +182,21 @@ def create_topic_view(request):
         'form': form,
     }
     return render(request, 'debates/create_topic.html', context)
+
+
+def unfollow_debate_view(request, topic_id, debate_id):
+    obj = Debate.objects.get(id=debate_id)
+    updated_followers = obj.followers.exclude(user=request.user)
+    obj.followers.set(updated_followers)
+    messages.info(request, 'Przestałeś uważnie uczestniczyć w naradzie!')
+    return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
+
+
+def follow_debate_view(request, topic_id, debate_id):
+    obj = Debate.objects.get(id=debate_id)
+    followers = obj.followers.all()
+    new_follower = request.user.profile
+    followers |= Profile.objects.filter(id=new_follower.id)
+    obj.followers.set(followers)
+    messages.info(request, 'Od teraz uważnie uczestniczysz w naradzie!')
+    return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
