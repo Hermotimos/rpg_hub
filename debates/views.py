@@ -128,9 +128,11 @@ def create_debate_view(request, topic_id):
             debate.topic = Topic.objects.get(id=topic_id)
             debate.starter = request.user
             debate.save()
-            debate.allowed_profiles.set(debate_form.cleaned_data['allowed_profiles'])
-            debate.followers.set(debate.allowed_profiles.all())
-            debate.save()
+
+            allowed_profiles = debate_form.cleaned_data['allowed_profiles']
+            allowed_profiles |= Profile.objects.filter(id=request.user.id)
+            debate.allowed_profiles.set(allowed_profiles)
+            debate.followers.set(allowed_profiles)
 
             remark = remark_form.save(commit=False)
             remark.debate = debate

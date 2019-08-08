@@ -22,12 +22,16 @@ def news_view(request):
 @login_required
 def create_news_view(request):
     if request.method == 'POST':
-        form = CreateNewsForm(request.POST, request.FILES)
+        form = CreateNewsForm(authenticated_user=request.user, data=request.POST, files=request.FILES)
         if form.is_valid():
             news = form.save(commit=False)
             news.author = request.user
             news = form.save()
-            news.followers.set(news.allowed_profiles.all())
+
+            allowed_profiles = form.cleaned_data['allowed_profiles']
+            allowed_profiles |= Profile.objects.filter(id=request.user.id)
+            news.allowed_profiles.set(allowed_profiles)
+            news.followers.set(allowed_profiles)
 
             subject = f"[RPG] Nowe ogłoszenie: '{news.title[:30]}...'"
             message = f"{request.user.profile} przybił/a coś do słupa ogłoszeń.\n" \
@@ -37,7 +41,7 @@ def create_news_view(request):
 
             receivers_list = []
             for user in User.objects.all():
-                if user.profile in news.allowed_profiles.all():
+                if user.profile in news.allowed_profiles.all() and user != request.user:
                     receivers_list.append(user.email)
             if request.user.profile.character_status != 'gm':
                 receivers_list.append('lukas.kozicki@gmail.com')
@@ -46,7 +50,7 @@ def create_news_view(request):
             messages.info(request, f'Utworzono nowe ogłoszenie!')
             return redirect('news:detail', news_slug=news.slug)
     else:
-        form = CreateNewsForm()
+        form = CreateNewsForm(authenticated_user=request.user)
 
     context = {
         'page_title': 'Nowe ogłoszenie',
@@ -78,7 +82,7 @@ def news_detail_view(request, news_slug):
 
             receivers_list = []
             for user in User.objects.all():
-                if user.profile in obj.followers.all():
+                if user.profile in obj.followers.all() and user != request.user:
                     receivers_list.append(user.email)
             if request.user.profile.character_status != 'gm':
                 receivers_list.append('lukas.kozicki@gmail.com')

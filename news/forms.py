@@ -1,6 +1,7 @@
 from django import forms
 from news.models import News, Response
 from users.models import Profile
+from django.db.models import Q
 from pagedown.widgets import PagedownWidget
 
 
@@ -41,6 +42,15 @@ class CreateNewsForm(forms.ModelForm):
         label='Załącz obraz:',
         required=False,
     )
+
+    def __init__(self, *args, **kwargs):
+        authenticated_user = kwargs.pop('authenticated_user')
+        super(CreateNewsForm, self).__init__(*args, **kwargs)
+        self.fields['allowed_profiles'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
+                                                                           Q(character_status='dead_player') |
+                                                                           Q(character_status='living_npc') |
+                                                                           Q(character_status='dead_npc') |
+                                                                           Q(character_status='gm'))
 
 
 class CreateResponseForm(forms.ModelForm):
