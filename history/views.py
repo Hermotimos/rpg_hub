@@ -315,13 +315,14 @@ def timeline_inform_view(request, event_id):
                       f"Tak było i nie inaczej...'\n" \
                       f"A było to w miejscu: {obj.general_location}" \
                       f", a dokładniej: {', '.join(l.name for l in obj.specific_locations.all())}.\n"
-
             sender = settings.EMAIL_HOST_USER
             receivers = []
             for profile in event.informed.all():
                 # exclude previously informed users from mailing to avoid spam
                 if profile not in old_informed:
                     receivers.append(profile.user.email)
+            if request.user.profile.character_status != 'gm':
+                receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
             messages.info(request, f'Poinformowałeś wybrane postaci!')
@@ -482,41 +483,54 @@ def chronicle_create_view(request):
 def chronicle_inform_view(request, event_id):
     obj = get_object_or_404(ChronicleEvent, id=event_id)
 
-    participants = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
-    already_informed = obj.informed.all()[::1]                  # enforces evaluation of lazy Queryset for message
-    informed = ', '.join(p.character_name.split(' ', 1)[0] for p in already_informed)
+    participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
+    participants_ids = [p.id for p in obj.participants.all()]
+    old_informed = obj.informed.all()[::1]                  # enforces evaluation of lazy Queryset for message
+    old_informed_ids = [p.id for p in old_informed]
+    old_informed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in old_informed)
 
     if request.method == 'POST':
-        form = ChronicleEventInformForm(request.POST, instance=obj)
+        form = ChronicleEventInformForm(authenticated_user=request.user,
+                                        old_informed_ids=old_informed_ids,
+                                        participants_ids=participants_ids,
+                                        data=request.POST,
+                                        instance=obj)
         if form.is_valid():
-            form.save()
+            event = form.save()
+
+            informed = form.cleaned_data['informed']
+            informed |= Profile.objects.filter(id__in=old_informed_ids)
+            event.informed.set(informed)
 
             subject = f"[RPG] {request.user.profile} podzielił się z Tobą swoją historią!"
             message = f"{request.user.profile} znów rozprawia o swoich przygodach.\n" \
-                      f"Oto kto już o nich słyszał: " \
                       f"{', '.join(p.character_name for p in form.cleaned_data['informed'])}\n\n" \
                       f"Podczas przygody '{obj.game_no.title}' rozegrało się co następuje:\n {obj.description}\n" \
                       f"Tak było i nie inaczej..."
             sender = settings.EMAIL_HOST_USER
             receivers = []
-            currently_informed = form.cleaned_data['informed']
-            for profile in currently_informed.all():
-                if profile.user.email and profile in form.cleaned_data['informed'] and profile not in already_informed:
+            for profile in event.informed.all():
+                # exclude previously informed users from mailing to avoid spam
+                if profile not in old_informed:
                     receivers.append(profile.user.email)
+            if request.user.profile.character_status != 'gm':
+                receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
             messages.info(request, f'Poinformowałeś wybrane postaci!')
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
     else:
-        form = ChronicleEventInformForm(instance=obj)
+        form = ChronicleEventInformForm(authenticated_user=request.user,
+                                        old_informed_ids=old_informed_ids,
+                                        participants_ids=participants_ids)
 
     context = {
         'page_title': 'Poinformuj o wydarzeniu',
         'form': form,
         'event': obj,
-        'participants': participants,
-        'informed': informed
+        'participants': participants_str,
+        'informed': old_informed_str
     }
     return render(request, 'history/chronicle_inform.html', context)
 
