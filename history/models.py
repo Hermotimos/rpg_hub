@@ -73,8 +73,8 @@ class SpecificLocation(models.Model):
 
 
 class TimelineEvent(models.Model):
-    # default=0 for events outside of game session:
-    game_no = models.ForeignKey(GameSession, related_name='events', on_delete=models.PROTECT)
+    # default=0 for events outside of sessions (background events):
+    game_no = models.ForeignKey(GameSession, related_name='events', on_delete=models.PROTECT, default=0)
     # year has to be > 0, for url patterns (they accept positive nums only):
     year = models.IntegerField(validators=[MinValueValidator(1)])
     season = models.CharField(max_length=10, choices=SEASONS)
@@ -103,7 +103,7 @@ class TimelineEvent(models.Model):
         return f'{self.description[0:100]}...'
 
     class Meta:
-        # ordering via 'description' to leave flexibility for events with later 'id'-s
+        # ordering via 'description' before 'game_no' to leave flexibility for events with later 'id'-s
         ordering = ['year', 'season', 'day_start', 'day_end', 'description', 'game_no']
 
     # Steps to migrate these models:
@@ -133,7 +133,8 @@ class ChronicleEvent(models.Model):
     EventDescription serves to create events in the full history text of the game.
     Lack or correspondence between the two is intentional for flexibility.
     """
-    game_no = models.ForeignKey(GameSession, related_name='described_events', on_delete=models.PROTECT)
+    # default=0 for events outside of sessions (background events):
+    game_no = models.ForeignKey(GameSession, related_name='described_events', on_delete=models.PROTECT, default=0)
     event_no_in_game = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
     description = models.TextField(max_length=10000)
     participants = models.ManyToManyField(Profile,
