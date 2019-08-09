@@ -2,6 +2,10 @@
 {% load static %}
 {% load custom_filters %}
 
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'history/history.css' %}">
+{% endblock head_extra %}
+
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'history:timeline-main' %}">Kalendarium</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>

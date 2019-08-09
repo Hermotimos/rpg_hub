@@ -4,7 +4,8 @@
 {% load crispy_forms_tags %}
 
 {% block head_extra %}
-{{ form.media }}
+    {{ form.media }}
+    <link rel="stylesheet" href="{% static 'history/history.css' %}">
 {% endblock head_extra %}
 
 {% block breadcrumb %}

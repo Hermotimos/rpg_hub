@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load custom_filters %}
- <script src="myScript.js"></script>
+<!-- <script src="myScript.js"></script>-->
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'history/history.css' %}">
+{% endblock head_extra %}
 
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'history:chronicle-main' %}">Historia</a></li>
