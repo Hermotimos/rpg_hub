@@ -203,10 +203,3 @@ small {
 small.red {
         color: red;
 }
-
-
-/* Rules - Zasady */
-
-h1.rules, h2.rules, h3.rules, h4.rules, h5.rules, h6.rules {
-        font-weight: bold;
-}
