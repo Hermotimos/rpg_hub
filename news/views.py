@@ -38,13 +38,13 @@ def create_news_view(request):
                       f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/detail:{news.slug}/\n\n" \
                       f"Ogłoszenie: {news.text}"
             sender = settings.EMAIL_HOST_USER
-            receivers_list = []
+            receivers = []
             for profile in news.allowed_profiles.all():
                 if profile.user != request.user:
-                    receivers_list.append(profile.user.email)
+                    receivers.append(profile.user.email)
             if request.user.profile.character_status != 'gm':
-                receivers_list.append('lukas.kozicki@gmail.com')
-            send_mail(subject, message, sender, receivers_list)
+                receivers.append('lukas.kozicki@gmail.com')
+            send_mail(subject, message, sender, receivers)
 
             messages.info(request, f'Utworzono nowe ogłoszenie!')
             return redirect('news:detail', news_slug=news.slug)
@@ -79,13 +79,13 @@ def news_detail_view(request, news_slug):
                       f"Odpowiedź: {response.text}"
             sender = settings.EMAIL_HOST_USER
 
-            receivers_list = []
+            receivers = []
             for user in User.objects.all():
                 if user.profile in obj.followers.all() and user != request.user:
-                    receivers_list.append(user.email)
+                    receivers.append(user.email)
             if request.user.profile.character_status != 'gm':
-                receivers_list.append('lukas.kozicki@gmail.com')
-            send_mail(subject, message, sender, receivers_list)
+                receivers.append('lukas.kozicki@gmail.com')
+            send_mail(subject, message, sender, receivers)
 
             messages.info(request, f'Twoja odpowiedź została zapisana!')
             return redirect('news:detail', news_slug=news_slug)

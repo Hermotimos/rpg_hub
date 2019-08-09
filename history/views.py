@@ -308,13 +308,13 @@ def timeline_inform_view(request, event_id):
                       f"{[l.name for l in obj.specific_locations.all()]}.\n" \
                       f"Tak było i nie inaczej..."
             sender = settings.EMAIL_HOST_USER
-            receivers_list = []
+            receivers = []
 
             currently_informed = form.cleaned_data['informed']
             for profile in currently_informed.all():
                 if profile.user.email and profile in form.cleaned_data['informed'] and profile not in already_informed:
-                    receivers_list.append(profile.user.email)
-            send_mail(subject, message, sender, receivers_list)
+                    receivers.append(profile.user.email)
+            send_mail(subject, message, sender, receivers)
 
             messages.info(request, f'Poinformowałeś wybrane postaci!')
             _next = request.POST.get('next', '/')
@@ -489,13 +489,13 @@ def chronicle_inform_view(request, event_id):
                       f"Podczas przygody '{obj.game_no.title}' rozegrało się co następuje:\n {obj.description}\n" \
                       f"Tak było i nie inaczej..."
             sender = settings.EMAIL_HOST_USER
-            receivers_list = []
+            receivers = []
 
             currently_informed = form.cleaned_data['informed']
             for profile in currently_informed.all():
                 if profile.user.email and profile in form.cleaned_data['informed'] and profile not in already_informed:
-                    receivers_list.append(profile.user.email)
-            send_mail(subject, message, sender, receivers_list)
+                    receivers.append(profile.user.email)
+            send_mail(subject, message, sender, receivers)
 
             messages.info(request, f'Poinformowałeś wybrane postaci!')
             _next = request.POST.get('next', '/')

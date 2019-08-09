@@ -43,13 +43,13 @@ def debate_view(request, topic_id, debate_id):
                       f"'{remark.text}'\n\n" \
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
-            receivers_list = []
+            receivers = []
             for user in User.objects.all():
                 if user.profile in debate.followers.all() and user != request.user:
-                    receivers_list.append(user.email)
+                    receivers.append(user.email)
             if request.user.profile.character_status != 'gm':
-                receivers_list.append('lukas.kozicki@gmail.com')
-            send_mail(subject, message, sender, receivers_list)
+                receivers.append('lukas.kozicki@gmail.com')
+            send_mail(subject, message, sender, receivers)
 
             messages.info(request, f'Twój głos zabrzmiał w naradzie!')
             return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
@@ -100,13 +100,13 @@ def add_allowed_profiles_view(request, topic_id, debate_id):
                       f"Uczestnicy: {', '.join(p.character_name for p in allowed_profiles if p.character_status != 'gm')}\n" \
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
-            receivers_list = []
+            receivers = []
             for profile in debate.allowed_profiles.all():
                 if profile not in old_allowed_profiles:
-                    receivers_list.append(profile.user.email)
+                    receivers.append(profile.user.email)
             if request.user.profile.character_status != 'gm':
-                receivers_list.append('lukas.kozicki@gmail.com')
-            send_mail(subject, message, sender, receivers_list)
+                receivers.append('lukas.kozicki@gmail.com')
+            send_mail(subject, message, sender, receivers)
 
             messages.info(request, f'Wybrane postaci zostały dodane do narady!')
             return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
@@ -153,13 +153,13 @@ def create_debate_view(request, topic_id):
                       f"Uczestnicy: {', '.join(p.character_name for p in debate.allowed_profiles.all())}\n" \
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
-            receivers_list = []
+            receivers = []
             for profile in debate.allowed_profiles.all():
                 if profile.user != request.user:
-                    receivers_list.append(profile.user.email)
+                    receivers.append(profile.user.email)
             if request.user.profile.character_status != 'gm':
-                receivers_list.append('lukas.kozicki@gmail.com')
-            send_mail(subject, message, sender, receivers_list)
+                receivers.append('lukas.kozicki@gmail.com')
+            send_mail(subject, message, sender, receivers)
 
             messages.info(request, f'Utworzono nową naradę!')
             return redirect('debates:debate', topic_id=topic_id, debate_id=debate.id)
