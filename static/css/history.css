@@ -89,6 +89,21 @@ td img {
 }
 
 td.season-spring  {
+        background-color: #a9d6ca;
+}
+td.season-summer  {
+        background-color: #fff1cc;
+}
+td.season-autumn {
+        background-color: #e3d1b5;
+}
+td.season-winter  {
+        background-color: #bfd3d9;
+}
+
+/*
+
+td.season-spring  {
         background-color: #87c5b5;
 }
 td.season-summer  {
@@ -100,3 +115,5 @@ td.season-autumn {
 td.season-winter  {
         background-color: #99b9c2;
 }
+
+*/
