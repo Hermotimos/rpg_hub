@@ -100,10 +100,10 @@ def add_allowed_profiles_view(request, topic_id, debate_id):
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
-
-            newly_allowed = [p for p in form.cleaned_data['allowed_profiles'] if p not in old_allowed_profiles]
-            for profile in newly_allowed:
-                if profile.user.email:
+            # newly_allowed = [p for p in form.cleaned_data['allowed_profiles'] if p not in old_allowed_profiles]
+            for profile in debate.allowed_profiles.all():
+                if profile not in old_allowed_profiles:
+            # for profile in newly_allowed:
                     receivers_list.append(profile.user.email)
             if request.user.profile.character_status != 'gm':
                 receivers_list.append('lukas.kozicki@gmail.com')
