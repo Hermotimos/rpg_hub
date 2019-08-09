@@ -490,7 +490,6 @@ def chronicle_inform_view(request, event_id):
                       f"Tak było i nie inaczej..."
             sender = settings.EMAIL_HOST_USER
             receivers = []
-
             currently_informed = form.cleaned_data['informed']
             for profile in currently_informed.all():
                 if profile.user.email and profile in form.cleaned_data['informed'] and profile not in already_informed:
