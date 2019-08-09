@@ -61,7 +61,7 @@
                         <small>{{ response.author.profile.character_name }}</small>
                     </td>
                     <td>
-                        <small>{{ response.date_posted|date:'d-M-Y' }}</small>
+                        <small>{{ response.date_posted|date:'d-M-Y, H:i' }}</small>
                         {{ response.text|capfirst|linebreaks }}
                         {% if response.image %}
                             <img src="{{ response.image.url }}">
