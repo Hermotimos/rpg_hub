@@ -1,6 +1,8 @@
 from django import forms
+from django.db.models import Q
 from pagedown.widgets import PagedownWidget
 from history.models import TimelineEvent, TimelineEventNote, ChronicleEvent, ChronicleEventNote
+from users.models import Profile
 
 
 # ------ TimelineEvent model ------
@@ -26,7 +28,17 @@ class TimelineEventInformForm(forms.ModelForm):
         fields = ['informed']
 
     def __init__(self, *args, **kwargs):
+        authenticated_user = kwargs.pop('authenticated_user')
+        old_informed_ids = kwargs.pop('old_informed_ids')
+        participants_ids = kwargs.pop('participants_ids')
+        the_knowing_ids = participants_ids + old_informed_ids
         super(TimelineEventInformForm, self).__init__(*args, **kwargs)
+        uninformable_profiles = Profile.objects.exclude(Q(user=authenticated_user) |
+                                                        Q(character_status='dead_player') |
+                                                        Q(character_status='dead_npc') |
+                                                        Q(character_status='living_npc') |
+                                                        Q(character_status='gm'))
+        self.fields['informed'].queryset = uninformable_profiles.exclude(id__in=the_knowing_ids)
         self.fields['informed'].label = ''
 
 
