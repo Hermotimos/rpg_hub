@@ -88,6 +88,7 @@ def news_detail_view(request, news_slug):
                 receivers_list.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers_list)
 
+            messages.info(request, f'Twoja odpowiedź została zapisana!')
             return redirect('news:detail', news_slug=news_slug)
     else:
         form = CreateResponseForm()

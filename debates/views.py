@@ -51,6 +51,7 @@ def debate_view(request, topic_id, debate_id):
                 receivers_list.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers_list)
 
+            messages.info(request, f'Twój głos zabrzmiał w naradzie!')
             return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
     else:
         form = CreateRemarkForm()            # equals to: form = CreateRemarkForm(request.GET) - GET is the default
