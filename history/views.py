@@ -249,7 +249,7 @@ def timeline_date_view(request, year, season='0'):
 
 
 @login_required
-def create_event_view(request):
+def timeline_create_view(request):
     if request.method == 'POST':
         form = TimelineEventCreateForm(request.POST or None)
         if form.is_valid():
