@@ -16,7 +16,7 @@ class Picture(models.Model):
     image = models.ImageField(blank=True, null=True, upload_to='post_pics')
     type = models.CharField(max_length=10, choices=TYPES)
     title = models.CharField(max_length=200, unique=True)
-    description = models.CharField(max_length=200)
+    description = models.CharField(max_length=200, blank=True, null=True)
 
     class Meta:
         ordering = ['type']
