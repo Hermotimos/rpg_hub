@@ -203,3 +203,7 @@ small {
 small.red {
         color: red;
 }
+
+small.smaller {
+    font-size: 12px;
+}
