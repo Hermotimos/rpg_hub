@@ -32,6 +32,7 @@ SEASONS_WITH_STYLES_DICT = {
     '4': 'season-winter'
 }
 
+
 @login_required
 def timeline_main_view(request):
     if request.user.profile in Profile.objects.filter(character_status='gm'):
