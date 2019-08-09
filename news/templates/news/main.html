@@ -3,6 +3,10 @@
 {% load crispy_forms_tags %}
 {% load custom_filters %}
 
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'news/news.css' %}">
+{% endblock head_extra %}
+
 {% block breadcrumb %}
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
