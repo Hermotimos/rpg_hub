@@ -154,9 +154,9 @@ def create_debate_view(request, topic_id):
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
-            for user in User.objects.all():
-                if user.profile in debate.allowed_profiles.all() and user != request.user:
-                    receivers_list.append(user.email)
+            for profile in debate.allowed_profiles.all():
+                if profile.user != request.user:
+                    receivers_list.append(profile.user.email)
             if request.user.profile.character_status != 'gm':
                 receivers_list.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers_list)
