@@ -2,6 +2,10 @@
 {% load static %}
 {% load custom_filters %}
 
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'debates/debates.css' %}">
+{% endblock head_extra %}
+
 {% block breadcrumb %}
     <li class="breadcrumb-item active">Narady</li>
 {% endblock breadcrumb %}

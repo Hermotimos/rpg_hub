@@ -1,3 +1,4 @@
+
 body {
         background: #fafafa;
         margin-top: 4rem;
@@ -67,13 +68,6 @@ a.article-title:hover {
         margin-right: auto;
 }
 
-/* SEEMS TO HAVE NO EFFECT
-.article-metadata {
-        padding-bottom: 1px;
-        margin-bottom: 4px;
-        border-bottom: 1px solid #e3e3e3;
-}
-*/
 
 .article-metadata a:hover {
         color: red;
@@ -204,35 +198,6 @@ small {
 .hover-blue:hover {
         color: #3366cc;
         cursor: pointer;
-}
-
-
-
-
-
-
-/* FORUM - Narady */
-
-
-
-.forum th {
-        border: 1px solid black;
-        font-weight: normal;
-        padding: 10px;
-}
-
-.forum thead {
-        background-color: #363636;
-        color: #ffffff;
-}
-
-.forum td {
-        border: 1px solid black;
-        padding: 5px;
-}
-
-table.forum {
-        border: double;
 }
 
 small.red {

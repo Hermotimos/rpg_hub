@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'debates/debates.css' %}">
+{% endblock head_extra %}
+
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'debates:main' %}">Narady</a></li>
     <li class="breadcrumb-item"><a href="{% url 'debates:debate' debate.topic.id debate.id %}">{{ debate.topic.title }}: {{ debate.title }}</a></li>
