@@ -13,7 +13,7 @@
 
 {% block content %}
     <br><br><br>
-    <form class="allowed-profiles-form" method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" class="allowed-profiles-form">
         {% csrf_token %}
 
         {{ form.title }}<br><br>
@@ -23,7 +23,6 @@
         <h5>Wybierz adresatów ogłoszenia:</h5>
         <small>1) Tylko wybrani adresaci zobaczą ogłoszenie.</small><br>
         <small>2) Późniejsze dodanie adresatów - przez MG.</small><br>
-        <small class="red">3) Nie zapomnij dodać samego siebie!</small>
 
         <br><br>
         {{ form.allowed_profiles }}<br>

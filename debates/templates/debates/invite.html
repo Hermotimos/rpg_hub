@@ -37,14 +37,12 @@
         <small>5) Jeśli chcesz się naradzić z postacią, której nie ma na liście, powiadom MG.</small><br>
         <br><br>
 
-        <div class="allowed-profiles-form-debate">
-            <form method="POST" action=".#page-bottom">
-                {% csrf_token %}
-                {{ form.allowed_profiles }}
-                <br>
-                <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
-                <input class="btn btn-dark" type="submit" value="Dodaj uczestników narady">
-            </form>
-        </div>
+        <form method="POST" action=".#page-bottom" class="allowed-profiles-form-debate">
+            {% csrf_token %}
+            {{ form.allowed_profiles }}
+            <br>
+            <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
+            <input class="btn btn-dark" type="submit" value="Dodaj uczestników narady">
+        </form>
     {% endif %}
 {% endblock content %}

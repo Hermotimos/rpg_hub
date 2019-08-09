@@ -85,13 +85,11 @@
 
     <br>
 
-    <div class="allowed-profiles-form">
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.informed }}<br>
-            <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
-            <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
-            <input class="btn btn-dark" type="submit" value="Poinformuj">
-        </form>
-    </div>
+    <form method="POST" class="allowed-profiles-form">
+        {% csrf_token %}
+        {{ form.informed }}<br>
+        <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
+        <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
+        <input class="btn btn-dark" type="submit" value="Poinformuj">
+    </form>
 {% endblock content %}

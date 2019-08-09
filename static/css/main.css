@@ -122,13 +122,13 @@ a.article-title:hover {
 }
 
 .allowed-profiles-form select {
-        min-height: 300px;
-        width: 400px;
+        min-height: 200px;
+        width: 300px;
 }
 
 .allowed-profiles-form-debate select {
         min-height: 300px;
-        width: 400px;
+        width: 300px;
 }
 
 .breadcrumbs small {
