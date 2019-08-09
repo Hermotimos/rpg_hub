@@ -71,7 +71,7 @@
                             </td>
                             <td>
                                 <br>
-                                <small>{{ remark.date_posted|date:'d-M-Y' }}</small>
+                                <small>{{ remark.date_posted|date:'d-M-Y, H:i' }}</small>
                                 {{ remark.text|capfirst|linebreaks }}
                                 {% if remark.image %}
                                     <img src="{{ remark.image.url }}" class="border-double">
