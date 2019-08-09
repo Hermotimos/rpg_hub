@@ -56,8 +56,9 @@
             <tbody>
             {% for response in news.responses.all %}
                 <tr class="posts-and-news">
-                    <td class="center">
+                    <td>
                         <img class="rounded-circle article-img" src="{{ response.author.profile.image.url }}">
+                        <br>
                         <small>{{ response.author.profile.character_name }}</small>
                     </td>
                     <td>
