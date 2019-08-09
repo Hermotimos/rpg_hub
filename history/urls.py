@@ -27,5 +27,3 @@ urlpatterns = [
     path('chronicle/note:<int:event_id>/', views.chronicle_note_view, name='chronicle-note'),
     path('chronicle/edit:<int:event_id>/', views.chronicle_edit_view, name='chronicle-edit'),
 ]
-
-
