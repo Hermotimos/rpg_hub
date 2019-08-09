@@ -38,6 +38,8 @@
         {% endif %}
     </table><br><br>
 
+    <small>Jeśli chcesz skasować notatkę, usuń jej treść i kliknij 'Zapisz'.</small><br><br>
+
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}
