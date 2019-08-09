@@ -96,7 +96,7 @@ def add_allowed_profiles_view(request, topic_id, debate_id):
 
             subject = f"[RPG] Dołączenie do narady: '{debate.title}'"
             message = f"{request.user.profile} dołączył/a Cię do narady '{debate.title}' w temacie '{debate.topic}'.\n"\
-                      f"Uczestnicy: {', '.join(p.character_name for p in allowed_profiles)}\n" \
+                      f"Uczestnicy: {', '.join(p.character_name for p in allowed_profiles if p.character_status != 'gm')}\n" \
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
             receivers_list = []
