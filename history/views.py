@@ -330,8 +330,7 @@ def timeline_inform_view(request, event_id):
     else:
         form = TimelineEventInformForm(authenticated_user=request.user,
                                        old_informed_ids=old_informed_ids,
-                                       participants_ids=participants_ids,
-                                       instance=obj)                        # TODO this here is useful? debate work without it...
+                                       participants_ids=participants_ids)
 
     context = {
         'page_title': 'Poinformuj o wydarzeniu',
