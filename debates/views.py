@@ -73,15 +73,16 @@ def add_allowed_profiles_view(request, topic_id, debate_id):
 
     old_allowed_profiles = debate.allowed_profiles.all()[::1]
     old_allowed_profiles_ids = [p.id for p in old_allowed_profiles]
-    allowed_str = ', '.join(p.character_name.split(' ', 1)[0]
-                            for p in old_allowed_profiles
-                            if p.character_status != 'gm')
+    old_allowed_str = ', '.join(p.character_name.split(' ', 1)[0]
+                                for p in old_allowed_profiles
+                                if p.character_status != 'gm')
     old_followers = debate.followers.all()
 
     if request.method == 'POST':
         form = UpdateDebateForm(authenticated_user=request.user,
                                 already_allowed_profiles_ids=old_allowed_profiles_ids,
-                                data=request.POST, instance=debate)
+                                data=request.POST,
+                                instance=debate)
         if form.is_valid():
             debate = form.save()
 
@@ -102,6 +103,7 @@ def add_allowed_profiles_view(request, topic_id, debate_id):
             sender = settings.EMAIL_HOST_USER
             receivers = []
             for profile in debate.allowed_profiles.all():
+                # exclude previously allowed users from mailing to avoid spam
                 if profile not in old_allowed_profiles:
                     receivers.append(profile.user.email)
             if request.user.profile.character_status != 'gm':
@@ -118,7 +120,7 @@ def add_allowed_profiles_view(request, topic_id, debate_id):
         'page_title': 'Dodaj uczestników narady',
         'debate': debate,
         'form': form,
-        'allowed': allowed_str
+        'allowed': old_allowed_str
     }
     return render(request, 'debates/invite.html', context)
 
