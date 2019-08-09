@@ -1,0 +1,22 @@
+
+
+table.forum {
+        border: double;
+}
+
+.forum th {
+        border: 1px solid black;
+        font-weight: normal;
+        padding: 10px;
+}
+
+.forum thead {
+        background-color: #363636;
+        color: #ffffff;
+}
+
+.forum td {
+        border: 1px solid black;
+        padding: 5px;
+}
+
