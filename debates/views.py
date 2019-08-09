@@ -11,7 +11,6 @@ from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm, U
 @login_required
 def debates_main_view(request):
     queryset = Topic.objects.all()
-
     context = {
         'page_title': 'Narady',
         'queryset': queryset,
@@ -44,7 +43,6 @@ def debate_view(request, topic_id, debate_id):
                       f"'{remark.text}'\n\n" \
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
-
             receivers_list = []
             for user in User.objects.all():
                 if user.profile in debate.followers.all() and user != request.user:
@@ -77,7 +75,6 @@ def add_allowed_profiles_view(request, topic_id, debate_id):
     allowed_str = ', '.join(p.character_name.split(' ', 1)[0]
                             for p in old_allowed_profiles
                             if p.character_status != 'gm')
-
     old_followers = debate.followers.all()
 
     if request.method == 'POST':
@@ -93,7 +90,7 @@ def add_allowed_profiles_view(request, topic_id, debate_id):
             debate.allowed_profiles.set(allowed_profiles)
 
             new_followers_ids = [p.id for p in allowed_profiles if p not in old_allowed_profiles]
-            new_followers = old_followers
+            new_followers = old_followers                                                               # TODO try 2 lines in 1
             new_followers |= Profile.objects.filter(id__in=new_followers_ids)
             debate.followers.set(new_followers)
 
