@@ -28,10 +28,11 @@
         </tr>
     </table><br><br>
 
-    {% if debate.is_individual %}
-        <h4><b>Nie możesz dodać uczestników do tej rozmowy.</b></h4>
-    {% elif debate.is_ended %}
+
+    {% if debate.is_ended %}
         <h4><b>Ta narada już się zakończyła.</b></h4>
+    {% elif debate.is_individual %}
+        <h4><b>Nie możesz dodać uczestników do tej rozmowy.</b></h4>
     {% else %}
         <h6>Włącz uczestników do narady:</h6>
         <small>1) Nowi uczestnicy uzyskają dostęp do całości narady.</small><br>
