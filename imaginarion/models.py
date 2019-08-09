@@ -8,6 +8,7 @@ TYPES = (
     ('symbola', 'symbola'),
     ('thera', 'thera'),
     ('topoi', 'topoi'),
+    ('varia', 'varia'),
 )
 
 
