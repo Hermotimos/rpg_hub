@@ -10,9 +10,9 @@ from history.models import (GameSession,
                             ChronicleEvent,
                             ChronicleEventNote)
 
-admin.site.register(Thread)
-admin.site.register(GeneralLocation)
-admin.site.register(SpecificLocation)
+
+class SpecificLocationAdmin(admin.ModelAdmin):
+    list_display = ['name', 'general_location']
 
 
 class InlineTimelineEvent(admin.TabularInline):
@@ -25,11 +25,6 @@ class InlineTimelineEvent(admin.TabularInline):
     }
 
 
-admin.site.register(TimelineEvent)
-admin.site.register(TimelineEventNote)
-admin.site.register(ChronicleEventNote)
-
-
 class InlineChronicleEvent(admin.TabularInline):
     model = ChronicleEvent
     extra = 2
@@ -39,7 +34,8 @@ class GameSessionAdmin(admin.ModelAdmin):
     inlines = [InlineTimelineEvent, InlineChronicleEvent]
 
 
-admin.site.register(GameSession, GameSessionAdmin)
+class TimelineEventAdmin(admin.ModelAdmin):
+    list_display = ('short_description', 'game_no', 'date')
 
 
 class ChronicleEventAdmin(admin.ModelAdmin):
@@ -58,17 +54,17 @@ class ChronicleEventAdmin(admin.ModelAdmin):
     list_display = [
         'game_no',
         'event_no_in_game',
-        'shorten_description',
+        'short_description',
     ]
 
     # way of customizing display of fields:
-    def shorten_description(self, obj):
+    def short_description(self, obj):
         return f'{obj.description[:100]}...{obj.description[-100:] if len(obj.description) > 200 else obj.description}'
 
     # fields may be made links leading to their objects:
     list_display_links = [
         'game_no',
-        'shorten_description',
+        'short_description',
     ]
 
     # fields made ditable directly in list display:
@@ -83,4 +79,13 @@ class ChronicleEventAdmin(admin.ModelAdmin):
     ]
 
 
+admin.site.register(GameSession, GameSessionAdmin)
+admin.site.register(Thread)
+admin.site.register(GeneralLocation)
+admin.site.register(SpecificLocation, SpecificLocationAdmin)
+admin.site.register(TimelineEvent, TimelineEventAdmin)
+admin.site.register(TimelineEventNote)
 admin.site.register(ChronicleEvent, ChronicleEventAdmin)
+admin.site.register(ChronicleEventNote)
+
+

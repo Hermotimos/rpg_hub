@@ -102,6 +102,27 @@ class TimelineEvent(models.Model):
     def __str__(self):
         return f'{self.description[0:100]}...'
 
+    def short_description(self):
+        return self.__str__()
+
+    def days(self):
+        if self.day_end:
+            return f'{self.day_start}-{self.day_end}'
+        else:
+            return f'{self.day_start}'
+
+    def date(self):
+        days = f'{self.day_start}-{self.day_end}' if self.day_end else self.day_start
+        if self.season == 'spring':
+            season = 'Wiosny'
+        elif self.season == 'summer':
+            season = 'Lata'
+        elif self.season == 'autumn':
+            season = 'Jesieni'
+        else:
+            season = 'Zimy'
+        return f'{days}. dzień {season} {self.year}. roku Archonatu Nemetha Samatiana'
+
     class Meta:
         # ordering via 'description' before 'game_no' to leave flexibility for events with later 'id'-s
         ordering = ['year', 'season', 'day_start', 'day_end', 'description', 'game_no']
@@ -134,7 +155,10 @@ class ChronicleEvent(models.Model):
     Lack or correspondence between the two is intentional for flexibility.
     """
     # default=0 for events outside of sessions (background events):
-    game_no = models.ForeignKey(GameSession, related_name='described_events', on_delete=models.PROTECT, default=0)
+    game_no = models.ForeignKey(GameSession,
+                                related_name='described_events',
+                                on_delete=models.PROTECT,
+                                default=0)
     event_no_in_game = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
     description = models.TextField(max_length=10000)
     participants = models.ManyToManyField(Profile,
