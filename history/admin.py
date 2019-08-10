@@ -13,6 +13,8 @@ from history.models import (GameSession,
 
 class SpecificLocationAdmin(admin.ModelAdmin):
     list_display = ['name', 'general_location']
+    list_editable = ['general_location', ]
+    list_filter = ['general_location', ]
 
 
 class InlineTimelineEvent(admin.TabularInline):
@@ -54,9 +56,9 @@ class ChronicleEventAdmin(admin.ModelAdmin):
     list_display_links = ['game_no', 'short_description']
 
     # fields made editable directly in list display:
-    list_editable = ['event_no_in_game',]
+    list_editable = ['event_no_in_game', ]
 
-    list_filter = ['participants', 'informed', 'game_no',]
+    list_filter = ['participants', 'informed', 'game_no', ]
 
 
 admin.site.register(GameSession, GameSessionAdmin)
