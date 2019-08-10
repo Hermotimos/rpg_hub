@@ -33,7 +33,7 @@ SEASONS_WITH_STYLES_DICT = {
 }
 
 
-# @login_required
+@login_required
 def timeline_main_view(request):
     if request.user.profile in Profile.objects.filter(character_status='gm'):
         queryset = TimelineEvent.objects.all()
@@ -101,7 +101,7 @@ def timeline_main_view(request):
     return render(request, 'history/timeline_main.html', context)
 
 
-# @login_required
+@login_required
 def timeline_all_events_view(request):
     if request.user.profile in Profile.objects.filter(character_status='gm'):
         queryset = TimelineEvent.objects.all()
@@ -142,7 +142,7 @@ def timeline_thread_view(request, thread_id):
     return render(request, 'history/timeline_events.html', context)
 
 
-# @login_required
+@login_required
 def timeline_participant_view(request, participant_id):
     participant = get_object_or_404(Profile, id=participant_id)
     events_by_participant_qs = participant.events_participated.all()
