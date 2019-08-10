@@ -24,26 +24,7 @@
         <tr>
             <td><h6>Data:</h6></td>
             <td class="justify">
-                <small>
-                    Rok: {{ event.year }}. rok Archonatu Nemetha Samatiana<br>
-                    Pora roku:
-                    {% if event.season == '1' %}
-                        Wiosna
-                    {% elif event.season == '2' %}
-                        Lato
-                    {% elif event.season == '3' %}
-                        Jesień
-                    {% elif event.season == '4' %}
-                        Zima
-                    {% endif %}
-                    <br>
-                    Dzień:
-                    {% if event.day_end %}
-                        {{ event.day_start }}-{{ event.day_end }}
-                    {% else %}
-                        {{ event.day_start }}
-                    {% endif %}
-                </small>
+                <small>{{ event.date }}</small>
             </td>
         </tr>
         <tr>
