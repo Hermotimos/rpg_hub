@@ -3,9 +3,9 @@ from django.contrib.auth.models import User
 from PIL import Image
 
 STATUS = [
-    ('active_player', 'Postać gracza'),
-    ('inactive_player', 'Nieaktywna postać gracza'),
-    ('dead_player', 'Martwa postać gracza'),
+    ('active_player', 'Gracz'),
+    ('inactive_player', 'Nieaktywny gracz'),
+    ('dead_player', 'Martwy gracz'),
     ('living_npc', 'Bohater niezależny'),
     ('dead_npc', 'Martwy bohater niezależny'),
     ('gm', 'Mistrz gry')
