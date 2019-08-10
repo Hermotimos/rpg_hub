@@ -3,12 +3,12 @@ from PIL import Image
 
 
 TYPES = (
-    ('npc', 'npc'),
-    ('realia', 'realia'),
-    ('symbola', 'symbola'),
-    ('thera', 'thera'),
-    ('topoi', 'topoi'),
-    ('varia', 'varia'),
+    ('npc', 'NPC'),
+    ('realia', 'REALIA'),
+    ('symbola', 'SYMBOLA'),
+    ('thera', 'THERA'),
+    ('topoi', 'TOPOI'),
+    ('varia', 'VARIA'),
 )
 
 
@@ -22,7 +22,10 @@ class Picture(models.Model):
         ordering = ['type', 'title', 'description']
 
     def __str__(self):
-        return self.title
+        return f'{str(self.type).upper()}___{str(self.title).split("_", 1)[1]}'
+
+    def admin_title(self):
+        return self.__str__()
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

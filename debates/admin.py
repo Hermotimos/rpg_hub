@@ -14,4 +14,10 @@ class DebateAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Debate, DebateAdmin)
-admin.site.register(Remark)
+
+
+class RemarkAdmin(admin.ModelAdmin):
+    list_display = ('text_begin', 'debate', 'author', 'date_posted', 'image')
+
+
+admin.site.register(Remark, RemarkAdmin)

@@ -74,7 +74,10 @@ class Remark(models.Model):
     image = models.ImageField(blank=True, null=True, upload_to='post_pics')
 
     def __str__(self):
-        return self.text[:30]
+        return f'{self.text[:50]}...'
+
+    def text_begin(self):
+        return self.__str__()
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
