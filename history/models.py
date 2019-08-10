@@ -176,6 +176,9 @@ class ChronicleEvent(models.Model):
     def __str__(self):
         return f'{self.description[0:100]}...'
 
+    def short_description(self):
+        return f'{self.description[:100]}...{self.description[-100:] if len(str(self.description)) > 200 else self.description}'
+
     class Meta:
         ordering = ['game_no', 'event_no_in_game']
 

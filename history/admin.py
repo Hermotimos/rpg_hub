@@ -48,10 +48,6 @@ class ChronicleEventAdmin(admin.ModelAdmin):
     # list of fields to show in overview table (cannot include M2M fields)
     list_display = ['game_no', 'event_no_in_game', 'short_description']
 
-    # way of customizing display of fields:
-    def short_description(self, obj):
-        return f'{obj.description[:100]}...{obj.description[-100:] if len(obj.description) > 200 else obj.description}'
-
     # fields may be made links leading to their objects:
     list_display_links = ['game_no', 'short_description']
 
