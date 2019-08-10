@@ -8,7 +8,7 @@ from users.models import User, Profile
 from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm, UpdateDebateForm
 
 
-# @login_required
+@login_required
 def debates_main_view(request):
     queryset = Topic.objects.all()
     context = {
