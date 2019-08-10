@@ -1,12 +1,19 @@
 {% extends "admin/base.html" %}
 
-{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+{% block title %}
+    {{ title }} | {{ site_title|default:_('Django site admin') }}
+{% endblock %}
 
 {% block branding %}
 <h1 id="site-name">
     <a href="{% url 'admin:index' %}">HYLLEMATH</a>
-    &emsp;&emsp;
-    <a href="{% url 'users:profile' %}">Profil</a>
+    &emsp;
+    <small>
+        <a href="{% url 'news:main' %}">Ogłoszenia</a>&emsp;
+        <a href="{% url 'history:chronicle-main' %}">Kronika</a>&emsp;
+        <a href="{% url 'history:timeline-main' %}">Kalendarium</a>&emsp;
+        <a href="{% url 'debates:main' %}">Narady</a>
+    </small>
 </h1>
 {% endblock %}
 
