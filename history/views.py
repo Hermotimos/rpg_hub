@@ -298,21 +298,13 @@ def timeline_inform_view(request, event_id):
             informed |= Profile.objects.filter(id__in=old_informed_ids)
             event.informed.set(informed)
 
-            if obj.season == 'spring':
-                season = 'Wiosny'
-            elif obj.season == 'summer':
-                season = 'Lata'
-            elif obj.season == 'autumn':
-                season = 'Jesieni'
-            else:
-                season = 'Zimy'
-
             subject = f"[RPG] {request.user.profile} podzielił się z Tobą swoją historią!"
             message = f"{request.user.profile} znów rozprawia o swoich przygodach.\n\n" \
                       f"'{obj.date()} rozegrało się co następuje:\n {obj.description}\n" \
                       f"Tak było i nie inaczej...'\n" \
                       f"A było to w miejscu: {obj.general_location}" \
-                      f", a dokładniej: {', '.join(l.name for l in obj.specific_locations.all())}.\n"
+                      f", a dokładniej: {', '.join(l.name for l in obj.specific_locations.all())}.\n\n" \
+                      f"Wydarzenie zostało zapisane w Twoim Kalendarium."
             sender = settings.EMAIL_HOST_USER
             receivers = []
             for profile in event.informed.all():
@@ -504,7 +496,8 @@ def chronicle_inform_view(request, event_id):
             message = f"{request.user.profile} znów rozprawia o swoich przygodach.\n" \
                       f"{', '.join(p.character_name for p in form.cleaned_data['informed'])}\n\n" \
                       f"Podczas przygody '{obj.game_no.title}' rozegrało się co następuje:\n {obj.description}\n" \
-                      f"Tak było i nie inaczej..."
+                      f"Tak było i nie inaczej...\n\n" \
+                      f"Wydarzenie zostało zapisane w Twojej Kronice."
             sender = settings.EMAIL_HOST_USER
             receivers = []
             for profile in event.informed.all():
