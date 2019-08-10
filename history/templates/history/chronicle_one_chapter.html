@@ -45,7 +45,10 @@
                                         {% for p in event.pictures.all %}
                                             <td>
                                                 <img src="{{ p.image.url }}" class="border-double">
-                                                &nbsp;&nbsp;{{ p.description }}
+                                                &nbsp;&nbsp;
+                                                {% if p.description %}
+                                                    {{ p.description }}
+                                                {% endif %}
                                             </td>
                                         {% endfor %}
                                         </tr>
