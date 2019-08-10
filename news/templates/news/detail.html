@@ -61,11 +61,11 @@
                         <br>
                         <small class="smaller">{{ response.author.profile.character_name }}</small>
                     </td>
-                    <td>
-                        <small>{{ response.date_posted|date:'d-M-Y, H:i' }}</small>
+                    <td class="align-center">
+                        <small class="left-float">{{ response.date_posted|date:'d-M-Y, H:i' }}</small><br>
                         {{ response.text|capfirst|linebreaks }}
                         {% if response.image %}
-                            <img src="{{ response.image.url }}">
+                            <img src="{{ response.image.url }}" class="border-double">
                         {% endif %}
                         <br>
                     </td>

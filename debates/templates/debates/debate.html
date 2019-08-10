@@ -53,7 +53,7 @@
                 {% for remark in debate.remarks.all %}
                     {% if remark.author.profile.character_status == 'gm' %}
                         <tr class="posts-and-news">
-                            <td  colspan="2">
+                            <td colspan="2" class="align-center">
                                 <br>
                                 {{ remark.text|capfirst|linebreaks }}
                                 {% if remark.image %}
@@ -70,9 +70,9 @@
                                 <br>
                                 <small class="smaller">{{ remark.author.profile.character_name }}</small>
                             </td>
-                            <td>
+                            <td class="align-center">
                                 <br>
-                                <small>{{ remark.date_posted|date:'d-M-Y, H:i' }}</small>
+                                <small class="left-float">{{ remark.date_posted|date:'d-M-Y, H:i' }}</small><br>
                                 {{ remark.text|capfirst|linebreaks }}
                                 {% if remark.image %}
                                     <img src="{{ remark.image.url }}" class="border-double">

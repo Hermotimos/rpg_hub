@@ -60,10 +60,6 @@ table.timeline {
         color: #444444;
 }
 
-td.center {
-        text-align: center;
-}
-
 td img {
         display: block;
         margin-left: auto;

@@ -207,3 +207,13 @@ small.red {
 small.smaller {
     font-size: 12px;
 }
+
+td.align-center {
+        text-align: center;
+}
+
+small.left-float {
+        width: 50%;
+        float: left;
+        text-align: left;
+}
