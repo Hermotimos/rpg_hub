@@ -106,13 +106,9 @@ class TimelineEvent(models.Model):
         return self.__str__()
 
     def days(self):
-        if self.day_end:
-            return f'{self.day_start}-{self.day_end}'
-        else:
-            return f'{self.day_start}'
+        return f'{self.day_start}-{self.day_end}' if self.day_end else self.day_start
 
     def date(self):
-        days = f'{self.day_start}-{self.day_end}' if self.day_end else self.day_start
         if self.season == 'spring':
             season = 'Wiosny'
         elif self.season == 'summer':
@@ -121,7 +117,7 @@ class TimelineEvent(models.Model):
             season = 'Jesieni'
         else:
             season = 'Zimy'
-        return f'{days}. dzień {season} {self.year}. roku Archonatu Nemetha Samatiana'
+        return f'{self.days()}. dnia {season} {self.year}. roku Archonatu Nemetha Samatiana'
 
     class Meta:
         # ordering via 'description' before 'game_no' to leave flexibility for events with later 'id'-s

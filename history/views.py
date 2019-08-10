@@ -309,9 +309,7 @@ def timeline_inform_view(request, event_id):
 
             subject = f"[RPG] {request.user.profile} podzielił się z Tobą swoją historią!"
             message = f"{request.user.profile} znów rozprawia o swoich przygodach.\n\n" \
-                      f"'{obj.day_start}{'-' + obj.day_end if obj.day_end else ''}." \
-                      f" dnia {season} {obj.year + 19}. " \
-                      f"roku Archonatu Nemetha Samatiana rozegrało się co następuje:\n {obj.description}\n" \
+                      f"'{obj.date()} rozegrało się co następuje:\n {obj.description}\n" \
                       f"Tak było i nie inaczej...'\n" \
                       f"A było to w miejscu: {obj.general_location}" \
                       f", a dokładniej: {', '.join(l.name for l in obj.specific_locations.all())}.\n"
