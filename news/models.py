@@ -38,6 +38,8 @@ class News(models.Model):
 
     class Meta:
         ordering = ['-date_posted']
+        verbose_name = 'News'
+        verbose_name_plural = 'News'
 
     def last_activity(self):
         return self.responses.all().aggregate(Max('date_posted'))['date_posted__max']
