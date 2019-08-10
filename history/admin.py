@@ -15,9 +15,9 @@ admin.site.register(GeneralLocation)
 admin.site.register(SpecificLocation)
 
 
-class InlineEvent(admin.TabularInline):
+class InlineTimelineEvent(admin.TabularInline):
     model = TimelineEvent
-    extra = 2
+    extra = 4
 
     # override attrs of form field when rendered as Inline:
     formfield_overrides = {
@@ -30,13 +30,13 @@ admin.site.register(TimelineEventNote)
 admin.site.register(ChronicleEventNote)
 
 
-class InlineDescribedEvent(admin.TabularInline):
+class InlineChronicleEvent(admin.TabularInline):
     model = ChronicleEvent
     extra = 2
 
 
 class GameSessionAdmin(admin.ModelAdmin):
-    inlines = [InlineDescribedEvent, InlineEvent]
+    inlines = [InlineTimelineEvent, InlineChronicleEvent]
 
 
 admin.site.register(GameSession, GameSessionAdmin)
