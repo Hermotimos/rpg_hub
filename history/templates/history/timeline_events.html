@@ -56,8 +56,8 @@
                         &#10023;<a class="hover-pointer" href="{% url 'history:timeline-thread' thread.id %}">{{ thread }}</a><br>
                     {% endfor %}
                 </td>
-                <td class="timeline-event justify align-top">
-                    {{ event.description|linebreaksbr }}
+                <td class="timeline-event justify align-top unblue-black">
+                    <a href="{% url 'history:chronicle-one-chapter' event.game_no.id %}">{{ event.description|linebreaksbr }}</a>
                     {% for note in event.notes.all %}
                         {% if request.user == note.author %}
                             {% if note.text != '' %}
@@ -66,7 +66,7 @@
                         {% endif %}
                     {% endfor %}
                 </td>
-                <td class="timeline-small align-top unblue">
+                <td class="timeline-small align-top unblue-black">
                     {% for profile in event.participants.all %}
                         <a class="hover-pointer" href="{% url 'history:timeline-participant' profile.id %}"><small>{{ profile.character_name|get_first_word }}</small></a><br>
                     {% endfor %}
@@ -82,7 +82,7 @@
                 </td>
                 <td class="align-center align-top unblue-black">
                     {% if event.game_no.game_no > 0 %}
-                        <small><a href="{% url 'history:chronicle-one-chapter' event.game_no.id %}">
+                        <small><a href="#">
                             -{{ event.game_no.game_no }}-
                         </a></small>
                     {% elif event.game_no.game_no == 0 %}
