@@ -64,6 +64,7 @@
                             </p>
                         </td>
                         <td class="align-top">
+                            <br>
                             <h6><a href="{% url 'history:chronicle-inform' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
                             <h6><a href="{% url 'history:chronicle-note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
                             {% if request.user.profile.character_status == 'gm' %}
