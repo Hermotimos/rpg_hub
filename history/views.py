@@ -206,7 +206,7 @@ def timeline_specific_location_view(request, spec_loc_id):
 
     context = {
         'page_title': f'Kalendarium: {specific_location.name}',
-        'header': f'{specific_location.name}... Jak odcisnęło się na Twoim losie to miejsce?',
+        'header': f'{specific_location.name}... Jak to miejsce odcisnęło się na Twoim losie?',
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
@@ -242,6 +242,28 @@ def timeline_date_view(request, year, season='0'):
     context = {
         'page_title': page_title,
         'header': f'Nie wydaje się to wcale aż tak dawno temu...',
+        'queryset': queryset,
+        'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
+    }
+    return render(request, 'history/timeline_events.html', context)
+
+
+@login_required
+def timeline_game_view(request, game_id):
+    game = get_object_or_404(GameSession, id=game_id)
+    events_by_game_no_qs = TimelineEvent.objects.filter(game_no=game)
+
+    if request.user.profile in Profile.objects.filter(character_status='gm'):
+        queryset = events_by_game_no_qs
+    else:
+        participated_qs = Profile.objects.get(user=request.user).events_participated.all()
+        informed_qs = Profile.objects.get(user=request.user).events_informed.all()
+        events_by_user = (participated_qs | informed_qs).distinct()
+        queryset = [e for e in events_by_user if e in events_by_game_no_qs]
+
+    context = {
+        'page_title': f'Kalendarium: {game.title}',
+        'header': f'{game.title}... Jak to po kolei było?',
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }

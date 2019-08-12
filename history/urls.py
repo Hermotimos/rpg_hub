@@ -13,6 +13,7 @@ urlpatterns = [
     path('timeline/gen-loc:<int:gen_loc_id>/', views.timeline_general_location_view, name='timeline-gen-loc'),
     path('timeline/spec-loc:<int:spec_loc_id>/', views.timeline_specific_location_view, name='timeline-spec-loc'),
     path('timeline/date:<int:year>:<str:season>/', views.timeline_date_view, name='timeline-date'),
+    path('timeline/game:<int:game_id>/', views.timeline_game_view, name='timeline-game'),
     path('timeline/create/', views.timeline_create_view, name='timeline-create'),
     path('timeline/inform:<int:event_id>/', views.timeline_inform_view, name='timeline-inform'),
     path('timeline/note:<int:event_id>/', views.timeline_note_view, name='timeline-note'),

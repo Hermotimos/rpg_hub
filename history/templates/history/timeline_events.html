@@ -82,13 +82,13 @@
                 </td>
                 <td class="align-center align-top unblue-black">
                     {% if event.game_no.game_no > 0 %}
-                        <small><a href="#">
+                        <small><a href="{% url 'history:timeline-game' event.game_no.id %}">
                             -{{ event.game_no.game_no }}-
                         </a></small>
                     {% elif event.game_no.game_no == 0 %}
                         <small hidden><b>***</b></small>
                     {% else %}
-                        <small><a href="{% url 'history:chronicle-one-chapter' event.game_no.id %}">-X-</a></small>
+                        <small><a href="{% url 'history:timeline-game' event.game_no.id %}">-X-</a></small>
                     {% endif %}
                 </td>
                 <td class="align-top">
