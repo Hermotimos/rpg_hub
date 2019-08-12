@@ -115,4 +115,19 @@
     </table>
     <br><br>
 
+    <h3 class="hover-blue" data-toggle="collapse" data-target="#games">
+        <b>Sesje</b>
+    </h3>
+    <small>Wykaz sesji</small><br><br>
+    <table id="games" class="collapse">
+        {% for g in games %}
+            <tr>
+                <td class="unblue">
+                    &#10023;<a href="{% url 'history:timeline-game' g.1.id %}">{{ g.0 }}</a>&emsp;&emsp;
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <br><br>
+
 {% endblock content %}

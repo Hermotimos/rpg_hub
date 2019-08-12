@@ -89,6 +89,13 @@ def timeline_main_view(request):
         gen_loc_with_spec_locs_list = [gl, [sl for sl in spec_locs_name_and_obj_list if sl[1].general_location == gl]]
         gen_locs_with_spec_locs_list.append(gen_loc_with_spec_locs_list)
 
+    # games
+    games_set = {event.game_no for event in queryset}
+    games_sorted_list = list(games_set)
+    games_sorted_list.sort(key=lambda game: game.game_no)
+    games_name_and_obj_list = [(g.title, g) for g in games_sorted_list]
+    # games_name_and_obj_list.
+
     context = {
         'page_title': 'Kalendarium',
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
@@ -96,6 +103,7 @@ def timeline_main_view(request):
         'threads': threads_name_and_obj_list,
         'participants': participants_name_and_obj_list,
         'gen_locs_with_spec_locs_list': gen_locs_with_spec_locs_list,
+        'games': games_name_and_obj_list,
         'queryset': queryset,
     }
     return render(request, 'history/timeline_main.html', context)
