@@ -33,7 +33,7 @@ SEASONS_WITH_STYLES_DICT = {
 }
 
 
-def known_events(profile_id):
+def participated_or_informed_events(profile_id):
     profile = Profile.objects.get(id=profile_id)
     if profile.character_status == 'gm':
         known_qs = TimelineEvent.objects.all()
@@ -46,24 +46,24 @@ def known_events(profile_id):
 
 @login_required
 def timeline_main_view(request):
-    events_per_profile = known_events(request.user.profile.id)
+    known_events = participated_or_informed_events(request.user.profile.id)
 
     # years
-    years_set = {e.year for e in events_per_profile.all()}
+    years_set = {e.year for e in known_events.all()}
     years_sorted_list = list(years_set)
     years_sorted_list.sort()
 
     # years with their seasons
     years_with_seasons_dict = {}
     for y in years_sorted_list:
-        seasons_set = {e.season for e in events_per_profile.all() if e.year == y}
+        seasons_set = {e.season for e in known_events.all() if e.year == y}
         seasons_sorted_list = list(seasons_set)
         seasons_sorted_list.sort()
         years_with_seasons_dict[y] = seasons_sorted_list
 
     # threads
     threads_set = set()
-    threads_querysets_list = [event.threads.all() for event in events_per_profile]
+    threads_querysets_list = [event.threads.all() for event in known_events]
     for qs in threads_querysets_list:
         for th in qs:
             threads_set.add(th)
@@ -72,7 +72,7 @@ def timeline_main_view(request):
 
     # participants
     participants_set = set()
-    participants_querysets_list = [event.participants.all() for event in events_per_profile]
+    participants_querysets_list = [event.participants.all() for event in known_events]
     for qs in participants_querysets_list:
         for p in qs:
             participants_set.add(p)
@@ -81,22 +81,22 @@ def timeline_main_view(request):
 
     # specific locations
     spec_locs_set = set()
-    spec_locs_querysets_list = [event.specific_locations.all() for event in events_per_profile]
+    spec_locs_querysets_list = [event.specific_locations.all() for event in known_events]
     for qs in spec_locs_querysets_list:
         for sl in qs:
             spec_locs_set.add(sl)
     spec_locs_name_and_obj_list = [(t.name, t) for t in spec_locs_set]
     spec_locs_name_and_obj_list.sort()
 
-    # general locations with their specific locations: LEFT UNSORTED TO REFLECT SUBSEQUNT GENERAL LOCATIONS IN GAME
-    gen_locs_set = {event.general_location for event in events_per_profile}
+    # general locations with their specific locations: LEFT UNSORTED TO REFLECT SUBSEQUENT GENERAL LOCATIONS IN GAME
+    gen_locs_set = {event.general_location for event in known_events}
     gen_locs_with_spec_locs_list = []
     for gl in gen_locs_set:
         gen_loc_with_spec_locs_list = [gl, [sl for sl in spec_locs_name_and_obj_list if sl[1].general_location == gl]]
         gen_locs_with_spec_locs_list.append(gen_loc_with_spec_locs_list)
 
     # games
-    games_set = {event.game_no for event in events_per_profile}
+    games_set = {event.game_no for event in known_events}
     games_sorted_list = list(games_set)
     games_sorted_list.sort(key=lambda game: game.game_no)
     games_name_and_obj_list = [(g.title, g) for g in games_sorted_list]
@@ -108,22 +108,16 @@ def timeline_main_view(request):
         'years_with_seasons_dict': years_with_seasons_dict,
         'threads': threads_name_and_obj_list,
         'participants': participants_name_and_obj_list,
-        'gen_locs_with_spec_locs_list': gen_locs_with_spec_locs_list,
+        'gen_locs_with_spec_locs': gen_locs_with_spec_locs_list,
         'games': games_name_and_obj_list,
-        'queryset': events_per_profile,
     }
     return render(request, 'history/timeline_main.html', context)
 
 
 @login_required
 def timeline_all_events_view(request):
-    if request.user.profile in Profile.objects.filter(character_status='gm'):
-        queryset = TimelineEvent.objects.all()
-    else:
-        participated_qs = Profile.objects.get(user=request.user).events_participated.all()
-        informed_qs = Profile.objects.get(user=request.user).events_informed.all()
-        queryset = (participated_qs | informed_qs).distinct()
-
+    known_events = participated_or_informed_events(request.user.profile.id)
+    queryset = known_events
     context = {
         'page_title': 'Pełne Kalendarium',
         'header': 'Opisane tu wydarzenia rozpoczęły swój bieg 20. roku Archonatu Nemetha Samatiana w Ebbonie, '
@@ -138,15 +132,8 @@ def timeline_all_events_view(request):
 def timeline_thread_view(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
     events_by_thread_qs = thread.events.all()
-
-    if request.user.profile in Profile.objects.filter(character_status='gm'):
-        queryset = events_by_thread_qs
-    else:
-        participated_qs = Profile.objects.get(user=request.user).events_participated.all()
-        informed_qs = Profile.objects.get(user=request.user).events_informed.all()
-        events_by_user = (participated_qs | informed_qs).distinct()
-        queryset = [e for e in events_by_user if e in events_by_thread_qs]
-
+    known_events = participated_or_informed_events(request.user.profile.id)
+    queryset = set(events_by_thread_qs) & set(known_events)
     context = {
         'page_title': f'Kalendarium: {thread.name}',
         'header': f'{thread.name}... Próbujesz sobie przypomnieć, od czego się to wszystko zaczęło?',
@@ -160,14 +147,8 @@ def timeline_thread_view(request, thread_id):
 def timeline_participant_view(request, participant_id):
     participant = get_object_or_404(Profile, id=participant_id)
     events_by_participant_qs = participant.events_participated.all()
-
-    if request.user.profile in Profile.objects.filter(character_status='gm'):
-        queryset = events_by_participant_qs
-    else:
-        participated_qs = Profile.objects.get(user=request.user).events_participated.all()
-        informed_qs = Profile.objects.get(user=request.user).events_informed.all()
-        events_by_user = (participated_qs | informed_qs).distinct()
-        queryset = [e for e in events_by_user if e in events_by_participant_qs]
+    known_events = participated_or_informed_events(request.user.profile.id)
+    queryset = set(events_by_participant_qs) & set(known_events)
 
     if request.user.profile == participant:
         text = 'Są czasy, gdy ogarnia Cię zaduma nad Twoim zawikłanym losem...'
@@ -187,15 +168,8 @@ def timeline_participant_view(request, participant_id):
 def timeline_general_location_view(request, gen_loc_id):
     general_location = get_object_or_404(GeneralLocation, id=gen_loc_id)
     events_by_general_location_qs = TimelineEvent.objects.filter(general_location=general_location)
-
-    if request.user.profile in Profile.objects.filter(character_status='gm'):
-        queryset = events_by_general_location_qs
-    else:
-        participated_qs = Profile.objects.get(user=request.user).events_participated.all()
-        informed_qs = Profile.objects.get(user=request.user).events_informed.all()
-        events_by_user = (participated_qs | informed_qs).distinct()
-        queryset = [e for e in events_by_user if e in events_by_general_location_qs]
-
+    known_events = participated_or_informed_events(request.user.profile.id)
+    queryset = set(events_by_general_location_qs) & set(known_events)
     context = {
         'page_title': f'Kalendarium: {general_location.name}',
         'header': f'{general_location.name}... Zastanawiasz się, jakie piętno wywarła na Twoich losach ta kraina...',
@@ -209,15 +183,8 @@ def timeline_general_location_view(request, gen_loc_id):
 def timeline_specific_location_view(request, spec_loc_id):
     specific_location = get_object_or_404(SpecificLocation, id=spec_loc_id)
     events_by_specific_location_qs = specific_location.events.all()
-
-    if request.user.profile in Profile.objects.filter(character_status='gm'):
-        queryset = events_by_specific_location_qs
-    else:
-        participated_qs = Profile.objects.get(user=request.user).events_participated.all()
-        informed_qs = Profile.objects.get(user=request.user).events_informed.all()
-        events_by_user = (participated_qs | informed_qs).distinct()
-        queryset = [e for e in events_by_user if e in events_by_specific_location_qs]
-
+    known_events = participated_or_informed_events(request.user.profile.id)
+    queryset = set(events_by_specific_location_qs) & set(known_events)
     context = {
         'page_title': f'Kalendarium: {specific_location.name}',
         'header': f'{specific_location.name}... Jak to miejsce odcisnęło się na Twoim losie?',
@@ -229,7 +196,6 @@ def timeline_specific_location_view(request, spec_loc_id):
 
 @login_required
 def timeline_date_view(request, year, season='0'):
-
     if season == '0':
         page_title = f'Kalendarium: {year}. rok Archonatu Nemetha Samatiana'
         events_qs = TimelineEvent.objects.filter(year=year)
@@ -245,13 +211,8 @@ def timeline_date_view(request, year, season='0'):
         events_qs = TimelineEvent.objects.filter(year=year, season=season)
         page_title = f'Kalendarium: {season_name} {year}. roku Archonatu Nemetha Samatiana'
 
-    if request.user.profile in Profile.objects.filter(character_status='gm'):
-        queryset = events_qs
-    else:
-        participated_qs = Profile.objects.get(user=request.user).events_participated.all()
-        informed_qs = Profile.objects.get(user=request.user).events_informed.all()
-        events_by_user = (participated_qs | informed_qs).distinct()
-        queryset = [e for e in events_by_user if e in events_qs]
+    known_events = participated_or_informed_events(request.user.profile.id)
+    queryset = set(events_qs) & set(known_events)
 
     context = {
         'page_title': page_title,
@@ -266,15 +227,8 @@ def timeline_date_view(request, year, season='0'):
 def timeline_game_view(request, game_id):
     game = get_object_or_404(GameSession, id=game_id)
     events_by_game_no_qs = TimelineEvent.objects.filter(game_no=game)
-
-    if request.user.profile in Profile.objects.filter(character_status='gm'):
-        queryset = events_by_game_no_qs
-    else:
-        participated_qs = Profile.objects.get(user=request.user).events_participated.all()
-        informed_qs = Profile.objects.get(user=request.user).events_informed.all()
-        events_by_user = (participated_qs | informed_qs).distinct()
-        queryset = [e for e in events_by_user if e in events_by_game_no_qs]
-
+    known_events = participated_or_informed_events(request.user.profile.id)
+    queryset = set(events_by_game_no_qs) & set(known_events)
     context = {
         'page_title': f'Kalendarium: {game.title}',
         'header': f'{game.title}... Jak to po kolei było?',
