@@ -23,6 +23,198 @@ from history.forms import (TimelineEventCreateForm,
                            ChronicleEventEditForm)
 
 
+# #################### CHRONICLE: model ChronicleEvent ####################
+
+
+def is_allowed_game(_game, profile):
+    for event in _game.described_events.all():
+        if profile in event.participants.all() or profile in event.informed.all() or profile.character_status == 'gm':
+            return True
+    return False
+
+
+@login_required
+def chronicle_main_view(request):
+    games = GameSession.objects.all()
+    allowed_bios_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no < 0]
+    allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no > 0]
+
+    context = {
+        'page_title': 'Historia',
+        'allowed_bios_list': allowed_bios_list,
+        'allowed_games_list': allowed_games_list
+    }
+    return render(request, 'history/chronicle_main.html', context)
+
+
+@login_required
+def chronicle_all_chapters_view(request):
+    games = GameSession.objects.all()
+    allowed_bios_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no < 0]
+    allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no > 0]
+
+    context = {
+        'page_title': 'Pełna historia drużyny',
+        'allowed_bios_list': allowed_bios_list,
+        'allowed_games_list': allowed_games_list
+    }
+    return render(request, 'history/chronicle_all_chapters.html', context)
+
+
+@login_required
+def chronicle_one_chapter_view(request, game_id):
+    obj = get_object_or_404(GameSession, id=game_id)
+
+    if ':' in obj.title:
+        page_title = f'{obj.title.split(": ", 1)[0]}:\n"{obj.title.split(": ", 1)[1]}"'
+    else:
+        page_title = obj.title
+
+    context = {
+        'page_title': page_title,
+        'game': obj
+    }
+    return render(request, 'history/chronicle_one_chapter.html', context)
+
+
+@login_required
+def chronicle_create_view(request):
+    if request.method == 'POST':
+        form = ChronicleEventCreateForm(request.POST or None)
+        if form.is_valid():
+            event = form.save()
+            event.participants.set(form.cleaned_data['participants'])
+            event.informed.set(form.cleaned_data['informed'])
+            event.save()
+            messages.info(request, f'Dodano nowe wydarzenie!')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+        else:
+            messages.warning(request, 'Popraw poniższy błąd!')
+    else:
+        form = ChronicleEventCreateForm()
+
+    context = {
+        'page_title': 'Nowe wydarzenie: Historia',
+        'form': form
+    }
+    return render(request, 'history/chronicle_create.html', context)
+
+
+@login_required
+def chronicle_inform_view(request, event_id):
+    obj = get_object_or_404(ChronicleEvent, id=event_id)
+
+    participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
+    participants_ids = [p.id for p in obj.participants.all()]
+    old_informed = obj.informed.all()[::1]                  # enforces evaluation of lazy Queryset for message
+    old_informed_ids = [p.id for p in old_informed]
+    old_informed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in old_informed)
+
+    if request.method == 'POST':
+        form = ChronicleEventInformForm(authenticated_user=request.user,
+                                        old_informed_ids=old_informed_ids,
+                                        participants_ids=participants_ids,
+                                        data=request.POST,
+                                        instance=obj)
+        if form.is_valid():
+            event = form.save()
+
+            informed = form.cleaned_data['informed']
+            informed |= Profile.objects.filter(id__in=old_informed_ids)
+            event.informed.set(informed)
+
+            subject = f"[RPG] {request.user.profile} podzielił się z Tobą swoją historią!"
+            message = f"{request.user.profile} znów rozprawia o swoich przygodach.\n" \
+                      f"{', '.join(p.character_name for p in form.cleaned_data['informed'])}\n\n" \
+                      f"Podczas przygody '{obj.game_no.title}' rozegrało się co następuje:\n {obj.description}\n" \
+                      f"Tak było i nie inaczej...\n\n" \
+                      f"Wydarzenie zostało zapisane w Twojej Kronice."
+            sender = settings.EMAIL_HOST_USER
+            receivers = []
+            for profile in event.informed.all():
+                # exclude previously informed users from mailing to avoid spam
+                if profile not in old_informed:
+                    receivers.append(profile.user.email)
+            if request.user.profile.character_status != 'gm':
+                receivers.append('lukas.kozicki@gmail.com')
+            send_mail(subject, message, sender, receivers)
+
+            messages.info(request, f'Poinformowałeś wybrane postaci!')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+    else:
+        form = ChronicleEventInformForm(authenticated_user=request.user,
+                                        old_informed_ids=old_informed_ids,
+                                        participants_ids=participants_ids)
+
+    context = {
+        'page_title': 'Poinformuj o wydarzeniu',
+        'form': form,
+        'event': obj,
+        'participants': participants_str,
+        'informed': old_informed_str
+    }
+    return render(request, 'history/chronicle_inform.html', context)
+
+
+@login_required
+def chronicle_note_view(request, event_id):
+    obj = get_object_or_404(ChronicleEvent, id=event_id)
+
+    current_note = None
+    participants = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
+    informed = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.informed.all())
+
+    try:
+        current_note = ChronicleEventNote.objects.get(event=obj, author=request.user)
+    except ChronicleEventNote.DoesNotExist:
+        pass
+
+    if request.method == 'POST':
+        form = ChronicleEventNoteForm(request.POST, instance=current_note)
+        if form.is_valid():
+            note = form.save(commit=False)
+            note.author = request.user
+            note.event = obj
+            note.save()
+            messages.info(request, f'Dodano/zmieniono notatkę!')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+    else:
+        form = ChronicleEventNoteForm(instance=current_note)
+
+    context = {
+        'page_title': 'Notatka',
+        'event': obj,
+        'form': form,
+        'participants': participants,
+        'informed': informed
+    }
+    return render(request, 'history/chronicle_note.html', context)
+
+
+@login_required
+def chronicle_edit_view(request, event_id):
+    obj = get_object_or_404(ChronicleEvent, id=event_id)
+
+    if request.method == 'POST':
+        form = ChronicleEventEditForm(request.POST, instance=obj)
+        if form.is_valid():
+            form.save()
+            messages.info(request, f'Zmodyfikowano wydarzenie!')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+    else:
+        form = ChronicleEventEditForm(instance=obj)
+
+    context = {
+        'page_title': 'Edycja wydarzenia',
+        'form': form
+    }
+    return render(request, 'history/chronicle_edit.html', context)
+
+
 # #################### TIMELINE: model TimelineEvent ####################
 
 SEASONS_WITH_STYLES_DICT = {
@@ -394,195 +586,3 @@ def timeline_edit_view(request, event_id):
         'form': form
     }
     return render(request, 'history/timeline_edit.html', context)
-
-
-# #################### CHRONICLE: model ChronicleEvent ####################
-
-
-def is_allowed_game(_game, profile):
-    for event in _game.described_events.all():
-        if profile in event.participants.all() or profile in event.informed.all() or profile.character_status == 'gm':
-            return True
-    return False
-
-
-@login_required
-def chronicle_main_view(request):
-    games = GameSession.objects.all()
-    allowed_bios_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no < 0]
-    allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no > 0]
-
-    context = {
-        'page_title': 'Historia',
-        'allowed_bios_list': allowed_bios_list,
-        'allowed_games_list': allowed_games_list
-    }
-    return render(request, 'history/chronicle_main.html', context)
-
-
-@login_required
-def chronicle_all_chapters_view(request):
-    games = GameSession.objects.all()
-    allowed_bios_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no < 0]
-    allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no > 0]
-
-    context = {
-        'page_title': 'Pełna historia drużyny',
-        'allowed_bios_list': allowed_bios_list,
-        'allowed_games_list': allowed_games_list
-    }
-    return render(request, 'history/chronicle_all_chapters.html', context)
-
-
-@login_required
-def chronicle_one_chapter_view(request, game_id):
-    obj = get_object_or_404(GameSession, id=game_id)
-
-    if ':' in obj.title:
-        page_title = f'{obj.title.split(": ", 1)[0]}:\n"{obj.title.split(": ", 1)[1]}"'
-    else:
-        page_title = obj.title
-
-    context = {
-        'page_title': page_title,
-        'game': obj
-    }
-    return render(request, 'history/chronicle_one_chapter.html', context)
-
-
-@login_required
-def chronicle_create_view(request):
-    if request.method == 'POST':
-        form = ChronicleEventCreateForm(request.POST or None)
-        if form.is_valid():
-            event = form.save()
-            event.participants.set(form.cleaned_data['participants'])
-            event.informed.set(form.cleaned_data['informed'])
-            event.save()
-            messages.info(request, f'Dodano nowe wydarzenie!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-        else:
-            messages.warning(request, 'Popraw poniższy błąd!')
-    else:
-        form = ChronicleEventCreateForm()
-
-    context = {
-        'page_title': 'Nowe wydarzenie: Historia',
-        'form': form
-    }
-    return render(request, 'history/chronicle_create.html', context)
-
-
-@login_required
-def chronicle_inform_view(request, event_id):
-    obj = get_object_or_404(ChronicleEvent, id=event_id)
-
-    participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
-    participants_ids = [p.id for p in obj.participants.all()]
-    old_informed = obj.informed.all()[::1]                  # enforces evaluation of lazy Queryset for message
-    old_informed_ids = [p.id for p in old_informed]
-    old_informed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in old_informed)
-
-    if request.method == 'POST':
-        form = ChronicleEventInformForm(authenticated_user=request.user,
-                                        old_informed_ids=old_informed_ids,
-                                        participants_ids=participants_ids,
-                                        data=request.POST,
-                                        instance=obj)
-        if form.is_valid():
-            event = form.save()
-
-            informed = form.cleaned_data['informed']
-            informed |= Profile.objects.filter(id__in=old_informed_ids)
-            event.informed.set(informed)
-
-            subject = f"[RPG] {request.user.profile} podzielił się z Tobą swoją historią!"
-            message = f"{request.user.profile} znów rozprawia o swoich przygodach.\n" \
-                      f"{', '.join(p.character_name for p in form.cleaned_data['informed'])}\n\n" \
-                      f"Podczas przygody '{obj.game_no.title}' rozegrało się co następuje:\n {obj.description}\n" \
-                      f"Tak było i nie inaczej...\n\n" \
-                      f"Wydarzenie zostało zapisane w Twojej Kronice."
-            sender = settings.EMAIL_HOST_USER
-            receivers = []
-            for profile in event.informed.all():
-                # exclude previously informed users from mailing to avoid spam
-                if profile not in old_informed:
-                    receivers.append(profile.user.email)
-            if request.user.profile.character_status != 'gm':
-                receivers.append('lukas.kozicki@gmail.com')
-            send_mail(subject, message, sender, receivers)
-
-            messages.info(request, f'Poinformowałeś wybrane postaci!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-    else:
-        form = ChronicleEventInformForm(authenticated_user=request.user,
-                                        old_informed_ids=old_informed_ids,
-                                        participants_ids=participants_ids)
-
-    context = {
-        'page_title': 'Poinformuj o wydarzeniu',
-        'form': form,
-        'event': obj,
-        'participants': participants_str,
-        'informed': old_informed_str
-    }
-    return render(request, 'history/chronicle_inform.html', context)
-
-
-@login_required
-def chronicle_note_view(request, event_id):
-    obj = get_object_or_404(ChronicleEvent, id=event_id)
-
-    current_note = None
-    participants = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.participants.all())
-    informed = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.informed.all())
-
-    try:
-        current_note = ChronicleEventNote.objects.get(event=obj, author=request.user)
-    except ChronicleEventNote.DoesNotExist:
-        pass
-
-    if request.method == 'POST':
-        form = ChronicleEventNoteForm(request.POST, instance=current_note)
-        if form.is_valid():
-            note = form.save(commit=False)
-            note.author = request.user
-            note.event = obj
-            note.save()
-            messages.info(request, f'Dodano/zmieniono notatkę!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-    else:
-        form = ChronicleEventNoteForm(instance=current_note)
-
-    context = {
-        'page_title': 'Notatka',
-        'event': obj,
-        'form': form,
-        'participants': participants,
-        'informed': informed
-    }
-    return render(request, 'history/chronicle_note.html', context)
-
-
-@login_required
-def chronicle_edit_view(request, event_id):
-    obj = get_object_or_404(ChronicleEvent, id=event_id)
-
-    if request.method == 'POST':
-        form = ChronicleEventEditForm(request.POST, instance=obj)
-        if form.is_valid():
-            form.save()
-            messages.info(request, f'Zmodyfikowano wydarzenie!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-    else:
-        form = ChronicleEventEditForm(instance=obj)
-
-    context = {
-        'page_title': 'Edycja wydarzenia',
-        'form': form
-    }
-    return render(request, 'history/chronicle_edit.html', context)
