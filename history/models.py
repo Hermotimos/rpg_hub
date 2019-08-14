@@ -74,30 +74,30 @@ class SpecificLocation(models.Model):
 
 class TimelineEvent(models.Model):
     # default=0 for events outside of sessions (background events):
-    game_no = models.ForeignKey(GameSession, related_name='events', on_delete=models.PROTECT, default=0)
+    game_no = models.ForeignKey(GameSession, related_name='timeline_events', on_delete=models.PROTECT, default=0)
     # year has to be > 0, for url patterns (they accept positive nums only):
     year = models.IntegerField(validators=[MinValueValidator(1)])
     season = models.CharField(max_length=10, choices=SEASONS)
     day_start = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(90)])
     day_end = models.PositiveSmallIntegerField(blank=True, null=True,
                                                validators=[MinValueValidator(1), MaxValueValidator(90)])
-    threads = models.ManyToManyField(Thread, related_name='events', blank=True)
+    threads = models.ManyToManyField(Thread, related_name='timeline_events', blank=True)
     description = models.TextField(max_length=4000)
     participants = models.ManyToManyField(Profile,
-                                          related_name='events_participated',
+                                          related_name='timeline_events_participated',
                                           limit_choices_to=
                                           Q(character_status='active_player') |
                                           Q(character_status='inactive_player') |
                                           Q(character_status='dead_player'),
                                           blank=True)
     informed = models.ManyToManyField(Profile,
-                                      related_name='events_informed',
+                                      related_name='timeline_events_informed',
                                       limit_choices_to=
                                       Q(character_status='active_player') |
                                       Q(character_status='inactive_player'),
                                       blank=True)
     general_location = models.ForeignKey(GeneralLocation, null=True, on_delete=models.SET_NULL)
-    specific_locations = models.ManyToManyField(SpecificLocation, related_name='events')
+    specific_locations = models.ManyToManyField(SpecificLocation, related_name='timeline_events')
 
     def __str__(self):
         return f'{self.description[0:100]}...'
@@ -131,7 +131,7 @@ class TimelineEvent(models.Model):
 
 
 class TimelineEventNote(models.Model):
-    author = models.ForeignKey(User, related_name='events_notes', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, related_name='timeline_events_notes', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000, blank=True, null=True)
     event = models.ForeignKey(TimelineEvent, related_name='notes', on_delete=models.PROTECT)
     color = models.CharField(max_length=20, choices=COLORS, default='#C70039')
@@ -152,20 +152,20 @@ class ChronicleEvent(models.Model):
     """
     # default=0 for events outside of sessions (background events):
     game_no = models.ForeignKey(GameSession,
-                                related_name='described_events',
+                                related_name='chronicle_events',
                                 on_delete=models.PROTECT,
                                 default=0)
     event_no_in_game = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
     description = models.TextField(max_length=10000)
     participants = models.ManyToManyField(Profile,
-                                          related_name='described_events_participated',
+                                          related_name='chronicle_events_participated',
                                           limit_choices_to=
                                           Q(character_status='active_player') |
                                           Q(character_status='inactive_player') |
                                           Q(character_status='dead_player'),
                                           blank=True)
     informed = models.ManyToManyField(Profile,
-                                      related_name='described_events_informed',
+                                      related_name='chronicle_events_informed',
                                       limit_choices_to=
                                       Q(character_status='active_player') |
                                       Q(character_status='inactive_player') |
@@ -184,7 +184,7 @@ class ChronicleEvent(models.Model):
 
 
 class ChronicleEventNote(models.Model):
-    author = models.ForeignKey(User, related_name='described_events_notes', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, related_name='chronicle_events_notes', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000, blank=True, null=True)
     event = models.ForeignKey(ChronicleEvent, related_name='notes', on_delete=models.PROTECT)
     color = models.CharField(max_length=20, choices=COLORS, default='#C70039')

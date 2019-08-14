@@ -40,13 +40,13 @@
                     </td>
                     <td></td>
                 </tr>
-                {% for event in game.described_events.all %}
-                    {% if event in request.user.profile.described_events_participated.all or event in request.user.profile.described_events_informed.all or request.user.profile.character_status == 'gm' %}
+                {% for event in game.chronicle_events.all %}
+                    {% if event in request.user.profile.chronicle_events_participated.all or event in request.user.profile.chronicle_events_informed.all or request.user.profile.character_status == 'gm' %}
                         <tr>
                             <td class="chronicle-event">
                                 <br>
                                 <p>
-                                    {% if event in request.user.profile.described_events_informed.all %}
+                                    {% if event in request.user.profile.chronicle_events_informed.all %}
                                         <small>(Znasz z opowieści)</small>
                                     {% endif %}
 
@@ -98,12 +98,12 @@
                         </h4>
                     </td>
                 </tr>
-                {% for event in game.described_events.all %}
-                    {% if event in request.user.profile.described_events_participated.all or event in request.user.profile.described_events_informed.all or request.user.profile.character_status == 'gm' %}
+                {% for event in game.chronicle_events.all %}
+                    {% if event in request.user.profile.chronicle_events_participated.all or event in request.user.profile.chronicle_events_informed.all or request.user.profile.character_status == 'gm' %}
                         <tr>
                             <td class="chronicle-event">
                                 <p>
-                                    {% if event in request.user.profile.described_events_informed.all %}
+                                    {% if event in request.user.profile.chronicle_events_informed.all %}
                                         <small>(Znasz z opowieści)</small>
                                     {% endif %}
 

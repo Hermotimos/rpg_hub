@@ -26,8 +26,8 @@ from history.forms import (TimelineEventCreateForm,
 # #################### CHRONICLE: model ChronicleEvent ####################
 
 
-def is_allowed_game(_game, profile):
-    for event in _game.described_events.all():
+def is_allowed_game(game, profile):
+    for event in game.chronicle_events.all():
         if profile in event.participants.all() or profile in event.informed.all() or profile.character_status == 'gm':
             return True
     return False
@@ -230,8 +230,8 @@ def participated_or_informed_events(profile_id):
     if profile.character_status == 'gm':
         known_qs = TimelineEvent.objects.all()
     else:
-        participated_qs = Profile.objects.get(id=profile_id).events_participated.all()
-        informed_qs = Profile.objects.get(id=profile_id).events_informed.all()
+        participated_qs = Profile.objects.get(id=profile_id).timeline_events_participated.all()
+        informed_qs = Profile.objects.get(id=profile_id).timeline_events_informed.all()
         known_qs = (participated_qs | informed_qs).distinct()
     return known_qs
 
@@ -329,7 +329,7 @@ def timeline_all_events_view(request):
 @login_required
 def timeline_thread_view(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
-    events_by_thread_qs = thread.events.all()
+    events_by_thread_qs = thread.timeline_events.all()
     known_events = participated_or_informed_events(request.user.profile.id)
     queryset = set(events_by_thread_qs) & set(known_events)
     context = {
@@ -344,7 +344,7 @@ def timeline_thread_view(request, thread_id):
 @login_required
 def timeline_participant_view(request, participant_id):
     participant = get_object_or_404(Profile, id=participant_id)
-    events_by_participant_qs = participant.events_participated.all()
+    events_by_participant_qs = participant.timeline_events_participated.all()
     known_events = participated_or_informed_events(request.user.profile.id)
     queryset = set(events_by_participant_qs) & set(known_events)
 
@@ -380,7 +380,7 @@ def timeline_general_location_view(request, gen_loc_id):
 @login_required
 def timeline_specific_location_view(request, spec_loc_id):
     specific_location = get_object_or_404(SpecificLocation, id=spec_loc_id)
-    events_by_specific_location_qs = specific_location.events.all()
+    events_by_specific_location_qs = specific_location.timeline_events.all()
     known_events = participated_or_informed_events(request.user.profile.id)
     queryset = set(events_by_specific_location_qs) & set(known_events)
     context = {
