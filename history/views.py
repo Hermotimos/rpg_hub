@@ -48,8 +48,23 @@ def participated_or_informed_events(profile_id):
 def timeline_main_view(request):
     known_events = participated_or_informed_events(request.user.profile.id)
 
+    # repetitive interations over known_events.all():
+    years_set = set()
+    threads_querysets_list = []
+    participants_querysets_list = []
+    spec_locs_querysets_list = []
+    gen_locs_set = set()
+    games_set = set()
+    for event in known_events.all():
+        years_set.add(event.year)
+        threads_querysets_list.append(event.threads.all())
+        participants_querysets_list.append(event.participants.all())
+        spec_locs_querysets_list.append(event.specific_locations.all())
+        gen_locs_set.add(event.general_location)
+        games_set.add(event.game_no)
+
     # years
-    years_set = {e.year for e in known_events.all()}
+    # years_set = {e.year for e in known_events.all()}
     years_sorted_list = list(years_set)
     years_sorted_list.sort()
 
@@ -63,7 +78,7 @@ def timeline_main_view(request):
 
     # threads
     threads_set = set()
-    threads_querysets_list = [event.threads.all() for event in known_events]
+    # threads_querysets_list = [event.threads.all() for event in known_events]
     for qs in threads_querysets_list:
         for th in qs:
             threads_set.add(th)
@@ -72,7 +87,7 @@ def timeline_main_view(request):
 
     # participants
     participants_set = set()
-    participants_querysets_list = [event.participants.all() for event in known_events]
+    # participants_querysets_list = [event.participants.all() for event in known_events]
     for qs in participants_querysets_list:
         for p in qs:
             participants_set.add(p)
@@ -81,7 +96,7 @@ def timeline_main_view(request):
 
     # specific locations
     spec_locs_set = set()
-    spec_locs_querysets_list = [event.specific_locations.all() for event in known_events]
+    # spec_locs_querysets_list = [event.specific_locations.all() for event in known_events]
     for qs in spec_locs_querysets_list:
         for sl in qs:
             spec_locs_set.add(sl)
@@ -89,14 +104,14 @@ def timeline_main_view(request):
     spec_locs_name_and_obj_list.sort()
 
     # general locations with their specific locations: LEFT UNSORTED TO REFLECT SUBSEQUENT GENERAL LOCATIONS IN GAME
-    gen_locs_set = {event.general_location for event in known_events}
+    # gen_locs_set = {event.general_location for event in known_events}
     gen_locs_with_spec_locs_list = []
     for gl in gen_locs_set:
         gen_loc_with_spec_locs_list = [gl, [sl for sl in spec_locs_name_and_obj_list if sl[1].general_location == gl]]
         gen_locs_with_spec_locs_list.append(gen_loc_with_spec_locs_list)
 
     # games
-    games_set = {event.game_no for event in known_events}
+    # games_set = {event.game_no for event in known_events}
     games_sorted_list = list(games_set)
     games_sorted_list.sort(key=lambda game: game.game_no)
     games_name_and_obj_list = [(g.title, g) for g in games_sorted_list]
