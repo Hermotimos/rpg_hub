@@ -45,14 +45,15 @@ INSTALLED_APPS = [
     'pagedown',
 
     # own
-    'home',
-    'debates',
-    'news',
-    'users.apps.UsersConfig',    # just another way of doing this
-    'history',
     'contact',
+    'debates',
+    'history',
+    'home',
+    'imaginarion',
     'rules',
-    'imaginarion'
+    'news',
+    'users.apps.UsersConfig',  # just another way of doing this
+
 ]
 
 MIDDLEWARE = [
