@@ -52,7 +52,7 @@
                                     {% endif %}
 
                                     {{ event.description|linebreaksbr }}
-                                    {% if event.pictures.all %}
+                                    {% if event.pictures.all and event not in request.user.profile.chronicle_events_informed.all %}
                                         <table class="chronicle-img">
                                             <tr>
                                             {% for p in event.pictures.all %}
