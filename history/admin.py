@@ -11,10 +11,10 @@ from history.models import (GameSession,
                             ChronicleEventNote)
 
 
-class SpecificLocationAdmin(admin.ModelAdmin):
-    list_display = ['name', 'general_location']
-    list_editable = ['general_location', ]
-    list_filter = ['general_location', ]
+class ThreadAdmin(admin.ModelAdmin):
+    model = Thread
+    list_display = ['name', 'is_ended']
+    list_editable = ['is_ended',]
 
 
 class InlineTimelineEvent(admin.TabularInline):
@@ -34,6 +34,12 @@ class InlineChronicleEvent(admin.TabularInline):
 
 class GameSessionAdmin(admin.ModelAdmin):
     inlines = [InlineTimelineEvent, InlineChronicleEvent]
+
+
+class SpecificLocationAdmin(admin.ModelAdmin):
+    list_display = ['name', 'general_location']
+    list_editable = ['general_location', ]
+    list_filter = ['general_location', ]
 
 
 class TimelineEventAdmin(admin.ModelAdmin):
@@ -57,8 +63,8 @@ class ChronicleEventAdmin(admin.ModelAdmin):
     list_filter = ['participants', 'informed', 'game_no', ]
 
 
+admin.site.register(Thread, ThreadAdmin)
 admin.site.register(GameSession, GameSessionAdmin)
-admin.site.register(Thread)
 admin.site.register(GeneralLocation)
 admin.site.register(SpecificLocation, SpecificLocationAdmin)
 admin.site.register(TimelineEvent, TimelineEventAdmin)

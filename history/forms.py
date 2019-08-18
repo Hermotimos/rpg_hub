@@ -1,7 +1,7 @@
 from django import forms
 from django.db.models import Q
 from pagedown.widgets import PagedownWidget
-from history.models import TimelineEvent, TimelineEventNote, ChronicleEvent, ChronicleEventNote
+from history.models import TimelineEvent, TimelineEventNote, ChronicleEvent, ChronicleEventNote, Thread
 from users.models import Profile
 
 
@@ -16,6 +16,7 @@ class TimelineEventCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TimelineEventCreateForm, self).__init__(*args, **kwargs)
         self.fields['threads'].widget.attrs = {'size': 10}
+        self.fields['threads'].queryset = Thread.objects.exclude(is_ended=True)
         self.fields['description'].widget.attrs = {'cols': 50, 'rows': 5}
         self.fields['participants'].widget.attrs = {'size': 8}
         self.fields['informed'].widget.attrs = {'size': 8}
