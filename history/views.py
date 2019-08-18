@@ -316,6 +316,7 @@ def timeline_main_view(request):
 def timeline_all_events_view(request):
     known_events = participated_or_informed_events(request.user.profile.id)
     queryset = known_events
+
     context = {
         'page_title': 'Pełne Kalendarium',
         'header': 'Opisane tu wydarzenia rozpoczęły swój bieg 20. roku Archonatu Nemetha Samatiana w Ebbonie, '
@@ -331,8 +332,8 @@ def timeline_thread_view(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
     events_by_thread_qs = thread.timeline_events.all()
     known_events = participated_or_informed_events(request.user.profile.id)
-    queryset = events_by_thread_qs & known_events
-    queryset.distinct()
+    queryset = events_by_thread_qs.distinct() & known_events.distinct()
+
     context = {
         'page_title': f'Kalendarium: {thread.name}',
         'header': f'{thread.name}... Próbujesz sobie przypomnieć, od czego się to wszystko zaczęło?',
@@ -347,8 +348,7 @@ def timeline_participant_view(request, participant_id):
     participant = get_object_or_404(Profile, id=participant_id)
     events_by_participant_qs = participant.timeline_events_participated.all()
     known_events = participated_or_informed_events(request.user.profile.id)
-    queryset = events_by_participant_qs & known_events
-    queryset.distinct()
+    queryset = events_by_participant_qs.distinct() & known_events.distinct()
 
     if request.user.profile == participant:
         text = 'Są czasy, gdy ogarnia Cię zaduma nad Twoim zawikłanym losem...'
@@ -369,8 +369,8 @@ def timeline_general_location_view(request, gen_loc_id):
     general_location = get_object_or_404(GeneralLocation, id=gen_loc_id)
     events_by_general_location_qs = TimelineEvent.objects.filter(general_location=general_location)
     known_events = participated_or_informed_events(request.user.profile.id)
-    queryset = events_by_general_location_qs & known_events
-    queryset.distinct()
+    queryset = events_by_general_location_qs.distinct() & known_events.distinct()
+
     context = {
         'page_title': f'Kalendarium: {general_location.name}',
         'header': f'{general_location.name}... Zastanawiasz się, jakie piętno wywarła na Twoich losach ta kraina...',
@@ -385,8 +385,8 @@ def timeline_specific_location_view(request, spec_loc_id):
     specific_location = get_object_or_404(SpecificLocation, id=spec_loc_id)
     events_by_specific_location_qs = specific_location.timeline_events.all()
     known_events = participated_or_informed_events(request.user.profile.id)
-    queryset = events_by_specific_location_qs & known_events
-    queryset.distinct()
+    queryset = events_by_specific_location_qs.distinct() & known_events.distinct()
+
     context = {
         'page_title': f'Kalendarium: {specific_location.name}',
         'header': f'{specific_location.name}... Jak to miejsce odcisnęło się na Twoim losie?',
@@ -414,8 +414,7 @@ def timeline_date_view(request, year, season='0'):
         page_title = f'Kalendarium: {season_name} {year}. roku Archonatu Nemetha Samatiana'
 
     known_events = participated_or_informed_events(request.user.profile.id)
-    queryset = events_qs & known_events
-    queryset.distinct()
+    queryset = events_qs.distinct() & known_events.distinct()
 
     context = {
         'page_title': page_title,
@@ -431,8 +430,8 @@ def timeline_game_view(request, game_id):
     game = get_object_or_404(GameSession, id=game_id)
     events_by_game_no_qs = TimelineEvent.objects.filter(game_no=game)
     known_events = participated_or_informed_events(request.user.profile.id)
-    queryset = events_by_game_no_qs & known_events
-    queryset.distinct()
+    queryset = events_by_game_no_qs.distinct() & known_events.distinct()
+
     context = {
         'page_title': f'Kalendarium: {game.title}',
         'header': f'{game.title}... Jak to po kolei było?',
