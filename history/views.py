@@ -185,7 +185,7 @@ def chronicle_note_view(request, event_id):
         form = ChronicleEventNoteForm(instance=current_note)
 
     context = {
-        'page_title': 'Notatka',
+        'page_title': 'Przemyślenia',
         'event': obj,
         'form': form,
         'participants': participants,
@@ -554,7 +554,7 @@ def timeline_note_view(request, event_id):
         form = TimelineEventNoteForm(instance=current_note)
 
     context = {
-        'page_title': 'Notatka',
+        'page_title': 'Przemyślenia',
         'event': obj,
         'form': form,
         'participants': participants,

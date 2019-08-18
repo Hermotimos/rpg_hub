@@ -70,7 +70,7 @@ class TimelineEventNoteForm(forms.ModelForm):
         required=False,
         widget=PagedownWidget(
             attrs={
-                'placeholder': 'Twoja notatka (max. 4000 znaków)*',
+                'placeholder': 'Twoje przemyślenia (max. 4000 znaków)*',
                 'rows': 10,
                 'cols': 60
             }
@@ -79,7 +79,7 @@ class TimelineEventNoteForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TimelineEventNoteForm, self).__init__(*args, **kwargs)
-        self.fields['color'].label = 'Kolor notatki'
+        self.fields['color'].label = 'Kolor wyświetlania'
 
 
 # ------ ChronicleEvent model -----
@@ -142,7 +142,7 @@ class ChronicleEventNoteForm(forms.ModelForm):
         required=False,
         widget=PagedownWidget(
             attrs={
-                'placeholder': 'Twoja notatka (max. 4000 znaków)*',
+                'placeholder': 'Twoje przemyślenia (max. 4000 znaków)*',
                 'rows': 10,
                 'cols': 60
             }
@@ -151,4 +151,4 @@ class ChronicleEventNoteForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ChronicleEventNoteForm, self).__init__(*args, **kwargs)
-        self.fields['color'].label = 'Kolor notatki'
+        self.fields['color'].label = 'Kolor wyświetlania'

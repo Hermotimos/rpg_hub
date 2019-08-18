@@ -38,12 +38,12 @@
         {% endif %}
     </table><br><br>
 
-    <small>Jeśli chcesz skasować notatkę, usuń jej treść i kliknij 'Zapisz'.</small><br><br>
+    <small>Jeśli chcesz skasować przemyślenia, usuń treść i kliknij 'Zapamiętaj'.</small><br><br>
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}
         <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
-        <input class="btn btn-dark" type="submit" value="Zanotuj">
+        <input class="btn btn-dark" type="submit" value="Zapamiętaj">
     </form>
 {% endblock content %}
