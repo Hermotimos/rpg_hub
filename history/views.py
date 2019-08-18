@@ -40,7 +40,7 @@ def chronicle_main_view(request):
     allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no > 0]
 
     context = {
-        'page_title': 'Historia',
+        'page_title': 'Kronika',
         'allowed_bios_list': allowed_bios_list,
         'allowed_games_list': allowed_games_list
     }
@@ -54,7 +54,7 @@ def chronicle_all_chapters_view(request):
     allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no > 0]
 
     context = {
-        'page_title': 'Pełna historia drużyny',
+        'page_title': 'Pełna kronika',
         'allowed_bios_list': allowed_bios_list,
         'allowed_games_list': allowed_games_list
     }
@@ -95,7 +95,7 @@ def chronicle_create_view(request):
         form = ChronicleEventCreateForm()
 
     context = {
-        'page_title': 'Nowe wydarzenie: Historia',
+        'page_title': 'Nowe wydarzenie: Kronika',
         'form': form
     }
     return render(request, 'history/chronicle_create.html', context)
