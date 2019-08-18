@@ -124,6 +124,10 @@
                                         </table>
                                     {% endif %}
 
+                                    {% if event.debate %}
+                                        <br><br><a href="{% url 'debates:debate' event.debate.topic.id event.debate.id %}">Narada: {{ event.debate.title }}</a>
+                                    {% endif %}
+
                                     {% for note in event.notes.all %}
                                         {% if request.user == note.author %}
                                             {% if note.text != '' %}
