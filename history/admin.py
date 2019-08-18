@@ -49,7 +49,7 @@ class TimelineEventAdmin(admin.ModelAdmin):
 class ChronicleEventAdmin(admin.ModelAdmin):
 
     # fields to be displayed in admin for each object
-    fields = ['game_no', 'event_no_in_game', 'description', 'participants', 'informed', 'pictures']
+    fields = ['game_no', 'event_no_in_game', 'description', 'participants', 'informed', 'pictures', 'debate']
 
     # list of fields to show in overview table (cannot include M2M fields)
     list_display = ['game_no', 'event_no_in_game', 'short_description']
