@@ -14,10 +14,10 @@ from history.models import (GameSession,
 class ThreadAdmin(admin.ModelAdmin):
     model = Thread
     list_display = ['name', 'is_ended']
-    list_editable = ['is_ended',]
+    list_editable = ['is_ended', ]
 
 
-class InlineTimelineEvent(admin.TabularInline):
+class TimelineEventInline(admin.TabularInline):
     model = TimelineEvent
     extra = 4
 
@@ -27,13 +27,13 @@ class InlineTimelineEvent(admin.TabularInline):
     }
 
 
-class InlineChronicleEvent(admin.TabularInline):
+class ChronicleEventInline(admin.TabularInline):
     model = ChronicleEvent
     extra = 2
 
 
 class GameSessionAdmin(admin.ModelAdmin):
-    inlines = [InlineTimelineEvent, InlineChronicleEvent]
+    inlines = [TimelineEventInline, ChronicleEventInline]
 
 
 class SpecificLocationAdmin(admin.ModelAdmin):
