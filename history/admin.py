@@ -19,7 +19,7 @@ class ThreadAdmin(admin.ModelAdmin):
 
 class TimelineEventInline(admin.TabularInline):
     model = TimelineEvent
-    extra = 4
+    extra = 3
 
     # override attrs of form field when rendered as Inline:
     formfield_overrides = {
