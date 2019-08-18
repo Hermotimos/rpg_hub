@@ -70,7 +70,7 @@
                                     {% for note in event.notes.all %}
                                         {% if request.user == note.author %}
                                             {% if note.text != '' %}
-                                                <a style="color:{{ note.color }}"><br>Notatka:<br>{{ note.text|linebreaksbr }}</a>
+                                                <a style="color:{{ note.color }}"><br>Przemyślenia:<br>{{ note.text|linebreaksbr }}</a>
                                             {% endif %}
                                         {% endif %}
                                     {% endfor %}
@@ -127,7 +127,7 @@
                                     {% for note in event.notes.all %}
                                         {% if request.user == note.author %}
                                             {% if note.text != '' %}
-                                                <a style="color:{{ note.color }}"><br>Notatka:<br>{{ note.text|linebreaksbr }}</a>
+                                                <a style="color:{{ note.color }}"><br>Przemyślenia:<br>{{ note.text|linebreaksbr }}</a>
                                             {% endif %}
                                         {% endif %}
                                     {% endfor %}
