@@ -41,7 +41,8 @@ def chronicle_main_view(request):
     for ch in chapters:
         games = GameSession.objects.filter(chapter=ch)
         allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile)]
-        chapters_with_allowed_games_dict[ch] = allowed_games_list
+        if allowed_games_list:
+            chapters_with_allowed_games_dict[ch] = allowed_games_list
 
     context = {
         'page_title': 'Kronika',
@@ -57,7 +58,8 @@ def chronicle_all_chapters_view(request):
     for ch in chapters:
         games = GameSession.objects.filter(chapter=ch)
         allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile)]
-        chapters_with_allowed_games_dict[ch] = allowed_games_list
+        if allowed_games_list:
+            chapters_with_allowed_games_dict[ch] = allowed_games_list
 
     context = {
         'page_title': 'Pełna kronika',
