@@ -6,12 +6,23 @@ from imaginarion.models import Picture
 from debates.models import Debate
 
 
-# ------ GameSession model ------
+# ------ Chapter and GameSession models ------
+
+class Chapter(models.Model):
+    chapter_no = models.IntegerField(null=True)
+    title = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ['chapter_no']
 
 
 class GameSession(models.Model):
     game_no = models.IntegerField(null=True)
-    title = models.CharField(max_length=200, blank=True, null=True)
+    title = models.CharField(max_length=200)
+    chapter = models.ForeignKey(Chapter, related_name='game_sessions', on_delete=models.PROTECT, blank=True, null=True)
     date = models.DateField(blank=True, null=True)
 
     def __str__(self):

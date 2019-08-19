@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.forms import Textarea
 from django.db import models
-from history.models import (GameSession,
+from history.models import (Chapter,
+                            GameSession,
                             Thread,
                             GeneralLocation,
                             SpecificLocation,
@@ -33,6 +34,8 @@ class ChronicleEventInline(admin.TabularInline):
 
 
 class GameSessionAdmin(admin.ModelAdmin):
+    list_display = ['id', 'game_no', 'title', 'chapter', 'date']
+    list_editable = ['game_no', 'title', 'chapter', 'date']
     inlines = [TimelineEventInline, ChronicleEventInline]
 
 
@@ -63,6 +66,7 @@ class ChronicleEventAdmin(admin.ModelAdmin):
     list_filter = ['participants', 'informed', 'game_no', ]
 
 
+admin.site.register(Chapter)
 admin.site.register(Thread, ThreadAdmin)
 admin.site.register(GameSession, GameSessionAdmin)
 admin.site.register(GeneralLocation)
