@@ -19,14 +19,14 @@
     <br><br>
     {% for chapter in chapters_with_allowed_games_dict %}
         <br>
-        <tr><h3>{{ chapter.title }}</h3></tr>
+        <tr><h4>{{ chapter.title }}</h4></tr>
         {% for game in chapters_with_allowed_games_dict|dict_lookup:chapter %}
         <tr>
             <td>
-                <h5 class="unblue">
+                <h6 class="unblue">
                     {{ forloop.counter }}.
                     <a href="{% url 'history:chronicle-one-chapter' game.id %}">{{ game.title }}</a>
-                </h5>
+                </h6>
             </td>
         </tr>
         {% endfor %}
