@@ -14,22 +14,22 @@
     <br><br><br>
 
     <h3 class="unblue">
-        <strong><a href="{% url 'history:chronicle-all-chapters' %}">Pełna historia drużyny</a></strong>
+        <strong><a href="{% url 'history:chronicle-all-chapters' %}">Pełna kronika</a></strong>
     </h3>
     <br><br>
     {% for chapter in chapters_with_allowed_games_dict %}
         <br>
         <tr><h3>{{ chapter.title }}</h3></tr>
-            {% for game in chapters_with_allowed_games_dict|dict_lookup:chapter %}
-            <tr>
-                <td>
-                    <h5 class="unblue">
-                        {{ forloop.counter }}.
-                        <a href="{% url 'history:chronicle-one-chapter' game.id %}">{{ game.title }}</a>
-                    </h5>
-                </td>
-            </tr>
-            {% endfor %}
+        {% for game in chapters_with_allowed_games_dict|dict_lookup:chapter %}
+        <tr>
+            <td>
+                <h5 class="unblue">
+                    {{ forloop.counter }}.
+                    <a href="{% url 'history:chronicle-one-chapter' game.id %}">{{ game.title }}</a>
+                </h5>
+            </td>
+        </tr>
+        {% endfor %}
     {% endfor %}
 
 {% endblock content %}
