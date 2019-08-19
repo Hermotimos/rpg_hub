@@ -16,28 +16,42 @@
     <h3 class="unblue">
         <strong><a href="{% url 'history:chronicle-all-chapters' %}">Pełna historia drużyny</a></strong>
     </h3>
-    <br>
-    {% for game in allowed_bios_list %}
-        <tr>
-            <td>
-                <h5 class="unblue">
-                    0.
-                    <a href="{% url 'history:chronicle-one-chapter' game.id %}">{{ game.title }}</a>
-                </h5>
-            </td>
-        </tr>
-    {% endfor %}
+<!--    <br>-->
+<!--    {% for game in allowed_bios_list %}-->
+<!--        <tr>-->
+<!--            <td>-->
+<!--                <h5 class="unblue">-->
+<!--                    0.-->
+<!--                    <a href="{% url 'history:chronicle-one-chapter' game.id %}">{{ game.title }}</a>-->
+<!--                </h5>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--    {% endfor %}-->
 
-    {% for game in allowed_games_list %}
-        <tr>
-            <td>
-                <h5 class="unblue">
-                    {{ forloop.counter }}.
-                    <a href="{% url 'history:chronicle-one-chapter' game.id %}">{{ game.title }}</a>
-                </h5>
-            </td>
-        </tr>
+<!--    {% for game in allowed_games_list %}-->
+<!--        <tr>-->
+<!--            <td>-->
+<!--                <h5 class="unblue">-->
+<!--                    {{ forloop.counter }}.-->
+<!--                    <a href="{% url 'history:chronicle-one-chapter' game.id %}">{{ game.title }}</a>-->
+<!--                </h5>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--    {% endfor %}-->
+<!--    <br>-->
+
+    {% for chapter in chapters_with_allowed_games_dict %}
+        <tr>{{ chapter.title }}</tr>
+            {% for game in chapters_with_allowed_games_dict|dict_lookup:chapter %}
+            <tr>
+                <td>
+                    <h5 class="unblue">
+                        {{ forloop.counter }}.
+                        <a href="{% url 'history:chronicle-one-chapter' game.id %}">{{ game.title }}</a>
+                    </h5>
+                </td>
+            </tr>
+            {% endfor %}
     {% endfor %}
-    <br>
 
 {% endblock content %}

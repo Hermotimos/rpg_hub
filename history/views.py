@@ -9,6 +9,7 @@ from history.models import (TimelineEvent,
                             TimelineEventNote,
                             ChronicleEvent,
                             ChronicleEventNote,
+                            Chapter,
                             GameSession,
                             Thread,
                             GeneralLocation,
@@ -35,14 +36,22 @@ def is_allowed_game(game, profile):
 
 @login_required
 def chronicle_main_view(request):
-    games = GameSession.objects.all()
-    allowed_bios_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no < 0]
-    allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no > 0]
+    # games = GameSession.objects.all()
+    # allowed_bios_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no < 0]
+    # allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile) and g.game_no > 0]
+
+    chapters = Chapter.objects.all()
+    chapters_with_allowed_games_dict = {}
+    for ch in chapters:
+        games = GameSession.objects.filter(chapter=ch)
+        allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile)]
+        chapters_with_allowed_games_dict[ch] = allowed_games_list
 
     context = {
         'page_title': 'Kronika',
-        'allowed_bios_list': allowed_bios_list,
-        'allowed_games_list': allowed_games_list
+        # 'allowed_bios_list': allowed_bios_list,
+        # 'allowed_games_list': allowed_games_list,
+        'chapters_with_allowed_games_dict': chapters_with_allowed_games_dict
     }
     return render(request, 'history/chronicle_main.html', context)
 

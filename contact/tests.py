@@ -1,3 +1,10 @@
 from django.test import TestCase
 
-# Create your tests here.
+from contact.models import Report
+
+
+# class ReportModelTests(TestCase):
+
+
+
+
