@@ -47,6 +47,7 @@ class SpecificLocationAdmin(admin.ModelAdmin):
 
 class TimelineEventAdmin(admin.ModelAdmin):
     list_display = ('short_description', 'game_no', 'date')
+    list_filter = ('game_no', )
 
 
 class ChronicleEventAdmin(admin.ModelAdmin):

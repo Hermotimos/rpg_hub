@@ -19,7 +19,7 @@ class Picture(models.Model):
     description = models.CharField(max_length=200, blank=True, null=True)
 
     class Meta:
-        ordering = ['type', 'title', 'description']
+        ordering = ['type', 'description']
 
     def __str__(self):
         return f'{str(self.type).upper()}___{str(self.title).split("_", 1)[1]}'
