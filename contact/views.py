@@ -16,15 +16,16 @@ def report_view(request):
             report.author = request.user
             report.save()
 
-            subject = f"[RPG] Problem"
-            message = f"{request.user.profile} zgłasza problem:\n" \
-                      f"Zgłoszenie:\n{form.cleaned_data['text']}"
-            sender = settings.EMAIL_HOST_USER
-            receivers_list = ['lukas.kozicki@gmail.com']
-            send_mail(subject, message, sender, receivers_list)
+            if request.user.profile.character_status != 'gm':
+                subject = f"[RPG] Zgłoszenie od {request.user.profile}"
+                message = f"{request.user.profile} zgłasza:\n" \
+                          f"{form.cleaned_data['text']}"
+                sender = settings.EMAIL_HOST_USER
+                receivers_list = ['lukas.kozicki@gmail.com']
+                send_mail(subject, message, sender, receivers_list)
 
-            messages.info(request, f'MG został poinformowany o problemie!')
-            return redirect('users:profile')
+            messages.info(request, f'Zgłoszenie zostało wysłane!')
+            return redirect('contact:reports-list')
     else:
         form = ReportForm()
 
@@ -56,6 +57,7 @@ def reports_list_view(request):
 def mark_done_view(request, report_id):
     obj = Report.objects.get(id=report_id)
     obj.is_done = True
+    obj.response = 'Zrobione!'
     obj.save()
     messages.info(request, 'Zrobione!')
     return redirect('contact:reports-list')

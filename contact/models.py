@@ -7,6 +7,7 @@ class Report(models.Model):
     text = models.TextField(max_length=4000)
     date_created = models.DateTimeField(auto_now_add=True)
     is_done = models.BooleanField(default=False)
+    response = models.TextField(max_length=4000, blank=True, null=True)
 
     def __str__(self):
         return f'{self.text[0:50]}...'

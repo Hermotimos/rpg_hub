@@ -204,6 +204,10 @@ small.red {
         color: red;
 }
 
+small.deep-green {
+        color: #229954;
+}
+
 small.smaller {
     font-size: 12px;
 }

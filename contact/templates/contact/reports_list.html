@@ -12,9 +12,11 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br><br><br>
+    <br>
+    <a href="{% url 'contact:report' %}" class="btn btn-outline-dark">Nowe zgłoszenie</a>
+    <br><br><br><br>
 
-    <h3><strong>Oczekujące:</strong></h3>
+    <h3>Oczekujące:</h3>
     <br>
     {% for report in reports_undone %}
         <table>
@@ -31,7 +33,7 @@
     {% endfor %}
     <br><br><br>
 
-    <h3><strong>Zrobione:</strong></h3>
+    <h3>Zrobione:</h3>
     <br>
     {% for report in reports_done %}
         <table>
@@ -41,10 +43,16 @@
                     <br>
                     <small>{{ report.date_created|date:'d-M-Y' }}</small>
                 </td>
-                <td>{{ report.text }}</td>
+                <td>
+                    {{ report.text }}
+                    {% if report.response %}
+                        <br><br><small class="deep-green">Odpowiedź: {{ report.response }}</small>
+                    {% endif %}
+                </td>
                 <td><a href="{% url 'contact:undone' report.id %}" class="btn btn-warning">&#10008;</a></td>
             </tr>
         </table>
+        <br>
     {% endfor %}
 
 {% endblock content %}
