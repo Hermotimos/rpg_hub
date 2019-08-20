@@ -49,9 +49,9 @@
                 <ul id="##" class="list-group collapse unblue">
                     <a href="#"><li class="list-group-item list-group-item-light"><strike><small>Prosoponomikon</small></strike></li></a>
                 </ul>
-            <li class="list-group-item list-group-item-light" data-toggle="collapse" data-target="#notes"><h6><strike>TODO</strike></h6></li>
-                <ul id="xz" class="list-group collapse unblue">
-                    <a href="#"><li class="list-group-item list-group-item-light"><strike><small>Dziennik</small></strike></li></a>
+            <li class="list-group-item list-group-item-light" data-toggle="collapse" data-target="#todos"><h6><strike>TODO</strike></h6></li>
+                <ul id="todos" class="list-group collapse unblue">
+                    <a href="{% url 'contact:reports-list' %}"><li class="list-group-item list-group-item-light"><strike><small>Zgłoszone problemy</small></strike></li></a>
                 </ul>
 
         {% endif %}
