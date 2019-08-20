@@ -29,26 +29,42 @@ def report_view(request):
         form = ReportForm()
 
     context = {
-        'page_title': 'Zgłoś problem',
+        'page_title': 'Zgłoszenie do MG',
         'form': form,
     }
     return render(request, 'contact/report.html', context)
 
 
+@login_required
 def reports_list_view(request):
-    reports_undone = Report.objects.filter(is_done=False)
-    reports_done = Report.objects.filter(is_done=True)
+    if request.user.profile.character_status == 'gm':
+        reports_undone = Report.objects.filter(is_done=False)
+        reports_done = Report.objects.filter(is_done=True)
+    else:
+        reports_undone = Report.objects.filter(is_done=False, author=request.user)
+        reports_done = Report.objects.filter(is_done=True, author=request.user)
 
     context = {
-        'page_title': 'Zgłoszone problemy',
+        'page_title': 'Zgłoszenia',
         'reports_undone': reports_undone,
         'reports_done': reports_done
     }
     return render(request, 'contact/reports_list.html', context)
 
 
-def mark_done_view(request):
-    pass
+@login_required
+def mark_done_view(request, report_id):
+    obj = Report.objects.get(id=report_id)
+    obj.is_done = True
+    obj.save()
+    messages.info(request, 'Zrobione!')
+    return redirect('contact:reports-list')
 
-def mark_undone_view(request):
-    pass
+
+@login_required
+def mark_undone_view(request, report_id):
+    obj = Report.objects.get(id=report_id)
+    obj.is_done = False
+    obj.save()
+    messages.info(request, 'Nie-zrobione!')
+    return redirect('contact:reports-list')

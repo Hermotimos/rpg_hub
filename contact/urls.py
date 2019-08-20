@@ -6,6 +6,6 @@ app_name = 'contact'
 urlpatterns = [
     path('', views.report_view, name='report'),
     path('reports-list/', views.reports_list_view, name='reports-list'),
-    path('mark-done/', views.mark_done_view, name='done'),
-    path('mark-undone/', views.mark_undone_view, name='undone'),
+    path('mark-done:<int:report_id>/', views.mark_done_view, name='done'),
+    path('mark-undone:<int:report_id>/', views.mark_undone_view, name='undone'),
 ]

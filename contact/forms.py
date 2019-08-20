@@ -12,7 +12,7 @@ class ReportForm(forms.ModelForm):
         label='',
         widget=PagedownWidget(
             attrs={
-                'placeholder': 'Opisz problem (max. 4000 znaków)*',
+                'placeholder': 'Twoje zgłoszenie (max. 4000 znaków)*',
                 'rows': 10,
                 'cols': 60
             }

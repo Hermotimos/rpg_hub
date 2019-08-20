@@ -3,6 +3,9 @@
 {% load crispy_forms_tags %}
 {% load custom_filters %}
 
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/news.css' %}">
+{% endblock head_extra %}
 
 {% block breadcrumb %}
     <li class="breadcrumb-item active">{{ page_title }}</li>
@@ -11,7 +14,8 @@
 {% block content %}
     <br><br><br>
 
-    <h3>Do zrobienia:</h3>
+    <h3><strong>Oczekujące:</strong></h3>
+    <br>
     {% for report in reports_undone %}
         <table>
             <tr class="posts-and-news">
@@ -20,16 +24,27 @@
                     <br>
                     <small>{{ report.date_created|date:'d-M-Y' }}</small>
                 </td>
-                <td>{{ report }}</td>
-                <td><a href="{% url 'contact:done' %}" class="btn btn-dark">&#10004;&#10008;</a></td>
+                <td>{{ report.text }}</td>
+                <td><a href="{% url 'contact:done' report.id %}" class="btn btn-success">&#10004;</a></td>
             </tr>
         </table>
     {% endfor %}
     <br><br><br>
 
-    <h3>Zrobione:</h3>
+    <h3><strong>Zrobione:</strong></h3>
+    <br>
     {% for report in reports_done %}
-        <!-- SKOPIOWAĆ Z GÓRY-->
+        <table>
+            <tr class="posts-and-news">
+                <td>
+                    <img class="rounded-circle article-img" src="{{ report.author.profile.image.url }}">
+                    <br>
+                    <small>{{ report.date_created|date:'d-M-Y' }}</small>
+                </td>
+                <td>{{ report.text }}</td>
+                <td><a href="{% url 'contact:undone' report.id %}" class="btn btn-warning">&#10008;</a></td>
+            </tr>
+        </table>
     {% endfor %}
 
 {% endblock content %}
