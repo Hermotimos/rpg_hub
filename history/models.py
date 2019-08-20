@@ -113,7 +113,7 @@ class TimelineEvent(models.Model):
     specific_locations = models.ManyToManyField(SpecificLocation, related_name='timeline_events')
 
     def __str__(self):
-        return f'{self.description[0:100]}...'
+        return f'{self.description[0:100]}{"..." if len(self.description[::]) > 100 else ""}'
 
     def short_description(self):
         return self.__str__()
