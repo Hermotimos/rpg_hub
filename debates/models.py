@@ -12,7 +12,7 @@ class Topic(models.Model):
     description = models.CharField(max_length=100, verbose_name='opis tematu', blank=True, null=True)
 
     class Meta:
-        ordering = ['-date_updated']
+        ordering = ['date_updated']
 
     def __str__(self):
         return self.title
