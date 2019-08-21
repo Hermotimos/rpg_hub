@@ -8,9 +8,26 @@ from contact.forms import DemandForm, DemandModifyForm, DemandAnswerForm
 
 
 @login_required
-def demand_view(request):
+def main_view(request):
+    if request.user.profile.character_status == 'gm':
+        demands_undone = Demand.objects.filter(is_done=False)
+        demands_done = Demand.objects.filter(is_done=True)
+    else:
+        demands_undone = Demand.objects.filter(is_done=False, author=request.user)
+        demands_done = Demand.objects.filter(is_done=True, author=request.user)
+
+    context = {
+        'page_title': 'Zgłoszenia',
+        'demands_undone': demands_undone,
+        'demands_done': demands_done
+    }
+    return render(request, 'contact/main.html', context)
+
+
+@login_required
+def create_demand_view(request):
     if request.method == 'POST':
-        form = DemandForm(request.POST or None)
+        form = DemandForm(request.POST or None, request.FILES)
         if form.is_valid():
             demand = form.save(commit=False)
             demand.author = request.user
@@ -37,33 +54,42 @@ def demand_view(request):
 
 
 @login_required
-def demands_list_view(request):
-    if request.user.profile.character_status == 'gm':
-        demands_undone = Demand.objects.filter(is_done=False)
-        demands_done = Demand.objects.filter(is_done=True)
-    else:
-        demands_undone = Demand.objects.filter(is_done=False, author=request.user)
-        demands_done = Demand.objects.filter(is_done=True, author=request.user)
-
-    context = {
-        'page_title': 'Zgłoszenia',
-        'demands_undone': demands_undone,
-        'demands_done': demands_done
-    }
-    return render(request, 'contact/main.html', context)
-
-
-@login_required
 def demand_detail_view(request, demand_id):
-    demand = Demand.objects.get(id=demand_id)
+    demand = get_object_or_404(Demand, id=demand_id)
     answers = DemandAnswer.objects.filter(demand=demand)
+
+    if request.method == 'POST':
+        form = DemandAnswerForm(request.POST or None, request.FILES)
+        if form.is_valid():
+            answer = form.save(commit=False)
+            answer.demand = demand
+            answer.author = request.user
+            answer.save()
+
+            subject = f"[RPG] Odpowiedź na zgłoszenie!"
+            message = f"{request.user.profile} odpowiedział na zgłoszenie:\n" \
+                      f"Ogłoszenie: {answer.text}" \
+                      f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
+            sender = settings.EMAIL_HOST_USER
+            if request.user.profile.character_status != 'gm':
+                receivers = ['lukas.kozicki@gmail.com']
+            else:
+                receivers = [request.user.email]
+            send_mail(subject, message, sender, receivers)
+
+            messages.info(request, f'Dodano odpowiedź')
+            return redirect('contact:detail', demand_id=demand.id)
+    else:
+        form = DemandAnswerForm()
 
     context = {
         'page_title': 'Zgłoszenie - szczegóły',
         'demand': demand,
-        'answers': answers
+        'answers': answers,
+        'form': form
     }
     return render(request, 'contact/detail.html', context)
+
 
 @login_required
 def mark_done_view(request, demand_id):
@@ -81,7 +107,7 @@ def modify_demand_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
 
     if request.method == 'POST':
-        form = DemandAnswerForm(instance=demand, data=request.POST or None)
+        form = DemandAnswerForm(instance=demand, data=request.POST or None, files=request.FILES)
         if form.is_valid():
             form.save()
             messages.info(request, 'Zmodyfikowano zgłoszenie!')

@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import User
+from PIL import Image
 
 
 class Demand(models.Model):
@@ -12,6 +13,16 @@ class Demand(models.Model):
     def __str__(self):
         return f'{self.text[0:50]}...'
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.image:
+            img = Image.open(self.image.path)
+            if img.height > 700 or img.width > 700:
+                output_size = (700, 700)
+                img.thumbnail(output_size)
+                img.save(self.image.path)
+
 
 class DemandAnswer(models.Model):
     demand = models.ForeignKey(Demand, related_name='demand_answers', on_delete=models.CASCADE)
@@ -20,4 +31,13 @@ class DemandAnswer(models.Model):
     date_posted = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(blank=True, null=True, upload_to='contact_pics')
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.image:
+            img = Image.open(self.image.path)
+            if img.height > 700 or img.width > 700:
+                output_size = (700, 700)
+                img.thumbnail(output_size)
+                img.save(self.image.path)
 

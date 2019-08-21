@@ -13,7 +13,7 @@ class ReportTest(TestCase):
 
     def test_url_resolves_view(self):
         view = resolve('/contact/')
-        self.assertEquals(view.func, views.demand_view)
+        self.assertEquals(view.func, views.create_demand_view)
 
 
 class ReportsListTest(TestCase):
@@ -28,4 +28,4 @@ class ReportsListTest(TestCase):
 
     def test_url_resolves_view(self):
         view = resolve('/contact/reports-list/')
-        self.assertEquals(view.func, views.demands_list_view)
+        self.assertEquals(view.func, views.main_view)

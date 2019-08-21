@@ -9,63 +9,46 @@
 {% endblock head_extra %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{% url 'contact:main' %}">Ogłoszenia</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'contact:main' %}">Zgłoszenia</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
 {% block content %}
-    {% if request.user.profile not in news.allowed_profiles.all and request.user.profile.character_status != 'gm' %}
+    {% if request.user != demand.author and request.user.profile.character_status != 'gm' %}
         <br><br><br>
-        <h4>Poza tytułem to ogłoszenie jest dla Ciebie kompletnie nieczytelne.<br>Najwyraźniej ktoś napisał je w języku innym niż HTML, który tak dobrze znasz, że sobie tu buszujesz...</h4>
+        <h4>Nie Twoje zgłoszenie, to co grzebiesz?<br>Najwyraźniej ktoś napisał je w języku innym niż HTML, który tak dobrze znasz, że sobie tu buszujesz...</h4>
     {% else %}
-        <br><br><br>
-        <table class="forms">
-            <tr>
-                <td><h6>Ogłoszeniodawca:</h6></td>
-                <td><small>{{ news.author.profile }}</small></td>
-            </tr>
-            <tr>
-                <td><h6>Adresaci:</h6></td>
-                <td><small>{{ allowed }}</small></td>
-            </tr>
-            <tr>
-                <td><h6>Aktywni uczestnicy:</h6></td>
-                <td><small>{{ followers }}</small></td>
+    <br>
+    <a href="{% url 'contact:main' %}" class="btn btn-outline-dark">Twoje zgłoszenia</a>
+    <br><br><br><br><br>
+
+        <table>
+            <tr class="posts-and-news">
+                <td>
+                    <img class="rounded-circle article-img" src="{{ demand.author.profile.image.url }}">
+                </td>
+                <td>
+                    <small>{{ demand.date_created|date:'d-M-Y, H:i' }}</small>
+                    {{ demand.text|capfirst|linebreaks }}
+                    {% if demand.image %}
+                        <img src="{{ demand.image.url }}">
+                    {% endif %}
+                </td>
             </tr>
         </table>
-        <br>
-
-        <div class="mb-4">
-            {% if request.user.profile in news.followers.all %}
-                <a href="{% url 'news:unfollow' news.slug %}" class="btn btn-dark">Nie obserwuj</a>
-            {% else %}
-                <a href="{% url 'news:follow' news.slug %}" class="btn btn-dark">Obserwuj</a>
-            {% endif %}
-        </div>
-
-        <br>
-        <div class="post-and-news">
-            <p>{{ news.text|capfirst|linebreaks }}</p>
-            {% if news.image %}
-                <img src="{{ news.image.url }}">
-            {% endif %}
-        </div>
-        <br>
 
         <table>
             <tbody>
-            {% for response in news.responses.all %}
+            {% for answer in demand.demand_answers.all %}
                 <tr class="posts-and-news">
                     <td>
-                        <img class="rounded-circle article-img" src="{{ response.author.profile.image.url }}">
-                        <br>
-                        <small class="smaller">{{ response.author.profile.character_name }}</small>
+                        <img class="rounded-circle article-img" src="{{ answer.author.profile.image.url }}">
                     </td>
                     <td class="align-center">
-                        <small class="left-float">{{ response.date_posted|date:'d-M-Y, H:i' }}</small><br>
-                        {{ response.text|capfirst|linebreaks }}
-                        {% if response.image %}
-                            <img src="{{ response.image.url }}" class="border-double">
+                        <small class="left-float">{{ answer.date_posted|date:'d-M-Y, H:i' }}</small><br>
+                        {{ answer.text|capfirst|linebreaks }}
+                        {% if answer.image %}
+                            <img src="{{ answer.image.url }}" class="border-double">
                         {% endif %}
                         <br>
                     </td>
