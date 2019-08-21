@@ -9,7 +9,7 @@ from news.forms import CreateNewsForm, CreateResponseForm
 
 
 @login_required
-def news_view(request):
+def main_view(request):
     queryset = News.objects.all()
 
     context = {
