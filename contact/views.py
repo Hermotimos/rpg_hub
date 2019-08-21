@@ -35,8 +35,8 @@ def create_demand_view(request):
             demand.save()
 
             if request.user.profile.character_status != 'gm':
-                subject = f"[RPG] Zgłoszenie od {request.user.profile}"
-                message = f"{form.cleaned_data['text']}" \
+                subject = f"[RPG] Zgłoszenie nr {demand.id}"
+                message = f"Zgłoszenie od {demand.author.profile}:\n{demand.text}\n" \
                           f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
                 sender = settings.EMAIL_HOST_USER
                 if request.user.profile.character_status == 'active_player':
@@ -70,18 +70,17 @@ def demand_detail_view(request, demand_id):
             answer.author = request.user
             answer.save()
 
-            subject = f"[RPG] Odpowiedź na zgłoszenie!"
-            message = f"{request.user.profile} odpowiedział na zgłoszenie:\n" \
-                      f"Ogłoszenie: {answer.text}\n" \
+            subject = f"[RPG] Zgłoszenie nr {demand.id}"
+            message = f"Odpowiedź od {answer.author.profile}:\n{demand.text}\n" \
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             sender = settings.EMAIL_HOST_USER
             if request.user.profile.character_status == 'active_player':
                 receivers = ['lukas.kozicki@gmail.com']
             else:
-                receivers = [request.user.email]
+                receivers = [demand.author.email]
             send_mail(subject, message, sender, receivers)
 
-            messages.info(request, f'Dodano odpowiedź')
+            messages.info(request, f'Dodano odpowiedź!')
             return redirect('contact:detail', demand_id=demand.id)
     else:
         form = DemandAnswerForm()
@@ -100,13 +99,24 @@ def modify_demand_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
 
     if request.method == 'POST':
-        form = DemandAnswerForm(instance=demand, data=request.POST or None, files=request.FILES)
+        form = DemandModifyForm(instance=demand, data=request.POST or None, files=request.FILES)
         if form.is_valid():
             form.save()
+
+            subject = f"[RPG] Zgłoszenie nr {demand.id}"
+            message = f"Modyfikacja przez {demand.author.profile}:\n{demand.text}\n" \
+                      f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
+            sender = settings.EMAIL_HOST_USER
+            if request.user.profile.character_status == 'active_player':
+                receivers = ['lukas.kozicki@gmail.com']
+            else:
+                receivers = []
+            send_mail(subject, message, sender, receivers)
+
             messages.info(request, 'Zmodyfikowano zgłoszenie!')
             return redirect('contact:main')
     else:
-        form = DemandAnswerForm(instance=demand)
+        form = DemandModifyForm(instance=demand)
 
     context = {
         'page_title': 'Modyfikacja zgłoszenia',
@@ -124,9 +134,9 @@ def mark_done_view(request, demand_id):
     demand.save()
     DemandAnswer.objects.create(demand=demand, author=request.user, text='Zrobione!')
 
-    subject = f"[RPG] Zgłoszenie oznaczone jako zrobione!"
-    message = f"{request.user.profile} oznaczył zgłoszenie jako 'zrobione'\n" \
-              f"Zgłoszenie: {demand.text}\n" \
+    subject = f"[RPG] Zgłoszenie nr {demand.id}"
+    message = f"{request.user.profile} oznaczył zgłoszenie jako 'zrobione.'\n" \
+              f"Zgłoszenie:\n{demand.text}\n" \
               f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
     sender = settings.EMAIL_HOST_USER
     if request.user.profile.character_status == 'active_player':
@@ -155,8 +165,8 @@ def mark_done_and_answer_view(request, demand_id):
             demand.date_done = timezone.now()
             demand.save()
 
-            subject = f"[RPG] Zgłoszenie zrobione + odpowiedź!"
-            message = f"Odpowiedź: {answer.text}" \
+            subject = f"[RPG] Zgłoszenie nr {demand.id}"
+            message = f"Zgłoszenie 'zrobione' + odpowiedź:\n{answer.text}\n" \
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             sender = settings.EMAIL_HOST_USER
             receivers = [demand.author.email]
@@ -177,9 +187,21 @@ def mark_done_and_answer_view(request, demand_id):
 
 @login_required
 def mark_undone_view(request, demand_id):
-    obj = Demand.objects.get(id=demand_id)
-    obj.is_done = False
-    obj.save()
+    demand = get_object_or_404(Demand, id=demand_id)
+    demand.is_done = False
+    demand.save()
+
+    subject = f"[RPG] Zgłoszenie nr {demand.id}"
+    message = f"{request.user.profile} wycofał zgłoszenie jako 'NIE-zrobione'\n" \
+              f"Zgłoszenie:\n{demand.text}\n" \
+              f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
+    sender = settings.EMAIL_HOST_USER
+    if request.user.profile.character_status == 'active_player':
+        receivers = ['lukas.kozicki@gmail.com']
+    else:
+        receivers = [demand.author.email]
+    send_mail(subject, message, sender, receivers)
+
     messages.info(request, 'Oznaczono jako niezrobione!')
     return redirect('contact:main')
 
@@ -188,5 +210,5 @@ def mark_undone_view(request, demand_id):
 def delete_demand_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
     demand.delete()
-    messages.info(request, 'Usunięto zgłoszenie')
+    messages.info(request, 'Usunięto zgłoszenie!')
     return redirect('contact:main')
