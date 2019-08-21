@@ -10,11 +10,14 @@ from news.forms import CreateNewsForm, CreateResponseForm
 
 @login_required
 def main_view(request):
-    queryset = News.objects.all()
+    if request.user.profile.character_status =='gm':
+        news = News.objects.all()
+    else:
+        news = request.user.profile.allowed_news.all()
 
     context = {
         'page_title': 'Ogłoszenia',
-        'queryset': queryset,
+        'queryset': news,
     }
     return render(request, 'news/main.html', context)
 
@@ -60,28 +63,29 @@ def create_news_view(request):
 
 @login_required
 def news_detail_view(request, news_slug):
-    obj = News.objects.get(slug=news_slug)
+    news = News.objects.get(slug=news_slug)
+    news_answers = news.news_answers.all()
 
-    allowed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.allowed_profiles.all())
-    followers_str = ', '.join(p.character_name.split(' ', 1)[0] for p in obj.followers.all())
+    allowed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in news.allowed_profiles.all())
+    followers_str = ', '.join(p.character_name.split(' ', 1)[0] for p in news.followers.all())
 
     if request.method == 'POST':
         form = CreateResponseForm(request.POST, request.FILES)
         if form.is_valid():
             response = form.save(commit=False)
-            response.news = obj
+            response.news = news
             response.author = request.user
             form.save()
 
-            subject = f"[RPG] Odpowiedź na ogłoszenie: '{obj.title[:30]}...'"
-            message = f"{request.user.profile} odpowiedział/a na ogłoszenie '{obj.title}':\n" \
-                      f"Ogłoszenie: {request.get_host()}/news/detail:{obj.slug}/\n\n" \
+            subject = f"[RPG] Odpowiedź na ogłoszenie: '{news.title[:30]}...'"
+            message = f"{request.user.profile} odpowiedział/a na ogłoszenie '{news.title}':\n" \
+                      f"Ogłoszenie: {request.get_host()}/news/detail:{news.slug}/\n\n" \
                       f"Odpowiedź: {response.text}"
             sender = settings.EMAIL_HOST_USER
 
             receivers = []
             for user in User.objects.all():
-                if user.profile in obj.followers.all() and user != request.user:
+                if user.profile in news.followers.all() and user != request.user:
                     receivers.append(user.email)
             if request.user.profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
@@ -93,8 +97,9 @@ def news_detail_view(request, news_slug):
         form = CreateResponseForm()
 
     context = {
-        'page_title': obj.title,
-        'news': obj,
+        'page_title': news.title,
+        'news': news,
+        'news_answers': news_answers,
         'form': form,
         'allowed': allowed_str,
         'followers': followers_str,
