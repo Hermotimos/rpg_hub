@@ -3,18 +3,18 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import send_mail
-from contact.models import Demand
-from contact.forms import ReportForm, ResponseForm
+from contact.models import Demand, DemandAnswer
+from contact.forms import DemandForm, DemandAnswerForm
 
 
 @login_required
-def report_view(request):
+def demand_view(request):
     if request.method == 'POST':
-        form = ReportForm(request.POST or None)
+        form = DemandForm(request.POST or None)
         if form.is_valid():
-            report = form.save(commit=False)
-            report.author = request.user
-            report.save()
+            demand = form.save(commit=False)
+            demand.author = request.user
+            demand.save()
 
             if request.user.profile.character_status != 'gm':
                 subject = f"[RPG] Zgłoszenie od {request.user.profile}"
@@ -25,9 +25,9 @@ def report_view(request):
                 send_mail(subject, message, sender, receivers_list)
 
             messages.info(request, f'Zgłoszenie zostało wysłane!')
-            return redirect('contact:reports-list')
+            return redirect('contact:demands-list')
     else:
-        form = ReportForm()
+        form = DemandForm()
 
     context = {
         'page_title': 'Zgłoszenie do MG',
@@ -37,58 +37,58 @@ def report_view(request):
 
 
 @login_required
-def reports_list_view(request):
+def demands_list_view(request):
     if request.user.profile.character_status == 'gm':
-        reports_undone = Demand.objects.filter(is_done=False)
-        reports_done = Demand.objects.filter(is_done=True)
+        demands_undone = Demand.objects.filter(is_done=False)
+        demands_done = Demand.objects.filter(is_done=True)
     else:
-        reports_undone = Demand.objects.filter(is_done=False, author=request.user)
-        reports_done = Demand.objects.filter(is_done=True, author=request.user)
+        demands_undone = Demand.objects.filter(is_done=False, author=request.user)
+        demands_done = Demand.objects.filter(is_done=True, author=request.user)
 
     context = {
         'page_title': 'Zgłoszenia',
-        'reports_undone': reports_undone,
-        'reports_done': reports_done
+        'demands_undone': demands_undone,
+        'demands_done': demands_done
     }
     return render(request, 'contact/demands_list.html', context)
 
 
 @login_required
-def mark_done_view(request, report_id):
-    obj = Demand.objects.get(id=report_id)
+def mark_done_view(request, demand_id):
+    obj = Demand.objects.get(id=demand_id)
     obj.is_done = True
     obj.response = 'Zrobione!'
     obj.save()
     messages.info(request, 'Oznaczono jako zrobione!')
-    return redirect('contact:reports-list')
+    return redirect('contact:demands-list')
 
 
 @login_required
-def mark_done_and_respond_view(request, report_id):
-    report = get_object_or_404(Demand, id=report_id)
+def mark_done_and_answer_view(request, demand_id):
+    demand = get_object_or_404(Demand, id=demand_id)
 
     if request.method == 'POST':
-        form = ResponseForm(instance=report, data=request.POST or None)
+        form = DemandAnswerForm(instance=demand, data=request.POST or None)
         if form.is_valid():
-            report.is_done = True
+            demand.is_done = True
             form.save()
             messages.info(request, 'Oznaczono jako zrobione!')
-            return redirect('contact:reports-list')
+            return redirect('contact:demands-list')
     else:
-        form = ResponseForm(instance=report)
+        form = DemandAnswerForm(instance=demand)
 
     context = {
         'page_title': 'Odpowiedź na zgłoszenie',
-        'report': report,
+        'demand': demand,
         'form': form
     }
     return render(request, 'contact/answer.html', context)
 
 
 @login_required
-def mark_undone_view(request, report_id):
-    obj = Demand.objects.get(id=report_id)
+def mark_undone_view(request, demand_id):
+    obj = Demand.objects.get(id=demand_id)
     obj.is_done = False
     obj.save()
     messages.info(request, 'Oznaczono jako niezrobione!')
-    return redirect('contact:reports-list')
+    return redirect('contact:demands-list')

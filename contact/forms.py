@@ -1,9 +1,9 @@
 from django import forms
 from pagedown.widgets import PagedownWidget
-from contact.models import Demand
+from contact.models import Demand, DemandAnswer
 
 
-class ReportForm(forms.ModelForm):
+class DemandForm(forms.ModelForm):
     class Meta:
         model = Demand
         fields = ['text']
@@ -20,9 +20,9 @@ class ReportForm(forms.ModelForm):
     )
 
 
-class ResponseForm(forms.ModelForm):
+class DemandAnswerForm(forms.ModelForm):
     class Meta:
-        model = Demand
+        model = DemandAnswer
         fields = ['response']
 
     response = forms.CharField(
