@@ -25,7 +25,7 @@ def demand_view(request):
                 send_mail(subject, message, sender, receivers_list)
 
             messages.info(request, f'Zgłoszenie zostało wysłane!')
-            return redirect('contact:demands-list')
+            return redirect('contact:main')
     else:
         form = DemandForm()
 
