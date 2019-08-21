@@ -20,59 +20,55 @@
         </div>
 
         <br><br>
-        {% for topic in queryset %}
-            {% if request.user.profile in topic.allowed_list or request.user.profile.character_status == 'gm' %}
+        {% for topic in topics %}
+            <h3>{{ topic.title }}</h3>
+            {% if topic.description %}
+                <small>{{ topic.description }}</small> <br>
+            {% endif %}<br>
 
-                <h3>{{ topic.title }}</h3>
-                {% if topic.description %}
-                    <small>{{ topic.description }}</small> <br>
-                {% endif %}<br>
+            <table class="forum">
+                <thead>
+                    <tr>
+                        <th>Narada</th>
+                        <th>Inicjator</th>
+                        <th>Uczestnicy</th>
+                        <th>Wypowiedzi</th>
+                        <th>Ostatnie słowo</th>
+                    </tr>
+                </thead>
 
-                <table class="forum">
-                    <thead>
-                        <tr>
-                            <th>Narada</th>
-                            <th>Inicjator</th>
-                            <th>Uczestnicy</th>
-                            <th>Wypowiedzi</th>
-                            <th>Ostatnie słowo</th>
-                        </tr>
-                    </thead>
-
-
-                    <tbody>
-                    {% for debate in topic.debates.all %}
-                        {% if request.user.profile in debate.allowed_profiles.all or request.user.profile.character_status == 'gm' %}
-                            <tr>
-                                <td class="unblue">
-                                    <a href="{% url 'debates:debate' debate.topic.id debate.id %}">{{ debate.title }}</a>
-                                </td>
-                                <td>
-                                    {{ debate.first_active_player|get_first_word  }}<br>
-                                    <small>{{ debate.first_player_remark_date|date:'d-M-Y' }}</small>
-                                </td>
-                                <td>
-                                    {% for profile in debate.allowed_profiles.all %}
-                                        {% if profile.character_status != 'gm' %}
-                                            <small>{{ profile.character_name|get_first_word }}</small><br>
-                                        {% endif %}
-                                    {% endfor %}
-                                </td>
-                                <td>{{ debate.player_remarks_count }}</td>
-                                <td>
-                                    {{ debate.last_active_player|get_first_word }}<br>
-                                    <small>{{ debate.last_player_remark_date|date:'d-M-Y' }}</small>
-                                </td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                    </tbody>
-                </table>
-                <br>
-                <div class="mb-4">
-                    <a href="{% url 'debates:create-debate' topic.id %}" class="btn btn-outline-dark">Nowa narada</a>
-                </div><br><br>
-            {% endif %}
+                <tbody>
+                {% for debate in topics_with_debates_dict|dict_lookup:topic %}
+                    <tr>
+                        <td class="unblue">
+                            <a href="{% url 'debates:debate' debate.topic.id debate.id %}">{{ debate.title }}</a>
+                        </td>
+                        <td>
+                            {{ debate.first_active_player|get_first_word  }}<br>
+                            <small>{{ debate.first_player_remark_date|date:'d-M-Y' }}</small>
+                        </td>
+                        <td>
+                            {% for profile in debate.allowed_profiles.all %}
+                                {% if profile.character_status != 'gm' %}
+                                    <small>{{ profile.character_name|get_first_word }}</small><br>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {{ debate.player_remarks_count }}
+                        </td>
+                        <td>
+                            {{ debate.last_active_player|get_first_word }}<br>
+                            <small>{{ debate.last_player_remark_date|date:'d-M-Y' }}</small>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <div class="mb-4">
+                <a href="{% url 'debates:create-debate' topic.id %}" class="btn btn-outline-dark">Nowa narada</a>
+            </div><br><br>
         {% endfor %}
     {% endif %}
 {% endblock content %}
