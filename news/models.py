@@ -14,8 +14,8 @@ class News(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, related_name='news', on_delete=models.CASCADE)
     allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_news')
-    image = models.ImageField(blank=True, null=True, upload_to='news_pics')
     followers = models.ManyToManyField(to=Profile, related_name='followed_news', blank=True)
+    image = models.ImageField(blank=True, null=True, upload_to='news_pics')
 
     def __str__(self):
         return self.title[:50] + '...'
@@ -46,11 +46,11 @@ class News(models.Model):
 
 
 class Response(models.Model):
+    news = models.ForeignKey(News, related_name='responses', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, related_name='responses', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000)
     date_posted = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, related_name='responses', on_delete=models.CASCADE)
     image = models.ImageField(blank=True, null=True, upload_to='news_pics')
-    news = models.ForeignKey(News, related_name='responses', on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['date_posted']
