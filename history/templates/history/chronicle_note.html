@@ -15,35 +15,39 @@
 
 {% block content %}
     <br><br><br>
-    <table class="forms">
-        {% if event.game_no %}
-        <tr>
-            <td><h6>Sesja:</h6></td>
-            <td class="justify"><small>{{ event.game_no }}</small></td>
-        </tr>
-        {% endif %}
-        <tr>
-            <td><h6>Wydarzenie:</h6></td>
-            <td class="justify"><small>{{ event.description }}</small></td>
-        </tr>
-        <tr>
-            <td><h6>Uczestnicy:</h6></td>
-            <td><small>{{ participants }}</small></td>
-        </tr>
-        {% if informed %}
-        <tr>
-            <td><h6>Poinformowani:</h6></td>
-            <td><small>{{ informed }}</small></td>
-        </tr>
-        {% endif %}
-    </table><br><br>
+    {% if request.user.profile not in event.participants.all and request.user.profile not in event.informed.all and request.user.profile.character_status != 'gm' %}
+        <h4>Kto Ci powiedział, że coś takiego miało miejsce?<br>Chcesz znać tajemnice - rozmawiaj z ludźmi.</h4>
+    {% else %}
+        <table class="forms">
+            {% if event.game_no %}
+            <tr>
+                <td><h6>Sesja:</h6></td>
+                <td class="justify"><small>{{ event.game_no }}</small></td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td><h6>Wydarzenie:</h6></td>
+                <td class="justify"><small>{{ event.description }}</small></td>
+            </tr>
+            <tr>
+                <td><h6>Uczestnicy:</h6></td>
+                <td><small>{{ participants }}</small></td>
+            </tr>
+            {% if informed %}
+            <tr>
+                <td><h6>Poinformowani:</h6></td>
+                <td><small>{{ informed }}</small></td>
+            </tr>
+            {% endif %}
+        </table><br><br>
 
-    <small>Jeśli chcesz skasować przemyślenia, usuń treść i kliknij 'Zapamiętaj'.</small><br><br>
+        <small>Jeśli chcesz skasować przemyślenia, usuń treść i kliknij 'Zapamiętaj'.</small><br><br>
 
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
-        <input class="btn btn-dark" type="submit" value="Zapamiętaj">
-    </form>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
+            <input class="btn btn-dark" type="submit" value="Zapamiętaj">
+        </form>
+    {% endif %}
 {% endblock content %}

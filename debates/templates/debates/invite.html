@@ -13,6 +13,9 @@
 
 {% block content %}
     <br><br><br>
+    {% if request.user.profile not in debate.allowed_profiles.all and request.user.profile.character_status != 'gm' %}
+        <h4>Kto Ci powiedział, że coś takiego miało miejsce?<br>Chcesz znać tajemnice - rozmawiaj z ludźmi.</h4>
+    {% else %}
     <table class="forms">
         <tr>
             <td><h6>Temat:</h6></td>
