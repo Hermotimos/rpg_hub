@@ -6,6 +6,7 @@ class Demand(models.Model):
     author = models.ForeignKey(User, related_name='reports', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000)
     date_created = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(blank=True, null=True, upload_to='contact_pics')
     is_done = models.BooleanField(default=False)
 
     def __str__(self):
@@ -13,7 +14,7 @@ class Demand(models.Model):
 
 
 class DemandAnswer(models.Model):
-    report = models.ForeignKey(Demand, related_name='demand_answers', on_delete=models.CASCADE)
+    demand = models.ForeignKey(Demand, related_name='demand_answers', on_delete=models.CASCADE)
     author = models.ForeignKey(User, related_name='demand_answers', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000)
     date_posted = models.DateTimeField(auto_now_add=True)

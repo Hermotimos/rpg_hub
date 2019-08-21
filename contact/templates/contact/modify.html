@@ -9,25 +9,18 @@
 {% endblock head_extra %}
 
 {% block breadcrumb %}
+    <li class="breadcrumb-item active"><a href="{% url 'contact:main' %}">Zgłoszenia</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br><br><br>
-    <table class="forms">
-        <tr>
-            <td><h6>Zgłoszenie:</h6></td>
-            <td class="justify"><small>{{ demand.text }}</small></td>
-        </tr>
-        <tr>
-            <td><h6>Autor:</h6></td>
-            <td class="justify"><small>{{ demand.author }}</small></td>
-        </tr>
-    </table><br><br>
+    <br>
+    <a href="{% url 'contact:main' %}" class="btn btn-outline-dark">Twoje zgłoszenia</a>
+    <br><br><br><br><br>
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}
-        <input class="btn btn-dark" type="submit" value="Odpowiedz + Zrobione">
+        <input class="btn btn-dark" type="submit" value="Zmodyfikuj">
     </form>
 {% endblock content %}

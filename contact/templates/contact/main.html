@@ -13,7 +13,7 @@
 
 {% block content %}
     <br>
-    <a href="{% url 'contact:demand' %}" class="btn btn-outline-dark">Nowe zgłoszenie</a>
+    <a href="{% url 'contact:create' %}" class="btn btn-outline-dark">Nowe zgłoszenie</a>
     <br><br><br><br>
 
     <h3>Oczekujące:</h3>
@@ -26,14 +26,17 @@
                     <br>
                     <small>{{ demand.date_created|date:'d-M-Y' }}</small>
                 </td>
-                <td>{{ demand.text }}
+                <td  class="unblue">
+                    <a href="{% url 'contact:detail' demand.id %}">{{ demand.text }}</a>
                     {% if demand.response %}
                         <br><small class="deep-green">Odpowiedź: {{ demand.response }}</small>
                     {% endif %}
                 </td>
+                <td><a href="{% url 'contact:modify' demand.id %}" class="btn btn-warning">&#9998;</a></td>
                 <td><a href="{% url 'contact:done' demand.id %}" class="btn btn-success">&#10004;</a></td>
-                <td><a href="{% url 'contact:done-answer' demand.id %}" class="btn btn-success">&#9998;</a></td>
-                <td><a href="{% url 'contact:done-answer' demand.id %}" class="btn btn-success">&#10004;<br>&#9998;</a></td>
+                {% if request.user.profile.character_status == 'gm' %}
+                    <td><a href="{% url 'contact:done-answer' demand.id %}" class="btn btn-success">&#10004;<br>&#9993;</a></td>
+                {% endif %}
             </tr>
         </table>
         <br>
@@ -56,7 +59,9 @@
                         <br><br><small class="deep-green">Odpowiedź: {{ demand.response }}</small>
                     {% endif %}
                 </td>
-                <td><a href="{% url 'contact:undone' demand.id %}" class="btn btn-warning">&#10008;</a></td>
+                <td><a href="{% url 'contact:undone' demand.id %}" class="btn btn-warning">&#9757;</a></td>
+                <!--      DELETE          -->
+                <td><a href="#" class="btn btn-danger">&#10008;</a></td>
             </tr>
         </table>
         <br>

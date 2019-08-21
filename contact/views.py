@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import send_mail
 from contact.models import Demand, DemandAnswer
-from contact.forms import DemandForm, DemandAnswerForm
+from contact.forms import DemandForm, DemandModifyForm, DemandAnswerForm
 
 
 @login_required
@@ -33,7 +33,7 @@ def demand_view(request):
         'page_title': 'Zgłoszenie do MG',
         'form': form,
     }
-    return render(request, 'contact/demand.html', context)
+    return render(request, 'contact/create.html', context)
 
 
 @login_required
@@ -50,17 +50,51 @@ def demands_list_view(request):
         'demands_undone': demands_undone,
         'demands_done': demands_done
     }
-    return render(request, 'contact/demands_list.html', context)
+    return render(request, 'contact/main.html', context)
 
+
+@login_required
+def demand_detail_view(request, demand_id):
+    demand = Demand.objects.get(id=demand_id)
+    answers = DemandAnswer.objects.filter(demand=demand)
+
+    context = {
+        'page_title': 'Zgłoszenie - szczegóły',
+        'demand': demand,
+        'answers': answers
+    }
+    return render(request, 'contact/detail.html', context)
 
 @login_required
 def mark_done_view(request, demand_id):
     obj = Demand.objects.get(id=demand_id)
     obj.is_done = True
-    obj.response = 'Zrobione!'
     obj.save()
+    answer = DemandAnswer.objects.create(demand=obj, author=request.user, text='Zrobione!')
+    # answer.save()
     messages.info(request, 'Oznaczono jako zrobione!')
-    return redirect('contact:demands-list')
+    return redirect('contact:main')
+
+
+@login_required
+def modify_demand_view(request, demand_id):
+    demand = get_object_or_404(Demand, id=demand_id)
+
+    if request.method == 'POST':
+        form = DemandAnswerForm(instance=demand, data=request.POST or None)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Zmodyfikowano zgłoszenie!')
+            return redirect('contact:main')
+    else:
+        form = DemandAnswerForm(instance=demand)
+
+    context = {
+        'page_title': 'Modyfikacja zgłoszenia',
+        'demand': demand,
+        'form': form
+    }
+    return render(request, 'contact/modify.html', context)
 
 
 @login_required
@@ -73,7 +107,7 @@ def mark_done_and_answer_view(request, demand_id):
             demand.is_done = True
             form.save()
             messages.info(request, 'Oznaczono jako zrobione!')
-            return redirect('contact:demands-list')
+            return redirect('contact:main')
     else:
         form = DemandAnswerForm(instance=demand)
 
@@ -91,4 +125,4 @@ def mark_undone_view(request, demand_id):
     obj.is_done = False
     obj.save()
     messages.info(request, 'Oznaczono jako niezrobione!')
-    return redirect('contact:demands-list')
+    return redirect('contact:main')

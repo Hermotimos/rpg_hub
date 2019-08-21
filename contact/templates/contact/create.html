@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_filters %}
+{% load crispy_forms_tags %}
 
 {% block head_extra %}
     {{ form.media }}
@@ -7,19 +9,18 @@
 {% endblock head_extra %}
 
 {% block breadcrumb %}
+    <li class="breadcrumb-item active"><a href="{% url 'contact:main' %}">Zgłoszenia</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
 {% block content %}
     <br>
-    <a href="{% url 'contact:demands-list' %}" class="btn btn-outline-dark">Twoje zgłoszenia</a>
+    <a href="{% url 'contact:main' %}" class="btn btn-outline-dark">Twoje zgłoszenia</a>
     <br><br><br><br><br>
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-
-        {{ form }}
-
+        {{ form|crispy }}
         <input class="btn btn-dark" type="submit" value="Wyślij zgłoszenie">
     </form>
 {% endblock content %}

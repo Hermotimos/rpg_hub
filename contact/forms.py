@@ -6,7 +6,7 @@ from contact.models import Demand, DemandAnswer
 class DemandForm(forms.ModelForm):
     class Meta:
         model = Demand
-        fields = ['text']
+        fields = ['text', 'image']
 
     text = forms.CharField(
         label='',
@@ -19,13 +19,18 @@ class DemandForm(forms.ModelForm):
         )
     )
 
+    image = forms.ImageField(
+        label='Załącz obraz:',
+        required=False,
+    )
 
-class DemandAnswerForm(forms.ModelForm):
+
+class DemandModifyForm(forms.ModelForm):
     class Meta:
-        model = DemandAnswer
-        fields = ['response']
+        model = Demand
+        fields = ['text', 'image']
 
-    response = forms.CharField(
+    text = forms.CharField(
         label='',
         widget=PagedownWidget(
             attrs={
@@ -34,4 +39,31 @@ class DemandAnswerForm(forms.ModelForm):
                 'cols': 60
             }
         )
+    )
+
+    image = forms.ImageField(
+        label='Załącz obraz:',
+        required=False,
+    )
+
+
+class DemandAnswerForm(forms.ModelForm):
+    class Meta:
+        model = DemandAnswer
+        fields = ['text', 'image']
+
+    text = forms.CharField(
+        label='',
+        widget=PagedownWidget(
+            attrs={
+                'placeholder': 'Twoja odpowiedź (max. 4000 znaków)*',
+                'rows': 10,
+                'cols': 60
+            }
+        )
+    )
+
+    image = forms.ImageField(
+        label='Załącz obraz:',
+        required=False,
     )
