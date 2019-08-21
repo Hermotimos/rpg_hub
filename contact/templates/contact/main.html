@@ -52,8 +52,9 @@
                 </td>
                 <td class="unblue"><a href="{% url 'contact:detail' demand.id %}">{{ demand.text }}</a></td>
                 <td><a href="{% url 'contact:undone' demand.id %}" class="btn btn-warning">&#9757;</a></td>
-                <!--      DELETE          -->
-                <td><a href="#" class="btn btn-danger">&#10008;</a></td>
+                {% if request.user == demand.author %}
+                    <td><a href="{% url 'contact:delete' demand.id %}" class="btn btn-danger">&#10008;</a></td>
+                {% endif %}
             </tr>
         </table>
         <br>
