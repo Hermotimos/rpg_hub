@@ -16,7 +16,7 @@
 {% block content %}
     {% if request.user.profile not in news.allowed_profiles.all and request.user.profile.character_status != 'gm' %}
         <br><br><br>
-        <h4>To ogłoszenie jest dla Ciebie kompletnie nieczytelne.<br>Najwyraźniej ktoś napisał je w języku innym niż HTML, który tak dobrze znasz, że sobie tu buszujesz...</h4>
+        <h4>Poza tytułem to ogłoszenie jest dla Ciebie kompletnie nieczytelne.<br>Najwyraźniej ktoś napisał je w języku innym niż HTML, który tak dobrze znasz, że sobie tu buszujesz...</h4>
     {% else %}
         <br><br><br>
         <table class="forms">
