@@ -15,7 +15,7 @@
 {% block content %}
     <br><br><br>
     {% if request.user.profile not in event.participants.all and request.user.profile not in event.informed.all and request.user.profile.character_status != 'gm' %}
-        <h4>Kto Ci powiedział, że coś takiego miało miejsce?<br>Chcesz znać tajemnice - rozmawiaj z ludźmi.</h4>
+        <h4>Kto Ci powiedział, że coś takiego miało miejsce?<br>Chcesz znać tajemnice - rozmawiaj z ludźmi.<br>Pamiętaj, że cała gra opiera się na tym, że MG tworzy scenariusze, które odkrywasz w trakcie gry. Jeśli nie jesteś w stanie znieść tego poziomu stresu i niepewności, jaki niesie ze sobą eksploracja świata gry jako odgrywana przez Ciebie postać, to zrezygnuj z gry na rzecz książek fantasy. Ale psuj zabawy sobie i innym zaglądając tam, gdzie nie powinieneś!</h4>
     {% else %}
         <table class="forms">
             {% if event.game_no %}

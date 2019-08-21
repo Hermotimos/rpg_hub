@@ -16,7 +16,7 @@
 {% block content %}
     <br><br><br>
     {% if request.user.profile not in debate.allowed_profiles.all and request.user.profile.character_status != 'gm' %}
-        <h4>Nie jesteś uczestnikiem tej narady</h4>
+        <h4>Nie jesteś uczestnikiem tej narady!<br>Pamiętaj, że cała gra opiera się na tym, że MG tworzy scenariusze, które odkrywasz w trakcie gry. Jeśli nie jesteś w stanie znieść tego poziomu stresu i niepewności, jaki niesie ze sobą eksploracja świata gry jako odgrywana przez Ciebie postać, to zrezygnuj z gry na rzecz książek fantasy. Ale psuj zabawy sobie i innym zaglądając tam, gdzie nie powinieneś!</h4>
     {% else %}
         <table class="forms">
             <tr>
