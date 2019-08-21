@@ -26,10 +26,17 @@
                     <br>
                     <small>{{ report.date_created|date:'d-M-Y' }}</small>
                 </td>
-                <td>{{ report.text }}</td>
+                <td>{{ report.text }}
+                    {% if report.response %}
+                        <br><small class="deep-green">Odpowiedź: {{ report.response }}</small>
+                    {% endif %}
+                </td>
                 <td><a href="{% url 'contact:done' report.id %}" class="btn btn-success">&#10004;</a></td>
+                <td><a href="{% url 'contact:respond' report.id %}" class="btn btn-success">&#9998;</a></td>
+                <td><a href="{% url 'contact:respond' report.id %}" class="btn btn-success">&#10004;<br>&#9998;</a></td>
             </tr>
         </table>
+        <br>
     {% endfor %}
     <br><br><br>
 

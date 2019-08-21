@@ -1,4 +1,4 @@
 from django.contrib import admin
-from contact.models import Report
+from contact.models import Demand
 
-admin.site.register(Report)
+admin.site.register(Demand)

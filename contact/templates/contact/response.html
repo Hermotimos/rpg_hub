@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+    {{ form.media }}
+    <link rel="stylesheet" href="{% static 'css/contact.css' %}">
+{% endblock head_extra %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br><br><br>
+    <table class="forms">
+        <tr>
+            <td><h6>Zgłoszenie:</h6></td>
+            <td class="justify"><small>{{ report.text }}</small></td>
+        </tr>
+        <tr>
+            <td><h6>Autor:</h6></td>
+            <td class="justify"><small>{{ report.author }}</small></td>
+        </tr>
+    </table><br><br>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form }}
+
+        <input class="btn btn-dark" type="submit" value="Odpowiedz + Zrobione">
+    </form>
+{% endblock content %}

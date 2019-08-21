@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import send_mail
-from contact.models import Report
-from contact.forms import ReportForm
+from contact.models import Demand
+from contact.forms import ReportForm, ResponseForm
 
 
 @login_required
@@ -39,11 +39,11 @@ def report_view(request):
 @login_required
 def reports_list_view(request):
     if request.user.profile.character_status == 'gm':
-        reports_undone = Report.objects.filter(is_done=False)
-        reports_done = Report.objects.filter(is_done=True)
+        reports_undone = Demand.objects.filter(is_done=False)
+        reports_done = Demand.objects.filter(is_done=True)
     else:
-        reports_undone = Report.objects.filter(is_done=False, author=request.user)
-        reports_done = Report.objects.filter(is_done=True, author=request.user)
+        reports_undone = Demand.objects.filter(is_done=False, author=request.user)
+        reports_done = Demand.objects.filter(is_done=True, author=request.user)
 
     context = {
         'page_title': 'Zgłoszenia',
@@ -55,18 +55,40 @@ def reports_list_view(request):
 
 @login_required
 def mark_done_view(request, report_id):
-    obj = Report.objects.get(id=report_id)
+    obj = Demand.objects.get(id=report_id)
     obj.is_done = True
     obj.response = 'Zrobione!'
     obj.save()
-    messages.info(request, 'Zrobione!')
+    messages.info(request, 'Oznaczono jako zrobione!')
     return redirect('contact:reports-list')
 
 
 @login_required
+def mark_done_and_respond_view(request, report_id):
+    report = get_object_or_404(Demand, id=report_id)
+
+    if request.method == 'POST':
+        form = ResponseForm(instance=report, data=request.POST or None)
+        if form.is_valid():
+            report.is_done = True
+            form.save()
+            messages.info(request, 'Oznaczono jako zrobione!')
+            return redirect('contact:reports-list')
+    else:
+        form = ResponseForm(instance=report)
+
+    context = {
+        'page_title': 'Odpowiedź na zgłoszenie',
+        'report': report,
+        'form': form
+    }
+    return render(request, 'contact/response.html', context)
+
+
+@login_required
 def mark_undone_view(request, report_id):
-    obj = Report.objects.get(id=report_id)
+    obj = Demand.objects.get(id=report_id)
     obj.is_done = False
     obj.save()
-    messages.info(request, 'Nie-zrobione!')
+    messages.info(request, 'Oznaczono jako niezrobione!')
     return redirect('contact:reports-list')

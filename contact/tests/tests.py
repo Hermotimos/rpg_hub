@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
 from contact  import views
-from contact.models import Report
+from contact.models import Demand
 from users.models import User
 
 
@@ -19,7 +19,7 @@ class ReportTest(TestCase):
 class ReportsListTest(TestCase):
     def setUp(self):
         mock_user = User.objects.create_user(username='test_user', email='test@user.com', password='sswapord123')
-        Report.objects.create(author=mock_user, text='Mock report')
+        Demand.objects.create(author=mock_user, text='Mock report')
 
     def test_get(self):
         url = reverse('contact:reports-list')
