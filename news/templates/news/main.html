@@ -18,7 +18,7 @@
     </div>
     <br><br><br>
 
-    {% for news in queryset %}
+    {% for news in newss %}
         {% if request.user.profile in news.allowed_profiles.all or request.user.profile.character_status == 'gm' %}
             <table>
                 <tbody>

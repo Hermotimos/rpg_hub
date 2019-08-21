@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
@@ -10,14 +10,14 @@ from news.forms import CreateNewsForm, CreateResponseForm
 
 @login_required
 def main_view(request):
-    if request.user.profile.character_status =='gm':
-        news = News.objects.all()
+    if request.user.profile.character_status == 'gm':
+        newss = News.objects.all()
     else:
-        news = request.user.profile.allowed_news.all()
+        newss = request.user.profile.allowed_news.all()
 
     context = {
         'page_title': 'Ogłoszenia',
-        'queryset': news,
+        'newss': newss,
     }
     return render(request, 'news/main.html', context)
 
@@ -63,7 +63,7 @@ def create_news_view(request):
 
 @login_required
 def news_detail_view(request, news_slug):
-    news = News.objects.get(slug=news_slug)
+    news = get_object_or_404(News, slug=news_slug)
     news_answers = news.news_answers.all()
 
     allowed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in news.allowed_profiles.all())
