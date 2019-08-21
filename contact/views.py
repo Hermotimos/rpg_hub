@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import send_mail
+from django.utils import timezone
 from contact.models import Demand, DemandAnswer
 from contact.forms import DemandForm, DemandModifyForm, DemandAnswerForm
 
@@ -92,17 +93,6 @@ def demand_detail_view(request, demand_id):
 
 
 @login_required
-def mark_done_view(request, demand_id):
-    obj = Demand.objects.get(id=demand_id)
-    obj.is_done = True
-    obj.save()
-    answer = DemandAnswer.objects.create(demand=obj, author=request.user, text='Zrobione!')
-    # answer.save()
-    messages.info(request, 'Oznaczono jako zrobione!')
-    return redirect('contact:main')
-
-
-@login_required
 def modify_demand_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
 
@@ -124,6 +114,17 @@ def modify_demand_view(request, demand_id):
 
 
 @login_required
+def mark_done_view(request, demand_id):
+    obj = Demand.objects.get(id=demand_id)
+    obj.is_done = True
+    obj.date_done = timezone.now()
+    obj.save()
+    DemandAnswer.objects.create(demand=obj, author=request.user, text='Zrobione!')
+    messages.info(request, 'Oznaczono jako zrobione!')
+    return redirect('contact:main')
+
+
+@login_required
 def mark_done_and_answer_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
 
@@ -131,6 +132,7 @@ def mark_done_and_answer_view(request, demand_id):
         form = DemandAnswerForm(instance=demand, data=request.POST or None)
         if form.is_valid():
             demand.is_done = True
+            demand.date_done = timezone.now()
             form.save()
             messages.info(request, 'Oznaczono jako zrobione!')
             return redirect('contact:main')

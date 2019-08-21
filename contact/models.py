@@ -7,6 +7,7 @@ class Demand(models.Model):
     author = models.ForeignKey(User, related_name='reports', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000)
     date_created = models.DateTimeField(auto_now_add=True)
+    date_done = models.DateTimeField(blank=True, null=True)
     image = models.ImageField(blank=True, null=True, upload_to='contact_pics')
     is_done = models.BooleanField(default=False)
 
@@ -22,6 +23,9 @@ class Demand(models.Model):
                 output_size = (700, 700)
                 img.thumbnail(output_size)
                 img.save(self.image.path)
+
+    class Meta:
+        ordering = ['-date_done', '-date_created']
 
 
 class DemandAnswer(models.Model):
