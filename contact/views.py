@@ -33,7 +33,7 @@ def report_view(request):
         'page_title': 'Zgłoszenie do MG',
         'form': form,
     }
-    return render(request, 'contact/report.html', context)
+    return render(request, 'contact/demand.html', context)
 
 
 @login_required
@@ -50,7 +50,7 @@ def reports_list_view(request):
         'reports_undone': reports_undone,
         'reports_done': reports_done
     }
-    return render(request, 'contact/reports_list.html', context)
+    return render(request, 'contact/demands_list.html', context)
 
 
 @login_required
@@ -82,7 +82,7 @@ def mark_done_and_respond_view(request, report_id):
         'report': report,
         'form': form
     }
-    return render(request, 'contact/response.html', context)
+    return render(request, 'contact/answer.html', context)
 
 
 @login_required
