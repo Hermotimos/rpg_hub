@@ -26,7 +26,7 @@ def create_news_view(request):
         if form.is_valid():
             news = form.save(commit=False)
             news.author = request.user
-            news = form.save()
+            news.save()
 
             allowed_profiles = form.cleaned_data['allowed_profiles']
             allowed_profiles |= Profile.objects.filter(id=request.user.id)
