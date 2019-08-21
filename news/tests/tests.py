@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
 from news.views import news_view, create_news_view, news_detail_view, follow_news_view, unfollow_news_view
-from news.models import News, Response
+from news.models import News, NewsAnswer
 from users.models import User, Profile
 
 

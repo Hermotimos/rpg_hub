@@ -1,5 +1,5 @@
 from django import forms
-from news.models import News, Response
+from news.models import News, NewsAnswer
 from users.models import Profile
 from django.db.models import Q
 from pagedown.widgets import PagedownWidget
@@ -55,7 +55,7 @@ class CreateNewsForm(forms.ModelForm):
 
 class CreateResponseForm(forms.ModelForm):
     class Meta:
-        model = Response
+        model = NewsAnswer
         fields = [
             'text',
             'image'
