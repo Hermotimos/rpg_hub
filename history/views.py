@@ -52,6 +52,30 @@ def chronicle_main_view(request):
 
 
 @login_required
+def chronicle_create_view(request):
+    if request.method == 'POST':
+        form = ChronicleEventCreateForm(request.POST or None)
+        if form.is_valid():
+            event = form.save()
+            event.participants.set(form.cleaned_data['participants'])
+            event.informed.set(form.cleaned_data['informed'])
+            event.save()
+            messages.info(request, f'Dodano nowe wydarzenie!')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+        else:
+            messages.warning(request, 'Popraw poniższy błąd!')
+    else:
+        form = ChronicleEventCreateForm()
+
+    context = {
+        'page_title': 'Nowe wydarzenie: Kronika',
+        'form': form
+    }
+    return render(request, 'history/chronicle_create.html', context)
+
+
+@login_required
 def chronicle_all_chapters_view(request):
     chapters = Chapter.objects.all()
     chapters_with_allowed_games_dict = {}
@@ -77,30 +101,6 @@ def chronicle_one_chapter_view(request, game_id):
         'game': obj
     }
     return render(request, 'history/chronicle_one_chapter.html', context)
-
-
-@login_required
-def chronicle_create_view(request):
-    if request.method == 'POST':
-        form = ChronicleEventCreateForm(request.POST or None)
-        if form.is_valid():
-            event = form.save()
-            event.participants.set(form.cleaned_data['participants'])
-            event.informed.set(form.cleaned_data['informed'])
-            event.save()
-            messages.info(request, f'Dodano nowe wydarzenie!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-        else:
-            messages.warning(request, 'Popraw poniższy błąd!')
-    else:
-        form = ChronicleEventCreateForm()
-
-    context = {
-        'page_title': 'Nowe wydarzenie: Kronika',
-        'form': form
-    }
-    return render(request, 'history/chronicle_create.html', context)
 
 
 @login_required
@@ -315,6 +315,33 @@ def timeline_main_view(request):
 
 
 @login_required
+def timeline_create_view(request):
+    if request.method == 'POST':
+        form = TimelineEventCreateForm(request.POST or None)
+        if form.is_valid():
+            event = form.save()
+            event.threads.set(form.cleaned_data['threads'])
+            event.participants.set(form.cleaned_data['participants'])
+            event.informed.set(form.cleaned_data['informed'])
+            event.specific_locations.set(form.cleaned_data['specific_locations'])
+            event.save()
+            messages.info(request, f'Dodano nowe wydarzenie!')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+        else:
+            messages.warning(request, 'Popraw poniższy błąd!')
+
+    else:
+        form = TimelineEventCreateForm()
+
+    context = {
+        'page_title': 'Nowe wydarzenie: Kalendarium',
+        'form': form
+    }
+    return render(request, 'history/timeline_create.html', context)
+
+
+@login_required
 def timeline_all_events_view(request):
     known_events = participated_or_informed_events(request.user.profile.id)
     queryset = known_events
@@ -441,33 +468,6 @@ def timeline_game_view(request, game_id):
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
     return render(request, 'history/timeline_events.html', context)
-
-
-@login_required
-def timeline_create_view(request):
-    if request.method == 'POST':
-        form = TimelineEventCreateForm(request.POST or None)
-        if form.is_valid():
-            event = form.save()
-            event.threads.set(form.cleaned_data['threads'])
-            event.participants.set(form.cleaned_data['participants'])
-            event.informed.set(form.cleaned_data['informed'])
-            event.specific_locations.set(form.cleaned_data['specific_locations'])
-            event.save()
-            messages.info(request, f'Dodano nowe wydarzenie!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-        else:
-            messages.warning(request, 'Popraw poniższy błąd!')
-
-    else:
-        form = TimelineEventCreateForm()
-
-    context = {
-        'page_title': 'Nowe wydarzenie: Kalendarium',
-        'form': form
-    }
-    return render(request, 'history/timeline_create.html', context)
 
 
 @login_required
