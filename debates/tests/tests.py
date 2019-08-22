@@ -82,7 +82,7 @@ class DebatesInviteTest(TestCase):
 class UnfollowDebateTest(TestCase):
     def setUp(self):
         mock_topic = Topic.objects.create(title='Mock Topic', description='Mock description.')
-        mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='fakepsswrd111')
+        mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='mockpsswrd111')
         Debate.objects.create(topic=mock_topic, starter=mock_user)
 
     def test_get(self):

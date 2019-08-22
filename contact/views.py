@@ -58,6 +58,46 @@ def create_demand_view(request):
 
 
 @login_required
+def delete_demand_view(request, demand_id):
+    demand = get_object_or_404(Demand, id=demand_id)
+    demand.delete()
+    messages.info(request, 'Usunięto zgłoszenie!')
+    return redirect('contact:main')
+
+
+@login_required
+def modify_demand_view(request, demand_id):
+    demand = get_object_or_404(Demand, id=demand_id)
+
+    if request.method == 'POST':
+        form = DemandModifyForm(instance=demand, data=request.POST or None, files=request.FILES)
+        if form.is_valid():
+            form.save()
+
+            subject = f"[RPG] Zgłoszenie nr {demand.id}"
+            message = f"Modyfikacja przez {demand.author.profile}:\n{demand.text}\n" \
+                      f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
+            sender = settings.EMAIL_HOST_USER
+            if request.user.profile.character_status == 'active_player':
+                receivers = ['lukas.kozicki@gmail.com']
+            else:
+                receivers = []
+            send_mail(subject, message, sender, receivers)
+
+            messages.info(request, 'Zmodyfikowano zgłoszenie!')
+            return redirect('contact:main')
+    else:
+        form = DemandModifyForm(instance=demand)
+
+    context = {
+        'page_title': 'Modyfikacja zgłoszenia',
+        'demand': demand,
+        'form': form
+    }
+    return render(request, 'contact/modify.html', context)
+
+
+@login_required
 def demand_detail_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
     answers = DemandAnswer.objects.filter(demand=demand)
@@ -92,38 +132,6 @@ def demand_detail_view(request, demand_id):
         'form': form
     }
     return render(request, 'contact/detail.html', context)
-
-
-@login_required
-def modify_demand_view(request, demand_id):
-    demand = get_object_or_404(Demand, id=demand_id)
-
-    if request.method == 'POST':
-        form = DemandModifyForm(instance=demand, data=request.POST or None, files=request.FILES)
-        if form.is_valid():
-            form.save()
-
-            subject = f"[RPG] Zgłoszenie nr {demand.id}"
-            message = f"Modyfikacja przez {demand.author.profile}:\n{demand.text}\n" \
-                      f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
-            sender = settings.EMAIL_HOST_USER
-            if request.user.profile.character_status == 'active_player':
-                receivers = ['lukas.kozicki@gmail.com']
-            else:
-                receivers = []
-            send_mail(subject, message, sender, receivers)
-
-            messages.info(request, 'Zmodyfikowano zgłoszenie!')
-            return redirect('contact:main')
-    else:
-        form = DemandModifyForm(instance=demand)
-
-    context = {
-        'page_title': 'Modyfikacja zgłoszenia',
-        'demand': demand,
-        'form': form
-    }
-    return render(request, 'contact/modify.html', context)
 
 
 @login_required
@@ -203,12 +211,4 @@ def mark_undone_view(request, demand_id):
     send_mail(subject, message, sender, receivers)
 
     messages.info(request, 'Oznaczono jako niezrobione!')
-    return redirect('contact:main')
-
-
-@login_required
-def delete_demand_view(request, demand_id):
-    demand = get_object_or_404(Demand, id=demand_id)
-    demand.delete()
-    messages.info(request, 'Usunięto zgłoszenie!')
     return redirect('contact:main')

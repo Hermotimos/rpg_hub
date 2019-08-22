@@ -10,7 +10,7 @@ urlpatterns = [
     path('demands/modify:<int:demand_id>/', views.modify_demand_view, name='modify'),
     path('demands/detail:<int:demand_id>/', views.demand_detail_view, name='detail'),
     path('demands/mark-done:<int:demand_id>/', views.mark_done_view, name='done'),
-    path('demands/mark-done:<int:demand_id>/done-answer/', views.mark_done_and_answer_view, name='done-answer'),
+    path('demands/mark-done:<int:demand_id>/answer/', views.mark_done_and_answer_view, name='done-answer'),
     path('demands/mark-undone:<int:demand_id>/', views.mark_undone_view, name='undone'),
 
 ]
