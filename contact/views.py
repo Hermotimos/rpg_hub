@@ -10,10 +10,14 @@ from contact.forms import DemandForm, DemandModifyForm, DemandAnswerForm
 
 @login_required
 def main_view(request):
-    received_demands_undone = Demand.objects.filter(is_done=False).exclude(author=request.user.profile)
-    received_demands_done = Demand.objects.filter(is_done=True).exclude(author=request.user.profile)
-    sent_demands_undone = Demand.objects.filter(is_done=False, author=request.user.profile)
-    sent_demands_done = Demand.objects.filter(is_done=True, author=request.user.profile)
+    received_demands_undone = \
+        Demand.objects.filter(is_done=False, addressee=request.user.profile).exclude(author=request.user.profile)
+    received_demands_done = \
+        Demand.objects.filter(is_done=True, addressee=request.user.profile).exclude(author=request.user.profile)
+    sent_demands_undone = \
+        Demand.objects.filter(is_done=False, author=request.user.profile).exclude(addressee=request.user.profile)
+    sent_demands_done = \
+        Demand.objects.filter(is_done=True, author=request.user.profile).exclude(addressee=request.user.profile)
 
     context = {
         'page_title': 'Dezyderaty',
@@ -23,6 +27,21 @@ def main_view(request):
         'sent_demands_done': sent_demands_done
     }
     return render(request, 'contact/main.html', context)
+
+
+@login_required
+def todo_view(request):
+    self_demands_undone = \
+        Demand.objects.filter(is_done=False, addressee=request.user.profile, author=request.user.profile)
+    self_demands_done = \
+        Demand.objects.filter(is_done=True, addressee=request.user.profile, author=request.user.profile)
+
+    context = {
+        'page_title': 'Dezyderaty',
+        'self_demands_undone': self_demands_undone,
+        'self_demands_done': self_demands_done,
+    }
+    return render(request, 'contact/todo.html', context)
 
 
 @login_required
@@ -140,7 +159,7 @@ def mark_done_view(request, demand_id):
     demand.is_done = True
     demand.date_done = timezone.now()
     demand.save()
-    DemandAnswer.objects.create(demand=demand, author=request.user, text='Zrobione!')
+    DemandAnswer.objects.create(demand=demand, author=request.user.profile, text='Zrobione!')
 
     subject = f"[RPG] Dezyderat nr {demand.id}"
     message = f"{request.user.profile} oznaczył dezyderat jako 'zrobiony'.\n" \
@@ -177,7 +196,7 @@ def mark_done_and_answer_view(request, demand_id):
             message = f"Dezyderat 'zrobiony' + odpowiedź:\n{answer.text}\n" \
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             sender = settings.EMAIL_HOST_USER
-            receivers = [demand.author.email]
+            receivers = [demand.author.user.email]
             send_mail(subject, message, sender, receivers)
 
             messages.info(request, 'Oznaczono dezyderat jako zrobiony i wysłano odpowiedź!')

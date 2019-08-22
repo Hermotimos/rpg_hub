@@ -14,7 +14,7 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    {% if request.user != demand.author and request.user.profile.character_status != 'gm' %}
+    {% if request.user.profile != demand.author and request.user.profile != demand.addressee and request.user.profile.character_status != 'gm' %}
         <br><br><br>
         <h4>Nie Twój dezyderat, to co grzebiesz?<br>Najwyraźniej ktoś napisał je w języku innym niż HTML, który tak dobrze znasz, że sobie tu buszujesz...</h4>
     {% else %}
@@ -25,7 +25,7 @@
         <table>
             <tr class="posts-and-news">
                 <td>
-                    <img class="rounded-circle article-img" src="{{ demand.author.profile.image.url }}">
+                    <img class="rounded-circle article-img" src="{{ demand.author.image.url }}">
                 </td>
                 <td>
                     <small>{{ demand.date_created|date:'d-M-Y, H:i' }}</small>
@@ -42,7 +42,7 @@
             {% for answer in demand.demand_answers.all %}
                 <tr class="posts-and-news">
                     <td>
-                        <img class="rounded-circle article-img" src="{{ answer.author.profile.image.url }}">
+                        <img class="rounded-circle article-img" src="{{ answer.author.image.url }}">
                     </td>
                     <td class="align-center">
                         <small class="left-float">{{ answer.date_posted|date:'d-M-Y, H:i' }}</small><br>
