@@ -9,13 +9,13 @@
 {% endblock head_extra %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item active"><a href="{% url 'contact:main' %}">Zgłoszenia</a></li>
+    <li class="breadcrumb-item active"><a href="{% url 'contact:main' %}">Dezyderaty</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
 {% block content %}
     <br>
-    <a href="{% url 'contact:main' %}" class="btn btn-outline-dark">Twoje zgłoszenia</a>
+    <a href="{% url 'contact:main' %}" class="btn btn-outline-dark">Twoje dezyderaty</a>
     <br><br><br><br><br>
 
     <form method="POST" enctype="multipart/form-data">

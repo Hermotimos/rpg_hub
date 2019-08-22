@@ -10,17 +10,17 @@ from contact.forms import DemandForm, DemandModifyForm, DemandAnswerForm
 
 @login_required
 def main_view(request):
-    if request.user.profile.character_status == 'gm':
-        demands_undone = Demand.objects.filter(is_done=False)
-        demands_done = Demand.objects.filter(is_done=True)
-    else:
-        demands_undone = Demand.objects.filter(is_done=False, author=request.user)
-        demands_done = Demand.objects.filter(is_done=True, author=request.user)
+    received_demands_undone = Demand.objects.filter(is_done=False).exclude(author=request.user.profile)
+    received_demands_done = Demand.objects.filter(is_done=True).exclude(author=request.user.profile)
+    sent_demands_undone = Demand.objects.filter(is_done=False, author=request.user.profile)
+    sent_demands_done = Demand.objects.filter(is_done=True, author=request.user.profile)
 
     context = {
-        'page_title': 'Zgłoszenia',
-        'demands_undone': demands_undone,
-        'demands_done': demands_done
+        'page_title': 'Dezyderaty',
+        'received_demands_undone': received_demands_undone,
+        'received_demands_done': received_demands_done,
+        'sent_demands_undone': sent_demands_undone,
+        'sent_demands_done': sent_demands_done
     }
     return render(request, 'contact/main.html', context)
 
@@ -31,12 +31,12 @@ def create_demand_view(request):
         form = DemandForm(request.POST or None, request.FILES)
         if form.is_valid():
             demand = form.save(commit=False)
-            demand.author = request.user
+            demand.author = request.user.profile
             demand.save()
 
             if request.user.profile.character_status != 'gm':
-                subject = f"[RPG] Zgłoszenie nr {demand.id}"
-                message = f"Zgłoszenie od {demand.author.profile}:\n{demand.text}\n" \
+                subject = f"[RPG] Dezyderat nr {demand.id}"
+                message = f"Dezyderat od {demand.author}:\n{demand.text}\n" \
                           f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
                 sender = settings.EMAIL_HOST_USER
                 if request.user.profile.character_status == 'active_player':
@@ -45,13 +45,13 @@ def create_demand_view(request):
                     receivers = []
                 send_mail(subject, message, sender, receivers)
 
-            messages.info(request, f'Zgłoszenie zostało wysłane!')
+            messages.info(request, f'Dezyderat został wysłany!')
             return redirect('contact:main')
     else:
         form = DemandForm()
 
     context = {
-        'page_title': 'Zgłoszenie do MG',
+        'page_title': 'Nowy dezyderat',
         'form': form,
     }
     return render(request, 'contact/create.html', context)
@@ -61,7 +61,7 @@ def create_demand_view(request):
 def delete_demand_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
     demand.delete()
-    messages.info(request, 'Usunięto zgłoszenie!')
+    messages.info(request, 'Usunięto dezyderat!')
     return redirect('contact:main')
 
 
@@ -74,8 +74,8 @@ def modify_demand_view(request, demand_id):
         if form.is_valid():
             form.save()
 
-            subject = f"[RPG] Zgłoszenie nr {demand.id}"
-            message = f"Modyfikacja przez {demand.author.profile}:\n{demand.text}\n" \
+            subject = f"[RPG] Dezyderat nr {demand.id}"
+            message = f"Modyfikacja przez {demand.author}:\n{demand.text}\n" \
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             sender = settings.EMAIL_HOST_USER
             if request.user.profile.character_status == 'active_player':
@@ -84,13 +84,13 @@ def modify_demand_view(request, demand_id):
                 receivers = []
             send_mail(subject, message, sender, receivers)
 
-            messages.info(request, 'Zmodyfikowano zgłoszenie!')
+            messages.info(request, 'Zmodyfikowano dezyderat!')
             return redirect('contact:main')
     else:
         form = DemandModifyForm(instance=demand)
 
     context = {
-        'page_title': 'Modyfikacja zgłoszenia',
+        'page_title': 'Modyfikacja dezyderatu',
         'demand': demand,
         'form': form
     }
@@ -107,17 +107,17 @@ def demand_detail_view(request, demand_id):
         if form.is_valid():
             answer = form.save(commit=False)
             answer.demand = demand
-            answer.author = request.user
+            answer.author = request.user.profile
             answer.save()
 
-            subject = f"[RPG] Zgłoszenie nr {demand.id}"
-            message = f"Odpowiedź od {answer.author.profile}:\n{demand.text}\n" \
+            subject = f"[RPG] Dezyderat nr {demand.id}"
+            message = f"Odpowiedź od {answer.author}:\n{demand.text}\n" \
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             sender = settings.EMAIL_HOST_USER
             if request.user.profile.character_status == 'active_player':
                 receivers = ['lukas.kozicki@gmail.com']
             else:
-                receivers = [demand.author.email]
+                receivers = [demand.author.user.email]
             send_mail(subject, message, sender, receivers)
 
             messages.info(request, f'Dodano odpowiedź!')
@@ -126,7 +126,7 @@ def demand_detail_view(request, demand_id):
         form = DemandAnswerForm()
 
     context = {
-        'page_title': 'Zgłoszenie - szczegóły',
+        'page_title': 'Dezyderat - szczegóły',
         'demand': demand,
         'answers': answers,
         'form': form
@@ -142,18 +142,18 @@ def mark_done_view(request, demand_id):
     demand.save()
     DemandAnswer.objects.create(demand=demand, author=request.user, text='Zrobione!')
 
-    subject = f"[RPG] Zgłoszenie nr {demand.id}"
-    message = f"{request.user.profile} oznaczył zgłoszenie jako 'zrobione.'\n" \
-              f"Zgłoszenie:\n{demand.text}\n" \
+    subject = f"[RPG] Dezyderat nr {demand.id}"
+    message = f"{request.user.profile} oznaczył dezyderat jako 'zrobiony'.\n" \
+              f"Dezyderat:\n{demand.text}\n" \
               f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
     sender = settings.EMAIL_HOST_USER
     if request.user.profile.character_status == 'active_player':
         receivers = ['lukas.kozicki@gmail.com']
     else:
-        receivers = [demand.author.email]
+        receivers = [demand.author.user.email]
     send_mail(subject, message, sender, receivers)
 
-    messages.info(request, 'Oznaczono jako zrobione!')
+    messages.info(request, 'Oznaczono dezyderat jako zrobiony!')
     return redirect('contact:main')
 
 
@@ -166,27 +166,27 @@ def mark_done_and_answer_view(request, demand_id):
         if form.is_valid():
             answer = form.save(commit=False)
             answer.demand = demand
-            answer.author = request.user
+            answer.author = request.user.profile
             answer.save()
 
             demand.is_done = True
             demand.date_done = timezone.now()
             demand.save()
 
-            subject = f"[RPG] Zgłoszenie nr {demand.id}"
-            message = f"Zgłoszenie 'zrobione' + odpowiedź:\n{answer.text}\n" \
+            subject = f"[RPG] Dezyderat nr {demand.id}"
+            message = f"Dezyderat 'zrobiony' + odpowiedź:\n{answer.text}\n" \
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             sender = settings.EMAIL_HOST_USER
             receivers = [demand.author.email]
             send_mail(subject, message, sender, receivers)
 
-            messages.info(request, 'Oznaczono jako zrobione i wysłano odpowiedź!')
+            messages.info(request, 'Oznaczono dezyderat jako zrobiony i wysłano odpowiedź!')
             return redirect('contact:main')
     else:
         form = DemandAnswerForm()
 
     context = {
-        'page_title': 'Odpowiedź na zgłoszenie',
+        'page_title': 'Odpowiedź na dezyderat',
         'demand': demand,
         'form': form
     }
@@ -199,16 +199,16 @@ def mark_undone_view(request, demand_id):
     demand.is_done = False
     demand.save()
 
-    subject = f"[RPG] Zgłoszenie nr {demand.id}"
-    message = f"{request.user.profile} wycofał zgłoszenie jako 'NIE-zrobione'\n" \
-              f"Zgłoszenie:\n{demand.text}\n" \
+    subject = f"[RPG] Dezyderat nr {demand.id}"
+    message = f"{request.user.profile} cofnął dezyderat jako 'NIE-zrobiony'.\n" \
+              f"Dezyderat:\n{demand.text}\n" \
               f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
     sender = settings.EMAIL_HOST_USER
     if request.user.profile.character_status == 'active_player':
         receivers = ['lukas.kozicki@gmail.com']
     else:
-        receivers = [demand.author.email]
+        receivers = [demand.author.user.email]
     send_mail(subject, message, sender, receivers)
 
-    messages.info(request, 'Oznaczono jako niezrobione!')
+    messages.info(request, 'Oznaczono dezyderat jako niezrobiony!')
     return redirect('contact:main')

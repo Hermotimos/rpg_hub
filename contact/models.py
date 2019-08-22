@@ -1,10 +1,11 @@
 from django.db import models
-from users.models import User
+from users.models import User, Profile
 from PIL import Image
 
 
 class Demand(models.Model):
-    author = models.ForeignKey(User, related_name='reports', on_delete=models.CASCADE)
+    author = models.ForeignKey(Profile, related_name='authored_demands', on_delete=models.CASCADE)
+    addressee = models.ForeignKey(Profile, related_name='received_demands', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000)
     date_created = models.DateTimeField(auto_now_add=True)
     date_done = models.DateTimeField(blank=True, null=True)
