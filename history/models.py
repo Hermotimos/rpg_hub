@@ -6,6 +6,18 @@ from imaginarion.models import Picture
 from debates.models import Debate
 
 
+COLORS = (
+    ('#000000', 'czarny'),
+    ('#C70039', 'czerwony'),
+    ('#800080', 'fioletowy'),
+    ('#000080', 'granatowy'),
+    ('#2e86c1', 'niebieski'),
+    ('#FFC300', 'pomarańczowy'),
+    ('#808080', 'szary'),
+    ('#229954', 'zielony'),
+)
+
+
 # ------ Chapter and GameSession models ------
 
 class Chapter(models.Model):
@@ -32,6 +44,64 @@ class GameSession(models.Model):
         ordering = ['game_no']
 
 
+# ------ ChronicleEvent model and connected models ------
+
+
+class ChronicleEvent(models.Model):
+    """
+    This model is not connected with TimelineEvent model. There is not 121 or M2M relationships between them.
+    TimelineEvent model serves to create events in history view (chronology).
+    EventDescription serves to create events in the full history text of the game.
+    Lack or correspondence between the two is intentional for flexibility.
+    """
+    # default=0 for events outside of sessions (background events):
+    game_no = models.ForeignKey(GameSession,
+                                related_name='chronicle_events',
+                                on_delete=models.PROTECT,
+                                default=0)
+    event_no_in_game = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
+    description = models.TextField(max_length=10000)
+    participants = models.ManyToManyField(Profile,
+                                          related_name='chronicle_events_participated',
+                                          limit_choices_to=
+                                          Q(character_status='active_player') |
+                                          Q(character_status='inactive_player') |
+                                          Q(character_status='dead_player'),
+                                          blank=True)
+    informed = models.ManyToManyField(Profile,
+                                      related_name='chronicle_events_informed',
+                                      limit_choices_to=
+                                      Q(character_status='active_player') |
+                                      Q(character_status='inactive_player') |
+                                      Q(character_status='dead_player'),
+                                      blank=True)
+    pictures = models.ManyToManyField(Picture, related_name='chronicle_events_pics', blank=True)
+    debate = models.OneToOneField(Debate,
+                                  related_name='chronicle_event',
+                                  on_delete=models.PROTECT,
+                                  blank=True,
+                                  null=True)
+
+    def __str__(self):
+        return f'{self.description[0:100]}...'
+
+    def short_description(self):
+        return f'{self.description[:100]}...{self.description[-100:] if len(str(self.description)) > 200 else self.description}'
+
+    class Meta:
+        ordering = ['game_no', 'event_no_in_game']
+
+
+class ChronicleEventNote(models.Model):
+    author = models.ForeignKey(User, related_name='chronicle_events_notes', on_delete=models.CASCADE)
+    text = models.TextField(max_length=4000, blank=True, null=True)
+    event = models.ForeignKey(ChronicleEvent, related_name='notes', on_delete=models.PROTECT)
+    color = models.CharField(max_length=20, choices=COLORS, default='#C70039')
+
+    def __str__(self):
+        return f'{self.text[0:50]}...'
+
+
 # ------ TimelineEvent model and connected models ------
 
 
@@ -40,16 +110,6 @@ SEASONS = (
     ('2', 'Lato'),
     ('3', 'Jesień'),
     ('4', 'Zima')
-)
-COLORS = (
-    ('#000000', 'czarny'),
-    ('#C70039', 'czerwony'),
-    ('#800080', 'fioletowy'),
-    ('#000080', 'granatowy'),
-    ('#2e86c1', 'niebieski'),
-    ('#FFC300', 'pomarańczowy'),
-    ('#808080', 'szary'),
-    ('#229954', 'zielony'),
 )
 
 
@@ -147,64 +207,6 @@ class TimelineEventNote(models.Model):
     author = models.ForeignKey(User, related_name='timeline_events_notes', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000, blank=True, null=True)
     event = models.ForeignKey(TimelineEvent, related_name='notes', on_delete=models.PROTECT)
-    color = models.CharField(max_length=20, choices=COLORS, default='#C70039')
-
-    def __str__(self):
-        return f'{self.text[0:50]}...'
-
-
-# ------ ChronicleEvent model and connected models ------
-
-
-class ChronicleEvent(models.Model):
-    """
-    This model is not connected with TimelineEvent model. There is not 121 or M2M relationships between them.
-    TimelineEvent model serves to create events in history view (chronology).
-    EventDescription serves to create events in the full history text of the game.
-    Lack or correspondence between the two is intentional for flexibility.
-    """
-    # default=0 for events outside of sessions (background events):
-    game_no = models.ForeignKey(GameSession,
-                                related_name='chronicle_events',
-                                on_delete=models.PROTECT,
-                                default=0)
-    event_no_in_game = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
-    description = models.TextField(max_length=10000)
-    participants = models.ManyToManyField(Profile,
-                                          related_name='chronicle_events_participated',
-                                          limit_choices_to=
-                                          Q(character_status='active_player') |
-                                          Q(character_status='inactive_player') |
-                                          Q(character_status='dead_player'),
-                                          blank=True)
-    informed = models.ManyToManyField(Profile,
-                                      related_name='chronicle_events_informed',
-                                      limit_choices_to=
-                                      Q(character_status='active_player') |
-                                      Q(character_status='inactive_player') |
-                                      Q(character_status='dead_player'),
-                                      blank=True)
-    pictures = models.ManyToManyField(Picture, related_name='chronicle_events_pics', blank=True)
-    debate = models.OneToOneField(Debate,
-                                  related_name='chronicle_event',
-                                  on_delete=models.PROTECT,
-                                  blank=True,
-                                  null=True)
-
-    def __str__(self):
-        return f'{self.description[0:100]}...'
-
-    def short_description(self):
-        return f'{self.description[:100]}...{self.description[-100:] if len(str(self.description)) > 200 else self.description}'
-
-    class Meta:
-        ordering = ['game_no', 'event_no_in_game']
-
-
-class ChronicleEventNote(models.Model):
-    author = models.ForeignKey(User, related_name='chronicle_events_notes', on_delete=models.CASCADE)
-    text = models.TextField(max_length=4000, blank=True, null=True)
-    event = models.ForeignKey(ChronicleEvent, related_name='notes', on_delete=models.PROTECT)
     color = models.CharField(max_length=20, choices=COLORS, default='#C70039')
 
     def __str__(self):
