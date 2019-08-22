@@ -207,7 +207,6 @@ def debates_invite_view(request, topic_id, debate_id):
     return render(request, 'debates/invite.html', context)
 
 
-
 @login_required
 def unfollow_debate_view(request, topic_id, debate_id):
     obj = Debate.objects.get(id=debate_id)

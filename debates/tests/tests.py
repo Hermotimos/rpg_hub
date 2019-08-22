@@ -61,3 +61,21 @@ class DebateTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve('/debates/topic:1/debate:1/')
         self.assertEquals(view.func, views.debate_view)
+
+
+class DebatesInviteTest(TestCase):
+    def setUp(self):
+        mock_topic = Topic.objects.create(title='Mock Topic', description='Mock description.')
+        mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='fakepsswrd111')
+        Debate.objects.create(topic=mock_topic, starter=mock_user)
+
+    def test_get(self):
+        url = reverse('debates:invite', kwargs={'topic_id': 1, 'debate_id': 1})
+        response = self.client.get(url, follow=True)
+        self.assertEquals(response.status_code, 200)
+
+    def test_url_resolves_view(self):
+        view = resolve('/debates/topic:1/debate:1/invite/')
+        self.assertEquals(view.func, views.debates_invite_view)
+
+
