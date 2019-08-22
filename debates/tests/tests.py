@@ -6,14 +6,33 @@ from users.models import User
 
 
 class DebatesMainTest(TestCase):
+    def setUp(self):
+        mock_topic = Topic.objects.create(title='Mock Topic', description='Mock description.')
+        mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='fakepsswrd111')
+        debate = Debate.objects.create(topic=mock_topic, starter=mock_user, title='Mock Debate')
+        allowed = [mock_user.profile, ]
+        debate.allowed_profiles.set(allowed)
+        # self.client.force_login(mock_user)
+        self.client.login(username=mock_user.username, password=mock_user.password)
+
     def test_get(self):
         url = reverse('debates:main')
-        response = self.client.get(url, follow=True)            # follow=True follows beyond @login_required
+        response = self.client.get(url, follow=True)
         self.assertEquals(response.status_code, 200)
 
     def test_url_resolves_view(self):
         view = resolve('/debates/')
         self.assertEquals(view.func, views.debates_main_view)
+
+    def test_new_topic_entry(self):
+        url = reverse('debates:main')
+        response = self.client.get(url, follow=True)
+        self.assertContains(response, 'Mock Topic')
+
+    def test_new_debate_entry(self):
+        url = reverse('debates:main')
+        response = self.client.get(url, follow=True)
+        self.assertContains(response, 'Mock Debate')
 
 
 class CreateTopicTest(TestCase):
@@ -25,6 +44,17 @@ class CreateTopicTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve('/debates/create_topic/')
         self.assertEquals(view.func, views.create_topic_view)
+
+    def test_contains_link_back(self):
+        linked_url = reverse('debates:main')
+        response = self.client.get(linked_url, follow=True)
+        self.assertContains(response, f'href="{linked_url}"')
+
+    def test_contains_link_to_main(self):
+        url = reverse('debates:create-debate', kwargs={'topic_id': 1})
+        linked_url = reverse('debates:main')
+        response = self.client.get(url, follow=True)
+        self.assertContains(response, f'href="{linked_url}"')
 
 
 class CreateDebateTest(TestCase):
@@ -45,6 +75,12 @@ class CreateDebateTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve('/debates/topic:1/create-debate/')
         self.assertEquals(view.func, views.create_debate_view)
+
+    def test_contains_link_to_main(self):
+        url = reverse('debates:debate', kwargs={'topic_id': 1, 'debate_id': 1})
+        linked_url = reverse('debates:main')
+        response = self.client.get(url, follow=True)
+        self.assertContains(response, f'href="{linked_url}"')
 
 
 class DebateTest(TestCase):
