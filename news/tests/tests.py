@@ -31,8 +31,10 @@ class DetailTest(TestCase):
     def setUp(self):
         mock_user = User.objects.create_user(username='test_user', email='test@user.com', password='sswapord123')
         mock_user.save()
+        print(User.objects.all())
         news = News.objects.create(title='The good news', text='Blahblah', author=mock_user)
         news.save()
+        print(News.objects.all())
         news.allowed_profiles.set(Profile.objects.get(pk=1))
 
     # These don't work, why?
