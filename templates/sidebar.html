@@ -29,9 +29,9 @@
                     <a href="#"><li class="list-group-item list-group-item-light"><strike><small>Biblioteka | Mapy</small></strike></li></a>
                     <a href="#"><li class="list-group-item list-group-item-light"><strike><small>Varia</small></strike></li></a>
                 </ul>
-            <li class="list-group-item list-group-item-light" data-toggle="collapse" data-target="#notes"><h6><strike>Plany i przemyślenia</strike></h6></li>
+            <li class="list-group-item list-group-item-light" data-toggle="collapse" data-target="#notes"><h6>Plany i przemyślenia</h6></li>
                 <ul id="notes" class="list-group collapse unblue">
-                    <a href="#"><li class="list-group-item list-group-item-light"><strike><small>Plany</small></strike></li></a>
+                    <a href="{% url 'contact:todo' %}"><li class="list-group-item list-group-item-light"><small>Plany</small></li></a>
                     <a href="#"><li class="list-group-item list-group-item-light"><strike><small>Przemyślenia</small></strike></li></a>
                     <a href="#"><li class="list-group-item list-group-item-light"><strike><small>Notatnik</small></strike></li></a>
                     <a href="#"><li class="list-group-item list-group-item-light"><strike><small>Synteza</small></strike></li></a>
@@ -51,10 +51,7 @@
                 <ul id="##" class="list-group collapse unblue">
                     <a href="#"><li class="list-group-item list-group-item-light"><strike><small>Prosoponomikon</small></strike></li></a>
                 </ul>
-            <li class="list-group-item list-group-item-light" data-toggle="collapse" data-target="#todos"><h6>TODO</h6></li>
-                <ul id="todos" class="list-group collapse unblue">
-                    <a href="{% url 'contact:main' %}"><li class="list-group-item list-group-item-light"><small>Zgłoszenia</small></li></a>
-                </ul>
+            <li class="list-group-item list-group-item-light"><a href="{% url 'contact:todo' %}"><h6>TODO</h6></a></li>
 
         {% endif %}
         </ul>

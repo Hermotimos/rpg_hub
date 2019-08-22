@@ -4,8 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import send_mail
 from django.utils import timezone
+from django.http import HttpResponseRedirect
 from contact.models import Demand, DemandAnswer
-from contact.forms import DemandForm, DemandModifyForm, DemandAnswerForm
+from contact.forms import DemandForm, DemandTodoForm, DemandModifyForm, DemandAnswerForm
 
 
 @login_required
@@ -37,7 +38,7 @@ def todo_view(request):
         Demand.objects.filter(is_done=True, addressee=request.user.profile, author=request.user.profile)
 
     context = {
-        'page_title': 'Dezyderaty',
+        'page_title': 'Plany',
         'self_demands_undone': self_demands_undone,
         'self_demands_done': self_demands_done,
     }
@@ -77,11 +78,32 @@ def create_demand_view(request):
 
 
 @login_required
+def create_todo_view(request):
+    if request.method == 'POST':
+        form = DemandTodoForm(request.POST or None, request.FILES)
+        if form.is_valid():
+            demand = form.save(commit=False)
+            demand.author = request.user.profile
+            demand.addressee = request.user.profile
+            demand.save()
+            messages.info(request, f'Plan został zapisany!')
+            return redirect('contact:todo')
+    else:
+        form = DemandForm(initial={'addressee': request.user.profile})
+
+    context = {
+        'page_title': 'Nowy plan',
+        'form': form,
+    }
+    return render(request, 'contact/create-todo.html', context)
+
+
+@login_required
 def delete_demand_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
     demand.delete()
-    messages.info(request, 'Usunięto dezyderat!')
-    return redirect('contact:main')
+    messages.info(request, 'Usunięto!')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
@@ -172,8 +194,8 @@ def mark_done_view(request, demand_id):
         receivers = [demand.author.user.email]
     send_mail(subject, message, sender, receivers)
 
-    messages.info(request, 'Oznaczono dezyderat jako zrobiony!')
-    return redirect('contact:main')
+    messages.info(request, 'Oznaczono jako zrobiony!')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
@@ -229,5 +251,5 @@ def mark_undone_view(request, demand_id):
         receivers = [demand.author.user.email]
     send_mail(subject, message, sender, receivers)
 
-    messages.info(request, 'Oznaczono dezyderat jako niezrobiony!')
-    return redirect('contact:main')
+    messages.info(request, 'Oznaczono jako niezrobiony!')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
