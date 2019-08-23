@@ -60,7 +60,7 @@ def create_demand_view(request):
         'page_title': 'Nowy dezyderat',
         'form': form,
     }
-    return render(request, 'contact/create.html', context)
+    return render(request, 'contact/demand-create.html', context)
 
 
 @login_required
@@ -101,7 +101,7 @@ def modify_demand_view(request, demand_id):
         'demand': demand,
         'form': form
     }
-    return render(request, 'contact/modify-demand.html', context)
+    return render(request, 'contact/demand-modify.html', context)
 
 
 @login_required
@@ -216,13 +216,13 @@ def create_todo_view(request):
             messages.info(request, f'Plan został zapisany!')
             return redirect('contact:todo')
     else:
-        form = DemandForm(initial={'addressee': request.user.profile})
+        form = TodoForm(initial={'addressee': request.user.profile})
 
     context = {
         'page_title': 'Nowy plan',
         'form': form,
     }
-    return render(request, 'contact/create-todo.html', context)
+    return render(request, 'contact/plan-todo.html', context)
 
 
 @login_required

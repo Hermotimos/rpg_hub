@@ -9,25 +9,22 @@
 {% endblock head_extra %}
 
 {% block breadcrumb %}
+    <li class="breadcrumb-item active"><a href="{% url 'contact:todo' %}">Plany</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br><br><br>
-    <table class="forms">
-        <tr>
-            <td><h6>Dezyderat:</h6></td>
-            <td class="justify"><small>{{ demand.text }}</small></td>
-        </tr>
-        <tr>
-            <td><h6>Autor:</h6></td>
-            <td class="justify"><small>{{ demand.author.profile }}</small></td>
-        </tr>
-    </table><br><br>
+<br><br><br><br>
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form|crispy }}
-        <input class="btn btn-dark" type="submit" value="Odpowiedz + Zrobione">
+        <div class="form-row">
+            <div class="form-group col-md-2 mb-0"></div>
+            <div class="form-group col-md-10 mb-0">
+                {{ form.text|as_crispy_field }}
+            </div>
+        </div>
+        {{ form.image|as_crispy_field }}
+        <input class="btn btn-dark" type="submit" value="Snuj plan">
     </form>
 {% endblock content %}

@@ -32,12 +32,11 @@
                 </td>
                 <td class="unblue"><a href="{% url 'contact:detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
                 {% if request.user == demand.author %}
-                    <td><a href="{% url 'contact:modify-demand' demand.id %}" class="btn btn-warning">&#9998;</a></td>
+                    <td><a href="{% url 'contact:modify-demand' demand.id %}" class="btn btn-dark">&#9998;</a></td>
                 {% endif %}
-                <td><a href="{% url 'contact:done' demand.id %}" class="btn btn-success">&#10004;</a></td>
+                <td><a href="{% url 'contact:done' demand.id %}" class="btn btn-dark">&#10004;</a></td>
             </tr>
         </table>
-        <br><br>
     {% endfor %}
     <br><br><br>
 
@@ -55,13 +54,12 @@
                     <small>{{ demand.date_created|date:'d-M-Y' }}</small>
                 </td>
                 <td class="unblue"><a href="{% url 'contact:detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
-                <td><a href="{% url 'contact:undone' demand.id %}" class="btn btn-warning">&#9757;</a></td>
+                <td><a href="{% url 'contact:undone' demand.id %}" class="btn btn-dark">&#9757;</a></td>
                 {% if request.user == demand.author %}
-                    <td><a href="{% url 'contact:delete-demand' demand.id %}" class="btn btn-danger">&#10008;</a></td>
+                    <td><a href="{% url 'contact:delete-demand' demand.id %}" class="btn btn-dark">&#10008;</a></td>
                 {% endif %}
             </tr>
         </table>
-        <br>
     {% endfor %}
     <br><br>
 
@@ -83,12 +81,11 @@
                 </td>
                 <td class="unblue"><a href="{% url 'contact:detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
                 {% if request.user == demand.author %}
-                    <td><a href="{% url 'contact:modify-demand' demand.id %}" class="btn btn-warning">&#9998;</a></td>
+                    <td><a href="{% url 'contact:modify-demand' demand.id %}" class="btn btn-dark">&#9998;</a></td>
                 {% endif %}
-                <td><a href="{% url 'contact:done' demand.id %}" class="btn btn-success">&#10004;</a></td>
+                <td><a href="{% url 'contact:done' demand.id %}" class="btn btn-dark">&#10004;</a></td>
             </tr>
         </table>
-        <br>
     {% endfor %}
     <br><br>
 
@@ -106,13 +103,12 @@
                     <small>{{ demand.date_created|date:'d-M-Y' }}</small>
                 </td>
                 <td class="unblue"><a href="{% url 'contact:detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
-                <td><a href="{% url 'contact:undone' demand.id %}" class="btn btn-warning">&#9757;</a></td>
+                <td><a href="{% url 'contact:undone' demand.id %}" class="btn btn-dark">&#9757;</a></td>
                 {% if request.user == demand.author %}
                     <td><a href="{% url 'contact:delete-demand' demand.id %}" class="btn btn-danger">&#10008;</a></td>
                 {% endif %}
             </tr>
         </table>
-        <br>
     {% endfor %}
     </div>
     <br><br><br>

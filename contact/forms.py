@@ -11,7 +11,7 @@ class DemandForm(forms.ModelForm):
         fields = ['addressee', 'text', 'image']
 
     addressee = forms.ModelChoiceField(
-        label='',
+        label='Adresat:',
         queryset=User.objects.filter(
             Q(profile__character_status='active_player') |
             Q(profile__character_status='inactive_player') |
