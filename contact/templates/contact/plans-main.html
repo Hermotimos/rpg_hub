@@ -13,7 +13,7 @@
 
 {% block content %}
     <br>
-    <a href="{% url 'contact:create-todo' %}" class="btn btn-outline-dark">Nowy plan</a>
+    <a href="{% url 'contact:plans-create' %}" class="btn btn-outline-dark">Nowy plan</a>
     <br><br><br><br>
     {% for demand in self_demands_undone %}
         <table>
@@ -24,10 +24,9 @@
                     <small>{{ demand.date_created|date:'d-M-Y' }}</small>
                 </td>
                 <td>{{ demand.text|capfirst|linebreaks }}</td>
-                <td><a href="{% url 'contact:modify-todo' demand.id %}" class="btn btn-warning">&#9998;</a></td>
-                <td><a href="{% url 'contact:delete-todo' demand.id %}" class="btn btn-danger">&#10008;</a></td>
+                <td><a href="{% url 'contact:plans-modify' demand.id %}" class="btn btn-warning">&#9998;</a></td>
+                <td><a href="{% url 'contact:plans-delete' demand.id %}" class="btn btn-danger">&#10008;</a></td>
             </tr>
         </table>
-        <br><br>
     {% endfor %}
 {% endblock content %}

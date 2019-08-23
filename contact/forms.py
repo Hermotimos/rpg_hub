@@ -5,7 +5,7 @@ from contact.models import Demand, DemandAnswer
 from users.models import User
 
 
-class DemandForm(forms.ModelForm):
+class DemandsCreateForm(forms.ModelForm):
     class Meta:
         model = Demand
         fields = ['addressee', 'text', 'image']
@@ -36,7 +36,7 @@ class DemandForm(forms.ModelForm):
     )
 
 
-class TodoForm(forms.ModelForm):
+class PlansCreateForm(forms.ModelForm):
     class Meta:
         model = Demand
         fields = ['text', 'image']
@@ -58,7 +58,7 @@ class TodoForm(forms.ModelForm):
     )
 
 
-class DemandModifyForm(forms.ModelForm):
+class DemandsModifyForm(forms.ModelForm):
     class Meta:
         model = Demand
         fields = ['text', 'image']

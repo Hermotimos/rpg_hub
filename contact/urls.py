@@ -4,18 +4,18 @@ from contact import views
 
 app_name = 'contact'
 urlpatterns = [
-    path('demands/', views.demands_view, name='main'),
-    path('demands/create', views.create_demand_view, name='create'),
-    path('demands/delete:<int:demand_id>/', views.delete_demand_view, name='delete-demand'),
-    path('demands/modify:<int:demand_id>/', views.modify_demand_view, name='modify-demand'),
-
-    path('demands/todo', views.todo_view, name='todo'),
-    path('demands/todo/create-todo', views.create_todo_view, name='create-todo'),
-    path('demands/todo/delete:<int:demand_id>/', views.delete_todo_view, name='delete-todo'),
-    path('demands/todo/modify:<int:demand_id>/', views.modify_todo_view, name='modify-todo'),
-
-    path('demands/detail:<int:demand_id>/', views.demand_detail_view, name='detail'),
+    # demands
+    path('demands/main/', views.demands_main_view, name='demands-main'),
+    path('demands/create/', views.demands_create_view, name='demands-create'),
+    path('demands/delete:<int:demand_id>/', views.demands_delete_view, name='demands-delete'),
+    path('demands/modify:<int:demand_id>/', views.demands_modify_view, name='demands-modify'),
+    path('demands/detail:<int:demand_id>/', views.demands_detail_view, name='demands-detail'),
+    # plans
+    path('plans/main/', views.plans_main_view, name='plans-main'),
+    path('plans/create/', views.plans_create_view, name='plans-create'),
+    path('plans/delete:<int:demand_id>/', views.plans_delete_view, name='plans-delete'),
+    path('plans/modify:<int:demand_id>/', views.plans_modify_view, name='plans-modify'),
+    # both plans & demands
     path('demands/mark-done:<int:demand_id>/', views.mark_done_view, name='done'),
     path('demands/mark-undone:<int:demand_id>/', views.mark_undone_view, name='undone'),
-
 ]

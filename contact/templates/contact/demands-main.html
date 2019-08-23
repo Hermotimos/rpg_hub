@@ -13,9 +13,8 @@
 
 {% block content %}
     <br>
-    <a href="{% url 'contact:create' %}" class="btn btn-outline-dark">Nowy dezyderat</a>
+    <a href="{% url 'contact:demands-create' %}" class="btn btn-outline-dark">Nowy dezyderat</a>
     <br><br><br><br>
-
 
     <h3><b>Otrzymane</b></h3>
     <br>
@@ -30,9 +29,9 @@
                     <br>
                     <small>{{ demand.date_created|date:'d-M-Y' }}</small>
                 </td>
-                <td class="unblue"><a href="{% url 'contact:detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
+                <td class="unblue"><a href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
                 {% if request.user == demand.author %}
-                    <td><a href="{% url 'contact:modify-demand' demand.id %}" class="btn btn-dark">&#9998;</a></td>
+                    <td><a href="{% url 'contact:demands-modify' demand.id %}" class="btn btn-dark">&#9998;</a></td>
                 {% endif %}
                 <td><a href="{% url 'contact:done' demand.id %}" class="btn btn-dark">&#10004;</a></td>
             </tr>
@@ -53,10 +52,10 @@
                     <br>
                     <small>{{ demand.date_created|date:'d-M-Y' }}</small>
                 </td>
-                <td class="unblue"><a href="{% url 'contact:detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
+                <td class="unblue"><a href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
                 <td><a href="{% url 'contact:undone' demand.id %}" class="btn btn-dark">&#9757;</a></td>
                 {% if request.user == demand.author %}
-                    <td><a href="{% url 'contact:delete-demand' demand.id %}" class="btn btn-dark">&#10008;</a></td>
+                    <td><a href="{% url 'contact:demands-delete' demand.id %}" class="btn btn-dark">&#10008;</a></td>
                 {% endif %}
             </tr>
         </table>
@@ -79,9 +78,9 @@
                     <br>
                     <small>{{ demand.date_created|date:'d-M-Y' }}</small>
                 </td>
-                <td class="unblue"><a href="{% url 'contact:detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
+                <td class="unblue"><a href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
                 {% if request.user == demand.author %}
-                    <td><a href="{% url 'contact:modify-demand' demand.id %}" class="btn btn-dark">&#9998;</a></td>
+                    <td><a href="{% url 'contact:demands-modify' demand.id %}" class="btn btn-dark">&#9998;</a></td>
                 {% endif %}
                 <td><a href="{% url 'contact:done' demand.id %}" class="btn btn-dark">&#10004;</a></td>
             </tr>
@@ -102,10 +101,10 @@
                     <br>
                     <small>{{ demand.date_created|date:'d-M-Y' }}</small>
                 </td>
-                <td class="unblue"><a href="{% url 'contact:detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
+                <td class="unblue"><a href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
                 <td><a href="{% url 'contact:undone' demand.id %}" class="btn btn-dark">&#9757;</a></td>
                 {% if request.user == demand.author %}
-                    <td><a href="{% url 'contact:delete-demand' demand.id %}" class="btn btn-danger">&#10008;</a></td>
+                    <td><a href="{% url 'contact:demands-delete' demand.id %}" class="btn btn-danger">&#10008;</a></td>
                 {% endif %}
             </tr>
         </table>

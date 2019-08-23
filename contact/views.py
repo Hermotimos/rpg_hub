@@ -7,11 +7,14 @@ from django.utils import timezone
 from django.http import HttpResponseRedirect
 from users.models import User
 from contact.models import Demand, DemandAnswer
-from contact.forms import DemandForm, TodoForm, DemandModifyForm, DemandAnswerForm
+from contact.forms import DemandsCreateForm, PlansCreateForm, DemandsModifyForm, DemandAnswerForm
+
+
+# ----------------------------- DEMANDS -----------------------------
 
 
 @login_required
-def demands_view(request):
+def demands_main_view(request):
     received_demands_undone = \
         Demand.objects.filter(is_done=False, addressee=request.user).exclude(author=request.user)
     received_demands_done = \
@@ -32,9 +35,9 @@ def demands_view(request):
 
 
 @login_required
-def create_demand_view(request):
+def demands_create_view(request):
     if request.method == 'POST':
-        form = DemandForm(request.POST or None, request.FILES)
+        form = DemandsCreateForm(request.POST or None, request.FILES)
         if form.is_valid():
             demand = form.save(commit=False)
             demand.author = request.user
@@ -52,9 +55,10 @@ def create_demand_view(request):
                 send_mail(subject, message, sender, receivers)
 
             messages.info(request, f'Dezyderat został wysłany!')
-            return redirect('contact:main')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
     else:
-        form = DemandForm(initial={'addressee': User.objects.get(username='MG')})
+        form = DemandsCreateForm(initial={'addressee': User.objects.get(username='MG')})
 
     context = {
         'page_title': 'Nowy dezyderat',
@@ -64,7 +68,7 @@ def create_demand_view(request):
 
 
 @login_required
-def delete_demand_view(request, demand_id):
+def demands_delete_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
     demand.delete()
     messages.info(request, 'Usunięto dezyderat!')
@@ -72,11 +76,11 @@ def delete_demand_view(request, demand_id):
 
 
 @login_required
-def modify_demand_view(request, demand_id):
+def demands_modify_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
 
     if request.method == 'POST':
-        form = DemandModifyForm(instance=demand, data=request.POST or None, files=request.FILES)
+        form = DemandsModifyForm(instance=demand, data=request.POST or None, files=request.FILES)
         if form.is_valid():
             form.save()
 
@@ -94,7 +98,7 @@ def modify_demand_view(request, demand_id):
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
     else:
-        form = DemandModifyForm(instance=demand)
+        form = DemandsModifyForm(instance=demand)
 
     context = {
         'page_title': 'Modyfikacja dezyderatu',
@@ -105,7 +109,7 @@ def modify_demand_view(request, demand_id):
 
 
 @login_required
-def demand_detail_view(request, demand_id):
+def demands_detail_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
     answers = DemandAnswer.objects.filter(demand=demand)
 
@@ -140,6 +144,78 @@ def demand_detail_view(request, demand_id):
         'form': form
     }
     return render(request, 'contact/demands-detail.html', context)
+
+
+# ----------------------------- PLANS -----------------------------
+
+
+@login_required
+def plans_main_view(request):
+    self_demands_undone = \
+        Demand.objects.filter(is_done=False, addressee=request.user, author=request.user)
+    self_demands_done = \
+        Demand.objects.filter(is_done=True, addressee=request.user, author=request.user)
+
+    context = {
+        'page_title': 'Plany',
+        'self_demands_undone': self_demands_undone,
+        'self_demands_done': self_demands_done,
+    }
+    return render(request, 'contact/plans-main.html', context)
+
+
+@login_required
+def plans_create_view(request):
+    if request.method == 'POST':
+        form = PlansCreateForm(request.POST or None, request.FILES)
+        if form.is_valid():
+            demand = form.save(commit=False)
+            demand.author = request.user
+            demand.addressee = request.user
+            demand.save()
+            messages.info(request, f'Plan został zapisany!')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+    else:
+        form = PlansCreateForm(initial={'addressee': request.user.profile})
+
+    context = {
+        'page_title': 'Nowy plan',
+        'form': form,
+    }
+    return render(request, 'contact/plans-create.html', context)
+
+
+@login_required
+def plans_delete_view(request, demand_id):
+    demand = get_object_or_404(Demand, id=demand_id)
+    demand.delete()
+    messages.info(request, 'Usunięto plan!')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+def plans_modify_view(request, demand_id):
+    demand = get_object_or_404(Demand, id=demand_id)
+    if request.method == 'POST':
+        form = DemandsModifyForm(instance=demand, data=request.POST or None, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Zmodyfikowano plan!')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+    else:
+        form = DemandsModifyForm(instance=demand)
+
+    context = {
+        'page_title': 'Zmiana planów?',
+        'demand': demand,
+        'form': form
+    }
+    return render(request, 'contact/plans-modify.html', context)
+
+
+# ----------------------------- DEMANDS & PLANS -----------------------------
 
 
 @login_required
@@ -184,71 +260,3 @@ def mark_undone_view(request, demand_id):
 
     messages.info(request, 'Oznaczono jako niezrobiony!')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-
-# ----------------------------- TODOs -----------------------------
-
-
-@login_required
-def todo_view(request):
-    self_demands_undone = \
-        Demand.objects.filter(is_done=False, addressee=request.user, author=request.user)
-    self_demands_done = \
-        Demand.objects.filter(is_done=True, addressee=request.user, author=request.user)
-
-    context = {
-        'page_title': 'Plany',
-        'self_demands_undone': self_demands_undone,
-        'self_demands_done': self_demands_done,
-    }
-    return render(request, 'contact/plans-demands-main.html', context)
-
-
-@login_required
-def create_todo_view(request):
-    if request.method == 'POST':
-        form = TodoForm(request.POST or None, request.FILES)
-        if form.is_valid():
-            demand = form.save(commit=False)
-            demand.author = request.user
-            demand.addressee = request.user
-            demand.save()
-            messages.info(request, f'Plan został zapisany!')
-            return redirect('contact:todo')
-    else:
-        form = TodoForm(initial={'addressee': request.user.profile})
-
-    context = {
-        'page_title': 'Nowy plan',
-        'form': form,
-    }
-    return render(request, 'contact/plan-plans-demands-main.html', context)
-
-
-@login_required
-def delete_todo_view(request, demand_id):
-    demand = get_object_or_404(Demand, id=demand_id)
-    demand.delete()
-    messages.info(request, 'Usunięto plan!')
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-
-@login_required
-def modify_todo_view(request, demand_id):
-    demand = get_object_or_404(Demand, id=demand_id)
-    if request.method == 'POST':
-        form = DemandModifyForm(instance=demand, data=request.POST or None, files=request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.info(request, 'Zmodyfikowano plan!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-    else:
-        form = DemandModifyForm(instance=demand)
-
-    context = {
-        'page_title': 'Zmiana planów?',
-        'demand': demand,
-        'form': form
-    }
-    return render(request, 'contact/modify-plans-demands-main.html', context)
