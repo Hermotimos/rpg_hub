@@ -35,10 +35,6 @@ class CreateTopicTest(TestCase):
         view = resolve('/debates/create_topic/')
         self.assertEquals(view.func, views.create_topic_view)
 
-    def test_contains_link_to_main(self):
-        linked_url = reverse('debates:main')
-        self.assertContains(self.response, f'href="{linked_url}"')
-
 
 class CreateDebateTest(TestCase):
     def setUp(self):
@@ -60,10 +56,6 @@ class CreateDebateTest(TestCase):
         view = resolve('/debates/topic:1/create-debate/')
         self.assertEquals(view.func, views.create_debate_view)
 
-    def test_contains_link_to_main(self):
-        linked_url = reverse('debates:main')
-        self.assertContains(self.response, f'href="{linked_url}"')
-
 
 class DebateTest(TestCase):
     def setUp(self):
@@ -80,10 +72,6 @@ class DebateTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve('/debates/topic:1/debate:1/')
         self.assertEquals(view.func, views.debate_view)
-
-    def test_contains_link_to_main(self):
-        linked_url = reverse('debates:main')
-        self.assertContains(self.response, f'href="{linked_url}"')
 
 
 class DebatesInviteTest(TestCase):
@@ -102,10 +90,6 @@ class DebatesInviteTest(TestCase):
         view = resolve('/debates/topic:1/debate:1/invite/')
         self.assertEquals(view.func, views.debates_invite_view)
 
-    def test_contains_link_to_main(self):
-        linked_url = reverse('debates:main')
-        self.assertContains(self.response, f'href="{linked_url}"')
-
 
 class UnfollowDebateTest(TestCase):
     def setUp(self):
@@ -123,10 +107,6 @@ class UnfollowDebateTest(TestCase):
         view = resolve('/debates/topic:1/debate:1/unfollow/')
         self.assertEquals(view.func, views.unfollow_debate_view)
 
-    def test_contains_link_to_main(self):
-        linked_url = reverse('debates:main')
-        self.assertContains(self.response, f'href="{linked_url}"')
-
 
 class FollowDebateTest(TestCase):
     def setUp(self):
@@ -143,7 +123,3 @@ class FollowDebateTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve('/debates/topic:1/debate:1/follow/')
         self.assertEquals(view.func, views.follow_debate_view)
-
-    def test_contains_link_to_main(self):
-        linked_url = reverse('debates:main')
-        self.assertContains(self.response, f'href="{linked_url}"')
