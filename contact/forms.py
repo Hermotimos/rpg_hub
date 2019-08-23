@@ -14,7 +14,6 @@ class DemandsCreateForm(forms.ModelForm):
         label='Adresat:',
         queryset=User.objects.filter(
             Q(profile__character_status='active_player') |
-            Q(profile__character_status='inactive_player') |
             Q(profile__character_status='gm')
         )
     )
