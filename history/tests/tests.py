@@ -219,3 +219,81 @@ class TimelineSpecificLocationtTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve('/history/timeline/spec-loc:1/')
         self.assertEquals(view.func, views.timeline_specific_location_view)
+
+
+class TimelineDateTest(TestCase):
+    def setUp(self):
+        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
+        TimelineEvent.objects.create(game_no=mock_gamesession, year=1, season=1, day_start=1, description='Mock desc')
+
+    def test_get(self):
+        url_only_year = reverse('history:timeline-date', kwargs={'year': 1, 'season': 0})
+        url_year_and_season = reverse('history:timeline-date', kwargs={'year': 1, 'season': 1})
+        response_only_year = self.client.get(url_only_year, follow=True)
+        response_year_and_season = self.client.get(url_year_and_season, follow=True)
+        self.assertEquals(response_only_year.status_code, 200)
+        self.assertEquals(response_year_and_season.status_code, 200)
+
+    def test_url_resolves_view(self):
+        view = resolve('/history/timeline/date:1:1/')
+        self.assertEquals(view.func, views.timeline_date_view)
+
+
+class TimelineGameTest(TestCase):
+    def setUp(self):
+        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
+        TimelineEvent.objects.create(game_no=mock_gamesession, year=1, season=1, day_start=1, description='Mock desc')
+
+    def test_get(self):
+        url = reverse('history:timeline-game', kwargs={'game_id': 1})
+        response = self.client.get(url, follow=True)
+        self.assertEquals(response.status_code, 200)
+
+    def test_url_resolves_view(self):
+        view = resolve('/history/timeline/game:1/')
+        self.assertEquals(view.func, views.timeline_game_view)
+
+
+class TimelineInformView(TestCase):
+    def setUp(self):
+        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
+        TimelineEvent.objects.create(game_no=mock_gamesession, year=1, season=1, day_start=1, description='Mock desc')
+
+    def test_get(self):
+        url = reverse('history:timeline-inform', kwargs={'event_id': 1})
+        response = self.client.get(url, follow=True)
+        self.assertEquals(response.status_code, 200)
+
+    def test_url_resolves_view(self):
+        view = resolve('/history/timeline/inform:1/')
+        self.assertEquals(view.func, views.timeline_inform_view)
+
+
+class TimelineNoteView(TestCase):
+    def setUp(self):
+        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
+        TimelineEvent.objects.create(game_no=mock_gamesession, year=1, season=1, day_start=1, description='Mock desc')
+
+    def test_get(self):
+        url = reverse('history:timeline-note', kwargs={'event_id': 1})
+        response = self.client.get(url, follow=True)
+        self.assertEquals(response.status_code, 200)
+
+    def test_url_resolves_view(self):
+        view = resolve('/history/timeline/note:1/')
+        self.assertEquals(view.func, views.timeline_note_view)
+
+
+class TimelineEditView(TestCase):
+    def setUp(self):
+        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
+        TimelineEvent.objects.create(game_no=mock_gamesession, year=1, season=1, day_start=1, description='Mock desc')
+
+    def test_get(self):
+        url = reverse('history:timeline-edit', kwargs={'event_id': 1})
+        response = self.client.get(url, follow=True)
+        self.assertEquals(response.status_code, 200)
+
+    def test_url_resolves_view(self):
+        view = resolve('/history/timeline/edit:1/')
+        self.assertEquals(view.func, views.timeline_edit_view)
