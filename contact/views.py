@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.http import HttpResponseRedirect
+from users.models import User
 from contact.models import Demand, DemandAnswer
 from contact.forms import DemandForm, DemandTodoForm, DemandModifyForm, DemandAnswerForm
 
@@ -12,13 +13,13 @@ from contact.forms import DemandForm, DemandTodoForm, DemandModifyForm, DemandAn
 @login_required
 def main_view(request):
     received_demands_undone = \
-        Demand.objects.filter(is_done=False, addressee=request.user.profile).exclude(author=request.user.profile)
+        Demand.objects.filter(is_done=False, addressee=request.user).exclude(author=request.user)
     received_demands_done = \
-        Demand.objects.filter(is_done=True, addressee=request.user.profile).exclude(author=request.user.profile)
+        Demand.objects.filter(is_done=True, addressee=request.user).exclude(author=request.user)
     sent_demands_undone = \
-        Demand.objects.filter(is_done=False, author=request.user.profile).exclude(addressee=request.user.profile)
+        Demand.objects.filter(is_done=False, author=request.user).exclude(addressee=request.user)
     sent_demands_done = \
-        Demand.objects.filter(is_done=True, author=request.user.profile).exclude(addressee=request.user.profile)
+        Demand.objects.filter(is_done=True, author=request.user).exclude(addressee=request.user)
 
     context = {
         'page_title': 'Dezyderaty',
@@ -33,9 +34,9 @@ def main_view(request):
 @login_required
 def todo_view(request):
     self_demands_undone = \
-        Demand.objects.filter(is_done=False, addressee=request.user.profile, author=request.user.profile)
+        Demand.objects.filter(is_done=False, addressee=request.user, author=request.user)
     self_demands_done = \
-        Demand.objects.filter(is_done=True, addressee=request.user.profile, author=request.user.profile)
+        Demand.objects.filter(is_done=True, addressee=request.user, author=request.user)
 
     context = {
         'page_title': 'Plany',
@@ -51,7 +52,7 @@ def create_demand_view(request):
         form = DemandForm(request.POST or None, request.FILES)
         if form.is_valid():
             demand = form.save(commit=False)
-            demand.author = request.user.profile
+            demand.author = request.user
             demand.save()
 
             if request.user.profile.character_status != 'gm':
@@ -68,7 +69,7 @@ def create_demand_view(request):
             messages.info(request, f'Dezyderat został wysłany!')
             return redirect('contact:main')
     else:
-        form = DemandForm()
+        form = DemandForm(initial={'addressee': User.objects.get(username='MG')})
 
     context = {
         'page_title': 'Nowy dezyderat',
@@ -83,8 +84,8 @@ def create_todo_view(request):
         form = DemandTodoForm(request.POST or None, request.FILES)
         if form.is_valid():
             demand = form.save(commit=False)
-            demand.author = request.user.profile
-            demand.addressee = request.user.profile
+            demand.author = request.user
+            demand.addressee = request.user
             demand.save()
             messages.info(request, f'Plan został zapisany!')
             return redirect('contact:todo')
@@ -148,7 +149,7 @@ def demand_detail_view(request, demand_id):
         if form.is_valid():
             answer = form.save(commit=False)
             answer.demand = demand
-            answer.author = request.user.profile
+            answer.author = request.user
             answer.save()
 
             subject = f"[RPG] Dezyderat nr {demand.id}"
@@ -158,7 +159,7 @@ def demand_detail_view(request, demand_id):
             if request.user.profile.character_status == 'active_player':
                 receivers = ['lukas.kozicki@gmail.com']
             else:
-                receivers = [demand.author.user.email]
+                receivers = [demand.author.email]
             send_mail(subject, message, sender, receivers)
 
             messages.info(request, f'Dodano odpowiedź!')
@@ -181,7 +182,7 @@ def mark_done_view(request, demand_id):
     demand.is_done = True
     demand.date_done = timezone.now()
     demand.save()
-    DemandAnswer.objects.create(demand=demand, author=request.user.profile, text='Zrobione!')
+    DemandAnswer.objects.create(demand=demand, author=request.user, text='Zrobione!')
 
     subject = f"[RPG] Dezyderat nr {demand.id}"
     message = f"{request.user.profile} oznaczył dezyderat jako 'zrobiony'.\n" \
@@ -191,7 +192,7 @@ def mark_done_view(request, demand_id):
     if request.user.profile.character_status == 'active_player':
         receivers = ['lukas.kozicki@gmail.com']
     else:
-        receivers = [demand.author.user.email]
+        receivers = [demand.author.email]
     send_mail(subject, message, sender, receivers)
 
     messages.info(request, 'Oznaczono jako zrobiony!')
@@ -207,7 +208,7 @@ def mark_done_and_answer_view(request, demand_id):
         if form.is_valid():
             answer = form.save(commit=False)
             answer.demand = demand
-            answer.author = request.user.profile
+            answer.author = request.user
             answer.save()
 
             demand.is_done = True
@@ -218,7 +219,7 @@ def mark_done_and_answer_view(request, demand_id):
             message = f"Dezyderat 'zrobiony' + odpowiedź:\n{answer.text}\n" \
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             sender = settings.EMAIL_HOST_USER
-            receivers = [demand.author.user.email]
+            receivers = [demand.author.email]
             send_mail(subject, message, sender, receivers)
 
             messages.info(request, 'Oznaczono dezyderat jako zrobiony i wysłano odpowiedź!')
@@ -248,7 +249,7 @@ def mark_undone_view(request, demand_id):
     if request.user.profile.character_status == 'active_player':
         receivers = ['lukas.kozicki@gmail.com']
     else:
-        receivers = [demand.author.user.email]
+        receivers = [demand.author.email]
     send_mail(subject, message, sender, receivers)
 
     messages.info(request, 'Oznaczono jako niezrobiony!')

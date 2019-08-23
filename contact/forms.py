@@ -2,7 +2,7 @@ from django import forms
 from django.db.models import Q
 from pagedown.widgets import PagedownWidget
 from contact.models import Demand, DemandAnswer
-from users.models import Profile
+from users.models import User
 
 
 class DemandForm(forms.ModelForm):
@@ -12,10 +12,10 @@ class DemandForm(forms.ModelForm):
 
     addressee = forms.ModelChoiceField(
         label='',
-        queryset=Profile.objects.filter(
-            Q(character_status='active_player') |
-            Q(character_status='inactive_player') |
-            Q(character_status='gm')
+        queryset=User.objects.filter(
+            Q(profile__character_status='active_player') |
+            Q(profile__character_status='inactive_player') |
+            Q(profile__character_status='gm')
         )
     )
 
@@ -56,6 +56,7 @@ class DemandTodoForm(forms.ModelForm):
         label='Załącz obraz:',
         required=False,
     )
+
 
 class DemandModifyForm(forms.ModelForm):
     class Meta:

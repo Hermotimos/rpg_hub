@@ -26,12 +26,12 @@
         <table>
             <tr class="posts-and-news">
                 <td>
-                    <img class="rounded-circle article-img" src="{{ demand.author.image.url }}">
+                    <img class="rounded-circle article-img" src="{{ demand.author.profile.image.url }}">
                     <br>
                     <small>{{ demand.date_created|date:'d-M-Y' }}</small>
                 </td>
                 <td class="unblue"><a href="{% url 'contact:detail' demand.id %}">{{ demand.text }}</a></td>
-                {% if request.user.profile == demand.author %}
+                {% if request.user == demand.author %}
                     <td><a href="{% url 'contact:modify' demand.id %}" class="btn btn-warning">&#9998;</a></td>
                 {% endif %}
                 <td><a href="{% url 'contact:done' demand.id %}" class="btn btn-success">&#10004;</a></td>
@@ -51,13 +51,13 @@
         <table id="received-to-do" class="collapse">
             <tr class="posts-and-news">
                 <td>
-                    <img class="rounded-circle article-img" src="{{ demand.author.image.url }}">
+                    <img class="rounded-circle article-img" src="{{ demand.author.profile.image.url }}">
                     <br>
                     <small>{{ demand.date_created|date:'d-M-Y' }}</small>
                 </td>
                 <td class="unblue"><a href="{% url 'contact:detail' demand.id %}">{{ demand.text }}</a></td>
                 <td><a href="{% url 'contact:undone' demand.id %}" class="btn btn-warning">&#9757;</a></td>
-                {% if request.user.profile == demand.author %}
+                {% if request.user == demand.author %}
                     <td><a href="{% url 'contact:delete' demand.id %}" class="btn btn-danger">&#10008;</a></td>
                 {% endif %}
             </tr>
@@ -78,12 +78,12 @@
         <table>
             <tr class="posts-and-news">
                 <td>
-                    <img class="rounded-circle article-img" src="{{ demand.addressee.image.url }}">
+                    <img class="rounded-circle article-img" src="{{ demand.addressee.profile.image.url }}">
                     <br>
                     <small>{{ demand.date_created|date:'d-M-Y' }}</small>
                 </td>
                 <td class="unblue"><a href="{% url 'contact:detail' demand.id %}">{{ demand.text }}</a></td>
-                {% if request.user.profile == demand.author %}
+                {% if request.user == demand.author %}
                     <td><a href="{% url 'contact:modify' demand.id %}" class="btn btn-warning">&#9998;</a></td>
                 {% endif %}
                 <td><a href="{% url 'contact:done' demand.id %}" class="btn btn-success">&#10004;</a></td>
@@ -103,13 +103,13 @@
         <table id="received-done" class="collapse">
             <tr class="posts-and-news">
                 <td>
-                    <img class="rounded-circle article-img" src="{{ demand.addressee.image.url }}">
+                    <img class="rounded-circle article-img" src="{{ demand.addressee.profile.image.url }}">
                     <br>
                     <small>{{ demand.date_created|date:'d-M-Y' }}</small>
                 </td>
                 <td class="unblue"><a href="{% url 'contact:detail' demand.id %}">{{ demand.text }}</a></td>
                 <td><a href="{% url 'contact:undone' demand.id %}" class="btn btn-warning">&#9757;</a></td>
-                {% if request.user.profile == demand.author %}
+                {% if request.user == demand.author %}
                     <td><a href="{% url 'contact:delete' demand.id %}" class="btn btn-danger">&#10008;</a></td>
                 {% endif %}
             </tr>
