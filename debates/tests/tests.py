@@ -10,10 +10,10 @@ class DebatesMainTest(TestCase):
         url = reverse('debates:main')
         self.response = self.client.get(url, follow=True)
 
-        mock_topic = Topic.objects.create(id=1, title='Mock Topic', description='Mock description.')
-        mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='fakepsswrd111')
-        Debate.objects.create(id=1, topic=mock_topic, starter=mock_user, title='Mock Debate')
-        self.client.login(username=mock_user.username, password=mock_user.password)
+        # mock_topic = Topic.objects.create(id=1, title='Mock Topic', description='Mock description.')
+        # mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='fakepsswrd111')
+        # Debate.objects.create(id=1, topic=mock_topic, starter=mock_user, title='Mock Debate')
+        # self.client.login(username=mock_user.username, password=mock_user.password)
 
     def test_get(self):
         self.assertEquals(self.response.status_code, 200)
