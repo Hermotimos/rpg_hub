@@ -17,7 +17,7 @@
     <br><br><br><br>
 
     <h3>Oczekujące:</h3>
-    <br><br>
+    <br>
     {% for demand in self_demands_undone %}
         <table>
             <tr class="posts-and-news">
@@ -31,9 +31,6 @@
                     <td><a href="{% url 'contact:modify' demand.id %}" class="btn btn-warning">&#9998;</a></td>
                 {% endif %}
                 <td><a href="{% url 'contact:done' demand.id %}" class="btn btn-success">&#10004;</a></td>
-                {% if request.user.profile.character_status == 'gm' %}
-                    <td><a href="{% url 'contact:done-answer' demand.id %}" class="btn btn-success">&#10004;<br>&#9993;</a></td>
-                {% endif %}
             </tr>
         </table>
         <br><br>
@@ -41,7 +38,7 @@
     <br><br><br>
 
     <h3>Zrobione:</h3>
-    <br><br>
+    <br>
     {% for demand in self_demands_done %}
         <table>
             <tr class="posts-and-news">
