@@ -30,7 +30,8 @@ class CreateDemandTest(TestCase):
 class DeleteDemandTest(TestCase):
     def setUp(self):
         mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='mockpsswrd111')
-        Demand.objects.create(author=mock_user, text='Mock report')
+        mock_user2 = User.objects.create_user(username='mock_user2', email='mock2@user.com', password='mockpsswrd111')
+        Demand.objects.create(author=mock_user, addressee=mock_user2, text='Mock report')
 
     def test_get(self):
         url = reverse('contact:delete', kwargs={'demand_id': 1})
@@ -45,7 +46,8 @@ class DeleteDemandTest(TestCase):
 class ModifyDemandTest(TestCase):
     def setUp(self):
         mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='mockpsswrd111')
-        Demand.objects.create(author=mock_user, text='Mock report')
+        mock_user2 = User.objects.create_user(username='mock_user2', email='mock2@user.com', password='mockpsswrd111')
+        Demand.objects.create(author=mock_user, addressee=mock_user2, text='Mock report')
 
     def test_get(self):
         url = reverse('contact:modify', kwargs={'demand_id': 1})
@@ -60,7 +62,8 @@ class ModifyDemandTest(TestCase):
 class DemandDetailTest(TestCase):
     def setUp(self):
         mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='mockpsswrd111')
-        Demand.objects.create(author=mock_user, text='Mock report')
+        mock_user2 = User.objects.create_user(username='mock_user2', email='mock2@user.com', password='mockpsswrd111')
+        Demand.objects.create(author=mock_user, addressee=mock_user2, text='Mock report')
 
     def test_get(self):
         url = reverse('contact:detail', kwargs={'demand_id': 1})
@@ -75,7 +78,8 @@ class DemandDetailTest(TestCase):
 class MarkDoneTest(TestCase):
     def setUp(self):
         mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='mockpsswrd111')
-        Demand.objects.create(author=mock_user, text='Mock report')
+        mock_user2 = User.objects.create_user(username='mock_user2', email='mock2@user.com', password='mockpsswrd111')
+        Demand.objects.create(author=mock_user, addressee=mock_user2, text='Mock report')
 
     def test_get(self):
         url = reverse('contact:done', kwargs={'demand_id': 1})
@@ -90,7 +94,8 @@ class MarkDoneTest(TestCase):
 class MarkDoneAndAnswerDemandTest(TestCase):
     def setUp(self):
         mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='mockpsswrd111')
-        Demand.objects.create(author=mock_user, text='Mock report')
+        mock_user2 = User.objects.create_user(username='mock_user2', email='mock2@user.com', password='mockpsswrd111')
+        Demand.objects.create(author=mock_user, addressee=mock_user2, text='Mock report')
 
     def test_get(self):
         url = reverse('contact:done-answer', kwargs={'demand_id': 1})
@@ -105,7 +110,8 @@ class MarkDoneAndAnswerDemandTest(TestCase):
 class MarkUndoneTest(TestCase):
     def setUp(self):
         mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='mockpsswrd111')
-        Demand.objects.create(author=mock_user, text='Mock report')
+        mock_user2 = User.objects.create_user(username='mock_user2', email='mock2@user.com', password='mockpsswrd111')
+        Demand.objects.create(author=mock_user, addressee=mock_user2, text='Mock report')
 
     def test_get(self):
         url = reverse('contact:undone', kwargs={'demand_id': 1})
