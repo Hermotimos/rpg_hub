@@ -28,7 +28,7 @@ def demands_view(request):
         'sent_demands_undone': sent_demands_undone,
         'sent_demands_done': sent_demands_done
     }
-    return render(request, 'contact/main.html', context)
+    return render(request, 'contact/demands-main.html', context)
 
 
 @login_required
@@ -60,7 +60,7 @@ def create_demand_view(request):
         'page_title': 'Nowy dezyderat',
         'form': form,
     }
-    return render(request, 'contact/demand-create.html', context)
+    return render(request, 'contact/demands-create.html', context)
 
 
 @login_required
@@ -101,7 +101,7 @@ def modify_demand_view(request, demand_id):
         'demand': demand,
         'form': form
     }
-    return render(request, 'contact/demand-modify.html', context)
+    return render(request, 'contact/demands-modify.html', context)
 
 
 @login_required
@@ -139,7 +139,7 @@ def demand_detail_view(request, demand_id):
         'answers': answers,
         'form': form
     }
-    return render(request, 'contact/detail.html', context)
+    return render(request, 'contact/demands-detail.html', context)
 
 
 @login_required
@@ -201,7 +201,7 @@ def todo_view(request):
         'self_demands_undone': self_demands_undone,
         'self_demands_done': self_demands_done,
     }
-    return render(request, 'contact/todo.html', context)
+    return render(request, 'contact/plans-demands-main.html', context)
 
 
 @login_required
@@ -222,7 +222,7 @@ def create_todo_view(request):
         'page_title': 'Nowy plan',
         'form': form,
     }
-    return render(request, 'contact/plan-todo.html', context)
+    return render(request, 'contact/plan-plans-demands-main.html', context)
 
 
 @login_required
@@ -251,4 +251,4 @@ def modify_todo_view(request, demand_id):
         'demand': demand,
         'form': form
     }
-    return render(request, 'contact/modify-todo.html', context)
+    return render(request, 'contact/modify-plans-demands-main.html', context)
