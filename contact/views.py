@@ -31,7 +31,6 @@ def demands_view(request):
     return render(request, 'contact/main.html', context)
 
 
-
 @login_required
 def create_demand_view(request):
     if request.method == 'POST':
@@ -68,7 +67,7 @@ def create_demand_view(request):
 def delete_demand_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
     demand.delete()
-    messages.info(request, 'Usunięto!')
+    messages.info(request, 'Usunięto dezyderat!')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -129,7 +128,8 @@ def demand_detail_view(request, demand_id):
             send_mail(subject, message, sender, receivers)
 
             messages.info(request, f'Dodano odpowiedź!')
-            return redirect('contact:detail', demand_id=demand.id)
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
     else:
         form = DemandAnswerForm()
 
@@ -226,6 +226,14 @@ def create_todo_view(request):
 
 
 @login_required
+def delete_todo_view(request, demand_id):
+    demand = get_object_or_404(Demand, id=demand_id)
+    demand.delete()
+    messages.info(request, 'Usunięto plan!')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
 def modify_todo_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
     if request.method == 'POST':
@@ -239,7 +247,7 @@ def modify_todo_view(request, demand_id):
         form = DemandModifyForm(instance=demand)
 
     context = {
-        'page_title': 'Modyfikacja dezyderatu',
+        'page_title': 'Zmiana planów?',
         'demand': demand,
         'form': form
     }
