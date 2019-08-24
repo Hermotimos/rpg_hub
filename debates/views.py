@@ -71,7 +71,7 @@ def create_debate_view(request, topic_id):
             remark.save()
 
             subject = f"[RPG] Nowa narada: {debate.title}"
-            message = f"{request.user.profile} włączył/a Cię do nowej narady " \
+            message = f"{remark.author.profile} włączył/a Cię do nowej narady " \
                       f"'{debate.title}' w temacie '{debate.topic}'.\n" \
                       f"Uczestnicy: {', '.join(p.character_name for p in debate.allowed_profiles.all())}\n" \
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
@@ -119,7 +119,7 @@ def debate_view(request, topic_id, debate_id):
             remark.save()
 
             subject = f"[RPG] Głos w naradzie: '{debate.title[:30]}...'"
-            message = f"{request.user.profile} zabrał/a głos w naradzie '{debate.title}':\n" \
+            message = f"{remark.author.profile} zabrał/a głos w naradzie '{debate.title}':\n" \
                       f"'{remark.text}'\n\n" \
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
