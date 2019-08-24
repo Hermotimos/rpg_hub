@@ -43,9 +43,9 @@
         <small>2) Inne postacie znajdujące się w pobliżu mogą podsłuchać Twoją opowieść.</small><br>
         <small>3) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small><br>    <br>
 
-        <form method="POST" class="allowed-profiles-form">
+        <form method="POST">
             {% csrf_token %}
-            {{ form.informed }}<br>
+            {{ form|crispy }}<br>
             <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
             <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
             <input class="btn btn-dark" type="submit" value="Poinformuj">
