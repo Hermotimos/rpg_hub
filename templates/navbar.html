@@ -5,7 +5,7 @@
 <header class="site-header">
     <nav class="navbar navbar-expand-md navbar-dark bg-navbar fixed-top">
         <div class="container">
-            <span class="navbar-brand navbar-nav mr-5"><a class="nav-link" href="{% url 'home:home' %}">Hyllemath</a></span>
+            <span class="navbar-brand navbar-nav mr-5"><a class="nav-link-main" href="{% url 'home:home' %}">Hyllemath</a></span>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -28,7 +28,7 @@
                 <div class="navbar-nav">
                     {% if user.is_authenticated %}
                         {% if user.profile.character_name != '' %}
-                            <a class="navbar-brand mr-2" href="{% url 'users:profile' %}">{{ user.profile.character_name|get_first_word }}</a>
+                            <a class="navbar-brand mr-2 nav-link" href="{% url 'users:profile' %}">{{ user.profile.character_name|get_first_word }}</a>
                             <a href="{% url 'contact:demands-create' %}"><img src="{% static 'img/demand.png' %}" class="mr-2 mt-1"></a>
                             &emsp;
                         {% else %}
