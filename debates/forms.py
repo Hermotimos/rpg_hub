@@ -3,15 +3,22 @@ from debates.models import Remark, Debate, Topic
 from users.models import Profile
 from django.db.models import Q
 from pagedown.widgets import PagedownWidget
+from users.models import User
 
 
 class CreateRemarkForm(forms.ModelForm):
     class Meta:
         model = Remark
         fields = [
+            'author',
             'text',
             'image'
         ]
+
+    author = forms.ModelChoiceField(
+        label='Autor:',
+        queryset=User.objects.all(),
+    )
 
     text = forms.CharField(
         label='',
@@ -34,10 +41,18 @@ class CreateDebateForm(forms.ModelForm):
     class Meta:
         model = Debate
         fields = [
-            'title',
             'allowed_profiles',
-            'is_individual'
+            'is_individual',
+            'title',
         ]
+
+    # is_individual =
+    #
+    # allowed_profiles = forms.ModelMultipleChoiceField(
+    #     label='',
+    #     queryset=User.objects.exclude(Q(profile__character_status='dead_player') |
+    #                                   Q(profile__character_status='dead_npc'))
+    # )
 
     title = forms.CharField(
         label='',
@@ -45,7 +60,7 @@ class CreateDebateForm(forms.ModelForm):
         widget=forms.TextInput(
             attrs={
                 'placeholder': 'Tytuł nowej narady (max. 100 znaków)*',
-                'size': '60'
+                # 'size': '60'
             }
         )
     )
@@ -57,7 +72,8 @@ class CreateDebateForm(forms.ModelForm):
                                                                            Q(character_status='dead_player') |
                                                                            Q(character_status='dead_npc') |
                                                                            Q(character_status='gm'))
-
+        self.fields['allowed_profiles'].label = ''
+        self.fields['is_individual'].label = 'Dyskusja indywidualna?'
 
 class UpdateDebateForm(forms.ModelForm):
     class Meta:

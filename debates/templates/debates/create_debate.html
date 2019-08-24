@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block head_extra %}
-    {{ form.media }}
+    {{ remark_form.media }}
     <link rel="stylesheet" href="{% static 'css/debates.css' %}">
 {% endblock head_extra %}
 
@@ -14,31 +14,43 @@
 
 {% block content %}
     <br><br><br>
-    <form method="POST" enctype="multipart/form-data" class="allowed-profiles-form-debate" >
+    <form method="POST" enctype="multipart/form-data" >
         {% csrf_token %}
+        <fieldset class="allowed-profiles-form-debate">
+            {{ debate_form.title|as_crispy_field }}<br>
+            {{ debate_form.title.errors }}<br>
 
-        {{ debate_form.title }}<br>
-        {{ debate_form.title.errors }}<br>
+            <h6>Włącz uczestników do narady:</h6>
+            <small>1) Włączaj tylko postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji.</small><br>
+            <small>2) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small><br>
+            <small>3) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small><br>
+            <small>4) Jeśli chcesz się naradzić z postacią, której nie ma na liście, powiadom MG.</small>
 
-        <h6>Włącz uczestników do narady:</h6>
-        <small>1) Włączaj tylko postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji.</small><br>
-        <small>2) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small><br>
-        <small>3) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small><br>
-        <small>4) Jeśli chcesz się naradzić z postacią, której nie ma na liście, powiadom MG.</small>
-
-
-        <br><br>
-        {{ debate_form.allowed_profiles }}
-        <br>
-        <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
+            <br><br>
+            {{ debate_form.allowed_profiles|as_crispy_field }}
+            <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
+        </fieldset>
 
         {% if request.user.profile.character_status == 'gm' %}
-            {{ debate_form.is_individual }}
-            <label>Dyskusja indywidualna?</label><br><br>
+            {{ debate_form.is_individual|as_crispy_field }}<br>
         {% endif %}
 
-        {{ remark_form|crispy }}
-
+        <div class="form-row">
+            <div class="form-group col-md-2 mb-0">
+                {% if request.user.profile.character_status == 'gm' %}
+                    {{ remark_form.author|as_crispy_field }}
+                {% else %}
+                <div class="collapse">
+                    {{ remark_form.author }}
+                </div>
+                {% endif %}
+                {{ remark_form.author.errors }}
+            </div>
+            <div class="form-group col-md-10 mb-0">
+                {{ remark_form.text|as_crispy_field }}
+            </div>
+        </div>
+        {{ remark_form.image|as_crispy_field }}
         <input class="btn btn-dark" type="submit" value="Rozpocznij naradę"/>
     </form>
 {% endblock content %}

@@ -68,7 +68,6 @@ def create_debate_view(request, topic_id):
 
             remark = remark_form.save(commit=False)
             remark.debate = debate
-            remark.author = request.user
             remark.save()
 
             subject = f"[RPG] Nowa narada: {debate.title}"
@@ -89,7 +88,7 @@ def create_debate_view(request, topic_id):
             return redirect('debates:debate', topic_id=topic_id, debate_id=debate.id)
     else:
         debate_form = CreateDebateForm(authenticated_user=request.user)
-        remark_form = CreateRemarkForm()
+        remark_form = CreateRemarkForm(initial={'author': request.user})
 
     context = {
         'page_title': 'Nowa narada',
@@ -117,7 +116,6 @@ def debate_view(request, topic_id, debate_id):
         if form.is_valid():
             remark = form.save(commit=False)
             remark.debate = debate
-            remark.author = request.user
             remark.save()
 
             subject = f"[RPG] Głos w naradzie: '{debate.title[:30]}...'"
@@ -135,8 +133,9 @@ def debate_view(request, topic_id, debate_id):
 
             messages.info(request, f'Twój głos zabrzmiał w naradzie!')
             return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
+
     else:
-        form = CreateRemarkForm()            # equals to: form = CreateRemarkForm(request.GET) - GET is the default
+        form = CreateRemarkForm(initial={'author': request.user})
 
     context = {
         'page_title': debate.title,
