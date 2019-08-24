@@ -71,9 +71,9 @@
 
         <br>
 
-        <form method="POST" class="allowed-profiles-form">
+        <form method="POST" class="allowed-profiles-form-history">
             {% csrf_token %}
-            {{ form.informed }}<br>
+            {{ form.informed|as_crispy_field }}<br>
             <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
             <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
             <input class="btn btn-dark" type="submit" value="Poinformuj">

@@ -123,9 +123,9 @@ a.article-title:hover {
         border-bottom: 1px solid #363636;
 }
 
-.allowed-profiles-form select {
-        min-height: 200px;
-        width: 300px;
+.allowed-profiles-form-history select {
+        min-height: 150px;
+        width: 400px;
 }
 
 .allowed-profiles-form-debate select {

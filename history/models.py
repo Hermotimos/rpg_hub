@@ -146,8 +146,8 @@ class SpecificLocation(models.Model):
 
 
 class TimelineEvent(models.Model):
-    # default=0 for events outside of sessions (background events):
-    game_no = models.ForeignKey(GameSession, related_name='timeline_events', on_delete=models.PROTECT, default=0)
+    # default=35 for events outside of sessions (instance of 'GameSession' for background events has id=35):
+    game_no = models.ForeignKey(GameSession, related_name='timeline_events', on_delete=models.PROTECT, default=35)
     # year has to be > 0, for url patterns (they accept positive nums only):
     year = models.IntegerField(validators=[MinValueValidator(1)])
     season = models.CharField(max_length=10, choices=SEASONS)

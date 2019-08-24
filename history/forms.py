@@ -79,7 +79,7 @@ class TimelineEventNoteForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TimelineEventNoteForm, self).__init__(*args, **kwargs)
-        self.fields['color'].label = 'Kolor wyświetlania'
+        self.fields['color'].label = 'Kolor tekstu'
 
 
 # ------ ChronicleEvent model -----
@@ -151,4 +151,4 @@ class ChronicleEventNoteForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ChronicleEventNoteForm, self).__init__(*args, **kwargs)
-        self.fields['color'].label = 'Kolor wyświetlania'
+        self.fields['color'].label = 'Kolor tekstu'
