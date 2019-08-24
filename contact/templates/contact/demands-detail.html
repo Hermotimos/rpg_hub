@@ -14,7 +14,7 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    {% if request.user.profile != demand.author and request.user.profile != demand.addressee and request.user.profile.character_status != 'gm' %}
+    {% if request.user != demand.author and request.user != demand.addressee and request.user.profile.character_status != 'gm' %}
         <br><br><br>
         <h4>Nie Twoje, to co grzebiesz?<br>Najwyraźniej ktoś napisał je w języku innym niż HTML, który tak dobrze znasz, że sobie tu buszujesz...</h4>
     {% else %}
