@@ -44,12 +44,11 @@
             <small>3) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small><br>
             <small>4) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small><br>
             <small>5) Jeśli chcesz się naradzić z postacią, której nie ma na liście, powiadom MG.</small><br>
-            <br><br>
+            <br>
 
             <form method="POST" action=".#page-bottom" class="allowed-profiles-form-debate">
                 {% csrf_token %}
                 {{ form.allowed_profiles|as_crispy_field }}
-                <br>
                 <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
                 <input class="btn btn-dark" type="submit" value="Dodaj uczestników narady">
             </form>

@@ -64,6 +64,7 @@ class CreateDebateForm(forms.ModelForm):
                                                                            Q(character_status='dead_npc') |
                                                                            Q(character_status='gm'))
         self.fields['allowed_profiles'].label = ''
+        self.fields['allowed_profiles'].widget.attrs['size'] = 10
         self.fields['is_individual'].label = 'Dyskusja indywidualna?'
 
 
