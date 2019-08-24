@@ -14,10 +14,10 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    {% if request.user != demand.author and request.user != demand.addressee and request.user.profile.character_status != 'gm' %}
-        <br><br><br>
-        <h4>Nie Twoje, to co grzebiesz?</h4>
-    {% else %}
+<!--    {% if request.user != demand.author and request.user != demand.addressee and request.user.profile.character_status != 'gm' %}-->
+<!--        <br><br><br>-->
+<!--        <h4>Nie Twoje, to co grzebiesz?</h4>-->
+<!--    {% else %}-->
         <br><br><br><br>
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
@@ -31,5 +31,5 @@
             <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
             <input class="btn btn-dark" type="submit" value="Zmodyfikuj">
         </form>
-    {% endif %}
+<!--    {% endif %}-->
 {% endblock content %}

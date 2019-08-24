@@ -79,26 +79,30 @@ def demands_delete_view(request, demand_id):
 def demands_modify_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
 
-    if request.method == 'POST':
-        form = DemandsModifyForm(instance=demand, data=request.POST or None, files=request.FILES)
-        if form.is_valid():
-            form.save()
+    allowed_users = [demand.author, demand.addressee]
+    if request.user in allowed_users:
+        if request.method == 'POST':
+            form = DemandsModifyForm(instance=demand, data=request.POST or None, files=request.FILES)
+            if form.is_valid():
+                form.save()
 
-            subject = f"[RPG] Dezyderat nr {demand.id}"
-            message = f"Modyfikacja przez {demand.author}:\n{demand.text}\n" \
-                      f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
-            sender = settings.EMAIL_HOST_USER
-            if request.user.profile.character_status == 'active_player':
-                receivers = ['lukas.kozicki@gmail.com']
-            else:
-                receivers = []
-            send_mail(subject, message, sender, receivers)
+                subject = f"[RPG] Dezyderat nr {demand.id}"
+                message = f"Modyfikacja przez {demand.author}:\n{demand.text}\n" \
+                          f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
+                sender = settings.EMAIL_HOST_USER
+                if request.user.profile.character_status == 'active_player':
+                    receivers = ['lukas.kozicki@gmail.com']
+                else:
+                    receivers = []
+                send_mail(subject, message, sender, receivers)
 
-            messages.info(request, 'Zmodyfikowano dezyderat!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
+                messages.info(request, 'Zmodyfikowano dezyderat!')
+                _next = request.POST.get('next', '/')
+                return HttpResponseRedirect(_next)
+        else:
+            form = DemandsModifyForm(instance=demand)
     else:
-        form = DemandsModifyForm(instance=demand)
+        form = None
 
     context = {
         'page_title': 'Modyfikacja dezyderatu',
@@ -113,29 +117,33 @@ def demands_detail_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
     answers = DemandAnswer.objects.filter(demand=demand)
 
-    if request.method == 'POST':
-        form = DemandAnswerForm(request.POST or None, request.FILES)
-        if form.is_valid():
-            answer = form.save(commit=False)
-            answer.demand = demand
-            answer.author = request.user
-            answer.save()
+    allowed_users = [demand.author, demand.addressee]
+    if request.user in allowed_users:
+        if request.method == 'POST':
+            form = DemandAnswerForm(request.POST or None, request.FILES)
+            if form.is_valid():
+                answer = form.save(commit=False)
+                answer.demand = demand
+                answer.author = request.user
+                answer.save()
 
-            subject = f"[RPG] Dezyderat nr {demand.id}"
-            message = f"Odpowiedź od {answer.author}:\n{answer.text}\n" \
-                      f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
-            sender = settings.EMAIL_HOST_USER
-            if request.user.profile.character_status == 'active_player':
-                receivers = ['lukas.kozicki@gmail.com']
-            else:
-                receivers = [demand.author.email]
-            send_mail(subject, message, sender, receivers)
+                subject = f"[RPG] Dezyderat nr {demand.id}"
+                message = f"Odpowiedź od {answer.author}:\n{answer.text}\n" \
+                          f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
+                sender = settings.EMAIL_HOST_USER
+                if request.user.profile.character_status == 'active_player':
+                    receivers = ['lukas.kozicki@gmail.com']
+                else:
+                    receivers = [demand.author.email]
+                send_mail(subject, message, sender, receivers)
 
-            messages.info(request, f'Dodano odpowiedź!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
+                messages.info(request, f'Dodano odpowiedź!')
+                _next = request.POST.get('next', '/')
+                return HttpResponseRedirect(_next)
+        else:
+            form = DemandAnswerForm()
     else:
-        form = DemandAnswerForm()
+        form = None
 
     context = {
         'page_title': 'Dezyderat - szczegóły',
@@ -197,15 +205,19 @@ def plans_delete_view(request, demand_id):
 @login_required
 def plans_modify_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
-    if request.method == 'POST':
-        form = DemandsModifyForm(instance=demand, data=request.POST or None, files=request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.info(request, 'Zmodyfikowano plan!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
+    allowed_users = [demand.author, demand.addressee]
+    if request.user in allowed_users:
+        if request.method == 'POST':
+            form = DemandsModifyForm(instance=demand, data=request.POST or None, files=request.FILES)
+            if form.is_valid():
+                form.save()
+                messages.info(request, 'Zmodyfikowano plan!')
+                _next = request.POST.get('next', '/')
+                return HttpResponseRedirect(_next)
+        else:
+            form = DemandsModifyForm(instance=demand)
     else:
-        form = DemandsModifyForm(instance=demand)
+        form = None
 
     context = {
         'page_title': 'Zmiana planów?',
