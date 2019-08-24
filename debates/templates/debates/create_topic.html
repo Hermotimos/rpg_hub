@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block head_extra %}
     <link rel="stylesheet" href="{% static 'css/debates.css' %}">
@@ -14,9 +15,7 @@
     <br><br><br>
     <form method="POST">
         {% csrf_token %}
-        {{ form.title }}<br>
-        {{ form.title.errors }}<br>
-        {{ form.description }}<br><br>
+        {{ form|crispy }}
         <input class="btn btn-dark" type="submit" value="Stwórz temat i zapoczątkuj naradę"/>
     </form>
 

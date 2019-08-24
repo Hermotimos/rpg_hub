@@ -46,21 +46,12 @@ class CreateDebateForm(forms.ModelForm):
             'title',
         ]
 
-    # is_individual =
-    #
-    # allowed_profiles = forms.ModelMultipleChoiceField(
-    #     label='',
-    #     queryset=User.objects.exclude(Q(profile__character_status='dead_player') |
-    #                                   Q(profile__character_status='dead_npc'))
-    # )
-
     title = forms.CharField(
         label='',
         max_length=100,
         widget=forms.TextInput(
             attrs={
                 'placeholder': 'Tytuł nowej narady (max. 100 znaków)*',
-                # 'size': '60'
             }
         )
     )
@@ -74,6 +65,7 @@ class CreateDebateForm(forms.ModelForm):
                                                                            Q(character_status='gm'))
         self.fields['allowed_profiles'].label = ''
         self.fields['is_individual'].label = 'Dyskusja indywidualna?'
+
 
 class UpdateDebateForm(forms.ModelForm):
     class Meta:
@@ -89,6 +81,7 @@ class UpdateDebateForm(forms.ModelForm):
                                                                            Q(character_status='dead_npc') |
                                                                            Q(character_status='gm'))
         self.fields['allowed_profiles'].queryset = unallowable_profiles.exclude(id__in=already_allowed_profiles_ids)
+        self.fields['allowed_profiles'].label = ''
 
 
 class CreateTopicForm(forms.ModelForm):
