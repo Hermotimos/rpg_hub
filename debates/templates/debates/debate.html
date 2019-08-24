@@ -54,24 +54,20 @@
                     {% if remark.author.profile.character_status == 'gm' %}
                         <tr class="posts-and-news">
                             <td colspan="2" class="align-center">
-
                                 {{ remark.text|capfirst|linebreaks }}
                                 {% if remark.image %}
                                     <img src="{{ remark.image.url }}" class="border-double">
                                 {% endif %}
-
                             </td>
                         </tr>
                     {% else %}
                         <tr class="posts-and-news">
                             <td>
-                                <br>
                                 <img class="rounded-circle article-img" src="{{ remark.author.profile.image.url }}">
                                 <br>
                                 <small class="smaller">{{ remark.author.profile.character_name }}</small>
                             </td>
                             <td class="align-center">
-                                <br>
                                 <small class="left-float">{{ remark.date_posted|date:'d-M-Y, H:i' }}</small><br>
                                 {{ remark.text|capfirst|linebreaks }}
                                 {% if remark.image %}
