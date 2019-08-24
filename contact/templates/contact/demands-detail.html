@@ -14,55 +14,50 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-<!--    {% if request.user != demand.author and request.user != demand.addressee and request.user.profile.character_status != 'gm' %}-->
-<!--        <br><br><br>-->
-<!--        <h4>Nie Twoje, to co grzebiesz?</h4>-->
-<!--    {% else %}-->
     <br><br><br><br>
-        <table>
+    <table>
+        <tr class="posts-and-news">
+            <td>
+                <img class="rounded-circle article-img" src="{{ demand.author.profile.image.url }}">
+            </td>
+            <td>
+                <small>{{ demand.date_created|date:'d-M-Y, H:i' }}</small>
+                {{ demand.text|capfirst|linebreaks }}
+                {% if demand.image %}
+                    <img src="{{ demand.image.url }}">
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    <table>
+        <tbody>
+        {% for answer in demand.demand_answers.all %}
             <tr class="posts-and-news">
                 <td>
-                    <img class="rounded-circle article-img" src="{{ demand.author.profile.image.url }}">
+                    <img class="rounded-circle article-img" src="{{ answer.author.profile.image.url }}">
                 </td>
-                <td>
-                    <small>{{ demand.date_created|date:'d-M-Y, H:i' }}</small>
-                    {{ demand.text|capfirst|linebreaks }}
-                    {% if demand.image %}
-                        <img src="{{ demand.image.url }}">
+                <td class="align-center">
+                    <small class="left-float">{{ answer.date_posted|date:'d-M-Y, H:i' }}</small><br>
+                    {{ answer.text|capfirst|linebreaks }}
+                    {% if answer.image %}
+                        <img src="{{ answer.image.url }}" class="border-double">
                     {% endif %}
+                    <br>
                 </td>
             </tr>
-        </table>
+        {% endfor %}
+        </tbody>
+    </table>
+    <br><br>
 
-        <table>
-            <tbody>
-            {% for answer in demand.demand_answers.all %}
-                <tr class="posts-and-news">
-                    <td>
-                        <img class="rounded-circle article-img" src="{{ answer.author.profile.image.url }}">
-                    </td>
-                    <td class="align-center">
-                        <small class="left-float">{{ answer.date_posted|date:'d-M-Y, H:i' }}</small><br>
-                        {{ answer.text|capfirst|linebreaks }}
-                        {% if answer.image %}
-                            <img src="{{ answer.image.url }}" class="border-double">
-                        {% endif %}
-                        <br>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <br><br>
-
-        <div id="page-bottom" class="border-top">
-            <br>
-            <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form|crispy }}
-                <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
-                <input class="btn btn-dark" type="submit" value="Odpowiedz">
-            </form>
-        </div>
-<!--    {% endif %}-->
+    <div id="page-bottom" class="border-top">
+        <br>
+        <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
+            <input class="btn btn-dark" type="submit" value="Odpowiedz">
+        </form>
+    </div>
 {% endblock content %}
