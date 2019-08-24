@@ -122,7 +122,7 @@ def demands_detail_view(request, demand_id):
             answer.save()
 
             subject = f"[RPG] Dezyderat nr {demand.id}"
-            message = f"Odpowiedź od {answer.author}:\n{demand.text}\n" \
+            message = f"Odpowiedź od {answer.author}:\n{answer.text}\n" \
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             sender = settings.EMAIL_HOST_USER
             if request.user.profile.character_status == 'active_player':
