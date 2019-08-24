@@ -18,7 +18,7 @@ class LinksToAppsTest(TestCase):
         self.assertEquals(self.response.status_code, 200)
 
     def test_url_resolves_view(self):
-        view = resolve('/home')
+        view = resolve('/')
         self.assertEquals(view.func, views.home_view)
 
     def test_contains_link_to_apps(self):

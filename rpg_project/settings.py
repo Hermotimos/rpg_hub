@@ -27,7 +27,7 @@ SECRET_KEY = KEY
 # WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'hermos.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'hyllemath.pythonanywhere.com']
 
 
 # Application definition
