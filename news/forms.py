@@ -9,21 +9,15 @@ class CreateNewsForm(forms.ModelForm):
     class Meta:
         model = News
         fields = [
-            'title',
-            'text',
             'allowed_profiles',
-            'image'
+            'image',
+            'text',
+            'title',
         ]
 
-    title = forms.CharField(
-        label='',
-        max_length=100,
-        widget=forms.TextInput(
-            attrs={
-                'placeholder': 'Tytuł ogłoszenia (max. 100 znaków)*',
-                'size': '60'
-            }
-        )
+    image = forms.ImageField(
+        label='Załącz obraz:',
+        required=False,
     )
 
     text = forms.CharField(
@@ -38,9 +32,15 @@ class CreateNewsForm(forms.ModelForm):
         )
     )
 
-    image = forms.ImageField(
-        label='Załącz obraz:',
-        required=False,
+    title = forms.CharField(
+        label='',
+        max_length=100,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Tytuł ogłoszenia (max. 100 znaków)*',
+                'size': '60'
+            }
+        )
     )
 
     def __init__(self, *args, **kwargs):
@@ -51,6 +51,7 @@ class CreateNewsForm(forms.ModelForm):
                                                                            Q(character_status='living_npc') |
                                                                            Q(character_status='dead_npc') |
                                                                            Q(character_status='gm'))
+        self.fields['allowed_profiles'].label = ''
 
 
 class CreateResponseForm(forms.ModelForm):

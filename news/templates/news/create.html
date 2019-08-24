@@ -14,24 +14,27 @@
 
 {% block content %}
     <br><br><br>
-    <form method="POST" enctype="multipart/form-data" class="allowed-profiles-form">
+    <form method="POST" enctype="multipart/form-data" class="allowed-profiles-form-history">
         {% csrf_token %}
 
-        {{ form.title }}<br><br>
-        {{ form.title.errors }}
-        {{ form.text }}<br><br>
+        {{ form.title|as_crispy_field }}
+        {{ form.title.errors }}<br><br>
+
+        <div class="form-row">
+            <div class="form-group col-md-2 mb-0">
+            </div>
+            <div class="form-group col-md-10 mb-0">
+                {{ form.text|as_crispy_field }}
+            </div>
+        </div>
 
         <h5>Wybierz adresatów ogłoszenia:</h5>
         <small>1) Tylko wybrani adresaci zobaczą ogłoszenie.</small><br>
         <small>2) Późniejsze dodanie adresatów - przez MG.</small><br>
-
-        <br><br>
-        {{ form.allowed_profiles }}<br>
+        <br>
+        {{ form.allowed_profiles|as_crispy_field }}
         <small>***Aby zaznaczyć wielu adresatów - użyj CTRL albo SHIFT.</small><br><br>
-
-        {{ form.image.label }}<br>
-        {{ form.image }}<br><br>
-
+        {{ form.image|as_crispy_field }}
         <input class="btn btn-dark" type="submit" value="Dodaj ogłoszenie"/>
     </form>
 {% endblock content %}
