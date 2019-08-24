@@ -16,7 +16,7 @@
 {% block content %}
     {% if request.user != demand.author and request.user != demand.addressee and request.user.profile.character_status != 'gm' %}
         <br><br><br>
-        <h4>Nie Twoje, to co grzebiesz?<br>Najwyraźniej ktoś napisał je w języku innym niż HTML, który tak dobrze znasz, że sobie tu buszujesz...</h4>
+        <h4>Nie Twoje, to co grzebiesz?</h4>
     {% else %}
     <br><br><br><br>
 
