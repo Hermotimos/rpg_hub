@@ -112,6 +112,30 @@ def chronicle_all_chapters_view(request):
 
 
 @login_required
+def chronicle_one_chapter_view(request, chapter_id):
+    chapter = Chapter.objects.get(id=chapter_id)
+    if request.user.profile.character_status == 'gm':
+        games_with_events_dict = {g: [e for e in g.chronicle_events.all()] for g in chapter.game_sessions.all()}
+        events_informed = []
+    else:
+        events_participated = request.user.profile.chronicle_events_participated.filter(game_no__in=chapter.game_sessions.all())
+        events_informed = request.user.profile.chronicle_events_informed.filter(game_no__in=chapter.game_sessions.all())
+        events = (events_participated | events_informed).distinct()
+        events_informed = list(events_informed)
+        events = list(events)
+
+        games = [e.game_no for e in events]
+        games_with_events_dict = {g: [e for e in g.chronicle_events.all() if e in events] for g in games}
+
+    context = {
+        'page_title': f'Kronika: {chapter.title}',
+        'games_with_events_dict': games_with_events_dict,
+        'events_informed': events_informed
+    }
+    return render(request, 'history/chronicle_one_chapter.html', context)
+
+
+@login_required
 def chronicle_one_game_view(request, game_id):
     game = get_object_or_404(GameSession, id=game_id)
     if request.user.profile.character_status == 'gm':
@@ -131,26 +155,6 @@ def chronicle_one_game_view(request, game_id):
         'events_informed': events_informed
     }
     return render(request, 'history/chronicle_one_game.html', context)
-
-
-# @login_required
-# def chronicle_one_chapter_view(request, game_id):
-#     game = get_object_or_404(GameSession, id=game_id)
-#     if request.user.profile.character_status == 'gm':
-#         events_informed = []
-#         events = game.chronicle_events.all()
-#     else:
-#         events_participated = request.user.profile.chronicle_events_participated.filter(game_no=game.game_no)
-#         events_informed = request.user.profile.chronicle_events_informed.filter(game_no=game.game_no)
-#         events = (events_participated | events_informed).distinct()
-#
-#     context = {
-#         'page_title': f'{game.chapter.title}: {game.title}',
-#         'events': list(events),
-#         'informed_events': list(events_informed)
-#     }
-#     return render(request, 'history/chronicle_one_game.html', context)
-
 
 
 @login_required

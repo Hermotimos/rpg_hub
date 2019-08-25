@@ -1,21 +1,9 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
 from history import views
-from history.models import GameSession, ChronicleEvent, TimelineEvent, Thread, GeneralLocation, SpecificLocation
+from history.models import Chapter, GameSession, ChronicleEvent, TimelineEvent, Thread, GeneralLocation, SpecificLocation
 from users.models import User
-"""
-TODO:
-timeline_thread_view
-timeline_participant_view
-timeline_general_location_view
-timeline_specific_location_view
-timeline_date_view
-timeline_game_view
-timeline_create_view
-timeline_inform_view
-timeline_note_view
-timeline_edit_view
-"""
+
 
 # ------------------ CHRONICLE ------------------
 
@@ -55,18 +43,31 @@ class ChronicleAllChaptersTest(TestCase):
 
 class ChronicleOneChapterTest(TestCase):
     def setUp(self):
-        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
-        ChronicleEvent.objects.create(game_no=mock_gamesession, event_no_in_game=1, description='Mock description')
+        Chapter.objects.create(chapter_no=1, title='Mock title')
 
     def test_get(self):
-        url = reverse('history:chronicle-one-chapter', kwargs={'game_id': 1})
+        url = reverse('history:chronicle-one-chapter', kwargs={'chapter_id': 1})
         response = self.client.get(url, follow=True)
         self.assertEquals(response.status_code, 200)
 
     def test_url_resolves_view(self):
         view = resolve('/history/chronicle/one-chapter:1/')
-        self.assertEquals(view.func, views.chronicle_one_game_view)
+        self.assertEquals(view.func, views.chronicle_one_chapter_view)
 
+
+class ChronicleOneGameTest(TestCase):
+    def setUp(self):
+        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
+        ChronicleEvent.objects.create(game_no=mock_gamesession, event_no_in_game=1, description='Mock description')
+
+    def test_get(self):
+        url = reverse('history:chronicle-one-game', kwargs={'game_id': 1})
+        response = self.client.get(url, follow=True)
+        self.assertEquals(response.status_code, 200)
+
+    def test_url_resolves_view(self):
+        view = resolve('/history/chronicle/one-game:1/')
+        self.assertEquals(view.func, views.chronicle_one_game_view)
 
 class ChronicleInformTest(TestCase):
     def setUp(self):

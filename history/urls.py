@@ -8,6 +8,7 @@ urlpatterns = [
     path('chronicle/', views.chronicle_main_view, name='chronicle-main'),
     path('chronicle/create/', views.chronicle_create_view, name='chronicle-create'),
     path('chronicle/all-chapters/', views.chronicle_all_chapters_view, name='chronicle-all-chapters'),
+    path('chronicle/one-chapter:<int:chapter_id>/', views.chronicle_one_chapter_view, name='chronicle-one-chapter'),
     path('chronicle/one-game:<int:game_id>/', views.chronicle_one_game_view, name='chronicle-one-game'),
     path('chronicle/inform:<int:event_id>/', views.chronicle_inform_view, name='chronicle-inform'),
     path('chronicle/note:<int:event_id>/', views.chronicle_note_view, name='chronicle-note'),
