@@ -33,6 +33,13 @@ def is_allowed_game(game, profile):
             return True
     return False
 
+# def list_known_games(profile):
+#     if profile.character_status == 'gm':
+#         return [g for g in GameSession.objects.all()]
+#     else:
+#         participated
+#         participated_games = [g for g in GameSession.objects.all() if ]
+
 
 @login_required
 def chronicle_main_view(request):
@@ -93,12 +100,20 @@ def chronicle_all_chapters_view(request):
 
 
 @login_required
-def chronicle_one_chapter_view(request, game_id):
-    obj = get_object_or_404(GameSession, id=game_id)
+def chronicle_one_game_view(request, game_id):
+    game = get_object_or_404(GameSession, id=game_id)
+    if request.user.profile.character_status == 'gm':
+        events_informed = []
+        events = game.chronicle_events.all()
+    else:
+        events_participated = request.user.profile.chronicle_events_participated.filter(game_no=game.game_no)
+        events_informed = request.user.profile.chronicle_events_informed.filter(game_no=game.game_no)
+        events = (events_participated | events_informed).distinct()
 
     context = {
-        'page_title': f'{obj.chapter.title}: {obj.title}',
-        'game': obj
+        'page_title': f'{game.chapter.title}: {game.title}',
+        'events': list(events),
+        'informed_events': list(events_informed)
     }
     return render(request, 'history/chronicle_one_chapter.html', context)
 

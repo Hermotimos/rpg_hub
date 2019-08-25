@@ -65,7 +65,7 @@ class ChronicleOneChapterTest(TestCase):
 
     def test_url_resolves_view(self):
         view = resolve('/history/chronicle/one-chapter:1/')
-        self.assertEquals(view.func, views.chronicle_one_chapter_view)
+        self.assertEquals(view.func, views.chronicle_one_game_view)
 
 
 class ChronicleInformTest(TestCase):
