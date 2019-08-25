@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
@@ -27,11 +27,28 @@ from history.forms import (TimelineEventCreateForm,
 # #################### CHRONICLE: model ChronicleEvent ####################
 
 
-def is_allowed_game(game, profile):
-    for event in game.chronicle_events.all():
-        if profile in event.participants.all() or profile in event.informed.all() or profile.character_status == 'gm':
+def is_allowed(profile, chapter_id=0, game_id=0, chronicle_event_id=0, timeline_event_id=0):
+    if profile.character_status == 'gm':
+        return True
+    elif chapter_id:
+        for game in Chapter.objects.get(id=chapter_id).game_sessions.all():
+            for event in game.chronicle_events.all():
+                if profile in event.participants.all() or profile in event.informed.all():
+                    return True
+    elif game_id:
+        for event in GameSession.objects.get(id=game_id).chronicle_events.all():
+            if profile in event.participants.all() or profile in event.informed.all():
+                return True
+    elif chronicle_event_id:
+        if profile in ChronicleEvent.objects.get(id=chronicle_event_id).participants.all() \
+                or profile in ChronicleEvent.objects.get(id=chronicle_event_id).informed.all():
             return True
-    return False
+    elif timeline_event_id:
+        if profile in TimelineEvent.objects.get(id=timeline_event_id).participants.all() \
+                or profile in ChronicleEvent.objects.get(id=timeline_event_id).informed.all():
+            return True
+    else:
+        return False
 
 
 @login_required
@@ -42,19 +59,10 @@ def chronicle_main_view(request):
         events_participated = request.user.profile.chronicle_events_participated.all()
         events_informed = request.user.profile.chronicle_events_informed.all()
         events = (events_participated | events_informed).distinct()
-
         events = list(events)
         games = [e.game_no for e in events]
         chapters = [g.chapter for g in games]
         chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all() if g in games] for ch in chapters}
-
-    # chapters = Chapter.objects.all()
-    # chapters_with_allowed_games_dict = {}
-    # for ch in chapters:
-    #     games = GameSession.objects.filter(chapter=ch)
-    #     allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile)]
-    #     if allowed_games_list:
-    #         chapters_with_allowed_games_dict[ch] = allowed_games_list
 
     context = {
         'page_title': 'Kronika',
@@ -135,7 +143,10 @@ def chronicle_one_chapter_view(request, chapter_id):
         'games_with_events_dict': games_with_events_dict,
         'events_informed': events_informed
     }
-    return render(request, 'history/chronicle_one_chapter.html', context)
+    if is_allowed(request.user.profile, chapter_id=chapter_id):
+        return render(request, 'history/chronicle_one_chapter.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
@@ -157,7 +168,10 @@ def chronicle_one_game_view(request, game_id):
         'events': events,
         'events_informed': events_informed
     }
-    return render(request, 'history/chronicle_one_game.html', context)
+    if is_allowed(request.user.profile, game_id=game_id):
+        return render(request, 'history/chronicle_one_game.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
@@ -214,7 +228,10 @@ def chronicle_inform_view(request, event_id):
         'participants': participants_str,
         'informed': old_informed_str
     }
-    return render(request, 'history/chronicle_inform.html', context)
+    if is_allowed(request.user.profile, chronicle_event_id=event_id):
+        return render(request, 'history/chronicle_inform.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
@@ -250,7 +267,10 @@ def chronicle_note_view(request, event_id):
         'participants': participants,
         'informed': informed
     }
-    return render(request, 'history/chronicle_note.html', context)
+    if is_allowed(request.user.profile, chronicle_event_id=event_id):
+        return render(request, 'history/chronicle_note.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
@@ -271,7 +291,10 @@ def chronicle_edit_view(request, event_id):
         'page_title': 'Edycja wydarzenia',
         'form': form
     }
-    return render(request, 'history/chronicle_edit.html', context)
+    if request.user.profile.character_status == 'gm':
+        return render(request, 'history/chronicle_edit.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 # #################### TIMELINE: model TimelineEvent ####################
@@ -582,7 +605,10 @@ def timeline_inform_view(request, event_id):
         'participants': participants_str,
         'informed': old_informed_str
     }
-    return render(request, 'history/timeline_inform.html', context)
+    if is_allowed(request.user.profile, timeline_event_id=event_id):
+        return render(request, 'history/timeline_inform.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
@@ -619,7 +645,10 @@ def timeline_note_view(request, event_id):
         'participants': participants,
         'informed': informed
     }
-    return render(request, 'history/timeline_note.html', context)
+    if is_allowed(request.user.profile, timeline_event_id=event_id):
+        return render(request, 'history/timeline_note.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
@@ -640,4 +669,7 @@ def timeline_edit_view(request, event_id):
         'page_title': 'Edycja wydarzenia',
         'form': form
     }
-    return render(request, 'history/timeline_edit.html', context)
+    if is_allowed(request.user.profile, timeline_event_id=event_id):
+        return render(request, 'history/timeline_edit.html', context)
+    else:
+        return redirect('home:dupa')
