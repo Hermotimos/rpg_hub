@@ -299,6 +299,7 @@ def chronicle_edit_view(request, event_id):
 
 # #################### TIMELINE: model TimelineEvent ####################
 
+
 SEASONS_WITH_STYLES_DICT = {
     '1': 'season-spring',
     '2': 'season-summer',
@@ -307,7 +308,7 @@ SEASONS_WITH_STYLES_DICT = {
 }
 
 
-def participated_or_informed_events(profile_id):
+def participated_and_informed_events(profile_id):
     profile = Profile.objects.get(id=profile_id)
     if profile.character_status == 'gm':
         known_qs = TimelineEvent.objects.all()
@@ -320,7 +321,7 @@ def participated_or_informed_events(profile_id):
 
 @login_required
 def timeline_main_view(request):
-    known_events = participated_or_informed_events(request.user.profile.id)
+    known_events = participated_and_informed_events(request.user.profile.id)
 
     # repetitive interations over known_events.all():
     threads_querysets_list = []
@@ -423,7 +424,7 @@ def timeline_create_view(request):
 
 @login_required
 def timeline_all_events_view(request):
-    known_events = participated_or_informed_events(request.user.profile.id)
+    known_events = participated_and_informed_events(request.user.profile.id)
     queryset = known_events
 
     context = {
@@ -440,7 +441,7 @@ def timeline_all_events_view(request):
 def timeline_thread_view(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
     events_by_thread_qs = thread.timeline_events.all()
-    known_events = participated_or_informed_events(request.user.profile.id)
+    known_events = participated_and_informed_events(request.user.profile.id)
     queryset = events_by_thread_qs.distinct() & known_events.distinct()
 
     context = {
@@ -449,14 +450,17 @@ def timeline_thread_view(request, thread_id):
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
-    return render(request, 'history/timeline_events.html', context)
+    if queryset:
+        return render(request, 'history/timeline_events.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
 def timeline_participant_view(request, participant_id):
     participant = get_object_or_404(Profile, id=participant_id)
     events_by_participant_qs = participant.timeline_events_participated.all()
-    known_events = participated_or_informed_events(request.user.profile.id)
+    known_events = participated_and_informed_events(request.user.profile.id)
     queryset = events_by_participant_qs.distinct() & known_events.distinct()
 
     if request.user.profile == participant:
@@ -470,14 +474,17 @@ def timeline_participant_view(request, participant_id):
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
-    return render(request, 'history/timeline_events.html', context)
+    if queryset:
+        return render(request, 'history/timeline_events.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
 def timeline_general_location_view(request, gen_loc_id):
     general_location = get_object_or_404(GeneralLocation, id=gen_loc_id)
     events_by_general_location_qs = TimelineEvent.objects.filter(general_location=general_location)
-    known_events = participated_or_informed_events(request.user.profile.id)
+    known_events = participated_and_informed_events(request.user.profile.id)
     queryset = events_by_general_location_qs.distinct() & known_events.distinct()
 
     context = {
@@ -493,7 +500,7 @@ def timeline_general_location_view(request, gen_loc_id):
 def timeline_specific_location_view(request, spec_loc_id):
     specific_location = get_object_or_404(SpecificLocation, id=spec_loc_id)
     events_by_specific_location_qs = specific_location.timeline_events.all()
-    known_events = participated_or_informed_events(request.user.profile.id)
+    known_events = participated_and_informed_events(request.user.profile.id)
     queryset = events_by_specific_location_qs.distinct() & known_events.distinct()
 
     context = {
@@ -502,7 +509,10 @@ def timeline_specific_location_view(request, spec_loc_id):
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
-    return render(request, 'history/timeline_events.html', context)
+    if queryset:
+        return render(request, 'history/timeline_events.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
@@ -522,7 +532,7 @@ def timeline_date_view(request, year, season='0'):
         events_qs = TimelineEvent.objects.filter(year=year, season=season)
         page_title = f'Kalendarium: {season_name} {year}. roku Archonatu Nemetha Samatiana'
 
-    known_events = participated_or_informed_events(request.user.profile.id)
+    known_events = participated_and_informed_events(request.user.profile.id)
     queryset = events_qs.distinct() & known_events.distinct()
 
     context = {
@@ -531,14 +541,17 @@ def timeline_date_view(request, year, season='0'):
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
-    return render(request, 'history/timeline_events.html', context)
+    if queryset:
+        return render(request, 'history/timeline_events.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
 def timeline_game_view(request, game_id):
     game = get_object_or_404(GameSession, id=game_id)
     events_by_game_no_qs = TimelineEvent.objects.filter(game_no=game)
-    known_events = participated_or_informed_events(request.user.profile.id)
+    known_events = participated_and_informed_events(request.user.profile.id)
     queryset = events_by_game_no_qs.distinct() & known_events.distinct()
 
     context = {
@@ -547,7 +560,10 @@ def timeline_game_view(request, game_id):
         'queryset': queryset,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
-    return render(request, 'history/timeline_events.html', context)
+    if is_allowed(request.user.profile, game_id=game_id):
+        return render(request, 'history/timeline_events.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
