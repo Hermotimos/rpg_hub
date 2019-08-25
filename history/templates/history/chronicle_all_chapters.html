@@ -13,19 +13,17 @@
 
 {% block content %}
     <br><br><br>
-    {% for chapter in chapters_with_allowed_games_dict %}
+    {% for chapter in chapters_with_games_dict %}
         <h5 class="unblue"><a href="#{{ chapter.id }}">{{ chapter.title }}</a></h5>
     {% endfor %}
     <br><br>
 
     <table class="chronicle" id="chronicle" data-search="true" data-toggle="table">
-
         <colgroup>
             <col class="description">
             <col class="actions">
         </colgroup>
-
-        <!-- This is neccessary to display table with Search feature nicely  -->
+        <!-- This is neccessary to display the table with Search feature nicely  -->
         <thead class="hide">
             <tr>
                 <th></th>
@@ -34,12 +32,12 @@
         </thead>
 
         <tbody>
-            {% for chapter in chapters_with_allowed_games_dict %}
+            {% for chapter in chapters_with_games_dict %}
             <tr>
                 <td><h3><a name="{{chapter.id}}"><br></a><br>{{ chapter.title }}<br><br></h3></td>
                 <td></td>
             </tr>
-                {% for game in chapters_with_allowed_games_dict|dict_lookup:chapter %}
+                {% for game in chapters_with_games_dict|dict_lookup:chapter %}
                     <tr>
                         <td>
                             <h4>
@@ -48,55 +46,53 @@
                         </td>
                         <td></td>
                     </tr>
-                    {% for event in game.chronicle_events.all %}
-                        {% if event in request.user.profile.chronicle_events_participated.all or event in request.user.profile.chronicle_events_informed.all or request.user.profile.character_status == 'gm' %}
-                            <tr>
-                                <td class="chronicle-event">
-                                    <br>
-                                    <p>
-                                        {% if event in request.user.profile.chronicle_events_informed.all %}
-                                            <small>(Znasz z opowieści)</small>
-                                        {% endif %}
-
-                                        {{ event.description|linebreaksbr }}
-                                        {% if event.pictures.all and event not in request.user.profile.chronicle_events_informed.all %}
-                                            <table class="chronicle-img">
-                                                <tr>
-                                                {% for p in event.pictures.all %}
-                                                    <td>
-                                                        <img src="{{ p.image.url }}" class="border-double">
-                                                        {% if p.description %}
-                                                            <small>{{ p.description }}</small>
-                                                        {% endif %}
-                                                    </td>
-                                                {% endfor %}
-                                                </tr>
-                                            </table>
-                                        {% endif %}
-
-                                        {% if event.debate %}
-                                            <br><br><a href="{% url 'debates:debate' event.debate.topic.id event.debate.id %}">Narada: {{ event.debate.title }}</a>
-                                        {% endif %}
-
-                                        {% for note in event.notes.all %}
-                                            {% if request.user == note.author %}
-                                                {% if note.text != '' %}
-                                                    <a style="color:{{ note.color }}"><br>Przemyślenia:<br>{{ note.text|linebreaksbr }}</a>
-                                                {% endif %}
-                                            {% endif %}
-                                        {% endfor %}
-                                    </p>
-                                </td>
-                                <td class="align-top">
-                                    <br>
-                                    <h6><a href="{% url 'history:chronicle-inform' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
-                                    <h6><a href="{% url 'history:chronicle-note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
-                                    {% if request.user.profile.character_status == 'gm' %}
-                                        <h6><a href="{% url 'history:chronicle-edit' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
+                    {% for event in games_with_events_dict|dict_lookup:game %}
+                        <tr>
+                            <td class="chronicle-event">
+                                <br>
+                                <p>
+                                    {% if event in events_informed %}
+                                        <small>(Znasz z opowieści)</small>
                                     {% endif %}
-                                </td>
-                            </tr>
-                        {% endif %}
+
+                                    {{ event.description|linebreaksbr }}
+                                    {% if event.pictures.all and event not in events_informed %}
+                                        <table class="chronicle-img">
+                                            <tr>
+                                            {% for p in event.pictures.all %}
+                                                <td>
+                                                    <img src="{{ p.image.url }}" class="border-double">
+                                                    {% if p.description %}
+                                                        <small>{{ p.description }}</small>
+                                                    {% endif %}
+                                                </td>
+                                            {% endfor %}
+                                            </tr>
+                                        </table>
+                                    {% endif %}
+
+                                    {% if event.debate %}
+                                        <br><br><a href="{% url 'debates:debate' event.debate.topic.id event.debate.id %}">Narada: {{ event.debate.title }}</a>
+                                    {% endif %}
+
+                                    {% for note in event.notes.all %}
+                                        {% if request.user == note.author %}
+                                            {% if note.text != '' %}
+                                                <a style="color:{{ note.color }}"><br>Przemyślenia:<br>{{ note.text|linebreaksbr }}</a>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </p>
+                            </td>
+                            <td class="align-top">
+                                <br>
+                                <h6><a href="{% url 'history:chronicle-inform' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
+                                <h6><a href="{% url 'history:chronicle-note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
+                                {% if request.user.profile.character_status == 'gm' %}
+                                    <h6><a href="{% url 'history:chronicle-edit' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
+                                {% endif %}
+                            </td>
+                        </tr>
                     {% endfor %}
                 {% endfor %}
             {% endfor %}
