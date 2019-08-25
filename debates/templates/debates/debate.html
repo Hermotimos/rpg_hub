@@ -15,98 +15,94 @@
 
 {% block content %}
     <br><br><br>
-    {% if request.user.profile not in debate.allowed_profiles.all and request.user.profile.character_status != 'gm' %}
-        <h4>Kto Ci powiedział, że coś takiego miało miejsce?<br>Chcesz znać tajemnice - rozmawiaj z ludźmi w świecie gry.<br>Pamiętaj, że cała gra opiera się na tym, że MG tworzy scenariusze, które odkrywasz w trakcie gry. Jeśli nie jesteś w stanie znieść tego poziomu stresu i niepewności, jaki niesie ze sobą eksploracja świata gry jako odgrywana przez Ciebie postać, to zrezygnuj z gry na rzecz książek fantasy. Ale nie psuj zabawy sobie i innym zaglądając tam, gdzie nie powinieneś!</h4>
-    {% else %}
-        <table class="forms">
-            <tr>
-                <td><h6>Temat:</h6></td>
-                <td><small>{{ debate.topic.title }}</small></td>
-            </tr>
-            <tr>
-                <td><h6>Inicjator:</h6></td>
-                <td><small>{{ debate.starter.profile.character_name|get_first_word }}</small></td>
-            </tr>
-            <tr>
-                <td><h6>Uczestnicy:</h6></td>
-                <td><small>{{ allowed }}</small></td>
-            </tr>
-            <tr>
-                <td><h6>Uważni uczestnicy:</h6></td>
-                <td><small>{{ followers }}</small></td>
-            </tr>
-        </table>
+    <table class="forms">
+        <tr>
+            <td><h6>Temat:</h6></td>
+            <td><small>{{ debate.topic.title }}</small></td>
+        </tr>
+        <tr>
+            <td><h6>Inicjator:</h6></td>
+            <td><small>{{ debate.starter.profile.character_name|get_first_word }}</small></td>
+        </tr>
+        <tr>
+            <td><h6>Uczestnicy:</h6></td>
+            <td><small>{{ allowed }}</small></td>
+        </tr>
+        <tr>
+            <td><h6>Uważni uczestnicy:</h6></td>
+            <td><small>{{ followers }}</small></td>
+        </tr>
+    </table>
 
-        <br>
-        <div class="mb-4">
-            <a href="{% url 'debates:invite' debate.topic.id debate.id %}" class="btn btn-outline-dark">Dodaj uczestników narady</a>&emsp;
-            {% if request.user.profile in debate.followers.all %}
-                <a href="{% url 'debates:unfollow' topic.id debate.id %}" class="btn btn-dark">Nie obserwuj</a>
-            {% else %}
-                <a href="{% url 'debates:follow' topic.id debate.id %}" class="btn btn-dark">Obserwuj</a>
-            {% endif %}
-        </div>
-        <br>
-
-        <table>
-            <tbody>
-                {% for remark in debate.remarks.all %}
-                    {% if remark.author.profile.character_status == 'gm' %}
-                        <tr class="posts-and-news">
-                            <td colspan="2" class="align-center">
-                                {{ remark.text|capfirst|linebreaks }}
-                                {% if remark.image %}
-                                    <img src="{{ remark.image.url }}" class="border-double">
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr class="posts-and-news">
-                            <td>
-                                <img class="rounded-circle article-img" src="{{ remark.author.profile.image.url }}">
-                                <br>
-                                <small class="smaller">{{ remark.author.profile.character_name }}</small>
-                            </td>
-                            <td class="align-center">
-                                <small class="left-float">{{ remark.date_posted|date:'d-M-Y, H:i' }}</small><br>
-                                {{ remark.text|capfirst|linebreaks }}
-                                {% if remark.image %}
-                                    <img src="{{ remark.image.url }}" class="border-double">
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
-        <br><br>
-
-        {% if debate.is_ended %}
-            <h4><b>Tak zakończyła się Wasza rozmowa.</b></h4><br>
+    <br>
+    <div class="mb-4">
+        <a href="{% url 'debates:invite' debate.topic.id debate.id %}" class="btn btn-outline-dark">Dodaj uczestników narady</a>&emsp;
+        {% if request.user.profile in debate.followers.all %}
+            <a href="{% url 'debates:unfollow' topic.id debate.id %}" class="btn btn-dark">Nie obserwuj</a>
         {% else %}
-            <div id="page-bottom" class="border-top">
-                <br>
-                <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="form-row">
-                        <div class="form-group col-md-2 mb-0">
-                            {% if request.user.profile.character_status == 'gm' %}
-                                {{ form.author|as_crispy_field }}
-                            {% else %}
-                            <div class="collapse">
-                                {{ form.author }}
-                            </div>
-                            {% endif %}
-                            {{ form.author.errors }}
-                        </div>
-                        <div class="form-group col-md-10 mb-0">
-                            {{ form.text|as_crispy_field }}
-                        </div>
-                    </div>
-                    {{ form.image|as_crispy_field }}
-                    <input class="btn btn-dark" type="submit" value="Tak rzeknij">
-                </form>
-            </div>
+            <a href="{% url 'debates:follow' topic.id debate.id %}" class="btn btn-dark">Obserwuj</a>
         {% endif %}
+    </div>
+    <br>
+
+    <table>
+        <tbody>
+            {% for remark in debate.remarks.all %}
+                {% if remark.author.profile.character_status == 'gm' %}
+                    <tr class="posts-and-news">
+                        <td colspan="2" class="align-center">
+                            {{ remark.text|capfirst|linebreaks }}
+                            {% if remark.image %}
+                                <img src="{{ remark.image.url }}" class="border-double">
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr class="posts-and-news">
+                        <td>
+                            <img class="rounded-circle article-img" src="{{ remark.author.profile.image.url }}">
+                            <br>
+                            <small class="smaller">{{ remark.author.profile.character_name }}</small>
+                        </td>
+                        <td class="align-center">
+                            <small class="left-float">{{ remark.date_posted|date:'d-M-Y, H:i' }}</small><br>
+                            {{ remark.text|capfirst|linebreaks }}
+                            {% if remark.image %}
+                                <img src="{{ remark.image.url }}" class="border-double">
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <br><br>
+
+    {% if debate.is_ended %}
+        <h4><b>Tak zakończyła się Wasza rozmowa.</b></h4><br>
+    {% else %}
+        <div id="page-bottom" class="border-top">
+            <br>
+            <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group col-md-2 mb-0">
+                        {% if request.user.profile.character_status == 'gm' %}
+                            {{ form.author|as_crispy_field }}
+                        {% else %}
+                        <div class="collapse">
+                            {{ form.author }}
+                        </div>
+                        {% endif %}
+                        {{ form.author.errors }}
+                    </div>
+                    <div class="form-group col-md-10 mb-0">
+                        {{ form.text|as_crispy_field }}
+                    </div>
+                </div>
+                {{ form.image|as_crispy_field }}
+                <input class="btn btn-dark" type="submit" value="Tak rzeknij">
+            </form>
+        </div>
     {% endif %}
 {% endblock content %}

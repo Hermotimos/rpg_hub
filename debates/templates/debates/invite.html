@@ -14,44 +14,39 @@
 
 {% block content %}
     <br><br><br>
-    {% if request.user.profile not in debate.allowed_profiles.all and request.user.profile.character_status != 'gm' %}
-        <h4>Kto Ci powiedział, że coś takiego miało miejsce?<br>Chcesz znać tajemnice - rozmawiaj z ludźmi w świecie gry.<br>Pamiętaj, że cała gra opiera się na tym, że MG tworzy scenariusze, które odkrywasz w trakcie gry. Jeśli nie jesteś w stanie znieść tego poziomu stresu i niepewności, jaki niesie ze sobą eksploracja świata gry jako odgrywana przez Ciebie postać, to zrezygnuj z gry na rzecz książek fantasy. Ale nie psuj zabawy sobie i innym zaglądając tam, gdzie nie powinieneś!</h4>
+    <table class="forms">
+        <tr>
+            <td><h6>Temat:</h6></td>
+            <td><small>{{ debate.topic.title }}</small></td>
+        </tr>
+        <tr>
+            <td><h6>Narada:</h6></td>
+            <td><small>{{ debate.title }}</small></td>
+        </tr>
+        <tr>
+            <td><h6>Uczestnicy:</h6></td>
+            <td><small>{{ allowed }}</small></td>
+        </tr>
+    </table><br><br>
+
+    {% if debate.is_ended %}
+        <h4><b>Ta narada już się zakończyła.</b></h4>
+    {% elif debate.is_individual %}
+        <h4><b>Nie możesz dodać uczestników do tej rozmowy.</b></h4>
     {% else %}
-        <table class="forms">
-            <tr>
-                <td><h6>Temat:</h6></td>
-                <td><small>{{ debate.topic.title }}</small></td>
-            </tr>
-            <tr>
-                <td><h6>Narada:</h6></td>
-                <td><small>{{ debate.title }}</small></td>
-            </tr>
-            <tr>
-                <td><h6>Uczestnicy:</h6></td>
-                <td><small>{{ allowed }}</small></td>
-            </tr>
-        </table><br><br>
+        <h6>Włącz uczestników do narady:</h6>
+        <small>1) Nowi uczestnicy uzyskają dostęp do całości narady.</small><br>
+        <small>2) Włączaj tylko postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji.</small><br>
+        <small>3) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small><br>
+        <small>4) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small><br>
+        <small>5) Jeśli chcesz się naradzić z postacią, której nie ma na liście, powiadom MG.</small><br>
+        <br>
 
-
-        {% if debate.is_ended %}
-            <h4><b>Ta narada już się zakończyła.</b></h4>
-        {% elif debate.is_individual %}
-            <h4><b>Nie możesz dodać uczestników do tej rozmowy.</b></h4>
-        {% else %}
-            <h6>Włącz uczestników do narady:</h6>
-            <small>1) Nowi uczestnicy uzyskają dostęp do całości narady.</small><br>
-            <small>2) Włączaj tylko postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji.</small><br>
-            <small>3) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small><br>
-            <small>4) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small><br>
-            <small>5) Jeśli chcesz się naradzić z postacią, której nie ma na liście, powiadom MG.</small><br>
-            <br>
-
-            <form method="POST" action=".#page-bottom" class="allowed-profiles-form-debate">
-                {% csrf_token %}
-                {{ form.allowed_profiles|as_crispy_field }}
-                <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
-                <input class="btn btn-dark" type="submit" value="Dodaj uczestników narady">
-            </form>
-        {% endif %}
+        <form method="POST" action=".#page-bottom" class="allowed-profiles-form-debate">
+            {% csrf_token %}
+            {{ form.allowed_profiles|as_crispy_field }}
+            <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
+            <input class="btn btn-dark" type="submit" value="Dodaj uczestników narady">
+        </form>
     {% endif %}
 {% endblock content %}

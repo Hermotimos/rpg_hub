@@ -96,7 +96,10 @@ def create_debate_view(request, topic_id):
         'remark_form': remark_form,
         'topic': topic
     }
-    return render(request, 'debates/create_debate.html', context)
+    if request.user.profile in topic.allowed_list() or request.user.profile.character_status == 'gm':
+        return render(request, 'debates/create_debate.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
@@ -145,7 +148,10 @@ def debate_view(request, topic_id, debate_id):
         'allowed': allowed_str,
         'followers': followers_str
     }
-    return render(request, 'debates/debate.html', context)
+    if request.user.profile in debate.allowed_profiles.all() or request.user.profile.character_status == 'gm':
+        return render(request, 'debates/debate.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
@@ -203,24 +209,33 @@ def debates_invite_view(request, topic_id, debate_id):
         'form': form,
         'allowed': old_allowed_str
     }
-    return render(request, 'debates/invite.html', context)
+    if request.user.profile in debate.allowed_profiles.all() or request.user.profile.character_status == 'gm':
+        return render(request, 'debates/invite.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
 def unfollow_debate_view(request, topic_id, debate_id):
-    obj = Debate.objects.get(id=debate_id)
-    updated_followers = obj.followers.exclude(user=request.user)
-    obj.followers.set(updated_followers)
-    messages.info(request, 'Przestałeś uważnie uczestniczyć w naradzie!')
-    return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
+    debate = Debate.objects.get(id=debate_id)
+    if request.user.profile in debate.allowed_profiles.all():
+        updated_followers = debate.followers.exclude(user=request.user)
+        debate.followers.set(updated_followers)
+        messages.info(request, 'Przestałeś uważnie uczestniczyć w naradzie!')
+        return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
 def follow_debate_view(request, topic_id, debate_id):
-    obj = Debate.objects.get(id=debate_id)
-    followers = obj.followers.all()
-    new_follower = request.user.profile
-    followers |= Profile.objects.filter(id=new_follower.id)
-    obj.followers.set(followers)
-    messages.info(request, 'Od teraz uważnie uczestniczysz w naradzie!')
-    return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
+    debate = Debate.objects.get(id=debate_id)
+    if request.user.profile in debate.allowed_profiles.all():
+        followers = debate.followers.all()
+        new_follower = request.user.profile
+        followers |= Profile.objects.filter(id=new_follower.id)
+        debate.followers.set(followers)
+        messages.info(request, 'Od teraz uważnie uczestniczysz w naradzie!')
+        return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
+    else:
+        return redirect('home:dupa')
