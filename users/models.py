@@ -18,6 +18,9 @@ class Profile(models.Model):
     character_name = models.CharField(max_length=50, default='')
     character_status = models.CharField(max_length=20, choices=STATUS, default='living_npc')
 
+    class Meta:
+        ordering = ['character_status', 'character_name']
+
     def __str__(self):
         return f'{self.character_name}'
 
@@ -30,6 +33,3 @@ class Profile(models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.image.path)
-
-    class Meta:
-        ordering = ['character_status', 'character_name']
