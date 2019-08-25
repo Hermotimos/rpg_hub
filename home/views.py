@@ -9,4 +9,4 @@ def home_view(request):
 
 @login_required
 def dupa_view(request):
-    return render(request, 'home/dupa.html', {'page_title': 'Dupa'})
+    return render(request, 'home/dupa.html', {'page_title': 'Dupa!'})
