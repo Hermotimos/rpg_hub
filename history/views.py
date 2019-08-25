@@ -115,8 +115,8 @@ def chronicle_one_game_view(request, game_id):
 
     context = {
         'page_title': f'{game.chapter.title}: {game.title}',
-        'events': list(events),
-        'informed_events': list(events_informed)
+        'events': events,
+        'events_informed': events_informed
     }
     return render(request, 'history/chronicle_one_game.html', context)
 

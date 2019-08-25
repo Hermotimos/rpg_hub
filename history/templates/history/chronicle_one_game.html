@@ -35,11 +35,11 @@
                         <br>
                         <!-- <p> tag enforces the right text formatting    -->
                         <p>
-                        {% if event in informed_events %}
+                        {% if event in events_informed %}
                             <small>(Znasz z opowieści)</small>
                         {% endif %}
                         {{ event.description|linebreaksbr }}
-                        {% if event.pictures.all and event not in informed_events %}
+                        {% if event.pictures.all and event not in events_informed %}
                             <table class="chronicle-img">
                                 <tr>
                                 {% for p in event.pictures.all %}
