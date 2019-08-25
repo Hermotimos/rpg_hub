@@ -33,27 +33,32 @@ def is_allowed_game(game, profile):
             return True
     return False
 
-# def list_known_games(profile):
-#     if profile.character_status == 'gm':
-#         return [g for g in GameSession.objects.all()]
-#     else:
-#         participated
-#         participated_games = [g for g in GameSession.objects.all() if ]
-
 
 @login_required
 def chronicle_main_view(request):
-    chapters = Chapter.objects.all()
-    chapters_with_allowed_games_dict = {}
-    for ch in chapters:
-        games = GameSession.objects.filter(chapter=ch)
-        allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile)]
-        if allowed_games_list:
-            chapters_with_allowed_games_dict[ch] = allowed_games_list
+    if request.user.profile.character_status == 'gm':
+        chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all()] for ch in Chapter.objects.all()}
+    else:
+        events_participated = request.user.profile.chronicle_events_participated.all()
+        events_informed = request.user.profile.chronicle_events_informed.all()
+        events = (events_participated | events_informed).distinct()
+
+        events = list(events)
+        games = [e.game_no for e in events]
+        chapters = [g.chapter for g in games]
+        chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all() if g in games] for ch in chapters}
+
+    # chapters = Chapter.objects.all()
+    # chapters_with_allowed_games_dict = {}
+    # for ch in chapters:
+    #     games = GameSession.objects.filter(chapter=ch)
+    #     allowed_games_list = [g for g in games if is_allowed_game(g, request.user.profile)]
+    #     if allowed_games_list:
+    #         chapters_with_allowed_games_dict[ch] = allowed_games_list
 
     context = {
         'page_title': 'Kronika',
-        'chapters_with_allowed_games_dict': chapters_with_allowed_games_dict
+        'chapters_with_games_dict': chapters_with_games_dict
     }
     return render(request, 'history/chronicle_main.html', context)
 
@@ -86,10 +91,8 @@ def chronicle_create_view(request):
 def chronicle_all_chapters_view(request):
     if request.user.profile.character_status == 'gm':
         events_informed = []
-        games = GameSession.objects.all()
-        chapters = Chapter.objects.all()
-        chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all()] for ch in chapters}
-        games_with_events_dict = {g: [e for e in g.chronicle_events.all()] for g in games}
+        chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all()] for ch in Chapter.objects.all()}
+        games_with_events_dict = {g: [e for e in g.chronicle_events.all()] for g in GameSession.objects.all()}
     else:
         events_participated = request.user.profile.chronicle_events_participated.all()
         events_informed = request.user.profile.chronicle_events_informed.all()
