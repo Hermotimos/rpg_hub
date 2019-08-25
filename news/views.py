@@ -8,6 +8,15 @@ from users.models import User, Profile
 from news.forms import CreateNewsForm, CreateResponseForm
 
 
+def is_allowed(profile, news_id):
+    if profile.character_status == 'gm':
+        return True
+    elif profile in News.objects.get(id=news_id).allowed_profiles.all():
+        return True
+    else:
+        return False
+
+
 @login_required
 def main_view(request):
     if request.user.profile.character_status == 'gm':
@@ -30,7 +39,6 @@ def create_news_view(request):
             news = form.save(commit=False)
             news.author = request.user
             news.save()
-
             allowed_profiles = form.cleaned_data['allowed_profiles']
             allowed_profiles |= Profile.objects.filter(id=request.user.id)
             news.allowed_profiles.set(allowed_profiles)
@@ -65,7 +73,6 @@ def create_news_view(request):
 def news_detail_view(request, news_slug):
     news = get_object_or_404(News, slug=news_slug)
     news_answers = news.news_answers.all()
-
     allowed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in news.allowed_profiles.all())
     followers_str = ', '.join(p.character_name.split(' ', 1)[0] for p in news.followers.all())
 
@@ -82,7 +89,6 @@ def news_detail_view(request, news_slug):
                       f"Ogłoszenie: {request.get_host()}/news/detail:{news.slug}/\n\n" \
                       f"Odpowiedź: {response.text}"
             sender = settings.EMAIL_HOST_USER
-
             receivers = []
             for user in User.objects.all():
                 if user.profile in news.followers.all() and user != request.user:
@@ -104,24 +110,33 @@ def news_detail_view(request, news_slug):
         'allowed': allowed_str,
         'followers': followers_str,
     }
-    return render(request, 'news/detail.html', context)
+    if is_allowed(request.user.profile, news_id=news.id):
+        return render(request, 'news/detail.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
 def unfollow_news_view(request, news_slug):
-    obj = News.objects.get(slug=news_slug)
-    updated_followers = obj.followers.exclude(user=request.user)
-    obj.followers.set(updated_followers)
-    messages.info(request, 'Przestałeś obserwować ogłoszenie!')
-    return redirect('news:detail', news_slug=news_slug)
+    news = News.objects.get(slug=news_slug)
+    if is_allowed(request.user.profile, news_id=news.id):
+        updated_followers = news.followers.exclude(user=request.user)
+        news.followers.set(updated_followers)
+        messages.info(request, 'Przestałeś obserwować ogłoszenie!')
+        return redirect('news:detail', news_slug=news_slug)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
 def follow_news_view(request, news_slug):
-    obj = News.objects.get(slug=news_slug)
-    followers = obj.followers.all()
-    new_follower = request.user.profile
-    followers |= Profile.objects.filter(id=new_follower.id)
-    obj.followers.set(followers)
-    messages.info(request, 'Obserwujesz ogłoszenie!')
-    return redirect('news:detail', news_slug=news_slug)
+    news = News.objects.get(slug=news_slug)
+    if is_allowed(request.user.profile, news_id=news.id):
+        followers = news.followers.all()
+        new_follower = request.user.profile
+        followers |= Profile.objects.filter(id=new_follower.id)
+        news.followers.set(followers)
+        messages.info(request, 'Obserwujesz ogłoszenie!')
+        return redirect('news:detail', news_slug=news_slug)
+    else:
+        return redirect('home:dupa')
