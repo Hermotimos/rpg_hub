@@ -15,44 +15,40 @@
 
 {% block content %}
     <br><br><br>
-    {% if request.user.profile not in event.participants.all and request.user.profile not in event.informed.all and request.user.profile.character_status != 'gm' %}
-        <h4>Kto Ci powiedział, że coś takiego miało miejsce?<br>Chcesz znać tajemnice - rozmawiaj z ludźmi w świecie gry.<br>Pamiętaj, że cała gra opiera się na tym, że MG tworzy scenariusze, które odkrywasz w trakcie gry. Jeśli nie jesteś w stanie znieść tego poziomu stresu i niepewności, jaki niesie ze sobą eksploracja świata gry jako odgrywana przez Ciebie postać, to zrezygnuj z gry na rzecz książek fantasy. Ale nie psuj zabawy sobie i innym zaglądając tam, gdzie nie powinieneś!</h4>
-    {% else %}
-        <table class="forms">
-            <tr>
-                <td><h6>Sesja:</h6></td>
-                <td class="justify"><small>{{ event.game_no }}</small></td>
-            </tr>
-            <tr>
-                <td><h6>Wydarzenie:</h6></td>
-                <td class="justify"><small>{{ event.description }}</small></td>
-            </tr>
-            <tr>
-                <td><h6>Uczestnicy:</h6></td>
-                <td><small>{{ participants }}</small></td>
-            </tr>
-            {% if informed %}
-            <tr>
-                <td><h6>Poinformowani:</h6></td>
-                <td><small>{{ informed }}</small></td>
-            </tr>
-            {% endif %}
-        </table><br><br>
+    <table class="forms">
+        <tr>
+            <td><h6>Sesja:</h6></td>
+            <td class="justify"><small>{{ event.game_no }}</small></td>
+        </tr>
+        <tr>
+            <td><h6>Wydarzenie:</h6></td>
+            <td class="justify"><small>{{ event.description }}</small></td>
+        </tr>
+        <tr>
+            <td><h6>Uczestnicy:</h6></td>
+            <td><small>{{ participants }}</small></td>
+        </tr>
+        {% if informed %}
+        <tr>
+            <td><h6>Poinformowani:</h6></td>
+            <td><small>{{ informed }}</small></td>
+        </tr>
+        {% endif %}
+    </table><br><br>
 
-        <small>Jeśli chcesz skasować przemyślenia, usuń treść i kliknij 'Zapamiętaj'.</small><br><br>
+    <small>Jeśli chcesz skasować przemyślenia, usuń treść i kliknij 'Zapamiętaj'.</small><br><br>
 
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="form-row">
-                <div class="form-group col-md-2 mb-0">
-                    {{ form.color|as_crispy_field }}
-                </div>
-                <div class="form-group col-md-10 mb-0">
-                    {{ form.text }}
-                </div>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group col-md-2 mb-0">
+                {{ form.color|as_crispy_field }}
             </div>
-            <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
-            <input class="btn btn-dark" type="submit" value="Zapamiętaj">
-        </form>
-    {% endif %}
+            <div class="form-group col-md-10 mb-0">
+                {{ form.text }}
+            </div>
+        </div>
+        <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
+        <input class="btn btn-dark" type="submit" value="Zapamiętaj">
+    </form>
 {% endblock content %}
