@@ -105,17 +105,40 @@ def chronicle_one_game_view(request, game_id):
     if request.user.profile.character_status == 'gm':
         events_informed = []
         events = game.chronicle_events.all()
+        events = list(events)
     else:
-        events_participated = request.user.profile.chronicle_events_participated.filter(game_no=game.game_no)
-        events_informed = request.user.profile.chronicle_events_informed.filter(game_no=game.game_no)
+        events_participated = request.user.profile.chronicle_events_participated.filter(game_no=game)
+        events_informed = request.user.profile.chronicle_events_informed.filter(game_no=game)
         events = (events_participated | events_informed).distinct()
+        events_informed = list(events_informed)
+        events = list(events)
 
     context = {
         'page_title': f'{game.chapter.title}: {game.title}',
         'events': list(events),
         'informed_events': list(events_informed)
     }
-    return render(request, 'history/chronicle_one_chapter.html', context)
+    return render(request, 'history/chronicle_one_game.html', context)
+
+
+# @login_required
+# def chronicle_one_chapter_view(request, game_id):
+#     game = get_object_or_404(GameSession, id=game_id)
+#     if request.user.profile.character_status == 'gm':
+#         events_informed = []
+#         events = game.chronicle_events.all()
+#     else:
+#         events_participated = request.user.profile.chronicle_events_participated.filter(game_no=game.game_no)
+#         events_informed = request.user.profile.chronicle_events_informed.filter(game_no=game.game_no)
+#         events = (events_participated | events_informed).distinct()
+#
+#     context = {
+#         'page_title': f'{game.chapter.title}: {game.title}',
+#         'events': list(events),
+#         'informed_events': list(events_informed)
+#     }
+#     return render(request, 'history/chronicle_one_game.html', context)
+
 
 
 @login_required
