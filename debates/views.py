@@ -217,7 +217,7 @@ def debates_invite_view(request, topic_id, debate_id):
 
 @login_required
 def unfollow_debate_view(request, topic_id, debate_id):
-    debate = Debate.objects.get(id=debate_id)
+    debate = get_object_or_404(Debate, id=debate_id)
     if request.user.profile in debate.allowed_profiles.all():
         updated_followers = debate.followers.exclude(user=request.user)
         debate.followers.set(updated_followers)
@@ -229,7 +229,7 @@ def unfollow_debate_view(request, topic_id, debate_id):
 
 @login_required
 def follow_debate_view(request, topic_id, debate_id):
-    debate = Debate.objects.get(id=debate_id)
+    debate = get_object_or_404(Debate, id=debate_id)
     if request.user.profile in debate.allowed_profiles.all():
         followers = debate.followers.all()
         new_follower = request.user.profile
