@@ -53,7 +53,7 @@ class CreateTopicTest(TestCase):
 class CreateDebateTest(TestCase):
     def setUp(self):
         # mock_user  - create, log in and add to Debate.allowed_profiles
-        self.mock_user = User.objects.create_user(id=1, username='mock_user', email='mock@user.com', password='fakepsswrd111')
+        self.mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='fakepsswrd111')
         self.client.force_login(self.mock_user)
         self.mock_topic = Topic.objects.create(id=1, title='Mock Topic', description='Mock description.')
         self.mock_debate = Debate.objects.create(id=1, topic=self.mock_topic, starter=self.mock_user)
