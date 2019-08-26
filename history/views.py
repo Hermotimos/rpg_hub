@@ -425,13 +425,13 @@ def timeline_create_view(request):
 @login_required
 def timeline_all_events_view(request):
     known_events = participated_and_informed_events(request.user.profile.id)
-    queryset = known_events
+    known_events = list(known_events)
 
     context = {
         'page_title': 'Pełne Kalendarium',
         'header': 'Opisane tu wydarzenia rozpoczęły swój bieg 20. roku Archonatu Nemetha Samatiana w Ebbonie, '
                   'choć zarodki wielu z nich sięgają znacznie odleglejszych czasów...',
-        'queryset': queryset,
+        'known_events': known_events,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
     return render(request, 'history/timeline_events.html', context)

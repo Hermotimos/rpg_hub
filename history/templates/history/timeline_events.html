@@ -41,7 +41,7 @@
         </thead>
 
         <tbody>
-        {% for event in queryset %}
+        {% for event in known_events %}
             <tr>
                 <td class="align-center align-top unblue-black {{ seasons_with_styles_dict|dict_lookup:event.season }}">
                     <a class="hover-pointer" href="{% url 'history:timeline-date' event.year '0' %}">{{ event.year }}</a>
