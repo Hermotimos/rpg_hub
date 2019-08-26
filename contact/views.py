@@ -58,7 +58,7 @@ def demands_create_view(request):
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
     else:
-        form = DemandsCreateForm(initial={'addressee': User.objects.get(username='MG')})
+        form = DemandsCreateForm()
 
     context = {
         'page_title': 'Nowy dezyderat',
@@ -73,7 +73,8 @@ def demands_delete_view(request, demand_id):
     if request.user == demand.author:
         demand.delete()
         messages.info(request, 'Usunięto dezyderat!')
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        return redirect('contact:demands-main')
+        # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     else:
         return redirect('home:dupa')
 
