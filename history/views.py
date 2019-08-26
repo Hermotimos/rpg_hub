@@ -139,7 +139,7 @@ def chronicle_one_chapter_view(request, chapter_id):
         games_with_events_dict = {g: [e for e in g.chronicle_events.all() if e in events] for g in games}
 
     context = {
-        'page_title': f'Kronika: {chapter.title}',
+        'page_title': f'{chapter.title}',
         'games_with_events_dict': games_with_events_dict,
         'events_informed': events_informed
     }
@@ -164,7 +164,7 @@ def chronicle_one_game_view(request, game_id):
         events = list(events)
 
     context = {
-        'page_title': f'{game.chapter.title}: {game.title}',
+        'page_title': f'{game.title}',
         'events': events,
         'events_informed': events_informed
     }
