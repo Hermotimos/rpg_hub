@@ -202,7 +202,8 @@ def plans_delete_view(request, demand_id):
     if request.user == demand.author:
         demand.delete()
         messages.info(request, 'Usunięto plan!')
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        return redirect('contact:plans-main')
+        # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     else:
         return redirect('home:dupa')
 
