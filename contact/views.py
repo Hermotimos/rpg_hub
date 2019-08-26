@@ -70,7 +70,7 @@ def demands_create_view(request):
 @login_required
 def demands_delete_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
-    if request.user in [demand.author, demand.addressee]:
+    if request.user == demand.author:
         demand.delete()
         messages.info(request, 'Usunięto dezyderat!')
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -108,7 +108,7 @@ def demands_modify_view(request, demand_id):
         'demand': demand,
         'form': form
     }
-    if request.user in [demand.author, demand.addressee]:
+    if request.user == demand.author:
         return render(request, 'contact/demands-modify.html', context)
     else:
         return redirect('home:dupa')
@@ -198,7 +198,7 @@ def plans_create_view(request):
 @login_required
 def plans_delete_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
-    if request.user in [demand.author, demand.addressee]:
+    if request.user == demand.author:
         demand.delete()
         messages.info(request, 'Usunięto plan!')
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -224,7 +224,7 @@ def plans_modify_view(request, demand_id):
         'demand': demand,
         'form': form
     }
-    if request.user in [demand.author, demand.addressee]:
+    if request.user == demand.author:
         return render(request, 'contact/plans-modify.html', context)
     else:
         return redirect('home:dupa')
