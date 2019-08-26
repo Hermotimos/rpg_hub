@@ -7,14 +7,14 @@ from users.models import User
 
 class DebatesMainTest(TestCase):
     def setUp(self):
-        # mock_user  - create, log in and add to Debate.allowed_profiles
+        # mock_user  - create, log in
         mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='fakepsswrd111')
         self.client.force_login(mock_user)
 
     def test_login_required(self):
         self.client.logout()
         url = reverse('debates:main')
-        redirect_url = reverse('users:login') + '?next=' + reverse('debates:main')
+        redirect_url = reverse('users:login') + '?next=' + url
         response = self.client.get(url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
@@ -30,14 +30,13 @@ class DebatesMainTest(TestCase):
 
 class CreateTopicTest(TestCase):
     def setUp(self):
-        # mock_user  - create, log in and add to Debate.allowed_profiles
         mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='fakepsswrd111')
         self.client.force_login(mock_user)
 
     def test_login_required(self):
         self.client.logout()
         url = reverse('debates:create-topic')
-        redirect_url = reverse('users:login') + '?next=' + reverse('debates:create-topic')
+        redirect_url = reverse('users:login') + '?next=' + url
         response = self.client.get(url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
@@ -53,18 +52,20 @@ class CreateTopicTest(TestCase):
 
 class CreateDebateTest(TestCase):
     def setUp(self):
+        # mock_user  - create, log in and add to Debate.allowed_profiles
         self.mock_user = User.objects.create_user(id=1, username='mock_user', email='mock@user.com', password='fakepsswrd111')
         self.client.force_login(self.mock_user)
         self.mock_topic = Topic.objects.create(id=1, title='Mock Topic', description='Mock description.')
         self.mock_debate = Debate.objects.create(id=1, topic=self.mock_topic, starter=self.mock_user)
         self.mock_debate.allowed_profiles.set([self.mock_user.profile, ])
+        # testing if mock_user is added to allowed
         # self.assertTrue(self.mock_user.profile in self.mock_debate.allowed_profiles.all())
         # self.assertTrue(self.mock_user.profile in self.mock_topic.allowed_list())
 
     def test_login_required(self):
         self.client.logout()
         url = reverse('debates:create-debate', kwargs={'topic_id': 1})
-        redirect_url = reverse('users:login') + '?next=' + reverse('debates:create-debate', kwargs={'topic_id': 1})
+        redirect_url = reverse('users:login') + '?next=' + url
         response = self.client.get(url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
@@ -111,7 +112,7 @@ class DebateTest(TestCase):
     def test_login_required(self):
         self.client.logout()
         url = reverse('debates:debate', kwargs={'topic_id': 1, 'debate_id': 1})
-        redirect_url = reverse('users:login') + '?next=' + reverse('debates:debate', kwargs={'topic_id': 1, 'debate_id': 1})
+        redirect_url = reverse('users:login') + '?next=' + url
         response = self.client.get(url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
@@ -149,7 +150,7 @@ class DebatesInviteTest(TestCase):
     def test_login_required(self):
         self.client.logout()
         url = reverse('debates:invite', kwargs={'topic_id': 1, 'debate_id': 1})
-        redirect_url = reverse('users:login') + '?next=' + reverse('debates:invite', kwargs={'topic_id': 1, 'debate_id': 1})
+        redirect_url = reverse('users:login') + '?next=' + url
         response = self.client.get(url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
@@ -187,7 +188,7 @@ class UnfollowDebateTest(TestCase):
     def test_login_required(self):
         self.client.logout()
         url = reverse('debates:unfollow', kwargs={'topic_id': 1, 'debate_id': 1})
-        redirect_url = reverse('users:login') + '?next=' + reverse('debates:unfollow', kwargs={'topic_id': 1, 'debate_id': 1})
+        redirect_url = reverse('users:login') + '?next=' + url
         response = self.client.get(url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
@@ -226,7 +227,7 @@ class FollowDebateTest(TestCase):
     def test_login_required(self):
         self.client.logout()
         url = reverse('debates:follow', kwargs={'topic_id': 1, 'debate_id': 1})
-        redirect_url = reverse('users:login') + '?next=' + reverse('debates:follow', kwargs={'topic_id': 1, 'debate_id': 1})
+        redirect_url = reverse('users:login') + '?next=' + url
         response = self.client.get(url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
