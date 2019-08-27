@@ -19,8 +19,8 @@
         {% csrf_token %}
         <div class="form-row">
             <div class="form-group col-md-2 mb-0">
-            {{ form.addressee|as_crispy_field }}
-            {{ form.addressee.errors }}
+                {{ form.addressee|as_crispy_field }}
+                {{ form.addressee.errors }}
             </div>
             <div class="form-group col-md-10 mb-0">
                 {{ form.text|as_crispy_field }}
