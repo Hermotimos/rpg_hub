@@ -20,9 +20,9 @@ def is_allowed(profile, news_id):
 @login_required
 def main_view(request):
     if request.user.profile.character_status == 'gm':
-        newss = News.objects.all()
+        newss = list(News.objects.all())
     else:
-        newss = request.user.profile.allowed_news.all()
+        newss = list(request.user.profile.allowed_news.all())
 
     context = {
         'page_title': 'Ogłoszenia',
@@ -72,7 +72,7 @@ def create_news_view(request):
 @login_required
 def news_detail_view(request, news_slug):
     news = get_object_or_404(News, slug=news_slug)
-    news_answers = news.news_answers.all()
+    news_answers = list(news.news_answers.all())
     allowed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in news.allowed_profiles.all())
     followers_str = ', '.join(p.character_name.split(' ', 1)[0] for p in news.followers.all())
 
