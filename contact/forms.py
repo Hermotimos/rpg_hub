@@ -10,13 +10,15 @@ class DemandsCreateForm(forms.ModelForm):
         model = Demand
         fields = ['addressee', 'text', 'image']
 
-    addressee = forms.ModelChoiceField(
-        label='Adresat:',
-        queryset=User.objects.filter(
-            Q(profile__character_status='active_player') |
-            Q(profile__character_status='gm')
-        )
-    )
+    def __init__(self, *args, **kwargs):
+        authenticated_user = kwargs.pop('authenticated_user')
+        super(DemandsCreateForm, self).__init__(*args, **kwargs)
+        self.fields['addressee'].label = 'Adresat:'
+        self.fields['addressee'].queryset = User.objects.exclude(Q(id=authenticated_user.id) |
+                                                                    Q(profile__character_status='dead_player') |
+                                                                    Q(profile__character_status='inactive_player') |
+                                                                    Q(profile__character_status='dead_npc') |
+                                                                    Q(profile__character_status='living_npc'))
 
     text = forms.CharField(
         label='',

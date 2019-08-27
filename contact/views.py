@@ -37,7 +37,7 @@ def demands_main_view(request):
 @login_required
 def demands_create_view(request):
     if request.method == 'POST':
-        form = DemandsCreateForm(request.POST or None, request.FILES)
+        form = DemandsCreateForm(authenticated_user=request.user, data=request.POST or None, files=request.FILES)
         if form.is_valid():
             demand = form.save(commit=False)
             demand.author = request.user
@@ -58,7 +58,7 @@ def demands_create_view(request):
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
     else:
-        form = DemandsCreateForm()
+        form = DemandsCreateForm(authenticated_user=request.user)
 
     context = {
         'page_title': 'Nowy dezyderat',
