@@ -47,10 +47,7 @@ def demands_create_view(request):
                 message = f"Dezyderat od {demand.author}:\n{demand.text}\n" \
                           f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
                 sender = settings.EMAIL_HOST_USER
-                if request.user.profile.character_status == 'active_player':
-                    receivers = ['lukas.kozicki@gmail.com']
-                else:
-                    receivers = []
+                receivers = [demand.addressee.email]
                 send_mail(subject, message, sender, receivers)
 
             messages.info(request, f'Dezyderat został wysłany!')
@@ -91,10 +88,7 @@ def demands_modify_view(request, demand_id):
             message = f"Modyfikacja przez {demand.author}:\n{demand.text}\n" \
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             sender = settings.EMAIL_HOST_USER
-            if request.user.profile.character_status == 'active_player':
-                receivers = ['lukas.kozicki@gmail.com']
-            else:
-                receivers = []
+            receivers = [demand.addressee.email]
             send_mail(subject, message, sender, receivers)
 
             messages.info(request, 'Zmodyfikowano dezyderat!')
@@ -131,8 +125,8 @@ def demands_detail_view(request, demand_id):
             message = f"Odpowiedź od {answer.author}:\n{answer.text}\n" \
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             sender = settings.EMAIL_HOST_USER
-            if request.user.profile.character_status == 'active_player':
-                receivers = ['lukas.kozicki@gmail.com']
+            if request.user == demand.author:
+                receivers = [demand.addressee.email]
             else:
                 receivers = [demand.author.email]
             send_mail(subject, message, sender, receivers)
@@ -157,7 +151,7 @@ def demands_detail_view(request, demand_id):
 
 @login_required
 def mark_done_view(request, demand_id):
-    demand = Demand.objects.get(id=demand_id)
+    demand = get_object_or_404(Demand, id=demand_id)
     if request.user in [demand.author, demand.addressee]:
         demand.is_done = True
         demand.date_done = timezone.now()
@@ -169,14 +163,14 @@ def mark_done_view(request, demand_id):
                   f"Dezyderat:\n{demand.text}\n" \
                   f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
         sender = settings.EMAIL_HOST_USER
-        if request.user.profile.character_status == 'active_player':
-            receivers = ['lukas.kozicki@gmail.com']
+        if request.user == demand.author:
+            receivers = [demand.addressee.email]
         else:
             receivers = [demand.author.email]
         send_mail(subject, message, sender, receivers)
 
         messages.info(request, 'Oznaczono jako zrobiony!')
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        return redirect('contact:demands-main')
 
     else:
         return redirect('home:dupa')
@@ -194,14 +188,14 @@ def mark_undone_view(request, demand_id):
                   f"Dezyderat:\n{demand.text}\n" \
                   f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
         sender = settings.EMAIL_HOST_USER
-        if request.user.profile.character_status == 'active_player':
-            receivers = ['lukas.kozicki@gmail.com']
+        if request.user == demand.author:
+            receivers = [demand.addressee.email]
         else:
             receivers = [demand.author.email]
         send_mail(subject, message, sender, receivers)
 
         messages.info(request, 'Oznaczono jako niezrobiony!')
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        return redirect('contact:demands-main')
 
     else:
         return redirect('home:dupa')
