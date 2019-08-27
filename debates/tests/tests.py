@@ -8,7 +8,7 @@ from users.models import User
 class DebatesMainTest(TestCase):
     def setUp(self):
         # user1  - create, log in
-        user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        user1 = User.objects.create_user(username='user1', password='pass1111')
         self.client.force_login(user1)
 
     def test_login_required(self):
@@ -30,7 +30,7 @@ class DebatesMainTest(TestCase):
 
 class CreateTopicTest(TestCase):
     def setUp(self):
-        user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        user1 = User.objects.create_user(username='user1', password='pass1111')
         self.client.force_login(user1)
 
     def test_login_required(self):
@@ -53,7 +53,7 @@ class CreateTopicTest(TestCase):
 class CreateDebateTest(TestCase):
     def setUp(self):
         # user1  - create, log in and add to Debate.allowed_profiles
-        user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        user1 = User.objects.create_user(username='user1', password='pass1111')
         self.client.force_login(user1)
         topic1 = Topic.objects.create(id=1)
         debate1 = Debate.objects.create(id=1, topic=topic1, starter=user1)
@@ -75,7 +75,7 @@ class CreateDebateTest(TestCase):
         self.assertEquals(response.status_code, 404)
 
     def test_redirect_if_unallowed(self):
-        user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
+        user2 = User.objects.create_user(username='user2', password='pass1111')
         self.client.force_login(user2)
         url = reverse('debates:create-debate', kwargs={'topic_id': 1})
         redirect_url = reverse('home:dupa')
@@ -103,7 +103,7 @@ class CreateDebateTest(TestCase):
 
 class DebateTest(TestCase):
     def setUp(self):
-        user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        user1 = User.objects.create_user(username='user1', password='pass1111')
         self.client.force_login(user1)
         topic1 = Topic.objects.create(id=1, title='Topic1', description='Description1')
         debate1 = Debate.objects.create(id=1, topic=topic1, starter=user1)
@@ -117,7 +117,7 @@ class DebateTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
+        user2 = User.objects.create_user(username='user2', password='pass1111')
         self.client.force_login(user2)
         url = reverse('debates:debate', kwargs={'topic_id': 1, 'debate_id': 1})
         redirect_url = reverse('home:dupa')
@@ -141,7 +141,7 @@ class DebateTest(TestCase):
 
 class DebatesInviteTest(TestCase):
     def setUp(self):
-        user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        user1 = User.objects.create_user(username='user1', password='pass1111')
         self.client.force_login(user1)
         topic1 = Topic.objects.create(id=1, title='Topic1', description='Description1')
         debate1 = Debate.objects.create(id=1, topic=topic1, starter=user1)
@@ -155,7 +155,7 @@ class DebatesInviteTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
+        user2 = User.objects.create_user(username='user2', password='pass1111')
         self.client.force_login(user2)
         url = reverse('debates:invite', kwargs={'topic_id': 1, 'debate_id': 1})
         redirect_url = reverse('home:dupa')
@@ -179,7 +179,7 @@ class DebatesInviteTest(TestCase):
 
 class UnfollowDebateTest(TestCase):
     def setUp(self):
-        user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        user1 = User.objects.create_user(username='user1', password='pass1111')
         self.client.force_login(user1)
         topic1 = Topic.objects.create(id=1, title='Topic1', description='Description1')
         debate1 = Debate.objects.create(id=1, topic=topic1, starter=user1)
@@ -193,7 +193,7 @@ class UnfollowDebateTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
+        user2 = User.objects.create_user(username='user2', password='pass1111')
         self.client.force_login(user2)
         url = reverse('debates:unfollow', kwargs={'topic_id': 1, 'debate_id': 1})
         redirect_url = reverse('home:dupa')
@@ -220,7 +220,7 @@ class UnfollowDebateTest(TestCase):
 
 class FollowDebateTest(TestCase):
     def setUp(self):
-        user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        user1 = User.objects.create_user(username='user1', password='pass1111')
         self.client.force_login(user1)
         topic1 = Topic.objects.create(id=1, title='Topic1', description='Description1')
         debate1 = Debate.objects.create(id=1, topic=topic1, starter=user1)
@@ -234,7 +234,7 @@ class FollowDebateTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
+        user2 = User.objects.create_user(username='user2', password='pass1111')
         self.client.force_login(user2)
         url = reverse('debates:follow', kwargs={'topic_id': 1, 'debate_id': 1})
         redirect_url = reverse('home:dupa')

@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
-from news.views import main_view, create_news_view, news_detail_view, follow_news_view, unfollow_news_view
+from news import views
 from news.models import News, NewsAnswer
 from users.models import User, Profile
 
@@ -13,7 +13,7 @@ class MainTest(TestCase):
 
     def test_url_resolves_view(self):
         view = resolve('/news/')
-        self.assertEquals(view.func, main_view)
+        self.assertEquals(view.func, views.main_view)
 
 
 class CreateTest(TestCase):
@@ -24,7 +24,7 @@ class CreateTest(TestCase):
 
     def test_url_resolves_view(self):
         view = resolve('/news/create/')
-        self.assertEquals(view.func, create_news_view)
+        self.assertEquals(view.func, views.create_news_view)
 
 
 class DetailTest(TestCase):

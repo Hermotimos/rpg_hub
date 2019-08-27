@@ -9,10 +9,9 @@ class LinksToAppsTest(TestCase):
         url = reverse('home:home')
         self.response = self.client.get(url, follow=True)
 
-        mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='fakepsswrd111')
-        mock_user.profile.character_status = 'gm'
-        mock_user.save()
-        self.client.login(username=mock_user.username, password=mock_user.password)
+        user1 = User.objects.create_user(username='user1', password='pass1111')
+        user1.profile.character_status = 'gm'
+        self.client.login(username=user1.username, password=user1.password)
 
     def test_get(self):
         self.assertEquals(self.response.status_code, 200)

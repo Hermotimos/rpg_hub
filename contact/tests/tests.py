@@ -10,7 +10,7 @@ from users.models import User
 
 class DemandsMainTest(TestCase):
     def setUp(self):
-        user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        user1 = User.objects.create_user(username='user1', password='pass1111')
         self.client.force_login(user1)
 
     def test_login_required(self):
@@ -32,7 +32,7 @@ class DemandsMainTest(TestCase):
 
 class DemandsCreateTest(TestCase):
     def setUp(self):
-        user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        user1 = User.objects.create_user(username='user1', password='pass1111')
         self.client.force_login(user1)
 
     def test_login_required(self):
@@ -54,8 +54,8 @@ class DemandsCreateTest(TestCase):
 
 class DemandsDeleteTest(TestCase):
     def setUp(self):
-        self.user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
-        self.user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
+        self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', password='pass1111')
         Demand.objects.create(id=1, author=self.user1, addressee=self.user2, text='Demand1')
 
     def test_login_required(self):
@@ -94,8 +94,8 @@ class DemandsDeleteTest(TestCase):
 
 class DemandsModifyTest(TestCase):
     def setUp(self):
-        self.user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
-        self.user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
+        self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', password='pass1111')
         Demand.objects.create(id=1, author=self.user1, addressee=self.user2, text='Demand1')
 
     def test_login_required(self):
@@ -131,9 +131,9 @@ class DemandsModifyTest(TestCase):
 
 class DemandsDetailTest(TestCase):
     def setUp(self):
-        self.user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
-        self.user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
-        self.user3 = User.objects.create_user(username='user3', email='user@3.com', password='pass1111')
+        self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', password='pass1111')
+        self.user3 = User.objects.create_user(username='user3', password='pass1111')
         Demand.objects.create(id=1, author=self.user1, addressee=self.user2, text='Demand1')
 
     def test_login_required(self):
@@ -176,9 +176,9 @@ class DemandsDetailTest(TestCase):
 
 class MarkDoneTest(TestCase):
     def setUp(self):
-        self.user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
-        self.user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
-        self.user3 = User.objects.create_user(username='user3', email='user@3.com', password='pass1111')
+        self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', password='pass1111')
+        self.user3 = User.objects.create_user(username='user3', password='pass1111')
         Demand.objects.create(id=1, author=self.user1, addressee=self.user2, text='Demand1')
 
     def test_login_required(self):
@@ -223,9 +223,9 @@ class MarkDoneTest(TestCase):
 
 class MarkUndoneTest(TestCase):
     def setUp(self):
-        self.user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
-        self.user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
-        self.user3 = User.objects.create_user(username='user3', email='user@3.com', password='pass1111')
+        self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', password='pass1111')
+        self.user3 = User.objects.create_user(username='user3', password='pass1111')
         Demand.objects.create(id=1, author=self.user1, addressee=self.user2, text='Demand1')
 
     def test_login_required(self):
