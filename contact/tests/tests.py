@@ -10,8 +10,8 @@ from users.models import User
 
 class DemandsMainTest(TestCase):
     def setUp(self):
-        mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='fakepsswrd111')
-        self.client.force_login(mock_user)
+        user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        self.client.force_login(user1)
 
     def test_login_required(self):
         self.client.logout()
@@ -32,8 +32,8 @@ class DemandsMainTest(TestCase):
 
 class DemandsCreateTest(TestCase):
     def setUp(self):
-        mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='fakepsswrd111')
-        self.client.force_login(mock_user)
+        user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        self.client.force_login(user1)
 
     def test_login_required(self):
         self.client.logout()
@@ -54,9 +54,9 @@ class DemandsCreateTest(TestCase):
 
 class DemandsDeleteTest(TestCase):
     def setUp(self):
-        self.mock_user1 = User.objects.create_user(username='mock_user', email='mock@user.com', password='psswrd111')
-        self.mock_user2 = User.objects.create_user(username='mock_user2', email='mock@user2.com', password='psswrd111')
-        Demand.objects.create(id=1, author=self.mock_user1, addressee=self.mock_user2, text='Mock demand')
+        self.user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
+        Demand.objects.create(id=1, author=self.user1, addressee=self.user2, text='Demand1')
 
     def test_login_required(self):
         url = reverse('contact:demands-delete', kwargs={'demand_id': 1})
@@ -66,20 +66,20 @@ class DemandsDeleteTest(TestCase):
 
     def test_redirect_if_unallowed(self):
         # addressee is not allowed to delete
-        self.client.force_login(self.mock_user2)
+        self.client.force_login(self.user2)
         url = reverse('contact:demands-delete', kwargs={'demand_id': 1})
         redirect_url = reverse('home:dupa')
         response = self.client.get(url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_404(self):
-        self.client.force_login(self.mock_user1)
+        self.client.force_login(self.user1)
         url = reverse('contact:demands-delete', kwargs={'demand_id': 999})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 404)
 
     def test_redirect_if_allowed(self):
-        self.client.force_login(self.mock_user1)
+        self.client.force_login(self.user1)
         url = reverse('contact:demands-delete', kwargs={'demand_id': 1})
         redirect_url = reverse('contact:demands-main')
         response = self.client.get(url)
@@ -94,9 +94,9 @@ class DemandsDeleteTest(TestCase):
 
 class DemandsModifyTest(TestCase):
     def setUp(self):
-        self.mock_user1 = User.objects.create_user(username='mock_user', email='mock@user.com', password='psswrd111')
-        self.mock_user2 = User.objects.create_user(username='mock_user2', email='mock@user2.com', password='psswrd111')
-        Demand.objects.create(id=1, author=self.mock_user1, addressee=self.mock_user2, text='Mock demand')
+        self.user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
+        Demand.objects.create(id=1, author=self.user1, addressee=self.user2, text='Demand1')
 
     def test_login_required(self):
         url = reverse('contact:demands-modify', kwargs={'demand_id': 1})
@@ -106,20 +106,20 @@ class DemandsModifyTest(TestCase):
 
     def test_redirect_if_unallowed(self):
         # addressee is not allowed to modify
-        self.client.force_login(self.mock_user2)
+        self.client.force_login(self.user2)
         url = reverse('contact:demands-modify', kwargs={'demand_id': 1})
         redirect_url = reverse('home:dupa')
         response = self.client.get(url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_404(self):
-        self.client.force_login(self.mock_user1)
+        self.client.force_login(self.user1)
         url = reverse('contact:demands-modify', kwargs={'demand_id': 999})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 404)
 
     def test_get_1(self):
-        self.client.force_login(self.mock_user1)
+        self.client.force_login(self.user1)
         url = reverse('contact:demands-modify', kwargs={'demand_id': 1})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
@@ -131,10 +131,10 @@ class DemandsModifyTest(TestCase):
 
 class DemandsDetailTest(TestCase):
     def setUp(self):
-        self.mock_user1 = User.objects.create_user(username='mock_user', email='mock@user.com', password='psswrd111')
-        self.mock_user2 = User.objects.create_user(username='mock_user2', email='mock@user2.com', password='psswrd111')
-        self.mock_user3 = User.objects.create_user(username='mock_user3', email='mock@user3.com', password='psswrd111')
-        Demand.objects.create(id=1, author=self.mock_user1, addressee=self.mock_user2, text='Mock demand')
+        self.user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
+        self.user3 = User.objects.create_user(username='user3', email='user@3.com', password='pass1111')
+        Demand.objects.create(id=1, author=self.user1, addressee=self.user2, text='Demand1')
 
     def test_login_required(self):
         url = reverse('contact:demands-detail', kwargs={'demand_id': 1})
@@ -143,28 +143,28 @@ class DemandsDetailTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        self.client.force_login(self.mock_user3)
+        self.client.force_login(self.user3)
         url = reverse('contact:demands-detail', kwargs={'demand_id': 1})
         redirect_url = reverse('home:dupa')
         response = self.client.get(url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_404(self):
-        self.client.force_login(self.mock_user1)
+        self.client.force_login(self.user1)
         url = reverse('contact:demands-detail', kwargs={'demand_id': 999})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 404)
 
     def test_get_1(self):
         # test for author
-        self.client.force_login(self.mock_user1)
+        self.client.force_login(self.user1)
         url = reverse('contact:demands-detail', kwargs={'demand_id': 1})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
 
     def test_get_2(self):
         # test for addressee
-        self.client.force_login(self.mock_user2)
+        self.client.force_login(self.user2)
         url = reverse('contact:demands-detail', kwargs={'demand_id': 1})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
@@ -176,10 +176,10 @@ class DemandsDetailTest(TestCase):
 
 class MarkDoneTest(TestCase):
     def setUp(self):
-        self.mock_user1 = User.objects.create_user(username='mock_user', email='mock@user.com', password='psswrd111')
-        self.mock_user2 = User.objects.create_user(username='mock_user2', email='mock@user2.com', password='psswrd111')
-        self.mock_user3 = User.objects.create_user(username='mock_user3', email='mock@user3.com', password='psswrd111')
-        Demand.objects.create(id=1, author=self.mock_user1, addressee=self.mock_user2, text='Mock demand')
+        self.user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
+        self.user3 = User.objects.create_user(username='user3', email='user@3.com', password='pass1111')
+        Demand.objects.create(id=1, author=self.user1, addressee=self.user2, text='Demand1')
 
     def test_login_required(self):
         url = reverse('contact:done', kwargs={'demand_id': 1})
@@ -188,27 +188,27 @@ class MarkDoneTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        self.client.force_login(self.mock_user3)
+        self.client.force_login(self.user3)
         url = reverse('contact:done', kwargs={'demand_id': 1})
         redirect_url = reverse('home:dupa')
         response = self.client.get(url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_404(self):
-        self.client.force_login(self.mock_user1)
+        self.client.force_login(self.user1)
         url = reverse('contact:done', kwargs={'demand_id': 999})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 404)
 
     def test_redirect_if_allowed_1(self):
-        self.client.force_login(self.mock_user1)
+        self.client.force_login(self.user1)
         url = reverse('contact:done', kwargs={'demand_id': 1})
         redirect_url = reverse('contact:demands-main')
         response = self.client.get(url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_allowed_2(self):
-        self.client.force_login(self.mock_user2)
+        self.client.force_login(self.user2)
         url = reverse('contact:done', kwargs={'demand_id': 1})
         redirect_url = reverse('contact:demands-main')
         response = self.client.get(url)
@@ -223,10 +223,10 @@ class MarkDoneTest(TestCase):
 
 class MarkUndoneTest(TestCase):
     def setUp(self):
-        self.mock_user1 = User.objects.create_user(username='mock_user', email='mock@user.com', password='psswrd111')
-        self.mock_user2 = User.objects.create_user(username='mock_user2', email='mock@user2.com', password='psswrd111')
-        self.mock_user3 = User.objects.create_user(username='mock_user3', email='mock@user3.com', password='psswrd111')
-        Demand.objects.create(id=1, author=self.mock_user1, addressee=self.mock_user2, text='Mock demand')
+        self.user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
+        self.user3 = User.objects.create_user(username='user3', email='user@3.com', password='pass1111')
+        Demand.objects.create(id=1, author=self.user1, addressee=self.user2, text='Demand1')
 
     def test_login_required(self):
         url = reverse('contact:done', kwargs={'demand_id': 1})
@@ -235,27 +235,27 @@ class MarkUndoneTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        self.client.force_login(self.mock_user3)
+        self.client.force_login(self.user3)
         url = reverse('contact:undone', kwargs={'demand_id': 1})
         redirect_url = reverse('home:dupa')
         response = self.client.get(url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_404(self):
-        self.client.force_login(self.mock_user1)
+        self.client.force_login(self.user1)
         url = reverse('contact:undone', kwargs={'demand_id': 999})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 404)
 
     def test_redirect_if_allowed_1(self):
-        self.client.force_login(self.mock_user1)
+        self.client.force_login(self.user1)
         url = reverse('contact:undone', kwargs={'demand_id': 1})
         redirect_url = reverse('contact:demands-main')
         response = self.client.get(url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_allowed_2(self):
-        self.client.force_login(self.mock_user2)
+        self.client.force_login(self.user2)
         url = reverse('contact:undone', kwargs={'demand_id': 1})
         redirect_url = reverse('contact:demands-main')
         response = self.client.get(url)
