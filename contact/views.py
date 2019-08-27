@@ -15,13 +15,13 @@ from contact.forms import DemandsCreateForm, DemandsModifyForm, DemandAnswerForm
 @login_required
 def demands_main_view(request):
     received_demands_undone = \
-        Demand.objects.filter(is_done=False, addressee=request.user).exclude(author=request.user)
+        list(Demand.objects.filter(is_done=False, addressee=request.user).exclude(author=request.user))
     received_demands_done = \
-        Demand.objects.filter(is_done=True, addressee=request.user).exclude(author=request.user)
+        list(Demand.objects.filter(is_done=True, addressee=request.user).exclude(author=request.user))
     sent_demands_undone = \
-        Demand.objects.filter(is_done=False, author=request.user).exclude(addressee=request.user)
+        list(Demand.objects.filter(is_done=False, author=request.user).exclude(addressee=request.user))
     sent_demands_done = \
-        Demand.objects.filter(is_done=True, author=request.user).exclude(addressee=request.user)
+        list(Demand.objects.filter(is_done=True, author=request.user).exclude(addressee=request.user))
 
     context = {
         'page_title': 'Dezyderaty',
@@ -117,7 +117,7 @@ def demands_modify_view(request, demand_id):
 @login_required
 def demands_detail_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
-    answers = DemandAnswer.objects.filter(demand=demand)
+    answers = list(DemandAnswer.objects.filter(demand=demand))
 
     if request.method == 'POST':
         form = DemandAnswerForm(request.POST or None, request.FILES)
