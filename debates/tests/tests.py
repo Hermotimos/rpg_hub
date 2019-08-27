@@ -7,9 +7,9 @@ from users.models import User
 
 class DebatesMainTest(TestCase):
     def setUp(self):
-        # mock_user  - create, log in
-        mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='fakepsswrd111')
-        self.client.force_login(mock_user)
+        # user1  - create, log in
+        user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        self.client.force_login(user1)
 
     def test_login_required(self):
         self.client.logout()
@@ -30,8 +30,8 @@ class DebatesMainTest(TestCase):
 
 class CreateTopicTest(TestCase):
     def setUp(self):
-        mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='fakepsswrd111')
-        self.client.force_login(mock_user)
+        user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        self.client.force_login(user1)
 
     def test_login_required(self):
         self.client.logout()
@@ -52,15 +52,15 @@ class CreateTopicTest(TestCase):
 
 class CreateDebateTest(TestCase):
     def setUp(self):
-        # mock_user  - create, log in and add to Debate.allowed_profiles
-        self.mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='fakepsswrd111')
-        self.client.force_login(self.mock_user)
-        self.mock_topic = Topic.objects.create(id=1, title='Mock Topic', description='Mock description.')
-        self.mock_debate = Debate.objects.create(id=1, topic=self.mock_topic, starter=self.mock_user)
-        self.mock_debate.allowed_profiles.set([self.mock_user.profile, ])
-        # testing if mock_user is added to allowed
-        # self.assertTrue(self.mock_user.profile in self.mock_debate.allowed_profiles.all())
-        # self.assertTrue(self.mock_user.profile in self.mock_topic.allowed_list())
+        # user1  - create, log in and add to Debate.allowed_profiles
+        user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        self.client.force_login(user1)
+        topic1 = Topic.objects.create(id=1)
+        debate1 = Debate.objects.create(id=1, topic=topic1, starter=user1)
+        debate1.allowed_profiles.set([user1.profile, ])
+        # testing if user1 is added to allowed
+        # self.assertTrue(self.user1.profile in self.debate1.allowed_profiles.all())
+        # self.assertTrue(self.user1.profile in self.topic1.allowed_list())
 
     def test_login_required(self):
         self.client.logout()
@@ -75,8 +75,8 @@ class CreateDebateTest(TestCase):
         self.assertEquals(response.status_code, 404)
 
     def test_redirect_if_unallowed(self):
-        mock_user2 = User.objects.create_user(username='mock_user2', email='mock@user2.com', password='fakepsswrd111')
-        self.client.force_login(mock_user2)
+        user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
+        self.client.force_login(user2)
         url = reverse('debates:create-debate', kwargs={'topic_id': 1})
         redirect_url = reverse('home:dupa')
         response = self.client.get(url)
@@ -91,23 +91,23 @@ class CreateDebateTest(TestCase):
         view = resolve('/debates/topic:1/create-debate/')
         self.assertEquals(view.func, views.create_debate_view)
 
-    # TODO remove this later, but now it serves to ensure other test don't base on objects created in this one !!!
-    def clean_up(self):
-        self.mock_user.delete()
-        self.mock_topic.delete()
-        self.mock_debate.delete()
-        self.assertFalse(User.objects.all())
-        self.assertFalse(Topic.objects.all())
-        self.assertFalse(Debate.objects.all())
+    # ensures other test don't base on objects created in this one: variables in setUp have to begin with 'self. '
+    # def clean_up(self):
+    #     self.user1.delete()
+    #     self.t1opic.delete()
+    #     self.debate1.delete()
+    #     self.assertFalse(User.objects.all())
+    #     self.assertFalse(Topic.objects.all())
+    #     self.assertFalse(Debate.objects.all())
 
 
 class DebateTest(TestCase):
     def setUp(self):
-        mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='fakepsswrd111')
-        self.client.force_login(mock_user)
-        mock_topic = Topic.objects.create(id=1, title='Mock Topic', description='Mock description.')
-        mock_debate = Debate.objects.create(id=1, topic=mock_topic, starter=mock_user)
-        mock_debate.allowed_profiles.set([mock_user.profile, ])
+        user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        self.client.force_login(user1)
+        topic1 = Topic.objects.create(id=1, title='Topic1', description='Description1')
+        debate1 = Debate.objects.create(id=1, topic=topic1, starter=user1)
+        debate1.allowed_profiles.set([user1.profile, ])
 
     def test_login_required(self):
         self.client.logout()
@@ -117,8 +117,8 @@ class DebateTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        mock_user2 = User.objects.create_user(username='mock_user2', email='mock@user2.com', password='fakepsswrd111')
-        self.client.force_login(mock_user2)
+        user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
+        self.client.force_login(user2)
         url = reverse('debates:debate', kwargs={'topic_id': 1, 'debate_id': 1})
         redirect_url = reverse('home:dupa')
         response = self.client.get(url)
@@ -141,11 +141,11 @@ class DebateTest(TestCase):
 
 class DebatesInviteTest(TestCase):
     def setUp(self):
-        mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='fakepsswrd111')
-        self.client.force_login(mock_user)
-        mock_topic = Topic.objects.create(id=1, title='Mock Topic', description='Mock description.')
-        mock_debate = Debate.objects.create(id=1, topic=mock_topic, starter=mock_user)
-        mock_debate.allowed_profiles.set([mock_user.profile, ])
+        user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        self.client.force_login(user1)
+        topic1 = Topic.objects.create(id=1, title='Topic1', description='Description1')
+        debate1 = Debate.objects.create(id=1, topic=topic1, starter=user1)
+        debate1.allowed_profiles.set([user1.profile, ])
 
     def test_login_required(self):
         self.client.logout()
@@ -155,8 +155,8 @@ class DebatesInviteTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        mock_user2 = User.objects.create_user(username='mock_user2', email='mock@user2.com', password='fakepsswrd111')
-        self.client.force_login(mock_user2)
+        user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
+        self.client.force_login(user2)
         url = reverse('debates:invite', kwargs={'topic_id': 1, 'debate_id': 1})
         redirect_url = reverse('home:dupa')
         response = self.client.get(url)
@@ -179,11 +179,11 @@ class DebatesInviteTest(TestCase):
 
 class UnfollowDebateTest(TestCase):
     def setUp(self):
-        mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='fakepsswrd111')
-        self.client.force_login(mock_user)
-        mock_topic = Topic.objects.create(id=1, title='Mock Topic', description='Mock description.')
-        mock_debate = Debate.objects.create(id=1, topic=mock_topic, starter=mock_user)
-        mock_debate.allowed_profiles.set([mock_user.profile, ])
+        user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        self.client.force_login(user1)
+        topic1 = Topic.objects.create(id=1, title='Topic1', description='Description1')
+        debate1 = Debate.objects.create(id=1, topic=topic1, starter=user1)
+        debate1.allowed_profiles.set([user1.profile, ])
 
     def test_login_required(self):
         self.client.logout()
@@ -193,8 +193,8 @@ class UnfollowDebateTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        mock_user2 = User.objects.create_user(username='mock_user2', email='mock@user2.com', password='fakepsswrd111')
-        self.client.force_login(mock_user2)
+        user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
+        self.client.force_login(user2)
         url = reverse('debates:unfollow', kwargs={'topic_id': 1, 'debate_id': 1})
         redirect_url = reverse('home:dupa')
         response = self.client.get(url)
@@ -220,11 +220,11 @@ class UnfollowDebateTest(TestCase):
 
 class FollowDebateTest(TestCase):
     def setUp(self):
-        mock_user = User.objects.create_user(username='mock_user', email='mock@user.com', password='fakepsswrd111')
-        self.client.force_login(mock_user)
-        mock_topic = Topic.objects.create(id=1, title='Mock Topic', description='Mock description.')
-        mock_debate = Debate.objects.create(id=1, topic=mock_topic, starter=mock_user)
-        mock_debate.allowed_profiles.set([mock_user.profile, ])
+        user1 = User.objects.create_user(username='user1', email='user@1.com', password='pass1111')
+        self.client.force_login(user1)
+        topic1 = Topic.objects.create(id=1, title='Topic1', description='Description1')
+        debate1 = Debate.objects.create(id=1, topic=topic1, starter=user1)
+        debate1.allowed_profiles.set([user1.profile, ])
 
     def test_login_required(self):
         self.client.logout()
@@ -234,8 +234,8 @@ class FollowDebateTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        mock_user2 = User.objects.create_user(username='mock_user2', email='mock@user2.com', password='fakepsswrd111')
-        self.client.force_login(mock_user2)
+        user2 = User.objects.create_user(username='user2', email='user@2.com', password='pass1111')
+        self.client.force_login(user2)
         url = reverse('debates:follow', kwargs={'topic_id': 1, 'debate_id': 1})
         redirect_url = reverse('home:dupa')
         response = self.client.get(url)
