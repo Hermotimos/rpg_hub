@@ -5,9 +5,8 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.http import HttpResponseRedirect
-from users.models import User
-from contact.models import Demand, DemandAnswer
-from contact.forms import DemandsCreateForm, PlansCreateForm, DemandsModifyForm, DemandAnswerForm
+from contact.models import Demand, DemandAnswer, Plan
+from contact.forms import DemandsCreateForm, DemandsModifyForm, DemandAnswerForm, PlansCreateForm, PlansModifyForm
 
 
 # ----------------------------- DEMANDS -----------------------------
@@ -156,85 +155,6 @@ def demands_detail_view(request, demand_id):
         return redirect('home:dupa')
 
 
-# ----------------------------- PLANS -----------------------------
-
-
-@login_required
-def plans_main_view(request):
-    self_demands_undone = \
-        Demand.objects.filter(is_done=False, addressee=request.user, author=request.user)
-    self_demands_done = \
-        Demand.objects.filter(is_done=True, addressee=request.user, author=request.user)
-
-    context = {
-        'page_title': 'Plany',
-        'self_demands_undone': self_demands_undone,
-        'self_demands_done': self_demands_done,
-    }
-    return render(request, 'contact/plans-main.html', context)
-
-
-@login_required
-def plans_create_view(request):
-    if request.method == 'POST':
-        form = PlansCreateForm(request.POST or None, request.FILES)
-        if form.is_valid():
-            demand = form.save(commit=False)
-            demand.author = request.user
-            demand.addressee = request.user
-            demand.save()
-            messages.info(request, f'Plan został zapisany!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-    else:
-        form = PlansCreateForm(initial={'addressee': request.user.profile})
-
-    context = {
-        'page_title': 'Nowy plan',
-        'form': form,
-    }
-    return render(request, 'contact/plans-create.html', context)
-
-
-@login_required
-def plans_delete_view(request, demand_id):
-    demand = get_object_or_404(Demand, id=demand_id)
-    if request.user == demand.author:
-        demand.delete()
-        messages.info(request, 'Usunięto plan!')
-        return redirect('contact:plans-main')
-        # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-    else:
-        return redirect('home:dupa')
-
-
-@login_required
-def plans_modify_view(request, demand_id):
-    demand = get_object_or_404(Demand, id=demand_id)
-    if request.method == 'POST':
-        form = DemandsModifyForm(instance=demand, data=request.POST or None, files=request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.info(request, 'Zmodyfikowano plan!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-    else:
-        form = DemandsModifyForm(instance=demand)
-
-    context = {
-        'page_title': 'Zmiana planów?',
-        'demand': demand,
-        'form': form
-    }
-    if request.user == demand.author:
-        return render(request, 'contact/plans-modify.html', context)
-    else:
-        return redirect('home:dupa')
-
-
-# ----------------------------- DEMANDS & PLANS -----------------------------
-
-
 @login_required
 def mark_done_view(request, demand_id):
     demand = Demand.objects.get(id=demand_id)
@@ -285,3 +205,105 @@ def mark_undone_view(request, demand_id):
 
     else:
         return redirect('home:dupa')
+
+
+# ----------------------------- PLANS -----------------------------
+
+
+@login_required
+def plans_main_view(request):
+    plans = list(Plan.objects.filter(author=request.user))
+    context = {
+        'page_title': 'Plany',
+        'plans': plans,
+    }
+    return render(request, 'contact/plans-main.html', context)
+
+
+@login_required
+def plans_for_gm_view(request):
+    plans = list(Plan.objects.filter(inform_gm=True))
+    context = {
+        'page_title': 'Plany graczy',
+        'plans': plans,
+    }
+    if request.user.profile.character_status == 'gm':
+        return render(request, 'contact/plans-for-gm.html', context)
+    else:
+        return redirect('home:dupa')
+
+
+@login_required
+def plans_create_view(request):
+    if request.method == 'POST':
+        form = PlansCreateForm(request.POST or None, request.FILES)
+        if form.is_valid():
+            plan = form.save(commit=False)
+            plan.author = request.user
+            plan.addressee = request.user
+            plan.save()
+
+            if plan.inform_gm:
+                subject = f"[RPG] Info o planach od {request.user.profile}"
+                message = f"{request.user.profile} poinformował o swoich planach:\n\n{plan.text}\n" \
+                          f"{request.get_host()}/contact/demands/detail:{plan.id}/\n\n"    # TODO adjust pattern to url!
+                sender = settings.EMAIL_HOST_USER
+                receivers = ['lukas.kozicki@gmail.com']
+                send_mail(subject, message, sender, receivers)
+
+            messages.info(request, f'Plan został zapisany!')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+    else:
+        form = PlansCreateForm()
+
+    context = {
+        'page_title': 'Nowy plan',
+        'form': form,
+    }
+    return render(request, 'contact/plans-create.html', context)
+
+
+@login_required
+def plans_delete_view(request, plan_id):
+    plan = get_object_or_404(Plan, id=plan_id)
+    if request.user == plan.author:
+        plan.delete()
+        messages.info(request, 'Usunięto plan!')
+        return redirect('contact:plans-main')
+        # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    else:
+        return redirect('home:dupa')
+
+
+@login_required
+def plans_modify_view(request, plan_id):
+    plan = get_object_or_404(Plan, id=plan_id)
+    if request.method == 'POST':
+        form = PlansModifyForm(instance=plan, data=request.POST or None, files=request.FILES)
+        if form.is_valid():
+            plan = form.save()
+
+            if plan.inform_gm:
+                subject = f"[RPG] Info o zmianie planów od {request.user.profile}"
+                message = f"{request.user.profile} poinformował o zmianie planów:\n\n{plan.text}\n" \
+                    f"{request.get_host()}/contact/demands/detail:{plan.id}/\n\n"  # TODO adjust pattern to url!
+                sender = settings.EMAIL_HOST_USER
+                receivers = ['lukas.kozicki@gmail.com']
+                send_mail(subject, message, sender, receivers)
+
+            messages.info(request, 'Zmodyfikowano plan!')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+    else:
+        form = PlansModifyForm(instance=plan)
+
+    context = {
+        'page_title': 'Zmiana planów?',
+        'form': form
+    }
+    if request.user == plan.author:
+        return render(request, 'contact/plans-modify.html', context)
+    else:
+        return redirect('home:dupa')
+

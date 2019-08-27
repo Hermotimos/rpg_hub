@@ -1,7 +1,7 @@
 from django import forms
 from django.db.models import Q
 from pagedown.widgets import PagedownWidget
-from contact.models import Demand, DemandAnswer
+from contact.models import Demand, DemandAnswer, Plan
 from users.models import User
 
 
@@ -25,28 +25,6 @@ class DemandsCreateForm(forms.ModelForm):
         widget=PagedownWidget(
             attrs={
                 'placeholder': 'Twój dezyderat (max. 4000 znaków)*',
-                'rows': 10,
-                'cols': 60
-            }
-        )
-    )
-
-    image = forms.ImageField(
-        label='Załącz obraz:',
-        required=False,
-    )
-
-
-class PlansCreateForm(forms.ModelForm):
-    class Meta:
-        model = Demand
-        fields = ['text', 'image']
-
-    text = forms.CharField(
-        label='',
-        widget=PagedownWidget(
-            attrs={
-                'placeholder': 'Twój plan... (max. 4000 znaków)*',
                 'rows': 10,
                 'cols': 60
             }
@@ -101,3 +79,57 @@ class DemandAnswerForm(forms.ModelForm):
         label='Załącz obraz:',
         required=False,
     )
+
+
+class PlansCreateForm(forms.ModelForm):
+    class Meta:
+        model = Plan
+        fields = ['inform_gm', 'text', 'image']
+
+    # addressee = LABEL ???
+
+    text = forms.CharField(
+        label='',
+        widget=PagedownWidget(
+            attrs={
+                'placeholder': 'Twój plan... (max. 4000 znaków)*',
+                'rows': 10,
+                'cols': 60
+            }
+        )
+    )
+
+    image = forms.ImageField(
+        label='Załącz obraz:',
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(PlansCreateForm, self).__init__(*args, **kwargs)
+        self.fields['inform_gm'].label = 'Poinformuj MG'
+
+
+class PlansModifyForm(forms.ModelForm):
+    class Meta:
+        model = Plan
+        fields = ['inform_gm', 'text', 'image']
+
+    text = forms.CharField(
+        label='',
+        widget=PagedownWidget(
+            attrs={
+                'placeholder': 'Treść (max. 4000 znaków)*',
+                'rows': 10,
+                'cols': 60
+            }
+        )
+    )
+
+    image = forms.ImageField(
+        label='Załącz obraz:',
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(PlansModifyForm, self).__init__(*args, **kwargs)
+        self.fields['inform_gm'].label = 'Poinformować MG?'

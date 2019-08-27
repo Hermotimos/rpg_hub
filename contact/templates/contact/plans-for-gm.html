@@ -12,8 +12,6 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br>
-    <a href="{% url 'contact:plans-create' %}" class="btn btn-outline-dark">Nowy plan</a>
     <br><br><br><br>
     {% for plan in plans %}
         <table>
@@ -24,8 +22,6 @@
                     <small>{{ plan.date_created|date:'d-M-Y' }}</small>
                 </td>
                 <td>{{ plan.text|capfirst|linebreaks }}</td>
-                <td><a href="{% url 'contact:plans-modify' plan.id %}" class="btn btn-dark">&#9998;</a></td>
-                <td><a href="{% url 'contact:plans-delete' plan.id %}" class="btn btn-danger">&#10008;</a></td>
             </tr>
         </table>
     {% endfor %}
