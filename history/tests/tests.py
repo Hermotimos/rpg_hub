@@ -43,7 +43,7 @@ class ChronicleAllChaptersTest(TestCase):
 
 class ChronicleOneChapterTest(TestCase):
     def setUp(self):
-        Chapter.objects.create(chapter_no=1, title='Mock title')
+        Chapter.objects.create(chapter_no=1, title='Chapter1')
 
     def test_get(self):
         url = reverse('history:chronicle-one-chapter', kwargs={'chapter_id': 1})
@@ -57,8 +57,8 @@ class ChronicleOneChapterTest(TestCase):
 
 class ChronicleOneGameTest(TestCase):
     def setUp(self):
-        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
-        ChronicleEvent.objects.create(game_no=mock_gamesession, event_no_in_game=1, description='Mock description')
+        game1 = GameSession.objects.create(game_no=1, title='Game1')
+        ChronicleEvent.objects.create(game_no=game1, event_no_in_game=1, description='Description1')
 
     def test_get(self):
         url = reverse('history:chronicle-one-game', kwargs={'game_id': 1})
@@ -69,10 +69,11 @@ class ChronicleOneGameTest(TestCase):
         view = resolve('/history/chronicle/one-game:1/')
         self.assertEquals(view.func, views.chronicle_one_game_view)
 
+
 class ChronicleInformTest(TestCase):
     def setUp(self):
-        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
-        ChronicleEvent.objects.create(game_no=mock_gamesession, event_no_in_game=1, description='Mock description')
+        game1 = GameSession.objects.create(game_no=1, title='Game1')
+        ChronicleEvent.objects.create(game_no=game1, event_no_in_game=1, description='Description1')
 
     def test_get(self):
         url = reverse('history:chronicle-inform', kwargs={'event_id': 1})
@@ -86,8 +87,8 @@ class ChronicleInformTest(TestCase):
 
 class ChronicleNoteTest(TestCase):
     def setUp(self):
-        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
-        ChronicleEvent.objects.create(game_no=mock_gamesession, event_no_in_game=1, description='Mock description')
+        gamesession1 = GameSession.objects.create(game_no=1, title='Game1')
+        ChronicleEvent.objects.create(game_no=gamesession1, event_no_in_game=1, description='Description1')
 
     def test_get(self):
         url = reverse('history:chronicle-note', kwargs={'event_id': 1})
@@ -101,8 +102,8 @@ class ChronicleNoteTest(TestCase):
 
 class ChronicleEditTest(TestCase):
     def setUp(self):
-        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
-        ChronicleEvent.objects.create(game_no=mock_gamesession, event_no_in_game=1, description='Mock description')
+        game1 = GameSession.objects.create(game_no=1, title='Game1')
+        ChronicleEvent.objects.create(game_no=game1, event_no_in_game=1, description='Description1')
 
     def test_get(self):
         url = reverse('history:chronicle-edit', kwargs={'event_id': 1})
@@ -152,11 +153,10 @@ class TimelineAllEventsTest(TestCase):
 
 class TimelineThreadTest(TestCase):
     def setUp(self):
-        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
-        mock_thread = Thread.objects.create(name='Mock thread')
-        mock_event = TimelineEvent.objects.create(game_no=mock_gamesession, year=1, season=1, day_start=1,
-                                                  description='Mock desc',)
-        mock_event.threads.set([mock_thread, ])
+        game1 = GameSession.objects.create(game_no=1, title='Game1')
+        thread1 = Thread.objects.create(name='Thread1')
+        event1 = TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1, description='Description1',)
+        event1.threads.set([thread1, ])
 
     def test_get(self):
         url = reverse('history:timeline-thread', kwargs={'thread_id': 1})
@@ -170,11 +170,10 @@ class TimelineThreadTest(TestCase):
 
 class TimelineParticipantTest(TestCase):
     def setUp(self):
-        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
-        mock_user = User.objects.create_user(username='Mock_user', password='mockpsswrd111')
-        mock_event = TimelineEvent.objects.create(game_no=mock_gamesession, year=1, season=1, day_start=1,
-                                                  description='Mock desc',)
-        mock_event.participants.set([mock_user.profile, ])
+        game1 = GameSession.objects.create(game_no=1, title='Game1')
+        user1 = User.objects.create_user(username='user1', password='pass1111')
+        event1 = TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1, description='Description1',)
+        event1.participants.set([user1.profile, ])
 
     def test_get(self):
         url = reverse('history:timeline-participant', kwargs={'participant_id': 1})
@@ -188,10 +187,10 @@ class TimelineParticipantTest(TestCase):
 
 class TimelineGeneralLocationtTest(TestCase):
     def setUp(self):
-        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
-        mock_gen_loc = GeneralLocation.objects.create(name='Mock genloc')
-        TimelineEvent.objects.create(game_no=mock_gamesession, year=1, season=1, day_start=1,
-                                     description='Mock desc', general_location=mock_gen_loc)
+        game1 = GameSession.objects.create(game_no=1, title='Game1')
+        gen_loc1 = GeneralLocation.objects.create(name='genloc1')
+        TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1,
+                                     description='Description1', general_location=gen_loc1)
 
     def test_get(self):
         url = reverse('history:timeline-gen-loc', kwargs={'gen_loc_id': 1})
@@ -205,12 +204,12 @@ class TimelineGeneralLocationtTest(TestCase):
 
 class TimelineSpecificLocationtTest(TestCase):
     def setUp(self):
-        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
-        mock_gen_loc = GeneralLocation.objects.create(name='Mock genloc')
-        mock_spec_loc = SpecificLocation.objects.create(name='Mock specloc', general_location=mock_gen_loc)
-        mock_event = TimelineEvent.objects.create(game_no=mock_gamesession, year=1, season=1, day_start=1,
-                                                  description='Mock desc', general_location=mock_gen_loc)
-        mock_event.specific_locations.set([mock_spec_loc, ])
+        game1 = GameSession.objects.create(game_no=1, title='Game1')
+        gen_loc1 = GeneralLocation.objects.create(name='genloc1')
+        spec_loc1 = SpecificLocation.objects.create(name='specloc1', general_location=gen_loc1)
+        event1 = TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1,
+                                              description='Description1', general_location=gen_loc1)
+        event1.specific_locations.set([spec_loc1, ])
 
     def test_get(self):
         url = reverse('history:timeline-spec-loc', kwargs={'spec_loc_id': 1})
@@ -224,8 +223,8 @@ class TimelineSpecificLocationtTest(TestCase):
 
 class TimelineDateTest(TestCase):
     def setUp(self):
-        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
-        TimelineEvent.objects.create(game_no=mock_gamesession, year=1, season=1, day_start=1, description='Mock desc')
+        game1 = GameSession.objects.create(game_no=1, title='Game1')
+        TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1, description='Description1')
 
     def test_get(self):
         url_only_year = reverse('history:timeline-date', kwargs={'year': 1, 'season': 0})
@@ -242,8 +241,8 @@ class TimelineDateTest(TestCase):
 
 class TimelineGameTest(TestCase):
     def setUp(self):
-        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
-        TimelineEvent.objects.create(game_no=mock_gamesession, year=1, season=1, day_start=1, description='Mock desc')
+        game1 = GameSession.objects.create(game_no=1, title='Game1')
+        TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1, description='Description1')
 
     def test_get(self):
         url = reverse('history:timeline-game', kwargs={'game_id': 1})
@@ -257,8 +256,8 @@ class TimelineGameTest(TestCase):
 
 class TimelineInformView(TestCase):
     def setUp(self):
-        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
-        TimelineEvent.objects.create(game_no=mock_gamesession, year=1, season=1, day_start=1, description='Mock desc')
+        game1 = GameSession.objects.create(game_no=1, title='Game1')
+        TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1, description='Description1')
 
     def test_get(self):
         url = reverse('history:timeline-inform', kwargs={'event_id': 1})
@@ -272,8 +271,8 @@ class TimelineInformView(TestCase):
 
 class TimelineNoteView(TestCase):
     def setUp(self):
-        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
-        TimelineEvent.objects.create(game_no=mock_gamesession, year=1, season=1, day_start=1, description='Mock desc')
+        game1 = GameSession.objects.create(game_no=1, title='Game1')
+        TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1, description='Description1')
 
     def test_get(self):
         url = reverse('history:timeline-note', kwargs={'event_id': 1})
@@ -287,8 +286,8 @@ class TimelineNoteView(TestCase):
 
 class TimelineEditView(TestCase):
     def setUp(self):
-        mock_gamesession = GameSession.objects.create(game_no=1, title='mock_gamesession')
-        TimelineEvent.objects.create(game_no=mock_gamesession, year=1, season=1, day_start=1, description='Mock desc')
+        game1 = GameSession.objects.create(game_no=1, title='Game1')
+        TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1, description='Description1')
 
     def test_get(self):
         url = reverse('history:timeline-edit', kwargs={'event_id': 1})
