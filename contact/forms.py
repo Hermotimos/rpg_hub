@@ -5,6 +5,9 @@ from contact.models import Demand, DemandAnswer, Plan
 from users.models import User
 
 
+# ------------------- DEMANDS -------------------
+
+
 class DemandsCreateForm(forms.ModelForm):
     class Meta:
         model = Demand
@@ -81,12 +84,17 @@ class DemandAnswerForm(forms.ModelForm):
     )
 
 
+# ------------------- PLANS -------------------
+
+
 class PlansCreateForm(forms.ModelForm):
     class Meta:
         model = Plan
         fields = ['inform_gm', 'text', 'image']
 
-    # addressee = LABEL ???
+    def __init__(self, *args, **kwargs):
+        super(PlansCreateForm, self).__init__(*args, **kwargs)
+        self.fields['inform_gm'].label = 'Poinformuj MG'
 
     text = forms.CharField(
         label='',
@@ -104,15 +112,15 @@ class PlansCreateForm(forms.ModelForm):
         required=False,
     )
 
-    def __init__(self, *args, **kwargs):
-        super(PlansCreateForm, self).__init__(*args, **kwargs)
-        self.fields['inform_gm'].label = 'Poinformuj MG'
-
 
 class PlansModifyForm(forms.ModelForm):
     class Meta:
         model = Plan
         fields = ['inform_gm', 'text', 'image']
+
+    def __init__(self, *args, **kwargs):
+        super(PlansModifyForm, self).__init__(*args, **kwargs)
+        self.fields['inform_gm'].label = 'Poinformuj MG'
 
     text = forms.CharField(
         label='',
@@ -129,7 +137,3 @@ class PlansModifyForm(forms.ModelForm):
         label='Załącz obraz:',
         required=False,
     )
-
-    def __init__(self, *args, **kwargs):
-        super(PlansModifyForm, self).__init__(*args, **kwargs)
-        self.fields['inform_gm'].label = 'Poinformować MG?'
