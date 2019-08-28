@@ -4,7 +4,7 @@ from home import views
 from users.models import User
 
 
-class LinksToAppsTest(TestCase):
+class TestHome(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.url = reverse('home:home')
@@ -23,24 +23,37 @@ class LinksToAppsTest(TestCase):
         view = resolve('/')
         self.assertEquals(view.func, views.home_view)
 
-    def test_contains_link_to_apps(self):
+
+class ContainsNavbarAndSidebarLinks(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.client.force_login(self.user1)
-        response = self.client.get(self.url)
+        self.url = reverse('home:home')
+        self.response = self.client.get(self.url)
 
-        # for non-game-master users:
-        self.assertContains(response, f'href="{reverse("news:main")}"')
-        self.assertContains(response, f'href="{reverse("rules:main")}"')
-        self.assertContains(response, f'href="{reverse("contact:demands-main")}"')
-        self.assertContains(response, f'href="{reverse("history:chronicle-main")}"')
-        self.assertContains(response, f'href="{reverse("history:timeline-main")}"')
-        self.assertContains(response, f'href="{reverse("debates:main")}"')
-        self.assertContains(response, f'href="{reverse("users:logout")}"')
-        self.assertContains(response, f'href="{reverse("contact:demands-create")}"')
-        self.assertContains(response, f'href="{reverse("contact:plans-main")}"')
-        self.assertContains(response, f'href="{reverse("users:profile")}"')
+    def test_contains_navbar_and_sidebar_links(self):
+        # NAVBAR:
+        self.assertContains(self.response, f'href="{reverse("home:home")}"')
+        self.assertContains(self.response, f'href="{reverse("news:main")}"')
+        self.assertContains(self.response, f'href="{reverse("rules:main")}"')
+        self.assertContains(self.response, f'href="{reverse("contact:demands-main")}"')
+        self.assertContains(self.response, f'href="{reverse("history:chronicle-main")}"')
+        self.assertContains(self.response, f'href="{reverse("history:timeline-main")}"')
+        self.assertContains(self.response, f'href="{reverse("debates:main")}"')
+        self.assertContains(self.response, f'href="{reverse("users:profile")}"')
+        self.assertContains(self.response, f'href="{reverse("contact:demands-create")}"')
+        self.assertContains(self.response, f'href="{reverse("users:logout")}"')
 
-        # for game-master users:
+        # SIDEBAR - for all users:
+        self.assertContains(self.response, f'href="{reverse("contact:plans-main")}"')
+
+        # SIDEBAR - for non-game-master users:
+
+        # SIDEBAR - for game-master users:
         self.user1.profile.character_status = 'gm'
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{reverse("admin:index")}"')
+        self.assertContains(response, f'href="{reverse("history:chronicle-create")}"')
+        self.assertContains(response, f'href="{reverse("history:timeline-create")}"')
+        self.assertContains(response, f'href="{reverse("contact:plans-for-gm")}"')
