@@ -23,7 +23,7 @@
 }
 
 .chronicle .small-img {
-        padding: 10px 0px 0px 0px;
+        padding: 1px 0px 0px 0px;
 }
 
 table.timeline {
@@ -58,6 +58,10 @@ table.timeline {
         margin: 0px;
         padding: 0px 5px;
         color: #444444;
+}
+
+td.chronicle-event {
+        border: 0px
 }
 
 td img {
