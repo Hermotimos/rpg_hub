@@ -43,7 +43,7 @@
     <div class="post-and-news">
         <p>{{ news.text|capfirst|linebreaks }}</p>
         {% if news.image %}
-            <img src="{{ news.image.url }}">
+            <img src="{{ news.image.url }}" class="border-double">
         {% endif %}
     </div>
     <br>
