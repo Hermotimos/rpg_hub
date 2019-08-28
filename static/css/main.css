@@ -230,6 +230,10 @@ td.align-center {
         text-align: center;
 }
 
+td.align-bottom {
+        text-align: bottom;
+}
+
 small.left-float {
         width: 50%;
         float: left;

@@ -40,13 +40,16 @@
             {% for chapter in chapters_with_games_dict %}
             <tr>
                 <td>
-                    <h3>
-                        <a name="{{chapter.id}}"><br></a><br>
-                        {% if chapter.image %}
-                            <img src="{{ chapter.image.url }}" class="border-double img-chapter">
-                        {% endif %}
-                        {{ chapter.title }}<br><br>
-                    </h3>
+                    <h2>
+                        <a name="{{chapter.id}}">
+                            <br><br>
+                            {% if chapter.image %}
+                                <img src="{{ chapter.image.url }}" class="border-double img-chapter-header">
+                            {% endif %}
+                            <br>
+                            {{ chapter.title }}
+                        </a>
+                    </h2>
                 </td>
                 <td></td>
             </tr>

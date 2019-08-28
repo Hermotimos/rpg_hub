@@ -88,6 +88,13 @@ td img {
         margin-right: 5px;
 }
 
+.img-chapter-header {
+        float: left;
+        height: 80px;
+        width: 80px;
+        margin-right: 5px;
+}
+
 .bootstrap-table .fixed-table-container .table thead th .th-inner {
         padding: 10px 3px;
 }

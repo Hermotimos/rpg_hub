@@ -25,7 +25,9 @@
                     {% if chapter.image %}
                         <img src="{{ chapter.image.url }}" class="border-double img-chapter">
                     {% endif %}
-                    <a href="{% url 'history:chronicle-one-chapter' chapter.id %}" class="align-middle pt-2">{{ chapter.title }}</a>
+                    <a href="{% url 'history:chronicle-one-chapter' chapter.id %}" class="align-middle pt-2">
+                        {{ chapter.title }}
+                    </a>
                 </h3>
             </td>
         </tr>
