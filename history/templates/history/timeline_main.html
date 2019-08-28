@@ -47,8 +47,10 @@
     <table id="participants" class="collapse">
         <tr>
         {% for p in participants %}
-            <td class="unblue">
-                &#10023;<a href="{% url 'history:timeline-participant' p.1.id %}">{{ p.0 }}</a>&emsp;&emsp;
+            <td class="unblue-black">
+                <a href="{% url 'history:timeline-participant' p.1.id %}">
+                    <img src="{{ p.1.image.url }}" class="border-double account-img-timeline">
+                </a>&emsp;&emsp;
             </td>
             {% if forloop.counter|divisibleby:4 %}
                 </tr><tr>
