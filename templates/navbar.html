@@ -29,11 +29,11 @@
                     {% if user.is_authenticated %}
                         {% if user.profile.character_name != '' %}
                             <a class="navbar-brand mr-2 nav-link" href="{% url 'users:profile' %}">{{ user.profile.character_name|get_first_word }}</a>
-                            <a href="{% url 'contact:demands-create' %}"><img src="{% static 'img/demand.png' %}" class="mr-2 mt-1"></a>
-                            &emsp;
                         {% else %}
                             <a class="navbar-brand mr-2" href="{% url 'users:profile' %}">Uzupełnij profil</a>
                         {% endif %}
+                        <a href="{% url 'contact:demands-create' %}"><img src="{% static 'img/demand.png' %}" class="mr-2 mt-1"></a>
+                        &emsp;
                         <a class="btn btn-outline-light btn-space" href="{% url 'users:logout' %}">Wyloguj</a>
                     {% else %}
                         <a class="btn btn-outline-light btn-space" href="{% url 'users:register' %}">Nowa postać</a>
