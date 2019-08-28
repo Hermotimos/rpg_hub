@@ -118,7 +118,7 @@ def news_detail_view(request, news_id):
 
 @login_required
 def unfollow_news_view(request, news_id):
-    news = News.objects.get(id=news_id)
+    news = get_object_or_404(News, id=news_id)
     if is_allowed(request.user.profile, news_id=news.id):
         updated_followers = news.followers.exclude(user=request.user)
         news.followers.set(updated_followers)
@@ -130,7 +130,7 @@ def unfollow_news_view(request, news_id):
 
 @login_required
 def follow_news_view(request, news_id):
-    news = News.objects.get(id=news_id)
+    news = get_object_or_404(News, id=news_id)
     if is_allowed(request.user.profile, news_id=news_id):
         followers = news.followers.all()
         new_follower = request.user.profile
