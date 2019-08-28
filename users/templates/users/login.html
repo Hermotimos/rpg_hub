@@ -16,7 +16,7 @@
         <form method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
-                {{ form|crispy }}
+                <b>{{ form|crispy }}</b>
             </fieldset>
             <div class="form-group">
                 <button class="btn btn-dark" type="submit">Zaloguj</button>
