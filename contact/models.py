@@ -15,8 +15,7 @@ class Demand(models.Model):
         return f'{self.text[0:50]}...'
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
+        super().save()
         if self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:
@@ -36,8 +35,7 @@ class DemandAnswer(models.Model):
     image = models.ImageField(blank=True, null=True, upload_to='contact_pics')
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
+        super().save()
         if self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:
@@ -57,8 +55,7 @@ class Plan(models.Model):
         return f'{self.text[0:50]}...'
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
+        super().save()
         if self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:

@@ -80,8 +80,7 @@ class Remark(models.Model):
         return self.__str__()
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
+        super().save()
         if self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:

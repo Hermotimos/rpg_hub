@@ -19,7 +19,7 @@ class News(models.Model):
         return self.title[:50] + '...'
 
     def save(self, *args, **kwargs):
-        super().save(*args, *kwargs)
+        super().save()
         if self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:
@@ -50,7 +50,7 @@ class NewsAnswer(models.Model):
         return self.text
 
     def save(self, *args, **kwargs):
-        super().save(*args, *kwargs)
+        super().save()
         if self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:
