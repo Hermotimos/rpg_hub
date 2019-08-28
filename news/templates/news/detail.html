@@ -33,9 +33,9 @@
 
     <div class="mb-4">
         {% if request.user.profile in news.followers.all %}
-            <a href="{% url 'news:unfollow' news.slug %}" class="btn btn-dark">Nie obserwuj</a>
+            <a href="{% url 'news:unfollow' news.id %}" class="btn btn-dark">Nie obserwuj</a>
         {% else %}
-            <a href="{% url 'news:follow' news.slug %}" class="btn btn-dark">Obserwuj</a>
+            <a href="{% url 'news:follow' news.id %}" class="btn btn-dark">Obserwuj</a>
         {% endif %}
     </div>
 

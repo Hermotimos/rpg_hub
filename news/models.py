@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.db.models import Max
 from users.models import Profile
@@ -8,7 +7,6 @@ from PIL import Image
 
 class News(models.Model):
     title = models.CharField(max_length=100, unique=True)
-    slug = models.SlugField(max_length=50, unique=True, blank=True)
     text = models.TextField(max_length=4000)
     date_posted = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
@@ -20,15 +18,8 @@ class News(models.Model):
     def __str__(self):
         return self.title[:50] + '...'
 
-    def _get_unique_slug(self):
-        slug = slugify(self.title)
-        return slug
-
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = self._get_unique_slug()
         super().save(*args, *kwargs)
-
         if self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:
@@ -60,7 +51,6 @@ class NewsAnswer(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, *kwargs)
-
         if self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:

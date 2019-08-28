@@ -36,7 +36,7 @@
                                     {{ news.date_posted|date:'d-M-Y, H:i' }}
                                 {% endif %}
                             </small>
-                            <h3 class="unblue"><a href="{% url 'news:detail' news.slug %}">{{ news.title }}</a></h3>
+                            <h3 class="unblue"><a href="{% url 'news:detail' news.id %}">{{ news.title }}</a></h3>
                         </td>
                     </tr>
                 </tbody>

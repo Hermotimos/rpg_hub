@@ -46,7 +46,7 @@ def create_news_view(request):
 
             subject = f"[RPG] Nowe ogłoszenie: '{news.title[:30]}...'"
             message = f"{request.user.profile} przybił/a coś do słupa ogłoszeń.\n" \
-                      f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/detail:{news.slug}/\n\n" \
+                      f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/detail:{news.id}/\n\n" \
                       f"Ogłoszenie: {news.text}"
             sender = settings.EMAIL_HOST_USER
             receivers = []
@@ -58,7 +58,7 @@ def create_news_view(request):
             send_mail(subject, message, sender, receivers)
 
             messages.info(request, f'Utworzono nowe ogłoszenie!')
-            return redirect('news:detail', news_slug=news.slug)
+            return redirect('news:detail', news_id=news.id)
     else:
         form = CreateNewsForm(authenticated_user=request.user)
 
@@ -70,8 +70,8 @@ def create_news_view(request):
 
 
 @login_required
-def news_detail_view(request, news_slug):
-    news = get_object_or_404(News, slug=news_slug)
+def news_detail_view(request, news_id):
+    news = get_object_or_404(News, id=news_id)
     news_answers = list(news.news_answers.all())
     allowed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in news.allowed_profiles.all())
     followers_str = ', '.join(p.character_name.split(' ', 1)[0] for p in news.followers.all())
@@ -86,7 +86,7 @@ def news_detail_view(request, news_slug):
 
             subject = f"[RPG] Odpowiedź na ogłoszenie: '{news.title[:30]}...'"
             message = f"{request.user.profile} odpowiedział/a na ogłoszenie '{news.title}':\n" \
-                      f"Ogłoszenie: {request.get_host()}/news/detail:{news.slug}/\n\n" \
+                      f"Ogłoszenie: {request.get_host()}/news/detail:{news.id}/\n\n" \
                       f"Odpowiedź: {response.text}"
             sender = settings.EMAIL_HOST_USER
             receivers = []
@@ -98,7 +98,7 @@ def news_detail_view(request, news_slug):
             send_mail(subject, message, sender, receivers)
 
             messages.info(request, f'Twoja odpowiedź została zapisana!')
-            return redirect('news:detail', news_slug=news_slug)
+            return redirect('news:detail', news_id=news_id)
     else:
         form = CreateResponseForm()
 
@@ -110,33 +110,33 @@ def news_detail_view(request, news_slug):
         'allowed': allowed_str,
         'followers': followers_str,
     }
-    if is_allowed(request.user.profile, news_id=news.id):
+    if is_allowed(request.user.profile, news_id=news_id):
         return render(request, 'news/detail.html', context)
     else:
         return redirect('home:dupa')
 
 
 @login_required
-def unfollow_news_view(request, news_slug):
-    news = News.objects.get(slug=news_slug)
+def unfollow_news_view(request, news_id):
+    news = News.objects.get(id=news_id)
     if is_allowed(request.user.profile, news_id=news.id):
         updated_followers = news.followers.exclude(user=request.user)
         news.followers.set(updated_followers)
         messages.info(request, 'Przestałeś obserwować ogłoszenie!')
-        return redirect('news:detail', news_slug=news_slug)
+        return redirect('news:detail', news_id=news_id)
     else:
         return redirect('home:dupa')
 
 
 @login_required
-def follow_news_view(request, news_slug):
-    news = News.objects.get(slug=news_slug)
-    if is_allowed(request.user.profile, news_id=news.id):
+def follow_news_view(request, news_id):
+    news = News.objects.get(id=news_id)
+    if is_allowed(request.user.profile, news_id=news_id):
         followers = news.followers.all()
         new_follower = request.user.profile
         followers |= Profile.objects.filter(id=new_follower.id)
         news.followers.set(followers)
         messages.info(request, 'Obserwujesz ogłoszenie!')
-        return redirect('news:detail', news_slug=news_slug)
+        return redirect('news:detail', news_id=news_id)
     else:
         return redirect('home:dupa')
