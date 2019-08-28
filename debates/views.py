@@ -60,7 +60,6 @@ def create_debate_view(request, topic_id):
             debate.topic = Topic.objects.get(id=topic_id)
             debate.starter = request.user
             debate.save()
-
             allowed_profiles = debate_form.cleaned_data['allowed_profiles']
             allowed_profiles |= Profile.objects.filter(id=request.user.id)
             debate.allowed_profiles.set(allowed_profiles)
