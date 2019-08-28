@@ -14,7 +14,12 @@
 {% block content %}
     <br><br><br>
     {% for chapter in chapters_with_games_dict %}
-        <h5 class="unblue"><a href="#{{ chapter.id }}">{{ chapter.title }}</a></h5>
+        <h3 class="unblue">
+            {% if chapter.image %}
+                <img src="{{ chapter.image.url }}" class="border-double img-chapter">
+            {% endif %}
+            <a href="#{{ chapter.id }}" class="align-middle pt-2">{{ chapter.title }}</a>
+        </h3>
     {% endfor %}
     <br><br>
 
@@ -34,7 +39,15 @@
         <tbody>
             {% for chapter in chapters_with_games_dict %}
             <tr>
-                <td><h3><a name="{{chapter.id}}"><br></a><br>{{ chapter.title }}<br><br></h3></td>
+                <td>
+                    <h3>
+                        <a name="{{chapter.id}}"><br></a><br>
+                        {% if chapter.image %}
+                            <img src="{{ chapter.image.url }}" class="border-double img-chapter">
+                        {% endif %}
+                        {{ chapter.title }}<br><br>
+                    </h3>
+                </td>
                 <td></td>
             </tr>
                 {% for game in chapters_with_games_dict|dict_lookup:chapter %}

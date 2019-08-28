@@ -12,15 +12,21 @@
 
 {% block content %}
     <br><br><br>
-    <h3 class="unblue">
-        <strong><a href="{% url 'history:chronicle-all-chapters' %}">Pełna kronika</a></strong>
-    </h3>
+    <h2 class="unblue">
+        <img src="{% static 'img/all_history.png' %}" class="border-double img-chapter">
+        <strong><a href="{% url 'history:chronicle-all-chapters' %}" class="align-middle pt-2">Pełna kronika</a></strong>
+    </h2>
     <br><br>
     {% for chapter in chapters_with_games_dict %}
         <br>
         <tr>
             <td>
-                <h4 class="unblue"><a href="{% url 'history:chronicle-one-chapter' chapter.id %}">{{ chapter.title }}</a></h4>
+                <h3 class="unblue">
+                    {% if chapter.image %}
+                        <img src="{{ chapter.image.url }}" class="border-double img-chapter">
+                    {% endif %}
+                    <a href="{% url 'history:chronicle-one-chapter' chapter.id %}" class="align-middle pt-2">{{ chapter.title }}</a>
+                </h3>
             </td>
         </tr>
         {% for game in chapters_with_games_dict|dict_lookup:chapter %}

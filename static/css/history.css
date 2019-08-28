@@ -81,6 +81,11 @@ td img {
         pointer-events: none;
 }
 
+.img-chapter {
+        height: 45px;
+        width: 45px;
+}
+
 .bootstrap-table .fixed-table-container .table thead th .th-inner {
         padding: 10px 3px;
 }
@@ -97,20 +102,3 @@ td.season-autumn {
 td.season-winter  {
         background-color: #bfd3d9;
 }
-
-/*
-
-td.season-spring  {
-        background-color: #87c5b5;
-}
-td.season-summer  {
-        background-color: #ffe9ab
-}
-td.season-autumn {
-        background-color: #d1b384;
-}
-td.season-winter  {
-        background-color: #99b9c2;
-}
-
-*/

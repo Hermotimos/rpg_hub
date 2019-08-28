@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Q
 from django.core.validators import MaxValueValidator, MinValueValidator
+from PIL import Image
 from users.models import User, Profile
 from imaginarion.models import Picture
 from debates.models import Debate
@@ -23,12 +24,22 @@ COLORS = (
 class Chapter(models.Model):
     chapter_no = models.IntegerField(null=True)
     title = models.CharField(max_length=200)
+    image = models.ImageField(blank=True, null=True, upload_to='site_features_pics')
+
+    class Meta:
+        ordering = ['chapter_no']
 
     def __str__(self):
         return self.title
 
-    class Meta:
-        ordering = ['chapter_no']
+    def save(self, *args, **kwargs):
+        super().save()
+        if self.image:
+            img = Image.open(self.image.path)
+            if img.height > 700 or img.width > 700:
+                output_size = (700, 700)
+                img.thumbnail(output_size)
+                img.save(self.image.path)
 
 
 class GameSession(models.Model):
