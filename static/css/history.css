@@ -82,8 +82,10 @@ td img {
 }
 
 .img-chapter {
+        float: left;
         height: 45px;
         width: 45px;
+        margin-right: 5px;
 }
 
 .bootstrap-table .fixed-table-container .table thead th .th-inner {
