@@ -124,7 +124,7 @@ def chronicle_all_chapters_view(request):
 
 @login_required
 def chronicle_one_chapter_view(request, chapter_id):
-    chapter = Chapter.objects.get(id=chapter_id)
+    chapter = get_object_or_404(Chapter, id=chapter_id)
     if request.user.profile.character_status == 'gm':
         games_with_events_dict = {g: [e for e in g.chronicle_events.all()] for g in chapter.game_sessions.all()}
         events_informed = []
