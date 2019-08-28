@@ -52,6 +52,7 @@ def profile_view(request):
     return render(request, 'users/profile.html', context)
 
 
+@login_required()
 def change_password_view(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
