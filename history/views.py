@@ -669,7 +669,7 @@ def timeline_note_view(request, event_id):
         'participants': participants_str,
         'informed': informed_str
     }
-    if request.user.profile in participants or request.user.profile in old_informed:
+    if request.user.profile in participants or request.user.profile in informed:
         return render(request, 'history/timeline_note.html', context)
     else:
         return redirect('home:dupa')

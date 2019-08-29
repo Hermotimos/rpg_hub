@@ -8,290 +8,286 @@ from users.models import User
 # ------------------ CHRONICLE ------------------
 
 
-# class ChronicleMainTest(TestCase):
-#     def setUp(self):
-#         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-#         self.url = reverse('history:chronicle-main')
-#
-#     def test_login_required(self):
-#         redirect_url = reverse('users:login') + '?next=' + self.url
-#         response = self.client.get(self.url)
-#         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-#
-#     def test_get(self):
-#         self.client.force_login(self.user1)
-#         response = self.client.get(self.url)
-#         self.assertEquals(response.status_code, 200)
-#
-#     def test_url_resolves_view(self):
-#         view = resolve('/history/chronicle/')
-#         self.assertEquals(view.func, views.chronicle_main_view)
-#
-#
-# class ChronicleCreateTest(TestCase):
-#     def setUp(self):
-#         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-#         self.url = reverse('history:chronicle-create')
-#
-#     def test_login_required(self):
-#         redirect_url = reverse('users:login') + '?next=' + self.url
-#         response = self.client.get(self.url)
-#         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-#
-#     def test_get(self):
-#         self.client.force_login(self.user1)
-#         response = self.client.get(self.url)
-#         self.assertEquals(response.status_code, 200)
-#
-#     def test_url_resolves_view(self):
-#         view = resolve('/history/chronicle/create/')
-#         self.assertEquals(view.func, views.chronicle_create_view)
-#
-#
-# class ChronicleAllChaptersTest(TestCase):
-#     def setUp(self):
-#         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-#         self.url = reverse('history:chronicle-all-chapters')
-#
-#     def test_login_required(self):
-#         redirect_url = reverse('users:login') + '?next=' + self.url
-#         response = self.client.get(self.url)
-#         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-#
-#     def test_get(self):
-#         self.client.force_login(self.user1)
-#         response = self.client.get(self.url)
-#         self.assertEquals(response.status_code, 200)
-#
-#     def test_url_resolves_view(self):
-#         view = resolve('/history/chronicle/all-chapters/')
-#         self.assertEquals(view.func, views.chronicle_all_chapters_view)
-#
-#
-# class ChronicleOneChapterTest(TestCase):
-#     def setUp(self):
-#         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-#         self.user2 = User.objects.create_user(username='user2', password='pass1111')
-#         self.user3 = User.objects.create_user(username='user3', password='pass1111')
-#         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
-#         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
-#         self.event1 = ChronicleEvent.objects.create(id=1, game_no=self.game1, event_no_in_game=1, )
-#         self.event1.participants.set([self.user1.profile])
-#         self.event1.informed.set([self.user2.profile])
-#         self.url = reverse('history:chronicle-one-chapter', kwargs={'chapter_id': self.chapter1.id})
-#
-#     def test_login_required(self):
-#         redirect_url = reverse('users:login') + '?next=' + self.url
-#         response = self.client.get(self.url)
-#         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-#
-#     def test_redirect_if_unallowed(self):
-#         self.client.force_login(self.user3)
-#         redirect_url = reverse('home:dupa')
-#         response = self.client.get(self.url)
-#         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-#
-#     def test_404(self):
-#         self.client.force_login(self.user1)
-#         url = reverse('history:chronicle-one-chapter', kwargs={'chapter_id': self.chapter1.id + 999})
-#         response = self.client.get(url)
-#         self.assertEquals(response.status_code, 404)
-#
-#     def test_get_1(self):
-#         # case: request.user.profile in participants:
-#         self.client.force_login(self.user1)
-#         response = self.client.get(self.url)
-#         self.assertEquals(response.status_code, 200)
-#
-#     def test_get_2(self):
-#         # case: request.user.profile in informed:
-#         self.client.force_login(self.user1)
-#         response = self.client.get(self.url)
-#         self.assertEquals(response.status_code, 200)
-#
-#     def test_url_resolves_view(self):
-#         view = resolve(f'/history/chronicle/one-chapter:{self.chapter1.id}/')
-#         self.assertEquals(view.func, views.chronicle_one_chapter_view)
-#
-#
-# class ChronicleOneGameTest(TestCase):
-#     def setUp(self):
-#         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-#         self.user2 = User.objects.create_user(username='user2', password='pass1111')
-#         self.user3 = User.objects.create_user(username='user3', password='pass1111')
-#         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
-#         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
-#         self.event1 = ChronicleEvent.objects.create(id=1, game_no=self.game1, event_no_in_game=1, )
-#         self.event1.participants.set([self.user1.profile])
-#         self.event1.informed.set([self.user2.profile])
-#         self.url = reverse('history:chronicle-one-game', kwargs={'game_id': self.game1.id})
-#
-#     def test_login_required(self):
-#         redirect_url = reverse('users:login') + '?next=' + self.url
-#         response = self.client.get(self.url)
-#         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-#
-#     def test_redirect_if_unallowed(self):
-#         self.client.force_login(self.user3)
-#         redirect_url = reverse('home:dupa')
-#         response = self.client.get(self.url)
-#         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-#
-#     def test_404(self):
-#         self.client.force_login(self.user1)
-#         url = reverse('history:chronicle-one-game', kwargs={'game_id': self.game1.id + 999})
-#         response = self.client.get(url)
-#         self.assertEquals(response.status_code, 404)
-#
-#     def test_get_1(self):
-#         # case: request.user.profile in participants:
-#         self.client.force_login(self.user1)
-#         response = self.client.get(self.url)
-#         self.assertEquals(response.status_code, 200)
-#
-#     def test_get_2(self):
-#         # case: request.user.profile in informed:
-#         self.client.force_login(self.user1)
-#         response = self.client.get(self.url)
-#         self.assertEquals(response.status_code, 200)
-#
-#     def test_url_resolves_view(self):
-#         view = resolve(f'/history/chronicle/one-game:{self.game1.id}/')
-#         self.assertEquals(view.func, views.chronicle_one_game_view)
-#
-#
-# class ChronicleInformTest(TestCase):
-#     def setUp(self):
-#         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-#         self.user2 = User.objects.create_user(username='user2', password='pass1111')
-#         self.user3 = User.objects.create_user(username='user3', password='pass1111')
-#         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
-#         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
-#         self.event1 = ChronicleEvent.objects.create(id=1, game_no=self.game1, event_no_in_game=1, )
-#         self.event1.participants.set([self.user1.profile])
-#         self.event1.informed.set([self.user2.profile])
-#         self.url = reverse('history:chronicle-inform', kwargs={'event_id': self.event1.id})
-#
-#     def test_login_required(self):
-#         redirect_url = reverse('users:login') + '?next=' + self.url
-#         response = self.client.get(self.url)
-#         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-#
-#     def test_redirect_if_unallowed(self):
-#         self.client.force_login(self.user3)
-#         redirect_url = reverse('home:dupa')
-#         response = self.client.get(self.url)
-#         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-#
-#     def test_404(self):
-#         self.client.force_login(self.user1)
-#         url = reverse('history:chronicle-inform', kwargs={'event_id': self.event1.id + 999})
-#         response = self.client.get(url)
-#         self.assertEquals(response.status_code, 404)
-#
-#     def test_get_1(self):
-#         # case: request.user.profile in participants:
-#         self.client.force_login(self.user1)
-#         response = self.client.get(self.url)
-#         self.assertEquals(response.status_code, 200)
-#
-#     def test_get_2(self):
-#         # case: request.user.profile in informed:
-#         self.client.force_login(self.user1)
-#         response = self.client.get(self.url)
-#         self.assertEquals(response.status_code, 200)
-#
-#     def test_url_resolves_view(self):
-#         view = resolve('/history/chronicle/inform:1/')
-#         self.assertEquals(view.func, views.chronicle_inform_view)
-#
-#
-# class ChronicleNoteTest(TestCase):
-#     def setUp(self):
-#         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-#         self.user2 = User.objects.create_user(username='user2', password='pass1111')
-#         self.user3 = User.objects.create_user(username='user3', password='pass1111')
-#         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
-#         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
-#         self.event1 = ChronicleEvent.objects.create(id=1, game_no=self.game1, event_no_in_game=1, )
-#         self.event1.participants.set([self.user1.profile])
-#         self.event1.informed.set([self.user2.profile])
-#         self.url = reverse('history:chronicle-note', kwargs={'event_id': self.event1.id})
-#
-#     def test_login_required(self):
-#         redirect_url = reverse('users:login') + '?next=' + self.url
-#         response = self.client.get(self.url)
-#         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-#
-#     def test_redirect_if_unallowed(self):
-#         self.client.force_login(self.user3)
-#         redirect_url = reverse('home:dupa')
-#         response = self.client.get(self.url)
-#         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-#
-#     def test_404(self):
-#         self.client.force_login(self.user1)
-#         url = reverse('history:chronicle-note', kwargs={'event_id': self.event1.id + 999})
-#         response = self.client.get(url)
-#         self.assertEquals(response.status_code, 404)
-#
-#     def test_get_1(self):
-#         # case: request.user.profile in participants:
-#         self.client.force_login(self.user1)
-#         response = self.client.get(self.url)
-#         self.assertEquals(response.status_code, 200)
-#
-#     def test_get_2(self):
-#         # case: request.user.profile in informed:
-#         self.client.force_login(self.user1)
-#         response = self.client.get(self.url)
-#         self.assertEquals(response.status_code, 200)
-#
-#     def test_url_resolves_view(self):
-#         view = resolve(f'/history/chronicle/note:{self.event1.id}/')
-#         self.assertEquals(view.func, views.chronicle_note_view)
-#
-#
-# class ChronicleEditTest(TestCase):
-#     def setUp(self):
-#         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-#         self.user1.profile.character_status = 'gm'
-#         self.user2 = User.objects.create_user(username='user2', password='pass1111')
-#         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
-#         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
-#         self.event1 = ChronicleEvent.objects.create(id=1, game_no=self.game1, event_no_in_game=1, )
-#         self.event1.participants.set([self.user1.profile])
-#         self.event1.informed.set([self.user2.profile])
-#         self.url = reverse('history:chronicle-edit', kwargs={'event_id': self.event1.id})
-#
-#     def test_login_required(self):
-#         redirect_url = reverse('users:login') + '?next=' + self.url
-#         response = self.client.get(self.url)
-#         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-#
-#     def test_redirect_if_unallowed(self):
-#         # case: request.user.profile.character_status != 'gm'
-#         self.client.force_login(self.user2)
-#         redirect_url = reverse('home:dupa')
-#         response = self.client.get(self.url)
-#         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-#
-#     def test_404(self):
-#         self.client.force_login(self.user1)
-#         url = reverse('history:chronicle-edit', kwargs={'event_id': self.event1.id + 999})
-#         response = self.client.get(url)
-#         self.assertEquals(response.status_code, 404)
-#
-#     def test_get(self):
-#         # case: request.user.profile.character_status == 'gm'
-#         self.client.force_login(self.user1)
-#         response = self.client.get(self.url)
-#         self.assertEquals(response.status_code, 200)
-#
-#     def test_url_resolves_view(self):
-#         view = resolve(f'/history/chronicle/edit:{self.event1.id}/')
-#         self.assertEquals(view.func, views.chronicle_edit_view)
-#
+class ChronicleMainTest(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.url = reverse('history:chronicle-main')
+
+    def test_login_required(self):
+        redirect_url = reverse('users:login') + '?next=' + self.url
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_get(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
+    def test_url_resolves_view(self):
+        view = resolve('/history/chronicle/')
+        self.assertEquals(view.func, views.chronicle_main_view)
+
+
+class ChronicleCreateTest(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.url = reverse('history:chronicle-create')
+
+    def test_login_required(self):
+        redirect_url = reverse('users:login') + '?next=' + self.url
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_get(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
+    def test_url_resolves_view(self):
+        view = resolve('/history/chronicle/create/')
+        self.assertEquals(view.func, views.chronicle_create_view)
+
+
+class ChronicleAllChaptersTest(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.url = reverse('history:chronicle-all-chapters')
+
+    def test_login_required(self):
+        redirect_url = reverse('users:login') + '?next=' + self.url
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_get(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
+    def test_url_resolves_view(self):
+        view = resolve('/history/chronicle/all-chapters/')
+        self.assertEquals(view.func, views.chronicle_all_chapters_view)
+
+
+class ChronicleOneChapterTest(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', password='pass1111')
+        self.user3 = User.objects.create_user(username='user3', password='pass1111')
+        self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
+        self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
+        self.event1 = ChronicleEvent.objects.create(id=1, game_no=self.game1, event_no_in_game=1, )
+        self.event1.participants.set([self.user1.profile])
+        self.event1.informed.set([self.user2.profile])
+        self.url = reverse('history:chronicle-one-chapter', kwargs={'chapter_id': self.chapter1.id})
+
+    def test_login_required(self):
+        redirect_url = reverse('users:login') + '?next=' + self.url
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_redirect_if_unallowed(self):
+        self.client.force_login(self.user3)
+        redirect_url = reverse('home:dupa')
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_404(self):
+        self.client.force_login(self.user1)
+        url = reverse('history:chronicle-one-chapter', kwargs={'chapter_id': self.chapter1.id + 999})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
+
+    def test_get(self):
+        # case: request.user.profile in participants:
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
+        # case: request.user.profile in informed:
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
+    def test_url_resolves_view(self):
+        view = resolve(f'/history/chronicle/one-chapter:{self.chapter1.id}/')
+        self.assertEquals(view.func, views.chronicle_one_chapter_view)
+
+
+class ChronicleOneGameTest(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', password='pass1111')
+        self.user3 = User.objects.create_user(username='user3', password='pass1111')
+        self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
+        self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
+        self.event1 = ChronicleEvent.objects.create(id=1, game_no=self.game1, event_no_in_game=1, )
+        self.event1.participants.set([self.user1.profile])
+        self.event1.informed.set([self.user2.profile])
+        self.url = reverse('history:chronicle-one-game', kwargs={'game_id': self.game1.id})
+
+    def test_login_required(self):
+        redirect_url = reverse('users:login') + '?next=' + self.url
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_redirect_if_unallowed(self):
+        self.client.force_login(self.user3)
+        redirect_url = reverse('home:dupa')
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_404(self):
+        self.client.force_login(self.user1)
+        url = reverse('history:chronicle-one-game', kwargs={'game_id': self.game1.id + 999})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
+
+    def test_get(self):
+        # case: request.user.profile in participants:
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
+        # case: request.user.profile in informed:
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
+    def test_url_resolves_view(self):
+        view = resolve(f'/history/chronicle/one-game:{self.game1.id}/')
+        self.assertEquals(view.func, views.chronicle_one_game_view)
+
+
+class ChronicleInformTest(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', password='pass1111')
+        self.user3 = User.objects.create_user(username='user3', password='pass1111')
+        self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
+        self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
+        self.event1 = ChronicleEvent.objects.create(id=1, game_no=self.game1, event_no_in_game=1, )
+        self.event1.participants.set([self.user1.profile])
+        self.event1.informed.set([self.user2.profile])
+        self.url = reverse('history:chronicle-inform', kwargs={'event_id': self.event1.id})
+
+    def test_login_required(self):
+        redirect_url = reverse('users:login') + '?next=' + self.url
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_redirect_if_unallowed(self):
+        self.client.force_login(self.user3)
+        redirect_url = reverse('home:dupa')
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_404(self):
+        self.client.force_login(self.user1)
+        url = reverse('history:chronicle-inform', kwargs={'event_id': self.event1.id + 999})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
+
+    def test_get(self):
+        # case: request.user.profile in participants:
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
+        # case: request.user.profile in informed:
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
+    def test_url_resolves_view(self):
+        view = resolve('/history/chronicle/inform:1/')
+        self.assertEquals(view.func, views.chronicle_inform_view)
+
+
+class ChronicleNoteTest(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', password='pass1111')
+        self.user3 = User.objects.create_user(username='user3', password='pass1111')
+        self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
+        self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
+        self.event1 = ChronicleEvent.objects.create(id=1, game_no=self.game1, event_no_in_game=1, )
+        self.event1.participants.set([self.user1.profile])
+        self.event1.informed.set([self.user2.profile])
+        self.url = reverse('history:chronicle-note', kwargs={'event_id': self.event1.id})
+
+    def test_login_required(self):
+        redirect_url = reverse('users:login') + '?next=' + self.url
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_redirect_if_unallowed(self):
+        self.client.force_login(self.user3)
+        redirect_url = reverse('home:dupa')
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_404(self):
+        self.client.force_login(self.user1)
+        url = reverse('history:chronicle-note', kwargs={'event_id': self.event1.id + 999})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
+
+    def test_get(self):
+        # case: request.user.profile in participants:
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
+        # case: request.user.profile in informed:
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
+    def test_url_resolves_view(self):
+        view = resolve(f'/history/chronicle/note:{self.event1.id}/')
+        self.assertEquals(view.func, views.chronicle_note_view)
+
+
+class ChronicleEditTest(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.user1.profile.character_status = 'gm'
+        self.user2 = User.objects.create_user(username='user2', password='pass1111')
+        self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
+        self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
+        self.event1 = ChronicleEvent.objects.create(id=1, game_no=self.game1, event_no_in_game=1, )
+        self.event1.participants.set([self.user1.profile])
+        self.event1.informed.set([self.user2.profile])
+        self.url = reverse('history:chronicle-edit', kwargs={'event_id': self.event1.id})
+
+    def test_login_required(self):
+        redirect_url = reverse('users:login') + '?next=' + self.url
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_redirect_if_unallowed(self):
+        # case: request.user.profile.character_status != 'gm'
+        self.client.force_login(self.user2)
+        redirect_url = reverse('home:dupa')
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_404(self):
+        self.client.force_login(self.user1)
+        url = reverse('history:chronicle-edit', kwargs={'event_id': self.event1.id + 999})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
+
+    def test_get(self):
+        # case: request.user.profile.character_status == 'gm'
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
+    def test_url_resolves_view(self):
+        view = resolve(f'/history/chronicle/edit:{self.event1.id}/')
+        self.assertEquals(view.func, views.chronicle_edit_view)
+
 
 # ------------------ TIMELINE ------------------
 
@@ -388,13 +384,12 @@ class TimelineThreadTest(TestCase):
         response = self.client.get(url)
         self.assertEquals(response.status_code, 404)
 
-    def test_get_1(self):
+    def test_get(self):
         # case: request.user.profile in event1.participant.all()
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-    def test_get_2(self):
         # case: request.user.profile in event1.informed.all()
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
@@ -436,19 +431,17 @@ class TimelineParticipantTest(TestCase):
         response = self.client.get(url)
         self.assertEquals(response.status_code, 404)
 
-    def test_get_1(self):
+    def test_get(self):
         # case: request.user.profile in event1.participant.all()
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-    def test_get_2(self):
         # case: request.user.profile in event1.informed.all()
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-    def test_get_3(self):
         # case: request.user.profile in event1.participant.all() and is the searched participant
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
@@ -489,13 +482,12 @@ class TimelineGeneralLocationtTest(TestCase):
         response = self.client.get(url)
         self.assertEquals(response.status_code, 404)
 
-    def test_get_1(self):
+    def test_get(self):
         # case: request.user.profile in event1.participant.all()
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-    def test_get_2(self):
         # case: request.user.profile in event1.informed.all()
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
@@ -538,17 +530,17 @@ class TimelineSpecificLocationtTest(TestCase):
         response = self.client.get(url)
         self.assertEquals(response.status_code, 404)
 
-    def test_get_1(self):
+    def test_get(self):
         # case: request.user.profile in event1.participant.all()
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-    def test_get_2(self):
         # case: request.user.profile in event1.informed.all()
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
+
 
     def test_url_resolves_view(self):
         view = resolve(f'/history/timeline/spec-loc:{self.spec_loc1.id}/')
@@ -582,14 +574,15 @@ class TimelineDateTest(TestCase):
 
     # no test_404() becaues no objects timeline_date_view() has no args and calls no object with get_object_or_404()
 
-    def test_get_1(self):
+    def test_get(self):
+        # case: request.user.profile in event1.participant.all()
         self.client.force_login(self.user1)
         response_only_year = self.client.get(self.url_only_year)
         response_year_and_season = self.client.get(self.url_year_and_season)
         self.assertEquals(response_only_year.status_code, 200)
         self.assertEquals(response_year_and_season.status_code, 200)
 
-    def test_get_2(self):
+        # case: request.user.profile in event1.informed.all()
         self.client.force_login(self.user2)
         response_only_year = self.client.get(self.url_only_year)
         response_year_and_season = self.client.get(self.url_year_and_season)
@@ -633,13 +626,12 @@ class TimelineGameTest(TestCase):
         response = self.client.get(url)
         self.assertEquals(response.status_code, 404)
 
-    def test_get_1(self):
+    def test_get(self):
         # case: request.user.profile in event1.participant.all()
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-    def test_get_2(self):
         # case: request.user.profile in event1.informed.all()
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
@@ -652,44 +644,146 @@ class TimelineGameTest(TestCase):
 
 class TimelineInformView(TestCase):
     def setUp(self):
-        game1 = GameSession.objects.create(title='Game1')
-        TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1, description='Description1')
+        self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', password='pass1111')
+        self.user3 = User.objects.create_user(username='user3', password='pass1111')
+        self.game1 = GameSession.objects.create(title='Game1')
+        gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
+        self.event1 = TimelineEvent.objects.create(game_no=self.game1, year=1, season=1, day_start=1,
+                                                   description='Description1', general_location=gen_loc1)
+        self.event1.participants.set([self.user1.profile, ])
+        self.event1.informed.set([self.user2.profile, ])
+        self.url = reverse('history:timeline-inform', kwargs={'event_id': self.event1.id})
+
+    def test_login_required(self):
+        redirect_url = reverse('users:login') + '?next=' + self.url
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_redirect_if_unallowed(self):
+        self.client.force_login(self.user3)
+        redirect_url = reverse('home:dupa')
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_404(self):
+        self.client.force_login(self.user1)
+        url = reverse('history:timeline-inform', kwargs={'event_id': self.event1.id + 999})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
 
     def test_get(self):
-        url = reverse('history:timeline-inform', kwargs={'event_id': 1})
-        response = self.client.get(url, follow=True)
+        # case: request.user.profile in event1.participant.all()
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
+        # case: request.user.profile in event1.informed.all()
+        self.client.force_login(self.user2)
+        response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
     def test_url_resolves_view(self):
-        view = resolve('/history/timeline/inform:1/')
+        view = resolve(f'/history/timeline/inform:{self.event1.id}/')
         self.assertEquals(view.func, views.timeline_inform_view)
 
 
 class TimelineNoteView(TestCase):
     def setUp(self):
-        game1 = GameSession.objects.create(game_no=1, title='Game1')
-        TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1, description='Description1')
+        self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', password='pass1111')
+        self.user3 = User.objects.create_user(username='user3', password='pass1111')
+        self.game1 = GameSession.objects.create(title='Game1')
+        gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
+        self.event1 = TimelineEvent.objects.create(game_no=self.game1, year=1, season=1, day_start=1,
+                                                   description='Description1', general_location=gen_loc1)
+        self.event1.participants.set([self.user1.profile, ])
+        self.event1.informed.set([self.user2.profile, ])
+        self.url = reverse('history:timeline-note', kwargs={'event_id': self.event1.id})
+
+    def test_login_required(self):
+        redirect_url = reverse('users:login') + '?next=' + self.url
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_redirect_if_unallowed(self):
+        self.client.force_login(self.user3)
+        redirect_url = reverse('home:dupa')
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_404(self):
+        self.client.force_login(self.user1)
+        url = reverse('history:timeline-note', kwargs={'event_id': self.event1.id + 999})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
 
     def test_get(self):
-        url = reverse('history:timeline-note', kwargs={'event_id': 1})
-        response = self.client.get(url, follow=True)
+        # case: request.user.profile in event1.participant.all()
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
+        # case: request.user.profile in event1.informed.all()
+        self.client.force_login(self.user2)
+        response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
     def test_url_resolves_view(self):
-        view = resolve('/history/timeline/note:1/')
+        view = resolve(f'/history/timeline/note:{self.event1.id}/')
         self.assertEquals(view.func, views.timeline_note_view)
 
 
 class TimelineEditView(TestCase):
     def setUp(self):
-        game1 = GameSession.objects.create(game_no=1, title='Game1')
-        TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1, description='Description1')
+        self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', password='pass1111')
+        self.user3 = User.objects.create_user(username='user3', password='pass1111')
+        self.user4 = User.objects.create_user(username='user4', password='pass1111')
+        self.user4.profile.character_status = 'gm'
+        self.game1 = GameSession.objects.create(title='Game1')
+        gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
+        self.event1 = TimelineEvent.objects.create(game_no=self.game1, year=1, season=1, day_start=1,
+                                                   description='Description1', general_location=gen_loc1)
+        self.event1.participants.set([self.user1.profile, ])
+        self.event1.informed.set([self.user2.profile, ])
+        self.url = reverse('history:timeline-edit', kwargs={'event_id': self.event1.id})
+
+    def test_login_required(self):
+        redirect_url = reverse('users:login') + '?next=' + self.url
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_redirect_if_unallowed(self):
+        redirect_url = reverse('home:dupa')
+
+        # case: request.user.profile in event1.participant.all()
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+        # case: request.user.profile in event1.informed.all()
+        self.client.force_login(self.user2)
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+        # case: request.user.profile neither in event1.participant.all() nor in event1.informed.all()
+        self.client.force_login(self.user3)
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_404(self):
+        self.client.force_login(self.user1)
+        url = reverse('history:timeline-edit', kwargs={'event_id': self.event1.id + 999})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
 
     def test_get(self):
-        url = reverse('history:timeline-edit', kwargs={'event_id': 1})
-        response = self.client.get(url, follow=True)
+        # case: request.user.profile.character_status == 'gm'
+        self.client.force_login(self.user4)
+        response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
     def test_url_resolves_view(self):
-        view = resolve('/history/timeline/edit:1/')
+        view = resolve(f'/history/timeline/edit:{self.event1.id}/')
         self.assertEquals(view.func, views.timeline_edit_view)
