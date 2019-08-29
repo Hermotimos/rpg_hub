@@ -8,6 +8,8 @@ from users.models import User
 class MainTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.news1 = News.objects.create(id=1, title='Title1', author=self.user1)
+        self.news1.allowed_profiles.set([self.user1.profile, ])
         self.url = reverse('news:main')
 
     def test_login_required(self):
@@ -23,6 +25,14 @@ class MainTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve('/news/')
         self.assertEquals(view.func, views.main_view)
+
+    def test_contains_links(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        linked_url = reverse('news:create')
+        self.assertContains(response, f'href="{linked_url}"')
+        linked_url = reverse('news:detail', kwargs={'news_id': self.news1.id})
+        self.assertContains(response, f'href="{linked_url}"')
 
 
 class CreateTest(TestCase):
@@ -49,8 +59,10 @@ class DetailTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
+        self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.news1 = News.objects.create(id=1, title='News1', text='news1', author=self.user1)
-        self.news1.allowed_profiles.set([self.user1.profile, ])
+        self.news1.allowed_profiles.set([self.user1.profile, self.user2.profile, ])
+        self.news1.followers.set([self.user1.profile, ])
         self.url = reverse('news:detail', kwargs={'news_id': self.news1.id})
 
     def test_login_required(self):
@@ -59,7 +71,7 @@ class DetailTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        self.client.force_login(self.user2)
+        self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
@@ -78,6 +90,20 @@ class DetailTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve(f'/news/detail:{self.news1.id}/')
         self.assertEquals(view.func, views.news_detail_view)
+
+    def test_contains_links(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+
+        # case request.user.profile in news1.followers.all()
+        linked_url = reverse('news:unfollow', kwargs={'news_id': self.news1.id})
+        self.assertContains(response, f'href="{linked_url}"')
+
+        # case request.user.profile not in news1.followers.all()
+        self.client.force_login(self.user2)
+        response = self.client.get(self.url)
+        linked_url = reverse('news:follow', kwargs={'news_id': self.news1.id})
+        self.assertContains(response, f'href="{linked_url}"')
 
 
 class FollowNewsTest(TestCase):
