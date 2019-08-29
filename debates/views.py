@@ -32,19 +32,69 @@ def debates_main_view(request):
 @login_required
 def create_topic_view(request):
     if request.method == 'POST':
-        form = CreateTopicForm(request.POST or None)
-        if form.is_valid():
-            topic = form.save()
-            messages.info(request, f'Utworzono nowy temat narad!')
-            return redirect('debates:create-debate', topic_id=topic.id)
+        topic_form = CreateTopicForm(request.POST or None)
+        debate_form = CreateDebateForm(authenticated_user=request.user, data=request.POST or None)
+        remark_form = CreateRemarkForm(request.POST, request.FILES)
+
+        if topic_form.is_valid() and debate_form.is_valid() and remark_form.is_valid():
+            topic = topic_form.save()
+
+            debate = debate_form.save(commit=False)
+            debate.topic = topic
+            debate.starter = request.user
+            debate.save()
+            allowed_profiles = debate_form.cleaned_data['allowed_profiles']
+            allowed_profiles |= Profile.objects.filter(id=request.user.id)
+            debate.allowed_profiles.set(allowed_profiles)
+            debate.followers.set(allowed_profiles)
+
+            remark = remark_form.save(commit=False)
+            remark.debate = debate
+            remark.save()
+
+            subject = f"[RPG] Nowa narada w nowym temacie: {debate.title}"
+            message = f"{remark.author.profile} włączył/a Cię do nowej narady " \
+                f"'{debate.title}' w temacie '{debate.topic}'.\n" \
+                f"Uczestnicy: {', '.join(p.character_name for p in debate.allowed_profiles.all())}\n" \
+                f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
+            sender = settings.EMAIL_HOST_USER
+            receivers = []
+            for profile in debate.allowed_profiles.all():
+                if profile.user != request.user:
+                    receivers.append(profile.user.email)
+            if request.user.profile.character_status != 'gm':
+                receivers.append('lukas.kozicki@gmail.com')
+            send_mail(subject, message, sender, receivers)
+
+            messages.info(request, f'Utworzono nową naradę w nowym temacie!')
+            return redirect('debates:debate', topic_id=topic.id, debate_id=debate.id)
     else:
-        form = CreateTopicForm()             # equals to: form = CreateTopicForm(request.GET) - GET is the default
+        topic_form = CreateTopicForm()
+        debate_form = CreateDebateForm(authenticated_user=request.user)
+        remark_form = CreateRemarkForm(initial={'author': request.user})
 
     context = {
-        'page_title': 'Nowy temat narad',
-        'form': form,
+        'page_title': 'Nowa narada w nowym temacie',
+        'topic_form': topic_form,
+        'debate_form': debate_form,
+        'remark_form': remark_form,
     }
     return render(request, 'debates/create_topic.html', context)
+
+    # if request.method == 'POST':
+    #     form = CreateTopicForm(request.POST or None)
+    #     if form.is_valid():
+    #         topic = form.save()
+    #         messages.info(request, f'Utworzono nowy temat narad!')
+    #         return redirect('debates:create-debate', topic_id=topic.id)
+    # else:
+    #     form = CreateTopicForm()             # equals to: form = CreateTopicForm(request.GET) - GET is the default
+    #
+    # context = {
+    #     'page_title': 'Nowy temat narad',
+    #     'form': form,
+    # }
+    # return render(request, 'debates/create_topic.html', context)
 
 
 @login_required

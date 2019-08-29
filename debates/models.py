@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models import Q, Max, Min
+from django.db.models import Max, Min
 from PIL import Image
 from users.models import Profile
 
