@@ -9,6 +9,9 @@ class DebatesMainTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.url = reverse('debates:main')
+        self.topic1 = Topic.objects.create(id=1, title='Topic1')
+        self.debate1 = Debate.objects.create(id=1, title='Debate1', topic=self.topic1, starter=self.user1)
+        self.debate1.allowed_profiles.set([self.user1.profile, ])
 
     def test_login_required(self):
         redirect_url = reverse('users:login') + '?next=' + self.url
@@ -23,6 +26,16 @@ class DebatesMainTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve('/debates/')
         self.assertEquals(view.func, views.debates_main_view)
+
+    def test_contains_link(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        linked_url1 = reverse('debates:create-topic')
+        linked_url2 = reverse('debates:create-debate', kwargs={'topic_id': self.topic1.id})
+        linked_url3 = reverse('debates:debate', kwargs={'topic_id': self.topic1.id, 'debate_id': self.debate1.id})
+        self.assertContains(response, f'href="{linked_url1}"')
+        self.assertContains(response, f'href="{linked_url2}"')
+        self.assertContains(response, f'href="{linked_url3}"')
 
 
 class CreateTopicTest(TestCase):
@@ -48,7 +61,7 @@ class CreateTopicTest(TestCase):
 class CreateDebateTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-        self.topic1 = Topic.objects.create(id=1, title='Topic1', description='Description1')
+        self.topic1 = Topic.objects.create(id=1, title='Topic1')
         self.debate1 = Debate.objects.create(id=1, topic=self.topic1, starter=self.user1)
         self.debate1.allowed_profiles.set([self.user1.profile, ])
         self.url = reverse('debates:create-debate', kwargs={'topic_id': self.topic1.id})
@@ -96,7 +109,7 @@ class CreateDebateTest(TestCase):
 class DebateTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-        self.topic1 = Topic.objects.create(id=1, title='Topic1', description='Description1')
+        self.topic1 = Topic.objects.create(id=1, title='Topic1')
         self.debate1 = Debate.objects.create(id=1, topic=self.topic1, starter=self.user1)
         self.debate1.allowed_profiles.set([self.user1.profile, ])
         self.url = reverse('debates:debate', kwargs={'topic_id': self.topic1.id, 'debate_id': self.debate1.id})
@@ -132,7 +145,7 @@ class DebateTest(TestCase):
 class DebatesInviteTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-        self.topic1 = Topic.objects.create(id=1, title='Topic1', description='Description1')
+        self.topic1 = Topic.objects.create(id=1, title='Topic1')
         self.debate1 = Debate.objects.create(id=1, topic=self.topic1, starter=self.user1)
         self.debate1.allowed_profiles.set([self.user1.profile, ])
         self.url = reverse('debates:invite', kwargs={'topic_id': self.topic1.id, 'debate_id': self.debate1.id})
@@ -168,7 +181,7 @@ class DebatesInviteTest(TestCase):
 class UnfollowDebateTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-        self.topic1 = Topic.objects.create(id=1, title='Topic1', description='Description1')
+        self.topic1 = Topic.objects.create(id=1, title='Topic1')
         self.debate1 = Debate.objects.create(id=1, topic=self.topic1, starter=self.user1)
         self.debate1.allowed_profiles.set([self.user1.profile, ])
         self.url = reverse('debates:unfollow', kwargs={'topic_id': self.topic1.id, 'debate_id': self.debate1.id})
@@ -207,7 +220,7 @@ class UnfollowDebateTest(TestCase):
 class FollowDebateTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-        self.topic1 = Topic.objects.create(id=1, title='Topic1', description='Description1')
+        self.topic1 = Topic.objects.create(id=1, title='Topic1')
         self.debate1 = Debate.objects.create(id=1, topic=self.topic1, starter=self.user1)
         self.debate1.allowed_profiles.set([self.user1.profile, ])
         self.url = reverse('debates:follow', kwargs={'topic_id': self.topic1.id, 'debate_id': self.debate1.id})

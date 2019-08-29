@@ -27,6 +27,12 @@ class DemandsMainTest(TestCase):
         view = resolve('/contact/demands/main/')
         self.assertEquals(view.func, views.demands_main_view)
 
+    def test_contains_links(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        linked_url = reverse('contact:demands-create')
+        self.assertContains(response, f'href="{linked_url}"')
+
 
 class DemandsCreateTest(TestCase):
     def setUp(self):
@@ -272,6 +278,12 @@ class PlansMainTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve('/contact/plans/main/')
         self.assertEquals(view.func, views.plans_main_view)
+
+    def test_contains_links(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        linked_url = reverse('contact:plans-create')
+        self.assertContains(response, f'href="{linked_url}"')
 
 
 class PlansForGmTest(TestCase):
