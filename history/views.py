@@ -27,7 +27,7 @@ from history.forms import (TimelineEventCreateForm,
 # #################### CHRONICLE: model ChronicleEvent ####################
 
 
-def is_allowed(profile, chapter_id=0, game_id=0, chronicle_event_id=0, timeline_event_id=0):
+def is_allowed_for_chronicle(profile, chapter_id=0, game_id=0, chronicle_event_id=0, timeline_event_id=0):
     if profile.character_status == 'gm':
         return True
     elif chapter_id:
@@ -143,7 +143,7 @@ def chronicle_one_chapter_view(request, chapter_id):
         'games_with_events_dict': games_with_events_dict,
         'events_informed': events_informed
     }
-    if is_allowed(request.user.profile, chapter_id=chapter_id):
+    if is_allowed_for_chronicle(request.user.profile, chapter_id=chapter_id):
         return render(request, 'history/chronicle_one_chapter.html', context)
     else:
         return redirect('home:dupa')
@@ -168,7 +168,7 @@ def chronicle_one_game_view(request, game_id):
         'events': events,
         'events_informed': events_informed
     }
-    if is_allowed(request.user.profile, game_id=game_id):
+    if is_allowed_for_chronicle(request.user.profile, game_id=game_id):
         return render(request, 'history/chronicle_one_game.html', context)
     else:
         return redirect('home:dupa')
@@ -228,7 +228,7 @@ def chronicle_inform_view(request, event_id):
         'participants': participants_str,
         'informed': old_informed_str
     }
-    if is_allowed(request.user.profile, chronicle_event_id=event_id):
+    if is_allowed_for_chronicle(request.user.profile, chronicle_event_id=event_id):
         return render(request, 'history/chronicle_inform.html', context)
     else:
         return redirect('home:dupa')
@@ -267,7 +267,7 @@ def chronicle_note_view(request, event_id):
         'participants': participants,
         'informed': informed
     }
-    if is_allowed(request.user.profile, chronicle_event_id=event_id):
+    if is_allowed_for_chronicle(request.user.profile, chronicle_event_id=event_id):
         return render(request, 'history/chronicle_note.html', context)
     else:
         return redirect('home:dupa')
@@ -391,6 +391,7 @@ def timeline_main_view(request):
         'participants': participants_name_and_obj_list,
         'gen_locs_with_spec_locs': gen_locs_with_spec_locs_list,
         'games': games_name_and_obj_list,
+        'known_events': list(known_events)
     }
     return render(request, 'history/timeline_main.html', context)
 
@@ -445,7 +446,7 @@ def timeline_thread_view(request, thread_id):
     events = list(events_by_thread_qs.distinct() & known_events.distinct())
 
     context = {
-        'page_title': f'Kalendarium: {thread.name}',
+        'page_title': f'{thread.name}',
         'header': f'{thread.name}... Próbujesz sobie przypomnieć, od czego się to wszystko zaczęło?',
         'events': events,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
@@ -469,7 +470,7 @@ def timeline_participant_view(request, participant_id):
         text = f'{participant.character_name.split(" ", 1)[0]}... Niejedno już razem przeżyliście. Na dobre i na złe...'
 
     context = {
-        'page_title': f'Kalendarium: {participant.character_name}',
+        'page_title': f'{participant.character_name}',
         'header': text,
         'events': events,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
@@ -488,7 +489,7 @@ def timeline_general_location_view(request, gen_loc_id):
     events = list(events_by_general_location_qs.distinct() & known_events.distinct())
 
     context = {
-        'page_title': f'Kalendarium: {general_location.name}',
+        'page_title': f'{general_location.name}',
         'header': f'{general_location.name}... Zastanawiasz się, jakie piętno wywarła na Twoich losach ta kraina...',
         'events': events,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
@@ -507,7 +508,7 @@ def timeline_specific_location_view(request, spec_loc_id):
     events = list(events_by_specific_location_qs.distinct() & known_events.distinct())
 
     context = {
-        'page_title': f'Kalendarium: {specific_location.name}',
+        'page_title': f'{specific_location.name}',
         'header': f'{specific_location.name}... Jak to miejsce odcisnęło się na Twoim losie?',
         'events': events,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
@@ -521,7 +522,7 @@ def timeline_specific_location_view(request, spec_loc_id):
 @login_required
 def timeline_date_view(request, year, season='0'):
     if season == '0':
-        page_title = f'Kalendarium: {year}. rok Archonatu Nemetha Samatiana'
+        page_title = f'{year}. rok Archonatu Nemetha Samatiana'
         events_qs = TimelineEvent.objects.filter(year=year)
     else:
         if season == '1':
@@ -533,7 +534,7 @@ def timeline_date_view(request, year, season='0'):
         else:
             season_name = "Zima"
         events_qs = TimelineEvent.objects.filter(year=year, season=season)
-        page_title = f'Kalendarium: {season_name} {year}. roku Archonatu Nemetha Samatiana'
+        page_title = f'{season_name} {year}. roku Archonatu Nemetha Samatiana'
 
     known_events = participated_and_informed_events(request.user.profile.id)
     events = list(events_qs.distinct() & known_events.distinct())
@@ -558,12 +559,12 @@ def timeline_game_view(request, game_id):
     events = list(events_by_game_no_qs.distinct() & known_events.distinct())
 
     context = {
-        'page_title': f'Kalendarium: {game.title}',
+        'page_title': f'{game.title}',
         'header': f'{game.title}... Jak to po kolei było?',
         'events': events,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
-    if is_allowed(request.user.profile, game_id=game_id):
+    if events:
         return render(request, 'history/timeline_events.html', context)
     else:
         return redirect('home:dupa')
@@ -573,9 +574,11 @@ def timeline_game_view(request, game_id):
 def timeline_inform_view(request, event_id):
     event = get_object_or_404(TimelineEvent, id=event_id)
 
-    participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in event.participants.all())
+    participants = list(event.participants.all())
+    participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in participants)
     participants_ids = [p.id for p in event.participants.all()]
-    old_informed = event.informed.all()[::1]                  # enforces evaluation of lazy Queryset for message
+
+    old_informed = list(event.informed.all())
     old_informed_ids = [p.id for p in old_informed]
     old_informed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in old_informed)
 
@@ -624,7 +627,7 @@ def timeline_inform_view(request, event_id):
         'participants': participants_str,
         'informed': old_informed_str
     }
-    if is_allowed(request.user.profile, timeline_event_id=event_id):
+    if request.user.profile in participants or request.user.profile in old_informed:
         return render(request, 'history/timeline_inform.html', context)
     else:
         return redirect('home:dupa')
@@ -635,8 +638,10 @@ def timeline_note_view(request, event_id):
     event = get_object_or_404(TimelineEvent, id=event_id)
 
     current_note = None
-    participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in event.participants.all())
-    informed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in event.informed.all())
+    participants = list(event.participants.all())
+    participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in participants)
+    informed = list(event.informed.all())
+    informed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in informed)
 
     try:
         current_note = TimelineEventNote.objects.get(event=event, author=request.user)
@@ -664,7 +669,7 @@ def timeline_note_view(request, event_id):
         'participants': participants_str,
         'informed': informed_str
     }
-    if is_allowed(request.user.profile, timeline_event_id=event_id):
+    if request.user.profile in participants or request.user.profile in old_informed:
         return render(request, 'history/timeline_note.html', context)
     else:
         return redirect('home:dupa')
@@ -688,7 +693,7 @@ def timeline_edit_view(request, event_id):
         'page_title': 'Edycja wydarzenia',
         'form': form
     }
-    if is_allowed(request.user.profile, timeline_event_id=event_id):
+    if request.user.profile.character_status == 'gm':
         return render(request, 'history/timeline_edit.html', context)
     else:
         return redirect('home:dupa')

@@ -361,7 +361,7 @@ class TimelineThreadTest(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
-        game1 = GameSession.objects.create(game_no=1, title='Game1')
+        game1 = GameSession.objects.create(title='Game1')
         gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
         self.thread1 = Thread.objects.create(name='Thread1')
         event1 = TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1,
@@ -411,7 +411,7 @@ class TimelineParticipantTest(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        game1 = GameSession.objects.create(game_no=1, title='Game1')
+        game1 = GameSession.objects.create(title='Game1')
         gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
         self.event1 = TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1,
                                                    description='Description1', general_location=gen_loc1)
@@ -464,7 +464,7 @@ class TimelineGeneralLocationtTest(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
-        game1 = GameSession.objects.create(game_no=1, title='Game1')
+        game1 = GameSession.objects.create(title='Game1')
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
         event1 = TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1,
                                               description='Description1', general_location=self.gen_loc1)
@@ -511,7 +511,7 @@ class TimelineSpecificLocationtTest(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
-        game1 = GameSession.objects.create(game_no=1, title='Game1')
+        game1 = GameSession.objects.create(title='Game1')
         gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
         self.spec_loc1 = SpecificLocation.objects.create(name='spec_loc1', general_location=gen_loc1)
         event1 = TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1,
@@ -550,11 +550,6 @@ class TimelineSpecificLocationtTest(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-    def test_get(self):
-        url = reverse('history:timeline-spec-loc', kwargs={'spec_loc_id': 1})
-        response = self.client.get(url, follow=True)
-        self.assertEquals(response.status_code, 200)
-
     def test_url_resolves_view(self):
         view = resolve(f'/history/timeline/spec-loc:{self.spec_loc1.id}/')
         self.assertEquals(view.func, views.timeline_specific_location_view)
@@ -565,17 +560,12 @@ class TimelineDateTest(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
-        game1 = GameSession.objects.create(game_no=1, title='Game1')
+        game1 = GameSession.objects.create(title='Game1')
         gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
-        self.spec_loc1 = SpecificLocation.objects.create(name='spec_loc1', general_location=gen_loc1)
-        # thread1 = Thread.objects.create(name='Thread1')
         event1 = TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1,
                                               description='Description1', general_location=gen_loc1)
-        # event1.threads.set([thread1, ])
         event1.participants.set([self.user1.profile, ])
         event1.informed.set([self.user2.profile, ])
-        event1.specific_locations.set([self.spec_loc1, ])
-
         self.url_only_year = reverse('history:timeline-date', kwargs={'year': 1, 'season': 0})
         self.url_year_and_season = reverse('history:timeline-date', kwargs={'year': 1, 'season': 1})
 
@@ -615,22 +605,54 @@ class TimelineDateTest(TestCase):
 
 class TimelineGameTest(TestCase):
     def setUp(self):
-        game1 = GameSession.objects.create(game_no=1, title='Game1')
-        TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1, description='Description1')
+        self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', password='pass1111')
+        self.user3 = User.objects.create_user(username='user3', password='pass1111')
+        self.game1 = GameSession.objects.create(title='Game1')
+        gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
+        event1 = TimelineEvent.objects.create(game_no=self.game1, year=1, season=1, day_start=1,
+                                              description='Description1', general_location=gen_loc1)
+        event1.participants.set([self.user1.profile, ])
+        event1.informed.set([self.user2.profile, ])
+        self.url = reverse('history:timeline-game', kwargs={'game_id': self.game1.id})
 
-    def test_get(self):
-        url = reverse('history:timeline-game', kwargs={'game_id': 1})
-        response = self.client.get(url, follow=True)
+    def test_login_required(self):
+        redirect_url = reverse('users:login') + '?next=' + self.url
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_redirect_if_unallowed(self):
+        self.client.force_login(self.user3)
+        redirect_url = reverse('home:dupa')
+        response = self.client.get(self.url)
+        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_404(self):
+        self.client.force_login(self.user1)
+        url = reverse('history:timeline-game', kwargs={'game_id': self.game1.id + 999})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
+
+    def test_get_1(self):
+        # case: request.user.profile in event1.participant.all()
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
+    def test_get_2(self):
+        # case: request.user.profile in event1.informed.all()
+        self.client.force_login(self.user2)
+        response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
     def test_url_resolves_view(self):
-        view = resolve('/history/timeline/game:1/')
+        view = resolve(f'/history/timeline/game:{self.game1.id}/')
         self.assertEquals(view.func, views.timeline_game_view)
 
 
 class TimelineInformView(TestCase):
     def setUp(self):
-        game1 = GameSession.objects.create(game_no=1, title='Game1')
+        game1 = GameSession.objects.create(title='Game1')
         TimelineEvent.objects.create(game_no=game1, year=1, season=1, day_start=1, description='Description1')
 
     def test_get(self):
