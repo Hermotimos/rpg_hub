@@ -30,12 +30,15 @@ class DebatesMainTest(TestCase):
     def test_contains_links(self):
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
-        linked_url1 = reverse('debates:create-topic')
-        linked_url2 = reverse('debates:create-debate', kwargs={'topic_id': self.topic1.id})
-        linked_url3 = reverse('debates:debate', kwargs={'topic_id': self.topic1.id, 'debate_id': self.debate1.id})
-        self.assertContains(response, f'href="{linked_url1}"')
-        self.assertContains(response, f'href="{linked_url2}"')
-        self.assertContains(response, f'href="{linked_url3}"')
+
+        linked_url = reverse('debates:create-topic')
+        self.assertContains(response, f'href="{linked_url}"')
+
+        linked_url = reverse('debates:create-debate', kwargs={'topic_id': self.topic1.id})
+        self.assertContains(response, f'href="{linked_url}"')
+
+        linked_url = reverse('debates:debate', kwargs={'topic_id': self.topic1.id, 'debate_id': self.debate1.id})
+        self.assertContains(response, f'href="{linked_url}"')
 
 
 class CreateTopicTest(TestCase):
@@ -146,6 +149,7 @@ class DebateTest(TestCase):
     def test_contains_links(self):
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
+
         linked_url = reverse('debates:invite', kwargs={'topic_id': self.topic1.id, 'debate_id': self.debate1.id})
         self.assertContains(response, f'href="{linked_url}"')
 
