@@ -52,9 +52,9 @@ def create_topic_view(request):
             remark.debate = debate
             remark.save()
 
-            subject = f"[RPG] Nowa narada w nowym temacie: {debate.title}"
+            subject = f"[RPG] Nowa narada w nowym temacie: {debate.name}"
             message = f"{remark.author.profile} włączył/a Cię do nowej narady " \
-                f"'{debate.title}' w temacie '{debate.topic}'.\n" \
+                f"'{debate.name}' w temacie '{debate.topic}'.\n" \
                 f"Uczestnicy: {', '.join(p.character_name for p in debate.allowed_profiles.all())}\n" \
                 f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
@@ -119,9 +119,9 @@ def create_debate_view(request, topic_id):
             remark.debate = debate
             remark.save()
 
-            subject = f"[RPG] Nowa narada: {debate.title}"
+            subject = f"[RPG] Nowa narada: {debate.name}"
             message = f"{remark.author.profile} włączył/a Cię do nowej narady " \
-                      f"'{debate.title}' w temacie '{debate.topic}'.\n" \
+                      f"'{debate.name}' w temacie '{debate.topic}'.\n" \
                       f"Uczestnicy: {', '.join(p.character_name for p in debate.allowed_profiles.all())}\n" \
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
@@ -170,8 +170,8 @@ def debate_view(request, topic_id, debate_id):
             remark.debate = debate
             remark.save()
 
-            subject = f"[RPG] Głos w naradzie: '{debate.title[:30]}...'"
-            message = f"{remark.author.profile} zabrał/a głos w naradzie '{debate.title}':\n" \
+            subject = f"[RPG] Głos w naradzie: '{debate.name[:30]}...'"
+            message = f"{remark.author.profile} zabrał/a głos w naradzie '{debate.name}':\n" \
                       f"'{remark.text}'\n\n" \
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
@@ -190,7 +190,7 @@ def debate_view(request, topic_id, debate_id):
         form = CreateRemarkForm(initial={'author': request.user})
 
     context = {
-        'page_title': debate.title,
+        'page_title': debate.name,
         'topic': topic,
         'debate': debate,
         'form': form,
@@ -232,8 +232,8 @@ def debates_invite_view(request, topic_id, debate_id):
             new_followers |= Profile.objects.filter(id__in=new_followers_ids)
             debate.followers.set(new_followers)
 
-            subject = f"[RPG] Dołączenie do narady: '{debate.title}'"
-            message = f"{request.user.profile} dołączył/a Cię do narady '{debate.title}' w temacie '{debate.topic}'.\n"\
+            subject = f"[RPG] Dołączenie do narady: '{debate.name}'"
+            message = f"{request.user.profile} dołączył/a Cię do narady '{debate.name}' w temacie '{debate.topic}'.\n"\
                       f"Uczestnicy: {', '.join(p.character_name for p in allowed_profiles if p.character_status != 'gm')}\n" \
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER

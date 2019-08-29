@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models import Max, Min
+from django.db.models import Q, Max, Min
 from PIL import Image
 from users.models import Profile
 
@@ -26,7 +26,7 @@ class Topic(models.Model):
 
 
 class Debate(models.Model):
-    title = models.CharField(max_length=100, unique=True, verbose_name='tytuł narady')
+    name = models.CharField(max_length=100, unique=True, verbose_name='tytuł narady')
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     topic = models.ForeignKey(Topic, related_name='debates', on_delete=models.CASCADE)
@@ -40,7 +40,7 @@ class Debate(models.Model):
         ordering = ['-date_updated']
 
     def __str__(self):
-        return self.title
+        return self.name
 
     def first_player_remark_date(self):
         players_remarks = self.remarks.exclude(

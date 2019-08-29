@@ -44,10 +44,10 @@ class CreateDebateForm(forms.ModelForm):
         fields = [
             'allowed_profiles',
             'is_individual',
-            'title',
+            'name',
         ]
 
-    title = forms.CharField(
+    name = forms.CharField(
         label='',
         max_length=100,
         widget=forms.TextInput(
@@ -67,7 +67,6 @@ class CreateDebateForm(forms.ModelForm):
         self.fields['allowed_profiles'].label = ''
         self.fields['allowed_profiles'].widget.attrs['size'] = 10
         self.fields['is_individual'].label = 'Dyskusja indywidualna?'
-
 
 
 class CreateRemarkForm(forms.ModelForm):

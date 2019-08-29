@@ -38,7 +38,7 @@
             {% for debate in topics_with_debates_dict|dict_lookup:topic %}
                 <tr>
                     <td class="unblue">
-                        <a href="{% url 'debates:debate' debate.topic.id debate.id %}">{{ debate.title }}</a>
+                        <a href="{% url 'debates:debate' debate.topic.id debate.id %}">{{ debate.name }}</a>
                     </td>
                     <td>
                         {{ debate.first_active_player|get_first_word  }}<br>

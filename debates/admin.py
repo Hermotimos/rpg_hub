@@ -7,7 +7,7 @@ class TopicAdmin(admin.ModelAdmin):
 
 
 class DebateAdmin(admin.ModelAdmin):
-    list_display = ('title', 'topic', 'is_ended', 'is_individual', 'date_created', 'date_updated', )
+    list_display = ('name', 'topic', 'is_ended', 'is_individual', 'date_created', 'date_updated', )
 
 
 class RemarkAdmin(admin.ModelAdmin):
