@@ -493,7 +493,10 @@ def timeline_general_location_view(request, gen_loc_id):
         'events': events,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
-    return render(request, 'history/timeline_events.html', context)
+    if events:
+        return render(request, 'history/timeline_events.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
