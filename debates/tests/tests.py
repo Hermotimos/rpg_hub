@@ -8,10 +8,10 @@ from users.models import User
 class DebatesMainTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-        self.url = reverse('debates:main')
         self.topic1 = Topic.objects.create(id=1, title='Topic1')
         self.debate1 = Debate.objects.create(id=1, name='Debate1', topic=self.topic1, starter=self.user1)
         self.debate1.allowed_profiles.set([self.user1.profile, ])
+        self.url = reverse('debates:main')
 
     def test_login_required(self):
         redirect_url = reverse('users:login') + '?next=' + self.url
