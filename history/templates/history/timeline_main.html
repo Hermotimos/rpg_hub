@@ -25,117 +25,134 @@
         <b>Wątki</b>
     </h3>
     <small>Wykaz wątków splątanych z Twoim losem</small><br><br>
-    <table id="threads" class="collapse">
-        <tr>
-        {% for t in threads %}
-            <td class="unblue">
-                &#10023;<a href="{% url 'history:timeline-thread' t.1.id %}">{{ t.0 }}</a>&emsp;&emsp;
-            </td>
-            {% if forloop.counter|divisibleby:3 %}
-                </tr><tr>
-            {% endif %}
-        {% endfor %}
-        </tr>
-    </table>
-    <br><br>
+    <div id="threads" class="collapse">
+        <table>
+            {% for row in threads|columns:3 %}
+             <tr>
+                 {% for thread in row %}
+                 <td class="unblue">
+                    &#10023;<a href="{% url 'history:timeline-thread' thread.1.id %}">{{ thread.0 }}</a>&emsp;&emsp;
+                 </td>
+                 {% endfor %}
+             </tr>
+            {% endfor %}
+        </table>
+        <br><br>
+    </div>
+    <br>
 
     <img src="{% static 'img/timeline_participants.png' %}" class="border-double img-chapter">
     <h3 class="hover-blue align-middle pt-2" data-toggle="collapse" data-target="#participants">
         <b>Uczestnicy</b>
     </h3>
     <small>Członkowie drużyny współuczestniczący w Twoich przygodach</small><br><br>
-    <table id="participants" class="collapse">
-        <tr>
-        {% for p in participants %}
-            <td class="unblue-black">
-                <a href="{% url 'history:timeline-participant' p.1.id %}">
-                    <img src="{{ p.1.image.url }}" class="border-double account-img-timeline">
-                </a>&emsp;&emsp;
-            </td>
-            {% if forloop.counter|divisibleby:4 %}
-                </tr><tr>
-            {% endif %}
-        {% endfor %}
-        </tr>
-    </table>
-    <br><br>
-
-    <img src="{% static 'img/timeline_locations.png' %}" class="border-double img-chapter">
-    <h3 class="hover-blue align-middle pt-2" data-toggle="collapse" data-target="#general_locations">
-        <b>Lokacje</b>
-    </h3>
-    <small>Wykaz znanych Ci krain i lokacji występujących w Kalendarium</small><br>
-    <table id="general_locations" class="collapse">
-        {% for gl in gen_locs_with_spec_locs %}
+    <div id="participants" class="collapse">
+        <table>
             <tr>
-                <td class="unblue" colspan="4">
-                    <br><h4>&#10037;<a href="{% url 'history:timeline-gen-loc' gl.0.id %}">{{ gl.0 }}</a>&emsp;&emsp;</h4>
-                </td>
-            </tr>
-            <tr>
-            {% for sl in gl.1 %}
-                <td class="unblue">
-                    &#10023;<a href="{% url 'history:timeline-spec-loc' sl.1.id %}">{{ sl.0 }}</a>&emsp;&emsp;
+            {% for p in participants %}
+                <td class="unblue-black">
+                    <a href="{% url 'history:timeline-participant' p.1.id %}">
+                        <img src="{{ p.1.image.url }}" class="border-double account-img-timeline">
+                    </a>&emsp;&emsp;
                 </td>
                 {% if forloop.counter|divisibleby:4 %}
                     </tr><tr>
                 {% endif %}
             {% endfor %}
             </tr>
-        {% endfor %}
-    </table>
-    <br><br><br>
+        </table>
+        <br><br>
+    </div>
+    <br>
+
+    <img src="{% static 'img/timeline_locations.png' %}" class="border-double img-chapter">
+    <h3 class="hover-blue align-middle pt-2" data-toggle="collapse" data-target="#general_locations">
+        <b>Lokacje</b>
+    </h3>
+    <small>Wykaz znanych Ci krain i lokacji występujących w Kalendarium</small><br>
+    <div id="general_locations" class="collapse">
+        <table>
+            {% for gl in gen_locs_with_spec_locs %}
+                <tr>
+                    <td class="unblue" colspan="4">
+                        <br><h4>&#10037;<a href="{% url 'history:timeline-gen-loc' gl.0.id %}">{{ gl.0 }}</a>&emsp;&emsp;</h4>
+                    </td>
+                </tr>
+                {% for row in gl.1|columns:4 %}
+                 <tr>
+                     {% for sl in row %}
+                     <td class="unblue">
+                        &#10023; <a href="{% url 'history:timeline-spec-loc' sl.1.id %}">{{ sl.0 }}</a>&emsp;&emsp;
+                     </td>
+                     {% endfor %}
+                 </tr>
+                {% endfor %}
+            {% endfor %}
+        </table>
+        <br>
+    </div>
+    <br><br>
 
     <img src="{% static 'img/timeline_years_and_seasons.png' %}" class="border-double img-chapter">
     <h3 class="hover-blue align-middle pt-2" data-toggle="collapse" data-target="#years">
         <b>Lata i pory roku</b>
     </h3>
     <small>Chronologia według Archonatu Nemetha Samatiana w Ebbonie</small><br><br>
-    <table id="years" class="collapse">
-        {% for y in years_with_seasons_dict %}
-            <tr>
-                <td class="unblue">
-                    <a href="{% url 'history:timeline-date' y '0' %}">{{ y }}</a>&emsp;
-                </td>
-                <td class="unblue">
-                    {% if '1' in years_with_seasons_dict|dict_lookup:y %}
-                        <a href="{% url 'history:timeline-date' y '1' %}">Wiosna</a>&emsp;
-                    {% endif %}
-                </td>
-                <td class="unblue">
-                    {% if '2' in years_with_seasons_dict|dict_lookup:y %}
-                        <a href="{% url 'history:timeline-date' y '2' %}">Lato</a>&emsp;
-                    {% endif %}
-                </td>
-                <td class="unblue">
-                    {% if '3' in years_with_seasons_dict|dict_lookup:y %}
-                        <a href="{% url 'history:timeline-date' y '3' %}">Jesień</a>&emsp;
-                    {% endif %}
-                </td>
-                <td class="unblue">
-                    {% if '4' in years_with_seasons_dict|dict_lookup:y %}
-                        <a href="{% url 'history:timeline-date' y '4' %}">Zima</a>&emsp;
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-    <br><br>
+    <div id="years" class="collapse">
+    <table>
+            {% for y in years_with_seasons_dict %}
+                <tr>
+                    <td class="unblue">
+                        <a href="{% url 'history:timeline-date' y '0' %}">{{ y }}</a>&emsp;
+                    </td>
+                    <td class="unblue">
+                        {% if '1' in years_with_seasons_dict|dict_lookup:y %}
+                            <a href="{% url 'history:timeline-date' y '1' %}">Wiosna</a>&emsp;
+                        {% endif %}
+                    </td>
+                    <td class="unblue">
+                        {% if '2' in years_with_seasons_dict|dict_lookup:y %}
+                            <a href="{% url 'history:timeline-date' y '2' %}">Lato</a>&emsp;
+                        {% endif %}
+                    </td>
+                    <td class="unblue">
+                        {% if '3' in years_with_seasons_dict|dict_lookup:y %}
+                            <a href="{% url 'history:timeline-date' y '3' %}">Jesień</a>&emsp;
+                        {% endif %}
+                    </td>
+                    <td class="unblue">
+                        {% if '4' in years_with_seasons_dict|dict_lookup:y %}
+                            <a href="{% url 'history:timeline-date' y '4' %}">Zima</a>&emsp;
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br><br>
+    </div>
+    <br>
+
 
     <img src="{% static 'img/timeline_games.png' %}" class="border-double img-chapter">
     <h3 class="hover-blue align-middle pt-2" data-toggle="collapse" data-target="#games">
         <b>Sesje</b>
     </h3>
     <small>Wykaz sesji mieszczących Twoje losy oraz znane Ci wydarzenia</small><br><br>
-    <table id="games" class="collapse">
-        {% for g in games %}
-            <tr>
-                <td class="unblue">
-                    &#10023;<a href="{% url 'history:timeline-game' g.1.id %}">{{ g.0 }}</a>&emsp;&emsp;
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-    <br><br>
+    <div id="games" class="collapse">
+        <table>
+            {% for row in games|columns:2 %}
+             <tr>
+                 {% for game in row %}
+                 <td class="unblue">
+                     &#10023; <a href="{% url 'history:timeline-game' game.1.id %}">{{ game.0|truncatechars:55 }}</a>
+                 </td>
+                 {% endfor %}
+             </tr>
+            {% endfor %}
+        </table>
+        <br><br>
+    </div>
 
 {% endblock content %}
+
+
