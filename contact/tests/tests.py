@@ -91,7 +91,7 @@ class DemandsCreateTest(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user2.profile.character_status = 'active_player'
-
+        self.user2.save()
         self.url = reverse('contact:demands-create')
 
     def test_login_required(self):
@@ -119,16 +119,13 @@ class DemandsCreateTest(TestCase):
         form = response.context.get('form')
         self.assertIsInstance(form, DemandsCreateForm)
 
-    def test_valid_post_data(self):                     # TODO still doesn't pass
+    def test_valid_post_data(self):
         self.client.force_login(self.user1)
         data = {
-            'addressee': '2',     # by ForeignKeyField pk or id has to be provided
+            'addressee': self.user2.id,     # by ForeignKeyField pk or id has to be provided
             'text': 'demand2',
         }
-        response = self.client.post(self.url, data)
-        form = response.context.get('form')
-        print(form.errors)
-        print(Demand.objects.all())
+        self.client.post(self.url, data)
         self.assertTrue(Demand.objects.exists())
 
     def test_invalid_post_data(self):

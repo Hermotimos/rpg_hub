@@ -3,7 +3,7 @@ from django.urls import reverse, resolve
 from news import views
 from news.models import News, NewsAnswer
 from news.forms import CreateNewsForm, CreateNewsAnswerForm
-from users.models import User
+from users.models import User, Profile
 
 
 class MainTest(TestCase):
@@ -50,7 +50,8 @@ class CreateTest(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user2.profile.character_status = 'active_player'
-        self.user2.profile.character_name = 'profile2'
+        self.user2.save()
+
         self.url = reverse('news:create')
 
     def test_login_required(self):
@@ -78,19 +79,15 @@ class CreateTest(TestCase):
         form = response.context.get('form')
         self.assertIsInstance(form, CreateNewsForm)
 
-    def test_valid_post_data(self):               # TODO still doesn't pass - user2.profile is not presented in choices
+    def test_valid_post_data(self):
         self.client.force_login(self.user1)
         data = {
             'author': self.user1.id,
             'title': 'News1',
             'text': 'news1',
-            'allowed_profiles': [2, ]
+            'allowed_profiles': [self.user2.id, ]
         }
-        response = self.client.post(self.url, data)
-        form = response.context.get('form')
-        print([p for p in form.fields['allowed_profiles'].choices]) # TODO user2.profile is not presented in choices
-        print(form.errors)
-        print(News.objects.all())
+        self.client.post(self.url, data)
         self.assertTrue(News.objects.exists())
 
     def test_invalid_post_data(self):
