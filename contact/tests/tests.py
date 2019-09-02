@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
 from contact import views
-from contact.models import Demand, Plan
+from contact.models import Demand, Plan, DemandAnswer
+from contact.forms import DemandsCreateForm, DemandsModifyForm, DemandAnswerForm, PlansCreateForm, PlansModifyForm
 from users.models import User
 
 
@@ -88,17 +89,15 @@ class DemandsMainTest(TestCase):
 class DemandsCreateTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', password='pass1111')
+        self.user2.profile.character_status = 'active_player'
+
         self.url = reverse('contact:demands-create')
 
     def test_login_required(self):
         redirect_url = reverse('users:login') + '?next=' + self.url
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-
-    def test_csrf(self):
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
-        self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_get(self):
         self.client.force_login(self.user1)
@@ -108,6 +107,51 @@ class DemandsCreateTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve('/contact/demands/create/')
         self.assertEquals(view.func, views.demands_create_view)
+
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+    def test_contains_form(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        form = response.context.get('form')
+        self.assertIsInstance(form, DemandsCreateForm)
+
+    def test_valid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {
+            'addressee': '2',     # by ForeignKeyField pk or id has to be provided
+            'text': 'demand2',
+        }
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        print(form.errors)
+        print(Demand.objects.all())
+        self.assertTrue(Demand.objects.exists())
+
+    def test_invalid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {}
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+
+    def test_invalid_post_data_empty_fields(self):
+        self.client.force_login(self.user1)
+        data = {
+            'addressee': '',
+            'text': '',
+        }
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertFalse(Demand.objects.exists())
+        self.assertTrue(form.errors)
 
 
 class DemandsDeleteTest(TestCase):
@@ -160,11 +204,6 @@ class DemandsModifyTest(TestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
-    def test_csrf(self):
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
-        self.assertContains(response, 'csrfmiddlewaretoken')
-
     def test_redirect_if_unallowed(self):
         # case addressee is not allowed to modify
         self.client.force_login(self.user2)
@@ -187,6 +226,46 @@ class DemandsModifyTest(TestCase):
         view = resolve(f'/contact/demands/modify:{self.demand1.id}/')
         self.assertEquals(view.func, views.demands_modify_view)
 
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+    def test_contains_form(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        form = response.context.get('form')
+        self.assertIsInstance(form, DemandsModifyForm)
+
+    def test_valid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {
+            'text': 'changed text',
+        }
+        self.client.post(self.url, data)
+        self.assertTrue(Demand.objects.get(id=1).text == 'changed text')
+
+    def test_invalid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {}
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+
+    def test_invalid_post_data_empty_fields(self):
+        self.client.force_login(self.user1)
+        data = {
+            'text': '',
+        }
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+        self.assertTrue(Demand.objects.get(id=1).text == 'Demand1')
+
 
 class DemandsDetailTest(TestCase):
     def setUp(self):
@@ -200,11 +279,6 @@ class DemandsDetailTest(TestCase):
         redirect_url = reverse('users:login') + '?next=' + self.url
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-
-    def test_csrf(self):
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
-        self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_redirect_if_unallowed(self):
         self.client.force_login(self.user3)
@@ -233,6 +307,46 @@ class DemandsDetailTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve(f'/contact/demands/detail:{self.demand1.id}/')
         self.assertEquals(view.func, views.demands_detail_view)
+
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+    def test_contains_form(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        form = response.context.get('form')
+        self.assertIsInstance(form, DemandAnswerForm)
+
+    def test_valid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {
+            'text': 'Answer text',
+        }
+        self.client.post(self.url, data)
+        self.assertTrue(DemandAnswer.objects.exists())
+
+    def test_invalid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {}
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+
+    def test_invalid_post_data_empty_fields(self):
+        self.client.force_login(self.user1)
+        data = {
+            'text': '',
+        }
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertFalse(DemandAnswer.objects.exists())
+        self.assertTrue(form.errors)
 
 
 class MarkDoneTest(TestCase):
@@ -372,6 +486,7 @@ class PlansForGmTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
+        self.user1.profile.character_status = 'gm'
         self.url = reverse('contact:plans-for-gm')
 
     def test_login_required(self):
@@ -387,7 +502,6 @@ class PlansForGmTest(TestCase):
 
     def test_get(self):
         # case user.profile.character_status == 'gm' is allowed to plans_for_gm_view()
-        self.user1.profile.character_status = 'gm'
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -407,11 +521,6 @@ class PlansCreateTest(TestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
-    def test_csrf(self):
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
-        self.assertContains(response, 'csrfmiddlewaretoken')
-
     def test_get(self):
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
@@ -420,6 +529,47 @@ class PlansCreateTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve('/contact/plans/create/')
         self.assertEquals(view.func, views.plans_create_view)
+
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+    def test_contains_form(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        form = response.context.get('form')
+        self.assertIsInstance(form, PlansCreateForm)
+
+    def test_valid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {
+            'text': 'plan2',
+        }
+        self.client.post(self.url, data)
+        self.assertTrue(Plan.objects.count() == 1)
+
+    def test_invalid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {}
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+        self.assertTrue(Plan.objects.count() == 0)
+
+    def test_invalid_post_data_empty_fields(self):
+        self.client.force_login(self.user1)
+        data = {
+            'text': '',
+        }
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+        self.assertTrue(Plan.objects.count() == 0)
 
 
 class PlansDeleteTest(TestCase):
@@ -463,18 +613,13 @@ class PlansModifyTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
-        self.plan1 = Plan.objects.create(id=1, author=self.user1)
+        self.plan1 = Plan.objects.create(id=1, author=self.user1, text='Plan1')
         self.url = reverse('contact:plans-modify', kwargs={'plan_id': self.plan1.id})
 
     def test_login_required(self):
         redirect_url = reverse('users:login') + '?next=' + self.url
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-
-    def test_csrf(self):
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
-        self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_redirect_if_unallowed(self):
         self.client.force_login(self.user2)
@@ -496,3 +641,44 @@ class PlansModifyTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve(f'/contact/plans/modify:{self.plan1.id}/')
         self.assertEquals(view.func, views.plans_modify_view)
+
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+    def test_contains_form(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        form = response.context.get('form')
+        self.assertIsInstance(form, PlansModifyForm)
+
+    def test_valid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {
+            'text': 'changed text',
+        }
+        self.client.post(self.url, data)
+        self.assertTrue(Plan.objects.get(id=1).text == 'changed text')
+
+    def test_invalid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {}
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+        self.assertTrue(Plan.objects.count() == 1)
+
+    def test_invalid_post_data_empty_fields(self):
+        self.client.force_login(self.user1)
+        data = {
+            'text': '',
+        }
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+        self.assertTrue(Plan.objects.count() == 1)
