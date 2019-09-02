@@ -82,6 +82,11 @@ class ChronicleCreateTest(TestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
     def test_get(self):
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
@@ -331,6 +336,11 @@ class ChronicleInformTest(TestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
     def test_redirect_if_unallowed(self):
         # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
         self.client.force_login(self.user3)
@@ -386,6 +396,11 @@ class ChronicleNoteTest(TestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
     def test_redirect_if_unallowed(self):
         # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
         self.client.force_login(self.user3)
@@ -438,6 +453,11 @@ class ChronicleEditTest(TestCase):
         redirect_url = reverse('users:login') + '?next=' + self.url
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_redirect_if_unallowed(self):
         # case: request.user.profile.character_status != 'gm'
@@ -569,6 +589,11 @@ class TimelineCreateTest(TestCase):
         redirect_url = reverse('users:login') + '?next=' + self.url
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_get(self):
         self.client.force_login(self.user1)
@@ -1298,6 +1323,11 @@ class TimelineInformView(TestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
     def test_redirect_if_unallowed(self):
         # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
         self.client.force_login(self.user3)
@@ -1346,6 +1376,11 @@ class TimelineNoteView(TestCase):
         redirect_url = reverse('users:login') + '?next=' + self.url
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_redirect_if_unallowed(self):
         # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
@@ -1397,6 +1432,11 @@ class TimelineEditView(TestCase):
         redirect_url = reverse('users:login') + '?next=' + self.url
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_csrf(self):
+        self.client.force_login(self.user4)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_redirect_if_unallowed(self):
         redirect_url = reverse('home:dupa')

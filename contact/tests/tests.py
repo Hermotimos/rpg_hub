@@ -95,6 +95,11 @@ class DemandsCreateTest(TestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
     def test_get(self):
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
@@ -155,6 +160,11 @@ class DemandsModifyTest(TestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
     def test_redirect_if_unallowed(self):
         # case addressee is not allowed to modify
         self.client.force_login(self.user2)
@@ -190,6 +200,11 @@ class DemandsDetailTest(TestCase):
         redirect_url = reverse('users:login') + '?next=' + self.url
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_redirect_if_unallowed(self):
         self.client.force_login(self.user3)
@@ -392,6 +407,11 @@ class PlansCreateTest(TestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
     def test_get(self):
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
@@ -450,6 +470,11 @@ class PlansModifyTest(TestCase):
         redirect_url = reverse('users:login') + '?next=' + self.url
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_redirect_if_unallowed(self):
         self.client.force_login(self.user2)

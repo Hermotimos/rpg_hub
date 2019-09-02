@@ -9,6 +9,10 @@ class TestLogin(TestCase):
         self.url = reverse('users:login')
         self.response = self.client.get(self.url)
 
+    def test_csrf(self):
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
     def test_get(self):
         self.assertEquals(self.response.status_code, 200)
 
@@ -26,6 +30,10 @@ class TestRegister(TestCase):
     def setUp(self):
         self.url = reverse('users:register')
         self.response = self.client.get(self.url)
+
+    def test_csrf(self):
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_get(self):
         url = reverse('users:register')
@@ -68,6 +76,11 @@ class TestProfile(TestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
     def test_get(self):
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
@@ -93,6 +106,11 @@ class TestChangePassword(TestCase):
         redirect_url = reverse('users:login') + '?next=' + self.url
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_get(self):
         self.client.force_login(self.user1)
