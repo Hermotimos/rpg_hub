@@ -8,6 +8,7 @@ from users.models import User
 class MainTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.news1 = News.objects.create(id=1, title='Title1', author=self.user1)
         self.news1.allowed_profiles.set([self.user1.profile, ])
         self.url = reverse('news:main')
@@ -27,12 +28,20 @@ class MainTest(TestCase):
         self.assertEquals(view.func, views.main_view)
 
     def test_contains_links(self):
+        linked_url1 = reverse('news:create')
+        linked_url2 = reverse('news:detail', kwargs={'news_id': self.news1.id})
+
+        # case request.user.profile in news.allowed_profiles
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
-        linked_url = reverse('news:create')
-        self.assertContains(response, f'href="{linked_url}"')
-        linked_url = reverse('news:detail', kwargs={'news_id': self.news1.id})
-        self.assertContains(response, f'href="{linked_url}"')
+        self.assertContains(response, f'href="{linked_url1}"')
+        self.assertContains(response, f'href="{linked_url2}"')
+
+        # case request.user.profile not in news.allowed_profiles
+        self.client.force_login(self.user2)
+        response = self.client.get(self.url)
+        self.assertContains(response, f'href="{linked_url1}"')
+        self.assertNotContains(response, f'href="{linked_url2}"')
 
 
 class CreateTest(TestCase):
@@ -92,18 +101,20 @@ class DetailTest(TestCase):
         self.assertEquals(view.func, views.news_detail_view)
 
     def test_contains_links(self):
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
+        linked_url1 = reverse('news:unfollow', kwargs={'news_id': self.news1.id})
+        linked_url2 = reverse('news:follow', kwargs={'news_id': self.news1.id})
 
         # case request.user.profile in news1.followers.all()
-        linked_url = reverse('news:unfollow', kwargs={'news_id': self.news1.id})
-        self.assertContains(response, f'href="{linked_url}"')
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, f'href="{linked_url1}"')
+        self.assertNotContains(response, f'href="{linked_url2}"')
 
         # case request.user.profile not in news1.followers.all()
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
-        linked_url = reverse('news:follow', kwargs={'news_id': self.news1.id})
-        self.assertContains(response, f'href="{linked_url}"')
+        self.assertNotContains(response, f'href="{linked_url1}"')
+        self.assertContains(response, f'href="{linked_url2}"')
 
 
 class FollowNewsTest(TestCase):
