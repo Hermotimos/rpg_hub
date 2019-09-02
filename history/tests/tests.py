@@ -1144,7 +1144,7 @@ class TimelineDateTest(TestCase):
 
         # case request.user.profile in event1.participants.all()
         self.client.force_login(self.user1)
-        response = self.client.get(self.url)
+        response = self.client.get(self.url_year_and_season)
         self.assertContains(response, f'href="{linked_url2}"')
         self.assertContains(response, f'href="{linked_url3}"')
         self.assertContains(response, f'href="{linked_url4}"')
@@ -1155,7 +1155,7 @@ class TimelineDateTest(TestCase):
 
         # case request.user.profile in event1.informed.all()
         self.client.force_login(self.user2)
-        response = self.client.get(self.url)
+        response = self.client.get(self.url_year_and_season)
         self.assertContains(response, f'href="{linked_url2}"')
         self.assertContains(response, f'href="{linked_url3}"')
         self.assertContains(response, f'href="{linked_url4}"')
@@ -1168,7 +1168,7 @@ class TimelineDateTest(TestCase):
 
         # case request.user.profile.character_status == 'gm'
         self.client.force_login(self.user4)
-        response = self.client.get(self.url)
+        response = self.client.get(self.url_year_and_season)
         self.assertContains(response, f'href="{linked_url2}"')
         self.assertContains(response, f'href="{linked_url3}"')
         self.assertContains(response, f'href="{linked_url4}"')
