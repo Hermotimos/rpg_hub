@@ -63,24 +63,12 @@ def columns(thelist, n):
     return [thelist[i::split] for i in range(split)]
 
 
-
-
-    # if which_part_of_division > 0 and denominator > 1:
-    #     length = len(indexable_iterable)
-    #     fraction = length // denominator
-    #
-    #     return indexable_iterable[]
-    # else:
-    #     raise ValueError
-
-
 # @register.filter
 # def underscore_to_space(text):
 #     text = str(text)
 #     return text.replace('_', ' ')
-
-
-
+#
+#
 # @register.filter
 # def rtrim(data, number_of_digits):
 #     data = str(data)
