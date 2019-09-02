@@ -119,7 +119,7 @@ class DemandsCreateTest(TestCase):
         form = response.context.get('form')
         self.assertIsInstance(form, DemandsCreateForm)
 
-    def test_valid_post_data(self):
+    def test_valid_post_data(self):                     # TODO still doesn't pass
         self.client.force_login(self.user1)
         data = {
             'addressee': '2',     # by ForeignKeyField pk or id has to be provided
