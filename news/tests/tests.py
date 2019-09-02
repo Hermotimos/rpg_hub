@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
 from news import views
-from news.models import News
+from news.models import News, NewsAnswer
+from news.forms import CreateNewsForm, CreateNewsAnswerForm
 from users.models import User
 
 
@@ -47,17 +48,15 @@ class MainTest(TestCase):
 class CreateTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', password='pass1111')
+        self.user2.profile.character_status = 'active_player'
+        self.user2.profile.character_name = 'profile2'
         self.url = reverse('news:create')
 
     def test_login_required(self):
         redirect_url = reverse('users:login') + '?next=' + self.url
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-
-    def test_csrf(self):
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
-        self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_get(self):
         self.client.force_login(self.user1)
@@ -67,6 +66,54 @@ class CreateTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve('/news/create/')
         self.assertEquals(view.func, views.create_news_view)
+
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+    def test_contains_form(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        form = response.context.get('form')
+        self.assertIsInstance(form, CreateNewsForm)
+
+    def test_valid_post_data(self):               # TODO still doesn't pass - user2.profile is not presented in choices
+        self.client.force_login(self.user1)
+        data = {
+            'author': self.user1.id,
+            'title': 'News1',
+            'text': 'news1',
+            'allowed_profiles': [2, ]
+        }
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        print([p for p in form.fields['allowed_profiles'].choices]) # TODO user2.profile is not presented in choices
+        print(form.errors)
+        print(News.objects.all())
+        self.assertTrue(News.objects.exists())
+
+    def test_invalid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {}
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+        self.assertTrue(News.objects.count() == 0)
+
+    def test_invalid_post_data_empty_fields(self):
+        self.client.force_login(self.user1)
+        data = {
+            'text': '',
+        }
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+        self.assertTrue(News.objects.count() == 0)
 
 
 class DetailTest(TestCase):
@@ -83,11 +130,6 @@ class DetailTest(TestCase):
         redirect_url = reverse('users:login') + '?next=' + self.url
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-
-    def test_csrf(self):
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
-        self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_redirect_if_unallowed(self):
         self.client.force_login(self.user3)
@@ -125,6 +167,47 @@ class DetailTest(TestCase):
         response = self.client.get(self.url)
         self.assertNotContains(response, f'href="{linked_url1}"')
         self.assertContains(response, f'href="{linked_url2}"')
+
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+    def test_contains_form(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        form = response.context.get('form')
+        self.assertIsInstance(form, CreateNewsAnswerForm)
+
+    def test_valid_post_data(self):               # TODO still doesn't pass - user2.profile is not presented in choices
+        self.client.force_login(self.user1)
+        data = {
+            'text': 'news1',
+        }
+        self.client.post(self.url, data)
+        self.assertTrue(NewsAnswer.objects.exists())
+
+    def test_invalid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {}
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+        self.assertTrue(NewsAnswer.objects.count() == 0)
+
+    def test_invalid_post_data_empty_fields(self):
+        self.client.force_login(self.user1)
+        data = {
+            'text': '',
+        }
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+        self.assertTrue(NewsAnswer.objects.count() == 0)
 
 
 class FollowNewsTest(TestCase):
