@@ -54,7 +54,7 @@ class CreateNewsForm(forms.ModelForm):
         self.fields['allowed_profiles'].label = ''
 
 
-class CreateResponseForm(forms.ModelForm):
+class CreateNewsAnswerForm(forms.ModelForm):
     class Meta:
         model = NewsAnswer
         fields = [

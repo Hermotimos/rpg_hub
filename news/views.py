@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from news.models import News
 from users.models import User, Profile
-from news.forms import CreateNewsForm, CreateResponseForm
+from news.forms import CreateNewsForm, CreateNewsAnswerForm
 
 
 def is_allowed(profile, news_id):
@@ -77,7 +77,7 @@ def news_detail_view(request, news_id):
     followers_str = ', '.join(p.character_name.split(' ', 1)[0] for p in news.followers.all())
 
     if request.method == 'POST':
-        form = CreateResponseForm(request.POST, request.FILES)
+        form = CreateNewsAnswerForm(request.POST, request.FILES)
         if form.is_valid():
             response = form.save(commit=False)
             response.news = news
@@ -100,7 +100,7 @@ def news_detail_view(request, news_id):
             messages.info(request, f'Twoja odpowiedź została zapisana!')
             return redirect('news:detail', news_id=news_id)
     else:
-        form = CreateResponseForm()
+        form = CreateNewsAnswerForm()
 
     context = {
         'page_title': news.title,
