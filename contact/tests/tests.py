@@ -16,7 +16,6 @@ class DemandsMainTest(TestCase):
         self.demand1 = Demand.objects.create(id=1, author=self.user1, addressee=self.user2, text='Demand1')
         self.demand2 = Demand.objects.create(id=2, author=self.user1, addressee=self.user2, text='Demand2',
                                              is_done=True)
-
         self.url = reverse('contact:demands-main')
 
     def test_login_required(self):
@@ -34,77 +33,56 @@ class DemandsMainTest(TestCase):
         self.assertEquals(view.func, views.demands_main_view)
 
     def test_links(self):
-        # case request.user is author
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
         linked_url1 = reverse('contact:demands-create')
         # demand1.is_done=False
         linked_url2 = reverse('contact:demands-modify', kwargs={'demand_id': self.demand1.id})
         linked_url3 = reverse('contact:done', kwargs={'demand_id': self.demand1.id})
         linked_url4 = reverse('contact:undone', kwargs={'demand_id': self.demand1.id})
         linked_url5 = reverse('contact:demands-delete', kwargs={'demand_id': self.demand1.id})
+        # demand2.is_done=True
+        linked_url6 = reverse('contact:demands-modify', kwargs={'demand_id': self.demand2.id})
+        linked_url7 = reverse('contact:done', kwargs={'demand_id': self.demand2.id})
+        linked_url8 = reverse('contact:undone', kwargs={'demand_id': self.demand2.id})
+        linked_url9 = reverse('contact:demands-delete', kwargs={'demand_id': self.demand2.id})
+
+        # case request.user is author
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
         self.assertContains(response, f'href="{linked_url2}"')
         self.assertContains(response, f'href="{linked_url3}"')
         self.assertNotContains(response, f'href="{linked_url4}"')
         self.assertNotContains(response, f'href="{linked_url5}"')
-        # demand2.is_done=True
-        linked_url2 = reverse('contact:demands-modify', kwargs={'demand_id': self.demand2.id})
-        linked_url3 = reverse('contact:done', kwargs={'demand_id': self.demand2.id})
-        linked_url4 = reverse('contact:undone', kwargs={'demand_id': self.demand2.id})
-        linked_url5 = reverse('contact:demands-delete', kwargs={'demand_id': self.demand2.id})
-        self.assertNotContains(response, f'href="{linked_url2}"')
-        self.assertNotContains(response, f'href="{linked_url3}"')
-        self.assertContains(response, f'href="{linked_url4}"')
-        self.assertContains(response, f'href="{linked_url5}"')
+        self.assertNotContains(response, f'href="{linked_url6}"')
+        self.assertNotContains(response, f'href="{linked_url7}"')
+        self.assertContains(response, f'href="{linked_url8}"')
+        self.assertContains(response, f'href="{linked_url9}"')
 
         # # case request.user is addressee
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
-        linked_url1 = reverse('contact:demands-create')
         self.assertContains(response, f'href="{linked_url1}"')
-        # demand1.is_done=False
-        linked_url2 = reverse('contact:demands-modify', kwargs={'demand_id': self.demand1.id})
-        linked_url3 = reverse('contact:done', kwargs={'demand_id': self.demand1.id})
-        linked_url4 = reverse('contact:demands-delete', kwargs={'demand_id': self.demand1.id})
-        linked_url5 = reverse('contact:undone', kwargs={'demand_id': self.demand1.id})
         self.assertNotContains(response, f'href="{linked_url2}"')
         self.assertContains(response, f'href="{linked_url3}"')
         self.assertNotContains(response, f'href="{linked_url4}"')
         self.assertNotContains(response, f'href="{linked_url5}"')
-        # demand2.is_done=True
-        linked_url2 = reverse('contact:demands-modify', kwargs={'demand_id': self.demand2.id})
-        linked_url3 = reverse('contact:done', kwargs={'demand_id': self.demand2.id})
-        linked_url4 = reverse('contact:undone', kwargs={'demand_id': self.demand2.id})
-        linked_url5 = reverse('contact:demands-delete', kwargs={'demand_id': self.demand2.id})
-        self.assertNotContains(response, f'href="{linked_url2}"')
-        self.assertNotContains(response, f'href="{linked_url3}"')
-        self.assertContains(response, f'href="{linked_url4}"')
-        self.assertNotContains(response, f'href="{linked_url5}"')
+        self.assertNotContains(response, f'href="{linked_url6}"')
+        self.assertNotContains(response, f'href="{linked_url7}"')
+        self.assertContains(response, f'href="{linked_url8}"')
+        self.assertNotContains(response, f'href="{linked_url9}"')
 
         # # case request.user is neither author nor addressee
         self.client.force_login(self.user3)
         response = self.client.get(self.url)
-        linked_url1 = reverse('contact:demands-create')
         self.assertContains(response, f'href="{linked_url1}"')
-        # demand1.is_done=False
-        linked_url2 = reverse('contact:demands-modify', kwargs={'demand_id': self.demand1.id})
-        linked_url3 = reverse('contact:done', kwargs={'demand_id': self.demand1.id})
-        linked_url4 = reverse('contact:demands-delete', kwargs={'demand_id': self.demand1.id})
-        linked_url5 = reverse('contact:undone', kwargs={'demand_id': self.demand1.id})
         self.assertNotContains(response, f'href="{linked_url2}"')
         self.assertNotContains(response, f'href="{linked_url3}"')
         self.assertNotContains(response, f'href="{linked_url4}"')
         self.assertNotContains(response, f'href="{linked_url5}"')
-        # demand2.is_done=True
-        linked_url2 = reverse('contact:demands-modify', kwargs={'demand_id': self.demand2.id})
-        linked_url3 = reverse('contact:done', kwargs={'demand_id': self.demand2.id})
-        linked_url4 = reverse('contact:undone', kwargs={'demand_id': self.demand2.id})
-        linked_url5 = reverse('contact:demands-delete', kwargs={'demand_id': self.demand2.id})
-        self.assertNotContains(response, f'href="{linked_url2}"')
-        self.assertNotContains(response, f'href="{linked_url3}"')
-        self.assertNotContains(response, f'href="{linked_url4}"')
-        self.assertNotContains(response, f'href="{linked_url5}"')
+        self.assertNotContains(response, f'href="{linked_url6}"')
+        self.assertNotContains(response, f'href="{linked_url7}"')
+        self.assertNotContains(response, f'href="{linked_url8}"')
+        self.assertNotContains(response, f'href="{linked_url9}"')
 
 
 class DemandsCreateTest(TestCase):
@@ -356,12 +334,13 @@ class PlansMainTest(TestCase):
         self.assertEquals(view.func, views.plans_main_view)
 
     def test_links(self):
-        # case request.user is author
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
         linked_url1 = reverse('contact:plans-create')
         linked_url2 = reverse('contact:plans-modify', kwargs={'plan_id': self.plan1.id})
         linked_url3 = reverse('contact:plans-delete', kwargs={'plan_id': self.plan1.id})
+
+        # case request.user is author
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
         self.assertContains(response, f'href="{linked_url2}"')
         self.assertContains(response, f'href="{linked_url3}"')
@@ -369,9 +348,6 @@ class PlansMainTest(TestCase):
         # case request.user is not author
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
-        linked_url1 = reverse('contact:plans-create')
-        linked_url2 = reverse('contact:plans-modify', kwargs={'plan_id': self.plan1.id})
-        linked_url3 = reverse('contact:plans-delete', kwargs={'plan_id': self.plan1.id})
         self.assertContains(response, f'href="{linked_url1}"')
         self.assertNotContains(response, f'href="{linked_url2}"')
         self.assertNotContains(response, f'href="{linked_url3}"')
