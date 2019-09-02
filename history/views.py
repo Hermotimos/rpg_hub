@@ -322,6 +322,7 @@ def participated_and_informed_events(profile_id):
 @login_required
 def timeline_main_view(request):
     known_events = participated_and_informed_events(request.user.profile.id)
+    known_events = list(known_events)
 
     # repetitive interations over known_events.all():
     threads_querysets_list = []
@@ -330,7 +331,7 @@ def timeline_main_view(request):
     gen_locs_set = set()
     games_set = set()
     years_set = set()
-    for event in known_events.all():
+    for event in known_events:
         years_set.add(event.year)
         threads_querysets_list.append(event.threads.all())
         participants_querysets_list.append(event.participants.all())
@@ -378,7 +379,7 @@ def timeline_main_view(request):
     years_sorted_list.sort()
     years_with_seasons_dict = {}
     for y in years_sorted_list:
-        seasons_set = {e.season for e in known_events.all() if e.year == y}
+        seasons_set = {e.season for e in known_events if e.year == y}
         seasons_sorted_list = list(seasons_set)
         seasons_sorted_list.sort()
         years_with_seasons_dict[y] = seasons_sorted_list
@@ -391,7 +392,7 @@ def timeline_main_view(request):
         'participants': participants_name_and_obj_list,
         'gen_locs_with_spec_locs': gen_locs_with_spec_locs_list,
         'games': games_name_and_obj_list,
-        'known_events': list(known_events)
+        'known_events': known_events
     }
     return render(request, 'history/timeline_main.html', context)
 
