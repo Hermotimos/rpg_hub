@@ -79,6 +79,9 @@ class ChronicleMainTest(TestCase):
 class ChronicleCreateTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
+        self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
+
         self.url = reverse('history:chronicle-create')
 
     def test_login_required(self):
@@ -94,6 +97,51 @@ class ChronicleCreateTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve('/history/chronicle/create/')
         self.assertEquals(view.func, views.chronicle_create_view)
+
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+    def test_contains_form(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        form = response.context.get('form')
+        self.assertIsInstance(form, ChronicleEventCreateForm)
+
+    def test_valid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {
+            'game': self.game1.id,
+            'event_no_in_game': 1,
+            'description': 'event1',
+        }
+        self.client.post(self.url, data)
+        self.assertTrue(ChronicleEvent.objects.exists())
+
+    def test_invalid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {}
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertFalse(ChronicleEvent.objects.exists())
+        self.assertTrue(form.errors)
+
+    def test_invalid_post_data_empty_fields(self):
+        self.client.force_login(self.user1)
+        data = {
+            'game': '',
+            'event_no_in_game': '',
+            'description': '',
+        }
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertFalse(ChronicleEvent.objects.exists())
+        self.assertTrue(form.errors)
 
 
 class ChronicleAllChaptersTest(TestCase):
