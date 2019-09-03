@@ -65,11 +65,11 @@ class ChronicleEvent(models.Model):
     EventDescription serves to create events in the full history text of the game.
     Lack or correspondence between the two is intentional for flexibility.
     """
-    # default=0 for events outside of sessions (background events):
+    # default=35 for events outside of sessions (instance of 'GameSession' for background events has id=35):
     game = models.ForeignKey(GameSession,
                              related_name='chronicle_events',
                              on_delete=models.PROTECT,
-                             default=0)
+                             default=35)
     event_no_in_game = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
     description = models.TextField(max_length=10000)
     participants = models.ManyToManyField(Profile,
