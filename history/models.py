@@ -163,8 +163,7 @@ class TimelineEvent(models.Model):
     year = models.IntegerField(validators=[MinValueValidator(1)])
     season = models.CharField(max_length=10, choices=SEASONS)
     day_start = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(90)])
-    day_end = models.PositiveSmallIntegerField(blank=True, null=True,
-                                               validators=[MinValueValidator(1), MaxValueValidator(90)])
+    day_end = models.PositiveSmallIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(90)])
     threads = models.ManyToManyField(Thread, related_name='timeline_events', blank=True)
     description = models.TextField(max_length=4000)
     participants = models.ManyToManyField(Profile,
