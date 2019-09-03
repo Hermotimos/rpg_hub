@@ -1,7 +1,9 @@
 from django.test import TestCase
 from django.urls import resolve, reverse
+from django.contrib.auth.forms import UserCreationForm
 from users import views
 from users.models import User
+from users.forms import UserCreationForm, UserUpdateForm, UserRegistrationForm
 
 
 class TestLogin(TestCase):
@@ -31,14 +33,8 @@ class TestRegister(TestCase):
         self.url = reverse('users:register')
         self.response = self.client.get(self.url)
 
-    def test_csrf(self):
-        response = self.client.get(self.url)
-        self.assertContains(response, 'csrfmiddlewaretoken')
-
     def test_get(self):
-        url = reverse('users:register')
-        response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEquals(self.response.status_code, 200)
 
     def test_url_resolves_view(self):
         view = resolve('/users/register/')
@@ -47,6 +43,13 @@ class TestRegister(TestCase):
     def test_contains_links(self):
         linked_url = reverse('users:login')
         self.assertContains(self.response, f'href="{linked_url}"')
+
+    def test_csrf(self):
+        self.assertContains(self.response, 'csrfmiddlewaretoken')
+
+    def test_contains_form(self):
+        form = self.response.context.get('form')
+        self.assertIsInstance(form, UserCreationForm)
 
 
 class TestLogout(TestCase):
