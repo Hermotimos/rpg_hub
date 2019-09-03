@@ -180,7 +180,7 @@ class TimelineEvent(models.Model):
                                       Q(character_status='active_player') |
                                       Q(character_status='inactive_player'),
                                       blank=True)
-    general_location = models.ForeignKey(GeneralLocation, null=True, on_delete=models.SET_NULL)
+    general_location = models.ForeignKey(GeneralLocation, on_delete=models.DO_NOTHING)
     specific_locations = models.ManyToManyField(SpecificLocation, related_name='timeline_events')
 
     def __str__(self):
