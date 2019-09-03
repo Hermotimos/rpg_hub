@@ -74,7 +74,7 @@ def chronicle_main_view(request):
 @login_required
 def chronicle_create_view(request):
     if request.method == 'POST':
-        form = ChronicleEventCreateForm(request.POST or None)
+        form = ChronicleEventCreateForm(request.POST)
         if form.is_valid():
             event = form.save()
             event.participants.set(form.cleaned_data['participants'])
@@ -400,7 +400,7 @@ def timeline_main_view(request):
 @login_required
 def timeline_create_view(request):
     if request.method == 'POST':
-        form = TimelineEventCreateForm(request.POST or None)
+        form = TimelineEventCreateForm(request.POST)
         if form.is_valid():
             event = form.save()
             event.threads.set(form.cleaned_data['threads'])
