@@ -79,8 +79,7 @@ class ChronicleMainTest(TestCase):
 class ChronicleCreateTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-        self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
-        self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
+        self.game1 = GameSession.objects.create(title='Game1')
 
         self.url = reverse('history:chronicle-create')
 
@@ -490,7 +489,7 @@ class ChronicleEditTest(TestCase):
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
-        self.event1 = ChronicleEvent.objects.create(id=1, game=self.game1, event_no_in_game=1, )
+        self.event1 = ChronicleEvent.objects.create(id=1, game=self.game1, event_no_in_game=1, description='Event1')
         self.event1.participants.set([self.user2.profile])
         self.event1.informed.set([self.user2.profile])
 
@@ -500,11 +499,6 @@ class ChronicleEditTest(TestCase):
         redirect_url = reverse('users:login') + '?next=' + self.url
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-
-    def test_csrf(self):
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
-        self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_redirect_if_unallowed(self):
         # case: request.user.profile.character_status != 'gm'
@@ -528,6 +522,48 @@ class ChronicleEditTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve(f'/history/chronicle/edit:{self.event1.id}/')
         self.assertEquals(view.func, views.chronicle_edit_view)
+
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+    def test_contains_form(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        form = response.context.get('form')
+        self.assertIsInstance(form, ChronicleEventEditForm)
+
+    def test_valid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {
+            'game': self.game1.id,
+            'event_no_in_game': 1,
+            'description': 'changed text',
+        }
+        self.client.post(self.url, data)
+        self.assertTrue(ChronicleEvent.objects.get(id=1).description == 'changed text')
+
+    def test_invalid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {}
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+
+    def test_invalid_post_data_empty_fields(self):
+        self.client.force_login(self.user1)
+        data = {
+            'description': '',
+        }
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+        self.assertTrue(ChronicleEvent.objects.get(id=1).description == 'Event1')
 
 
 # # ------------------ TIMELINE ------------------
@@ -630,17 +666,18 @@ class TimelineMainTest(TestCase):
 class TimelineCreateTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
+        self.game1 = GameSession.objects.create(title='Game1')
+        self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
+        self.spec_loc1 = SpecificLocation.objects.create(name='spec_loc1', general_location=self.gen_loc1)
+        self.thread1 = Thread.objects.create(name='Thread1')
+
         self.url = reverse('history:timeline-create')
 
     def test_login_required(self):
         redirect_url = reverse('users:login') + '?next=' + self.url
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-
-    def test_csrf(self):
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
-        self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_get(self):
         self.client.force_login(self.user1)
@@ -650,6 +687,64 @@ class TimelineCreateTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve('/history/timeline/create/')
         self.assertEquals(view.func, views.timeline_create_view)
+
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+    def test_contains_form(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        form = response.context.get('form')
+        self.assertIsInstance(form, TimelineEventCreateForm)
+
+    def test_valid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {
+            'game': self.game1.id,
+            'year': 1,
+            'season': '1',
+            'day_start': 1,
+            'day_end': 0,
+            'threads': [self.thread1.id, ],
+            'description': 'event1',
+            'general_location': self.gen_loc1.id,
+            'specific_locations': [self.spec_loc1.id, ]
+        }
+        # response = self.client.post(self.url, data)
+        # form = response.context.get('form')
+        # print(form.errors)
+        self.client.post(self.url, data)
+        self.assertTrue(TimelineEvent.objects.exists())
+
+    def test_invalid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {}
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertFalse(ChronicleEvent.objects.exists())
+        self.assertTrue(form.errors)
+
+    def test_invalid_post_data_empty_fields(self):
+        self.client.force_login(self.user1)
+        data = {
+            'game': '',
+            'year': '',
+            'season': '',
+            'day_start': '',
+            'threads': '',
+            'description': '',
+            'general_location': '',
+        }
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertFalse(ChronicleEvent.objects.exists())
+        self.assertTrue(form.errors)
 
 
 class TimelineAllEventsTest(TestCase):
@@ -1464,14 +1559,17 @@ class TimelineEditView(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-
         self.user4.profile.character_status = 'gm'
+
         self.game1 = GameSession.objects.create(title='Game1')
-        gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
+        self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
+        self.spec_loc1 = SpecificLocation.objects.create(name='spec_loc1', general_location=self.gen_loc1)
         self.event1 = TimelineEvent.objects.create(game=self.game1, year=1, season=1, day_start=1,
-                                                   description='Description1', general_location=gen_loc1)
+                                                   description='Description1', general_location=self.gen_loc1)
+        # self.event1.save()
         self.event1.participants.set([self.user1.profile, ])
         self.event1.informed.set([self.user2.profile, ])
+        self.event1.specific_locations.set([self.spec_loc1, ])
 
         self.url = reverse('history:timeline-edit', kwargs={'event_id': self.event1.id})
 
@@ -1479,11 +1577,6 @@ class TimelineEditView(TestCase):
         redirect_url = reverse('users:login') + '?next=' + self.url
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-
-    def test_csrf(self):
-        self.client.force_login(self.user4)
-        response = self.client.get(self.url)
-        self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_redirect_if_unallowed(self):
         redirect_url = reverse('home:dupa')
@@ -1518,3 +1611,52 @@ class TimelineEditView(TestCase):
     def test_url_resolves_view(self):
         view = resolve(f'/history/timeline/edit:{self.event1.id}/')
         self.assertEquals(view.func, views.timeline_edit_view)
+
+    def test_csrf(self):
+        self.client.force_login(self.user4)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+    def test_contains_form(self):
+        self.client.force_login(self.user4)
+        response = self.client.get(self.url)
+        form = response.context.get('form')
+        self.assertIsInstance(form, TimelineEventEditForm)
+
+    def test_valid_post_data(self):                                                  # TODO won't pass WHY?
+        self.client.force_login(self.user4)
+        form = TimelineEventEditForm(instance=self.event1)
+        data = form.initial
+        print('\n', data)
+        data['description'] = 'changed text'
+        data['informed'] = [self.user2.profile, ]
+        data['specific_locations'] = [self.spec_loc1, ]
+        print('\n', data)
+
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        print('\n', form.errors)
+
+        # self.client.post(self.url, data)
+        self.assertTrue(TimelineEvent.objects.get(id=1).description == 'changed text')
+
+    def test_invalid_post_data(self):
+        self.client.force_login(self.user4)
+        data = {}
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+
+    def test_invalid_post_data_empty_fields(self):
+        self.client.force_login(self.user4)
+        data = {
+            'description': '',
+        }
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+        self.assertTrue(TimelineEvent.objects.get(id=1).description == 'Description1')
