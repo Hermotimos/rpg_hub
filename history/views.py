@@ -60,7 +60,7 @@ def chronicle_main_view(request):
         events_informed = request.user.profile.chronicle_events_informed.all()
         events = (events_participated | events_informed).distinct()
         events = list(events)
-        games = [e.game_no for e in events]
+        games = [e.game for e in events]
         chapters = [g.chapter for g in games]
         chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all() if g in games] for ch in chapters}
 
@@ -108,7 +108,7 @@ def chronicle_all_chapters_view(request):
 
         events_informed = list(events_informed)
         events = list(events)
-        games = [e.game_no for e in events]
+        games = [e.game for e in events]
         chapters = [g.chapter for g in games]
         chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all() if g in games] for ch in chapters}
         games_with_events_dict = {g: [e for e in g.chronicle_events.all() if e in events] for g in games}
@@ -129,13 +129,13 @@ def chronicle_one_chapter_view(request, chapter_id):
         games_with_events_dict = {g: [e for e in g.chronicle_events.all()] for g in chapter.game_sessions.all()}
         events_informed = []
     else:
-        events_participated = request.user.profile.chronicle_events_participated.filter(game_no__in=chapter.game_sessions.all())
-        events_informed = request.user.profile.chronicle_events_informed.filter(game_no__in=chapter.game_sessions.all())
+        events_participated = request.user.profile.chronicle_events_participated.filter(game__in=chapter.game_sessions.all())
+        events_informed = request.user.profile.chronicle_events_informed.filter(game__in=chapter.game_sessions.all())
         events = (events_participated | events_informed).distinct()
         events_informed = list(events_informed)
         events = list(events)
 
-        games = [e.game_no for e in events]
+        games = [e.game for e in events]
         games_with_events_dict = {g: [e for e in g.chronicle_events.all() if e in events] for g in games}
 
     context = {
@@ -157,8 +157,8 @@ def chronicle_one_game_view(request, game_id):
         events = game.chronicle_events.all()
         events = list(events)
     else:
-        events_participated = request.user.profile.chronicle_events_participated.filter(game_no=game)
-        events_informed = request.user.profile.chronicle_events_informed.filter(game_no=game)
+        events_participated = request.user.profile.chronicle_events_participated.filter(game=game)
+        events_informed = request.user.profile.chronicle_events_informed.filter(game=game)
         events = (events_participated | events_informed).distinct()
         events_informed = list(events_informed)
         events = list(events)
@@ -200,7 +200,7 @@ def chronicle_inform_view(request, event_id):
             subject = f"[RPG] {request.user.profile} podzielił się z Tobą swoją historią!"
             message = f"{request.user.profile} znów rozprawia o swoich przygodach.\n" \
                       f"{', '.join(p.character_name for p in form.cleaned_data['informed'])}\n\n" \
-                      f"Podczas przygody '{event.game_no.title}' rozegrało się co następuje:\n {event.description}\n" \
+                      f"Podczas przygody '{event.game.title}' rozegrało się co następuje:\n {event.description}\n" \
                       f"Tak było i nie inaczej...\n\n" \
                       f"Wydarzenie zostało zapisane w Twojej Kronice."
             sender = settings.EMAIL_HOST_USER
@@ -337,7 +337,7 @@ def timeline_main_view(request):
         participants_querysets_list.append(event.participants.all())
         spec_locs_querysets_list.append(event.specific_locations.all())
         gen_locs_set.add(event.general_location)
-        games_set.add(event.game_no)
+        games_set.add(event.game)
 
     # threads
     threads_set = set()
@@ -555,9 +555,9 @@ def timeline_date_view(request, year, season='0'):
 @login_required
 def timeline_game_view(request, game_id):
     game = get_object_or_404(GameSession, id=game_id)
-    events_by_game_no_qs = TimelineEvent.objects.filter(game_no=game)
+    events_by_game_qs = TimelineEvent.objects.filter(game=game)
     known_events = participated_and_informed_events(request.user.profile.id)
-    events = list(events_by_game_no_qs.distinct() & known_events.distinct())
+    events = list(events_by_game_qs.distinct() & known_events.distinct())
 
     context = {
         'page_title': f'{game.title}',

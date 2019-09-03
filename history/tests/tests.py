@@ -1,7 +1,11 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
 from history import views
-from history.models import Chapter, GameSession, ChronicleEvent, TimelineEvent, Thread, GeneralLocation, SpecificLocation
+from history.models import (Chapter,  ChronicleEvent, GameSession, GeneralLocation, SpecificLocation, Thread,
+                            TimelineEvent)
+from history.forms import (ChronicleEventCreateForm, ChronicleEventEditForm, ChronicleEventInformForm,
+                           ChronicleEventNoteForm, TimelineEventCreateForm, TimelineEventInformForm,
+                           TimelineEventNoteForm, TimelineEventEditForm)
 from users.models import User
 
 
@@ -18,7 +22,7 @@ class ChronicleMainTest(TestCase):
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
-        self.event1 = ChronicleEvent.objects.create(id=1, game_no=self.game1, event_no_in_game=1, )
+        self.event1 = ChronicleEvent.objects.create(id=1, game=self.game1, event_no_in_game=1, )
         self.event1.participants.set([self.user1.profile])
         self.event1.informed.set([self.user2.profile])
 
@@ -82,11 +86,6 @@ class ChronicleCreateTest(TestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
-    def test_csrf(self):
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
-        self.assertContains(response, 'csrfmiddlewaretoken')
-
     def test_get(self):
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
@@ -107,7 +106,7 @@ class ChronicleAllChaptersTest(TestCase):
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
-        self.event1 = ChronicleEvent.objects.create(id=1, game_no=self.game1, event_no_in_game=1, )
+        self.event1 = ChronicleEvent.objects.create(id=1, game=self.game1, event_no_in_game=1, )
         self.event1.participants.set([self.user1.profile])
         self.event1.informed.set([self.user2.profile])
 
@@ -159,7 +158,7 @@ class ChronicleOneChapterTest(TestCase):
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
-        self.event1 = ChronicleEvent.objects.create(id=1, game_no=self.game1, event_no_in_game=1, )
+        self.event1 = ChronicleEvent.objects.create(id=1, game=self.game1, event_no_in_game=1, )
         self.event1.participants.set([self.user1.profile])
         self.event1.informed.set([self.user2.profile])
 
@@ -242,7 +241,7 @@ class ChronicleOneGameTest(TestCase):
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
-        self.event1 = ChronicleEvent.objects.create(id=1, game_no=self.game1, event_no_in_game=1, )
+        self.event1 = ChronicleEvent.objects.create(id=1, game=self.game1, event_no_in_game=1, )
         self.event1.participants.set([self.user1.profile])
         self.event1.informed.set([self.user2.profile])
 
@@ -325,7 +324,7 @@ class ChronicleInformTest(TestCase):
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
-        self.event1 = ChronicleEvent.objects.create(id=1, game_no=self.game1, event_no_in_game=1, )
+        self.event1 = ChronicleEvent.objects.create(id=1, game=self.game1, event_no_in_game=1, )
         self.event1.participants.set([self.user1.profile])
         self.event1.informed.set([self.user2.profile])
 
@@ -385,7 +384,7 @@ class ChronicleNoteTest(TestCase):
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
-        self.event1 = ChronicleEvent.objects.create(id=1, game_no=self.game1, event_no_in_game=1, )
+        self.event1 = ChronicleEvent.objects.create(id=1, game=self.game1, event_no_in_game=1, )
         self.event1.participants.set([self.user1.profile])
         self.event1.informed.set([self.user2.profile])
 
@@ -443,7 +442,7 @@ class ChronicleEditTest(TestCase):
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
-        self.event1 = ChronicleEvent.objects.create(id=1, game_no=self.game1, event_no_in_game=1, )
+        self.event1 = ChronicleEvent.objects.create(id=1, game=self.game1, event_no_in_game=1, )
         self.event1.participants.set([self.user2.profile])
         self.event1.informed.set([self.user2.profile])
 
@@ -498,7 +497,7 @@ class TimelineMainTest(TestCase):
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
         self.spec_loc1 = SpecificLocation.objects.create(name='spec_loc1', general_location=self.gen_loc1)
         self.thread1 = Thread.objects.create(name='Thread1')
-        self.event1 = TimelineEvent.objects.create(game_no=self.game1, year=1, season=1, day_start=1,
+        self.event1 = TimelineEvent.objects.create(game=self.game1, year=1, season=1, day_start=1,
                                                    description='Description1', general_location=self.gen_loc1)
         self.event1.threads.set([self.thread1, ])
         self.event1.specific_locations.set([self.spec_loc1, ])
@@ -617,7 +616,7 @@ class TimelineAllEventsTest(TestCase):
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
         self.spec_loc1 = SpecificLocation.objects.create(name='spec_loc1', general_location=self.gen_loc1)
         self.thread1 = Thread.objects.create(name='Thread1')
-        self.event1 = TimelineEvent.objects.create(game_no=self.game1, year=1, season=1, day_start=1,
+        self.event1 = TimelineEvent.objects.create(game=self.game1, year=1, season=1, day_start=1,
                                                    description='Description1', general_location=self.gen_loc1)
         self.event1.threads.set([self.thread1, ])
         self.event1.specific_locations.set([self.spec_loc1, ])
@@ -707,7 +706,7 @@ class TimelineThreadTest(TestCase):
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
         self.spec_loc1 = SpecificLocation.objects.create(name='spec_loc1', general_location=self.gen_loc1)
         self.thread1 = Thread.objects.create(name='Thread1')
-        self.event1 = TimelineEvent.objects.create(game_no=self.game1, year=1, season=1, day_start=1,
+        self.event1 = TimelineEvent.objects.create(game=self.game1, year=1, season=1, day_start=1,
                                                    description='Description1', general_location=self.gen_loc1)
         self.event1.threads.set([self.thread1, ])
         self.event1.specific_locations.set([self.spec_loc1, ])
@@ -807,7 +806,7 @@ class TimelineParticipantTest(TestCase):
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
         self.spec_loc1 = SpecificLocation.objects.create(name='spec_loc1', general_location=self.gen_loc1)
         self.thread1 = Thread.objects.create(name='Thread1')
-        self.event1 = TimelineEvent.objects.create(game_no=self.game1, year=1, season=1, day_start=1,
+        self.event1 = TimelineEvent.objects.create(game=self.game1, year=1, season=1, day_start=1,
                                                    description='Description1', general_location=self.gen_loc1)
         self.event1.threads.set([self.thread1, ])
         self.event1.specific_locations.set([self.spec_loc1, ])
@@ -912,7 +911,7 @@ class TimelineGeneralLocationtTest(TestCase):
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
         self.spec_loc1 = SpecificLocation.objects.create(name='spec_loc1', general_location=self.gen_loc1)
         self.thread1 = Thread.objects.create(name='Thread1')
-        self.event1 = TimelineEvent.objects.create(game_no=self.game1, year=1, season=1, day_start=1,
+        self.event1 = TimelineEvent.objects.create(game=self.game1, year=1, season=1, day_start=1,
                                                    description='Description1', general_location=self.gen_loc1)
         self.event1.threads.set([self.thread1, ])
         self.event1.specific_locations.set([self.spec_loc1, ])
@@ -1012,7 +1011,7 @@ class TimelineSpecificLocationtTest(TestCase):
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
         self.spec_loc1 = SpecificLocation.objects.create(name='spec_loc1', general_location=self.gen_loc1)
         self.thread1 = Thread.objects.create(name='Thread1')
-        self.event1 = TimelineEvent.objects.create(game_no=self.game1, year=1, season=1, day_start=1,
+        self.event1 = TimelineEvent.objects.create(game=self.game1, year=1, season=1, day_start=1,
                                                    description='Description1', general_location=self.gen_loc1)
         self.event1.threads.set([self.thread1, ])
         self.event1.specific_locations.set([self.spec_loc1, ])
@@ -1112,7 +1111,7 @@ class TimelineDateTest(TestCase):
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
         self.spec_loc1 = SpecificLocation.objects.create(name='spec_loc1', general_location=self.gen_loc1)
         self.thread1 = Thread.objects.create(name='Thread1')
-        self.event1 = TimelineEvent.objects.create(game_no=self.game1, year=1, season=1, day_start=1,
+        self.event1 = TimelineEvent.objects.create(game=self.game1, year=1, season=1, day_start=1,
                                                    description='Description1', general_location=self.gen_loc1)
         self.event1.threads.set([self.thread1, ])
         self.event1.specific_locations.set([self.spec_loc1, ])
@@ -1215,7 +1214,7 @@ class TimelineGameTest(TestCase):
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
         self.spec_loc1 = SpecificLocation.objects.create(name='spec_loc1', general_location=self.gen_loc1)
         self.thread1 = Thread.objects.create(name='Thread1')
-        self.event1 = TimelineEvent.objects.create(game_no=self.game1, year=1, season=1, day_start=1,
+        self.event1 = TimelineEvent.objects.create(game=self.game1, year=1, season=1, day_start=1,
                                                    description='Description1', general_location=self.gen_loc1)
         self.event1.threads.set([self.thread1, ])
         self.event1.specific_locations.set([self.spec_loc1, ])
@@ -1311,7 +1310,7 @@ class TimelineInformView(TestCase):
 
         self.game1 = GameSession.objects.create(title='Game1')
         gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
-        self.event1 = TimelineEvent.objects.create(game_no=self.game1, year=1, season=1, day_start=1,
+        self.event1 = TimelineEvent.objects.create(game=self.game1, year=1, season=1, day_start=1,
                                                    description='Description1', general_location=gen_loc1)
         self.event1.participants.set([self.user1.profile, ])
         self.event1.informed.set([self.user2.profile, ])
@@ -1365,7 +1364,7 @@ class TimelineNoteView(TestCase):
 
         self.game1 = GameSession.objects.create(title='Game1')
         gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
-        self.event1 = TimelineEvent.objects.create(game_no=self.game1, year=1, season=1, day_start=1,
+        self.event1 = TimelineEvent.objects.create(game=self.game1, year=1, season=1, day_start=1,
                                                    description='Description1', general_location=gen_loc1)
         self.event1.participants.set([self.user1.profile, ])
         self.event1.informed.set([self.user2.profile, ])
@@ -1421,7 +1420,7 @@ class TimelineEditView(TestCase):
         self.user4.profile.character_status = 'gm'
         self.game1 = GameSession.objects.create(title='Game1')
         gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
-        self.event1 = TimelineEvent.objects.create(game_no=self.game1, year=1, season=1, day_start=1,
+        self.event1 = TimelineEvent.objects.create(game=self.game1, year=1, season=1, day_start=1,
                                                    description='Description1', general_location=gen_loc1)
         self.event1.participants.set([self.user1.profile, ])
         self.event1.informed.set([self.user2.profile, ])

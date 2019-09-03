@@ -57,7 +57,7 @@
                     {% endfor %}
                 </td>
                 <td class="timeline-event justify align-top unblue-black">
-                    <a href="{% url 'history:chronicle-one-game' event.game_no.id %}">{{ event.description|linebreaksbr }}</a>
+                    <a href="{% url 'history:chronicle-one-game' event.game.id %}">{{ event.description|linebreaksbr }}</a>
                     {% for note in event.notes.all %}
                         {% if request.user == note.author %}
                             {% if note.text != '' %}
@@ -81,14 +81,14 @@
                     {% endfor %}
                 </td>
                 <td class="align-center align-top unblue-black">
-                    {% if event.game_no.game_no > 0 %}
-                        <small><a href="{% url 'history:timeline-game' event.game_no.id %}">
-                            -{{ event.game_no.game_no }}-
+                    {% if event.game.game_no > 0 %}
+                        <small><a href="{% url 'history:timeline-game' event.game.id %}">
+                            -{{ event.game.game_no }}-
                         </a></small>
-                    {% elif event.game_no.game_no == 0 %}
+                    {% elif event.game.game_no == 0 %}
                         <small hidden><b>***</b></small>
                     {% else %}
-                        <small><a href="{% url 'history:timeline-game' event.game_no.id %}">-X-</a></small>
+                        <small><a href="{% url 'history:timeline-game' event.game.id %}">-X-</a></small>
                     {% endif %}
                 </td>
                 <td class="align-top">

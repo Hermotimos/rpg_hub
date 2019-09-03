@@ -66,10 +66,10 @@ class ChronicleEvent(models.Model):
     Lack or correspondence between the two is intentional for flexibility.
     """
     # default=0 for events outside of sessions (background events):
-    game_no = models.ForeignKey(GameSession,
-                                related_name='chronicle_events',
-                                on_delete=models.PROTECT,
-                                default=0)
+    game = models.ForeignKey(GameSession,
+                             related_name='chronicle_events',
+                             on_delete=models.PROTECT,
+                             default=0)
     event_no_in_game = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
     description = models.TextField(max_length=10000)
     participants = models.ManyToManyField(Profile,
@@ -100,7 +100,7 @@ class ChronicleEvent(models.Model):
         return f'{self.description[:100]}...{self.description[-100:] if len(str(self.description)) > 200 else self.description}'
 
     class Meta:
-        ordering = ['game_no', 'event_no_in_game']
+        ordering = ['game', 'event_no_in_game']
 
 
 class ChronicleEventNote(models.Model):
@@ -158,7 +158,7 @@ class SpecificLocation(models.Model):
 
 class TimelineEvent(models.Model):
     # default=35 for events outside of sessions (instance of 'GameSession' for background events has id=35):
-    game_no = models.ForeignKey(GameSession, related_name='timeline_events', on_delete=models.PROTECT, default=35)
+    game = models.ForeignKey(GameSession, related_name='timeline_events', on_delete=models.PROTECT, default=35)
     # year has to be > 0, for url patterns (they accept positive nums only):
     year = models.IntegerField(validators=[MinValueValidator(1)])
     season = models.CharField(max_length=10, choices=SEASONS)
@@ -204,8 +204,8 @@ class TimelineEvent(models.Model):
         return f'{self.days()}. dnia {season} {self.year}. roku Archonatu Nemetha Samatiana'
 
     class Meta:
-        # ordering via 'description' before 'game_no' to leave flexibility for events with later 'id'-s
-        ordering = ['year', 'season', 'day_start', 'day_end', 'description', 'game_no']
+        # ordering via 'description' before 'game' to leave flexibility for events with later 'id'-s
+        ordering = ['year', 'season', 'day_start', 'day_end', 'description', 'game']
 
     # Steps to migrate these models:
     # 1) delete migration files, delete tables in db, DELETE FROM django_migrations WHERE app="history";
