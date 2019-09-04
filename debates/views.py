@@ -32,8 +32,8 @@ def debates_main_view(request):
 @login_required
 def create_topic_view(request):
     if request.method == 'POST':
-        topic_form = CreateTopicForm(request.POST or None)
-        debate_form = CreateDebateForm(authenticated_user=request.user, data=request.POST or None)
+        topic_form = CreateTopicForm(request.POST)
+        debate_form = CreateDebateForm(authenticated_user=request.user, data=request.POST)
         remark_form = CreateRemarkForm(request.POST, request.FILES)
 
         if topic_form.is_valid() and debate_form.is_valid() and remark_form.is_valid():
@@ -81,28 +81,13 @@ def create_topic_view(request):
     }
     return render(request, 'debates/create_topic.html', context)
 
-    # if request.method == 'POST':
-    #     form = CreateTopicForm(request.POST or None)
-    #     if form.is_valid():
-    #         topic = form.save()
-    #         messages.info(request, f'Utworzono nowy temat narad!')
-    #         return redirect('debates:create-debate', topic_id=topic.id)
-    # else:
-    #     form = CreateTopicForm()             # equals to: form = CreateTopicForm(request.GET) - GET is the default
-    #
-    # context = {
-    #     'page_title': 'Nowy temat narad',
-    #     'form': form,
-    # }
-    # return render(request, 'debates/create_topic.html', context)
-
 
 @login_required
 def create_debate_view(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
 
     if request.method == 'POST':
-        debate_form = CreateDebateForm(authenticated_user=request.user, data=request.POST or None)
+        debate_form = CreateDebateForm(authenticated_user=request.user, data=request.POST)
         remark_form = CreateRemarkForm(request.POST, request.FILES)
         if debate_form.is_valid() and remark_form.is_valid():
 
@@ -249,8 +234,8 @@ def debates_invite_view(request, topic_id, debate_id):
             messages.info(request, f'Wybrane postaci zostały dodane do narady!')
             return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
     else:
-        form = UpdateDebateForm(authenticated_user=request.user,
-                                already_allowed_profiles_ids=old_allowed_profiles_ids)
+        form = InviteForm(authenticated_user=request.user,
+                          already_allowed_profiles_ids=old_allowed_profiles_ids)
 
     context = {
         'page_title': 'Dodaj uczestników narady',
