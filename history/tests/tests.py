@@ -888,6 +888,11 @@ class TimelineThreadTest(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
+        # case: request.user.profile.character_status == 'gm'
+        self.client.force_login(self.user4)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
     def test_url_resolves_view(self):
         view = resolve(f'/history/timeline/thread:{self.thread1.id}/')
         self.assertEquals(view.func, views.timeline_thread_view)
@@ -993,6 +998,11 @@ class TimelineParticipantTest(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
+        # case: request.user.profile.character_status == 'gm'
+        self.client.force_login(self.user4)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
     def test_url_resolves_view(self):
         view = resolve(f'/history/timeline/participant:{self.user4.id}/')
         self.assertEquals(view.func, views.timeline_participant_view)
@@ -1090,6 +1100,11 @@ class TimelineGeneralLocationtTest(TestCase):
 
         # case: request.user.profile in event1.informed.all()
         self.client.force_login(self.user2)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
+        # case: request.user.profile.character_status == 'gm'
+        self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
@@ -1193,6 +1208,11 @@ class TimelineSpecificLocationtTest(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
+        # case: request.user.profile.character_status == 'gm'
+        self.client.force_login(self.user4)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
     def test_url_resolves_view(self):
         view = resolve(f'/history/timeline/spec-loc:{self.spec_loc1.id}/')
         self.assertEquals(view.func, views.timeline_specific_location_view)
@@ -1277,7 +1297,7 @@ class TimelineDateTest(TestCase):
         response = self.client.get(self.url_only_year)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
-    # no test_404() becaues no objects timeline_date_view() has no args and calls no object with get_object_or_404()
+    # no test_404() because no objects timeline_date_view() has no args and calls no object with get_object_or_404()
 
     def test_get(self):
         # case: request.user.profile in event1.participant.all()
@@ -1289,6 +1309,13 @@ class TimelineDateTest(TestCase):
 
         # case: request.user.profile in event1.informed.all()
         self.client.force_login(self.user2)
+        response_only_year = self.client.get(self.url_only_year)
+        response_year_and_season = self.client.get(self.url_year_and_season)
+        self.assertEquals(response_only_year.status_code, 200)
+        self.assertEquals(response_year_and_season.status_code, 200)
+
+        # case: request.user.profile.character_status == 'gm'
+        self.client.force_login(self.user4)
         response_only_year = self.client.get(self.url_only_year)
         response_year_and_season = self.client.get(self.url_year_and_season)
         self.assertEquals(response_only_year.status_code, 200)
@@ -1396,6 +1423,11 @@ class TimelineGameTest(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
+        # case: request.user.profile.character_status == 'gm'
+        self.client.force_login(self.user4)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
     def test_url_resolves_view(self):
         view = resolve(f'/history/timeline/game:{self.game1.id}/')
         self.assertEquals(view.func, views.timeline_game_view)
@@ -1450,6 +1482,8 @@ class TimelineInformView(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
+        self.user4 = User.objects.create_user(username='user4', password='pass1111')
+        self.user4.profile.character_status = 'gm'
 
         self.game1 = GameSession.objects.create(title='Game1')
         gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
@@ -1494,6 +1528,11 @@ class TimelineInformView(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
+        # case: request.user.profile.character_status == 'gm'
+        self.client.force_login(self.user4)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
     def test_url_resolves_view(self):
         view = resolve(f'/history/timeline/inform:{self.event1.id}/')
         self.assertEquals(view.func, views.timeline_inform_view)
@@ -1504,6 +1543,8 @@ class TimelineNoteView(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
+        self.user4 = User.objects.create_user(username='user4', password='pass1111')
+        self.user4.profile.character_status = 'gm'
 
         self.game1 = GameSession.objects.create(title='Game1')
         gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
@@ -1545,6 +1586,11 @@ class TimelineNoteView(TestCase):
 
         # case: request.user.profile in event1.informed.all()
         self.client.force_login(self.user2)
+        response = self.client.get(self.url)
+        self.assertEquals(response.status_code, 200)
+
+        # case: request.user.profile.character_status == 'gm'
+        self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
