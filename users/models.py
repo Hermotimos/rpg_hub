@@ -3,14 +3,15 @@ from django.contrib.auth.models import User
 from PIL import Image
 
 STATUS = [
+    # players
     ('active_player', 'Gracz'),
     ('inactive_player', 'Nieaktywny gracz'),
     ('dead_player', 'Martwy gracz'),
+    # npc
     ('living_npc', 'Bohater niezależny'),
     ('dead_npc', 'Martwy bohater niezależny'),
+    # other
     ('gm', 'Mistrz gry'),
-    ('trusted_spectator', 'Zaufany widz'),
-    ('spectator', 'Widz')
 ]
 
 

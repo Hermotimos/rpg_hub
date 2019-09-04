@@ -19,29 +19,27 @@
     <br><br><br>
 
     {% for news in newss %}
-        {% if request.user.profile in news.allowed_profiles.all or request.user.profile.character_status == 'gm' %}
-            <table>
-                <tbody>
-                    <tr class="posts-and-news">
-                        <td>
-                            <img class="rounded-circle article-img" src="{{ news.author.profile.image.url }}">
-                            <br>
-                            <small>{{ news.date_posted|date:'d-M-Y' }}</small>
-                        </td>
-                        <td>
-                            <small>Ostatnia aktywność:
-                                {% if news.last_activity %}
-                                    {{ news.last_activity|date:'d-M-Y, H:i' }}
-                                {% else %}
-                                    {{ news.date_posted|date:'d-M-Y, H:i' }}
-                                {% endif %}
-                            </small>
-                            <h3 class="unblue"><a href="{% url 'news:detail' news.id %}">{{ news.title }}</a></h3>
-                        </td>
-                    </tr>
-                </tbody>
-            </table><br>
-        {% endif %}
+        <table>
+            <tbody>
+                <tr class="posts-and-news">
+                    <td>
+                        <img class="rounded-circle article-img" src="{{ news.author.profile.image.url }}">
+                        <br>
+                        <small>{{ news.date_posted|date:'d-M-Y' }}</small>
+                    </td>
+                    <td>
+                        <small>Ostatnia aktywność:
+                            {% if news.last_activity %}
+                                {{ news.last_activity|date:'d-M-Y, H:i' }}
+                            {% else %}
+                                {{ news.date_posted|date:'d-M-Y, H:i' }}
+                            {% endif %}
+                        </small>
+                        <h3 class="unblue"><a href="{% url 'news:detail' news.id %}">{{ news.title }}</a></h3>
+                    </td>
+                </tr>
+            </tbody>
+        </table><br>
     {% endfor %}
 
 {% endblock content %}
