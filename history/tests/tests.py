@@ -7,6 +7,7 @@ from history.forms import (ChronicleEventCreateForm, ChronicleEventEditForm, Chr
                            ChronicleEventNoteForm, TimelineEventCreateForm, TimelineEventInformForm,
                            TimelineEventNoteForm, TimelineEventEditForm)
 from users.models import User
+from debates.models import Topic, Debate
 
 
 # ------------------ CHRONICLE ------------------
@@ -546,12 +547,18 @@ class ChronicleEditTest(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user1.profile.character_status = 'gm'
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
+        self.user4 = User.objects.create_user(username='user4', password='pass1111')
+        self.user4.profile.character_status = 'gm'
+        self.user4.save()
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
         self.event1 = ChronicleEvent.objects.create(id=1, game=self.game1, event_no_in_game=1, description='Event1')
         self.event1.participants.set([self.user2.profile])
         self.event1.informed.set([self.user2.profile])
+
+        self.topic1 = Topic.objects.create(id=1, title='Topic1')
+        self.debate1 = Debate.objects.create(id=1, topic=self.topic1, starter=self.user1)
 
         self.url = reverse('history:chronicle-edit', kwargs={'event_id': self.event1.id})
 
@@ -596,13 +603,14 @@ class ChronicleEditTest(TestCase):
 
     # # TODO won't pass - WHY? error ' "" nie jest poprawną wartością.' though form.data seems legit
     # def test_valid_post_data(self):
-    #     self.client.force_login(self.user1)
+    #     self.client.force_login(self.user4)
     #     form = ChronicleEventEditForm(instance=self.event1)
     #     data = form.initial
     #
     #     print('\n', data)
     #     data['description'] = 'changed text'
     #     data['informed'] = [self.user2.profile]
+    #     data['debate'] = self.debate1.id
     #     print('\n', data)
     #     response = self.client.post(self.url, data)
     #     form = response.context.get('form')
