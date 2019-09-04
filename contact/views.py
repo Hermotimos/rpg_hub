@@ -36,7 +36,7 @@ def demands_main_view(request):
 @login_required
 def demands_create_view(request):
     if request.method == 'POST':
-        form = DemandsCreateForm(authenticated_user=request.user, data=request.POST or None, files=request.FILES)
+        form = DemandsCreateForm(authenticated_user=request.user, data=request.POST, files=request.FILES)
         if form.is_valid():
             demand = form.save(commit=False)
             demand.author = request.user
@@ -80,7 +80,7 @@ def demands_modify_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
 
     if request.method == 'POST':
-        form = DemandsModifyForm(instance=demand, data=request.POST or None, files=request.FILES)
+        form = DemandsModifyForm(instance=demand, data=request.POST, files=request.FILES)
         if form.is_valid():
             form.save()
 
@@ -114,7 +114,7 @@ def demands_detail_view(request, demand_id):
     answers = list(DemandAnswer.objects.filter(demand=demand))
 
     if request.method == 'POST':
-        form = DemandAnswerForm(request.POST or None, request.FILES)
+        form = DemandAnswerForm(request.POST, request.FILES)
         if form.is_valid():
             answer = form.save(commit=False)
             answer.demand = demand
@@ -230,7 +230,7 @@ def plans_for_gm_view(request):
 @login_required
 def plans_create_view(request):
     if request.method == 'POST':
-        form = PlansCreateForm(request.POST or None, request.FILES)
+        form = PlansCreateForm(request.POST, request.FILES)
         if form.is_valid():
             plan = form.save(commit=False)
             plan.author = request.user
@@ -274,7 +274,7 @@ def plans_delete_view(request, plan_id):
 def plans_modify_view(request, plan_id):
     plan = get_object_or_404(Plan, id=plan_id)
     if request.method == 'POST':
-        form = PlansModifyForm(instance=plan, data=request.POST or None, files=request.FILES)
+        form = PlansModifyForm(instance=plan, data=request.POST, files=request.FILES)
         if form.is_valid():
             plan = form.save()
 
