@@ -1,4 +1,8 @@
 
+.allowed-profiles-form-debate select {
+        min-height: 300px;
+        width: 400px;
+}
 
 table.forum {
         border: double;

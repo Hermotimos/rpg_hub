@@ -119,19 +119,8 @@ a.article-title:hover {
         border-style: double;
 }
 
-
 .border-custom-base {
         border-bottom: 1px solid #363636;
-}
-
-.allowed-profiles-form-history select {
-        min-height: 150px;
-        width: 400px;
-}
-
-.allowed-profiles-form-debate select {
-        min-height: 300px;
-        width: 400px;
 }
 
 .breadcrumbs small {
@@ -189,7 +178,7 @@ small {
 
 .forum tr:nth-child(even),
 .timeline tr:nth-child(even),
-.create-event tr:nth-child(even) {
+/*.create-event tr:nth-child(even)*/ {
         background-color: #f2f2f2;
 }
 

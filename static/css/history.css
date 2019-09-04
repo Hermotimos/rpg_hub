@@ -1,4 +1,10 @@
 
+
+.allowed-profiles-form-history select {
+        min-height: 150px;
+        width: 400px;
+}
+
 .timeline .year {%;}
 .timeline .day {width: %;}
 .timeline .thread {width: 18%;}
