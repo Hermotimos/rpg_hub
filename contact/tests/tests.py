@@ -136,6 +136,7 @@ class DemandsCreateTest(TestCase):
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
         self.assertTrue(form.errors)
+        self.assertTrue(Demand.objects.count() == 0)
 
     def test_invalid_post_data_empty_fields(self):
         self.client.force_login(self.user1)
@@ -149,6 +150,7 @@ class DemandsCreateTest(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertFalse(Demand.objects.exists())
         self.assertTrue(form.errors)
+        self.assertTrue(Demand.objects.count() == 0)
 
 
 class DemandsDeleteTest(TestCase):
