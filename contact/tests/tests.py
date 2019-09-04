@@ -263,6 +263,7 @@ class DemandsModifyTest(TestCase):
     #     # should show the form again, not redirect
     #     self.assertEquals(response.status_code, 200)
     #     self.assertTrue(form.errors)
+    #     self.assertFalse(Demand.objects.get(id=1).is_done)
 
     # # TODO Nonsense error for field image with null=True, blank=True:
     # # ValueError: The 'image' attribute has no file associated with it.
@@ -276,7 +277,7 @@ class DemandsModifyTest(TestCase):
     #     # should show the form again, not redirect
     #     self.assertEquals(response.status_code, 200)
     #     self.assertTrue(form.errors)
-    #     self.assertTrue(Demand.objects.get(id=1).text == 'Demand1')
+    #     self.assertTrue(Demand.objects.get(id=1).text)
 
 
 class DemandsDetailTest(TestCase):
@@ -357,7 +358,6 @@ class DemandsDetailTest(TestCase):
         form = response.context.get('form')
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
-        self.assertFalse(DemandAnswer.objects.exists())
         self.assertTrue(form.errors)
 
 
