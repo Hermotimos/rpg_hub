@@ -3,13 +3,17 @@ from django.urls import reverse, resolve
 from news import views
 from news.models import News, NewsAnswer
 from news.forms import CreateNewsForm, CreateNewsAnswerForm
-from users.models import User, Profile
+from users.models import User
 
 
 class MainTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
+
+        self.user4 = User.objects.create_user(username='user4', password='pass1111')
+        self.user4.profile.character_status = 'gm'
+
         self.news1 = News.objects.create(id=1, title='Title1', author=self.user1)
         self.news1.allowed_profiles.set([self.user1.profile, ])
         self.url = reverse('news:main')
@@ -28,7 +32,7 @@ class MainTest(TestCase):
         view = resolve('/news/')
         self.assertEquals(view.func, views.main_view)
 
-    def test_contains_links(self):
+    def test_links(self):
         linked_url1 = reverse('news:create')
         linked_url2 = reverse('news:detail', kwargs={'news_id': self.news1.id})
 
@@ -43,6 +47,12 @@ class MainTest(TestCase):
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
         self.assertNotContains(response, f'href="{linked_url2}"')
+
+        # case request.user.profile.character_status == 'gm'
+        self.client.force_login(self.user4)
+        response = self.client.get(self.url)
+        self.assertContains(response, f'href="{linked_url1}"')
+        self.assertContains(response, f'href="{linked_url2}"')
 
 
 class CreateTest(TestCase):
@@ -118,6 +128,7 @@ class DetailTest(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
+
         self.news1 = News.objects.create(id=1, title='News1', text='news1', author=self.user1)
         self.news1.allowed_profiles.set([self.user1.profile, self.user2.profile, ])
         self.news1.followers.set([self.user1.profile, ])
@@ -149,7 +160,7 @@ class DetailTest(TestCase):
         view = resolve(f'/news/detail:{self.news1.id}/')
         self.assertEquals(view.func, views.news_detail_view)
 
-    def test_contains_links(self):
+    def test_links(self):
         linked_url1 = reverse('news:unfollow', kwargs={'news_id': self.news1.id})
         linked_url2 = reverse('news:follow', kwargs={'news_id': self.news1.id})
 
