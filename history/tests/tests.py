@@ -534,15 +534,16 @@ class ChronicleEditTest(TestCase):
         form = response.context.get('form')
         self.assertIsInstance(form, ChronicleEventEditForm)
 
-    def test_valid_post_data(self):
-        self.client.force_login(self.user1)
-        data = {
-            'game': self.game1.id,
-            'event_no_in_game': 1,
-            'description': 'changed text',
-        }
-        self.client.post(self.url, data)
-        self.assertTrue(ChronicleEvent.objects.get(id=1).description == 'changed text')
+    # TODO This is not a meaningful test for edit form - see TimelineEventEditTest below
+    # def test_valid_post_data(self):
+    #     self.client.force_login(self.user1)
+    #     data = {
+    #         'game': self.game1.id,
+    #         'event_no_in_game': 1,
+    #         'description': 'changed text',
+    #     }
+    #     self.client.post(self.url, data)
+    #     self.assertTrue(ChronicleEvent.objects.get(id=1).description == 'changed text')
 
     def test_invalid_post_data(self):
         self.client.force_login(self.user1)
