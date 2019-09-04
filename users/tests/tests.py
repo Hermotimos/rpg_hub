@@ -42,6 +42,11 @@ class TestLogin(TestCase):
         redirect_url = reverse('users:profile')
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+        # TODO AttributeError: 'NoneType' object has no attribute 'get'
+        #  WHY? This test is copied from:
+        #  https://simpleisbetterthancomplex.com/series/2017/09/25/a-complete-beginners-guide-to-django-part-4.html
+        # user = response.context.get('user')
+        # self.assertTrue(user.is_authenticated)
 
     def test_invalid_post_data(self):
         data = {}
