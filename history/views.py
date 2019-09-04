@@ -578,10 +578,10 @@ def timeline_inform_view(request, event_id):
     participants = list(event.participants.all())
     participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in participants)
     participants_ids = [p.id for p in event.participants.all()]
-
     old_informed = list(event.informed.all())
     old_informed_ids = [p.id for p in old_informed]
     old_informed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in old_informed)
+    allowed = (participants + old_informed)
 
     if request.method == 'POST':
         form = TimelineEventInformForm(authenticated_user=request.user,
@@ -628,7 +628,7 @@ def timeline_inform_view(request, event_id):
         'participants': participants_str,
         'informed': old_informed_str
     }
-    if request.user.profile in participants or request.user.profile in old_informed:
+    if request.user.profile in allowed or request.user.profile.character_status == 'gm':
         return render(request, 'history/timeline_inform.html', context)
     else:
         return redirect('home:dupa')
@@ -643,6 +643,7 @@ def timeline_note_view(request, event_id):
     participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in participants)
     informed = list(event.informed.all())
     informed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in informed)
+    allowed = (participants + informed)
 
     try:
         current_note = TimelineEventNote.objects.get(event=event, author=request.user)
@@ -670,7 +671,7 @@ def timeline_note_view(request, event_id):
         'participants': participants_str,
         'informed': informed_str
     }
-    if request.user.profile in participants or request.user.profile in informed:
+    if request.user.profile in allowed or request.user.profile.character_status == 'gm':
         return render(request, 'history/timeline_note.html', context)
     else:
         return redirect('home:dupa')
