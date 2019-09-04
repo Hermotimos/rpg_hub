@@ -1,8 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
 from history import views
-from history.models import (Chapter,  ChronicleEvent, GameSession, GeneralLocation, SpecificLocation, Thread,
-                            TimelineEvent)
+from history.models import (Chapter,  ChronicleEvent, ChronicleEventNote, GameSession, GeneralLocation,
+                            SpecificLocation, Thread, TimelineEvent, TimelineEventNote)
 from history.forms import (ChronicleEventCreateForm, ChronicleEventEditForm, ChronicleEventInformForm,
                            ChronicleEventNoteForm, TimelineEventCreateForm, TimelineEventInformForm,
                            TimelineEventNoteForm, TimelineEventEditForm)
@@ -382,11 +382,6 @@ class ChronicleInformTest(TestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
-    def test_csrf(self):
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
-        self.assertContains(response, 'csrfmiddlewaretoken')
-
     def test_redirect_if_unallowed(self):
         # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
         self.client.force_login(self.user3)
@@ -420,6 +415,29 @@ class ChronicleInformTest(TestCase):
         view = resolve('/history/chronicle/inform:1/')
         self.assertEquals(view.func, views.chronicle_inform_view)
 
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+    def test_contains_form(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        form = response.context.get('form')
+        self.assertIsInstance(form, ChronicleEventInformForm)
+
+    # TODO no idea how to handle forms kwargs in tests
+    def test_valid_post_data(self):
+        pass
+
+    # TODO no idea how to handle forms kwargs in tests
+    def test_invalid_post_data(self):
+        pass
+
+    # TODO no idea how to handle forms kwargs in tests
+    def test_invalid_post_data_empty_fields(self):
+        pass
+
 
 class ChronicleNoteTest(TestCase):
     def setUp(self):
@@ -441,11 +459,6 @@ class ChronicleNoteTest(TestCase):
         redirect_url = reverse('users:login') + '?next=' + self.url
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-
-    def test_csrf(self):
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
-        self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_redirect_if_unallowed(self):
         # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
@@ -479,6 +492,53 @@ class ChronicleNoteTest(TestCase):
     def test_url_resolves_view(self):
         view = resolve(f'/history/chronicle/note:{self.event1.id}/')
         self.assertEquals(view.func, views.chronicle_note_view)
+
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+    def test_contains_form(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        form = response.context.get('form')
+        self.assertIsInstance(form, ChronicleEventNoteForm)
+
+    def test_valid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {
+            'author': self.user1.id,
+            'event': self.event1.id,
+            'text': 'Note1',
+            'color': '#C70039'
+        }
+        self.client.post(self.url, data)
+        self.assertTrue(ChronicleEventNote.objects.exists())
+
+    def test_invalid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {}
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+        self.assertTrue(ChronicleEventNote.objects.count() == 0)
+
+    def test_invalid_post_data_empty_fields(self):
+        self.client.force_login(self.user1)
+        data = {
+            'author': '',
+            'event': '',
+            'text': '',
+            'color': ''
+        }
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+        self.assertTrue(ChronicleEventNote.objects.count() == 0)
 
 
 class ChronicleEditTest(TestCase):
@@ -534,15 +594,21 @@ class ChronicleEditTest(TestCase):
         form = response.context.get('form')
         self.assertIsInstance(form, ChronicleEventEditForm)
 
-    # TODO This is not a meaningful test for edit form - see TimelineEventEditTest below
+    # # TODO won't pass - WHY? error ' "" nie jest poprawną wartością.' though form.data seems legit
     # def test_valid_post_data(self):
     #     self.client.force_login(self.user1)
-    #     data = {
-    #         'game': self.game1.id,
-    #         'event_no_in_game': 1,
-    #         'description': 'changed text',
-    #     }
-    #     self.client.post(self.url, data)
+    #     form = ChronicleEventEditForm(instance=self.event1)
+    #     data = form.initial
+    #
+    #     print('\n', data)
+    #     data['description'] = 'changed text'
+    #     data['informed'] = [self.user2.profile]
+    #     print('\n', data)
+    #     response = self.client.post(self.url, data)
+    #     form = response.context.get('form')
+    #     print('\n', form.errors)
+    #
+    #     # self.client.post(self.url, data)
     #     self.assertTrue(ChronicleEvent.objects.get(id=1).description == 'changed text')
 
     def test_invalid_post_data(self):
@@ -1500,11 +1566,6 @@ class TimelineInformView(TestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
-    def test_csrf(self):
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
-        self.assertContains(response, 'csrfmiddlewaretoken')
-
     def test_redirect_if_unallowed(self):
         # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
         self.client.force_login(self.user3)
@@ -1538,6 +1599,29 @@ class TimelineInformView(TestCase):
         view = resolve(f'/history/timeline/inform:{self.event1.id}/')
         self.assertEquals(view.func, views.timeline_inform_view)
 
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+    def test_contains_form(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        form = response.context.get('form')
+        self.assertIsInstance(form, TimelineEventInformForm)
+
+    # TODO no idea how to handle forms kwargs in tests
+    def test_valid_post_data(self):
+        pass
+
+    # TODO no idea how to handle forms kwargs in tests
+    def test_invalid_post_data(self):
+        pass
+
+    # TODO no idea how to handle forms kwargs in tests
+    def test_invalid_post_data_empty_fields(self):
+        pass
+
 
 class TimelineNoteView(TestCase):
     def setUp(self):
@@ -1560,11 +1644,6 @@ class TimelineNoteView(TestCase):
         redirect_url = reverse('users:login') + '?next=' + self.url
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-
-    def test_csrf(self):
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
-        self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_redirect_if_unallowed(self):
         # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
@@ -1598,6 +1677,53 @@ class TimelineNoteView(TestCase):
     def test_url_resolves_view(self):
         view = resolve(f'/history/timeline/note:{self.event1.id}/')
         self.assertEquals(view.func, views.timeline_note_view)
+
+    def test_csrf(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+    def test_contains_form(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        form = response.context.get('form')
+        self.assertIsInstance(form, TimelineEventNoteForm)
+
+    def test_valid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {
+            'author': self.user1.id,
+            'event': self.event1.id,
+            'text': 'Note1',
+            'color': '#C70039'
+        }
+        self.client.post(self.url, data)
+        self.assertTrue(TimelineEventNote.objects.exists())
+
+    def test_invalid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {}
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+        self.assertTrue(TimelineEventNote.objects.count() == 0)
+
+    def test_invalid_post_data_empty_fields(self):
+        self.client.force_login(self.user1)
+        data = {
+            'author': '',
+            'event': '',
+            'text': '',
+            'color': ''
+        }
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+        self.assertTrue(TimelineEventNote.objects.count() == 0)
 
 
 class TimelineEditView(TestCase):
@@ -1669,7 +1795,8 @@ class TimelineEditView(TestCase):
         form = response.context.get('form')
         self.assertIsInstance(form, TimelineEventEditForm)
 
-    # def test_valid_post_data(self):                                                  # TODO won't pass WHY?
+    # # TODO won't pass - WHY? error ' "" nie jest poprawną wartością.' though form.data seems legit
+    # def test_valid_post_data(self):
     #     self.client.force_login(self.user4)
     #     form = TimelineEventEditForm(instance=self.event1)
     #     data = form.initial
@@ -1688,7 +1815,9 @@ class TimelineEditView(TestCase):
 
     def test_invalid_post_data(self):
         self.client.force_login(self.user4)
-        data = {}
+        form = TimelineEventEditForm(instance=self.event1)
+        data = form.initial
+        data['informed'] = 'Wrong kind of data'
         response = self.client.post(self.url, data)
         form = response.context.get('form')
         # should show the form again, not redirect
@@ -1697,12 +1826,11 @@ class TimelineEditView(TestCase):
 
     def test_invalid_post_data_empty_fields(self):
         self.client.force_login(self.user4)
-        data = {
-            'description': '',
-        }
+        form = TimelineEventEditForm(instance=self.event1)
+        data = form.initial
+        data['informed'] = ''
         response = self.client.post(self.url, data)
         form = response.context.get('form')
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
         self.assertTrue(form.errors)
-        self.assertTrue(TimelineEvent.objects.get(id=1).description == 'Description1')
