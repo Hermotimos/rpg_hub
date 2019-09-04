@@ -8,7 +8,8 @@ STATUS = [
     ('dead_player', 'Martwy gracz'),
     ('living_npc', 'Bohater niezależny'),
     ('dead_npc', 'Martwy bohater niezależny'),
-    ('gm', 'Mistrz gry')
+    ('gm', 'Mistrz gry'),
+    ('spectator', 'Widz')
 ]
 
 
