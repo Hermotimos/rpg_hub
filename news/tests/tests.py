@@ -187,7 +187,7 @@ class DetailTest(TestCase):
         form = response.context.get('form')
         self.assertIsInstance(form, CreateNewsAnswerForm)
 
-    def test_valid_post_data(self):               # TODO still doesn't pass - user2.profile is not presented in choices
+    def test_valid_post_data(self):
         self.client.force_login(self.user1)
         data = {
             'text': 'news1',
