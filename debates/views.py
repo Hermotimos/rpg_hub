@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from debates.models import Topic, Debate
 from users.models import User, Profile
-from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm, UpdateDebateForm
+from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm, InviteForm
 
 
 @login_required
@@ -215,10 +215,10 @@ def debates_invite_view(request, topic_id, debate_id):
     old_followers = debate.followers.all()
 
     if request.method == 'POST':
-        form = UpdateDebateForm(authenticated_user=request.user,
-                                already_allowed_profiles_ids=old_allowed_profiles_ids,
-                                data=request.POST,
-                                instance=debate)
+        form = InviteForm(authenticated_user=request.user,
+                          already_allowed_profiles_ids=old_allowed_profiles_ids,
+                          data=request.POST,
+                          instance=debate)
         if form.is_valid():
             debate = form.save()
 

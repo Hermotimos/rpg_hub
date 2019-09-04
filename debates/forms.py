@@ -100,7 +100,7 @@ class CreateRemarkForm(forms.ModelForm):
     )
 
 
-class UpdateDebateForm(forms.ModelForm):
+class InviteForm(forms.ModelForm):
     class Meta:
         model = Debate
         fields = ['allowed_profiles']
@@ -108,7 +108,7 @@ class UpdateDebateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
         already_allowed_profiles_ids = kwargs.pop('already_allowed_profiles_ids')
-        super(UpdateDebateForm, self).__init__(*args, **kwargs)
+        super(InviteForm, self).__init__(*args, **kwargs)
         unallowable_profiles = Profile.objects.exclude(Q(user=authenticated_user) |
                                                                            Q(character_status='dead_player') |
                                                                            Q(character_status='dead_npc') |
