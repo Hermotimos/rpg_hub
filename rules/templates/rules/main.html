@@ -12,6 +12,52 @@
 
 {% block content %}
     <br><br><br>
+    <h3 class="unblue mb-0 chapter-title">
+        <img src="{{ chapter.image.url }}" class="border-double img-chapter">
+        <a href="#traits" class="align-middle pt-3">Cechy</a>
+    </h3><br>
+    <h3 class="unblue mb-0 chapter-title">
+        <img src="{{ chapter.image.url }}" class="border-double img-chapter">
+        <a href="#classes" class="align-middle pt-3">Klasa postaci</a>
+    </h3><br>
+    <h3 class="unblue mb-0 chapter-title">
+        <img src="{{ chapter.image.url }}" class="border-double img-chapter">
+        <a href="#levelups" class="align-middle pt-3">Awanse</a>
+    </h3><br>
+    <h3 class="unblue mb-0 chapter-title">
+        <img src="{{ chapter.image.url }}" class="border-double img-chapter">
+        <a href="#multiclassing" class="align-middle pt-3">Wieloklasowość i awanse</a>
+    </h3><br>
+    <h3 class="unblue mb-0 chapter-title">
+        <img src="{{ chapter.image.url }}" class="border-double img-chapter">
+        <a href="{% url 'rules:skills' %}" class="align-middle pt-3">Umiejętności</a>
+    </h3><br>
+    <h3 class="unblue mb-0 chapter-title">
+        <img src="{{ chapter.image.url }}" class="border-double img-chapter">
+        <a href="#rouge-skills" class="align-middle pt-3">Umiejętności "łotrzykowskie"</a>
+    </h3><br>
+    <h3 class="unblue mb-0 chapter-title">
+        <img src="{{ chapter.image.url }}" class="border-double img-chapter">
+        <a href="#arms-skills" class="align-middle pt-3">Biegłości i broń</a>
+    </h3><br>
+    <h3 class="unblue mb-0 chapter-title">
+        <img src="{{ chapter.image.url }}" class="border-double img-chapter">
+        <a href="#" class="align-middle pt-3">Walka - do wrzucenia</a>
+    </h3><br>
+    <h3 class="unblue mb-0 chapter-title">
+        <img src="{{ chapter.image.url }}" class="border-double img-chapter">
+        <a href="#armor" class="align-middle pt-3">Zbroja</a>
+    </h3><br>
+    <h3 class="unblue mb-0 chapter-title">
+        <img src="{{ chapter.image.url }}" class="border-double img-chapter">
+        <a href="#damage" class="align-middle pt-3">Obrażenia i progi ran</a>
+    </h3><br>
+    <h3 class="unblue mb-0 chapter-title">
+        <img src="{{ chapter.image.url }}" class="border-double img-chapter">
+        <a href="#character-sheet" class="align-middle pt-3">Karta postaci</a>
+    </h3><br>
+
+    <br id="traits"><br><br>
     <h2 class="rules">Cechy</h2>
         <p>Trzy cechy opisujące postać to: Siła, Zręczność i Kondycja, a ich bazowe wartości to: 11, 11, 11. Przeciętne wartości dla człowieka to 10. Te bazowe cechy graczy są ponadprzeciętne, ponieważ gracze wcielają się w „bohaterów”.</p>
         <p>Istnieje możliwość przesunięcia ok. 3 pkt przy uzasadnieniu silnymi rysami biografii lub fizjologii. O zakresie przesunięć decyduje MG na podstawie opisu gracza. Taki opis stanowi potem wyzwanie w zakresie odgrywania postaci.</p>
@@ -20,7 +66,7 @@
         <br>
         <iframe width="820" height="714" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21183&authkey=%21AI54yAAKXHbpOcQ&em=2&wdAllowInteractivity=False&AllowTyping=True&ActiveCell='CECHY'!C24&Item='CECHY'!A1%3AS30&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
 
-    <br><br><br><br>
+    <br><br id="classes"><br><br>
     <h2 class="rules">Klasa postaci</h2>
         <p>Początkowa klasa postaci to inaczej profesja: Syssition, Starogwardzista, Strażnik, Rozbójnik, Kapłan Eyra, Aeromanta, Krystalomanta, Kupiec, Kuglarz, Grajek; a wyjątkowo nazwę rodu: (np. w Umbrze albo innych częściach świata): Haznyta, Belochita, Seressyta; Kyrn, Ketys itd.</p>
         <p>Wymienione klasy można potraktować jak podklasy znanych z AD&D klas: Wojownik, Łowca, Kapłan, Mag, Złodziej, Bard. Przykładowo dla Syssitiona zasady rozwoju postaci są oparte na klasie Wojownik, a dla Starogwardzisty na klasie Łowca, choć w obu przypadkach z pewnymi modyfikacjami: </p>
@@ -43,7 +89,7 @@
                 <li>Co poziom +15% umiejętności łotrzykowskich.</li>
             </ul>
 
-    <br><br>
+    <br id="levelups"><br><br>
     <h2 class="rules">Awanse</h2>
         <p>Awanse następują po identycznych progach liczbowych doświadczenia typowych dla danej klasy (np. Starogwardzista - co 2000 exp.). Ilość przyznawanego exp. jest stała - nie podlega mnożnikowi za heroiczność czynów - jest uzależniona raczej od tego, co nowego dane doświadczenie może wnieść do rozwoju indywiduum odgrywanego przez gracza. Dlatego pierwszych parę poziomów przyrasta raczej wolno, potem można się spodziewać przyspieszenia ze względu na zwiększone możliwości przerobowe różnych wyzwań typu walka i próby cech, a następnie spowolnienia związanego z wyczerpaniem się sfery nowych doświadczeń w danej dziedzinie. Odzwierciedla to zarazem normalną dynamikę uczenia się oraz osiągania biegłości, a następnie mistrzostwa w danej dziedzinie.</p>
         <p>Każdy awans wiąże się z 1 pkt do rozdysponowania między cechy fizyczne, jednak z respektowaniem ograniczeń fabularnych. Aby uzyskać bardzo wysoki poziom jakiejś cechy, może być konieczne wykreowanie bardzo specyficznych sytuacji fabularnych.</p>
@@ -52,8 +98,8 @@
         <p>Taki system awansów wiąże się z koniecznością prowadzenia osobnej tabeli awansów, w której będą wykazane wszystkie modyfikatory uzyskane na każdym poszczególnym poziomie, najlepiej wraz z hasłowym opisem uzasadnienia fabularnego (funkcja pomocnicza do zachowania ciągłości kontaktu z bohaterem w przypadku dłuższych przerw w grze).</p>
         <iframe width="820" height="636" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21177&authkey=%21AKc73V08HYwLiig&em=2&wdAllowInteractivity=False&Item='AWANSE'!A1%3AL22&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
 
-    <br><br><br><br>
-    <h2 class="rules">Wieloklasowość</h2>
+    <br><br id="multiclassing"><br><br>
+    <h2 class="rules">Wieloklasowość i awanse</h2>
         <p>Klasa postaci stanowi jedynie standardową, domyślną ramę dla rozwoju postaci. Jedynymi ograniczeniami dla zawodu/profesji/klasy postaci jest fabuła, czyli wypadkowa działań postaci w realiach świata przedstawionego. Nic nie stoi na przeszkodzie, aby czterdziestoletni rozbójnik zaczął parać się magią nekromantyczną... nic poza realiami niesprzyjającymi takiej przemianie. Jednak opór i konsekwencja, przy odrobinie szczęścia, potrafią odmienić ludzkie losy...</p>
 
         <p>Rozwój innych klas niż bazowa odbywa się w taki sposób, że gracz powinien zadeklarować taką chęć oraz tak kierować działaniami postaci, żeby zyskiwała ona doświadczenie typowe dla innej klasy. Od tego momentu dalszy rozwój przebiega mniej więcej równolegle, to znaczy, że gracz ma prawo rozdysponować nowo otrzymywane doświadczenie między wiodącą klasę postaci a dodatkową klasę postaci, wedle następujących zasad:</p>
@@ -65,7 +111,7 @@
         <p>Wszelkie klasy dodatkowe korzystają jedynie z zasad dotyczących awansów, ale nie z początkowych bonusów dla danej klasy. Oznacza to, że wybór dodatkowej klasy Złodziej nie powoduje wzrostu umiejętności złodziejskich do początkowych wartości dla Złodzieja; podobnie wybór dodatkowej klasy czarodziej nie powoduje uzyskania ilości czarów typowej dla czarodzieja 1 poziomu. Natomiast każdy awans w ramach dodatkowej klasy przynosi wszelkie korzyści typowe dla niej.</p>
         <p>Podsumowując, dodatkowa klasa jest trudniejsza do rozwoju niż klasa wiodąca, a także jej rozwój startuje z niższej pozycji niż gdyby ta klasa była wiodącą. Natomiast wieloklasowość nigdy nie wymaga porzucania wcześniejszej klasy – pozwala rozwijać ją równocześnie w tempie w dużej mierze zależnym od gracza. </p>
 
-    <br><br>
+    <br id="arms-skills"><br><br>
     <h2 class="rules">Biegłości i broń</h2>
         <p>W zależności od umiejętności władania bronią (tzw. biegłości) postać może preferować pewne klasy broni lub któryś bardzo konkretny typ. Umiejętność władania bronią można podzielić na cztery stopnie zależne od ilości zainwestowanych punktów biegłości:</p>
         <h6 class="rules">Poziomy umiejętności władania bronią:</h6>
@@ -87,7 +133,7 @@
         <iframe width="820" height="650" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21184&authkey=%21APT9nIHLrUmMSlk&em=2&wdAllowInteractivity=False&Item='BRO%C5%83'!A1%3AL110&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
 
 
-    <br><br><br><br>
+    <br><br id="rouge-skills"><br><br>
     <h2 class="rules">Umiejętności „łotrzykowskie”</h2>
         <p>Są dostępne dla każdej klasy i profesji. Każdy awans każdej profesji może skutkować bonusem +5% do jednej lub więcej umiejętności łotrzykowskiej, o ile jest to uzasadnione fabularnie poprzez wielokrotne użycie. W praktyce w przypadku Starogwardzisty oznacza to bardzo powolny rozwój w tym zakresie, chyba że dana postać rzeczywiście oddaje się takim czynnościom bardzo często. Inaczej rzecz by się miała w przypadku profesji np. Kuglarza albo Grajka, które mogą być oparte na klasie „złodziej”. </p>
         <h6 class="rules">Starogwardzista</h6>
@@ -115,7 +161,7 @@
             <br>
         <iframe width="820" height="322" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21174&authkey=%21AAA1gAvS7QFa6FU&em=2&wdAllowInteractivity=False&AllowTyping=True&ActiveCell='Umiej%C4%99tno%C5%9Bci%20%C5%82otrzykowskie'!B3&Item='Umiej%C4%99tno%C5%9Bci%20%C5%82otrzykowskie'!A1%3AJ11&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
 
-    <br><br><br><br>
+    <br><br id="armor"><br><br>
     <h2 class="rules">Zbroja</h2>
         <p>Zbroje oprócz modyfikowania KP posiadają punkty wyparowań, które określają, ile obrażeń dana zbroja przejmuje z ciosu na siebie. Takie obrażenia nie są ponoszone przez postać, natomiast uszkadzają zbroję, powodując jej powolną dezintegrację. Dla uproszczenia przyjmujemy, ze zbroja w złym stanie - powyżej 50% uszkodzeń - daje KP o 1 gorsze.</p>
         <p>Oznacza to konieczność prowadzenia dwóch tabeli obrażeń: jednej dla postaci (obrażenia podlegające leczeniu) oraz dla zbroi (obrażenia trwałe, poddające się 1-2 krotnej naprawie u specjalisty).</p>
@@ -123,7 +169,7 @@
         <br>
         <iframe width="820" height="710" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21182&authkey=%21ALLarqqIsDb5eVw&em=2&wdAllowInteractivity=False&Item='ZBROJA'!A1%3AI27&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
 
-    <br><br><br><br>
+    <br><br id="damage"><br><br>
     <h2 class="rules">Obrażenia i progi ran</h2>
         <p>Obrażenia wg progów ran dzielą się na lekkie, średnie, ciężkie oraz rany śmiertelne. Rany poniżej lekkich to zadraśnięcia i obicia, które generalnie przestają obciążać żywotność postaci już po kilku godzinach.</p>
         <p>Progi ran należy czytać następująco: np 3/6/9/12 oznacza, że rany Lekkie zaczynają się od 3 obr., a Śmiertelne od 12. Innymi słowy Lekkie 3-5, Średnie 6-8, Ciężkie 9-11, Śmiertelne od 12. A zatem progi ran 3/6/9/12 można też zapisać jako 3-5/6-8/9-11/12.</p>
@@ -135,7 +181,7 @@
             </ul>
         <p>Dodatkowo obrażenia powinny być przypisywane przez graczy do poszczególnych części ciała wraz z hasłowym opisem. W tym celu - stos kartek ze schematyczną ilustracją części ciała.</p>
 
-    <br><br>
+    <br id="character-sheet"><br><br>
     <h2 class="rules">Karta postaci</h2>
         <p>Poniższe szablony karty postaci wymagają instalacji czcionki "IM Fell Great Primer", aby zachować układ strony. Przy braku tej czcionki formatowanie tekstu będzie wyglądać gorzej. Karty postaci można ściągnąć przez ikonę w pasku poniżej tabeli (tak samo wszystkie wcześniejsze tabele).</p>
 
