@@ -13,7 +13,7 @@
 
 {% block content %}
     <br><br><br>
-    <h2 class="rules">Umiejętności początkowe i rozwój</h2>
+    <h2 class="rules">Umiejętności początkowe</h2>
         <p>Każda postać rozpoczyna grę z pewnym zakresem umiejętności, zależnym od jej biografii oraz klasy postaci. Początkowa ilość punktów umiejętności do rozdysponowania różni się w zalżności od klasy: Wojownik i Łowca - 3, ale Syssition i Starogwardzista - 4; Kapłan, Bard, Kupiec, Czarodziej - 4; Łotrzyk - 3. Dalsze nabywanie umiejętności jest ograniczone jedynie ramami fabuły. Poniżej przykład klasy Starogwardzisty oraz Syssitiona.</p>
         <h5 class="rules">Starogwardzista</h5>
         <p>Starogwardziści są szkoleni dość wszechstronnie, dlatego nie osiągają tak wcześnie jak wojownicy specjalizacji w walce, natomiast dysponują znaczącą ilością umiejętności. Do tego pewne umiejętności posiadają zawsze od początku, co wynika ze sposobu wychowania.</p>
@@ -40,7 +40,12 @@
         <tr>
             <td class="align-top"><img src="{% static 'img/0.png' %}" class="border-double img-numeral"></td>
             <td class="align-bottom pl-1 justify">
-                <b>Brak umiejętnośći</b><br><br>
+                <b>Brak umiejętności</b><br>
+                Postać nie posiada jakiejkolwiek sprawności w danym zakresie, która wykraczałaby ponad przeciętne rozeznanie w świecie i rozgarnięcie życiowe.
+                Ewentualnie postaci może się zdawać, że coś na dany temat wie albo umie.
+                Oczywiście w niczym nie stoi to na przeszkodzie, żeby się wymądrzać.<br>
+                Jeśli postać spróbuje użyć danej umiejętności, to istnieje oczywiście szansa na to, że jej działanie się powiedzie, jednak jest to szansa niezwykle mała...
+                <br><br>
             </td>
         </tr>
         <tr>
@@ -48,7 +53,7 @@
             <td class="align-bottom pl-1 justify">
                 <b>Sprawność</b><br>
                 Pozwala na wykonywanie standardowych testów za powodzenie zastosowania danej umiejętności z modyfikatorami zależnymi od sytuacji.
-                Taką umiejętność można nabyć za punkt umiejętności otrzymywane przy awansach.
+                Taką umiejętność można nabyć za 1 pkt umiejętności otrzymany przy awansie.
                 <br><br>
             </td>
         </tr>
@@ -75,6 +80,18 @@
     </table>
     <br><br><br>
 
+    <h2 class="rules">Rozwój umiejętności</h2>
+        <p>
+            Punkty Umiejetności, podobnie jak Punkty Biegłości można wydawać w chwili awansu i tylko wtedy.
+            Oznacza to, że aby uzyskać nową umiejętność wraz z awansem, należy ją rozwijać już wcześniej.
+            Jeśli gracz tego nie robił bądź robił niemrawo, to dany awans nie przynosi punktu umiejętności albo biegłości,
+            tak samo jak nie da +1 cechy, jeśli cały poziom został nabyty na stanowisku urzędnika portowego albo celnika na mało ruchliwym brodzie.
+            W przypadku 2 i 3 poziomu umiejętności, które wymagają odpowiednio 200 exp i 500 exp., punkty te trzeba przeznaczyć na umiejętność w trakcie nauki,
+            czyli w trakcie nabijania danego poziomu - co de facto opóźnia awans.
+            Tylko pod tym warunkiem w chwili awansu jest się gotowym do wejścia na wyższy poziom danej umiejętności (przez wydanie Punktu Umiejętności).
+            Deklarację o wydaniu 200/500 exp. można złożyć w dowolnym momencie w trakcie zdobywania nowego poziomu, ale najlepiej po uzyskaniu od Mistrza Gry potwierdzenia, że nauka przynosi pierwsze efekty.
+        </p>
+        <br><br><br>
 
     <h2><b class="hover-blue" data-toggle="collapse" data-target="#skills">Lista umiejętności</b></h2>
     <br>
