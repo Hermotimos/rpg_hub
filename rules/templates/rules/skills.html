@@ -42,13 +42,15 @@
             <br>
             {% if skill.image %}
                 <img src="{{ skill.image.url }}" class="border-double img-skill">
+            {% else %}
+                <img src="{% static 'img/skill-default.png' %}" class="border-double img-skill">
             {% endif %}
-            <h1 class="hover-blue pt-2" data-toggle="collapse" data-target="#{{ skill.name }}">
+            <h1 class="hover-blue pt-2" data-toggle="collapse" data-target="#{{ skill.short_name }}">
                 <b>{{ skill.name }}</b>
             </h1>
             <small>{{ skill.description }}</small>
             <br>
-            <div id="{{ skill.name }}" class="collapse">
+            <div id="{{ skill.short_name }}" class="collapse">
                 <table class="skills-table">
                     <tr>
                         <td class="align-top"><img src="{% static 'img/0.png' %}" class="border-double img-numeral"></td>

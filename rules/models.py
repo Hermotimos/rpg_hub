@@ -19,6 +19,9 @@ class Skill(models.Model):
     def __str__(self):
         return self.name
 
+    def short_name(self):
+        return ''.join(word[:3] for word in str(self.name).split(' '))
+
 
 class Synergy(models.Model):
     skills = models.ManyToManyField(Skill, related_name='skills')
