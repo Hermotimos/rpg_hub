@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from rules.models import Skill, Synergy
 
 
 @login_required
@@ -9,4 +10,21 @@ def rules_main_view(request):
         'page_title': 'Zasady'
     }
     return render(request, 'rules/main.html', context)
+
+
+@login_required
+def skills_and_synergies_view(request):
+    if request.user.profile.character_status == 'gm':
+        skills = list(Skill.objects.all())
+        synergies = list(Synergy.objects.all())
+    else:
+        skills = list(request.user.profile.allowed_skills.all())
+        synergies = list(request.user.profile.allowed_synergies.all())
+
+    context = {
+        'page_title': 'Umiejętności',
+        'skills': skills,
+        'synergies': synergies
+    }
+    return render(request, 'rules/skills.html', context)
 

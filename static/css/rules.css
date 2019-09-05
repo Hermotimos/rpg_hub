@@ -11,3 +11,29 @@ ol.rules li, ul.rules li {
 li b {
         color: #444444;
 }
+
+.img-skill {
+        float: left;
+        height: 60px;
+        width: auto;
+        margin-right: 5px;
+}
+
+.img-skill h3:hover {
+        pointer-events: none;
+}
+
+.no-bullet {
+        list-style: none;
+}
+
+.skills-table {
+        margin: 30px;
+}
+
+.img-numeral {
+        float: left;
+        height: 30px;
+        width: auto;
+        margin-right: 5px;
+}
