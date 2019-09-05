@@ -26,19 +26,15 @@
             <a href="{% url 'history:chronicle-one-chapter' chapter.id %}" class="align-middle pt-2">
                 {{ chapter.title }}
             </a>
-
         </h3>
         <br>
         {% for game in chapters_with_games_dict|dict_lookup:chapter %}
-        <tr>
-            <td>
-                <h6 class="unblue">
-                    {{ forloop.counter }}.
-                    <a href="{% url 'history:chronicle-one-game' game.id %}">{{ game.title }}</a>
-                </h6>
-            </td>
-        </tr>
+            <h6 class="unblue">
+                {{ forloop.counter }}.
+                <a href="{% url 'history:chronicle-one-game' game.id %}">{{ game.title }}</a>
+            </h6>
         {% endfor %}
+        <br>
     {% endfor %}
 
 {% endblock content %}
