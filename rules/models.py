@@ -33,6 +33,9 @@ class Synergy(models.Model):
     def name(self):
         return self.__str_()
 
+    def short_name(self):
+        return ''.join(s.name[:3] for s in self.skills.all())
+
     class Meta:
         verbose_name = 'Synergy'
         verbose_name_plural = 'Synergies'
