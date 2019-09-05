@@ -18,7 +18,10 @@
 
     <br><br>
     {% for topic in topics %}
-        <h3>{{ topic.title }}</h3>
+        <h3>
+            {{ topic.title }}&nbsp;&nbsp;
+            <a href="{% url 'debates:create-debate' topic.id %}" class="btn btn-outline-dark">Nowa narada</a>
+        </h3>
         {% if topic.description %}
             <small>{{ topic.description }}</small> <br>
         {% endif %}<br>
@@ -62,9 +65,7 @@
             {% endfor %}
             </tbody>
         </table>
-        <br>
-        <div class="mb-4">
-            <a href="{% url 'debates:create-debate' topic.id %}" class="btn btn-outline-dark">Nowa narada</a>
-        </div><br><br>
+        <br><br><br><br>
+
     {% endfor %}
 {% endblock content %}
