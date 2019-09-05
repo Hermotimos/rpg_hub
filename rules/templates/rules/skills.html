@@ -132,9 +132,9 @@
                     <img src="{{ skill.image.url }}" class="border-double img-skill">
                 {% endif %}
             {% endfor %}
-            <h1 class="hover-blue pt-2" data-toggle="collapse" data-target="#{{ synergy.short_name }}">
+            <h2 class="hover-blue pt-3" data-toggle="collapse" data-target="#{{ synergy.short_name }}">
                {{ synergy.name }}
-            </h1>
+            </h2><br>
             <div id="{{ synergy.short_name }}" class="collapse">
                 <table class="skills-table">
                     {% if synergy.lvl_1 %}
