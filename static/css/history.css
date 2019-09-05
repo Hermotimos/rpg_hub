@@ -105,6 +105,11 @@ td img {
         margin-right: 5px;
 }
 
+.chapter-title  {
+        line-height: 1;
+}
+
+
 .account-img-timeline {
         display: block;
         height: auto;
