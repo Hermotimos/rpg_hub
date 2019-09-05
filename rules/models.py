@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from users.models import Profile
 
 
@@ -11,7 +12,14 @@ class Skill(models.Model):
     lvl_2 = models.TextField(max_length=4000, blank=True, null=True, verbose_name='2')
     lvl_3 = models.TextField(max_length=4000, blank=True, null=True, verbose_name='3')
     image = models.ImageField(blank=True, null=True, upload_to='site_features_pics')
-    allowed_profiles = models.ManyToManyField(Profile, related_name='allowed_skills', blank=True)
+    allowed_profiles = models.ManyToManyField(Profile,
+                                              blank=True,
+                                              limit_choices_to=
+                                              Q(character_status='active_player') |
+                                              Q(character_status='inactive_player') |
+                                              Q(character_status='dead_player'),
+                                              related_name='allowed_skills',
+                                              )
 
     class Meta:
         ordering = ['name']
@@ -28,7 +36,14 @@ class Synergy(models.Model):
     lvl_1 = models.TextField(max_length=4000, blank=True, null=True, verbose_name='1')
     lvl_2 = models.TextField(max_length=4000, blank=True, null=True, verbose_name='2')
     lvl_3 = models.TextField(max_length=4000, blank=True, null=True, verbose_name='3')
-    allowed_profiles = models.ManyToManyField(Profile, related_name='allowed_synergies', blank=True)
+    allowed_profiles = models.ManyToManyField(Profile,
+                                              blank=True,
+                                              limit_choices_to=
+                                              Q(character_status='active_player') |
+                                              Q(character_status='inactive_player') |
+                                              Q(character_status='dead_player'),
+                                              related_name='allowed_synergies',
+                                              )
 
     def __str_(self):
         return ' + '.join(s.name for s in self.skills.all())
