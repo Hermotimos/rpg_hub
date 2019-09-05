@@ -14,7 +14,7 @@
 
 {% block content %}
     <br><br><br>
-    <form method="POST">
+    <form method="POST" class="allowed-profiles-form-debate">
         {% csrf_token %}
 
         <!-- NEW TOPIC -->
@@ -24,7 +24,7 @@
         {{ topic_form.description.errors }}<br><br>
 
         <!-- NEW DEBATE -->
-        <fieldset class="allowed-profiles-form-debate">
+        <fieldset>
             {{ debate_form.name|as_crispy_field }}<br>
             {{ debate_form.name.errors }}
 

@@ -48,6 +48,7 @@ class CreateNewsForm(forms.ModelForm):
         super(CreateNewsForm, self).__init__(*args, **kwargs)
         self.fields['allowed_profiles'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
                                                                            Q(character_status='dead_player') |
+                                                                           Q(character_status='inactive_player') |
                                                                            Q(character_status='living_npc') |
                                                                            Q(character_status='dead_npc') |
                                                                            Q(character_status='gm'))

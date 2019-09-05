@@ -14,7 +14,7 @@
 
 {% block content %}
     <br><br><br>
-    <form method="POST" enctype="multipart/form-data" class="allowed-profiles-form-history">
+    <form method="POST" enctype="multipart/form-data" class="allowed-profiles-form-news">
         {% csrf_token %}
 
         {{ form.title|as_crispy_field }}
