@@ -13,7 +13,7 @@ def rules_main_view(request):
 
 
 @login_required
-def skills_and_synergies_view(request):
+def rules_skills_view(request):
     if request.user.profile.character_status == 'gm':
         skills = list(Skill.objects.all())
         synergies = list(Synergy.objects.all())
@@ -28,3 +28,11 @@ def skills_and_synergies_view(request):
     }
     return render(request, 'rules/skills.html', context)
 
+
+@login_required
+def rules_combat_view(request):
+
+    context = {
+        'page_title': 'Walka'
+    }
+    return render(request, 'rules/combat.html', context)

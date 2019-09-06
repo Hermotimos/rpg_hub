@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{% static 'css/rules.css' %}" xmlns="http://www.w3.org/1999/html">
+{% endblock head_extra %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'rules:main' %}">Zasady</a></li>
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br><br><br>
+    <h2 class="rules">Przebieg rundy walki</h2>
+        <br>
+        <ol class="rules">
+            <li>Deklaracje graczy na podstawie opisu sytuacji.</li>
+            <li>Rzuty za Inicjatywę (k6) i ustalenie kolejności działań.</li>
+            <li>Rzuty za Trafienie (k20).</li>
+            <li>W razie trafienia rzut za Obrażenia (zależnie od broni).</li>
+            <li>Ewentualne dalsze ataki (ataki zostawione na koniec rundy lub dodatkowe ataki).</li>
+        </ol>
+        <br>
+    <h5 class="rules">Deklaracje</h5>
+        <p>
+            Gracz składa deklarację akcji, jaką podejmie w rundzie na podstawie opisów sytuacji z poprzedniej rundy;
+            może też dopytać o aktualną sytuację, jeśli MG jej nie opisał albo nie opisał jakiegoś aspektu.
+            Po złożeniu deklaracji nie ma możliwości jej zmiany w reakcji na opisane działanie przeciwnika (chyba że postać dysponuje umiejętnością Refleks w walce).
+            Wyprowadzenie ataku następuje mniej więcej jednocześnie, a rzuty za Inicjatywę określają, który atak dotrze pierwszy.
+        </p>
+        <p>
+            Pozostawienie ataku na koniec rundy może mieć najwyżej ten skutek, że postać wyczeka aż przeciwnik się zbliży lub ustawi w konkretny sposób,
+            albo aż walczący przemieszczą się odsłaniając dostęp do konkretnego przeciwnika.
+        </p>
+        <p>
+            Postać może deklarować różnego rodzaju specjalne ataki, jak próba trafienia w określoną część ciała,
+            jednoczesne sypnięcie piaskiem po oczach albo próba taranowania czy wytrącenia broni.
+            Każda taka deklaracja wymaga dodatkowego rzutu za SIŁ, ZRC albo KON zależnie od sytuacji.
+            W zależności od stopnia karkołomności zadeklarowanej akcji.
+        </p>
+        <br>
+    <h5 class="rules">Inicjatywa</h5>
+        <p>
+            Rzut za Inicjatywę określa kolejność ciosów. Jest ona szczególnie ważna, gdy postać ma szanse wyeliminować przeciwnika z walki lub w inny sposób uniknąć jego ciosu.
+            Dzieje się tak w przypadku zadania ciosu absolutnie śmiertelnego (Rany Śmiertelne +5),
+            a może się tak stać w przypadku zadania Ran Śmiertelnych, Krytyka lub pozbawienia przeciwnika Życia do poziomu Progu przytomności.
+        </p>
+        <p>
+            Rzut za Inicjatywę może być pominięty, jeśli z sytuacji wynika, że czyjś atak musi nastąpić wcześniej albo później
+            (np. postać musi dobiec, zmienia broń albo zbytu długo wahała się co do akcji), a także w przypadku Szarży, gdy ataki następują jednocześnie
+            (wyjątek to przyjęcie szarży przy pomocy broni drzewcowej, gdy automatycznie pierwszy atak należy do przyjmującego szarżę).
+        </p>
+        <p>
+            Inicjatywę oblicza się sumując:
+        </p>
+            <ol class="rules">
+                <li>Opóźnienie broni.</li>
+                <li>Wynik rzutu za Inicjatywę (k6).</li>
+                <li>Modyfikatory Refleksu zależne od ZRC oraz Umiejętności.</li>
+            </ol>
+        <br>
+    <h5 class="rules">Rzut za Trafienie</h5>
+        <p>
+            Rzut za Trafienie decyduje o powodzeniu ataku.
+            Wynik 20 to Krytyk, który skutkuje automatycznym trafieniem oraz podwojeniem ran obliczonych ze wszystkimi modyfikatorami dla normalnego trafienia.
+            Przed Krytykiem mogą jednak chronić  karwasze, nagolenniki i hełm. Natomiast wynik 1 to Krytyczne pudło,
+            które w zależności od sytuacji może skutkować wypuszczeniem broni albo zranieniem innego uczestnika walki niż się zamierzało, a nawet zranieniem się własną bronią
+            (np. przy miotaniu miksturą albo walce korbaczem czy cepem).
+        </p>
+        <p>
+            Trafienie  oblicza się sumując:
+        </p>
+            <ol class="rules">
+                <li>
+                    Modyfikatory do TRAF (zależne od SIŁ/ZRC, Poziomu, Biegłości, Umiejętności, właściwości broni,
+                    a także modyfikatory sytuacyjne od ataku z boku, od tyłu, przyjęcia szarży, oraz modyfikatory negatywne –
+                    od braku umiejętności władania bronią, otrzymanych ran, II i III progu zasięgu broni dystansowej, walki 2 brońmi i inne sytuacyjne).
+                </li>
+                <li>
+                    Rzut za Trafienie (k20). Następnie sumę tę należy zestawić z sumą KP przeciwnika. Jeśli TRAF &#8805; KP &#8594; sukces ataku i zadanie obrażeń).
+                </li>
+                <li>
+                    Modyfikatory Refleksu zależne od ZRC oraz Umiejętności.
+                </li>
+            </ol>
+        <br>
+    <h5 class="rules">Rzut za Obrażenia</h5>
+        <p>
+            Rzut za Obrażenia decyduje o ilości pktów Życia, jakie utraci przeciwnik w wyniku trafienia, oczywiście po uwzględnieniu Wyparowań.
+        </p>
+        <p>
+            Obrażenia oblicza się sumując:
+        </p>
+            <ol class="rules">
+                <li>Rzut za Obrażenia zadane przez broń.</li>
+                <li>
+                    Modyfikatory do OBR (zależne od SIŁ/ZRC, Poziomu, Biegłości, Umiejętności, właściwości broni,
+                    a także modyfikatory sytuacyjne od natarcia szarżą,  oraz modyfikatory negatywne – od braku umiejętności władania bronią,  otrzymanych ran i inne sytuacyjne).
+                </li>
+                <li>Modyfikatory Refleksu zależne od ZRC oraz Umiejętności.</li>
+            </ol>
+
+    <br><br><br>
+    <h2 class="rules">Modyfikatory sytuacyjne w walce</h2>
+        <br>
+        <p>
+            Pewne sytuacje podczas walki uzasadniają modyfikacje standardowych rzutów.
+            Jednak nadanie modyfikatorów jest zależne od deklaracji graczy, co odpowiada faktowi, że w ferworze walki postać nie zawsze dostrzega nadarzające się okazje.
+        </p>
+
+        <br>
+        <h5 class="rules">Szarża</h5>
+            <p>
+                Natarcie z szarżą pozwala na zadanie większych ran ze względu na impet (+2 OBR).
+                Przyjęcie szarży zwiększa szanse na trafienie przeciwnika, ponieważ jego ruch jest bardziej przewidywalny ze względu na bezwładność pędzącego ciała (+2 TRAF).
+                W sytuacji szarży ataki występują jednocześnie, więc pomija się rzut za Inicjatywę;
+                wyjątek to natarcie szarżą lub przyjęcie szarży przy pomocy broni drzewcowej nadającej się do przyjmowania szarży –
+                pierwszy atakuje posiadacz długiej broni, chyba że dotyczy to obu.
+                Wtedy o kolejności ataków decyduje długość broni drzewcowej: 3m, 2m, a dalej zwykła włócznia czy widły.
+            </p>
+            <br>
+        <h5 class="rules">Atak oburącz bronią jednoręczną</h5>
+            <p>
+                Oburęczny atak bronią jednoręczną pozwala na uwzględnienie 150% normalnej premii do OBR z SIŁ zaokrąglając w górę
+                (np. przy SIŁ 15 modyfikator OBR wynosi +3, a więc +1 x 150% = +4.5, a po zaokrągleniu +5).
+                Oczywiście dotyczy to takiej broni, którą można uchwycić oburącz w sposób zwiększający siłę ciosu (np. sztuczka ta nie uda się z kastetem).
+            </p>
+            <br>
+        <h5 class="rules">Atak z boku i od tyłu oraz na unieruchomionego przeciwnika.</h5>
+            <p>
+                Ataki spoza zasięgu wzroku przeciwnika zwiększają szanse Trafienia: z boku +2 TRAF, od tyłu +4 TRAF.
+                Natomiast w przypadku ataku na śpiącego, nieprzytomnego albo związanego przeciwnika, oprócz modyfikatora +4 TRAF, zakłada się chęć zabicia go na miejscu.
+                Jeśli po rzucie za TRAF okaże się, że przeciwnik został trafiony poza modyfikatorem +4 TRAF, to jest to Krytyk.
+            </p>
+            <p>
+                Dotyczy to ataków z przymierzeniem, które pozostawiają jednak pewne pole losowości, jak cios maczugą w głowę przeciwnika przywiązanego do drzewa.
+                Natomiast, jeśli taki atak nastąpi przez staranne przyłożenie sztyletu albo grotu włóczni do gardła, to należy przyjąć mod. OBR x3.
+            </p>
+            <br>
+        <h5 class="rules">Parowanie</h5>
+            <p>
+                Parowanie polega na rezygnacji z ataku i skupieniu się na odpieraniu ciosów przeciwnika.
+                Pozwala to podwoić premię KP od tarczy. Nie dotyczy to premii do parowania z KP czy Walki tarczą.
+                Jako parowanie należy również rozumieć sytuację zbliżania się w tempie 1x (bez przyspieszenia) pod osłoną tarczy do wroga atakującego z dystansu.
+            </p>
+        <br><br><br>
+
+
+{% endblock content %}
