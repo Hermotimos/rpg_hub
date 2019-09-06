@@ -24,7 +24,6 @@ class DemandsCreateForm(forms.ModelForm):
                                                                  Q(profile__character_status='living_npc'))
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
-
         self.fields['text'].label = ''
         self.fields['text'].widget = PagedownWidget()
         self.fields['text'].widget.attrs['placeholder'] = 'Twój dezyderat (max. 4000 znaków)*'
@@ -55,10 +54,8 @@ class DemandsModifyForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(DemandsModifyForm, self).__init__(*args, **kwargs)
-
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
-
         self.fields['text'].label = ''
         self.fields['text'].widget = PagedownWidget()
         self.fields['text'].widget.attrs['placeholder'] = 'Treść (max. 4000 znaków)*'
@@ -89,10 +86,8 @@ class DemandAnswerForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(DemandAnswerForm, self).__init__(*args, **kwargs)
-
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
-
         self.fields['text'].label = ''
         self.fields['text'].widget = PagedownWidget()
         self.fields['text'].widget.attrs['placeholder'] = 'Odpowiedź (max. 4000 znaków)*'
@@ -126,12 +121,9 @@ class PlansCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PlansCreateForm, self).__init__(*args, **kwargs)
-
         self.fields['inform_gm'].label = 'Poinformuj MG'
-
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
-
         self.fields['text'].label = ''
         self.fields['text'].widget = PagedownWidget()
         self.fields['text'].widget.attrs['placeholder'] = 'Twój plan... (max. 4000 znaków)*'
@@ -162,12 +154,9 @@ class PlansModifyForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PlansModifyForm, self).__init__(*args, **kwargs)
-
         self.fields['inform_gm'].label = 'Poinformuj MG'
-
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
-
         self.fields['text'].label = ''
         self.fields['text'].widget = PagedownWidget()
         self.fields['text'].widget.attrs['placeholder'] = 'Treść (max. 4000 znaków)*'

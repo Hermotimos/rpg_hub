@@ -16,8 +16,8 @@ class ChronicleEventCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ChronicleEventCreateForm, self).__init__(*args, **kwargs)
         self.fields['description'].widget.attrs = {'cols': 50, 'rows': 5}
-        self.fields['participants'].widget.attrs = {'size': 10}
         self.fields['informed'].widget.attrs = {'size': 10}
+        self.fields['participants'].widget.attrs = {'size': 10}
         self.fields['pictures'].widget.attrs = {'size': 10}
 
 
