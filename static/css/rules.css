@@ -19,6 +19,14 @@ li b {
         margin-right: 5px;
 }
 
+
+.img-rules {
+        float: left;
+        height: 45px;
+        width: auto;
+        margin-right: 5px;
+}
+
 .img-skill h3:hover {
         pointer-events: none;
 }

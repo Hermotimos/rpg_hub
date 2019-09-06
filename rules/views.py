@@ -33,6 +33,6 @@ def rules_skills_view(request):
 def rules_combat_view(request):
 
     context = {
-        'page_title': 'Walka'
+        'page_title': 'Przebieg walki'
     }
     return render(request, 'rules/combat.html', context)
