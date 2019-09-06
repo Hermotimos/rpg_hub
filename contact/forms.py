@@ -11,7 +11,7 @@ from users.models import User
 class DemandsCreateForm(forms.ModelForm):
     class Meta:
         model = Demand
-        fields = ['addressee', 'text', 'image']
+        fields = ['addressee', 'image', 'text']
 
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
@@ -22,22 +22,30 @@ class DemandsCreateForm(forms.ModelForm):
                                                                  Q(profile__character_status='inactive_player') |
                                                                  Q(profile__character_status='dead_npc') |
                                                                  Q(profile__character_status='living_npc'))
+        self.fields['image'].label = 'Załącz obraz:'
+        self.fields['image'].required = False
 
-    text = forms.CharField(
-        label='',
-        widget=PagedownWidget(
-            attrs={
-                'placeholder': 'Twój dezyderat (max. 4000 znaków)*',
-                'rows': 10,
-                'cols': 60
-            }
-        )
-    )
+        self.fields['text'].label = ''
+        self.fields['text'].widget = PagedownWidget()
+        self.fields['text'].widget.attrs['placeholder'] = 'Twój dezyderat (max. 4000 znaków)*'
+        self.fields['text'].widget.attrs['rows'] = 10
+        self.fields['text'].widget.attrs['cols'] = 60
 
-    image = forms.ImageField(
-        label='Załącz obraz:',
-        required=False,
-    )
+    # text = forms.CharField(
+    #     label='',
+    #     widget=PagedownWidget(
+    #         attrs={
+    #             'placeholder': 'Twój dezyderat (max. 4000 znaków)*',
+    #             'rows': 10,
+    #             'cols': 60
+    #         }
+    #     )
+    # )
+
+    # image = forms.ImageField(
+    #     label='Załącz obraz:',
+    #     required=False,
+    # )
 
 
 class DemandsModifyForm(forms.ModelForm):
@@ -45,21 +53,33 @@ class DemandsModifyForm(forms.ModelForm):
         model = Demand
         fields = ['text', 'image']
 
-    text = forms.CharField(
-        label='',
-        widget=PagedownWidget(
-            attrs={
-                'placeholder': 'Treść (max. 4000 znaków)*',
-                'rows': 10,
-                'cols': 60
-            }
-        )
-    )
+    def __init__(self, *args, **kwargs):
+        super(DemandsModifyForm, self).__init__(*args, **kwargs)
 
-    image = forms.ImageField(
-        label='Załącz obraz:',
-        required=False,
-    )
+        self.fields['image'].label = 'Załącz obraz:'
+        self.fields['image'].required = False
+
+        self.fields['text'].label = ''
+        self.fields['text'].widget = PagedownWidget()
+        self.fields['text'].widget.attrs['placeholder'] = 'Treść (max. 4000 znaków)*'
+        self.fields['text'].widget.attrs['rows'] = 10
+        self.fields['text'].widget.attrs['cols'] = 60
+
+    # text = forms.CharField(
+    #     label='',
+    #     widget=PagedownWidget(
+    #         attrs={
+    #             'placeholder': 'Treść (max. 4000 znaków)*',
+    #             'rows': 10,
+    #             'cols': 60
+    #         }
+    #     )
+    # )
+    #
+    # image = forms.ImageField(
+    #     label='Załącz obraz:',
+    #     required=False,
+    # )
 
 
 class DemandAnswerForm(forms.ModelForm):
@@ -67,21 +87,33 @@ class DemandAnswerForm(forms.ModelForm):
         model = DemandAnswer
         fields = ['text', 'image']
 
-    text = forms.CharField(
-        label='',
-        widget=PagedownWidget(
-            attrs={
-                'placeholder': 'Odpowiedź (max. 4000 znaków)*',
-                'rows': 10,
-                'cols': 60
-            }
-        )
-    )
+    def __init__(self, *args, **kwargs):
+        super(DemandAnswerForm, self).__init__(*args, **kwargs)
 
-    image = forms.ImageField(
-        label='Załącz obraz:',
-        required=False,
-    )
+        self.fields['image'].label = 'Załącz obraz:'
+        self.fields['image'].required = False
+
+        self.fields['text'].label = ''
+        self.fields['text'].widget = PagedownWidget()
+        self.fields['text'].widget.attrs['placeholder'] = 'Odpowiedź (max. 4000 znaków)*'
+        self.fields['text'].widget.attrs['rows'] = 10
+        self.fields['text'].widget.attrs['cols'] = 60
+
+    # text = forms.CharField(
+    #     label='',
+    #     widget=PagedownWidget(
+    #         attrs={
+    #             'placeholder': 'Odpowiedź (max. 4000 znaków)*',
+    #             'rows': 10,
+    #             'cols': 60
+    #         }
+    #     )
+    # )
+    #
+    # image = forms.ImageField(
+    #     label='Załącz obraz:',
+    #     required=False,
+    # )
 
 
 # ------------------- PLANS -------------------
@@ -94,23 +126,33 @@ class PlansCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PlansCreateForm, self).__init__(*args, **kwargs)
+
         self.fields['inform_gm'].label = 'Poinformuj MG'
 
-    text = forms.CharField(
-        label='',
-        widget=PagedownWidget(
-            attrs={
-                'placeholder': 'Twój plan... (max. 4000 znaków)*',
-                'rows': 10,
-                'cols': 60
-            }
-        )
-    )
+        self.fields['image'].label = 'Załącz obraz:'
+        self.fields['image'].required = False
 
-    image = forms.ImageField(
-        label='Załącz obraz:',
-        required=False,
-    )
+        self.fields['text'].label = ''
+        self.fields['text'].widget = PagedownWidget()
+        self.fields['text'].widget.attrs['placeholder'] = 'Twój plan... (max. 4000 znaków)*'
+        self.fields['text'].widget.attrs['rows'] = 10
+        self.fields['text'].widget.attrs['cols'] = 60
+
+    # text = forms.CharField(
+    #     label='',
+    #     widget=PagedownWidget(
+    #         attrs={
+    #             'placeholder': 'Twój plan... (max. 4000 znaków)*',
+    #             'rows': 10,
+    #             'cols': 60
+    #         }
+    #     )
+    # )
+    #
+    # image = forms.ImageField(
+    #     label='Załącz obraz:',
+    #     required=False,
+    # )
 
 
 class PlansModifyForm(forms.ModelForm):
@@ -120,20 +162,30 @@ class PlansModifyForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PlansModifyForm, self).__init__(*args, **kwargs)
+
         self.fields['inform_gm'].label = 'Poinformuj MG'
 
-    text = forms.CharField(
-        label='',
-        widget=PagedownWidget(
-            attrs={
-                'placeholder': 'Treść (max. 4000 znaków)*',
-                'rows': 10,
-                'cols': 60
-            }
-        )
-    )
+        self.fields['image'].label = 'Załącz obraz:'
+        self.fields['image'].required = False
 
-    image = forms.ImageField(
-        label='Załącz obraz:',
-        required=False,
-    )
+        self.fields['text'].label = ''
+        self.fields['text'].widget = PagedownWidget()
+        self.fields['text'].widget.attrs['placeholder'] = 'Treść (max. 4000 znaków)*'
+        self.fields['text'].widget.attrs['rows'] = 10
+        self.fields['text'].widget.attrs['cols'] = 60
+
+    # text = forms.CharField(
+    #     label='',
+    #     widget=PagedownWidget(
+    #         attrs={
+    #             'placeholder': 'Treść (max. 4000 znaków)*',
+    #             'rows': 10,
+    #             'cols': 60
+    #         }
+    #     )
+    # )
+    #
+    # image = forms.ImageField(
+    #     label='Załącz obraz:',
+    #     required=False,
+    # )
