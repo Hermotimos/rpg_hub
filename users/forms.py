@@ -7,13 +7,12 @@ from .models import Profile
 class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
-        # fields = [
-        #     'username',
-        #     'email',
-        #     'password1',
-        #     'password2'
-        # ]
-        exclude = ()
+        fields = [
+            'username',
+            'email',
+            'password1',
+            'password2'
+        ]
 
     email = forms.EmailField(required=False)
 
@@ -37,25 +36,26 @@ class ProfileUpdateForm(forms.ModelForm):
             'image'
         ]
 
-    def __init__(self, *args, **kwargs):
-        super(ProfileUpdateForm, self).__init__(self, *args, **kwargs)
-        self.fields['character_name'].label = ''
-        self.fields['character_name'].max_length = 50
-        self.fields['character_name'].widget.attrs['placeholder'] = 'max. 50 znaków (spacje dozwolone)'
-        self.fields['character_name'].widget.attrs['size'] = 60
-        self.fields['image'].label = 'Awatar'
+    # With this there's error: 'ProfileUpdateForm' object has no attribute 'get'
+    # def __init__(self, *args, **kwargs):
+    #     super(ProfileUpdateForm, self).__init__(self, *args, **kwargs)
+    #     self.fields['character_name'].label = ''
+    #     self.fields['character_name'].max_length = 50
+    #     self.fields['character_name'].widget.attrs['placeholder'] = 'max. 50 znaków (spacje dozwolone)'
+    #     self.fields['character_name'].widget.attrs['size'] = 60
+    #     self.fields['image'].label = 'Awatar'
 
-    # character_name = forms.CharField(
-    #     label='Imię postaci (wyświetlane przy postach)',
-    #     max_length=50,
-    #     widget=forms.TextInput(
-    #         attrs={
-    #             'placeholder': 'max. 50 znaków (spacje dozwolone)',
-    #             'size': '60'
-    #         }
-    #     )
-    # )
-    #
-    # image = forms.ImageField(
-    #     label='Awatar'
-    # )
+    character_name = forms.CharField(
+        label='Imię postaci (wyświetlane przy postach)',
+        max_length=50,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'max. 50 znaków (spacje dozwolone)',
+                'size': '60'
+            }
+        )
+    )
+
+    image = forms.ImageField(
+        label='Awatar'
+    )
