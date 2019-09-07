@@ -38,6 +38,10 @@ table.timeline {
 
 .timeline-event {
         font-style: italic;
+        font-size: 15px;
+}
+
+.timeline-event-thread {
         font-size: 13px;
 }
 

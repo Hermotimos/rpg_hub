@@ -111,8 +111,20 @@ a.article-title:hover {
 
 /* ----- CUSTOM ----- */
 
+/* FONT NORMAL */
+@font-face {
+        font-family: IMFellGreatPrimer;
+        src: url(fonts.IMFellGreatPrimer-Regular.ttf);
+}
+
+@font-face {
+        font-family: IMFellGreatPrimer;
+        src: url(fonts.IMFellGreatPrimer-Regular.ttf);
+        font-style: italic;
+}
+
 * {
-        font-family: 'IM Fell Great Primer', serif;
+        font-family: IMFellGreatPrimer;
 }
 
 .border-double {

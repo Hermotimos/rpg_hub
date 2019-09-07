@@ -51,14 +51,14 @@
                     {{ event.days }}
                     </a>
                 </td>
-                <td class="timeline-event align-top unblue-black">
+                <td class="timeline-event-thread align-top unblue-black">
                     {% for thread in event.threads.all %}
                         &#10023;<a class="hover-pointer" href="{% url 'history:timeline-thread' thread.id %}">{{ thread }}</a><br>
                     {% endfor %}
                 </td>
-                <td class="timeline-event justify align-top unblue-black">
+                <td class="timeline-event justify align-top unblue-black pl-2 pr-2">
                     <a href="{% url 'history:chronicle-one-game' event.game.id %}">{{ event.description|linebreaksbr }}</a>
-                    {% for note in event.notes.all %}
+                    {% for note in event.notes.all %}thread
                         {% if request.user == note.author %}
                             {% if note.text != '' %}
                                 <a style="color:{{ note.color }}"><br>Przemyślenia:<br>{{ note.text|linebreaksbr }}</a>
