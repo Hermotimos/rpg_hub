@@ -3,7 +3,7 @@
 {% load custom_filters %}
 
 {% block head_extra %}
-<link rel="stylesheet" href="{% static 'css/rules.css' %}" xmlns="http://www.w3.org/1999/html">
+    <link rel="stylesheet" href="{% static 'css/rules.css' %}" xmlns="http://www.w3.org/1999/html">
 {% endblock head_extra %}
 
 {% block breadcrumb %}
@@ -12,6 +12,15 @@
 {% endblock breadcrumb %}
 
 {% block content %}
+ <style type="text/css">
+    @font-face {
+        font-family: Palatino Linotype; src: url({% static 'automobiles/fonts/bold.ttf' %});
+    }
+    body{
+        font-family: "Palatino Linotype", Arial, sans-serif;
+        color: #333333;
+    }
+    </style>
     <br><br><br>
     <h2 class="rules">Przebieg rundy walki</h2>
         <br>
