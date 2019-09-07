@@ -1,4 +1,13 @@
 
+@font-face {
+        font-family: IMFellGreatPrimer;
+        src: url(fonts/IMFellGreatPrimer-Regular.ttf);
+}
+
+* {
+        font-family: IMFellGreatPrimer;
+}
+
 body {
         background: #fafafa;
         margin-top: 4rem;
@@ -8,7 +17,9 @@ h1, h2, h3, h4, h5, h6 {
         color: #444444;                                             /* <h1>-<h6> COLOR */
 }
 
+
 /* MOTIVE */
+
 .bg-navbar {
         background-color: #363636;                                /* NAVBAR COLOR # */
 }
@@ -111,21 +122,7 @@ a.article-title:hover {
 
 /* ----- CUSTOM ----- */
 
-/* FONT NORMAL */
-@font-face {
-        font-family: IMFellGreatPrimer;
-        src: url(fonts.IMFellGreatPrimer-Regular.ttf);
-}
 
-@font-face {
-        font-family: IMFellGreatPrimer;
-        src: url(fonts.IMFellGreatPrimer-Regular.ttf);
-        font-style: italic;
-}
-
-* {
-        font-family: IMFellGreatPrimer;
-}
 
 .border-double {
         border-style: double;
