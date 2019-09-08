@@ -73,12 +73,12 @@ nav.navbar {
 .article-title {
         color: #444444;
 }
-
+/*
 a.article-title:hover {
         color: red;
         text-decoration: none;
 }
-
+*/
 .article-content {
         white-space: pre-line;
 }
@@ -90,12 +90,12 @@ a.article-title:hover {
         margin-right: auto;
 }
 
-
+/*
 .article-metadata a:hover {
         color: red;
         text-decoration: none;
 }
-
+*/
 .article-svg {
         width: 25px;
         height: 25px;
@@ -239,3 +239,6 @@ small.left-float {
         text-align: left;
 }
 
+.deep-red {
+        color: #C70039;
+}
