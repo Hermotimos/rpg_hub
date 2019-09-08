@@ -6,6 +6,10 @@ from django.template.loader import get_template
 from rules.utils import render_to_pdf, link_callback
 from django.template import Context
 from xhtml2pdf import pisa
+from io import BytesIO, StringIO
+from django.conf import settings
+
+import os
 
 
 def generate_pdf_view(request, *args, **kwargs):
