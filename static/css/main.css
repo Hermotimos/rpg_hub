@@ -12,6 +12,21 @@
 
 @font-face {
         font-family: IMFellGreatPrimer;
+        src: url(fonts/im-fell-great-primer.sc.ttf.ttf);
+        font-variant: small-caps;
+}
+
+* {
+        font-family: IMFellGreatPrimer;
+}
+
+a:hover {
+        text-decoration: none;
+        color: #3366cc;
+}
+
+.small-caps {
+        font-variant: small-caps;
 }
 
 body {
@@ -217,6 +232,7 @@ small {
         color: #3366cc;
         cursor: pointer;
 }
+
 
 small.red {
         color: red;
