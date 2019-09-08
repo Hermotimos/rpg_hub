@@ -4,7 +4,13 @@
         src: url(fonts/IMFellGreatPrimer-Regular.ttf);
 }
 
-* {
+@font-face {
+        font-family: IMFellGreatPrimer;
+        src: url(fonts/FeGPit27C.otf.ttf);
+        font-style: italic;
+}
+
+@font-face {
         font-family: IMFellGreatPrimer;
 }
 

@@ -19,12 +19,12 @@
     <br><br>
     {% for chapter in chapters_with_games_dict %}
         <br>
+        {% if chapter.image %}
+            <img src="{{ chapter.image.url }}" class="border-double img-chapter">
+        {% endif %}
         <h3 class="unblue">
-            {% if chapter.image %}
-                <img src="{{ chapter.image.url }}" class="border-double img-chapter">
-            {% endif %}
-            <a href="{% url 'history:chronicle-one-chapter' chapter.id %}" class="align-middle pt-2">
-                {{ chapter.title }}
+            <a href="{% url 'history:chronicle-one-chapter' chapter.id %}" class="align-middle pt-2 small-caps border-custom-base hover-no-underline">
+                <b>{{ chapter.title }}</b>
             </a>
         </h3>
         <br>
