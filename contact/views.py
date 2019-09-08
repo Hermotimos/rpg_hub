@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from django.conf import settings
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from contact.models import Demand, DemandAnswer, Plan
 from contact.forms import DemandsCreateForm, DemandsModifyForm, DemandAnswerForm, PlansCreateForm, PlansModifyForm
+from rules.models import Skill, Synergy
+from users.models import User
 
 
 # ----------------------------- DEMANDS -----------------------------
@@ -206,10 +209,31 @@ def mark_undone_view(request, demand_id):
 
 @login_required
 def plans_main_view(request):
+
+    skills_without_allowed = Skill.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
+    skills_to_do = [s.name for s in skills_without_allowed]
+    synergies_without_allowed = Synergy.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
+    synergies_to_do = [s for s in synergies_without_allowed]
+
+    text = \
+        f'Lista rzeczy do uzupełnienia:\n ' \
+        f'1) Skille z 0 allowed_profiles:\n{[s for s in skills_to_do] if skills_to_do else 0}\n' \
+        f'2) Synergie z 0 allowed_profiles:\n{[s.name() for s in synergies_to_do] if synergies_to_do else 0}\n'
+
+    if skills_to_do or synergies_to_do:
+        try:
+            todos = Plan.objects.get(text__contains='Lista rzeczy do uzupełnienia:')
+
+            todos.text = text
+
+        except Plan.DoesNotExist:
+            Plan.objects.create(text=text, author=User.objects.get(profile__character_status='gm'))
+
     plans = list(Plan.objects.filter(author=request.user))
     context = {
         'page_title': 'Plany',
         'plans': plans,
+        'skills_to_do': skills_to_do
     }
     return render(request, 'contact/plans-main.html', context)
 
@@ -300,4 +324,3 @@ def plans_modify_view(request, plan_id):
         return render(request, 'contact/plans-modify.html', context)
     else:
         return redirect('home:dupa')
-
