@@ -1,6 +1,6 @@
 from django.urls import path
 from rules import views
-from rules import html2pdf_views
+
 
 
 app_name = 'rules'
@@ -9,7 +9,7 @@ urlpatterns = [
     path('skills/', views.rules_skills_view, name='skills'),
     path('combat/', views.rules_combat_view, name='combat'),
 
-    path('combat/pdf/', html2pdf_views.generate_pdf_view, name='combat-pdf'),
-    path('combat/pdf2/', html2pdf_views.generate_pdf_view_2, name='combat-pdf2'),
+    # path('combat/pdf/', html2pdf_views.yet_another, name='combat-pdf'),
+    # path('combat/pdf2/', html2pdf_views.export_word_2, name='combat-pdf2'),
 
 ]

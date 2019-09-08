@@ -35,4 +35,8 @@ def rules_combat_view(request):
     context = {
         'page_title': 'Przebieg walki'
     }
+    html = render(request, 'rules/combat.html', context).content
+    html = str(html.decode('utf-8'))
+    print(type(html))
+    print(html)
     return render(request, 'rules/combat.html', context)
