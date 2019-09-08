@@ -29,18 +29,11 @@ def rules_skills_view(request):
     return render(request, 'rules/skills.html', context)
 
 
-# from rules.views_pdf import render_to_pdf
 @login_required
 def rules_combat_view(request):
-
     context = {
         'page_title': 'Przebieg walki'
     }
-    # html = render(request, 'rules/combat.html', context).content
-    # html = str(html.decode('utf-8'))
-    # print(type(html))
-    # print(html)
 
-    # render_to_pdf()
     print(type('rules/combat.html'))
     return render(request, 'rules/combat.html', context)
