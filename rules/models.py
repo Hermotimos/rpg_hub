@@ -57,3 +57,6 @@ class Synergy(models.Model):
     class Meta:
         verbose_name = 'Synergy'
         verbose_name_plural = 'Synergies'
+
+
+# class CharacterClass(models.Model):
