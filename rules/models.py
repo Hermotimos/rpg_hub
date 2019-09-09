@@ -69,6 +69,9 @@ class CharacterClass(models.Model):
     def __str__(self):
         return self.name
 
+    def short_name(self):
+        return str(self.name).split('', 0)
+
 
 class CharacterProfession(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name='Profesja')

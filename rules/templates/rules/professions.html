@@ -28,12 +28,12 @@
 
             <div id="{{ class.name }}" class="collapse">
             {% for profession in classes_with_professions_dict|dict_lookup:class %}
-                <h5 data-toggle="collapse" data-target="#{{ profession.name }}">
+                <h5 data-toggle="collapse" data-target="#{{ profession.short_name }}">
                     <b class="hover-blue">
                         {{ profession.name }}
                     </b>
                 </h5>
-                <div id="{{ profession.name }}" class="collapse">
+                <div id="{{ profession.short_name }}" class="collapse">
                 <small>{{ profession.description }}</small>
                 <small>{{ profession.start_perks }}</small>
                     <br><br>
