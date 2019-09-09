@@ -19,14 +19,14 @@
         XXXXXXXXXXX
     </p>
     <br>
-    <div id="professions" class="">
+    <div id="professions">
         {% for class in classes_with_professions_dict %}
-            <h1 data-toggle="collapse" data-target="#{{ class.name }}">
+            <h1 data-toggle="collapse" data-target="#{{ class.short_name }}">
                 <b class="hover-blue">{{ class.name }}</b>
             </h1>
             <p>{{ class.description }}</p>
 
-            <div id="{{ class.name }}" class="collapse">
+            <div id="{{ class.short_name }}" class="collapse">
             {% for profession in classes_with_professions_dict|dict_lookup:class %}
                 <h5 data-toggle="collapse" data-target="#{{ profession.short_name }}">
                     <b class="hover-blue">

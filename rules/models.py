@@ -70,7 +70,7 @@ class CharacterClass(models.Model):
         return self.name
 
     def short_name(self):
-        return str(self.name).split('', 0)
+        return ''.join(word[:3] for word in str(self.name).split(' '))
 
 
 class CharacterProfession(models.Model):
@@ -104,3 +104,6 @@ class CharacterProfession(models.Model):
 
     def __str__(self):
         return self.name
+
+    def short_name(self):
+        return ''.join(word[:3] for word in str(self.name).split(' '))
