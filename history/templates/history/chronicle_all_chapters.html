@@ -14,12 +14,13 @@
 {% block content %}
     <br><br><br>
     {% for chapter in chapters_with_games_dict %}
-        <h3 class="unblue mb-0 chapter-title">
+        <h3 class="unblue mb-0">
             {% if chapter.image %}
                 <img src="{{ chapter.image.url }}" class="border-double img-chapter">
             {% endif %}
-            <a href="#{{ chapter.id }}" class="align-middle pt-3">{{ chapter.title }}</a>
-        </h3><br>
+            <a href="#{{ chapter.id }}" class="align-middle pt-2 small-caps border-custom-base">{{ chapter.title }}</a>
+        </h3>
+        <br>
     {% endfor %}
     <br><br>
 

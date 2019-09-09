@@ -1,144 +1,15 @@
-
-
-* {
-        font-family: 'IM Fell Great Primer', serif;
-}
-
-.small-caps {
-        font-variant: small-caps;
-}
-
-a:hover {
-        text-decoration: none;
-        color: #3366cc;
-}
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* -------------------- */
+/* ----- GENERAL ----- */
+/* ------------------ */
 
 body {
         background: #fafafa;
         margin-top: 4rem;
 }
 
- /* <h1>-<h6> COLOR */
-h1, h2, h3, h4, h5, h6 {
-        color: #444444;
-}
-
-
-/* MOTIVE */
-
-/* NAVBAR COLOR # */
-.bg-navbar {
-        background-color: #363636;
-}
-
-.site-header .navbar-nav .nav-link {
-        color: #cbd5db;
-        font-variant: small-caps;
-}
-
-.site-header .navbar-nav .nav-link-main {
-        color: #cbd5db;
-}
-
-.site-header .navbar-nav .nav-link:hover {
-        color: #ffffff;
-}
-
-.site-header .navbar-nav .nav-link-main:hover {
-        color: #ffffff;
-}
-
-nav.navbar {
-        border: double;
-        border-color: white;
-}
-
-.content-section-user {
-        background: #ffffff;
-        padding: 10px 20px;
-        border: 1px solid #dddddd;
-        border-radius: 3px;
-        margin-bottom: 20px;
-}
-
-.content-section-sidebar {
-        width: 250px;
-        background: #ffffff;
-        padding: 10px 20px;
-        border: 1px solid #dddddd;
-        border-radius: 3px;
-        margin-bottom: 20px;
-        color: #363636;
-}
-
-.article-title {
-        color: #444444;
-}
-/*
-a.article-title:hover {
-        color: red;
-        text-decoration: none;
-}
-*/
-.article-content {
-        white-space: pre-line;
-}
-
-.article-img {
-        height: 65px;
-        width: 65px;
-        margin-left: auto;
-        margin-right: auto;
-}
-
-/*
-.article-metadata a:hover {
-        color: red;
-        text-decoration: none;
-}
-*/
-.article-svg {
-        width: 25px;
-        height: 25px;
-        vertical-align: middle;
-}
-
-.account-img {
-        height: 85px;
-        width: 85px;
-        margin-right: 20px;
-        margin-bottom: 16px;
-}
-
-.account-img-sidebar {
-        display: block;
-        height: auto;
-        width: 100%;
-        margin-right: 20px;
-        margin-bottom: 16px;
-}
-
-.account-heading {
-        font-size: 2rem;
-}
-
-
-
-/* ----- CUSTOM ----- */
-
-
-.border-double {
-        border-style: double;
-}
-
 .border-custom-base {
         border-bottom: 1px solid #363636;
-}
-
-.breadcrumbs small {
-        color: #888;
-        white-space: nowrap;
-        font-size: 11px;
 }
 
 .btn-space {
@@ -149,21 +20,20 @@ a.article-title:hover {
         color: red;
 }
 
+.forms td {
+        vertical-align: top;
+        padding: 4px 15px;
+}
+
 .hide tr {
         display: none;
 }
 
-.img-page-title {
-        height: 100px;
-        width: 100px;
-}
-
-.justify {
-        text-align: justify;
-}
-
-.my-1 {
-        padding: 5px;
+/* dates above posts in debates and timeline*/
+small.left-float {
+        width: 50%;
+        float: left;
+        text-align: left;
 }
 
 .posts-and-news td, p {
@@ -174,36 +44,121 @@ a.article-title:hover {
         text-align: justify;
 }
 
-.posts-and-news small {
-        white-space: nowrap;
+/*
+.my-1 {
+        padding: 5px;
+}
+*/
+td.align-center {
+        text-align: center;
 }
 
-.forms td {
-        vertical-align: top;
-        padding: 4px;
-        background-color: #f2f2f2
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------- */
+/* ----- BREADCRUMBS & PAGE TITLE ----- */
+/* ----------------------------------- */
+
+.breadcrumbs small {
+        color: #888;
+        white-space: nowrap;
+        font-size: 11px;
+}
+
+.img-page-title {
+        height: 100px;
+        width: 100px;
+}
+
+
+
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* ------------------------- */
+/* ----- TEXT & FONTS ----- */
+/* ----------------------- */
+
+* {
+        font-family: 'IM Fell Great Primer', serif;
+}
+
+h1, h2, h3, h4, h5, h6, b {
+        color: #444444;
+}
+
+.justify {
+        text-align: justify;
+}
+
+
+.deep-red {
+        color: #C70039;
+}
+
+.posts-and-news small {
+        white-space: nowrap;
 }
 
 small {
         color: #888;
 }
 
-.forum tr:nth-child(even),
-.timeline tr:nth-child(even) {
-        background-color: #f2f2f2;
+
+small.red {
+        color: red;
 }
 
-.unblue a {
+small.smaller {
+    font-size: 12px;
+}
+
+.small-caps {
+        font-variant: small-caps;
+}
+
+
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* -------------------- */
+/* ----- IMAGES ----- */
+/* ------------------ */
+
+.article-img {
+        height: 65px;
+        width: 65px;
+        margin-left: auto;
+        margin-right: auto;
+}
+
+.border-double {
+        border-style: double;
+}
+
+
+
+
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* --------------------------------- */
+/* ----- LINKS & COLLAPSIBLES ----- */
+/* ------------------------------- */
+
+a:hover {
+        text-decoration: none;
+        color: #3366cc;
+}
+
+a {
         color: #444444;
 }
 
-.unblue-black a {
-        color: #212529;
-}
 
-.unblue a:hover, .unblue-dark a:hover {
-        color: #3366cc;
-}
 
 .hover-pointer li:hover, a:hover {
         cursor: pointer;
@@ -214,32 +169,80 @@ small {
         cursor: pointer;
 }
 
-small.red {
-        color: red;
-}
+
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* ---------------------- */
+/* ----- PURGATORY ----- */
+/* -------------------- */
+
+
+
 /*
 small.deep-green {
         color: #229954;
 }
 */
-small.smaller {
-    font-size: 12px;
-}
 
-td.align-center {
-        text-align: center;
-}
 /*
 td.align-bottom {
         text-align: bottom;
 }
 */
-small.left-float {
-        width: 50%;
-        float: left;
-        text-align: left;
+
+
+
+/*
+ b {
+        color: #444444;
+}
+*/
+
+
+/*
+.article-title {align
+        color: #444444;
 }
 
-.deep-red {
-        color: #C70039;
+a.article-title:hover {
+        color: red;
+        text-decoration: none;
 }
+
+.article-content {
+        white-space: pre-line;
+}
+*/
+
+
+/*
+.article-metadata a:hover {
+        color: red;
+        text-decoration: none;
+}
+
+.article-svg {
+        width: 25px;
+        height: 25px;
+        vertical-align: middle;
+}
+*/
+
+
+/*
+.account-heading {
+        font-size: 2rem;
+}
+*/
+
+/*
+.unblue a:hover, .unblue-dark a:hover {
+        color: #3366cc;
+}
+*/
+
+/*
+
+*/

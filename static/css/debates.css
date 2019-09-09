@@ -4,22 +4,26 @@
         max-width: 400px;
 }
 
-table.forum {
+
+
+/*
+table.debates {
         border: double;
 }
 
-.forum th {
+.debates th {
         border: 1px solid black;
         font-weight: normal;
         padding: 10px;
 }
 
-.forum thead {
+.debates thead {
         background-color: #363636;
         color: #ffffff;
 }
 
-.forum td {
+.debates td {
         border: 1px solid black;
         padding: 5px;
 }
+*/

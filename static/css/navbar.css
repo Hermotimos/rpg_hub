@@ -1,0 +1,27 @@
+
+
+.bg-navbar {
+        background-color: #363636;
+}
+
+.site-header .navbar-nav .nav-link {
+        color: #cbd5db;
+        font-variant: small-caps;
+}
+
+.site-header .navbar-nav .nav-link-main {
+        color: #cbd5db;
+}
+
+.site-header .navbar-nav .nav-link:hover {
+        color: #ffffff;
+}
+
+.site-header .navbar-nav .nav-link-main:hover {
+        color: #ffffff;
+}
+
+nav.navbar {
+        border: double;
+        border-color: white;
+}

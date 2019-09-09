@@ -45,3 +45,18 @@ li b {
         width: auto;
         margin-right: 5px;
 }
+
+.resp-container {
+    position: relative;
+    overflow: hidden;
+    padding-top: 100%;
+}
+
+.resp-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 820px;
+    height: 100%;
+    border: 0;
+}

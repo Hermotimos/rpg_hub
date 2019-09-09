@@ -12,351 +12,374 @@
 
 {% block content %}
     <br><br><br>
+
     <h2>
         <img src="{% static 'img/TWORZENIE I ROZWÓJ POSTACI.png' %}" class="border-double img-rules">
-        <strong class="align-middle pt-2 small-caps border-custom-base">Tworzenie i rozwój postaci</strong>
+        <strong class="align-middle small-caps border-custom-base">Tworzenie i rozwój postaci</strong>
     </h2>
     <br>
-        <h6 class="unblue">
-            1. <a href="#traits" class="">Cechy</a>
-        </h6>
-        <h6 class="unblue">
-            2. <a href="#classes" class="">Klasa postaci</a>
-        </h6>
-        <h6 class="unblue">
-            3. <a href="#levelups" class="">Awanse</a>
-        </h6>
-        <h6 class="unblue">
-            4. <a href="#multiclassing" class="">Wieloklasowość i awanse</a>
-        </h6>
-        <h6 class="unblue">
-            5. <a href="{% url 'rules:skills' %}" class="">Umiejętności</a>
-        </h6>
-        <h6 class="unblue">
-            6. <a href="#rouge-skills" class=" ">Umiejętności "łotrzykowskie"</a>
-        </h6>
-        <br>
+
+    <h6 class="unblue">
+        1. <a href="#traits" class="">Cechy</a>
+    </h6>
+    <h6 class="unblue">
+        2. <a href="#classes" class="">Klasa postaci</a>
+    </h6>
+    <h6 class="unblue">
+        3. <a href="#levelups" class="">Awanse</a>
+    </h6>
+    <h6 class="unblue">
+        4. <a href="#multiclassing" class="">Wieloklasowość i awanse</a>
+    </h6>
+    <h6 class="unblue">
+        5. <a href="{% url 'rules:skills' %}" class="">Umiejętności</a>
+    </h6>
+    <h6 class="unblue">
+        6. <a href="#rouge-skills" class=" ">Umiejętności "łotrzykowskie"</a>
+    </h6>
+    <br>
 
     <h2>
         <img src="{% static 'img/WALKA.png' %}" class="border-double img-rules">
-        <strong class="align-middle pt-2 small-caps border-custom-base">Walka i obrażenia</strong>
+        <strong class="align-middle small-caps border-custom-base">Walka i obrażenia</strong>
     </h2>
+
     <br>
-        <h6 class="unblue">
-            1. <a href="#arms-skills" class="">Biegłości i broń</a>
-        </h6>
-        <h6 class="unblue">
-            2. <a href="#armor" class="">Zbroja</a>
-        </h6>
-        <h6 class="unblue">
-            3. <a href="#damage" class="">Obrażenia i progi ran</a>
-        </h6>
-        <h6 class="unblue">
-            4. <a href="{% url 'rules:combat' %}" class="">Przebieg walki</a>
-        </h6>
-        <br>
+    <h6 class="unblue">
+        1. <a href="#arms-skills" class="">Biegłości i broń</a>
+    </h6>
+    <h6 class="unblue">
+        2. <a href="#armor" class="">Zbroja</a>
+    </h6>
+    <h6 class="unblue">
+        3. <a href="#damage" class="">Obrażenia i progi ran</a>
+    </h6>
+    <h6 class="unblue">
+        4. <a href="{% url 'rules:combat' %}" class="">Przebieg walki</a>
+    </h6>
+    <br>
 
     <h2>
         <img src="{% static 'img/KARTA POSTACI.png' %}" class="border-double img-rules">
-        <strong class="align-middle pt-2 small-caps border-custom-base">Karta postaci</strong>
+        <strong class="align-middle small-caps border-custom-base">Karta postaci</strong>
     </h2>
     <br>
-        <h6 class="unblue">
-            1. <a href="#character-sheet1" class="">Cechy i walka</a>
-        </h6>
-        <h6 class="unblue">
-            2. <a href="#character-sheet2" class="">Ekwipunek</a>
-        </h6>
-        <h6 class="unblue">
-            3. <a href="#character-sheet3" class="">Umiejętności i biegłości</a>
-        </h6>
-        <h6 class="unblue">
-            4. <a href="#character-sheet4" class="">Tabela awansów</a>
-        </h6>
+    <h6 class="unblue">
+        1. <a href="#character-sheet1" class="">Cechy i walka</a>
+    </h6>
+    <h6 class="unblue">
+        2. <a href="#character-sheet2" class="">Ekwipunek</a>
+    </h6>
+    <h6 class="unblue">
+        3. <a href="#character-sheet3" class="">Umiejętności i biegłości</a>
+    </h6>
+    <h6 class="unblue">
+        4. <a href="#character-sheet4" class="">Tabela awansów</a>
+    </h6>
 
 
     <br id="traits"><br><br>
     <h2 class="rules">Cechy</h2>
     <br>
-        <p>
-            Trzy cechy opisujące postać to: Siła, Zręczność i Kondycja, a ich bazowe wartości to: 11, 11, 11.
-            Przeciętne wartości dla człowieka to 10. Te bazowe cechy graczy są ponadprzeciętne, ponieważ gracze wcielają się w „bohaterów”.
-        </p>
-        <p>
-            Istnieje możliwość przesunięcia ok. 3 pkt przy uzasadnieniu silnymi rysami biografii lub fizjologii.
-            O zakresie przesunięć decyduje MG na podstawie opisu gracza. Taki opis stanowi potem wyzwanie w zakresie odgrywania postaci.
-        </p>
-        <p>
-            Cechy mentalne jak Inteligencja, Mądrość i Charyzma zależą jedynie od odgrywania postaci przez graczy oraz sytuacji fabularnej.
-            Dla przykładu - potężny osiłek ma dużą siłę oddziaływania (wysoką charyzmę), gdy zastrasza grupę chłopów,
-            jednak prawdopodobnie niską, gdy prosi słabo mu znanego arystokratę o osobistą przysługę.
-        </p>
-        <p>
-            Wszelkie modyfikatory wpływu magii na graczy mają charakter fabularny, to znaczy zależą od rozeznania życiowego,
-            obycia z magią i sprytu reprezentowanego przez graczy na przestrzeni wcześniejszych przygód.
-            Ewentualne rzuty obronne albo odporność magiczna (na iluzję, ogień, magicznie wywołane emocje) mogą się pojawić w dalszej części gry,
-            jeśli postać zgromadzi doświadczenie życiowe i obycie z magią, które uzasadniałyby zawarcie ich w formie testowalnej cechy.
-            Do tego czasu postać zmaga się z iluzorycznym osiłkiem przy pomocy swojej Siły, a przed iluzorycznymi pociskami uchyla się testując swoją Zręczność.
-        </p>
-        <br>
-        <iframe width="820" height="714" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21185&authkey=%21AEZOk4z5UCOmThQ&em=2&wdAllowInteractivity=False&AllowTyping=True&ActiveCell='CECHY'!C24&Item='CECHY'!A1%3AS30&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+    <p>
+        Trzy cechy opisujące postać to: Siła, Zręczność i Kondycja, a ich bazowe wartości to: 11, 11, 11.
+        Przeciętne wartości dla człowieka to 10. Te bazowe cechy graczy są ponadprzeciętne, ponieważ gracze wcielają się w „bohaterów”.
+    </p>
+    <p>
+        Istnieje możliwość przesunięcia ok. 3 pkt przy uzasadnieniu silnymi rysami biografii lub fizjologii.
+        O zakresie przesunięć decyduje MG na podstawie opisu gracza. Taki opis stanowi potem wyzwanie w zakresie odgrywania postaci.
+    </p>
+    <p>
+        Cechy mentalne jak Inteligencja, Mądrość i Charyzma zależą jedynie od odgrywania postaci przez graczy oraz sytuacji fabularnej.
+        Dla przykładu - potężny osiłek ma dużą siłę oddziaływania (wysoką charyzmę), gdy zastrasza grupę chłopów,
+        jednak prawdopodobnie niską, gdy prosi słabo mu znanego arystokratę o osobistą przysługę.
+    </p>
+    <p>
+        Wszelkie modyfikatory wpływu magii na graczy mają charakter fabularny, to znaczy zależą od rozeznania życiowego,
+        obycia z magią i sprytu reprezentowanego przez graczy na przestrzeni wcześniejszych przygód.
+        Ewentualne rzuty obronne albo odporność magiczna (na iluzję, ogień, magicznie wywołane emocje) mogą się pojawić w dalszej części gry,
+        jeśli postać zgromadzi doświadczenie życiowe i obycie z magią, które uzasadniałyby zawarcie ich w formie testowalnej cechy.
+        Do tego czasu postać zmaga się z iluzorycznym osiłkiem przy pomocy swojej Siły, a przed iluzorycznymi pociskami uchyla się testując swoją Zręczność.
+    </p>
+    <br>
+    <div class="resp-container">
+        <iframe class="resp-iframe" width="820" height="714" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21185&authkey=%21AEZOk4z5UCOmThQ&em=2&wdAllowInteractivity=False&AllowTyping=True&ActiveCell='CECHY'!C24&Item='CECHY'!A1%3AS30&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+    </div>
 
     <br><br id="classes"><br><br>
     <h2 class="rules">Klasa postaci</h2>
     <br>
-        <p>
-            Początkowa klasa postaci to inaczej profesja: Syssition, Starogwardzista, Strażnik, Rozbójnik, Kapłan Eyra, Aeromanta, Krystalomanta, Kupiec, Kuglarz, Grajek;
-            a wyjątkowo nazwę rodu: (np. w Umbrze albo innych częściach świata): Haznyta, Belochita, Seressyta; Kyrn, Ketys itd.
-        </p>
-        <p>
-            Wymienione klasy można potraktować jak podklasy znanych z AD&D klas: Wojownik, Łowca, Kapłan, Mag, Złodziej, Bard.
-            Przykładowo dla Syssitiona zasady rozwoju postaci są oparte na klasie Wojownik, a dla Starogwardzisty na klasie Łowca, choć w obu przypadkach z pewnymi modyfikacjami:
-        </p>
+    <p>
+        Początkowa klasa postaci to inaczej profesja: Syssition, Starogwardzista, Strażnik, Rozbójnik, Kapłan Eyra, Aeromanta, Krystalomanta, Kupiec, Kuglarz, Grajek;
+        a wyjątkowo nazwę rodu: (np. w Umbrze albo innych częściach świata): Haznyta, Belochita, Seressyta; Kyrn, Ketys itd.
+    </p>
+    <p>
+        Wymienione klasy można potraktować jak podklasy znanych z AD&D klas: Wojownik, Łowca, Kapłan, Mag, Złodziej, Bard.
+        Przykładowo dla Syssitiona zasady rozwoju postaci są oparte na klasie Wojownik, a dla Starogwardzisty na klasie Łowca, choć w obu przypadkach z pewnymi modyfikacjami:
+    </p>
 
-        <h6 class="rules">Syssition</h6>
-            <ul class="rules">
-                <li>Dostępne trzy poziomy rozwoju umiejętności władania bronią (do specjalizacji).
-                <li>+ 1 TRAF / poziom.</li>
-                <li>Rozpoczyna z 3 pktami biegłości i 4 pktami umiejętności.</li>
-                <li>Umiejętności początkowe: Pływanie [1] i Wspinaczka [1].</li>
-            </ul>
-        <h6 class="rules">Starogwardzista</h6>
-            <ul class="rules">
-                <li>Dostępne trzy poziomy rozwoju umiejętności władania bronią (do specjalizacji).
-                <li>Dostępna walka dwiema brońmi od 0 poziomu (nie korzysta z cechy Łowcy o zupełnym braku malusów do TRAF w lekkich zbrojach).</li>
-                <li>+ 2 TRAF / 3 poziomy.</li>
-                <li>Rozpoczyna z 3 pktami biegłości i 4 pktami umiejętności (z czego minimum 1 pkt musi przeznaczyć na Księgi - zob. Umiejętności).</li>
-                <li>Umiejętności początkowe: Wytrzymałość [1], Sztuka przetrwania [1], Czytanie i pisanie [2], Sztuka władania ogniem [1].</li>
-                <li>Od 7 poz. dostęp do czarów kapłańskich z domeny boga Ehmdalena</li>
-                <li>Co poziom +15% umiejętności łotrzykowskich.</li>
-            </ul>
+    <h6 class="rules">Syssition</h6>
+        <ul class="rules">
+            <li>Dostępne trzy poziomy rozwoju umiejętności władania bronią (do specjalizacji).
+            <li>+ 1 TRAF / poziom.</li>
+            <li>Rozpoczyna z 3 pktami biegłości i 4 pktami umiejętności.</li>
+            <li>Umiejętności początkowe: Pływanie [1] i Wspinaczka [1].</li>
+        </ul>
+    <h6 class="rules">Starogwardzista</h6>
+        <ul class="rules">
+            <li>Dostępne trzy poziomy rozwoju umiejętności władania bronią (do specjalizacji).
+            <li>Dostępna walka dwiema brońmi od 0 poziomu (nie korzysta z cechy Łowcy o zupełnym braku malusów do TRAF w lekkich zbrojach).</li>
+            <li>+ 2 TRAF / 3 poziomy.</li>
+            <li>Rozpoczyna z 3 pktami biegłości i 4 pktami umiejętności (z czego minimum 1 pkt musi przeznaczyć na Księgi - zob. Umiejętności).</li>
+            <li>Umiejętności początkowe: Wytrzymałość [1], Sztuka przetrwania [1], Czytanie i pisanie [2], Sztuka władania ogniem [1].</li>
+            <li>Od 7 poz. dostęp do czarów kapłańskich z domeny boga Ehmdalena</li>
+            <li>Co poziom +15% umiejętności łotrzykowskich.</li>
+        </ul>
 
     <br id="levelups"><br><br>
     <h2 class="rules">Awanse</h2>
     <br>
-        <p>
-            Awanse następują po identycznych progach liczbowych doświadczenia typowych dla danej klasy (np. Starogwardzista - co 2000 exp.).
-            Ilość przyznawanego exp. jest stała - nie podlega mnożnikowi za heroiczność czynów - jest uzależniona raczej od tego,
-            co nowego dane doświadczenie może wnieść do rozwoju indywiduum odgrywanego przez gracza.
-            Dlatego pierwszych parę poziomów przyrasta raczej wolno, potem można się spodziewać przyspieszenia ze względu na zwiększone możliwości przerobowe różnych wyzwań
-            typu walka i próby cech, a następnie spowolnienia związanego z wyczerpaniem się sfery nowych doświadczeń w danej dziedzinie.
-            Odzwierciedla to zarazem normalną dynamikę uczenia się oraz osiągania biegłości, a następnie mistrzostwa w danej dziedzinie.
-        </p>
-        <p>
-            Każdy awans wiąże się z 1 pkt do rozdysponowania między cechy fizyczne, jednak z respektowaniem ograniczeń fabularnych.
-            Aby uzyskać bardzo wysoki poziom jakiejś cechy, może być konieczne wykreowanie bardzo specyficznych sytuacji fabularnych.
-        </p>
-        <p>
-            Przykład: gracz pragnący przeskoczyć próg Kon 18 musiałby poddawać swoją wytrzymałość potężnym próbom
-            przy prawie każdej nadarzającej się okazji albo podjąć się jednej bardzo długotrwałej lub esktremalnej.
-        </p>
-        <p>
-            Przykład: gracz który przez całą sesję był tylko i wyłącznie mózgiem, nie angażując się w żadną aktywność fizyczną
-            może uzyskać awans niedający żadnych bonusów do cech ani biegłości władania bronią, natomiast dający zwiększoną ilość punktów umiejętności do rozdysponowania.
-        </p>
-        <p>
-            Taki system awansów wiąże się z koniecznością prowadzenia osobnej tabeli awansów, w której będą wykazane wszystkie modyfikatory uzyskane na każdym poszczególnym poziomie, najlepiej wraz z hasłowym opisem uzasadnienia fabularnego (funkcja pomocnicza do zachowania ciągłości kontaktu z bohaterem w przypadku dłuższych przerw w grze).</p>
-        <iframe width="820" height="636" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21177&authkey=%21AKc73V08HYwLiig&em=2&wdAllowInteractivity=False&Item='AWANSE'!A1%3AL22&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+    <p>
+        Awanse następują po identycznych progach liczbowych doświadczenia typowych dla danej klasy (np. Starogwardzista - co 2000 exp.).
+        Ilość przyznawanego exp. jest stała - nie podlega mnożnikowi za heroiczność czynów - jest uzależniona raczej od tego,
+        co nowego dane doświadczenie może wnieść do rozwoju indywiduum odgrywanego przez gracza.
+        Dlatego pierwszych parę poziomów przyrasta raczej wolno, potem można się spodziewać przyspieszenia ze względu na zwiększone możliwości przerobowe różnych wyzwań
+        typu walka i próby cech, a następnie spowolnienia związanego z wyczerpaniem się sfery nowych doświadczeń w danej dziedzinie.
+        Odzwierciedla to zarazem normalną dynamikę uczenia się oraz osiągania biegłości, a następnie mistrzostwa w danej dziedzinie.
+    </p>
+    <p>
+        Każdy awans wiąże się z 1 pkt do rozdysponowania między cechy fizyczne, jednak z respektowaniem ograniczeń fabularnych.
+        Aby uzyskać bardzo wysoki poziom jakiejś cechy, może być konieczne wykreowanie bardzo specyficznych sytuacji fabularnych.
+    </p>
+    <p>
+        Przykład: gracz pragnący przeskoczyć próg Kon 18 musiałby poddawać swoją wytrzymałość potężnym próbom
+        przy prawie każdej nadarzającej się okazji albo podjąć się jednej bardzo długotrwałej lub esktremalnej.
+    </p>
+    <p>
+        Przykład: gracz który przez całą sesję był tylko i wyłącznie mózgiem, nie angażując się w żadną aktywność fizyczną
+        może uzyskać awans niedający żadnych bonusów do cech ani biegłości władania bronią, natomiast dający zwiększoną ilość punktów umiejętności do rozdysponowania.
+    </p>
+    <p>
+        Taki system awansów wiąże się z koniecznością prowadzenia osobnej tabeli awansów, w której będą wykazane wszystkie modyfikatory uzyskane na każdym poszczególnym poziomie, najlepiej wraz z hasłowym opisem uzasadnienia fabularnego (funkcja pomocnicza do zachowania ciągłości kontaktu z bohaterem w przypadku dłuższych przerw w grze).
+    </p>
+    <div class="resp-container">
+        <iframe class="resp-iframe" width="820" height="636" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21177&authkey=%21AKc73V08HYwLiig&em=2&wdAllowInteractivity=False&Item='AWANSE'!A1%3AL22&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+    </div>
 
     <br><br id="multiclassing"><br><br>
     <h2 class="rules">Wieloklasowość i awanse</h2>
     <br>
-        <p>
-            Klasa postaci stanowi jedynie standardową, domyślną ramę dla rozwoju postaci.
-            Jedynymi ograniczeniami dla zawodu/profesji/klasy postaci jest fabuła, czyli wypadkowa działań postaci w realiach świata przedstawionego.
-            Nic nie stoi na przeszkodzie, aby czterdziestoletni rozbójnik zaczął parać się magią nekromantyczną... nic poza realiami niesprzyjającymi takiej przemianie.
-            Jednak opór i konsekwencja, przy odrobinie szczęścia, potrafią odmienić ludzkie losy...
-        </p>
+    <p>
+        Klasa postaci stanowi jedynie standardową, domyślną ramę dla rozwoju postaci.
+        Jedynymi ograniczeniami dla zawodu/profesji/klasy postaci jest fabuła, czyli wypadkowa działań postaci w realiach świata przedstawionego.
+        Nic nie stoi na przeszkodzie, aby czterdziestoletni rozbójnik zaczął parać się magią nekromantyczną... nic poza realiami niesprzyjającymi takiej przemianie.
+        Jednak opór i konsekwencja, przy odrobinie szczęścia, potrafią odmienić ludzkie losy...
+    </p>
 
-        <p>
-            Rozwój innych klas niż bazowa odbywa się w taki sposób, że gracz powinien zadeklarować taką chęć oraz tak kierować działaniami postaci,
-            żeby zyskiwała ona doświadczenie typowe dla innej klasy. Od tego momentu dalszy rozwój przebiega mniej więcej równolegle,
-            to znaczy, że gracz ma prawo rozdysponować nowo otrzymywane doświadczenie między wiodącą klasę postaci a dodatkową klasę postaci, wedle następujących zasad:
-        </p>
-            <ol class="rules">
-                <li>
-                    Punkty doświadczenia otrzymane za działania cechujące daną klasę czy to wiodącą, czy nową, muszą trafić do tej klasy
-                    (np. za podkradanie się i ukrywanie dla Złodzieja, za tropienie i zastawianie pułapek dla Łowcy,
-                    za studiowanie starożytnych ksiąg i ćwiczenie/używanie zaklęć dla czarodzieja; za walkę zbrojną – dla Wojownika/Syssitiona/Starogwardzisty itp.).
-                    W przypadku działań podpadających w ewidentny sposób pod więcej niż jedną klasę, gracz ma swobodę dysponowania
-                    (np. gracz rozwijający Syssiitona oraz Kapłana Eyra może swobodnie rozdysponować doświadczenie otrzymane za służbę zbrojną w Gwardii Słońca).
-                    <br><br>
-                </li>
+    <p>
+        Rozwój innych klas niż bazowa odbywa się w taki sposób, że gracz powinien zadeklarować taką chęć oraz tak kierować działaniami postaci,
+        żeby zyskiwała ona doświadczenie typowe dla innej klasy. Od tego momentu dalszy rozwój przebiega mniej więcej równolegle,
+        to znaczy, że gracz ma prawo rozdysponować nowo otrzymywane doświadczenie między wiodącą klasę postaci a dodatkową klasę postaci, wedle następujących zasad:
+    </p>
+        <ol class="rules">
+            <li>
+                Punkty doświadczenia otrzymane za działania cechujące daną klasę czy to wiodącą, czy nową, muszą trafić do tej klasy
+                (np. za podkradanie się i ukrywanie dla Złodzieja, za tropienie i zastawianie pułapek dla Łowcy,
+                za studiowanie starożytnych ksiąg i ćwiczenie/używanie zaklęć dla czarodzieja; za walkę zbrojną – dla Wojownika/Syssitiona/Starogwardzisty itp.).
+                W przypadku działań podpadających w ewidentny sposób pod więcej niż jedną klasę, gracz ma swobodę dysponowania
+                (np. gracz rozwijający Syssiitona oraz Kapłana Eyra może swobodnie rozdysponować doświadczenie otrzymane za służbę zbrojną w Gwardii Słońca).
+                <br><br>
+            </li>
 
-                <li>
-                    Doświadczenie otrzymane za bardziej ogólne kwestie (pomysły, przeżycia, rozumowanie) gracz może rozdysponować między wszystkie rozwijane klasy postaci,
-                    jednak z tym zastrzeżeniem, że wiodąca klasa postaci musi otrzymać co najmniej 50% exp. przy 2 klasach, 33% exp. przy 3 klasach, 25% exp. przy 4 klasach i tak dalej.
-                    <br><br>
-                </li>
+            <li>
+                Doświadczenie otrzymane za bardziej ogólne kwestie (pomysły, przeżycia, rozumowanie) gracz może rozdysponować między wszystkie rozwijane klasy postaci,
+                jednak z tym zastrzeżeniem, że wiodąca klasa postaci musi otrzymać co najmniej 50% exp. przy 2 klasach, 33% exp. przy 3 klasach, 25% exp. przy 4 klasach i tak dalej.
+                <br><br>
+            </li>
 
-                <li>
-                    Wiodącą klasą postaci jest zawsze ta, która ma najwyższy poziom. Może więc dojść do jej zmiany w trakcie gry,
-                    jednak na podstawie powyższych zasad widać, że wymaga to ogromnej przewagi działań typowych dla dodatkowej klasy nad innymi.
-                </li>
-            </ol>
-        <p>
-            Wszelkie klasy dodatkowe korzystają jedynie z zasad dotyczących awansów, ale nie z początkowych bonusów dla danej klasy.
-            Oznacza to, że wybór dodatkowej klasy Złodziej nie powoduje wzrostu umiejętności złodziejskich do początkowych wartości dla Złodzieja;
-            podobnie wybór dodatkowej klasy czarodziej nie powoduje uzyskania ilości czarów typowej dla czarodzieja 1 poziomu.
-            Natomiast każdy awans w ramach dodatkowej klasy przynosi wszelkie korzyści typowe dla niej.
-        </p>
-        <p>
-            Podsumowując, dodatkowa klasa jest trudniejsza do rozwoju niż klasa wiodąca, a także jej rozwój startuje z niższej pozycji niż gdyby ta klasa była wiodącą.
-            Natomiast wieloklasowość nigdy nie wymaga porzucania wcześniejszej klasy – pozwala rozwijać ją równocześnie w tempie w dużej mierze zależnym od gracza.
-        </p>
+            <li>
+                Wiodącą klasą postaci jest zawsze ta, która ma najwyższy poziom. Może więc dojść do jej zmiany w trakcie gry,
+                jednak na podstawie powyższych zasad widać, że wymaga to ogromnej przewagi działań typowych dla dodatkowej klasy nad innymi.
+            </li>
+        </ol>
+    <p>
+        Wszelkie klasy dodatkowe korzystają jedynie z zasad dotyczących awansów, ale nie z początkowych bonusów dla danej klasy.
+        Oznacza to, że wybór dodatkowej klasy Złodziej nie powoduje wzrostu umiejętności złodziejskich do początkowych wartości dla Złodzieja;
+        podobnie wybór dodatkowej klasy czarodziej nie powoduje uzyskania ilości czarów typowej dla czarodzieja 1 poziomu.
+        Natomiast każdy awans w ramach dodatkowej klasy przynosi wszelkie korzyści typowe dla niej.
+    </p>
+    <p>
+        Podsumowując, dodatkowa klasa jest trudniejsza do rozwoju niż klasa wiodąca, a także jej rozwój startuje z niższej pozycji niż gdyby ta klasa była wiodącą.
+        Natomiast wieloklasowość nigdy nie wymaga porzucania wcześniejszej klasy – pozwala rozwijać ją równocześnie w tempie w dużej mierze zależnym od gracza.
+    </p>
 
     <br id="arms-skills"><br><br>
     <h2 class="rules">Biegłości i broń</h2>
     <br>
-        <p>
-            W zależności od umiejętności władania bronią (tzw. biegłości) postać może preferować pewne klasy broni lub któryś bardzo konkretny typ.
-            Umiejętność władania bronią można podzielić na cztery stopnie zależne od ilości zainwestowanych punktów biegłości:
-        </p>
-        <h6 class="rules">Poziomy umiejętności władania bronią:</h6>
-            <ul class="rules">
-                <li><b>⓿ BRAK UMIEJĘTNOŚCI:</b> -2 TRAF, -1 OBR</li>
-                <li><b>❶ UMIEJĘTNOŚĆ:</b> brak modyfikatorów [dotyczy klasy broni np.: drzewcowa, miecze, łuki, topory itd.]</li>
-                <li><b>❷ BIEGŁOŚĆ:</b> +1 TRAF, +1 OBR [j.w.]</li>
-                <li><b>❸ SPECJALIZACJA:</b> +1 TRAF, +2 OBR, + 1/2 AT/R [dotyczy konkretnego typu broni np.: miecz oburęczny, krótki łuk]</li>
-            </ul>
-        <h6 class="rules">Inne umiejętności bojowe:</h6>
-            <ul class="rules">
-                <li><b>❶ WALKA Z TARCZĄ:</b> +1 KP od parowania używając tarczy</li>
-                <li><b>❶ WALKA DWIEMA BROŃMI:</b> atak 2 brońmi w 1 rundzie z -3 TRAF do ręki wiodącej (broń M/Ś) i -5 TRAF do słabszej (broń M)</li>
-            </ul>
-        <p>
-            Powyższe modyfikatory są ujęte sumarycznie, tzn. specjalizacja daje w sumie +1 TRAF, +2 OBR i +1/2 AT/R.
-            Umiejętność walki bronią aż do poziomu biegłości dotyczy całej klasy broni (broń drzewcowa, łuki, długie ostrza, krótkie ostrza itd.).
-            Natomiast specjalizacja dotyczy wybranego, konkretnego typu broni jak długi miecz, krótki łuk, oszczep.
-        </p>
-        <p>
-            Początkowa ilość punktów biegłości do rozdysponowania różni się w zależności od klasy: Wojownik i Łowca - 4,
-            ale Syssition i Starogwardzista - 3; Kapłan, Łotrzyk - 2; Kupiec, Czarodziej - 1.
-        </p>
-        <p>
-            W zależności od profesji postać może wybrać Specjalizację już na początku gry (Fechmistrz, Gladiator, Najemnik),
-            bądź też musi ją nabyć od mistrza w toku gry. Łotrzykowie mogą nabywać specjalizację samodzielnie od wyższych poziomów,
-            natomiast Czarodziej i pokrewne klasy nie mają możliwości ani Biegłości, ani Specjalizacji - jedyną furtką pozostaje dla nich Wieloklasowość.
-        </p>
-        <br>
-        <iframe width="820" height="650" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21184&authkey=%21APT9nIHLrUmMSlk&em=2&wdAllowInteractivity=False&Item='BRO%C5%83'!A1%3AL110&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
-
+    <p>
+        W zależności od umiejętności władania bronią (tzw. biegłości) postać może preferować pewne klasy broni lub któryś bardzo konkretny typ.
+        Umiejętność władania bronią można podzielić na cztery stopnie zależne od ilości zainwestowanych punktów biegłości:
+    </p>
+    <h6 class="rules">Poziomy umiejętności władania bronią:</h6>
+        <ul class="rules">
+            <li><b>⓿ BRAK UMIEJĘTNOŚCI:</b> -2 TRAF, -1 OBR</li>
+            <li><b>❶ UMIEJĘTNOŚĆ:</b> brak modyfikatorów [dotyczy klasy broni np.: drzewcowa, miecze, łuki, topory itd.]</li>
+            <li><b>❷ BIEGŁOŚĆ:</b> +1 TRAF, +1 OBR [j.w.]</li>
+            <li><b>❸ SPECJALIZACJA:</b> +1 TRAF, +2 OBR, + 1/2 AT/R [dotyczy konkretnego typu broni np.: miecz oburęczny, krótki łuk]</li>
+        </ul>
+    <h6 class="rules">Inne umiejętności bojowe:</h6>
+        <ul class="rules">
+            <li><b>❶ WALKA Z TARCZĄ:</b> +1 KP od parowania używając tarczy</li>
+            <li><b>❶ WALKA DWIEMA BROŃMI:</b> atak 2 brońmi w 1 rundzie z -3 TRAF do ręki wiodącej (broń M/Ś) i -5 TRAF do słabszej (broń M)</li>
+        </ul>
+    <p>
+        Powyższe modyfikatory są ujęte sumarycznie, tzn. specjalizacja daje w sumie +1 TRAF, +2 OBR i +1/2 AT/R.
+        Umiejętność walki bronią aż do poziomu biegłości dotyczy całej klasy broni (broń drzewcowa, łuki, długie ostrza, krótkie ostrza itd.).
+        Natomiast specjalizacja dotyczy wybranego, konkretnego typu broni jak długi miecz, krótki łuk, oszczep.
+    </p>
+    <p>
+        Początkowa ilość punktów biegłości do rozdysponowania różni się w zależności od klasy: Wojownik i Łowca - 4,
+        ale Syssition i Starogwardzista - 3; Kapłan, Łotrzyk - 2; Kupiec, Czarodziej - 1.
+    </p>
+    <p>
+        W zależności od profesji postać może wybrać Specjalizację już na początku gry (Fechmistrz, Gladiator, Najemnik),
+        bądź też musi ją nabyć od mistrza w toku gry. Łotrzykowie mogą nabywać specjalizację samodzielnie od wyższych poziomów,
+        natomiast Czarodziej i pokrewne klasy nie mają możliwości ani Biegłości, ani Specjalizacji - jedyną furtką pozostaje dla nich Wieloklasowość.
+    </p>
+    <br>
+    <div class="resp-container">
+        <iframe class="resp-iframe" width="820" height="650" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21184&authkey=%21APT9nIHLrUmMSlk&em=2&wdAllowInteractivity=False&Item='BRO%C5%83'!A1%3AL110&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+    </div>
 
     <br><br id="rouge-skills"><br><br>
     <h2 class="rules">Umiejętności „łotrzykowskie”</h2>
     <br>
-        <p>
-            Są dostępne dla każdej klasy i profesji. Każdy awans każdej profesji może skutkować bonusem +5% do jednej lub więcej umiejętności łotrzykowskiej,
-            o ile jest to uzasadnione fabularnie poprzez wielokrotne użycie.
-            W praktyce w przypadku Starogwardzisty oznacza to bardzo powolny rozwój w tym zakresie, chyba że dana postać rzeczywiście oddaje się takim czynnościom bardzo często.
-            Inaczej rzecz by się miała w przypadku profesji np. Kuglarza albo Grajka, które mogą być oparte na klasie „złodziej”.
-        </p>
-        <h6 class="rules">Starogwardzista</h6>
-            <ul class="rules">
-                <li>Krycie się w cieniu w terenie: <b>10%</b></li>
-                <li>Krycie się w cieniu w mieście: <b>0%</b></li>
-                <li>Ciche chodzenie w terenie: <b>15%</b></li>
-                <li>Ciche chodzenie w mieście: <b>0%</b></li>
-                <li>Wspinaczka: <b>10%</b></li>
-                <li>Otwieranie zamków: <b>0%</b></li>
-                <li>Wykrywanie pułapek: <b>0%</b></li>
-                <li>Kradzież kieszonkowa: <b>0%</b></li>
-            </ul>
-        <h6 class="rules">Syssition</h6>
-            <ul class="rules">
-                <li>Krycie się w cieniu w terenie: <b>10%</b></li>
-                <li>Krycie się w cieniu w mieście: <b>5%</b></li>
-                <li>Ciche chodzenie w terenie: <b>10%</b></li>
-                <li>Ciche chodzenie w mieście: <b>10%</b></li>
-                <li>Wspinaczka: <b>15%</b></li>
-                <li>Otwieranie zamków: <b>0%</b></li>
-                <li>Wykrywanie pułapek: <b>5%</b></li>
-                <li>Kradzież kieszonkowa: <b>0%</b></li>
-            </ul>
-            <br>
-        <iframe width="820" height="322" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21174&authkey=%21AAA1gAvS7QFa6FU&em=2&wdAllowInteractivity=False&AllowTyping=True&ActiveCell='Umiej%C4%99tno%C5%9Bci%20%C5%82otrzykowskie'!B3&Item='Umiej%C4%99tno%C5%9Bci%20%C5%82otrzykowskie'!A1%3AJ11&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+    <p>
+        Są dostępne dla każdej klasy i profesji. Każdy awans każdej profesji może skutkować bonusem +5% do jednej lub więcej umiejętności łotrzykowskiej,
+        o ile jest to uzasadnione fabularnie poprzez wielokrotne użycie.
+        W praktyce w przypadku Starogwardzisty oznacza to bardzo powolny rozwój w tym zakresie, chyba że dana postać rzeczywiście oddaje się takim czynnościom bardzo często.
+        Inaczej rzecz by się miała w przypadku profesji np. Kuglarza albo Grajka, które mogą być oparte na klasie „złodziej”.
+    </p>
+    <h6 class="rules">Starogwardzista</h6>
+        <ul class="rules">
+            <li>Krycie się w cieniu w terenie: <b>10%</b></li>
+            <li>Krycie się w cieniu w mieście: <b>0%</b></li>
+            <li>Ciche chodzenie w terenie: <b>15%</b></li>
+            <li>Ciche chodzenie w mieście: <b>0%</b></li>
+            <li>Wspinaczka: <b>10%</b></li>
+            <li>Otwieranie zamków: <b>0%</b></li>
+            <li>Wykrywanie pułapek: <b>0%</b></li>
+            <li>Kradzież kieszonkowa: <b>0%</b></li>
+        </ul>
+    <h6 class="rules">Syssition</h6>
+        <ul class="rules">
+            <li>Krycie się w cieniu w terenie: <b>10%</b></li>
+            <li>Krycie się w cieniu w mieście: <b>5%</b></li>
+            <li>Ciche chodzenie w terenie: <b>10%</b></li>
+            <li>Ciche chodzenie w mieście: <b>10%</b></li>
+            <li>Wspinaczka: <b>15%</b></li>
+            <li>Otwieranie zamków: <b>0%</b></li>
+            <li>Wykrywanie pułapek: <b>5%</b></li>
+            <li>Kradzież kieszonkowa: <b>0%</b></li>
+        </ul>
+        <br>
+    <div class="resp-container">
+        <iframe class="resp-iframe" width="820" height="322" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21174&authkey=%21AAA1gAvS7QFa6FU&em=2&wdAllowInteractivity=False&AllowTyping=True&ActiveCell='Umiej%C4%99tno%C5%9Bci%20%C5%82otrzykowskie'!B3&Item='Umiej%C4%99tno%C5%9Bci%20%C5%82otrzykowskie'!A1%3AJ11&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+    </div>
 
     <br><br id="armor"><br><br>
     <h2 class="rules">Zbroja</h2>
     <br>
-        <p>
-            Zbroje oprócz modyfikowania KP posiadają punkty wyparowań, które określają, ile obrażeń dana zbroja przejmuje z ciosu na siebie.
-            Takie obrażenia nie są ponoszone przez postać, natomiast uszkadzają zbroję, powodując jej powolną dezintegrację.
-            Zbroja w złym stanie - od 50% uszkodzeń - daje KP o 1 gorsze, a od 90% - poprawia KP tylko o 1.
-        </p>
-        <p>
-            Oznacza to konieczność prowadzenia dwóch tabeli obrażeń: jednej dla postaci (obrażenia podlegające leczeniu)
-            oraz dla zbroi (obrażenia trwałe, poddające się 1-2 krotnej naprawie u specjalisty).
-        </p>
-        <p>
-            Zbroja w znaczący sposób ogranicza płynność ruchów postaci, co może nie mieć znaczenia w walce i nadal pozwalać na czerpanie korzyści z premii do KP ze ZRC,
-            jednak nie pozostaje bez wpływu na powodzenie działań wymagających wyjątkowej precyzji i dobrego czasu reakcji.
-            W związku z tym jakakolwiek zbroja powoduje negatywne modyfikatory do Umiejętności łotrzykowskich.</p>
-        <br>
-        <iframe width="820" height="710" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21182&authkey=%21ALLarqqIsDb5eVw&em=2&wdAllowInteractivity=False&Item='ZBROJA'!A1%3AI27&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+    <p>
+        Zbroje oprócz modyfikowania KP posiadają punkty wyparowań, które określają, ile obrażeń dana zbroja przejmuje z ciosu na siebie.
+        Takie obrażenia nie są ponoszone przez postać, natomiast uszkadzają zbroję, powodując jej powolną dezintegrację.
+        Zbroja w złym stanie - od 50% uszkodzeń - daje KP o 1 gorsze, a od 90% - poprawia KP tylko o 1.
+    </p>
+    <p>
+        Oznacza to konieczność prowadzenia dwóch tabeli obrażeń: jednej dla postaci (obrażenia podlegające leczeniu)
+        oraz dla zbroi (obrażenia trwałe, poddające się 1-2 krotnej naprawie u specjalisty).
+    </p>
+    <p>
+        Zbroja w znaczący sposób ogranicza płynność ruchów postaci, co może nie mieć znaczenia w walce i nadal pozwalać na czerpanie korzyści z premii do KP ze ZRC,
+        jednak nie pozostaje bez wpływu na powodzenie działań wymagających wyjątkowej precyzji i dobrego czasu reakcji.
+        W związku z tym jakakolwiek zbroja powoduje negatywne modyfikatory do Umiejętności łotrzykowskich.</p>
+    <br>
+    <div class="resp-container">
+        <iframe class="resp-iframe" width="820" height="710" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21182&authkey=%21ALLarqqIsDb5eVw&em=2&wdAllowInteractivity=False&Item='ZBROJA'!A1%3AI27&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+    </div>
 
     <br><br id="damage"><br><br>
     <h2 class="rules">Obrażenia i progi ran</h2>
     <br>
-        <p>
-            Obrażenia wg progów ran dzielą się na lekkie, średnie, ciężkie oraz rany śmiertelne.
-            Rany poniżej lekkich to zadraśnięcia i obicia, które generalnie przestają obciążać żywotność postaci już po kilku godzinach.
-        </p>
-        <p>
-            Progi ran należy czytać następująco: np 3/6/9/12 oznacza, że rany Lekkie zaczynają się od 3 obr., a Śmiertelne od 12.
-            Innymi słowy Lekkie 3-5, Średnie 6-8, Ciężkie 9-11, Śmiertelne od 12. A zatem progi ran 3/6/9/12 można też zapisać jako 3-5/6-8/9-11/12.
-        </p>
-            <ul class="rules">
-                <li>
-                    <b>Lekkie:</b> goją się zazwyczaj z dnia na dzień, nie powodują utraty sprawności w walce.
-                </li>
-                <li>
-                    <b>Średnie:</b> 1 pkt/dzień, nie ograniczają sprawności w bieżącej walce, ale kiedy rany zaczną krzepnąć - owszem.
-                </li>
-                <li>
-                    <b>Ciężkie:</b> 1 pkt/dzień pod warunkiem opieki specjalisty, w przeciwnym razie goją się znacznie dłużej, ograniczają sprawność w bieżącej walce,
-                    a efekt podwaja się, kiedy rany zaczną krzepnąć.
-                </li>
-                <li>
-                    <b>Śmiertelne:</b> są to rany zagrażające życiu, które w braku natychmiastowej pomocy skutkują śmiercią,
-                    po ich otrzymaniu możliwa jest jeszcze jedna akcja przed odpadnięciem z walki (oczywiście ze znacząco ograniczoną sprawnością);
-                    w przypadku rany znacznie przewyższającej próg ran śmiertelnych (o 5 obr.) postać ginie natychmiast nieświadoma tego, że umiera.
-                </li>
-            </ul>
-        <p>
-            Dodatkowo obrażenia powinny być przypisywane przez graczy do poszczególnych części ciała wraz z hasłowym opisem. W tym celu - stos kartek ze schematyczną ilustracją części ciała.
-        </p>
+    <p>
+        Obrażenia wg progów ran dzielą się na lekkie, średnie, ciężkie oraz rany śmiertelne.
+        Rany poniżej lekkich to zadraśnięcia i obicia, które generalnie przestają obciążać żywotność postaci już po kilku godzinach.
+    </p>
+    <p>
+        Progi ran należy czytać następująco: np 3/6/9/12 oznacza, że rany Lekkie zaczynają się od 3 obr., a Śmiertelne od 12.
+        Innymi słowy Lekkie 3-5, Średnie 6-8, Ciężkie 9-11, Śmiertelne od 12. A zatem progi ran 3/6/9/12 można też zapisać jako 3-5/6-8/9-11/12.
+    </p>
+        <ul class="rules">
+            <li>
+                <b>Lekkie:</b> goją się zazwyczaj z dnia na dzień, nie powodują utraty sprawności w walce.
+            </li>
+            <li>
+                <b>Średnie:</b> 1 pkt/dzień, nie ograniczają sprawności w bieżącej walce, ale kiedy rany zaczną krzepnąć - owszem.
+            </li>
+            <li>
+                <b>Ciężkie:</b> 1 pkt/dzień pod warunkiem opieki specjalisty, w przeciwnym razie goją się znacznie dłużej, ograniczają sprawność w bieżącej walce,
+                a efekt podwaja się, kiedy rany zaczną krzepnąć.
+            </li>
+            <li>
+                <b>Śmiertelne:</b> są to rany zagrażające życiu, które w braku natychmiastowej pomocy skutkują śmiercią,
+                po ich otrzymaniu możliwa jest jeszcze jedna akcja przed odpadnięciem z walki (oczywiście ze znacząco ograniczoną sprawnością);
+                w przypadku rany znacznie przewyższającej próg ran śmiertelnych (o 5 obr.) postać ginie natychmiast nieświadoma tego, że umiera.
+            </li>
+        </ul>
+    <p>
+        Dodatkowo obrażenia powinny być przypisywane przez graczy do poszczególnych części ciała wraz z hasłowym opisem. W tym celu - stos kartek ze schematyczną ilustracją części ciała.
+    </p>
 
     <br><br><br>
     <h2 class="rules">Karta postaci</h2>
     <br>
-        <p>
-            Poniższe szablony karty postaci wymagają instalacji czcionki "IM Fell Great Primer", aby zachować układ strony.
-            Przy braku tej czcionki formatowanie tekstu będzie wyglądać gorzej.
-            Karty postaci można ściągnąć przez ikonę w pasku poniżej tabeli (tak samo wszystkie wcześniejsze tabele).
-        </p>
+    <p>
+        Poniższe szablony karty postaci wymagają instalacji czcionki "IM Fell Great Primer", aby zachować układ strony.
+        Przy braku tej czcionki formatowanie tekstu będzie wyglądać gorzej.
+        Karty postaci można ściągnąć przez ikonę w pasku poniżej tabeli (tak samo wszystkie wcześniejsze tabele).
+    </p>
 
-        <br id="character-sheet1">
-        <h4>Cechy i walka</h4>
-        <br>
-        <iframe width="820" height="800" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21186&authkey=%21APJrr9D7kO1uRPw&em=2&wdAllowInteractivity=False&Item='Karta%20postaci%20I'!A1%3AO42&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
-        <br><br><br>
+    <br id="character-sheet1">
+    <h4>Cechy i walka</h4>
+    <br>
+    <div class="resp-container">
+        <iframe class="resp-iframe" width="820" height="800" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21186&authkey=%21APJrr9D7kO1uRPw&em=2&wdAllowInteractivity=False&Item='Karta%20postaci%20I'!A1%3AO42&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+    </div>
 
-        <br id="character-sheet2">
-        <h4>Ekwipunek</h4>
-        <br>
-        <iframe width="820" height="800" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21180&authkey=%21AFvO8ocNWSlgRPE&em=2&wdAllowInteractivity=False&Item='Karta%20postaci%20III'!A1%3AG53&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
-        <br><br><br>
+    <br><br><br>
 
-        <br id="character-sheet3">
-        <h4>Umiejętności i biegłości</h4>
-        <br>
-        <iframe width="820" height="800" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21164&authkey=%21APqI_Elaow_VmUw&em=2&wdAllowInteractivity=False&Item='Karta%20postaci%20II'!A1%3AJ27&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
-        <br><br><br>
+    <br id="character-sheet2">
+    <h4>Ekwipunek</h4>
+    <br>
+    <div class="resp-container">
+        <iframe class="resp-iframe" width="820" height="800" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21180&authkey=%21AFvO8ocNWSlgRPE&em=2&wdAllowInteractivity=False&Item='Karta%20postaci%20III'!A1%3AG53&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+    </div>
+    <br><br><br>
 
-        <br id="character-sheet4">
-        <h4>Tabela awansów</h4>
-        <br>
-        <iframe width="820" height="800" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21166&authkey=%21ALxxz5vuE5N_NGM&em=2&wdAllowInteractivity=False&Item='Karta%20postaci%20III'!A1%3AJ38&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
-        <br><br>
+    <br id="character-sheet3">
+    <h4>Umiejętności i biegłości</h4>
+    <br>
+    <div class="resp-container">
+        <iframe class="resp-iframe" width="820" height="800" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21164&authkey=%21APqI_Elaow_VmUw&em=2&wdAllowInteractivity=False&Item='Karta%20postaci%20II'!A1%3AJ27&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+    </div>
+    <br><br><br>
+
+    <br id="character-sheet4">
+    <h4>Tabela awansów</h4>
+    <br>
+    <div class="resp-container">
+        <iframe class="resp-iframe" width="820" height="800" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21166&authkey=%21ALxxz5vuE5N_NGM&em=2&wdAllowInteractivity=False&Item='Karta%20postaci%20III'!A1%3AJ38&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+    </div>
+    <br><br>
+
 {% endblock content %}

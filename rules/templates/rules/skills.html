@@ -134,8 +134,8 @@
             {% else %}
                 <img src="{% static 'img/skill-default.png' %}" class="border-double img-skill">
             {% endif %}
-            <h1 class="hover-blue pt-2" data-toggle="collapse" data-target="#{{ skill.short_name }}">
-                <b>{{ skill.name }}</b>
+            <h1 class="pt-2" data-toggle="collapse" data-target="#{{ skill.short_name }}">
+                <b class="hover-blue">{{ skill.name }}</b>
             </h1>
 
             <div id="{{ skill.short_name }}" class="collapse">
@@ -172,11 +172,11 @@
     </div>
     <br>
 
-    <h2 class="hover-blue border-top" data-toggle="collapse" data-target="#synergies"><br><b>Synergie</b></h2>
+    <h2 class=" border-top" data-toggle="collapse" data-target="#synergies"><br><b class="hover-blue">Synergie</b></h2>
     <small>
         Synergie to dodatkowe bonusy z tytułu połączenia pary lub więcej umiejętności. Lista jest otwarta.
     </small>
-    <br>
+    <br><br>
     <div id="synergies" class="collapse">
         {% for synergy in synergies %}
             {% for skill in synergy.skills.all %}

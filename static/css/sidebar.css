@@ -1,0 +1,17 @@
+
+.content-section-sidebar {
+	    position: sticky;
+        padding: 0 10px;
+	    top: 0;
+	    left: 0;
+}
+
+.account-img-sidebar {
+        display: block;
+        height: auto;
+        width: 100%;
+        margin-right: 20px;
+        margin-bottom: 16px;
+        margin-top: 40px;
+        border: double;
+}
