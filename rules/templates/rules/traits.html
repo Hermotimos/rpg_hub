@@ -1,0 +1,525 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/rules.css' %}" xmlns="http://www.w3.org/1999/html">
+{% endblock head_extra %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'rules:main' %}">Zasady</a></li>
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br><br><br>
+    <h3 class="rules">Siła</h3>
+    <br>
+
+    <table>
+        <colgroup>
+            <col class="value">
+            <col class="strength-hit">
+            <col class="strength-damage">
+            <col class="load">
+            <col class="max-load">
+        </colgroup>
+        <thead>
+            <tr class="border-custom-base">
+                <th>Tu obrazek</th>
+                <th>TRAF</th>
+                <th>OBR</th>
+                <th>UDŹWIG</th>
+                <th>UDŹWIG MAX.</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>-10</td>
+                <td>-10</td>
+                <td>0</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>13</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>14</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>15</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>16</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>17</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>18</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>19</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>20</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+
+
+
+    <br><br><br>
+    <h3 class="rules">Zręczność</h3>
+    <br>
+
+    <table>
+        <colgroup>
+            <col class="value">
+            <col class="strength-hit">
+            <col class="strength-damage">
+            <col class="load">
+            <col class="max-load">
+        </colgroup>
+        <thead>
+            <tr class="border-custom-base">
+                <th>Tu obrazek</th>
+                <th>TRAF</th>
+                <th>OBR</th>
+                <th>UDŹWIG</th>
+                <th>UDŹWIG MAX.</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>-10</td>
+                <td>-10</td>
+                <td>0</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>13</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>14</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>15</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>16</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>17</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>18</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>19</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>20</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+
+
+
+
+    <br><br><br>
+    <h3 class="rules">Kondycja</h3>
+    <br>
+
+    <table>
+        <colgroup>
+            <col class="value">
+            <col class="strength-hit">
+            <col class="strength-damage">
+            <col class="load">
+            <col class="max-load">
+        </colgroup>
+        <thead>
+            <tr class="border-custom-base">
+                <th>Tu obrazek</th>
+                <th>TRAF</th>
+                <th>OBR</th>
+                <th>UDŹWIG</th>
+                <th>UDŹWIG MAX.</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>-10</td>
+                <td>-10</td>
+                <td>0</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>13</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>14</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>15</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>16</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>17</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>18</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>19</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+            <tr>
+                <td>20</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+                <td>xx</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+
+        <br><br><br>
+{% endblock content %}

@@ -35,5 +35,13 @@ def rules_combat_view(request):
         'page_title': 'Przebieg walki'
     }
 
-    print(type('rules/combat.html'))
     return render(request, 'rules/combat.html', context)
+
+
+@login_required
+def rules_traits_view(request):
+    context = {
+        'page_title': 'Cechy'
+    }
+    return render(request, 'rules/traits.html', context)
+
