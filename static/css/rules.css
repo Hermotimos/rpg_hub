@@ -65,19 +65,19 @@ li b {
 .skills .strength-damage {width: 100px;}
 .skills .load {width: 100px;}
 .skills .max-load {width: 125px;}
-
 .skills .agility-value {width: 80px;}
 .skills .agility-hit {width: 100px;}
 .skills .agility-damage {width: 100px;}
 .skills .ac-dodge {width: 100px;}
 .skills .reflex {width: 100px;}
-
 .skills .endurance-value {width: 80px;}
 .skills .defense-throw {width: 100px;}
 .skills .ac-parry {width: 100px;}
 .skills .life {width: 100px;}
 .skills .damage-thresholds {width: 180px;}
 
+.professions .level {width: 180px;}
+.professions .level-desc {width: 180px;}
 
 .skills-red {
         color: #993300;

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.forms import Textarea
 from django.db import models
-from rules.models import Skill, Synergy
+from rules.models import Skill, Synergy, CharacterClass, CharacterProfession
 
 
 class SkillAdmin(admin.ModelAdmin):
@@ -26,3 +26,5 @@ class SynergyAdmin(admin.ModelAdmin):
 
 admin.site.register(Skill, SkillAdmin)
 admin.site.register(Synergy, SynergyAdmin)
+admin.site.register(CharacterClass)
+admin.site.register(CharacterProfession)

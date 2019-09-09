@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{% static 'css/rules.css' %}" xmlns="http://www.w3.org/1999/html">
+{% endblock head_extra %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'rules:main' %}">Zasady</a></li>
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br><br><br><br>
+    <h2 class="rules">XXXXX</h2>
+    <br>
+    <p>
+        XXXXXXXXXXX
+    </p>
+    <br>
+    <div id="professions" class="">
+        {% for class in classes_with_professions_dict %}
+            <h1 data-toggle="collapse" data-target="#{{ class.name }}">
+                <b class="hover-blue">{{ class.name }}</b>
+            </h1>
+            <p>{{ class.description }}</p>
+
+            <div id="{{ class.name }}" class="collapse">
+            {% for profession in classes_with_professions_dict|dict_lookup:class %}
+                <h5 data-toggle="collapse" data-target="#{{ profession.name }}">
+                    <b class="hover-blue">
+                        {{ profession.name }}
+                    </b>
+                </h5>
+                <div id="{{ profession.name }}" class="collapse">
+                <small>{{ profession.description }}</small>
+                <small>{{ profession.start_perks }}</small>
+                    <br><br>
+                    <table>
+                        <colgroup>
+                            <col class="level">
+                            <col class="level-desc">
+                        </colgroup>
+                        <thead class="align-center">
+                            <tr class="border-custom-base">
+                                <th class="border-custom-right small-caps">Poziom</th>
+                                <th class="small-caps">Bonusy</th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="align-center">
+                            <tr><td>1</td><td>{{ profession.lvl_1 }}</td></tr>
+                            <tr><td>2</td><td>{{ profession.lvl_2 }}</td></tr>
+                            <tr><td>3</td><td>{{ profession.lvl_3 }}</td></tr>
+                            <tr><td>4</td><td>{{ profession.lvl_4 }}</td></tr>
+                            <tr><td>5</td><td>{{ profession.lvl_5 }}</td></tr>
+                            <tr><td>6</td><td>{{ profession.lvl_6 }}</td></tr>
+                            <tr><td>7</td><td>{{ profession.lvl_7 }}</td></tr>
+                            <tr><td>8</td><td>{{ profession.lvl_8 }}</td></tr>
+                            <tr><td>9</td><td>{{ profession.lvl_9 }}</td></tr>
+                            <tr><td>10</td><td>{{ profession.lvl_10 }}</td></tr>
+                            <tr><td>11</td><td>{{ profession.lvl_11 }}</td></tr>
+                            <tr><td>12</td><td>{{ profession.lvl_12 }}</td></tr>
+                            <tr><td>13</td><td>{{ profession.lvl_13 }}</td></tr>
+                            <tr><td>14</td><td>{{ profession.lvl_14 }}</td></tr>
+                            <tr><td>15</td><td>{{ profession.lvl_15 }}</td></tr>
+                            <tr><td>16</td><td>{{ profession.lvl_16 }}</td></tr>
+                            <tr><td>17</td><td>{{ profession.lvl_17 }}</td></tr>
+                            <tr><td>18</td><td>{{ profession.lvl_18 }}</td></tr>
+                            <tr><td>19</td><td>{{ profession.lvl_19 }}</td></tr>
+                            <tr><td>20</td><td>{{ profession.lvl_20 }}</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+            </div>
+            <br>
+         {% endfor %}
+    </div>
+    <br><br><br>
+{% endblock content %}

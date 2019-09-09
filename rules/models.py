@@ -59,4 +59,45 @@ class Synergy(models.Model):
         verbose_name_plural = 'Synergies'
 
 
-# class CharacterClass(models.Model):
+class CharacterClass(models.Model):
+    name = models.CharField(max_length=100, unique=True, verbose_name='Klasa')
+    description = models.TextField(max_length=4000, default='')
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
+class CharacterProfession(models.Model):
+    name = models.CharField(max_length=100, unique=True, verbose_name='Profesja')
+    character_class = models.ForeignKey(CharacterClass, related_name='professions', on_delete=models.PROTECT)
+    description = models.TextField(max_length=4000, default='')
+    start_perks = models.TextField(max_length=4000, default='')
+    lvl_1 = models.CharField(max_length=500, default='')
+    lvl_2 = models.CharField(max_length=500, default='')
+    lvl_3 = models.CharField(max_length=500, default='')
+    lvl_4 = models.CharField(max_length=500, default='')
+    lvl_5 = models.CharField(max_length=500, default='')
+    lvl_6 = models.CharField(max_length=500, default='')
+    lvl_7 = models.CharField(max_length=500, default='')
+    lvl_8 = models.CharField(max_length=500, default='')
+    lvl_9 = models.CharField(max_length=500, default='')
+    lvl_10 = models.CharField(max_length=500, default='')
+    lvl_11 = models.CharField(max_length=500, default='')
+    lvl_12 = models.CharField(max_length=500, default='')
+    lvl_13 = models.CharField(max_length=500, default='')
+    lvl_14 = models.CharField(max_length=500, default='')
+    lvl_15 = models.CharField(max_length=500, default='')
+    lvl_16 = models.CharField(max_length=500, default='')
+    lvl_17 = models.CharField(max_length=500, default='')
+    lvl_18 = models.CharField(max_length=500, default='')
+    lvl_19 = models.CharField(max_length=500, default='')
+    lvl_20 = models.CharField(max_length=500, default='')
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from rules.models import Skill, Synergy
+from rules.models import Skill, Synergy, CharacterClass, CharacterProfession
 
 
 @login_required
@@ -44,4 +44,17 @@ def rules_traits_view(request):
         'page_title': 'Cechy'
     }
     return render(request, 'rules/traits.html', context)
+
+
+@login_required
+def rules_professions_view(request):
+    classes = CharacterClass.objects.all()
+    classes_with_professions_dict = {c: [p for p in c.professions.all()] for c in classes}
+
+    context = {
+        'page_title': 'Cechy',
+        'classes_with_professions_dict': classes_with_professions_dict
+    }
+    return render(request, 'rules/professions.html', context)
+
 
