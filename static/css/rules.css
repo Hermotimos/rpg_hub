@@ -19,7 +19,6 @@ li b {
         margin-right: 5px;
 }
 
-
 .img-rules {
         float: left;
         height: 45px;
@@ -59,4 +58,49 @@ li b {
     width: 820px;
     height: 100%;
     border: 0;
+}
+
+.skills .strength-value {width: 80px;}
+.skills .strength-hit {width: 100px;}
+.skills .strength-damage {width: 100px;}
+.skills .load {width: 100px;}
+.skills .max-load {width: 125px;}
+
+.skills .agility-value {width: 80px;}
+.skills .agility-hit {width: 100px;}
+.skills .agility-damage {width: 100px;}
+.skills .ac-dodge {width: 100px;}
+.skills .reflex {width: 100px;}
+
+.skills .endurance-value {width: 80px;}
+.skills .defense-throw {width: 100px;}
+.skills .ac-parry {width: 100px;}
+.skills .life {width: 100px;}
+.skills .damage-thresholds {width: 180px;}
+
+
+.skills-red {
+        color: #993300;
+}
+
+
+.skills-green {
+        color: #008000;
+}
+
+.border-custom-right {
+        border-right: 1px solid #363636;
+}
+
+thead.align-center th {
+        text-align: center;
+        color: #444444;
+}
+
+tbody.align-center td {
+        text-align: center;
+}
+
+tbody.align-center td.align-right {
+        text-align: right;
 }

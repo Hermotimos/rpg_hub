@@ -12,514 +12,212 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br><br><br>
-    <h3 class="rules">Siła</h3>
+    <br><br><br><br>
+    <h2 class="rules">Cechy początkowe i rozwój</h2>
     <br>
+    <p>
+        Trzy cechy opisujące postać to: Siła, Zręczność i Kondycja, a ich bazowe wartości to: 11, 11, 11.
+        Przeciętne wartości dla człowieka to 10. Te bazowe cechy graczy są ponadprzeciętne, ponieważ gracze wcielają się w „bohaterów”.
+        Istnieje możliwość przesunięcia ok. 3 pkt przy uzasadnieniu silnymi rysami biografii lub fizjologii.
+        O zakresie przesunięć decyduje MG na podstawie opisu gracza. Jednak trzeba mieć na uwadze, że taki opis zobowiązuje w trakcie rozgrywki do odpowiedniego odgrywania postaci.
+    </p>
+    <p>
+        Cechy mentalne jak Inteligencja, Mądrość i Charyzma zależą jedynie od wyboru sposobu odgrywania postaci przez gracza oraz sytuacji fabularnej.
+        Jest znanym procederem przesuwanie punktów z cech mentalnych na fizyczne, tak jak jest znanym problemem kwestia odgrywania postaci o Mądrości 4 i Inteligencji 9, czy odwrotnie. A co dopiero Charyzma...
+        Charyzma nie sprawdza się nawet przy dobrych wartościach, ponieważ np. potężny osiłek może dużą siłę oddziaływania, gdy zastrasza grupę chłopów,
+        jednak prawdopodobnie niską, gdy prosi słabo mu znanego arystokratę o osobistą przysługę.
+        Dlatego cechy mentalne mają charakter fabularny, to znaczy że zależą od wyboru sposobu odgrywania postaci przez gracza (tego deklarowanego czy faktycznego).
+    </p>
+    <p>
+        Wszelkie modyfikatory wpływu magii na graczy mają charakter fabularny, to znaczy zależą od rozeznania życiowego,
+        obycia z magią i sprytu reprezentowanego przez graczy na przestrzeni wcześniejszych przygód.
+        Ewentualne rzuty obronne albo odporność magiczna (na iluzję, ogień, magicznie wywołane emocje) mogą się pojawić w dalszej części gry,
+        jeśli postać zgromadzi doświadczenie życiowe i obycie z magią, które uzasadniałyby zawarcie ich w formie testowalnej cechy.
+        Do tego czasu postać zmaga się z iluzorycznym osiłkiem przy pomocy swojej Siły, a przed iluzorycznymi pociskami uchyla się testując swoją Zręczność.
+    </p>
 
-    <table>
+
+    <br><br><br>
+    <h2 class="rules">Siła</h2>
+    <br>
+    <p>
+        Siła odpowiada za szansę na przebicie się przez pancerz i skórę wroga, tak aby go zranić,
+        a także za zdolność udźwigu, od którego zależy prędkość poruszania się postaci oraz możliwość czerpania premii ze ZRC.
+    </p>
+    <br>
+    <table class="skills align-center">
         <colgroup>
-            <col class="value">
+            <col class="strength-value">
             <col class="strength-hit">
             <col class="strength-damage">
             <col class="load">
             <col class="max-load">
         </colgroup>
-        <thead>
+        <thead class="align-center">
             <tr class="border-custom-base">
-                <th>Tu obrazek</th>
-                <th>TRAF</th>
-                <th>OBR</th>
-                <th>UDŹWIG</th>
-                <th>UDŹWIG MAX.</th>
+                <th class="border-custom-right small-caps"><h2><b>Sił</b></h2></th>
+                <th class="small-caps">Traf</th>
+                <th class="small-caps">Obr</th>
+                <th class="small-caps">Udźwig</th>
+                <th class="small-caps">Udźwig<br>max.</th>
             </tr>
         </thead>
 
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>-10</td>
-                <td>-10</td>
-                <td>0</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>6</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>7</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>8</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>9</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>10</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>11</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>12</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>13</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>14</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>15</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>16</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>17</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>18</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>19</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>20</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-
+        <tbody class="align-center ">
+            <tr><td class="border-custom-right">1</td><td class="skills-red">-10</td><td class="skills-red">-10</td><td class="skills-red">0</td><td class="skills-red">1</td></tr>
+            <tr><td class="border-custom-right">2</td><td class="skills-red">-6</td><td class="skills-red">-6</td><td class="skills-red">2</td><td class="skills-red">5</td></tr>
+            <tr><td class="border-custom-right">3</td><td class="skills-red">-5</td><td class="skills-red">-5</td><td class="skills-red">3</td><td class="skills-red">10</td></tr>
+            <tr><td class="border-custom-right">4</td><td class="skills-red">-4</td><td class="skills-red">-4</td><td class="skills-red">6</td><td class="skills-red">15</td></tr>
+            <tr><td class="border-custom-right">5</td><td class="skills-red">-3</td><td class="skills-red">-3</td><td class="skills-red">9</td><td class="skills-red">22</td></tr>
+            <tr><td class="border-custom-right">6</td><td class="skills-red">-2</td><td class="skills-red">-2</td><td class="skills-red">12</td><td class="skills-red">25</td></tr>
+            <tr><td class="border-custom-right">7</td><td class="skills-red">-1</td><td class="skills-red">-2</td><td class="skills-red">15</td><td class="skills-red">28</td></tr>
+            <tr><td class="border-custom-right">8</td><td class="skills-red">-1</td><td class="skills-red">-1</td><td class="skills-red">18</td><td class="skills-red">35</td></tr>
+            <tr><td class="border-custom-right">9</td><td>0</td><td class="skills-red">-1</td><td>20</td><td class="skills-red">45</td></tr>
+            <tr><td class="border-custom-right">10</td><td>0</td><td>0</td><td>20</td><td>57</td></tr>
+            <tr><td class="border-custom-right">11</td><td>0</td><td class="skills-green">+1</td><td>20</td><td class="skills-green">62</td></tr>
+            <tr><td class="border-custom-right">12</td><td class="skills-green">+1</td><td class="skills-green">+1</td><td class="skills-green">23</td><td class="skills-green">70</td></tr>
+            <tr><td class="border-custom-right">13</td><td class="skills-green">+1</td><td class="skills-green">+2</td><td class="skills-green">24</td><td class="skills-green">75</td></tr>
+            <tr><td class="border-custom-right">14</td><td class="skills-green">+2</td><td class="skills-green">+2</td><td class="skills-green">27</td><td class="skills-green">85</td></tr>
+            <tr><td class="border-custom-right">15</td><td class="skills-green">+2</td><td class="skills-green">+3</td><td class="skills-green">30</td><td class="skills-green">90</td></tr>
+            <tr><td class="border-custom-right">16</td><td class="skills-green">+3</td><td class="skills-green">+3</td><td class="skills-green">35</td><td class="skills-green">98</td></tr>
+            <tr><td class="border-custom-right">17</td><td class="skills-green">+3</td><td class="skills-green">+4</td><td class="skills-green">40</td><td class="skills-green">110</td></tr>
+            <tr><td class="border-custom-right">18</td><td class="skills-green">+4</td><td class="skills-green">+4</td><td class="skills-green">55</td><td class="skills-green">128</td></tr>
+            <tr><td class="border-custom-right">19</td><td class="skills-green">+5</td><td class="skills-green">+5</td><td class="skills-green">68</td><td class="skills-green">140</td></tr>
+            <tr><td class="border-custom-right">20</td><td class="skills-green">+6</td><td class="skills-green">+6</td><td class="skills-green">80</td><td class="skills-green">153</td></tr>
         </tbody>
     </table>
-
-
+    <br>
+    <p>
+        Premie do TRAF i OBR z Siły są rozłączne wobec premii do TRAF i OBR ze Zręczności. Premię zawsze należy obliczyć dla obranej techniki walki lub sytuacji,
+        uwzględniając przy tym opis broni, w którym wskazane jest, jakiego rodzaju premie dana broń dopuszcza (z Siły, ze Zręczności, albo zależnie od wyboru).
+    </p>
 
 
     <br><br><br>
-    <h3 class="rules">Zręczność</h3>
+    <h2 class="rules">Zręczność</h2>
     <br>
-
-    <table>
+    <p>
+        Zręczność odpowiada za szanse na celne ugodzenie przeciwnika bronią dystansową lub użytą na dystans (łuki, kusze, proca lub oszczep, włócznia, toporek - przy rzucie),
+        szermierczą (sztylet, krótki miecz) albo taką, która dopuszcza różne techniki walki, tj. siłową lub szermierczą (część mieczy i broni drzewcowej).
+        Oprócz tego wysoka Zręczność umożliwia postaci szybkie reagowanie na nadchodzące ciosy i uchylanie się przed nimi zamiast przyjmowanie na tarczę albo na broń.
+        Dzięki dobremu Refleksowi postacie z wysoką Zręcznością są w stanie zadawać ciosy szybciej i lepiej radzić sobie z walką dwiema brońmi.
+        Oznacza to, że Refleks zmniejsza rzut za Inicjatywę w walce, a także malusy do TRAF przy walce dwiema brońmi.
+    </p>
+    <br>
+    <table class="skills align-center">
         <colgroup>
-            <col class="value">
-            <col class="strength-hit">
-            <col class="strength-damage">
-            <col class="load">
-            <col class="max-load">
+            <col class="agility-value">
+            <col class="agility-hit">
+            <col class="agility-damage">
+            <col class="ac-dodge">
+            <col class="reflex">
         </colgroup>
-        <thead>
+        <thead class="align-center">
             <tr class="border-custom-base">
-                <th>Tu obrazek</th>
-                <th>TRAF</th>
-                <th>OBR</th>
-                <th>UDŹWIG</th>
-                <th>UDŹWIG MAX.</th>
+                <th class="border-custom-right small-caps"><h2><b>Zrc</b></h2></th>
+                <th class="small-caps">Traf</th>
+                <th class="small-caps">Obr</th>
+                <th class="small-caps">KP<br>uniki</th>
+                <th class="small-caps">Refleks</th>
             </tr>
         </thead>
 
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>-10</td>
-                <td>-10</td>
-                <td>0</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>6</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>7</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>8</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>9</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>10</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>11</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>12</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>13</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>14</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>15</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>16</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>17</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>18</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>19</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>20</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-
+        <tbody class="align-center ">
+            <tr><td class="border-custom-right">1</td><td class="skills-red">-10</td><td class="skills-red">-10</td><td class="skills-red">-10</td><td class="skills-red">-10</td></tr>
+            <tr><td class="border-custom-right">2</td><td class="skills-red">-6</td><td class="skills-red">-6</td><td class="skills-red">-5</td><td class="skills-red">-5</td></tr>
+            <tr><td class="border-custom-right">3</td><td class="skills-red">-5</td><td class="skills-red">-5</td><td class="skills-red">-4</td><td class="skills-red">-4</td></tr>
+            <tr><td class="border-custom-right">4</td><td class="skills-red">-4</td><td class="skills-red">-4</td><td class="skills-red">-3</td><td class="skills-red">-3</td></tr>
+            <tr><td class="border-custom-right">5</td><td class="skills-red">-3</td><td class="skills-red">-3</td><td class="skills-red">-2</td><td class="skills-red">-2</td></tr>
+            <tr><td class="border-custom-right">6</td><td class="skills-red">-2</td><td class="skills-red">-2</td><td class="skills-red">-1</td><td class="skills-red">-2</td></tr>
+            <tr><td class="border-custom-right">7</td><td class="skills-red">-2</td><td class="skills-red">-1</td><td class="skills-red">-1</td><td class="skills-red">-1</td></tr>
+            <tr><td class="border-custom-right">8</td><td class="skills-red">-1</td><td class="skills-red">-1</td><td>0</td><td>-1</td></tr>
+            <tr><td class="border-custom-right">9</td><td class="skills-red">-1</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td class="border-custom-right">10</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td class="border-custom-right">11</td><td class="skills-green">+1</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td class="border-custom-right">12</td><td class="skills-green">+1</td><td class="skills-green">+1</td><td class="skills-green">+1</td><td class="skills-green">+1</td></tr>
+            <tr><td class="border-custom-right">13</td><td class="skills-green">+2</td><td class="skills-green">+1</td><td class="skills-green">+1</td><td class="skills-green">+1</td></tr>
+            <tr><td class="border-custom-right">14</td><td class="skills-green">+2</td><td class="skills-green">+2</td><td class="skills-green">+2</td><td class="skills-green">+2</td></tr>
+            <tr><td class="border-custom-right">15</td><td class="skills-green">+3</td><td class="skills-green">+2</td><td class="skills-green">+2</td><td class="skills-green">+2</td></tr>
+            <tr><td class="border-custom-right">16</td><td class="skills-green">+3</td><td class="skills-green">+2</td><td class="skills-green">+3</td><td class="skills-green">+3</td></tr>
+            <tr><td class="border-custom-right">17</td><td class="skills-green">+4</td><td class="skills-green">+3</td><td class="skills-green">+3</td><td class="skills-green">+3</td></tr>
+            <tr><td class="border-custom-right">18</td><td class="skills-green">+4</td><td class="skills-green">+3</td><td class="skills-green">+4</td><td class="skills-green">+4</td></tr>
+            <tr><td class="border-custom-right">19</td><td class="skills-green">+5</td><td class="skills-green">+4</td><td class="skills-green">+5</td><td class="skills-green">+5</td></tr>
+            <tr><td class="border-custom-right">20</td><td class="skills-green">+6</td><td class="skills-green">+4</td><td class="skills-green">+6</td><td class="skills-green">+6</td></tr>
         </tbody>
     </table>
-
-
-
+    <br>
+    <p>
+        Premie do TRAF i OBR ze Zręczności są rozłączne wobec premii do TRAF i OBR z Siły. Premię zawsze należy obliczyć dla obranej techniki walki lub sytuacji,
+        uwzględniając przy tym opis broni, w którym wskazane jest, jakiego rodzaju premie dana broń dopuszcza (z Siły, ze Zręczności, albo zależnie od wyboru).
+    </p>
+    <p>
+        Premia do KP ze Zręczności (uniki) jest rozłączna wobec premii do KP z Kondycji (parowanie). Modyfikatory te opisują dwie odrębne strategie uniknięcia obrażeń w walce,
+        tj. uchylanie się od ciosu, albo umiejętne przyjmowanie go na siebie w kontrolowany sposób, czyli na tarczę albo pancerz, bez odnoszenia szkody.
+    </p>
 
 
     <br><br><br>
-    <h3 class="rules">Kondycja</h3>
+    <h2 class="rules">Kondycja</h2>
     <br>
-
-    <table>
+    <p>
+        Kondycja odpowiada przede wszystkim za żywotność postaci, czyli jej zdolność na wytrzymywanie długotrwałych obciążeń oraz ran.
+        Progi ran oraz Próg przytomności określają reakcje fizjologiczne postaci na obrażenia fizyczne.
+        Kondycja pozwala również na lepsze znoszenie ciosów przeciwników przyjmowanych na zbroję lub tarczę,
+        pod warunkiem, że posiada się zbroję co najmniej jeden z trzech elementów: tarczę, broń nadającą się do parowania lub zbroję płytowo-kolczą lub jeszcze wyższej klasy.
+        Dla zawadiaki z dwoma nożami w garściach, odzianego nawet w dobrej klasy kolczugę, parowanie nie wchodzi zupełnie w grę.
+    </p>
+    <p>
+        Rzut obronny to rzut za KON wykonywany w sytuacjach walki z chorobą, trucizną, jadem albo innym rodzajem potężnego obciążenia fizjologicznego.
+        Rzuty takie zwykle wykonuje się z wysokimi modyfikatorami negatywnymi, np. -5 przy ukąszeniu przez żmiję rogatą.
+        Modyfikator rzutu obronnego z Kondycji należy dodać do wyniku rzutu w takiej sytuacji.
+    </p>
+    <br>
+    <table class="skills">
         <colgroup>
-            <col class="value">
-            <col class="strength-hit">
-            <col class="strength-damage">
-            <col class="load">
-            <col class="max-load">
+            <col class="endurance-value">
+            <col class="defense-throw">
+            <col class="ac-parry">
+            <col class="life">
+            <col class="damage-thresholds">
         </colgroup>
-        <thead>
+        <thead class="align-center">
             <tr class="border-custom-base">
-                <th>Tu obrazek</th>
-                <th>TRAF</th>
-                <th>OBR</th>
-                <th>UDŹWIG</th>
-                <th>UDŹWIG MAX.</th>
+                <th class="border-custom-right small-caps"><h2><b>Kon</b></h2></th>
+                <th class="small-caps">Rzut<br>obronny</th>
+                <th class="small-caps">KP<br>parowanie</th>
+                <th class="small-caps">Życie</th>
+                <th class="small-caps align-right">Progi ran<br>L/Ś/Ć/Śm</th>
             </tr>
         </thead>
 
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>-10</td>
-                <td>-10</td>
-                <td>0</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>6</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>7</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>8</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>9</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>10</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>11</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>12</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>13</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>14</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>15</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>16</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>17</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>18</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>19</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-            <tr>
-                <td>20</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-            </tr>
-
+        <tbody class="align-center">
+            <tr><td class="border-custom-right">1</td><td class="skills-red">-10</td><td class="skills-red">-10</td><td class="skills-red">?</td><td class="skills-red align-right"> - / - / - / pac!</td></tr>
+            <tr><td class="border-custom-right">2</td><td class="skills-red">-6</td><td class="skills-red">-5</td><td class="skills-red">1</td><td class="skills-red align-right">- / - / - / 1+</td></tr>
+            <tr><td class="border-custom-right">3</td><td class="skills-red">-5</td><td class="skills-red">-4</td><td class="skills-red">3</td><td class="skills-red align-right">- / - / 1 / 2+</td></tr>
+            <tr><td class="border-custom-right">4</td><td class="skills-red">-4</td><td class="skills-red">-3</td><td class="skills-red">5</td><td class="skills-red align-right">1 / 2 / 3 / 4+</td></tr>
+            <tr><td class="border-custom-right">5</td><td class="skills-red">-3</td><td class="skills-red">-2</td><td class="skills-red">7</td><td class="skills-red align-right">1 / 2-3 / 4-6 / 7+</td></tr>
+            <tr><td class="border-custom-right">6</td><td class="skills-red">-2</td><td class="skills-red">-1</td><td class="skills-red">10</td><td class="skills-red align-right">1-2 / 3-4 / 5-7 / 8+</td></tr>
+            <tr><td class="border-custom-right">7</td><td class="skills-red">-1</td><td class="skills-red">-1</td><td class="skills-red">12</td><td class="skills-red align-right">2-3 / 4-5 / 6-8 / 9+</td></tr>
+            <tr><td class="border-custom-right">8</td><td>0</td><td>0</td><td class="skills-red">15</td><td class="skills-red align-right">2-3 / 5-6 / 7-9 / 10+</td></tr>
+            <tr><td class="border-custom-right">9</td><td>0</td><td>0</td><td class="skills-red">17</td><td class="skills-red align-right">3-5 / 6-8 / 9-10 / 11+</td></tr>
+            <tr><td class="border-custom-right">10</td><td>0</td><td>0</td><td>20</td><td class="align-right">3-5 / 6-8 / 9-10 / 12+</td></tr>
+            <tr><td class="border-custom-right">11</td><td>0</td><td>0</td><td class="skills-green">23</td><td class="align-right">3-5 / 6-8 / 9-10 / 12+</td></tr>
+            <tr><td class="border-custom-right">12</td><td>0</td><td class="skills-green">+1</td><td class="skills-green">25</td><td class="align-right">3-5 / 6-8 / 9-10 / 12+</td></tr>
+            <tr><td class="border-custom-right">13</td><td class="skills-green">+1</td><td class="skills-green">+1</td><td class="skills-green">28</td><td class="skills-green align-right">3-5 / 6-9 / 10-12 / 13+</td></tr>
+            <tr><td class="border-custom-right">14</td><td class="skills-green">+1</td><td class="skills-green">+2</td><td class="skills-green">30</td><td class="skills-green align-right">3-6 / 7-9 / 10-13 / 14+</td></tr>
+            <tr><td class="border-custom-right">15</td><td class="skills-green">+2</td><td class="skills-green">+2</td><td class="skills-green">33</td><td class="skills-green align-right">4-6 / 7-10 / 11-13 / 14+</td></tr>
+            <tr><td class="border-custom-right">16</td><td class="skills-green">+2</td><td class="skills-green">+3</td><td class="skills-green">35</td><td class="skills-green align-right">5-7 / 8-11 / 12-14 / 15+</td></tr>
+            <tr><td class="border-custom-right">17</td><td class="skills-green">+3</td><td class="skills-green">+3</td><td class="skills-green">38</td><td class="skills-green align-right">6-8 / 9-12 / 13-15 / 16+</td></tr>
+            <tr><td class="border-custom-right">18</td><td class="skills-green">+4</td><td class="skills-green">+4</td><td class="skills-green">40</td><td class="skills-green align-right">6-9 / 10-13 / 14-16 / 17+</td></tr>
+            <tr><td class="border-custom-right">19</td><td class="skills-green">+5</td><td class="skills-green">+5</td><td class="skills-green">43</td><td class="skills-green align-right">6-10 / 11-14 / 15-17 / 18+</td></tr>
+            <tr><td class="border-custom-right">20</td><td class="skills-green">+6</td><td class="skills-green">+6</td><td class="skills-green">46</td><td class="skills-green align-right">6-11 / 12-15 / 16-18 / 19+</td></tr>
         </tbody>
     </table>
+    <br>
+    <p>
+        Premia do KP z Kondycji (parowanie) jest rozłączna wobec premii do KP ze Zręczności (uniki). Modyfikatory te opisują dwie odrębne strategie uniknięcia obrażeń w walce,
+        tj. uchylanie się od ciosu, albo umiejętne przyjmowanie go na siebie w kontrolowany sposób, czyli na tarczę albo pancerz, bez odnoszenia szkody.
+    </p>
 
-
-        <br><br><br>
+<br><br><br>
 {% endblock content %}
