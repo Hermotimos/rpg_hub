@@ -48,11 +48,16 @@ def rules_traits_view(request):
 
 @login_required
 def rules_professions_view(request):
-    classes = CharacterClass.objects.all()
-    classes_with_professions_dict = {c: [p for p in c.professions.all()] for c in classes}
+    if request.user.profile.character_status == 'gm':
+        classes = list(CharacterClass.objects.all())
+        classes_with_professions_dict = {c: [p for p in c.professions.all()] for c in classes}
+    else:
+        classes = list(c for c in CharacterClass.objects.all() if request.user.profile in c.allowed_list())
+        classes_with_professions_dict = \
+            {c: [p for p in c.professions.all() if request.user.profile in p.allowed_profiles.all()] for c in classes}
 
     context = {
-        'page_title': 'Cechy',
+        'page_title': 'Klasy i profesje',
         'classes_with_professions_dict': classes_with_professions_dict
     }
     return render(request, 'rules/professions.html', context)

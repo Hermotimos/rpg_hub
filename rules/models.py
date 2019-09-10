@@ -67,6 +67,13 @@ class CharacterClass(models.Model):
     def __str__(self):
         return self.name
 
+    def allowed_list(self):
+        allowed_profiles = []
+        for profession in self.professions.all():
+            for profile in profession.allowed_profiles.all():
+                allowed_profiles.append(profile)
+        return allowed_profiles
+
     def short_name(self):
         return ''.join(word[:3] for word in str(self.name).split(' '))
 
