@@ -11,7 +11,7 @@ from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm, I
 @login_required
 def debates_main_view(request):
     if request.user.profile.character_status == 'gm':
-        topics = Topic.objects.all()
+        topics = list(Topic.objects.all())
         topics_with_debates_dict = {}
         for topic in topics:
             topics_with_debates_dict[topic] = [d for d in topic.debates.all()]
