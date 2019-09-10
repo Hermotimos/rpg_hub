@@ -24,7 +24,7 @@
             <h1 data-toggle="collapse" data-target="#{{ class.short_name }}">
                 <b class="hover-blue">{{ class.name }}</b>
             </h1>
-            <p>{{ class.description }}</p>
+            <p>{{ class.description|linebreaksbr }}</p>
 
             <div id="{{ class.short_name }}" class="collapse">
             {% for profession in classes_with_professions_dict|dict_lookup:class %}
@@ -34,8 +34,8 @@
                     </b>
                 </h5>
                 <div id="{{ profession.short_name }}" class="collapse">
-                <small>{{ profession.description }}</small>
-                <small>{{ profession.start_perks }}</small>
+                <small>{{ profession.description|linebreaksbr }}</small>
+                <small>{{ profession.start_perks|linebreaksbr }}</small>
                     <br><br>
                     <table>
                         <colgroup>
