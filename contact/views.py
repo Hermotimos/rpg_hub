@@ -264,7 +264,7 @@ def plans_create_view(request):
             if plan.inform_gm:
                 subject = f"[RPG] Info o planach od {request.user.profile}"
                 message = f"{request.user.profile} poinformował o swoich planach:\n\n{plan.text}\n" \
-                          f"{request.get_host()}/contact/demands/detail:{plan.id}/\n\n"    # TODO adjust pattern to url!
+                          f"{request.get_host()}/contact/plans/for-gm/\n\n"
                 sender = settings.EMAIL_HOST_USER
                 receivers = ['lukas.kozicki@gmail.com']
                 send_mail(subject, message, sender, receivers)
@@ -305,7 +305,7 @@ def plans_modify_view(request, plan_id):
             if plan.inform_gm:
                 subject = f"[RPG] Info o zmianie planów od {request.user.profile}"
                 message = f"{request.user.profile} poinformował o zmianie planów:\n\n{plan.text}\n" \
-                    f"{request.get_host()}/contact/demands/detail:{plan.id}/\n\n"  # TODO adjust pattern to url!
+                    f"{request.get_host()}/contact/demands/for-gm/\n\n"
                 sender = settings.EMAIL_HOST_USER
                 receivers = ['lukas.kozicki@gmail.com']
                 send_mail(subject, message, sender, receivers)
