@@ -13,20 +13,21 @@
 
 {% block content %}
     <br><br><br><br>
-    <h2 class="rules">XXXXX</h2>
+    <h2 class="rules">Klasa a profesja</h2>
     <br>
     <p>
-        XXXXXXXXXXX
+        Klasa postaci grupuje profesje o zbliżonym rysie psychologicznym i pofilu rozwoju.
     </p>
-    <br>
+
     <div id="professions">
         {% for class in classes_with_professions_dict %}
-            <h1 data-toggle="collapse" data-target="#{{ class.short_name }}">
-                <b class="hover-blue">{{ class.name }}</b>
-            </h1>
+            <br><br><br>
+            <h2><b>{{ class.name }}</b></h2>
             <p>{{ class.description|linebreaksbr }}</p>
 
+            <h5 data-toggle="collapse" data-target="#{{ class.short_name }}"><b class="hover-blue">Lista profesji</b></h5>
             <div id="{{ class.short_name }}" class="collapse">
+            <br>
             {% for profession in classes_with_professions_dict|dict_lookup:class %}
                 <h5 data-toggle="collapse" data-target="#{{ profession.short_name }}">
                     <b class="hover-blue">
@@ -34,9 +35,9 @@
                     </b>
                 </h5>
                 <div id="{{ profession.short_name }}" class="collapse">
-                <small>{{ profession.description|linebreaksbr }}</small>
-                <small>{{ profession.start_perks|linebreaksbr }}</small>
-                    <br><br>
+                <p>{{ profession.description|linebreaksbr }}</p>
+                <p>{{ profession.start_perks|linebreaksbr }}</p>
+                    <br>
                     <table>
                         <colgroup>
                             <col class="level">
@@ -72,7 +73,7 @@
                             <tr><td>20</td><td>{{ profession.lvl_20 }}</td></tr>
                         </tbody>
                     </table>
-                    <br>
+                    <br><br>
                 </div>
             {% endfor %}
             </div>

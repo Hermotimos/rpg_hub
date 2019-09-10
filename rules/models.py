@@ -63,6 +63,8 @@ class CharacterClass(models.Model):
 
     class Meta:
         ordering = ['name']
+        verbose_name = 'Character class'
+        verbose_name_plural = 'Character classes'
 
     def __str__(self):
         return self.name
@@ -75,7 +77,7 @@ class CharacterClass(models.Model):
         return allowed_profiles
 
     def short_name(self):
-        return ''.join(word[:3] for word in str(self.name).split(' '))
+        return ''.join(word[:4] for word in str(self.name).split(' '))
 
 
 class CharacterProfession(models.Model):
@@ -112,10 +114,10 @@ class CharacterProfession(models.Model):
                                               related_name='allowed_professions')
 
     class Meta:
-        ordering = ['name']
+        ordering = ['character_class', 'name']
 
     def __str__(self):
         return self.name
 
     def short_name(self):
-        return ''.join(word[:3] for word in str(self.name).split(' '))
+        return ''.join(word[:4] for word in str(self.name).split(' '))
