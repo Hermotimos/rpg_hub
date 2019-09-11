@@ -47,6 +47,14 @@ def rules_traits_view(request):
 
 
 @login_required
+def rules_masteries_view(request):
+    context = {
+        'page_title': 'Biegłości i inne zdolności bojowe'
+    }
+    return render(request, 'rules/masteries.html', context)
+
+
+@login_required
 def rules_professions_view(request):
     if request.user.profile.character_status == 'gm':
         classes = list(CharacterClass.objects.all())
