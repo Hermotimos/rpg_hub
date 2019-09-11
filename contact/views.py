@@ -45,15 +45,14 @@ def demands_create_view(request):
             demand.author = request.user
             demand.save()
 
-            if request.user.profile.character_status != 'gm':
-                subject = f"[RPG] Dezyderat nr {demand.id}"
-                message = f"Dezyderat od {demand.author}:\n{demand.text}\n" \
-                          f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
-                sender = settings.EMAIL_HOST_USER
-                receivers = [demand.addressee.email]
-                send_mail(subject, message, sender, receivers)
+            subject = f"[RPG] Dezyderat nr {demand.id}"
+            message = f"Dezyderat od {demand.author}:\n{demand.text}\n" \
+                      f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
+            sender = settings.EMAIL_HOST_USER
+            receivers = [demand.addressee.email]
+            send_mail(subject, message, sender, receivers)
 
-            messages.info(request, f'Dezyderat został wysłany!')
+            messages.info(request, f'Dezyderat został wysłany! -{sender} -{receivers}')
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
     else:
