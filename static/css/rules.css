@@ -76,8 +76,8 @@ li b {
 .skills .life {width: 100px;}
 .skills .damage-thresholds {width: 180px;}
 
-.professions .level {width: 180px;}
-.professions .level-desc {width: 180px;}
+.professions .level {width: 100px;}
+.professions .level-desc {width: 350px;}
 
 .skills-red {
         color: #993300;
@@ -103,4 +103,20 @@ tbody.align-center td {
 
 tbody.align-center td.align-right {
         text-align: right;
+}
+
+tbody.align-center td.align-left {
+        text-align: left;
+}
+
+thead.align-center th.align-left {
+        text-align: left;
+}
+
+thead.align-center th.align-right {
+        text-align: right;
+}
+
+.professions tr:nth-child(even) {
+        background-color: #f2f2f2;
 }

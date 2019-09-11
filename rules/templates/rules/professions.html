@@ -35,42 +35,43 @@
                     </b>
                 </h5>
                 <div id="{{ profession.short_name }}" class="collapse">
-                <p>{{ profession.description|linebreaksbr }}</p>
-                <p>{{ profession.start_perks|linebreaksbr }}</p>
+                    <p>{{ profession.description|linebreaksbr }}</p>
+                    <p>{{ profession.start_perks|linebreaksbr }}</p>
                     <br>
-                    <table>
+
+                    <table class="professions">
                         <colgroup>
-                            <col class="level">
+                            <col class="level border-custom-right">
                             <col class="level-desc">
                         </colgroup>
                         <thead class="align-center">
                             <tr class="border-custom-base">
                                 <th class="border-custom-right small-caps">Poziom</th>
-                                <th class="small-caps">Bonusy</th>
+                                <th class="small-caps align-left">&emsp;Bonusy</th>
                             </tr>
                         </thead>
 
                         <tbody class="align-center">
-                            <tr><td>1</td><td>{{ profession.lvl_1 }}</td></tr>
-                            <tr><td>2</td><td>{{ profession.lvl_2 }}</td></tr>
-                            <tr><td>3</td><td>{{ profession.lvl_3 }}</td></tr>
-                            <tr><td>4</td><td>{{ profession.lvl_4 }}</td></tr>
-                            <tr><td>5</td><td>{{ profession.lvl_5 }}</td></tr>
-                            <tr><td>6</td><td>{{ profession.lvl_6 }}</td></tr>
-                            <tr><td>7</td><td>{{ profession.lvl_7 }}</td></tr>
-                            <tr><td>8</td><td>{{ profession.lvl_8 }}</td></tr>
-                            <tr><td>9</td><td>{{ profession.lvl_9 }}</td></tr>
-                            <tr><td>10</td><td>{{ profession.lvl_10 }}</td></tr>
-                            <tr><td>11</td><td>{{ profession.lvl_11 }}</td></tr>
-                            <tr><td>12</td><td>{{ profession.lvl_12 }}</td></tr>
-                            <tr><td>13</td><td>{{ profession.lvl_13 }}</td></tr>
-                            <tr><td>14</td><td>{{ profession.lvl_14 }}</td></tr>
-                            <tr><td>15</td><td>{{ profession.lvl_15 }}</td></tr>
-                            <tr><td>16</td><td>{{ profession.lvl_16 }}</td></tr>
-                            <tr><td>17</td><td>{{ profession.lvl_17 }}</td></tr>
-                            <tr><td>18</td><td>{{ profession.lvl_18 }}</td></tr>
-                            <tr><td>19</td><td>{{ profession.lvl_19 }}</td></tr>
-                            <tr><td>20</td><td>{{ profession.lvl_20 }}</td></tr>
+                            <tr><td>1</td><td class="align-left">&emsp;{{ profession.lvl_1 }}</td></tr>
+                            <tr><td>2</td><td class="align-left">&emsp;{{ profession.lvl_2 }}</td></tr>
+                            <tr><td>3</td><td class="align-left">&emsp;{{ profession.lvl_3 }}</td></tr>
+                            <tr><td>4</td><td class="align-left">&emsp;{{ profession.lvl_4 }}</td></tr>
+                            <tr><td>5</td><td class="align-left">&emsp;{{ profession.lvl_5 }}</td></tr>
+                            <tr><td>6</td><td class="align-left">&emsp;{{ profession.lvl_6 }}</td></tr>
+                            <tr><td>7</td><td class="align-left">&emsp;{{ profession.lvl_7 }}</td></tr>
+                            <tr><td>8</td><td class="align-left">&emsp;{{ profession.lvl_8 }}</td></tr>
+                            <tr><td>9</td><td class="align-left">&emsp;{{ profession.lvl_9 }}</td></tr>
+                            <tr><td>10</td><td class="align-left">&emsp;{{ profession.lvl_10 }}</td></tr>
+                            <tr><td>11</td><td class="align-left">&emsp;{{ profession.lvl_11 }}</td></tr>
+                            <tr><td>12</td><td class="align-left">&emsp;{{ profession.lvl_12 }}</td></tr>
+                            <tr><td>13</td><td class="align-left">&emsp;{{ profession.lvl_13 }}</td></tr>
+                            <tr><td>14</td><td class="align-left">&emsp;{{ profession.lvl_14 }}</td></tr>
+                            <tr><td>15</td><td class="align-left">&emsp;{{ profession.lvl_15 }}</td></tr>
+                            <tr><td>16</td><td class="align-left">&emsp;{{ profession.lvl_16 }}</td></tr>
+                            <tr><td>17</td><td class="align-left">&emsp;{{ profession.lvl_17 }}</td></tr>
+                            <tr><td>18</td><td class="align-left">&emsp;{{ profession.lvl_18 }}</td></tr>
+                            <tr><td>19</td><td class="align-left">&emsp;{{ profession.lvl_19 }}</td></tr>
+                            <tr><td>20</td><td class="align-left">&emsp;{{ profession.lvl_20 }}</td></tr>
                         </tbody>
                     </table>
                     <br><br>
