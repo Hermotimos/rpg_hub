@@ -52,7 +52,7 @@ def demands_create_view(request):
             receivers = [demand.addressee.email]
             send_mail(subject, message, sender, receivers)
 
-            messages.info(request, f'Dezyderat został wysłany! -{sender} -{receivers}')
+            messages.info(request, f'Dezyderat został wysłany!')
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
     else:
