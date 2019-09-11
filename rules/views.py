@@ -55,6 +55,14 @@ def rules_masteries_view(request):
 
 
 @login_required
+def rules_tricks_view(request):
+    context = {
+        'page_title': 'Podstępy'
+    }
+    return render(request, 'rules/tricks.html', context)
+
+
+@login_required
 def rules_professions_view(request):
     if request.user.profile.character_status == 'gm':
         classes = list(CharacterClass.objects.all())

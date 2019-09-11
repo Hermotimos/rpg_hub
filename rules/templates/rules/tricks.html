@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/rules.css' %}" xmlns="http://www.w3.org/1999/html">
+{% endblock head_extra %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'rules:main' %}">Zasady</a></li>
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br>
+
+    <br><br id="rouge-skills"><br><br>
+    <h2 class="rules">Podstępy</h2>
+    <br>
+    <p>
+        Podstępy są dostępne dla każdej Klasy i Profesji. Domyślna wartość początkowa to 0% dla wszystkich Podstępów, chyba że opis Profesji stwierdza inaczej.
+        Każdy awans każdej Profesji może skutkować bonusem +5% do Podstępów, o ile jest to uzasadnione fabularnie poprzez kilkukrotne użycie.
+    </p>
+    <iframe class="" width="820" height="322" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21191&authkey=%21AA8YTfxRmIaTwAk&em=2&wdAllowInteractivity=False&ActiveCell='Umiej%C4%99tno%C5%9Bci%20%C5%82otrzykowskie'!B4&Item='Umiej%C4%99tno%C5%9Bci%20%C5%82otrzykowskie'!A1%3AJ11&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+    <br><br><br>
+{% endblock content %}
