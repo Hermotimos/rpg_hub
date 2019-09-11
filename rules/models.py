@@ -114,7 +114,7 @@ class CharacterProfession(models.Model):
                                               related_name='allowed_professions')
 
     class Meta:
-        ordering = ['character_class', 'name']
+        ordering = ['name']
 
     def __str__(self):
         return self.name
