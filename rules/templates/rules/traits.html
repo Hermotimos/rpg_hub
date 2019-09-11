@@ -173,6 +173,10 @@
         Rzuty takie zwykle wykonuje się z wysokimi modyfikatorami negatywnymi, np. -5 przy ukąszeniu przez żmiję rogatą.
         Modyfikator rzutu obronnego z Kondycji należy dodać do wyniku rzutu w takiej sytuacji.
     </p>
+    <p>
+        Próg przytomności charakteryzuje zdolność postaci do walki do upadłego.
+        Utrata pktów życia równa lub wyższa niż Próg przytomności skutkuje natychmiastową utratą świadomości niezależnie od rodzaju otrzymanych ran.
+    </p>
     <br>
     <table class="skills">
         <colgroup>
@@ -187,38 +191,42 @@
                 <th class="border-custom-right small-caps"><h2><b>Kon</b></h2></th>
                 <th class="small-caps">Rzut<br>obronny</th>
                 <th class="small-caps">KP<br>parowanie</th>
-                <th class="small-caps">Życie</th>
+                <th class="small-caps">Życie<br>[Próg przytomności]</th>
                 <th class="small-caps align-right">Progi ran<br>L/Ś/Ć/Śm</th>
             </tr>
         </thead>
 
         <tbody class="align-center">
             <tr><td class="border-custom-right">1</td><td class="skills-red">-10</td><td class="skills-red">-10</td><td class="skills-red">?</td><td class="skills-red align-right"> - / - / - / pac!</td></tr>
-            <tr><td class="border-custom-right">2</td><td class="skills-red">-6</td><td class="skills-red">-5</td><td class="skills-red">1</td><td class="skills-red align-right">- / - / - / 1+</td></tr>
-            <tr><td class="border-custom-right">3</td><td class="skills-red">-5</td><td class="skills-red">-4</td><td class="skills-red">3</td><td class="skills-red align-right">- / - / 1 / 2+</td></tr>
-            <tr><td class="border-custom-right">4</td><td class="skills-red">-4</td><td class="skills-red">-3</td><td class="skills-red">5</td><td class="skills-red align-right">1 / 2 / 3 / 4+</td></tr>
-            <tr><td class="border-custom-right">5</td><td class="skills-red">-3</td><td class="skills-red">-2</td><td class="skills-red">7</td><td class="skills-red align-right">1 / 2-3 / 4-6 / 7+</td></tr>
-            <tr><td class="border-custom-right">6</td><td class="skills-red">-2</td><td class="skills-red">-1</td><td class="skills-red">10</td><td class="skills-red align-right">1-2 / 3-4 / 5-7 / 8+</td></tr>
-            <tr><td class="border-custom-right">7</td><td class="skills-red">-1</td><td class="skills-red">-1</td><td class="skills-red">12</td><td class="skills-red align-right">2-3 / 4-5 / 6-8 / 9+</td></tr>
-            <tr><td class="border-custom-right">8</td><td>0</td><td>0</td><td class="skills-red">15</td><td class="skills-red align-right">2-3 / 5-6 / 7-9 / 10+</td></tr>
-            <tr><td class="border-custom-right">9</td><td>0</td><td>0</td><td class="skills-red">17</td><td class="skills-red align-right">3-5 / 6-8 / 9-10 / 11+</td></tr>
-            <tr><td class="border-custom-right">10</td><td>0</td><td>0</td><td>20</td><td class="align-right">3-5 / 6-8 / 9-10 / 12+</td></tr>
-            <tr><td class="border-custom-right">11</td><td>0</td><td>0</td><td class="skills-green">23</td><td class="align-right">3-5 / 6-8 / 9-10 / 12+</td></tr>
-            <tr><td class="border-custom-right">12</td><td>0</td><td class="skills-green">+1</td><td class="skills-green">25</td><td class="align-right">3-5 / 6-8 / 9-10 / 12+</td></tr>
-            <tr><td class="border-custom-right">13</td><td class="skills-green">+1</td><td class="skills-green">+1</td><td class="skills-green">28</td><td class="skills-green align-right">3-5 / 6-9 / 10-12 / 13+</td></tr>
-            <tr><td class="border-custom-right">14</td><td class="skills-green">+1</td><td class="skills-green">+2</td><td class="skills-green">30</td><td class="skills-green align-right">3-6 / 7-9 / 10-13 / 14+</td></tr>
-            <tr><td class="border-custom-right">15</td><td class="skills-green">+2</td><td class="skills-green">+2</td><td class="skills-green">33</td><td class="skills-green align-right">4-6 / 7-10 / 11-13 / 14+</td></tr>
-            <tr><td class="border-custom-right">16</td><td class="skills-green">+2</td><td class="skills-green">+3</td><td class="skills-green">35</td><td class="skills-green align-right">5-7 / 8-11 / 12-14 / 15+</td></tr>
-            <tr><td class="border-custom-right">17</td><td class="skills-green">+3</td><td class="skills-green">+3</td><td class="skills-green">38</td><td class="skills-green align-right">6-8 / 9-12 / 13-15 / 16+</td></tr>
-            <tr><td class="border-custom-right">18</td><td class="skills-green">+4</td><td class="skills-green">+4</td><td class="skills-green">40</td><td class="skills-green align-right">6-9 / 10-13 / 14-16 / 17+</td></tr>
-            <tr><td class="border-custom-right">19</td><td class="skills-green">+5</td><td class="skills-green">+5</td><td class="skills-green">43</td><td class="skills-green align-right">6-10 / 11-14 / 15-17 / 18+</td></tr>
-            <tr><td class="border-custom-right">20</td><td class="skills-green">+6</td><td class="skills-green">+6</td><td class="skills-green">46</td><td class="skills-green align-right">6-11 / 12-15 / 16-18 / 19+</td></tr>
+            <tr><td class="border-custom-right">2</td><td class="skills-red">-6</td><td class="skills-red">-5</td><td class="skills-red">1 [1]</td><td class="skills-red align-right">- / - / - / 1+</td></tr>
+            <tr><td class="border-custom-right">3</td><td class="skills-red">-5</td><td class="skills-red">-4</td><td class="skills-red">3 [1]</td><td class="skills-red align-right">- / - / 1 / 2+</td></tr>
+            <tr><td class="border-custom-right">4</td><td class="skills-red">-4</td><td class="skills-red">-3</td><td class="skills-red">5 [4]</td><td class="skills-red align-right">1 / 2 / 3 / 4+</td></tr>
+            <tr><td class="border-custom-right">5</td><td class="skills-red">-3</td><td class="skills-red">-2</td><td class="skills-red">7 [6]</td><td class="skills-red align-right">1 / 2-3 / 4-6 / 7+</td></tr>
+            <tr><td class="border-custom-right">6</td><td class="skills-red">-2</td><td class="skills-red">-1</td><td class="skills-red">10 [9]</td><td class="skills-red align-right">1-2 / 3-4 / 5-7 / 8+</td></tr>
+            <tr><td class="border-custom-right">7</td><td class="skills-red">-1</td><td class="skills-red">-1</td><td class="skills-red">12 [10]</td><td class="skills-red align-right">2-3 / 4-5 / 6-8 / 9+</td></tr>
+            <tr><td class="border-custom-right">8</td><td>0</td><td>0</td><td class="skills-red">15 [13]</td><td class="skills-red align-right">2-3 / 5-6 / 7-9 / 10+</td></tr>
+            <tr><td class="border-custom-right">9</td><td>0</td><td>0</td><td class="skills-red">17 [14]</td><td class="skills-red align-right">3-5 / 6-8 / 9-10 / 11+</td></tr>
+            <tr><td class="border-custom-right">10</td><td>0</td><td>0</td><td>20 [17]</td><td class="align-right">3-5 / 6-8 / 9-10 / 12+</td></tr>
+            <tr><td class="border-custom-right">11</td><td>0</td><td>0</td><td class="skills-green">23 [20]</td><td class="align-right">3-5 / 6-8 / 9-10 / 12+</td></tr>
+            <tr><td class="border-custom-right">12</td><td>0</td><td class="skills-green">+1</td><td class="skills-green">25 [22]</td><td class="align-right">3-5 / 6-8 / 9-10 / 12+</td></tr>
+            <tr><td class="border-custom-right">13</td><td class="skills-green">+1</td><td class="skills-green">+1</td><td class="skills-green">28 [25]</td><td class="skills-green align-right">3-5 / 6-9 / 10-12 / 13+</td></tr>
+            <tr><td class="border-custom-right">14</td><td class="skills-green">+1</td><td class="skills-green">+2</td><td class="skills-green">30 [27]</td><td class="skills-green align-right">3-6 / 7-9 / 10-13 / 14+</td></tr>
+            <tr><td class="border-custom-right">15</td><td class="skills-green">+2</td><td class="skills-green">+2</td><td class="skills-green">33 [29]</td><td class="skills-green align-right">4-6 / 7-10 / 11-13 / 14+</td></tr>
+            <tr><td class="border-custom-right">16</td><td class="skills-green">+2</td><td class="skills-green">+3</td><td class="skills-green">35 [30]</td><td class="skills-green align-right">5-7 / 8-11 / 12-14 / 15+</td></tr>
+            <tr><td class="border-custom-right">17</td><td class="skills-green">+3</td><td class="skills-green">+3</td><td class="skills-green">38 [32]</td><td class="skills-green align-right">6-8 / 9-12 / 13-15 / 16+</td></tr>
+            <tr><td class="border-custom-right">18</td><td class="skills-green">+4</td><td class="skills-green">+4</td><td class="skills-green">40 [36]</td><td class="skills-green align-right">6-9 / 10-13 / 14-16 / 17+</td></tr>
+            <tr><td class="border-custom-right">19</td><td class="skills-green">+5</td><td class="skills-green">+5</td><td class="skills-green">43 [37]</td><td class="skills-green align-right">6-10 / 11-14 / 15-17 / 18+</td></tr>
+            <tr><td class="border-custom-right">20</td><td class="skills-green">+6</td><td class="skills-green">+6</td><td class="skills-green">46 [40]</td><td class="skills-green align-right">6-11 / 12-15 / 16-18 / 19+</td></tr>
         </tbody>
     </table>
     <br>
     <p>
         Premia do KP z Kondycji (parowanie) jest rozłączna wobec premii do KP ze Zręczności (uniki). Modyfikatory te opisują dwie odrębne strategie uniknięcia obrażeń w walce,
         tj. uchylanie się od ciosu, albo umiejętne przyjmowanie go na siebie w kontrolowany sposób, czyli na tarczę albo pancerz, bez odnoszenia szkody.
+    </p>
+    <p>
+        Próg przytomności oblicza się w następujący sposób: Próg przytomności = (Życie - dolna granica Ran Lekkich).
+        Skoro zaś Próg przytomności jest zależny od Progów ran, to wszelkie modyfikacje Progów ran (Umiejętności, modyfikatory sytuacyjne) skutkują przesunięciem Progu przytomności.
     </p>
 
     <br><br><br>
