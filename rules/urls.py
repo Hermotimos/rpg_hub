@@ -11,6 +11,7 @@ urlpatterns = [
     path('professions/', views.rules_professions_view, name='professions'),
     path('masteries/', views.rules_masteries_view, name='masteries'),
     path('tricks/', views.rules_tricks_view, name='tricks'),
+    path('character-sheet/', views.rules_character_sheet_view, name='character-sheet'),
     # path('combat/pdf/', html2pdf_views.yet_another, name='combat-pdf'),
     # path('combat/pdf2/', html2pdf_views.export_word_2, name='combat-pdf2'),
 

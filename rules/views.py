@@ -63,6 +63,13 @@ def rules_tricks_view(request):
 
 
 @login_required
+def rules_character_sheet_view(request):
+    context = {
+        'page_title': 'Karta postaci'
+    }
+    return render(request, 'rules/character_sheet.html', context)
+
+@login_required
 def rules_professions_view(request):
     if request.user.profile.character_status == 'gm':
         classes = list(CharacterClass.objects.all())
