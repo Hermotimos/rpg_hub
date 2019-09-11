@@ -57,7 +57,7 @@ def rules_professions_view(request):
             {c: [p for p in c.professions.all() if request.user.profile in p.allowed_profiles.all()] for c in classes}
 
     context = {
-        'page_title': 'Klasy i profesje',
+        'page_title': 'Klasa, Profesja i rozwój postaci',
         'classes_with_professions_dict': classes_with_professions_dict
     }
     return render(request, 'rules/professions.html', context)
