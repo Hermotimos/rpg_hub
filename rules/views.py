@@ -63,6 +63,14 @@ def rules_tricks_view(request):
 
 
 @login_required
+def rules_armor_view(request):
+    context = {
+        'page_title': 'Pancerz'
+    }
+    return render(request, 'rules/armor.html', context)
+
+
+@login_required
 def rules_character_sheet_view(request):
     context = {
         'page_title': 'Karta postaci'
