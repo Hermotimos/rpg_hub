@@ -79,7 +79,29 @@ li b {
 .professions .level {width: 100px;}
 .professions .level-desc {width: 350px;}
 
-.skills-red {
+.plates .plate {width: 320px;}
+.plates .armor-class {width: 70px;}
+.plates .parry {width: 120px;}
+.plates .endurance {width: 120px;}
+.plates .weight {width: 100px;}
+.plates .agility-penalty {width: 150px;}
+.plates .movement-penalty {width: 150px;}
+
+.shields .shield {width: 150px;}
+.shields .num-of-enemies {width: 120px;}
+.shields .rmor-class {width: 180px;}
+.shields .weight {width: 100px;}
+
+
+.professions tr:nth-child(even),
+.plates tr:nth-child(even),
+.shields tr:nth-child(even) {
+        background-color: #f2f2f2;
+}
+
+
+
+.rules-red {
         color: #993300;
 }
 
@@ -117,6 +139,4 @@ thead.align-center th.align-right {
         text-align: right;
 }
 
-.professions tr:nth-child(even) {
-        background-color: #f2f2f2;
-}
+
