@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from rules.models import Skill, Synergy, CharacterClass, CharacterProfession
+from rules.models import Skill, Synergy, CharacterClass
 
 
 @login_required
