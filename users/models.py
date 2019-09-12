@@ -23,7 +23,7 @@ class Profile(models.Model):
     sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
 
     def save(self, *args, **kwargs):
-        if self.pk is not None:
+        if self.user:
             if str(self.character_name)[0] == 'Ć':
                 self.sorting_name = 'C' + str(self.character_name)
             elif str(self.character_name)[0] == 'Ł':

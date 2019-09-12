@@ -130,7 +130,7 @@ class Thread(models.Model):
     sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
 
     def save(self, *args, **kwargs):
-        if self.pk is not None:
+        if self.name:
             if str(self.name)[0] == 'Ć':
                 self.sorting_name = 'C' + str(self.name)
             elif str(self.name)[0] == 'Ł':
@@ -159,7 +159,7 @@ class GeneralLocation(models.Model):
     sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
 
     def save(self, *args, **kwargs):
-        if self.pk:
+        if self.name:
             if str(self.name)[0] == 'Ć':
                 self.sorting_name = 'C' + str(self.name)
             elif str(self.name)[0] == 'Ł':
@@ -189,7 +189,7 @@ class SpecificLocation(models.Model):
     sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
 
     def save(self, *args, **kwargs):
-        if self.pk:
+        if self.name:
             if str(self.name)[0] == 'Ć':
                 self.sorting_name = 'C' + str(self.name)
             elif str(self.name)[0] == 'Ł':
