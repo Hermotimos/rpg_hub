@@ -127,33 +127,90 @@ SEASONS = (
 class Thread(models.Model):
     name = models.CharField(max_length=200)
     is_ended = models.BooleanField(default=False)
+    sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
+
+    def save(self, *args, **kwargs):
+        if self.pk is not None:
+            if str(self.name)[0] == 'Ć':
+                self.sorting_name = 'C' + str(self.name)
+            elif str(self.name)[0] == 'Ł':
+                self.sorting_name = 'L' + str(self.name)
+            elif str(self.name)[0] == 'Ó':
+                self.sorting_name = 'O' + str(self.name)
+            elif str(self.name)[0] == 'Ś':
+                self.sorting_name = 'S' + str(self.name)
+            elif str(self.name)[0] == 'Ź':
+                self.sorting_name = 'Z' + str(self.name)
+            elif str(self.name)[0] == 'Ż':
+                self.sorting_name = 'Z' + str(self.name)
+            else:
+                self.sorting_name = str(self.name)
+            super(Thread, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        ordering = ['name']
+        ordering = ['sorting_name']
 
 
 class GeneralLocation(models.Model):
     name = models.CharField(max_length=100)
+    sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            if str(self.name)[0] == 'Ć':
+                self.sorting_name = 'C' + str(self.name)
+            elif str(self.name)[0] == 'Ł':
+                self.sorting_name = 'L' + str(self.name)
+            elif str(self.name)[0] == 'Ó':
+                self.sorting_name = 'O' + str(self.name)
+            elif str(self.name)[0] == 'Ś':
+                self.sorting_name = 'S' + str(self.name)
+            elif str(self.name)[0] == 'Ź':
+                self.sorting_name = 'Z' + str(self.name)
+            elif str(self.name)[0] == 'Ż':
+                self.sorting_name = 'Z' + str(self.name)
+            else:
+                self.sorting_name = str(self.name)
+            super(GeneralLocation, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        ordering = ['name']
+        ordering = ['sorting_name']
 
 
 class SpecificLocation(models.Model):
     name = models.CharField(max_length=100)
     general_location = models.ForeignKey(GeneralLocation, related_name='specific_locations', on_delete=models.PROTECT)
+    sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            if str(self.name)[0] == 'Ć':
+                self.sorting_name = 'C' + str(self.name)
+            elif str(self.name)[0] == 'Ł':
+                self.sorting_name = 'L' + str(self.name)
+            elif str(self.name)[0] == 'Ó':
+                self.sorting_name = 'O' + str(self.name)
+            elif str(self.name)[0] == 'Ś':
+                self.sorting_name = 'S' + str(self.name)
+            elif str(self.name)[0] == 'Ź':
+                self.sorting_name = 'Z' + str(self.name)
+            elif str(self.name)[0] == 'Ż':
+                self.sorting_name = 'Z' + str(self.name)
+            else:
+                self.sorting_name = str(self.name)
+            super(SpecificLocation, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        ordering = ['name']
+        ordering = ['sorting_name']
 
 
 class TimelineEvent(models.Model):

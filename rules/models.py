@@ -24,9 +24,8 @@ class Skill(models.Model):
     def __str__(self):
         return self.name
 
-    def __init__(self, *args, **kwargs):
-        super(Skill, self).__init__(*args, **kwargs)
-        if self.pk:
+    def save(self, *args, **kwargs):
+        if self.pk is not None:
             if str(self.name)[0] == 'Ć':
                 self.sorting_name = 'C' + str(self.name)
             elif str(self.name)[0] == 'Ł':
@@ -41,7 +40,7 @@ class Skill(models.Model):
                 self.sorting_name = 'Z' + str(self.name)
             else:
                 self.sorting_name = str(self.name)
-            self.save()
+            super(Skill, self).save(*args, **kwargs)
 
     def short_name(self):
         return ''.join(word[:3] for word in str(self.name).split(' '))
@@ -64,9 +63,8 @@ class Synergy(models.Model):
                                               related_name='allowed_synergies',)
     sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
 
-    def __init__(self, *args, **kwargs):
-        super(Synergy, self).__init__(*args, **kwargs)
-        if self.pk:
+    def save(self, *args, **kwargs):
+        if self.pk is not None:
             if str(self.name())[0] == 'Ć':
                 self.sorting_name = 'C' + str(self.name)
             elif str(self.name())[0] == 'Ł':
@@ -81,7 +79,7 @@ class Synergy(models.Model):
                 self.sorting_name = 'Z' + str(self.name)
             else:
                 self.sorting_name = str(self.name())
-            self.save()
+            super(Synergy, self).save(*args, **kwargs)
 
     def __str_(self):
         return ' + '.join(s.name for s in self.skills.all())
@@ -103,9 +101,8 @@ class CharacterClass(models.Model):
     description = models.TextField(max_length=4000, blank=True, null=True)
     sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
 
-    def __init__(self, *args, **kwargs):
-        super(CharacterClass, self).__init__(*args, **kwargs)
-        if self.pk:
+    def save(self, *args, **kwargs):
+        if self.pk is not None:
             if str(self.name)[0] == 'Ć':
                 self.sorting_name = 'C' + str(self.name)
             elif str(self.name)[0] == 'Ł':
@@ -120,7 +117,7 @@ class CharacterClass(models.Model):
                 self.sorting_name = 'Z' + str(self.name)
             else:
                 self.sorting_name = str(self.name)
-            self.save()
+            super(CharacterClass, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ['sorting_name']
@@ -175,9 +172,8 @@ class CharacterProfession(models.Model):
                                               related_name='allowed_professions')
     sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
 
-    def __init__(self, *args, **kwargs):
-        super(CharacterProfession, self).__init__(*args, **kwargs)
-        if self.pk:
+    def save(self, *args, **kwargs):
+        if self.pk is not None:
             if str(self.name)[0] == 'Ć':
                 self.sorting_name = 'C' + str(self.name)
             elif str(self.name)[0] == 'Ł':
@@ -192,7 +188,7 @@ class CharacterProfession(models.Model):
                 self.sorting_name = 'Z' + str(self.name)
             else:
                 self.sorting_name = str(self.name)
-            self.save()
+            super(CharacterProfession, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ['sorting_name']
