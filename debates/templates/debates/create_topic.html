@@ -3,7 +3,6 @@
 {% load crispy_forms_tags %}
 
 {% block head_extra %}
-    {{ remark_form.media }}
     <link rel="stylesheet" href="{% static 'css/debates.css' %}">
 {% endblock head_extra %}
 
@@ -44,20 +43,15 @@
         {% endif %}
 
         <!-- NEW REMARK -->
-        <div class="form-row">
-            <div class="form-group col-md-2 mb-0">
-                {% if request.user.profile.character_status == 'gm' %}
-                    {{ remark_form.author|as_crispy_field }}
-                {% else %}
-                <div class="collapse">
-                    {{ remark_form.author }}
-                </div>
-                {% endif %}
-                {{ remark_form.author.errors }}
+        {% if request.user.profile.character_status == 'gm' %}
+            <div class="col-md-3">
+                {{ remark_form.author|as_crispy_field }}
             </div>
-            <div class="form-group col-md-10 mb-0">
-                {{ remark_form.text|as_crispy_field }}
-            </div>
+        {% endif %}
+        {{ remark_form.author.errors }}
+
+        <div class="col-md-12">
+            {{ remark_form.text|as_crispy_field }}
         </div>
         {{ remark_form.image|as_crispy_field }}
         <input class="btn btn-dark" type="submit" value="Stwórz temat i zapoczątkuj naradę"/>

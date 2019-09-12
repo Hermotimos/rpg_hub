@@ -4,7 +4,6 @@
 {% load crispy_forms_tags %}
 
 {% block head_extra %}
-    {{ form.media }}
     <link rel="stylesheet" href="{% static 'css/history.css' %}">
 {% endblock head_extra %}
 
@@ -29,13 +28,10 @@
             <div class="col-md-6">{{ form.pictures|as_crispy_field }}</div>
         </div>
         <div class="form-row">
-            <div class="col-md-4">{{ form.debate|as_crispy_field }}</div>
+            <div class="col-md-12">{{ form.debate|as_crispy_field }}</div>
         </div>
         <br>
-
-
         <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
         <input class="btn btn-dark" type="submit" value="Zapisz zmiany"/>
     </form>
-
 {% endblock content %}

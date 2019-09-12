@@ -4,7 +4,6 @@
 {% load crispy_forms_tags %}
 
 {% block head_extra %}
-    {{ form.media }}
     <link rel="stylesheet" href="{% static 'css/contact.css' %}">
 {% endblock head_extra %}
 
@@ -51,7 +50,7 @@
     </table>
     <br><br>
 
-    <div id="page-bottom" class="border-top">
+    <div id="page-bottom">
         <br>
         <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
             {% csrf_token %}

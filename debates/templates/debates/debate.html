@@ -4,7 +4,6 @@
 {% load crispy_forms_tags %}
 
 {% block head_extra %}
-    {{ form.media }}
     <link rel="stylesheet" href="{% static 'css/debates.css' %}">
 {% endblock head_extra %}
 
@@ -81,24 +80,19 @@
     {% if debate.is_ended %}
         <h4><b>Tak zakończyła się Wasza rozmowa.</b></h4><br>
     {% else %}
-        <div id="page-bottom" class="border-top">
+        <div id="page-bottom">
             <br>
             <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="form-row">
-                    <div class="form-group col-md-2 mb-0">
-                        {% if request.user.profile.character_status == 'gm' %}
-                            {{ form.author|as_crispy_field }}
-                        {% else %}
-                        <div class="collapse">
-                            {{ form.author }}
-                        </div>
-                        {% endif %}
-                        {{ form.author.errors }}
+                {% if request.user.profile.character_status == 'gm' %}
+                    <div class="col-md-3">
+                        {{ form.author|as_crispy_field }}
                     </div>
-                    <div class="form-group col-md-10 mb-0">
-                        {{ form.text|as_crispy_field }}
-                    </div>
+                {% endif %}
+                {{ form.author.errors }}
+
+                <div class="col-md-12">
+                    {{ form.text|as_crispy_field }}
                 </div>
                 {{ form.image|as_crispy_field }}
                 <input class="btn btn-dark" type="submit" value="Tak rzeknij">

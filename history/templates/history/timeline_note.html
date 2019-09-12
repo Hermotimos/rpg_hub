@@ -3,7 +3,6 @@
 {% load crispy_forms_tags %}
 
 {% block head_extra %}
-    {{ form.media }}
     <link rel="stylesheet" href="{% static 'css/history.css' %}">
 {% endblock head_extra %}
 
@@ -62,18 +61,15 @@
         {% endif %}
     </table><br><br>
 
-    <small>Jeśli chcesz skasować przemyślenia, usuń treść i kliknij 'Zapamiętaj'.</small><br><br>
-
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="form-row">
-            <div class="form-group col-md-2 mb-0">
-                {{ form.color|as_crispy_field }}
-            </div>
-            <div class="form-group col-md-10 mb-0">
-                {{ form.text }}
-            </div>
+        <div class="col-md-4">
+            {{ form.color|as_crispy_field }}
         </div>
+        <div class="col-md-12">
+            {{ form.text|as_crispy_field }}
+        </div>
+        <small>Jeśli chcesz skasować Przemyślenia, usuń treść i kliknij 'Zapamiętaj'.</small><br><br>
         <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
         <input class="btn btn-dark" type="submit" value="Zapamiętaj">
     </form>

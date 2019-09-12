@@ -77,10 +77,8 @@
         <br>
         <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="form-row">
-                <div class="col-md-12 ">
-                    {{ form.text|as_crispy_field }}
-                </div>
+            <div class="col-md-12 ">
+                {{ form.text|as_crispy_field }}
             </div>
             {{ form.image|as_crispy_field }}
             <input class="btn btn-dark" type="submit" value="Odpowiedz">
