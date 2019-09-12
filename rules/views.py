@@ -13,8 +13,8 @@ def rules_main_view(request):
 
 @login_required
 def rules_skills_view(request):
-    for o in Skill.objects.all():
-        o.save()
+    # for o in Skill.objects.all():
+    #     o.save()
     if request.user.profile.character_status == 'gm':
         skills = list(Skill.objects.all())
         synergies = list(Synergy.objects.all())

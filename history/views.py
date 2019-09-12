@@ -53,6 +53,13 @@ def is_allowed_for_chronicle(profile, chapter_id=0, game_id=0, chronicle_event_i
 
 @login_required
 def chronicle_main_view(request):
+    # for o in Thread.objects.all():
+    #     o.save()
+    #
+    # for o in GeneralLocation.objects.all():
+    #     o.save()
+    # for o in SpecificLocation.objects.all():
+    #     o.save()
     if request.user.profile.character_status == 'gm':
         chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all()] for ch in Chapter.objects.all()}
     else:
