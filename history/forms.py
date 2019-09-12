@@ -15,7 +15,7 @@ class ChronicleEventCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ChronicleEventCreateForm, self).__init__(*args, **kwargs)
-        self.fields['description'].widget.attrs = {'cols': 50, 'rows': 5}
+        self.fields['description'].widget.attrs = {'cols': 60, 'rows': 10}
         self.fields['informed'].widget.attrs = {'size': 10}
         self.fields['participants'].widget.attrs = {'size': 10}
         self.fields['pictures'].widget.attrs = {'size': 10}
@@ -29,8 +29,9 @@ class ChronicleEventEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ChronicleEventEditForm, self).__init__(*args, **kwargs)
         self.fields['description'].widget.attrs = {'cols': 60, 'rows': 10}
-        self.fields['informed'].widget.attrs = {'size': 8}
-        self.fields['participants'].widget.attrs = {'size': 8}
+        self.fields['informed'].widget.attrs = {'size': 10}
+        self.fields['participants'].widget.attrs = {'size': 10}
+        self.fields['pictures'].widget.attrs = {'size': 10}
 
 
 class ChronicleEventInformForm(forms.ModelForm):

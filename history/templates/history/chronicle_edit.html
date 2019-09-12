@@ -18,19 +18,21 @@
     <br><br><br>
     <form method="POST">
         {% csrf_token %}
-        <table>
-        {% for field in form %}
-            <tr>
-                <td class="padding">
-                    <label for="{{ forloop.counter }}">{{ field.label }}:</label>
-                </td>
-                <td class="padding">
-                    <a id="{{ forloop.counter }}">{{ field }}</a>
-                </td>
-            </tr>
-        {% endfor %}
-        </table>
+        {{ form.game|as_crispy_field }}
+        <div class="form-row">
+            <div class="col-md-3">{{ form.event_no_in_game|as_crispy_field }}</div>
+        </div>
+        {{ form.description|as_crispy_field }}
+        <div class="form-row">
+            <div class="col-md-3">{{ form.participants|as_crispy_field }}</div>
+            <div class="col-md-3">{{ form.informed|as_crispy_field }}</div>
+            <div class="col-md-6">{{ form.pictures|as_crispy_field }}</div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-4">{{ form.debate|as_crispy_field }}</div>
+        </div>
         <br>
+
 
         <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
         <input class="btn btn-dark" type="submit" value="Zapisz zmiany"/>
