@@ -4,7 +4,7 @@
 {% load crispy_forms_tags %}
 
 {% block head_extra %}
-    {{ form.media }}
+<!--    {{ form.media }}-->
     <link rel="stylesheet" href="{% static 'css/news.css' %}">
 {% endblock head_extra %}
 
@@ -46,39 +46,39 @@
             <img src="{{ news.image.url }}" class="border-double">
         {% endif %}
     </div>
-    <br>
 
-    <table>
-        <tbody>
-        {% for answer in news_answers %}
-            <tr class="posts-and-news">
-                <td>
-                    <img class="rounded-circle article-img" src="{{ answer.author.profile.image.url }}">
-                    <br>
-                    <small class="smaller">{{ answer.author.profile.character_name }}</small>
-                </td>
-                <td class="align-center">
-                    <small class="left-float">{{ answer.date_posted|date:'d-M-Y, H:i' }}</small><br>
-                    {{ answer.text|capfirst|linebreaks }}
-                    {% if answer.image %}
-                        <img src="{{ answer.image.url }}" class="border-double">
-                    {% endif %}
-                    <br>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="border-top">
+        <br><br>
+        <table>
+            <tbody>
+            {% for answer in news_answers %}
+                <tr class="posts-and-news">
+                    <td>
+                        <img class="rounded-circle article-img" src="{{ answer.author.profile.image.url }}">
+                        <br>
+                        <small class="smaller">{{ answer.author.profile.character_name }}</small>
+                    </td>
+                    <td class="align-center">
+                        <small class="left-float">{{ answer.date_posted|date:'d-M-Y, H:i' }}</small><br>
+                        {{ answer.text|capfirst|linebreaks }}
+                        {% if answer.image %}
+                            <img src="{{ answer.image.url }}" class="border-double">
+                        {% endif %}
+                        <br>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
     <br><br>
 
-    <div id="page-bottom" class="border-top">
+    <div id="page-bottom">
         <br>
         <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-row">
-                <div class="form-group col-md-2 mb-0">
-                </div>
-                <div class="form-group col-md-10 mb-0">
+                <div class="col-md-12 ">
                     {{ form.text|as_crispy_field }}
                 </div>
             </div>
