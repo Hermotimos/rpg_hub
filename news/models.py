@@ -9,7 +9,7 @@ class News(models.Model):
     title = models.CharField(max_length=100, unique=True)
     text = models.TextField(max_length=4000)
     date_posted = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
+    # date_updated = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, related_name='news', on_delete=models.CASCADE)
     allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_news')
     followers = models.ManyToManyField(to=Profile, related_name='followed_news', blank=True)
@@ -47,7 +47,7 @@ class NewsAnswer(models.Model):
         ordering = ['date_posted']
 
     def __str__(self):
-        return self.text
+        return self.text[:100] + '...'
 
     def save(self, *args, **kwargs):
         super().save()
