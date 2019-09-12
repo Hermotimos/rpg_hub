@@ -62,37 +62,12 @@ class Synergy(models.Model):
                                               Q(character_status='inactive_player') |
                                               Q(character_status='dead_player'),
                                               related_name='allowed_synergies',)
-    # sorting_name = models.CharField(max_length=251, blank=True, null=True, unique=True)
 
     def __str__(self):
         return ' + '.join(str(s) for s in self.skills.all())
 
-    # def caption(self):
-        # return ' + '.join(str(s) for s in self.skills.all())
-
     def short_name(self):
         return ''.join(str(s)[:3] for s in self.skills.all())
-
-    # def save(self, *args, **kwargs):
-    #     super().save()
-    #     self.sorting_name = ' + '.join(str(s) for s in self.skills.all())
-    #     if self.sorting_name is not None:
-    #         print(self.sorting_name)
-    #         if self.sorting_name[0] == 'Ć':
-    #             self.sorting_name = 'C' + self.sorting_name
-    #         elif self.sorting_name[0] == 'Ł':
-    #             self.sorting_name = 'L' + self.sorting_name
-    #         elif self.sorting_name[0] == 'Ó':
-    #             self.sorting_name = 'O' + self.sorting_name
-    #         elif self.sorting_name[0] == 'Ś':
-    #             self.sorting_name = 'S' + self.sorting_name
-    #         elif self.sorting_name[0] == 'Ź':
-    #             self.sorting_name = 'Z' + self.sorting_name
-    #         elif self.sorting_name[0] == 'Ż':
-    #             self.sorting_name = 'Z' + self.sorting_name
-    #         else:
-    #             self.sorting_name = self.sorting_name
-    #         super(Synergy, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ['name']
