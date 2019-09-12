@@ -15,8 +15,8 @@ class SkillAdmin(admin.ModelAdmin):
 
 
 class SynergyAdmin(admin.ModelAdmin):
-    list_display = ['name', 'lvl_1', 'lvl_2', 'lvl_3']
-    list_editable = ['lvl_1', 'lvl_2', 'lvl_3']
+    list_display = ['id', 'name', 'lvl_1', 'lvl_2', 'lvl_3']
+    list_editable = ['name', 'lvl_1', 'lvl_2', 'lvl_3']
 
     formfield_overrides = {
         models.CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 8})},

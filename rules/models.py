@@ -22,10 +22,10 @@ class Skill(models.Model):
     sorting_name = models.CharField(max_length=101, blank=True, null=True, unique=True)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def save(self, *args, **kwargs):
-        if self.pk is not None:
+        if self.name:
             if str(self.name)[0] == 'Ć':
                 self.sorting_name = 'C' + str(self.name)
             elif str(self.name)[0] == 'Ł':
@@ -40,7 +40,7 @@ class Skill(models.Model):
                 self.sorting_name = 'Z' + str(self.name)
             else:
                 self.sorting_name = str(self.name)
-            super(Skill, self).save(*args, **kwargs)
+        super(Skill, self).save(*args, **kwargs)
 
     def short_name(self):
         return ''.join(word[:3] for word in str(self.name).split(' '))
@@ -50,6 +50,7 @@ class Skill(models.Model):
 
 
 class Synergy(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Synergia')
     skills = models.ManyToManyField(Skill, related_name='skills')
     lvl_1 = models.TextField(max_length=4000, blank=True, null=True)
     lvl_2 = models.TextField(max_length=4000, blank=True, null=True)
@@ -61,37 +62,40 @@ class Synergy(models.Model):
                                               Q(character_status='inactive_player') |
                                               Q(character_status='dead_player'),
                                               related_name='allowed_synergies',)
-    sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
+    # sorting_name = models.CharField(max_length=251, blank=True, null=True, unique=True)
 
-    def save(self, *args, **kwargs):
-        if self.pk is not None:
-            if str(self.name())[0] == 'Ć':
-                self.sorting_name = 'C' + str(self.name)
-            elif str(self.name())[0] == 'Ł':
-                self.sorting_name = 'L' + str(self.name)
-            elif str(self.name())[0] == 'Ó':
-                self.sorting_name = 'O' + str(self.name)
-            elif str(self.name())[0] == 'Ś':
-                self.sorting_name = 'Ss' + str(self.name)
-            elif str(self.name())[0] == 'Ź':
-                self.sorting_name = 'Z' + str(self.name)
-            elif str(self.name())[0] == 'Ż':
-                self.sorting_name = 'Z' + str(self.name)
-            else:
-                self.sorting_name = str(self.name())
-            super(Synergy, self).save(*args, **kwargs)
+    def __str__(self):
+        return ' + '.join(str(s) for s in self.skills.all())
 
-    def __str_(self):
-        return ' + '.join(s.name for s in self.skills.all())
-
-    def name(self):
-        return self.__str_()
+    # def caption(self):
+        # return ' + '.join(str(s) for s in self.skills.all())
 
     def short_name(self):
-        return ''.join(s.name[:3] for s in self.skills.all())
+        return ''.join(str(s)[:3] for s in self.skills.all())
+
+    # def save(self, *args, **kwargs):
+    #     super().save()
+    #     self.sorting_name = ' + '.join(str(s) for s in self.skills.all())
+    #     if self.sorting_name is not None:
+    #         print(self.sorting_name)
+    #         if self.sorting_name[0] == 'Ć':
+    #             self.sorting_name = 'C' + self.sorting_name
+    #         elif self.sorting_name[0] == 'Ł':
+    #             self.sorting_name = 'L' + self.sorting_name
+    #         elif self.sorting_name[0] == 'Ó':
+    #             self.sorting_name = 'O' + self.sorting_name
+    #         elif self.sorting_name[0] == 'Ś':
+    #             self.sorting_name = 'S' + self.sorting_name
+    #         elif self.sorting_name[0] == 'Ź':
+    #             self.sorting_name = 'Z' + self.sorting_name
+    #         elif self.sorting_name[0] == 'Ż':
+    #             self.sorting_name = 'Z' + self.sorting_name
+    #         else:
+    #             self.sorting_name = self.sorting_name
+    #         super(Synergy, self).save(*args, **kwargs)
 
     class Meta:
-        ordering = ['sorting_name']
+        ordering = ['name']
         verbose_name = 'Synergy'
         verbose_name_plural = 'Synergies'
 
@@ -102,7 +106,7 @@ class CharacterClass(models.Model):
     sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
 
     def save(self, *args, **kwargs):
-        if self.pk is not None:
+        if self.name:
             if str(self.name)[0] == 'Ć':
                 self.sorting_name = 'C' + str(self.name)
             elif str(self.name)[0] == 'Ł':
@@ -117,7 +121,7 @@ class CharacterClass(models.Model):
                 self.sorting_name = 'Z' + str(self.name)
             else:
                 self.sorting_name = str(self.name)
-            super(CharacterClass, self).save(*args, **kwargs)
+        super(CharacterClass, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ['sorting_name']
@@ -173,7 +177,7 @@ class CharacterProfession(models.Model):
     sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
 
     def save(self, *args, **kwargs):
-        if self.pk is not None:
+        if self.name:
             if str(self.name)[0] == 'Ć':
                 self.sorting_name = 'C' + str(self.name)
             elif str(self.name)[0] == 'Ł':
@@ -188,7 +192,7 @@ class CharacterProfession(models.Model):
                 self.sorting_name = 'Z' + str(self.name)
             else:
                 self.sorting_name = str(self.name)
-            super(CharacterProfession, self).save(*args, **kwargs)
+        super(CharacterProfession, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ['sorting_name']
