@@ -1,6 +1,5 @@
 from django import forms
 from django.db.models import Q
-from pagedown.widgets import PagedownWidget
 from contact.models import Demand, DemandAnswer, Plan
 from users.models import User
 
@@ -25,7 +24,6 @@ class DemandsCreateForm(forms.ModelForm):
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
-        self.fields['text'].widget = PagedownWidget()
         self.fields['text'].widget.attrs['placeholder'] = 'Twój dezyderat (max. 4000 znaków)*'
         self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60
@@ -41,7 +39,6 @@ class DemandsModifyForm(forms.ModelForm):
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
-        self.fields['text'].widget = PagedownWidget()
         self.fields['text'].widget.attrs['placeholder'] = 'Treść (max. 4000 znaków)*'
         self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60
@@ -57,7 +54,6 @@ class DemandAnswerForm(forms.ModelForm):
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
-        self.fields['text'].widget = PagedownWidget()
         self.fields['text'].widget.attrs['placeholder'] = 'Odpowiedź (max. 4000 znaków)*'
         self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60
@@ -77,7 +73,6 @@ class PlansCreateForm(forms.ModelForm):
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
-        self.fields['text'].widget = PagedownWidget()
         self.fields['text'].widget.attrs['placeholder'] = 'Twój plan... (max. 4000 znaków)*'
         self.fields['text'].widget.attrs['rows'] = 15
         self.fields['text'].widget.attrs['cols'] = 60
@@ -94,7 +89,6 @@ class PlansModifyForm(forms.ModelForm):
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
-        self.fields['text'].widget = PagedownWidget()
         self.fields['text'].widget.attrs['placeholder'] = 'Treść (max. 4000 znaków)*'
         self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60

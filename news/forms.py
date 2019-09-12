@@ -2,7 +2,6 @@ from django import forms
 from news.models import News, NewsAnswer
 from users.models import Profile
 from django.db.models import Q
-from pagedown.widgets import PagedownWidget
 
 
 class CreateNewsForm(forms.ModelForm):
@@ -29,7 +28,6 @@ class CreateNewsForm(forms.ModelForm):
         self.fields['image'].required = False
         self.fields['text'].label = ''
         self.fields['text'].max_length = 4000
-        self.fields['text'].widget = PagedownWidget()
         self.fields['text'].widget.attrs['placeholder'] = 'Twoje ogłoszenie (max. 4000 znaków)*'
         self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60
@@ -53,7 +51,6 @@ class CreateNewsAnswerForm(forms.ModelForm):
         self.fields['image'].required = False
         self.fields['text'].label = ''
         self.fields['text'].max_length = 4000
-        self.fields['text'].widget = PagedownWidget()
         self.fields['text'].widget.attrs['placeholder'] = 'Twoja odpowiedź (max. 4000 znaków)*'
         self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60

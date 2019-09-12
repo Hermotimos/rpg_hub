@@ -2,7 +2,6 @@ from django import forms
 from debates.models import Remark, Debate, Topic
 from users.models import Profile
 from django.db.models import Q
-from pagedown.widgets import PagedownWidget
 from users.models import User
 
 
@@ -67,7 +66,6 @@ class CreateRemarkForm(forms.ModelForm):
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
-        self.fields['text'].widget = PagedownWidget()
         self.fields['text'].widget.attrs['placeholder'] = 'Twój głos w naradzie (max. 4000 znaków)*'
         self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60

@@ -1,6 +1,5 @@
 from django import forms
 from django.db.models import Q
-from pagedown.widgets import PagedownWidget
 from history.models import TimelineEvent, TimelineEventNote, ChronicleEvent, ChronicleEventNote, Thread
 from users.models import Profile
 
@@ -67,7 +66,6 @@ class ChronicleEventNoteForm(forms.ModelForm):
         self.fields['color'].label = 'Kolor tekstu'
         self.fields['text'].label = ''
         self.fields['text'].required = False
-        self.fields['text'].widget = PagedownWidget()
         self.fields['text'].widget.attrs['placeholder'] = 'Twoje przemyślenia (max. 4000 znaków)*'
         self.fields['text'].widget.attrs['cols'] = 60
         self.fields['text'].widget.attrs['rows'] = 10
@@ -138,7 +136,6 @@ class TimelineEventNoteForm(forms.ModelForm):
         self.fields['color'].label = 'Kolor tekstu'
         self.fields['text'].label = ''
         self.fields['text'].required = False
-        self.fields['text'].widget = PagedownWidget()
         self.fields['text'].widget.attrs['placeholder'] = 'Twoje przemyślenia (max. 4000 znaków)*'
         self.fields['text'].widget.attrs['cols'] = 60
         self.fields['text'].widget.attrs['rows'] = 10
