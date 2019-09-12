@@ -145,7 +145,7 @@ class Thread(models.Model):
                 self.sorting_name = 'Z' + str(self.name)
             else:
                 self.sorting_name = str(self.name)
-            super(Thread, self).save(*args, **kwargs)
+        super(Thread, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -174,7 +174,7 @@ class GeneralLocation(models.Model):
                 self.sorting_name = 'Z' + str(self.name)
             else:
                 self.sorting_name = str(self.name)
-            super(GeneralLocation, self).save(*args, **kwargs)
+        super(GeneralLocation, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -204,7 +204,7 @@ class SpecificLocation(models.Model):
                 self.sorting_name = 'Z' + str(self.name)
             else:
                 self.sorting_name = str(self.name)
-            super(SpecificLocation, self).save(*args, **kwargs)
+        super(SpecificLocation, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
