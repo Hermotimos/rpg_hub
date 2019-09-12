@@ -19,15 +19,34 @@ class Skill(models.Model):
                                               Q(character_status='inactive_player') |
                                               Q(character_status='dead_player'),
                                               related_name='allowed_skills')
-
-    class Meta:
-        ordering = ['name']
+    sorting_name = models.CharField(max_length=101, blank=True, null=True, unique=True)
 
     def __str__(self):
         return self.name
 
+    def __init__(self, *args, **kwargs):
+        super(Skill, self).__init__(*args, **kwargs)
+        if str(self.name)[0] == 'Ć':
+            self.sorting_name = 'C' + str(self.name)
+        elif str(self.name)[0] == 'Ł':
+            self.sorting_name = 'L' + str(self.name)
+        elif str(self.name)[0] == 'Ó':
+            self.sorting_name = 'O' + str(self.name)
+        elif str(self.name)[0] == 'Ś':
+            self.sorting_name = 'S' + str(self.name)
+        elif str(self.name)[0] == 'Ź':
+            self.sorting_name = 'Z' + str(self.name)
+        elif str(self.name)[0] == 'Ż':
+            self.sorting_name = 'Z' + str(self.name)
+        else:
+            self.sorting_name = str(self.name)
+        self.save()
+
     def short_name(self):
         return ''.join(word[:3] for word in str(self.name).split(' '))
+
+    class Meta:
+        ordering = ['sorting_name']
 
 
 class Synergy(models.Model):
@@ -42,6 +61,25 @@ class Synergy(models.Model):
                                               Q(character_status='inactive_player') |
                                               Q(character_status='dead_player'),
                                               related_name='allowed_synergies',)
+    sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
+
+    def __init__(self, *args, **kwargs):
+        super(Synergy, self).__init__(*args, **kwargs)
+        if str(self.name())[0] == 'Ć':
+            self.sorting_name = 'C' + str(self.name)
+        elif str(self.name())[0] == 'Ł':
+            self.sorting_name = 'L' + str(self.name)
+        elif str(self.name())[0] == 'Ó':
+            self.sorting_name = 'O' + str(self.name)
+        elif str(self.name())[0] == 'Ś':
+            self.sorting_name = 'Ss' + str(self.name)
+        elif str(self.name())[0] == 'Ź':
+            self.sorting_name = 'Z' + str(self.name)
+        elif str(self.name())[0] == 'Ż':
+            self.sorting_name = 'Z' + str(self.name)
+        else:
+            self.sorting_name = str(self.name())
+        self.save()
 
     def __str_(self):
         return ' + '.join(s.name for s in self.skills.all())
@@ -53,6 +91,7 @@ class Synergy(models.Model):
         return ''.join(s.name[:3] for s in self.skills.all())
 
     class Meta:
+        ordering = ['sorting_name']
         verbose_name = 'Synergy'
         verbose_name_plural = 'Synergies'
 

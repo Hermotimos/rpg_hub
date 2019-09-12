@@ -24,7 +24,7 @@ def rules_skills_view(request):
     context = {
         'page_title': 'Umiejętności',
         'skills': skills,
-        'synergies': synergies
+        'synergies': synergies,
     }
     return render(request, 'rules/skills.html', context)
 
@@ -76,6 +76,7 @@ def rules_character_sheet_view(request):
         'page_title': 'Karta postaci'
     }
     return render(request, 'rules/character_sheet.html', context)
+
 
 @login_required
 def rules_professions_view(request):
