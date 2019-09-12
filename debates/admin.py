@@ -3,11 +3,11 @@ from debates.models import Topic, Debate, Remark
 
 
 class TopicAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description', 'date_created', 'date_updated')
+    list_display = ('title', 'description', 'date_created')
 
 
 class DebateAdmin(admin.ModelAdmin):
-    list_display = ('name', 'topic', 'is_ended', 'is_individual', 'date_created', 'date_updated', )
+    list_display = ('name', 'topic', 'is_ended', 'is_individual', 'date_created')
 
 
 class RemarkAdmin(admin.ModelAdmin):

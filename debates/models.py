@@ -8,11 +8,11 @@ from users.models import Profile
 class Topic(models.Model):
     title = models.CharField(max_length=50, unique=True, verbose_name='tytuł tematu')
     date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
+    # date_updated = models.DateTimeField(auto_now=True)
     description = models.CharField(max_length=100, verbose_name='opis tematu', blank=True, null=True)
 
     class Meta:
-        ordering = ['date_updated']
+        ordering = ['-date_created']
 
     def __str__(self):
         return self.title
@@ -28,7 +28,7 @@ class Topic(models.Model):
 class Debate(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name='tytuł narady')
     date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
+    # date_updated = models.DateTimeField(auto_now=True)
     topic = models.ForeignKey(Topic, related_name='debates', on_delete=models.CASCADE)
     starter = models.ForeignKey(User, related_name='debates', on_delete=models.CASCADE)
     allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_debates')
@@ -37,7 +37,7 @@ class Debate(models.Model):
     followers = models.ManyToManyField(to=Profile, related_name='followed_debates', blank=True)
 
     class Meta:
-        ordering = ['-date_updated']
+        ordering = ['-date_created']
 
     def __str__(self):
         return self.name
