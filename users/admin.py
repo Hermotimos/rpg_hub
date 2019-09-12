@@ -3,8 +3,8 @@ from .models import Profile
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('character_name', 'character_status', 'image')
-    list_editable = ('character_status', 'image')
+    list_display = ('id', 'character_name', 'character_status', 'image')
+    list_editable = ('character_name', 'character_status', 'image')
     list_filter = ('character_status',)
 
 
