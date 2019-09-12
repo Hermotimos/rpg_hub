@@ -38,34 +38,6 @@ class CreateNewsForm(forms.ModelForm):
         self.fields['title'].widget.attrs['placeholder'] = 'Tytuł ogłoszenia (max. 100 znaków)*'
         self.fields['title'].widget.attrs['size'] = 60
 
-    # image = forms.ImageField(
-    #     label='Załącz obraz:',
-    #     required=False,
-    # )
-    #
-    # text = forms.CharField(
-    #     label='',
-    #     max_length=4000,
-    #     widget=PagedownWidget(
-    #         attrs={
-    #             'placeholder': 'Twoje ogłoszenie (max. 4000 znaków)*',
-    #             'rows': 10,
-    #             'cols': 60
-    #         }
-    #     )
-    # )
-    #
-    # title = forms.CharField(
-    #     label='',
-    #     max_length=100,
-    #     widget=forms.TextInput(
-    #         attrs={
-    #             'placeholder': 'Tytuł ogłoszenia (max. 100 znaków)*',
-    #             'size': '60'
-    #         }
-    #     )
-    # )
-
 
 class CreateNewsAnswerForm(forms.ModelForm):
     class Meta:
@@ -85,20 +57,3 @@ class CreateNewsAnswerForm(forms.ModelForm):
         self.fields['text'].widget.attrs['placeholder'] = 'Twoja odpowiedź (max. 4000 znaków)*'
         self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60
-
-    # text = forms.CharField(
-    #     label='',
-    #     max_length=4000,
-    #     widget=PagedownWidget(
-    #         attrs={
-    #             'placeholder': 'Twoja odpowiedź (max. 4000 znaków)*',
-    #             'rows': 10,
-    #             'cols': 60
-    #         }
-    #     )
-    # )
-    #
-    # image = forms.ImageField(
-    #     label='Załącz obraz:',
-    #     required=False,
-    # )

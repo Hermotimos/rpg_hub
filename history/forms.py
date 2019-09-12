@@ -69,20 +69,8 @@ class ChronicleEventNoteForm(forms.ModelForm):
         self.fields['text'].required = False
         self.fields['text'].widget = PagedownWidget()
         self.fields['text'].widget.attrs['placeholder'] = 'Twoje przemyślenia (max. 4000 znaków)*'
-        self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60
-
-    # text = forms.CharField(
-    #     label='',
-    #     required=False,
-    #     widget=PagedownWidget(
-    #         attrs={
-    #             'placeholder': 'Twoje przemyślenia (max. 4000 znaków)*',
-    #             'rows': 10,
-    #             'cols': 60
-    #         }
-    #     )
-    # )
+        self.fields['text'].widget.attrs['rows'] = 10
 
 
 # ------ TimelineEvent model ------
@@ -95,9 +83,9 @@ class TimelineEventCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TimelineEventCreateForm, self).__init__(*args, **kwargs)
-        self.fields['description'].widget.attrs = {'cols': 50, 'rows': 5}
-        self.fields['informed'].widget.attrs = {'size': 8}
-        self.fields['participants'].widget.attrs = {'size': 8}
+        self.fields['description'].widget.attrs = {'cols': 60, 'rows': 10}
+        self.fields['informed'].widget.attrs = {'size': 10}
+        self.fields['participants'].widget.attrs = {'size': 10}
         self.fields['specific_locations'].widget.attrs = {'size': 10}
         self.fields['threads'].widget.attrs = {'size': 10}
         self.fields['threads'].queryset = Thread.objects.exclude(is_ended=True)
@@ -131,8 +119,8 @@ class TimelineEventEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TimelineEventEditForm, self).__init__(*args, **kwargs)
         self.fields['description'].widget.attrs = {'cols': 60, 'rows': 10}
-        self.fields['informed'].widget.attrs = {'size': 8}
-        self.fields['participants'].widget.attrs = {'size': 8}
+        self.fields['informed'].widget.attrs = {'size': 10}
+        self.fields['participants'].widget.attrs = {'size': 10}
         self.fields['specific_locations'].widget.attrs = {'size': 10}
         self.fields['threads'].widget.attrs = {'size': 10}
 
@@ -145,18 +133,6 @@ class TimelineEventNoteForm(forms.ModelForm):
             'color'
         ]
 
-    # text = forms.CharField(
-    #     label='',
-    #     required=False,
-    #     widget=PagedownWidget(
-    #         attrs={
-    #             'placeholder': 'Twoje przemyślenia (max. 4000 znaków)*',
-    #             'rows': 10,
-    #             'cols': 60
-    #         }
-    #     )
-    # )
-
     def __init__(self, *args, **kwargs):
         super(TimelineEventNoteForm, self).__init__(*args, **kwargs)
         self.fields['color'].label = 'Kolor tekstu'
@@ -164,5 +140,5 @@ class TimelineEventNoteForm(forms.ModelForm):
         self.fields['text'].required = False
         self.fields['text'].widget = PagedownWidget()
         self.fields['text'].widget.attrs['placeholder'] = 'Twoje przemyślenia (max. 4000 znaków)*'
-        self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60
+        self.fields['text'].widget.attrs['rows'] = 10
