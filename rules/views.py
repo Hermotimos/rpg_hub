@@ -5,7 +5,6 @@ from rules.models import Skill, Synergy, CharacterClass
 
 @login_required
 def rules_main_view(request):
-
     context = {
         'page_title': 'Zasady'
     }
@@ -34,7 +33,6 @@ def rules_combat_view(request):
     context = {
         'page_title': 'Przebieg walki'
     }
-
     return render(request, 'rules/combat.html', context)
 
 
@@ -90,7 +88,7 @@ def rules_professions_view(request):
 
     context = {
         'page_title': 'Klasa, Profesja i rozwój postaci',
-        'classes_with_professions_dict': classes_with_professions_dict
+        'classes_with_professions_dict': classes_with_professions_dict,
     }
     return render(request, 'rules/professions.html', context)
 
