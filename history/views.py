@@ -340,28 +340,39 @@ def timeline_main_view(request):
         games_set.add(event.game)
 
     # threads
-    threads_set = set()
+    threads_qs = Thread.objects.none()
     for qs in threads_querysets_list:
-        for th in qs:
-            threads_set.add(th)
-    threads_name_and_obj_list = [(t.name, t) for t in threads_set]
-    threads_name_and_obj_list.sort()
+        threads_qs = threads_qs | qs
+    threads_list = list(threads_qs.distinct())
+    threads_name_and_obj_list = [(t.name, t) for t in threads_list]
 
     # participants
-    participants_set = set()
+    # participants_set = set()
+    # for qs in participants_querysets_list:
+    #     for p in qs:
+    #         participants_set.add(p)
+    # participants_name_and_obj_list = [(t.character_name, t) for t in participants_set]
+    # participants_name_and_obj_list.sort()
+
+    participants_qs = Profile.objects.none()
     for qs in participants_querysets_list:
-        for p in qs:
-            participants_set.add(p)
-    participants_name_and_obj_list = [(t.character_name, t) for t in participants_set]
-    participants_name_and_obj_list.sort()
+        participants_qs = participants_qs | qs
+    participants_list = list(participants_qs.distinct())
+    participants_name_and_obj_list = [(t.character_name, t) for t in participants_list]
 
     # specific locations
-    spec_locs_set = set()
+    # spec_locs_set = set()
+    # for qs in spec_locs_querysets_list:
+    #     for sl in qs:
+    #         spec_locs_set.add(sl)
+    # spec_locs_name_and_obj_list = [(t.name, t) for t in spec_locs_set]
+    # spec_locs_name_and_obj_list.sort()
+
+    spec_locs_qs = SpecificLocation.objects.none()
     for qs in spec_locs_querysets_list:
-        for sl in qs:
-            spec_locs_set.add(sl)
-    spec_locs_name_and_obj_list = [(t.name, t) for t in spec_locs_set]
-    spec_locs_name_and_obj_list.sort()
+        spec_locs_qs = spec_locs_qs | qs
+    spec_locs_list = list(spec_locs_qs.distinct())
+    spec_locs_name_and_obj_list = [(t.name, t) for t in spec_locs_list]
 
     # general locations with their specific locations: LEFT UNSORTED TO REFLECT SUBSEQUENT GENERAL LOCATIONS IN GAME
     gen_locs_with_spec_locs_list = []
