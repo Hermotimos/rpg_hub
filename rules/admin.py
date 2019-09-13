@@ -4,6 +4,11 @@ from django.db import models
 from rules.models import Skill, Synergy, CharacterClass, CharacterProfession
 
 
+class CharacterProfessionAdmin(admin.ModelAdmin):
+    list_display = ['name', 'character_class', 'description', 'start_perks']
+    list_editable = ['description', 'start_perks']
+
+
 class SkillAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'tested_trait', 'description', 'lvl_0', 'lvl_1', 'lvl_2', 'lvl_3', 'image']
     list_editable = ['name', 'description', 'tested_trait', 'lvl_0', 'lvl_1', 'lvl_2', 'lvl_3', 'image']
@@ -27,4 +32,4 @@ class SynergyAdmin(admin.ModelAdmin):
 admin.site.register(Skill, SkillAdmin)
 admin.site.register(Synergy, SynergyAdmin)
 admin.site.register(CharacterClass)
-admin.site.register(CharacterProfession)
+admin.site.register(CharacterProfession, CharacterProfessionAdmin)
