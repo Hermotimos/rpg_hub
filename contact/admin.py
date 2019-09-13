@@ -9,14 +9,14 @@ class DemandAdmin(admin.ModelAdmin):
         return str(obj.author) + ' => ' + str(obj.addressee)
 
     def get_caption(self, obj):
-        return obj.text[:100] + '...'
+        return obj.text[:100] + '...' if len(str(obj.text)) > 100 else obj.text
 
 
 class PlanAdmin(admin.ModelAdmin):
     list_display = ['id', 'inform_gm', 'author', 'get_caption']
 
     def get_caption(self, obj):
-        return obj.text[:100] + '...'
+        return obj.text[:100] + '...' if len(str(obj.text)) > 100 else obj.text
 
 
 admin.site.register(Demand, DemandAdmin)
