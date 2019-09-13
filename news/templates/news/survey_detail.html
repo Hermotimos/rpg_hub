@@ -4,7 +4,6 @@
 {% load crispy_forms_tags %}
 
 {% block head_extra %}
-<!--    {{ form.media }}-->
     <link rel="stylesheet" href="{% static 'css/news.css' %}">
 {% endblock head_extra %}
 
@@ -28,7 +27,7 @@
         <tr>
             <td>
                 {% for profile in option.no_voters.all %}
-                    <img class="rounded-circle small-article-img border-solid-red" src="{{ profile.image.url }}">
+                    <img class="rounded-circle article-img border-solid-red" src="{{ profile.image.url }}">
                 {% endfor %}
 
             </td>
@@ -37,13 +36,13 @@
                 <br>
                 {% for profile in survey.addressees.all %}
                     {% if profile not in option.no_voters.all and profile not in option.yes_voters.all %}
-                        <img class="rounded-circle small-article-img border-double" src="{{ profile.image.url }}">
+                        <img class="rounded-circle article-img border-double" src="{{ profile.image.url }}">
                     {% endif %}
                 {% endfor %}
             </td>
             <td>
                 {% for profile in option.yes_voters.all %}
-                    <img class="rounded-circle small-article-img border-solid-green" src="{{ profile.image.url }}">
+                    <img class="rounded-circle article-img border-solid-green" src="{{ profile.image.url }}">
                 {% endfor %}
             </td>
 

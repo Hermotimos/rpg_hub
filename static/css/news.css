@@ -9,10 +9,17 @@
 .border-solid-red {
         border-color: red;
         border-style: solid;
-
 }
 
 .border-solid-green {
         border-color: green;
         border-style: solid;
+}
+
+
+.img-survey {
+        height: 50%;
+        width: auto;
+        margin-left: auto;
+        margin-right: auto;
 }

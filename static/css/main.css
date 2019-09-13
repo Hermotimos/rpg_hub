@@ -133,18 +133,10 @@ small.smaller {
 
 .article-img {
         height: 65px;
-        width: 65px;
+        width: auto;
         margin-left: auto;
         margin-right: auto;
 }
-
-.small-article-img {
-        height: 35px;
-        width: 35px;
-        margin-left: auto;
-        margin-right: auto;
-}
-
 
 .border-double {
         border-style: double;
