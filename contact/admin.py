@@ -1,5 +1,23 @@
 from django.contrib import admin
 from contact.models import Demand, Plan
 
-admin.site.register(Demand)
-admin.site.register(Plan)
+
+class DemandAdmin(admin.ModelAdmin):
+    list_display = ['id', 'from_to', 'get_caption', 'is_done']
+
+    def from_to(self, obj):
+        return str(obj.author) + ' => ' + str(obj.addressee)
+
+    def get_caption(self, obj):
+        return obj.text[:100] + '...'
+
+
+class PlanAdmin(admin.ModelAdmin):
+    list_display = ['id', 'inform_gm', 'author', 'get_caption']
+
+    def get_caption(self, obj):
+        return obj.text[:100] + '...'
+
+
+admin.site.register(Demand, DemandAdmin)
+admin.site.register(Plan, PlanAdmin)
