@@ -4,3 +4,15 @@
         min-height: 150px;
         width: 300px;
 }
+
+
+.border-solid-red {
+        border-color: red;
+        border-style: solid;
+
+}
+
+.border-solid-green {
+        border-color: green;
+        border-style: solid;
+}

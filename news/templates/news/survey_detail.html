@@ -16,6 +16,45 @@
 {% block content %}
     <br><br><br>
 
+    <div class="post-and-news">
+        <p>{{ survey.text|capfirst|linebreaks }}</p>
+        {% if survey.image %}
+            <img src="{{ survey.image.url }}" class="border-double">
+        {% endif %}
+    </div>
+
+    <table>
+        {% for option in survey_options %}
+        <tr>
+            <td>
+                {% for profile in option.no_voters.all %}
+                    <img class="rounded-circle small-article-img border-solid-red" src="{{ profile.image.url }}">
+                {% endfor %}
+
+            </td>
+            <td>
+                {{ option.text }}
+                <br>
+                {% for profile in survey.addressees.all %}
+                    {% if profile not in option.no_voters.all and profile not in option.yes_voters.all %}
+                        <img class="rounded-circle small-article-img border-double" src="{{ profile.image.url }}">
+                    {% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for profile in option.yes_voters.all %}
+                    <img class="rounded-circle small-article-img border-solid-green" src="{{ profile.image.url }}">
+                {% endfor %}
+            </td>
+
+
+        </tr>
+        {% endfor %}
+
+    </table>
+
+
+
     <br>
 
 

@@ -139,7 +139,10 @@ def follow_news_view(request, news_id):
 @login_required
 def survey_detail_view(request, survey_id):
     survey = get_object_or_404(Survey, id=survey_id)
+    # survey_with_options_dict = {survey: (o for o in survey.options.all())}
+    survey_options = list(survey.survey_options.all())
     survey_answers = list(survey.survey_answers.all())
+
     # allowed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in news.allowed_profiles.all())
     # followers_str = ', '.join(p.character_name.split(' ', 1)[0] for p in news.followers.all())
 
@@ -172,6 +175,7 @@ def survey_detail_view(request, survey_id):
     context = {
         'page_title': survey.title,
         'survey': survey,
+        'survey_options': survey_options,
         'survey_answers': survey_answers,
         # 'form': form,
         # 'allowed': allowed_str,

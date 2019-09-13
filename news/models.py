@@ -71,7 +71,7 @@ class Survey(models.Model):
         ordering = ['-date_posted']
 
     def __str__(self):
-        return self.text[:100] + '...' if len(str(self.text)) > 100 else self.text
+        return self.title[:50] + '...' if len(str(self.title)) > 50 else self.title
 
     def save(self, *args, **kwargs):
         super().save()
