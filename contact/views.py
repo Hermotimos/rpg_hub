@@ -212,27 +212,29 @@ def plans_main_view(request):
     skills_without_allowed = Skill.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
     skills_to_do = [s.name for s in skills_without_allowed]
     synergies_without_allowed = Synergy.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
-    synergies_to_do = [s for s in synergies_without_allowed]
+    synergies_to_do = [s.name for s in synergies_without_allowed]
 
     text = \
-        f'Lista rzeczy do uzupełnienia:\n ' \
+        f'=>Lista rzeczy do uzupełnienia:\n ' \
         f'1) Skille z 0 allowed_profiles:\n{[s for s in skills_to_do] if skills_to_do else 0}\n' \
-        f'2) Synergie z 0 allowed_profiles:\n{[s.name() for s in synergies_to_do] if synergies_to_do else 0}\n'
+        f'2) Synergie z 0 allowed_profiles:\n{[s for s in synergies_to_do] if synergies_to_do else 0}\n'
 
     if skills_to_do or synergies_to_do:
         try:
-            todos = Plan.objects.get(text__contains='Lista rzeczy do uzupełnienia:')
-
+            todos = Plan.objects.get(text__contains='=>Lista rzeczy do uzupełnienia')
             todos.text = text
-
         except Plan.DoesNotExist:
             Plan.objects.create(text=text, author=User.objects.get(profile__character_status='gm'))
+    else:
+        try:
+            Plan.objects.get(text__contains='=>Lista rzeczy do uzupełnienia').delete()
+        except Plan.DoesNotExist:
+            pass
 
     plans = list(Plan.objects.filter(author=request.user))
     context = {
         'page_title': 'Plany',
         'plans': plans,
-        'skills_to_do': skills_to_do
     }
     return render(request, 'contact/plans-main.html', context)
 
