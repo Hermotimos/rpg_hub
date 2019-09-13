@@ -18,6 +18,24 @@
     </div>
     <br><br><br>
 
+    {% for survey in surveys %}
+        <table>
+            <tbody>
+                <tr class="posts-and-news">
+                    <td>
+                        <img class="rounded-circle article-img" src="{{ survey.author.profile.image.url }}">
+                        <br>
+                        <small>{{ survey.date_posted|date:'d-M-Y' }}</small>
+                    </td>
+                    <td>
+                        <h3 class="unblue"><a href="{% url 'news:survey-detail' survey.id %}">{{ survey.title }}</a></h3>
+                    </td>
+                </tr>
+            </tbody>
+        </table><br>
+    {% endfor %}
+    ----------------------------------------------------------
+
     {% for news in newss %}
         <table>
             <tbody>

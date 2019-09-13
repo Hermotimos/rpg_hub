@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import News, NewsAnswer
+from .models import News, NewsAnswer, Survey, SurveyOption, SurveyAnswer
 
 
 class NewsAdmin(admin.ModelAdmin):
@@ -14,8 +14,11 @@ class NewsAnswerAdmin(admin.ModelAdmin):
         return obj.news.title
 
     def get_caption(self, obj):
-        return obj.text[:100] + '...'
+        return obj.text[:100] + '...' if len(str(obj.text)) > 100 else obj.text
 
 
 admin.site.register(News, NewsAdmin)
 admin.site.register(NewsAnswer, NewsAnswerAdmin)
+admin.site.register(Survey)
+admin.site.register(SurveyOption)
+admin.site.register(SurveyAnswer)

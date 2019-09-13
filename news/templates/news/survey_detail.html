@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% load crispy_forms_tags %}
+
+{% block head_extra %}
+<!--    {{ form.media }}-->
+    <link rel="stylesheet" href="{% static 'css/news.css' %}">
+{% endblock head_extra %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'news:main' %}">Ogłoszenia</a></li>
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br><br><br>
+
+    <br>
+
+
+
+
+<!-- ANSWERS -->
+
+    <div class="border-top">
+        <br><br>
+        <table>
+            <tbody>
+            {% for answer in news_answers %}
+                <tr class="posts-and-news">
+                    <td>
+                        <img class="rounded-circle article-img" src="{{ answer.author.profile.image.url }}">
+                        <br>
+                        <small class="smaller">{{ answer.author.profile.character_name }}</small>
+                    </td>
+                    <td class="align-center">
+                        <small class="left-float">{{ answer.date_posted|date:'d-M-Y, H:i' }}</small><br>
+                        {{ answer.text|capfirst|linebreaks }}
+                        {% if answer.image %}
+                            <img src="{{ answer.image.url }}" class="border-double">
+                        {% endif %}
+                        <br>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <br><br>
+
+
+{% endblock content %}
