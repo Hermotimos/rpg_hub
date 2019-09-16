@@ -222,7 +222,7 @@ class EliteClass(models.Model):
 
 class EliteProfession(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    elite_class = models.ForeignKey(CharacterClass, related_name='elite_professions', on_delete=models.PROTECT)
+    elite_class = models.ForeignKey(EliteClass, related_name='elite_professions', on_delete=models.PROTECT)
     description = models.TextField(max_length=4000, blank=True, null=True)
     start_perks = models.TextField(max_length=4000, blank=True, null=True)
     allowed_profiles = models.ManyToManyField(Profile,
