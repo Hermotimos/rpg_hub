@@ -1,12 +1,7 @@
 from django.contrib import admin
 from django.forms import Textarea
 from django.db import models
-from rules.models import Skill, Synergy, CharacterClass, CharacterProfession, EliteClass
-
-
-class CharacterProfessionAdmin(admin.ModelAdmin):
-    list_display = ['name', 'character_class', 'description', 'start_perks']
-    list_editable = ['description', 'start_perks']
+from rules.models import Skill, Synergy, CharacterClass, CharacterProfession, EliteClass, EliteProfession
 
 
 class SkillAdmin(admin.ModelAdmin):
@@ -29,13 +24,29 @@ class SynergyAdmin(admin.ModelAdmin):
     }
 
 
-class EliteProfessionAdmin(admin.ModelAdmin):
+class CharacterClassAdmin(admin.ModelAdmin):
     list_display = ['name', 'description']
     list_editable = ['description']
 
 
+class CharacterProfessionAdmin(admin.ModelAdmin):
+    list_display = ['name', 'character_class', 'description', 'start_perks']
+    list_editable = ['description', 'start_perks']
+
+
+class EliteClassAdmin(admin.ModelAdmin):
+    list_display = ['name', 'description']
+    list_editable = ['description']
+
+
+class EliteProfessionAdmin(admin.ModelAdmin):
+    list_display = ['name', 'elite_class', 'description', 'start_perks']
+    list_editable = ['description', 'start_perks']
+
+
 admin.site.register(Skill, SkillAdmin)
 admin.site.register(Synergy, SynergyAdmin)
-admin.site.register(CharacterClass)
+admin.site.register(CharacterClass, CharacterClassAdmin)
 admin.site.register(CharacterProfession, CharacterProfessionAdmin)
-admin.site.register(EliteClass, EliteProfessionAdmin)
+admin.site.register(EliteClass, EliteClassAdmin)
+admin.site.register(EliteProfession, EliteProfessionAdmin)
