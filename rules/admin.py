@@ -29,8 +29,13 @@ class SynergyAdmin(admin.ModelAdmin):
     }
 
 
+class EliteProfessionAdmin(admin.ModelAdmin):
+    list_display = ['name', 'description', 'start_perks']
+    list_editable = ['description', 'start_perks']
+
+
 admin.site.register(Skill, SkillAdmin)
 admin.site.register(Synergy, SynergyAdmin)
 admin.site.register(CharacterClass)
 admin.site.register(CharacterProfession, CharacterProfessionAdmin)
-admin.site.register(EliteProfession)
+admin.site.register(EliteProfession, EliteProfessionAdmin)
