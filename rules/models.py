@@ -181,7 +181,6 @@ class CharacterProfession(models.Model):
 
 class EliteClass(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    open_to_classes = models.ManyToManyField(CharacterClass, related_name='elite_classes')
     description = models.TextField(max_length=4000, blank=True, null=True)
     allowed_profiles = models.ManyToManyField(Profile,
                                               blank=True,
