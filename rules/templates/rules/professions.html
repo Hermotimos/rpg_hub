@@ -57,7 +57,7 @@
             <p>{{ class.description|linebreaksbr }}</p>
 
             <h5><b class="border-custom-base">{{ class.name }} - profesje:</b></h5>
-        <br>
+            <br>
             {% for profession in classes_with_professions_dict|dict_lookup:class %}
                 <h5 data-toggle="collapse" data-target="#{{ profession.short_name }}">
                     <b class="hover-blue">
@@ -163,5 +163,42 @@
         Podsumowując, dodatkowa Profesja jest trudniejsza w rozwoju niż wiodąca, a także jej rozwój rozpoczyna się z niższego pułapu umiejętności.
         Natomiast wieloklasowość nigdy nie wymaga porzucania wcześniejszej klasy – pozwala rozwijać ją równocześnie w tempie w dużej mierze zależnym od dezycji Gracza.
     </p>
+
+    <br><br><br>
+    <h2 class="rules">Profesje elitarne</h2>
+    <br>
+    <p>
+        Przed nielicznymi jednostkami, które dzięki swoim umiejętnościom, doświadczeniu i koligacjom osiągnęły wysoki status
+        w ramach hierarchii charakterystycznej dla ich Profesji, otwierają się szersze możliwości rozwoju.
+        Profesje elitarne pozwalają połączyć pewne aspekty rozwoju Profesji należących do różnych Klas w ramach jednolitego systemu awansów co 2000 doświadczenia.
+        Postać, która ze względu na sytuację fabularną może otworzyć Profesję elitarną, musi
+        całkowicie zawiesić rozwój dotychczasowych Profesji i w całości skupić się na rozwoju Profesji elitarnej,
+        jako że stanowi ona tak intensywne wyzwanie mentalne, że pochłania całe zasoby poznawcze jednostki.
+    </p>
+    <p>
+        Wybór Profesji elitarnej ma charakter techniczno-fabularny, to znaczy, że istnieje ścisła korelacja między wyborem postaci w świecie gry a zmianą Profesji.
+        Np. postać stająca przed możliwością objęcia rządów jako Namiestnik albo pasowania na Paladyna dokonuje jednocześnie skorelowanego wyboru w świecie gry
+        (przyjąć namiestnictwo lub funkcję paladyna czy nie?) oraz na płaszczyźnie zasad gry (zmienić Profesję na Namiestnika lub Paladyna czy nie?).
+        Jest to uzasadnione tym, że wymienione role społeczne pozbawiają postać możliwości w miarę swobodnego kształtowania własnej sfery doświadczeń,
+        wtłaczając ją w sytuację wymagającą określonego stylu życia.
+        Takim samym zasadom podlega porzucenie Profesji elitarnej. Następuje ono w chwili wyjścia z określonej roli społecznej w świecie gry.
+    </p>
+    <p>
+        Doświadczenie zgromadzone przez postać w ramach wcześniej rozwijanych Profesji zostaje zachowane i zamrożone do momentu porzucenia lub utraty Profesji elitarnej.
+        Doświadczenie zgromadzone w ramach Profesji eliarnej podlega tej samej zasadzie - w przypadku powrotu do niej postać może kontynuować rozwój.
+    </p>
+    <br>
+    {% for elite_profession in elite_professions %}
+        <h5 data-toggle="collapse" data-target="#{{ elite_profession.short_name }}">
+            <b class="hover-blue">
+                ✧ {{ elite_profession.name }}
+            </b>
+        </h5>
+        <div id="{{ elite_profession.short_name }}" class="collapse">
+            <p>{{ elite_profession.description|linebreaksbr }}</p>
+            <p>{{ elite_profession.start_perks|linebreaksbr }}</p>
+        </div>
+    {% endfor %}
+
     <br><br><br>
 {% endblock content %}

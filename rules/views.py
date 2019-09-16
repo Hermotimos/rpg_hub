@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from rules.models import Skill, Synergy, CharacterClass
+from rules.models import Skill, Synergy, CharacterClass, EliteProfession
 
 
 @login_required
@@ -83,14 +83,17 @@ def rules_professions_view(request):
     if request.user.profile.character_status == 'gm':
         classes = list(CharacterClass.objects.all())
         classes_with_professions_dict = {c: [p for p in c.professions.all()] for c in classes}
+        elite_professions = list(EliteProfession.objects.all())
     else:
         classes = list(c for c in CharacterClass.objects.all() if request.user.profile in c.allowed_list())
         classes_with_professions_dict = \
             {c: [p for p in c.professions.all() if request.user.profile in p.allowed_profiles.all()] for c in classes}
+        elite_professions = list(p for p in EliteProfession.objects.all() if request.user.profile in p.allowed_list())
 
     context = {
         'page_title': 'Klasa, Profesja i rozwój postaci',
         'classes_with_professions_dict': classes_with_professions_dict,
+        'elite_professions': elite_professions
     }
     return render(request, 'rules/professions.html', context)
 

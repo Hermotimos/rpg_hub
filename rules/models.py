@@ -177,3 +177,45 @@ class CharacterProfession(models.Model):
 
     def short_name(self):
         return ''.join(word[:4] for word in str(self.name).split(' '))
+
+
+class EliteProfession(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    preceding_professions = models.ManyToManyField(CharacterProfession, related_name='elite_professions')
+    description = models.TextField(max_length=4000, blank=True, null=True)
+    start_perks = models.TextField(max_length=4000, blank=True, null=True)
+    allowed_profiles = models.ManyToManyField(Profile,
+                                              blank=True,
+                                              limit_choices_to=
+                                              Q(character_status='active_player') |
+                                              Q(character_status='inactive_player') |
+                                              Q(character_status='dead_player'),
+                                              related_name='allowed_elite_professions')
+    sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
+
+    def save(self, *args, **kwargs):
+        if self.name:
+            if str(self.name)[0] == 'Ć':
+                self.sorting_name = 'C' + str(self.name)
+            elif str(self.name)[0] == 'Ł':
+                self.sorting_name = 'L' + str(self.name)
+            elif str(self.name)[0] == 'Ó':
+                self.sorting_name = 'O' + str(self.name)
+            elif str(self.name)[0] == 'Ś':
+                self.sorting_name = 'S' + str(self.name)
+            elif str(self.name)[0] == 'Ź':
+                self.sorting_name = 'Z' + str(self.name)
+            elif str(self.name)[0] == 'Ż':
+                self.sorting_name = 'Z' + str(self.name)
+            else:
+                self.sorting_name = str(self.name)
+        super(EliteProfession, self).save(*args, **kwargs)
+
+    class Meta:
+        ordering = ['sorting_name']
+
+    def __str__(self):
+        return self.name
+
+    def short_name(self):
+        return ''.join(word[:4] for word in str(self.name).split(' '))
