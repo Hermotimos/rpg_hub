@@ -191,6 +191,11 @@
         Doświadczenie zgromadzone przez postać w ramach wcześniej rozwijanych Profesji zostaje zachowane i zamrożone do momentu porzucenia lub utraty Profesji elitarnej.
         Doświadczenie zgromadzone w ramach Profesji eliarnej podlega tej samej zasadzie - zostaje zamrożone w chwili jej utraty, a w przypadku powrotu postać może kontynuować rozwój.
     </p>
+    <p>
+        Dostęp do Klas i Profesji elitarnych nie jest ograniczony przez zasady gry, jednak realia świata wytyczają możliwe do pomyślenia ścieżki.
+    </p>
+    <img src="{% static 'img/Klasy elitarne.png' %}" class="border-double">
+    <br><br>
 
     <br><br><br>
     <h2 class="rules">Lista Klas i Profesji elitarnych</h2>
@@ -198,6 +203,7 @@
     <p>
         Poniższa lista ma otwarty charakter. Widoczne na niej Klasy i Profesje to te, które są znane postaci na podstawie wiedzy ogólnej.
     </p>
+    <br>
     <div>
         {% for elite_class in elite_classes_with_professions_dict %}
 
@@ -205,23 +211,20 @@
             </h4>
             <div>
                 <p>{{ elite_class.description|linebreaksbr }}</p>
-
-                <h5><b class="border-custom-base">{{ elite_class.name }} - profesje:</b></h5>
-                <br>
-                {% for elite_profession in elite_classes_with_professions_dict|dict_lookup:elite_class %}
-                    <h5 data-toggle="collapse" data-target="#{{ elite_profession.short_name }}">
-                        <b class="hover-blue">
-                            ✧ {{ elite_profession.name }}
-                        </b>
-                    </h5>
-                    <div id="{{ elite_profession.short_name }}" class="collapse">
-                        <p>{{ elite_profession.description|linebreaksbr }}</p>
-                        <p>{{ elite_profession.start_perks|linebreaksbr }}</p>
-                        <br>
-
-                        <br><br>
-                    </div>
-                {% endfor %}
+                {% if elite_classes_with_professions_dict|dict_lookup:elite_class %}
+                    {% for elite_profession in elite_classes_with_professions_dict|dict_lookup:elite_class %}
+                        <h5 data-toggle="collapse" data-target="#{{ elite_profession.short_name }}">
+                            <b class="hover-blue">
+                                ✧ {{ elite_profession.name }}
+                            </b>
+                        </h5>
+                        <div id="{{ elite_profession.short_name }}" class="collapse">
+                            <p>{{ elite_profession.description|linebreaksbr }}</p>
+                            <p>{{ elite_profession.start_perks|linebreaksbr }}</p>
+                            <br>
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
             <br><br>
          {% endfor %}
