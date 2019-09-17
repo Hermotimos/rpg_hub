@@ -68,6 +68,10 @@ td.align-center {
         font-size: 11px;
 }
 
+.breadcrumb {
+        padding: 3px
+}
+
 .img-page-title {
         height: 100px;
         width: 100px;
