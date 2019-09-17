@@ -89,7 +89,7 @@ def rules_professions_view(request):
         classes = list(c for c in CharacterClass.objects.all() if request.user.profile in c.allowed_list())
         classes_with_professions_dict = \
             {c: [p for p in c.professions.all() if request.user.profile in p.allowed_profiles.all()] for c in classes}
-        elite_classes = list(ec for ec in EliteClass.objects.all() if request.user.profile in ec.allowed_list())
+        elite_classes = list(ec for ec in EliteClass.objects.all() if request.user.profile in ec.allowed_profiles.all())
         elite_classes_with_professions_dict = \
             {ec: [ep for ep in ec.elite_professions.all() if request.user.profile in ep.allowed_profiles.all()]
              for ec in elite_classes}
