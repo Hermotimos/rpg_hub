@@ -92,10 +92,16 @@ li b {
 .shields .rmor-class {width: 180px;}
 .shields .weight {width: 100px;}
 
+.protection .protection-type {width: 400px;}
+.protection .protection-desc {width: 600px;}
+.protection .weight {width: 40px;}
+
+
 
 .professions tr:nth-child(even),
 .plates tr:nth-child(even),
-.shields tr:nth-child(even) {
+.shields tr:nth-child(even),
+.protection tr:nth-child(even) {
         background-color: #f2f2f2;
 }
 
