@@ -25,41 +25,34 @@
     <table class="survey">
         <colgroup>
             <col class="negative">
-            <col class="empty">
             <col class="text">
-            <col class="empty">
             <col class="positive">
-            <col class="empty">
-            <col class="undecided">
         </colgroup>
         {% for option in survey_options %}
         <tr>
-            <td>
+            <td class="align-right">
                 {% for profile in option.no_voters.all %}
                     <img class="rounded-circle img-survey border-double border-red" src="{{ profile.image.url }}">
                 {% endfor %}
-
+                <br><br>
             </td>
-            <td></td>
             <td>
-                {{ option.text }}
+                &ensp;&ensp;{{ option.text }}&ensp;&ensp;
+                <br>
+                &ensp;&ensp;
+                {% for profile in survey.addressees.all %}
+                    {% if profile not in option.no_voters.all and profile not in option.yes_voters.all %}
+                        <img class="rounded-circle img-survey-tiny border-double" src="{{ profile.image.url }}">
+                    {% endif %}
+                {% endfor %}
+                &ensp;&ensp;
             </td>
-            <td></td>
             <td>
                 {% for profile in option.yes_voters.all %}
                     <img class="rounded-circle img-survey border-double border-green" src="{{ profile.image.url }}">
                 {% endfor %}
+                <br><br>
             </td>
-            <td></td>
-            <td>
-                {% for profile in survey.addressees.all %}
-                    {% if profile not in option.no_voters.all and profile not in option.yes_voters.all %}
-                        <img class="rounded-circle img-survey border-double" src="{{ profile.image.url }}">
-                    {% endif %}
-                {% endfor %}
-            </td>
-
-
         </tr>
         {% endfor %}
 

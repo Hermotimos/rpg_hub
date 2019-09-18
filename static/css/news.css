@@ -22,8 +22,9 @@
         margin-right: auto;
 }
 
-.survey .negative {width: 1%;}
-.survey .empty {max-width: 10%;}
-.survey .text {width: 30%;}
-.survey .positive {width: 50%;}
-.survey .undecided {width: ;}
+.img-survey-tiny {
+        height: 15px;
+        width: auto;
+        margin-left: auto;
+        margin-right: auto;
+}
