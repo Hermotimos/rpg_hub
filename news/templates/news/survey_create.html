@@ -19,16 +19,23 @@
         {{ form.title|as_crispy_field }}
         {{ form.title.errors }}<br>
 
-        <h5>Wybierz adresatów ogłoszenia:</h5>
-        <small>1) Tylko wybrani adresaci zobaczą ogłoszenie.</small><br>
+        <h5>Wybierz adresatów ankiety:</h5>
+        <small>1) Tylko wybrani adresaci zobaczą ankietę.</small><br>
         <small>2) Późniejsze dodanie adresatów - przez MG.</small><br>
         <br>
-        {{ form.allowed_profiles|as_crispy_field }}
+        {{ form.addressees|as_crispy_field }}
         <small>***Aby zaznaczyć wielu adresatów - użyj CTRL albo SHIFT.</small><br><br>
         <div class="col-md-12">
             {{ form.text|as_crispy_field }}
         </div>
         {{ form.image|as_crispy_field }}
-        <input class="btn btn-dark" type="submit" value="Utwórz ogłoszenie"/>
+
+    {% for form in option_forms %}
+            <div class="col-md-6">
+                {{ form.option_text|as_crispy_field }}
+            </div>
+    {% endfor %}
+
+     <input class="btn btn-dark" type="submit" value="Utwórz ankietę"/>
     </form>
 {% endblock content %}

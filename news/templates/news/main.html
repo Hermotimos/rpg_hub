@@ -15,7 +15,9 @@
     <br>
     <div class="mb-4">
         <a href="{% url 'news:create' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
+        <a href="{% url 'news:survey-create' %}" class="btn btn-outline-dark">Nowa ankieta</a>
     </div>
+
     <br><br><br>
 
     {% for survey in surveys %}

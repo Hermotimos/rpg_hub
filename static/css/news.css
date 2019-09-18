@@ -32,3 +32,14 @@
 .inline {
   float:left;
 }
+
+.btn-yes {
+        color: black;
+        border: 1px solid;
+}
+
+.btn-no {
+        color: black;
+        border: 1px solid;
+
+}
