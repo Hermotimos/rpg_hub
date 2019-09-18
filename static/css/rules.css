@@ -96,24 +96,35 @@ li b {
 .protection .protection-desc {width: 600px;}
 .protection .weight {width: 40px;}
 
+.plate-and-tricks .plate {width: 450px;}
+.plate-and-tricks .pickpocketing {width: 80px;}
+.plate-and-tricks .lockpicking {width: 80px;}
+.plate-and-tricks .sneaking-towns {width: 80px;}
+.plate-and-tricks .sneaking-wilderness {width: 80px;}
+.plate-and-tricks .hiding-towns {width: 80px;}
+.plate-and-tricks .hiding-wilderness {width: 80px;}
+.plate-and-tricks .climbing {width: 80px;}
+.plate-and-tricks .traps {width: 120px;}
 
 
 .professions tr:nth-child(even),
 .plates tr:nth-child(even),
 .shields tr:nth-child(even),
-.protection tr:nth-child(even) {
+.protection tr:nth-child(even),
+.protection tr:nth-child(even){
         background-color: #f2f2f2;
 }
-
-
 
 .rules-red {
         color: #993300;
 }
 
-
-.skills-green {
+.rules-green {
         color: #008000;
+}
+
+.back-gray {
+        background-color: #f2f2f2;
 }
 
 .border-custom-right {
