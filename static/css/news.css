@@ -6,20 +6,24 @@
 }
 
 
-.border-solid-red {
-        border-color: red;
-        border-style: solid;
+.border-red {
+        border-color: #C70039;
 }
 
-.border-solid-green {
-        border-color: green;
-        border-style: solid;
+.border-green {
+        border-color: #229954;
 }
 
 
 .img-survey {
-        height: 50%;
+        height: 30px;
         width: auto;
         margin-left: auto;
         margin-right: auto;
 }
+
+.survey .negative {width: 1%;}
+.survey .empty {max-width: 10%;}
+.survey .text {width: 30%;}
+.survey .positive {width: 50%;}
+.survey .undecided {width: ;}
