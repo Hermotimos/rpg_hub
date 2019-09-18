@@ -34,31 +34,40 @@
                 {% for profile in option.no_voters.all %}
                     <img class="rounded-circle img-survey border-double border-red" src="{{ profile.image.url }}">
                 {% endfor %}
-                <br><br>
             </td>
             <td>
-                &ensp;&ensp;{{ option.text }}&ensp;&ensp;
+                &ensp;&ensp;
+                <a href="{% url 'news:survey-no' survey.id option.id %}" class="btn btn-dark">-</a>
+            </td>
+            <td>
+                &ensp;&ensp;
+                {{ option.option_text }}
                 <br>
-                &ensp;&ensp;
-                {% for profile in survey.addressees.all %}
-                    {% if profile not in option.no_voters.all and profile not in option.yes_voters.all %}
-                        <img class="rounded-circle img-survey-tiny border-double" src="{{ profile.image.url }}">
-                    {% endif %}
-                {% endfor %}
-                &ensp;&ensp;
             </td>
             <td>
+                &ensp;&ensp;
+                <a href="{% url 'news:survey-yes' survey.id option.id %}" class="btn btn-dark">+</a>
+            </td>
+            <td>
+                &ensp;&ensp;
                 {% for profile in option.yes_voters.all %}
                     <img class="rounded-circle img-survey border-double border-green" src="{{ profile.image.url }}">
                 {% endfor %}
-                <br><br>
             </td>
         </tr>
         {% endfor %}
-
     </table>
 
-
+    <br><br>
+    <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="col-md-5">
+            {{ option_form.option_text|as_crispy_field }}
+        </div>
+        <input class="btn btn-dark" type="submit" value="Dodaj nową opcję ankiety">
+    </form>
+        <br>
+        Wyświetlili: ...
 
     <br>
 
@@ -94,14 +103,16 @@
     <br><br>
 
 
+<!-- ANSWER FORM -->
+
     <div id="page-bottom">
         <br>
         <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="col-md-12 ">
-                {{ form.text|as_crispy_field }}
+                {{ answer_form.text|as_crispy_field }}
             </div>
-            {{ form.image|as_crispy_field }}
+            {{ answer_form.image|as_crispy_field }}
             <input class="btn btn-dark" type="submit" value="Odpowiedz">
         </form>
     </div>

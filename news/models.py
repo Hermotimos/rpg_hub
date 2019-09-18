@@ -86,15 +86,15 @@ class Survey(models.Model):
 class SurveyOption(models.Model):
     survey = models.ForeignKey(Survey, related_name='survey_options', on_delete=models.CASCADE)
     author = models.ForeignKey(User, related_name='survey_options_authored', on_delete=models.CASCADE)
-    text = models.TextField(max_length=4000)
+    option_text = models.TextField(max_length=50)
     yes_voters = models.ManyToManyField(Profile, related_name='survey_yes_votes', blank=True)
     no_voters = models.ManyToManyField(Profile, related_name='survey_no_votes', blank=True)
 
     class Meta:
-        ordering = ['text']
+        ordering = ['option_text']
 
     def __str__(self):
-        return self.text[:100] + '...' if len(str(self.text)) > 100 else self.text
+        return self.option_text[:100] + '...' if len(str(self.option_text)) > 100 else self.option_text
 
 
 class SurveyAnswer(models.Model):

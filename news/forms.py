@@ -87,6 +87,21 @@ class CreateSurveyForm(forms.ModelForm):
         self.fields['title'].widget.attrs['size'] = 60
 
 
+class CreateSurveyOptionForm(forms.ModelForm):
+    class Meta:
+        model = SurveyOption
+        fields = [
+            'option_text'
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super(CreateSurveyOptionForm, self).__init__(*args, **kwargs)
+        self.fields['option_text'].label = ''
+        self.fields['option_text'].max_length = 50
+        self.fields['option_text'].widget.attrs['placeholder'] = 'Nowa opcja (max. 50 znaków)*'
+        self.fields['option_text'].widget.attrs['rows'] = 1
+
+
 class CreateSurveyAnswerForm(forms.ModelForm):
     class Meta:
         model = SurveyAnswer

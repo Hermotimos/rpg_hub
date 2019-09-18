@@ -3,9 +3,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.conf import settings
-from news.models import News, Survey
+from news.models import News, Survey, SurveyOption, SurveyAnswer
 from users.models import User, Profile
-from news.forms import CreateNewsForm, CreateNewsAnswerForm, CreateSurveyForm, CreateSurveyAnswerForm
+from news.forms import CreateNewsForm, CreateNewsAnswerForm, CreateSurveyForm, CreateSurveyOptionForm, CreateSurveyAnswerForm
 
 
 @login_required
@@ -144,12 +144,14 @@ def survey_detail_view(request, survey_id):
     survey_answers = list(survey.survey_answers.all())
 
     if request.method == 'POST':
-        form = CreateSurveyAnswerForm(request.POST, request.FILES)
-        if form.is_valid():
-            answer = form.save(commit=False)
+        answer_form = CreateSurveyAnswerForm(request.POST, request.FILES)
+        option_form = CreateSurveyOptionForm(request.POST)
+
+        if answer_form.is_valid():
+            answer = answer_form.save(commit=False)
             answer.survey = survey
             answer.author = request.user
-            form.save()
+            answer_form.save()
 
             # subject = f"[RPG] Odpowiedź na ogłoszenie: '{survey.title[:30]}...'"
             # message = f"{request.user.profile} odpowiedział/a na ogłoszenie '{survey.title}':\n" \
@@ -166,17 +168,80 @@ def survey_detail_view(request, survey_id):
 
             messages.info(request, f'Twoja odpowiedź została zapisana!')
             return redirect('news:survey-detail', survey_id=survey_id)
+
+        elif option_form.is_valid():
+            option = option_form.save(commit=False)
+            option.survey = survey
+            option.author = request.user
+            option_form.save()
+
+            # subject = f"[RPG] Odpowiedź na ogłoszenie: '{survey.title[:30]}...'"
+            # message = f"{request.user.profile} odpowiedział/a na ogłoszenie '{survey.title}':\n" \
+            #           f"Ogłoszenie: {request.get_host()}/news/detail:{survey.id}/\n\n" \
+            #           f"Odpowiedź: {answer.text}"
+            # sender = settings.EMAIL_HOST_USER
+            # receivers = []
+            # for user in User.objects.all():
+            #     if user.profile in news.followers.all() and user != request.user:
+            #         receivers.append(user.email)
+            # if request.user.profile.character_status != 'gm':
+            #     receivers.append('lukas.kozicki@gmail.com')
+            # send_mail(subject, message, sender, receivers)
+
+            messages.info(request, f'Utworzono nową opcję ankiety!')
+            return redirect('news:survey-detail', survey_id=survey_id)
     else:
-        form = CreateSurveyAnswerForm()
+        answer_form = CreateSurveyAnswerForm()
+        option_form = CreateSurveyOptionForm()
 
     context = {
         'page_title': survey.title,
         'survey': survey,
         'survey_options': survey_options,
         'survey_answers': survey_answers,
-        'form': form,
+        'answer_form': answer_form,
+        'option_form': option_form
     }
     if request.user.profile in survey.addressees.all() or request.user.profile.character_status == 'gm':
         return render(request, 'news/survey_detail.html', context)
     else:
         return redirect('home:dupa')
+
+
+@login_required
+def vote_yes_view(request, survey_id, option_id):
+    option = get_object_or_404(SurveyOption, id=option_id)
+    if request.user.profile in option.survey.addressees.all():
+        yes_voters = option.yes_voters.all()
+        new_yes_voter = request.user.profile
+        yes_voters |= Profile.objects.filter(id=new_yes_voter.id)
+        option.yes_voters.set(yes_voters)
+
+        if request.user.profile in option.no_voters.all():
+            updated_no_voters = option.no_voters.exclude(user=request.user)
+            option.no_voters.set(updated_no_voters)
+
+        messages.info(request, 'Dodano głos na "tak"!')
+        return redirect('news:survey-detail', survey_id=survey_id)
+    else:
+        return redirect('home:dupa')
+
+
+@login_required
+def vote_no_view(request, survey_id, option_id):
+    option = get_object_or_404(SurveyOption, id=option_id)
+    if request.user.profile in option.survey.addressees.all():
+        no_voters = option.no_voters.all()
+        new_no_voter = request.user.profile
+        no_voters |= Profile.objects.filter(id=new_no_voter.id)
+        option.no_voters.set(no_voters)
+
+        if request.user.profile in option.yes_voters.all():
+            updated_yes_voters = option.yes_voters.exclude(user=request.user)
+            option.yes_voters.set(updated_yes_voters)
+
+        messages.info(request, 'Dodano głos na "nie"!')
+        return redirect('news:survey-detail', survey_id=survey_id)
+    else:
+        return redirect('home:dupa')
+
