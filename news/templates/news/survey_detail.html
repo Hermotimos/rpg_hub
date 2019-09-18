@@ -17,7 +17,7 @@
 
 <!-- SURVEY MESSAGE -->
     <div class="post-and-news">
-        <h6>{{ survey.text|capfirst|linebreaks }}</h6>
+        {{ survey.text|capfirst|linebreaks }}
         {% if survey.image %}
             <img src="{{ survey.image.url }}" class="border-double">
         {% endif %}
@@ -83,7 +83,7 @@
 <!-- SEEN BY -->
     <br>
     {% if request.user.profile.character_status == 'gm' %}
-        "Cannot be unseen":&ensp;&ensp;
+        Wyświetlili:&ensp;&ensp;
         {% for profile in survey.seen_by.all %}
             <img class="rounded-circle img-survey" src="{{ profile.image.url }}">
         {% endfor %}
