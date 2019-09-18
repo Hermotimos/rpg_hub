@@ -59,12 +59,13 @@
     </table>
 
     <br><br>
-    <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="col-md-5">
+        <div class="col-md-5 inline">
             {{ option_form.option_text|as_crispy_field }}
         </div>
-        <input class="btn btn-dark" type="submit" value="Dodaj nową opcję ankiety">
+        &nbsp;
+        <input class="btn btn-dark" type="submit" value="+">
     </form>
         <br>
         Wyświetlili: ...

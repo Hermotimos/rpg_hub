@@ -9,7 +9,6 @@ class News(models.Model):
     title = models.CharField(max_length=100, unique=True)
     text = models.TextField(max_length=4000)
     date_posted = models.DateTimeField(auto_now_add=True)
-    # date_updated = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, related_name='news', on_delete=models.CASCADE)
     allowed_profiles = models.ManyToManyField(Profile, related_name='allowed_news')
     followers = models.ManyToManyField(Profile, related_name='followed_news', blank=True)
@@ -86,7 +85,7 @@ class Survey(models.Model):
 class SurveyOption(models.Model):
     survey = models.ForeignKey(Survey, related_name='survey_options', on_delete=models.CASCADE)
     author = models.ForeignKey(User, related_name='survey_options_authored', on_delete=models.CASCADE)
-    option_text = models.TextField(max_length=50)
+    option_text = models.CharField(max_length=50)
     yes_voters = models.ManyToManyField(Profile, related_name='survey_yes_votes', blank=True)
     no_voters = models.ManyToManyField(Profile, related_name='survey_no_votes', blank=True)
 
