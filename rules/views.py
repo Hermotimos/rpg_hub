@@ -65,7 +65,7 @@ def rules_tricks_view(request):
 @login_required
 def rules_wounds_view(request):
     context = {
-        'page_title': 'Progi ran'
+        'page_title': 'Progi i skutki ran'
     }
     return render(request, 'rules/wounds.html', context)
 
