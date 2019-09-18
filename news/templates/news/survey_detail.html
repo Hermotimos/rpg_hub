@@ -15,6 +15,7 @@
 {% block content %}
     <br><br><br><br>
 
+<!-- SURVEY MESSAGE -->
     <div class="post-and-news">
         <h6>{{ survey.text|capfirst|linebreaks }}</h6>
         {% if survey.image %}
@@ -22,6 +23,7 @@
         {% endif %}
     </div>
 
+<!-- NEW SURVEY OPTION -->
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="col-md-6 inline">
@@ -29,9 +31,9 @@
         </div>
         &nbsp;<input class="btn btn-dark" type="submit" value="+">
     </form>
-
     <br><br><br>
 
+<!-- SURVEY -->
     <table class="survey">
         <colgroup>
             <col class="negative">
@@ -48,17 +50,14 @@
                 {% endfor %}
             </td>
             <td>
-                &ensp;&ensp;
-                <a href="{% url 'news:survey-no' survey.id option.id %}" class="btn btn-no">&#10008;</a>
+                &ensp;&ensp;<a href="{% url 'news:survey-no' survey.id option.id %}" class="btn btn-no">&#10008;</a>
             </td>
             <td>
-                &ensp;&ensp;
-                {{ option.option_text }}
+                &ensp;&ensp;{{ option.option_text }}
                 <br>
             </td>
             <td>
-                &ensp;&ensp;
-                <a href="{% url 'news:survey-yes' survey.id option.id %}" class="btn btn-yes">&#10004;</a>
+                &ensp;&ensp;<a href="{% url 'news:survey-yes' survey.id option.id %}" class="btn btn-yes">&#10004;</a>
             </td>
             <td>
                 &ensp;&ensp;
@@ -73,7 +72,7 @@
     </table>
     <br>
 
-
+<!-- SEEN BY -->
     <br>
     {% if request.user.profile.character_status == 'gm' %}
         "Cannot be unseen":&ensp;&ensp;
@@ -84,10 +83,7 @@
     {% endif %}
 
 
-
-
 <!-- ANSWERS -->
-
     <div class="border-top">
         <br><br>
         <table>
@@ -114,9 +110,7 @@
     </div>
     <br><br>
 
-
 <!-- ANSWER FORM -->
-
     <div id="page-bottom">
         <br>
         <form method="POST" action=".#page-bottom" enctype="multipart/form-data">

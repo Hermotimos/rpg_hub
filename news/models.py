@@ -60,6 +60,7 @@ class NewsAnswer(models.Model):
 
 class Survey(models.Model):
     title = models.CharField(max_length=100, unique=True)
+    author = models.ForeignKey(User, related_name='surveys_authored', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000)
     image = models.ImageField(blank=True, null=True, upload_to='news_pics')
     date_posted = models.DateTimeField(auto_now_add=True)

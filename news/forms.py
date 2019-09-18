@@ -78,10 +78,9 @@ class CreateSurveyForm(forms.ModelForm):
                                                                      Q(character_status='dead_npc'))
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
-
         self.fields['text'].label = ''
         self.fields['text'].max_length = 4000
-        self.fields['text'].widget.attrs['placeholder'] = 'Twoja odpowiedź (max. 4000 znaków)*'
+        self.fields['text'].widget.attrs['placeholder'] = 'Wiadomość do ankiety (max. 4000 znaków)*'
         self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60
         self.fields['title'].label = ''

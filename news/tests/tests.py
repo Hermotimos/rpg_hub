@@ -75,7 +75,7 @@ class CreateTest(TestCase):
         self.assertEquals(response.status_code, 200)
 
     def test_url_resolves_view(self):
-        view = resolve('/news/create/')
+        view = resolve('/news/create-news/')
         self.assertEquals(view.func, views.create_news_view)
 
     def test_csrf(self):

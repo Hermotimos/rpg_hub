@@ -19,7 +19,6 @@
     </div>
 
     <br><br><br>
-
     {% for survey in surveys %}
         <table>
             <tbody>
@@ -30,24 +29,24 @@
                         <small>{{ survey.date_posted|date:'d-M-Y' }}</small>
                     </td>
                     <td>
-                        <h3 class="unblue"><a href="{% url 'news:survey-detail' survey.id %}">{{ survey.title }}</a></h3>
+                        <h3 class="unblue"><a href="{% url 'news:survey-detail' survey.id %}">ANKIETA: {{ survey.title }}</a></h3>
                     </td>
                 </tr>
             </tbody>
         </table><br>
     {% endfor %}
-    ----------------------------------------------------------
+    <br><br>
 
     {% for news in newss %}
-        <table>
+        <table class="border-top">
             <tbody>
                 <tr class="posts-and-news">
-                    <td>
+                    <td class="pt-3">
                         <img class="rounded-circle article-img" src="{{ news.author.profile.image.url }}">
                         <br>
                         <small>{{ news.date_posted|date:'d-M-Y' }}</small>
                     </td>
-                    <td>
+                    <td class="pt-2">
                         <small>Ostatnia aktywność:
                             {% if news.last_activity %}
                                 {{ news.last_activity|date:'d-M-Y, H:i' }}
