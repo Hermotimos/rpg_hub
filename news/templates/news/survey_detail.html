@@ -13,14 +13,24 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br><br>
+    <br><br><br><br>
 
     <div class="post-and-news">
-        <p>{{ survey.text|capfirst|linebreaks }}</p>
+        <h6>{{ survey.text|capfirst|linebreaks }}</h6>
         {% if survey.image %}
             <img src="{{ survey.image.url }}" class="border-double">
         {% endif %}
     </div>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="col-md-6 inline">
+            {{ option_form.option_text|as_crispy_field }}
+        </div>
+        &nbsp;<input class="btn btn-dark" type="submit" value="+">
+    </form>
+
+    <br><br><br>
 
     <table class="survey">
         <colgroup>
@@ -32,12 +42,14 @@
         <tr>
             <td class="align-right">
                 {% for profile in option.no_voters.all %}
-                    <img class="rounded-circle img-survey border-double border-red" src="{{ profile.image.url }}">
+                    <a href="{% url 'news:survey-unvote' survey.id option.id %}">
+                        <img class="rounded-circle img-survey border-double border-red" src="{{ profile.image.url }}">
+                    </a>
                 {% endfor %}
             </td>
             <td>
                 &ensp;&ensp;
-                <a href="{% url 'news:survey-no' survey.id option.id %}" class="btn btn-dark">-</a>
+                <a href="{% url 'news:survey-no' survey.id option.id %}" class="btn btn-danger">&#10008;</a>
             </td>
             <td>
                 &ensp;&ensp;
@@ -46,31 +58,30 @@
             </td>
             <td>
                 &ensp;&ensp;
-                <a href="{% url 'news:survey-yes' survey.id option.id %}" class="btn btn-dark">+</a>
+                <a href="{% url 'news:survey-yes' survey.id option.id %}" class="btn btn-success">&#10004;</a>
             </td>
             <td>
                 &ensp;&ensp;
                 {% for profile in option.yes_voters.all %}
-                    <img class="rounded-circle img-survey border-double border-green" src="{{ profile.image.url }}">
+                    <a href="{% url 'news:survey-unvote' survey.id option.id %}">
+                        <img class="rounded-circle img-survey border-double border-green" src="{{ profile.image.url }}">
+                    </a>
                 {% endfor %}
             </td>
         </tr>
         {% endfor %}
     </table>
+    <br>
 
-    <br><br>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="col-md-5 inline">
-            {{ option_form.option_text|as_crispy_field }}
-        </div>
-        &nbsp;
-        <input class="btn btn-dark" type="submit" value="+">
-    </form>
-        <br>
-        Wyświetlili: ...
 
     <br>
+    {% if request.user.profile.character_status == 'gm' %}
+        "Cannot be unseen":&ensp;&ensp;
+        {% for profile in survey.seen_by.all %}
+            <img class="rounded-circle img-survey" src="{{ profile.image.url }}">
+        {% endfor %}
+        <br><br>
+    {% endif %}
 
 
 

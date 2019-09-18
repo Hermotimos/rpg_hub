@@ -13,4 +13,5 @@ urlpatterns = [
     path('survey_detail:<int:survey_id>/', views.survey_detail_view, name='survey-detail'),
     path('survey_detail:<int:survey_id>/survey_option:<int:option_id>/vote_yes', views.vote_yes_view, name='survey-yes'),
     path('survey_detail:<int:survey_id>/survey_option:<int:option_id>/vote_no', views.vote_no_view, name='survey-no'),
+    path('survey_detail:<int:survey_id>/survey_option:<int:option_id>/unvote', views.unvote_view, name='survey-unvote')
 ]

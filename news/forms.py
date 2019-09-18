@@ -98,7 +98,7 @@ class CreateSurveyOptionForm(forms.ModelForm):
         super(CreateSurveyOptionForm, self).__init__(*args, **kwargs)
         self.fields['option_text'].label = ''
         self.fields['option_text'].max_length = 50
-        self.fields['option_text'].widget.attrs['placeholder'] = 'Nowa opcja (max. 50 znaków)*'
+        self.fields['option_text'].widget.attrs['placeholder'] = 'Nowa opcja ankiety (max. 50 znaków)*'
         self.fields['option_text'].widget.attrs['rows'] = 1
 
 

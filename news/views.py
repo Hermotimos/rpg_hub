@@ -139,6 +139,15 @@ def follow_news_view(request, news_id):
 @login_required
 def survey_detail_view(request, survey_id):
     survey = get_object_or_404(Survey, id=survey_id)
+
+    profile = request.user.profile
+    seen_by = survey.seen_by.all()
+    if profile not in seen_by:
+        new_seen = profile
+        seen_by |= Profile.objects.filter(id=new_seen.id)
+        survey.seen_by.set(seen_by)
+
+
     # survey_with_options_dict = {survey: (o for o in survey.options.all())}
     survey_options = list(survey.survey_options.all())
     survey_answers = list(survey.survey_answers.all())
@@ -221,7 +230,6 @@ def vote_yes_view(request, survey_id, option_id):
             updated_no_voters = option.no_voters.exclude(user=request.user)
             option.no_voters.set(updated_no_voters)
 
-        messages.info(request, 'Dodano głos na "tak"!')
         return redirect('news:survey-detail', survey_id=survey_id)
     else:
         return redirect('home:dupa')
@@ -240,8 +248,23 @@ def vote_no_view(request, survey_id, option_id):
             updated_yes_voters = option.yes_voters.exclude(user=request.user)
             option.yes_voters.set(updated_yes_voters)
 
-        messages.info(request, 'Dodano głos na "nie"!')
         return redirect('news:survey-detail', survey_id=survey_id)
     else:
         return redirect('home:dupa')
 
+
+@login_required
+def unvote_view(request, survey_id, option_id):
+    option = get_object_or_404(SurveyOption, id=option_id)
+
+    if request.user.profile in option.survey.addressees.all():
+        if request.user.profile in option.yes_voters.all():
+            updated_yes_voters = option.yes_voters.exclude(user=request.user)
+            option.yes_voters.set(updated_yes_voters)
+        elif request.user.profile in option.no_voters.all():
+            updated_no_voters = option.no_voters.exclude(user=request.user)
+            option.no_voters.set(updated_no_voters)
+
+        return redirect('news:survey-detail', survey_id=survey_id)
+    else:
+        return redirect('home:dupa')
