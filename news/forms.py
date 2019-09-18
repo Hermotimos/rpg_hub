@@ -72,9 +72,9 @@ class CreateSurveyForm(forms.ModelForm):
         super(CreateSurveyForm, self).__init__(*args, **kwargs)
         self.fields['addressees'].label = ''
         self.fields['addressees'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                                     # Q(character_status='dead_player') |
+                                                                     Q(character_status='dead_player') |
                                                                      Q(character_status='inactive_player') |
-                                                                     # Q(character_status='living_npc') |
+                                                                     Q(character_status='living_npc') |
                                                                      Q(character_status='dead_npc'))
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False

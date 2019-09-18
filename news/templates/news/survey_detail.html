@@ -44,9 +44,13 @@
         <tr>
             <td class="align-right">
                 {% for profile in option.no_voters.all %}
-                    <a href="{% url 'news:survey-unvote' survey.id option.id %}">
+                    {% if profile == request.user.profile %}
+                        <a href="{% url 'news:survey-unvote' survey.id option.id %}">
+                            <img class="rounded-circle img-survey border-double border-red" src="{{ profile.image.url }}">
+                        </a>
+                    {% else %}
                         <img class="rounded-circle img-survey border-double border-red" src="{{ profile.image.url }}">
-                    </a>
+                    {% endif %}
                 {% endfor %}
             </td>
             <td>
@@ -62,9 +66,13 @@
             <td>
                 &ensp;&ensp;
                 {% for profile in option.yes_voters.all %}
-                    <a href="{% url 'news:survey-unvote' survey.id option.id %}">
+                    {% if profile == request.user.profile %}
+                        <a href="{% url 'news:survey-unvote' survey.id option.id %}">
+                            <img class="rounded-circle img-survey border-double border-green" src="{{ profile.image.url }}">
+                        </a>
+                    {% else %}
                         <img class="rounded-circle img-survey border-double border-green" src="{{ profile.image.url }}">
-                    </a>
+                    {% endif %}
                 {% endfor %}
             </td>
         </tr>
