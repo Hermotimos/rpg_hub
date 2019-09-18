@@ -13,6 +13,7 @@ urlpatterns = [
     path('tricks/', views.rules_tricks_view, name='tricks'),
     path('character-sheet/', views.rules_character_sheet_view, name='character-sheet'),
     path('armor/', views.rules_armor_view, name='armor'),
+    path('wounds/', views.rules_wounds_view, name='wounds'),
 
     # path('combat/pdf/', html2pdf_views.yet_another, name='combat-pdf'),
     # path('combat/pdf2/', html2pdf_views.export_word_2, name='combat-pdf2'),

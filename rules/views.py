@@ -63,6 +63,14 @@ def rules_tricks_view(request):
 
 
 @login_required
+def rules_wounds_view(request):
+    context = {
+        'page_title': 'Progi ran'
+    }
+    return render(request, 'rules/wounds.html', context)
+
+
+@login_required
 def rules_armor_view(request):
     context = {
         'page_title': 'Pancerz'
