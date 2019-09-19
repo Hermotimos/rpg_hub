@@ -106,6 +106,15 @@ li b {
 .plate-and-tricks .climbing {width: 80px;}
 .plate-and-tricks .traps {width: 120px;}
 
+.agility-and-tricks .plate {width: 50px;}
+.agility-and-tricks .pickpocketing {width: 100px;}
+.agility-and-tricks .lockpicking {width: 100px;}
+.agility-and-tricks .sneaking-towns {width: 100px;}
+.agility-and-tricks .sneaking-wilderness {width: 100px;}
+.agility-and-tricks .hiding-towns {width: 100px;}
+.agility-and-tricks .hiding-wilderness {width: 100px;}
+.agility-and-tricks .climbing {width: 100px;}
+.agility-and-tricks .traps {width: 100px;}
 
 .professions tr:nth-child(even),
 .plates tr:nth-child(even),
