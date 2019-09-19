@@ -15,12 +15,6 @@
 }
 
 
-.img-survey {
-        height: 30px;
-        width: auto;
-        margin-left: auto;
-        margin-right: auto;
-}
 
 .img-survey-tiny {
         height: 15px;
@@ -30,7 +24,7 @@
 }
 
 .inline {
-  float:left;
+        float:left;
 }
 
 .btn-yes {

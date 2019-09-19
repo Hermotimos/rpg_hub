@@ -46,10 +46,10 @@
                 {% for profile in option.no_voters.all %}
                     {% if profile == request.user.profile %}
                         <a href="{% url 'news:survey-unvote' survey.id option.id %}">
-                            <img class="rounded-circle img-survey border-double border-red" src="{{ profile.image.url }}">
+                            <img class="rounded-circle img-small border-double border-red" src="{{ profile.image.url }}">
                         </a>
                     {% else %}
-                        <img class="rounded-circle img-survey border-double border-red" src="{{ profile.image.url }}">
+                        <img class="rounded-circle img-small border-double border-red" src="{{ profile.image.url }}">
                     {% endif %}
                 {% endfor %}
             </td>
@@ -68,10 +68,10 @@
                 {% for profile in option.yes_voters.all %}
                     {% if profile == request.user.profile %}
                         <a href="{% url 'news:survey-unvote' survey.id option.id %}">
-                            <img class="rounded-circle img-survey border-double border-green" src="{{ profile.image.url }}">
+                            <img class="rounded-circle img-small border-double border-green" src="{{ profile.image.url }}">
                         </a>
                     {% else %}
-                        <img class="rounded-circle img-survey border-double border-green" src="{{ profile.image.url }}">
+                        <img class="rounded-circle img-small border-double border-green" src="{{ profile.image.url }}">
                     {% endif %}
                 {% endfor %}
             </td>
@@ -85,7 +85,7 @@
     {% if request.user.profile.character_status == 'gm' %}
         Wyświetlili:&ensp;&ensp;
         {% for profile in survey.seen_by.all %}
-            <img class="rounded-circle img-survey" src="{{ profile.image.url }}">
+            <img class="rounded-circle img-small" src="{{ profile.image.url }}">
         {% endfor %}
         <br><br>
     {% endif %}

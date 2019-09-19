@@ -42,14 +42,14 @@
                 {% else %}
                     [{{ debate.first_player_remark_date|date:'d M Y' }}
                 {% endif %}
-                    &#10033;
+                &#10033;
+                Wypowiedzi: {{ debate.player_remarks_count }}]
+                &emsp;
                 {% for profile in debate.allowed_profiles.all %}
                     {% if profile.character_status != 'gm' %}
-                        {{ profile.character_name|get_first_word }}
+                        <img class="rounded-circle img-small" src="{{ profile.image.url }}">
                     {% endif %}
                 {% endfor %}
-                    &#10033;
-                    Wypowiedzi: {{ debate.player_remarks_count }}]
                 </small>
             </h6>
         {% endfor %}
