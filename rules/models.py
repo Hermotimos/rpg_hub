@@ -19,27 +19,31 @@ class Skill(models.Model):
                                               Q(character_status='inactive_player') |
                                               Q(character_status='dead_player'),
                                               related_name='allowed_skills')
-    sorting_name = models.CharField(max_length=101, blank=True, null=True, unique=True)
+    sorting_name = models.CharField(max_length=101, blank=True, null=True)
 
     def __str__(self):
         return str(self.name)
 
     def save(self, *args, **kwargs):
         if self.name:
-            if str(self.name)[0] == 'Ć':
-                self.sorting_name = 'C' + str(self.name)
-            elif str(self.name)[0] == 'Ł':
-                self.sorting_name = 'L' + str(self.name)
-            elif str(self.name)[0] == 'Ó':
-                self.sorting_name = 'O' + str(self.name)
-            elif str(self.name)[0] == 'Ś':
-                self.sorting_name = 'S' + str(self.name)
-            elif str(self.name)[0] == 'Ź':
-                self.sorting_name = 'Z' + str(self.name)
-            elif str(self.name)[0] == 'Ż':
-                self.sorting_name = 'Z' + str(self.name)
-            else:
-                self.sorting_name = str(self.name)
+            name = str(self.name)
+            name = name.replace('Ą', 'Azz')
+            name = name.replace('ą', 'azz')
+            name = name.replace('Ć', 'Czz')
+            name = name.replace('ć', 'czz')
+            name = name.replace('Ę', 'Ezz')
+            name = name.replace('ę', 'ezz')
+            name = name.replace('Ł', 'Lzz')
+            name = name.replace('ł', 'lzz')
+            name = name.replace('Ó', 'Ozz')
+            name = name.replace('ó', 'ozz')
+            name = name.replace('Ś', 'Szz')
+            name = name.replace('ś', 'szz')
+            name = name.replace('Ź', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            name = name.replace('Ż', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            self.sorting_name = name
         super(Skill, self).save(*args, **kwargs)
 
     def short_name(self):
@@ -62,15 +66,38 @@ class Synergy(models.Model):
                                               Q(character_status='inactive_player') |
                                               Q(character_status='dead_player'),
                                               related_name='allowed_synergies',)
+    sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
         return ' + '.join(str(s) for s in self.skills.all())
+
+    def save(self, *args, **kwargs):
+        if self.name:
+            name = str(self.name)
+            name = name.replace('Ą', 'Azz')
+            name = name.replace('ą', 'azz')
+            name = name.replace('Ć', 'Czz')
+            name = name.replace('ć', 'czz')
+            name = name.replace('Ę', 'Ezz')
+            name = name.replace('ę', 'ezz')
+            name = name.replace('Ł', 'Lzz')
+            name = name.replace('ł', 'lzz')
+            name = name.replace('Ó', 'Ozz')
+            name = name.replace('ó', 'ozz')
+            name = name.replace('Ś', 'Szz')
+            name = name.replace('ś', 'szz')
+            name = name.replace('Ź', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            name = name.replace('Ż', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            self.sorting_name = name
+        super(Synergy, self).save(*args, **kwargs)
 
     def short_name(self):
         return ''.join(str(s)[:3] for s in self.skills.all())
 
     class Meta:
-        ordering = ['name']
+        ordering = ['sorting_name']
         verbose_name = 'Synergy'
         verbose_name_plural = 'Synergies'
 
@@ -78,24 +105,28 @@ class Synergy(models.Model):
 class CharacterClass(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=4000, blank=True, null=True)
-    sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
+    sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.name:
-            if str(self.name)[0] == 'Ć':
-                self.sorting_name = 'C' + str(self.name)
-            elif str(self.name)[0] == 'Ł':
-                self.sorting_name = 'L' + str(self.name)
-            elif str(self.name)[0] == 'Ó':
-                self.sorting_name = 'O' + str(self.name)
-            elif str(self.name)[0] == 'Ś':
-                self.sorting_name = 'S' + str(self.name)
-            elif str(self.name)[0] == 'Ź':
-                self.sorting_name = 'Z' + str(self.name)
-            elif str(self.name)[0] == 'Ż':
-                self.sorting_name = 'Z' + str(self.name)
-            else:
-                self.sorting_name = str(self.name)
+            name = str(self.name)
+            name = name.replace('Ą', 'Azz')
+            name = name.replace('ą', 'azz')
+            name = name.replace('Ć', 'Czz')
+            name = name.replace('ć', 'czz')
+            name = name.replace('Ę', 'Ezz')
+            name = name.replace('ę', 'ezz')
+            name = name.replace('Ł', 'Lzz')
+            name = name.replace('ł', 'lzz')
+            name = name.replace('Ó', 'Ozz')
+            name = name.replace('ó', 'ozz')
+            name = name.replace('Ś', 'Szz')
+            name = name.replace('ś', 'szz')
+            name = name.replace('Ź', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            name = name.replace('Ż', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            self.sorting_name = name
         super(CharacterClass, self).save(*args, **kwargs)
 
     class Meta:
@@ -149,24 +180,28 @@ class CharacterProfession(models.Model):
                                               Q(character_status='inactive_player') |
                                               Q(character_status='dead_player'),
                                               related_name='allowed_professions')
-    sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
+    sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.name:
-            if str(self.name)[0] == 'Ć':
-                self.sorting_name = 'C' + str(self.name)
-            elif str(self.name)[0] == 'Ł':
-                self.sorting_name = 'L' + str(self.name)
-            elif str(self.name)[0] == 'Ó':
-                self.sorting_name = 'O' + str(self.name)
-            elif str(self.name)[0] == 'Ś':
-                self.sorting_name = 'S' + str(self.name)
-            elif str(self.name)[0] == 'Ź':
-                self.sorting_name = 'Z' + str(self.name)
-            elif str(self.name)[0] == 'Ż':
-                self.sorting_name = 'Z' + str(self.name)
-            else:
-                self.sorting_name = str(self.name)
+            name = str(self.name)
+            name = name.replace('Ą', 'Azz')
+            name = name.replace('ą', 'azz')
+            name = name.replace('Ć', 'Czz')
+            name = name.replace('ć', 'czz')
+            name = name.replace('Ę', 'Ezz')
+            name = name.replace('ę', 'ezz')
+            name = name.replace('Ł', 'Lzz')
+            name = name.replace('ł', 'lzz')
+            name = name.replace('Ó', 'Ozz')
+            name = name.replace('ó', 'ozz')
+            name = name.replace('Ś', 'Szz')
+            name = name.replace('ś', 'szz')
+            name = name.replace('Ź', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            name = name.replace('Ż', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            self.sorting_name = name
         super(CharacterProfession, self).save(*args, **kwargs)
 
     class Meta:
@@ -189,24 +224,28 @@ class EliteClass(models.Model):
                                               Q(character_status='inactive_player') |
                                               Q(character_status='dead_player'),
                                               related_name='allowed_elite_classes')
-    sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
+    sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.name:
-            if str(self.name)[0] == 'Ć':
-                self.sorting_name = 'C' + str(self.name)
-            elif str(self.name)[0] == 'Ł':
-                self.sorting_name = 'L' + str(self.name)
-            elif str(self.name)[0] == 'Ó':
-                self.sorting_name = 'O' + str(self.name)
-            elif str(self.name)[0] == 'Ś':
-                self.sorting_name = 'S' + str(self.name)
-            elif str(self.name)[0] == 'Ź':
-                self.sorting_name = 'Z' + str(self.name)
-            elif str(self.name)[0] == 'Ż':
-                self.sorting_name = 'Z' + str(self.name)
-            else:
-                self.sorting_name = str(self.name)
+            name = str(self.name)
+            name = name.replace('Ą', 'Azz')
+            name = name.replace('ą', 'azz')
+            name = name.replace('Ć', 'Czz')
+            name = name.replace('ć', 'czz')
+            name = name.replace('Ę', 'Ezz')
+            name = name.replace('ę', 'ezz')
+            name = name.replace('Ł', 'Lzz')
+            name = name.replace('ł', 'lzz')
+            name = name.replace('Ó', 'Ozz')
+            name = name.replace('ó', 'ozz')
+            name = name.replace('Ś', 'Szz')
+            name = name.replace('ś', 'szz')
+            name = name.replace('Ź', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            name = name.replace('Ż', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            self.sorting_name = name
         super(EliteClass, self).save(*args, **kwargs)
 
     class Meta:
@@ -216,13 +255,6 @@ class EliteClass(models.Model):
 
     def __str__(self):
         return self.name
-
-    # def allowed_list(self):
-    #     allowed_profiles = []
-    #     for profession in self.elite_professions.all():
-    #         for profile in profession.allowed_profiles.all():
-    #             allowed_profiles.append(profile)
-    #     return allowed_profiles
 
     def short_name(self):
         return ''.join(word[:4] for word in str(self.name).split(' '))
@@ -240,25 +272,148 @@ class EliteProfession(models.Model):
                                               Q(character_status='inactive_player') |
                                               Q(character_status='dead_player'),
                                               related_name='allowed_elite_professions')
-    sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
+    sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.name:
-            if str(self.name)[0] == 'Ć':
-                self.sorting_name = 'C' + str(self.name)
-            elif str(self.name)[0] == 'Ł':
-                self.sorting_name = 'L' + str(self.name)
-            elif str(self.name)[0] == 'Ó':
-                self.sorting_name = 'O' + str(self.name)
-            elif str(self.name)[0] == 'Ś':
-                self.sorting_name = 'S' + str(self.name)
-            elif str(self.name)[0] == 'Ź':
-                self.sorting_name = 'Z' + str(self.name)
-            elif str(self.name)[0] == 'Ż':
-                self.sorting_name = 'Z' + str(self.name)
-            else:
-                self.sorting_name = str(self.name)
+            name = str(self.name)
+            name = name.replace('Ą', 'Azz')
+            name = name.replace('ą', 'azz')
+            name = name.replace('Ć', 'Czz')
+            name = name.replace('ć', 'czz')
+            name = name.replace('Ę', 'Ezz')
+            name = name.replace('ę', 'ezz')
+            name = name.replace('Ł', 'Lzz')
+            name = name.replace('ł', 'lzz')
+            name = name.replace('Ó', 'Ozz')
+            name = name.replace('ó', 'ozz')
+            name = name.replace('Ś', 'Szz')
+            name = name.replace('ś', 'szz')
+            name = name.replace('Ź', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            name = name.replace('Ż', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            self.sorting_name = name
         super(EliteProfession, self).save(*args, **kwargs)
+
+    class Meta:
+        ordering = ['sorting_name']
+
+    def __str__(self):
+        return self.name
+
+    def short_name(self):
+        return ''.join(word[:4] for word in str(self.name).split(' '))
+
+
+class WeaponClass(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(max_length=4000, blank=True, null=True)
+    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if self.name:
+            name = str(self.name)
+            name = name.replace('Ą', 'Azz')
+            name = name.replace('ą', 'azz')
+            name = name.replace('Ć', 'Czz')
+            name = name.replace('ć', 'czz')
+            name = name.replace('Ę', 'Ezz')
+            name = name.replace('ę', 'ezz')
+            name = name.replace('Ł', 'Lzz')
+            name = name.replace('ł', 'lzz')
+            name = name.replace('Ó', 'Ozz')
+            name = name.replace('ó', 'ozz')
+            name = name.replace('Ś', 'Szz')
+            name = name.replace('ś', 'szz')
+            name = name.replace('Ź', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            name = name.replace('Ż', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            self.sorting_name = name
+        super(WeaponClass, self).save(*args, **kwargs)
+
+    class Meta:
+        ordering = ['sorting_name']
+
+    def __str__(self):
+        return self.name
+
+    def short_name(self):
+        return ''.join(word[:4] for word in str(self.name).split(' '))
+
+
+DAMAGE_TYPES = [
+    ('K', 'K'),
+    ('S', 'S'),
+    ('O', 'O'),
+    ('K/S', 'K/S'),
+    ('K/O', 'K/O'),
+    ('O/S', 'O/S'),
+    ('K/S/O', 'K/S/O')
+]
+
+TRAITS = [
+    ('SIŁ', 'SIŁ'),
+    ('ZRC', 'ZRC'),
+    ('SIŁ/ZRC', 'SIŁ/ZRC')
+]
+
+SIZES = [
+    ('M', 'M'),
+    ('Ś', 'Ś'),
+    ('D', 'D')
+]
+
+CURRENCIES = [
+    ('m', 'm'),
+    ('ss', 'ss'),
+    ('sz', 'sz'),
+    ('sp', 'sp'),
+]
+
+
+class WeaponType(models.Model):
+    weapon_class = models.ForeignKey(WeaponClass, related_name='weapon_types', on_delete=models.PROTECT)
+    name = models.CharField(max_length=100, unique=True)
+    delay = models.PositiveSmallIntegerField()
+    damage_small_dices = models.CharField(max_length=10)
+    damage_small_add = models.PositiveSmallIntegerField()
+    damage_big_dices = models.CharField(max_length=10)
+    damage_big_add = models.PositiveSmallIntegerField()
+    damage_type = models.CharField(max_length=10, choices=DAMAGE_TYPES)
+    special = models.TextField(max_length=4000, blank=True, null=True)
+    range = models.CharField(max_length=100)
+    size = models.CharField(max_length=5, choices=SIZES)
+    trait = models.CharField(max_length=10, choices=TRAITS)
+    average_price_value = models.PositiveSmallIntegerField()
+    average_price_currency = models.CharField(max_length=5, choices=CURRENCIES)
+    average_weight = models.FloatField()
+
+    description = models.TextField(max_length=4000, blank=True, null=True)
+    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if self.name:
+            name = str(self.name)
+            name = name.replace('Ą', 'Azz')
+            name = name.replace('ą', 'azz')
+            name = name.replace('Ć', 'Czz')
+            name = name.replace('ć', 'czz')
+            name = name.replace('Ę', 'Ezz')
+            name = name.replace('ę', 'ezz')
+            name = name.replace('Ł', 'Lzz')
+            name = name.replace('ł', 'lzz')
+            name = name.replace('Ó', 'Ozz')
+            name = name.replace('ó', 'ozz')
+            name = name.replace('Ś', 'Szz')
+            name = name.replace('ś', 'szz')
+            name = name.replace('Ź', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            name = name.replace('Ż', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            self.sorting_name = name
+        super(WeaponType, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ['sorting_name']

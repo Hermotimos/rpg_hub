@@ -131,20 +131,24 @@ class Thread(models.Model):
 
     def save(self, *args, **kwargs):
         if self.name:
-            if str(self.name)[0] == 'Ć':
-                self.sorting_name = 'C' + str(self.name)
-            elif str(self.name)[0] == 'Ł':
-                self.sorting_name = 'L' + str(self.name)
-            elif str(self.name)[0] == 'Ó':
-                self.sorting_name = 'O' + str(self.name)
-            elif str(self.name)[0] == 'Ś':
-                self.sorting_name = 'S' + str(self.name)
-            elif str(self.name)[0] == 'Ź':
-                self.sorting_name = 'Z' + str(self.name)
-            elif str(self.name)[0] == 'Ż':
-                self.sorting_name = 'Z' + str(self.name)
-            else:
-                self.sorting_name = str(self.name)
+            name = str(self.name)
+            name = name.replace('Ą', 'Azz')
+            name = name.replace('ą', 'azz')
+            name = name.replace('Ć', 'Czz')
+            name = name.replace('ć', 'czz')
+            name = name.replace('Ę', 'Ezz')
+            name = name.replace('ę', 'ezz')
+            name = name.replace('Ł', 'Lzz')
+            name = name.replace('ł', 'lzz')
+            name = name.replace('Ó', 'Ozz')
+            name = name.replace('ó', 'ozz')
+            name = name.replace('Ś', 'Szz')
+            name = name.replace('ś', 'szz')
+            name = name.replace('Ź', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            name = name.replace('Ż', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            self.sorting_name = name
         super(Thread, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -160,20 +164,24 @@ class GeneralLocation(models.Model):
 
     def save(self, *args, **kwargs):
         if self.name:
-            if str(self.name)[0] == 'Ć':
-                self.sorting_name = 'C' + str(self.name)
-            elif str(self.name)[0] == 'Ł':
-                self.sorting_name = 'L' + str(self.name)
-            elif str(self.name)[0] == 'Ó':
-                self.sorting_name = 'O' + str(self.name)
-            elif str(self.name)[0] == 'Ś':
-                self.sorting_name = 'S' + str(self.name)
-            elif str(self.name)[0] == 'Ź':
-                self.sorting_name = 'Z' + str(self.name)
-            elif str(self.name)[0] == 'Ż':
-                self.sorting_name = 'Z' + str(self.name)
-            else:
-                self.sorting_name = str(self.name)
+            name = str(self.name)
+            name = name.replace('Ą', 'Azz')
+            name = name.replace('ą', 'azz')
+            name = name.replace('Ć', 'Czz')
+            name = name.replace('ć', 'czz')
+            name = name.replace('Ę', 'Ezz')
+            name = name.replace('ę', 'ezz')
+            name = name.replace('Ł', 'Lzz')
+            name = name.replace('ł', 'lzz')
+            name = name.replace('Ó', 'Ozz')
+            name = name.replace('ó', 'ozz')
+            name = name.replace('Ś', 'Szz')
+            name = name.replace('ś', 'szz')
+            name = name.replace('Ź', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            name = name.replace('Ż', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            self.sorting_name = name
         super(GeneralLocation, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -190,20 +198,24 @@ class SpecificLocation(models.Model):
 
     def save(self, *args, **kwargs):
         if self.name:
-            if str(self.name)[0] == 'Ć':
-                self.sorting_name = 'C' + str(self.name)
-            elif str(self.name)[0] == 'Ł':
-                self.sorting_name = 'L' + str(self.name)
-            elif str(self.name)[0] == 'Ó':
-                self.sorting_name = 'O' + str(self.name)
-            elif str(self.name)[0] == 'Ś':
-                self.sorting_name = 'S' + str(self.name)
-            elif str(self.name)[0] == 'Ź':
-                self.sorting_name = 'Z' + str(self.name)
-            elif str(self.name)[0] == 'Ż':
-                self.sorting_name = 'Z' + str(self.name)
-            else:
-                self.sorting_name = str(self.name)
+            name = str(self.name)
+            name = name.replace('Ą', 'Azz')
+            name = name.replace('ą', 'azz')
+            name = name.replace('Ć', 'Czz')
+            name = name.replace('ć', 'czz')
+            name = name.replace('Ę', 'Ezz')
+            name = name.replace('ę', 'ezz')
+            name = name.replace('Ł', 'Lzz')
+            name = name.replace('ł', 'lzz')
+            name = name.replace('Ó', 'Ozz')
+            name = name.replace('ó', 'ozz')
+            name = name.replace('Ś', 'Szz')
+            name = name.replace('ś', 'szz')
+            name = name.replace('Ź', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            name = name.replace('Ż', 'Zzz')
+            name = name.replace('ż', 'zzz')
+            self.sorting_name = name
         super(SpecificLocation, self).save(*args, **kwargs)
 
     def __str__(self):
