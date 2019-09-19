@@ -12,65 +12,94 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br>
+    <br><br><br><br>
 
-    <br><br id="rouge-skills"><br><br>
-    <h2 class="rules">Podstępy</h2>
+    <h2 class="rules">Podstępy początkowe i rozwój</h2>
     <br>
     <p>
-        Podstępy są dostępne dla każdej Klasy i Profesji. Domyślna wartość początkowa to 0% dla wszystkich Podstępów, chyba że opis Profesji stwierdza inaczej.
-        Każdy awans każdej Profesji może skutkować bonusem +5% do Podstępów, o ile jest to uzasadnione fabularnie poprzez kilkukrotne użycie.
-        Profesje należące do Klas Awanturnik, Łotr i Złodziej mogą otrzymać więcej punktów Podstępu co poziom (zob. tabele awansów poszczególnych Profesji).
+        Używanie i rozwój Podstępów są dostępne dla każdej Klasy i Profesji.
+        Domyślna wartość początkowa to 0% dla wszystkich Podstępów, chyba że opis Profesji stwierdza inaczej.
+        Każdy awans każdej Profesji może skutkować bonusem +5% do Podstępów, o ile jest to uzasadnione fabularnie poprzez wielokrotne użycie.
+        Profesje należące do Klas Awanturnik, Łotr i Złodziej mogą otrzymać więcej punktów Podstępu co poziom
+        (zob. tabele awansów poszczególnych Profesji w <u><a href="{% url 'rules:professions' %}">Klasa, Profesja i rozwój postaci</a></u>).
+        Na szanse powodzenia danego Podstępu wpływa stopień jego trudności oraz szereg modyfikatorów.
     </p>
-    <p>
-        <iframe width="805" height="322" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21193&authkey=%21AHUahf83cS05z_w&em=2&wdAllowInteractivity=False&AllowTyping=True&ActiveCell='Umiej%C4%99tno%C5%9Bci%20%C5%82otrzykowskie'!B4&Item='Umiej%C4%99tno%C5%9Bci%20%C5%82otrzykowskie'!A1%3AJ11&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
-    </p>
-    <br><br><br>
+    <br>
 
-    <h4><b>Kradzież kieszonkowa</b></h4>
+    <h5><b>Kradzież kieszonkowa</b></h5>
     <p>
         Umiejętność niezauważalnego zawijania i podrzucania małych przedmiotów przyczepionych do cudzego pasa lub
         znajdujących się w cudzym bagażu podręcznym, a także leżących na stole czy w ogóle w jakikolwiek inny sposób uśmiechające się do każdego rzezimieszka.
         Trudność tego rodzaju postępku jest wielce zależna od czujności ofiary i różnorodnych dystraktorów.
     </p>
-    <br><br>
+    <br>
 
-    <h4><b>Otwieranie zamków</b></h4>
+    <h5><b>Otwieranie zamków</b></h5>
     <p>
         Umiejętność otwierania zamków w drzwiach i skrzyniach, a także kłódek.
         Jej zastosowanie wymaga posiadania metalowego drucika, a w przypadku bardziej zaawansowanych zamków specjalistycznego przybornika złodziejskiego.
     </p>
-    <br><br>
+    <br>
 
-    <h4><b>Skradanie</b></h4>
+    <h5><b>Skradanie</b></h5>
     <p>
         Umiejętność bezszelestnego podchodzenia, zachodzenia, podpełzania i przekradania się.
         Umiejętność ta rozbita jest na dwoje ze względu na to, że środowisko naturalne, jak las czy łąka, stawia w tym zakresie zupłenie inne wyzwania niż miasto czy miasteczko.
         Trudność Skradania zależy od czujności i spostrzegawczości drugiej strony, a także od hałasów, pośród których mogą się ukryć kroki skradającego.
     </p>
-    <br><br>
+    <br>
 
-    <h4><b>Ukrycie</b></h4>
+    <h5><b>Ukrycie</b></h5>
     <p>
         Umiejętność niezauważalnego przyczajenia się w zaroślach, trawie lub ciemnym miejscu.
         Podobnie jak Skradanie rozbite jest na miasto i teren.
         Szanse na Ukrycie zależą od gęstości osłony oraz spostrzegawczości drugiej strony.
     </p>
-    <br><br>
+    <br>
 
-    <h4><b>Wspinaczka</b></h4>
+    <h5><b>Wspinaczka</b></h5>
     <p>
         Umiejętność wspinania się po drzewach, skarpach, ścianach przepaści oraz budynków. A także - umiejętność schodzenia...
     </p>
-    <br><br>
+    <br>
 
-    <h4><b>Wykrywanie i rozbrajanie pułapek</b></h4>
+    <h5><b>Wykrywanie i rozbrajanie pułapek</b></h5>
     <p>
         Zdolność zauważania mechanizmów spustowych różnego rodzaju pułapek i sideł, czy to w środowisku naturalnym, czy w pomieszczeniach.
         A w razie, gdy pułapki nie da się wyminąć - także ich unieszkodliwiania, co jest nie mniejszą sztuką.
     </p>
+    <br><br><br>
 
-<br>
+    <h2 class="rules">Modyfikatory Podstępów</h2>
+    <br>
+    <p>
+        Obliczanie szans na powodzenie danego Podstępu jest procesem dość skomplikowanym, ponieważ w grę wchodzi wiele czynników.
+        Pierwsza grupa czynników składa się na bazową wartość danego Podstępu. Jest ona zależna od początkowych wartości Podstępów dla danej Profesji,
+        Zręczności i posiadanych Umiejętności oraz dotychczasowego rozwoju Podstępów. Druga grupa czynników to modyfikatory sytuacyjne,
+        tj. ograniczenia wynikające z noszonego przez postać pancerza oraz trudność danego wyczynu.
+        Ten ostatni modyfikator nigdy nie jest do końca znany Graczowi, choć jego doświadczenie oraz opis Mistrza Gry mogą sugerować przybliżoną wartość.
+    </p>
+    <p>
+        Istnieją czynniki ułatwiające Podstęp, jak hałas w przypadku Skradania oraz ciemność w przypadku Ukrycia,
+        a także utrudniające, jak czujnośc i spostrzegawczość przeciwnika lub ofiary, otwarty teren, jasne światło itd.
+        W przypadku Otwierania zamków oraz Wykrywania i rozbrajania pułapek dużą rolę odgrywa znajomość mechanizmu,
+        a także okoliczności ułatwiające lub utrudniające koncentrację i precyzję ruchów.
+    </p>
+    <br>
+
+    <h5 class="rules">Tabele modyfikatorów</h5>
+    <p>
+        Poniższe tabele zawierają ogólne modyfikatory i pozwalają przeprowadzić symulację wartości Podstępów dla postaci 0 poziomu.
+        Nie uwzględniają natomiast rozwoju Podstępów w toku awansów oraz rozdzielenia punktów początkowych przez Łotrzyków.
+        <strike>Indywidualne wartości Podstępów zawiera Karta Postaci.</strike>
+    </p>
+    <br>
+
+    <h6><b>Sumaryczne ujęcie modyfikatorów Podstępów</b></h6>
+    <p>
+        <iframe width="805" height="322" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21193&authkey=%21AHUahf83cS05z_w&em=2&wdAllowInteractivity=False&AllowTyping=True&ActiveCell='Umiej%C4%99tno%C5%9Bci%20%C5%82otrzykowskie'!B4&Item='Umiej%C4%99tno%C5%9Bci%20%C5%82otrzykowskie'!A1%3AJ11&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+    </p>
+    <br><br>
 
     <table class="agility-and-tricks">
         <colgroup>
@@ -86,7 +115,7 @@
         </colgroup>
         <thead class="align-center">
             <tr>
-                <th colspan="1" rowspan="2" class="align-left">ZRC</th>
+                <th colspan="1" rowspan="2" class="align-center">ZRC</th>
                 <th colspan="1" rowspan="2">Kradzież<br>kieszonkowa</th>
                 <th colspan="1" rowspan="2">Otwieranie<br>zamków</th>
                 <th colspan="2" rowspan="1">Skradanie</th>
@@ -95,7 +124,6 @@
                 <th colspan="1" rowspan="2">Wykrywanie i<br>rozbrajanie<br>pułapek</th>
             </tr>
             <tr class="border-custom-base">
-
                 <th>miasto</th>
                 <th>teren</th>
                 <th>miasto</th>
@@ -125,5 +153,9 @@
             <tr class="back-gray">  <td>20</td>  <td class="rules-green">+40%</td>   <td class="rules-green">+40%</td>   <td class="rules-green">+40%</td>   <td class="rules-green">+40%</td>   <td class="rules-green">+45%</td>      <td class="rules-green">+45%</td>    <td class="rules-green">+45%</td>   <td class="rules-green">+35%</td></tr>
         </tbody>
     </table>
+    <br><br><br>
 
+    {% include 'rules/_plate_and_tricks_table.html' %}
+
+    <br>
 {% endblock content %}
