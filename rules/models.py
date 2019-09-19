@@ -377,10 +377,10 @@ class WeaponType(models.Model):
     weapon_class = models.ForeignKey(WeaponClass, related_name='weapon_types', on_delete=models.PROTECT)
     name = models.CharField(max_length=100, unique=True)
     delay = models.PositiveSmallIntegerField()
-    damage_small_dices = models.CharField(max_length=10)
-    damage_small_add = models.PositiveSmallIntegerField()
-    damage_big_dices = models.CharField(max_length=10)
-    damage_big_add = models.PositiveSmallIntegerField()
+    damage_small_dices = models.CharField(max_length=10, blank=True, null=True)
+    damage_small_add = models.PositiveSmallIntegerField(blank=True, null=True)
+    damage_big_dices = models.CharField(max_length=10, blank=True, null=True)
+    damage_big_add = models.PositiveSmallIntegerField(blank=True, null=True)
     damage_type = models.CharField(max_length=10, choices=DAMAGE_TYPES)
     special = models.TextField(max_length=4000, blank=True, null=True)
     range = models.CharField(max_length=100)
@@ -388,7 +388,7 @@ class WeaponType(models.Model):
     trait = models.CharField(max_length=10, choices=TRAITS)
     average_price_value = models.PositiveSmallIntegerField()
     average_price_currency = models.CharField(max_length=5, choices=CURRENCIES)
-    average_weight = models.FloatField()
+    average_weight = models.DecimalField(max_digits=10, decimal_places=1)
 
     description = models.TextField(max_length=4000, blank=True, null=True)
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
@@ -423,3 +423,14 @@ class WeaponType(models.Model):
 
     def short_name(self):
         return ''.join(word[:4] for word in str(self.name).split(' '))
+
+    def damage_summary(self):
+        damage_small = str(self.damage_small_dices)
+        if self.damage_small_add:
+            damage_small += ('+' + str(self.damage_small_add))
+
+        damage_big = str(self.damage_big_dices)
+        if self.damage_big_add:
+            damage_big += ('+' + str(self.damage_big_add))
+
+        return f'{damage_small}/{damage_big}'

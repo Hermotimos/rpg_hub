@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/rules.css' %}" xmlns="http://www.w3.org/1999/html">
+{% endblock head_extra %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'rules:main' %}">Zasady</a></li>
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br><br><br><br>
+
+    {% for weapon_class in weapons_classes_with_types_dict %}
+    <table>
+        <thead>
+            <tr>
+                <th>{{ weapon_class.name }}</th>
+                <th>Opóźń</th>
+                <th>OBR<br>M / D</th>
+                <th>OBR<br>Typ</th>
+                <th>Specjalne</th>
+                <th>Zasięg</th>
+                <th>Rozm</th>
+                <th>Cecha</th>
+                <th>Cena<br>≈</th>
+                <th>Waga<br>≈</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for weapon_type in weapons_classes_with_types_dict|dict_lookup:weapon_class %}
+                <tr>
+                    <td>{{ weapon_type.name }}</td>
+                    <td>{{ weapon_type.delay }}</td>
+                    <td>{{ weapon_type.damage_summary }}</td>
+                    <td>{{ weapon_type.damage_type }}</td>
+                    <td>{{ weapon_type.special }}</td>
+                    <td>{{ weapon_type.range }}</td>
+                    <td>{{ weapon_type.size }}</td>
+                    <td>{{ weapon_type.trait }}</td>
+                    <td>{{ weapon_type.average_price_value }} {{ weapon_type.average_price_currency }}</td>
+                    <td>{{ weapon_type.average_weight }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endfor %}
+    <br><br><br>
+
+    <h2 class="rules">XXXX</h2>
+    <br>
+    <p>
+        XXXX
+    </p>
+    <br><br><br>
+
+
+
+
+{% endblock content %}

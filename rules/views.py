@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from rules.models import Skill, Synergy, CharacterClass, EliteClass
+from rules.models import Skill, Synergy, CharacterClass, EliteClass, WeaponClass, WeaponType
 
 
 @login_required
@@ -28,6 +28,18 @@ def rules_skills_view(request):
         'synergies': synergies,
     }
     return render(request, 'rules/skills.html', context)
+
+
+@login_required
+def rules_weapons_view(request):
+    weapons_classes_with_types_dict = \
+        {wc: (wt for wt in wc.weapon_types.all()) for wc in WeaponClass.objects.all()}
+
+    context = {
+        'page_title': 'Broń',
+        'weapons_classes_with_types_dict': weapons_classes_with_types_dict
+    }
+    return render(request, 'rules/weapons.html', context)
 
 
 @login_required
