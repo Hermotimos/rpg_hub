@@ -19,7 +19,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='profile_pics/profile_default.jpg', upload_to='profile_pics')
     character_name = models.CharField(max_length=50, default='')
-    character_status = models.CharField(max_length=20, choices=STATUS, default='living_npc')
+    character_status = models.CharField(max_length=50, choices=STATUS, default='living_npc')
 
     class Meta:
         ordering = ['character_status', 'character_name']
