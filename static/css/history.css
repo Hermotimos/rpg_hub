@@ -36,19 +36,6 @@ table.timeline {
         border: double;
 }
 
-.timeline-event {
-        font-style: italic;
-        font-size: 15px;
-}
-
-.timeline-event-thread {
-        font-size: 13px;
-}
-
-.timeline-small {
-        font-size: 13px;
-}
-
 .timeline thead {
         background-color: #363636;
         border-bottom: double;
@@ -63,6 +50,39 @@ table.timeline {
         border: 1px solid black;
         padding: 5px;
 }
+
+.timeline tr:nth-child(even) {
+        background-color: #f2f2f2;
+}
+
+.timeline-event {
+        font-style: italic;
+        font-size: 15px;
+}
+
+.timeline-event-thread {
+        font-size: 13px;
+}
+
+.timeline-small {
+        font-size: 13px;
+}
+
+
+td.season-spring  {
+        background-color: #a9d6ca;
+}
+td.season-summer  {
+        background-color: #fff1cc;
+}
+td.season-autumn {
+        background-color: #e3d1b5;
+}
+td.season-winter  {
+        background-color: #bfd3d9;
+}
+
+
 
 .chronicle td {
         margin: 0px;
@@ -95,10 +115,6 @@ td img {
         pointer-events: none;
 }
 
-.timeline tr:nth-child(even) {
-        background-color: #f2f2f2;
-}
-
 .img-chapter {
         float: left;
         height: 45px;
@@ -125,18 +141,6 @@ td img {
         padding: 10px 3px;
 }
 
-td.season-spring  {
-        background-color: #a9d6ca;
-}
-td.season-summer  {
-        background-color: #fff1cc;
-}
-td.season-autumn {
-        background-color: #e3d1b5;
-}
-td.season-winter  {
-        background-color: #bfd3d9;
-}
 
 a.link-disabled {
         pointer-events: none;
