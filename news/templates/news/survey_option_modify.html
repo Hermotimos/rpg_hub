@@ -12,10 +12,12 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br><br><br>
+    <br><br><br><br>
     <form method="POST" enctype="multipart/form-data" class="allowed-profiles-form-news">
         {% csrf_token %}
-        {{ form|crispy }}
+        <div class="col-md-6 inline">
+            {{ form|crispy }}
+        </div>
      <input class="btn btn-dark" type="submit" value="Zmodyfikuj"/>
     </form>
 {% endblock content %}
