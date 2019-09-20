@@ -3,7 +3,7 @@ from django.urls import reverse, resolve
 from debates import views
 from debates.models import Topic, Debate, Remark
 from debates.forms import CreateTopicForm, CreateDebateForm, CreateRemarkForm, InviteForm
-from users.models import User, Profile
+from users.models import User
 
 
 class DebatesMainTest(TestCase):
