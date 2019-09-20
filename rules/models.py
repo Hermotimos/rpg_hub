@@ -203,6 +203,8 @@ class EliteProfession(models.Model):
 
     class Meta:
         ordering = ['sorting_name']
+        verbose_name = 'Weapon class'
+        verbose_name_plural = 'Weapon classes'
 
 
 class WeaponClass(models.Model):

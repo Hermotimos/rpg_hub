@@ -45,11 +45,26 @@ class EliteProfessionAdmin(admin.ModelAdmin):
     list_editable = ['description', 'start_perks']
 
 
+class WeaponTypeInline(admin.TabularInline):
+    model = WeaponType
+    extra = 5
+
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 1, 'cols': 25})},
+        models.CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 5})},
+    }
+
+
+class WeaponClassAdmin(admin.ModelAdmin):
+    list_display = ['name', 'description']
+    inlines = [WeaponTypeInline, ]
+
+
 admin.site.register(Skill, SkillAdmin)
 admin.site.register(Synergy, SynergyAdmin)
 admin.site.register(CharacterClass, CharacterClassAdmin)
 admin.site.register(CharacterProfession, CharacterProfessionAdmin)
 admin.site.register(EliteClass, EliteClassAdmin)
 admin.site.register(EliteProfession, EliteProfessionAdmin)
-admin.site.register(WeaponClass)
+admin.site.register(WeaponClass, WeaponClassAdmin)
 admin.site.register(WeaponType)
