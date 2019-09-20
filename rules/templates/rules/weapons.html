@@ -14,9 +14,21 @@
 {% block content %}
     <br><br><br><br>
 
-    {% for weapon_class in weapons_classes_with_types_dict %}
-    <table>
-        <thead>
+    <table class="weapons">
+        {% for weapon_class in weapons_classes_with_types_dict %}
+        <colgroup>
+            <col class="class">
+            <col class="delay">
+            <col class="damage">
+            <col class="damage-type">
+            <col class="special">
+            <col class="range">
+            <col class="size">
+            <col class="trait">
+            <col class="price">
+            <col class="weight">
+        </colgroup>
+        <thead class="align-center">
             <tr>
                 <th>{{ weapon_class.name }}</th>
                 <th>Opóźń</th>
@@ -34,20 +46,21 @@
             {% for weapon_type in weapons_classes_with_types_dict|dict_lookup:weapon_class %}
                 <tr>
                     <td>{{ weapon_type.name }}</td>
-                    <td>{{ weapon_type.delay }}</td>
-                    <td>{{ weapon_type.damage_summary }}</td>
-                    <td>{{ weapon_type.damage_type }}</td>
+                    <td class="align-center">{{ weapon_type.delay }}</td>
+                    <td class="align-center">{{ weapon_type.damage_summary }}</td>
+                    <td class="align-center">{{ weapon_type.damage_type }}</td>
                     <td>{{ weapon_type.special }}</td>
                     <td>{{ weapon_type.range }}</td>
-                    <td>{{ weapon_type.size }}</td>
-                    <td>{{ weapon_type.trait }}</td>
-                    <td>{{ weapon_type.average_price_value }} {{ weapon_type.average_price_currency }}</td>
-                    <td>{{ weapon_type.average_weight }}</td>
+                    <td class="align-center">{{ weapon_type.size }}</td>
+                    <td class="align-center">{{ weapon_type.trait }}</td>
+                    <td class="align-center">{{ weapon_type.avg_price_value }} {{ weapon_type.avg_price_currency }}</td>
+                    <td class="align-center">{{ weapon_type.avg_weight }}</td>
                 </tr>
             {% endfor %}
         </tbody>
+        {% endfor %}
     </table>
-    {% endfor %}
+
     <br><br><br>
 
     <h2 class="rules">XXXX</h2>

@@ -116,11 +116,38 @@ li b {
 .agility-and-tricks .climbing {width: 100px;}
 .agility-and-tricks .traps {width: 100px;}
 
+.weapons .class {width: 25%;}
+.weapons .delay {width: 5%;}
+.weapons .damage {width: 10%;}
+.weapons .damage-type {width: 5%;}
+.weapons .special {width: 25%;}
+.weapons .range {width: 6%;}
+.weapons .size {width: 6%;}
+.weapons .trait {width: 6%;}
+.weapons .price {width: 6%;}
+.weapons .weight {width: 6%;}
+
+table.weapons {
+        border: double;
+}
+
+.weapons thead {
+        background-color: #363636;
+        border-bottom: double;
+        color: #ffffff;
+}
+
+.weapons th {
+        font-weight: normal;
+}
+
+
 .professions tr:nth-child(even),
 .plates tr:nth-child(even),
 .shields tr:nth-child(even),
 .protection tr:nth-child(even),
-.protection tr:nth-child(even){
+.protection tr:nth-child(even),
+.weapons tr:nth-child(even){
         background-color: #f2f2f2;
 }
 
