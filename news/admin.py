@@ -17,8 +17,22 @@ class NewsAnswerAdmin(admin.ModelAdmin):
         return obj.text[:100] + '...' if len(str(obj.text)) > 100 else obj.text
 
 
+class SurveyOptionInline(admin.TabularInline):
+    model = SurveyOption
+    extra = 4
+
+
+class SurveyAdmin(admin.ModelAdmin):
+    list_display = ['title', 'author', 'text', 'image']
+    inlines = [SurveyOptionInline, ]
+
+
+class SurveyOptionAdmin(admin.ModelAdmin):
+    list_display = ['survey', 'author', 'option_text']
+
+
 admin.site.register(News, NewsAdmin)
 admin.site.register(NewsAnswer, NewsAnswerAdmin)
-admin.site.register(Survey)
-admin.site.register(SurveyOption)
+admin.site.register(Survey, SurveyAdmin)
+admin.site.register(SurveyOption, SurveyOptionAdmin)
 admin.site.register(SurveyAnswer)

@@ -15,7 +15,11 @@
     <br>
     <div class="mb-4">
         <a href="{% url 'news:create' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
-        <a href="{% url 'news:survey-create' %}" class="btn btn-outline-dark">Nowa ankieta</a>
+        {% if request.user.profile.character_status == 'gm' %}
+            <a href="{% url 'admin:news_survey_add' %}" class="btn btn-outline-dark">Nowa ankieta</a>
+        {% else %}
+            <a href="{% url 'news:survey-create' %}" class="btn btn-outline-dark">Nowa ankieta</a>
+        {% endif %}
     </div>
 
     <br><br><br>
