@@ -266,7 +266,7 @@ class WeaponType(models.Model):
     damage_big_add = models.PositiveSmallIntegerField(blank=True, null=True)
     damage_type = models.CharField(max_length=10, choices=DAMAGE_TYPES)
     special = models.TextField(max_length=4000, blank=True, null=True)
-    range = models.CharField(max_length=100)
+    range = models.CharField(max_length=100, blank=True, null=True)
     size = models.CharField(max_length=5, choices=SIZES)
     trait = models.CharField(max_length=10, choices=TRAITS)
     avg_price_value = models.PositiveSmallIntegerField()
