@@ -203,8 +203,8 @@ class EliteProfession(models.Model):
 
     class Meta:
         ordering = ['sorting_name']
-        verbose_name = 'Weapon class'
-        verbose_name_plural = 'Weapon classes'
+        verbose_name = 'Elite class'
+        verbose_name_plural = 'Elite classes'
 
 
 class WeaponClass(models.Model):
@@ -225,6 +225,8 @@ class WeaponClass(models.Model):
 
     class Meta:
         ordering = ['sorting_name']
+        verbose_name = 'Weapon class'
+        verbose_name_plural = 'Weapon classes'
 
 
 DAMAGE_TYPES = [
