@@ -142,13 +142,14 @@ def debate_view(request, topic_id, debate_id):
     topic = get_object_or_404(Topic, id=topic_id)
     debate = get_object_or_404(Debate, id=debate_id)
 
-    last_remark = Remark.objects.filter(debate=debate.id).order_by('-date_posted')[0]
-    profile = request.user.profile
-    seen_by = last_remark.seen_by.all()
-    if profile not in seen_by:
-        new_seen = profile
-        seen_by |= Profile.objects.filter(id=new_seen.id)
-        last_remark.seen_by.set(seen_by)
+    last_remark = debate.last_remark()
+    if last_remark:
+        profile = request.user.profile
+        seen_by = last_remark.seen_by.all()
+        if profile not in seen_by:
+            new_seen = profile
+            seen_by |= Profile.objects.filter(id=new_seen.id)
+            last_remark.seen_by.set(seen_by)
 
     allowed_str = ', '.join(p.character_name.split(' ', 1)[0]
                             for p in debate.allowed_profiles.all()

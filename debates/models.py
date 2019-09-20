@@ -63,6 +63,12 @@ class Debate(models.Model):
             author__profile__in=Profile.objects.filter(character_status='gm'))
         return players_remarks.count()
 
+    def last_remark(self):
+        if self.remarks.all():
+            return self.remarks.order_by('-date_posted')[0]
+        else:
+            return None
+
 
 class Remark(models.Model):
     text = models.TextField(max_length=4000)
