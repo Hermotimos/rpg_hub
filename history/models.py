@@ -5,7 +5,7 @@ from PIL import Image
 from users.models import User, Profile
 from imaginarion.models import Picture
 from debates.models import Debate
-
+from rpg_project.utils import create_sorting_name
 
 COLORS = (
     ('#000000', 'czarny'),
@@ -129,30 +129,13 @@ class Thread(models.Model):
     is_ended = models.BooleanField(default=False)
     sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
 
-    def save(self, *args, **kwargs):
-        if self.name:
-            name = str(self.name)
-            name = name.replace('Ą', 'Azz')
-            name = name.replace('ą', 'azz')
-            name = name.replace('Ć', 'Czz')
-            name = name.replace('ć', 'czz')
-            name = name.replace('Ę', 'Ezz')
-            name = name.replace('ę', 'ezz')
-            name = name.replace('Ł', 'Lzz')
-            name = name.replace('ł', 'lzz')
-            name = name.replace('Ó', 'Ozz')
-            name = name.replace('ó', 'ozz')
-            name = name.replace('Ś', 'Szz')
-            name = name.replace('ś', 'szz')
-            name = name.replace('Ź', 'Zzz')
-            name = name.replace('ż', 'zzz')
-            name = name.replace('Ż', 'Zzz')
-            name = name.replace('ż', 'zzz')
-            self.sorting_name = name
-        super(Thread, self).save(*args, **kwargs)
-
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.sorting_name = create_sorting_name(self.name)
+        super(Thread, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ['sorting_name']
@@ -162,30 +145,13 @@ class GeneralLocation(models.Model):
     name = models.CharField(max_length=100)
     sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
 
-    def save(self, *args, **kwargs):
-        if self.name:
-            name = str(self.name)
-            name = name.replace('Ą', 'Azz')
-            name = name.replace('ą', 'azz')
-            name = name.replace('Ć', 'Czz')
-            name = name.replace('ć', 'czz')
-            name = name.replace('Ę', 'Ezz')
-            name = name.replace('ę', 'ezz')
-            name = name.replace('Ł', 'Lzz')
-            name = name.replace('ł', 'lzz')
-            name = name.replace('Ó', 'Ozz')
-            name = name.replace('ó', 'ozz')
-            name = name.replace('Ś', 'Szz')
-            name = name.replace('ś', 'szz')
-            name = name.replace('Ź', 'Zzz')
-            name = name.replace('ż', 'zzz')
-            name = name.replace('Ż', 'Zzz')
-            name = name.replace('ż', 'zzz')
-            self.sorting_name = name
-        super(GeneralLocation, self).save(*args, **kwargs)
-
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.sorting_name = create_sorting_name(self.name)
+        super(GeneralLocation, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ['sorting_name']
@@ -196,30 +162,13 @@ class SpecificLocation(models.Model):
     general_location = models.ForeignKey(GeneralLocation, related_name='specific_locations', on_delete=models.PROTECT)
     sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
 
-    def save(self, *args, **kwargs):
-        if self.name:
-            name = str(self.name)
-            name = name.replace('Ą', 'Azz')
-            name = name.replace('ą', 'azz')
-            name = name.replace('Ć', 'Czz')
-            name = name.replace('ć', 'czz')
-            name = name.replace('Ę', 'Ezz')
-            name = name.replace('ę', 'ezz')
-            name = name.replace('Ł', 'Lzz')
-            name = name.replace('ł', 'lzz')
-            name = name.replace('Ó', 'Ozz')
-            name = name.replace('ó', 'ozz')
-            name = name.replace('Ś', 'Szz')
-            name = name.replace('ś', 'szz')
-            name = name.replace('Ź', 'Zzz')
-            name = name.replace('ż', 'zzz')
-            name = name.replace('Ż', 'Zzz')
-            name = name.replace('ż', 'zzz')
-            self.sorting_name = name
-        super(SpecificLocation, self).save(*args, **kwargs)
-
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.sorting_name = create_sorting_name(self.name)
+        super(SpecificLocation, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ['sorting_name']

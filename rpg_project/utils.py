@@ -1,0 +1,20 @@
+
+def create_sorting_name(obj):
+    name = str(obj)
+    name = name.replace('Ą', 'Azz')
+    name = name.replace('ą', 'azz')
+    name = name.replace('Ć', 'Czz')
+    name = name.replace('ć', 'czz')
+    name = name.replace('Ę', 'Ezz')
+    name = name.replace('ę', 'ezz')
+    name = name.replace('Ł', 'Lzz')
+    name = name.replace('ł', 'lzz')
+    name = name.replace('Ó', 'Ozz')
+    name = name.replace('ó', 'ozz')
+    name = name.replace('Ś', 'Szz')
+    name = name.replace('ś', 'szz')
+    name = name.replace('Ź', 'Zzz')
+    name = name.replace('ż', 'zzz')
+    name = name.replace('Ż', 'Zzz')
+    name = name.replace('ż', 'zzz')
+    return name
