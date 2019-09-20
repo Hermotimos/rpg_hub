@@ -25,13 +25,15 @@
         float:left;
 }
 
-.btn-yes {
+.btn-vote {
         color: black;
         border: 1px solid;
 }
 
-.btn-no {
+.btn-modify {
         color: black;
         border: 1px solid;
-
+        padding: 5px;
+        text-align: top;
+        height: 30px;
 }

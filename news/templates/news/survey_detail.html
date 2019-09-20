@@ -54,14 +54,19 @@
                 {% endfor %}
             </td>
             <td>
-                &ensp;&ensp;<a href="{% url 'news:survey-no' survey.id option.id %}" class="btn btn-no">&#10008;</a>
+                &ensp;&ensp;<a href="{% url 'news:survey-no' survey.id option.id %}" class="btn btn-vote">&#10008;</a>
             </td>
             <td>
                 &ensp;&ensp;{{ option.option_text }}
+                {% if request.user == option.author and not option.yes_voters.all and not option.no_voters.all %}
+                    <a href="{% url 'news:survey-option-modify' survey.id option.id %}">
+                        &nbsp;<img src="{% static 'img/edit.png' %}">
+                    </a>
+                {% endif %}
                 <br>
             </td>
             <td>
-                &ensp;&ensp;<a href="{% url 'news:survey-yes' survey.id option.id %}" class="btn btn-yes">&#10004;</a>
+                &ensp;&ensp;<a href="{% url 'news:survey-yes' survey.id option.id %}" class="btn btn-vote">&#10004;</a>
             </td>
             <td>
                 &ensp;&ensp;

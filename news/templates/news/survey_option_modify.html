@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/news.css' %}">
+{% endblock head_extra %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'news:main' %}">Ogłoszenia</a></li>
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br><br><br>
+    <form method="POST" enctype="multipart/form-data" class="allowed-profiles-form-news">
+        {% csrf_token %}
+        {{ form|crispy }}
+     <input class="btn btn-dark" type="submit" value="Zmodyfikuj"/>
+    </form>
+{% endblock content %}

@@ -6,7 +6,7 @@ from django.conf import settings
 from news.models import News, Survey, SurveyOption
 from users.models import User, Profile
 from news.forms import CreateNewsForm, CreateNewsAnswerForm, CreateSurveyForm, CreateSurveyOptionForm, \
-    CreateSurveyAnswerForm
+    CreateSurveyAnswerForm, ModifySurveyOptionForm
 
 
 @login_required
@@ -297,3 +297,24 @@ def survey_create_view(request):
         'form': form,
     }
     return render(request, 'news/survey_create.html', context)
+
+
+@login_required
+def survey_option_modify_view(request, survey_id, option_id):
+    option = get_object_or_404(SurveyOption, id=option_id)
+
+    if request.method == 'POST':
+        form = ModifySurveyOptionForm(request.POST, instance=option)
+
+        if form.is_valid():
+            form.save()
+            messages.info(request, f'Zmieniono opcję ankiety!')
+            return redirect('news:survey-detail', survey_id=survey_id)
+    else:
+        form = ModifySurveyOptionForm(instance=option)
+
+    context = {
+        'page_title': 'Zmiana opcji ankiety',
+        'form': form,
+    }
+    return render(request, 'news/survey_option_modify.html', context)
