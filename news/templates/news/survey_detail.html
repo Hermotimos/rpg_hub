@@ -60,7 +60,10 @@
                 &ensp;&ensp;{{ option.option_text }}
                 {% if request.user == option.author and not option.yes_voters.all and not option.no_voters.all %}
                     <a href="{% url 'news:survey-option-modify' survey.id option.id %}">
-                        &nbsp;<img src="{% static 'img/edit.png' %}">
+                        &nbsp;<img src="{% static 'img/edit.png' %}" class="img-edit">
+                    </a>
+                    <a href="{% url 'news:survey-option-delete' survey.id option.id %}" class="btn">
+                        &#10008;
                     </a>
                 {% endif %}
                 <br>

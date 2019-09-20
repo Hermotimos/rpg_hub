@@ -317,4 +317,17 @@ def survey_option_modify_view(request, survey_id, option_id):
         'page_title': 'Zmiana opcji ankiety',
         'form': form,
     }
-    return render(request, 'news/survey_option_modify.html', context)
+    if request.user == option.author:
+        return render(request, 'news/survey_option_modify.html', context)
+    else:
+        return redirect('home:dupa')
+
+
+@login_required
+def survey_option_delete_view(request, survey_id, option_id):
+    option = get_object_or_404(SurveyOption, id=option_id)
+    if request.user == option.author:
+        option.delete()
+        return redirect('news:survey-detail', survey_id=survey_id)
+    else:
+        return redirect('home:dupa')

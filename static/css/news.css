@@ -17,9 +17,15 @@
 .img-survey-tiny {
         height: 15px;
         width: auto;
+}
+
+.img-edit {
+        height: 15px;
+        width: auto;
         margin-left: auto;
         margin-right: auto;
 }
+
 
 .inline {
         float:left;
