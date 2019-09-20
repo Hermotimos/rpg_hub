@@ -117,12 +117,12 @@ li b {
 .agility-and-tricks .traps {width: 100px;}
 
 .weapons .class {width: 25%;}
-.weapons .delay {width: 4%;}
+.weapons .delay {width: 3%;}
 .weapons .damage {width: 10%;}
 .weapons .damage-type {width: 6%;}
-.weapons .special {width: 25%;}
+.weapons .special {width: 27%;}
 .weapons .range {width: 6%;}
-.weapons .size {width: 6%;}
+.weapons .size {width: 5%;}
 .weapons .trait {width: 6%;}
 .weapons .price {width: 6%;}
 .weapons .weight {width: 6%;}
