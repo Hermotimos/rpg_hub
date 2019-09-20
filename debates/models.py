@@ -70,6 +70,7 @@ class Remark(models.Model):
     date_posted = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, related_name='remarks', on_delete=models.CASCADE)
     image = models.ImageField(blank=True, null=True, upload_to='post_pics')
+    seen_by = models.ManyToManyField(Profile, related_name='remarks_seen', blank=True)
 
     def __str__(self):
         return f'{self.text[:50]}...'

@@ -73,6 +73,15 @@
                     </tr>
                 {% endif %}
             {% endfor %}
+            <tr>
+                <td>
+                    {% if not debate.is_ended %}
+                        {% for profile in last_remark.seen_by.all %}
+                            <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                        {% endfor %}
+                    {% endif %}
+                </td>
+            </tr>
         </tbody>
     </table>
     <br><br>

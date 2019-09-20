@@ -3,7 +3,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.conf import settings
-from debates.models import Topic, Debate
+from django.db.models import Max
+from debates.models import Topic, Debate, Remark
 from users.models import User, Profile
 from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm, InviteForm
 
@@ -141,6 +142,14 @@ def debate_view(request, topic_id, debate_id):
     topic = get_object_or_404(Topic, id=topic_id)
     debate = get_object_or_404(Debate, id=debate_id)
 
+    last_remark = Remark.objects.filter(debate=debate.id).order_by('-date_posted')[0]
+    profile = request.user.profile
+    seen_by = last_remark.seen_by.all()
+    if profile not in seen_by:
+        new_seen = profile
+        seen_by |= Profile.objects.filter(id=new_seen.id)
+        last_remark.seen_by.set(seen_by)
+
     allowed_str = ', '.join(p.character_name.split(' ', 1)[0]
                             for p in debate.allowed_profiles.all()
                             if p.character_status != 'gm')
@@ -180,7 +189,8 @@ def debate_view(request, topic_id, debate_id):
         'debate': debate,
         'form': form,
         'allowed': allowed_str,
-        'followers': followers_str
+        'followers': followers_str,
+        'last_remark': last_remark
     }
     if request.user.profile in debate.allowed_profiles.all() or request.user.profile.character_status == 'gm':
         return render(request, 'debates/debate.html', context)
