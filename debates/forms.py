@@ -86,3 +86,4 @@ class InviteForm(forms.ModelForm):
                                                                            Q(character_status='gm'))
         self.fields['allowed_profiles'].label = ''
         self.fields['allowed_profiles'].queryset = unallowable_profiles.exclude(id__in=already_allowed_profiles_ids)
+        self.fields['allowed_profiles'].widget.attrs['size'] = 10
