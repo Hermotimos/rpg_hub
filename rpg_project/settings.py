@@ -42,7 +42,6 @@ INSTALLED_APPS = [
 
     # imported
     'crispy_forms',
-    'pagedown',
 
     # own
     'contact',
