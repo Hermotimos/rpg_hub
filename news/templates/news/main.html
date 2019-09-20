@@ -30,6 +30,13 @@
                     </td>
                     <td>
                         <h3 class="unblue"><a href="{% url 'news:survey-detail' survey.id %}">ANKIETA: {{ survey.title }}</a></h3>
+                        {% if survey.survey_answers.all %}
+                        <h5>
+                            {% for user in surveys_with_answers_authors_dict|dict_lookup:survey %}
+                                <img class="rounded-circle img-small" src="{{ user.profile.image.url }}">
+                            {% endfor %}
+                        </h5>
+                        {% endif %}
                     </td>
                 </tr>
             </tbody>
@@ -55,6 +62,11 @@
                             {% endif %}
                         </small>
                         <h3 class="unblue"><a href="{% url 'news:detail' news.id %}">{{ news.title }}</a></h3>
+                        {% if news.news_answers.all %}
+                            {% for user in news_with_answers_authors_dict|dict_lookup:news %}
+                                <img class="rounded-circle img-small" src="{{ user.profile.image.url }}">
+                            {% endfor %}
+                        {% endif %}
                     </td>
                 </tr>
             </tbody>

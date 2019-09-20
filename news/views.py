@@ -18,10 +18,15 @@ def main_view(request):
         newss = list(request.user.profile.allowed_news.all())
         surveys = list(request.user.profile.surveys_received.all())
 
+    news_with_answers_authors_dict = {n: [a.author for a in n.news_answers.all()] for n in newss}
+    surveys_with_answers_authors_dict = {s: [a.author for a in s.survey_answers.all()] for s in surveys}
+
     context = {
         'page_title': 'Ogłoszenia',
         'newss': newss,
-        'surveys': surveys
+        'surveys': surveys,
+        'surveys_with_answers_authors_dict': surveys_with_answers_authors_dict,
+        'news_with_answers_authors_dict': news_with_answers_authors_dict
     }
     return render(request, 'news/main.html', context)
 
