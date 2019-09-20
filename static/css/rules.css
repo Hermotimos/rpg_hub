@@ -140,9 +140,12 @@ li b {
         border-right: 1px solid #363636;
 }
 
+thead.dark th {
+        color: #444444;
+}
+
 thead.align-center th {
         text-align: center;
-        color: #444444;
 }
 
 tbody.align-center td {
