@@ -168,7 +168,7 @@ def survey_detail_view(request, survey_id):
 
             subject = f"[RPG] Wypowiedż do ankiety: '{survey.title[:30]}...'"
             message = f"{request.user.profile} wypowiedział się co do ankiety '{survey.title}':\n" \
-                      f"Ankieta: {request.get_host()}/news/detail:{survey.id}/\n\n" \
+                      f"Ankieta: {request.get_host()}/news/survey-detail:{survey.id}/\n\n" \
                       f"Wypowiedź: {answer.text}"
             sender = settings.EMAIL_HOST_USER
             receivers = []
