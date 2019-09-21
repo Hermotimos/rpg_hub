@@ -148,13 +148,16 @@ table.key td {
         font-weight: normal;
 }
 
-.key tr:nth-child(even),
 .professions tr:nth-child(even),
 .plates tr:nth-child(even),
 .shields tr:nth-child(even),
 .protection tr:nth-child(even),
-.protection tr:nth-child(even),
-.weapons tr:nth-child(even){
+.protection tr:nth-child(even) {
+        background-color: #f2f2f2;
+}
+
+.weapons tbody tr:nth-child(4n-1),
+.weapons tbody tr:nth-child(4n) {
         background-color: #f2f2f2;
 }
 
