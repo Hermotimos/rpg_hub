@@ -31,7 +31,11 @@ class Skill(models.Model):
         super(Skill, self).save(*args, **kwargs)
 
     def short_name(self):
-        return ''.join(word[:3] for word in str(self.name).split(' '))
+        short_name = ''
+        for char in str(self.name):
+            if char in 'abcdefghijklmnopqrstuvwxyz':
+                short_name += char
+        return short_name
 
     class Meta:
         ordering = ['sorting_name']
@@ -61,7 +65,11 @@ class Synergy(models.Model):
         super(Synergy, self).save(*args, **kwargs)
 
     def short_name(self):
-        return ''.join(str(s)[:3] for s in self.skills.all())
+        short_name = ''
+        for char in str(self.name):
+            if char in 'abcdefghijklmnopqrstuvwxyz':
+                short_name += char
+        return short_name
 
     class Meta:
         ordering = ['sorting_name']
@@ -83,7 +91,11 @@ class CharacterClass(models.Model):
         super(CharacterClass, self).save(*args, **kwargs)
 
     def short_name(self):
-        return ''.join(word[:4] for word in str(self.name).split(' '))
+        short_name = ''
+        for char in str(self.name):
+            if char in 'abcdefghijklmnopqrstuvwxyz':
+                short_name += char
+        return short_name
 
     def allowed_list(self):
         allowed_profiles = []
@@ -141,7 +153,11 @@ class CharacterProfession(models.Model):
         super(CharacterProfession, self).save(*args, **kwargs)
 
     def short_name(self):
-        return ''.join(word[:4] for word in str(self.name).split(' '))
+        short_name = ''
+        for char in str(self.name):
+            if char in 'abcdefghijklmnopqrstuvwxyz':
+                short_name += char
+        return short_name
 
     class Meta:
         ordering = ['sorting_name']
@@ -168,7 +184,11 @@ class EliteClass(models.Model):
         super(EliteClass, self).save(*args, **kwargs)
 
     def short_name(self):
-        return ''.join(word[:4] for word in str(self.name).split(' '))
+        short_name = ''
+        for char in str(self.name):
+            if char in 'abcdefghijklmnopqrstuvwxyz':
+                short_name += char
+        return short_name
 
     class Meta:
         ordering = ['sorting_name']
@@ -199,7 +219,11 @@ class EliteProfession(models.Model):
         super(EliteProfession, self).save(*args, **kwargs)
 
     def short_name(self):
-        return ''.join(word[:4] for word in str(self.name).split(' '))
+        short_name = ''
+        for char in str(self.name):
+            if char in 'abcdefghijklmnopqrstuvwxyz':
+                short_name += char
+        return short_name
 
     class Meta:
         ordering = ['sorting_name']
@@ -221,7 +245,11 @@ class WeaponClass(models.Model):
         super(WeaponClass, self).save(*args, **kwargs)
 
     def short_name(self):
-        return ''.join(word[:4] for word in str(self.name).split(' '))
+        short_name = ''
+        for char in str(self.name):
+            if char in 'abcdefghijklmnopqrstuvwxyz':
+                short_name += char
+        return short_name
 
     class Meta:
         ordering = ['sorting_name']
@@ -285,7 +313,11 @@ class WeaponType(models.Model):
         super(WeaponType, self).save(*args, **kwargs)
 
     def short_name(self):
-        return ''.join(word[:4] for word in str(self.name).split(' '))
+        short_name = ''
+        for char in str(self.name):
+            if char in 'abcdefghijklmnopqrstuvwxyz':
+                short_name += char
+        return short_name
 
     def damage_summary(self):
         damage_small = str(self.damage_small_dices)
