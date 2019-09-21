@@ -14,6 +14,17 @@
 {% block content %}
     <br><br><br><br>
 
+    <h2 class="rules">Klasa broni</h2>
+    <br>
+    <p>
+        Podział broni na Klasy jest związane przede wszystkim z zasadami dotyczącymi Biegłości w broni.
+        Spośród 4 poziomów Biegłości (Brak zdolności [0], Zdolność [1], Biegłość [2], Specjalizacja [3]) pierwsze trzy dotyczą całej Klasy broni.
+        Oznacza to, że postać mająca Biegłość w Broniach drzewcowych równie sprawnie włada włócznią co halabardą.
+        Jest to oczywiście uproszczenie, jednak zmierza o oddania tej prawidłowości, że władanie niektórymi typami broni rządzi się tymi samym zasadami.
+        Najlepszym przykładem jest Broń zamachowa, do której należą zarówno proca czy bolas, jak i korbacz czy kiścień.
+    </p>
+
+
     <table class="weapons">
         {% for weapon_class in weapons_classes_with_types_dict %}
         <colgroup>
@@ -60,15 +71,26 @@
         </tbody>
         {% endfor %}
     </table>
+    <br><br>
 
-    <br><br><br>
-
-    <h2 class="rules">XXXX</h2>
+    <h5><b>Legenda</b></h5>
     <br>
-    <p>
-        XXXX
-    </p>
-    <br><br><br>
+    <table class="key">
+        <colgroup>
+            <col class="point">
+            <col class="explanation">
+        </colgroup>
+        <tbody>
+            <tr><td>&nbsp;nie zabija!</td><td>Broń zadająca obrażenia, które raczej nie są w stanie spowodować śmierci.</td></tr>
+            <tr><td>&nbsp;1 AT/2r</td><td>Wskazuje liczbę AT/R w przypadku broni, której użycie wymaga długiego przygotowania.</td></tr>
+            <tr><td>&nbsp;Oszołomienie 15%</td><td>Wskazuje szanse na oszołomienie przeciwnika w przypadku trafienia (przeciwnik przez 1r nie może atakować - może przejść do Defensywy).</td></tr>
+            <tr><td>&nbsp;+Parowanie</td><td>Broń umożliwiająca parowanie, czyli zastosowanie premii z KON do KP.</td></tr>
+            <tr><td>&nbsp;Przeb+3</td><td>Przebicie broni określa, ile punktów Wyparowań zbroi ignoruje w przypadku trafienia.</td></tr>
+            <tr><td>&nbsp;K:Przeb+1</td><td>Wskazuje, że Przebicie jest zależne od zastosowania konkretnego Typu OBR przy broni o wielu typach.</td></tr>
+            <tr><td>&nbsp;Szarża konna +1k6 OBR</td><td>Określa dodatkowe OBR przy broni o dewastującej szarży w przypadku zastosowana z wierzchowca.</td></tr>
+            <tr><td>&nbsp;vs. szarży +1TRAF +1OBR</td><td>Modyfikatory sytuacyjne broni nadającej się do przyjęcia szarży (sumują się z normalną premią).</td></tr>
+        </tbody>
+    </table>
 
 
 

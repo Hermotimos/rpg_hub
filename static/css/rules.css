@@ -127,8 +127,16 @@ li b {
 .weapons .price {width: 6%;}
 .weapons .weight {width: 6%;}
 
+
+.key .point {width: 25%;}
+.key .explanation {width: %;}
+
 table.weapons {
         border: double;
+}
+
+table.key td {
+        padding: 5px 0px 5px 0px;
 }
 
 .weapons thead {
@@ -140,7 +148,7 @@ table.weapons {
         font-weight: normal;
 }
 
-
+.key tr:nth-child(even),
 .professions tr:nth-child(even),
 .plates tr:nth-child(even),
 .shields tr:nth-child(even),
