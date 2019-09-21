@@ -3,8 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.conf import settings
-from django.db.models import Max
-from debates.models import Topic, Debate, Remark
+from debates.models import Topic, Debate
 from users.models import User, Profile
 from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm, InviteForm
 
