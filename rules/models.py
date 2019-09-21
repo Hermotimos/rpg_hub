@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Q
 from users.models import Profile
 from rpg_project.utils import create_sorting_name
+from imaginarion.models import Picture
 
 
 class Skill(models.Model):
@@ -302,6 +303,7 @@ class WeaponType(models.Model):
     avg_weight = models.DecimalField(max_digits=10, decimal_places=1)
 
     description = models.TextField(max_length=4000, blank=True, null=True)
+    pictures = models.ManyToManyField(Picture, related_name='weapons_pics', blank=True)
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):

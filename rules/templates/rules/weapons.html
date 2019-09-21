@@ -57,7 +57,7 @@
         <tbody>
             {% for weapon_type in weapons_classes_with_types_dict|dict_lookup:weapon_class %}
                 <tr>
-                    <td class="hover-blue" data-toggle="collapse" data-target="#{{ weapon_type.short_name }}">&nbsp;{{ weapon_type.name }}</td>
+                    <td class="{% if weapon_type.description %} hover-blue {% endif %}" data-toggle="collapse" data-target="#{{ weapon_type.short_name }}">&nbsp;{{ weapon_type.name }}</td>
                     <td class="align-center">{{ weapon_type.delay }}</td>
                     <td class="align-center">{{ weapon_type.damage_summary }}</td>
                     <td class="align-center">{{ weapon_type.damage_type }}</td>
@@ -68,9 +68,24 @@
                     <td class="align-center">{{ weapon_type.avg_price_value }} {{ weapon_type.avg_price_currency }}</td>
                     <td class="align-center">{{ weapon_type.avg_weight }}</td>
                 </tr>
-                <tr id="{{ weapon_type.short_name }}" class="collapse">
-                    <td colspan="10"><br>&nbsp;{{ weapon_type.description|linebreaksbr }}<br></td>
-                </tr>
+                {% if weapon_type.description %}
+                    <tr id="{{ weapon_type.short_name }}" class="collapse">
+                        <td colspan="10" class="weapons-img px-2">
+                            <br>
+                            {{ weapon_type.description|linebreaksbr }}
+                            <br><br>
+                            {% for p in weapon_type.pictures.all %}
+                                <img src="{{ p.image.url }}" class="border-double">
+                                {% if p.description %}
+                                    <small>{{ p.description }}</small>
+                                {% endif %}
+                            {% endfor %}
+                            <br><br>
+                        </td>
+                    </tr>
+                {% endif %}
+
+
             {% endfor %}
         </tbody>
         {% endfor %}
