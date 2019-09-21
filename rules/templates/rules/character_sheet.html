@@ -12,49 +12,19 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br>
+    <br><br><br><br>
 
-    <br><br><br>
     <h2 class="rules">Szablony</h2>
     <br>
     <p>
-        Szablon każdej z kart można ściągnąć w trzech wariantach.
-        Plik .xps (odpowiednik .pdf) jest dopasowany do strony A4 (dlatego cieszy się rekomendacją Archonta Ebbonu), natomiast pliki .png i .xlsx nie.
-        Szablony .xlsx (arkusz kalkulacyjny Excel) wymaga instalacji czcionki "IM Fell Great Primer", aby zachować układ strony.
-        Przy braku tej czcionki formatowanie tekstu będzie zaburzone - możliwe ucięcie tekstu w niektórych komórkach.
-        Plik .png przy wydruku należałoby rozciągnąć do krawędzi strony w opcjach drukowania.
+        Szablony kart postaci nareszcie dopasowane do wydruku A4 i w formacie .pdf - częstujcie się!
     </p>
+    &#9758; <a href="{% static 'files/Karta postaci I - Cechy i walka.pdf' %}">Karta postaci I - Cechy i walka</a>
     <br>
-
-    <h4><b>Cechy i walka</b></h4>
-    <b class="deep-red">&#9758; </b><a href="{% static 'files/Karta postaci I - Cechy i walka.xps' %}">.xps</a>
+    &#9758; <a href="{% static 'files/Karta postaci II - Ekwipunek.pdf' %}">Karta postaci II - Ekwipunek</a>
     <br>
-    &#9758; <a href="{% static 'files/Karta postaci I - Cechy i walka - b&w.png' %}">.png</a>
+    &#9758; <a href="{% static 'files/Karta postaci III - Tabela umiejętności.pdf' %}">Karta postaci III - Tabela umiejętności</a>
     <br>
-    &#9758; <a href="{% static 'files/Karta postaci I - Cechy i walka.xlsx' %}">.xlsx (notatki na marginesach są pominięte w obszarze wydruku)</a>
-    <br><br><br>
-
-    <h4><b>Ekwipunek</b></h4>
-    <b class="deep-red">&#9758; </b><a href="{% static 'files/Karta postaci II - Ekwipunek.xps' %}">.xps (dopasowana do wydruku)</a>
-    <br>
-    &#9758; <a href="{% static 'files/Karta postaci II - Ekwipunek - b&w.png' %}">.png (wymaga dopasowania przy wydruku)</a>
-    <br>
-    &#9758; <a href="{% static 'files/Karta postaci II - Ekwipunek.xlsx' %}">.xlsx (notatki na marginesach są pominięte w obszarze wydruku)</a>
-    <br><br><br>
-
-    <h4><b>Umiejętności i biegłości</b></h4>
-    <b class="deep-red">&#9758; </b><a href="{% static 'files/Karta postaci III - Tabela umiejętności.xps' %}">.xps (dopasowana do wydruku)</a>
-    <br>
-    &#9758; <a href="{% static 'files/Karta postaci III - Tabela umiejętności - b&w.png' %}">.png (wymaga dopasowania przy wydruku)</a>
-    <br>
-    &#9758; <a href="{% static 'files/Karta postaci III - Tabela umiejętności.xlsx' %}">.xlsx (notatki na marginesach są pominięte w obszarze wydruku)</a>
-    <br><br><br>
-
-    <h4><b>Tabela awansów</b></h4>
-    <b class="deep-red">&#9758; </b><a href="{% static 'files/Karta postaci IV - Tabela awansów.xps' %}">.xps (dopasowana do wydruku)</a>
-    <br>
-    &#9758; <a href="{% static 'files/Karta postaci IV - Tabela awansów - b&w.png' %}">.png (wymaga dopasowania przy wydruku)</a>
-    <br>
-    &#9758; <a href="{% static 'files/Karta postaci IV - Tabela awansów.xlsx' %}">.xlsx (notatki na marginesach są pominięte w obszarze wydruku)</a>
+    &#9758; <a href="{% static 'files/Karta postaci IV - Tabela awansów.pdf' %}">Karta postaci IV - Tabela awansów</a>
 
 {% endblock content %}
