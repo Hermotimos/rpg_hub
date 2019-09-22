@@ -22,12 +22,14 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
-    path('debates/', include('debates.urls')),
-    path('users/', include('users.urls')),
-    path('news/', include('news.urls')),
-    path('history/', include('history.urls')),
+    path('characters/', include('characters.urls')),
     path('contact/', include('contact.urls')),
+    path('debates/', include('debates.urls')),
+    path('history/', include('history.urls')),
+    path('news/', include('news.urls')),
     path('rules/', include('rules.urls')),
+    path('users/', include('users.urls')),
+
 ]
 
 # only for development phase (= when DEBUG is True), not suitable for production
