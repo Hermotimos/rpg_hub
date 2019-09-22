@@ -27,6 +27,10 @@
                 <div id="actions" class="list-group collapse unblue">
                     <a class="list-group-item list-group-item-light" href="{% url 'home:reload' %}"><strike><small>Reload sorting names</small></strike></a>
                 </div>
+            <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#character_sheets"><h6>Karty postaci</h6></li>
+                <div id="character_sheets" class="list-group collapse unblue">
+                    <a class="list-group-item list-group-item-light" href="{% url 'characters:tricks-sheet' %}"><small>Podstępy</small></a>
+                </div>
             <li class="list-group-item list-group-item-light small-caps"><a href="{% url 'contact:plans-for-gm' %}">Plany graczy</a></li>
             <li class="list-group-item list-group-item-light small-caps"><a href="{% url 'contact:plans-main' %}">TODO</a></li>
         </ul>
@@ -34,16 +38,13 @@
         <!-- For players  -->
         {% else %}
         <ul class="list-group hover-pointer">
-            <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#character_sheet"><h6><strike>Karta postaci</strike></h6></li>
+            <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#character_sheet"><h6>Karta postaci</h6></li>
                 <div id="character_sheet" class="list-group collapse unblue">
                     <a class="list-group-item list-group-item-light" href="#"><strike><small>Cechy i walka</small></strike></a>
                     <a class="list-group-item list-group-item-light" href="#"><strike><small>Doświadczenie | Tabela awansów</small></strike></a>
                     <a class="list-group-item list-group-item-light" href="#"><strike><small>Ekwipunek | Skrytki</small></strike></a>
-<!--                </div>-->
-<!--            <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#skills"><h6><strike>Umiejętności</strike></h6></li>-->
-<!--                <div id="skills" class="list-group collapse unblue">-->
                     <a class="list-group-item list-group-item-light" href="#"><strike><small>Umiejętności</small></strike></a>
-                    <a class="list-group-item list-group-item-light" href="#"><strike><small>Podstępy</small></strike></a>
+                    <a class="list-group-item list-group-item-light" href="{% url 'characters:tricks-sheet' %}"><small>Podstępy</small></a>
                     <a class="list-group-item list-group-item-light" href="#"><strike><small>Arkana</small></strike></a>
                 </div>
             <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#knowledge"><h6><strike>Wiedza</strike></h6></li>
