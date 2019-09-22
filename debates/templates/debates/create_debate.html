@@ -39,6 +39,11 @@
             <div class="col-md-3">
                 {{ remark_form.author|as_crispy_field }}
             </div>
+        {% else %}
+        <!--  necessary for form to validate - hidden author form field  -->
+            <div class="collapse">
+                {{ remark_form.author }}
+            </div>
         {% endif %}
         {{ remark_form.author.errors }}
 

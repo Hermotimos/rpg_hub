@@ -74,6 +74,7 @@
                 {% endif %}
             {% endfor %}
             <tr>
+                <td></td>
                 <td>
                     {% if not debate.is_ended %}
                         {% for profile in last_remark.seen_by.all %}
@@ -96,6 +97,11 @@
                 {% if request.user.profile.character_status == 'gm' %}
                     <div class="col-md-3">
                         {{ form.author|as_crispy_field }}
+                    </div>
+                {% else %}
+                <!--  necessary for form to validate - hidden author form field  -->
+                    <div class="collapse">
+                        {{ form.author }}
                     </div>
                 {% endif %}
                 {{ form.author.errors }}
