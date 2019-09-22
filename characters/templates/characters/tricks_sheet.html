@@ -14,7 +14,14 @@
     <br><br><br><br>
 
 
+    <h5 class="rules">Karta Podstępów</h5>
+    <p>
+        Karta Podstępów widoczna poniżej nie ma opcji zapisu zmian (to ograniczenie obiektywne, nie da się tego zmienić).
+        W celu wprowadzenia zmian - klijnij link 'EDYTUJ' poniżej. Edytować można tylko te pola, które podlegają zmianie w trakcie gry:
+        ZRC, Umiejętności, Zbroję oraz informację o rozwoju Podstępów w toku awansów Profesji.
+    </p>
     <br>
+
     {% if 'Dalamar' in request.user.profile.character_name or request.user.profile.character_status == 'gm' %}
         <u><a href="https://1drv.ms/x/s!AiRT0FtymkyPgV8CCe8964WZanji">EDYTUJ</a></u>
         <iframe width="820" height="700" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21223&authkey=%21ACYol_Rdpe6PNvo&em=2&wdAllowInteractivity=False&AllowTyping=True&Item='Podst%C4%99py'!A1%3AJ23&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
@@ -39,11 +46,9 @@
     <u><a href="https://1drv.ms/x/s!AiRT0FtymkyPgWeKxROmaJ2NBLis">EDYTUJ</a></u>
         <iframe width="820" height="700" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21231&authkey=%21AF2scRcEQ_6GsIQ&em=2&wdAllowInteractivity=False&AllowTyping=True&Item='Podst%C4%99py'!A1%3AJ23&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>        <br><br>
         <br><br>
-        <h6><a href="https://1drv.ms/x/s!AiRT0FtymkyPgWeKxROmaJ2NBLis">Edycja</a></h6>
 {% endif %}
 
     <br><br>
-
     <h5 class="rules">Przydatne linki:</h5>
     <p>
         Zasady => <u><a href="{% url 'rules:tricks' %}">Podstępy</a></u>
