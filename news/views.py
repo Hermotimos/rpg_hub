@@ -84,6 +84,9 @@ def news_detail_view(request, news_id):
     allowed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in news.allowed_profiles.all())
     followers_str = ', '.join(p.character_name.split(' ', 1)[0] for p in news.followers.all())
 
+    allowed_imgs = [p.image for p in news.allowed_profiles.all()]
+    followers_imgs = [p.image for p in news.followers.all()]
+
     if request.method == 'POST':
         form = CreateNewsAnswerForm(request.POST, request.FILES)
         if form.is_valid():
@@ -115,8 +118,8 @@ def news_detail_view(request, news_id):
         'news': news,
         'news_answers': news_answers,
         'form': form,
-        'allowed': allowed_str,
-        'followers': followers_str,
+        'allowed': allowed_imgs,
+        'followers': followers_imgs,
     }
     if request.user.profile in news.allowed_profiles.all() or request.user.profile.character_status == 'gm':
         return render(request, 'news/detail.html', context)

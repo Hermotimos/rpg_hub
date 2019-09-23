@@ -22,15 +22,23 @@
     <table class="forms">
         <tr>
             <td><h6>Autor:</h6></td>
-            <td><small>{{ news.author.profile }}</small></td>
+            <td><img class="rounded-circle img-small" src="{{ news.author.profile.image.url }}"></td>
         </tr>
         <tr>
             <td><h6>Adresaci:</h6></td>
-            <td><small>{{ allowed }}</small></td>
+            <td>
+            {% for img in allowed %}
+                <img class="rounded-circle img-small" src="{{ img.url }}">
+            {% endfor %}
+            </td>
         </tr>
         <tr>
             <td><h6>Obserwują:</h6></td>
-            <td><small>{{ followers }}</small></td>
+            <td>
+            {% for img in followers %}
+                <img class="rounded-circle img-small" src="{{ img.url }}">
+            {% endfor %}
+            </td>
         </tr>
     </table>
     <br>
