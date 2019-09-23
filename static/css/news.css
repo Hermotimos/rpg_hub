@@ -13,7 +13,6 @@
         border-color: #229954;
 }
 
-
 .img-survey-tiny {
         height: 15px;
         width: auto;
@@ -26,14 +25,8 @@
         margin-right: auto;
 }
 
-
 .inline {
         float:left;
-}
-
-.btn-vote {
-        color: black;
-        border: 1px solid;
 }
 
 .btn-modify {

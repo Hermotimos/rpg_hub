@@ -72,6 +72,14 @@ def create_news_view(request):
 @login_required
 def news_detail_view(request, news_id):
     news = get_object_or_404(News, id=news_id)
+
+    profile = request.user.profile
+    seen_by = news.seen_by.all()
+    if profile not in seen_by:
+        new_seen = profile
+        seen_by |= Profile.objects.filter(id=new_seen.id)
+        news.seen_by.set(seen_by)
+
     news_answers = list(news.news_answers.all())
     allowed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in news.allowed_profiles.all())
     followers_str = ', '.join(p.character_name.split(' ', 1)[0] for p in news.followers.all())

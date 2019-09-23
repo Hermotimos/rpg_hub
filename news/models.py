@@ -13,6 +13,7 @@ class News(models.Model):
     allowed_profiles = models.ManyToManyField(Profile, related_name='allowed_news')
     followers = models.ManyToManyField(Profile, related_name='followed_news', blank=True)
     image = models.ImageField(blank=True, null=True, upload_to='news_pics')
+    seen_by = models.ManyToManyField(Profile, related_name='news_seen', blank=True)
 
     def __str__(self):
         return self.title[:50] + '...' if len(str(self.title)) > 100 else self.title

@@ -14,10 +14,14 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br><br><br>
+    <br><br><br><br>
+
+<!-- NEWS -->
+
+
     <table class="forms">
         <tr>
-            <td><h6>Ogłoszeniodawca:</h6></td>
+            <td><h6>Autor:</h6></td>
             <td><small>{{ news.author.profile }}</small></td>
         </tr>
         <tr>
@@ -25,7 +29,7 @@
             <td><small>{{ allowed }}</small></td>
         </tr>
         <tr>
-            <td><h6>Aktywni uczestnicy:</h6></td>
+            <td><h6>Obserwują:</h6></td>
             <td><small>{{ followers }}</small></td>
         </tr>
     </table>
@@ -39,13 +43,22 @@
         {% endif %}
     </div>
 
+
+
     <br>
     <div class="post-and-news">
-        <p>{{ news.text|capfirst|linebreaks }}</p>
+        {{ news.text|capfirst|linebreaks }}
         {% if news.image %}
             <img src="{{ news.image.url }}" class="border-double">
         {% endif %}
+        {% for profile in news.seen_by.all %}
+            <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+        {% endfor %}
+        <br><br>
     </div>
+
+
+
 
     <div class="border-top">
         <br><br>
