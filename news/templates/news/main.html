@@ -12,8 +12,7 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br>
-    <div class="mb-4">
+    <div class="mt-4">
         <a href="{% url 'news:create' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
         {% if request.user.profile.character_status == 'gm' %}
             <a href="{% url 'admin:news_survey_add' %}" class="btn btn-outline-dark">Nowa ankieta</a>
@@ -21,18 +20,19 @@
             <a href="{% url 'news:survey-create' %}" class="btn btn-outline-dark">Nowa ankieta</a>
         {% endif %}
     </div>
-
     <br><br><br>
+
+
     {% for survey in surveys %}
         <table>
             <tbody>
                 <tr class="posts-and-news">
-                    <td class="align-center">
+                    <td class="align-center pt-3">
                         <img class="rounded-circle article-img" src="{{ survey.author.profile.image.url }}">
                         <br>
-                        <small>{{ survey.date_posted|date:'d-M-Y' }}</small>
                     </td>
                     <td>
+                        <small>{{ survey.date_posted|date:'d-M-Y, H:i' }}</small>
                         <h3 class="unblue"><a href="{% url 'news:survey-detail' survey.id %}">ANKIETA: {{ survey.title }}</a></h3>
                         {% if survey.survey_answers.all %}
                         <h5>
@@ -48,6 +48,7 @@
     {% endfor %}
     <br><br>
 
+
     {% for news in newss %}
         <table class="border-top">
             <tbody>
@@ -55,22 +56,25 @@
                     <td class="align-center pt-3">
                         <img class="rounded-circle article-img" src="{{ news.author.profile.image.url }}">
                         <br>
-                        <small>{{ news.date_posted|date:'d-M-Y' }}</small>
+                        <small></small>
                     </td>
                     <td class="pt-2">
-                        <small>Ostatnia aktywność:
-                            {% if news.last_activity %}
-                                {{ news.last_activity|date:'d-M-Y, H:i' }}
-                            {% else %}
-                                {{ news.date_posted|date:'d-M-Y, H:i' }}
-                            {% endif %}
-                        </small>
+                        <small>{{ news.date_posted|date:'d-M-Y, H:i' }}</small>
                         <h3 class="unblue"><a href="{% url 'news:detail' news.id %}">{{ news.title }}</a></h3>
                         {% if news.news_answers.all %}
                             {% for user in news_with_answers_authors_dict|dict_lookup:news %}
                                 <img class="rounded-circle img-small" src="{{ user.profile.image.url }}">
                             {% endfor %}
+                            <br>
                         {% endif %}
+                        <small>
+                            Ostatnia aktywność:
+                            {% if news.last_activity %}
+                                {{ news.last_activity|date:'d-M-Y, H:i' }}<br>
+                            {% else %}
+                                {{ news.date_posted|date:'d-M-Y, H:i' }}<br>
+                            {% endif %}
+                        </small>
                     </td>
                 </tr>
             </tbody>
