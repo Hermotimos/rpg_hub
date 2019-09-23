@@ -77,15 +77,15 @@
                 {% if not debate.is_ended %}
                     {% if last_remark.author.profile.character_status == 'gm' %}
                         <td>
-                            {% for profile in last_remark.seen_by.all %}
-                                <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                            {% for image in last_remark_seen_by_imgs %}
+                                <img class="rounded-circle img-small" src="{{ image.url }}">
                             {% endfor %}
                         </td>
                     {% else %}
                         <td></td>
                         <td>
-                            {% for profile in last_remark.seen_by.all %}
-                                <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                            {% for image in last_remark_seen_by_imgs %}
+                                <img class="rounded-circle img-small" src="{{ image.url }}">
                             {% endfor %}
                         </td>
                     {% endif %}

@@ -142,6 +142,7 @@ def debate_view(request, topic_id, debate_id):
     debate = get_object_or_404(Debate, id=debate_id)
 
     last_remark = debate.last_remark()
+    last_remark_seen_by_imgs = ()
     if last_remark:
         profile = request.user.profile
         seen_by = last_remark.seen_by.all()
@@ -149,6 +150,7 @@ def debate_view(request, topic_id, debate_id):
             new_seen = profile
             seen_by |= Profile.objects.filter(id=new_seen.id)
             last_remark.seen_by.set(seen_by)
+        last_remark_seen_by_imgs = (p.image for p in last_remark.seen_by.all())
 
     allowed_str = ', '.join(p.character_name.split(' ', 1)[0]
                             for p in debate.allowed_profiles.all()
@@ -187,10 +189,11 @@ def debate_view(request, topic_id, debate_id):
         'page_title': debate.name,
         'topic': topic,
         'debate': debate,
-        'form': form,
         'allowed': allowed_str,
         'followers': followers_str,
-        'last_remark': last_remark
+        'last_remark': last_remark,
+        'last_remark_seen_by_imgs': last_remark_seen_by_imgs,
+        'form': form,
     }
     if request.user.profile in debate.allowed_profiles.all() or request.user.profile.character_status == 'gm':
         return render(request, 'debates/debate.html', context)
