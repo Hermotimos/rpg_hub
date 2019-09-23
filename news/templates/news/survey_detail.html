@@ -40,10 +40,10 @@
                 {% for profile in option.no_voters.all %}
                     {% if profile == request.user.profile %}
                         <a href="{% url 'news:survey-unvote' survey.id option.id %}">
-                            <img class="rounded-circle img-small border-double border-red" src="{{ profile.image.url }}">
+                            <img class="rounded-circle img-small border-red" src="{{ profile.image.url }}">
                         </a>
                     {% else %}
-                        <img class="rounded-circle img-small border-double border-red" src="{{ profile.image.url }}">
+                        <img class="rounded-circle img-small border-red" src="{{ profile.image.url }}">
                     {% endif %}
                 {% endfor %}
             </td>
@@ -70,10 +70,10 @@
                 {% for profile in option.yes_voters.all %}
                     {% if profile == request.user.profile %}
                         <a href="{% url 'news:survey-unvote' survey.id option.id %}">
-                            <img class="rounded-circle img-small border-double border-green" src="{{ profile.image.url }}">
+                            <img class="rounded-circle img-small border-green" src="{{ profile.image.url }}">
                         </a>
                     {% else %}
-                        <img class="rounded-circle img-small border-double border-green" src="{{ profile.image.url }}">
+                        <img class="rounded-circle img-small border-green" src="{{ profile.image.url }}">
                     {% endif %}
                 {% endfor %}
             </td>
@@ -116,6 +116,14 @@
                     </td>
                 </tr>
             {% endfor %}
+                <tr>
+                    <td></td>
+                    <td>
+                        {% for image in last_survey_answer_seen_by_imgs %}
+                            <img class="rounded-circle img-small" src="{{ image.url }}">
+                        {% endfor %}
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

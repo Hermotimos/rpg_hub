@@ -72,18 +72,25 @@ def create_news_view(request):
 @login_required
 def news_detail_view(request, news_id):
     news = get_object_or_404(News, id=news_id)
-
     profile = request.user.profile
+
     seen_by = news.seen_by.all()
     if profile not in seen_by:
         new_seen = profile
         seen_by |= Profile.objects.filter(id=new_seen.id)
         news.seen_by.set(seen_by)
 
-    news_answers = list(news.news_answers.all())
-    allowed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in news.allowed_profiles.all())
-    followers_str = ', '.join(p.character_name.split(' ', 1)[0] for p in news.followers.all())
+    last_news_answer = news.last_news_answer()
+    last_news_answer_seen_by_imgs = ()
+    if last_news_answer:
+        seen_by = last_news_answer.seen_by.all()
+        if profile not in seen_by:
+            new_seen = profile
+            seen_by |= Profile.objects.filter(id=new_seen.id)
+            last_news_answer.seen_by.set(seen_by)
+        last_news_answer_seen_by_imgs = (p.image for p in last_news_answer.seen_by.all())
 
+    news_answers = list(news.news_answers.all())
     allowed_imgs = [p.image for p in news.allowed_profiles.all()]
     followers_imgs = [p.image for p in news.followers.all()]
 
@@ -117,9 +124,10 @@ def news_detail_view(request, news_id):
         'page_title': news.title,
         'news': news,
         'news_answers': news_answers,
+        'last_news_answer_seen_by_imgs': last_news_answer_seen_by_imgs,
         'form': form,
-        'allowed': allowed_imgs,
-        'followers': followers_imgs,
+        'allowed_imgs': allowed_imgs,
+        'followers_imgs': followers_imgs,
     }
     if request.user.profile in news.allowed_profiles.all() or request.user.profile.character_status == 'gm':
         return render(request, 'news/detail.html', context)
@@ -163,6 +171,16 @@ def survey_detail_view(request, survey_id):
         new_seen = profile
         seen_by |= Profile.objects.filter(id=new_seen.id)
         survey.seen_by.set(seen_by)
+
+    last_survey_answer = survey.last_survey_answer()
+    last_survey_answer_seen_by_imgs = ()
+    if last_survey_answer:
+        seen_by = last_survey_answer.seen_by.all()
+        if profile not in seen_by:
+            new_seen = profile
+            seen_by |= Profile.objects.filter(id=new_seen.id)
+            last_survey_answer.seen_by.set(seen_by)
+        last_survey_answer_seen_by_imgs = (p.image for p in last_survey_answer.seen_by.all())
 
     survey_options = list(survey.survey_options.all())
     survey_answers = list(survey.survey_answers.all())
@@ -210,6 +228,7 @@ def survey_detail_view(request, survey_id):
         'survey': survey,
         'survey_options': survey_options,
         'survey_answers': survey_answers,
+        'last_survey_answer_seen_by_imgs': last_survey_answer_seen_by_imgs,
         'answer_form': answer_form,
         'option_form': option_form
     }

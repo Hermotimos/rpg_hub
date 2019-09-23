@@ -35,6 +35,12 @@ class News(models.Model):
     def last_activity(self):
         return self.news_answers.all().aggregate(Max('date_posted'))['date_posted__max']
 
+    def last_news_answer(self):
+        if self.news_answers.all():
+            return self.news_answers.order_by('-date_posted')[0]
+        else:
+            return None
+
 
 class NewsAnswer(models.Model):
     news = models.ForeignKey(News, related_name='news_answers', on_delete=models.CASCADE)
@@ -42,6 +48,7 @@ class NewsAnswer(models.Model):
     text = models.TextField(max_length=4000)
     date_posted = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(blank=True, null=True, upload_to='news_pics')
+    seen_by = models.ManyToManyField(Profile, related_name='news_answers_seen', blank=True)
 
     class Meta:
         ordering = ['date_posted']
@@ -83,6 +90,12 @@ class Survey(models.Model):
                 img.thumbnail(output_size)
                 img.save(self.image.path)
 
+    def last_survey_answer(self):
+        if self.survey_answers.all():
+            return self.survey_answers.order_by('-date_posted')[0]
+        else:
+            return None
+
 
 class SurveyOption(models.Model):
     survey = models.ForeignKey(Survey, related_name='survey_options', on_delete=models.CASCADE)
@@ -104,6 +117,7 @@ class SurveyAnswer(models.Model):
     text = models.TextField(max_length=4000)
     date_posted = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(blank=True, null=True, upload_to='news_pics')
+    seen_by = models.ManyToManyField(Profile, related_name='survey_answers_seen', blank=True)
 
     class Meta:
         ordering = ['date_posted']

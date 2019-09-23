@@ -4,7 +4,6 @@
 {% load crispy_forms_tags %}
 
 {% block head_extra %}
-<!--    {{ form.media }}-->
     <link rel="stylesheet" href="{% static 'css/news.css' %}">
 {% endblock head_extra %}
 
@@ -16,9 +15,7 @@
 {% block content %}
     <br><br><br><br>
 
-<!-- NEWS -->
-
-
+<!-- NEWS META INFO-->
     <table class="forms">
         <tr>
             <td><h6>Autor:</h6></td>
@@ -27,7 +24,7 @@
         <tr>
             <td><h6>Adresaci:</h6></td>
             <td>
-            {% for img in allowed %}
+            {% for img in allowed_imgs %}
                 <img class="rounded-circle img-small" src="{{ img.url }}">
             {% endfor %}
             </td>
@@ -35,7 +32,7 @@
         <tr>
             <td><h6>Obserwują:</h6></td>
             <td>
-            {% for img in followers %}
+            {% for img in followers_imgs %}
                 <img class="rounded-circle img-small" src="{{ img.url }}">
             {% endfor %}
             </td>
@@ -43,6 +40,7 @@
     </table>
     <br>
 
+<!-- FOLLOW/UNFOLLOW BUTTON -->
     <div class="mb-4">
         {% if request.user.profile in news.followers.all %}
             <a href="{% url 'news:unfollow' news.id %}" class="btn btn-dark">Nie obserwuj</a>
@@ -51,8 +49,7 @@
         {% endif %}
     </div>
 
-
-
+<!-- NEWS TEXT -->
     <br>
     <div class="post-and-news">
         {{ news.text|capfirst|linebreaks }}
@@ -65,9 +62,7 @@
         <br><br>
     </div>
 
-
-
-
+<!-- NEWS ANSWERS -->
     <div class="border-top">
         <br><br>
         <table>
@@ -85,15 +80,23 @@
                         {% if answer.image %}
                             <img src="{{ answer.image.url }}" class="border-double">
                         {% endif %}
-                        <br>
                     </td>
                 </tr>
             {% endfor %}
+                <tr>
+                    <td></td>
+                    <td>
+                        {% for image in last_news_answer_seen_by_imgs %}
+                            <img class="rounded-circle img-small" src="{{ image.url }}">
+                        {% endfor %}
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
     <br><br>
 
+<!-- NEWS ANSWER FORM -->
     <div id="page-bottom">
         <br>
         <form method="POST" action=".#page-bottom" enctype="multipart/form-data">

@@ -6,16 +6,13 @@
 }
 
 .border-red {
+        border: solid 2px;
         border-color: #C70039;
 }
 
 .border-green {
+        border: solid 2px;
         border-color: #229954;
-}
-
-.img-survey-tiny {
-        height: 15px;
-        width: auto;
 }
 
 .img-edit {

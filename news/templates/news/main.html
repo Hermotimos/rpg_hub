@@ -12,6 +12,8 @@
 {% endblock breadcrumb %}
 
 {% block content %}
+
+<!-- NEW NEWS & NEW SURVEY BUTTONS-->
     <div class="mt-4">
         <a href="{% url 'news:create' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
         {% if request.user.profile.character_status == 'gm' %}
@@ -22,7 +24,7 @@
     </div>
     <br><br><br>
 
-
+<!-- SURVEYS -->
     {% for survey in surveys %}
         <table>
             <tbody>
@@ -48,7 +50,7 @@
     {% endfor %}
     <br><br>
 
-
+<!-- NEWS -->
     {% for news in newss %}
         <table class="border-top">
             <tbody>
