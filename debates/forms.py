@@ -10,16 +10,10 @@ class CreateTopicForm(forms.ModelForm):
         model = Topic
         fields = [
             'title',
-            'description'
         ]
 
     def __init__(self, *args, **kwargs):
         super(CreateTopicForm, self).__init__(*args, **kwargs)
-        self.fields['description'].label = ''
-        self.fields['description'].max_length = 100
-        self.fields['description'].required = False
-        self.fields['description'].widget.attrs['placeholder'] = 'Opis nowego tematu - opcjonalnie (max. 100 znaków)'
-        self.fields['description'].widget.attrs['size'] = 60
         self.fields['title'].label = ''
         self.fields['title'].max_length = 50
         self.fields['title'].widget.attrs['placeholder'] = 'Nowy temat narad (max. 50 znaków)*'

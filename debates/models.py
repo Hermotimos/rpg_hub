@@ -8,7 +8,6 @@ from users.models import Profile
 class Topic(models.Model):
     title = models.CharField(max_length=50, unique=True, verbose_name='tytuł tematu')
     date_created = models.DateTimeField(auto_now_add=True)
-    description = models.CharField(max_length=100, verbose_name='opis tematu', blank=True, null=True)
 
     class Meta:
         ordering = ['-date_created']

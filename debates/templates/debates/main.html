@@ -11,8 +11,7 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br>
-    <div class="mb-4">
+    <div class="mt-4">
         <a href="{% url 'debates:create-topic' %}" class="btn btn-outline-dark">Nowy temat narad</a>
     </div>
     <br><br><br>
@@ -22,10 +21,8 @@
                 <b class="border-custom-base">{{ topic.title }}</b>
         </h3>
         <a href="{% url 'debates:create-debate' topic.id %}" class="btn btn-outline-dark">Nowa narada</a>
+        <br><br>
 
-        {% if topic.description %}
-            <small>&nbsp;&nbsp;{{ topic.description }}</small>
-        {% endif %}<br><br>
         {% for debate in topics_with_debates_dict|dict_lookup:topic %}
             <h6 class="unblue">
                 <a href="{% url 'debates:debate' debate.topic.id debate.id %}">
