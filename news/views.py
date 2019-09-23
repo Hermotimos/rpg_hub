@@ -46,7 +46,7 @@ def create_news_view(request):
 
             subject = f"[RPG] Nowe ogłoszenie: '{news.title[:30]}...'"
             message = f"{request.user.profile} przybił/a coś do słupa ogłoszeń.\n" \
-                      f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/detail:{news.id}/\n\n" \
+                      f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/news-detail:{news.id}/\n\n" \
                       f"Ogłoszenie: {news.text}"
             sender = settings.EMAIL_HOST_USER
             receivers = []
@@ -66,7 +66,7 @@ def create_news_view(request):
         'page_title': 'Nowe ogłoszenie',
         'form': form
     }
-    return render(request, 'news/create.html', context)
+    return render(request, 'news/news_create.html', context)
 
 
 @login_required
@@ -104,7 +104,7 @@ def news_detail_view(request, news_id):
 
             subject = f"[RPG] Odpowiedź na ogłoszenie: '{news.title[:30]}...'"
             message = f"{request.user.profile} odpowiedział/a na ogłoszenie '{news.title}':\n" \
-                      f"Ogłoszenie: {request.get_host()}/news/detail:{news.id}/\n\n" \
+                      f"Ogłoszenie: {request.get_host()}/news/news-detail:{news.id}/\n\n" \
                       f"Odpowiedź: {answer.text}"
             sender = settings.EMAIL_HOST_USER
             receivers = []
@@ -130,7 +130,7 @@ def news_detail_view(request, news_id):
         'followers_imgs': followers_imgs,
     }
     if request.user.profile in news.allowed_profiles.all() or request.user.profile.character_status == 'gm':
-        return render(request, 'news/detail.html', context)
+        return render(request, 'news/news_detail.html', context)
     else:
         return redirect('home:dupa')
 
@@ -306,7 +306,7 @@ def survey_create_view(request):
 
             subject = f"[RPG] Nowa ankieta: '{survey.title[:30]}...'"
             message = f"{request.user.profile} przybił/a coś do słupa ogłoszeń.\n" \
-                      f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/survey_detail:{survey.id}/\n\n" \
+                      f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/survey-detail:{survey.id}/\n\n" \
                       f"Ogłoszenie: {survey.text}"
             sender = settings.EMAIL_HOST_USER
             receivers = []
