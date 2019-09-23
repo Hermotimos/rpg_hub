@@ -33,7 +33,7 @@ def demands_main_view(request):
         'sent_demands_undone': sent_demands_undone,
         'sent_demands_done': sent_demands_done
     }
-    return render(request, 'contact/demands-main.html', context)
+    return render(request, 'contact/demands_main.html', context)
 
 
 @login_required
@@ -62,7 +62,7 @@ def demands_create_view(request):
         'page_title': 'Nowy dezyderat',
         'form': form,
     }
-    return render(request, 'contact/demands-create.html', context)
+    return render(request, 'contact/demands_create.html', context)
 
 
 @login_required
@@ -105,7 +105,7 @@ def demands_modify_view(request, demand_id):
         'form': form
     }
     if request.user == demand.author:
-        return render(request, 'contact/demands-modify.html', context)
+        return render(request, 'contact/demands_modify.html', context)
     else:
         return redirect('home:dupa')
 
@@ -146,7 +146,7 @@ def demands_detail_view(request, demand_id):
         'form': form
     }
     if request.user in [demand.author, demand.addressee]:
-        return render(request, 'contact/demands-detail.html', context)
+        return render(request, 'contact/demands_detail.html', context)
     else:
         return redirect('home:dupa')
 
@@ -236,7 +236,7 @@ def plans_main_view(request):
         'page_title': 'Plany',
         'plans': plans,
     }
-    return render(request, 'contact/plans-main.html', context)
+    return render(request, 'contact/plans_main.html', context)
 
 
 @login_required
@@ -247,7 +247,7 @@ def plans_for_gm_view(request):
         'plans': plans,
     }
     if request.user.profile.character_status == 'gm':
-        return render(request, 'contact/plans-for-gm.html', context)
+        return render(request, 'contact/plans_for_gm.html', context)
     else:
         return redirect('home:dupa')
 
@@ -280,7 +280,7 @@ def plans_create_view(request):
         'page_title': 'Nowy plan',
         'form': form,
     }
-    return render(request, 'contact/plans-create.html', context)
+    return render(request, 'contact/plans_create.html', context)
 
 
 @login_required
@@ -322,6 +322,6 @@ def plans_modify_view(request, plan_id):
         'form': form
     }
     if request.user == plan.author:
-        return render(request, 'contact/plans-modify.html', context)
+        return render(request, 'contact/plans_modify.html', context)
     else:
         return redirect('home:dupa')
