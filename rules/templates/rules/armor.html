@@ -68,16 +68,20 @@
                 </tr>
                 {% if plate.description %}
                     <tr id="{{ plate.short_name }}" class="collapse">
-                        <td colspan="10" class="weapons-img px-2">
+                        <td colspan="10" class="weapons-img px-2 align-left">
                             <br>
                             {{ plate.description|linebreaksbr }}
                             <br><br>
+                            <div>
                             {% for p in plate.pictures.all %}
+                                <div class="inline-block">
                                 <img src="{{ p.image.url }}" class="border-double">
                                 {% if p.description %}
                                     <small>{{ p.description }}</small>
                                 {% endif %}
+                                </div>
                             {% endfor %}
+                            </div>
                             <br><br>
                         </td>
                     </tr>
@@ -117,8 +121,6 @@
     <br><br>
 
     {% include 'rules/_plate_and_tricks_table.html' %}
-
-
     <br><br><br>
 
 
