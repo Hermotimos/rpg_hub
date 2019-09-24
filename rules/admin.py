@@ -47,7 +47,7 @@ class EliteProfessionAdmin(admin.ModelAdmin):
 
 class WeaponTypeInline(admin.TabularInline):
     model = WeaponType
-    extra = 5
+    extra = 3
 
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 1, 'cols': 25})},

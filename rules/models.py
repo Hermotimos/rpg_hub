@@ -353,7 +353,7 @@ class PlateType(models.Model):
     weight = models.DecimalField(max_digits=10, decimal_places=1)
 
     penalty_max_agility = models.PositiveSmallIntegerField()
-    penalty_max_movement = models.CharField(max_length=2)
+    penalty_max_movement = models.CharField(max_length=2, blank=True, null=True)
     penalty_pickpocketing = models.DecimalField(max_digits=3, decimal_places=2)
     penalty_lockpicking = models.DecimalField(max_digits=3, decimal_places=2)
     penalty_sneaking_towns = models.DecimalField(max_digits=3, decimal_places=2)
