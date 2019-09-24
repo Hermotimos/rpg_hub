@@ -63,6 +63,11 @@ def columns(thelist, n):
     return [thelist[i::split] for i in range(split)]
 
 
+@register.filter
+def percentage(value):
+    return format(value, "%")
+
+
 # @register.filter
 # def underscore_to_space(text):
 #     text = str(text)

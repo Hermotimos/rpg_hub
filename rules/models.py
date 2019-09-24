@@ -352,16 +352,16 @@ class PlateType(models.Model):
     endurance = models.PositiveSmallIntegerField()
     weight = models.DecimalField(max_digits=10, decimal_places=1)
 
-    penalty_max_agility = models.PositiveSmallIntegerField(blank=True, null=True)
-    penalty_max_movement = models.CharField(max_length=2, blank=True, null=True)
-    penalty_pickpocketing = models.DecimalField(max_digits=3, decimal_places=2)
-    penalty_lockpicking = models.DecimalField(max_digits=3, decimal_places=2)
-    penalty_sneaking_towns = models.DecimalField(max_digits=3, decimal_places=2)
-    penalty_sneaking_wilderness = models.DecimalField(max_digits=3, decimal_places=2)
-    penalty_hiding_towns = models.DecimalField(max_digits=3, decimal_places=2)
-    penalty_hiding_wilderness = models.DecimalField(max_digits=3, decimal_places=2)
-    penalty_climbing = models.DecimalField(max_digits=3, decimal_places=2)
-    penalty_traps = models.DecimalField(max_digits=3, decimal_places=2)
+    mod_max_agility = models.PositiveSmallIntegerField(blank=True, null=True)
+    mod_max_movement = models.CharField(max_length=2, blank=True, null=True)
+    mod_pickpocketing = models.DecimalField(max_digits=3, decimal_places=2)
+    mod_lockpicking = models.DecimalField(max_digits=3, decimal_places=2)
+    mod_sneaking_towns = models.DecimalField(max_digits=3, decimal_places=2)
+    mod_sneaking_wilderness = models.DecimalField(max_digits=3, decimal_places=2)
+    mod_hiding_towns = models.DecimalField(max_digits=3, decimal_places=2)
+    mod_hiding_wilderness = models.DecimalField(max_digits=3, decimal_places=2)
+    mod_climbing = models.DecimalField(max_digits=3, decimal_places=2)
+    mod_traps = models.DecimalField(max_digits=3, decimal_places=2)
 
     allowed_profiles = models.ManyToManyField(Profile,
                                               blank=True,
