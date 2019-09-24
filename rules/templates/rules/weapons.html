@@ -66,7 +66,7 @@
                     <td class="align-center">{{ weapon_type.size }}</td>
                     <td class="align-center">{{ weapon_type.trait }}</td>
                     <td class="align-center">{{ weapon_type.avg_price_value }} {{ weapon_type.avg_price_currency }}</td>
-                    <td class="align-center">{{ weapon_type.avg_weight }}</td>
+                    <td class="align-center">{{ weapon_type.avg_weight.normalize }}</td>
                 </tr>
                 {% if weapon_type.description %}
                     <tr id="{{ weapon_type.short_name }}" class="collapse">
@@ -84,8 +84,6 @@
                         </td>
                     </tr>
                 {% endif %}
-
-
             {% endfor %}
         </tbody>
         {% endfor %}

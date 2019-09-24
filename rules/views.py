@@ -30,7 +30,6 @@ def rules_skills_view(request):
 
 @login_required
 def rules_weapons_view(request):
-
     if request.user.profile.character_status == 'gm':
         weapons_classes_with_types_dict = \
             {wc: (wt for wt in wc.weapon_types.all()) for wc in WeaponClass.objects.all()}
