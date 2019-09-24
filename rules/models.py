@@ -288,6 +288,9 @@ CURRENCIES = [
 class WeaponType(models.Model):
     weapon_class = models.ForeignKey(WeaponClass, related_name='weapon_types', on_delete=models.PROTECT)
     name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(max_length=4000, blank=True, null=True)
+    pictures = models.ManyToManyField(Picture, related_name='plates_pics', blank=True)
+
     delay = models.PositiveSmallIntegerField()
     damage_small_dices = models.CharField(max_length=10, blank=True, null=True)
     damage_small_add = models.PositiveSmallIntegerField(blank=True, null=True)
@@ -302,8 +305,13 @@ class WeaponType(models.Model):
     avg_price_currency = models.CharField(max_length=5, choices=CURRENCIES)
     avg_weight = models.DecimalField(max_digits=10, decimal_places=1)
 
-    description = models.TextField(max_length=4000, blank=True, null=True)
-    pictures = models.ManyToManyField(Picture, related_name='weapons_pics', blank=True)
+    allowed_profiles = models.ManyToManyField(Profile,
+                                              blank=True,
+                                              limit_choices_to=
+                                              Q(character_status='active_player') |
+                                              Q(character_status='inactive_player') |
+                                              Q(character_status='dead_player'),
+                                              related_name='allowed_weapon_types')
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
@@ -337,6 +345,8 @@ class WeaponType(models.Model):
 class PlateType(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=4000, blank=True, null=True)
+    pictures = models.ManyToManyField(Picture, related_name='weapons_pics', blank=True)
+
     armor_class_bonus = models.PositiveSmallIntegerField()
     parrying = models.PositiveSmallIntegerField()
     endurance = models.PositiveSmallIntegerField()
