@@ -70,8 +70,14 @@ def rules_masteries_view(request):
 
 @login_required
 def rules_tricks_view(request):
+    if request.user.profile.character_status == 'gm':
+        plates = list(PlateType.objects.all())
+    else:
+        plates = list(request.user.profile.allowed_plate_types.all())
+
     context = {
-        'page_title': 'Podstępy'
+        'page_title': 'Podstępy',
+        'plates': plates
     }
     return render(request, 'rules/tricks.html', context)
 

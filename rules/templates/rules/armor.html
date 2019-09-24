@@ -59,8 +59,8 @@
             {% for plate in plates %}
                 <tr>
                     <td class="{% if plate.description %} hover-blue {% endif %} align-left" data-toggle="collapse" data-target="#{{ plate.short_name }}">{{ plate.name }}</td>
-                    <td>{% if plate.armor_class_bonus %} +{{ plate.armor_class_bonus }} {% endif %}</td>
-                    <td>{{ plate.parrying }}</td>
+                    <td class="rules-green">{% if plate.armor_class_bonus %} +{{ plate.armor_class_bonus }} {% endif %}</td>
+                    <td class="rules-green">{{ plate.parrying }}</td>
                     <td>{{ plate.endurance }}</td>
                     <td>{{ plate.weight.normalize }}</td>
                     <td class="rules-red">{% if plate.mod_max_agility %} {{ plate.mod_max_agility }} {% endif %}</td>

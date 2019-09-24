@@ -31,21 +31,20 @@
         </tr>
     </thead>
     <tbody class="align-center">
-        <tr><td class="align-left">-</td>   <td class="rules-green">+5%</td>    <td>-</td>  <td class="rules-green">+10%</td>   <td class="rules-green">+10%</td>   <td class="rules-green">+5%</td>    <td class="rules-green">+5%</td>    <td class="rules-green">+10%</td>   <td>-</td></tr>
+        <tr><td class="align-left">Brak zbroi</td>   <td class="rules-green">+5%</td>    <td></td>  <td class="rules-green">+10%</td>   <td class="rules-green">+10%</td>   <td class="rules-green">+5%</td>    <td class="rules-green">+5%</td>    <td class="rules-green">+10%</td>   <td></td></tr>
         {% for plate in plates %}
             <tr>
-                <td class=" align-left">{{ plate.name }}</td>
-                <td>{% if plate.mod_pickpocketing %} {{ plate.mod_pickpocketing|percentage }} {% endif %}</td>
-                <td>{% if plate.mod_lockpicking %} {{ plate.mod_lockpicking|percentage }} {% endif %}</td>
-                <td>{% if plate.mod_sneaking_towns %} {{ plate.mod_sneaking_towns|percentage }} {% endif %}</td>
-                <td>{% if plate.mod_sneaking_wilderness %} {{ plate.mod_sneaking_wilderness|percentage }} {% endif %}</td>
-                <td>{% if plate.mod_hiding_towns %} {{ plate.mod_hiding_towns|percentage }} {% endif %}</td>
-                <td>{% if plate.mod_hiding_wilderness %} {{ plate.mod_hiding_wilderness|percentage }} {% endif %}</td>
-                <td>{% if plate.mod_climbing %} {{ plate.mod_climbing|percentage }} {% endif %}</td>
-                <td>{% if plate.mod_traps %} {{ plate.mod_traps|percentage }} {% endif %}</td>
+                <td class="align-left">{{ plate.name }}</td>
+                <td class="rules-red">{% if plate.mod_pickpocketing %} {{ plate.mod_pickpocketing|percentage }} {% endif %}</td>
+                <td class="rules-red">{% if plate.mod_lockpicking %} {{ plate.mod_lockpicking|percentage }} {% endif %}</td>
+                <td class="rules-red">{% if plate.mod_sneaking_towns %} {{ plate.mod_sneaking_towns|percentage }} {% endif %}</td>
+                <td class="rules-red">{% if plate.mod_sneaking_wilderness %} {{ plate.mod_sneaking_wilderness|percentage }} {% endif %}</td>
+                <td class="rules-red">{% if plate.mod_hiding_towns %} {{ plate.mod_hiding_towns|percentage }} {% endif %}</td>
+                <td class="rules-red">{% if plate.mod_hiding_wilderness %} {{ plate.mod_hiding_wilderness|percentage }} {% endif %}</td>
+                <td class="rules-red">{% if plate.mod_climbing %} {{ plate.mod_climbing|percentage }} {% endif %}</td>
+                <td class="rules-red">{% if plate.mod_traps %} {{ plate.mod_traps|percentage }} {% endif %}</td>
             </tr>
         {% endfor %}
-
 <!--        <tr class="back-gray">  <td class="align-left">Gambeson</td>                        <td class="rules-red">-5%</td>      <td>-</td>                          <td>-</td>                          <td>-</td>                          <td class="rules-red">-5%</td>      <td class="rules-red">-5%</td>      <td class="rules-red">-10%</td>     <td>-</td></tr>-->
 <!--        <tr>                    <td class="align-left">Skórzana, Skórzana ćwiekowana</td>   <td class="rules-red">-10%</td>     <td class="rules-red">-5%</td>      <td class="rules-red">-5%</td>      <td class="rules-red">-5%</td>      <td class="rules-red">-10%</td>     <td class="rules-red">-10%</td>     <td class="rules-red">-20%</td>     <td class="rules-red">-5%</td></tr>-->
 <!--        <tr class="back-gray">  <td class="align-left">Brygantyna</td>                      <td class="rules-red">-20%</td>     <td class="rules-red">-10%</td>     <td class="rules-red">-10%</td>     <td class="rules-red">-10%</td>     <td class="rules-red">-20%</td>     <td class="rules-red">-20%</td>     <td class="rules-red">-30%</td>     <td class="rules-red">-10%</td></tr>-->
@@ -56,8 +55,5 @@
 <!--        <tr>                    <td class="align-left">Płytowo-kolcza</td>                  <td class="rules-red">-100%</td>    <td class="rules-red">-100%</td>    <td class="rules-red">-80%</td>     <td class="rules-red">-100%</td>    <td class="rules-red">-80%</td>     <td class="rules-red">-100%</td>    <td class="rules-red">-100%</td>    <td class="rules-red">-100%</td></tr>-->
 <!--        <tr class="back-gray">  <td class="align-left">Płytowa</td>                         <td class="rules-red">-100%</td>    <td class="rules-red">-100%</td>    <td class="rules-red">-90%</td>     <td class="rules-red">-100%</td>    <td class="rules-red">-90%</td>     <td class="rules-red">-100%</td>    <td class="rules-red">-100%</td>    <td class="rules-red">-100%</td></tr>-->
 <!--        <tr>                    <td class="align-left">Płytowa pełna</td>                   <td class="rules-red">-100%</td>    <td class="rules-red">-100%</td>    <td class="rules-red">-100%</td>    <td class="rules-red">-100%</td>    <td class="rules-red">-100%</td>    <td class="rules-red">-100%</td>    <td class="rules-red">-100%</td>    <td class="rules-red">-100%</td></tr>-->
-
-
-
     </tbody>
 </table>
