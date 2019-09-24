@@ -154,13 +154,14 @@ td .nowrap {
 
 .key tr:nth-child(even),
 .professions tr:nth-child(even),
-.plates tr:nth-child(even),
 .shields tr:nth-child(even),
 .plate-and-tricks tr:nth-child(2n+3),
 .protection tr:nth-child(even) {
         background-color: #f2f2f2;
 }
 
+.plates tr:nth-child(4n-1),
+.plates tr:nth-child(4n),
 .weapons tbody tr:nth-child(4n-1),
 .weapons tbody tr:nth-child(4n) {
         background-color: #f2f2f2;
