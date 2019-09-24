@@ -332,3 +332,50 @@ class WeaponType(models.Model):
 
     class Meta:
         ordering = ['sorting_name']
+
+
+class PlateType(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(max_length=4000, blank=True, null=True)
+    armor_class_bonus = models.PositiveSmallIntegerField()
+    parrying = models.PositiveSmallIntegerField()
+    endurance = models.PositiveSmallIntegerField()
+    weight = models.DecimalField(max_digits=10, decimal_places=1)
+
+    penalty_max_agility = models.PositiveSmallIntegerField()
+    penalty_max_movement = models.CharField(max_length=2)
+    penalty_pickpocketing = models.DecimalField(max_digits=3, decimal_places=2)
+    penalty_lockpicking = models.DecimalField(max_digits=3, decimal_places=2)
+    penalty_sneaking_towns = models.DecimalField(max_digits=3, decimal_places=2)
+    penalty_sneaking_wilderness = models.DecimalField(max_digits=3, decimal_places=2)
+    penalty_hiding_towns = models.DecimalField(max_digits=3, decimal_places=2)
+    penalty_hiding_wilderness = models.DecimalField(max_digits=3, decimal_places=2)
+    penalty_climbing = models.DecimalField(max_digits=3, decimal_places=2)
+    penalty_traps = models.DecimalField(max_digits=3, decimal_places=2)
+
+    allowed_profiles = models.ManyToManyField(Profile,
+                                              blank=True,
+                                              limit_choices_to=
+                                              Q(character_status='active_player') |
+                                              Q(character_status='inactive_player') |
+                                              Q(character_status='dead_player'),
+                                              related_name='allowed_plate_types')
+    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.sorting_name = create_sorting_name(self.name)
+        super(PlateType, self).save(*args, **kwargs)
+
+    def short_name(self):
+        short_name = ''
+        for char in str(self.name):
+            if char in 'abcdefghijklmnopqrstuvwxyz':
+                short_name += char
+        return short_name
+
+    class Meta:
+        ordering = ['sorting_name']

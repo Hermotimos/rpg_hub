@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.forms import Textarea
 from django.db import models
 from rules.models import Skill, Synergy, CharacterClass, CharacterProfession, EliteClass, EliteProfession, \
-    WeaponClass, WeaponType
+    WeaponClass, WeaponType, PlateType
 
 
 class SkillAdmin(admin.ModelAdmin):
@@ -68,3 +68,4 @@ admin.site.register(EliteClass, EliteClassAdmin)
 admin.site.register(EliteProfession, EliteProfessionAdmin)
 admin.site.register(WeaponClass, WeaponClassAdmin)
 admin.site.register(WeaponType)
+admin.site.register(PlateType)
