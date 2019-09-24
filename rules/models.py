@@ -352,7 +352,7 @@ class PlateType(models.Model):
     endurance = models.PositiveSmallIntegerField()
     weight = models.DecimalField(max_digits=10, decimal_places=1)
 
-    penalty_max_agility = models.PositiveSmallIntegerField()
+    penalty_max_agility = models.PositiveSmallIntegerField(blank=True, null=True)
     penalty_max_movement = models.CharField(max_length=2, blank=True, null=True)
     penalty_pickpocketing = models.DecimalField(max_digits=3, decimal_places=2)
     penalty_lockpicking = models.DecimalField(max_digits=3, decimal_places=2)
@@ -370,7 +370,7 @@ class PlateType(models.Model):
                                               Q(character_status='inactive_player') |
                                               Q(character_status='dead_player'),
                                               related_name='allowed_plate_types')
-    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+    sorting_number = models.DecimalField(max_digits=3, decimal_places=2)
 
     def __str__(self):
         return self.name
@@ -388,4 +388,4 @@ class PlateType(models.Model):
         return short_name
 
     class Meta:
-        ordering = ['sorting_name']
+        ordering = ['sorting_number']
