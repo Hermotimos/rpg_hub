@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.http import HttpResponseRedirect
 from contact.models import Demand, DemandAnswer, Plan
 from contact.forms import DemandsCreateForm, DemandsModifyForm, DemandAnswerForm, PlansCreateForm, PlansModifyForm
-from rules.models import Skill, Synergy
+from rules.models import Skill, Synergy, WeaponType, PlateType
 from users.models import User
 
 
@@ -214,12 +214,19 @@ def plans_main_view(request):
     synergies_without_allowed = Synergy.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
     synergies_to_do = [s.name for s in synergies_without_allowed]
 
+    weapon_types_without_allowed = WeaponType.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
+    weapon_types_to_do = [wt.name for wt in weapon_types_without_allowed]
+    plate_types_without_allowed = PlateType.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
+    plate_types_to_do = [pt.name for pt in plate_types_without_allowed]
+
     text = \
         f'=>Lista rzeczy do uzupełnienia:\n ' \
         f'1) Skille z 0 allowed_profiles:\n{[s for s in skills_to_do] if skills_to_do else 0}\n' \
-        f'2) Synergie z 0 allowed_profiles:\n{[s for s in synergies_to_do] if synergies_to_do else 0}\n'
+        f'2) Synergie z 0 allowed_profiles:\n{[s for s in synergies_to_do] if synergies_to_do else 0}\n' \
+        f'3) Bronie z 0 allowed_profiles:\n{[s for s in weapon_types_to_do] if weapon_types_to_do else 0}\n' \
+        f'4) Zbroje z 0 allowed_profiles:\n{[s for s in plate_types_to_do] if plate_types_to_do else 0}\n'
 
-    if skills_to_do or synergies_to_do:
+    if skills_to_do or synergies_to_do or weapon_types_to_do or plate_types_to_do:
         try:
             todos = Plan.objects.get(text__contains='=>Lista rzeczy do uzupełnienia')
             todos.text = text
