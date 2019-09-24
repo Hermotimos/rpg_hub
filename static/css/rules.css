@@ -168,6 +168,7 @@ td .nowrap {
 
 
 .weapons-img img {
+        display: block;
         max-width: 100%;
         max-height: 300px;
         height: auto;
