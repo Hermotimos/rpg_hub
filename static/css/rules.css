@@ -60,28 +60,28 @@ li b {
     border: 0;
 }
 
-.skills .strength-value {width: 80px;}
-.skills .strength-hit {width: 100px;}
-.skills .strength-damage {width: 100px;}
-.skills .load {width: 100px;}
-.skills .max-load {width: 125px;}
-.skills .agility-value {width: 80px;}
-.skills .agility-hit {width: 100px;}
-.skills .agility-damage {width: 100px;}
-.skills .ac-dodge {width: 100px;}
-.skills .reflex {width: 100px;}
-.skills .endurance-value {width: 80px;}
-.skills .defense-throw {width: 100px;}
-.skills .ac-parry {width: 100px;}
-.skills .life {width: 180px;}
-.skills .damage-thresholds {width: 180px;}
+.traits .strength-value {width: 80px;}
+.traits .strength-hit {width: 100px;}
+.traits .strength-damage {width: 100px;}
+.traits .load {width: 100px;}
+.traits .max-load {width: 125px;}
+.traits .agility-value {width: 80px;}
+.traits .agility-hit {width: 100px;}
+.traits .agility-damage {width: 100px;}
+.traits .ac-dodge {width: 100px;}
+.traits .reflex {width: 100px;}
+.traits .endurance-value {width: 80px;}
+.traits .defense-throw {width: 100px;}
+.traits .ac-parrying {width: 100px;}
+.traits .life {width: 180px;}
+.traits .damage-thresholds {width: 180px;}
 
 .professions .level {width: 100px;}
 .professions .level-desc {width: 350px;}
 
 .plates .plate {width: 320px;}
 .plates .armor-class {width: 70px;}
-.plates .parry {width: 120px;}
+.plates .parrying {width: 120px;}
 .plates .endurance {width: 120px;}
 .plates .weight {width: 100px;}
 .plates .agility-penalty {width: 150px;}
