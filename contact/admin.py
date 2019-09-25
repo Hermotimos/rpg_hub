@@ -1,5 +1,5 @@
 from django.contrib import admin
-from contact.models import Demand, Plan
+from contact.models import Demand, Plan, DemandAnswer
 
 
 class DemandAdmin(admin.ModelAdmin):
@@ -21,3 +21,4 @@ class PlanAdmin(admin.ModelAdmin):
 
 admin.site.register(Demand, DemandAdmin)
 admin.site.register(Plan, PlanAdmin)
+admin.site.register(DemandAnswer)
