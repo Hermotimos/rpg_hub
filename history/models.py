@@ -223,6 +223,15 @@ class TimelineEvent(models.Model):
     class Meta:
         # ordering via 'description' before 'game' to leave flexibility for events with later 'id'-s
         ordering = ['year', 'season', 'day_start', 'day_end', 'description', 'game']
+        indexes = [
+            models.Index(fields=['year', 'season', 'day_start', 'day_end', 'description', 'game']),
+            models.Index(fields=['year', ]),
+            models.Index(fields=['season', ]),
+            models.Index(fields=['day_start', ]),
+            models.Index(fields=['day_end', ]),
+            models.Index(fields=['description', ]),
+            models.Index(fields=['game', ]),
+        ]
 
     # Steps to migrate these models:
     # 1) delete migration files, delete tables in db, DELETE FROM django_migrations WHERE app="history";
