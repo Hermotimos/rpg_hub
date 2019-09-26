@@ -27,6 +27,15 @@
                 <td><a href="{% url 'contact:plans-modify' plan.id %}" class="btn btn-dark">&#9998;</a></td>
                 <td><a href="{% url 'contact:plans-delete' plan.id %}" class="btn btn-danger">&#10008;</a></td>
             </tr>
+            <tr>
+                <td></td>
+                <td colspan="3">
+                    {% if plan.image %}
+                        <img src="{{ plan.image.url }}" class="border-double">
+                    {% endif %}
+                    <br><br>
+                </td>
+            </tr>
         </table>
     {% endfor %}
 {% endblock content %}

@@ -23,6 +23,15 @@
                 </td>
                 <td>{{ plan.text|capfirst|linebreaks }}</td>
             </tr>
+            <tr>
+                <td></td>
+                <td colspan="3">
+                    {% if plan.image %}
+                        <img src="{{ plan.image.url }}" class="border-double">
+                    {% endif %}
+                    <br><br>
+                </td>
+            </tr>
         </table>
     {% endfor %}
 {% endblock content %}

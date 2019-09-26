@@ -23,7 +23,7 @@
                 <small>{{ demand.date_created|date:'d-M-Y, H:i' }}</small>
                 {{ demand.text|capfirst|linebreaks }}
                 {% if demand.image %}
-                    <img src="{{ demand.image.url }}">
+                    <img src="{{ demand.image.url }}" class="border-double">
                 {% endif %}
             </td>
         </tr>
