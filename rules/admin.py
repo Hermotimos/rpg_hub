@@ -25,9 +25,15 @@ class SynergyAdmin(admin.ModelAdmin):
     }
 
 
+class CharacterProfessionInline(admin.TabularInline):
+    model = CharacterProfession
+    extra = 3
+
+
 class CharacterClassAdmin(admin.ModelAdmin):
     list_display = ['name', 'description']
     list_editable = ['description']
+    inlines = [CharacterProfessionInline, ]
 
 
 class CharacterProfessionAdmin(admin.ModelAdmin):
