@@ -1,24 +1,24 @@
 
 def create_sorting_name(obj):
-    name = str(obj)
-    name = name.replace('Ą', 'AĄ')
+    name = str(obj).lower()
+    name = name.replace('a', 'aa')
     name = name.replace('ą', 'aą')
-    name = name.replace('Ć', 'CĆ')
+    name = name.replace('c', 'cc')
     name = name.replace('ć', 'cć')
-    name = name.replace('Ę', 'EĘ')
+    name = name.replace('e', 'ee')
     name = name.replace('ę', 'eę')
-    name = name.replace('Ł', 'LŁ')
+    name = name.replace('l', 'll')
     name = name.replace('ł', 'lł')
-    name = name.replace('Ó', 'OÓ')
+    name = name.replace('n', 'nn')
+    name = name.replace('ń', 'nń')
+    name = name.replace('o', 'oo')
     name = name.replace('ó', 'oó')
-    name = name.replace('Ś', 'SŚ')
+    name = name.replace('s', 'ss')
     name = name.replace('ś', 'sś')
-    name = name.replace('Ź', 'ZŻ')
+    name = name.replace('z', 'zz')
     name = name.replace('ż', 'zż')
-    name = name.replace('Ż', 'ZŹ')
-    name = name.replace('ż', 'zź')
+    name = name.replace('ź', 'zź')
     return name
-
 
 
 # def create_sorting_name(obj):
@@ -33,10 +33,12 @@ def create_sorting_name(obj):
 #     name = name.replace('ł', 'lzz')
 #     name = name.replace('Ó', 'Ozz')
 #     name = name.replace('ó', 'ozz')
+#     name = name.replace('Ń', 'Nzz')
+#     name = name.replace('ń', 'nzz')
 #     name = name.replace('Ś', 'Szz')
 #     name = name.replace('ś', 'szz')
-#     name = name.replace('Ź', 'Zzz')
-#     name = name.replace('ż', 'zzz')
 #     name = name.replace('Ż', 'Zzz')
 #     name = name.replace('ż', 'zzz')
+#     name = name.replace('Ź', 'Zzz')
+#     name = name.replace('ź', 'zzz')
 #     return name
