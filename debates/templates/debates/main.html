@@ -16,9 +16,10 @@
     </div>
     <br><br><br>
 
+    <!--    10 queries                -->
     {% for topic in topics_with_debates_dict %}
         <h3 class="small-caps ">
-                <b class="border-custom-base">{{ topic.title }}</b>
+            <b class="border-custom-base">{{ topic.title }}</b>
         </h3>
         <a href="{% url 'debates:create-debate' topic.id %}" class="btn btn-outline-dark">Nowa narada</a>
         <br><br>
@@ -34,14 +35,18 @@
                     {{ debate.name }}&nbsp;
                 </a>
                 <small>
+                <!--    ca. 5 queries per debate       -->
                 {% if debate.first_player_remark_date|date:'d-M-Y' != debate.last_player_remark_date|date:'d-M-Y' %}
                    [{{ debate.first_player_remark_date|date:'d' }}-{{ debate.last_player_remark_date|date:'d M Y' }}
                 {% else %}
                     [{{ debate.first_player_remark_date|date:'d M Y' }}
                 {% endif %}
+                
                 &#10033;
+                <!--  1 query per debate  -->
                 Wypowiedzi: {{ debate.player_remarks_count }}]
                 &emsp;
+                <!--  1 query per debate   -->
                 {% for profile in debate.allowed_profiles.all %}
                     {% if profile.character_status != 'gm' %}
                         <img class="rounded-circle img-small" src="{{ profile.image.url }}">
