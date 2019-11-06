@@ -4,10 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.conf import settings
 from debates.models import Topic, Debate
+from rpg_project.utils import query_debugger
 from users.models import User, Profile
 from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm, InviteForm
 
 
+@query_debugger
 @login_required
 def debates_main_view(request):
     if request.user.profile.character_status == 'gm':
@@ -29,6 +31,7 @@ def debates_main_view(request):
     return render(request, 'debates/main.html', context)
 
 
+@query_debugger
 @login_required
 def create_topic_view(request):
     if request.method == 'POST':
@@ -82,6 +85,7 @@ def create_topic_view(request):
     return render(request, 'debates/create_topic.html', context)
 
 
+@query_debugger
 @login_required
 def create_debate_view(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
@@ -136,6 +140,7 @@ def create_debate_view(request, topic_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def debate_view(request, topic_id, debate_id):
     topic = get_object_or_404(Topic, id=topic_id)
@@ -201,6 +206,7 @@ def debate_view(request, topic_id, debate_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def debates_invite_view(request, topic_id, debate_id):
     debate = get_object_or_404(Debate, id=debate_id)
@@ -262,6 +268,7 @@ def debates_invite_view(request, topic_id, debate_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def unfollow_debate_view(request, topic_id, debate_id):
     debate = get_object_or_404(Debate, id=debate_id)
@@ -274,6 +281,7 @@ def unfollow_debate_view(request, topic_id, debate_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def follow_debate_view(request, topic_id, debate_id):
     debate = get_object_or_404(Debate, id=debate_id)
