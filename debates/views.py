@@ -13,15 +13,15 @@ from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm, I
 @login_required
 def debates_main_view(request):
     if request.user.profile.character_status == 'gm':
-        topics = list(Topic.objects.all())
+        topics = Topic.objects.all().prefetch_related('debates')
         topics_with_debates_dict = {}
         for topic in topics:
             topics_with_debates_dict[topic] = [d for d in topic.debates.all()]
     else:
-        topics = [t for t in Topic.objects.all() if request.user.profile in t.allowed_list()]
+        topics = Topic.objects.filter(debates__allowed_profiles=request.user.profile).prefetch_related('debates')
         topics_with_debates_dict = {}
         for topic in topics:
-            topics_with_debates_dict[topic] = [d for d in topic.debates.all() if request.user.profile in d.allowed_profiles.all()]
+            topics_with_debates_dict[topic] = [d for d in topic.debates.filter(allowed_profiles=request.user.profile)]
 
     context = {
         'page_title': 'Narady',
