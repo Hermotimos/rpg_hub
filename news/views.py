@@ -1,14 +1,17 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.conf import settings
+from django.shortcuts import render, redirect, get_object_or_404
+
 from news.models import News, Survey, SurveyOption
+from rpg_project.utils import query_debugger
 from users.models import User, Profile
 from news.forms import CreateNewsForm, CreateNewsAnswerForm, CreateSurveyForm, CreateSurveyOptionForm, \
     CreateSurveyAnswerForm, ModifySurveyOptionForm
 
 
+@query_debugger
 @login_required
 def main_view(request):
     if request.user.profile.character_status == 'gm':
@@ -31,6 +34,7 @@ def main_view(request):
     return render(request, 'news/main.html', context)
 
 
+@query_debugger
 @login_required
 def create_news_view(request):
     if request.method == 'POST':
@@ -69,6 +73,7 @@ def create_news_view(request):
     return render(request, 'news/news_create.html', context)
 
 
+@query_debugger
 @login_required
 def news_detail_view(request, news_id):
     news = get_object_or_404(News, id=news_id)
@@ -135,6 +140,7 @@ def news_detail_view(request, news_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def unfollow_news_view(request, news_id):
     news = get_object_or_404(News, id=news_id)
@@ -147,6 +153,7 @@ def unfollow_news_view(request, news_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def follow_news_view(request, news_id):
     news = get_object_or_404(News, id=news_id)
@@ -161,6 +168,7 @@ def follow_news_view(request, news_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def survey_detail_view(request, survey_id):
     survey = get_object_or_404(Survey, id=survey_id)
@@ -238,6 +246,7 @@ def survey_detail_view(request, survey_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def vote_yes_view(request, survey_id, option_id):
     option = get_object_or_404(SurveyOption, id=option_id)
@@ -256,6 +265,7 @@ def vote_yes_view(request, survey_id, option_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def vote_no_view(request, survey_id, option_id):
     option = get_object_or_404(SurveyOption, id=option_id)
@@ -274,6 +284,7 @@ def vote_no_view(request, survey_id, option_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def unvote_view(request, survey_id, option_id):
     option = get_object_or_404(SurveyOption, id=option_id)
@@ -291,6 +302,7 @@ def unvote_view(request, survey_id, option_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def survey_create_view(request):
     if request.method == 'POST':
@@ -329,6 +341,7 @@ def survey_create_view(request):
     return render(request, 'news/survey_create.html', context)
 
 
+@query_debugger
 @login_required
 def survey_option_modify_view(request, survey_id, option_id):
     option = get_object_or_404(SurveyOption, id=option_id)
@@ -353,6 +366,7 @@ def survey_option_modify_view(request, survey_id, option_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def survey_option_delete_view(request, survey_id, option_id):
     option = get_object_or_404(SurveyOption, id=option_id)
