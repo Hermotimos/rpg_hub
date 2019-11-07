@@ -1,5 +1,8 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.contrib.auth.models import User
+
 from PIL import Image
 
 STATUS = [
@@ -34,3 +37,11 @@ class Profile(models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.image.path)
+
+
+@receiver(post_save, sender=User)                          # After a User is saved send signal 'post_save'
+def create_profile(sender, instance, created, **kwargs):   # the receiver will be create_profile (via decoration)
+    if created:                                            # if User has just been created (False for already existing)
+        p = Profile.objects.create(user=instance)          # than create instance of Profile which is equal to User
+        p.character_name = instance.username.replace('_', ' ')      # whose name will be the username without '_'
+        p.save()                                                    # save Profile to save new character_name
