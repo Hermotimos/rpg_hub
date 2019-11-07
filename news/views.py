@@ -14,15 +14,24 @@ from news.forms import CreateNewsForm, CreateNewsAnswerForm, CreateSurveyForm, C
 @query_debugger
 @login_required
 def main_view(request):
-    if request.user.profile.character_status == 'gm':
-        newss = list(News.objects.all())
-        surveys = list(Survey.objects.all())
+    profile = request.user.profile
+    if profile.character_status == 'gm':
+        newss = News.objects.all().select_related('author').prefetch_related('news_answers')
+        surveys = Survey.objects.all().select_related('author').prefetch_related('survey_answers')
     else:
-        newss = list(request.user.profile.allowed_news.all())
-        surveys = list(request.user.profile.surveys_received.all())
+        newss = profile.allowed_news.all().select_related('author').prefetch_related('news_answers')
+        surveys = profile.surveys_received.all().select_related('author').prefetch_related('survey_answers')
 
-    news_with_answers_authors_dict = {n: [a.author for a in n.news_answers.all()] for n in newss}
-    surveys_with_answers_authors_dict = {s: [a.author for a in s.survey_answers.all()] for s in surveys}
+    news_with_answers_authors_dict = {
+        n: [
+            a.author for a in n.news_answers.all().select_related('author')
+        ] for n in newss
+    }
+    surveys_with_answers_authors_dict = {
+        s: [
+            a.author for a in s.survey_answers.all().select_related('author')
+        ] for s in surveys
+    }
 
     context = {
         'page_title': 'Ogłoszenia',
