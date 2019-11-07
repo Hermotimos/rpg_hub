@@ -168,25 +168,18 @@ def follow_news_view(request, news_id):
 def survey_detail_view(request, survey_id):
     survey = get_object_or_404(Survey, id=survey_id)
 
-    profile = request.user.profile
-    seen_by = survey.seen_by.all()
-    if profile not in seen_by:
-        new_seen = profile
-        seen_by |= Profile.objects.filter(id=new_seen.id)
-        survey.seen_by.set(seen_by)
+    if request.user.profile not in survey.seen_by.all():
+        survey.seen_by.add(request.user.profile)
 
     last_survey_answer = survey.last_survey_answer()
     last_survey_answer_seen_by_imgs = ()
     if last_survey_answer:
-        seen_by = last_survey_answer.seen_by.all()
-        if profile not in seen_by:
-            new_seen = profile
-            seen_by |= Profile.objects.filter(id=new_seen.id)
-            last_survey_answer.seen_by.set(seen_by)
+        if request.user.profile not in last_survey_answer.seen_by.all():
+            last_survey_answer.seen_by.add(request.user.profile)
         last_survey_answer_seen_by_imgs = (p.image for p in last_survey_answer.seen_by.all())
 
-    survey_options = list(survey.survey_options.all())
-    survey_answers = list(survey.survey_answers.all())
+    survey_options = survey.survey_options.all().prefetch_related('yes_voters', 'no_voters')
+    survey_answers = survey.survey_answers.all().select_related('author')
 
     if request.method == 'POST':
         answer_form = CreateSurveyAnswerForm(request.POST, request.FILES)
