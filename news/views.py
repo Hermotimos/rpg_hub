@@ -77,25 +77,18 @@ def create_news_view(request):
 @login_required
 def news_detail_view(request, news_id):
     news = get_object_or_404(News, id=news_id)
-    profile = request.user.profile
 
-    seen_by = news.seen_by.all()
-    if profile not in seen_by:
-        new_seen = profile
-        seen_by |= Profile.objects.filter(id=new_seen.id)
-        news.seen_by.set(seen_by)
+    if request.user.profile not in news.seen_by.all():
+        news.seen_by.add(request.user.profile)
 
     last_news_answer = news.last_news_answer()
     last_news_answer_seen_by_imgs = ()
     if last_news_answer:
-        seen_by = last_news_answer.seen_by.all()
-        if profile not in seen_by:
-            new_seen = profile
-            seen_by |= Profile.objects.filter(id=new_seen.id)
-            last_news_answer.seen_by.set(seen_by)
+        if request.user.profile not in last_news_answer.seen_by.all():
+            last_news_answer.seen_by.add(request.user.profile)
         last_news_answer_seen_by_imgs = (p.image for p in last_news_answer.seen_by.all())
 
-    news_answers = list(news.news_answers.all())
+    news_answers = news.news_answers.all().select_related('author')
     allowed_imgs = [p.image for p in news.allowed_profiles.all()]
     followers_imgs = [p.image for p in news.followers.all()]
 
@@ -145,8 +138,9 @@ def news_detail_view(request, news_id):
 def unfollow_news_view(request, news_id):
     news = get_object_or_404(News, id=news_id)
     if request.user.profile in news.allowed_profiles.all():
-        updated_followers = news.followers.exclude(user=request.user)
-        news.followers.set(updated_followers)
+        # TODO: remove the above if news.followers.remove(request.user.profile) works
+        # updated_followers = news.followers.exclude(user=request.user)
+        news.followers.remove(request.user.profile)
         messages.info(request, 'Przestałeś obserwować ogłoszenie!')
         return redirect('news:detail', news_id=news_id)
     else:
@@ -158,10 +152,11 @@ def unfollow_news_view(request, news_id):
 def follow_news_view(request, news_id):
     news = get_object_or_404(News, id=news_id)
     if request.user.profile in news.allowed_profiles.all():
-        followers = news.followers.all()
-        new_follower = request.user.profile
-        followers |= Profile.objects.filter(id=new_follower.id)
-        news.followers.set(followers)
+        # TODO: remove the above if news.followers.add(request.user.profile) works
+        # followers = news.followers.all()
+        # new_follower = request.user.profile
+        # followers |= Profile.objects.filter(id=new_follower.id)
+        news.followers.add(request.user.profile)
         messages.info(request, 'Obserwujesz ogłoszenie!')
         return redirect('news:detail', news_id=news_id)
     else:
