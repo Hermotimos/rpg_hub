@@ -215,7 +215,6 @@ def debates_invite_view(request, topic_id, debate_id):
 
     allowed_profiles_old = debate.allowed_profiles.all()
     # followers_old = debate.followers.all()
-
     allowed_profiles_old_ids = [p.id for p in allowed_profiles_old]
     allowed_profiles_old_str = ', '.join(p.character_name.split(' ', 1)[0]
                                          for p in allowed_profiles_old
