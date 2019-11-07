@@ -153,9 +153,10 @@ def debate_view(request, topic_id, debate_id):
         profile = request.user.profile
         seen_by = last_remark.seen_by.all()
         if profile not in seen_by:
-            new_seen = profile
-            seen_by |= Profile.objects.filter(id=new_seen.id)
-            last_remark.seen_by.set(seen_by)
+            last_remark.seen_by.add(profile)
+            # new_seen = profile
+            # seen_by |= Profile.objects.filter(id=new_seen.id)
+            # last_remark.seen_by.set(seen_by)
         last_remark_seen_by_imgs = (p.image for p in last_remark.seen_by.all())
 
     allowed_str = ', '.join(p.character_name.split(' ', 1)[0]
@@ -212,40 +213,40 @@ def debate_view(request, topic_id, debate_id):
 def debates_invite_view(request, topic_id, debate_id):
     debate = get_object_or_404(Debate, id=debate_id)
 
-    old_allowed_profiles = debate.allowed_profiles.all()[::1]
-    old_allowed_profiles_ids = [p.id for p in old_allowed_profiles]
-    old_allowed_str = ', '.join(p.character_name.split(' ', 1)[0]
-                                for p in old_allowed_profiles
-                                if p.character_status != 'gm')
-    old_followers = debate.followers.all()
+    allowed_profiles_old = debate.allowed_profiles.all()
+    # followers_old = debate.followers.all()
+
+    allowed_profiles_old_ids = [p.id for p in allowed_profiles_old]
+    allowed_profiles_old_str = ', '.join(p.character_name.split(' ', 1)[0]
+                                         for p in allowed_profiles_old
+                                         if p.character_status != 'gm')
 
     if request.method == 'POST':
         form = InviteForm(authenticated_user=request.user,
-                          already_allowed_profiles_ids=old_allowed_profiles_ids,
+                          already_allowed_profiles_ids=allowed_profiles_old_ids,
                           data=request.POST,
                           instance=debate)
         if form.is_valid():
-            debate = form.save()
+            # debate = form.save()
 
-            allowed_profiles = form.cleaned_data['allowed_profiles']
-            allowed_profiles |= Profile.objects.filter(id=request.user.id)
-            allowed_profiles |= Profile.objects.filter(id__in=old_allowed_profiles_ids)
-            debate.allowed_profiles.set(allowed_profiles)
+            allowed_profiles_new = form.cleaned_data['allowed_profiles']
+            debate.allowed_profiles.add(*list(allowed_profiles_new))
+            debate.followers.add(*list(allowed_profiles_new))
 
-            new_followers_ids = [p.id for p in allowed_profiles if p not in old_allowed_profiles]
-            new_followers = old_followers
-            new_followers |= Profile.objects.filter(id__in=new_followers_ids)
-            debate.followers.set(new_followers)
+            # new_followers_ids = [p.id for p in allowed_profiles_new if p not in allowed_profiles_old]
+            # new_followers = followers_old
+            # new_followers |= Profile.objects.filter(id__in=new_followers_ids)
+            # debate.followers.set(new_followers)
 
             subject = f"[RPG] Dołączenie do narady: '{debate.name}'"
             message = f"{request.user.profile} dołączył/a Cię do narady '{debate.name}' w temacie '{debate.topic}'.\n"\
-                      f"Uczestnicy: {', '.join(p.character_name for p in allowed_profiles if p.character_status != 'gm')}\n" \
+                      f"Uczestnicy: {', '.join(p.character_name for p in allowed_profiles_new if p.character_status != 'gm')}\n" \
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
             receivers = []
             for profile in debate.allowed_profiles.all():
                 # exclude previously allowed users from mailing to avoid spam
-                if profile not in old_allowed_profiles:
+                if profile not in allowed_profiles_old:
                     receivers.append(profile.user.email)
             if request.user.profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
@@ -255,13 +256,13 @@ def debates_invite_view(request, topic_id, debate_id):
             return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
     else:
         form = InviteForm(authenticated_user=request.user,
-                          already_allowed_profiles_ids=old_allowed_profiles_ids)
+                          already_allowed_profiles_ids=allowed_profiles_old_ids)
 
     context = {
         'page_title': 'Dodaj uczestników narady',
         'debate': debate,
         'form': form,
-        'allowed': old_allowed_str
+        'allowed': allowed_profiles_old_str,
     }
     if request.user.profile in debate.allowed_profiles.all() or request.user.profile.character_status == 'gm':
         return render(request, 'debates/invite.html', context)
