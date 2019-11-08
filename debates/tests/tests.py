@@ -13,6 +13,7 @@ class DebatesMainTest(TestCase):
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
         self.user4.profile.character_status = 'gm'
+        self.user4.profile.save()
 
         self.topic1 = Topic.objects.create(id=1, title='Topic1')
         self.debate1 = Debate.objects.create(id=1, name='Debate1', topic=self.topic1, starter=self.user1)
@@ -165,6 +166,7 @@ class CreateDebateTest(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
         self.user4.profile.character_status = 'gm'
+        self.user4.profile.save()
 
         self.topic1 = Topic.objects.create(id=1, title='Topic1')
         self.debate1 = Debate.objects.create(id=1, topic=self.topic1, starter=self.user1)
