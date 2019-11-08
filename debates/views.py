@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.db.models import Prefetch
 from django.shortcuts import render, redirect, get_object_or_404
 
 from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm, InviteForm
@@ -14,9 +15,12 @@ from users.models import User, Profile
 @login_required
 def debates_main_view(request):
     if request.user.profile.character_status == 'gm':
-        topics = Topic.objects.all().prefetch_related('debates')
+        topics = Topic.objects.all().prefetch_related('debates__allowed_profiles')
     else:
-        topics = Topic.objects.filter(debates__allowed_profiles=request.user.profile).prefetch_related('debates')
+        profile = request.user.profile
+        topics = Topic.objects.filter(allowed_profiles=profile).prefetch_related(
+            Prefetch('debates', queryset=Debate.objects.filter(allowed_profiles=profile))
+        )
 
     context = {
         'page_title': 'Narady',
@@ -128,7 +132,7 @@ def create_debate_view(request, topic_id):
         'remark_form': remark_form,
         'topic': topic
     }
-    if request.user.profile in topic.allowed_list() or request.user.profile.character_status == 'gm':
+    if request.user.profile in topic.allowed_profiles.all() or request.user.profile.character_status == 'gm':
         return render(request, 'debates/create_debate.html', context)
     else:
         return redirect('home:dupa')

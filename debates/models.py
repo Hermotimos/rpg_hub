@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.signals import m2m_changed, post_save
 from django.contrib.auth.models import User
 from django.db.models import Max, Min
 from PIL import Image
@@ -8,19 +9,13 @@ from users.models import Profile
 class Topic(models.Model):
     title = models.CharField(max_length=50, unique=True, verbose_name='tytuł tematu')
     date_created = models.DateTimeField(auto_now_add=True)
+    allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_topics', blank=True)
 
     class Meta:
         ordering = ['-date_created']
 
     def __str__(self):
         return self.title
-
-    def allowed_list(self):
-        allowed_profiles = []
-        for debate in self.debates.all():
-            for profile in debate.allowed_profiles.all():
-                allowed_profiles.append(profile)
-        return allowed_profiles
 
 
 class Debate(models.Model):
@@ -29,9 +24,9 @@ class Debate(models.Model):
     topic = models.ForeignKey(Topic, related_name='debates', on_delete=models.CASCADE)
     starter = models.ForeignKey(User, related_name='debates', on_delete=models.CASCADE)
     allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_debates')
+    followers = models.ManyToManyField(to=Profile, related_name='followed_debates', blank=True)
     is_ended = models.BooleanField(default=False)
     is_individual = models.BooleanField(default=False)
-    followers = models.ManyToManyField(to=Profile, related_name='followed_debates', blank=True)
 
     class Meta:
         ordering = ['-date_created']
@@ -91,3 +86,22 @@ class Remark(models.Model):
                 output_size = (700, 700)
                 img.thumbnail(output_size)
                 img.save(self.image.path)
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# -------------------------------------------------- SIGNALS ---------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
+
+
+def update_topic_allowed_profiles(sender, instance, **kwargs):
+    topic = instance.topic
+    allowed = []
+    for debate in topic.debates.all().prefetch_related('allowed_profiles'):
+        for profile in debate.allowed_profiles.all():
+            allowed.append(profile)
+    topic.allowed_profiles.set(allowed)
+    topic.save()
+
+
+post_save.connect(update_topic_allowed_profiles, sender=Debate)
+m2m_changed.connect(update_topic_allowed_profiles, sender=Debate.allowed_profiles.through)
