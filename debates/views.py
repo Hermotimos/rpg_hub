@@ -15,19 +15,12 @@ from users.models import User, Profile
 def debates_main_view(request):
     if request.user.profile.character_status == 'gm':
         topics = Topic.objects.all().prefetch_related('debates')
-        topics_with_debates_dict = {}
-        for topic in topics:
-            topics_with_debates_dict[topic] = [d for d in topic.debates.all()]
     else:
         topics = Topic.objects.filter(debates__allowed_profiles=request.user.profile).prefetch_related('debates')
-        topics_with_debates_dict = {}
-        for topic in topics:
-            topics_with_debates_dict[topic] = [d for d in topic.debates.filter(allowed_profiles=request.user.profile)]
 
     context = {
         'page_title': 'Narady',
         'topics': topics,
-        'topics_with_debates_dict': topics_with_debates_dict
     }
     return render(request, 'debates/main.html', context)
 
