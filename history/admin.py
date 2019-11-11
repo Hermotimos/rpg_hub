@@ -43,11 +43,13 @@ class SpecificLocationAdmin(admin.ModelAdmin):
     list_display = ['name', 'general_location']
     list_editable = ['general_location', ]
     list_filter = ['general_location', ]
+    search_fields = ['name']
 
 
 class TimelineEventAdmin(admin.ModelAdmin):
-    list_display = ('short_description', 'game', 'date')
-    list_filter = ('game', )
+    list_display = ['short_description', 'game', 'date']
+    list_filter = ['game']
+    search_fields = ['description']
 
 
 class ChronicleEventAdmin(admin.ModelAdmin):
@@ -55,16 +57,11 @@ class ChronicleEventAdmin(admin.ModelAdmin):
     # fields to be displayed in admin for each object
     fields = ['game', 'event_no_in_game', 'description', 'participants', 'informed', 'pictures', 'debate']
 
-    # list of fields to show in overview table (cannot include M2M fields)
     list_display = ['game', 'event_no_in_game', 'short_description']
-
-    # fields may be made links leading to their objects:
     list_display_links = ['game', 'short_description']
-
-    # fields made editable directly in list display:
     list_editable = ['event_no_in_game', ]
-
     list_filter = ['participants', 'informed', 'game', ]
+    search_fields = ['description']
 
 
 admin.site.register(Chapter)
