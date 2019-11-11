@@ -11,6 +11,9 @@ class Demand(models.Model):
     image = models.ImageField(blank=True, null=True, upload_to='contact_pics')
     is_done = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ['-date_created']
+
     def __str__(self):
         return f'{self.text[0:50]}...'
 
@@ -23,9 +26,6 @@ class Demand(models.Model):
                 img.thumbnail(output_size)
                 img.save(self.image.path)
 
-    class Meta:
-        ordering = ['-date_created']
-
 
 class DemandAnswer(models.Model):
     demand = models.ForeignKey(Demand, related_name='demand_answers', on_delete=models.CASCADE)
@@ -33,6 +33,9 @@ class DemandAnswer(models.Model):
     text = models.TextField(max_length=4000)
     date_posted = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(blank=True, null=True, upload_to='contact_pics')
+
+    class Meta:
+        ordering = ['-date_posted']
 
     def save(self, *args, **kwargs):
         super().save()
@@ -42,6 +45,9 @@ class DemandAnswer(models.Model):
                 output_size = (700, 700)
                 img.thumbnail(output_size)
                 img.save(self.image.path)
+
+    def __str__(self):
+        return f'{self.text[0:100] if len(str(self.text)) > 100 else self.text}...'
 
 
 class Plan(models.Model):
@@ -52,7 +58,7 @@ class Plan(models.Model):
     image = models.ImageField(blank=True, null=True, upload_to='contact_pics')
 
     def __str__(self):
-        return f'{self.text[0:50]}...'
+        return f'{self.text[0:100] if len(str(self.text)) > 100 else self.text}...'
 
     def save(self, *args, **kwargs):
         super().save()
