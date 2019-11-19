@@ -35,7 +35,7 @@ class DemandAnswer(models.Model):
     image = models.ImageField(blank=True, null=True, upload_to='contact_pics')
 
     class Meta:
-        ordering = ['-date_posted']
+        ordering = ['date_posted']
 
     def save(self, *args, **kwargs):
         super().save()
