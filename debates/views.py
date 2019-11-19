@@ -14,11 +14,14 @@ from users.models import User, Profile
 @query_debugger
 @login_required
 def debates_main_view(request):
-    if request.user.profile.character_status == 'gm':
+    profile = request.user.profile
+    if profile.character_status == 'gm':
         topics = Topic.objects.all().prefetch_related('debates__allowed_profiles')
     else:
-        profile = request.user.profile
-        topics = Topic.objects.filter(allowed_profiles=profile).prefetch_related(
+        # topics = Topic.objects.filter(allowed_profiles=profile).prefetch_related(
+        #     Prefetch('debates', queryset=Debate.objects.filter(allowed_profiles=profile))
+
+        topics = profile.allowed_topics.prefetch_related(
             Prefetch('debates', queryset=Debate.objects.filter(allowed_profiles=profile))
         )
 
