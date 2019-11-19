@@ -20,7 +20,8 @@ class DemandsCreateForm(forms.ModelForm):
                                                                  Q(profile__character_status='dead_player') |
                                                                  Q(profile__character_status='inactive_player') |
                                                                  Q(profile__character_status='dead_npc') |
-                                                                 Q(profile__character_status='living_npc'))
+                                                                 Q(profile__character_status='living_npc')
+                                                                 ).order_by('username')
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
