@@ -18,10 +18,7 @@ def debates_main_view(request):
     if profile.character_status == 'gm':
         topics = Topic.objects.all().prefetch_related('debates__allowed_profiles')
     else:
-        # topics = Topic.objects.filter(allowed_profiles=profile).prefetch_related(
-        #     Prefetch('debates', queryset=Debate.objects.filter(allowed_profiles=profile))
-
-        topics = profile.allowed_topics.prefetch_related(
+        topics = Topic.objects.filter(allowed_profiles=profile).prefetch_related(
             Prefetch('debates', queryset=Debate.objects.filter(allowed_profiles=profile))
         )
 
