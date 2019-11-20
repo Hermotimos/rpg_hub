@@ -7,7 +7,7 @@ from users.models import Profile
 
 
 class Topic(models.Model):
-    title = models.CharField(max_length=50, unique=True, verbose_name='tytuł tematu')
+    title = models.CharField(max_length=100, unique=True, verbose_name='tytuł tematu')
     date_created = models.DateTimeField(auto_now_add=True)
     allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_topics', blank=True)
 
