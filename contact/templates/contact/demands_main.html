@@ -4,7 +4,7 @@
 {% load custom_filters %}
 
 {% block head_extra %}
-    <link rel="stylesheet" href="{% static 'css/news.css' %}">
+    <link rel="stylesheet" href="{% static 'css/contact.css' %}">
 {% endblock head_extra %}
 
 {% block breadcrumb %}
@@ -16,102 +16,26 @@
     <a href="{% url 'contact:demands-create' %}" class="btn btn-outline-dark">Nowy dezyderat</a>
     <br><br><br><br>
 
-    <h3><b>Otrzymane</b></h3>
-    <br>
 
-    <h5>Oczekujące:</h5>
-    <br>
-    {% for demand in received_demands_undone %}
-        <table>
-            <tr class="posts-and-news">
-                <td>
-                    <img class="rounded-circle article-img" src="{{ demand.author.profile.image.url }}">
-                    <br>
-                    <small>{{ demand.date_created|date:'d-M-Y' }}</small>
-                </td>
-                <td class="unblue"><a href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
-                {% if request.user == demand.author %}
-                    <td><a href="{% url 'contact:demands-modify' demand.id %}" class="btn btn-dark">&#9998;</a></td>
-                {% endif %}
-                <td><a href="{% url 'contact:done' demand.id %}" class="btn btn-dark">&#10004;</a></td>
-            </tr>
-        </table>
-    {% endfor %}
-    <br><br><br>
+<div>
+    <ul class="tabs" xmlns="http://www.w3.org/1999/html">
+        <li class="tab">
+            <input type="radio" name="tabs" checked="checked" id="tab1"/>
+            <label for="tab1">OTRZYMANE</label>
+            <div id="tab-content1" class="content">
+                {% include 'contact/received_demands.html' %}
+            </div>
+        </li>
+        <li class="tab">
+            <input type="radio" name="tabs" id="tab2"/>
+            <label for="tab2">WYSŁANE</label>
+            <div id="tab-content2" class="content">
+                {% include 'contact/sent_demands.html' %}
+                
+            </div>
+        </li>
+    </ul>
+</div>
 
-    <h5 class="hover-blue" data-toggle="collapse" data-target="#received-to-do">
-        Pokaż zrobione:<br>
-    </h5>
-    <br>
-    {% for demand in received_demands_done %}
-        <table id="received-to-do" class="collapse">
-            <tr class="posts-and-news">
-                <td>
-                    <img class="rounded-circle img-small" src="{{ demand.author.profile.image.url }}">
-                    &#9755;
-                    <img class="rounded-circle img-small" src="{{ demand.addressee.profile.image.url }}">
-                    <br>
-                    <small>{{ demand.date_created|date:'d-M-Y' }}</small>
-                </td>
-                <td class="unblue"><a href="{% url 'contact:demands-detail' demand.id %}">{{ demand|capfirst|linebreaks }}</a></td>
-                <td><a href="{% url 'contact:undone' demand.id %}" class="btn btn-dark">&#9757;</a></td>
-                {% if request.user == demand.author %}
-                    <td><a href="{% url 'contact:demands-delete' demand.id %}" class="btn btn-dark">&#10008;</a></td>
-                {% endif %}
-            </tr>
-        </table>
-    {% endfor %}
-    <br><br>
-
-    <div class="border-top">
-
-    <br>
-    <h3><b>Wysłane</b></h3>
-    <br>
-
-    <h5>Oczekujące:</h5>
-    <br>
-    {% for demand in sent_demands_undone %}
-        <table>
-            <tr class="posts-and-news">
-                <td>
-                    <img class="rounded-circle article-img" src="{{ demand.addressee.profile.image.url }}">
-                    <br>
-                    <small>{{ demand.date_created|date:'d-M-Y' }}</small>
-                </td>
-                <td class="unblue"><a href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
-                {% if request.user == demand.author %}
-                    <td><a href="{% url 'contact:demands-modify' demand.id %}" class="btn btn-dark">&#9998;</a></td>
-                {% endif %}
-                <td><a href="{% url 'contact:done' demand.id %}" class="btn btn-dark">&#10004;</a></td>
-            </tr>
-        </table>
-    {% endfor %}
-    <br><br>
-
-    <h5 class="hover-blue" data-toggle="collapse" data-target="#received-done">
-        Pokaż zrobione:<br>
-    </h5>
-    <br>
-    {% for demand in sent_demands_done %}
-        <table id="received-done" class="collapse">
-            <tr class="posts-and-news">
-                <td>
-                    <img class="rounded-circle img-small" src="{{ demand.author.profile.image.url }}">
-                    &#9755;
-                    <img class="rounded-circle img-small" src="{{ demand.addressee.profile.image.url }}">
-                    <br>
-                    <small>{{ demand.date_created|date:'d-M-Y' }}</small>
-                </td>
-                <td class="unblue"><a href="{% url 'contact:demands-detail' demand.id %}">{{ demand|capfirst|linebreaks }}</a></td>
-                <td><a href="{% url 'contact:undone' demand.id %}" class="btn btn-dark">&#9757;</a></td>
-                {% if request.user == demand.author %}
-                    <td><a href="{% url 'contact:demands-delete' demand.id %}" class="btn btn-danger">&#10008;</a></td>
-                {% endif %}
-            </tr>
-        </table>
-    {% endfor %}
-    </div>
-    <br><br><br>
 
 {% endblock content %}

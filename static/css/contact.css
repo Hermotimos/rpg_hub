@@ -1,0 +1,60 @@
+td.demands-imgs {
+        white-space: nowrap;
+}
+
+
+
+/* TABS */
+
+.tabs {
+    padding: 0px;
+    position: relative;
+}
+
+.tabs .tab {
+    float: left;
+    display: block;
+    border-top: 1px solid;
+}
+
+.tabs .tab>input[type="radio"] {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+.tabs .tab>label {
+    display: block;
+    padding: 0px 21px;
+    font-size: 30px;
+
+    cursor: pointer;
+    position: relative;
+    margin-bottom: 0px;
+    color: #F5F5F5;
+    background: #303030;
+}
+
+.tabs .content {
+    z-index: 0;/* or display: none; */
+    overflow: hidden;
+    max-width: 840px;
+    padding: 2px;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    background: #fafafa;
+    opacity:0;
+
+
+}
+
+.tabs>.tab>[id^="tab"]:checked + label {
+    top: 0;
+    background: #fafafa;
+    color: #303030
+}
+
+.tabs>.tab>[id^="tab"]:checked ~ [id^="tab-content"] {
+    z-index: 1;/* or display: block; */
+    opacity: 1;
