@@ -44,23 +44,23 @@
                                 {% if event in events_informed %}
                                     <small>(Znasz z opowieści)</small>
                                 {% endif %}
-
                                 {{ event.description|linebreaksbr }}
-                                {% if event.pictures.all and event not in events_informed %}
-                                    <table class="chronicle-img">
-                                        <tr>
-                                        {% for p in event.pictures.all %}
-                                            <td>
-                                                <img src="{{ p.image.url }}" class="border-double">
-                                                {% if p.description %}
-                                                    <small>{{ p.description }}</small>
-                                                {% endif %}
-                                            </td>
-                                        {% endfor %}
-                                        </tr>
-                                    </table>
-                                {% endif %}
-
+                            </p>
+                            {% if event.pictures.all and event not in events_informed %}
+                                <table class="chronicle-img">
+                                    <tr>
+                                    {% for p in event.pictures.all %}
+                                        <td>
+                                            <img src="{{ p.image.url }}" class="border-double"/>
+                                            {% if p.description %}
+                                                <small>{{ p.description }}</small>
+                                            {% endif %}
+                                        </td>
+                                    {% endfor %}
+                                    </tr>
+                                </table>
+                            {% endif %}
+                            <p>
                                 {% if event.debate %}
                                     <br><br><a href="{% url 'debates:debate' event.debate.topic.id event.debate.id %}">Narada: {{ event.debate.name }}</a>
                                 {% endif %}

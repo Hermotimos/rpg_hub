@@ -33,10 +33,11 @@
                         <br>
                         <!-- <p> tag enforces the right text formatting    -->
                         <p>
-                        {% if event in events_informed %}
-                            <small>(Znasz z opowieści)</small>
-                        {% endif %}
-                        {{ event.description|linebreaksbr }}
+                            {% if event in events_informed %}
+                                <small>(Znasz z opowieści)</small>
+                            {% endif %}
+                            {{ event.description|linebreaksbr }}
+                        </p>
                         {% if event.pictures.all and event not in events_informed %}
                             <table class="chronicle-img">
                                 <tr>
@@ -51,19 +52,19 @@
                                 </tr>
                             </table>
                         {% endif %}
-
-                        {% if event.debate %}
-                            <br><br><a href="{% url 'debates:debate' event.debate.topic.id event.debate.id %}">Narada: {{ event.debate.name }}</a>
-                        {% endif %}
-
-                        {% for note in event.notes.all %}
-                            {% if request.user == note.author %}
-                                {% if note.text != '' %}
-                                    <a style="color:{{ note.color }}"><br>Przemyślenia:<br>{{ note.text|linebreaksbr }}</a>
-                                {% endif %}
+                        <p>
+                            {% if event.debate %}
+                                <br><br><a href="{% url 'debates:debate' event.debate.topic.id event.debate.id %}">Narada: {{ event.debate.name }}</a>
                             {% endif %}
-                        {% endfor %}
-                    <!--</p> obviously not needed... -->
+    
+                            {% for note in event.notes.all %}
+                                {% if request.user == note.author %}
+                                    {% if note.text != '' %}
+                                        <a style="color:{{ note.color }}"><br>Przemyślenia:<br>{{ note.text|linebreaksbr }}</a>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </p>
                     </td>
                     <td class="align-top">
                         <br>
