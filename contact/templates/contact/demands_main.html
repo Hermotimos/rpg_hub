@@ -40,19 +40,20 @@
     <br><br><br>
 
     <h5 class="hover-blue" data-toggle="collapse" data-target="#received-to-do">
-        Zrobione:<br>
-        <small>Odkryj / ukryj</small>
+        Pokaż zrobione:<br>
     </h5>
     <br>
     {% for demand in received_demands_done %}
         <table id="received-to-do" class="collapse">
             <tr class="posts-and-news">
                 <td>
-                    <img class="rounded-circle article-img" src="{{ demand.author.profile.image.url }}">
+                    <img class="rounded-circle img-small" src="{{ demand.author.profile.image.url }}">
+                    &#9755;
+                    <img class="rounded-circle img-small" src="{{ demand.addressee.profile.image.url }}">
                     <br>
                     <small>{{ demand.date_created|date:'d-M-Y' }}</small>
                 </td>
-                <td class="unblue"><a href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
+                <td class="unblue"><a href="{% url 'contact:demands-detail' demand.id %}">{{ demand|capfirst|linebreaks }}</a></td>
                 <td><a href="{% url 'contact:undone' demand.id %}" class="btn btn-dark">&#9757;</a></td>
                 {% if request.user == demand.author %}
                     <td><a href="{% url 'contact:demands-delete' demand.id %}" class="btn btn-dark">&#10008;</a></td>
@@ -89,19 +90,20 @@
     <br><br>
 
     <h5 class="hover-blue" data-toggle="collapse" data-target="#received-done">
-        Zrobione:<br>
-        <small>Odkryj / ukryj</small>
+        Pokaż zrobione:<br>
     </h5>
     <br>
     {% for demand in sent_demands_done %}
         <table id="received-done" class="collapse">
             <tr class="posts-and-news">
                 <td>
-                    <img class="rounded-circle article-img" src="{{ demand.addressee.profile.image.url }}">
+                    <img class="rounded-circle img-small" src="{{ demand.author.profile.image.url }}">
+                    &#9755;
+                    <img class="rounded-circle img-small" src="{{ demand.addressee.profile.image.url }}">
                     <br>
                     <small>{{ demand.date_created|date:'d-M-Y' }}</small>
                 </td>
-                <td class="unblue"><a href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
+                <td class="unblue"><a href="{% url 'contact:demands-detail' demand.id %}">{{ demand|capfirst|linebreaks }}</a></td>
                 <td><a href="{% url 'contact:undone' demand.id %}" class="btn btn-dark">&#9757;</a></td>
                 {% if request.user == demand.author %}
                     <td><a href="{% url 'contact:demands-delete' demand.id %}" class="btn btn-danger">&#10008;</a></td>
