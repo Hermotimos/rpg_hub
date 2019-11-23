@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br><br><br>
+
+    <u>Kronika i Kalendarium:</u><br>
+    <a href="{% url 'reload:reload-history' %}">PRZEŁADUJ WSZYSTKO</a><br>
+    <br><br>
+
+    <u>Zasady:</u><br>
+    <a href="{% url 'reload:reload-rules' %}">PRZEŁADUJ WSZYSTKO</a><br>
+
+{% endblock content %}

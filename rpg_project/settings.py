@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'history',
     'home',
     'imaginarion',
+    'reload',
     'rules',
     'news',
     'users.apps.UsersConfig',  # just another way of doing this

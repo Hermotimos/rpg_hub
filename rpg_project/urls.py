@@ -27,6 +27,7 @@ urlpatterns = [
     path('debates/', include('debates.urls')),
     path('history/', include('history.urls')),
     path('news/', include('news.urls')),
+    path('reload/', include('reload.urls')),
     path('rules/', include('rules.urls')),
     path('users/', include('users.urls')),
 
