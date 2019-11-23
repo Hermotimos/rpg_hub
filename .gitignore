@@ -8,5 +8,7 @@ mvenv
 credentials.py
 requirements.txt
 
+migrations/
+
 db.sqlite3
 media
