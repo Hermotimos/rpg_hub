@@ -31,7 +31,7 @@ def reload_history(request):
         for obj in SpecificLocation.objects.all():
             obj.save()
 
-        messages.info(request, f'Przeładowano "sorting names"!')
+        messages.info(request, f'Przeładowano "sorting_name" dla aplikacji "history"!')
         return redirect('reload:reload-main')
     else:
         return redirect('home:dupa')
@@ -59,7 +59,7 @@ def reload_rules(request):
         for obj in WeaponType.objects.all():
             obj.save()
 
-        messages.info(request, f'Przeładowano "sorting names"!')
+        messages.info(request, f'Przeładowano "sorting_name" dla aplikacji "rules"!')
         return redirect('reload:reload-main')
     else:
         return redirect('home:dupa')
