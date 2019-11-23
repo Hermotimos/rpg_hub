@@ -321,14 +321,6 @@ def participated_and_informed_events(profile_id):
 
 @login_required
 def timeline_main_view(request):
-    # for populating fields sorting_name on models Thread, Participant, Specific Location
-    # for o in Thread.objects.all():
-    #     o.save()
-    # for o in GeneralLocation.objects.all():
-    #     o.save()
-    # for o in SpecificLocation.objects.all():
-    #     o.save()
-
     known_events = participated_and_informed_events(request.user.profile.id)
     known_events = list(known_events)
 
@@ -354,27 +346,11 @@ def timeline_main_view(request):
     threads_list = list(threads_qs.distinct())
     threads_name_and_obj_list = [(t.name, t) for t in threads_list]
 
-    # participants
-    # participants_set = set()
-    # for qs in participants_querysets_list:
-    #     for p in qs:
-    #         participants_set.add(p)
-    # participants_name_and_obj_list = [(t.character_name, t) for t in participants_set]
-    # participants_name_and_obj_list.sort()
-
     participants_qs = Profile.objects.none()
     for qs in participants_querysets_list:
         participants_qs = participants_qs | qs
     participants_list = list(participants_qs.distinct())
     participants_name_and_obj_list = [(t.character_name, t) for t in participants_list]
-
-    # specific locations
-    # spec_locs_set = set()
-    # for qs in spec_locs_querysets_list:
-    #     for sl in qs:
-    #         spec_locs_set.add(sl)
-    # spec_locs_name_and_obj_list = [(t.name, t) for t in spec_locs_set]
-    # spec_locs_name_and_obj_list.sort()
 
     spec_locs_qs = SpecificLocation.objects.none()
     for qs in spec_locs_querysets_list:
