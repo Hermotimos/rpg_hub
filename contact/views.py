@@ -248,7 +248,7 @@ def plans_main_view(request):
         except Plan.DoesNotExist:
             pass
 
-    plans = list(Plan.objects.filter(author=request.user))
+    plans = Plan.objects.filter(author=request.user).select_related('author__profile')
     context = {
         'page_title': 'Plany',
         'plans': plans,
