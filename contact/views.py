@@ -120,7 +120,7 @@ def demands_modify_view(request, demand_id):
 @login_required
 def demands_detail_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
-    answers = list(DemandAnswer.objects.filter(demand=demand))
+    answers = DemandAnswer.objects.filter(demand=demand).select_related('author', 'author__profile')
 
     if request.method == 'POST':
         form = DemandAnswerForm(request.POST, request.FILES)
