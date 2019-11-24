@@ -248,10 +248,9 @@ def plans_main_view(request):
         except Plan.DoesNotExist:
             pass
 
-    plans = Plan.objects.filter(author=request.user).select_related('author__profile')
     context = {
         'page_title': 'Plany',
-        'plans': plans,
+        'plans': Plan.objects.filter(author=request.user).select_related('author__profile'),
     }
     return render(request, 'contact/plans_main.html', context)
 
@@ -259,10 +258,9 @@ def plans_main_view(request):
 @query_debugger
 @login_required
 def plans_for_gm_view(request):
-    plans = list(Plan.objects.filter(inform_gm=True))
     context = {
         'page_title': 'Plany graczy',
-        'plans': plans,
+        'plans': Plan.objects.filter(inform_gm=True).select_related('author__profile'),
     }
     if request.user.profile.character_status == 'gm':
         return render(request, 'contact/plans_for_gm.html', context)
