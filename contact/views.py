@@ -219,15 +219,15 @@ def mark_undone_view(request, demand_id):
 @login_required
 def plans_main_view(request):
 
-    skills_without_allowed = Skill.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
-    skills_to_do = [s.name for s in skills_without_allowed]
-    synergies_without_allowed = Synergy.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
-    synergies_to_do = [s.name for s in synergies_without_allowed]
+    skills_no_allowed = Skill.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
+    skills_to_do = [s.name for s in skills_no_allowed]
+    synergies_no_allowed = Synergy.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
+    synergies_to_do = [s.name for s in synergies_no_allowed]
 
-    weapon_types_without_allowed = WeaponType.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
-    weapon_types_to_do = [wt.name for wt in weapon_types_without_allowed]
-    plate_types_without_allowed = PlateType.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
-    plate_types_to_do = [pt.name for pt in plate_types_without_allowed]
+    weapon_types_no_allowed = WeaponType.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
+    weapon_types_to_do = [wt.name for wt in weapon_types_no_allowed]
+    plate_types_no_allowed = PlateType.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
+    plate_types_to_do = [pt.name for pt in plate_types_no_allowed]
 
     text = \
         f'=>Lista rzeczy do uzupełnienia:\n ' \
