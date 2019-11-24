@@ -46,7 +46,7 @@
 
     <table>
         <tbody>
-            {% for remark in debate.remarks.all %}
+            {% for remark in remarks %}
                 {% if remark.author.profile.character_status == 'gm' %}
                     <tr class="posts-and-news">
                         <td colspan="2" class="align-center">

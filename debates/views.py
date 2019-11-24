@@ -143,6 +143,7 @@ def create_debate_view(request, topic_id):
 def debate_view(request, topic_id, debate_id):
     topic = get_object_or_404(Topic, id=topic_id)
     debate = get_object_or_404(Debate, id=debate_id)
+    remarks = debate.remarks.all().select_related('author__profile')
 
     last_remark = debate.last_remark()
     last_remark_seen_by_imgs = ()
@@ -173,7 +174,7 @@ def debate_view(request, topic_id, debate_id):
             subject = f"[RPG] Głos w naradzie: '{debate.name[:30]}...'"
             message = f"{remark.author.profile} zabrał/a głos w naradzie '{debate.name}':\n" \
                       f"'{remark.text}'\n\n" \
-                      f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
+                      f"Weź udział w naradzie: {request.get_host()}/debates/topic:{topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
             receivers = []
             for user in User.objects.all():
@@ -193,6 +194,7 @@ def debate_view(request, topic_id, debate_id):
         'page_title': debate.name,
         'topic': topic,
         'debate': debate,
+        'remarks': remarks,
         'allowed': allowed_str,
         'followers': followers_str,
         'last_remark': last_remark,
