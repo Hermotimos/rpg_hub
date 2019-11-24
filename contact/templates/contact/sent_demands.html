@@ -2,7 +2,7 @@
 <br>
 <h5>OCZEKUJĄCE:</h5>
 <br>
-{% for demand in sent_demands_undone %}
+{% for demand in sent_undone %}
     <table>
         <tr class="posts-and-news">
             <td class="demands-imgs">
@@ -24,7 +24,7 @@
 
 <h5 class="hover-blue" data-toggle="collapse" data-target="#sent-done">POKAŻ ZROBIONE</h5>
 <br>
-{% for demand in sent_demands_done %}
+{% for demand in sent_done %}
     <table id="sent-done" class="collapse">
         <tr class="posts-and-news">
             <td class="demands-imgs">

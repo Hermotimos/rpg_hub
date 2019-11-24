@@ -1,13 +1,15 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
-from django.conf import settings
 from django.core.mail import send_mail
-from django.utils import timezone
+from django.db.models import Count
 from django.http import HttpResponseRedirect
-from contact.models import Demand, DemandAnswer, Plan
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
+
 from contact.forms import DemandsCreateForm, DemandsModifyForm, DemandAnswerForm, PlansCreateForm, PlansModifyForm
+from contact.models import Demand, DemandAnswer, Plan
+from rpg_project.utils import query_debugger
 from rules.models import Skill, Synergy, WeaponType, PlateType
 from users.models import User
 
@@ -15,27 +17,29 @@ from users.models import User
 # ----------------------------- DEMANDS -----------------------------
 
 
+@query_debugger
 @login_required
 def demands_main_view(request):
-    received_demands_undone = \
-        list(Demand.objects.filter(is_done=False, addressee=request.user).exclude(author=request.user))
-    received_demands_done = \
-        list(Demand.objects.filter(is_done=True, addressee=request.user).exclude(author=request.user))
-    sent_demands_undone = \
-        list(Demand.objects.filter(is_done=False, author=request.user).exclude(addressee=request.user))
-    sent_demands_done = \
-        list(Demand.objects.filter(is_done=True, author=request.user).exclude(addressee=request.user))
+    received_undone = Demand.objects.filter(is_done=False, addressee=request.user).exclude(author=request.user).\
+        select_related('author__profile', 'addressee__profile')
+    received_done = Demand.objects.filter(is_done=True, addressee=request.user).exclude(author=request.user).\
+        select_related('author__profile', 'addressee__profile')
+    sent_undone = Demand.objects.filter(is_done=False, author=request.user).exclude(addressee=request.user).\
+        select_related('author__profile', 'addressee__profile')
+    sent_done = Demand.objects.filter(is_done=True, author=request.user).exclude(addressee=request.user).\
+        select_related('author__profile', 'addressee__profile')
 
     context = {
         'page_title': 'Dezyderaty',
-        'received_demands_undone': received_demands_undone,
-        'received_demands_done': received_demands_done,
-        'sent_demands_undone': sent_demands_undone,
-        'sent_demands_done': sent_demands_done
+        'received_undone': received_undone,
+        'received_done': received_done,
+        'sent_undone': sent_undone,
+        'sent_done': sent_done
     }
     return render(request, 'contact/demands_main.html', context)
 
 
+@query_debugger
 @login_required
 def demands_create_view(request):
     if request.method == 'POST':
@@ -65,6 +69,7 @@ def demands_create_view(request):
     return render(request, 'contact/demands_create.html', context)
 
 
+@query_debugger
 @login_required
 def demands_delete_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
@@ -77,6 +82,7 @@ def demands_delete_view(request, demand_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def demands_modify_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
@@ -110,6 +116,7 @@ def demands_modify_view(request, demand_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def demands_detail_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
@@ -151,6 +158,7 @@ def demands_detail_view(request, demand_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def mark_done_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
@@ -178,6 +186,7 @@ def mark_done_view(request, demand_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def mark_undone_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
@@ -206,6 +215,7 @@ def mark_undone_view(request, demand_id):
 # ----------------------------- PLANS -----------------------------
 
 
+@query_debugger
 @login_required
 def plans_main_view(request):
 
@@ -246,6 +256,7 @@ def plans_main_view(request):
     return render(request, 'contact/plans_main.html', context)
 
 
+@query_debugger
 @login_required
 def plans_for_gm_view(request):
     plans = list(Plan.objects.filter(inform_gm=True))
@@ -259,6 +270,7 @@ def plans_for_gm_view(request):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def plans_create_view(request):
     if request.method == 'POST':
@@ -290,6 +302,7 @@ def plans_create_view(request):
     return render(request, 'contact/plans_create.html', context)
 
 
+@query_debugger
 @login_required
 def plans_delete_view(request, plan_id):
     plan = get_object_or_404(Plan, id=plan_id)
@@ -302,6 +315,7 @@ def plans_delete_view(request, plan_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def plans_modify_view(request, plan_id):
     plan = get_object_or_404(Plan, id=plan_id)
