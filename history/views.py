@@ -421,8 +421,9 @@ def timeline_create_view(request):
 
 @login_required
 def timeline_all_events_view(request):
-    known_events = participated_and_informed_events(request.user.profile.id)
-    known_events = list(known_events)
+    known_events = participated_and_informed_events(request.user.profile.id).\
+        select_related('general_location', 'game').\
+        prefetch_related('threads', 'participants', 'informed', 'specific_locations')
 
     context = {
         'page_title': 'Pełne Kalendarium',
