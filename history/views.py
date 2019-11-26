@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.conf import settings
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
-from users.models import Profile
+from django.shortcuts import render, redirect, get_object_or_404
+
 from history.models import (TimelineEvent,
                             TimelineEventNote,
                             ChronicleEvent,
@@ -22,6 +22,8 @@ from history.forms import (TimelineEventCreateForm,
                            ChronicleEventCreateForm,
                            ChronicleEventInformForm,
                            ChronicleEventEditForm)
+from rpg_project.utils import query_debugger
+from users.models import Profile
 
 
 # #################### CHRONICLE: model ChronicleEvent ####################
@@ -51,6 +53,7 @@ def is_allowed_for_chronicle(profile, chapter_id=0, game_id=0, chronicle_event_i
         return False
 
 
+@query_debugger
 @login_required
 def chronicle_main_view(request):
     if request.user.profile.character_status == 'gm':
@@ -71,6 +74,7 @@ def chronicle_main_view(request):
     return render(request, 'history/chronicle_main.html', context)
 
 
+@query_debugger
 @login_required
 def chronicle_create_view(request):
     if request.method == 'POST':
@@ -95,6 +99,7 @@ def chronicle_create_view(request):
     return render(request, 'history/chronicle_create.html', context)
 
 
+@query_debugger
 @login_required
 def chronicle_all_chapters_view(request):
     if request.user.profile.character_status == 'gm':
@@ -122,6 +127,7 @@ def chronicle_all_chapters_view(request):
     return render(request, 'history/chronicle_all_chapters.html', context)
 
 
+@query_debugger
 @login_required
 def chronicle_one_chapter_view(request, chapter_id):
     chapter = get_object_or_404(Chapter, id=chapter_id)
@@ -149,6 +155,7 @@ def chronicle_one_chapter_view(request, chapter_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def chronicle_one_game_view(request, game_id):
     game = get_object_or_404(GameSession, id=game_id)
@@ -174,6 +181,7 @@ def chronicle_one_game_view(request, game_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def chronicle_inform_view(request, event_id):
     event = get_object_or_404(ChronicleEvent, id=event_id)
@@ -234,6 +242,7 @@ def chronicle_inform_view(request, event_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def chronicle_note_view(request, event_id):
     event = get_object_or_404(ChronicleEvent, id=event_id)
@@ -273,6 +282,7 @@ def chronicle_note_view(request, event_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def chronicle_edit_view(request, event_id):
     event = get_object_or_404(ChronicleEvent, id=event_id)
@@ -319,10 +329,10 @@ def participated_and_informed_events(profile_id):
     return known_qs
 
 
+@query_debugger
 @login_required
 def timeline_main_view(request):
     known_events = participated_and_informed_events(request.user.profile.id)
-    known_events = list(known_events)
 
     # repetitive interations over known_events.all():
     threads_querysets_list = []
@@ -392,6 +402,7 @@ def timeline_main_view(request):
     return render(request, 'history/timeline_main.html', context)
 
 
+@query_debugger
 @login_required
 def timeline_create_view(request):
     if request.method == 'POST':
@@ -419,6 +430,7 @@ def timeline_create_view(request):
     return render(request, 'history/timeline_create.html', context)
 
 
+@query_debugger
 @login_required
 def timeline_all_events_view(request):
     known_events = participated_and_informed_events(request.user.profile.id).\
@@ -435,6 +447,7 @@ def timeline_all_events_view(request):
     return render(request, 'history/timeline_events.html', context)
 
 
+@query_debugger
 @login_required
 def timeline_thread_view(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
@@ -454,6 +467,7 @@ def timeline_thread_view(request, thread_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def timeline_participant_view(request, participant_id):
     participant = get_object_or_404(Profile, id=participant_id)
@@ -478,6 +492,7 @@ def timeline_participant_view(request, participant_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def timeline_general_location_view(request, gen_loc_id):
     general_location = get_object_or_404(GeneralLocation, id=gen_loc_id)
@@ -497,6 +512,7 @@ def timeline_general_location_view(request, gen_loc_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def timeline_specific_location_view(request, spec_loc_id):
     specific_location = get_object_or_404(SpecificLocation, id=spec_loc_id)
@@ -516,6 +532,7 @@ def timeline_specific_location_view(request, spec_loc_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def timeline_date_view(request, year, season='0'):
     if season == '0':
@@ -548,6 +565,7 @@ def timeline_date_view(request, year, season='0'):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def timeline_game_view(request, game_id):
     game = get_object_or_404(GameSession, id=game_id)
@@ -567,6 +585,7 @@ def timeline_game_view(request, game_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def timeline_inform_view(request, event_id):
     event = get_object_or_404(TimelineEvent, id=event_id)
@@ -630,6 +649,7 @@ def timeline_inform_view(request, event_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def timeline_note_view(request, event_id):
     event = get_object_or_404(TimelineEvent, id=event_id)
@@ -673,6 +693,7 @@ def timeline_note_view(request, event_id):
         return redirect('home:dupa')
 
 
+@query_debugger
 @login_required
 def timeline_edit_view(request, event_id):
     event = get_object_or_404(TimelineEvent, id=event_id)
