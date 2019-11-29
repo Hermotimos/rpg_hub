@@ -37,9 +37,9 @@
                 <small>
                 <!--    ca. 5 queries per debate       -->
                 {% if debate.first_player_remark_date|date:'d-M-Y' != debate.last_player_remark_date|date:'d-M-Y' %}
-                   [{{ debate.first_player_remark_date|date:'d' }}-{{ debate.last_player_remark_date|date:'d M Y' }}
+                   [{{ debate.first_player_remark_date|date:'d/M' }} - {{ debate.last_player_remark_date|date:'d/M Y' }}
                 {% else %}
-                    [{{ debate.first_player_remark_date|date:'d M Y' }}
+                    [{{ debate.first_player_remark_date|date:'d/M Y' }}
                 {% endif %}
                 
                 &#10033;
