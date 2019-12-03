@@ -147,7 +147,7 @@ def debate_view(request, topic_id, debate_id):
 
     last_remark = debate.last_remark()
     last_remark_seen_by_imgs = ()
-    if last_remark:
+    if not debate.is_ended and last_remark:
         profile = request.user.profile
         seen_by = last_remark.seen_by.all()
         if profile not in seen_by:
