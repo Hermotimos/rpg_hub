@@ -107,11 +107,11 @@ def chronicle_all_chapters_view(request):
     if profile.character_status == 'gm':
         events_informed = []
         chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all()] for ch in Chapter.objects.all()}
-        games_with_events_dict = {g: [e for e in g.chronicle_events.all()] for g in GameSession.objects.all()}
+        games_with_events_dict = {g: [e for e in g.chronicle_events.all().prefetch_related('pictures')] for g in GameSession.objects.all()}
     else:
         events_participated = profile.chronicle_events_participated.all()
         events_informed = profile.chronicle_events_informed.all()
-        events = (events_participated | events_informed).distinct()
+        events = (events_participated | events_informed).distinct().prefetch_related('pictures').select_related('game')
 
         games = [e.game for e in events]
         chapters = [g.chapter for g in games]
@@ -122,7 +122,7 @@ def chronicle_all_chapters_view(request):
         'page_title': 'Pełna kronika',
         'chapters_with_games_dict': chapters_with_games_dict,
         'games_with_events_dict': games_with_events_dict,
-        'events_informed': events_informed
+        'events_informed': events_informed,
     }
     return render(request, 'history/chronicle_all_chapters.html', context)
 
