@@ -152,9 +152,6 @@ def debate_view(request, topic_id, debate_id):
         seen_by = last_remark.seen_by.all()
         if profile not in seen_by:
             last_remark.seen_by.add(profile)
-            # new_seen = profile
-            # seen_by |= Profile.objects.filter(id=new_seen.id)
-            # last_remark.seen_by.set(seen_by)
         last_remark_seen_by_imgs = (p.image for p in last_remark.seen_by.all())
 
     allowed_str = ', '.join(p.character_name.split(' ', 1)[0]
@@ -213,7 +210,6 @@ def debates_invite_view(request, topic_id, debate_id):
     debate = get_object_or_404(Debate, id=debate_id)
 
     allowed_profiles_old = debate.allowed_profiles.all()
-    # followers_old = debate.followers.all()
     allowed_profiles_old_ids = [p.id for p in allowed_profiles_old]
     allowed_profiles_old_str = ', '.join(p.character_name.split(' ', 1)[0]
                                          for p in allowed_profiles_old
@@ -225,16 +221,9 @@ def debates_invite_view(request, topic_id, debate_id):
                           data=request.POST,
                           instance=debate)
         if form.is_valid():
-            # debate = form.save()
-
             allowed_profiles_new = form.cleaned_data['allowed_profiles']
             debate.allowed_profiles.add(*list(allowed_profiles_new))
             debate.followers.add(*list(allowed_profiles_new))
-
-            # new_followers_ids = [p.id for p in allowed_profiles_new if p not in allowed_profiles_old]
-            # new_followers = followers_old
-            # new_followers |= Profile.objects.filter(id__in=new_followers_ids)
-            # debate.followers.set(new_followers)
 
             subject = f"[RPG] Dołączenie do narady: '{debate.name}'"
             message = f"{request.user.profile} dołączył/a Cię do narady '{debate.name}' w temacie '{debate.topic}'.\n"\
@@ -273,8 +262,6 @@ def debates_invite_view(request, topic_id, debate_id):
 def unfollow_debate_view(request, topic_id, debate_id):
     debate = get_object_or_404(Debate, id=debate_id)
     if request.user.profile in debate.allowed_profiles.all() or request.user.profile.character_status == 'gm':
-        # TODO: remove the above if debate.followers.remove(request.user.profile) works
-        # updated_followers = debate.followers.exclude(user=request.user)
         debate.followers.remove(request.user.profile)
         messages.info(request, 'Przestałeś uważnie uczestniczyć w naradzie!')
         return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
@@ -287,10 +274,6 @@ def unfollow_debate_view(request, topic_id, debate_id):
 def follow_debate_view(request, topic_id, debate_id):
     debate = get_object_or_404(Debate, id=debate_id)
     if request.user.profile in debate.allowed_profiles.all() or request.user.profile.character_status == 'gm':
-        # TODO: remove the above if debate.followers.add(request.user.profile) works
-        # followers = debate.followers.all()
-        # new_follower = request.user.profile
-        # followers |= Profile.objects.filter(id=new_follower.id)
         debate.followers.add(request.user.profile)
         messages.info(request, 'Od teraz uważnie uczestniczysz w naradzie!')
         return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
