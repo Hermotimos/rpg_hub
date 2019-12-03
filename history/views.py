@@ -56,11 +56,12 @@ def is_allowed_for_chronicle(profile, chapter_id=0, game_id=0, chronicle_event_i
 @query_debugger
 @login_required
 def chronicle_main_view(request):
-    if request.user.profile.character_status == 'gm':
+    profile = request.user.profile
+    if profile.character_status == 'gm':
         chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all()] for ch in Chapter.objects.all()}
     else:
-        events_participated = request.user.profile.chronicle_events_participated.all()
-        events_informed = request.user.profile.chronicle_events_informed.all()
+        events_participated = profile.chronicle_events_participated.all()
+        events_informed = profile.chronicle_events_informed.all()
         events = (events_participated | events_informed).distinct()
         events = list(events)
         games = [e.game for e in events]
@@ -102,17 +103,16 @@ def chronicle_create_view(request):
 @query_debugger
 @login_required
 def chronicle_all_chapters_view(request):
-    if request.user.profile.character_status == 'gm':
+    profile = request.user.profile
+    if profile.character_status == 'gm':
         events_informed = []
         chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all()] for ch in Chapter.objects.all()}
         games_with_events_dict = {g: [e for e in g.chronicle_events.all()] for g in GameSession.objects.all()}
     else:
-        events_participated = request.user.profile.chronicle_events_participated.all()
-        events_informed = request.user.profile.chronicle_events_informed.all()
+        events_participated = profile.chronicle_events_participated.all()
+        events_informed = profile.chronicle_events_informed.all()
         events = (events_participated | events_informed).distinct()
 
-        events_informed = list(events_informed)
-        events = list(events)
         games = [e.game for e in events]
         chapters = [g.chapter for g in games]
         chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all() if g in games] for ch in chapters}
@@ -130,13 +130,14 @@ def chronicle_all_chapters_view(request):
 @query_debugger
 @login_required
 def chronicle_one_chapter_view(request, chapter_id):
+    profile = request.user.profile
     chapter = get_object_or_404(Chapter, id=chapter_id)
-    if request.user.profile.character_status == 'gm':
+    if profile.character_status == 'gm':
         games_with_events_dict = {g: [e for e in g.chronicle_events.all()] for g in chapter.game_sessions.all()}
         events_informed = []
     else:
-        events_participated = request.user.profile.chronicle_events_participated.filter(game__in=chapter.game_sessions.all())
-        events_informed = request.user.profile.chronicle_events_informed.filter(game__in=chapter.game_sessions.all())
+        events_participated = profile.chronicle_events_participated.filter(game__in=chapter.game_sessions.all())
+        events_informed = profile.chronicle_events_informed.filter(game__in=chapter.game_sessions.all())
         events = (events_participated | events_informed).distinct()
         events_informed = list(events_informed)
         events = list(events)
@@ -149,7 +150,7 @@ def chronicle_one_chapter_view(request, chapter_id):
         'games_with_events_dict': games_with_events_dict,
         'events_informed': events_informed
     }
-    if is_allowed_for_chronicle(request.user.profile, chapter_id=chapter_id):
+    if is_allowed_for_chronicle(profile, chapter_id=chapter_id):
         return render(request, 'history/chronicle_one_chapter.html', context)
     else:
         return redirect('home:dupa')
@@ -158,14 +159,15 @@ def chronicle_one_chapter_view(request, chapter_id):
 @query_debugger
 @login_required
 def chronicle_one_game_view(request, game_id):
+    profile = request.user.profile
     game = get_object_or_404(GameSession, id=game_id)
-    if request.user.profile.character_status == 'gm':
+    if profile.character_status == 'gm':
         events_informed = []
         events = game.chronicle_events.all()
         events = list(events)
     else:
-        events_participated = request.user.profile.chronicle_events_participated.filter(game=game)
-        events_informed = request.user.profile.chronicle_events_informed.filter(game=game)
+        events_participated = profile.chronicle_events_participated.filter(game=game)
+        events_informed = profile.chronicle_events_informed.filter(game=game)
         events = (events_participated | events_informed).distinct()
         events_informed = list(events_informed)
         events = list(events)
@@ -175,7 +177,7 @@ def chronicle_one_game_view(request, game_id):
         'events': events,
         'events_informed': events_informed
     }
-    if is_allowed_for_chronicle(request.user.profile, game_id=game_id):
+    if is_allowed_for_chronicle(profile, game_id=game_id):
         return render(request, 'history/chronicle_one_game.html', context)
     else:
         return redirect('home:dupa')
@@ -184,6 +186,7 @@ def chronicle_one_game_view(request, game_id):
 @query_debugger
 @login_required
 def chronicle_inform_view(request, event_id):
+    profile = request.user.profile
     event = get_object_or_404(ChronicleEvent, id=event_id)
 
     participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in event.participants.all())
@@ -205,8 +208,8 @@ def chronicle_inform_view(request, event_id):
             informed |= Profile.objects.filter(id__in=old_informed_ids)
             event.informed.set(informed)
 
-            subject = f"[RPG] {request.user.profile} podzielił się z Tobą swoją historią!"
-            message = f"{request.user.profile} znów rozprawia o swoich przygodach.\n" \
+            subject = f"[RPG] {profile} podzielił się z Tobą swoją historią!"
+            message = f"{profile} znów rozprawia o swoich przygodach.\n" \
                       f"{', '.join(p.character_name for p in form.cleaned_data['informed'])}\n\n" \
                       f"Podczas przygody '{event.game.title}' rozegrało się co następuje:\n {event.description}\n" \
                       f"Tak było i nie inaczej...\n\n" \
@@ -217,7 +220,7 @@ def chronicle_inform_view(request, event_id):
                 # exclude previously informed users from mailing to avoid spam
                 if profile not in old_informed:
                     receivers.append(profile.user.email)
-            if request.user.profile.character_status != 'gm':
+            if profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
@@ -236,7 +239,7 @@ def chronicle_inform_view(request, event_id):
         'participants': participants_str,
         'informed': old_informed_str
     }
-    if is_allowed_for_chronicle(request.user.profile, chronicle_event_id=event_id):
+    if is_allowed_for_chronicle(profile, chronicle_event_id=event_id):
         return render(request, 'history/chronicle_inform.html', context)
     else:
         return redirect('home:dupa')
@@ -245,6 +248,7 @@ def chronicle_inform_view(request, event_id):
 @query_debugger
 @login_required
 def chronicle_note_view(request, event_id):
+    profile = request.user.profile
     event = get_object_or_404(ChronicleEvent, id=event_id)
 
     current_note = None
@@ -276,7 +280,7 @@ def chronicle_note_view(request, event_id):
         'participants': participants,
         'informed': informed
     }
-    if is_allowed_for_chronicle(request.user.profile, chronicle_event_id=event_id):
+    if is_allowed_for_chronicle(profile, chronicle_event_id=event_id):
         return render(request, 'history/chronicle_note.html', context)
     else:
         return redirect('home:dupa')
@@ -285,6 +289,7 @@ def chronicle_note_view(request, event_id):
 @query_debugger
 @login_required
 def chronicle_edit_view(request, event_id):
+    profile = request.user.profile
     event = get_object_or_404(ChronicleEvent, id=event_id)
 
     if request.method == 'POST':
@@ -301,7 +306,7 @@ def chronicle_edit_view(request, event_id):
         'page_title': 'Edycja wydarzenia',
         'form': form
     }
-    if request.user.profile.character_status == 'gm':
+    if profile.character_status == 'gm':
         return render(request, 'history/chronicle_edit.html', context)
     else:
         return redirect('home:dupa')
@@ -332,7 +337,8 @@ def participated_and_informed_events(profile_id):
 @query_debugger
 @login_required
 def timeline_main_view(request):
-    known_events = participated_and_informed_events(request.user.profile.id)
+    profile = request.user.profile
+    known_events = participated_and_informed_events(profile.id)
 
     # repetitive interations over known_events.all():
     threads_querysets_list = []
@@ -433,7 +439,8 @@ def timeline_create_view(request):
 @query_debugger
 @login_required
 def timeline_all_events_view(request):
-    known_events = participated_and_informed_events(request.user.profile.id).\
+    profile = request.user.profile
+    known_events = participated_and_informed_events(profile.id).\
         select_related('general_location', 'game').\
         prefetch_related('threads', 'participants', 'informed', 'specific_locations')
 
@@ -450,9 +457,10 @@ def timeline_all_events_view(request):
 @query_debugger
 @login_required
 def timeline_thread_view(request, thread_id):
+    profile = request.user.profile
     thread = get_object_or_404(Thread, id=thread_id)
     events_by_thread_qs = thread.timeline_events.all()
-    known_events = participated_and_informed_events(request.user.profile.id)
+    known_events = participated_and_informed_events(profile.id)
     events = list(events_by_thread_qs.distinct() & known_events.distinct())
 
     context = {
@@ -470,12 +478,13 @@ def timeline_thread_view(request, thread_id):
 @query_debugger
 @login_required
 def timeline_participant_view(request, participant_id):
+    profile = request.user.profile
     participant = get_object_or_404(Profile, id=participant_id)
     events_by_participant_qs = participant.timeline_events_participated.all()
-    known_events = participated_and_informed_events(request.user.profile.id)
+    known_events = participated_and_informed_events(profile.id)
     events = list(events_by_participant_qs.distinct() & known_events.distinct())
 
-    if request.user.profile == participant:
+    if profile == participant:
         text = 'Są czasy, gdy ogarnia Cię zaduma nad Twoim zawikłanym losem...'
     else:
         text = f'{participant.character_name.split(" ", 1)[0]}... Niejedno już razem przeżyliście. Na dobre i na złe...'
@@ -495,9 +504,10 @@ def timeline_participant_view(request, participant_id):
 @query_debugger
 @login_required
 def timeline_general_location_view(request, gen_loc_id):
+    profile = request.user.profile
     general_location = get_object_or_404(GeneralLocation, id=gen_loc_id)
     events_by_general_location_qs = TimelineEvent.objects.filter(general_location=general_location)
-    known_events = participated_and_informed_events(request.user.profile.id)
+    known_events = participated_and_informed_events(profile.id)
     events = list(events_by_general_location_qs.distinct() & known_events.distinct())
 
     context = {
@@ -515,9 +525,10 @@ def timeline_general_location_view(request, gen_loc_id):
 @query_debugger
 @login_required
 def timeline_specific_location_view(request, spec_loc_id):
+    profile = request.user.profile
     specific_location = get_object_or_404(SpecificLocation, id=spec_loc_id)
     events_by_specific_location_qs = specific_location.timeline_events.all()
-    known_events = participated_and_informed_events(request.user.profile.id)
+    known_events = participated_and_informed_events(profile.id)
     events = list(events_by_specific_location_qs.distinct() & known_events.distinct())
 
     context = {
@@ -535,6 +546,7 @@ def timeline_specific_location_view(request, spec_loc_id):
 @query_debugger
 @login_required
 def timeline_date_view(request, year, season='0'):
+    profile = request.user.profile
     if season == '0':
         page_title = f'{year}. rok Archonatu Nemetha Samatiana'
         events_qs = TimelineEvent.objects.filter(year=year)
@@ -550,7 +562,7 @@ def timeline_date_view(request, year, season='0'):
         events_qs = TimelineEvent.objects.filter(year=year, season=season)
         page_title = f'{season_name} {year}. roku Archonatu Nemetha Samatiana'
 
-    known_events = participated_and_informed_events(request.user.profile.id)
+    known_events = participated_and_informed_events(profile.id)
     events = list(events_qs.distinct() & known_events.distinct())
 
     context = {
@@ -568,9 +580,10 @@ def timeline_date_view(request, year, season='0'):
 @query_debugger
 @login_required
 def timeline_game_view(request, game_id):
+    profile = request.user.profile
     game = get_object_or_404(GameSession, id=game_id)
     events_by_game_qs = TimelineEvent.objects.filter(game=game)
-    known_events = participated_and_informed_events(request.user.profile.id)
+    known_events = participated_and_informed_events(profile.id)
     events = list(events_by_game_qs.distinct() & known_events.distinct())
 
     context = {
@@ -588,6 +601,7 @@ def timeline_game_view(request, game_id):
 @query_debugger
 @login_required
 def timeline_inform_view(request, event_id):
+    profile = request.user.profile
     event = get_object_or_404(TimelineEvent, id=event_id)
 
     participants = list(event.participants.all())
@@ -611,8 +625,8 @@ def timeline_inform_view(request, event_id):
             informed |= Profile.objects.filter(id__in=old_informed_ids)
             event.informed.set(informed)
 
-            subject = f"[RPG] {request.user.profile} podzielił się z Tobą swoją historią!"
-            message = f"{request.user.profile} znów rozprawia o swoich przygodach.\n\n" \
+            subject = f"[RPG] {profile} podzielił się z Tobą swoją historią!"
+            message = f"{profile} znów rozprawia o swoich przygodach.\n\n" \
                       f"'{event.date()} rozegrało się co następuje:\n {event.description}\n" \
                       f"Tak było i nie inaczej...'\n" \
                       f"A było to w miejscu: {event.general_location}" \
@@ -624,7 +638,7 @@ def timeline_inform_view(request, event_id):
                 # exclude previously informed users from mailing to avoid spam
                 if profile not in old_informed:
                     receivers.append(profile.user.email)
-            if request.user.profile.character_status != 'gm':
+            if profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
@@ -643,7 +657,7 @@ def timeline_inform_view(request, event_id):
         'participants': participants_str,
         'informed': old_informed_str
     }
-    if request.user.profile in allowed or request.user.profile.character_status == 'gm':
+    if profile in allowed or profile.character_status == 'gm':
         return render(request, 'history/timeline_inform.html', context)
     else:
         return redirect('home:dupa')
@@ -652,6 +666,7 @@ def timeline_inform_view(request, event_id):
 @query_debugger
 @login_required
 def timeline_note_view(request, event_id):
+    profile = request.user.profile
     event = get_object_or_404(TimelineEvent, id=event_id)
 
     current_note = None
@@ -687,7 +702,7 @@ def timeline_note_view(request, event_id):
         'participants': participants_str,
         'informed': informed_str
     }
-    if request.user.profile in allowed or request.user.profile.character_status == 'gm':
+    if profile in allowed or profile.character_status == 'gm':
         return render(request, 'history/timeline_note.html', context)
     else:
         return redirect('home:dupa')
@@ -696,6 +711,7 @@ def timeline_note_view(request, event_id):
 @query_debugger
 @login_required
 def timeline_edit_view(request, event_id):
+    profile = request.user.profile
     event = get_object_or_404(TimelineEvent, id=event_id)
 
     if request.method == 'POST':
@@ -712,7 +728,7 @@ def timeline_edit_view(request, event_id):
         'page_title': 'Edycja wydarzenia',
         'form': form
     }
-    if request.user.profile.character_status == 'gm':
+    if profile.character_status == 'gm':
         return render(request, 'history/timeline_edit.html', context)
     else:
         return redirect('home:dupa')
