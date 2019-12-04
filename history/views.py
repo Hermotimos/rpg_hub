@@ -205,21 +205,25 @@ def chronicle_one_chapter_view(request, chapter_id):
 def chronicle_one_game_view(request, game_id):
     profile = request.user.profile
     game = get_object_or_404(GameSession, id=game_id)
+
     if profile.character_status == 'gm':
-        events_informed = []
-        events = game.chronicle_events.all()
-        events = list(events)
+        events = game.chronicle_events.all()\
+            .select_related('debate')\
+            .prefetch_related('informed', 'pictures', 'notes')
     else:
-        events_participated = profile.chronicle_events_participated.filter(game=game)
-        events_informed = profile.chronicle_events_informed.filter(game=game)
-        events = (events_participated | events_informed).distinct()
-        events_informed = list(events_informed)
-        events = list(events)
+        events = game.chronicle_events\
+            .filter(Q(informed=profile) | Q(participants=profile))\
+            .distinct()\
+            .select_related('debate') \
+            .prefetch_related('informed', 'pictures', 'notes')
+        # events_participated = profile.chronicle_events_participated.filter(game=game)
+        # events_informed = profile.chronicle_events_informed.filter(game=game)
+        # events = (events_participated | events_informed).distinct()
 
     context = {
         'page_title': f'{game.title}',
         'events': events,
-        'events_informed': events_informed
+        # 'events_informed': events_informed
     }
     if is_allowed_for_chronicle(profile, game_id=game_id):
         return render(request, 'history/chronicle_one_game.html', context)
