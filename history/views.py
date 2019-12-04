@@ -58,20 +58,33 @@ def is_allowed_for_chronicle(profile, chapter_id=0, game_id=0, chronicle_event_i
 @login_required
 def chronicle_main_view(request):
     profile = request.user.profile
-    if profile.character_status == 'gm':
-        chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all()] for ch in Chapter.objects.all()}
+
+    if request.user.profile.character_status == 'gm':
+        chapters = Chapter.objects.prefetch_related('game_sessions')
+        # chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all()] for ch in Chapter.objects.all()}
     else:
-        events_participated = profile.chronicle_events_participated.all()
-        events_informed = profile.chronicle_events_informed.all()
-        events = (events_participated | events_informed).distinct()
-        events = list(events)
-        games = [e.game for e in events]
-        chapters = [g.chapter for g in games]
-        chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all() if g in games] for ch in chapters}
+        # events_participated = profile.chronicle_events_participated.all()
+        # events_informed = profile.chronicle_events_informed.all()
+        # events = (events_participated | events_informed).distinct()
+        # events = list(events)
+        # games = [e.game for e in events]
+        # chapters = [g.chapter for g in games]
+        # chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all() if g in games] for ch in chapters}
+
+        events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all())\
+            .distinct().select_related('debate').prefetch_related('informed', 'pictures', 'notes')
+
+        games = GameSession.objects.filter(
+            chronicle_events__in=events
+        ).distinct().prefetch_related(Prefetch('chronicle_events', queryset=events))
+
+        chapters = Chapter.objects.prefetch_related(
+            Prefetch('game_sessions', queryset=games)
+        ).filter(game_sessions__in=games).distinct()
 
     context = {
         'page_title': 'Kronika',
-        'chapters_with_games_dict': chapters_with_games_dict
+        'chapters': chapters
     }
     return render(request, 'history/chronicle_main.html', context)
 
