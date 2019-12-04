@@ -60,19 +60,18 @@
                                     </tr>
                                 </table>
                             {% endif %}
-                            <p>
-                                {% if event.debate %}
-                                    <br><br><a href="{% url 'debates:debate' event.debate.topic.id event.debate.id %}">Narada: {{ event.debate.name }}</a>
-                                {% endif %}
+                            
+                            {% if event.debate %}
+                                <br><br><a href="{% url 'debates:debate' event.debate.topic.id event.debate.id %}">Narada: {{ event.debate.name }}</a>
+                            {% endif %}
 
-                                {% for note in event.notes.all %}
-                                    {% if request.user == note.author %}
-                                        {% if note.text != '' %}
-                                            <a style="color:{{ note.color }}"><br>Przemyślenia:<br>{{ note.text|linebreaksbr }}</a>
-                                        {% endif %}
+                            {% for note in event.notes.all %}
+                                {% if request.user == note.author %}
+                                    {% if note.text != '' %}
+                                        <a style="color:{{ note.color }}"><br>Przemyślenia:<br>{{ note.text|linebreaksbr }}</a>
                                     {% endif %}
-                                {% endfor %}
-                            </p>
+                                {% endif %}
+                            {% endfor %}
                         </td>
                         <td class="align-top">
                             <br>
