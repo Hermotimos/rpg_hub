@@ -63,14 +63,6 @@ def chronicle_main_view(request):
         chapters = Chapter.objects.prefetch_related('game_sessions')
         # chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all()] for ch in Chapter.objects.all()}
     else:
-        # events_participated = profile.chronicle_events_participated.all()
-        # events_informed = profile.chronicle_events_informed.all()
-        # events = (events_participated | events_informed).distinct()
-        # events = list(events)
-        # games = [e.game for e in events]
-        # chapters = [g.chapter for g in games]
-        # chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all() if g in games] for ch in chapters}
-
         events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all())\
             .distinct().select_related('debate').prefetch_related('informed', 'pictures', 'notes')
 
@@ -81,6 +73,14 @@ def chronicle_main_view(request):
         chapters = Chapter.objects.prefetch_related(
             Prefetch('game_sessions', queryset=games)
         ).filter(game_sessions__in=games).distinct()
+
+        # events_participated = profile.chronicle_events_participated.all()
+        # events_informed = profile.chronicle_events_informed.all()
+        # events = (events_participated | events_informed).distinct()
+        # events = list(events)
+        # games = [e.game for e in events]
+        # chapters = [g.chapter for g in games]
+        # chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all() if g in games] for ch in chapters}
 
     context = {
         'page_title': 'Kronika',
@@ -123,7 +123,8 @@ def chronicle_all_chapters_view(request):
             'game_sessions__chronicle_events__informed',
             'game_sessions__chronicle_events__pictures',
             'game_sessions__chronicle_events__notes',
-            'game_sessions__chronicle_events__debate')
+            'game_sessions__chronicle_events__debate'
+        )
         # events_informed = []
         # chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all()] for ch in Chapter.objects.all()}
         # games_with_events_dict = {g: [e for e in g.chronicle_events.all().prefetch_related('pictures')] for g in GameSession.objects.all()}
@@ -131,13 +132,11 @@ def chronicle_all_chapters_view(request):
         events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all())\
             .distinct().select_related('debate').prefetch_related('informed', 'pictures', 'notes')
 
-        games = GameSession.objects.filter(
-            chronicle_events__in=events
-        ).distinct().prefetch_related(Prefetch('chronicle_events', queryset=events))
+        games = GameSession.objects.filter(chronicle_events__in=events
+                                           ).distinct().prefetch_related(Prefetch('chronicle_events', queryset=events))
 
-        chapters = Chapter.objects.prefetch_related(
-            Prefetch('game_sessions', queryset=games)
-        ).filter(game_sessions__in=games).distinct()
+        chapters = Chapter.objects.prefetch_related(Prefetch('game_sessions', queryset=games)
+                                                    ).filter(game_sessions__in=games).distinct()
 
         # chapters = [g.chapter for g in games]
         # chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all() if g in games] for ch in chapters}
@@ -158,23 +157,44 @@ def chronicle_all_chapters_view(request):
 def chronicle_one_chapter_view(request, chapter_id):
     profile = request.user.profile
     chapter = get_object_or_404(Chapter, id=chapter_id)
-    if profile.character_status == 'gm':
-        games_with_events_dict = {g: [e for e in g.chronicle_events.all()] for g in chapter.game_sessions.all()}
-        events_informed = []
-    else:
-        events_participated = profile.chronicle_events_participated.filter(game__in=chapter.game_sessions.all())
-        events_informed = profile.chronicle_events_informed.filter(game__in=chapter.game_sessions.all())
-        events = (events_participated | events_informed).distinct()
-        events_informed = list(events_informed)
-        events = list(events)
 
-        games = [e.game for e in events]
-        games_with_events_dict = {g: [e for e in g.chronicle_events.all() if e in events] for g in games}
+    if profile.character_status == 'gm':
+        # games_with_events_dict = {g: [e for e in g.chronicle_events.all()] for g in chapter.game_sessions.all()}
+        # events_informed = []
+
+        games = GameSession.objects\
+            .filter(chapter=chapter_id)\
+            .prefetch_related(
+                'chronicle_events__informed',
+                'chronicle_events__pictures',
+                'chronicle_events__notes',
+                'chronicle_events__debate'
+            )
+    else:
+        events = ChronicleEvent.objects\
+            .filter(game__chapter=chapter_id)\
+            .filter(Q(informed=profile) | Q(participants=profile))\
+            .select_related('debate')\
+            .prefetch_related('informed', 'pictures', 'notes')
+
+        games = GameSession.objects\
+            .filter(chronicle_events__in=events)\
+            .distinct()\
+            .prefetch_related(Prefetch('chronicle_events', queryset=events))
+
+        # events_participated = profile.chronicle_events_participated.filter(game__in=chapter.game_sessions.all())
+        # events_informed = profile.chronicle_events_informed.filter(game__in=chapter.game_sessions.all())
+        # events = (events_participated | events_informed).distinct()
+        # events_informed = list(events_informed)
+        # events = list(events)
+        #
+        # games = [e.game for e in events]
+        # games_with_events_dict = {g: [e for e in g.chronicle_events.all() if e in events] for g in games}
 
     context = {
-        'page_title': f'{chapter.title}',
-        'games_with_events_dict': games_with_events_dict,
-        'events_informed': events_informed
+        'page_title': chapter.title,
+        'games': games,
+        # 'events_informed': events_informed
     }
     if is_allowed_for_chronicle(profile, chapter_id=chapter_id):
         return render(request, 'history/chronicle_one_chapter.html', context)

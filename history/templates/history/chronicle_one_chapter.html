@@ -27,7 +27,7 @@
         </thead>
 
         <tbody>
-            {% for game in games_with_events_dict %}
+            {% for game in games %}
                 <tr>
                     <td>
                         <h4>
@@ -36,17 +36,17 @@
                     </td>
                     <td></td>
                 </tr>
-                {% for event in games_with_events_dict|dict_lookup:game %}
+                {% for event in game.chronicle_events.all %}
                     <tr>
                         <td class="chronicle-event">
                             <br>
                             <p>
-                                {% if event in events_informed %}
+                                {% if request.user.profile in event.informed.all %}
                                     <small>(Znasz z opowieści)</small>
                                 {% endif %}
                                 {{ event.description|linebreaksbr }}
                             </p>
-                            {% if event.pictures.all and event not in events_informed %}
+                            {% if event.pictures.all and request.user.profile not in event.informed.all %}
                                 <table class="chronicle-img">
                                     <tr>
                                     {% for p in event.pictures.all %}
