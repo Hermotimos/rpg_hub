@@ -159,17 +159,14 @@ def chronicle_one_chapter_view(request, chapter_id):
     chapter = get_object_or_404(Chapter, id=chapter_id)
 
     if profile.character_status == 'gm':
+        games = chapter.game_sessions.prefetch_related(
+            'chronicle_events__informed',
+            'chronicle_events__pictures',
+            'chronicle_events__notes',
+            'chronicle_events__debate'
+            )
         # games_with_events_dict = {g: [e for e in g.chronicle_events.all()] for g in chapter.game_sessions.all()}
         # events_informed = []
-
-        games = GameSession.objects\
-            .filter(chapter=chapter_id)\
-            .prefetch_related(
-                'chronicle_events__informed',
-                'chronicle_events__pictures',
-                'chronicle_events__notes',
-                'chronicle_events__debate'
-            )
     else:
         events = ChronicleEvent.objects\
             .filter(game__chapter=chapter_id)\
@@ -177,7 +174,7 @@ def chronicle_one_chapter_view(request, chapter_id):
             .select_related('debate')\
             .prefetch_related('informed', 'pictures', 'notes')
 
-        games = GameSession.objects\
+        games = chapter.game_sessions\
             .filter(chronicle_events__in=events)\
             .distinct()\
             .prefetch_related(Prefetch('chronicle_events', queryset=events))
