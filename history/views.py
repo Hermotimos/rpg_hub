@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.db.models import Prefetch, Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -108,26 +109,36 @@ def chronicle_all_chapters_view(request):
         events_informed = []
         # chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all()] for ch in Chapter.objects.all()}
         # games_with_events_dict = {g: [e for e in g.chronicle_events.all().prefetch_related('pictures')] for g in GameSession.objects.all()}
-        chapters = Chapter.objects.all().prefetch_related(
+        chapters = Chapter.objects.prefetch_related(
             'game_sessions__chronicle_events__informed',
             'game_sessions__chronicle_events__pictures',
             'game_sessions__chronicle_events__notes',
             'game_sessions__chronicle_events__debate')
     else:
-        events_participated = profile.chronicle_events_participated.all()
-        events_informed = profile.chronicle_events_informed.all()
-        events = (events_participated | events_informed).distinct().prefetch_related('pictures').select_related('game')
+        events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all()).\
+            distinct().\
+            prefetch_related('informed', 'pictures', 'notes').select_related('debate')
+        #
+        games = GameSession.objects.filter(chronicle_events__in=events)
+        # chapters = [g.chapter for g in games]
+        # chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all() if g in games] for ch in chapters}
+        # games_with_events_dict = {g: [e for e in g.chronicle_events.all() if e in events] for g in games}
 
-        games = [e.game for e in events]
-        chapters = [g.chapter for g in games]
-        chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all() if g in games] for ch in chapters}
-        games_with_events_dict = {g: [e for e in g.chronicle_events.all() if e in events] for g in games}
+
+        chapters = Chapter.objects.prefetch_related(
+            Prefetch(
+                'game_sessions__chronicle_events', queryset=events.prefetch_related(
+
+                )
+            )
+        )
+
 
     context = {
         'page_title': 'Pełna kronika',
         # 'chapters_with_games_dict': chapters_with_games_dict,
         # 'games_with_events_dict': games_with_events_dict,
-        'events_informed': events_informed,
+        # 'events_informed': events_informed,
 
         'chapters': chapters,
         'profile': profile,
