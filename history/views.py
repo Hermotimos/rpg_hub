@@ -171,6 +171,7 @@ def chronicle_one_chapter_view(request, chapter_id):
         events = ChronicleEvent.objects\
             .filter(game__chapter=chapter_id)\
             .filter(Q(informed=profile) | Q(participants=profile))\
+            .distinct()\
             .select_related('debate')\
             .prefetch_related('informed', 'pictures', 'notes')
 
