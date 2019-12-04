@@ -86,10 +86,11 @@
                                         {% endfor %}
                                         </tr>
                                     </table>
+                                    <br>
                                 {% endif %}
                                 
                                 {% if event.debate %}
-                                    <br><br><a href="{% url 'debates:debate' event.debate.topic.id event.debate.id %}">Narada: {{ event.debate.name }}</a>
+                                    <p><a href="{% url 'debates:debate' event.debate.topic.id event.debate.id %}">Narada: {{ event.debate.name }}</a></p>
                                 {% endif %}
 
                                 {% for note in event.notes.all %}
