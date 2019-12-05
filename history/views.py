@@ -669,12 +669,23 @@ def timeline_general_location_view(request, gen_loc_id):
 def timeline_specific_location_view(request, spec_loc_id):
     profile = request.user.profile
     specific_location = get_object_or_404(SpecificLocation, id=spec_loc_id)
-    events_by_specific_location_qs = specific_location.timeline_events.all()
-    known_events = participated_and_informed_events(profile.id)
-    events = list(events_by_specific_location_qs.distinct() & known_events.distinct())
+
+    if profile.character_status == 'gm':
+        events = TimelineEvent.objects.filter(specific_locations=spec_loc_id)
+    else:
+        events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
+            .filter(specific_locations=spec_loc_id)
+
+    events = events\
+        .select_related('general_location', 'game')\
+        .prefetch_related('threads', 'participants', 'informed', 'specific_locations', 'notes__author')
+
+    # events_by_specific_location_qs = specific_location.timeline_events.all()
+    # known_events = participated_and_informed_events(profile.id)
+    # events = list(events_by_specific_location_qs.distinct() & known_events.distinct())
 
     context = {
-        'page_title': f'{specific_location.name}',
+        'page_title': specific_location.name,
         'header': f'{specific_location.name}... Jak to miejsce odcisnęło się na Twoim losie?',
         'events': events,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
