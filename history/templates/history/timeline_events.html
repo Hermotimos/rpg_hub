@@ -58,7 +58,7 @@
                 </td>
                 <td class="timeline-event text-justify align-top unblue-black pl-2 pr-2">
                     <a href="{% url 'history:chronicle-one-game' event.game.id %}">{{ event.description|linebreaksbr }}</a>
-                    {% for note in event.notes.all %}thread
+                    {% for note in event.notes.all %}
                         {% if request.user == note.author %}
                             {% if note.text != '' %}
                                 <a style="color:{{ note.color }}"><br>Przemyślenia:<br>{{ note.text|linebreaksbr }}</a>
