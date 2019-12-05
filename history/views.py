@@ -551,15 +551,22 @@ def timeline_create_view(request):
 @login_required
 def timeline_all_events_view(request):
     profile = request.user.profile
-    known_events = participated_and_informed_events(profile.id).\
-        select_related('general_location', 'game').\
-        prefetch_related('threads', 'participants', 'informed', 'specific_locations')
+
+    if profile.character_status == 'gm':
+        events = TimelineEvent.objects.all()
+    else:
+        events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
+            .distinct()
+
+    events = events\
+        .select_related('general_location', 'game')\
+        .prefetch_related('threads', 'participants', 'informed', 'specific_locations', 'notes')
 
     context = {
         'page_title': 'Pełne Kalendarium',
         'header': 'Opisane tu wydarzenia rozpoczęły swój bieg 20. roku Archonatu Nemetha Samatiana w Ebbonie, '
                   'choć zarodki wielu z nich sięgają znacznie odleglejszych czasów...',
-        'events': known_events,
+        'events': events,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
     return render(request, 'history/timeline_events.html', context)
