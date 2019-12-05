@@ -236,10 +236,12 @@ def chronicle_one_game_view(request, game_id):
 def chronicle_inform_view(request, event_id):
     profile = request.user.profile
     event = get_object_or_404(ChronicleEvent, id=event_id)
+    participants = event.participants.all()
+    old_informed = event.informed.all()
 
-    participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in event.participants.all())
-    participants_ids = [p.id for p in event.participants.all()]
-    old_informed = event.informed.all()[::1]                  # enforces evaluation of lazy Queryset for message
+    participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in participants)
+    participants_ids = [p.id for p in participants]
+
     old_informed_ids = [p.id for p in old_informed]
     old_informed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in old_informed)
 
@@ -252,16 +254,17 @@ def chronicle_inform_view(request, event_id):
         if form.is_valid():
             event = form.save()
 
-            informed = form.cleaned_data['informed']
-            informed |= Profile.objects.filter(id__in=old_informed_ids)
-            event.informed.set(informed)
+            new_informed = form.cleaned_data['informed']
+            event.informed.add(*list(new_informed))
+            # informed |= Profile.objects.filter(id__in=old_informed_ids)
+            # event.informed.set(informed)
 
             subject = f"[RPG] {profile} podzielił się z Tobą swoją historią!"
-            message = f"{profile} znów rozprawia o swoich przygodach.\n" \
-                      f"{', '.join(p.character_name for p in form.cleaned_data['informed'])}\n\n" \
+            message = f"{profile} znów rozprawia o swoich przygodach.\n\n" \
                       f"Podczas przygody '{event.game.title}' rozegrało się co następuje:\n {event.description}\n" \
                       f"Tak było i nie inaczej...\n\n" \
-                      f"Wydarzenie zostało zapisane w Twojej Kronice."
+                      f"Wydarzenie zostało zapisane w Twojej Kronice:" \
+                      f"{request.get_host()}/history/chronicle/one-game:{event.game.id}/"
             sender = settings.EMAIL_HOST_USER
             receivers = []
             for profile in event.informed.all():
