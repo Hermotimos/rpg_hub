@@ -386,11 +386,14 @@ SEASONS_WITH_STYLES_DICT = {
 def participated_and_informed_events(profile_id):
     profile = Profile.objects.get(id=profile_id)
     if profile.character_status == 'gm':
-        known_qs = TimelineEvent.objects.all()
+        known_qs = TimelineEvent.objects.all()\
+            .select_related('game', 'general_location')\
+            .prefetch_related('threads', 'participants', 'informed', 'specific_locations')
     else:
-        participated_qs = Profile.objects.get(id=profile_id).timeline_events_participated.all()
-        informed_qs = Profile.objects.get(id=profile_id).timeline_events_informed.all()
-        known_qs = (participated_qs | informed_qs).distinct()
+        known_qs = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
+            .distinct()\
+            .select_related('game', 'general_location')\
+            .prefetch_related('threads', 'participants', 'informed', 'specific_locations')
     return known_qs
 
 
@@ -408,12 +411,12 @@ def timeline_main_view(request):
     games_set = set()
     years_set = set()
     for event in known_events:
-        years_set.add(event.year)
         threads_querysets_list.append(event.threads.all())
         participants_querysets_list.append(event.participants.all())
         spec_locs_querysets_list.append(event.specific_locations.all())
         gen_locs_set.add(event.general_location)
         games_set.add(event.game)
+        years_set.add(event.year)
 
     # threads
     threads_qs = Thread.objects.none()
