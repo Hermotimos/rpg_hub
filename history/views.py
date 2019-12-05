@@ -64,15 +64,17 @@ def chronicle_main_view(request):
         # chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all()] for ch in Chapter.objects.all()}
     else:
         events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all())\
-            .distinct().select_related('debate').prefetch_related('informed', 'pictures', 'notes')
+            .distinct()\
+            .select_related('debate')\
+            .prefetch_related('informed', 'pictures', 'notes')
 
-        games = GameSession.objects.filter(
-            chronicle_events__in=events
-        ).distinct().prefetch_related(Prefetch('chronicle_events', queryset=events))
+        games = GameSession.objects.filter(chronicle_events__in=events)\
+            .distinct()\
+            .prefetch_related(Prefetch('chronicle_events', queryset=events))
 
-        chapters = Chapter.objects.prefetch_related(
-            Prefetch('game_sessions', queryset=games)
-        ).filter(game_sessions__in=games).distinct()
+        chapters = Chapter.objects\
+            .prefetch_related(Prefetch('game_sessions', queryset=games))\
+            .filter(game_sessions__in=games).distinct()
 
         # events_participated = profile.chronicle_events_participated.all()
         # events_informed = profile.chronicle_events_informed.all()
@@ -118,6 +120,7 @@ def chronicle_create_view(request):
 @login_required
 def chronicle_all_chapters_view(request):
     profile = request.user.profile
+
     if profile.character_status == 'gm':
         chapters = Chapter.objects.prefetch_related(
             'game_sessions__chronicle_events__informed',
@@ -130,13 +133,19 @@ def chronicle_all_chapters_view(request):
         # games_with_events_dict = {g: [e for e in g.chronicle_events.all().prefetch_related('pictures')] for g in GameSession.objects.all()}
     else:
         events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all())\
-            .distinct().select_related('debate').prefetch_related('informed', 'pictures', 'notes')
+            .distinct()\
+            .select_related('debate')\
+            .prefetch_related('informed', 'pictures', 'notes')
 
-        games = GameSession.objects.filter(chronicle_events__in=events
-                                           ).distinct().prefetch_related(Prefetch('chronicle_events', queryset=events))
+        games = GameSession.objects\
+            .filter(chronicle_events__in=events)\
+            .distinct()\
+            .prefetch_related(Prefetch('chronicle_events', queryset=events))
 
-        chapters = Chapter.objects.prefetch_related(Prefetch('game_sessions', queryset=games)
-                                                    ).filter(game_sessions__in=games).distinct()
+        chapters = Chapter.objects\
+            .prefetch_related(Prefetch('game_sessions', queryset=games))\
+            .filter(game_sessions__in=games)\
+            .distinct()
 
         # chapters = [g.chapter for g in games]
         # chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all() if g in games] for ch in chapters}
@@ -168,12 +177,11 @@ def chronicle_one_chapter_view(request, chapter_id):
         # games_with_events_dict = {g: [e for e in g.chronicle_events.all()] for g in chapter.game_sessions.all()}
         # events_informed = []
     else:
-        events = ChronicleEvent.objects\
-            .filter(game__chapter=chapter_id)\
-            .filter(Q(informed=profile) | Q(participants=profile))\
+        events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all())\
             .distinct()\
             .select_related('debate')\
-            .prefetch_related('informed', 'pictures', 'notes')
+            .prefetch_related('informed', 'pictures', 'notes')\
+            .filter(game__chapter=chapter_id)
 
         games = chapter.game_sessions\
             .filter(chronicle_events__in=events)\
@@ -221,7 +229,7 @@ def chronicle_one_game_view(request, game_id):
         # events = (events_participated | events_informed).distinct()
 
     context = {
-        'page_title': f'{game.title}',
+        'page_title': game.title,
         'events': events,
         # 'events_informed': events_informed
     }
@@ -304,8 +312,8 @@ def chronicle_note_view(request, event_id):
     event = get_object_or_404(ChronicleEvent, id=event_id)
 
     current_note = None
-    participants = ', '.join(p.character_name.split(' ', 1)[0] for p in event.participants.all())
-    informed = ', '.join(p.character_name.split(' ', 1)[0] for p in event.informed.all())
+    participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in event.participants.all())
+    informed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in event.informed.all())
 
     try:
         current_note = ChronicleEventNote.objects.get(event=event, author=request.user)
@@ -329,8 +337,8 @@ def chronicle_note_view(request, event_id):
         'page_title': 'Przemyślenia',
         'event': event,
         'form': form,
-        'participants': participants,
-        'informed': informed
+        'participants': participants_str,
+        'informed': informed_str
     }
     if is_allowed_for_chronicle(profile, chronicle_event_id=event_id):
         return render(request, 'history/chronicle_note.html', context)
