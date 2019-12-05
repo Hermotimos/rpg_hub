@@ -584,7 +584,7 @@ def timeline_thread_view(request, thread_id):
     # events = list(events_by_thread_qs.distinct() & known_events.distinct())
 
     context = {
-        'page_title': f'{thread.name}',
+        'page_title': thread.name,
         'header': f'{thread.name}... Próbujesz sobie przypomnieć, od czego się to wszystko zaczęło?',
         'events': events,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
@@ -621,7 +621,7 @@ def timeline_participant_view(request, participant_id):
         header = f'{participant.character_name.split(" ", 1)[0]}... Niejedno razem przeżyliście. Na dobre i na złe...'
 
     context = {
-        'page_title': f'{participant.character_name}',
+        'page_title': participant.character_name,
         'header': header,
         'events': events,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
@@ -637,12 +637,23 @@ def timeline_participant_view(request, participant_id):
 def timeline_general_location_view(request, gen_loc_id):
     profile = request.user.profile
     general_location = get_object_or_404(GeneralLocation, id=gen_loc_id)
-    events_by_general_location_qs = TimelineEvent.objects.filter(general_location=general_location)
-    known_events = participated_and_informed_events(profile.id)
-    events = list(events_by_general_location_qs.distinct() & known_events.distinct())
+
+    if profile.character_status == 'gm':
+        events = TimelineEvent.objects.filter(general_location=gen_loc_id)
+    else:
+        events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
+            .filter(general_location=gen_loc_id)
+
+    events = events\
+        .select_related('general_location', 'game')\
+        .prefetch_related('threads', 'participants', 'informed', 'specific_locations', 'notes__author')
+
+    # events_by_general_location_qs = TimelineEvent.objects.filter(general_location=general_location)
+    # known_events = participated_and_informed_events(profile.id)
+    # events = list(events_by_general_location_qs.distinct() & known_events.distinct())
 
     context = {
-        'page_title': f'{general_location.name}',
+        'page_title': general_location.name,
         'header': f'{general_location.name}... Zastanawiasz się, jakie piętno wywarła na Twoich losach ta kraina...',
         'events': events,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
