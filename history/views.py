@@ -739,12 +739,24 @@ def timeline_date_view(request, year, season='0'):
 def timeline_game_view(request, game_id):
     profile = request.user.profile
     game = get_object_or_404(GameSession, id=game_id)
-    events_by_game_qs = TimelineEvent.objects.filter(game=game)
-    known_events = participated_and_informed_events(profile.id)
-    events = list(events_by_game_qs.distinct() & known_events.distinct())
+
+    if profile.character_status == 'gm':
+        events = TimelineEvent.objects.filter(game=game_id)
+    else:
+        events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
+            .filter(game=game_id)\
+            .distinct()
+
+    events = events\
+        .select_related('general_location', 'game')\
+        .prefetch_related('threads', 'participants', 'informed', 'specific_locations', 'notes__author')
+
+    # events_by_game_qs = TimelineEvent.objects.filter(game=game)
+    # known_events = participated_and_informed_events(profile.id)
+    # events = list(events_by_game_qs.distinct() & known_events.distinct())
 
     context = {
-        'page_title': f'{game.title}',
+        'page_title': game.title,
         'header': f'{game.title}... Jak to po kolei było?',
         'events': events,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
