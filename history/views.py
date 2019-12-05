@@ -704,9 +704,20 @@ def timeline_specific_location_view(request, spec_loc_id):
 @login_required
 def timeline_date_view(request, year, season='0'):
     profile = request.user.profile
+
+    if profile.character_status == 'gm':
+        events = TimelineEvent.objects.all()
+    else:
+        events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
+            .distinct()
+
+    events = events\
+        .select_related('general_location', 'game')\
+        .prefetch_related('threads', 'participants', 'informed', 'specific_locations', 'notes__author')
+
     if season == '0':
+        events = events.filter(year=year)
         page_title = f'{year}. rok Archonatu Nemetha Samatiana'
-        events_qs = TimelineEvent.objects.filter(year=year)
     else:
         if season == '1':
             season_name = 'Wiosna'
@@ -716,11 +727,11 @@ def timeline_date_view(request, year, season='0'):
             season_name = "Jesień"
         else:
             season_name = "Zima"
-        events_qs = TimelineEvent.objects.filter(year=year, season=season)
+        events = events.filter(year=year, season=season)
         page_title = f'{season_name} {year}. roku Archonatu Nemetha Samatiana'
 
-    known_events = participated_and_informed_events(profile.id)
-    events = list(events_qs.distinct() & known_events.distinct())
+    # known_events = participated_and_informed_events(profile.id)
+    # events = list(events.distinct() & known_events.distinct())
 
     context = {
         'page_title': page_title,
