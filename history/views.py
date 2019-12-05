@@ -573,7 +573,8 @@ def timeline_thread_view(request, thread_id):
         events = TimelineEvent.objects.filter(threads=thread)
     else:
         events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
-            .filter(threads=thread).distinct()
+            .filter(threads=thread)\
+            .distinct()
 
     events = events\
         .select_related('general_location', 'game')\
@@ -605,7 +606,8 @@ def timeline_participant_view(request, participant_id):
         events = TimelineEvent.objects.filter(participants=participant_id)
     else:
         events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
-            .filter(participants=participant_id).distinct()
+            .filter(participants=participant_id)\
+            .distinct()
 
     events = events\
         .select_related('general_location', 'game')\
@@ -642,7 +644,8 @@ def timeline_general_location_view(request, gen_loc_id):
         events = TimelineEvent.objects.filter(general_location=gen_loc_id)
     else:
         events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
-            .filter(general_location=gen_loc_id)
+            .filter(general_location=gen_loc_id)\
+            .distinct()
 
     events = events\
         .select_related('general_location', 'game')\
@@ -674,7 +677,8 @@ def timeline_specific_location_view(request, spec_loc_id):
         events = TimelineEvent.objects.filter(specific_locations=spec_loc_id)
     else:
         events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
-            .filter(specific_locations=spec_loc_id)
+            .filter(specific_locations=spec_loc_id)\
+            .distinct()
 
     events = events\
         .select_related('general_location', 'game')\
