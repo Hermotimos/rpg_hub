@@ -239,10 +239,9 @@ def chronicle_inform_view(request, event_id):
     participants = event.participants.all()
     old_informed = event.informed.all()
 
-    participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in participants)
     participants_ids = [p.id for p in participants]
-
     old_informed_ids = [p.id for p in old_informed]
+    participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in participants)
     old_informed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in old_informed)
 
     if request.method == 'POST':
@@ -261,16 +260,18 @@ def chronicle_inform_view(request, event_id):
 
             subject = f"[RPG] {profile} podzielił się z Tobą swoją historią!"
             message = f"{profile} znów rozprawia o swoich przygodach.\n\n" \
-                      f"Podczas przygody '{event.game.title}' rozegrało się co następuje:\n {event.description}\n" \
+                      f"Podczas przygody '{event.game.title}' rozegrało się co następuje:\n{event.description}\n" \
                       f"Tak było i nie inaczej...\n\n" \
-                      f"Wydarzenie zostało zapisane w Twojej Kronice:" \
+                      f"Wydarzenie zostało zapisane w Twojej Kronice: " \
                       f"{request.get_host()}/history/chronicle/one-game:{event.game.id}/"
             sender = settings.EMAIL_HOST_USER
             receivers = []
-            for profile in event.informed.all():
-                # exclude previously informed users from mailing to avoid spam
-                if profile not in old_informed:
-                    receivers.append(profile.user.email)
+            for profile in new_informed:
+                receivers.append(profile.user.email)
+            # for profile in event.informed.all():
+            #     # exclude previously informed users from mailing to avoid spam
+            #     if profile not in old_informed:
+            #         receivers.append(profile.user.email)
             if profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
