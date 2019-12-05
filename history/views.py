@@ -577,9 +577,21 @@ def timeline_all_events_view(request):
 def timeline_thread_view(request, thread_id):
     profile = request.user.profile
     thread = get_object_or_404(Thread, id=thread_id)
-    events_by_thread_qs = thread.timeline_events.all()
-    known_events = participated_and_informed_events(profile.id)
-    events = list(events_by_thread_qs.distinct() & known_events.distinct())
+
+    if profile.character_status == 'gm':
+        events = TimelineEvent.objects.filter(threads=thread)
+    else:
+        events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
+            .filter(threads=thread).distinct()
+
+    events = events\
+        .select_related('general_location', 'game')\
+        .prefetch_related('threads', 'participants', 'informed', 'specific_locations', 'notes__author')
+
+    # thread = get_object_or_404(Thread, id=thread_id)
+    # events_by_thread_qs = thread.timeline_events.all()
+    # known_events = participated_and_informed_events(profile.id)
+    # events = list(events_by_thread_qs.distinct() & known_events.distinct())
 
     context = {
         'page_title': f'{thread.name}',
