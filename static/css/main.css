@@ -96,17 +96,11 @@ td.align-right {
 
 * {
         font-family: 'IM Fell Great Primer', serif;
-        text-align: justify;
 }
 
 h1, h2, h3, h4, h5, h6, b{
         color: #444444;
 }
-/*
-.justify {
-        text-align: justify;
-}
-*/
 
 .deep-red {
         color: #C70039;

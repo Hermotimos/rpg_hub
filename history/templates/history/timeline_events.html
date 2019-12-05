@@ -56,7 +56,7 @@
                         &#10023;<a class="hover-pointer" href="{% url 'history:timeline-thread' thread.id %}">{{ thread }}</a><br>
                     {% endfor %}
                 </td>
-                <td class="timeline-event justify align-top unblue-black pl-2 pr-2">
+                <td class="timeline-event text-justify align-top unblue-black pl-2 pr-2">
                     <a href="{% url 'history:chronicle-one-game' event.game.id %}">{{ event.description|linebreaksbr }}</a>
                     {% for note in event.notes.all %}thread
                         {% if request.user == note.author %}
