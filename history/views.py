@@ -401,72 +401,120 @@ def participated_and_informed_events(profile_id):
 @login_required
 def timeline_main_view(request):
     profile = request.user.profile
-    known_events = participated_and_informed_events(profile.id)
+
+    if profile.character_status == 'gm':
+        threads = Thread.objects.all()
+        participants = Profile.objects.filter(character_status__in=['active_player', 'inactive_player', 'dead_player'])
+        gen_locs = GeneralLocation.objects.all().prefetch_related('specific_locations')
+        games = GameSession.objects.all()
+        events = TimelineEvent.objects.all()
+
+        years = list({y for y in (e.year for e in events)})
+        years.sort()
+        years_with_seasons_dict = {}
+        for y in years:
+            seasons = list({e.season for e in events if e.year == y})
+            seasons.sort()
+            years_with_seasons_dict[y] = seasons
+
+    else:
+        threads = Thread.objects\
+            .filter(Q(timeline_events__participants=profile) | Q(timeline_events__informed=profile))\
+            .distinct()
+        participants = Profile.objects\
+            .filter(character_status__in=['active_player', 'inactive_player', 'dead_player'])\
+            .filter(timeline_events_participated__in=profile.timeline_events_participated.all())\
+            .distinct()
+        spec_locs = SpecificLocation.objects \
+            .filter(Q(timeline_events__participants=profile) | Q(timeline_events__informed=profile)) \
+            .distinct()
+        gen_locs = GeneralLocation.objects\
+            .filter(specific_locations__in=spec_locs)\
+            .distinct()\
+            .prefetch_related('specific_locations')
+        games = GameSession.objects \
+            .filter(Q(timeline_events__participants=profile) | Q(timeline_events__informed=profile)) \
+            .distinct()
+        events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
+            .distinct()
+
+        years = list({y for y in (e.year for e in events)})
+        years.sort()
+        years_with_seasons_dict = {}
+        for y in years:
+            seasons = list({e.season for e in events if e.year == y})
+            seasons.sort()
+            years_with_seasons_dict[y] = seasons
+
+    # known_events = participated_and_informed_events(profile.id)
 
     # repetitive interations over known_events.all():
-    threads_querysets_list = []
-    participants_querysets_list = []
-    spec_locs_querysets_list = []
-    gen_locs_set = set()
-    games_set = set()
-    years_set = set()
-    for event in known_events:
-        threads_querysets_list.append(event.threads.all())
-        participants_querysets_list.append(event.participants.all())
-        spec_locs_querysets_list.append(event.specific_locations.all())
-        gen_locs_set.add(event.general_location)
-        games_set.add(event.game)
-        years_set.add(event.year)
+    # threads_querysets_list = []
+    # participants_querysets_list = []
+    # spec_locs_querysets_list = []
+    # gen_locs_set = set()
+    # games_set = set()
+    # years_set = set()
+    # for event in known_events:
+    #     threads_querysets_list.append(event.threads.all())
+    #     participants_querysets_list.append(event.participants.all())
+    #     spec_locs_querysets_list.append(event.specific_locations.all())
+    #     gen_locs_set.add(event.general_location)
+    #     games_set.add(event.game)
+    #     years_set.add(event.year)
 
     # threads
-    threads_qs = Thread.objects.none()
-    for qs in threads_querysets_list:
-        threads_qs = threads_qs | qs
-    threads_list = list(threads_qs.distinct())
-    threads_name_and_obj_list = [(t.name, t) for t in threads_list]
+    # threads_qs = Thread.objects.none()
+    # for qs in threads_querysets_list:
+    #     threads_qs = threads_qs | qs
+    # threads = threads_qs.distinct()
 
-    participants_qs = Profile.objects.none()
-    for qs in participants_querysets_list:
-        participants_qs = participants_qs | qs
-    participants_list = list(participants_qs.distinct())
-    participants_name_and_obj_list = [(t.character_name, t) for t in participants_list]
+    # threads_list = list(threads_qs.distinct())
+    # threads_name_and_obj_list = [(t.name, t) for t in threads_list]
+    # participants_qs = Profile.objects.none()
+    # for qs in participants_querysets_list:
+    #     participants_qs = participants_qs | qs
+    # participants_list = list(participants_qs.distinct())
+    # participants_name_and_obj_list = [(t.character_name, t) for t in participants_list]
 
-    spec_locs_qs = SpecificLocation.objects.none()
-    for qs in spec_locs_querysets_list:
-        spec_locs_qs = spec_locs_qs | qs
-    spec_locs_list = list(spec_locs_qs.distinct())
-    spec_locs_name_and_obj_list = [(t.name, t) for t in spec_locs_list]
+    # spec_locs_qs = SpecificLocation.objects.none()
+    # for qs in spec_locs_querysets_list:
+    #     spec_locs_qs = spec_locs_qs | qs
+    # spec_locs_list = list(spec_locs_qs.distinct())
+    # spec_locs_name_and_obj_list = [(t.name, t) for t in spec_locs_list]
 
     # general locations with their specific locations: LEFT UNSORTED TO REFLECT SUBSEQUENT GENERAL LOCATIONS IN GAME
-    gen_locs_with_spec_locs_list = []
-    for gl in gen_locs_set:
-        gen_loc_with_spec_locs_list = [gl, [sl for sl in spec_locs_name_and_obj_list if sl[1].general_location == gl]]
-        gen_locs_with_spec_locs_list.append(gen_loc_with_spec_locs_list)
+    # gen_locs_with_spec_locs_list = []
+    # for gl in gen_locs_set:
+    #     gen_loc_with_spec_locs_list = [gl, [sl for sl in spec_locs.all() if sl.general_location == gl]]
+    #     gen_locs_with_spec_locs_list.append(gen_loc_with_spec_locs_list)
 
     # games
-    games_sorted_list = list(games_set)
-    games_sorted_list.sort(key=lambda game: game.game_no)
-    games_name_and_obj_list = [(g.title, g) for g in games_sorted_list]
+    # games_sorted_list = list(games_set)
+    # games_sorted_list.sort(key=lambda game: game.game_no)
+    # games_name_and_obj_list = [(g.title, g) for g in games_sorted_list]
 
     # years with their seasons
-    years_sorted_list = list(years_set)
-    years_sorted_list.sort()
-    years_with_seasons_dict = {}
-    for y in years_sorted_list:
-        seasons_set = {e.season for e in known_events if e.year == y}
-        seasons_sorted_list = list(seasons_set)
-        seasons_sorted_list.sort()
-        years_with_seasons_dict[y] = seasons_sorted_list
+    # years_sorted_list = list(years_set)
+    # years_sorted_list.sort()
+    # years_with_seasons_dict = {}
+    # for y in years_sorted_list:
+    #     seasons_set = {e.season for e in known_events if e.year == y}
+    #     seasons_sorted_list = list(seasons_set)
+    #     seasons_sorted_list.sort()
+    #     years_with_seasons_dict[y] = seasons_sorted_list
 
     context = {
         'page_title': 'Kalendarium',
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
         'years_with_seasons_dict': years_with_seasons_dict,
-        'threads': threads_name_and_obj_list,
-        'participants': participants_name_and_obj_list,
-        'gen_locs_with_spec_locs': gen_locs_with_spec_locs_list,
-        'games': games_name_and_obj_list,
-        'known_events': known_events
+        'threads': threads,
+        'participants': participants,
+        'gen_locs': gen_locs,
+        'games': games,
+        # 'threads': threads_name_and_obj_list,
+        # 'participants': participants_name_and_obj_list,
+        # 'gen_locs_with_spec_locs': gen_locs_with_spec_locs_list,
     }
     return render(request, 'history/timeline_main.html', context)
 
