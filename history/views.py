@@ -66,7 +66,7 @@ def chronicle_main_view(request):
         events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all())\
             .distinct()\
             .select_related('debate')\
-            .prefetch_related('informed', 'pictures', 'notes')
+            .prefetch_related('informed', 'pictures', 'notes__author')
 
         games = GameSession.objects.filter(chronicle_events__in=events)\
             .distinct()\
@@ -125,7 +125,7 @@ def chronicle_all_chapters_view(request):
         chapters = Chapter.objects.prefetch_related(
             'game_sessions__chronicle_events__informed',
             'game_sessions__chronicle_events__pictures',
-            'game_sessions__chronicle_events__notes',
+            'game_sessions__chronicle_events__notes__author',
             'game_sessions__chronicle_events__debate'
         )
         # events_informed = []
@@ -135,7 +135,7 @@ def chronicle_all_chapters_view(request):
         events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all())\
             .distinct()\
             .select_related('debate')\
-            .prefetch_related('informed', 'pictures', 'notes')
+            .prefetch_related('informed', 'pictures', 'notes__author')
 
         games = GameSession.objects\
             .filter(chronicle_events__in=events)\
@@ -171,7 +171,7 @@ def chronicle_one_chapter_view(request, chapter_id):
         games = chapter.game_sessions.prefetch_related(
             'chronicle_events__informed',
             'chronicle_events__pictures',
-            'chronicle_events__notes',
+            'chronicle_events__notes__author',
             'chronicle_events__debate'
             )
         # games_with_events_dict = {g: [e for e in g.chronicle_events.all()] for g in chapter.game_sessions.all()}
@@ -180,7 +180,7 @@ def chronicle_one_chapter_view(request, chapter_id):
         events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all())\
             .distinct()\
             .select_related('debate')\
-            .prefetch_related('informed', 'pictures', 'notes')\
+            .prefetch_related('informed', 'pictures', 'notes__author')\
             .filter(game__chapter=chapter_id)
 
         games = chapter.game_sessions\
@@ -217,13 +217,13 @@ def chronicle_one_game_view(request, game_id):
     if profile.character_status == 'gm':
         events = game.chronicle_events.all()\
             .select_related('debate')\
-            .prefetch_related('informed', 'pictures', 'notes')
+            .prefetch_related('informed', 'pictures', 'notes__author')
     else:
         events = game.chronicle_events\
             .filter(Q(informed=profile) | Q(participants=profile))\
             .distinct()\
             .select_related('debate') \
-            .prefetch_related('informed', 'pictures', 'notes')
+            .prefetch_related('informed', 'pictures', 'notes__author')
         # events_participated = profile.chronicle_events_participated.filter(game=game)
         # events_informed = profile.chronicle_events_informed.filter(game=game)
         # events = (events_participated | events_informed).distinct()
@@ -560,7 +560,7 @@ def timeline_all_events_view(request):
 
     events = events\
         .select_related('general_location', 'game')\
-        .prefetch_related('threads', 'participants', 'informed', 'specific_locations', 'notes')
+        .prefetch_related('threads', 'participants', 'informed', 'specific_locations', 'notes__author')
 
     context = {
         'page_title': 'Pełne Kalendarium',
