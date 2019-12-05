@@ -39,13 +39,12 @@
                 {% for event in game.chronicle_events.all %}
                     <tr>
                         <td class="chronicle-event">
-                            <br>
-                            <p>
-                                {% if request.user.profile in event.informed.all %}
-                                    <small>(Znasz z opowieści)</small>
-                                {% endif %}
-                                {{ event.description|linebreaksbr }}
-                            </p>
+                            {% if request.user.profile.character_status != 'gm' and request.user.profile in event.informed.all %}
+                                <p><small>(Znasz z opowieści) {{ event.description|linebreaksbr }}</small></p>
+                            {% else %}
+                                <p>{{ event.description|linebreaksbr }}</p>
+                            {% endif %}
+                            
                             {% if event.pictures.all and request.user.profile not in event.informed.all %}
                                 <table class="chronicle-img">
                                     <tr>
