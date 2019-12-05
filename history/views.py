@@ -408,15 +408,6 @@ def timeline_main_view(request):
         gen_locs = GeneralLocation.objects.all().prefetch_related('specific_locations')
         games = GameSession.objects.all()
         events = TimelineEvent.objects.all()
-
-        years = list({y for y in (e.year for e in events)})
-        years.sort()
-        years_with_seasons_dict = {}
-        for y in years:
-            seasons = list({e.season for e in events if e.year == y})
-            seasons.sort()
-            years_with_seasons_dict[y] = seasons
-
     else:
         threads = Thread.objects\
             .filter(Q(timeline_events__participants=profile) | Q(timeline_events__informed=profile))\
@@ -438,13 +429,13 @@ def timeline_main_view(request):
         events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
             .distinct()
 
-        years = list({y for y in (e.year for e in events)})
-        years.sort()
-        years_with_seasons_dict = {}
-        for y in years:
-            seasons = list({e.season for e in events if e.year == y})
-            seasons.sort()
-            years_with_seasons_dict[y] = seasons
+    years = list({y for y in (e.year for e in events)})
+    years.sort()
+    years_with_seasons_dict = {}
+    for y in years:
+        seasons = list({e.season for e in events if e.year == y})
+        seasons.sort()
+        years_with_seasons_dict[y] = seasons
 
     # known_events = participated_and_informed_events(profile.id)
 
@@ -588,7 +579,6 @@ def timeline_thread_view(request, thread_id):
         .select_related('general_location', 'game')\
         .prefetch_related('threads', 'participants', 'informed', 'specific_locations', 'notes__author')
 
-    # thread = get_object_or_404(Thread, id=thread_id)
     # events_by_thread_qs = thread.timeline_events.all()
     # known_events = participated_and_informed_events(profile.id)
     # events = list(events_by_thread_qs.distinct() & known_events.distinct())
@@ -610,18 +600,29 @@ def timeline_thread_view(request, thread_id):
 def timeline_participant_view(request, participant_id):
     profile = request.user.profile
     participant = get_object_or_404(Profile, id=participant_id)
-    events_by_participant_qs = participant.timeline_events_participated.all()
-    known_events = participated_and_informed_events(profile.id)
-    events = list(events_by_participant_qs.distinct() & known_events.distinct())
+
+    if profile.character_status == 'gm':
+        events = TimelineEvent.objects.filter(participants=participant_id)
+    else:
+        events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
+            .filter(participants=participant_id).distinct()
+
+    events = events\
+        .select_related('general_location', 'game')\
+        .prefetch_related('threads', 'participants', 'informed', 'specific_locations', 'notes__author')
+
+    # events_by_participant_qs = participant.timeline_events_participated.all()
+    # known_events = participated_and_informed_events(profile.id)
+    # events = list(events_by_participant_qs.distinct() & known_events.distinct())
 
     if profile == participant:
-        text = 'Są czasy, gdy ogarnia Cię zaduma nad Twoim zawikłanym losem...'
+        header = 'Są czasy, gdy ogarnia Cię zaduma nad Twoim zawikłanym losem...'
     else:
-        text = f'{participant.character_name.split(" ", 1)[0]}... Niejedno już razem przeżyliście. Na dobre i na złe...'
+        header = f'{participant.character_name.split(" ", 1)[0]}... Niejedno razem przeżyliście. Na dobre i na złe...'
 
     context = {
         'page_title': f'{participant.character_name}',
-        'header': text,
+        'header': header,
         'events': events,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
