@@ -34,21 +34,34 @@ def is_allowed_for_chronicle(profile, chapter_id=0, game_id=0, chronicle_event_i
     if profile.character_status == 'gm':
         return True
     elif chapter_id:
-        for game in Chapter.objects.get(id=chapter_id).game_sessions.all():
-            for event in game.chronicle_events.all():
-                if profile in event.participants.all() or profile in event.informed.all():
-                    return True
+        # for game in Chapter.objects.get(id=chapter_id).game_sessions.all():
+        #     for event in game.chronicle_events.all():
+        #         if profile in event.participants.all() or profile in event.informed.all():
+        #             return True
+        if chapter_id in [ch.id for ch in Chapter.objects.filter(
+                Q(game_sessions__chronicle_events__participants=profile)
+                | Q(game_sessions__chronicle_events__informed=profile))]:
+            return True
     elif game_id:
-        for event in GameSession.objects.get(id=game_id).chronicle_events.all():
-            if profile in event.participants.all() or profile in event.informed.all():
-                return True
+        # for event in GameSession.objects.get(id=game_id).chronicle_events.all():
+        #     if profile in event.participants.all() or profile in event.informed.all():
+        #         return True
+        if game_id in [g.id for g in GameSession.objects.filter(
+                Q(chronicle_events__participants=profile) | Q(chronicle_events__informed=profile))]:
+            return True
     elif chronicle_event_id:
-        if profile in ChronicleEvent.objects.get(id=chronicle_event_id).participants.all() \
-                or profile in ChronicleEvent.objects.get(id=chronicle_event_id).informed.all():
+        # if profile in ChronicleEvent.objects.get(id=chronicle_event_id).participants.all() \
+        #         or profile in ChronicleEvent.objects.get(id=chronicle_event_id).informed.all():
+        #     return True
+        if chronicle_event_id in [e.id for e in ChronicleEvent.objects.filter(
+                Q(participants=profile) | Q(informed=profile))]:
             return True
     elif timeline_event_id:
-        if profile in TimelineEvent.objects.get(id=timeline_event_id).participants.all() \
-                or profile in ChronicleEvent.objects.get(id=timeline_event_id).informed.all():
+        # if profile in TimelineEvent.objects.get(id=timeline_event_id).participants.all() \
+        #         or profile in TimelineEvent.objects.get(id=timeline_event_id).informed.all():
+        #     return True
+        if timeline_event_id in [e.id for e in TimelineEvent.objects.filter(
+                Q(participants=profile) | Q(informed=profile))]:
             return True
     else:
         return False
