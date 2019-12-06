@@ -223,9 +223,11 @@ def chronicle_one_chapter_view(request, chapter_id):
 
 @query_debugger
 @login_required
-def chronicle_one_game_view(request, game_id):
+def chronicle_one_game_view(request, game_id, timeline_event_id=0):
     profile = request.user.profile
     game = get_object_or_404(GameSession, id=game_id)
+    if timeline_event_id:
+        event = TimelineEvent.objects.get(id=timeline_event_id)
 
     if profile.character_status == 'gm':
         events = game.chronicle_events.all()\
@@ -248,6 +250,8 @@ def chronicle_one_game_view(request, game_id):
     }
     if is_allowed_for_chronicle(profile, game_id=game_id):
         return render(request, 'history/chronicle_one_game.html', context)
+    elif profile in event.informed.all():
+        return redirect('history:chronicle-gap', timeline_event_id=timeline_event_id)
     else:
         return redirect('home:dupa')
 
@@ -385,6 +389,18 @@ def chronicle_edit_view(request, event_id):
         return redirect('home:dupa')
 
 
+def chronicle_gap_view(request, timeline_event_id):
+    timeline_event = get_object_or_404(TimelineEvent, id=timeline_event_id)
+    participants_and_informed = (timeline_event.participants.all() | (timeline_event.informed.all())).distinct()
+    participants_and_informed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in participants_and_informed)
+
+    context = {
+        'page_title': 'Luka w Kronice',
+        'participants_and_informed': participants_and_informed_str
+    }
+    return render(request, 'history/chronicle_gap.html', context)
+
+
 # #################### TIMELINE: model TimelineEvent ####################
 
 
@@ -395,19 +411,19 @@ SEASONS_WITH_STYLES_DICT = {
     '4': 'season-winter'
 }
 
-
-def participated_and_informed_events(profile_id):
-    profile = Profile.objects.get(id=profile_id)
-    if profile.character_status == 'gm':
-        known_qs = TimelineEvent.objects.all()\
-            .select_related('game', 'general_location')\
-            .prefetch_related('threads', 'participants', 'informed', 'specific_locations')
-    else:
-        known_qs = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
-            .distinct()\
-            .select_related('game', 'general_location')\
-            .prefetch_related('threads', 'participants', 'informed', 'specific_locations')
-    return known_qs
+#
+# def participated_and_informed_events(profile_id):
+#     profile = Profile.objects.get(id=profile_id)
+#     if profile.character_status == 'gm':
+#         known_qs = TimelineEvent.objects.all()\
+#             .select_related('game', 'general_location')\
+#             .prefetch_related('threads', 'participants', 'informed', 'specific_locations')
+#     else:
+#         known_qs = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
+#             .distinct()\
+#             .select_related('game', 'general_location')\
+#             .prefetch_related('threads', 'participants', 'informed', 'specific_locations')
+#     return known_qs
 
 
 @query_debugger

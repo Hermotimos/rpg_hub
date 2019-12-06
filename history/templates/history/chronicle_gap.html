@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/history.css' %}">
+{% endblock head_extra %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'history:chronicle-main' %}">Kronika</a></li>
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br><br><br>
+    <p>
+        Jesteś poinformowany o tym wydarzeniu w bardzo ogólny sposób - wiesz co i kiedy,
+        ale nie znasz dokładnego przebiegu (czyt. jesteś poinformowany w ramach Kalendarium, ale nie w ramach Kroniki).
+    </p>
+    <p>
+        Jeśli jest to wydarzenie "ze świata", to nie ma ono odpowiednika w Kronice, ponieważ żaden z bohaterów nie był jego uczestnikiem.
+        Jeśli zaś jest to wydarzenie, w którym któryś ze znanych ci bohaterów brał udział, i pozwala na to sytuacja, w jakiej obecnie się znajdujecie,
+        to możesz zwrócić się do jednego z uczestników lub poinformowanych ({{ participants_and_informed }}),
+        aby opowiedzieli Ci dokładniej te dzieje.
+    </p>
+
+{% endblock content %}
