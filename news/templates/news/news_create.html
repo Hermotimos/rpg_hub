@@ -20,8 +20,8 @@
         {{ form.title.errors }}<br>
 
         <h5>Wybierz adresatów ogłoszenia:</h5>
-        <small>1) Tylko wybrani adresaci zobaczą ogłoszenie.</small><br>
-        <small>2) Późniejsze dodanie adresatów - przez MG.</small><br>
+        <small>1) Ogłoszenie zobaczą tylko wybrani adresaci (oraz automatycznie MG).</small><br>
+        <small>2) Późniejsze dodanie adresatów możliwe tylko dla MG, wyślij dezyderat.</small><br>
         <br>
         {{ form.allowed_profiles|as_crispy_field }}
         <small>***Aby zaznaczyć wielu adresatów - użyj CTRL albo SHIFT.</small><br><br>
