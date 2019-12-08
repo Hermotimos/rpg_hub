@@ -77,9 +77,7 @@ def chronicle_main_view(request):
         # chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all()] for ch in Chapter.objects.all()}
     else:
         events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all())\
-            .distinct()\
-            .select_related('debate')\
-            .prefetch_related('informed', 'pictures', 'notes__author')
+            .distinct()
 
         games = GameSession.objects.filter(chronicle_events__in=events)\
             .distinct()\
@@ -139,7 +137,7 @@ def chronicle_all_chapters_view(request):
             'game_sessions__chronicle_events__informed',
             'game_sessions__chronicle_events__pictures',
             'game_sessions__chronicle_events__notes__author',
-            'game_sessions__chronicle_events__debate'
+            'game_sessions__chronicle_events__debate__topic'
         )
         # events_informed = []
         # chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all()] for ch in Chapter.objects.all()}
@@ -147,7 +145,7 @@ def chronicle_all_chapters_view(request):
     else:
         events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all())\
             .distinct()\
-            .select_related('debate')\
+            .select_related('debate__topic')\
             .prefetch_related('informed', 'pictures', 'notes__author')
 
         games = GameSession.objects\
@@ -231,13 +229,13 @@ def chronicle_one_game_view(request, game_id, timeline_event_id):
 
     if profile.character_status == 'gm':
         events = game.chronicle_events.all()\
-            .select_related('debate')\
+            .select_related('debate__topic')\
             .prefetch_related('informed', 'pictures', 'notes__author')
     else:
         events = game.chronicle_events\
             .filter(Q(informed=profile) | Q(participants=profile))\
             .distinct()\
-            .select_related('debate') \
+            .select_related('debate__topic') \
             .prefetch_related('informed', 'pictures', 'notes__author')
         # events_participated = profile.chronicle_events_participated.filter(game=game)
         # events_informed = profile.chronicle_events_informed.filter(game=game)
