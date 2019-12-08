@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.db.models import Prefetch, Q
+from django.db.models import Count, Prefetch, Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -435,7 +435,7 @@ def timeline_main_view(request):
         threads = Thread.objects.all()
         participants = Profile.objects.filter(character_status__in=['active_player', 'inactive_player', 'dead_player'])
         gen_locs = GeneralLocation.objects.all().prefetch_related('specific_locations')
-        games = GameSession.objects.all()
+        games = GameSession.objects.annotate(num_events=Count('timeline_events')).filter(num_events__gt=0)
         events = TimelineEvent.objects.all()
     else:
         threads = Thread.objects\
