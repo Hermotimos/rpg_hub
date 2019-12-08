@@ -33,7 +33,7 @@
         {% for game in chapter.game_sessions.all %}
             <h6 class="unblue">
                 {{ forloop.counter }}.
-                <a href="{% url 'history:chronicle-one-game' game.id %}">{{ game.title }}</a>
+                <a href="{% url 'history:chronicle-one-game' game.id '0' %}">{{ game.title }}</a>
             </h6>
         {% endfor %}
         <br>
