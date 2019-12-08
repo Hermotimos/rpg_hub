@@ -226,7 +226,7 @@ def chronicle_one_chapter_view(request, chapter_id):
 def chronicle_one_game_view(request, game_id, timeline_event_id):
     profile = request.user.profile
     game = get_object_or_404(GameSession, id=game_id)
-    if timeline_event_id:
+    if timeline_event_id != '0':
         event = TimelineEvent.objects.get(id=timeline_event_id)
 
     if profile.character_status == 'gm':
