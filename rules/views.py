@@ -53,11 +53,11 @@ def rules_professions_view(request):
 @login_required
 def rules_skills_view(request):
     if request.user.profile.character_status == 'gm':
-        skills = list(Skill.objects.all())
-        synergies = list(Synergy.objects.all())
+        skills = Skill.objects.all()
+        synergies = Synergy.objects.all()
     else:
-        skills = list(request.user.profile.allowed_skills.all())
-        synergies = list(request.user.profile.allowed_synergies.all())
+        skills = request.user.profile.allowed_skills.all()
+        synergies = request.user.profile.allowed_synergies.all()
 
     context = {
         'page_title': 'Umiejętności',
@@ -71,9 +71,9 @@ def rules_skills_view(request):
 @login_required
 def rules_tricks_view(request):
     if request.user.profile.character_status == 'gm':
-        plates = list(PlateType.objects.all())
+        plates = PlateType.objects.all()
     else:
-        plates = list(request.user.profile.allowed_plate_types.all())
+        plates = request.user.profile.allowed_plate_types.all()
 
     context = {
         'page_title': 'Podstępy',
@@ -113,9 +113,9 @@ def rules_weapons_view(request):
 @login_required
 def rules_armor_view(request):
     if request.user.profile.character_status == 'gm':
-        plates = list(PlateType.objects.all())
+        plates = PlateType.objects.all()
     else:
-        plates = list(request.user.profile.allowed_plate_types.all())
+        plates = request.user.profile.allowed_plate_types.all()
 
     context = {
         'page_title': 'Pancerz',
