@@ -27,9 +27,9 @@ def rules_traits_view(request):
 @login_required
 def rules_professions_view(request):
     if request.user.profile.character_status == 'gm':
-        classes = list(CharacterClass.objects.all())
+        classes = CharacterClass.objects.all()
         classes_with_professions_dict = {c: [p for p in c.professions.all()] for c in classes}
-        elite_classes = list(EliteClass.objects.all())
+        elite_classes = EliteClass.objects.all()
         elite_classes_with_professions_dict = {ec: [ep for ep in ec.elite_professions.all()] for ec in elite_classes}
     else:
         classes = list(c for c in CharacterClass.objects.all() if request.user.profile in c.allowed_list())
@@ -54,10 +54,10 @@ def rules_professions_view(request):
 def rules_skills_view(request):
     if request.user.profile.character_status == 'gm':
         skills = Skill.objects.all()
-        synergies = Synergy.objects.all()
+        synergies = Synergy.objects.all().prefetch_related('skills')
     else:
         skills = request.user.profile.allowed_skills.all()
-        synergies = request.user.profile.allowed_synergies.all()
+        synergies = request.user.profile.allowed_synergies.all().prefetch_related('skills')
 
     context = {
         'page_title': 'Umiejętności',
