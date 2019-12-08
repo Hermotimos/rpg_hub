@@ -185,14 +185,14 @@ def chronicle_one_chapter_view(request, chapter_id):
             'chronicle_events__informed',
             'chronicle_events__pictures',
             'chronicle_events__notes__author',
-            'chronicle_events__debate'
+            'chronicle_events__debate__topic'
             )
         # games_with_events_dict = {g: [e for e in g.chronicle_events.all()] for g in chapter.game_sessions.all()}
         # events_informed = []
     else:
         events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all())\
             .distinct()\
-            .select_related('debate')\
+            .select_related('debate__topic')\
             .prefetch_related('informed', 'pictures', 'notes__author')\
             .filter(game__chapter=chapter_id)
 
