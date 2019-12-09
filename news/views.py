@@ -137,7 +137,7 @@ def news_detail_view(request, news_id):
         # 'allowed_imgs': allowed_imgs,
         # 'followers_imgs': followers_imgs,
     }
-    if request.user.profile in news.allowed_profiles.all() or request.user.profile.character_status == 'gm':
+    if profile in news.allowed_profiles.all() or profile.character_status == 'gm':
         return render(request, 'news/news_detail.html', context)
     else:
         return redirect('home:dupa')
@@ -146,11 +146,12 @@ def news_detail_view(request, news_id):
 @query_debugger
 @login_required
 def unfollow_news_view(request, news_id):
+    profile = request.user.profile
     news = get_object_or_404(News, id=news_id)
-    if request.user.profile in news.allowed_profiles.all():
-        # TODO: remove the above if news.followers.remove(request.user.profile) works
+    if profile in news.allowed_profiles.all():
+        # TODO: remove the above if news.followers.remove(profile) works
         # updated_followers = news.followers.exclude(user=request.user)
-        news.followers.remove(request.user.profile)
+        news.followers.remove(profile)
         messages.info(request, 'Przestałeś obserwować ogłoszenie!')
         return redirect('news:detail', news_id=news_id)
     else:
@@ -160,13 +161,14 @@ def unfollow_news_view(request, news_id):
 @query_debugger
 @login_required
 def follow_news_view(request, news_id):
+    profile = request.user.profile
     news = get_object_or_404(News, id=news_id)
-    if request.user.profile in news.allowed_profiles.all():
-        # TODO: remove the above if news.followers.add(request.user.profile) works
+    if profile in news.allowed_profiles.all():
+        # TODO: remove the above if news.followers.add(profile) works
         # followers = news.followers.all()
-        # new_follower = request.user.profile
+        # new_follower = profile
         # followers |= Profile.objects.filter(id=new_follower.id)
-        news.followers.add(request.user.profile)
+        news.followers.add(profile)
         messages.info(request, 'Obserwujesz ogłoszenie!')
         return redirect('news:detail', news_id=news_id)
     else:
@@ -176,16 +178,17 @@ def follow_news_view(request, news_id):
 @query_debugger
 @login_required
 def survey_detail_view(request, survey_id):
+    profile = request.user.profile
     survey = get_object_or_404(Survey, id=survey_id)
 
-    if request.user.profile not in survey.seen_by.all():
-        survey.seen_by.add(request.user.profile)
+    if profile not in survey.seen_by.all():
+        survey.seen_by.add(profile)
 
     last_survey_answer = survey.last_survey_answer()
     last_survey_answer_seen_by_imgs = ()
     if last_survey_answer:
-        if request.user.profile not in last_survey_answer.seen_by.all():
-            last_survey_answer.seen_by.add(request.user.profile)
+        if profile not in last_survey_answer.seen_by.all():
+            last_survey_answer.seen_by.add(profile)
         last_survey_answer_seen_by_imgs = (p.image for p in last_survey_answer.seen_by.all())
 
     survey_options = survey.survey_options.all().prefetch_related('yes_voters', 'no_voters')
@@ -202,7 +205,7 @@ def survey_detail_view(request, survey_id):
             answer_form.save()
 
             subject = f"[RPG] Wypowiedż do ankiety: '{survey.title[:30]}...'"
-            message = f"{request.user.profile} wypowiedział się co do ankiety '{survey.title}':\n" \
+            message = f"{profile} wypowiedział się co do ankiety '{survey.title}':\n" \
                       f"Ankieta: {request.get_host()}/news/survey-detail:{survey.id}/\n\n" \
                       f"Wypowiedź: {answer.text}"
             sender = settings.EMAIL_HOST_USER
@@ -210,7 +213,7 @@ def survey_detail_view(request, survey_id):
             for user in User.objects.all():
                 if user.profile in survey.addressees.all() and user != request.user:
                     receivers.append(user.email)
-            if request.user.profile.character_status != 'gm':
+            if profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
@@ -238,7 +241,7 @@ def survey_detail_view(request, survey_id):
         'answer_form': answer_form,
         'option_form': option_form
     }
-    if request.user.profile in survey.addressees.all() or request.user.profile.character_status == 'gm':
+    if profile in survey.addressees.all() or profile.character_status == 'gm':
         return render(request, 'news/survey_detail.html', context)
     else:
         return redirect('home:dupa')
@@ -247,14 +250,15 @@ def survey_detail_view(request, survey_id):
 @query_debugger
 @login_required
 def vote_yes_view(request, survey_id, option_id):
+    profile = request.user.profile
     option = get_object_or_404(SurveyOption, id=option_id)
-    if request.user.profile in option.survey.addressees.all():
+    if profile in option.survey.addressees.all():
         yes_voters = option.yes_voters.all()
-        new_yes_voter = request.user.profile
+        new_yes_voter = profile
         yes_voters |= Profile.objects.filter(id=new_yes_voter.id)
         option.yes_voters.set(yes_voters)
 
-        if request.user.profile in option.no_voters.all():
+        if profile in option.no_voters.all():
             updated_no_voters = option.no_voters.exclude(user=request.user)
             option.no_voters.set(updated_no_voters)
 
@@ -266,14 +270,15 @@ def vote_yes_view(request, survey_id, option_id):
 @query_debugger
 @login_required
 def vote_no_view(request, survey_id, option_id):
+    profile = request.user.profile
     option = get_object_or_404(SurveyOption, id=option_id)
-    if request.user.profile in option.survey.addressees.all():
+    if profile in option.survey.addressees.all():
         no_voters = option.no_voters.all()
-        new_no_voter = request.user.profile
+        new_no_voter = profile
         no_voters |= Profile.objects.filter(id=new_no_voter.id)
         option.no_voters.set(no_voters)
 
-        if request.user.profile in option.yes_voters.all():
+        if profile in option.yes_voters.all():
             updated_yes_voters = option.yes_voters.exclude(user=request.user)
             option.yes_voters.set(updated_yes_voters)
 
@@ -285,13 +290,14 @@ def vote_no_view(request, survey_id, option_id):
 @query_debugger
 @login_required
 def unvote_view(request, survey_id, option_id):
+    profile = request.user.profile
     option = get_object_or_404(SurveyOption, id=option_id)
 
-    if request.user.profile in option.survey.addressees.all():
-        if request.user.profile in option.yes_voters.all():
+    if profile in option.survey.addressees.all():
+        if profile in option.yes_voters.all():
             updated_yes_voters = option.yes_voters.exclude(user=request.user)
             option.yes_voters.set(updated_yes_voters)
-        elif request.user.profile in option.no_voters.all():
+        elif profile in option.no_voters.all():
             updated_no_voters = option.no_voters.exclude(user=request.user)
             option.no_voters.set(updated_no_voters)
 
@@ -303,6 +309,7 @@ def unvote_view(request, survey_id, option_id):
 @query_debugger
 @login_required
 def survey_create_view(request):
+    profile = request.user.profile
     if request.method == 'POST':
         form = CreateSurveyForm(authenticated_user=request.user, data=request.POST, files=request.FILES)
 
@@ -315,7 +322,7 @@ def survey_create_view(request):
             survey.addressees.set(addressees)
 
             subject = f"[RPG] Nowa ankieta: '{survey.title[:30]}...'"
-            message = f"{request.user.profile} przybił/a coś do słupa ogłoszeń.\n" \
+            message = f"{profile} przybił/a coś do słupa ogłoszeń.\n" \
                       f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/survey-detail:{survey.id}/\n\n" \
                       f"Ogłoszenie: {survey.text}"
             sender = settings.EMAIL_HOST_USER
@@ -323,7 +330,7 @@ def survey_create_view(request):
             for profile in survey.addressees.all():
                 if profile.user != request.user:
                     receivers.append(profile.user.email)
-            if request.user.profile.character_status != 'gm':
+            if profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
