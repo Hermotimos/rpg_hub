@@ -38,8 +38,8 @@
                         <h3 class="unblue"><a href="{% url 'news:survey-detail' survey.id %}">ANKIETA: {{ survey.title }}</a></h3>
                         {% if survey.survey_answers.all %}
                         <h5>
-                            {% for user in surveys_with_answers_authors_dict|dict_lookup:survey %}
-                                <img class="rounded-circle img-small" src="{{ user.profile.image.url }}">
+                            {% for answer in survey.survey_answers.all %}
+                                <img class="rounded-circle img-small" src="{{ answer.author.profile.image.url }}">
                             {% endfor %}
                         </h5>
                         {% endif %}
@@ -64,11 +64,12 @@
                         <small>{{ news.date_posted|date:'d-M-Y, H:i' }}</small>
                         <h3 class="unblue"><a href="{% url 'news:detail' news.id %}">{{ news.title }}</a></h3>
                         {% if news.news_answers.all %}
-                            {% for user in news_with_answers_authors_dict|dict_lookup:news %}
-                                <img class="rounded-circle img-small" src="{{ user.profile.image.url }}">
+                            {% for answer in news.news_answers.all %}
+                                <img class="rounded-circle img-small" src="{{ answer.author.profile.image.url }}">
                             {% endfor %}
                             <br>
                         {% endif %}
+                        <!--  following methods cost ca. 20 queries: -->
                         <small>
                             Ostatnia aktywność:
                             {% if news.last_activity %}

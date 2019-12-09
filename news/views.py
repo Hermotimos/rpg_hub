@@ -16,29 +16,29 @@ from news.forms import CreateNewsForm, CreateNewsAnswerForm, CreateSurveyForm, C
 def main_view(request):
     profile = request.user.profile
     if profile.character_status == 'gm':
-        newss = News.objects.all().select_related('author').prefetch_related('news_answers')
-        surveys = Survey.objects.all().select_related('author').prefetch_related('survey_answers')
+        newss = News.objects.all().select_related('author__profile').prefetch_related('news_answers__author__profile')
+        surveys = Survey.objects.all().select_related('author__profile').prefetch_related('survey_answers__author__profile')
     else:
-        newss = profile.allowed_news.all().select_related('author').prefetch_related('news_answers')
-        surveys = profile.surveys_received.all().select_related('author').prefetch_related('survey_answers')
+        newss = profile.allowed_news.all().select_related('author__profile').prefetch_related('news_answers__author__profile')
+        surveys = profile.surveys_received.all().select_related('author__profile').prefetch_related('survey_answers__author__profile')
 
-    news_with_answers_authors_dict = {
-        n: [
-            a.author for a in n.news_answers.all().select_related('author')
-        ] for n in newss
-    }
-    surveys_with_answers_authors_dict = {
-        s: [
-            a.author for a in s.survey_answers.all().select_related('author')
-        ] for s in surveys
-    }
+    # news_with_answers_authors_dict = {
+    #     n: [
+    #         a.author for a in n.news_answers.all().select_related('author')
+    #     ] for n in newss
+    # }
+    # surveys_with_answers_authors_dict = {
+    #     s: [
+    #         a.author for a in s.survey_answers.all().select_related('author')
+    #     ] for s in surveys
+    # }
 
     context = {
         'page_title': 'Ogłoszenia',
         'newss': newss,
         'surveys': surveys,
-        'surveys_with_answers_authors_dict': surveys_with_answers_authors_dict,
-        'news_with_answers_authors_dict': news_with_answers_authors_dict
+        # 'surveys_with_answers_authors_dict': surveys_with_answers_authors_dict,
+        # 'news_with_answers_authors_dict': news_with_answers_authors_dict
     }
     return render(request, 'news/main.html', context)
 
