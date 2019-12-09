@@ -51,11 +51,11 @@
     <h2 class="rules">Lista Klas i Profesji</h2>
     <br>
     <div id="professions">
-        {% for class in classes_with_professions_dict %}
+        {% for class in classes %}
 
             <h4><b>{{ class.name }}</b></h4>
             <p>{{ class.description|linebreaksbr }}</p>
-            {% for profession in classes_with_professions_dict|dict_lookup:class %}
+            {% for profession in class.professions.all %}
                 <h5 data-toggle="collapse" data-target="#{{ profession.short_name }}">
                     <b class="hover-blue">
                         ✧ {{ profession.name }}
@@ -202,25 +202,23 @@
     </p>
     <br>
     <div>
-        {% for elite_class in elite_classes_with_professions_dict %}
+        {% for elite_class in elite_classes %}
             <h4><b>{{ elite_class.name }}</b>
             </h4>
             <div>
                 <p>{{ elite_class.description|linebreaksbr }}</p>
-                {% if elite_classes_with_professions_dict|dict_lookup:elite_class %}
-                    {% for elite_profession in elite_classes_with_professions_dict|dict_lookup:elite_class %}
-                        <h5 data-toggle="collapse" data-target="#{{ elite_profession.short_name }}">
-                            <b class="hover-blue">
-                                ✧ {{ elite_profession.name }}
-                            </b>
-                        </h5>
-                        <div id="{{ elite_profession.short_name }}" class="collapse">
-                            <p>{{ elite_profession.description|linebreaksbr }}</p>
-                            <p>{{ elite_profession.start_perks|linebreaksbr }}</p>
-                            <br>
-                        </div>
-                    {% endfor %}
-                {% endif %}
+                {% for elite_profession in elite_class.elite_professions.all %}
+                    <h5 data-toggle="collapse" data-target="#{{ elite_profession.short_name }}">
+                        <b class="hover-blue">
+                            ✧ {{ elite_profession.name }}
+                        </b>
+                    </h5>
+                    <div id="{{ elite_profession.short_name }}" class="collapse">
+                        <p>{{ elite_profession.description|linebreaksbr }}</p>
+                        <p>{{ elite_profession.start_perks|linebreaksbr }}</p>
+                        <br>
+                    </div>
+                {% endfor %}
             </div>
             <br><br>
          {% endfor %}
