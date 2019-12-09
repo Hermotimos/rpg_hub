@@ -85,21 +85,22 @@ def create_news_view(request):
 @query_debugger
 @login_required
 def news_detail_view(request, news_id):
+    profile = request.user.profile
     news = get_object_or_404(News, id=news_id)
 
-    if request.user.profile not in news.seen_by.all():
-        news.seen_by.add(request.user.profile)
+    if profile not in news.seen_by.all():
+        news.seen_by.add(profile)
 
     last_news_answer = news.last_news_answer()
     last_news_answer_seen_by_imgs = ()
     if last_news_answer:
-        if request.user.profile not in last_news_answer.seen_by.all():
-            last_news_answer.seen_by.add(request.user.profile)
+        if profile not in last_news_answer.seen_by.all():
+            last_news_answer.seen_by.add(profile)
         last_news_answer_seen_by_imgs = (p.image for p in last_news_answer.seen_by.all())
 
-    news_answers = news.news_answers.all().select_related('author')
-    allowed_imgs = [p.image for p in news.allowed_profiles.all()]
-    followers_imgs = [p.image for p in news.followers.all()]
+    answers = news.news_answers.all().select_related('author__profile')
+    # allowed_imgs = [p.image for p in news.allowed_profiles.all()]
+    # followers_imgs = [p.image for p in news.followers.all()]
 
     if request.method == 'POST':
         form = CreateNewsAnswerForm(request.POST, request.FILES)
@@ -110,7 +111,7 @@ def news_detail_view(request, news_id):
             form.save()
 
             subject = f"[RPG] Odpowiedź na ogłoszenie: '{news.title[:30]}...'"
-            message = f"{request.user.profile} odpowiedział/a na ogłoszenie '{news.title}':\n" \
+            message = f"{profile} odpowiedział/a na ogłoszenie '{news.title}':\n" \
                       f"Ogłoszenie: {request.get_host()}/news/news-detail:{news.id}/\n\n" \
                       f"Odpowiedź: {answer.text}"
             sender = settings.EMAIL_HOST_USER
@@ -118,7 +119,7 @@ def news_detail_view(request, news_id):
             for user in User.objects.all():
                 if user.profile in news.followers.all() and user != request.user:
                     receivers.append(user.email)
-            if request.user.profile.character_status != 'gm':
+            if profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
@@ -130,11 +131,11 @@ def news_detail_view(request, news_id):
     context = {
         'page_title': news.title,
         'news': news,
-        'news_answers': news_answers,
+        'answers': answers,
         'last_news_answer_seen_by_imgs': last_news_answer_seen_by_imgs,
         'form': form,
-        'allowed_imgs': allowed_imgs,
-        'followers_imgs': followers_imgs,
+        # 'allowed_imgs': allowed_imgs,
+        # 'followers_imgs': followers_imgs,
     }
     if request.user.profile in news.allowed_profiles.all() or request.user.profile.character_status == 'gm':
         return render(request, 'news/news_detail.html', context)

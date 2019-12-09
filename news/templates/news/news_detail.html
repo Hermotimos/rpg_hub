@@ -24,16 +24,16 @@
         <tr>
             <td><h6>Adresaci:</h6></td>
             <td>
-            {% for img in allowed_imgs %}
-                <img class="rounded-circle img-small" src="{{ img.url }}">
+            {% for profile in news.allowed_profiles.all %}
+                <img class="rounded-circle img-small" src="{{ profile.image.url }}">
             {% endfor %}
             </td>
         </tr>
         <tr>
             <td><h6>Obserwują:</h6></td>
             <td>
-            {% for img in followers_imgs %}
-                <img class="rounded-circle img-small" src="{{ img.url }}">
+            {% for profile in news.followers.all %}
+                <img class="rounded-circle img-small" src="{{ profile.image.url }}">
             {% endfor %}
             </td>
         </tr>
@@ -67,7 +67,7 @@
         <br><br>
         <table>
             <tbody>
-            {% for answer in news_answers %}
+            {% for answer in answers %}
                 <tr class="posts-and-news">
                     <td class="align-center">
                         <img class="rounded-circle article-img" src="{{ answer.author.profile.image.url }}">
