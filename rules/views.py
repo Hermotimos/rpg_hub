@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.db.models import Prefetch
 
 from rpg_project.utils import query_debugger
 from rules.models import Skill, Synergy, CharacterClass, EliteClass, WeaponClass, WeaponType, PlateType
@@ -17,7 +18,8 @@ def rules_main_view(request):
 @query_debugger
 @login_required
 def rules_armor_view(request):
-    if request.user.profile.character_status == 'gm':
+    profile = request.user.profile
+    if profile.character_status == 'gm':
         plates = PlateType.objects.all().prefetch_related('pictures')
     else:
         plates = request.user.profile.allowed_plate_types.all().prefetch_related('pictures')
@@ -59,7 +61,8 @@ def rules_masteries_view(request):
 @query_debugger
 @login_required
 def rules_professions_view(request):
-    if request.user.profile.character_status == 'gm':
+    profile = request.user.profile
+    if profile.character_status == 'gm':
         classes = CharacterClass.objects.all()
         classes_with_professions_dict = {c: [p for p in c.professions.all()] for c in classes}
         elite_classes = EliteClass.objects.all()
@@ -85,7 +88,8 @@ def rules_professions_view(request):
 @query_debugger
 @login_required
 def rules_skills_view(request):
-    if request.user.profile.character_status == 'gm':
+    profile = request.user.profile
+    if profile.character_status == 'gm':
         skills = Skill.objects.all()
         synergies = Synergy.objects.all().prefetch_related('skills')
     else:
@@ -112,7 +116,8 @@ def rules_traits_view(request):
 @query_debugger
 @login_required
 def rules_tricks_view(request):
-    if request.user.profile.character_status == 'gm':
+    profile = request.user.profile
+    if profile.character_status == 'gm':
         plates = PlateType.objects.all()
     else:
         plates = request.user.profile.allowed_plate_types.all()
@@ -127,17 +132,23 @@ def rules_tricks_view(request):
 @query_debugger
 @login_required
 def rules_weapons_view(request):
-    if request.user.profile.character_status == 'gm':
-        weapons_classes_with_types_dict = \
-            {wc: (wt for wt in wc.weapon_types.all()) for wc in WeaponClass.objects.all()}
+    profile = request.user.profile
+    if profile.character_status == 'gm':
+        weapon_classes = WeaponClass.objects.all()\
+            .prefetch_related('weapon_types__allowed_profiles', 'weapon_types__pictures')
+        # weapons_classes_with_types_dict = \
+        #     {wc: (wt for wt in wc.weapon_types.all()) for wc in WeaponClass.objects.all()}
     else:
-        weapons_classes_with_types_dict = \
-            {wc: (wt for wt in wc.weapon_types.all() if wt in request.user.profile.allowed_weapon_types.all())
-             for wc in WeaponClass.objects.all()}
+        weapon_types = WeaponType.objects.filter(allowed_profiles=profile).prefetch_related('pictures')
+        weapon_classes = WeaponClass.objects.filter(weapon_types__allowed_profiles=profile)\
+            .prefetch_related(Prefetch('weapon_types', queryset=weapon_types))
+        # weapons_classes_with_types_dict = \
+        #     {wc: (wt for wt in wc.weapon_types.all() if wt in request.user.profile.allowed_weapon_types.all())
+        #      for wc in WeaponClass.objects.all()}
 
     context = {
         'page_title': 'Broń',
-        'weapons_classes_with_types_dict': weapons_classes_with_types_dict
+        'weapon_classes': weapon_classes
     }
     return render(request, 'rules/weapons.html', context)
 

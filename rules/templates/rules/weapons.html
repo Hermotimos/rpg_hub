@@ -27,7 +27,7 @@
     <br>
 
     <table class="weapons">
-        {% for weapon_class in weapons_classes_with_types_dict %}
+        {% for weapon_class in weapon_classes %}
         <colgroup>
             <col class="class">
             <col class="delay">
@@ -55,7 +55,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for weapon_type in weapons_classes_with_types_dict|dict_lookup:weapon_class %}
+            {% for weapon_type in weapon_class.weapon_types.all %}
                 <tr>
                     <td class="{% if weapon_type.description %} hover-blue {% endif %}" data-toggle="collapse" data-target="#{{ weapon_type.short_name }}">&nbsp;{{ weapon_type.name }}</td>
                     <td class="align-center">{{ weapon_type.delay }}</td>
