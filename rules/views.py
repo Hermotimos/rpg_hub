@@ -18,9 +18,9 @@ def rules_main_view(request):
 @login_required
 def rules_armor_view(request):
     if request.user.profile.character_status == 'gm':
-        plates = PlateType.objects.all()
+        plates = PlateType.objects.all().prefetch_related('pictures')
     else:
-        plates = request.user.profile.allowed_plate_types.all()
+        plates = request.user.profile.allowed_plate_types.all().prefetch_related('pictures')
 
     context = {
         'page_title': 'Pancerz',
