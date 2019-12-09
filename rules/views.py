@@ -16,11 +16,44 @@ def rules_main_view(request):
 
 @query_debugger
 @login_required
-def rules_traits_view(request):
+def rules_armor_view(request):
+    if request.user.profile.character_status == 'gm':
+        plates = PlateType.objects.all()
+    else:
+        plates = request.user.profile.allowed_plate_types.all()
+
     context = {
-        'page_title': 'Cechy'
+        'page_title': 'Pancerz',
+        'plates': plates
     }
-    return render(request, 'rules/traits.html', context)
+    return render(request, 'rules/armor.html', context)
+
+
+@query_debugger
+@login_required
+def rules_character_sheet_view(request):
+    context = {
+        'page_title': 'Karta postaci'
+    }
+    return render(request, 'rules/character_sheet.html', context)
+
+
+@query_debugger
+@login_required
+def rules_combat_view(request):
+    context = {
+        'page_title': 'Przebieg walki'
+    }
+    return render(request, 'rules/combat.html', context)
+
+
+@query_debugger
+@login_required
+def rules_masteries_view(request):
+    context = {
+        'page_title': 'Biegłości i inne zdolności bojowe'
+    }
+    return render(request, 'rules/masteries.html', context)
 
 
 @query_debugger
@@ -69,6 +102,15 @@ def rules_skills_view(request):
 
 @query_debugger
 @login_required
+def rules_traits_view(request):
+    context = {
+        'page_title': 'Cechy'
+    }
+    return render(request, 'rules/traits.html', context)
+
+
+@query_debugger
+@login_required
 def rules_tricks_view(request):
     if request.user.profile.character_status == 'gm':
         plates = PlateType.objects.all()
@@ -80,15 +122,6 @@ def rules_tricks_view(request):
         'plates': plates
     }
     return render(request, 'rules/tricks.html', context)
-
-
-@query_debugger
-@login_required
-def rules_masteries_view(request):
-    context = {
-        'page_title': 'Biegłości i inne zdolności bojowe'
-    }
-    return render(request, 'rules/masteries.html', context)
 
 
 @query_debugger
@@ -111,44 +144,8 @@ def rules_weapons_view(request):
 
 @query_debugger
 @login_required
-def rules_armor_view(request):
-    if request.user.profile.character_status == 'gm':
-        plates = PlateType.objects.all()
-    else:
-        plates = request.user.profile.allowed_plate_types.all()
-
-    context = {
-        'page_title': 'Pancerz',
-        'plates': plates
-    }
-    return render(request, 'rules/armor.html', context)
-
-
-@query_debugger
-@login_required
 def rules_wounds_view(request):
     context = {
         'page_title': 'Progi i skutki ran'
     }
     return render(request, 'rules/wounds.html', context)
-
-
-@query_debugger
-@login_required
-def rules_combat_view(request):
-    context = {
-        'page_title': 'Przebieg walki'
-    }
-    return render(request, 'rules/combat.html', context)
-
-
-@query_debugger
-@login_required
-def rules_character_sheet_view(request):
-    context = {
-        'page_title': 'Karta postaci'
-    }
-    return render(request, 'rules/character_sheet.html', context)
-
-
-
