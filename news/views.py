@@ -253,15 +253,18 @@ def vote_yes_view(request, survey_id, option_id):
     profile = request.user.profile
     option = get_object_or_404(SurveyOption, id=option_id)
     if profile in option.survey.addressees.all():
-        yes_voters = option.yes_voters.all()
-        new_yes_voter = profile
-        yes_voters |= Profile.objects.filter(id=new_yes_voter.id)
-        option.yes_voters.set(yes_voters)
+        # yes_voters = option.yes_voters.all()
+        # new_yes_voter = profile
+        # yes_voters |= Profile.objects.filter(id=new_yes_voter.id)
+        # option.yes_voters.set(yes_voters)
+        option.yes_voters.add(profile)
 
         if profile in option.no_voters.all():
-            updated_no_voters = option.no_voters.exclude(user=request.user)
-            option.no_voters.set(updated_no_voters)
+            # updated_no_voters = option.no_voters.exclude(user=request.user)
+            # option.no_voters.set(updated_no_voters)
+            option.no_voters.remove(profile)
 
+        messages.info(request, 'Twój głos został dodany!')
         return redirect('news:survey-detail', survey_id=survey_id)
     else:
         return redirect('home:dupa')
@@ -273,15 +276,18 @@ def vote_no_view(request, survey_id, option_id):
     profile = request.user.profile
     option = get_object_or_404(SurveyOption, id=option_id)
     if profile in option.survey.addressees.all():
-        no_voters = option.no_voters.all()
-        new_no_voter = profile
-        no_voters |= Profile.objects.filter(id=new_no_voter.id)
-        option.no_voters.set(no_voters)
+        # no_voters = option.no_voters.all()
+        # new_no_voter = profile
+        # no_voters |= Profile.objects.filter(id=new_no_voter.id)
+        # option.no_voters.set(no_voters)
+        option.no_voters.add(profile)
 
         if profile in option.yes_voters.all():
-            updated_yes_voters = option.yes_voters.exclude(user=request.user)
-            option.yes_voters.set(updated_yes_voters)
+            # updated_yes_voters = option.yes_voters.exclude(user=request.user)
+            # option.yes_voters.set(updated_yes_voters)
+            option.yes_voters.remove(profile)
 
+        messages.info(request, 'Twój głos został dodany!')
         return redirect('news:survey-detail', survey_id=survey_id)
     else:
         return redirect('home:dupa')
@@ -295,12 +301,15 @@ def unvote_view(request, survey_id, option_id):
 
     if profile in option.survey.addressees.all():
         if profile in option.yes_voters.all():
-            updated_yes_voters = option.yes_voters.exclude(user=request.user)
-            option.yes_voters.set(updated_yes_voters)
+            # updated_yes_voters = option.yes_voters.exclude(user=request.user)
+            # option.yes_voters.set(updated_yes_voters)
+            option.yes_voters.remove(profile)
         elif profile in option.no_voters.all():
-            updated_no_voters = option.no_voters.exclude(user=request.user)
-            option.no_voters.set(updated_no_voters)
+            # updated_no_voters = option.no_voters.exclude(user=request.user)
+            # option.no_voters.set(updated_no_voters)
+            option.no_voters.remove(profile)
 
+        messages.info(request, 'Twój głos został skasowany!')
         return redirect('news:survey-detail', survey_id=survey_id)
     else:
         return redirect('home:dupa')
