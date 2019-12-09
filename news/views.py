@@ -191,8 +191,11 @@ def survey_detail_view(request, survey_id):
             last_survey_answer.seen_by.add(profile)
         last_survey_answer_seen_by_imgs = (p.image for p in last_survey_answer.seen_by.all())
 
-    survey_options = survey.survey_options.all().prefetch_related('yes_voters', 'no_voters')
-    survey_answers = survey.survey_answers.all().select_related('author')
+    survey_options = survey.survey_options.all()\
+        .prefetch_related('yes_voters', 'no_voters')\
+        .select_related('author__profile')
+    survey_answers = survey.survey_answers.all()\
+        .select_related('author__profile')
 
     if request.method == 'POST':
         answer_form = CreateSurveyAnswerForm(request.POST, request.FILES)
