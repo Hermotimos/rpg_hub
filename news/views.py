@@ -16,11 +16,19 @@ from news.forms import CreateNewsForm, CreateNewsAnswerForm, CreateSurveyForm, C
 def main_view(request):
     profile = request.user.profile
     if profile.character_status == 'gm':
-        newss = News.objects.all().select_related('author__profile').prefetch_related('news_answers__author__profile')
-        surveys = Survey.objects.all().select_related('author__profile').prefetch_related('survey_answers__author__profile')
+        newss = News.objects.all()\
+            .select_related('author__profile')\
+            .prefetch_related('news_answers__author__profile')
+        surveys = Survey.objects.all()\
+            .select_related('author__profile')\
+            .prefetch_related('survey_answers__author__profile')
     else:
-        newss = profile.allowed_news.all().select_related('author__profile').prefetch_related('news_answers__author__profile')
-        surveys = profile.surveys_received.all().select_related('author__profile').prefetch_related('survey_answers__author__profile')
+        newss = profile.allowed_news.all()\
+            .select_related('author__profile')\
+            .prefetch_related('news_answers__author__profile')
+        surveys = profile.surveys_received.all()\
+            .select_related('author__profile')\
+            .prefetch_related('survey_answers__author__profile')
 
     # news_with_answers_authors_dict = {
     #     n: [
@@ -46,6 +54,7 @@ def main_view(request):
 @query_debugger
 @login_required
 def create_news_view(request):
+    profile = request.user.profile
     if request.method == 'POST':
         form = CreateNewsForm(authenticated_user=request.user, data=request.POST, files=request.FILES)
         if form.is_valid():
@@ -58,7 +67,7 @@ def create_news_view(request):
             news.followers.set(allowed_profiles)
 
             subject = f"[RPG] Nowe ogłoszenie: '{news.title[:30]}...'"
-            message = f"{request.user.profile} przybił/a coś do słupa ogłoszeń.\n" \
+            message = f"{profile} przybił/a coś do słupa ogłoszeń.\n" \
                       f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/news-detail:{news.id}/\n\n" \
                       f"Ogłoszenie: {news.text}"
             sender = settings.EMAIL_HOST_USER
@@ -66,7 +75,7 @@ def create_news_view(request):
             for profile in news.allowed_profiles.all():
                 if profile.user != request.user:
                     receivers.append(profile.user.email)
-            if request.user.profile.character_status != 'gm':
+            if profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
