@@ -12,6 +12,13 @@ from history.models import (Chapter,
                             ChronicleEventNote)
 
 
+class ChapterAdmin(admin.ModelAdmin):
+    model = Chapter
+    list_display = ['chapter_no', 'title', 'image']
+    list_editable = ['title', 'image']
+    search_fields = ['title']
+
+
 class ThreadAdmin(admin.ModelAdmin):
     model = Thread
     list_display = ['name', 'is_ended']
@@ -37,6 +44,10 @@ class GameSessionAdmin(admin.ModelAdmin):
     list_display = ['id', 'game_no', 'title', 'chapter', 'date']
     list_editable = ['game_no', 'title', 'chapter', 'date']
     inlines = [TimelineEventInline, ChronicleEventInline]
+    search_fields = ['ititle']
+
+    def ititle(self, obj):
+        return obj.title.lower()
 
 
 class SpecificLocationAdmin(admin.ModelAdmin):
@@ -64,7 +75,16 @@ class ChronicleEventAdmin(admin.ModelAdmin):
     search_fields = ['description']
 
 
-admin.site.register(Chapter)
+class ChronicleEventNoteAdmin(admin.ModelAdmin):
+    model = ChronicleEventNote
+    list_display = ['id', 'author', 'text_short']
+    search_fields = ['text']
+
+    def text_short(self, obj):
+        return f'{obj.text[:100]}...'
+
+
+admin.site.register(Chapter, ChapterAdmin)
 admin.site.register(Thread, ThreadAdmin)
 admin.site.register(GameSession, GameSessionAdmin)
 admin.site.register(GeneralLocation)
@@ -72,6 +92,6 @@ admin.site.register(SpecificLocation, SpecificLocationAdmin)
 admin.site.register(TimelineEvent, TimelineEventAdmin)
 admin.site.register(TimelineEventNote)
 admin.site.register(ChronicleEvent, ChronicleEventAdmin)
-admin.site.register(ChronicleEventNote)
+admin.site.register(ChronicleEventNote, ChronicleEventNoteAdmin)
 
 
