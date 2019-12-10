@@ -44,10 +44,7 @@ class GameSessionAdmin(admin.ModelAdmin):
     list_display = ['id', 'game_no', 'title', 'chapter', 'date']
     list_editable = ['game_no', 'title', 'chapter', 'date']
     inlines = [TimelineEventInline, ChronicleEventInline]
-    search_fields = ['ititle']
-
-    def ititle(self, obj):
-        return obj.title.lower()
+    search_fields = ['title']
 
 
 class SpecificLocationAdmin(admin.ModelAdmin):
