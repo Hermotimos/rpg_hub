@@ -8,6 +8,7 @@ from rules.models import Skill, Synergy, CharacterClass, CharacterProfession, El
 class SkillAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'tested_trait', 'description', 'lvl_0', 'lvl_1', 'lvl_2', 'lvl_3', 'image']
     list_editable = ['name', 'description', 'tested_trait', 'lvl_0', 'lvl_1', 'lvl_2', 'lvl_3', 'image']
+    search_fields = ['name', 'description', 'lvl_0', 'lvl_1', 'lvl_2', 'lvl_3']
 
     formfield_overrides = {
         models.CharField: {'widget': Textarea(attrs={'rows': 2, 'cols': 10})},
@@ -18,6 +19,7 @@ class SkillAdmin(admin.ModelAdmin):
 class SynergyAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'lvl_1', 'lvl_2', 'lvl_3']
     list_editable = ['name', 'lvl_1', 'lvl_2', 'lvl_3']
+    search_fields = ['name', 'lvl_1', 'lvl_2', 'lvl_3']
 
     formfield_overrides = {
         models.CharField: {'widget': Textarea(attrs={'rows': 2, 'cols': 10})},
@@ -34,21 +36,25 @@ class CharacterClassAdmin(admin.ModelAdmin):
     list_display = ['name', 'description']
     list_editable = ['description']
     inlines = [CharacterProfessionInline, ]
+    search_fields = ['name', 'description']
 
 
 class CharacterProfessionAdmin(admin.ModelAdmin):
     list_display = ['name', 'character_class', 'description', 'start_perks']
     list_editable = ['description', 'start_perks']
+    search_fields = ['name', 'description', 'start_perks']
 
 
 class EliteClassAdmin(admin.ModelAdmin):
     list_display = ['name', 'description']
     list_editable = ['description']
+    search_fields = ['name', 'description']
 
 
 class EliteProfessionAdmin(admin.ModelAdmin):
     list_display = ['name', 'elite_class', 'description', 'start_perks']
     list_editable = ['description', 'start_perks']
+    search_fields = ['name', 'description', 'start_perks']
 
 
 class WeaponTypeInline(admin.TabularInline):
@@ -64,6 +70,17 @@ class WeaponTypeInline(admin.TabularInline):
 class WeaponClassAdmin(admin.ModelAdmin):
     list_display = ['name', 'description']
     inlines = [WeaponTypeInline, ]
+    search_fields = ['name', 'description']
+
+
+class WeaponTypeAdmin(admin.ModelAdmin):
+    list_display = ['name', 'description']
+    search_fields = ['name', 'description']
+
+
+class PlateTypeAdmin(admin.ModelAdmin):
+    list_display = ['name', 'description']
+    search_fields = ['name', 'description']
 
 
 admin.site.register(Skill, SkillAdmin)
@@ -73,5 +90,5 @@ admin.site.register(CharacterProfession, CharacterProfessionAdmin)
 admin.site.register(EliteClass, EliteClassAdmin)
 admin.site.register(EliteProfession, EliteProfessionAdmin)
 admin.site.register(WeaponClass, WeaponClassAdmin)
-admin.site.register(WeaponType)
-admin.site.register(PlateType)
+admin.site.register(WeaponType, WeaponTypeAdmin)
+admin.site.register(PlateType, PlateTypeAdmin)
