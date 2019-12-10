@@ -5,6 +5,7 @@ from .models import News, NewsAnswer, Survey, SurveyOption, SurveyAnswer
 class NewsAdmin(admin.ModelAdmin):
     list_display = ['id', 'author', 'title', 'date_posted', 'image']
     list_editable = ['title', 'image']
+    search_fields = ['title']
 
 
 class NewsAnswerAdmin(admin.ModelAdmin):
@@ -29,6 +30,8 @@ class SurveyAdmin(admin.ModelAdmin):
 
 class SurveyOptionAdmin(admin.ModelAdmin):
     list_display = ['survey', 'author', 'option_text']
+    list_editable = ['option_text']
+    search_fields = ['option_text']
 
 
 admin.site.register(News, NewsAdmin)
