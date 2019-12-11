@@ -73,7 +73,7 @@ class Remark(models.Model):
     seen_by = models.ManyToManyField(Profile, related_name='remarks_seen', blank=True)
 
     def __str__(self):
-        return f'{self.text[:50]}...'
+        return f'{self.text[:100]}...' if len(str(self.text)) > 100 else self.text
 
     def text_begin(self):
         return self.__str__()
