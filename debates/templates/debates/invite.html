@@ -25,7 +25,11 @@
         </tr>
         <tr>
             <td><h6>Uczestnicy:</h6></td>
-            <td><small>{{ allowed }}</small></td>
+            <td>
+                {% for profile in debate.allowed_profiles.all %}
+                    <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                {% endfor %}
+            </td>
         </tr>
     </table><br><br>
 

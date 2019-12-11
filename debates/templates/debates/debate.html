@@ -21,15 +21,24 @@
         </tr>
         <tr>
             <td><h6>Inicjator:</h6></td>
-            <td><small>{{ debate.starter.profile.character_name|get_first_word }}</small></td>
+            <td><img class="rounded-circle img-small" src="{{ debate.starter.profile.image.url }}"></td>
         </tr>
         <tr>
             <td><h6>Uczestnicy:</h6></td>
-            <td><small>{{ allowed }}</small></td>
+            <td>
+                {% for profile in debate.allowed_profiles.all %}
+                    <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                {% endfor %}
+            </td>
         </tr>
         <tr>
             <td><h6>Uważni uczestnicy:</h6></td>
-            <td><small>{{ followers }}</small></td>
+            <td>
+                {% for profile in debate.followers.all %}
+                    <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                {% endfor %}
+
+            </td>
         </tr>
     </table>
 
