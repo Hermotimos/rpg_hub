@@ -1,24 +1,27 @@
-from django.contrib import admin
 from contact.models import Demand, Plan, DemandAnswer
+from django.contrib import admin
+from django.utils.html import format_html
 
 
 class DemandAdmin(admin.ModelAdmin):
-    list_display = ['id', 'from_to', 'get_demand_caption', 'is_done']
+    list_display = ['id', 'author', 'author_to_addressee', 'demand_caption', 'is_done']
     search_fields = ['text']
 
-    def from_to(self, obj):
+    def author_to_addressee(self, obj):
         return str(obj.author) + ' => ' + str(obj.addressee)
 
-    def get_demand_caption(self, obj):
+    def demand_caption(self, obj):
         return obj.text[:100] + '...' if len(str(obj.text)) > 100 else obj.text
 
 
 class DemandAnswerAdmin(admin.ModelAdmin):
-    list_display = ['get_demand_info', 'demand', 'id', 'get_answer_caption', ]
+    list_display = ['id', 'get_demand_info', 'get_answer_caption']
     search_fields = ['text']
 
     def get_demand_info(self, obj):
-        return f'{obj.demand.id} [{str(obj.demand.author)} => {str(obj.demand.addressee)}]'
+        return format_html(f'Dezyderat nr {obj.demand.id}'
+                           f'<br>[{str(obj.demand.author)} => {str(obj.demand.addressee)}]'
+                           f'<br><b>{obj.demand}</b>')
 
     def get_answer_caption(self, obj):
         return obj.text[:100] + '...' if len(str(obj.text)) > 100 else obj.text
@@ -29,7 +32,10 @@ class PlanAdmin(admin.ModelAdmin):
     search_fields = ['text']
 
     def get_plan_caption(self, obj):
-        return obj.text[:100] + '...' if len(str(obj.text)) > 100 else obj.text
+        if obj.author.profile.character_status == 'gm' or obj.inform_gm:
+            return obj.text[:100] + '...' if len(str(obj.text)) > 100 else obj.text
+        else:
+            return format_html('<b>TOP SECRET</b>')
 
 
 admin.site.register(Demand, DemandAdmin)
