@@ -22,21 +22,14 @@ class SynergyAdmin(admin.ModelAdmin):
     search_fields = ['name', 'lvl_1', 'lvl_2', 'lvl_3']
 
     formfield_overrides = {
-        models.CharField: {'widget': Textarea(attrs={'rows': 2, 'cols': 10})},
+        models.CharField: {'widget': Textarea(attrs={'rows': 3, 'cols': 10})},
         models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 30})},
     }
 
 
 class CharacterProfessionInline(admin.TabularInline):
     model = CharacterProfession
-    extra = 3
-
-
-class CharacterClassAdmin(admin.ModelAdmin):
-    list_display = ['name', 'description']
-    list_editable = ['description']
-    inlines = [CharacterProfessionInline, ]
-    search_fields = ['name', 'description']
+    extra = 2
 
 
 class CharacterProfessionAdmin(admin.ModelAdmin):
@@ -45,10 +38,16 @@ class CharacterProfessionAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description', 'start_perks']
 
 
-class EliteClassAdmin(admin.ModelAdmin):
+class CharacterClassAdmin(admin.ModelAdmin):
     list_display = ['name', 'description']
     list_editable = ['description']
+    inlines = [CharacterProfessionInline]
     search_fields = ['name', 'description']
+
+
+class EliteProfessionInline(admin.TabularInline):
+    model = EliteProfession
+    extra = 2
 
 
 class EliteProfessionAdmin(admin.ModelAdmin):
@@ -57,9 +56,16 @@ class EliteProfessionAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description', 'start_perks']
 
 
+class EliteClassAdmin(admin.ModelAdmin):
+    list_display = ['name', 'description']
+    list_editable = ['description']
+    inlines = [EliteProfessionInline]
+    search_fields = ['name', 'description']
+
+
 class WeaponTypeInline(admin.TabularInline):
     model = WeaponType
-    extra = 3
+    extra = 2
 
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 1, 'cols': 25})},
@@ -69,18 +75,33 @@ class WeaponTypeInline(admin.TabularInline):
 
 class WeaponClassAdmin(admin.ModelAdmin):
     list_display = ['name', 'description']
+    list_editable = ['description']
     inlines = [WeaponTypeInline, ]
     search_fields = ['name', 'description']
+
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
+    }
 
 
 class WeaponTypeAdmin(admin.ModelAdmin):
     list_display = ['name', 'description']
+    list_editable = ['description']
     search_fields = ['name', 'description']
+
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
+    }
 
 
 class PlateTypeAdmin(admin.ModelAdmin):
     list_display = ['name', 'description']
+    list_editable = ['description']
     search_fields = ['name', 'description']
+
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
+    }
 
 
 admin.site.register(Skill, SkillAdmin)
