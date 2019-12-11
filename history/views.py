@@ -259,13 +259,11 @@ def chronicle_one_game_view(request, game_id, timeline_event_id):
 def chronicle_inform_view(request, event_id):
     profile = request.user.profile
     event = get_object_or_404(ChronicleEvent, id=event_id)
+
     participants = event.participants.all()
     old_informed = event.informed.all()
-
     participants_ids = [p.id for p in participants]
     old_informed_ids = [p.id for p in old_informed]
-    participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in participants)
-    old_informed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in old_informed)
 
     if request.method == 'POST':
         form = ChronicleEventInformForm(authenticated_user=request.user,
@@ -311,8 +309,6 @@ def chronicle_inform_view(request, event_id):
         'page_title': 'Poinformuj o wydarzeniu',
         'form': form,
         'event': event,
-        'participants': participants_str,
-        'informed': old_informed_str
     }
     if is_allowed_for_chronicle(profile, chronicle_event_id=event_id):
         return render(request, 'history/chronicle_inform.html', context)
@@ -325,10 +321,7 @@ def chronicle_inform_view(request, event_id):
 def chronicle_note_view(request, event_id):
     profile = request.user.profile
     event = get_object_or_404(ChronicleEvent, id=event_id)
-
     current_note = None
-    participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in event.participants.all())
-    informed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in event.informed.all())
 
     try:
         current_note = ChronicleEventNote.objects.get(event=event, author=request.user)
@@ -352,8 +345,6 @@ def chronicle_note_view(request, event_id):
         'page_title': 'Przemyślenia',
         'event': event,
         'form': form,
-        'participants': participants_str,
-        'informed': informed_str
     }
     if is_allowed_for_chronicle(profile, chronicle_event_id=event_id):
         return render(request, 'history/chronicle_note.html', context)

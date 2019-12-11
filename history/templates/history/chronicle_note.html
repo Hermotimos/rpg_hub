@@ -25,12 +25,20 @@
         </tr>
         <tr>
             <td><h6>Uczestnicy:</h6></td>
-            <td><small>{{ participants }}</small></td>
+            <td>
+                {% for profile in event.participants.all %}
+                    <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                {% endfor %}
+            </td>
         </tr>
         {% if informed %}
         <tr>
             <td><h6>Poinformowani:</h6></td>
-            <td><small>{{ informed }}</small></td>
+            <td>
+                {% for profile in event.informed.all %}
+                    <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                {% endfor %}
+            </td>
         </tr>
         {% endif %}
     </table><br><br>
