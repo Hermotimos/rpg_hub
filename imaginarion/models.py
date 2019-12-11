@@ -22,10 +22,7 @@ class Picture(models.Model):
         ordering = ['type', 'title', 'description']
 
     def __str__(self):
-        return f'{str(self.type).upper()}___{str(self.title).split("_", 1)[1]}'
-
-    def admin_title(self):
-        return self.__str__()
+        return f'{str(self.type).upper()}__{str(self.title).split("_", 1)[1]}'
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
