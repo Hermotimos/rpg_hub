@@ -205,9 +205,6 @@ def debates_invite_view(request, topic_id, debate_id):
 
     allowed_profiles_old = debate.allowed_profiles.all()
     allowed_profiles_old_ids = [p.id for p in allowed_profiles_old]
-    # allowed_profiles_old_str = ', '.join(p.character_name.split(' ', 1)[0]
-    #                                      for p in allowed_profiles_old
-    #                                      if p.character_status != 'gm')
 
     if request.method == 'POST':
         form = InviteForm(authenticated_user=request.user,
@@ -243,7 +240,6 @@ def debates_invite_view(request, topic_id, debate_id):
         'page_title': 'Dodaj uczestników narady',
         'debate': debate,
         'form': form,
-        # 'allowed': allowed_profiles_old_str,
     }
     if profile in debate.allowed_profiles.all() or profile.character_status == 'gm':
         return render(request, 'debates/invite.html', context)
