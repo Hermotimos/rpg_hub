@@ -260,10 +260,8 @@ def chronicle_inform_view(request, event_id):
     profile = request.user.profile
     event = get_object_or_404(ChronicleEvent, id=event_id)
 
-    participants = event.participants.all()
-    old_informed = event.informed.all()
-    participants_ids = [p.id for p in participants]
-    old_informed_ids = [p.id for p in old_informed]
+    participants_ids = [p.id for p in event.participants.all()]
+    old_informed_ids = [p.id for p in event.informed.all()]
 
     if request.method == 'POST':
         form = ChronicleEventInformForm(authenticated_user=request.user,
@@ -802,13 +800,9 @@ def timeline_inform_view(request, event_id):
     profile = request.user.profile
     event = get_object_or_404(TimelineEvent, id=event_id)
 
-    participants = list(event.participants.all())
-    participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in participants)
     participants_ids = [p.id for p in event.participants.all()]
-    old_informed = list(event.informed.all())
+    old_informed = event.informed.all()
     old_informed_ids = [p.id for p in old_informed]
-    old_informed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in old_informed)
-    allowed = (participants + old_informed)
 
     if request.method == 'POST':
         form = TimelineEventInformForm(authenticated_user=request.user,
@@ -852,10 +846,8 @@ def timeline_inform_view(request, event_id):
         'page_title': 'Poinformuj o wydarzeniu',
         'form': form,
         'event': event,
-        'participants': participants_str,
-        'informed': old_informed_str
     }
-    if profile in allowed or profile.character_status == 'gm':
+    if profile in (event.participants.all() | event.informed.all()) or profile.character_status == 'gm':
         return render(request, 'history/timeline_inform.html', context)
     else:
         return redirect('home:dupa')
@@ -866,13 +858,7 @@ def timeline_inform_view(request, event_id):
 def timeline_note_view(request, event_id):
     profile = request.user.profile
     event = get_object_or_404(TimelineEvent, id=event_id)
-
     current_note = None
-    participants = list(event.participants.all())
-    participants_str = ', '.join(p.character_name.split(' ', 1)[0] for p in participants)
-    informed = list(event.informed.all())
-    informed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in informed)
-    allowed = (participants + informed)
 
     try:
         current_note = TimelineEventNote.objects.get(event=event, author=request.user)
@@ -897,10 +883,8 @@ def timeline_note_view(request, event_id):
         'page_title': 'Przemyślenia',
         'event': event,
         'form': form,
-        'participants': participants_str,
-        'informed': informed_str
     }
-    if profile in allowed or profile.character_status == 'gm':
+    if profile in (event.participants.all() | event.informed.all()) or profile.character_status == 'gm':
         return render(request, 'history/timeline_note.html', context)
     else:
         return redirect('home:dupa')
