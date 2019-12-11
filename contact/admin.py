@@ -35,7 +35,7 @@ class PlanAdmin(admin.ModelAdmin):
         if obj.author.profile.character_status == 'gm' or obj.inform_gm:
             return obj.text[:100] + '...' if len(str(obj.text)) > 100 else obj.text
         else:
-            return format_html('<b>TOP SECRET</b>')
+            return format_html('<b><font color="red">TOP SECRET</font></b>')
 
 
 admin.site.register(Demand, DemandAdmin)
