@@ -1,6 +1,7 @@
 from django.contrib import admin
-from django.forms import Textarea
 from django.db import models
+from django.forms import Textarea
+from django.utils.html import format_html
 from history.models import (Chapter,
                             GameSession,
                             Thread,
@@ -19,12 +20,6 @@ class ChapterAdmin(admin.ModelAdmin):
     search_fields = ['title']
 
 
-class ThreadAdmin(admin.ModelAdmin):
-    model = Thread
-    list_display = ['name', 'is_ended']
-    list_editable = ['is_ended', ]
-
-
 class TimelineEventInline(admin.TabularInline):
     model = TimelineEvent
     extra = 3
@@ -40,11 +35,53 @@ class ChronicleEventInline(admin.TabularInline):
     extra = 2
 
 
+class ChronicleEventAdmin(admin.ModelAdmin):
+    # fields to be displayed in admin for each object
+    fields = ['game', 'event_no_in_game', 'description', 'participants', 'informed', 'pictures', 'debate']
+
+    list_display = ['game', 'event_no_in_game', 'short_description']
+    list_display_links = ['short_description']
+    list_editable = ['event_no_in_game', ]
+    list_filter = ['participants', 'informed', 'game', ]
+    search_fields = ['description']
+
+
+class ChronicleEventNoteAdmin(admin.ModelAdmin):
+    model = ChronicleEventNote
+    list_display = ['id', 'author', 'text_secret']
+    search_fields = ['text']
+
+    def text_secret(self, obj):
+        return format_html('<b><font color="red">TOP SECRET</font></b>')
+
+
 class GameSessionAdmin(admin.ModelAdmin):
     list_display = ['id', 'game_no', 'title', 'chapter', 'date']
     list_editable = ['game_no', 'title', 'chapter', 'date']
     inlines = [TimelineEventInline, ChronicleEventInline]
     search_fields = ['title']
+
+
+class TimelineEventAdmin(admin.ModelAdmin):
+    list_display = ['short_description', 'game', 'date']
+    list_filter = ['game']
+    search_fields = ['description']
+
+
+class TimelineEventNoteAdmin(admin.ModelAdmin):
+    model = ChronicleEventNote
+    list_display = ['id', 'author', 'text_secret']
+    search_fields = ['text']
+
+    def text_secret(self, obj):
+        return format_html('<b><font color="red">TOP SECRET</font></b>')
+
+
+class ThreadAdmin(admin.ModelAdmin):
+    model = Thread
+    list_display = ['id', 'name', 'is_ended']
+    list_editable = ['name', 'is_ended']
+    search_fields = ['name']
 
 
 class SpecificLocationAdmin(admin.ModelAdmin):
@@ -54,40 +91,25 @@ class SpecificLocationAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
-class TimelineEventAdmin(admin.ModelAdmin):
-    list_display = ['short_description', 'game', 'date']
-    list_filter = ['game']
-    search_fields = ['description']
+class SpecificLocationInline(admin.TabularInline):
+    model = SpecificLocation
+    extra = 2
+    fields = ['name']
 
 
-class ChronicleEventAdmin(admin.ModelAdmin):
-
-    # fields to be displayed in admin for each object
-    fields = ['game', 'event_no_in_game', 'description', 'participants', 'informed', 'pictures', 'debate']
-
-    list_display = ['game', 'event_no_in_game', 'short_description']
-    list_display_links = ['game', 'short_description']
-    list_editable = ['event_no_in_game', ]
-    list_filter = ['participants', 'informed', 'game', ]
-    search_fields = ['description']
-
-
-class ChronicleEventNoteAdmin(admin.ModelAdmin):
-    model = ChronicleEventNote
-    list_display = ['id', 'author', 'text_short']
-    search_fields = ['text']
-
-    def text_short(self, obj):
-        return f'{obj.text[:100]}...'
+class GeneralLocationAdmin(admin.ModelAdmin):
+    list_display = ['name']
+    inlines = [SpecificLocationInline]
+    search_fields = ['name']
 
 
 admin.site.register(Chapter, ChapterAdmin)
 admin.site.register(Thread, ThreadAdmin)
 admin.site.register(GameSession, GameSessionAdmin)
-admin.site.register(GeneralLocation)
+admin.site.register(GeneralLocation, GeneralLocationAdmin)
 admin.site.register(SpecificLocation, SpecificLocationAdmin)
 admin.site.register(TimelineEvent, TimelineEventAdmin)
-admin.site.register(TimelineEventNote)
+admin.site.register(TimelineEventNote, TimelineEventNoteAdmin)
 admin.site.register(ChronicleEvent, ChronicleEventAdmin)
 admin.site.register(ChronicleEventNote, ChronicleEventNoteAdmin)
 
