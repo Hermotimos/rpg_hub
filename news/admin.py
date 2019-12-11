@@ -9,9 +9,10 @@ class NewsAdmin(admin.ModelAdmin):
 
 
 class NewsAnswerAdmin(admin.ModelAdmin):
-    list_display = ['id', 'get_news', 'author', 'get_caption', 'date_posted']
+    list_display = ['id', 'news_title', 'author', 'get_caption', 'date_posted']
+    search_fields = ['text']
 
-    def get_news(self, obj):
+    def news_title(self, obj):
         return obj.news.title
 
     def get_caption(self, obj):
@@ -26,6 +27,7 @@ class SurveyOptionInline(admin.TabularInline):
 class SurveyAdmin(admin.ModelAdmin):
     list_display = ['title', 'author', 'text', 'image']
     inlines = [SurveyOptionInline, ]
+    search_fields = ['title', 'text']
 
 
 class SurveyOptionAdmin(admin.ModelAdmin):
