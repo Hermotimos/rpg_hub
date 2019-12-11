@@ -15,7 +15,7 @@ class Demand(models.Model):
         ordering = ['-date_created']
 
     def __str__(self):
-        return f'{self.text[0:50]}...'
+        return f'{self.text[0:50]}...' if len(str(self.text)) > 50 else self.text
 
     def save(self, *args, **kwargs):
         super().save()
