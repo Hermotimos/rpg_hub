@@ -32,6 +32,7 @@ def debates_main_view(request):
 @query_debugger
 @login_required
 def create_topic_view(request):
+    profile = request.user.profile
     if request.method == 'POST':
         topic_form = CreateTopicForm(request.POST)
         debate_form = CreateDebateForm(authenticated_user=request.user, data=request.POST)
@@ -63,7 +64,7 @@ def create_topic_view(request):
             for profile in debate.allowed_profiles.all():
                 if profile.user != request.user:
                     receivers.append(profile.user.email)
-            if request.user.profile.character_status != 'gm':
+            if profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
@@ -86,6 +87,7 @@ def create_topic_view(request):
 @query_debugger
 @login_required
 def create_debate_view(request, topic_id):
+    profile = request.user.profile
     topic = get_object_or_404(Topic, id=topic_id)
 
     if request.method == 'POST':
@@ -116,7 +118,7 @@ def create_debate_view(request, topic_id):
             for profile in debate.allowed_profiles.all():
                 if profile.user != request.user:
                     receivers.append(profile.user.email)
-            if request.user.profile.character_status != 'gm':
+            if profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
@@ -132,7 +134,7 @@ def create_debate_view(request, topic_id):
         'remark_form': remark_form,
         'topic': topic
     }
-    if request.user.profile in topic.allowed_profiles.all() or request.user.profile.character_status == 'gm':
+    if profile in topic.allowed_profiles.all() or profile.character_status == 'gm':
         return render(request, 'debates/create_debate.html', context)
     else:
         return redirect('home:dupa')
@@ -141,6 +143,7 @@ def create_debate_view(request, topic_id):
 @query_debugger
 @login_required
 def debate_view(request, topic_id, debate_id):
+    profile = request.user.profile
     topic = get_object_or_404(Topic, id=topic_id)
     debate = get_object_or_404(Debate, id=debate_id)
     remarks = debate.remarks.all().select_related('author__profile')
@@ -148,7 +151,6 @@ def debate_view(request, topic_id, debate_id):
     last_remark = debate.last_remark()
     last_remark_seen_by_imgs = ()
     if not debate.is_ended and last_remark:
-        profile = request.user.profile
         seen_by = last_remark.seen_by.all()
         if profile not in seen_by:
             last_remark.seen_by.add(profile)
@@ -177,7 +179,7 @@ def debate_view(request, topic_id, debate_id):
             for user in User.objects.all():
                 if user.profile in debate.followers.all() and user != request.user:
                     receivers.append(user.email)
-            if request.user.profile.character_status != 'gm':
+            if profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
@@ -198,7 +200,7 @@ def debate_view(request, topic_id, debate_id):
         'last_remark_seen_by_imgs': last_remark_seen_by_imgs,
         'form': form,
     }
-    if request.user.profile in debate.allowed_profiles.all() or request.user.profile.character_status == 'gm':
+    if profile in debate.allowed_profiles.all() or profile.character_status == 'gm':
         return render(request, 'debates/debate.html', context)
     else:
         return redirect('home:dupa')
@@ -207,13 +209,14 @@ def debate_view(request, topic_id, debate_id):
 @query_debugger
 @login_required
 def debates_invite_view(request, topic_id, debate_id):
+    profile = request.user.profile
     debate = get_object_or_404(Debate, id=debate_id)
 
     allowed_profiles_old = debate.allowed_profiles.all()
     allowed_profiles_old_ids = [p.id for p in allowed_profiles_old]
-    allowed_profiles_old_str = ', '.join(p.character_name.split(' ', 1)[0]
-                                         for p in allowed_profiles_old
-                                         if p.character_status != 'gm')
+    # allowed_profiles_old_str = ', '.join(p.character_name.split(' ', 1)[0]
+    #                                      for p in allowed_profiles_old
+    #                                      if p.character_status != 'gm')
 
     if request.method == 'POST':
         form = InviteForm(authenticated_user=request.user,
@@ -226,7 +229,7 @@ def debates_invite_view(request, topic_id, debate_id):
             debate.followers.add(*list(allowed_profiles_new))
 
             subject = f"[RPG] Dołączenie do narady: '{debate.name}'"
-            message = f"{request.user.profile} dołączył/a Cię do narady '{debate.name}' w temacie '{debate.topic}'.\n"\
+            message = f"{profile} dołączył/a Cię do narady '{debate.name}' w temacie '{debate.topic}'.\n"\
                       f"Uczestnicy: {', '.join(p.character_name for p in allowed_profiles_new if p.character_status != 'gm')}\n" \
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
@@ -235,7 +238,7 @@ def debates_invite_view(request, topic_id, debate_id):
                 # exclude previously allowed users from mailing to avoid spam
                 if profile not in allowed_profiles_old:
                     receivers.append(profile.user.email)
-            if request.user.profile.character_status != 'gm':
+            if profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
@@ -249,9 +252,9 @@ def debates_invite_view(request, topic_id, debate_id):
         'page_title': 'Dodaj uczestników narady',
         'debate': debate,
         'form': form,
-        'allowed': allowed_profiles_old_str,
+        # 'allowed': allowed_profiles_old_str,
     }
-    if request.user.profile in debate.allowed_profiles.all() or request.user.profile.character_status == 'gm':
+    if profile in debate.allowed_profiles.all() or profile.character_status == 'gm':
         return render(request, 'debates/invite.html', context)
     else:
         return redirect('home:dupa')
@@ -260,9 +263,10 @@ def debates_invite_view(request, topic_id, debate_id):
 @query_debugger
 @login_required
 def unfollow_debate_view(request, topic_id, debate_id):
+    profile = request.user.profile
     debate = get_object_or_404(Debate, id=debate_id)
-    if request.user.profile in debate.allowed_profiles.all() or request.user.profile.character_status == 'gm':
-        debate.followers.remove(request.user.profile)
+    if profile in debate.allowed_profiles.all() or profile.character_status == 'gm':
+        debate.followers.remove(profile)
         messages.info(request, 'Przestałeś uważnie uczestniczyć w naradzie!')
         return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
     else:
@@ -272,9 +276,10 @@ def unfollow_debate_view(request, topic_id, debate_id):
 @query_debugger
 @login_required
 def follow_debate_view(request, topic_id, debate_id):
+    profile = request.user.profile
     debate = get_object_or_404(Debate, id=debate_id)
-    if request.user.profile in debate.allowed_profiles.all() or request.user.profile.character_status == 'gm':
-        debate.followers.add(request.user.profile)
+    if profile in debate.allowed_profiles.all() or profile.character_status == 'gm':
+        debate.followers.add(profile)
         messages.info(request, 'Od teraz uważnie uczestniczysz w naradzie!')
         return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
     else:
