@@ -156,13 +156,6 @@ def debate_view(request, topic_id, debate_id):
             last_remark.seen_by.add(profile)
         last_remark_seen_by_imgs = (p.image for p in last_remark.seen_by.all())
 
-    allowed_str = ', '.join(p.character_name.split(' ', 1)[0]
-                            for p in debate.allowed_profiles.all()
-                            if p.character_status != 'gm')
-    followers_str = ', '.join(p.character_name.split(' ', 1)[0]
-                              for p in debate.followers.all()
-                              if p.character_status != 'gm')
-
     if request.method == 'POST':
         form = CreateRemarkForm(request.POST, request.FILES)
         if form.is_valid():
@@ -194,8 +187,6 @@ def debate_view(request, topic_id, debate_id):
         'topic': topic,
         'debate': debate,
         'remarks': remarks,
-        'allowed': allowed_str,
-        'followers': followers_str,
         'last_remark': last_remark,
         'last_remark_seen_by_imgs': last_remark_seen_by_imgs,
         'form': form,
