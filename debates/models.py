@@ -108,11 +108,11 @@ post_save.connect(update_topic_allowed_profiles, sender=Debate)
 m2m_changed.connect(update_topic_allowed_profiles, sender=Debate.allowed_profiles.through)
 
 
-def delete_remark_if_doubled(sender, instance, **kwargs):
+def delete_if_doubled(sender, instance, **kwargs):
     time_span = datetime.datetime.now() - datetime.timedelta(minutes=1)
     doubled = Remark.objects.filter(text=instance.text, author=instance.author, date_posted__gte=time_span)
     if doubled.count() > 1:
         instance.delete()
 
 
-post_save.connect(delete_remark_if_doubled, sender=Remark)
+post_save.connect(delete_if_doubled, sender=Remark)
