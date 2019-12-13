@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.db.models.signals import m2m_changed, post_save
 from django.contrib.auth.models import User
@@ -105,3 +106,18 @@ def update_topic_allowed_profiles(sender, instance, **kwargs):
 
 post_save.connect(update_topic_allowed_profiles, sender=Debate)
 m2m_changed.connect(update_topic_allowed_profiles, sender=Debate.allowed_profiles.through)
+
+
+def delete_remark_if_doubled(sender, instance, **kwargs):
+    remark = instance
+    time_span = datetime.datetime.now() - datetime.timedelta(minutes=1)
+    same_remarks = Remark.objects.filter(
+        text=remark.text,
+        author=remark.author,
+        date_posted__gte=time_span
+    )
+    if same_remarks.count() > 1:
+        remark.delete()
+
+
+post_save.connect(delete_remark_if_doubled, sender=Remark)
