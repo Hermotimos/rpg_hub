@@ -1,4 +1,6 @@
+import datetime
 from django.db import models
+from django.db.models.signals import post_save
 from users.models import User
 from PIL import Image
 
@@ -71,3 +73,19 @@ class Plan(models.Model):
 
     class Meta:
         ordering = ['-date_created']
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# -------------------------------------------------- SIGNALS ---------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
+
+
+def delete_if_doubled(sender, instance, **kwargs):
+    time_span = datetime.datetime.now() - datetime.timedelta(minutes=1)
+    doubled = DemandAnswer.objects.filter(text=instance.text, author=instance.author, date_posted__gte=time_span)
+    if doubled.count() > 1:
+        instance.delete()
+
+
+post_save.connect(delete_if_doubled, sender=DemandAnswer)
+
