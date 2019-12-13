@@ -19,7 +19,8 @@ def debates_main_view(request):
         topics = Topic.objects.all().prefetch_related('debates__allowed_profiles')
     else:
         topics = Topic.objects.filter(allowed_profiles=profile).prefetch_related(
-            Prefetch('debates', queryset=Debate.objects.filter(allowed_profiles=profile)), 'debates__allowed_profiles'
+            Prefetch('debates', queryset=Debate.objects.filter(allowed_profiles=profile)),
+            'prefetched_debates__allowed_profiles'
         )
 
     context = {
