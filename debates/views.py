@@ -204,11 +204,10 @@ def debates_invite_view(request, topic_id, debate_id):
     debate = get_object_or_404(Debate, id=debate_id)
 
     allowed_profiles_old = debate.allowed_profiles.all()
-    allowed_profiles_old_ids = [p.id for p in allowed_profiles_old]
 
     if request.method == 'POST':
         form = InviteForm(authenticated_user=request.user,
-                          already_allowed_profiles_ids=allowed_profiles_old_ids,
+                          already_allowed_profiles=allowed_profiles_old,
                           data=request.POST,
                           instance=debate)
         if form.is_valid():
@@ -234,7 +233,7 @@ def debates_invite_view(request, topic_id, debate_id):
             return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
     else:
         form = InviteForm(authenticated_user=request.user,
-                          already_allowed_profiles_ids=allowed_profiles_old_ids)
+                          already_allowed_profiles=allowed_profiles_old)
 
     context = {
         'page_title': 'Dodaj uczestników narady',
