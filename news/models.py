@@ -1,6 +1,10 @@
+import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Max
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 from users.models import Profile
 from PIL import Image
 
@@ -133,3 +137,20 @@ class SurveyAnswer(models.Model):
                 output_size = (700, 700)
                 img.thumbnail(output_size)
                 img.save(self.image.path)
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# -------------------------------------------------- SIGNALS ---------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
+
+
+@receiver(post_save, sender=NewsAnswer)
+@receiver(post_save, sender=SurveyAnswer)
+def delete_if_doubled(sender, instance, **kwargs):
+    time_span = datetime.datetime.now() - datetime.timedelta(minutes=1)
+    if isinstance(instance, NewsAnswer):
+        doubled = NewsAnswer.objects.filter(text=instance.text, author=instance.author, date_posted__gte=time_span)
+    elif isinstance(instance, SurveyAnswer):
+        doubled = SurveyAnswer.objects.filter(text=instance.text, author=instance.author, date_posted__gte=time_span)
+    if doubled.count() > 1:
+        instance.delete()
