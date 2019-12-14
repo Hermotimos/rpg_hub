@@ -35,15 +35,15 @@ class Debate(models.Model):
     def __str__(self):
         return self.name
 
-    def first_player_remark_date(self):
-        players_remarks = self.remarks.exclude(
-            author__profile__in=Profile.objects.filter(character_status='gm'))
-        return players_remarks.aggregate(Min('date_posted'))['date_posted__min']
+    # def first_player_remark_date(self):
+    #     players_remarks = self.remarks.exclude(
+    #         author__profile__in=Profile.objects.filter(character_status='gm'))
+    #     return players_remarks.aggregate(Min('date_posted'))['date_posted__min']
 
-    def last_player_remark_date(self):
-        players_remarks = self.remarks.exclude(
-            author__profile__in=Profile.objects.filter(character_status='gm'))
-        return players_remarks.aggregate(Max('date_posted'))['date_posted__max']
+    # def last_player_remark_date(self):
+    #     players_remarks = self.remarks.exclude(
+    #         author__profile__in=Profile.objects.filter(character_status='gm'))
+    #     return players_remarks.aggregate(Max('date_posted'))['date_posted__max']
 
     def first_active_player(self):
         remark = self.remarks.get(date_posted=self.first_player_remark_date())

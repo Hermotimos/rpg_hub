@@ -25,28 +25,19 @@ def debates_main_view(request):
     topics = topics.prefetch_related(
         Prefetch(
             'debates',
-            queryset=debates.annotate(player_remarks_count=Count(
-                Case(
-                    When(~Q(remarks__author__profile__character_status='gm'), then=1),
-                    output_field=IntegerField()
+            queryset=debates.annotate(
+                first_player_remark_date=Min('remarks__date_posted'),
+                last_player_remark_date=Max('remarks__date_posted'),
+                player_remarks_count=Count(
+                    Case(
+                        When(~Q(remarks__author__profile__character_status='gm'), then=1),
+                        output_field=IntegerField()
+                    )
                 )
-            ))
+            )
         ),
         'allowed_profiles'
     )
-
-        # players_remarks = self.remarks.exclude(
-        #     author__profile__in=Profile.objects.filter(character_status='gm'))
-        # first_player_remark_date = players_remarks.aggregate(Min('date_posted'))['date_posted__min']
-        #
-        # players_remarks = self.remarks.exclude(
-        #     author__profile__in=Profile.objects.filter(character_status='gm'))
-        # last_player_remark_date = players_remarks.aggregate(Max('date_posted'))['date_posted__max']
-        #
-        # players_remarks = self.remarks.exclude(
-        #     author__profile__in=Profile.objects.filter(character_status='gm'))
-        # player_remarks_count = players_remarks.count()
-
 
     context = {
         'page_title': 'Narady',
