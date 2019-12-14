@@ -44,15 +44,7 @@ class Debate(models.Model):
     #     players_remarks = self.remarks.exclude(
     #         author__profile__in=Profile.objects.filter(character_status='gm'))
     #     return players_remarks.aggregate(Max('date_posted'))['date_posted__max']
-
-    def first_active_player(self):
-        remark = self.remarks.get(date_posted=self.first_player_remark_date())
-        return remark.author.profile.character_name if remark else ''
-
-    def last_active_player(self):
-        remark = self.remarks.get(date_posted=self.last_player_remark_date())
-        return remark.author.profile.character_name if remark else ''
-
+    #
     # def player_remarks_count(self):
     #     players_remarks = self.remarks.exclude(
     #         author__profile__in=Profile.objects.filter(character_status='gm'))
