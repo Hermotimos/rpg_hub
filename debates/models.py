@@ -53,10 +53,10 @@ class Debate(models.Model):
         remark = self.remarks.get(date_posted=self.last_player_remark_date())
         return remark.author.profile.character_name if remark else ''
 
-    def player_remarks_count(self):
-        players_remarks = self.remarks.exclude(
-            author__profile__in=Profile.objects.filter(character_status='gm'))
-        return players_remarks.count()
+    # def player_remarks_count(self):
+    #     players_remarks = self.remarks.exclude(
+    #         author__profile__in=Profile.objects.filter(character_status='gm'))
+    #     return players_remarks.count()
 
     def last_remark(self):
         if self.remarks.all():

@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.db.models import Prefetch
+from django.db.models import Count, Case, When, IntegerField, Max, Min, Prefetch, Q
 from django.shortcuts import render, redirect, get_object_or_404
 
 from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm, InviteForm
@@ -16,12 +16,37 @@ from users.models import User, Profile
 def debates_main_view(request):
     profile = request.user.profile
     if profile.character_status == 'gm':
-        topics = Topic.objects.all().prefetch_related('debates__allowed_profiles')
+        topics = Topic.objects.all()
+        debates = Debate.objects.all()
     else:
-        topics = Topic.objects.filter(allowed_profiles=profile).prefetch_related(
-            Prefetch('debates', queryset=Debate.objects.filter(allowed_profiles=profile)),
-            'prefetched_debates__allowed_profiles'
-        )
+        topics = Topic.objects.filter(allowed_profiles=profile)
+        debates = Debate.objects.filter(allowed_profiles=profile)
+
+    topics = topics.prefetch_related(
+        Prefetch(
+            'debates',
+            queryset=debates.annotate(player_remarks_count=Count(
+                Case(
+                    When(~Q(remarks__author__profile__character_status='gm'), then=1),
+                    output_field=IntegerField()
+                )
+            ))
+        ),
+        'allowed_profiles'
+    )
+
+        # players_remarks = self.remarks.exclude(
+        #     author__profile__in=Profile.objects.filter(character_status='gm'))
+        # first_player_remark_date = players_remarks.aggregate(Min('date_posted'))['date_posted__min']
+        #
+        # players_remarks = self.remarks.exclude(
+        #     author__profile__in=Profile.objects.filter(character_status='gm'))
+        # last_player_remark_date = players_remarks.aggregate(Max('date_posted'))['date_posted__max']
+        #
+        # players_remarks = self.remarks.exclude(
+        #     author__profile__in=Profile.objects.filter(character_status='gm'))
+        # player_remarks_count = players_remarks.count()
+
 
     context = {
         'page_title': 'Narady',
