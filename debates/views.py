@@ -163,11 +163,12 @@ def debate_view(request, topic_id, debate_id):
     profile = request.user.profile
     topic = get_object_or_404(Topic, id=topic_id)
     debate = get_object_or_404(Debate, id=debate_id)
-    remarks = debate.remarks.all().select_related('author__profile')
 
-    last_remark = debate.last_remark()
+    remarks = debate.remarks.all().select_related('author__profile')
+    last_remark = debate.remarks.order_by('-date_posted')[0]
+
     last_remark_seen_by_imgs = ()
-    if not debate.is_ended and last_remark:
+    if not debate.is_ended:
         seen_by = last_remark.seen_by.all()
         if profile not in seen_by:
             last_remark.seen_by.add(profile)

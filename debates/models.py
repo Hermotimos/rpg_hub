@@ -39,7 +39,7 @@ class Debate(models.Model):
     #     players_remarks = self.remarks.exclude(
     #         author__profile__in=Profile.objects.filter(character_status='gm'))
     #     return players_remarks.aggregate(Min('date_posted'))['date_posted__min']
-
+    #
     # def last_player_remark_date(self):
     #     players_remarks = self.remarks.exclude(
     #         author__profile__in=Profile.objects.filter(character_status='gm'))
@@ -49,12 +49,12 @@ class Debate(models.Model):
     #     players_remarks = self.remarks.exclude(
     #         author__profile__in=Profile.objects.filter(character_status='gm'))
     #     return players_remarks.count()
-
-    def last_remark(self):
-        if self.remarks.all():
-            return self.remarks.order_by('-date_posted')[0]
-        else:
-            return None
+    #
+    # def last_remark(self):
+    #     if self.remarks.all():
+    #         return self.remarks.order_by('-date_posted')[0]
+    #     else:
+    #         return None
 
 
 class Remark(models.Model):
