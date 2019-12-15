@@ -16,23 +16,20 @@
     <a href="{% url 'contact:demands-create' %}" class="btn btn-outline-dark">Nowy dezyderat</a>
     <br><br><br><br>
 
-    <div>
-        <ul class="tabs" xmlns="http://www.w3.org/1999/html">
-            <li class="tab">
-                <input type="radio" name="tabs" checked="checked" id="tab1"/>
-                <label for="tab1">OTRZYMANE</label>
-                <div id="tab-content1" class="content">
-                    {% include 'contact/received_demands.html' %}
-                </div>
-            </li>
-            <li class="tab">
-                <input type="radio" name="tabs" id="tab2"/>
-                <label for="tab2">WYSŁANE</label>
-                <div id="tab-content2" class="content">
-                    {% include 'contact/sent_demands.html' %}
-                </div>
-            </li>
-        </ul>
-    </div>
-
+    <ul class="tabs">
+        <li class="tab">
+            <input type="radio" name="tabs" checked="checked" id="tab1"/>
+            <label for="tab1">OTRZYMANE</label>
+            <div id="tab-content1" class="content">
+                {% include 'contact/received_demands.html' %}
+            </div>
+        </li>
+        <li class="tab">
+            <input type="radio" name="tabs" id="tab2"/>
+            <label for="tab2">WYSŁANE</label>
+            <div id="tab-content2" class="content">
+                {% include 'contact/sent_demands.html' %}
+            </div>
+        </li>
+    </ul>
 {% endblock content %}
