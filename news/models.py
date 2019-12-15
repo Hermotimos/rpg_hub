@@ -1,12 +1,12 @@
 import datetime
-from django.db import models
+from PIL import Image
+
 from django.contrib.auth.models import User
-from django.db.models import Max
+from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from users.models import Profile
-from PIL import Image
 
 
 class News(models.Model):

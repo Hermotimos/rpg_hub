@@ -100,19 +100,20 @@ def news_detail_view(request, news_id):
     profile = request.user.profile
     news = get_object_or_404(News, id=news_id)
 
+    news_allowed_profiles = news.allowed_profiles.all()
+    news_followers = news.followers.all()
+
     if profile not in news.seen_by.all():
         news.seen_by.add(profile)
 
-    last_news_answer = news.last_news_answer()
-    last_news_answer_seen_by_imgs = ()
-    if last_news_answer:
-        if profile not in last_news_answer.seen_by.all():
-            last_news_answer.seen_by.add(profile)
-        last_news_answer_seen_by_imgs = (p.image for p in last_news_answer.seen_by.all())
-
-    answers = news.news_answers.all().select_related('author__profile')
-    # allowed_imgs = [p.image for p in news.allowed_profiles.all()]
-    # followers_imgs = [p.image for p in news.followers.all()]
+    answers = []
+    last_answer_seen_by_imgs = ()
+    if news.news_answers.all():
+        answers = news.news_answers.all().select_related('author__profile')
+        last_answer = news.news_answers.order_by('-date_posted')[0]
+        if profile not in last_answer.seen_by.all():
+            last_answer.seen_by.add(profile)
+        last_answer_seen_by_imgs = (p.image for p in last_answer.seen_by.all())
 
     if request.method == 'POST':
         form = CreateNewsAnswerForm(request.POST, request.FILES)
@@ -129,7 +130,7 @@ def news_detail_view(request, news_id):
             sender = settings.EMAIL_HOST_USER
             receivers = []
             for user in User.objects.all():
-                if user.profile in news.followers.all() and user != request.user:
+                if user.profile in news_followers and user != request.user:
                     receivers.append(user.email)
             if profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
@@ -144,10 +145,10 @@ def news_detail_view(request, news_id):
         'page_title': news.title,
         'news': news,
         'answers': answers,
-        'last_news_answer_seen_by_imgs': last_news_answer_seen_by_imgs,
+        'last_answer_seen_by_imgs': last_answer_seen_by_imgs,
         'form': form,
-        # 'allowed_imgs': allowed_imgs,
-        # 'followers_imgs': followers_imgs,
+        'news_allowed_profiles': news_allowed_profiles,
+        'news_followers': news_followers,
     }
     if profile in news.allowed_profiles.all() or profile.character_status == 'gm':
         return render(request, 'news/news_detail.html', context)
