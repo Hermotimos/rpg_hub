@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.db.models import Max, Min, Prefetch, Q
+from django.db.models import Max
 from django.shortcuts import render, redirect, get_object_or_404
 
 from news.models import News, Survey, SurveyOption
@@ -148,10 +148,10 @@ def news_detail_view(request, news_id):
 def unfollow_news_view(request, news_id):
     profile = request.user.profile
     news = get_object_or_404(News, id=news_id)
+
     if profile in news.allowed_profiles.all():
-        # TODO: remove the above if news.followers.remove(profile) works
-        # updated_followers = news.followers.exclude(user=request.user)
         news.followers.remove(profile)
+
         messages.info(request, 'Przestałeś obserwować ogłoszenie!')
         return redirect('news:detail', news_id=news_id)
     else:
@@ -163,12 +163,10 @@ def unfollow_news_view(request, news_id):
 def follow_news_view(request, news_id):
     profile = request.user.profile
     news = get_object_or_404(News, id=news_id)
+
     if profile in news.allowed_profiles.all():
-        # TODO: remove the above if news.followers.add(profile) works
-        # followers = news.followers.all()
-        # new_follower = profile
-        # followers |= Profile.objects.filter(id=new_follower.id)
         news.followers.add(profile)
+
         messages.info(request, 'Obserwujesz ogłoszenie!')
         return redirect('news:detail', news_id=news_id)
     else:
@@ -256,16 +254,10 @@ def survey_detail_view(request, survey_id):
 def vote_yes_view(request, survey_id, option_id):
     profile = request.user.profile
     option = get_object_or_404(SurveyOption, id=option_id)
-    if profile in option.survey.addressees.all():
-        # yes_voters = option.yes_voters.all()
-        # new_yes_voter = profile
-        # yes_voters |= Profile.objects.filter(id=new_yes_voter.id)
-        # option.yes_voters.set(yes_voters)
-        option.yes_voters.add(profile)
 
+    if profile in option.survey.addressees.all():
+        option.yes_voters.add(profile)
         if profile in option.no_voters.all():
-            # updated_no_voters = option.no_voters.exclude(user=request.user)
-            # option.no_voters.set(updated_no_voters)
             option.no_voters.remove(profile)
 
         messages.info(request, 'Twój głos został dodany!')
@@ -279,16 +271,10 @@ def vote_yes_view(request, survey_id, option_id):
 def vote_no_view(request, survey_id, option_id):
     profile = request.user.profile
     option = get_object_or_404(SurveyOption, id=option_id)
-    if profile in option.survey.addressees.all():
-        # no_voters = option.no_voters.all()
-        # new_no_voter = profile
-        # no_voters |= Profile.objects.filter(id=new_no_voter.id)
-        # option.no_voters.set(no_voters)
-        option.no_voters.add(profile)
 
+    if profile in option.survey.addressees.all():
+        option.no_voters.add(profile)
         if profile in option.yes_voters.all():
-            # updated_yes_voters = option.yes_voters.exclude(user=request.user)
-            # option.yes_voters.set(updated_yes_voters)
             option.yes_voters.remove(profile)
 
         messages.info(request, 'Twój głos został dodany!')
@@ -305,12 +291,8 @@ def unvote_view(request, survey_id, option_id):
 
     if profile in option.survey.addressees.all():
         if profile in option.yes_voters.all():
-            # updated_yes_voters = option.yes_voters.exclude(user=request.user)
-            # option.yes_voters.set(updated_yes_voters)
             option.yes_voters.remove(profile)
         elif profile in option.no_voters.all():
-            # updated_no_voters = option.no_voters.exclude(user=request.user)
-            # option.no_voters.set(updated_no_voters)
             option.no_voters.remove(profile)
 
         messages.info(request, 'Twój głos został skasowany!')
