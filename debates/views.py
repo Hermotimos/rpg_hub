@@ -52,7 +52,7 @@ def create_topic_view(request):
     if request.method == 'POST':
         topic_form = CreateTopicForm(request.POST)
         debate_form = CreateDebateForm(authenticated_user=request.user, data=request.POST)
-        remark_form = CreateRemarkForm(request.POST, request.FILES)
+        remark_form = CreateRemarkForm(request.POST, request.FILES, debate_id=0)
 
         if topic_form.is_valid() and debate_form.is_valid() and remark_form.is_valid():
             topic = topic_form.save()
@@ -89,7 +89,7 @@ def create_topic_view(request):
     else:
         topic_form = CreateTopicForm()
         debate_form = CreateDebateForm(authenticated_user=request.user)
-        remark_form = CreateRemarkForm(initial={'author': request.user})
+        remark_form = CreateRemarkForm(initial={'author': request.user}, debate_id=0)
 
     context = {
         'page_title': 'Nowa narada w nowym temacie',
@@ -108,7 +108,7 @@ def create_debate_view(request, topic_id):
 
     if request.method == 'POST':
         debate_form = CreateDebateForm(authenticated_user=request.user, data=request.POST)
-        remark_form = CreateRemarkForm(request.POST, request.FILES)
+        remark_form = CreateRemarkForm(request.POST, request.FILES, debate_id=0)
         if debate_form.is_valid() and remark_form.is_valid():
 
             debate = debate_form.save(commit=False)
@@ -142,7 +142,7 @@ def create_debate_view(request, topic_id):
             return redirect('debates:debate', topic_id=topic_id, debate_id=debate.id)
     else:
         debate_form = CreateDebateForm(authenticated_user=request.user)
-        remark_form = CreateRemarkForm(initial={'author': request.user})
+        remark_form = CreateRemarkForm(initial={'author': request.user}, debate_id=0)
 
     context = {
         'page_title': 'Nowa narada',
