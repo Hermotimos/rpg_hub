@@ -26,7 +26,7 @@
         <tr>
             <td><h6>Uczestnicy:</h6></td>
             <td>
-                {% for profile in debate.allowed_profiles.all %}
+                {% for profile in debate_allowed_profiles %}
                     <img class="rounded-circle img-small" src="{{ profile.image.url }}">
                 {% endfor %}
             </td>
@@ -34,7 +34,7 @@
         <tr>
             <td><h6>Uważni uczestnicy:</h6></td>
             <td>
-                {% for profile in debate.followers.all %}
+                {% for profile in debate_followers %}
                     <img class="rounded-circle img-small" src="{{ profile.image.url }}">
                 {% endfor %}
 
@@ -45,7 +45,7 @@
     <br>
     <div class="mb-4">
         <a href="{% url 'debates:invite' debate.topic.id debate.id %}" class="btn btn-outline-dark">Dodaj uczestników narady</a>&emsp;
-        {% if request.user.profile in debate.followers.all %}
+        {% if request.user.profile in debate_followers %}
             <a href="{% url 'debates:unfollow' topic.id debate.id %}" class="btn btn-dark">Nie obserwuj</a>
         {% else %}
             <a href="{% url 'debates:follow' topic.id debate.id %}" class="btn btn-dark">Obserwuj</a>

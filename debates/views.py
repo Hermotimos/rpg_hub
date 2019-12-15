@@ -164,6 +164,8 @@ def debate_view(request, topic_id, debate_id):
     topic = get_object_or_404(Topic, id=topic_id)
     debate = get_object_or_404(Debate, id=debate_id)
 
+    debate_allowed_profiles = debate.allowed_profiles.all()
+    debate_followers = debate.followers.all()
     remarks = debate.remarks.all().select_related('author__profile')
     last_remark = debate.remarks.order_by('-date_posted')[0]
 
@@ -204,6 +206,8 @@ def debate_view(request, topic_id, debate_id):
         'page_title': debate.name,
         'topic': topic,
         'debate': debate,
+        'debate_allowed_profiles': debate_allowed_profiles,
+        'debate_followers': debate_followers,
         'remarks': remarks,
         'last_remark': last_remark,
         'last_remark_seen_by_imgs': last_remark_seen_by_imgs,
