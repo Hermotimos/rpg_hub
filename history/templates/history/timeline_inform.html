@@ -30,7 +30,7 @@
             <td class="justify">
                 <small>
                     {% for thread in event.threads.all %}
-                    *{{ thread }}<br>
+                        *{{ thread }}<br>
                     {% endfor %}
                 </small>
             </td>
@@ -40,7 +40,7 @@
             <td class="justify">
                 <small>{{ event.general_location }}:
                     {% for loc in event.specific_locations.all %}
-                    {{ loc }}
+                        {{ loc }}
                     {% endfor %}
                 </small>
             </td>
