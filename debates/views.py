@@ -17,10 +17,10 @@ def debates_main_view(request):
     profile = request.user.profile
     if profile.character_status == 'gm':
         topics = Topic.objects.all()
-        debates = Debate.objects.all()
+        debates = Debate.objects.all().prefetch_related('allowed_profiles')
     else:
         topics = Topic.objects.filter(allowed_profiles=profile)
-        debates = Debate.objects.filter(allowed_profiles=profile)
+        debates = Debate.objects.filter(allowed_profiles=profile).prefetch_related('allowed_profiles')
 
     topics = topics.prefetch_related(
         Prefetch(
@@ -36,7 +36,7 @@ def debates_main_view(request):
                 )
             )
         ),
-        'allowed_profiles'
+
     )
 
     context = {
@@ -45,6 +45,43 @@ def debates_main_view(request):
     }
     return render(request, 'debates/main.html', context)
 
+# @query_debugger
+# @login_required
+# def debates_main_view(request):
+#     profile = request.user.profile
+#     if profile.character_status == 'gm':
+#         topics = Topic.objects.all()
+#         debates = Debate.objects.all().prefetch_related('allowed_profiles')
+#     else:
+#         topics = Topic.objects.filter(allowed_profiles=profile)
+#         debates = Debate.objects.filter(allowed_profiles=profile).prefetch_related('allowed_profiles')
+#
+#     topics = topics.prefetch_related(
+#         Prefetch(
+#             'debates',
+#             queryset=debates.annotate(
+#                 first_player_remark_date=Min('remarks__date_posted'),
+#                 last_player_remark_date=Max('remarks__date_posted'),
+#                 player_remarks_count=Count(
+#                     Case(
+#                         When(~Q(remarks__author__profile__character_status='gm'), then=1),
+#                         output_field=IntegerField()
+#                     )
+#                 )
+#             )
+#         ),
+#
+#     )
+#     topics_with_debates_dict = {t: [d for d in t.debates.all()] for t in topics}
+#     debates_with_allowed_profiles_dict = {d: [p for p in d.allowed_profiles.all()] for d in debates}
+#
+#     context = {
+#         'page_title': 'Narady',
+#         'topics': topics,
+#         'debates_with_allowed_profiles_dict': debates_with_allowed_profiles_dict,
+#         'topics_with_debates_dict': topics_with_debates_dict
+#     }
+#     return render(request, 'debates/main.html', context)
 
 @query_debugger
 @login_required
