@@ -36,15 +36,6 @@ class News(models.Model):
         verbose_name = 'News'
         verbose_name_plural = 'News'
 
-    # def last_activity(self):
-    #     return self.news_answers.all().aggregate(Max('date_posted'))['date_posted__max']
-    #
-    # def last_news_answer(self):
-    #     if self.news_answers.all():
-    #         return self.news_answers.order_by('-date_posted')[0]
-    #     else:
-    #         return None
-
 
 class NewsAnswer(models.Model):
     news = models.ForeignKey(News, related_name='news_answers', on_delete=models.CASCADE)
@@ -93,12 +84,6 @@ class Survey(models.Model):
                 output_size = (700, 700)
                 img.thumbnail(output_size)
                 img.save(self.image.path)
-
-    def last_survey_answer(self):
-        if self.survey_answers.all():
-            return self.survey_answers.order_by('-date_posted')[0]
-        else:
-            return None
 
 
 class SurveyOption(models.Model):
