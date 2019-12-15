@@ -56,7 +56,7 @@
         {% if news.image %}
             <img src="{{ news.image.url }}" class="border-double">
         {% endif %}
-        {% for profile in news.seen_by.all %}
+        {% for profile in news_seen_by %}
             <img class="rounded-circle img-small" src="{{ profile.image.url }}">
         {% endfor %}
         <br><br>

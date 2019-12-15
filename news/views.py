@@ -88,7 +88,8 @@ def news_detail_view(request, news_id):
     news_allowed_profiles = news.allowed_profiles.all()
     news_followers = news.followers.all()
 
-    if profile not in news.seen_by.all():
+    news_seen_by = news.seen_by.all()
+    if profile not in news_seen_by:
         news.seen_by.add(profile)
 
     answers = []
@@ -130,6 +131,7 @@ def news_detail_view(request, news_id):
         'page_title': news.title,
         'news': news,
         'answers': answers,
+        'news_seen_by': news_seen_by,
         'last_answer_seen_by_imgs': last_answer_seen_by_imgs,
         'form': form,
         'news_allowed_profiles': news_allowed_profiles,
