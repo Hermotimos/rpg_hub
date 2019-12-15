@@ -800,7 +800,8 @@ def timeline_inform_view(request, event_id):
     profile = request.user.profile
     event = get_object_or_404(TimelineEvent, id=event_id)
 
-    participants_ids = [p.id for p in event.participants.all()]
+    participants = event.participants.all()
+    participants_ids = [p.id for p in participants]
     old_informed = event.informed.all()
     old_informed_ids = [p.id for p in old_informed]
 
@@ -846,6 +847,8 @@ def timeline_inform_view(request, event_id):
         'page_title': 'Poinformuj o wydarzeniu',
         'form': form,
         'event': event,
+        'participants': participants,
+        'informed': old_informed
     }
     if profile in (event.participants.all() | event.informed.all()) or profile.character_status == 'gm':
         return render(request, 'history/timeline_inform.html', context)
