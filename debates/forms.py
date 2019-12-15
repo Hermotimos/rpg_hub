@@ -55,11 +55,16 @@ class CreateRemarkForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         debate_id = kwargs.pop('debate_id')
-        debate = Debate.objects.get(id=debate_id)
+        if debate_id:
+            debate = Debate.objects.get(id=debate_id)
+            debate_allowed_profiles = debate.allowed_profiles.all()
+        else:
+            debate_allowed_profiles = Profile.objects.exclude(Q(character_status='dead_player') |
+                                                              Q(character_status='dead_npc'))
         super(CreateRemarkForm, self).__init__(*args, **kwargs)
         self.fields['author'].label = 'Autor:'
         self.fields['author'].queryset = User.objects.filter(Q(profile__character_status='gm') |
-                                                             Q(profile__in=debate.allowed_profiles.all()))
+                                                             Q(profile__in=debate_allowed_profiles)).order_by('profile__character_name')
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
