@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.db.models import Max, Min, Prefetch, Q
 from django.shortcuts import render, redirect, get_object_or_404
 
 from news.models import News, Survey, SurveyOption
@@ -16,19 +17,21 @@ from news.forms import CreateNewsForm, CreateNewsAnswerForm, CreateSurveyForm, C
 def main_view(request):
     profile = request.user.profile
     if profile.character_status == 'gm':
-        newss = News.objects.all()\
-            .select_related('author__profile')\
-            .prefetch_related('news_answers__author__profile')
-        surveys = Survey.objects.all()\
-            .select_related('author__profile')\
-            .prefetch_related('survey_answers__author__profile')
+        newss = News.objects.all()
+        surveys = Survey.objects.all()
     else:
-        newss = profile.allowed_news.all()\
-            .select_related('author__profile')\
-            .prefetch_related('news_answers__author__profile')
+        newss = profile.allowed_news.all()
         surveys = profile.surveys_received.all()\
-            .select_related('author__profile')\
-            .prefetch_related('survey_answers__author__profile')
+
+    newss = newss.annotate(last_news_answer=Max('news_answers__date_posted'))\
+        .select_related('author__profile') \
+        .prefetch_related('news_answers__author__profile')
+
+    surveys = surveys\
+        .select_related('author__profile')\
+        .prefetch_related('survey_answers__author__profile')
+
+    # surveys = surveys.annotate(last_survey_answer=Max('survey_answers__date_posted'))
 
     # news_with_answers_authors_dict = {
     #     n: [

@@ -36,14 +36,14 @@ class News(models.Model):
         verbose_name = 'News'
         verbose_name_plural = 'News'
 
-    def last_activity(self):
-        return self.news_answers.all().aggregate(Max('date_posted'))['date_posted__max']
-
-    def last_news_answer(self):
-        if self.news_answers.all():
-            return self.news_answers.order_by('-date_posted')[0]
-        else:
-            return None
+    # def last_activity(self):
+    #     return self.news_answers.all().aggregate(Max('date_posted'))['date_posted__max']
+    #
+    # def last_news_answer(self):
+    #     if self.news_answers.all():
+    #         return self.news_answers.order_by('-date_posted')[0]
+    #     else:
+    #         return None
 
 
 class NewsAnswer(models.Model):

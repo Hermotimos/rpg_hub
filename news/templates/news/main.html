@@ -72,8 +72,8 @@
                         <!--  following methods cost ca. 20 queries: -->
                         <small>
                             Ostatnia aktywność:
-                            {% if news.last_activity %}
-                                {{ news.last_activity|date:'d-M-Y, H:i' }}<br>
+                            {% if news.last_news_answer %}
+                                {{ news.last_news_answer|date:'d-M-Y, H:i' }}<br>
                             {% else %}
                                 {{ news.date_posted|date:'d-M-Y, H:i' }}<br>
                             {% endif %}
