@@ -863,6 +863,9 @@ def timeline_note_view(request, event_id):
     event = get_object_or_404(TimelineEvent, id=event_id)
     current_note = None
 
+    participants = event.participants.all()
+    informed = event.informed.all()
+
     try:
         current_note = TimelineEventNote.objects.get(event=event, author=request.user)
     except TimelineEventNote.DoesNotExist:
@@ -886,6 +889,8 @@ def timeline_note_view(request, event_id):
         'page_title': 'Przemyślenia',
         'event': event,
         'form': form,
+        'participants': participants,
+        'informed': informed
     }
     if profile in (event.participants.all() | event.informed.all()) or profile.character_status == 'gm':
         return render(request, 'history/timeline_note.html', context)
