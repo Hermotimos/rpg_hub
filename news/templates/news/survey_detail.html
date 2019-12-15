@@ -21,7 +21,7 @@
         {% if survey.image %}
             <img src="{{ survey.image.url }}" class="border-double">
         {% endif %}
-        {% for profile in survey.seen_by.all %}
+        {% for profile in survey_seen_by %}
             <img class="rounded-circle img-small" src="{{ profile.image.url }}">
         {% endfor %}
     </div>
@@ -34,7 +34,7 @@
             <col class="text">
             <col class="positive">
         </colgroup>
-        {% for option in survey_options %}
+        {% for option in options %}
         <tr>
             <td class="align-right">
                 {% for profile in option.no_voters.all %}
@@ -99,7 +99,7 @@
         <br><br>
         <table>
             <tbody>
-            {% for answer in survey_answers %}
+            {% for answer in answers %}
                 <tr class="posts-and-news">
                     <td class="align-center">
                         <img class="rounded-circle article-img" src="{{ answer.author.profile.image.url }}">
@@ -119,7 +119,7 @@
                 <tr>
                     <td></td>
                     <td>
-                        {% for image in last_survey_answer_seen_by_imgs %}
+                        {% for image in last_answer_seen_by_imgs %}
                             <img class="rounded-circle img-small" src="{{ image.url }}">
                         {% endfor %}
                     </td>

@@ -194,21 +194,21 @@ def survey_detail_view(request, survey_id):
     profile = request.user.profile
     survey = get_object_or_404(Survey, id=survey_id)
 
-    if profile not in survey.seen_by.all():
+    survey_seen_by = survey.seen_by.all()
+    if profile not in survey_seen_by:
         survey.seen_by.add(profile)
 
-    last_survey_answer = survey.last_survey_answer()
-    last_survey_answer_seen_by_imgs = ()
-    if last_survey_answer:
-        if profile not in last_survey_answer.seen_by.all():
-            last_survey_answer.seen_by.add(profile)
-        last_survey_answer_seen_by_imgs = (p.image for p in last_survey_answer.seen_by.all())
-
-    survey_options = survey.survey_options.all()\
+    options = survey.survey_options.all()\
         .prefetch_related('yes_voters', 'no_voters')\
         .select_related('author__profile')
-    survey_answers = survey.survey_answers.all()\
-        .select_related('author__profile')
+    answers = survey.survey_answers.all().select_related('author__profile')
+
+    last_answer_seen_by_imgs = []
+    if answers:
+        last_answer = answers.order_by('-date_posted')[0]
+        if profile not in last_answer.seen_by.all():
+            last_answer.seen_by.add(profile)
+        last_answer_seen_by_imgs = (p.image for p in last_answer.seen_by.all())
 
     if request.method == 'POST':
         answer_form = CreateSurveyAnswerForm(request.POST, request.FILES)
@@ -251,9 +251,10 @@ def survey_detail_view(request, survey_id):
     context = {
         'page_title': survey.title,
         'survey': survey,
-        'survey_options': survey_options,
-        'survey_answers': survey_answers,
-        'last_survey_answer_seen_by_imgs': last_survey_answer_seen_by_imgs,
+        'options': options,
+        'answers': answers,
+        'survey_seen_by': survey_seen_by,
+        'last_answer_seen_by_imgs': last_answer_seen_by_imgs,
         'answer_form': answer_form,
         'option_form': option_form
     }
