@@ -131,9 +131,9 @@ def create_debate_view(request, topic_id):
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
             receivers = []
-            for profile in allowed_profiles:
-                if profile.user != request.user:
-                    receivers.append(profile.user.email)
+            for p in allowed_profiles:
+                if p != request.user.profile:
+                    receivers.append(p.user.email)
             if profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
@@ -242,10 +242,8 @@ def debates_invite_view(request, topic_id, debate_id):
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
             receivers = []
-            for profile in debate.allowed_profiles.all():
-                # exclude previously allowed users from mailing to avoid spam
-                if profile not in allowed_profiles_old:
-                    receivers.append(profile.user.email)
+            for p in allowed_profiles_new:
+                receivers.append(p.user.email)
             if profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
