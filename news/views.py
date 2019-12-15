@@ -107,7 +107,7 @@ def news_detail_view(request, news_id):
         news.seen_by.add(profile)
 
     answers = []
-    last_answer_seen_by_imgs = ()
+    last_answer_seen_by_imgs = []
     if news.news_answers.all():
         answers = news.news_answers.all().select_related('author__profile')
         last_answer = news.news_answers.order_by('-date_posted')[0]
