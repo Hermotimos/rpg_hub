@@ -176,7 +176,7 @@ def debate_view(request, topic_id, debate_id):
         last_remark_seen_by_imgs = (p.image for p in last_remark.seen_by.all())
 
     if request.method == 'POST':
-        form = CreateRemarkForm(request.POST, request.FILES)
+        form = CreateRemarkForm(request.POST, request.FILES, debate_id=debate_id)
         if form.is_valid():
             remark = form.save(commit=False)
             remark.debate = debate
@@ -199,7 +199,8 @@ def debate_view(request, topic_id, debate_id):
             return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
 
     else:
-        form = CreateRemarkForm(initial={'author': request.user})
+        form = CreateRemarkForm(initial={'author': request.user},
+                                debate_id=debate_id)
 
     context = {
         'page_title': debate.name,

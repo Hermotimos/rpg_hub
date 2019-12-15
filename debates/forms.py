@@ -54,9 +54,12 @@ class CreateRemarkForm(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
+        debate_id = kwargs.pop('debate_id')
+        debate = Debate.objects.get(id=debate_id)
         super(CreateRemarkForm, self).__init__(*args, **kwargs)
         self.fields['author'].label = 'Autor:'
-        self.fields['author'].queryset = User.objects.all()
+        self.fields['author'].queryset = User.objects.filter(Q(profile__character_status='gm') |
+                                                             Q(profile__in=debate.allowed_profiles.all()))
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
@@ -75,9 +78,9 @@ class InviteForm(forms.ModelForm):
         already_allowed_profiles = kwargs.pop('already_allowed_profiles')
         super(InviteForm, self).__init__(*args, **kwargs)
         allowable_profiles = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                       Q(character_status='dead_player') |
-                                                       Q(character_status='dead_npc') |
-                                                       Q(character_status='gm'))
+                                                     Q(character_status='dead_player') |
+                                                     Q(character_status='dead_npc') |
+                                                     Q(character_status='gm'))
         self.fields['allowed_profiles'].label = ''
         self.fields['allowed_profiles'].queryset = allowable_profiles.exclude(
             id__in=[p.id for p in already_allowed_profiles]
