@@ -257,6 +257,7 @@ def debates_invite_view(request, topic_id, debate_id):
     context = {
         'page_title': 'Dodaj uczestników narady',
         'debate': debate,
+        'debate_allowed_profiles': allowed_profiles_old,
         'form': form,
     }
     if profile in debate.allowed_profiles.all() or profile.character_status == 'gm':
