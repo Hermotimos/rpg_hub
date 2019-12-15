@@ -31,25 +31,10 @@ def main_view(request):
         .select_related('author__profile')\
         .prefetch_related('survey_answers__author__profile')
 
-    # surveys = surveys.annotate(last_survey_answer=Max('survey_answers__date_posted'))
-
-    # news_with_answers_authors_dict = {
-    #     n: [
-    #         a.author for a in n.news_answers.all().select_related('author')
-    #     ] for n in newss
-    # }
-    # surveys_with_answers_authors_dict = {
-    #     s: [
-    #         a.author for a in s.survey_answers.all().select_related('author')
-    #     ] for s in surveys
-    # }
-
     context = {
         'page_title': 'Ogłoszenia',
         'newss': newss,
         'surveys': surveys,
-        # 'surveys_with_answers_authors_dict': surveys_with_answers_authors_dict,
-        # 'news_with_answers_authors_dict': news_with_answers_authors_dict
     }
     return render(request, 'news/main.html', context)
 
