@@ -1,12 +1,16 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
+from rpg_project.utils import query_debugger
 
+
+@query_debugger
 @login_required
 def home_view(request):
     return render(request, 'home/home.html')
 
 
+@query_debugger
 @login_required
 def dupa_view(request):
     return render(request, 'home/dupa.html', {'page_title': 'Dupa!'})
