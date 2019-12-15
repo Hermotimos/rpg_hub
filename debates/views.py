@@ -131,7 +131,7 @@ def create_debate_view(request, topic_id):
                       f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
             receivers = []
-            for profile in debate.allowed_profiles.all():
+            for profile in allowed_profiles:
                 if profile.user != request.user:
                     receivers.append(profile.user.email)
             if profile.character_status != 'gm':
