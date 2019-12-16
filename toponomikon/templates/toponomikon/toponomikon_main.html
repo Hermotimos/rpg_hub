@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/toponomikon.css' %}">
+{% endblock head_extra %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br><br><br>
+
+    <table>
+        {% for gen_loc in gen_locs %}
+            <tr>
+                <td class="unblue" colspan="4">
+                    <br><br>
+                    <h4>
+                        &#10037;
+                        <a href="{% url 'history:timeline-gen-loc' gen_loc.id %}">{{ gen_loc.name }}</a>
+                    </h4>
+                </td>
+            </tr>
+            {% for row in gen_loc.specific_locations.all|columns:4 %}
+             <tr>
+                 {% for spec_loc in row %}
+                 <td class="unblue">
+                    &#10023; <a href="{% url 'history:timeline-spec-loc' spec_loc.id %}">{{ spec_loc.name }}</a>&emsp;
+                 </td>
+                 {% endfor %}
+             </tr>
+            {% endfor %}
+        {% endfor %}
+    </table>
+    <br>
+
+
+{% endblock content %}
+
+

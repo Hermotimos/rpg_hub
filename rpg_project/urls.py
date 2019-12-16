@@ -29,6 +29,7 @@ urlpatterns = [
     path('news/', include('news.urls')),
     path('reload/', include('reload.urls')),
     path('rules/', include('rules.urls')),
+    path('toponomikon/', include('toponomikon.urls')),
     path('users/', include('users.urls')),
 
 ]
