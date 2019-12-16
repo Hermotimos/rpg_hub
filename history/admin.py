@@ -14,7 +14,6 @@ from history.models import (Chapter,
 
 
 class ChapterAdmin(admin.ModelAdmin):
-    model = Chapter
     list_display = ['chapter_no', 'title', 'image']
     list_editable = ['title', 'image']
     search_fields = ['title']
@@ -47,7 +46,7 @@ class ChronicleEventAdmin(admin.ModelAdmin):
 
 
 class ChronicleEventNoteAdmin(admin.ModelAdmin):
-    model = ChronicleEventNote
+    fields = ['text_secret']
     list_display = ['id', 'author', 'text_secret']
     search_fields = ['text']
 
@@ -69,7 +68,7 @@ class TimelineEventAdmin(admin.ModelAdmin):
 
 
 class TimelineEventNoteAdmin(admin.ModelAdmin):
-    model = ChronicleEventNote
+    fields = ['text_secret']
     list_display = ['id', 'author', 'text_secret']
     search_fields = ['text']
 
