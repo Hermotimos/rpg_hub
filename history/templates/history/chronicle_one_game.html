@@ -40,7 +40,7 @@
                             <table class="chronicle-img">
                                 <tr>
                                 {% for p in event.pictures.all %}
-                                    <td>
+                                    <td class="align-top">
                                         <img src="{{ p.image.url }}" class="border-double">
                                         {% if p.description %}
                                             <small>{{ p.description }}</small>
