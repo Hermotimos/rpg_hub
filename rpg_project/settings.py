@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'reload',
     'rules',
     'news',
+    'toponomikon',
     'users.apps.UsersConfig',  # just another way of doing this
 
 ]
