@@ -15,14 +15,13 @@
 
     <table>
         {% for gen_loc in gen_locs %}
-            <tr>
-                <td class="unblue" colspan="4">
+            <tr class="toponomikon-img">
+                <td class="unblue-black" colspan="4">
                     <br><br>
                     <h4>
                         <a href="#">
-                            <img src="{{ gen_loc.main_image.url }}" class="border-double">
+                            <img src="{{ gen_loc.main_image.image.url }}" class="border-double">
                         </a>
-                        &emsp;
                         <a href="#">{{ gen_loc.name }}</a>
                     </h4>
                 </td>
@@ -31,7 +30,7 @@
                 {% for spec_loc in gen_loc.specific_locations.all %}
                     <td class="unblue">
                         <a href="#">
-                            <img src="{{ spec_loc.main_image.url }}" class="border-double">
+                            <img src="{{ spec_loc.main_image.image.url }}" class="border-double">
                         </a>
                         <a href="#">{{ spec_loc.name }}</a>&emsp;
                     </td>
