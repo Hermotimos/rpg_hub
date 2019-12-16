@@ -49,16 +49,16 @@
     <div id="participants" class="collapse">
         <table>
             <tr>
-            {% for p in participants %}
-                <td class="unblue-black">
-                    <a href="{% url 'history:timeline-participant' p.id %}">
-                        <img src="{{ p.image.url }}" class="border-double account-img-timeline">
-                    </a>&emsp;&emsp;
-                </td>
-                {% if forloop.counter|divisibleby:4 %}
-                    </tr><tr>
-                {% endif %}
-            {% endfor %}
+                {% for p in participants %}
+                    <td class="unblue-black">
+                        <a href="{% url 'history:timeline-participant' p.id %}">
+                            <img src="{{ p.image.url }}" class="border-double account-img-timeline">
+                        </a>&emsp;&emsp;
+                    </td>
+                    {% if forloop.counter|divisibleby:4 %}
+                        </tr><tr>
+                    {% endif %}
+                {% endfor %}
             </tr>
         </table>
         <br><br>
@@ -72,17 +72,17 @@
     <small>Wykaz znanych Ci krain i lokacji występujących w Kalendarium</small><br>
     <div id="general_locations" class="collapse">
         <table>
-            {% for gl in gen_locs %}
+            {% for gen_loc in gen_locs %}
                 <tr>
                     <td class="unblue" colspan="4">
-                        <br><h4>&#10037;<a href="{% url 'history:timeline-gen-loc' gl.id %}">{{ gl.name }}</a>&emsp;&emsp;</h4>
+                        <br><h4>&#10037;<a href="{% url 'history:timeline-gen-loc' gen_loc.id %}">{{ gen_loc.name }}</a>&emsp;&emsp;</h4>
                     </td>
                 </tr>
-                {% for row in gl.specific_locations.all|columns:4 %}
+                {% for row in gen_loc.specific_locations.all|columns:4 %}
                  <tr>
-                     {% for sl in row %}
+                     {% for spec_loc in row %}
                      <td class="unblue">
-                        &#10023; <a href="{% url 'history:timeline-spec-loc' sl.id %}">{{ sl.name }}</a>&emsp;
+                         &#10023; <a href="{% url 'history:timeline-spec-loc' spec_loc.id %}">{{ spec_loc.name }}</a>&emsp;
                      </td>
                      {% endfor %}
                  </tr>
