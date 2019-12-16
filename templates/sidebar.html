@@ -17,26 +17,51 @@
         {% if user.profile.character_status == 'gm' %}
         <ul class="list-group hover-pointer unblue">
             <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#timeline"><h6 class="mb-0">Techniczne</h6></li>
-                <div id="timeline" class="list-group collapse unblue">
+            <li id="timeline" class="list-group collapse">
+                <div class="unblue">
                     <a class="list-group-item list-group-item-light mb-0" href="{% url 'admin:index' %}" target="_blank" rel="noopener noreferrer"><small>ADMIN</small></a>
                     <a class="list-group-item list-group-item-light" href="{% url 'reload:reload-main' %}"><small>Przeładowanie sorting_name</small></a>
                     <a class="list-group-item list-group-item-light" href="{% url 'admin:history_gamesession_add' %}"><small>+ SESJA</small></a>
                     <a class="list-group-item list-group-item-light" href="{% url 'history:chronicle-create' %}"><small>+ Wydarzenie | KRONIKA</small></a>
                     <a class="list-group-item list-group-item-light" href="{% url 'history:timeline-create' %}"><small>+ Wydarzenie | KALENDARIUM</small></a>
                 </div>
+            </li>
+            
+            <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#knowledge-mg"><h6 class="mb-0">Wiedza</h6></li>
+            <li id="knowledge-mg" class="list-group collapse">
+                <div class="unblue">
+                    <a class="list-group-item list-group-item-light" href="#"><strike><small>Prosoponomikon</small></strike></a>
+                    <a class="list-group-item list-group-item-light" href="{% url 'toponomikon:main' %}"><small>Toponomikon</small></a>
+                    <a class="list-group-item list-group-item-light" href="#"><strike><small>Bestiariusz</small></strike></a>
+                    <a class="list-group-item list-group-item-light" href="#"><strike><small>Biblioteka | Mapy</small></strike></a>
+                    <a class="list-group-item list-group-item-light" href="#"><strike><small>Varia</small></strike></a>
+                </div>
+            </li>
+
             <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#character_sheets"><h6 class="mb-0">Karty postaci</h6></li>
-                <div id="character_sheets" class="list-group collapse unblue">
+            <li id="character_sheets" class="list-group collapse">
+                <div class="unblue">
                     <a class="list-group-item list-group-item-light" href="{% url 'characters:tricks-sheet' %}"><small>Podstępy</small></a>
                 </div>
-            <li class="list-group-item list-group-item-light small-caps"><a href="{% url 'contact:plans-for-gm' %}"><h6 class="mb-0">Plany graczy</h6></a></li>
-            <li class="list-group-item list-group-item-light small-caps"><a href="{% url 'contact:plans-main' %}"><h6 class="mb-0">TODO</h6></a></li>
+            </li>
+            
+            <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#plans"><h6 class="mb-0">Karty postaci</h6></li>
+            <li id="plans" class="list-group collapse">
+                <div class="unblue">
+                    <a href="{% url 'contact:plans-for-gm' %}"><h6 class="mb-0">Plany graczy & TODOs</h6></a>
+                    <a href="{% url 'contact:plans-main' %}"><h6 class="mb-0">TODO</h6></a>
+                </div>
+            </li>
+            
         </ul>
 
         <!-- For players  -->
         {% else %}
         <ul class="list-group hover-pointer">
+            
             <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#character_sheet"><h6 class="mb-0">Karta postaci</h6></li>
-                <div id="character_sheet" class="list-group collapse unblue">
+            <li id="character_sheet" class="list-group collapse">
+                <div class="unblue">
                     <a class="list-group-item list-group-item-light" href="#"><strike><small>Cechy i walka</small></strike></a>
                     <a class="list-group-item list-group-item-light" href="#"><strike><small>Doświadczenie | Tabela awansów</small></strike></a>
                     <a class="list-group-item list-group-item-light" href="#"><strike><small>Ekwipunek | Skrytki</small></strike></a>
@@ -44,21 +69,28 @@
                     <a class="list-group-item list-group-item-light" href="{% url 'characters:tricks-sheet' %}"><small>Podstępy</small></a>
                     <a class="list-group-item list-group-item-light" href="#"><strike><small>Arkana</small></strike></a>
                 </div>
-            <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#knowledge"><h6 class="mb-0"><strike>Wiedza</strike></h6></li>
-                <div id="knowledge" class="list-group collapse unblue">
+            </li>
+            
+            <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#knowledge"><h6 class="mb-0">Wiedza</h6></li>
+            <li id="knowledge" class="list-group collapse">
+                <div class="unblue">
                     <a class="list-group-item list-group-item-light" href="#"><strike><small>Prosoponomikon</small></strike></a>
-                    <a class="list-group-item list-group-item-light" href="#"><strike><small>Toponomikon</small></strike></a>
+                    <a class="list-group-item list-group-item-light" href="{% url 'toponomikon:main' %}"><small>Toponomikon</small></a>
                     <a class="list-group-item list-group-item-light" href="#"><strike><small>Bestiariusz</small></strike></a>
                     <a class="list-group-item list-group-item-light" href="#"><strike><small>Biblioteka | Mapy</small></strike></a>
                     <a class="list-group-item list-group-item-light" href="#"><strike><small>Varia</small></strike></a>
                 </div>
-            <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#notes"><h6 class="mb-0">Plany i przemyślenia</h6></li>
-                <div id="notes" class="list-group collapse unblue">
+            </li>
+            
+            <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#plans-notes"><h6 class="mb-0">Plany i przemyślenia</h6></li>
+            <li id="plans-notes" class="list-group collapse">
+                <div class="unblue">
                     <a class="list-group-item list-group-item-light" href="{% url 'contact:plans-main' %}"><small>Plany</small></a>
                     <a class="list-group-item list-group-item-light" href="#"><strike><small>Przemyślenia</small></strike></a>
                 </div>
+            </li>
+            
         </ul>
-
         {% endif %}
         <br>
     </div>
