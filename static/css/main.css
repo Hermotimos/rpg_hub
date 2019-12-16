@@ -173,7 +173,6 @@ a {
 }
 
 
-
 .hover-pointer li:hover, a:hover {
         cursor: pointer;
 }
@@ -181,4 +180,8 @@ a {
 .hover-blue:hover {
         color: #3366cc;
         cursor: pointer;
+}
+
+.unblue-black a {
+        color: #212529;
 }

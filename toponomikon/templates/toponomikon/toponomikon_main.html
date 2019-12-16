@@ -12,18 +12,21 @@
 
 {% block content %}
     <br><br><br>
-
-    <table>
-        {% for gen_loc in gen_locs %}
-            <tr class="toponomikon-img">
-                <td class="unblue-black" colspan="4">
-                    <br><br>
-                    <h4>
-                        <a href="#">
-                            <img src="{{ gen_loc.main_image.image.url }}" class="border-double">
-                        </a>
-                        <a href="#">{{ gen_loc.name }}</a>
-                    </h4>
+    {% for gen_loc in gen_locs %}
+        <table class="toponomikon">
+            <tr class="toponomikon-img pb-3">
+                <td class="unblue-black align-top">
+                    <a href="#">
+                        <img src="{{ gen_loc.main_image.image.url }}" class="border-double">
+                    </a>
+                </td>
+                <td valign="top" align="left" colspan="2" class="pl-1">
+                    <h3>
+                        <a href="#" class="border-custom-base">{{ gen_loc.name }}</a>
+                    </h3>
+                    <i class="justify">
+                        <small>{{ gen_loc.description }}</small>
+                    </i>
                 </td>
             </tr>
             <tr class="toponomikon-img">
@@ -39,11 +42,9 @@
                     {% endif %}
                 {% endfor %}
             </tr>
-            {% endfor %}
-    </table>
-<br>
-
-
+        </table>
+        <br><br><br>
+    {% endfor %}
 {% endblock content %}
 
 
