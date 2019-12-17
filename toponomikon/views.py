@@ -12,7 +12,7 @@ def toponomikon_main_view(request):
     else:
         known_directly = GeneralLocation.objects.filter(known_directly=profile)
         known_indirectly = GeneralLocation.objects.filter(known_indirectly=profile)
-        gen_locs = known_directly | known_indirectly
+        gen_locs = (known_directly | known_indirectly).distinct()
 
     gen_locs = gen_locs.prefetch_related('specific_locations').select_related('main_image')
 
