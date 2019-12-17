@@ -7,16 +7,16 @@
 {% endblock head_extra %}
 
 {% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'toponomikon:main' %}">Toponomikon</a></li>
     <li class="breadcrumb-item active">{{ page_title }}</li>
 {% endblock breadcrumb %}
 
 {% block content %}
     <br><br><br>
-    <img src="{{ gen_loc.main_image.image.url }}" class="border-double">
-    <br><br>
-    <h3 class="border-custom-base">{{ gen_loc.name }}</h3>
+    <p class="toponomikon-gen-loc-img"><img src="{{ gen_loc.main_image.image.url }}" class="border-double"></p>
     <p class="text-justify p-0"><small>{{ gen_loc.description }}</small></p>
 
+    <br><br>
     <table class="toponomikon">
         <tr class="toponomikon-img">
             {% for spec_loc in spec_locs %}

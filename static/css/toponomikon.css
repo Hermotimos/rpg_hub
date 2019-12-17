@@ -1,3 +1,8 @@
+.toponomikon-gen-loc-img img {
+        display: block;
+        width: 100%;
+}
+
 .toponomikon-img img {
         display: block;
         max-height: 150px;
