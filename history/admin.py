@@ -46,7 +46,7 @@ class ChronicleEventAdmin(admin.ModelAdmin):
 
 
 class ChronicleEventNoteAdmin(admin.ModelAdmin):
-    fields = ['text_secret']
+    fields = ['author', 'event']
     list_display = ['id', 'author', 'text_secret']
     search_fields = ['text']
 
@@ -68,7 +68,7 @@ class TimelineEventAdmin(admin.ModelAdmin):
 
 
 class TimelineEventNoteAdmin(admin.ModelAdmin):
-    fields = ['text_secret']
+    fields = ['author', 'event']
     list_display = ['id', 'author', 'text_secret']
     search_fields = ['text']
 
