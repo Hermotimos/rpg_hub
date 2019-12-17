@@ -69,11 +69,16 @@ def rules_professions_view(request):
         # classes_with_professions_dict = {c: [p for p in c.professions.all()] for c in classes}
         # elite_classes_with_professions_dict = {ec: [ep for ep in ec.elite_professions.all()] for ec in elite_classes}
     else:
-        professions = CharacterProfession.objects.filter(allowed_profiles=profile)
-        classes = CharacterClass.objects.filter(professions__allowed_profiles=profile)\
-            .prefetch_related(Prefetch('professions', queryset=professions))
-        elite_professions = EliteProfession.objects.filter(allowed_profiles=profile)
-        elite_classes = EliteClass.objects.filter(allowed_profiles=profile)\
+        professions = CharacterProfession.objects\
+            .filter(allowed_profiles=profile)
+        classes = CharacterClass.objects\
+            .filter(professions__allowed_profiles=profile)\
+            .prefetch_related(Prefetch('professions', queryset=professions))\
+            .distinct()
+        elite_professions = EliteProfession.objects\
+            .filter(allowed_profiles=profile)
+        elite_classes = EliteClass.objects\
+            .filter(allowed_profiles=profile)\
             .prefetch_related(Prefetch('elite_professions', queryset=elite_professions))
 
         # classes = [c for c in CharacterClass.objects.all() if request.user.profile in c.allowed_list()]
