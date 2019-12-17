@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-from history.models import Thread, SpecificLocation, GeneralLocation
+from history.models import Thread, SpecificLocation, GeneralLocation, TimelineEvent
 from rules.models import Skill, Synergy, CharacterClass, CharacterProfession, EliteClass, EliteProfession, WeaponClass, WeaponType
 from rpg_project.utils import query_debugger
 
@@ -29,6 +29,8 @@ def reload_history(request):
         for obj in GeneralLocation.objects.all():
             obj.save()
         for obj in SpecificLocation.objects.all():
+            obj.save()
+        for obj in TimelineEvent.objects.all():
             obj.save()
 
         messages.info(request, f'Przeładowano "sorting_name" dla aplikacji "history"!')
