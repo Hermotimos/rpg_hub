@@ -1,8 +1,9 @@
 from PIL import Image
 
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Q
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db.models.signals import post_save, m2m_changed
 
 from debates.models import Debate
 from imaginarion.models import Picture
@@ -218,3 +219,16 @@ class TimelineEventNote(models.Model):
 
     def __str__(self):
         return f'{self.text[0:50]}...'
+
+
+def update_known_specific_locations(sender, instance, **kwargs):
+    participants = instance.participants.all()
+    informed = instance.informed.all()
+    spec_locs = instance.specific_locations.all()
+    for spec_loc in spec_locs:
+        spec_loc.known_directly.add(*participants)
+        spec_loc.known_indirectly.add(*informed)
+
+
+m2m_changed.connect(update_known_specific_locations, sender=TimelineEvent.participants.through)
+m2m_changed.connect(update_known_specific_locations, sender=TimelineEvent.informed.through)
