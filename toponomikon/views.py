@@ -1,6 +1,6 @@
 from django.db.models import Prefetch
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 
 from rpg_project.utils import query_debugger
 from toponomikon.models import GeneralLocation, SpecificLocation
@@ -29,4 +29,21 @@ def toponomikon_main_view(request):
     }
     return render(request, 'toponomikon/toponomikon_main.html', context)
 
+
+def toponomikon_general_location_view(request, gen_loc_id):
+    profile = request.user.profile
+    gen_loc = get_object_or_404(GeneralLocation, id=gen_loc_id)
+    if profile.character_status == 'gm':
+        spec_locs = SpecificLocation.objects.filter(general_location__id=gen_loc_id)
+    else:
+        known_directly = SpecificLocation.objects.filter(general_location__id=gen_loc_id, known_directly=profile)
+        known_indirectly = SpecificLocation.objects.filter(general_location__id=gen_loc_id, known_indirectly=profile)
+        spec_locs = (known_directly | known_indirectly).distinct()
+
+    context = {
+        'page_title': gen_loc.name,
+        'gen_loc': gen_loc,
+        'spec_locs': spec_locs
+    }
+    return render(request, 'toponomikon/toponomikon_general_location.html', context)
 

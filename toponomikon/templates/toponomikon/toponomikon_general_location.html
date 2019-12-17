@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/toponomikon.css' %}">
+{% endblock head_extra %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br><br><br>
+    <img src="{{ gen_loc.main_image.image.url }}" class="border-double">
+    <br><br>
+    <h3 class="border-custom-base">{{ gen_loc.name }}</h3>
+    <p class="text-justify p-0"><small>{{ gen_loc.description }}</small></p>
+
+    <table class="toponomikon">
+        <tr class="toponomikon-img">
+            {% for spec_loc in spec_locs %}
+                <td class="unblue">
+                    <a href="#">
+                        <img src="{{ spec_loc.main_image.image.url }}" class="border-double">
+                    </a>
+                    <a href="#">{{ spec_loc.name }}</a>&emsp;
+                </td>
+                {% if forloop.counter|divisibleby:3 %}
+                    </tr><tr class="toponomikon-img">
+                {% endif %}
+            {% endfor %}
+        </tr>
+    </table>
+    <br><br>
+{% endblock content %}
+
+
