@@ -83,30 +83,11 @@ class ThreadAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
-class SpecificLocationAdmin(admin.ModelAdmin):
-    list_display = ['name', 'general_location']
-    list_editable = ['general_location', ]
-    list_filter = ['general_location', ]
-    search_fields = ['name']
-
-
-class SpecificLocationInline(admin.TabularInline):
-    model = SpecificLocation
-    extra = 2
-    fields = ['name']
-
-
-class GeneralLocationAdmin(admin.ModelAdmin):
-    list_display = ['name']
-    inlines = [SpecificLocationInline]
-    search_fields = ['name']
 
 
 admin.site.register(Chapter, ChapterAdmin)
 admin.site.register(Thread, ThreadAdmin)
 admin.site.register(GameSession, GameSessionAdmin)
-admin.site.register(GeneralLocation, GeneralLocationAdmin)
-admin.site.register(SpecificLocation, SpecificLocationAdmin)
 admin.site.register(TimelineEvent, TimelineEventAdmin)
 admin.site.register(TimelineEventNote, TimelineEventNoteAdmin)
 admin.site.register(ChronicleEvent, ChronicleEventAdmin)
