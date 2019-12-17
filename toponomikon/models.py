@@ -1,8 +1,9 @@
 from django.db import models
 from django.db.models import Q
+from django.db.models.signals import post_save, m2m_changed
 
 from imaginarion.models import Picture
-from rpg_project.utils import create_sorting_name
+from rpg_project.utils import create_sorting_name, query_debugger
 from users.models import Profile
 
 
@@ -71,3 +72,17 @@ class SpecificLocation(models.Model):
 
     class Meta:
         ordering = ['sorting_name']
+
+
+def update_known_general_locations(sender, instance, **kwargs):
+    known_directly = instance.known_directly.all()
+    known_indirectly = instance.known_indirectly.all()
+    gen_loc = instance.general_location
+
+    gen_loc.known_directly.add(*known_directly)
+    gen_loc.known_indirectly.add(*known_indirectly)
+
+
+post_save.connect(update_known_general_locations, sender=SpecificLocation)
+m2m_changed.connect(update_known_general_locations, sender=SpecificLocation.known_directly.through)
+m2m_changed.connect(update_known_general_locations, sender=SpecificLocation.known_indirectly.through)
