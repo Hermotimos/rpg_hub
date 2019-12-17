@@ -25,19 +25,6 @@
                     <p class="text-justify p-0"><small>{{ gen_loc.description }}</small></p>
                 </td>
             </tr>
-<!--            <tr class="toponomikon-img">-->
-<!--                {% for spec_loc in gen_loc.specific_locations.all %}-->
-<!--                    <td class="unblue">-->
-<!--                        <a href="#">-->
-<!--                            <img src="{{ spec_loc.main_image.image.url }}" class="border-double">-->
-<!--                        </a>-->
-<!--                        <a href="#">{{ spec_loc.name }}</a>&emsp;-->
-<!--                    </td>-->
-<!--                    {% if forloop.counter|divisibleby:3 %}-->
-<!--                        </tr><tr class="toponomikon-img">-->
-<!--                    {% endif %}-->
-<!--                {% endfor %}-->
-<!--            </tr>-->
         </table>
         <br><br>
     {% endfor %}
