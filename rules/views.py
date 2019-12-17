@@ -23,7 +23,7 @@ def rules_armor_view(request):
     if profile.character_status == 'gm':
         plates = PlateType.objects.all().prefetch_related('pictures')
     else:
-        plates = request.user.profile.allowed_plate_types.all().prefetch_related('pictures')
+        plates = profile.allowed_plate_types.all().prefetch_related('pictures')
 
     context = {
         'page_title': 'Pancerz',
@@ -67,14 +67,13 @@ def rules_professions_view(request):
         classes = CharacterClass.objects.all().prefetch_related('professions')
         elite_classes = EliteClass.objects.all().prefetch_related('elite_professions')
     else:
-        professions = CharacterProfession.objects\
-            .filter(allowed_profiles=profile)
+        professions = CharacterProfession.objects.filter(allowed_profiles=profile)
         classes = CharacterClass.objects\
             .filter(professions__allowed_profiles=profile)\
-            .prefetch_related(Prefetch('professions', queryset=professions))\
-            .distinct()
-        elite_professions = EliteProfession.objects\
-            .filter(allowed_profiles=profile)
+            .distinct()\
+            .prefetch_related(Prefetch('professions', queryset=professions))
+
+        elite_professions = EliteProfession.objects.filter(allowed_profiles=profile)
         elite_classes = EliteClass.objects\
             .filter(allowed_profiles=profile)\
             .prefetch_related(Prefetch('elite_professions', queryset=elite_professions))
@@ -95,8 +94,8 @@ def rules_skills_view(request):
         skills = Skill.objects.all()
         synergies = Synergy.objects.all().prefetch_related('skills')
     else:
-        skills = request.user.profile.allowed_skills.all()
-        synergies = request.user.profile.allowed_synergies.all().prefetch_related('skills')
+        skills = profile.allowed_skills.all()
+        synergies = profile.allowed_synergies.all().prefetch_related('skills')
 
     context = {
         'page_title': 'Umiejętności',
@@ -122,7 +121,7 @@ def rules_tricks_view(request):
     if profile.character_status == 'gm':
         plates = PlateType.objects.all()
     else:
-        plates = request.user.profile.allowed_plate_types.all()
+        plates = profile.allowed_plate_types.all()
 
     context = {
         'page_title': 'Podstępy',
@@ -138,8 +137,10 @@ def rules_weapons_view(request):
     if profile.character_status == 'gm':
         weapon_classes = WeaponClass.objects.all().prefetch_related('weapon_types__pictures')
     else:
-        weapon_types = WeaponType.objects.filter(allowed_profiles=profile).prefetch_related('pictures')
-        weapon_classes = WeaponClass.objects.filter(weapon_types__allowed_profiles=profile)\
+        weapon_types = profile.allowed_weapon_types.prefetch_related('pictures')
+        weapon_classes = WeaponClass.objects\
+            .filter(weapon_types__allowed_profiles=profile)\
+            .distinct()\
             .prefetch_related(Prefetch('weapon_types', queryset=weapon_types))
 
     context = {
