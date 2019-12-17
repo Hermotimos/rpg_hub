@@ -1,4 +1,5 @@
 from django.db.models import Prefetch
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from rpg_project.utils import query_debugger
@@ -6,6 +7,7 @@ from toponomikon.models import GeneralLocation, SpecificLocation
 
 
 @query_debugger
+@login_required
 def toponomikon_main_view(request):
     profile = request.user.profile
     if profile.character_status == 'gm':
