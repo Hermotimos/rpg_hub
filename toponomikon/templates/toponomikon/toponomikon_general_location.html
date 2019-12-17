@@ -20,13 +20,13 @@
     <table class="toponomikon">
         <tr class="toponomikon-img">
             {% for spec_loc in spec_locs %}
-                <td class="unblue">
+                <td class="unblue-black pb-4">
                     <a href="#">
                         <img src="{{ spec_loc.main_image.image.url }}" class="border-double">
                     </a>
                     <a href="#">{{ spec_loc.name }}</a>&emsp;
                 </td>
-                {% if forloop.counter|divisibleby:3 %}
+                {% if forloop.counter|divisibleby:2 %}
                     </tr><tr class="toponomikon-img">
                 {% endif %}
             {% endfor %}
