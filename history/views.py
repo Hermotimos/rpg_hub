@@ -438,7 +438,7 @@ def timeline_main_view(request):
         gen_locs = GeneralLocation.objects\
             .filter(specific_locations__in=spec_locs)\
             .distinct()\
-            .prefetch_related('specific_locations')
+            .prefetch_related(Prefetch('specific_locations', queryset=spec_locs))
         games = GameSession.objects \
             .filter(Q(timeline_events__participants=profile) | Q(timeline_events__informed=profile)) \
             .distinct()
