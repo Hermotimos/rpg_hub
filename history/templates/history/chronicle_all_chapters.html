@@ -71,7 +71,7 @@
                                 {% else %}
                                     <p>{{ event.description|linebreaksbr }}</p>
                                 {% endif %}
-                                
+
                                 {% if event.pictures.all and request.user.profile not in event.informed.all %}
                                     <table class="chronicle-img">
                                         <tr>
