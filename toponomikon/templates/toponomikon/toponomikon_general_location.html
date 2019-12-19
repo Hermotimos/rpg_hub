@@ -30,7 +30,7 @@
                     </td>
                     <td valign="top" align="left" colspan="2" class="pl-1">
                         <h5 class="border-custom-base">{{ spec_loc.name }}</h5>&emsp;
-                        <p class="text-justify p-0"><small>{% if spec_loc.description %}{{ spec_loc.description }}{% endif %}</small></p>
+                        <p class="text-justify p-0"><small>{% if spec_loc.description %}{{ spec_loc.description|truncatewords:30 }}{% endif %}</small></p>
                     </td>
                 </tr>
             {% endfor %}
