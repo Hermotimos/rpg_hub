@@ -14,7 +14,7 @@
 {% block content %}
     <br><br><br>
     <p class="toponomikon-gen-loc-img"><img src="{{ gen_loc.main_image.image.url }}" class="border-double"></p>
-    <p class="text-justify p-0"><small>{{ gen_loc.description }}</small></p>
+    <p class="text-justify p-0">{{ gen_loc.description|linebreaksbr }}</p>
 
     <br><br>
     <h2><b class="hover-blue" data-toggle="collapse" data-target="#specific_locations">Lokacje</b></h2>
@@ -30,7 +30,7 @@
                     </td>
                     <td valign="top" align="left" colspan="2" class="pl-1">
                         <h5 class="border-custom-base">{{ spec_loc.name }}</h5>&emsp;
-                        <p class="text-justify p-0"><small>{% if spec_loc.description %}{{ spec_loc.description|truncatewords:30 }}{% endif %}</small></p>
+                        <p class="text-justify p-0"><small>{% if spec_loc.description %}{{ spec_loc.description|truncatewords:30|linebreaksbr }}{% endif %}</small></p>
                     </td>
                 </tr>
             {% endfor %}
@@ -38,7 +38,7 @@
         <br><br>
     </div>
 
-    <h2><b class="hover-blue" data-toggle="collapse" data-target="#knowledge">Szczegółowe informacje</b></h2>
+    <h2><b class="hover-blue" data-toggle="collapse" data-target="#knowledge">Szczegółowe informacje o krainie</b></h2>
     <br>
     <div id="knowledge" class="collapse">
         W budowie...

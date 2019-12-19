@@ -22,11 +22,11 @@
                 </td>
                 <td valign="top" align="left" colspan="2" class="pl-1">
                     <h3 class="border-custom-base">{{ gen_loc.name }}</h3>
-                    <p class="text-justify p-0"><small>{% if gen_loc.description %}{{ gen_loc.description|truncatewords:30 }}{% endif %}</small></p>
+                    <p class="text-justify p-0"><small>{% if gen_loc.description %}{{ gen_loc.description|linebreaksbr }}{% endif %}</small></p>
                 </td>
             </tr>
         </table>
-        <br><br>
+        <br>
     {% endfor %}
 {% endblock content %}
 
