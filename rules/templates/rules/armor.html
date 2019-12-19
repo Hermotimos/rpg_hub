@@ -139,13 +139,36 @@
         </thead>
 
         <tbody class="align-center dark">
-            <tr><td class="align-left">Puklerz</td>         <td>1</td> <td>+1 / 0</td>  <td>2</td></tr>
-            <tr><td class="align-left">Średnia</td>         <td>1</td> <td>+1 / +2</td> <td>3</td></tr>
-            <tr><td class="align-left">Średnia z umbo</td>  <td>1</td> <td>+2 / +2</td> <td>4</td></tr>
-            <tr><td class="align-left">Duża</td>            <td>2</td> <td>+2 / +3</td> <td>5</td></tr>
-            <tr><td class="align-left">Duża z umbo</td>     <td>2</td> <td>+3 / +3</td> <td>6</td></tr>
-            <tr><td class="align-left">Pawęż</td>           <td>3</td> <td>+3 / +4</td> <td>7</td></tr>
+            {% for shield in shields %}
+                <tr>
+                    <td class="{% if shield.description %} hover-blue {% endif %} align-left" data-toggle="collapse" data-target="#{{ shield.name }}">{{ shield.name }}</td>
+                    <td>{{ shield.enemies_no }}</td>
+                    <td>+{{ shield.armor_class_bonus_close_combat }}/+{{ shield.armor_class_bonus_distance_combat }}</td>
+                    <td>{{ shield.weight.normalize }}</td>
+                </tr>
+                {% if shield.description %}
+                    <tr id="{{ shield.name }}" class="collapse">
+                        <td colspan="10" class="weapons-img px-2 align-left">
+                            <br>
+                            {{ shield.description|linebreaksbr }}
+                            <br><br>
+                            <div>
+                            {% for p in shield.pictures.all %}
+                                <div class="inline-block">
+                                <img src="{{ p.image.url }}" class="border-double">
+                                {% if p.description %}
+                                    <small>{{ p.description }}</small>
+                                {% endif %}
+                                </div>
+                            {% endfor %}
+                            </div>
+                            <br><br>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
         </tbody>
+
     </table>
     <br><br><br>
 

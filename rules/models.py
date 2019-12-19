@@ -375,17 +375,38 @@ class PlateType(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        if self.name:
-            self.sorting_name = create_sorting_name(self.name)
-        super(PlateType, self).save(*args, **kwargs)
-
     def short_name(self):
         short_name = ''
         for char in str(self.name):
             if char in 'abcdefghijklmnopqrstuvwxyz':
                 short_name += char
         return short_name
+
+    class Meta:
+        ordering = ['sorting_number']
+
+
+class ShieldType(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(max_length=4000, blank=True, null=True)
+    pictures = models.ManyToManyField(Picture, related_name='shield_pics', blank=True)
+
+    enemies_no = models.PositiveSmallIntegerField()
+    armor_class_bonus_close_combat = models.PositiveSmallIntegerField()
+    armor_class_bonus_distance_combat = models.PositiveSmallIntegerField()
+    weight = models.DecimalField(max_digits=10, decimal_places=1)
+
+    allowed_profiles = models.ManyToManyField(Profile,
+                                              blank=True,
+                                              limit_choices_to=
+                                              Q(character_status='active_player') |
+                                              Q(character_status='inactive_player') |
+                                              Q(character_status='dead_player'),
+                                              related_name='allowed_shield_types')
+    sorting_number = models.DecimalField(max_digits=3, decimal_places=2)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         ordering = ['sorting_number']

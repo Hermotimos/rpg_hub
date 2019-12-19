@@ -4,7 +4,7 @@ from django.db.models import Prefetch
 
 from rpg_project.utils import query_debugger
 from rules.models import Skill, Synergy, CharacterClass, CharacterProfession, EliteClass, EliteProfession, \
-    WeaponClass, WeaponType, PlateType
+    WeaponClass, WeaponType, PlateType, ShieldType
 
 
 @query_debugger
@@ -22,12 +22,15 @@ def rules_armor_view(request):
     profile = request.user.profile
     if profile.character_status == 'gm':
         plates = PlateType.objects.all().prefetch_related('pictures')
+        shields = ShieldType.objects.all().prefetch_related('pictures')
     else:
         plates = profile.allowed_plate_types.all().prefetch_related('pictures')
+        shields = profile.allowed_shield_types.all().prefetch_related('pictures')
 
     context = {
         'page_title': 'Pancerz',
-        'plates': plates
+        'plates': plates,
+        'shields': shields
     }
     return render(request, 'rules/armor.html', context)
 

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.forms import Textarea
 from django.db import models
 from rules.models import Skill, Synergy, CharacterClass, CharacterProfession, EliteClass, EliteProfession, \
-    WeaponClass, WeaponType, PlateType
+    WeaponClass, WeaponType, PlateType, ShieldType
 
 
 class SkillAdmin(admin.ModelAdmin):
@@ -104,6 +104,16 @@ class PlateTypeAdmin(admin.ModelAdmin):
     }
 
 
+class ShieldTypeAdmin(admin.ModelAdmin):
+    list_display = ['name', 'description']
+    list_editable = ['description']
+    search_fields = ['name', 'description']
+
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
+    }
+
+
 admin.site.register(Skill, SkillAdmin)
 admin.site.register(Synergy, SynergyAdmin)
 admin.site.register(CharacterClass, CharacterClassAdmin)
@@ -113,3 +123,4 @@ admin.site.register(EliteProfession, EliteProfessionAdmin)
 admin.site.register(WeaponClass, WeaponClassAdmin)
 admin.site.register(WeaponType, WeaponTypeAdmin)
 admin.site.register(PlateType, PlateTypeAdmin)
+admin.site.register(ShieldType, ShieldTypeAdmin)
