@@ -75,9 +75,13 @@
                     {% endfor %}
                 </td>
                 <td class="timeline-small align-top unblue-black">
-                    <a class="hover-pointer"  href="{% url 'history:timeline-gen-loc' event.general_location.id %}">{{ event.general_location }}</a><br>
-                    {% for loc in event.specific_locations.all %}
-                        <a class="hover-pointer" href="{% url 'history:timeline-spec-loc' loc.id %}"><small>{{ loc }}</small></a><br>
+                    {% for gen_loc in event.general_locations.all %}
+                        <a class="hover-pointer"  href="{% url 'history:timeline-gen-loc' gen_loc.id %}">{{ gen_loc.name }}</a><br>
+                        {% for spec_loc in event.specific_locations.all %}
+                            {% if spec_loc.general_location.id == gen_loc.id %}
+                                <a class="hover-pointer" href="{% url 'history:timeline-spec-loc' spec_loc.id %}"><small>{{ spec_loc.name }}</small></a><br>
+                            {% endif %}
+                        {% endfor %}
                     {% endfor %}
                 </td>
                 <td class="align-center align-top unblue-black">

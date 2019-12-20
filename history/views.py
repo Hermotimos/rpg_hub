@@ -566,8 +566,8 @@ def timeline_all_events_view(request):
             .distinct()
 
     events = events\
-        .select_related('general_location', 'game')\
-        .prefetch_related('threads', 'participants', 'informed', 'specific_locations', 'notes__author')
+        .select_related('game')\
+        .prefetch_related('threads', 'participants', 'informed', 'general_locations', 'specific_locations', 'notes__author')
 
     context = {
         'page_title': 'Pełne Kalendarium',
