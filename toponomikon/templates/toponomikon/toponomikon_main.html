@@ -17,7 +17,7 @@
             <tr class="toponomikon-img pb-3">
                 <td class="unblue-black align-top">
                     <a href="{% url 'toponomikon:general_location' gen_loc.id %}">
-                        <img src="{{ gen_loc.main_image.image.url }}" class="border-double">
+                        <img src="{{ gen_loc.main_image.image.url }}" class="border-double {% if gen_loc.indirectly %}{{ 'img-grayscale' }}{% endif %}">
                     </a>
                 </td>
                 <td valign="top" align="left" colspan="2" class="pl-1">

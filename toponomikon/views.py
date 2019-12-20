@@ -1,4 +1,4 @@
-from django.db.models import Prefetch
+from django.db.models import Count, Case, When, IntegerField, Max, Min, Prefetch, Q, Value
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -21,7 +21,13 @@ def toponomikon_main_view(request):
 
     gen_locs = gen_locs\
         .prefetch_related(Prefetch('specific_locations', queryset=spec_locs))\
-        .select_related('main_image')
+        .select_related('main_image')\
+        .annotate(indirectly=Case(
+            When(~Q(known_directly=profile) & Q(known_indirectly=profile), then=Value(1)),
+            default=Value(0),
+            output_field=IntegerField()
+        ))\
+        .distinct()
 
     context = {
         'page_title': 'Toponomikon',
