@@ -25,13 +25,24 @@
                 <tr class="toponomikon-img">
                     <td class="unblue-black pb-4">
                         <a href="#">
-                            <img src="{{ spec_loc.main_image.image.url }}" class="border-double">
+                            <img src="{{ spec_loc.main_image.image.url }}" class="border-double
+                            {% if spec_loc.known_only_indirectly %}
+                                {{ 'img-grayscale' }}
+                            {% endif %}
+                            ">
                         </a>
                     </td>
-                    <td valign="top" align="left" colspan="2" class="pl-1">
-                        <h5 class="border-custom-base">{{ spec_loc.name }}</h5>&emsp;
-                        <p class="text-justify p-0"><small>{% if spec_loc.description %}{{ spec_loc.description|truncatewords:30|linebreaksbr }}{% endif %}</small></p>
-                    </td>
+                    {% if spec_loc.known_only_indirectly %}
+                        <td valign="top" align="left" colspan="2" class="pl-1">
+                            <h3 class="border-custom-base"><small>{{ spec_loc.name }} (znasz z opowieści)</small></h3>
+                            <p class="text-justify p-0"><small>{% if spec_loc.description %}{{ spec_loc.description|truncatewords:30|linebreaksbr }}{% endif %}</small></p>
+                        </td>
+                    {% else %}
+                        <td valign="top" align="left" colspan="2" class="pl-1">
+                            <h5 class="border-custom-base">{{ spec_loc.name }}</h5>&emsp;
+                            <p class="text-justify p-0"><small>{% if spec_loc.description %}{{ spec_loc.description|truncatewords:30|linebreaksbr }}{% endif %}</small></p>
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </table>
