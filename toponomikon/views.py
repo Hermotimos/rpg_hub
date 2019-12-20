@@ -1,4 +1,4 @@
-from django.db.models import Count, Case, When, IntegerField, Max, Min, Prefetch, Q, Value
+from django.db.models import Count, Prefetch, Q, Case, When, Value, IntegerField
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -14,20 +14,22 @@ def toponomikon_main_view(request):
         gen_locs = GeneralLocation.objects.all()
         spec_locs = SpecificLocation.objects.all()
     else:
-        known_directly = GeneralLocation.objects.filter(known_directly=profile)
-        known_indirectly = GeneralLocation.objects.filter(known_indirectly=profile)
-        gen_locs = (known_directly | known_indirectly).distinct()
+        known_directly = profile.gen_locs_known_directly.all()
+        known_indirectly = profile.gen_locs_known_indirectly.exclude(id__in=known_directly)
+        gen_locs = (known_directly | known_indirectly)
         spec_locs = (profile.spec_locs_known_directly.all() | profile.spec_locs_known_indirectly.all()).distinct()
 
     gen_locs = gen_locs\
         .prefetch_related(Prefetch('specific_locations', queryset=spec_locs))\
         .select_related('main_image')\
-        .annotate(indirectly=Case(
-            When(~Q(known_directly=profile) & Q(known_indirectly=profile), then=Value(1)),
+        .distinct()\
+        .annotate(known_only_indirectly=Case(
+            When(
+                Q(known_indirectly=profile) & ~Q(known_directly=profile),
+                then=Value(1)),
             default=Value(0),
             output_field=IntegerField()
-        ))\
-        .distinct()
+        ))
 
     context = {
         'page_title': 'Toponomikon',
