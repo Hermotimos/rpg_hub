@@ -119,6 +119,7 @@ class TimelineEventEditForm(forms.ModelForm):
         self.fields['description'].widget.attrs = {'cols': 60, 'rows': 10}
         self.fields['informed'].widget.attrs = {'size': 10}
         self.fields['participants'].widget.attrs = {'size': 10}
+        self.fields['general_locations'].widget.attrs = {'size': 10}
         self.fields['specific_locations'].widget.attrs = {'size': 10}
         self.fields['threads'].widget.attrs = {'size': 10}
 

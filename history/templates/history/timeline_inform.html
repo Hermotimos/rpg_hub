@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% load custom_filters %}
 
 {% block head_extra %}
     <link rel="stylesheet" href="{% static 'css/history.css' %}">
@@ -36,11 +37,11 @@
             </td>
         </tr>
         <tr>
-            <td><h6>Lokacja:</h6></td>
+            <td><h6>Lokacje:</h6></td>
             <td class="justify">
-                <small>{{ event.general_location }}:
-                    {% for loc in event.specific_locations.all %}
-                        {{ loc }}
+                <small>
+                    {% for gen_loc in gen_locs_and_spec_locs_dict %}
+                        {{ gen_loc }}: {{ gen_locs_and_spec_locs_dict|dict_lookup:gen_loc }}<br>
                     {% endfor %}
                 </small>
             </td>

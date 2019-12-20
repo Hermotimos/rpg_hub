@@ -593,8 +593,8 @@ def timeline_thread_view(request, thread_id):
             .distinct()
 
     events = events\
-        .select_related('general_location', 'game')\
-        .prefetch_related('threads', 'participants', 'informed', 'specific_locations', 'notes__author')
+        .select_related('game')\
+        .prefetch_related('threads', 'participants', 'informed', 'general_locations', 'specific_locations', 'notes__author')
 
     # events_by_thread_qs = thread.timeline_events.all()
     # known_events = participated_and_informed_events(profile.id)
@@ -626,8 +626,8 @@ def timeline_participant_view(request, participant_id):
             .distinct()
 
     events = events\
-        .select_related('general_location', 'game')\
-        .prefetch_related('threads', 'participants', 'informed', 'specific_locations', 'notes__author')
+        .select_related('game')\
+        .prefetch_related('threads', 'participants', 'informed', 'general_locations', 'specific_locations', 'notes__author')
 
     # events_by_participant_qs = participant.timeline_events_participated.all()
     # known_events = participated_and_informed_events(profile.id)
@@ -657,15 +657,15 @@ def timeline_general_location_view(request, gen_loc_id):
     general_location = get_object_or_404(GeneralLocation, id=gen_loc_id)
 
     if profile.character_status == 'gm':
-        events = TimelineEvent.objects.filter(general_location=gen_loc_id)
+        events = TimelineEvent.objects.filter(general_locations=gen_loc_id)
     else:
         events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
-            .filter(general_location=gen_loc_id)\
+            .filter(general_locations=gen_loc_id)\
             .distinct()
 
     events = events\
-        .select_related('general_location', 'game')\
-        .prefetch_related('threads', 'participants', 'informed', 'specific_locations', 'notes__author')
+        .select_related('game')\
+        .prefetch_related('threads', 'participants', 'informed', 'general_locations', 'specific_locations', 'notes__author')
 
     # events_by_general_location_qs = TimelineEvent.objects.filter(general_location=general_location)
     # known_events = participated_and_informed_events(profile.id)
@@ -697,8 +697,8 @@ def timeline_specific_location_view(request, spec_loc_id):
             .distinct()
 
     events = events\
-        .select_related('general_location', 'game')\
-        .prefetch_related('threads', 'participants', 'informed', 'specific_locations', 'notes__author')
+        .select_related('game')\
+        .prefetch_related('threads', 'participants', 'informed', 'general_locations', 'specific_locations', 'notes__author')
 
     # events_by_specific_location_qs = specific_location.timeline_events.all()
     # known_events = participated_and_informed_events(profile.id)
@@ -728,8 +728,8 @@ def timeline_date_view(request, year, season='0'):
             .distinct()
 
     events = events\
-        .select_related('general_location', 'game')\
-        .prefetch_related('threads', 'participants', 'informed', 'specific_locations', 'notes__author')
+        .select_related('game')\
+        .prefetch_related('threads', 'participants', 'informed', 'general_locations', 'specific_locations', 'notes__author')
 
     if season == '0':
         events = events.filter(year=year)
@@ -775,8 +775,8 @@ def timeline_game_view(request, game_id):
             .distinct()
 
     events = events\
-        .select_related('general_location', 'game')\
-        .prefetch_related('threads', 'participants', 'informed', 'specific_locations', 'notes__author')
+        .select_related('game')\
+        .prefetch_related('threads', 'participants', 'informed', 'general_locations', 'specific_locations', 'notes__author')
 
     # events_by_game_qs = TimelineEvent.objects.filter(game=game)
     # known_events = participated_and_informed_events(profile.id)
@@ -800,6 +800,13 @@ def timeline_inform_view(request, event_id):
     profile = request.user.profile
     event = get_object_or_404(TimelineEvent, id=event_id)
 
+    spec_locs = event.specific_locations.all()
+    gen_locs = event.general_locations\
+        .prefetch_related(Prefetch('specific_locations', queryset=spec_locs, to_attr='filtered_spec_locs'))
+    gen_locs_and_spec_locs_dict = {}
+    for gen_loc in gen_locs:
+        gen_locs_and_spec_locs_dict[gen_loc.name] = ', '.join(spec_loc.name for spec_loc in gen_loc.filtered_spec_locs)
+
     participants = event.participants.all()
     participants_ids = [p.id for p in participants]
     old_informed = event.informed.all()
@@ -822,7 +829,7 @@ def timeline_inform_view(request, event_id):
             message = f"{profile} znów rozprawia o swoich przygodach.\n\n" \
                       f"'{event.date()} rozegrało się co następuje:\n {event.description}\n" \
                       f"Tak było i nie inaczej...'\n" \
-                      f"A było to w miejscu: {event.general_location}" \
+                      f"A było to w miejscu: {', '.join(l.name for l in event.general_locations.all())}" \
                       f", a dokładniej: {', '.join(l.name for l in event.specific_locations.all())}.\n\n" \
                       f"Wydarzenie zostało zapisane w Twoim Kalendarium."
             sender = settings.EMAIL_HOST_USER
@@ -847,6 +854,7 @@ def timeline_inform_view(request, event_id):
         'page_title': 'Poinformuj o wydarzeniu',
         'form': form,
         'event': event,
+        'gen_locs_and_spec_locs_dict': gen_locs_and_spec_locs_dict,
         'participants': participants,
         'informed': old_informed
     }
@@ -862,6 +870,13 @@ def timeline_note_view(request, event_id):
     profile = request.user.profile
     event = get_object_or_404(TimelineEvent, id=event_id)
     current_note = None
+
+    spec_locs = event.specific_locations.all()
+    gen_locs = event.general_locations\
+        .prefetch_related(Prefetch('specific_locations', queryset=spec_locs, to_attr='filtered_spec_locs'))
+    gen_locs_and_spec_locs_dict = {}
+    for gen_loc in gen_locs:
+        gen_locs_and_spec_locs_dict[gen_loc.name] = ', '.join(spec_loc.name for spec_loc in gen_loc.filtered_spec_locs)
 
     participants = event.participants.all()
     informed = event.informed.all()
@@ -889,6 +904,7 @@ def timeline_note_view(request, event_id):
         'page_title': 'Przemyślenia',
         'event': event,
         'form': form,
+        'gen_locs_and_spec_locs_dict': gen_locs_and_spec_locs_dict,
         'participants': participants,
         'informed': informed
     }
