@@ -24,7 +24,12 @@ class GeneralLocation(models.Model):
                                               Q(character_status='inactive_player') |
                                               Q(character_status='dead_player'),
                                               related_name='gen_locs_known_indirectly')
-    main_image = models.ForeignKey(Picture, blank=True, null=True, related_name='gen_loc_main_pics', on_delete=models.CASCADE)
+    main_image = models.ForeignKey(Picture,
+                                   default='post_pics/topoi_gen_loc_default_MAIN.jpg',
+                                   blank=True,
+                                   null=True,
+                                   related_name='gen_loc_main_pics',
+                                   on_delete=models.PROTECT)
     pictures = models.ManyToManyField(Picture, related_name='gen_loc_pics', blank=True)
     sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
 
@@ -58,7 +63,12 @@ class SpecificLocation(models.Model):
                                               Q(character_status='inactive_player') |
                                               Q(character_status='dead_player'),
                                               related_name='spec_locs_known_indirectly')
-    main_image = models.ForeignKey(Picture, blank=True, null=True, related_name='spec_loc_main_pics', on_delete=models.CASCADE)
+    main_image = models.ForeignKey(Picture,
+                                   default='post_pics/topoi_spec_loc_default_MAIN.jpg',
+                                   blank=True,
+                                   null=True,
+                                   related_name='spec_loc_main_pics',
+                                   on_delete=models.PROTECT)
     pictures = models.ManyToManyField(Picture, related_name='spec_loc_pics', blank=True)
     sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
 
