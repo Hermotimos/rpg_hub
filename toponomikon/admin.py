@@ -11,8 +11,7 @@ class SpecificLocationAdmin(admin.ModelAdmin):
 
 class SpecificLocationInline(admin.TabularInline):
     model = SpecificLocation
-    extra = 2
-    fields = ['name', 'main_image', 'description']
+    extra = 0
 
 
 class GeneralLocationAdmin(admin.ModelAdmin):

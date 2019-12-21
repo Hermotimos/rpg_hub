@@ -5,8 +5,6 @@ from django.utils.html import format_html
 from history.models import (Chapter,
                             GameSession,
                             Thread,
-                            GeneralLocation,
-                            SpecificLocation,
                             TimelineEvent,
                             TimelineEventNote,
                             ChronicleEvent,
