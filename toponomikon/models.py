@@ -25,9 +25,7 @@ class GeneralLocation(models.Model):
                                               Q(character_status='dead_player'),
                                               related_name='gen_locs_known_indirectly')
     main_image = models.ForeignKey(Picture,
-                                   default='post_pics/topoi_gen_loc_default_MAIN.jpg',
-                                   blank=True,
-                                   null=True,
+                                   default=340,
                                    related_name='gen_loc_main_pics',
                                    on_delete=models.PROTECT)
     pictures = models.ManyToManyField(Picture, related_name='gen_loc_pics', blank=True)
@@ -64,9 +62,7 @@ class SpecificLocation(models.Model):
                                               Q(character_status='dead_player'),
                                               related_name='spec_locs_known_indirectly')
     main_image = models.ForeignKey(Picture,
-                                   default='post_pics/topoi_spec_loc_default_MAIN.jpg',
-                                   blank=True,
-                                   null=True,
+                                   default=341,
                                    related_name='spec_loc_main_pics',
                                    on_delete=models.PROTECT)
     pictures = models.ManyToManyField(Picture, related_name='spec_loc_pics', blank=True)
