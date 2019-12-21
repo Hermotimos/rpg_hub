@@ -81,8 +81,6 @@ class ThreadAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
-
-
 admin.site.register(Chapter, ChapterAdmin)
 admin.site.register(Thread, ThreadAdmin)
 admin.site.register(GameSession, GameSessionAdmin)

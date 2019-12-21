@@ -3,7 +3,7 @@ from imaginarion.models import Picture
 
 
 class PictureAdmin(admin.ModelAdmin):
-    list_display = ['admin_title', 'type', 'description', 'image']
+    list_display = ['id', 'admin_title', 'type', 'description', 'image']
     list_editable = ['description', 'image']
     search_fields = ['title', 'description']
 
