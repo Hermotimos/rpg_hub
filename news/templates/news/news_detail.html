@@ -91,7 +91,8 @@
                         {% endfor %}
                     </td>
                 </tr>
-                <tr class="posts-and-news" id="typing"></tr>
+                <!-- JS <tr> to show that someone is typing -->
+                <tr class="posts-and-news" id="is-typing"></tr>
             </tbody>
         </table>
     </div>
@@ -113,13 +114,7 @@
 {% endblock content %}
 
 {% block javascript %}
-    <script>
-        function showIsTyping() {
-            document.getElementById('typing').innerHTML =
-            '<td class="align-center pt-2"><img class="rounded-circle article-img" src="/media/profile_pics/profile_default.jpg"></td>\
-             <td class="align-bottom">...</td>';
-        }
-    </script>
+    <script src="{% static 'js/oninput.js' %}"></script>
 {% endblock javascript %}
 
 
