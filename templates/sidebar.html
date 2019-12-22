@@ -4,8 +4,6 @@
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 {% endblock head_extra %}
 
-{% if user.is_authenticated %}
-
 <div class="col-md-3">
     <div class="content-section-sidebar">
         <br>
@@ -26,7 +24,7 @@
                     <a class="list-group-item list-group-item-light" href="{% url 'history:timeline-create' %}"><small>+ Wydarzenie | KALENDARIUM</small></a>
                 </div>
             </li>
-            
+
             <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#knowledge-mg"><h6 class="mb-0">Wiedza</h6></li>
             <li id="knowledge-mg" class="list-group collapse">
                 <div class="unblue">
@@ -44,7 +42,7 @@
                     <a class="list-group-item list-group-item-light" href="{% url 'characters:tricks-sheet' %}"><small>Podstępy</small></a>
                 </div>
             </li>
-            
+
             <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#plans"><h6 class="mb-0">Plany graczy & TODOs</h6></li>
             <li id="plans" class="list-group collapse">
                 <div class="unblue">
@@ -52,13 +50,13 @@
                     <a class="list-group-item list-group-item-light" href="{% url 'contact:plans-main' %}"><small>TODO</small></a>
                 </div>
             </li>
-            
+
         </ul>
 
         <!-- For players  -->
         {% else %}
         <ul class="list-group hover-pointer">
-            
+
             <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#character_sheet"><h6 class="mb-0">Karta postaci</h6></li>
             <li id="character_sheet" class="list-group collapse">
                 <div class="unblue">
@@ -70,7 +68,7 @@
                     <a class="list-group-item list-group-item-light" href="#"><strike><small>Arkana</small></strike></a>
                 </div>
             </li>
-            
+
             <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#knowledge"><h6 class="mb-0">Wiedza</h6></li>
             <li id="knowledge" class="list-group collapse">
                 <div class="unblue">
@@ -81,7 +79,7 @@
                     <a class="list-group-item list-group-item-light" href="#"><strike><small>Varia</small></strike></a>
                 </div>
             </li>
-            
+
             <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#plans-notes"><h6 class="mb-0">Plany i przemyślenia</h6></li>
             <li id="plans-notes" class="list-group collapse">
                 <div class="unblue">
@@ -89,10 +87,10 @@
                     <a class="list-group-item list-group-item-light" href="#"><strike><small>Przemyślenia</small></strike></a>
                 </div>
             </li>
-            
+
         </ul>
         {% endif %}
         <br>
     </div>
 </div>
-{% endif %}
+

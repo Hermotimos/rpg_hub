@@ -7,14 +7,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=IM+Fell+Great+Primer&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IM+Fell+Great+Primer&display=swap">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css">
     <!-- Own CSS etc. -->
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
-
-    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
     <link rel="icon" href="{% static 'img/favicon.ico' %}" />
 
     {% if page_title %}
@@ -76,8 +74,9 @@
             </div>
 
             <!--     SIDEBAR       -->
-            {% include 'sidebar.html' %}
-
+            {% if user.is_authenticated %}
+                {% include 'sidebar.html' %}
+            {% endif %}
         </div>
     </main>
 
