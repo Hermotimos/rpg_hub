@@ -83,7 +83,7 @@
                     </td>
                 </tr>
             {% endfor %}
-                <tr>
+                <tr class="posts-and-news">
                     <td></td>
                     <td>
                         {% for image in last_answer_seen_by_imgs %}
@@ -91,6 +91,7 @@
                         {% endfor %}
                     </td>
                 </tr>
+                <tr class="posts-and-news" id="typing"></tr>
             </tbody>
         </table>
     </div>
@@ -108,4 +109,17 @@
             <input class="btn btn-dark" type="submit" value="Odpowiedz">
         </form>
     </div>
+
 {% endblock content %}
+
+{% block javascript %}
+    <script>
+        function showIsTyping() {
+            document.getElementById("typing").innerHTML =
+            '<td class="align-center pt-2"><img class="rounded-circle article-img" src="profile_pics/profile_default.jpg"></td>\
+             <td class="align-bottom">...</td>';
+        }
+    </script>
+{% endblock javascript %}
+
+

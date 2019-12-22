@@ -54,6 +54,7 @@ class CreateNewsAnswerForm(forms.ModelForm):
         self.fields['text'].widget.attrs['placeholder'] = 'Twoja odpowiedź (max. 4000 znaków)*'
         self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60
+        self.fields['text'].widget.attrs['oninput'] = 'showIsTyping()'
 
 
 class CreateSurveyForm(forms.ModelForm):
