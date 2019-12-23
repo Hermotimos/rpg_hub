@@ -1,11 +1,34 @@
+from django import forms
 from django.contrib import admin
-from .models import News, NewsAnswer, Survey, SurveyOption, SurveyAnswer
+from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.db.models import Q
+
+from news.models import News, NewsAnswer, Survey, SurveyOption, SurveyAnswer
+from users.models import Profile
+
+
+class NewsAdminForm(forms.ModelForm):
+    allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
+                                                      .exclude(Q(character_status='dead_player') |
+                                                               Q(character_status='dead_npc') |
+                                                               Q(character_status='gm')),
+                                                      widget=FilteredSelectMultiple('Allowed profiles', False),
+                                                      required=False)
+
+    followers = forms.ModelMultipleChoiceField(queryset=Profile.objects
+                                               .exclude(Q(character_status='dead_player') |
+                                                        Q(character_status='dead_npc') |
+                                                        Q(character_status='gm')),
+                                               widget=FilteredSelectMultiple('Followers', False),
+                                               required=False)
 
 
 class NewsAdmin(admin.ModelAdmin):
     list_display = ['id', 'author', 'title', 'date_posted', 'image']
     list_editable = ['title', 'image']
+    readonly_fields = ['seen_by']
     search_fields = ['title']
+    form = NewsAdminForm
 
 
 class NewsAnswerAdmin(admin.ModelAdmin):
@@ -24,10 +47,21 @@ class SurveyOptionInline(admin.TabularInline):
     extra = 4
 
 
+class SurveyAdminForm(forms.ModelForm):
+    addressees = forms.ModelMultipleChoiceField(queryset=Profile.objects
+                                                .exclude(Q(character_status='dead_player') |
+                                                         Q(character_status='dead_npc') |
+                                                         Q(character_status='gm')),
+                                                widget=FilteredSelectMultiple('Allowed profiles', False),
+                                                required=False)
+
+
 class SurveyAdmin(admin.ModelAdmin):
     list_display = ['title', 'author', 'text', 'image']
     inlines = [SurveyOptionInline, ]
+    readonly_fields = ['seen_by']
     search_fields = ['title', 'text']
+    form = SurveyAdminForm
 
 
 class SurveyOptionAdmin(admin.ModelAdmin):
