@@ -45,12 +45,23 @@ class SynergyAdmin(admin.ModelAdmin):
 class CharacterProfessionInline(admin.TabularInline):
     model = CharacterProfession
     extra = 2
+    fields = ['name', 'description', 'start_perks', 'allowed_profiles']
+
+    formfield_overrides = {
+        models.CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 60})},
+    }
 
 
 class CharacterProfessionAdmin(admin.ModelAdmin):
     list_display = ['name', 'character_class', 'description', 'start_perks']
     list_editable = ['description', 'start_perks']
     search_fields = ['name', 'description', 'start_perks']
+
+    formfield_overrides = {
+        models.CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 60})},
+    }
 
 
 class CharacterClassAdmin(admin.ModelAdmin):
@@ -64,11 +75,21 @@ class EliteProfessionInline(admin.TabularInline):
     model = EliteProfession
     extra = 2
 
+    formfield_overrides = {
+        models.CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 60})},
+    }
+
 
 class EliteProfessionAdmin(admin.ModelAdmin):
     list_display = ['name', 'elite_class', 'description', 'start_perks']
     list_editable = ['description', 'start_perks']
     search_fields = ['name', 'description', 'start_perks']
+
+    formfield_overrides = {
+        models.CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 60})},
+    }
 
 
 class EliteClassAdmin(admin.ModelAdmin):
