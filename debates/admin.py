@@ -1,5 +1,10 @@
+from django import forms
 from django.contrib import admin
+from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.db.models import Q
+
 from debates.models import Topic, Debate, Remark
+from users.models import Profile
 
 
 class TopicAdmin(admin.ModelAdmin):
@@ -7,9 +12,26 @@ class TopicAdmin(admin.ModelAdmin):
     search_fields = ['title']
 
 
+class DebateAdminForm(forms.ModelForm):
+    allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
+                                                      .exclude(Q(character_status='dead_player') |
+                                                               Q(character_status='dead_npc') |
+                                                               Q(character_status='gm')),
+                                                      widget=FilteredSelectMultiple('Allowed profiles', False),
+                                                      required=False)
+
+    followers = forms.ModelMultipleChoiceField(queryset=Profile.objects
+                                               .exclude(Q(character_status='dead_player') |
+                                                        Q(character_status='dead_npc') |
+                                                        Q(character_status='gm')),
+                                               widget=FilteredSelectMultiple('Followers', False),
+                                               required=False)
+
+
 class DebateAdmin(admin.ModelAdmin):
     list_display = ['name', 'topic', 'is_ended', 'is_individual', 'date_created']
     search_fields = ['name']
+    form = DebateAdminForm
 
 
 class RemarkAdmin(admin.ModelAdmin):
