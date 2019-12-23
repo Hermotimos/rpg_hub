@@ -55,7 +55,6 @@ class SkillLevel(models.Model):
     level = models.CharField(max_length=10, choices=S_LEVELS)
     description = models.TextField(max_length=4000, blank=True, null=True)
     knowledge_packets = models.TextField(max_length=4000, blank=True, null=True)    # TODO change to M2M when knowledge
-    pictures = models.ManyToManyField(Picture, related_name='skill_level_pics', blank=True)
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
@@ -167,6 +166,7 @@ class CharacterProfession(models.Model):
                                               blank=True,
                                               limit_choices_to=
                                               Q(character_status='active_player') |
+                                              Q(character_status='inactive_player') |
                                               Q(character_status='inactive_player') |
                                               Q(character_status='dead_player'),
                                               related_name='allowed_professions')
