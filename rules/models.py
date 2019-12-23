@@ -53,6 +53,7 @@ S_LEVELS = [
 class SkillLevel(models.Model):
     skill = models.ForeignKey(Skill, related_name='skill_levels', on_delete=models.PROTECT)
     level = models.CharField(max_length=10, choices=S_LEVELS)
+    description = models.TextField(max_length=4000, blank=True, null=True)
     knowledge_packets = models.TextField(max_length=4000, blank=True, null=True)    # TODO change to M2M when knowledge
     pictures = models.ManyToManyField(Picture, related_name='skill_level_pics', blank=True)
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
