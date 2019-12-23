@@ -11,10 +11,9 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br><br><br><br>
+    <br><br><br>
 
-    <div>
-    {% for skill in character_skills %}
+    {% for skill in skills %}
         {% if skill.image %}
             <img src="{{ skill.image.url }}" class="border-double img-skill">
         {% else %}
@@ -39,6 +38,5 @@
         </div>
         <br>
     {% endfor %}
-    </div>
 
 {% endblock content %}
