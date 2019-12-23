@@ -11,7 +11,7 @@ from rules.models import Skill, SkillLevel, Synergy, CharacterClass, CharacterPr
 from users.models import Profile
 
 
-class RulesAllowedProfilesForm(forms.ModelForm):
+class ForAllowedProfilesForm(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
                                                       .exclude(Q(character_status='dead_player') |
                                                                Q(character_status='dead_npc') |
@@ -21,7 +21,7 @@ class RulesAllowedProfilesForm(forms.ModelForm):
                                                       required=False)
 
 
-class RulesAllowedProfilesAndPicturesForm(forms.ModelForm):
+class ForAllowedProfilesAndPicturesForm(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
                                                       .exclude(Q(character_status='dead_player') |
                                                                Q(character_status='dead_npc') |
@@ -49,19 +49,19 @@ class SkillLevelInline(admin.TabularInline):
 
 
 class SkillAdmin(admin.ModelAdmin):
-    form = RulesAllowedProfilesForm
+    form = ForAllowedProfilesForm
     formfield_overrides = {
         models.CharField: {'widget': Textarea(attrs={'rows': 2, 'cols': 10})},
         models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 30})},
     }
+    inlines = [SkillLevelInline]
     list_display = ['id', 'name', 'tested_trait', 'description', 'lvl_0', 'lvl_1', 'lvl_2', 'lvl_3', 'image']
     list_editable = ['name', 'description', 'tested_trait', 'lvl_0', 'lvl_1', 'lvl_2', 'lvl_3', 'image']
     search_fields = ['name', 'description', 'lvl_0', 'lvl_1', 'lvl_2', 'lvl_3']
-    inlines = [SkillLevelInline]
 
 
 class SynergyAdmin(admin.ModelAdmin):
-    form = RulesAllowedProfilesForm
+    form = ForAllowedProfilesForm
     formfield_overrides = {
         models.CharField: {'widget': Textarea(attrs={'rows': 3, 'cols': 10})},
         models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 30})},
@@ -76,7 +76,7 @@ class CharacterProfessionInline(admin.TabularInline):
     extra = 2
 
     fields = ['name', 'description', 'start_perks', 'allowed_profiles']
-    form = RulesAllowedProfilesForm
+    form = ForAllowedProfilesForm
     formfield_overrides = {
         models.CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
         models.TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 40})},
@@ -84,7 +84,7 @@ class CharacterProfessionInline(admin.TabularInline):
 
 
 class CharacterProfessionAdmin(admin.ModelAdmin):
-    form = RulesAllowedProfilesForm
+    form = ForAllowedProfilesForm
     formfield_overrides = {
         models.CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
         models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 60})},
@@ -95,9 +95,9 @@ class CharacterProfessionAdmin(admin.ModelAdmin):
 
 
 class CharacterClassAdmin(admin.ModelAdmin):
+    inlines = [CharacterProfessionInline]
     list_display = ['name', 'description']
     list_editable = ['description']
-    inlines = [CharacterProfessionInline]
     search_fields = ['name', 'description']
 
 
@@ -105,7 +105,7 @@ class EliteProfessionInline(admin.TabularInline):
     model = EliteProfession
     extra = 2
 
-    form = RulesAllowedProfilesForm
+    form = ForAllowedProfilesForm
     formfield_overrides = {
         models.CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
         models.TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 40})},
@@ -113,7 +113,7 @@ class EliteProfessionInline(admin.TabularInline):
 
 
 class EliteProfessionAdmin(admin.ModelAdmin):
-    form = RulesAllowedProfilesForm
+    form = ForAllowedProfilesForm
     formfield_overrides = {
         models.CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
         models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 60})},
@@ -124,10 +124,10 @@ class EliteProfessionAdmin(admin.ModelAdmin):
 
 
 class EliteClassAdmin(admin.ModelAdmin):
-    form = RulesAllowedProfilesForm
+    form = ForAllowedProfilesForm
+    inlines = [EliteProfessionInline]
     list_display = ['name', 'description']
     list_editable = ['description']
-    inlines = [EliteProfessionInline]
     search_fields = ['name', 'description']
 
 
@@ -135,7 +135,7 @@ class WeaponTypeInline(admin.TabularInline):
     model = WeaponType
     extra = 2
 
-    form = RulesAllowedProfilesAndPicturesForm
+    form = ForAllowedProfilesAndPicturesForm
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 1, 'cols': 25})},
         models.CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 5})},
@@ -146,14 +146,14 @@ class WeaponClassAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
     }
+    inlines = [WeaponTypeInline, ]
     list_display = ['name', 'description']
     list_editable = ['description']
-    inlines = [WeaponTypeInline, ]
     search_fields = ['name', 'description']
 
 
 class WeaponTypeAdmin(admin.ModelAdmin):
-    form = RulesAllowedProfilesAndPicturesForm
+    form = ForAllowedProfilesAndPicturesForm
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
     }
@@ -163,7 +163,7 @@ class WeaponTypeAdmin(admin.ModelAdmin):
 
 
 class PlateTypeAdmin(admin.ModelAdmin):
-    form = RulesAllowedProfilesAndPicturesForm
+    form = ForAllowedProfilesAndPicturesForm
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
     }
@@ -173,7 +173,7 @@ class PlateTypeAdmin(admin.ModelAdmin):
 
 
 class ShieldTypeAdmin(admin.ModelAdmin):
-    form = RulesAllowedProfilesForm
+    form = ForAllowedProfilesForm
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
     }
