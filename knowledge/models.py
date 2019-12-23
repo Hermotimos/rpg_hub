@@ -2,12 +2,14 @@ from django.db import models
 
 from imaginarion.models import Picture
 from rpg_project.utils import create_sorting_name
+from users.models import Profile
 
 
 class KnowledgePacket(models.Model):
     title = models.CharField(max_length=100, unique=True)
     text = models.TextField()
     pictures = models.ManyToManyField(Picture, related_name='knowledge_packets', blank=True)
+    allowed_profiles = models.ManyToManyField(Profile, related_name='allowed_knowledge_packets', blank=True)
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
