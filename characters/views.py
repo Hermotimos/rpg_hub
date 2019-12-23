@@ -20,7 +20,7 @@ def tricks_sheet_view(request):
 @login_required
 def character_skills_view(request):
     profile = request.user.profile
-    if profile.character_name == 'gm':
+    if profile.character_status == 'gm':
         characters = Character.objects.all().select_related('profile').prefetch_related('skill_levels_acquired__skill')
         # characters_with_skills_dict = {}
         # for ch in characters:
