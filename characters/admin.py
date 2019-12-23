@@ -10,8 +10,7 @@ from rules.models import SkillLevel
 class CharacterAdminForm(forms.ModelForm):
     skill_levels_acquired = forms.ModelMultipleChoiceField(queryset=SkillLevel.objects.all(),
                                                            widget=FilteredSelectMultiple('Skill levels', False),
-                                                           required=False,
-                                                           )
+                                                           required=False)
 
 
 class CharacterAdmin(admin.ModelAdmin):
