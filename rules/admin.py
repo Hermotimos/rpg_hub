@@ -1,14 +1,29 @@
 from django.contrib import admin
 from django.forms import Textarea
 from django.db import models
-from rules.models import Skill, Synergy, CharacterClass, CharacterProfession, EliteClass, EliteProfession, \
+from rules.models import Skill, SkillLevel, Synergy, CharacterClass, CharacterProfession, EliteClass, EliteProfession, \
     WeaponClass, WeaponType, PlateType, ShieldType
+
+
+class SkillLevelAdmin(admin.ModelAdmin):
+    pass
+    # list_display = ['name']
+    # search_fields = ['name']
+    #
+    # def name(self, obj):
+    #     return f'{obj.skill} {obj.level}'
+
+
+class SkillLevelInline(admin.TabularInline):
+    model = SkillLevel
+    extra = 3
 
 
 class SkillAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'tested_trait', 'description', 'lvl_0', 'lvl_1', 'lvl_2', 'lvl_3', 'image']
     list_editable = ['name', 'description', 'tested_trait', 'lvl_0', 'lvl_1', 'lvl_2', 'lvl_3', 'image']
     search_fields = ['name', 'description', 'lvl_0', 'lvl_1', 'lvl_2', 'lvl_3']
+    inlines = [SkillLevelInline]
 
     formfield_overrides = {
         models.CharField: {'widget': Textarea(attrs={'rows': 2, 'cols': 10})},
@@ -115,6 +130,7 @@ class ShieldTypeAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Skill, SkillAdmin)
+admin.site.register(SkillLevel, SkillLevelAdmin)
 admin.site.register(Synergy, SynergyAdmin)
 admin.site.register(CharacterClass, CharacterClassAdmin)
 admin.site.register(CharacterProfession, CharacterProfessionAdmin)

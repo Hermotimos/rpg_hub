@@ -42,6 +42,31 @@ class Skill(models.Model):
         ordering = ['sorting_name']
 
 
+S_LEVELS = [
+    ('0', '0'),
+    ('1', '1'),
+    ('2', '2'),
+    ('3', '3')
+]
+
+
+class SkillLevel(models.Model):
+    skill = models.ForeignKey(Skill, related_name='skill_levels', on_delete=models.PROTECT)
+    level = models.CharField(max_length=10, choices=S_LEVELS)
+    knowledge_packets = models.TextField(max_length=4000, blank=True, null=True)    # TODO change to M2M when knowledge
+    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+
+    def __str__(self):
+        return f'{str(self.skill.name)} {self.level}'
+
+    def save(self, *args, **kwargs):
+        self.sorting_name = create_sorting_name(self.__str__())
+        super(SkillLevel, self).save(*args, **kwargs)
+
+    class Meta:
+        ordering = ['sorting_name']
+
+
 class Synergy(models.Model):
     name = models.CharField(max_length=100, verbose_name='Synergia')
     skills = models.ManyToManyField(Skill, related_name='skills')
