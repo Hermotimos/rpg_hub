@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'history',
     'home',
     'imaginarion',
+    'knowledge',
     'reload',
     'rules',
     'news',
