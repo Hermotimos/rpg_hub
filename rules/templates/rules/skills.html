@@ -106,34 +106,18 @@
                 <b class="hover-blue">&nbsp;{{ skill.name }}</b>
             </h1>
             <small>[{{ skill.tested_trait }}] {{ skill.description }}</small>
-            <br>
+            <br><br>
 
             <div id="{{ skill.short_name }}" class="collapse">
                 <table class="skills-table">
-                    {% if skill.lvl_0 %}
+                    {% for skill_level in skill.skill_levels.all %}
                     <tr>
-                        <td class="align-top"><img src="{% static 'img/0.png' %}" class="border-double img-numeral"></td>
-                        <td class="align-bottom pl-1 justify">{{ skill.lvl_0|linebreaksbr }}<br><br></td>
+                        {% with level_img='img/'|add:skill_level.level|add:'.png' %}
+                        <td class="align-top"><img src="{% static level_img %}" class="border-double img-numeral"></td>
+                        <td class="align-bottom pl-1 justify">{{ skill_level.description|linebreaksbr }}<br><br></td>
+                        {% endwith %}
                     </tr>
-                    {% endif %}
-                    {% if skill.lvl_1 %}
-                    <tr>
-                        <td class="align-top"><img src="{% static 'img/1.png' %}" class="border-double img-numeral"></td>
-                        <td class="align-bottom pl-1 justify">{{ skill.lvl_1|linebreaksbr }}<br><br></td>
-                    </tr>
-                    {% endif %}
-                    {% if skill.lvl_2 %}
-                    <tr>
-                        <td class="align-top"><img src="{% static 'img/2.png' %}" class="border-double img-numeral"></td>
-                        <td class="align-bottom pl-1 justify">{{ skill.lvl_2|linebreaksbr }}<br><br></td>
-                    </tr>
-                    {% endif %}
-                    {% if skill.lvl_3 %}
-                    <tr>
-                        <td class="align-top"><img src="{% static 'img/3.png' %}" class="border-double img-numeral"></td>
-                        <td class="align-bottom pl-1 justify">{{ skill.lvl_3|linebreaksbr }}<br></td>
-                    </tr>
-                    {% endif %}
+                    {% endfor %}
                 </table>
             </div>
             <br>
