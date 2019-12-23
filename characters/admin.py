@@ -1,12 +1,22 @@
+from django import forms
 from django.contrib import admin
-from django.db import models
+from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.html import format_html
 
 from characters.models import Character
+from rules.models import SkillLevel
+
+
+class CharacterAdminForm(forms.ModelForm):
+    skill_levels_acquired = forms.ModelMultipleChoiceField(queryset=SkillLevel.objects.all(),
+                                                           widget=FilteredSelectMultiple('Skill levels', False),
+                                                           required=False,
+                                                           )
 
 
 class CharacterAdmin(admin.ModelAdmin):
     list_display = ['get_img']
+    form = CharacterAdminForm
 
     def get_img(self, obj):
         if obj.profile.image:
