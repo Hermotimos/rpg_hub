@@ -1,0 +1,21 @@
+
+
+/* SKILLS */
+
+.skills-table {
+        margin-left: 30px;
+}
+
+.img-skill {
+        float: left;
+        height: 60px;
+        width: auto;
+        margin-right: 5px;
+}
+
+.img-numeral {
+        float: left;
+        height: 30px;
+        width: auto;
+        margin-right: 5px;
+}

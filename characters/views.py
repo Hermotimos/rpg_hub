@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Prefetch
 from django.shortcuts import render, redirect, get_object_or_404
 
 from characters.models import Character
 from rpg_project.utils import query_debugger
-from rules.models import Skill
+from rules.models import Skill, SkillLevel
 
 
 @query_debugger
@@ -24,14 +25,20 @@ def character_skills_view(request):
         characters_with_skills_dict = {}
         for ch in characters:
             characters_with_skills_dict[ch] = [s for s in ch.skill_levels_acquired.all()]
-        skills = []
+        character_skills = []
     else:
-        skills = Skill.objects.filter(skill_levels__acquired_by_characters=profile.character)
+        character_skills = Skill.objects\
+            .filter(skill_levels__acquired_by_characters=profile.character)\
+            .prefetch_related(Prefetch(
+                'skill_levels',
+                queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)
+            ))\
+            .distinct()
         characters_with_skills_dict = {}
 
     context = {
         'page_title': f'Umiejętności - {profile.character_name}',
         'characters_with_skills_dict': characters_with_skills_dict,
-        'skills': skills
+        'character_skills': character_skills
     }
     return render(request, 'characters/character_skills.html', context)

@@ -85,3 +85,7 @@ def percentage(value):
 #     data = str(data)
 #     return data[number_of_digits:]
 
+@register.filter
+def get_max_skill_level(skill_levels_list):
+    levels = [skill_lvl.level for skill_lvl in skill_levels_list]
+    return max(levels)

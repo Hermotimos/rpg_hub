@@ -13,32 +13,32 @@
 {% block content %}
     <br><br><br><br>
 
-    <div id="skills" class="collapse">
-        {% for skill in skills %}
-            {% if skill.image %}
-                <img src="{{ skill.image.url }}" class="border-double img-skill">
-            {% else %}
-                <img src="{% static 'img/skill-default.png' %}" class="border-double img-skill">
-            {% endif %}
-            <h1 class="pt-2" data-toggle="collapse" data-target="#{{ skill.short_name }}">
-                <b class="hover-blue">&nbsp;{{ skill.name }}</b>
-            </h1>
-            <small>[{{ skill.tested_trait }}] {{ skill.description }}</small>
-            <br>
+    <div>
+    {% for skill in character_skills %}
+        {% if skill.image %}
+            <img src="{{ skill.image.url }}" class="border-double img-skill">
+        {% else %}
+            <img src="{% static 'img/skill-default.png' %}" class="border-double img-skill">
+        {% endif %}
+        <h1 class="pt-2" data-toggle="collapse" data-target="#{{ skill.short_name }}">
+            <b class="hover-blue">&nbsp;{{ skill.name }} [{{ skill.skill_levels.all|get_max_skill_level }}]</b>
+        </h1>
+        <br>
 
-            <div id="{{ skill.short_name }}" >
-                <table class="skills-table">
-                    {% for skill_level in skill.skill_levels.all %}
-                    <tr>
-                        <td class="align-top"><img src="{% static 'img/0.png' %}" class="border-double img-numeral"></td>
-                        <td class="align-bottom pl-1 justify">{{ skill_level.lvl_0|linebreaksbr }}<br><br></td>
-                    </tr>
-                    {% endfor %}
-                </table>
-            </div>
-            <br>
-        {% endfor %}
+        <div id="{{ skill.short_name }}" class="collapse">
+            <table class="skills-table">
+                {% for skill_level in skill.skill_levels.all %}
+                <tr>
+                    {% with level_img='img/'|add:skill_level.level|add:'.png' %}
+                        <td class="align-top">{{ lvl }}<img src="{% static level_img %}" class="border-double img-numeral"></td>
+                        <td class="align-bottom pl-1 justify">{% if skill_level.description %}{{ skill_level.description }}{% endif %}<br><br></td>
+                    {% endwith %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <br>
+    {% endfor %}
     </div>
-    <br>
 
 {% endblock content %}
