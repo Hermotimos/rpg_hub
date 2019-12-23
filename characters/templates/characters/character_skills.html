@@ -22,7 +22,7 @@
         <h1 class="pt-2" data-toggle="collapse" data-target="#{{ skill.short_name }}">
             <b class="hover-blue">&nbsp;{{ skill.name }} [{{ skill.skill_levels.all|get_max_skill_level }}]</b>
         </h1>
-            <small>[{{ skill.tested_trait }}] {{ skill.description }}</small>
+            <small>[{{ skill.tested_trait }}] {{ skill.description|linebreaksbr }}</small>
         <br><br>
 
         <div id="{{ skill.short_name }}" class="collapse">
@@ -31,7 +31,7 @@
                 <tr>
                     {% with level_img='img/'|add:skill_level.level|add:'.png' %}
                         <td class="align-top"><img src="{% static level_img %}" class="border-double img-numeral"></td>
-                        <td class="align-bottom pl-1 justify">{% if skill_level.description %}{{ skill_level.description }}{% endif %}<br><br></td>
+                        <td class="align-bottom pl-1 justify">{% if skill_level.description %}{{ skill_level.description|linebreaksbr }}{% endif %}<br><br></td>
                     {% endwith %}
                 </tr>
                 {% endfor %}
