@@ -4,6 +4,7 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.html import format_html
 
 from characters.models import Character
+from imaginarion.models import Picture
 from rules.models import SkillLevel
 
 
@@ -11,6 +12,9 @@ class CharacterAdminForm(forms.ModelForm):
     skill_levels_acquired = forms.ModelMultipleChoiceField(queryset=SkillLevel.objects.all(),
                                                            widget=FilteredSelectMultiple('Skill levels', False),
                                                            required=False)
+    pictures = forms.ModelMultipleChoiceField(queryset=Picture.objects.all(),
+                                              widget=FilteredSelectMultiple('Pictures', False),
+                                              required=False)
 
 
 class CharacterAdmin(admin.ModelAdmin):

@@ -27,7 +27,7 @@ class ToponomikonKnownForm(forms.ModelForm):
                                                       required=False)
 
     pictures = forms.ModelMultipleChoiceField(queryset=Picture.objects.all(),
-                                              widget=FilteredSelectMultiple('Known indirectly', False),
+                                              widget=FilteredSelectMultiple('Pictures', False),
                                               required=False)
 
 
