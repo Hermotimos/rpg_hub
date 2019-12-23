@@ -25,7 +25,6 @@ class ToponomikonKnownForm(forms.ModelForm):
                                                                Q(character_status='living_npc')),
                                                       widget=FilteredSelectMultiple('Known indirectly', False),
                                                       required=False)
-
     pictures = forms.ModelMultipleChoiceField(queryset=Picture.objects.all(),
                                               widget=FilteredSelectMultiple('Pictures', False),
                                               required=False)

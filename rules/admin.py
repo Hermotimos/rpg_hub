@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.db import models
 from django.forms import Textarea
 
+from imaginarion.models import Picture
 from rules.models import Skill, SkillLevel, Synergy, CharacterClass, CharacterProfession, EliteClass, EliteProfession, \
     WeaponClass, WeaponType, PlateType, ShieldType
 from users.models import Profile
@@ -18,6 +19,19 @@ class RulesAllowedProfilesForm(forms.ModelForm):
                                                                Q(character_status='living_npc')),
                                                       widget=FilteredSelectMultiple('Allowed profiles', False),
                                                       required=False)
+
+
+class RulesAllowedProfilesAndPicturesForm(forms.ModelForm):
+    allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
+                                                      .exclude(Q(character_status='dead_player') |
+                                                               Q(character_status='dead_npc') |
+                                                               Q(character_status='gm') |
+                                                               Q(character_status='living_npc')),
+                                                      widget=FilteredSelectMultiple('Allowed profiles', False),
+                                                      required=False)
+    pictures = forms.ModelMultipleChoiceField(queryset=Picture.objects.all(),
+                                              widget=FilteredSelectMultiple('Pictures', False),
+                                              required=False)
 
 
 class SkillLevelAdmin(admin.ModelAdmin):
@@ -110,6 +124,7 @@ class EliteProfessionAdmin(admin.ModelAdmin):
 
 
 class EliteClassAdmin(admin.ModelAdmin):
+    form = RulesAllowedProfilesForm
     list_display = ['name', 'description']
     list_editable = ['description']
     inlines = [EliteProfessionInline]
@@ -120,6 +135,7 @@ class WeaponTypeInline(admin.TabularInline):
     model = WeaponType
     extra = 2
 
+    form = RulesAllowedProfilesAndPicturesForm
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 1, 'cols': 25})},
         models.CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 5})},
@@ -137,7 +153,7 @@ class WeaponClassAdmin(admin.ModelAdmin):
 
 
 class WeaponTypeAdmin(admin.ModelAdmin):
-    form = RulesAllowedProfilesForm
+    form = RulesAllowedProfilesAndPicturesForm
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
     }
@@ -147,7 +163,7 @@ class WeaponTypeAdmin(admin.ModelAdmin):
 
 
 class PlateTypeAdmin(admin.ModelAdmin):
-    form = RulesAllowedProfilesForm
+    form = RulesAllowedProfilesAndPicturesForm
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
     }
