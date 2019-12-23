@@ -22,7 +22,8 @@
         <h1 class="pt-2" data-toggle="collapse" data-target="#{{ skill.short_name }}">
             <b class="hover-blue">&nbsp;{{ skill.name }} [{{ skill.skill_levels.all|get_max_skill_level }}]</b>
         </h1>
-        <br>
+            <small>[{{ skill.tested_trait }}] {{ skill.description }}</small>
+        <br><br>
 
         <div id="{{ skill.short_name }}" class="collapse">
             <table class="skills-table">
