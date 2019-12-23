@@ -31,7 +31,6 @@ class ToponomikonKnownForm(forms.ModelForm):
                                               required=False)
 
 
-
 class SpecificLocationAdmin(admin.ModelAdmin):
     form = ToponomikonKnownForm
     list_display = ['name', 'general_location', 'main_image', 'description']
