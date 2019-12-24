@@ -13,7 +13,13 @@
 
 {% block content %}
     <br><br><br>
-    <p class="toponomikon-gen-loc-img"><img src="{{ gen_loc.main_image.image.url }}" class="border-double"></p>
+    <p class="toponomikon-gen-loc-img">
+        <img src="{{ gen_loc.main_image.image.url }}" class="border-double
+        {% if gen_loc_known_only_indirectly %}
+            {{ 'img-grayscale' }}
+        {% endif %}
+        ">
+    </p>
     <p class="text-justify p-0">{{ gen_loc.description|linebreaksbr }}</p>
 
     <br><br>

@@ -26,7 +26,8 @@ def toponomikon_main_view(request):
         .annotate(known_only_indirectly=Case(
             When(
                 Q(known_indirectly=profile) & ~Q(known_directly=profile),
-                then=Value(1)),
+                then=Value(1)
+            ),
             default=Value(0),
             output_field=IntegerField()
         ))
@@ -45,13 +46,13 @@ def toponomikon_general_location_view(request, gen_loc_id):
     gen_loc = get_object_or_404(GeneralLocation, id=gen_loc_id)
     if profile.character_status == 'gm':
         spec_locs = SpecificLocation.objects.filter(general_location__id=gen_loc_id)
+        gen_loc_known_only_indirectly = False
     else:
         known_directly = gen_loc.specific_locations.filter(known_directly=profile)
         known_indirectly = gen_loc.specific_locations.filter(known_indirectly=profile).exclude(id__in=known_directly)
-            # SpecificLocation.objects\
-            # .filter(general_location__id=gen_loc_id, known_indirectly=profile)\
-            # .exclude(id__in=known_directly)
         spec_locs = (known_directly | known_indirectly)
+        gen_loc_known_only_indirectly = \
+            True if profile in gen_loc.known_indirectly.all() and not profile in gen_loc.known_directly.all() else False
 
     spec_locs = spec_locs\
         .select_related('main_image')\
@@ -64,10 +65,10 @@ def toponomikon_general_location_view(request, gen_loc_id):
             output_field=IntegerField()
         ))
 
-
     context = {
         'page_title': gen_loc.name,
         'gen_loc': gen_loc,
+        'gen_loc_known_only_indirectly': gen_loc_known_only_indirectly,
         'spec_locs': spec_locs
     }
     return render(request, 'toponomikon/toponomikon_general_location.html', context)
