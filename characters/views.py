@@ -3,6 +3,7 @@ from django.db.models import Prefetch
 from django.shortcuts import render, redirect, get_object_or_404
 
 from characters.models import Character
+from knowledge.models import KnowledgePacket
 from rpg_project.utils import query_debugger
 from rules.models import Skill, SkillLevel
 
@@ -32,13 +33,19 @@ def character_skills_view(request):
             .prefetch_related(Prefetch(
                 'skill_levels',
                 queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)
+                .prefetch_related(Prefetch(
+                    'knowledge_packets',
+                    queryset=KnowledgePacket.objects.filter(allowed_profiles=profile)
+                    ))
             ))\
             .distinct()
         characters = []
 
+    knowledge_packets = KnowledgePacket.objects.all()
     context = {
         'page_title': f'Umiejętności - {profile.character_name}',
         'characters': characters,
-        'skills': skills
+        'skills': skills,
+        'knowledge_packets': knowledge_packets
     }
     return render(request, 'characters/character_skills.html', context)

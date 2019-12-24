@@ -23,9 +23,10 @@
             <b class="hover-blue">&nbsp;{{ skill.name }} [{{ skill.skill_levels.all|get_max_skill_level }}]</b>
         </h1>
             <small>[{{ skill.tested_trait }}] {{ skill.description|linebreaksbr }}</small>
-        <br><br>
+        <br>
 
         <div id="{{ skill.short_name }}" class="collapse">
+            <br>
             <table class="skills-table">
                 {% for skill_level in skill.skill_levels.all %}
                 <tr>
@@ -36,6 +37,27 @@
                 </tr>
                 {% endfor %}
             </table>
+
+            {% for skill_level in skill.skill_levels.all %}
+                {% for kn_packet in skill_level.knowledge_packets.all %}
+                    <h5 class="pl-4" data-toggle="collapse" data-target="#id{{ skill_level.id }}_{{ kn_packet.id }}">
+                        <b class="hover-blue">&#10023; {{ kn_packet.title }}</b>
+                    </h5>
+                    <div id="id{{ skill_level.id }}_{{ kn_packet.id }}" class="collapse">
+                        <div class="pl-5">
+                        <p><small class="text-justify">{{ kn_packet.text }}</small></p>
+                        {% for picture in kn_packet.pictures.all %}
+                            <p class="pt-2" data-toggle="collapse" data-target="#id{{ kn_packet.id }}_{{ picture.id }}">{{ picture.description }}</p>
+                            <div id="id{{ kn_packet.id }}_{{ picture.id }}" class="collapse">
+                                <img src="{{ picture.image.url }}" class="border-double">
+                                <br><br>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            <br>
         </div>
         <br>
     {% endfor %}
