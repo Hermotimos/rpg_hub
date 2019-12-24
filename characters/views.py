@@ -23,9 +23,6 @@ def character_skills_view(request):
     profile = request.user.profile
     if profile.character_status == 'gm':
         characters = Character.objects.all().select_related('profile').prefetch_related('skill_levels_acquired__skill')
-        # characters_with_skills_dict = {}
-        # for ch in characters:
-        #     characters_with_skills_dict[ch] = [s for s in ch.skill_levels_acquired.all()]
         skills = []
     else:
         skills = Skill.objects\
