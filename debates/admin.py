@@ -7,11 +7,6 @@ from debates.models import Topic, Debate, Remark
 from users.models import Profile
 
 
-class TopicAdmin(admin.ModelAdmin):
-    list_display = ['title', 'date_created']
-    search_fields = ['title']
-
-
 class DebateAdminForm(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
                                                       .exclude(Q(character_status='dead_player') |
@@ -28,10 +23,15 @@ class DebateAdminForm(forms.ModelForm):
                                                required=False)
 
 
+class TopicAdmin(admin.ModelAdmin):
+    list_display = ['title', 'date_created']
+    search_fields = ['title']
+
+
 class DebateAdmin(admin.ModelAdmin):
+    form = DebateAdminForm
     list_display = ['name', 'topic', 'is_ended', 'is_individual', 'date_created']
     search_fields = ['name']
-    form = DebateAdminForm
 
 
 class RemarkAdmin(admin.ModelAdmin):

@@ -24,11 +24,11 @@ class NewsAdminForm(forms.ModelForm):
 
 
 class NewsAdmin(admin.ModelAdmin):
+    form = NewsAdminForm
     list_display = ['id', 'author', 'title', 'date_posted', 'image']
     list_editable = ['title', 'image']
     readonly_fields = ['seen_by']
     search_fields = ['title']
-    form = NewsAdminForm
 
 
 class NewsAnswerAdmin(admin.ModelAdmin):
@@ -57,11 +57,11 @@ class SurveyAdminForm(forms.ModelForm):
 
 
 class SurveyAdmin(admin.ModelAdmin):
-    list_display = ['title', 'author', 'text', 'image']
+    form = SurveyAdminForm
     inlines = [SurveyOptionInline, ]
+    list_display = ['title', 'author', 'text', 'image']
     readonly_fields = ['seen_by']
     search_fields = ['title', 'text']
-    form = SurveyAdminForm
 
 
 class SurveyOptionAdmin(admin.ModelAdmin):

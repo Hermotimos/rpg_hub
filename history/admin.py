@@ -21,7 +21,6 @@ class TimelineEventInline(admin.TabularInline):
     model = TimelineEvent
     extra = 3
 
-    # override attrs of form field when rendered as Inline:
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 50})},
     }
@@ -33,9 +32,7 @@ class ChronicleEventInline(admin.TabularInline):
 
 
 class ChronicleEventAdmin(admin.ModelAdmin):
-    # fields to be displayed in admin for each object
     fields = ['game', 'event_no_in_game', 'description', 'participants', 'informed', 'pictures', 'debate']
-
     list_display = ['game', 'event_no_in_game', 'short_description']
     list_display_links = ['short_description']
     list_editable = ['event_no_in_game', ]
@@ -53,9 +50,9 @@ class ChronicleEventNoteAdmin(admin.ModelAdmin):
 
 
 class GameSessionAdmin(admin.ModelAdmin):
+    inlines = [TimelineEventInline, ChronicleEventInline]
     list_display = ['id', 'game_no', 'title', 'chapter', 'date']
     list_editable = ['game_no', 'title', 'chapter', 'date']
-    inlines = [TimelineEventInline, ChronicleEventInline]
     search_fields = ['title']
 
 
@@ -75,7 +72,6 @@ class TimelineEventNoteAdmin(admin.ModelAdmin):
 
 
 class ThreadAdmin(admin.ModelAdmin):
-    model = Thread
     list_display = ['id', 'name', 'is_ended']
     list_editable = ['name', 'is_ended']
     search_fields = ['name']

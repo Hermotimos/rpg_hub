@@ -6,8 +6,8 @@ from django.db.models import Q
 from django.forms import Textarea
 
 from history.models import GeneralLocation, SpecificLocation
-from users.models import Profile
 from imaginarion.models import Picture
+from users.models import Profile
 
 
 class ToponomikonKnownForm(forms.ModelForm):
@@ -50,11 +50,10 @@ class SpecificLocationInline(admin.TabularInline):
 
 class GeneralLocationAdmin(admin.ModelAdmin):
     form = ToponomikonKnownForm
+    inlines = [SpecificLocationInline]
     list_display = ['name', 'main_image', 'description']
     list_editable = ['description', 'main_image']
     search_fields = ['name', 'description']
-
-    inlines = [SpecificLocationInline]
 
 
 admin.site.register(GeneralLocation, GeneralLocationAdmin)

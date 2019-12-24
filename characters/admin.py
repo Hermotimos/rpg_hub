@@ -18,8 +18,8 @@ class CharacterAdminForm(forms.ModelForm):
 
 
 class CharacterAdmin(admin.ModelAdmin):
-    list_display = ['get_img']
     form = CharacterAdminForm
+    list_display = ['get_img']
 
     def get_img(self, obj):
         if obj.profile.image:
