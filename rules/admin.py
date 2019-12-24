@@ -35,12 +35,18 @@ class ForAllowedProfilesAndPicturesForm(forms.ModelForm):
 
 
 class SkillLevelAdmin(admin.ModelAdmin):
-    pass
-    # list_display = ['name']
-    # search_fields = ['name']
-    #
-    # def name(self, obj):
-    #     return f'{obj.skill} {obj.level}'
+    formfield_overrides = {
+        # models.CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 100})},
+    }
+
+    list_display = ['name', 'description']
+    list_editable = ['description']
+    list_filter = ['skill']
+    search_fields = ['level', 'description']
+
+    def name(self, obj):
+        return f'{str(obj.skill.name)} {obj.level}'
 
 
 class SkillLevelInline(admin.TabularInline):
