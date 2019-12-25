@@ -12,215 +12,216 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br><br><br>
+    <div class="rules-styling">
+        <br><br><br>
 
-    <h2 class="rules">Klasa a Profesja</h2>
-    <br>
-    <p>
-        Klasa postaci grupuje Profesje o zbliżonej charakterystyce i pofilu rozwoju, a najczęściej również rysie psychologicznym.
-        Na przykład Klasa postaci "Wojownik" grupuje takie Profesje jak Gladiator, Najemnik, Syssition,
-        a Klasa "Kapłan" grupuje między innymi Profesje Kapłan Eyra czy Kapłanka Eratel.
-    </p>
+        <h2 class="rules">Klasa a Profesja</h2>
+        <br>
+        <p>
+            Klasa postaci grupuje Profesje o zbliżonej charakterystyce i pofilu rozwoju, a najczęściej również rysie psychologicznym.
+            Na przykład Klasa postaci "Wojownik" grupuje takie Profesje jak Gladiator, Najemnik, Syssition,
+            a Klasa "Kapłan" grupuje między innymi Profesje Kapłan Eyra czy Kapłanka Eratel.
+        </p>
 
-    <br><br><br>
-    <h2 class="rules">Doświadczenie i awanse</h2>
-    <br>
-    <p>
-        Awanse w przypadku każdej Klasy i Profesji następują co 2000 pkt doświadczenia.
-        Ilość przyznawanego doświadczenia jest zależna od "heroiczności" czynów, a raczej od tego,
-        co nowego dane doświadczenie może wnieść do rozwoju indywiduum odgrywanego przez Gracza.
-        Dlatego pierwszych parę poziomów przyrasta raczej wolno, potem można się spodziewać przyspieszenia ze względu na
-        poszerzenie horyzontów poznawczych oraz zwiększone możliwości sprostania różnorodnym wyzwaniom jak typu walka i próby Cech,
-        a następnie spowolnienia związanego z wyczerpaniem się sfery nowych doświadczeń w danej dziedzinie.
-        Odzwierciedla to zarazem normalną dynamikę uczenia się oraz osiągania biegłości, a następnie poziomu mistrzostwa.
-    </p>
-    <p>
-        Każdy awans każej Klasy i Profesji przynosi potencjalnie 1 pkt do rozdysponowania między Cechy fizyczne oraz 5% do rozdysponowania między Podstępy,
-        jednak tylko pod warunkiem, że postać była faktycznie poddana wysokiemu obciążeniu w zakresie jakiejkolwiek z Cech lub zgromadziła jakiekolwiek doświadczenia ze sfery danego Podstępu.
-        W przypadku, gdy np. brak było obciążeń siłowych, natomiasty występowały zręcznościowe i kondycyjne, wybór jest zawężony do Cech używanych.
-        Może się zatem okazać, że dany poziom nie przyniesie 1 pkt do Cech.
-        Oprócz tego, aby uzyskać bardzo wysoki poziom jakiejś cechy (powyżej 19 lub 20), konieczne jest poddanie się przez postać ekstremalnym obciążenion i próbom.
-    </p>
-    <p>
-        Taki system awansów wiąże się z koniecznością prowadzenia osobnej tabeli awansów, w której będą wykazane wszystkie modyfikatory uzyskane na każdym poszczególnym poziomie,
-        najlepiej wraz z hasłowym opisem uzasadnienia fabularnego (funkcja pomocnicza do zachowania ciągłości kontaktu z bohaterem w przypadku dłuższych przerw w grze).
-    </p>
+        <br><br><br>
+        <h2 class="rules">Doświadczenie i awanse</h2>
+        <br>
+        <p>
+            Awanse w przypadku każdej Klasy i Profesji następują co 2000 pkt doświadczenia.
+            Ilość przyznawanego doświadczenia jest zależna od "heroiczności" czynów, a raczej od tego,
+            co nowego dane doświadczenie może wnieść do rozwoju indywiduum odgrywanego przez Gracza.
+            Dlatego pierwszych parę poziomów przyrasta raczej wolno, potem można się spodziewać przyspieszenia ze względu na
+            poszerzenie horyzontów poznawczych oraz zwiększone możliwości sprostania różnorodnym wyzwaniom jak typu walka i próby Cech,
+            a następnie spowolnienia związanego z wyczerpaniem się sfery nowych doświadczeń w danej dziedzinie.
+            Odzwierciedla to zarazem normalną dynamikę uczenia się oraz osiągania biegłości, a następnie poziomu mistrzostwa.
+        </p>
+        <p>
+            Każdy awans każej Klasy i Profesji przynosi potencjalnie 1 pkt do rozdysponowania między Cechy fizyczne oraz 5% do rozdysponowania między Podstępy,
+            jednak tylko pod warunkiem, że postać była faktycznie poddana wysokiemu obciążeniu w zakresie jakiejkolwiek z Cech lub zgromadziła jakiekolwiek doświadczenia ze sfery danego Podstępu.
+            W przypadku, gdy np. brak było obciążeń siłowych, natomiasty występowały zręcznościowe i kondycyjne, wybór jest zawężony do Cech używanych.
+            Może się zatem okazać, że dany poziom nie przyniesie 1 pkt do Cech.
+            Oprócz tego, aby uzyskać bardzo wysoki poziom jakiejś cechy (powyżej 19 lub 20), konieczne jest poddanie się przez postać ekstremalnym obciążenion i próbom.
+        </p>
+        <p>
+            Taki system awansów wiąże się z koniecznością prowadzenia osobnej tabeli awansów, w której będą wykazane wszystkie modyfikatory uzyskane na każdym poszczególnym poziomie,
+            najlepiej wraz z hasłowym opisem uzasadnienia fabularnego (funkcja pomocnicza do zachowania ciągłości kontaktu z bohaterem w przypadku dłuższych przerw w grze).
+        </p>
 
-    <br><br><br>
-    <h2 class="rules">Lista Klas i Profesji</h2>
-    <br>
-    <div id="professions">
-        {% for class in classes %}
+        <br><br><br>
+        <h2 class="rules">Lista Klas i Profesji</h2>
+        <br>
+        <div id="professions">
+            {% for class in classes %}
 
-            <h4><b>{{ class.name }}</b></h4>
-            <p>{{ class.description|linebreaksbr }}</p>
-            {% for profession in class.professions.all %}
-                <h5 data-toggle="collapse" data-target="#{{ profession.short_name }}">
-                    <b class="hover-blue">
-                        ✧ {{ profession.name }}
-                    </b>
-                </h5>
-                <div id="{{ profession.short_name }}" class="collapse">
-                    <p>{{ profession.description|linebreaksbr }}</p>
-                    <p>{{ profession.start_perks|linebreaksbr }}</p>
-                    <br>
-
-                    <table class="professions">
-                        <colgroup>
-                            <col class="level border-custom-right">
-                            <col class="level-desc">
-                        </colgroup>
-                        <thead class="align-center dark">
-                            <tr class="border-custom-base">
-                                <th class="border-custom-right small-caps">Poziom</th>
-                                <th class="small-caps align-left">&emsp;Bonusy</th>
-                            </tr>
-                        </thead>
-
-                        <tbody class="align-center dark">
-                            <tr><td>1</td>  <td class="align-left">&emsp;{{ profession.lvl_1 }}</td></tr>
-                            <tr><td>2</td>  <td class="align-left">&emsp;{{ profession.lvl_2 }}</td></tr>
-                            <tr><td>3</td>  <td class="align-left">&emsp;{{ profession.lvl_3 }}</td></tr>
-                            <tr><td>4</td>  <td class="align-left">&emsp;{{ profession.lvl_4 }}</td></tr>
-                            <tr><td>5</td>  <td class="align-left">&emsp;{{ profession.lvl_5 }}</td></tr>
-                            <tr><td>6</td>  <td class="align-left">&emsp;{{ profession.lvl_6 }}</td></tr>
-                            <tr><td>7</td>  <td class="align-left">&emsp;{{ profession.lvl_7 }}</td></tr>
-                            <tr><td>8</td>  <td class="align-left">&emsp;{{ profession.lvl_8 }}</td></tr>
-                            <tr><td>9</td>  <td class="align-left">&emsp;{{ profession.lvl_9 }}</td></tr>
-                            <tr><td>10</td> <td class="align-left">&emsp;{{ profession.lvl_10 }}</td></tr>
-                            <tr><td>11</td> <td class="align-left">&emsp;{{ profession.lvl_11 }}</td></tr>
-                            <tr><td>12</td> <td class="align-left">&emsp;{{ profession.lvl_12 }}</td></tr>
-                            <tr><td>13</td> <td class="align-left">&emsp;{{ profession.lvl_13 }}</td></tr>
-                            <tr><td>14</td> <td class="align-left">&emsp;{{ profession.lvl_14 }}</td></tr>
-                            <tr><td>15</td> <td class="align-left">&emsp;{{ profession.lvl_15 }}</td></tr>
-                            <tr><td>16</td> <td class="align-left">&emsp;{{ profession.lvl_16 }}</td></tr>
-                            <tr><td>17</td> <td class="align-left">&emsp;{{ profession.lvl_17 }}</td></tr>
-                            <tr><td>18</td> <td class="align-left">&emsp;{{ profession.lvl_18 }}</td></tr>
-                            <tr><td>19</td> <td class="align-left">&emsp;{{ profession.lvl_19 }}</td></tr>
-                            <tr><td>20</td> <td class="align-left">&emsp;{{ profession.lvl_20 }}</td></tr>
-                        </tbody>
-                    </table>
-                    <br><br>
-                </div>
-            {% endfor %}
-            <br><br>
-         {% endfor %}
-    </div>
-
-    <br>
-    <h2 class="rules">Wieloklasowość i awanse</h2>
-    <br>
-    <p>
-        Profesja postaci stanowi jedynie standardową, domyślną ramę dla jej rozwoju.
-        Jednak jedynymi prawdziwymi ograniczeniami dla rozwoju postaci są realia i fabuła, czyli wypadkowa działań postaci w reakcji w kontekście okoliczności.
-        Nic nie stoi na przeszkodzie, aby czterdziestoletni rozbójnik zaczął parać się magią nekromantyczną... nic poza realiami niesprzyjającymi takiej przemianie.
-        Jednak upór i konsekwencja potrafią, przy odrobinie szczęścia, odmienić ludzkie losy...
-    </p>
-    <p>
-        Rozwój innych Profesji niż bazowa odbywa się w taki sposób, że Gracz powinien zadeklarować taką chęć oraz tak kierować działaniami postaci,
-        żeby zyskiwała ona doświadczenie typowe dla innej klasy. Deklaracja może zostać złożona w dowolnym momencie i w dowolnym odwołana, może też obejmować dwie lub więcej nowych Profesji,
-        choć ze względu na zasady Wieloklasowości skutkowałoby to niezwykle powolnymi awansami.
-        Jedyne ograniczenie otwarcia nowej Profesji jest takie, że nie można obdzielić nowo otwartej Profesji doświadczeniem otrzymanym przed deklaracją.
-        Ma to znaczenie zwłaszcza w sytuacji, gdyby Gracz chciał otworzyć nową Profesję świeżo po otrzymaniu doświadczenia za sesję.
-        Jeżeli nie złożył deklaracji zanim Mistrz rozpoczął przydzielanie doświadczenia, to nawet jeśli jego działania zakrawały na typowe dla nowej Profesji, otrzymane doświadczenie jest dla niej niedostępne.
-        Natomiast jedynym ograniczeniem dla zamknięcia Profesji jest uzyskanie w niej 1 poziomu.
-    </p>
-    <p>
-        Od momentu deklaracji otwarcia nowej Profesji dalszy rozwój przebiega mniej więcej równolegle,
-        to znaczy, że Gracz ma prawo rozdysponować nowo otrzymywane doświadczenie między Profesję wiodącą a dodatkową, wedle następujących zasad:
-    </p>
-        <ol class="rules">
-            <li>
-                Punkty doświadczenia otrzymane za działania cechujące daną Profesję czy to wiodącą, czy dodatkową, muszą trafić do tej klasy
-                (np. za podkradanie się i ukrywanie dla Złodzieja, za tropienie i zastawianie pułapek dla Łowcy,
-                za studiowanie starożytnych ksiąg i ćwiczenie lub używanie zaklęć dla czarodzieja; za walkę zbrojną – dla Syssitiona czy Gladiatora itp.).
-                W przypadku działań podpadających w ewidentny sposób pod więcej niż jedną klasę, Gracz ma swobodę dysponowania
-                (np. Gracz rozwijający Syssiitona oraz Kapłana Eyra może swobodnie rozdysponować doświadczenie otrzymane za służbę zbrojną w Gwardii Słońca).
-                <br><br>
-            </li>
-            <li>
-                Doświadczenie otrzymane za pomysły, przeżycia, rozumowania niepozostające w ewidentnym związku z żadną z Profesji Gracz może rozdysponować między wszystkie rozwijane Profesje,
-                jednak z tym zastrzeżeniem, że Profesja wiodąca musi otrzymać co najmniej 50% doświadczenia przy 2 Profesjach, a 33% przy 3, 25% przy 4 i tak dalej.
-                <br><br>
-            </li>
-            <li>
-                Wiodącą klasą postaci jest zawsze ta, która ma najwyższy poziom. Może więc dojść do jej zmiany w trakcie gry,
-                jednak na podstawie powyższych zasad widać, że wymaga to ogromnej przewagi działań typowych dla dodatkowej klasy nad innymi.
-                W przypadku rozwijania 3 lub więcej Profesji, możliwe jest posiadanie więcej niż 1 Profesji wiodącej.
-            </li>
-        </ol>
-    <p>
-        Wszelkie Profesje dodatkowe korzystają jedynie z zasad dotyczących awansów, ale nie z początkowych bonusów dla danej Profesji.
-        Oznacza to, że wybór dodatkowej Profesji z Klasy "Złodziej" nie powoduje wzrostu Podstępów do wartości początkowych dla danej Profesji;
-        podobnie wybór dodatkowej klasy czarodziej nie powoduje uzyskania ilości czarów typowej dla czarodzieja 0 poziomu.
-        Natomiast każdy awans w ramach dodatkowej klasy przynosi wszelkie korzyści typowe dla niej, bez dalszych ograniczeń.
-    </p>
-    <p>
-        Podsumowując, dodatkowa Profesja jest trudniejsza w rozwoju niż wiodąca, a także jej rozwój rozpoczyna się z niższego pułapu umiejętności.
-        Natomiast wieloklasowość nigdy nie wymaga porzucania wcześniejszej klasy – pozwala rozwijać ją równocześnie w tempie w dużej mierze zależnym od dezycji Gracza.
-    </p>
-
-    <br><br><br>
-    <h2 class="rules">Klasy i Profesje elitarne</h2>
-    <br>
-    <p>
-        Przed nielicznymi jednostkami, które dzięki swoim umiejętnościom, doświadczeniu i koligacjom osiągnęły wysoki status
-        w ramach hierarchii charakterystycznej dla ich Profesji, otwierają się szersze możliwości rozwoju.
-        Postać, która ze względu na sytuację fabularną może otworzyć Profesję elitarną, musi
-        całkowicie zawiesić rozwój dotychczasowych Profesji i w całości skupić się na rozwoju Profesji elitarnej,
-        jako że stanowi ona tak intensywne wyzwanie mentalne, że pochłania całe zasoby poznawcze jednostki.
-    </p>
-    <p>
-        Wybór Profesji elitarnej ma charakter techniczno-fabularny, to znaczy, że istnieje ścisła korelacja między wyborem postaci w świecie gry a zmianą Profesji.
-        Np. postać stająca przed możliwością objęcia rządów jako Namiestnik albo pasowania na Paladyna dokonuje jednocześnie skorelowanego wyboru w świecie gry
-        (przyjąć namiestnictwo lub funkcję paladyna czy nie?) oraz na płaszczyźnie zasad gry (zmienić Profesję na Namiestnika lub Paladyna czy nie?).
-        Jest to uzasadnione tym, że wymienione role społeczne pozbawiają postać możliwości w miarę swobodnego kształtowania własnej sfery doświadczeń,
-        wtłaczając ją w sytuację wymagającą określonego stylu życia.
-        Takim samym zasadom podlega porzucenie Profesji elitarnej. Następuje ono w chwili wyjścia z określonej roli społecznej w świecie gry.
-        Niektóre Profesje elitarne mogą stanowić nowy tryb egzystencji, który pociąga za sobą nieodwracalne zmiany o charakterze psychicznym lub fizycznym,
-        inne mają z góry określony horyzont czasowy - np. w przypadku kadencyjnego urzędu.
-    </p>
-    <p>
-        Profesje elitarne pozwalają połączyć pewne aspekty rozwoju Profesji należących do różnych Klas w ramach jednolitego systemu awansów co 2000 doświadczenia.
-        Szczegółowy tryb awansów zależy od dotychczasowych Profesji postaci oraz od sytuacji fabularnej.
-        Jest więc tworzony ad hoc i zazwyczaj niejawny dla Gracza aż do momentu pierwszego awansu.
-        Doświadczenie zgromadzone przez postać w ramach wcześniej rozwijanych Profesji zostaje zachowane i zamrożone do momentu porzucenia lub utraty Profesji elitarnej.
-        Doświadczenie zgromadzone w ramach Profesji eliarnej podlega tej samej zasadzie - zostaje zamrożone w chwili jej utraty, a w przypadku powrotu postać może kontynuować rozwój.
-    </p>
-    <p>
-        Dostęp do Klas i Profesji elitarnych nie jest ograniczony przez zasady gry, jednak realia świata wytyczają możliwe do pomyślenia ścieżki.
-    </p>
-    <img src="{% static 'img/Klasy elitarne.png' %}" class="border-double">
-    <br><br>
-
-    <br><br><br>
-    <h2 class="rules">Lista Klas i Profesji elitarnych</h2>
-    <br>
-    <p>
-        Poniższa lista ma otwarty charakter. Widoczne na niej Klasy i Profesje to te, które są znane postaci na podstawie wiedzy ogólnej.
-    </p>
-    <br>
-    <div>
-        {% for elite_class in elite_classes %}
-            <h4><b>{{ elite_class.name }}</b>
-            </h4>
-            <div>
-                <p>{{ elite_class.description|linebreaksbr }}</p>
-                {% for elite_profession in elite_class.elite_professions.all %}
-                    <h5 data-toggle="collapse" data-target="#{{ elite_profession.short_name }}">
+                <h4><b>{{ class.name }}</b></h4>
+                <p>{{ class.description|linebreaksbr }}</p>
+                {% for profession in class.professions.all %}
+                    <h5 data-toggle="collapse" data-target="#{{ profession.short_name }}">
                         <b class="hover-blue">
-                            ✧ {{ elite_profession.name }}
+                            ✧ {{ profession.name }}
                         </b>
                     </h5>
-                    <div id="{{ elite_profession.short_name }}" class="collapse">
-                        <p>{{ elite_profession.description|linebreaksbr }}</p>
-                        <p>{{ elite_profession.start_perks|linebreaksbr }}</p>
+                    <div id="{{ profession.short_name }}" class="collapse">
+                        <p>{{ profession.description|linebreaksbr }}</p>
+                        <p>{{ profession.start_perks|linebreaksbr }}</p>
                         <br>
+
+                        <table class="professions">
+                            <colgroup>
+                                <col class="level border-custom-right">
+                                <col class="level-desc">
+                            </colgroup>
+                            <thead class="align-center dark">
+                                <tr class="border-custom-base">
+                                    <th class="border-custom-right small-caps">Poziom</th>
+                                    <th class="small-caps align-left">&emsp;Bonusy</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="align-center dark">
+                                <tr><td>1</td>  <td class="align-left">&emsp;{{ profession.lvl_1 }}</td></tr>
+                                <tr><td>2</td>  <td class="align-left">&emsp;{{ profession.lvl_2 }}</td></tr>
+                                <tr><td>3</td>  <td class="align-left">&emsp;{{ profession.lvl_3 }}</td></tr>
+                                <tr><td>4</td>  <td class="align-left">&emsp;{{ profession.lvl_4 }}</td></tr>
+                                <tr><td>5</td>  <td class="align-left">&emsp;{{ profession.lvl_5 }}</td></tr>
+                                <tr><td>6</td>  <td class="align-left">&emsp;{{ profession.lvl_6 }}</td></tr>
+                                <tr><td>7</td>  <td class="align-left">&emsp;{{ profession.lvl_7 }}</td></tr>
+                                <tr><td>8</td>  <td class="align-left">&emsp;{{ profession.lvl_8 }}</td></tr>
+                                <tr><td>9</td>  <td class="align-left">&emsp;{{ profession.lvl_9 }}</td></tr>
+                                <tr><td>10</td> <td class="align-left">&emsp;{{ profession.lvl_10 }}</td></tr>
+                                <tr><td>11</td> <td class="align-left">&emsp;{{ profession.lvl_11 }}</td></tr>
+                                <tr><td>12</td> <td class="align-left">&emsp;{{ profession.lvl_12 }}</td></tr>
+                                <tr><td>13</td> <td class="align-left">&emsp;{{ profession.lvl_13 }}</td></tr>
+                                <tr><td>14</td> <td class="align-left">&emsp;{{ profession.lvl_14 }}</td></tr>
+                                <tr><td>15</td> <td class="align-left">&emsp;{{ profession.lvl_15 }}</td></tr>
+                                <tr><td>16</td> <td class="align-left">&emsp;{{ profession.lvl_16 }}</td></tr>
+                                <tr><td>17</td> <td class="align-left">&emsp;{{ profession.lvl_17 }}</td></tr>
+                                <tr><td>18</td> <td class="align-left">&emsp;{{ profession.lvl_18 }}</td></tr>
+                                <tr><td>19</td> <td class="align-left">&emsp;{{ profession.lvl_19 }}</td></tr>
+                                <tr><td>20</td> <td class="align-left">&emsp;{{ profession.lvl_20 }}</td></tr>
+                            </tbody>
+                        </table>
+                        <br><br>
                     </div>
                 {% endfor %}
-            </div>
-            <br><br>
-         {% endfor %}
-    </div>
+                <br><br>
+             {% endfor %}
+        </div>
 
+        <br>
+        <h2 class="rules">Wieloklasowość i awanse</h2>
+        <br>
+        <p>
+            Profesja postaci stanowi jedynie standardową, domyślną ramę dla jej rozwoju.
+            Jednak jedynymi prawdziwymi ograniczeniami dla rozwoju postaci są realia i fabuła, czyli wypadkowa działań postaci w reakcji w kontekście okoliczności.
+            Nic nie stoi na przeszkodzie, aby czterdziestoletni rozbójnik zaczął parać się magią nekromantyczną... nic poza realiami niesprzyjającymi takiej przemianie.
+            Jednak upór i konsekwencja potrafią, przy odrobinie szczęścia, odmienić ludzkie losy...
+        </p>
+        <p>
+            Rozwój innych Profesji niż bazowa odbywa się w taki sposób, że Gracz powinien zadeklarować taką chęć oraz tak kierować działaniami postaci,
+            żeby zyskiwała ona doświadczenie typowe dla innej klasy. Deklaracja może zostać złożona w dowolnym momencie i w dowolnym odwołana, może też obejmować dwie lub więcej nowych Profesji,
+            choć ze względu na zasady Wieloklasowości skutkowałoby to niezwykle powolnymi awansami.
+            Jedyne ograniczenie otwarcia nowej Profesji jest takie, że nie można obdzielić nowo otwartej Profesji doświadczeniem otrzymanym przed deklaracją.
+            Ma to znaczenie zwłaszcza w sytuacji, gdyby Gracz chciał otworzyć nową Profesję świeżo po otrzymaniu doświadczenia za sesję.
+            Jeżeli nie złożył deklaracji zanim Mistrz rozpoczął przydzielanie doświadczenia, to nawet jeśli jego działania zakrawały na typowe dla nowej Profesji, otrzymane doświadczenie jest dla niej niedostępne.
+            Natomiast jedynym ograniczeniem dla zamknięcia Profesji jest uzyskanie w niej 1 poziomu.
+        </p>
+        <p>
+            Od momentu deklaracji otwarcia nowej Profesji dalszy rozwój przebiega mniej więcej równolegle,
+            to znaczy, że Gracz ma prawo rozdysponować nowo otrzymywane doświadczenie między Profesję wiodącą a dodatkową, wedle następujących zasad:
+        </p>
+            <ol class="rules">
+                <li>
+                    Punkty doświadczenia otrzymane za działania cechujące daną Profesję czy to wiodącą, czy dodatkową, muszą trafić do tej klasy
+                    (np. za podkradanie się i ukrywanie dla Złodzieja, za tropienie i zastawianie pułapek dla Łowcy,
+                    za studiowanie starożytnych ksiąg i ćwiczenie lub używanie zaklęć dla czarodzieja; za walkę zbrojną – dla Syssitiona czy Gladiatora itp.).
+                    W przypadku działań podpadających w ewidentny sposób pod więcej niż jedną klasę, Gracz ma swobodę dysponowania
+                    (np. Gracz rozwijający Syssiitona oraz Kapłana Eyra może swobodnie rozdysponować doświadczenie otrzymane za służbę zbrojną w Gwardii Słońca).
+                    <br><br>
+                </li>
+                <li>
+                    Doświadczenie otrzymane za pomysły, przeżycia, rozumowania niepozostające w ewidentnym związku z żadną z Profesji Gracz może rozdysponować między wszystkie rozwijane Profesje,
+                    jednak z tym zastrzeżeniem, że Profesja wiodąca musi otrzymać co najmniej 50% doświadczenia przy 2 Profesjach, a 33% przy 3, 25% przy 4 i tak dalej.
+                    <br><br>
+                </li>
+                <li>
+                    Wiodącą klasą postaci jest zawsze ta, która ma najwyższy poziom. Może więc dojść do jej zmiany w trakcie gry,
+                    jednak na podstawie powyższych zasad widać, że wymaga to ogromnej przewagi działań typowych dla dodatkowej klasy nad innymi.
+                    W przypadku rozwijania 3 lub więcej Profesji, możliwe jest posiadanie więcej niż 1 Profesji wiodącej.
+                </li>
+            </ol>
+        <p>
+            Wszelkie Profesje dodatkowe korzystają jedynie z zasad dotyczących awansów, ale nie z początkowych bonusów dla danej Profesji.
+            Oznacza to, że wybór dodatkowej Profesji z Klasy "Złodziej" nie powoduje wzrostu Podstępów do wartości początkowych dla danej Profesji;
+            podobnie wybór dodatkowej klasy czarodziej nie powoduje uzyskania ilości czarów typowej dla czarodzieja 0 poziomu.
+            Natomiast każdy awans w ramach dodatkowej klasy przynosi wszelkie korzyści typowe dla niej, bez dalszych ograniczeń.
+        </p>
+        <p>
+            Podsumowując, dodatkowa Profesja jest trudniejsza w rozwoju niż wiodąca, a także jej rozwój rozpoczyna się z niższego pułapu umiejętności.
+            Natomiast wieloklasowość nigdy nie wymaga porzucania wcześniejszej klasy – pozwala rozwijać ją równocześnie w tempie w dużej mierze zależnym od dezycji Gracza.
+        </p>
+
+        <br><br><br>
+        <h2 class="rules">Klasy i Profesje elitarne</h2>
+        <br>
+        <p>
+            Przed nielicznymi jednostkami, które dzięki swoim umiejętnościom, doświadczeniu i koligacjom osiągnęły wysoki status
+            w ramach hierarchii charakterystycznej dla ich Profesji, otwierają się szersze możliwości rozwoju.
+            Postać, która ze względu na sytuację fabularną może otworzyć Profesję elitarną, musi
+            całkowicie zawiesić rozwój dotychczasowych Profesji i w całości skupić się na rozwoju Profesji elitarnej,
+            jako że stanowi ona tak intensywne wyzwanie mentalne, że pochłania całe zasoby poznawcze jednostki.
+        </p>
+        <p>
+            Wybór Profesji elitarnej ma charakter techniczno-fabularny, to znaczy, że istnieje ścisła korelacja między wyborem postaci w świecie gry a zmianą Profesji.
+            Np. postać stająca przed możliwością objęcia rządów jako Namiestnik albo pasowania na Paladyna dokonuje jednocześnie skorelowanego wyboru w świecie gry
+            (przyjąć namiestnictwo lub funkcję paladyna czy nie?) oraz na płaszczyźnie zasad gry (zmienić Profesję na Namiestnika lub Paladyna czy nie?).
+            Jest to uzasadnione tym, że wymienione role społeczne pozbawiają postać możliwości w miarę swobodnego kształtowania własnej sfery doświadczeń,
+            wtłaczając ją w sytuację wymagającą określonego stylu życia.
+            Takim samym zasadom podlega porzucenie Profesji elitarnej. Następuje ono w chwili wyjścia z określonej roli społecznej w świecie gry.
+            Niektóre Profesje elitarne mogą stanowić nowy tryb egzystencji, który pociąga za sobą nieodwracalne zmiany o charakterze psychicznym lub fizycznym,
+            inne mają z góry określony horyzont czasowy - np. w przypadku kadencyjnego urzędu.
+        </p>
+        <p>
+            Profesje elitarne pozwalają połączyć pewne aspekty rozwoju Profesji należących do różnych Klas w ramach jednolitego systemu awansów co 2000 doświadczenia.
+            Szczegółowy tryb awansów zależy od dotychczasowych Profesji postaci oraz od sytuacji fabularnej.
+            Jest więc tworzony ad hoc i zazwyczaj niejawny dla Gracza aż do momentu pierwszego awansu.
+            Doświadczenie zgromadzone przez postać w ramach wcześniej rozwijanych Profesji zostaje zachowane i zamrożone do momentu porzucenia lub utraty Profesji elitarnej.
+            Doświadczenie zgromadzone w ramach Profesji eliarnej podlega tej samej zasadzie - zostaje zamrożone w chwili jej utraty, a w przypadku powrotu postać może kontynuować rozwój.
+        </p>
+        <p>
+            Dostęp do Klas i Profesji elitarnych nie jest ograniczony przez zasady gry, jednak realia świata wytyczają możliwe do pomyślenia ścieżki.
+        </p>
+        <img src="{% static 'img/Klasy elitarne.png' %}" class="border-double">
+        <br><br>
+
+        <br><br><br>
+        <h2 class="rules">Lista Klas i Profesji elitarnych</h2>
+        <br>
+        <p>
+            Poniższa lista ma otwarty charakter. Widoczne na niej Klasy i Profesje to te, które są znane postaci na podstawie wiedzy ogólnej.
+        </p>
+        <br>
+        <div>
+            {% for elite_class in elite_classes %}
+                <h4><b>{{ elite_class.name }}</b>
+                </h4>
+                <div>
+                    <p>{{ elite_class.description|linebreaksbr }}</p>
+                    {% for elite_profession in elite_class.elite_professions.all %}
+                        <h5 data-toggle="collapse" data-target="#{{ elite_profession.short_name }}">
+                            <b class="hover-blue">
+                                ✧ {{ elite_profession.name }}
+                            </b>
+                        </h5>
+                        <div id="{{ elite_profession.short_name }}" class="collapse">
+                            <p>{{ elite_profession.description|linebreaksbr }}</p>
+                            <p>{{ elite_profession.start_perks|linebreaksbr }}</p>
+                            <br>
+                        </div>
+                    {% endfor %}
+                </div>
+                <br><br>
+             {% endfor %}
+        </div>
+    </div>
 {% endblock content %}

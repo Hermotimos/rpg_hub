@@ -12,119 +12,117 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br><br><br>
+    <div class="rules-styling">
+        <br><br><br>
 
-    <h2 class="rules">Klasa broni</h2>
-    <br>
-    <p>
-        Podział broni na Klasy jest związany przede wszystkim z zasadami dotyczącymi Biegłości w broni.
-        Spośród 4 poziomów Biegłości (Brak zdolności [0], Zdolność [1], Biegłość [2], Specjalizacja [3]) pierwsze trzy dotyczą całej Klasy broni.
-        Oznacza to, że postać mająca Biegłość w Broniach drzewcowych równie sprawnie włada włócznią co halabardą.
-        Jest to oczywiście uproszczenie, jednak zmierza o oddania tej prawidłowości, że władanie niektórymi typami broni rządzi się tymi samym zasadami.
-        Najlepszym przykładem jest Broń zamachowa, do której należą zarówno proca czy bolas, jak i korbacz czy kiścień,
-        ponieważ wszystkimi z nich operuje się poprzez wyrzucenie przed siebie rozbujaneego obciążenia.
-    </p>
-    <br>
+        <h2 class="rules">Klasa broni</h2>
+        <br>
+        <p>
+            Podział broni na Klasy jest związany przede wszystkim z zasadami dotyczącymi Biegłości w broni.
+            Spośród 4 poziomów Biegłości (Brak zdolności [0], Zdolność [1], Biegłość [2], Specjalizacja [3]) pierwsze trzy dotyczą całej Klasy broni.
+            Oznacza to, że postać mająca Biegłość w Broniach drzewcowych równie sprawnie włada włócznią co halabardą.
+            Jest to oczywiście uproszczenie, jednak zmierza o oddania tej prawidłowości, że władanie niektórymi typami broni rządzi się tymi samym zasadami.
+            Najlepszym przykładem jest Broń zamachowa, do której należą zarówno proca czy bolas, jak i korbacz czy kiścień,
+            ponieważ wszystkimi z nich operuje się poprzez wyrzucenie przed siebie rozbujaneego obciążenia.
+        </p>
+        <br>
 
-    <table class="weapons">
-        {% for weapon_class in weapon_classes %}
-        <colgroup>
-            <col class="class">
-            <col class="delay">
-            <col class="damage">
-            <col class="damage-type">
-            <col class="special">
-            <col class="range">
-            <col class="size">
-            <col class="trait">
-            <col class="price">
-            <col class="weight">
-        </colgroup>
-        <thead class="align-center">
-            <tr>
-                <th class="small-caps align-left {% if weapon_class.description %} hover-blue {% endif %}" data-toggle="collapse" data-target="#{{ weapon_class.name }}">&nbsp;{{ weapon_class.name }}</th>
-                <th>Opóźń</th>
-                <th>OBR<br>M / D</th>
-                <th>OBR<br>Typ</th>
-                <th>Specjalne</th>
-                <th>Zasięg</th>
-                <th>Rozm</th>
-                <th>Cecha</th>
-                <th>Cena<br>≈</th>
-                <th>Waga<br>≈</th>
-            </tr>
-            {% if weapon_class.description %}
-                <tr id="{{ weapon_class.name }}" class="collapse">
-                    <td colspan="10" class="weapons-img px-2">
-                        <br>
-                        {{ weapon_class.description|linebreaksbr }}
-                        <br><br>
-                    </td>
-                </tr>
-            {% endif %}
-        </thead>
-        <tbody>
-            {% for weapon_type in weapon_class.weapon_types.all %}
+        <table class="weapons">
+            {% for weapon_class in weapon_classes %}
+            <colgroup>
+                <col class="class">
+                <col class="delay">
+                <col class="damage">
+                <col class="damage-type">
+                <col class="special">
+                <col class="range">
+                <col class="size">
+                <col class="trait">
+                <col class="price">
+                <col class="weight">
+            </colgroup>
+            <thead class="align-center">
                 <tr>
-                    <td class="{% if weapon_type.description %} hover-blue {% endif %}" data-toggle="collapse" data-target="#{{ weapon_type.short_name }}">&nbsp;{{ weapon_type.name }}</td>
-                    <td class="align-center">{{ weapon_type.delay }}</td>
-                    <td class="align-center">{{ weapon_type.damage_summary }}</td>
-                    <td class="align-center">{{ weapon_type.damage_type }}</td>
-                    <td class="align-center"><small>{{ weapon_type.special|linebreaksbr }}</small></td>
-                    <td class="align-center nowrap">{% if weapon_type.range %}{{ weapon_type.range }}{% endif %}</td>
-                    <td class="align-center">{{ weapon_type.size }}</td>
-                    <td class="align-center">{{ weapon_type.trait }}</td>
-                    <td class="align-center">{{ weapon_type.avg_price_value }} {{ weapon_type.avg_price_currency }}</td>
-                    <td class="align-center">{{ weapon_type.avg_weight.normalize }}</td>
+                    <th class="small-caps align-left {% if weapon_class.description %} hover-blue {% endif %}" data-toggle="collapse" data-target="#{{ weapon_class.name }}">&nbsp;{{ weapon_class.name }}</th>
+                    <th>Opóźń</th>
+                    <th>OBR<br>M / D</th>
+                    <th>OBR<br>Typ</th>
+                    <th>Specjalne</th>
+                    <th>Zasięg</th>
+                    <th>Rozm</th>
+                    <th>Cecha</th>
+                    <th>Cena<br>≈</th>
+                    <th>Waga<br>≈</th>
                 </tr>
-                {% if weapon_type.description %}
-                    <tr id="{{ weapon_type.short_name }}" class="collapse">
+                {% if weapon_class.description %}
+                    <tr id="{{ weapon_class.name }}" class="collapse">
                         <td colspan="10" class="weapons-img px-2">
                             <br>
-                            {{ weapon_type.description|linebreaksbr }}
-                            <br><br>
-                            <div>
-                            {% for p in weapon_type.pictures.all %}
-                                <div class="inline-block">
-                                <img src="{{ p.image.url }}" class="border-double">
-                                {% if p.description %}
-                                    <small>{{ p.description }}</small>
-                                {% endif %}
-                                </div>
-                            {% endfor %}
-                            </div>
+                            {{ weapon_class.description|linebreaksbr }}
                             <br><br>
                         </td>
                     </tr>
                 {% endif %}
+            </thead>
+            <tbody>
+                {% for weapon_type in weapon_class.weapon_types.all %}
+                    <tr>
+                        <td class="{% if weapon_type.description %} hover-blue {% endif %}" data-toggle="collapse" data-target="#{{ weapon_type.short_name }}">&nbsp;{{ weapon_type.name }}</td>
+                        <td class="align-center">{{ weapon_type.delay }}</td>
+                        <td class="align-center">{{ weapon_type.damage_summary }}</td>
+                        <td class="align-center">{{ weapon_type.damage_type }}</td>
+                        <td class="align-center"><small>{{ weapon_type.special|linebreaksbr }}</small></td>
+                        <td class="align-center nowrap">{% if weapon_type.range %}{{ weapon_type.range }}{% endif %}</td>
+                        <td class="align-center">{{ weapon_type.size }}</td>
+                        <td class="align-center">{{ weapon_type.trait }}</td>
+                        <td class="align-center">{{ weapon_type.avg_price_value }} {{ weapon_type.avg_price_currency }}</td>
+                        <td class="align-center">{{ weapon_type.avg_weight.normalize }}</td>
+                    </tr>
+                    {% if weapon_type.description %}
+                        <tr id="{{ weapon_type.short_name }}" class="collapse">
+                            <td colspan="10" class="weapons-img px-2">
+                                <br>
+                                {{ weapon_type.description|linebreaksbr }}
+                                <br><br>
+                                <div>
+                                {% for p in weapon_type.pictures.all %}
+                                    <div class="inline-block">
+                                    <img src="{{ p.image.url }}" class="border-double">
+                                    {% if p.description %}
+                                        <small>{{ p.description }}</small>
+                                    {% endif %}
+                                    </div>
+                                {% endfor %}
+                                </div>
+                                <br><br>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
             {% endfor %}
-        </tbody>
-        {% endfor %}
-    </table>
-    <br><br><br>
+        </table>
+        <br><br><br>
 
-    <h5><b>Legenda</b></h5>
-    <br>
-    <table class="key">
-        <colgroup>
-            <col class="point">
-            <col class="explanation">
-        </colgroup>
-        <tbody>
-            <tr><td>&nbsp;3m</td><td>Broń do walki wręcz o dużym zasięgu - umożliwia atak rundę wcześniej niż przeciwnik, jednak staje się bezużyteczna, jeśli przeciwnikowi uda się zbliżyć.</td></tr>
-            <tr><td>&nbsp;nie zabija!</td><td>Broń zadająca obrażenia, które raczej nie są w stanie spowodować śmierci.</td></tr>
-            <tr><td>&nbsp;1 AT/2r</td><td>Wskazuje liczbę AT/R w przypadku broni, której użycie wymaga długiego przygotowania.</td></tr>
-            <tr><td>&nbsp;Oszołomienie 15%</td><td>Wskazuje szanse na oszołomienie przeciwnika w przypadku trafienia (przeciwnik przez 1r nie może atakować - może przejść do Defensywy).</td></tr>
-            <tr><td>&nbsp;+Par</td><td>Broń umożliwiająca parowanie, czyli zastosowanie premii z KON do KP.</td></tr>
-            <tr><td>&nbsp;Przeb+3</td><td>Przebicie broni określa, ile punktów Wyparowań zbroi ignoruje w przypadku trafienia.</td></tr>
-            <tr><td>&nbsp;K:Przeb+1</td><td>Wskazuje, że Przebicie jest zależne od zastosowania konkretnego Typu OBR przy broni o wielu typach.</td></tr>
-            <tr><td>&nbsp;Szarża konna +1k6 OBR</td><td>Określa dodatkowe OBR przy broni o dewastującej szarży w przypadku zastosowana z wierzchowca.</td></tr>
-            <tr><td>&nbsp;vs. szarży +1TRAF +1OBR</td><td>Modyfikatory sytuacyjne broni nadającej się do przyjęcia szarży (sumują się z normalną premią).</td></tr>
-            <tr><td>&nbsp;-ZRC</td><td>Trafienie znosi wszystkie premie ze ZRC lub ogranicza ruch (zależnie czy trafienie w ręce, czy w nogi), a w przypadku trafienia w broń pozbawia możliwości ataku tą bronią, nie ograniczając premii ze ZRC. Określa warunek/czas oswobodzenia.</td></tr>
-        </tbody>
-    </table>
-
-
-
-
+        <h5><b>Legenda</b></h5>
+        <br>
+        <table class="key">
+            <colgroup>
+                <col class="point">
+                <col class="explanation">
+            </colgroup>
+            <tbody>
+                <tr><td><b>&nbsp;3m</b></td><td>Broń do walki wręcz o dużym zasięgu - umożliwia atak rundę wcześniej niż przeciwnik, jednak staje się bezużyteczna, jeśli przeciwnikowi uda się zbliżyć.</td></tr>
+                <tr><td><b>&nbsp;nie zabija!</b></td><td>Broń zadająca obrażenia, które raczej nie są w stanie spowodować śmierci.</td></tr>
+                <tr><td><b>&nbsp;1 AT/2r</b></td><td>Wskazuje liczbę AT/R w przypadku broni, której użycie wymaga długiego przygotowania.</td></tr>
+                <tr><td><b>&nbsp;Oszołomienie 15%</b></td><td>Wskazuje szanse na oszołomienie przeciwnika w przypadku trafienia (przeciwnik przez 1r nie może atakować - może przejść do Defensywy).</td></tr>
+                <tr><td><b>&nbsp;+Par</b></td><td>Broń umożliwiająca parowanie, czyli zastosowanie premii z KON do KP.</td></tr>
+                <tr><td><b>&nbsp;Przeb+3</b></td><td>Przebicie broni określa, ile punktów Wyparowań zbroi ignoruje w przypadku trafienia.</td></tr>
+                <tr><td><b>&nbsp;K:Przeb+1</b></td><td>Wskazuje, że Przebicie jest zależne od zastosowania konkretnego Typu OBR przy broni o wielu typach.</td></tr>
+                <tr><td><b>&nbsp;Szarża konna +1k6 OBR</b></td><td>Określa dodatkowe OBR przy broni o dewastującej szarży w przypadku zastosowana z wierzchowca.</td></tr>
+                <tr><td><b>&nbsp;vs. szarży +1TRAF +1OBR</b></td><td>Modyfikatory sytuacyjne broni nadającej się do przyjęcia szarży (sumują się z normalną premią).</td></tr>
+                <tr><td><b>&nbsp;-ZRC</b></td><td>Trafienie znosi wszystkie premie ze ZRC lub ogranicza ruch (zależnie czy trafienie w ręce, czy w nogi), a w przypadku trafienia w broń pozbawia możliwości ataku tą bronią, nie ograniczając premii ze ZRC. Określa warunek/czas oswobodzenia.</td></tr>
+            </tbody>
+        </table>
+    </div>
 {% endblock content %}

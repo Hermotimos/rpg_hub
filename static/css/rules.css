@@ -3,6 +3,13 @@ h1.rules, h2.rules, h3.rules, h4.rules, h5.rules, h6.rules {
         font-weight: bold;
 }
 
+.rules-styling p {
+        font-size: 18px;
+        font-style: italic;
+        padding: 5px;
+        text-align: justify;
+}
+
 ol.rules li, ul.rules li {
     font-style: italic;
     font-size: 14px;

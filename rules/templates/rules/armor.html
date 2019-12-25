@@ -12,197 +12,198 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br><br><br>
+    <div class="rules-styling">
+        <br><br><br>
 
-    <h2 class="rules">Zbroja</h2>
-    <br>
-    <p>
-        Zbroje chronią ciało wojownika przed skutkami trafienia, jednak ze względu na swoją sztywność oraz wagę ograniczają jego ruchy i pole widzenia.
-        Cięższe zbroje sprawdzają się w przypadku postaci, które nie wykorzystują w walce szybkości i zwinności.
-    </p>
+        <h2 class="rules">Zbroja</h2>
+        <br>
+        <p>
+            Zbroje chronią ciało wojownika przed skutkami trafienia, jednak ze względu na swoją sztywność oraz wagę ograniczają jego ruchy i pole widzenia.
+            Cięższe zbroje sprawdzają się w przypadku postaci, które nie wykorzystują w walce szybkości i zwinności.
+        </p>
 
-    <br>
-    <table class="plates">
-        <colgroup>
-            <col class="plate">
-            <col class="armor-class">
-            <col class="parrying">
-            <col class="endurance">
-            <col class="weight">
-            <col class="agility-penalty">
-            <col class="movement-penalty">
-        </colgroup>
-        <thead class="align-center dark">
-            <tr class="border-custom-base">
-                <th class="small-caps align-left">ZBROJA</th>
-                <th class="small-caps">KP</th>
-                <th class="small-caps">Wyparowania</th>
-                <th class="small-caps">Wytrzymałość</th>
-                <th class="small-caps">Waga</th>
-                <th class="small-caps">Max premia<br>ze ZRC</th>
-                <th class="small-caps">Max<br>przyspieszenie</th>
-            </tr>
-        </thead>
-        <tbody class="align-center dark">
-            {% for plate in plates %}
-                <tr>
-                    <td class="{% if plate.description %} hover-blue {% endif %} align-left" data-toggle="collapse" data-target="#{{ plate.short_name }}">{{ plate.name }}</td>
-                    <td class="rules-green">{% if plate.armor_class_bonus %} +{{ plate.armor_class_bonus }} {% endif %}</td>
-                    <td class="rules-green">{{ plate.parrying }}</td>
-                    <td>{{ plate.endurance }}</td>
-                    <td>{{ plate.weight.normalize }}</td>
-                    <td class="rules-red">{% if plate.mod_max_agility %} {{ plate.mod_max_agility }} {% endif %}</td>
-                    <td class="rules-red">{% if plate.mod_max_movement %} {{ plate.mod_max_movement }} {% endif %}</td>
+        <br>
+        <table class="plates">
+            <colgroup>
+                <col class="plate">
+                <col class="armor-class">
+                <col class="parrying">
+                <col class="endurance">
+                <col class="weight">
+                <col class="agility-penalty">
+                <col class="movement-penalty">
+            </colgroup>
+            <thead class="align-center dark">
+                <tr class="border-custom-base">
+                    <th class="small-caps align-left">ZBROJA</th>
+                    <th class="small-caps">KP</th>
+                    <th class="small-caps">Wyparowania</th>
+                    <th class="small-caps">Wytrzymałość</th>
+                    <th class="small-caps">Waga</th>
+                    <th class="small-caps">Max premia<br>ze ZRC</th>
+                    <th class="small-caps">Max<br>przyspieszenie</th>
                 </tr>
-                {% if plate.description %}
-                    <tr id="{{ plate.short_name }}" class="collapse">
-                        <td colspan="10" class="weapons-img px-2 align-left">
-                            <br>
-                            {{ plate.description|linebreaksbr }}
-                            <br><br>
-                            <div>
-                            {% for p in plate.pictures.all %}
-                                <div class="inline-block">
-                                <img src="{{ p.image.url }}" class="border-double">
-                                {% if p.description %}
-                                    <small>{{ p.description }}</small>
-                                {% endif %}
-                                </div>
-                            {% endfor %}
-                            </div>
-                            <br><br>
-                        </td>
+            </thead>
+            <tbody class="align-center dark">
+                {% for plate in plates %}
+                    <tr>
+                        <td class="{% if plate.description %} hover-blue {% endif %} align-left" data-toggle="collapse" data-target="#{{ plate.short_name }}">{{ plate.name }}</td>
+                        <td class="rules-green">{% if plate.armor_class_bonus %} +{{ plate.armor_class_bonus }} {% endif %}</td>
+                        <td class="rules-green">{{ plate.parrying }}</td>
+                        <td>{{ plate.endurance }}</td>
+                        <td>{{ plate.weight.normalize }}</td>
+                        <td class="rules-red">{% if plate.mod_max_agility %} {{ plate.mod_max_agility }} {% endif %}</td>
+                        <td class="rules-red">{% if plate.mod_max_movement %} {{ plate.mod_max_movement }} {% endif %}</td>
                     </tr>
-                {% endif %}
-            {% endfor %}
-        </tbody>
-    </table>
+                    {% if plate.description %}
+                        <tr id="{{ plate.short_name }}" class="collapse">
+                            <td colspan="10" class="weapons-img px-2 align-left">
+                                <br>
+                                {{ plate.description|linebreaksbr }}
+                                <br><br>
+                                <div>
+                                {% for p in plate.pictures.all %}
+                                    <div class="inline-block">
+                                    <img src="{{ p.image.url }}" class="border-double">
+                                    {% if p.description %}
+                                        <small>{{ p.description }}</small>
+                                    {% endif %}
+                                    </div>
+                                {% endfor %}
+                                </div>
+                                <br><br>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <br><br>
-    <h5><b>Wyparowania i Wytrzymałość zbroi</b></h5>
-    <p>
-        Oprócz poprawy Klasy Pancerza (KP) każda zbroja wyparowuje część otrzymanych obrażeń.
-        Obrażenia wyparowane dana zbroja przejmuje z ciosu na siebie, nie są ponoszone przez postać, natomiast uszkadzają zbroję, powodując jej powolną dezintegrację:
-    </p>
-    <ul>
-        <li>> 50% uszkodzeń: -2 do Wyparowań</li>
-        <li>>= 90% uszkodzeń: 0 Wyparowań</li>
-    </ul>
-    <p>
-        Oznacza to konieczność prowadzenia dwóch tabeli obrażeń: jednej dla postaci (obrażenia podlegające leczeniu)
-        oraz dla zbroi (obrażenia trwałe, poddające się 1-2 krotnej naprawie u specjalisty).
-    </p>
+        <br><br>
+        <h5><b>Wyparowania i Wytrzymałość zbroi</b></h5>
+        <p>
+            Oprócz poprawy Klasy Pancerza (KP) każda zbroja wyparowuje część otrzymanych obrażeń.
+            Obrażenia wyparowane dana zbroja przejmuje z ciosu na siebie, nie są ponoszone przez postać, natomiast uszkadzają zbroję, powodując jej powolną dezintegrację:
+        </p>
+        <ul>
+            <li>> 50% uszkodzeń: -2 do Wyparowań</li>
+            <li>>= 90% uszkodzeń: 0 Wyparowań</li>
+        </ul>
+        <p>
+            Oznacza to konieczność prowadzenia dwóch tabeli obrażeń: jednej dla postaci (obrażenia podlegające leczeniu)
+            oraz dla zbroi (obrażenia trwałe, poddające się 1-2 krotnej naprawie u specjalisty).
+        </p>
 
-    <br>
-    <h5><b>Ograniczenia wynikające ze zbroi</b></h5>
-    <p>
-        Zbroja w znaczący sposób zmniejsza płynność ruchów postaci,
-        co w przypadku cięższych typów zbroi powoduje ograniczenie premii czerpanych ze ZRC oraz możliwości prędkiego poruszania.
-        Przykładowo postać o ZRC 16 założywszy pełną zbroję płytową może korzystać jedynie z premii dla ZRC 13,
-        a jej zdolność do Przyspieszenia (biegu) jest ograniczona do prędkości x3.
-    </p>
-    <p>
-        Poza walką zbroja nie pozostaje bez wpływu na powodzenie działań wymagających wyjątkowej precyzji i dobrego czasu reakcji.
-        W związku z tym każda zbroja powoduje malusy do Podstępów.
-        Są one ujęte w osobnej tabeli, dlatego nie należy uwzględniać w tym przypadku ograniczeń premii ze ZRC. Byłby to podwójny malus.
-    </p>
-    <br><br>
+        <br>
+        <h5><b>Ograniczenia wynikające ze zbroi</b></h5>
+        <p>
+            Zbroja w znaczący sposób zmniejsza płynność ruchów postaci,
+            co w przypadku cięższych typów zbroi powoduje ograniczenie premii czerpanych ze ZRC oraz możliwości prędkiego poruszania.
+            Przykładowo postać o ZRC 16 założywszy pełną zbroję płytową może korzystać jedynie z premii dla ZRC 13,
+            a jej zdolność do Przyspieszenia (biegu) jest ograniczona do prędkości x3.
+        </p>
+        <p>
+            Poza walką zbroja nie pozostaje bez wpływu na powodzenie działań wymagających wyjątkowej precyzji i dobrego czasu reakcji.
+            W związku z tym każda zbroja powoduje malusy do Podstępów.
+            Są one ujęte w osobnej tabeli, dlatego nie należy uwzględniać w tym przypadku ograniczeń premii ze ZRC. Byłby to podwójny malus.
+        </p>
+        <br><br>
 
-    {% include 'rules/_plate_and_tricks_table.html' %}
-    <br><br><br>
+        {% include 'rules/_plate_and_tricks_table.html' %}
+        <br><br><br>
 
 
-    <h2 class="rules">Tarcza</h2>
-    <br>
-    <p>
-        Poprzez przyjęcie ciosu na tarczę wojownik może uniknąć trafienia przez przeciwnika.
-        Liczba przeciwników, przeciwko którym można użyć tarczy jest zależna od jej rodzaju i waha się między 1 a 3.
-        Liczba ta wskazuje również, wobec ilu przeciwników można zastosować premie do KP (parowanie) z KON, Walki z tarczą lub inne.
-        Postać nie jest w stanie parować ciosów większej liczby przeciwników niż wynika to z opisu danego typu tarczy.
-        Tarcza dostarcza także osłony przeciwko atakom dystansowym; wyjątkiem jest puklerz, który nie chroni przed atakami strzeleckimi.
-    </p>
-    <br>
-    <table class="shields">
-        <colgroup>
-            <col class="shield">
-            <col class="num-of-enemies">
-            <col class="armor-class">
-            <col class="weight">
-        </colgroup>
-        <thead class="align-center dark">
-            <tr class="border-custom-base">
-                <th class="small-caps align-left">TARCZA</th>
-                <th class="small-caps">Przeciwnicy</th>
-                <th class="small-caps">KP<br>zwarcie/dystans</th>
-                <th class="small-caps">Waga</th>
-            </tr>
-        </thead>
-
-        <tbody class="align-center dark">
-            {% for shield in shields %}
-                <tr>
-                    <td class="{% if shield.description %} hover-blue {% endif %} align-left" data-toggle="collapse" data-target="#{{ shield.name }}">{{ shield.name }}</td>
-                    <td>{{ shield.enemies_no }}</td>
-                    <td>+{{ shield.armor_class_bonus_close_combat }}/+{{ shield.armor_class_bonus_distance_combat }}</td>
-                    <td>{{ shield.weight.normalize }}</td>
+        <h2 class="rules">Tarcza</h2>
+        <br>
+        <p>
+            Poprzez przyjęcie ciosu na tarczę wojownik może uniknąć trafienia przez przeciwnika.
+            Liczba przeciwników, przeciwko którym można użyć tarczy jest zależna od jej rodzaju i waha się między 1 a 3.
+            Liczba ta wskazuje również, wobec ilu przeciwników można zastosować premie do KP (parowanie) z KON, Walki z tarczą lub inne.
+            Postać nie jest w stanie parować ciosów większej liczby przeciwników niż wynika to z opisu danego typu tarczy.
+            Tarcza dostarcza także osłony przeciwko atakom dystansowym; wyjątkiem jest puklerz, który nie chroni przed atakami strzeleckimi.
+        </p>
+        <br>
+        <table class="shields">
+            <colgroup>
+                <col class="shield">
+                <col class="num-of-enemies">
+                <col class="armor-class">
+                <col class="weight">
+            </colgroup>
+            <thead class="align-center dark">
+                <tr class="border-custom-base">
+                    <th class="small-caps align-left">TARCZA</th>
+                    <th class="small-caps">Przeciwnicy</th>
+                    <th class="small-caps">KP<br>zwarcie/dystans</th>
+                    <th class="small-caps">Waga</th>
                 </tr>
-                {% if shield.description %}
-                    <tr id="{{ shield.name }}" class="collapse">
-                        <td colspan="10" class="weapons-img px-2 align-left">
-                            <br>
-                            {{ shield.description|linebreaksbr }}
-                            <br><br>
-                            <div>
-                            {% for p in shield.pictures.all %}
-                                <div class="inline-block">
-                                <img src="{{ p.image.url }}" class="border-double">
-                                {% if p.description %}
-                                    <small>{{ p.description }}</small>
-                                {% endif %}
-                                </div>
-                            {% endfor %}
-                            </div>
-                            <br><br>
-                        </td>
+            </thead>
+
+            <tbody class="align-center dark">
+                {% for shield in shields %}
+                    <tr>
+                        <td class="{% if shield.description %} hover-blue {% endif %} align-left" data-toggle="collapse" data-target="#{{ shield.name }}">{{ shield.name }}</td>
+                        <td>{{ shield.enemies_no }}</td>
+                        <td>+{{ shield.armor_class_bonus_close_combat }}/+{{ shield.armor_class_bonus_distance_combat }}</td>
+                        <td>{{ shield.weight.normalize }}</td>
                     </tr>
-                {% endif %}
-            {% endfor %}
-        </tbody>
+                    {% if shield.description %}
+                        <tr id="{{ shield.name }}" class="collapse">
+                            <td colspan="10" class="weapons-img px-2 align-left">
+                                <br>
+                                {{ shield.description|linebreaksbr }}
+                                <br><br>
+                                <div>
+                                {% for p in shield.pictures.all %}
+                                    <div class="inline-block">
+                                    <img src="{{ p.image.url }}" class="border-double">
+                                    {% if p.description %}
+                                        <small>{{ p.description }}</small>
+                                    {% endif %}
+                                    </div>
+                                {% endfor %}
+                                </div>
+                                <br><br>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
 
-    </table>
-    <br><br><br>
+        </table>
+        <br><br><br>
 
 
-    <h2 class="rules">Hełm, karwasze i nagolenniki</h2>
-    <br>
-    <p>
-        Nagolenniki, karwasze i hełm dostarczają ochrony przeciwko natychmiastowemu wyeliminowaniu z walki przez Krytyka.
-        Trafienie krytyczne w nieosłoniętą głowę z dużym prawodpodobieństwem zakończy się penetracją czaszki,
-        natomiast w przypadku kończyn może skutkować ich odcięciem lub nieodwracalnym zdewastowaniem kości i stawów.
-        Nagolennice, karwasze oraz hełm dostarczają ochrony przeciwko niszczycielskim skutkom Krytyków.
-        Jeśli postać posiada jedynie część takiego kompletu, istnieje 33% szans na trafienie odpowiednio w głowę, jedną z rąk albo jedną z nóg.
-    </p>
-    <br>
-    <table class="protection">
-        <colgroup>
-            <col class="protection-type">
-            <col class="protection-desc">
-            <col class="weight">
-        </colgroup>
-        <thead class="align-center dark">
-            <tr class="border-custom-base">
-                <th class="small-caps align-left">HEŁM, KARWASZE, NAGOLENNIKI</th>
-                <th class="small-caps">Zakres ochrony przed Krytykiem</th>
-                <th class="small-caps">Waga</th>
-            </tr>
-        </thead>
+        <h2 class="rules">Hełm, karwasze i nagolenniki</h2>
+        <br>
+        <p>
+            Nagolenniki, karwasze i hełm dostarczają ochrony przeciwko natychmiastowemu wyeliminowaniu z walki przez Krytyka.
+            Trafienie krytyczne w nieosłoniętą głowę z dużym prawodpodobieństwem zakończy się penetracją czaszki,
+            natomiast w przypadku kończyn może skutkować ich odcięciem lub nieodwracalnym zdewastowaniem kości i stawów.
+            Nagolennice, karwasze oraz hełm dostarczają ochrony przeciwko niszczycielskim skutkom Krytyków.
+            Jeśli postać posiada jedynie część takiego kompletu, istnieje 33% szans na trafienie odpowiednio w głowę, jedną z rąk albo jedną z nóg.
+        </p>
+        <br>
+        <table class="protection">
+            <colgroup>
+                <col class="protection-type">
+                <col class="protection-desc">
+                <col class="weight">
+            </colgroup>
+            <thead class="align-center dark">
+                <tr class="border-custom-base">
+                    <th class="small-caps align-left">HEŁM, KARWASZE, NAGOLENNIKI</th>
+                    <th class="small-caps">Zakres ochrony przed Krytykiem</th>
+                    <th class="small-caps">Waga</th>
+                </tr>
+            </thead>
 
-        <tbody>
-            <tr><td>Skóra</td>               <td>Ochrona przed kalectwem od Ran Śmiertelnych, jeśli postać przeżyje</td>         <td class="align-center">2</td></tr>
-            <tr><td>Metal</td>               <td>Ochrona przed mnożnikiem ran *2 przy Krytyku</td>                               <td class="align-center">4</td></tr>
-            <tr><td>Krasnoludzka stal</td>   <td>Ochrona przed automatycznym trafieniem przy rzucie 20</td>                      <td class="align-center">6</td></tr>
-            <tr><td>Magiczne</td>            <td>Całkowita ochrona przed Krytykiem</td>                                          <td class="align-center">4</td></tr>
-        </tbody>
-    </table>
-
+            <tbody>
+                <tr><td>Skóra</td>               <td>Ochrona przed kalectwem od Ran Śmiertelnych, jeśli postać przeżyje</td>         <td class="align-center">2</td></tr>
+                <tr><td>Metal</td>               <td>Ochrona przed mnożnikiem ran *2 przy Krytyku</td>                               <td class="align-center">4</td></tr>
+                <tr><td>Krasnoludzka stal</td>   <td>Ochrona przed automatycznym trafieniem przy rzucie 20</td>                      <td class="align-center">6</td></tr>
+                <tr><td>Magiczne</td>            <td>Całkowita ochrona przed Krytykiem</td>                                          <td class="align-center">4</td></tr>
+            </tbody>
+        </table>
+    </div>
 {% endblock content %}
