@@ -59,10 +59,10 @@
     <br>
     <div id="knowledge" class="collapse">
         {% for kn_packet in gen_loc.knowledge_packets.all %}
-            <h5 class="pl-4" data-toggle="collapse" data-target="#id{{ skill_level.id }}_{{ kn_packet.id }}">
+            <h5 class="pl-4" data-toggle="collapse" data-target="#id{{ gen_loc.id }}_{{ kn_packet.id }}">
                 <b class="hover-blue">&#10023; {{ kn_packet.title }}</b>
             </h5>
-            <div id="id{{ skill_level.id }}_{{ kn_packet.id }}" class="collapse">
+            <div id="id{{ gen_loc.id }}_{{ kn_packet.id }}" class="collapse">
                 <div class="pl-5">
                 <p><small class="text-justify">{{ kn_packet.text }}</small></p>
                 {% for picture in kn_packet.pictures.all %}
@@ -73,6 +73,7 @@
                     </div>
                 {% endfor %}
                 </div>
+                <br><br>
             </div>
         {% endfor %}
 
