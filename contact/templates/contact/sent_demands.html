@@ -1,45 +1,19 @@
 
-<br>
-<h5>OCZEKUJĄCE:</h5>
-<br>
-{% for demand in sent_undone %}
-    <table>
-        <tr class="posts-and-news">
-            <td class="demands-imgs">
-                <img class="rounded-circle img-small" src="{{ demand.author.profile.image.url }}">
-                &#9755;
-                <img class="rounded-circle img-small" src="{{ demand.addressee.profile.image.url }}">
-                <br>
-                <small>{{ demand.date_created|date:'d-M-Y' }}</small>
-            </td>
-            <td class="unblue td-middle"><a href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
-            {% if request.user == demand.author %}
-                <td><a href="{% url 'contact:demands-modify' demand.id %}" class="btn btn-dark">&#9998;</a></td>
-            {% endif %}
-            <td><a href="{% url 'contact:done' demand.id %}" class="btn btn-dark">&#10004;</a></td>
-        </tr>
-    </table>
-{% endfor %}
+<br><br>
+{% if received_undone %}
+    <h4>OCZEKUJĄCE:</h4>
+    <br>
+    {% for demand in sent_undone %}
+        {% include 'contact/_undone_list.html' %}
+    {% endfor %}
+{% else %}
+    <h4>BRAK OCZEKUJĄCYCH!</h4>
+{% endif %}
 <br><br><br>
 
-<h5 class="hover-blue" data-toggle="collapse" data-target="#sent-done">POKAŻ ZROBIONE</h5>
+<h4>ZROBIONE:</h4>
 <br>
 {% for demand in sent_done %}
-    <table id="sent-done" class="collapse">
-        <tr class="posts-and-news">
-            <td class="demands-imgs">
-                <img class="rounded-circle img-small" src="{{ demand.author.profile.image.url }}">
-                &#9755;
-                <img class="rounded-circle img-small" src="{{ demand.addressee.profile.image.url }}">
-                <br>
-                <small>{{ demand.date_created|date:'d-M-Y' }}</small>
-            </td>
-            <td class="unblue td-middle"><a href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
-            <td><a href="{% url 'contact:undone' demand.id %}" class="btn btn-dark">&#9757;</a></td>
-            {% if request.user == demand.author %}
-                <td><a href="{% url 'contact:demands-delete' demand.id %}" class="btn btn-danger">&#10008;</a></td>
-            {% endif %}
-        </tr>
-    </table>
+    {% include 'contact/_done_list.html' %}
 {% endfor %}
 <br><br>
