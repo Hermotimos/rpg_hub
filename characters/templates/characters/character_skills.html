@@ -21,9 +21,8 @@
         {% endif %}
         <h1 class="pt-2" data-toggle="collapse" data-target="#{{ skill.short_name }}">
             <b class="hover-blue">&nbsp;{{ skill.name }} [{{ skill.skill_levels.all|get_max_skill_level }}]</b>
+            <small class="text-muted smaller"> [{{ skill.tested_trait }}]</small>
         </h1>
-            <small class="text-muted">[{{ skill.tested_trait }}] {{ skill.description|linebreaksbr }}</small>
-        <br>
 
         <div id="{{ skill.short_name }}" class="collapse">
             <br>
@@ -41,14 +40,14 @@
 
             {% for skill_level in skill.skill_levels.all %}
                 {% for kn_packet in skill_level.knowledge_packets.all %}
-                    <h5 class="pl-5" data-toggle="collapse" data-target="#id{{ skill_level.id }}_{{ kn_packet.id }}">
+                    <h5 class="pl-6" data-toggle="collapse" data-target="#id{{ skill_level.id }}_{{ kn_packet.id }}">
                         <b class="hover-blue">&#10023; {{ kn_packet.title }}</b>
                     </h5>
                     <div id="id{{ skill_level.id }}_{{ kn_packet.id }}" class="collapse">
-                        <div class="pl-6 text-justify">
-                        <p><small class="font-italic text-justify">{{ kn_packet.text|linebreaksbr }}</small></p>
+                        <div class="pl-7 text-justify">
+                        <p class="font-18 font-italic pt-1 text-justify">{{ kn_packet.text|linebreaksbr }}</p>
                         {% for picture in kn_packet.pictures.all %}
-                            <p class="pt-2" data-toggle="collapse" data-target="#id{{ kn_packet.id }}_{{ picture.id }}">{{ picture.description }}</p>
+                            <p data-toggle="collapse" data-target="#id{{ kn_packet.id }}_{{ picture.id }}">{{ picture.description }}</p>
                             <div id="id{{ kn_packet.id }}_{{ picture.id }}" class="collapse">
                                 <img src="{{ picture.image.url }}" class="border-double">
                                 <br><br>
@@ -64,3 +63,4 @@
     {% endfor %}
 
 {% endblock content %}
+
