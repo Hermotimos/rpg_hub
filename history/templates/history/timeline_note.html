@@ -18,37 +18,37 @@
     <table class="forms">
         <tr>
             <td><h6>Sesja:</h6></td>
-            <td class="justify"><small>{{ event.game }}</small></td>
+            <td><h6 class="font-italic px-1 text-justify">{{ event.game }}</h6></td>
         </tr>
         <tr>
             <td><h6>Data:</h6></td>
-            <td class="justify">
-                <small>{{ event.date }}</small>
+            <td>
+                <h6 class="font-italic px-1 text-justify">{{ event.date }}</h6>
             </td>
         </tr>
         <tr>
             <td><h6>Wątki:</h6></td>
-            <td class="justify">
-                <small>
+            <td>
+                <h6 class="font-italic px-1 text-justify">
                     {% for thread in event.threads.all %}
-                    *{{ thread }}<br>
+                        *{{ thread }}<br>
                     {% endfor %}
-                </small>
+                </h6>
             </td>
         </tr>
         <tr>
             <td><h6>Lokacje:</h6></td>
-            <td class="justify">
-                <small>
+            <td>
+                <h6 class="font-italic px-1 text-justify">
                     {% for gen_loc in gen_locs_and_spec_locs_dict %}
                         {{ gen_loc }}: {{ gen_locs_and_spec_locs_dict|dict_lookup:gen_loc }}<br>
                     {% endfor %}
-                </small>
+                </h6>
             </td>
         </tr>
         <tr>
             <td><h6>Wydarzenie:</h6></td>
-            <td class="justify"><small>{{ event.description }}</small></td>
+            <td class="justify"><h6 class="font-italic px-1 text-justify">{{ event.description }}</h6></td>
         </tr>
         <tr>
             <td><h6>Uczestnicy:</h6></td>
