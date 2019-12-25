@@ -33,7 +33,7 @@
                     {% endif %}
                     {{ debate.name }}&nbsp;
                 </a>
-                <small class="text-muted">
+                <small class="font-12 text-muted">
                 {% if debate.first_player_remark_date|date:'d-M-Y' != debate.last_player_remark_date|date:'d-M-Y' %}
                    [{{ debate.first_player_remark_date|date:'d/M' }} - {{ debate.last_player_remark_date|date:'d/M Y' }}
                 {% else %}
