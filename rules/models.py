@@ -10,10 +10,6 @@ from users.models import Profile
 class Skill(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name='Umiejętność')
     tested_trait = models.CharField(max_length=50, verbose_name='Cecha/Cechy')
-    lvl_0 = models.TextField(max_length=4000, blank=True, null=True)
-    lvl_1 = models.TextField(max_length=4000, blank=True, null=True)
-    lvl_2 = models.TextField(max_length=4000, blank=True, null=True)
-    lvl_3 = models.TextField(max_length=4000, blank=True, null=True)
     image = models.ImageField(blank=True, null=True, upload_to='site_features_pics')
     allowed_profiles = models.ManyToManyField(Profile,
                                               blank=True,
