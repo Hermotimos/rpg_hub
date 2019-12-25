@@ -17,14 +17,14 @@
     <table class="forms">
         <tr>
             <td><h6>Temat:</h6></td>
-            <td><small>{{ debate.topic.title }}</small></td>
+            <td><h6 class="font-italic px-1 text-justify">{{ debate.topic.title }}</h6></td>
         </tr>
         <tr>
             <td><h6>Narada:</h6></td>
-            <td><small>{{ debate.name }}</small></td>
+            <td><h6 class="font-italic px-1 text-justify">{{ debate.name }}</h6></td>
         </tr>
         <tr>
-            <td><h6>Uczestnicy:</h6></td>
+            <td class="align-middle"><h6>Uczestnicy:</h6></td>
             <td>
                 {% for profile in debate_allowed_profiles %}
                     <img class="rounded-circle img-small" src="{{ profile.image.url }}">
