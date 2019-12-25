@@ -7,6 +7,7 @@ from django.forms import Textarea
 
 from history.models import GeneralLocation, SpecificLocation
 from imaginarion.models import Picture
+from knowledge.models import KnowledgePacket
 from users.models import Profile
 
 
@@ -25,6 +26,9 @@ class ToponomikonKnownForm(forms.ModelForm):
                                                                Q(character_status='living_npc')),
                                                       widget=FilteredSelectMultiple('Known indirectly', False),
                                                       required=False)
+    knowledge_packets = forms.ModelMultipleChoiceField(queryset=KnowledgePacket.objects.all(),
+                                                       widget=FilteredSelectMultiple('Knowledge packets', False),
+                                                       required=False)
     pictures = forms.ModelMultipleChoiceField(queryset=Picture.objects.all(),
                                               widget=FilteredSelectMultiple('Pictures', False),
                                               required=False)
