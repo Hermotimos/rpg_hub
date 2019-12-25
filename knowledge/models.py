@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.signals import m2m_changed, post_save
 
 from imaginarion.models import Picture
 from rpg_project.utils import create_sorting_name
@@ -21,3 +22,18 @@ class KnowledgePacket(models.Model):
 
     class Meta:
         ordering = ['title']
+
+
+def add_gms_to_allowed_profiles(sender, instance, **kwargs):
+    knowledge_packet = instance
+    gms = Profile.objects.filter(character_status='gm')
+    perform = False
+    for gm in gms:
+        if gm not in knowledge_packet.allowed_profiles.all():
+            perform = True
+    if perform:
+        knowledge_packet.allowed_profiles.add(*gms)
+        knowledge_packet.save()
+
+
+post_save.connect(add_gms_to_allowed_profiles, sender=KnowledgePacket)
