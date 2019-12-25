@@ -34,27 +34,6 @@ class Debate(models.Model):
     def __str__(self):
         return self.name
 
-    # def first_player_remark_date(self):
-    #     players_remarks = self.remarks.exclude(
-    #         author__profile__in=Profile.objects.filter(character_status='gm'))
-    #     return players_remarks.aggregate(Min('date_posted'))['date_posted__min']
-    #
-    # def last_player_remark_date(self):
-    #     players_remarks = self.remarks.exclude(
-    #         author__profile__in=Profile.objects.filter(character_status='gm'))
-    #     return players_remarks.aggregate(Max('date_posted'))['date_posted__max']
-    #
-    # def player_remarks_count(self):
-    #     players_remarks = self.remarks.exclude(
-    #         author__profile__in=Profile.objects.filter(character_status='gm'))
-    #     return players_remarks.count()
-    #
-    # def last_remark(self):
-    #     if self.remarks.all():
-    #         return self.remarks.order_by('-date_posted')[0]
-    #     else:
-    #         return None
-
 
 class Remark(models.Model):
     text = models.TextField(max_length=4000)
