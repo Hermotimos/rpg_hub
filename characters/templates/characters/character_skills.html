@@ -46,7 +46,7 @@
                     </h5>
                     <div id="id{{ skill_level.id }}_{{ kn_packet.id }}" class="collapse">
                         <div class="pl-6 text-justify">
-                        <p><small class="text-justify font-italic">{{ kn_packet.text|linebreaksbr }}</small></p>
+                        <p><small class="font-italic text-justify">{{ kn_packet.text|linebreaksbr }}</small></p>
                         {% for picture in kn_packet.pictures.all %}
                             <p class="pt-2" data-toggle="collapse" data-target="#id{{ kn_packet.id }}_{{ picture.id }}">{{ picture.description }}</p>
                             <div id="id{{ kn_packet.id }}_{{ picture.id }}" class="collapse">
