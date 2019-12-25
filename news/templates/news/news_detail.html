@@ -18,11 +18,11 @@
 <!-- NEWS META INFO-->
     <table class="forms">
         <tr>
-            <td><h6>Autor:</h6></td>
+            <td class="align-middle"><h6 class="mb-0">Autor:</h6></td>
             <td><img class="rounded-circle img-small" src="{{ news.author.profile.image.url }}"></td>
         </tr>
         <tr>
-            <td><h6>Adresaci:</h6></td>
+            <td class="align-middle"><h6 class="mb-0">Adresaci:</h6></td>
             <td>
             {% for profile in news_allowed_profiles %}
                 <img class="rounded-circle img-small" src="{{ profile.image.url }}">
@@ -30,7 +30,7 @@
             </td>
         </tr>
         <tr>
-            <td><h6>Obserwują:</h6></td>
+            <td class="align-middle"><h6 class="mb-0">Obserwują:</h6></td>
             <td>
             {% for profile in news_followers %}
                 <img class="rounded-circle img-small" src="{{ profile.image.url }}">
@@ -52,7 +52,7 @@
 <!-- NEWS TEXT -->
     <br>
     <div class="post-and-news">
-        {{ news.text|capfirst|linebreaks }}
+        <p class="font-18 font-italic text-justify">{{ news.text|capfirst|linebreaksbr }}</p>
         {% if news.image %}
             <img src="{{ news.image.url }}" class="border-double">
         {% endif %}
@@ -68,22 +68,11 @@
         <table>
             <tbody>
             {% for answer in answers %}
-                <tr class="posts-and-news">
-                    <td class="align-center">
-                        <img class="rounded-circle article-img" src="{{ answer.author.profile.image.url }}">
-                        <br>
-                        <small class="smaller">{{ answer.author.profile.character_name }}</small>
-                    </td>
-                    <td class="align-center">
-                        <small class="left-float">{{ answer.date_posted|date:'d-M-Y, H:i' }}</small><br>
-                        {{ answer.text|capfirst|linebreaks }}
-                        {% if answer.image %}
-                            <img src="{{ answer.image.url }}" class="border-double">
-                        {% endif %}
-                    </td>
-                </tr>
+
+                {% include 'news/_answers_list.html' %}
+
             {% endfor %}
-                <tr class="posts-and-news">
+                <tr>
                     <td></td>
                     <td>
                         {% for image in last_answer_seen_by_imgs %}

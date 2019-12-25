@@ -17,7 +17,7 @@
 
 <!-- SURVEY MESSAGE -->
     <div class="post-and-news">
-        {{ survey.text|capfirst|linebreaks }}
+        <p class="font-18 font-italic text-justify">{{ survey.text|capfirst|linebreaksbr }}</p>
         {% if survey.image %}
             <img src="{{ survey.image.url }}" class="border-double">
         {% endif %}
@@ -100,21 +100,9 @@
         <table>
             <tbody>
             {% for answer in answers %}
-                <tr class="posts-and-news">
-                    <td class="align-center">
-                        <img class="rounded-circle article-img" src="{{ answer.author.profile.image.url }}">
-                        <br>
-                        <small class="smaller">{{ answer.author.profile.character_name }}</small>
-                    </td>
-                    <td class="align-center">
-                        <small class="left-float">{{ answer.date_posted|date:'d-M-Y, H:i' }}</small><br>
-                        {{ answer.text|capfirst|linebreaks }}
-                        {% if answer.image %}
-                            <img src="{{ answer.image.url }}" class="border-double">
-                        {% endif %}
-                        <br>
-                    </td>
-                </tr>
+
+                {% include 'news/_answers_list.html' %}
+
             {% endfor %}
                 <tr>
                     <td></td>
