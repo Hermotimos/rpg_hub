@@ -17,11 +17,11 @@
     <table class="forms">
         <tr>
             <td><h6>Sesja:</h6></td>
-            <td class="justify"><small>{{ event.game }}</small></td>
+            <td><h6 class="font-italic px-1 text-justify">{{ event.game }}</h6></td>
         </tr>
         <tr>
             <td><h6>Wydarzenie:</h6></td>
-            <td class="justify"><small>{{ event.description }}</small></td>
+            <td class="align-top"><h6 class="font-italic px-1 text-justify">{{ event.description|linebreaksbr|truncatechars:500 }}</h6></td>
         </tr>
         <tr>
             <td><h6>Uczestnicy:</h6></td>

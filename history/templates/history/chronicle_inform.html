@@ -17,11 +17,11 @@
     <table class="forms">
         <tr>
             <td><h6>Sesja:</h6></td>
-            <td class="justify"><small>{{ event.game }}</small></td>
+            <td><h6 class="font-italic px-1 text-justify">{{ event.game }}</h6></td>
         </tr>
         <tr>
             <td><h6>Wydarzenie:</h6></td>
-            <td class="justify"><small>{{ event.description }}</small></td>
+            <td class="align-top"><h6 class="font-italic px-1 text-justify">{{ event.description|linebreaksbr|truncatechars:500 }}</h6></td>
         </tr>
         <tr>
             <td><h6>Uczestnicy:</h6></td>
@@ -50,7 +50,7 @@
 
     <form method="POST" class="allowed-profiles-form-history">
         {% csrf_token %}
-        {{ form|crispy }}<br>
+        {{ form|crispy }}
         <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
         <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
         <input class="btn btn-dark" type="submit" value="Poinformuj">

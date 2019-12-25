@@ -28,51 +28,9 @@
 
         <tbody>
             {% for event in events %}
-                <tr>
-                    <td class="chronicle-event">
-                        {% if request.user.profile.character_status != 'gm' and request.user.profile in event.informed.all %}
-                            <p><small>(Znasz z opowieści) {{ event.description|linebreaksbr }}</small></p>
-                        {% else %}
-                            <p>{{ event.description|linebreaksbr }}</p>
-                        {% endif %}
-                        
-                        {% if event.pictures.all and request.user.profile not in event.informed.all %}
-                            <table class="chronicle-img">
-                                <tr>
-                                {% for p in event.pictures.all %}
-                                    <td class="align-top">
-                                        <img src="{{ p.image.url }}" class="border-double">
-                                        {% if p.description %}
-                                            <small>{{ p.description }}</small>
-                                        {% endif %}
-                                    </td>
-                                {% endfor %}
-                                </tr>
-                            </table>
-                            <br>
-                        {% endif %}
-                        
-                        {% if event.debate %}
-                            <p><a href="{% url 'debates:debate' event.debate.topic.id event.debate.id %}">Narada: {{ event.debate.name }}</a></p>
-                        {% endif %}
 
-                        {% for note in event.notes.all %}
-                            {% if request.user == note.author %}
-                                {% if note.text != '' %}
-                                    <a style="color:{{ note.color }}"><br>Przemyślenia:<br>{{ note.text|linebreaksbr }}</a>
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    </td>
-                    <td class="align-top">
-                        <br>
-                        <h6><a href="{% url 'history:chronicle-inform' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
-                        <h6><a href="{% url 'history:chronicle-note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
-                        {% if request.user.profile.character_status == 'gm' %}
-                            <h6><a href="{% url 'history:chronicle-edit' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
-                        {% endif %}
-                    </td>
-                </tr>
+                {% include 'history/_one_event.html' %}
+
             {% endfor %}
         </tbody>
     </table>
