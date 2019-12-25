@@ -135,7 +135,9 @@ h1, h2, h3, h4, h5, h6, b{
 .font-18 {
         font-size: 18px
 }
-
+.font-12 {
+        font-size: 12px
+}
 /*
 small {
         color: #888;

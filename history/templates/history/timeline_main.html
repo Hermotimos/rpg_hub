@@ -13,19 +13,27 @@
 {% block content %}
     <br><br><br>
 
-    <h2 class="unblue">
-        <img src="{% static 'img/history_all.png' %}" class="border-double img-chapter">
-        <b><a href="{% url 'history:timeline-all-events' %}" class="align-middle pt-2">Pełne Kalendarium</a></b>
-    </h2>
-    <small>Pełne kalendarium losów Twojej postaci oraz znanych jej wydarzeń</small><br><br>
-    <br><br>
-
-    <img src="{% static 'img/timeline_threads.png' %}" class="border-double img-chapter">
-    <h3 class="align-middle pt-2" data-toggle="collapse" data-target="#threads">
-        <b class="hover-blue">Wątki</b>
-    </h3>
-    <small>Wykaz wątków splątanych z Twoim losem</small><br><br>
-    <div id="threads" class="collapse">
+    <div class="border-bottom">
+        <h2 class="unblue">
+            <img src="{% static 'img/history_all.png' %}" class="border-double img-chapter">
+            <b><a href="{% url 'history:timeline-all-events' %}" class="align-middle pt-2">Pełne Kalendarium</a></b>
+        </h2>
+        <small>Pełne kalendarium losów Twojej postaci oraz znanych jej wydarzeń</small><br><br>
+    </div>
+<br><br>
+    <table>
+        <tr>
+            <td class="align-top"><img src="{% static 'img/timeline_threads.png' %}" class="border-double img-timeline"></td>
+            <td class="align-top">
+                <h3 class="align-middle mb-0" data-toggle="collapse" data-target="#threads">
+                    <b class="hover-blue">Wątki</b>
+                </h3>
+                <small class="font-10">Wykaz wątków splątanych z Twoim losem</small>
+            </td>
+        </tr>
+    </table>
+    <div id="threads" class="collapse pl-2">
+        <br>
         <table>
             {% for row in threads|columns:3 %}
              <tr>
@@ -37,16 +45,24 @@
              </tr>
             {% endfor %}
         </table>
-        <br><br>
+        <br>
     </div>
     <br>
 
-    <img src="{% static 'img/timeline_participants.png' %}" class="border-double img-chapter">
-    <h3 class="align-middle pt-2" data-toggle="collapse" data-target="#participants">
-        <b class="hover-blue">Uczestnicy</b>
-    </h3>
-    <small>Członkowie drużyny współuczestniczący w Twoich przygodach</small><br><br>
+
+    <table>
+        <tr>
+            <td class="align-top"><img src="{% static 'img/timeline_participants.png' %}" class="border-double img-timeline"></td>
+            <td class="align-top">
+                <h3 class="align-middle mb-0" data-toggle="collapse" data-target="#participants">
+                    <b class="hover-blue">Uczestnicy</b>
+                </h3>
+                <small class="font-12">Członkowie drużyny współuczestniczący w Twoich przygodach</small>
+            </td>
+        </tr>
+    </table>
     <div id="participants" class="collapse">
+        <br>
         <table>
             <tr>
                 {% for p in participants %}
@@ -61,16 +77,22 @@
                 {% endfor %}
             </tr>
         </table>
-        <br><br>
     </div>
     <br>
 
-    <img src="{% static 'img/timeline_locations.png' %}" class="border-double img-chapter">
-    <h3 class="align-middle pt-2" data-toggle="collapse" data-target="#general_locations">
-        <b class="hover-blue">Lokacje</b>
-    </h3>
-    <small>Wykaz znanych Ci krain i lokacji występujących w Kalendarium</small><br>
-    <div id="general_locations" class="collapse">
+
+    <table>
+        <tr>
+            <td class="align-top"><img src="{% static 'img/timeline_locations.png' %}" class="border-double img-timeline"></td>
+            <td class="align-top">
+                <h3 class="align-middle mb-0" data-toggle="collapse" data-target="#general_locations">
+                    <b class="hover-blue">Lokacje</b>
+                </h3>
+                <small class="font-12">Wykaz znanych Ci krain i lokacji występujących w Kalendarium</small>
+            </td>
+        </tr>
+    </table>
+    <div id="general_locations" class="collapse pl-2">
         <table>
             {% for gen_loc in gen_locs %}
                 <tr>
@@ -79,27 +101,35 @@
                     </td>
                 </tr>
                 {% for row in gen_loc.specific_locations.all|columns:4 %}
-                 <tr>
-                     {% for spec_loc in row %}
-                     <td class="unblue">
-                         &#10023; <a href="{% url 'history:timeline-spec-loc' spec_loc.id %}">{{ spec_loc.name }}</a>&emsp;
-                     </td>
-                     {% endfor %}
-                 </tr>
+                <tr>
+                    {% for spec_loc in row %}
+                        <td class="unblue pl-3">
+                            &#10023; <a href="{% url 'history:timeline-spec-loc' spec_loc.id %}">{{ spec_loc.name }}</a>
+                        </td>
+                    {% endfor %}
+                </tr>
                 {% endfor %}
             {% endfor %}
         </table>
         <br>
     </div>
-    <br><br>
+    <br>
 
-    <img src="{% static 'img/timeline_years_and_seasons.png' %}" class="border-double img-chapter">
-    <h3 class="align-middle pt-2" data-toggle="collapse" data-target="#years">
-        <b class="hover-blue">Lata i pory roku</b>
-    </h3>
-    <small>Chronologia według Archonatu Nemetha Samatiana w Ebbonie</small><br><br>
-    <div id="years" class="collapse">
+
     <table>
+        <tr>
+            <td class="align-top"><img src="{% static 'img/timeline_years_and_seasons.png' %}" class="border-double img-timeline"></td>
+            <td class="align-top">
+                <h3 class="align-middle mb-0" data-toggle="collapse" data-target="#years">
+                    <b class="hover-blue">Lata i pory roku</b>
+                </h3>
+                <small class="font-12">Chronologia wydarzeń według lat i pór roku</small>
+            </td>
+        </tr>
+    </table>
+    <div id="years" class="collapse pl-2">
+        <br>
+        <table>
             {% for y in years_with_seasons_dict %}
                 <tr>
                     <td class="unblue">
@@ -133,12 +163,19 @@
     <br>
 
 
-    <img src="{% static 'img/timeline_games.png' %}" class="border-double img-chapter">
-    <h3 class="align-middle pt-2" data-toggle="collapse" data-target="#games">
-        <b class="hover-blue">Sesje</b>
-    </h3>
-    <small>Wykaz sesji mieszczących Twoje losy oraz znane Ci wydarzenia</small><br><br>
-    <div id="games" class="collapse">
+    <table>
+        <tr>
+            <td class="align-top"><img src="{% static 'img/timeline_games.png' %}" class="border-double img-timeline"></td>
+            <td class="align-top">
+                <h3 class="align-middle mb-0" data-toggle="collapse" data-target="#games">
+                    <b class="hover-blue">Sesje</b>
+                </h3>
+                <small class="font-12">Wykaz sesji obejmujących Twoje losy oraz wydarzenia znane Ci z opowieści</small>
+            </td>
+        </tr>
+    </table>
+    <div id="games" class="collapse pl-2">
+        <br>
         <table>
             {% for row in games|columns:2 %}
              <tr>

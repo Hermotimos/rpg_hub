@@ -122,6 +122,13 @@ td img {
         margin-right: 5px;
 }
 
+.img-timeline {
+        float: left;
+        height: 55px;
+        width: auto;
+        margin-right: 5px;
+}
+
 .img-chapter-header {
         float: left;
         height: 80px;
