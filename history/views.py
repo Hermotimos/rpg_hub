@@ -34,32 +34,19 @@ def is_allowed_for_chronicle(profile, chapter_id=0, game_id=0, chronicle_event_i
     if profile.character_status == 'gm':
         return True
     elif chapter_id:
-        # for game in Chapter.objects.get(id=chapter_id).game_sessions.all():
-        #     for event in game.chronicle_events.all():
-        #         if profile in event.participants.all() or profile in event.informed.all():
-        #             return True
         if chapter_id in [ch.id for ch in Chapter.objects.filter(
                 Q(game_sessions__chronicle_events__participants=profile)
                 | Q(game_sessions__chronicle_events__informed=profile))]:
             return True
     elif game_id:
-        # for event in GameSession.objects.get(id=game_id).chronicle_events.all():
-        #     if profile in event.participants.all() or profile in event.informed.all():
-        #         return True
         if game_id in [g.id for g in GameSession.objects.filter(
                 Q(chronicle_events__participants=profile) | Q(chronicle_events__informed=profile))]:
             return True
     elif chronicle_event_id:
-        # if profile in ChronicleEvent.objects.get(id=chronicle_event_id).participants.all() \
-        #         or profile in ChronicleEvent.objects.get(id=chronicle_event_id).informed.all():
-        #     return True
         if chronicle_event_id in [e.id for e in ChronicleEvent.objects.filter(
                 Q(participants=profile) | Q(informed=profile))]:
             return True
     elif timeline_event_id:
-        # if profile in TimelineEvent.objects.get(id=timeline_event_id).participants.all() \
-        #         or profile in TimelineEvent.objects.get(id=timeline_event_id).informed.all():
-        #     return True
         if timeline_event_id in [e.id for e in TimelineEvent.objects.filter(
                 Q(participants=profile) | Q(informed=profile))]:
             return True
@@ -74,7 +61,6 @@ def chronicle_main_view(request):
 
     if request.user.profile.character_status == 'gm':
         chapters = Chapter.objects.prefetch_related('game_sessions')
-        # chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all()] for ch in Chapter.objects.all()}
     else:
         events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all())\
             .distinct()
@@ -86,14 +72,6 @@ def chronicle_main_view(request):
         chapters = Chapter.objects\
             .prefetch_related(Prefetch('game_sessions', queryset=games))\
             .filter(game_sessions__in=games).distinct()
-
-        # events_participated = profile.chronicle_events_participated.all()
-        # events_informed = profile.chronicle_events_informed.all()
-        # events = (events_participated | events_informed).distinct()
-        # events = list(events)
-        # games = [e.game for e in events]
-        # chapters = [g.chapter for g in games]
-        # chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all() if g in games] for ch in chapters}
 
     context = {
         'page_title': 'Kronika',
@@ -139,9 +117,6 @@ def chronicle_all_chapters_view(request):
             'game_sessions__chronicle_events__notes__author',
             'game_sessions__chronicle_events__debate__topic'
         )
-        # events_informed = []
-        # chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all()] for ch in Chapter.objects.all()}
-        # games_with_events_dict = {g: [e for e in g.chronicle_events.all().prefetch_related('pictures')] for g in GameSession.objects.all()}
     else:
         events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all())\
             .distinct()\
@@ -158,16 +133,10 @@ def chronicle_all_chapters_view(request):
             .filter(game_sessions__in=games)\
             .distinct()
 
-        # chapters = [g.chapter for g in games]
-        # chapters_with_games_dict = {ch: [g for g in ch.game_sessions.all() if g in games] for ch in chapters}
-        # games_with_events_dict = {g: [e for e in g.chronicle_events.all() if e in events] for g in games}
     context = {
         'page_title': 'Pełna kronika',
         'chapters': chapters,
         'profile': profile,
-        # 'chapters_with_games_dict': chapters_with_games_dict,
-        # 'games_with_events_dict': games_with_events_dict,
-        # 'events_informed': events_informed,
     }
     return render(request, 'history/chronicle_all_chapters.html', context)
 
@@ -185,8 +154,6 @@ def chronicle_one_chapter_view(request, chapter_id):
             'chronicle_events__notes__author',
             'chronicle_events__debate__topic'
             )
-        # games_with_events_dict = {g: [e for e in g.chronicle_events.all()] for g in chapter.game_sessions.all()}
-        # events_informed = []
     else:
         events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all())\
             .distinct()\
@@ -199,19 +166,9 @@ def chronicle_one_chapter_view(request, chapter_id):
             .distinct()\
             .prefetch_related(Prefetch('chronicle_events', queryset=events))
 
-        # events_participated = profile.chronicle_events_participated.filter(game__in=chapter.game_sessions.all())
-        # events_informed = profile.chronicle_events_informed.filter(game__in=chapter.game_sessions.all())
-        # events = (events_participated | events_informed).distinct()
-        # events_informed = list(events_informed)
-        # events = list(events)
-        #
-        # games = [e.game for e in events]
-        # games_with_events_dict = {g: [e for e in g.chronicle_events.all() if e in events] for g in games}
-
     context = {
         'page_title': chapter.title,
         'games': games,
-        # 'events_informed': events_informed
     }
     if is_allowed_for_chronicle(profile, chapter_id=chapter_id):
         return render(request, 'history/chronicle_one_chapter.html', context)
@@ -237,14 +194,10 @@ def chronicle_one_game_view(request, game_id, timeline_event_id):
             .distinct()\
             .select_related('debate__topic') \
             .prefetch_related('informed', 'pictures', 'notes__author')
-        # events_participated = profile.chronicle_events_participated.filter(game=game)
-        # events_informed = profile.chronicle_events_informed.filter(game=game)
-        # events = (events_participated | events_informed).distinct()
 
     context = {
         'page_title': game.title,
         'events': events,
-        # 'events_informed': events_informed
     }
     if is_allowed_for_chronicle(profile, game_id=game_id):
         return render(request, 'history/chronicle_one_game.html', context)
@@ -274,8 +227,6 @@ def chronicle_inform_view(request, event_id):
 
             new_informed = form.cleaned_data['informed']
             event.informed.add(*list(new_informed))
-            # informed |= Profile.objects.filter(id__in=old_informed_ids)
-            # event.informed.set(informed)
 
             subject = f"[RPG] {profile} podzielił się z Tobą swoją historią!"
             message = f"{profile} znów rozprawia o swoich przygodach.\n\n" \
@@ -287,10 +238,6 @@ def chronicle_inform_view(request, event_id):
             receivers = []
             for profile in new_informed:
                 receivers.append(profile.user.email)
-            # for profile in event.informed.all():
-            #     # exclude previously informed users from mailing to avoid spam
-            #     if profile not in old_informed:
-            #         receivers.append(profile.user.email)
             if profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
@@ -398,20 +345,6 @@ SEASONS_WITH_STYLES_DICT = {
     '4': 'season-winter'
 }
 
-#
-# def participated_and_informed_events(profile_id):
-#     profile = Profile.objects.get(id=profile_id)
-#     if profile.character_status == 'gm':
-#         known_qs = TimelineEvent.objects.all()\
-#             .select_related('game', 'general_location')\
-#             .prefetch_related('threads', 'participants', 'informed', 'specific_locations')
-#     else:
-#         known_qs = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
-#             .distinct()\
-#             .select_related('game', 'general_location')\
-#             .prefetch_related('threads', 'participants', 'informed', 'specific_locations')
-#     return known_qs
-
 
 @query_debugger
 @login_required
@@ -453,64 +386,6 @@ def timeline_main_view(request):
         seasons.sort()
         years_with_seasons_dict[y] = seasons
 
-    # known_events = participated_and_informed_events(profile.id)
-
-    # repetitive interations over known_events.all():
-    # threads_querysets_list = []
-    # participants_querysets_list = []
-    # spec_locs_querysets_list = []
-    # gen_locs_set = set()
-    # games_set = set()
-    # years_set = set()
-    # for event in known_events:
-    #     threads_querysets_list.append(event.threads.all())
-    #     participants_querysets_list.append(event.participants.all())
-    #     spec_locs_querysets_list.append(event.specific_locations.all())
-    #     gen_locs_set.add(event.general_location)
-    #     games_set.add(event.game)
-    #     years_set.add(event.year)
-
-    # threads
-    # threads_qs = Thread.objects.none()
-    # for qs in threads_querysets_list:
-    #     threads_qs = threads_qs | qs
-    # threads = threads_qs.distinct()
-
-    # threads_list = list(threads_qs.distinct())
-    # threads_name_and_obj_list = [(t.name, t) for t in threads_list]
-    # participants_qs = Profile.objects.none()
-    # for qs in participants_querysets_list:
-    #     participants_qs = participants_qs | qs
-    # participants_list = list(participants_qs.distinct())
-    # participants_name_and_obj_list = [(t.character_name, t) for t in participants_list]
-
-    # spec_locs_qs = SpecificLocation.objects.none()
-    # for qs in spec_locs_querysets_list:
-    #     spec_locs_qs = spec_locs_qs | qs
-    # spec_locs_list = list(spec_locs_qs.distinct())
-    # spec_locs_name_and_obj_list = [(t.name, t) for t in spec_locs_list]
-
-    # general locations with their specific locations: LEFT UNSORTED TO REFLECT SUBSEQUENT GENERAL LOCATIONS IN GAME
-    # gen_locs_with_spec_locs_list = []
-    # for gl in gen_locs_set:
-    #     gen_loc_with_spec_locs_list = [gl, [sl for sl in spec_locs.all() if sl.general_location == gl]]
-    #     gen_locs_with_spec_locs_list.append(gen_loc_with_spec_locs_list)
-
-    # games
-    # games_sorted_list = list(games_set)
-    # games_sorted_list.sort(key=lambda game: game.game_no)
-    # games_name_and_obj_list = [(g.title, g) for g in games_sorted_list]
-
-    # years with their seasons
-    # years_sorted_list = list(years_set)
-    # years_sorted_list.sort()
-    # years_with_seasons_dict = {}
-    # for y in years_sorted_list:
-    #     seasons_set = {e.season for e in known_events if e.year == y}
-    #     seasons_sorted_list = list(seasons_set)
-    #     seasons_sorted_list.sort()
-    #     years_with_seasons_dict[y] = seasons_sorted_list
-
     context = {
         'page_title': 'Kalendarium',
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
@@ -519,9 +394,6 @@ def timeline_main_view(request):
         'participants': participants,
         'gen_locs': gen_locs,
         'games': games,
-        # 'threads': threads_name_and_obj_list,
-        # 'participants': participants_name_and_obj_list,
-        # 'gen_locs_with_spec_locs': gen_locs_with_spec_locs_list,
     }
     return render(request, 'history/timeline_main.html', context)
 
@@ -596,10 +468,6 @@ def timeline_thread_view(request, thread_id):
         .select_related('game')\
         .prefetch_related('threads', 'participants', 'informed', 'general_locations', 'specific_locations', 'notes__author')
 
-    # events_by_thread_qs = thread.timeline_events.all()
-    # known_events = participated_and_informed_events(profile.id)
-    # events = list(events_by_thread_qs.distinct() & known_events.distinct())
-
     context = {
         'page_title': thread.name,
         'header': f'{thread.name}... Próbujesz sobie przypomnieć, od czego się to wszystko zaczęło?',
@@ -628,10 +496,6 @@ def timeline_participant_view(request, participant_id):
     events = events\
         .select_related('game')\
         .prefetch_related('threads', 'participants', 'informed', 'general_locations', 'specific_locations', 'notes__author')
-
-    # events_by_participant_qs = participant.timeline_events_participated.all()
-    # known_events = participated_and_informed_events(profile.id)
-    # events = list(events_by_participant_qs.distinct() & known_events.distinct())
 
     if profile == participant:
         header = 'Są czasy, gdy ogarnia Cię zaduma nad Twoim zawikłanym losem...'
@@ -667,10 +531,6 @@ def timeline_general_location_view(request, gen_loc_id):
         .select_related('game')\
         .prefetch_related('threads', 'participants', 'informed', 'general_locations', 'specific_locations', 'notes__author')
 
-    # events_by_general_location_qs = TimelineEvent.objects.filter(general_location=general_location)
-    # known_events = participated_and_informed_events(profile.id)
-    # events = list(events_by_general_location_qs.distinct() & known_events.distinct())
-
     context = {
         'page_title': general_location.name,
         'header': f'{general_location.name}... Zastanawiasz się, jakie piętno wywarła na Twoich losach ta kraina...',
@@ -699,10 +559,6 @@ def timeline_specific_location_view(request, spec_loc_id):
     events = events\
         .select_related('game')\
         .prefetch_related('threads', 'participants', 'informed', 'general_locations', 'specific_locations', 'notes__author')
-
-    # events_by_specific_location_qs = specific_location.timeline_events.all()
-    # known_events = participated_and_informed_events(profile.id)
-    # events = list(events_by_specific_location_qs.distinct() & known_events.distinct())
 
     context = {
         'page_title': specific_location.name,
@@ -746,9 +602,6 @@ def timeline_date_view(request, year, season='0'):
         events = events.filter(year=year, season=season)
         page_title = f'{season_name} {year}. roku Archonatu Nemetha Samatiana'
 
-    # known_events = participated_and_informed_events(profile.id)
-    # events = list(events.distinct() & known_events.distinct())
-
     context = {
         'page_title': page_title,
         'header': f'Nie wydaje się to wcale aż tak dawno temu...',
@@ -777,10 +630,6 @@ def timeline_game_view(request, game_id):
     events = events\
         .select_related('game')\
         .prefetch_related('threads', 'participants', 'informed', 'general_locations', 'specific_locations', 'notes__author')
-
-    # events_by_game_qs = TimelineEvent.objects.filter(game=game)
-    # known_events = participated_and_informed_events(profile.id)
-    # events = list(events_by_game_qs.distinct() & known_events.distinct())
 
     context = {
         'page_title': game.title,
