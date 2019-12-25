@@ -29,19 +29,11 @@ body {
         display: none;
 }
 
-/* dates above posts in debates and timeline*/
+/* dates above posts in debates and timeline
 small.left-float {
         width: 50%;
         float: left;
         text-align: left;
-}
-/*
-.posts-and-news td, .posts-and-news p {
-        font-size: 18px;
-        font-style: italic;
-        vertical-align: top;
-        padding: 5px;
-        text-align: justify;
 }
 */
 
@@ -145,11 +137,7 @@ h1, h2, h3, h4, h5, h6, b{
 .font-12 {
         font-size: 12px
 }
-/*
-small {
-        color: #888;
-}
-*/
+
 
 small.red {
         color: red;
