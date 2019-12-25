@@ -29,14 +29,6 @@ body {
         display: none;
 }
 
-/* dates above posts in debates and timeline
-small.left-float {
-        width: 50%;
-        float: left;
-        text-align: left;
-}
-*/
-
 .pt-6, .py-6 {
   padding-top: 5rem !important;
 }
@@ -65,11 +57,6 @@ small.left-float {
   padding-left: 6rem !important;
 }
 
-/*
-.my-1 {
-        padding: 5px;
-}
-*/
 td.align-center {
         text-align: center;
 }
@@ -138,7 +125,6 @@ h1, h2, h3, h4, h5, h6, b{
         font-size: 12px
 }
 
-
 small.red {
         color: red;
 }
@@ -195,7 +181,6 @@ a:hover {
 a {
         color: #444444;
 }
-
 
 .hover-pointer li:hover, a:hover {
         cursor: pointer;
