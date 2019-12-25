@@ -34,6 +34,19 @@ class ForAllowedProfilesAndPicturesForm(forms.ModelForm):
                                               required=False)
 
 
+class ForAllowedProfilesAndSkillsForm(forms.ModelForm):
+    allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
+                                                      .exclude(Q(character_status='dead_player') |
+                                                               Q(character_status='dead_npc') |
+                                                               Q(character_status='gm') |
+                                                               Q(character_status='living_npc')),
+                                                      widget=FilteredSelectMultiple('Allowed profiles', False),
+                                                      required=False)
+    skills = forms.ModelMultipleChoiceField(queryset=Skill.objects.all(),
+                                            widget=FilteredSelectMultiple('Skills', False),
+                                            required=False)
+
+
 class SkillLevelAdmin(admin.ModelAdmin):
     formfield_overrides = {
         # models.CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
@@ -67,7 +80,7 @@ class SkillAdmin(admin.ModelAdmin):
 
 
 class SynergyAdmin(admin.ModelAdmin):
-    form = ForAllowedProfilesForm
+    form = ForAllowedProfilesAndSkillsForm
     formfield_overrides = {
         models.CharField: {'widget': Textarea(attrs={'rows': 3, 'cols': 10})},
         models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 30})},
