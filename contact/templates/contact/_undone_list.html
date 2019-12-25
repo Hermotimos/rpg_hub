@@ -10,7 +10,7 @@
         </td>
         <td class="font-18 font-italic px-2 py-2 td-middle text-justify unblue"><a href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
         {% if request.user == demand.author %}
-            <td class="align-top"><a href="{% url 'contact:demands-modify' demand.id %}" class="btn btn-dark px-1">&#9998;</a></td>
+            <td class="align-top py-2"><a href="{% url 'contact:demands-modify' demand.id %}" class="btn btn-dark">&#9998;</a></td>
         {% endif %}
         <td class="align-top px-2 py-2"><a href="{% url 'contact:done' demand.id %}" class="btn btn-dark">&#10004;</a></td>
     </tr>
