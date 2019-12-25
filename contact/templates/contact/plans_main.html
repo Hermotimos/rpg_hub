@@ -17,15 +17,15 @@
     <br><br><br><br>
     {% for plan in plans %}
         <table>
-            <tr class="posts-and-news">
-                <td>
+            <tr>
+                <td class="align-top">
                     <img class="rounded-circle article-img" src="{{ plan.author.profile.image.url }}">
                     <br>
-                    <small>{{ plan.date_created|date:'d-M-Y' }}</small>
+                    <small class="font-italic text-muted text-nowrap">{{ plan.date_created|date:'d-M-Y' }}</small>
                 </td>
-                <td>{{ plan.text|capfirst|linebreaks }}</td>
-                <td><a href="{% url 'contact:plans-modify' plan.id %}" class="btn btn-dark">&#9998;</a></td>
-                <td><a href="{% url 'contact:plans-delete' plan.id %}" class="btn btn-danger">&#10008;</a></td>
+                <td class="font-18 font-italic px-2 py-2 text-justify">{{ plan.text|capfirst|linebreaks }}</td>
+                <td class="align-top"><a href="{% url 'contact:plans-modify' plan.id %}" class="btn btn-dark">&#9998;</a></td>
+                <td class="align-top"><a href="{% url 'contact:plans-delete' plan.id %}" class="btn btn-danger">&#10008;</a></td>
             </tr>
             <tr>
                 <td></td>

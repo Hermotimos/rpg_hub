@@ -15,13 +15,13 @@
     <br><br><br><br>
     {% for plan in plans %}
         <table>
-            <tr class="posts-and-news">
-                <td>
+            <tr>
+                <td class="align-top">
                     <img class="rounded-circle article-img" src="{{ plan.author.profile.image.url }}">
                     <br>
-                    <small>{{ plan.date_created|date:'d-M-Y' }}</small>
+                    <small class="font-italic text-muted text-nowrap">{{ plan.date_created|date:'d-M-Y' }}</small>
                 </td>
-                <td>{{ plan.text|capfirst|linebreaks }}</td>
+                <td class="font-18 font-italic px-2 py-2 text-justify">{{ plan.text|capfirst|linebreaksbr }}</td>
             </tr>
             <tr>
                 <td></td>
