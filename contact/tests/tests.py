@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 from contact import views
 from contact.models import Demand, Plan, DemandAnswer
-from contact.forms import DemandsCreateForm, DemandsModifyForm, DemandAnswerForm, PlansCreateForm, PlansModifyForm
+from contact.forms import DemandsCreateForm, DemandAnswerForm, PlansCreateForm, PlansModifyForm
 from users.models import User
 
 
@@ -36,12 +36,10 @@ class DemandsMainTest(TestCase):
     def test_links(self):
         linked_url1 = reverse('contact:demands-create')
         # demand1.is_done=False
-        linked_url2 = reverse('contact:demands-modify', kwargs={'demand_id': self.demand1.id})
         linked_url3 = reverse('contact:done', kwargs={'demand_id': self.demand1.id})
         linked_url4 = reverse('contact:undone', kwargs={'demand_id': self.demand1.id})
         linked_url5 = reverse('contact:demands-delete', kwargs={'demand_id': self.demand1.id})
         # demand2.is_done=True
-        linked_url6 = reverse('contact:demands-modify', kwargs={'demand_id': self.demand2.id})
         linked_url7 = reverse('contact:done', kwargs={'demand_id': self.demand2.id})
         linked_url8 = reverse('contact:undone', kwargs={'demand_id': self.demand2.id})
         linked_url9 = reverse('contact:demands-delete', kwargs={'demand_id': self.demand2.id})
@@ -50,11 +48,9 @@ class DemandsMainTest(TestCase):
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
-        self.assertContains(response, f'href="{linked_url2}"')
         self.assertContains(response, f'href="{linked_url3}"')
         self.assertNotContains(response, f'href="{linked_url4}"')
         self.assertNotContains(response, f'href="{linked_url5}"')
-        self.assertNotContains(response, f'href="{linked_url6}"')
         self.assertNotContains(response, f'href="{linked_url7}"')
         self.assertContains(response, f'href="{linked_url8}"')
         self.assertContains(response, f'href="{linked_url9}"')
@@ -63,11 +59,9 @@ class DemandsMainTest(TestCase):
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
-        self.assertNotContains(response, f'href="{linked_url2}"')
         self.assertContains(response, f'href="{linked_url3}"')
         self.assertNotContains(response, f'href="{linked_url4}"')
         self.assertNotContains(response, f'href="{linked_url5}"')
-        self.assertNotContains(response, f'href="{linked_url6}"')
         self.assertNotContains(response, f'href="{linked_url7}"')
         self.assertContains(response, f'href="{linked_url8}"')
         self.assertNotContains(response, f'href="{linked_url9}"')
@@ -76,11 +70,9 @@ class DemandsMainTest(TestCase):
         self.client.force_login(self.user3)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
-        self.assertNotContains(response, f'href="{linked_url2}"')
         self.assertNotContains(response, f'href="{linked_url3}"')
         self.assertNotContains(response, f'href="{linked_url4}"')
         self.assertNotContains(response, f'href="{linked_url5}"')
-        self.assertNotContains(response, f'href="{linked_url6}"')
         self.assertNotContains(response, f'href="{linked_url7}"')
         self.assertNotContains(response, f'href="{linked_url8}"')
         self.assertNotContains(response, f'href="{linked_url9}"')
@@ -190,94 +182,6 @@ class DemandsDeleteTest(TestCase):
         view = resolve(f'/contact/demands/delete:{self.demand1.id}/')
         self.assertEquals(view.func, views.demands_delete_view)
 
-
-class DemandsModifyTest(TestCase):
-    def setUp(self):
-        self.user1 = User.objects.create_user(username='user1', password='pass1111')
-        self.user2 = User.objects.create_user(username='user2', password='pass1111')
-        self.demand1 = Demand.objects.create(id=1, author=self.user1, addressee=self.user2, text='Demand1')
-        self.url = reverse('contact:demands-modify', kwargs={'demand_id': self.demand1.id})
-
-    def test_login_required(self):
-        redirect_url = reverse('users:login') + '?next=' + self.url
-        response = self.client.get(self.url)
-        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-
-    def test_redirect_if_unallowed(self):
-        # case addressee is not allowed to modify
-        self.client.force_login(self.user2)
-        redirect_url = reverse('home:dupa')
-        response = self.client.get(self.url)
-        self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
-
-    def test_404(self):
-        self.client.force_login(self.user1)
-        url = reverse('contact:demands-modify', kwargs={'demand_id': self.demand1.id + 999})
-        response = self.client.get(url)
-        self.assertEquals(response.status_code, 404)
-
-    def test_get(self):
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
-        self.assertEquals(response.status_code, 200)
-
-    def test_url_resolves_view(self):
-        view = resolve(f'/contact/demands/modify:{self.demand1.id}/')
-        self.assertEquals(view.func, views.demands_modify_view)
-
-    def test_csrf(self):
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
-        self.assertContains(response, 'csrfmiddlewaretoken')
-
-    def test_contains_form(self):
-        self.client.force_login(self.user1)
-        response = self.client.get(self.url)
-        form = response.context.get('form')
-        self.assertIsInstance(form, DemandsModifyForm)
-
-    # # TODO Nonsense error for field image with null=True, blank=True:
-    # # ValueError: The 'image' attribute has no file associated with it.
-    # def test_valid_post_data(self):
-    #     self.client.force_login(self.user1)
-    #     form = DemandsModifyForm(instance=self.demand1)
-    #     data = form.initial
-    #     data['text'] = 'changed text'
-    #     print('\n', data)
-    #     response = self.client.post(self.url, data)
-    #     form = response.context.get('form')
-    #     print('\n', form.errors)
-    #
-    #     # self.client.post(self.url, data)
-    #     self.assertTrue(Demand.objects.get(id=1).text == 'changed text')
-
-    # # TODO Nonsense error for field image with null=True, blank=True:
-    # # ValueError: The 'image' attribute has no file associated with it.
-    # def test_invalid_post_data(self):
-    #     self.client.force_login(self.user1)
-    #     form = DemandsModifyForm(instance=self.demand1)
-    #     data = form.initial
-    #     data['is_done'] = 'Invalid data for BooleanField'
-    #     response = self.client.post(self.url, data)
-    #     form = response.context.get('form')
-    #     # should show the form again, not redirect
-    #     self.assertEquals(response.status_code, 200)
-    #     self.assertTrue(form.errors)
-    #     self.assertFalse(Demand.objects.get(id=1).is_done)
-
-    # # TODO Nonsense error for field image with null=True, blank=True:
-    # # ValueError: The 'image' attribute has no file associated with it.
-    # def test_invalid_post_data_empty_fields(self):
-    #     self.client.force_login(self.user1)
-    #     form = DemandsModifyForm(instance=self.demand1)
-    #     data = form.initial
-    #     data['text'] = ''
-    #     response = self.client.post(self.url, data)
-    #     form = response.context.get('form')
-    #     # should show the form again, not redirect
-    #     self.assertEquals(response.status_code, 200)
-    #     self.assertTrue(form.errors)
-    #     self.assertTrue(Demand.objects.get(id=1).text)
 
 
 class DemandsDetailTest(TestCase):

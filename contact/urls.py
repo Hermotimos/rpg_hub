@@ -8,7 +8,6 @@ urlpatterns = [
     path('demands/main/', views.demands_main_view, name='demands-main'),
     path('demands/create/', views.demands_create_view, name='demands-create'),
     path('demands/delete:<int:demand_id>/', views.demands_delete_view, name='demands-delete'),
-    path('demands/modify:<int:demand_id>/', views.demands_modify_view, name='demands-modify'),
     path('demands/detail:<int:demand_id>/', views.demands_detail_view, name='demands-detail'),
     path('demands/mark-done:<int:demand_id>/', views.mark_done_view, name='done'),
     path('demands/mark-undone:<int:demand_id>/', views.mark_undone_view, name='undone'),

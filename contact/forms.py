@@ -30,21 +30,6 @@ class DemandsCreateForm(forms.ModelForm):
         self.fields['text'].widget.attrs['cols'] = 60
 
 
-class DemandsModifyForm(forms.ModelForm):
-    class Meta:
-        model = Demand
-        fields = ['text', 'image']
-
-    def __init__(self, *args, **kwargs):
-        super(DemandsModifyForm, self).__init__(*args, **kwargs)
-        self.fields['image'].label = 'Załącz obraz:'
-        self.fields['image'].required = False
-        self.fields['text'].label = ''
-        self.fields['text'].widget.attrs['placeholder'] = 'Treść (max. 4000 znaków)*'
-        self.fields['text'].widget.attrs['rows'] = 10
-        self.fields['text'].widget.attrs['cols'] = 60
-
-
 class DemandAnswerForm(forms.ModelForm):
     class Meta:
         model = DemandAnswer

@@ -84,40 +84,6 @@ def demands_delete_view(request, demand_id):
 
 @query_debugger
 @login_required
-def demands_modify_view(request, demand_id):
-    demand = get_object_or_404(Demand, id=demand_id)
-
-    if request.method == 'POST':
-        form = DemandsModifyForm(instance=demand, data=request.POST, files=request.FILES)
-        if form.is_valid():
-            form.save()
-
-            subject = f"[RPG] Dezyderat nr {demand.id}"
-            message = f"Modyfikacja przez {demand.author}:\n{demand.text}\n" \
-                      f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
-            sender = settings.EMAIL_HOST_USER
-            receivers = [demand.addressee.email]
-            send_mail(subject, message, sender, receivers)
-
-            messages.info(request, 'Zmodyfikowano dezyderat!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-    else:
-        form = DemandsModifyForm(instance=demand)
-
-    context = {
-        'page_title': 'Modyfikacja dezyderatu',
-        'demand': demand,
-        'form': form
-    }
-    if request.user == demand.author:
-        return render(request, 'contact/demands_modify.html', context)
-    else:
-        return redirect('home:dupa')
-
-
-@query_debugger
-@login_required
 def demands_detail_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
     answers = DemandAnswer.objects.filter(demand=demand).select_related('author', 'author__profile')
