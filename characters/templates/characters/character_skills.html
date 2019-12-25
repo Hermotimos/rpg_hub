@@ -22,7 +22,7 @@
         <h1 class="pt-2" data-toggle="collapse" data-target="#{{ skill.short_name }}">
             <b class="hover-blue">&nbsp;{{ skill.name }} [{{ skill.skill_levels.all|get_max_skill_level }}]</b>
         </h1>
-            <small>[{{ skill.tested_trait }}] {{ skill.description|linebreaksbr }}</small>
+            <small class="text-muted">[{{ skill.tested_trait }}] {{ skill.description|linebreaksbr }}</small>
         <br>
 
         <div id="{{ skill.short_name }}" class="collapse">
@@ -32,20 +32,21 @@
                 <tr>
                     {% with level_img='img/'|add:skill_level.level|add:'.png' %}
                         <td class="align-top"><img src="{% static level_img %}" class="border-double img-numeral"></td>
-                        <td class="align-bottom pl-1 justify">{% if skill_level.description %}{{ skill_level.description|linebreaksbr }}{% endif %}<br><br></td>
+                        <td class="align-bottom pl-1 text-justify">{% if skill_level.description %}{{ skill_level.description|linebreaksbr }}{% endif %}<br><br></td>
                     {% endwith %}
                 </tr>
                 {% endfor %}
             </table>
+            <br>
 
             {% for skill_level in skill.skill_levels.all %}
                 {% for kn_packet in skill_level.knowledge_packets.all %}
-                    <h5 class="pl-4" data-toggle="collapse" data-target="#id{{ skill_level.id }}_{{ kn_packet.id }}">
+                    <h5 class="pl-5" data-toggle="collapse" data-target="#id{{ skill_level.id }}_{{ kn_packet.id }}">
                         <b class="hover-blue">&#10023; {{ kn_packet.title }}</b>
                     </h5>
                     <div id="id{{ skill_level.id }}_{{ kn_packet.id }}" class="collapse">
-                        <div class="pl-5">
-                        <p><small class="text-justify">{{ kn_packet.text }}</small></p>
+                        <div class="pl-6 text-justify">
+                        <p><small class="text-justify font-italic">{{ kn_packet.text|linebreaksbr }}</small></p>
                         {% for picture in kn_packet.pictures.all %}
                             <p class="pt-2" data-toggle="collapse" data-target="#id{{ kn_packet.id }}_{{ picture.id }}">{{ picture.description }}</p>
                             <div id="id{{ kn_packet.id }}_{{ picture.id }}" class="collapse">

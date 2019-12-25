@@ -35,14 +35,36 @@ small.left-float {
         float: left;
         text-align: left;
 }
-
-.posts-and-news td, p {
+/*
+.posts-and-news td, .posts-and-news p {
         font-size: 18px;
         font-style: italic;
         vertical-align: top;
         padding: 5px;
         text-align: justify;
 }
+*/
+
+.pt-6,
+.py-6 {
+  padding-top: 5rem !important;
+}
+
+.pr-6,
+.px-6 {
+  padding-right: 5rem !important;
+}
+
+.pb-6,
+.py-6 {
+  padding-bottom: 5rem !important;
+}
+
+.pl-6,
+.px-6 {
+  padding-left: 5rem !important;
+}
+
 
 /*
 .my-1 {
@@ -110,10 +132,15 @@ h1, h2, h3, h4, h5, h6, b{
         white-space: nowrap;
 }
 
+.font-18 {
+        font-size: 18px
+}
+
+/*
 small {
         color: #888;
 }
-
+*/
 
 small.red {
         color: red;
