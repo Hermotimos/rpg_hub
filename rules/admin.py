@@ -61,9 +61,9 @@ class SkillAdmin(admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 30})},
     }
     inlines = [SkillLevelInline]
-    list_display = ['id', 'name', 'tested_trait', 'description', 'lvl_0', 'lvl_1', 'lvl_2', 'lvl_3', 'image']
-    list_editable = ['name', 'description', 'tested_trait', 'lvl_0', 'lvl_1', 'lvl_2', 'lvl_3', 'image']
-    search_fields = ['name', 'description', 'lvl_0', 'lvl_1', 'lvl_2', 'lvl_3']
+    list_display = ['id', 'name', 'tested_trait', 'lvl_0', 'lvl_1', 'lvl_2', 'lvl_3', 'image']
+    list_editable = ['name', 'tested_trait', 'lvl_0', 'lvl_1', 'lvl_2', 'lvl_3', 'image']
+    search_fields = ['name', 'lvl_0', 'lvl_1', 'lvl_2', 'lvl_3']
 
 
 class SynergyAdmin(admin.ModelAdmin):

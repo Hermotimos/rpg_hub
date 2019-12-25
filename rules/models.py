@@ -10,7 +10,6 @@ from users.models import Profile
 class Skill(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name='Umiejętność')
     tested_trait = models.CharField(max_length=50, verbose_name='Cecha/Cechy')
-    description = models.TextField(max_length=1000, blank=True, null=True, verbose_name='Opis')
     lvl_0 = models.TextField(max_length=4000, blank=True, null=True)
     lvl_1 = models.TextField(max_length=4000, blank=True, null=True)
     lvl_2 = models.TextField(max_length=4000, blank=True, null=True)
