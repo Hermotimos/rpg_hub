@@ -58,7 +58,24 @@
     <h2><b class="hover-blue" data-toggle="collapse" data-target="#knowledge">Szczegółowe informacje o krainie</b></h2>
     <br>
     <div id="knowledge" class="collapse">
-        W budowie...
+        {% for kn_packet in gen_loc.knowledge_packets.all %}
+            <h5 class="pl-4" data-toggle="collapse" data-target="#id{{ skill_level.id }}_{{ kn_packet.id }}">
+                <b class="hover-blue">&#10023; {{ kn_packet.title }}</b>
+            </h5>
+            <div id="id{{ skill_level.id }}_{{ kn_packet.id }}" class="collapse">
+                <div class="pl-5">
+                <p><small class="text-justify">{{ kn_packet.text }}</small></p>
+                {% for picture in kn_packet.pictures.all %}
+                    <p data-toggle="collapse" data-target="#id{{ kn_packet.id }}_{{ picture.id }}">{{ picture.description }}</p>
+                    <div id="id{{ kn_packet.id }}_{{ picture.id }}" class="collapse">
+                        <img src="{{ picture.image.url }}" class="border-double">
+                        <br><br>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+
     </div>
 {% endblock content %}
 

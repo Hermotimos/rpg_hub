@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.db.models.signals import post_save, m2m_changed
 
 from imaginarion.models import Picture
+from knowledge.models import KnowledgePacket
 from rpg_project.utils import create_sorting_name, query_debugger
 from users.models import Profile
 
@@ -28,6 +29,7 @@ class GeneralLocation(models.Model):
                                    default=340,
                                    related_name='gen_loc_main_pics',
                                    on_delete=models.PROTECT)
+    knowledge_packets = models.ManyToManyField(KnowledgePacket, related_name='general_locations', blank=True)
     pictures = models.ManyToManyField(Picture, related_name='gen_loc_pics', blank=True)
     sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
 
@@ -65,6 +67,7 @@ class SpecificLocation(models.Model):
                                    default=341,
                                    related_name='spec_loc_main_pics',
                                    on_delete=models.PROTECT)
+    knowledge_packets = models.ManyToManyField(KnowledgePacket, related_name='specific_locations', blank=True)
     pictures = models.ManyToManyField(Picture, related_name='spec_loc_pics', blank=True)
     sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
 
