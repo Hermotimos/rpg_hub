@@ -1,10 +1,8 @@
-td.demands-imgs {
-        white-space: nowrap;
-}
 
-
-
-/* TABS */
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* --------------------------------- */
+/* ----- TABS ----- */
+/* ------------------------------- */
 
 .tabs {
     padding: 0px;
@@ -27,7 +25,6 @@ td.demands-imgs {
     display: block;
     padding: 0px 21px;
     font-size: 30px;
-
     cursor: pointer;
     position: relative;
     margin-bottom: 0px;
@@ -44,9 +41,7 @@ td.demands-imgs {
     top: 60px;
     left: 0;
     background: #fafafa;
-    opacity:0;
-
-
+    opacity: 0;
 }
 
 .tabs>.tab>[id^="tab"]:checked + label {
@@ -58,3 +53,12 @@ td.demands-imgs {
 .tabs>.tab>[id^="tab"]:checked ~ [id^="tab-content"] {
     z-index: 1;/* or display: block; */
     opacity: 1;
+}
+
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* --------------------------------- */
+/* ----- XXXXX ----- */
+/* ------------------------------- */
