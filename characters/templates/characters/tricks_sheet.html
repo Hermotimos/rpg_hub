@@ -11,8 +11,7 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-    <br><br><br><br>
-
+    <br><br><br>
 
     <h5 class="rules">Karta Podstępów</h5>
     <p class="font-18 pl-1 font-italic text-justify">
@@ -43,10 +42,10 @@
         <br><br>
     {% endif %}
     {% if 'Mamert' in request.user.profile.character_name or request.user.profile.character_status == 'gm' %}
-    <u><a href="https://1drv.ms/x/s!AiRT0FtymkyPgWeKxROmaJ2NBLis">EDYTUJ</a></u>
+        <u><a href="https://1drv.ms/x/s!AiRT0FtymkyPgWeKxROmaJ2NBLis">EDYTUJ</a></u>
         <iframe width="820" height="700" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21231&authkey=%21AF2scRcEQ_6GsIQ&em=2&wdAllowInteractivity=False&AllowTyping=True&Item='Podst%C4%99py'!A1%3AJ23&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>        <br><br>
         <br><br>
-{% endif %}
+    {% endif %}
 
     <br><br>
     <h5 class="rules">Przydatne linki:</h5>
