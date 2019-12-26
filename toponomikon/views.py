@@ -83,8 +83,8 @@ def toponomikon_specific_location_view(request, spec_loc_id):
         spec_loc_known_only_indirectly = False
     else:
         spec_loc_known_only_indirectly = \
-            True if profile in spec_loc.known_indirectly.all() and not profile in spec_loc.known_directly.all() \
-                else False
+            True if profile in spec_loc.known_indirectly.all() and profile not in spec_loc.known_directly.all() \
+            else False
 
     context = {
         'page_title': spec_loc.name,
