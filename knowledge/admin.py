@@ -26,8 +26,8 @@ class ForAllowedProfilesAndPicturesForm(forms.ModelForm):
 class KnowledgePacketAdmin(admin.ModelAdmin):
     form = ForAllowedProfilesAndPicturesForm
     formfield_overrides = {
-        models.CharField: {'widget': TextInput(attrs={'size': 70})},
-        models.TextField: {'widget': Textarea(attrs={'rows': 20, 'cols': 120})},
+        models.CharField: {'widget': TextInput(attrs={'size': 50})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 20, 'cols': 100})},
     }
     list_display = ['id', 'title', 'text']
     list_editable = ['title', 'text']
