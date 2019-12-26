@@ -73,3 +73,22 @@ def toponomikon_general_location_view(request, gen_loc_id):
     }
     return render(request, 'toponomikon/toponomikon_general_location.html', context)
 
+
+@query_debugger
+@login_required
+def toponomikon_specific_location_view(request, spec_loc_id):
+    profile = request.user.profile
+    spec_loc = get_object_or_404(SpecificLocation, id=spec_loc_id)
+    if profile.character_status == 'gm':
+        spec_loc_known_only_indirectly = False
+    else:
+        spec_loc_known_only_indirectly = \
+            True if profile in spec_loc.known_indirectly.all() and not profile in spec_loc.known_directly.all() \
+                else False
+
+    context = {
+        'page_title': spec_loc.name,
+        'spec_loc': spec_loc,
+        'spec_loc_known_only_indirectly': spec_loc_known_only_indirectly,
+    }
+    return render(request, 'toponomikon/toponomikon_specific_location.html', context)

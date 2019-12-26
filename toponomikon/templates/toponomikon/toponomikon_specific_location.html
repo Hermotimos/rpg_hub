@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/toponomikon.css' %}">
+{% endblock head_extra %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'toponomikon:main' %}">Toponomikon</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'toponomikon:main' %}">XXXXXXXXXXXXXXX</a></li>
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br><br><br>
+    <p class="toponomikon-gen-loc-img">
+        <img src="{{ spec_loc.main_image.image.url }}" class="border-double
+        {% if spec_loc_known_only_indirectly %}
+            {{ 'img-grayscale' }}
+        {% endif %}
+        ">
+    </p>
+    <p class="font-italic text-justify">{{ spec_loc.description|linebreaksbr }}</p>
+
+    <br><br>
+    <h2><b class="hover-blue" data-toggle="collapse" data-target="#knowledge-packets">Szczegółowe informacje o krainie</b></h2>
+    <br>
+    <div id="knowledge-packets" class="collapse">
+        {% for kn_packet in spec_loc.knowledge_packets.all %}
+
+            {% include '_knowledge_packet.html' %}
+
+        {% endfor %}
+    </div>
+
+{% endblock content %}
+
+
+
+
+
+
+
+
