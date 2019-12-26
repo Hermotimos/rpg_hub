@@ -15,3 +15,9 @@
         margin-top: 40px;
         border: double;
 }
+/* for future experiments with sidebar position
+.pos-relative {
+    position: relative;
+    top: -65px;
+}
+*/
