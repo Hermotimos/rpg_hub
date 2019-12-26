@@ -241,8 +241,9 @@ def debates_invite_view(request, topic_id, debate_id):
 
             subject = f"[RPG] Dołączenie do narady: '{debate.name}'"
             message = f"{profile} dołączył/a Cię do narady '{debate.name}' w temacie '{debate.topic}'.\n"\
-                      f"Uczestnicy: {', '.join(p.character_name for p in allowed_profiles_new if p.character_status != 'gm')}\n" \
-                      f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
+                f"Uczestnicy: " \
+                f"{', '.join(p.character_name for p in debate.allowed_profiles.exclude(profile__character_status='gm'))}\n" \
+                f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
             receivers = []
             for p in allowed_profiles_new:
