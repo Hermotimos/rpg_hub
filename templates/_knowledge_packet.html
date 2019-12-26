@@ -6,6 +6,7 @@
 <div id="id_{{ skill_level.id }}_{{ kn_packet.id }}_{{ specifier }}" class="collapse">
     <div class="pl-7 text-justify">
         <a href="{% url 'knowledge:knowledge-inform' kn_packet.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a>
+        <br>
         <p class="font-18 font-italic pt-1 text-justify">{{ kn_packet.text|linebreaksbr }}</p>
         {% for picture in kn_packet.pictures.all %}
             <p data-toggle="collapse" data-target="#id{{ kn_packet.id }}_{{ picture.id }}">{{ picture.description }}</p>
