@@ -6,6 +6,7 @@ from characters.models import Character
 from knowledge.models import KnowledgePacket
 from rpg_project.utils import query_debugger
 from rules.models import Skill, SkillLevel
+from toponomikon.models import GeneralLocation, SpecificLocation
 
 
 @query_debugger
@@ -46,3 +47,22 @@ def character_skills_view(request):
         'knowledge_packets': knowledge_packets
     }
     return render(request, 'characters/character_skills.html', context)
+
+
+@query_debugger
+@login_required
+def character_knowledge_packets_view(request):
+    profile = request.user.profile
+    if profile.character_status == 'gm':
+        skills_kn_packets = KnowledgePacket.objects.filter(skill_levels=True)
+        # gen_locs_kn_packets = GeneralLocation.objects.all()
+        # spec_locs_kn_packets = SpecificLocation.objects.all()
+    else:
+        pass
+        skills_kn_packets = []
+
+    context = {
+        'page_title': 'Okruchy wiedzy',
+        'skills_kn_packets': skills_kn_packets,
+    }
+    return render(request, 'characters/knowledge_packets.html', context)
