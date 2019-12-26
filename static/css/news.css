@@ -5,14 +5,8 @@
         width: 300px;
 }
 
-.border-red {
+.border-2 {
         border: solid 2px;
-        border-color: #C70039;
-}
-
-.border-green {
-        border: solid 2px;
-        border-color: #229954;
 }
 
 .img-edit {

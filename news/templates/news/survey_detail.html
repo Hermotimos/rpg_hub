@@ -36,19 +36,19 @@
         </colgroup>
         {% for option in options %}
         <tr>
-            <td class="align-right">
+            <td class="align-middle align-right text-nowrap">
                 {% for profile in option.no_voters.all %}
                     {% if profile == request.user.profile %}
                         <a href="{% url 'news:survey-unvote' survey.id option.id %}">
-                            <img class="rounded-circle img-small border-red" src="{{ profile.image.url }}">
+                            <img class="rounded-circle img-small border-2 border-danger" src="{{ profile.image.url }}">
                         </a>
                     {% else %}
-                        <img class="rounded-circle img-small border-red" src="{{ profile.image.url }}">
+                        <img class="rounded-circle img-small border-2 border-danger" src="{{ profile.image.url }}">
                     {% endif %}
                 {% endfor %}
             </td>
-            <td>
-                &ensp;&ensp;<a href="{% url 'news:survey-no' survey.id option.id %}" class="btn btn-dark">-</a>
+            <td class="align-middle">
+                <a href="{% url 'news:survey-no' survey.id option.id %}" class="btn btn-dark">-</a>
             </td>
             <td>
                 &ensp;&ensp;{{ option.option_text }}
@@ -60,20 +60,21 @@
                         &#10008;
                     </a>
                 {% endif %}
+                &ensp;&ensp;
                 <br>
             </td>
-            <td>
-                &ensp;&ensp;<a href="{% url 'news:survey-yes' survey.id option.id %}" class="btn btn-dark">+</a>
+            <td class="align-middle">
+                <a href="{% url 'news:survey-yes' survey.id option.id %}" class="btn btn-dark">+</a>
             </td>
-            <td>
+            <td class="text-nowrap">
                 &ensp;&ensp;
                 {% for profile in option.yes_voters.all %}
                     {% if profile == request.user.profile %}
                         <a href="{% url 'news:survey-unvote' survey.id option.id %}">
-                            <img class="rounded-circle img-small border-green" src="{{ profile.image.url }}">
+                            <img class="rounded-circle img-small border-2 border-success" src="{{ profile.image.url }}">
                         </a>
                     {% else %}
-                        <img class="rounded-circle img-small border-green" src="{{ profile.image.url }}">
+                        <img class="rounded-circle img-small border-2 border-success" src="{{ profile.image.url }}">
                     {% endif %}
                 {% endfor %}
             </td>
