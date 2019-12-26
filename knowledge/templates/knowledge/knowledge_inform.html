@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/knowledge.css' %}">
+{% endblock head_extra %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+    <li class="breadcrumb-item active">XXXXXXXXXXXXXXXXXXXx</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br><br><br>
+    <table class="forms">
+        <tr>
+            <td><h6>Wiedza o:</h6></td>
+            <td><h6 class="font-italic px-1 text-justify">{{ kn_packet.title }}</h6></td>
+        </tr>
+    </table>
+    <br><br>
+
+    <h6>Przekaż wiedzę wybranym postaciom:</h6>
+    <small class="red">1) Wybieraj jedynie postacie, którym w kompleksowy sposób przekazałeś już tę wiedzę w świecie gry!</small><br>
+    <small>2) W razie wątpliwości skonsultuj się z MG zanim przekażesz wiedzę innym postaciom.</small><br>
+    <br>
+
+    <form method="POST" action=".#page-bottom" class="allowed-profiles-form-knowledge">
+        {% csrf_token %}
+        {{ form.allowed_profiles|as_crispy_field }}
+        <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
+        <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
+        <input class="btn btn-dark" type="submit" value="Przekaż wiedzę">
+    </form>
+{% endblock content %}

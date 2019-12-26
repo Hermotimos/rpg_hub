@@ -1,1 +1,5 @@
 
+.allowed-profiles-form-knowledge select {
+        min-height: 150px;
+        width: 400px;
+}
