@@ -28,7 +28,7 @@
 
     <form method="POST" action=".#page-bottom" class="allowed-profiles-form-knowledge">
         {% csrf_token %}
-        {{ form.allowed_profiles|as_crispy_field }}
+        {{ form|crispy }}
         <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
         <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
         <input class="btn btn-dark" type="submit" value="Przekaż wiedzę">

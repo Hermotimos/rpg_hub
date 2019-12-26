@@ -1,16 +1,18 @@
+{% load static %}
 
 <h5 class="pl-6" data-toggle="collapse" data-target="#id_{{ skill_level.id }}_{{ kn_packet.id }}_{{ specifier }}">
     <b class="hover-blue">&#10023; {{ kn_packet.title }}</b>
 </h5>
 <div id="id_{{ skill_level.id }}_{{ kn_packet.id }}_{{ specifier }}" class="collapse">
     <div class="pl-7 text-justify">
-    <p class="font-18 font-italic pt-1 text-justify">{{ kn_packet.text|linebreaksbr }}</p>
-    {% for picture in kn_packet.pictures.all %}
-        <p data-toggle="collapse" data-target="#id{{ kn_packet.id }}_{{ picture.id }}">{{ picture.description }}</p>
-        <div id="id{{ kn_packet.id }}_{{ picture.id }}" class="collapse">
-            <img src="{{ picture.image.url }}" class="border-double">
-        </div>
-    {% endfor %}
-    <br>
+        <a href="{% url 'knowledge:knowledge-inform' kn_packet.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a>
+        <p class="font-18 font-italic pt-1 text-justify">{{ kn_packet.text|linebreaksbr }}</p>
+        {% for picture in kn_packet.pictures.all %}
+            <p data-toggle="collapse" data-target="#id{{ kn_packet.id }}_{{ picture.id }}">{{ picture.description }}</p>
+            <div id="id{{ kn_packet.id }}_{{ picture.id }}" class="collapse">
+                <img src="{{ picture.image.url }}" class="border-double">
+            </div>
+        {% endfor %}
+        <br>
     </div>
 </div>
