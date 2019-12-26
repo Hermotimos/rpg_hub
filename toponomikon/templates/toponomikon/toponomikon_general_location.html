@@ -59,25 +59,12 @@
     <br>
     <div id="knowledge-packets" class="collapse">
         {% for kn_packet in gen_loc.knowledge_packets.all %}
-            <h5 class="pl-4" data-toggle="collapse" data-target="#id{{ gen_loc.id }}_{{ kn_packet.id }}">
-                <b class="hover-blue">&#10023; {{ kn_packet.title }}</b>
-            </h5>
-            <div id="id{{ gen_loc.id }}_{{ kn_packet.id }}" class="collapse">
-                <div class="pl-5">
-                <p class="font-18 font-italic pt-1 text-justify">{{ kn_packet.text }}</p>
-                {% for picture in kn_packet.pictures.all %}
-                    <p data-toggle="collapse" data-target="#id{{ kn_packet.id }}_{{ picture.id }}">{{ picture.description }}</p>
-                    <div id="id{{ kn_packet.id }}_{{ picture.id }}" class="collapse">
-                        <img src="{{ picture.image.url }}" class="border-double">
-                        <br><br>
-                    </div>
-                {% endfor %}
-                </div>
-                <br><br>
-            </div>
-        {% endfor %}
 
+            {% include '_knowledge_packet.html' %}
+
+        {% endfor %}
     </div>
+
 {% endblock content %}
 
 
