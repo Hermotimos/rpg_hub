@@ -26,7 +26,7 @@
 
         <div id="{{ skill.short_name }}" class="collapse">
             <br>
-            <table class="skills-table">
+            <table class="ml-4">
                 {% for skill_level in skill.skill_levels.all %}
                 <tr>
                     {% with level_img='img/'|add:skill_level.level|add:'.png' %}
