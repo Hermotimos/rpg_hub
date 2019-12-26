@@ -13,7 +13,8 @@
 {% block content %}
     <br><br><br>
 
-    <h2>Umiejętności</h2>
+    <h2><b>Umiejętności</b></h2>
+    <br>
     {% for kn_packet in skills_kn_packets %}
         {% with specifier=1 %}
 
@@ -23,19 +24,10 @@
     {% endfor %}
     <br><br>
 
-    <h2>Krainy</h2>
-    {% for kn_packet in gen_locs_kn_packets %}
+    <h2><b>Toponomikon</b></h2>
+    <br>
+    {% for kn_packet in toponomikon_kn_packets %}
         {% with specifier=2 %}
-
-            {% include '_knowledge_packet.html' %}
-
-        {% endwith %}
-    {% endfor %}
-    <br><br>
-
-    <h2>Lokacje</h2>
-    {% for kn_packet in spec_locs_kn_packets %}
-        {% with specifier=3 %}
 
             {% include '_knowledge_packet.html' %}
 
