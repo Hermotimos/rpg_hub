@@ -49,8 +49,7 @@ class ForAllowedProfilesAndSkillsForm(forms.ModelForm):
 
 class SkillLevelAdmin(admin.ModelAdmin):
     formfield_overrides = {
-        # models.CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
-        models.TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 100})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 80})},
     }
 
     list_display = ['name', 'description']
@@ -64,7 +63,7 @@ class SkillLevelAdmin(admin.ModelAdmin):
 
 class SkillLevelInline(admin.TabularInline):
     model = SkillLevel
-    extra = 4
+    extra = 1
 
 
 class SkillAdmin(admin.ModelAdmin):
