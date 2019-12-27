@@ -18,24 +18,59 @@
 
                 <!-- Navbar Left Side -->
                 <div class="navbar-nav mr-auto">
-                    <a class="nav-item nav-link" href="{% url 'news:main' %}">Ogłoszenia</a>
-                    <a class="nav-item nav-link" href="{% url 'contact:demands-main' %}">Dezyderaty</a>
-                    <a class="nav-item nav-link" href="{% url 'rules:main' %}">Zasady</a>
-                    &emsp;&emsp;&emsp;
-                    <a class="nav-item nav-link" href="{% url 'history:chronicle-main' %}">Kronika</a>
-                    <a class="nav-item nav-link" href="{% url 'history:timeline-main' %}">Kalendarium</a>
-                    <a class="nav-item nav-link" href="{% url 'debates:main' %}">Narady</a>
-                    &emsp;&emsp;
+
+                    <div class="dropdown pr-4">
+                        <button class="font-18 nav-item nav-link dropbtn">Organizacyjne</button>
+                        <div class="dropdown-content">
+                            <a class="font-14 nav-item nav-link" href="{% url 'news:main' %}">&#10023; Ogłoszenia</a>
+                            <a class="font-14 nav-item nav-link" href="{% url 'contact:demands-main' %}">&#10023; Dezyderaty</a>
+                            <a class="font-14 nav-item nav-link" href="{% url 'rules:main' %}">&#10023; Zasady</a>
+                        </div>
+                    </div>
+
+                    <div class="dropdown pr-4">
+                        <button class="font-18 nav-item nav-link dropbtn">Przygody</button>
+                        <div class="dropdown-content">
+                            <a class="font-14 nav-item nav-link" href="{% url 'history:chronicle-main' %}">&#10023; Kronika</a>
+                            <a class="font-14 nav-item nav-link" href="{% url 'history:timeline-main' %}">&#10023; Kalendarium</a>
+                            <a class="font-14 nav-item nav-link" href="{% url 'debates:main' %}">&#10023; Narady</a>
+<!--                            <a class="nav-item nav-link" href="#">&#10023; Prosoponomikon</a>-->
+                            <a class="font-14 nav-item nav-link" href="{% url 'toponomikon:main' %}">&#10023; Toponomikon</a>
+                        </div>
+                    </div>
+
+                    <div class="dropdown pr-4">
+                        <button class="font-18 nav-item nav-link dropbtn">Wiedza</button>
+                        <div class="dropdown-content">
+<!--                    <a class="nav-item nav-link" href="#">&#10023; Bestiariusz</a>-->
+<!--                    <a class="nav-item nav-link" href="#">&#10023; Biblioteka | Mapy</a>-->
+<!--                    <a class="nav-item nav-link" href="#">&#10023; Varia</a>-->
+                            <a class="font-14 nav-item nav-link" href="{% url 'knowledge:knowledge-sheet' %}">&#10023; Okruchy wiedzy</a>
+                        </div>
+                    </div>
+
+                    {% if user.profile.character_status != 'gm' %}
+                    <div class="dropdown pr-4">
+                        <button class="font-18 nav-item nav-link dropbtn">Postać</button>
+                        <div class="dropdown-content">
+<!--                            <a class="font-14 nav-item nav-link" href="#">&#10023; Cechy i walka</a>-->
+<!--                            <a class="font-14 nav-item nav-link" href="#">&#10023; Doświadczenie | Tabela awansów</a>-->
+<!--                            <a class="font-14 nav-item nav-link" href="#">&#10023; Ekwipunek | Skrytki</a>-->
+                            <a class="font-14 nav-item nav-link" href="{% url 'characters:skills-sheet' %}">&#10023; Umiejętności</a>
+                            <a class="font-14 nav-item nav-link" href="{% url 'characters:tricks-sheet' %}">&#10023; Podstępy</a>
+<!--                            <a class="font-14 nav-item nav-link" href="#">&#10023; Arkana</a>-->
+                            <a class="font-14 nav-item nav-link" href="{% url 'contact:plans-main' %}">&#10023; Plany</a>
+<!--                            <a class="font-14 nav-item nav-link" href="#">&#10023; Przemyślenia</a>-->
+                        </div>
+                    </div>
+                    {% endif %}
+
+
                 </div>
 
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav">
                     {% if user.is_authenticated %}
-                        {% if user.profile.character_name != '' %}
-                            <a class="navbar-brand mr-2 nav-link" href="{% url 'users:profile' %}">{{ user.profile.character_name|get_first_word }}</a>
-                        {% else %}
-                            <a class="navbar-brand mr-2" href="{% url 'users:profile' %}">Uzupełnij profil</a>
-                        {% endif %}
                         <a href="{% url 'contact:demands-create' %}"><img src="{% static 'img/demand.png' %}" class="mr-2 mt-1"></a>
                         &emsp;
                         <a class="btn btn-outline-light btn-space" href="{% url 'users:logout' %}">Wyloguj</a>

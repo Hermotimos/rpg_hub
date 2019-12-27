@@ -1,5 +1,4 @@
 
-
 .bg-navbar {
         background-color: #363636;
 }
@@ -24,4 +23,32 @@
 nav.navbar {
         border: double;
         border-color: white;
+}
+
+
+
+/* NEW NAVBAR */
+
+.dropdown .dropbtn {
+  border: none;
+  background-color: inherit;
+}
+
+.dropdown:hover .dropdown-content {
+  display: inline;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #363636;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  display: block;
+  text-align: left;
 }
