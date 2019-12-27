@@ -28,8 +28,9 @@
     cursor: pointer;
     position: relative;
     margin-bottom: 0px;
-    color: #F5F5F5;
-    background: #303030;
+        background: #fafafa;
+    color: #303030
+
 }
 
 .tabs .content {
@@ -46,8 +47,9 @@
 
 .tabs>.tab>[id^="tab"]:checked + label {
     top: 0;
-    background: #fafafa;
-    color: #303030
+    background: #303030;
+    color: #F5F5F5;
+
 }
 
 .tabs>.tab>[id^="tab"]:checked ~ [id^="tab-content"] {
