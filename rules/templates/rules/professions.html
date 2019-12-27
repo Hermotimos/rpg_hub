@@ -61,7 +61,7 @@
                             ✧ {{ profession.name }}
                         </b>
                     </h5>
-                    <div id="{{ profession.short_name }}" class="collapse">
+                    <div id="{{ profession.short_name }}" class="collapse pl-3">
                         <p>{{ profession.description|linebreaksbr }}</p>
                         <p>{{ profession.start_perks|linebreaksbr }}</p>
                         <br>
@@ -79,7 +79,7 @@
                             </thead>
 
                             <tbody class="align-center dark">
-                                <tr><td>1</td>  <td class="align-left">&emsp;{{ profession.lvl_1 }}</td></tr>
+                                <tr class="pl-3"><td>1</td>  <td class="align-left">&emsp;{{ profession.lvl_1 }}</td></tr>
                                 <tr><td>2</td>  <td class="align-left">&emsp;{{ profession.lvl_2 }}</td></tr>
                                 <tr><td>3</td>  <td class="align-left">&emsp;{{ profession.lvl_3 }}</td></tr>
                                 <tr><td>4</td>  <td class="align-left">&emsp;{{ profession.lvl_4 }}</td></tr>

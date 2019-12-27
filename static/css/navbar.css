@@ -51,4 +51,6 @@ nav.navbar {
   float: none;
   display: block;
   text-align: left;
+  outline:none;
 }
+
