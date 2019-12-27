@@ -1,8 +1,7 @@
 
 .content-section-sidebar {
 	    position: sticky;
-        padding: 0 10px;
-	    top: 0;
+	    top: 65px;
 }
 
 .account-img-sidebar {
@@ -14,9 +13,3 @@
         margin-top: 40px;
         border: double;
 }
-/* for future experiments with sidebar position
-.pos-relative {
-    position: relative;
-    top: -65px;
-}
-*/
