@@ -20,47 +20,47 @@
                 <div class="navbar-nav mr-auto">
 
                     <div class="dropdown pr-4">
-                        <button class="font-18 nav-item nav-link dropbtn">Organizacyjne</button>
+                        <button class="font-18 nav-item nav-link dropbtn small-caps">Organizacyjne</button>
                         <div class="dropdown-content">
-                            <a class="font-14 nav-item nav-link" href="{% url 'news:main' %}">&#10023; Ogłoszenia</a>
-                            <a class="font-14 nav-item nav-link" href="{% url 'contact:demands-main' %}">&#10023; Dezyderaty</a>
-                            <a class="font-14 nav-item nav-link" href="{% url 'rules:main' %}">&#10023; Zasady</a>
+                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'news:main' %}">&#10023; Ogłoszenia</a>
+                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'contact:demands-main' %}">&#10023; Dezyderaty</a>
+                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'rules:main' %}">&#10023; Zasady</a>
                         </div>
                     </div>
 
                     <div class="dropdown pr-4">
-                        <button class="font-18 nav-item nav-link dropbtn">Przygody</button>
+                        <button class="font-18 nav-item nav-link dropbtn small-caps">Przygody</button>
                         <div class="dropdown-content">
-                            <a class="font-14 nav-item nav-link" href="{% url 'history:chronicle-main' %}">&#10023; Kronika</a>
-                            <a class="font-14 nav-item nav-link" href="{% url 'history:timeline-main' %}">&#10023; Kalendarium</a>
-                            <a class="font-14 nav-item nav-link" href="{% url 'debates:main' %}">&#10023; Narady</a>
-<!--                            <a class="nav-item nav-link" href="#">&#10023; Prosoponomikon</a>-->
-                            <a class="font-14 nav-item nav-link" href="{% url 'toponomikon:main' %}">&#10023; Toponomikon</a>
+                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'history:chronicle-main' %}">&#10023; Kronika</a>
+                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'history:timeline-main' %}">&#10023; Kalendarium</a>
+                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'debates:main' %}">&#10023; Narady</a>
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Prosoponomikon</a>-->
+                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'toponomikon:main' %}">&#10023; Toponomikon</a>
                         </div>
                     </div>
 
                     <div class="dropdown pr-4">
-                        <button class="font-18 nav-item nav-link dropbtn">Wiedza</button>
+                        <button class="font-18 nav-item nav-link dropbtn small-caps">Wiedza</button>
                         <div class="dropdown-content">
-<!--                    <a class="nav-item nav-link" href="#">&#10023; Bestiariusz</a>-->
-<!--                    <a class="nav-item nav-link" href="#">&#10023; Biblioteka | Mapy</a>-->
-<!--                    <a class="nav-item nav-link" href="#">&#10023; Varia</a>-->
-                            <a class="font-14 nav-item nav-link" href="{% url 'knowledge:knowledge-sheet' %}">&#10023; Okruchy wiedzy</a>
+<!--                    <a class="nav-item nav-link small-caps" href="#">&#10023; Bestiariusz</a>-->
+<!--                    <a class="nav-item nav-link small-caps" href="#">&#10023; Biblioteka | Mapy</a>-->
+<!--                    <a class="nav-item nav-link small-caps" href="#">&#10023; Varia</a>-->
+                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'knowledge:knowledge-sheet' %}">&#10023; Okruchy wiedzy</a>
                         </div>
                     </div>
 
                     {% if user.profile.character_status != 'gm' %}
                     <div class="dropdown pr-4">
-                        <button class="font-18 nav-item nav-link dropbtn">Postać</button>
+                        <button class="font-18 nav-item nav-link dropbtn small-caps">Postać</button>
                         <div class="dropdown-content">
-<!--                            <a class="font-14 nav-item nav-link" href="#">&#10023; Cechy i walka</a>-->
-<!--                            <a class="font-14 nav-item nav-link" href="#">&#10023; Doświadczenie | Tabela awansów</a>-->
-<!--                            <a class="font-14 nav-item nav-link" href="#">&#10023; Ekwipunek | Skrytki</a>-->
-                            <a class="font-14 nav-item nav-link" href="{% url 'characters:skills-sheet' %}">&#10023; Umiejętności</a>
-                            <a class="font-14 nav-item nav-link" href="{% url 'characters:tricks-sheet' %}">&#10023; Podstępy</a>
-<!--                            <a class="font-14 nav-item nav-link" href="#">&#10023; Arkana</a>-->
-                            <a class="font-14 nav-item nav-link" href="{% url 'contact:plans-main' %}">&#10023; Plany</a>
-<!--                            <a class="font-14 nav-item nav-link" href="#">&#10023; Przemyślenia</a>-->
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Cechy i walka</a>-->
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Doświadczenie | Tabela awansów</a>-->
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Ekwipunek | Skrytki</a>-->
+                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'characters:skills-sheet' %}">&#10023; Umiejętności</a>
+                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'characters:tricks-sheet' %}">&#10023; Podstępy</a>
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Arkana</a>-->
+                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'contact:plans-main' %}">&#10023; Plany</a>
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Przemyślenia</a>-->
                         </div>
                     </div>
                     {% endif %}
