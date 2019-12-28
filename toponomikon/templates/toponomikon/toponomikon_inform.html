@@ -4,7 +4,7 @@
 {% load custom_filters %}
 
 {% block head_extra %}
-    <link rel="stylesheet" href="{% static 'css/characters.css' %}">
+    <link rel="stylesheet" href="{% static 'css/toponomikon.css' %}">
 {% endblock head_extra %}
 
 {% block breadcrumb %}
@@ -30,7 +30,7 @@
 
     <form method="POST" class="allowed-profiles-form-history">
         {% csrf_token %}
-        {{ form.known_indirectly|as_crispy_field }}<br>
+        {{ form|crispy }}<br>
         <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
         <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
         <input class="btn btn-dark" type="submit" value="Poinformuj">

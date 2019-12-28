@@ -21,6 +21,7 @@
         {% endif %}
         ">
     </p>
+<p><a class="pl-1" href="{% url 'toponomikon:inform' 0 spec_loc.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></p>
     <p class="font-italic text-justify">{{ spec_loc.description|linebreaksbr }}</p>
 
     <br><br>

@@ -103,7 +103,7 @@ def toponomikon_specific_location_view(request, spec_loc_id):
 @login_required
 def toponomikon_inform_view(request, gen_loc_id='0', spec_loc_id='0'):
     profile = request.user.profile
-    if gen_loc_id != '0':
+    if gen_loc_id != 0:
         obj = get_object_or_404(GeneralLocation, id=gen_loc_id)
     else:
         obj = get_object_or_404(SpecificLocation, id=spec_loc_id)

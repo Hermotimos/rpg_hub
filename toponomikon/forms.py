@@ -33,8 +33,8 @@ class SpecificLocationInformForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
-        already_known_directly = kwargs.pop('known_directly')
-        already_known_indirectly = kwargs.pop('known_indirectly')
+        already_known_directly = kwargs.pop('known_directly_old')
+        already_known_indirectly = kwargs.pop('known_indirectly_old')
         super(SpecificLocationInformForm, self).__init__(*args, **kwargs)
         informable_profiles = Profile.objects.exclude(Q(user=authenticated_user) |
                                                       Q(character_status='dead_player') |
