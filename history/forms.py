@@ -51,6 +51,7 @@ class ChronicleEventInformForm(forms.ModelForm):
                                                         Q(character_status='gm'))
         self.fields['informed'].queryset = uninformable_profiles.exclude(id__in=the_knowing_ids)
         self.fields['informed'].label = ''
+        self.fields['informed'].widget.attrs['size'] = 10
 
 
 class ChronicleEventNoteForm(forms.ModelForm):
@@ -107,6 +108,7 @@ class TimelineEventInformForm(forms.ModelForm):
                                                       Q(character_status='gm'))
         self.fields['informed'].queryset = informable_profiles.exclude(id__in=the_knowing_ids)
         self.fields['informed'].label = ''
+        self.fields['informed'].widget.attrs['size'] = 10
 
 
 class TimelineEventEditForm(forms.ModelForm):

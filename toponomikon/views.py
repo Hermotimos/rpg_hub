@@ -154,7 +154,7 @@ def toponomikon_inform_view(request, gen_loc_id='0', spec_loc_id='0'):
                                               known_indirectly_old=known_indirectly_old)
 
     context = {
-        'page_title': 'Poinformuj o wydarzeniu',
+        'page_title': 'Opowiedz o krainie lub lokacji',
         'form': form,
         'obj': obj,
     }
