@@ -229,14 +229,15 @@ def debates_invite_view(request, topic_id, debate_id):
     profile = request.user.profile
     debate = get_object_or_404(Debate, id=debate_id)
 
-    allowed_profiles_old = debate.allowed_profiles.all()
+    already_allowed_profiles = debate.allowed_profiles.all()
 
     if request.method == 'POST':
         form = InviteForm(authenticated_user=request.user,
-                          already_allowed_profiles=allowed_profiles_old,
+                          already_allowed_profiles=already_allowed_profiles,
                           data=request.POST,
                           instance=debate)
         if form.is_valid():
+            # debate = form.save()
             allowed_profiles_new = form.cleaned_data['allowed_profiles']
             debate.allowed_profiles.add(*list(allowed_profiles_new))
             debate.followers.add(*list(allowed_profiles_new))
@@ -248,8 +249,8 @@ def debates_invite_view(request, topic_id, debate_id):
                 f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
             receivers = []
-            for p in allowed_profiles_new:
-                receivers.append(p.user.email)
+            for new_profile in allowed_profiles_new:
+                receivers.append(new_profile.user.email)
             if profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
@@ -258,12 +259,12 @@ def debates_invite_view(request, topic_id, debate_id):
             return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
     else:
         form = InviteForm(authenticated_user=request.user,
-                          already_allowed_profiles=allowed_profiles_old)
+                          already_allowed_profiles=already_allowed_profiles)
 
     context = {
         'page_title': 'Dodaj uczestników narady',
         'debate': debate,
-        'debate_allowed_profiles': allowed_profiles_old,
+        'already_allowed_profiles': already_allowed_profiles,
         'form': form,
     }
     if profile in debate.allowed_profiles.all() or profile.character_status == 'gm':
