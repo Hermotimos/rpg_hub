@@ -21,7 +21,11 @@
         </tr>
         <tr>
             <td class="align-middle"><h6>Inicjator:</h6></td>
-            <td><img class="rounded-circle img-small" src="{{ first_remark.author.profile.image.url }}"></td>
+            <td>
+                {% if first_remark %}
+                    <img class="rounded-circle img-small" src="{{ first_remark.author.profile.image.url }}">
+                {% endif %}
+            </td>
         </tr>
         <tr>
             <td class="align-middle"><h6>Uczestnicy:</h6></td>
