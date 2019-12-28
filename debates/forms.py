@@ -85,9 +85,11 @@ class InviteForm(forms.ModelForm):
         allowable_profiles = Profile.objects.exclude(Q(user=authenticated_user) |
                                                      Q(character_status='dead_player') |
                                                      Q(character_status='dead_npc') |
-                                                     Q(character_status='gm'))
+                                                     Q(character_status='gm') |
+                                                     Q(id__in=already_allowed_profiles))
         self.fields['allowed_profiles'].label = ''
-        self.fields['allowed_profiles'].queryset = allowable_profiles.exclude(
-            id__in=[p.id for p in already_allowed_profiles]
-        )
+        self.fields['allowed_profiles'].queryset = allowable_profiles\
+            # .exclude(
+            # id__in=[p.id for p in already_allowed_profiles]
+        # )
         self.fields['allowed_profiles'].widget.attrs['size'] = 10
