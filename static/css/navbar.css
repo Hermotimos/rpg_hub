@@ -16,7 +16,9 @@ nav.navbar {
         border-color: white;
 }
 
-
+.navbar {
+        padding: 0;
+}
 
 /* NABAR DROPDOWNS */
 
@@ -49,4 +51,3 @@ nav.navbar {
         text-align: left;
         outline: none;
 }
-
