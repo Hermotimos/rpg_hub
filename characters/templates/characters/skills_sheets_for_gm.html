@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/characters.css' %}" xmlns="http://www.w3.org/1999/html">
+{% endblock head_extra %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br><br><br>
+    <table>
+        <tr>
+            {% for character in characters %}
+                <td class="unblue-black">
+                    <a href="{% url 'characters:skills-sheet' character.profile.id %}">
+                        <img src="{{ character.profile.image.url }}" class="border-double account-img-characters">
+                    </a>&emsp;&emsp;
+                </td>
+                {% if forloop.counter|divisibleby:4 %}
+                    </tr><tr>
+                {% endif %}
+            {% endfor %}
+        </tr>
+    </table>
+{% endblock content %}
