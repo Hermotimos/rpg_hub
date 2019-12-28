@@ -100,12 +100,12 @@ class TimelineEventInformForm(forms.ModelForm):
         participants_ids = kwargs.pop('participants_ids')
         the_knowing_ids = participants_ids + old_informed_ids
         super(TimelineEventInformForm, self).__init__(*args, **kwargs)
-        uninformable_profiles = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                        Q(character_status='dead_player') |
-                                                        Q(character_status='dead_npc') |
-                                                        Q(character_status='living_npc') |
-                                                        Q(character_status='gm'))
-        self.fields['informed'].queryset = uninformable_profiles.exclude(id__in=the_knowing_ids)
+        informable_profiles = Profile.objects.exclude(Q(user=authenticated_user) |
+                                                      Q(character_status='dead_player') |
+                                                      Q(character_status='dead_npc') |
+                                                      Q(character_status='living_npc') |
+                                                      Q(character_status='gm'))
+        self.fields['informed'].queryset = informable_profiles.exclude(id__in=the_knowing_ids)
         self.fields['informed'].label = ''
 
 
