@@ -233,3 +233,4 @@ def update_known_specific_locations(sender, instance, **kwargs):
 post_save.connect(update_known_specific_locations, sender=TimelineEvent)
 m2m_changed.connect(update_known_specific_locations, sender=TimelineEvent.participants.through)
 m2m_changed.connect(update_known_specific_locations, sender=TimelineEvent.informed.through)
+m2m_changed.connect(update_known_specific_locations, sender=TimelineEvent.specific_locations.through)
