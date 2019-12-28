@@ -20,6 +20,7 @@
         {% endif %}
         ">
     </p>
+    <p><a class="pl-1" href="{% url 'toponomikon:inform' gen_loc.id '0' %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></p>
     <p class="font-italic text-justify">{{ gen_loc.description|linebreaksbr }}</p>
 
     <br><br>

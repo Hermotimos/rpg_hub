@@ -18,15 +18,7 @@
     <table class="forms">
         <tr>
             <td><h6>Kraina/Lokacja:</h6></td>
-            <td>
-                <h6 class="font-italic px-1 text-justify">
-                {% if gen_loc %}
-                    {{ gen_loc.name }}
-                {% elif spec_loc %}
-                    {{ spec_loc.general_location.name }}: {{ spec_loc.name }}
-                {% endif %}
-            </h6>
-            </td>
+            <td><h6 class="font-italic px-1 text-justify">{{ obj.name }}</h6></td>
         </tr>
     </table>
     <br><br>
