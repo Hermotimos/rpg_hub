@@ -26,11 +26,13 @@
     <br><br>
     <h2><b class="hover-blue" data-toggle="collapse" data-target="#knowledge-packets">Szczegółowe informacje o lokacji</b></h2>
     <div id="knowledge-packets" class="collapse">
-        {% for kn_packet in spec_loc.knowledge_packets.all %}
-
-            {% include '_knowledge_packet.html' %}
-
-        {% endfor %}
+        {% if spec_loc.knowledge_packets.all %}
+            {% for kn_packet in spec_loc.knowledge_packets.all %}
+                {% include '_knowledge_packet.html' %}
+            {% endfor %}
+        {% else %}
+            <p class="font-18 font-italic pt-1 pl-5 text-justify">Ludzka niewiedza nieodmiennie przewyższa wiedzę...</p>
+        {% endif %}
     </div>
 
 {% endblock content %}
