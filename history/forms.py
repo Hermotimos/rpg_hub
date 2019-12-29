@@ -10,7 +10,7 @@ from users.models import Profile
 class ChronicleEventCreateForm(forms.ModelForm):
     class Meta:
         model = ChronicleEvent
-        exclude = ()
+        exclude = []
 
     def __init__(self, *args, **kwargs):
         super(ChronicleEventCreateForm, self).__init__(*args, **kwargs)
@@ -23,7 +23,7 @@ class ChronicleEventCreateForm(forms.ModelForm):
 class ChronicleEventEditForm(forms.ModelForm):
     class Meta:
         model = ChronicleEvent
-        exclude = ()
+        exclude = []
 
     def __init__(self, *args, **kwargs):
         super(ChronicleEventEditForm, self).__init__(*args, **kwargs)
@@ -44,13 +44,14 @@ class ChronicleEventInformForm(forms.ModelForm):
         participants_ids = kwargs.pop('participants_ids')
         the_knowing_ids = participants_ids + old_informed_ids
         super(ChronicleEventInformForm, self).__init__(*args, **kwargs)
-        uninformable_profiles = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                        Q(character_status='dead_player') |
-                                                        Q(character_status='dead_npc') |
-                                                        Q(character_status='living_npc') |
-                                                        Q(character_status='gm'))
-        self.fields['informed'].queryset = uninformable_profiles.exclude(id__in=the_knowing_ids)
         self.fields['informed'].label = ''
+        self.fields['informed'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
+                                                                   Q(character_status='dead_player') |
+                                                                   Q(character_status='dead_npc') |
+                                                                   Q(character_status='living_npc') |
+                                                                   Q(character_status='gm') |
+                                                                   Q(id__in=the_knowing_ids))
+        self.fields['informed'].widget.attrs = {'size': 10}
 
 
 class ChronicleEventNoteForm(forms.ModelForm):
@@ -66,9 +67,11 @@ class ChronicleEventNoteForm(forms.ModelForm):
         self.fields['color'].label = 'Kolor tekstu'
         self.fields['text'].label = ''
         self.fields['text'].required = False
-        self.fields['text'].widget.attrs['placeholder'] = 'Twoje przemyślenia (max. 4000 znaków)*'
-        self.fields['text'].widget.attrs['cols'] = 60
-        self.fields['text'].widget.attrs['rows'] = 10
+        self.fields['text'].widget.attrs = {
+            'cols': 60,
+            'rows': 10,
+            'placeholder': 'Twoje przemyślenia (max. 4000 znaków)*',
+        }
 
 
 # ------ TimelineEvent model ------
@@ -85,8 +88,8 @@ class TimelineEventCreateForm(forms.ModelForm):
         self.fields['informed'].widget.attrs = {'size': 10}
         self.fields['participants'].widget.attrs = {'size': 10}
         self.fields['specific_locations'].widget.attrs = {'size': 10}
-        self.fields['threads'].widget.attrs = {'size': 10}
         self.fields['threads'].queryset = Thread.objects.exclude(is_ended=True)
+        self.fields['threads'].widget.attrs = {'size': 10}
 
 
 class TimelineEventInformForm(forms.ModelForm):
@@ -100,13 +103,14 @@ class TimelineEventInformForm(forms.ModelForm):
         participants_ids = kwargs.pop('participants_ids')
         the_knowing_ids = participants_ids + old_informed_ids
         super(TimelineEventInformForm, self).__init__(*args, **kwargs)
-        uninformable_profiles = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                        Q(character_status='dead_player') |
-                                                        Q(character_status='dead_npc') |
-                                                        Q(character_status='living_npc') |
-                                                        Q(character_status='gm'))
-        self.fields['informed'].queryset = uninformable_profiles.exclude(id__in=the_knowing_ids)
         self.fields['informed'].label = ''
+        self.fields['informed'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
+                                                                   Q(character_status='dead_player') |
+                                                                   Q(character_status='dead_npc') |
+                                                                   Q(character_status='living_npc') |
+                                                                   Q(character_status='gm') |
+                                                                   Q(id__in=the_knowing_ids))
+        self.fields['informed'].widget.attrs = {'size': 10}
 
 
 class TimelineEventEditForm(forms.ModelForm):
@@ -137,6 +141,8 @@ class TimelineEventNoteForm(forms.ModelForm):
         self.fields['color'].label = 'Kolor tekstu'
         self.fields['text'].label = ''
         self.fields['text'].required = False
-        self.fields['text'].widget.attrs['placeholder'] = 'Twoje przemyślenia (max. 4000 znaków)*'
-        self.fields['text'].widget.attrs['cols'] = 60
-        self.fields['text'].widget.attrs['rows'] = 10
+        self.fields['text'].widget.attrs = {
+            'cols': 60,
+            'rows': 10,
+            'placeholder': 'Twoje przemyślenia (max. 4000 znaków)*',
+        }
