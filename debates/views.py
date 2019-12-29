@@ -166,7 +166,9 @@ def debate_view(request, topic_id, debate_id):
     debate_allowed_profiles = debate.allowed_profiles.exclude(character_status='gm')
     debate_followers = debate.followers.exclude(character_status='gm')
     remarks = debate.remarks.all().select_related('author__profile')
-    first_remark = debate.remarks.exclude(author__profile__character_status='gm').order_by('date_posted')[0]
+    first_remark = debate.remarks.exclude(author__profile__character_status='gm').order_by('date_posted')[0] \
+        if debate.remarks.exclude(author__profile__character_status='gm') \
+        else False
     last_remark = debate.remarks.order_by('-date_posted')[0]
 
     last_remark_seen_by_imgs = ()
