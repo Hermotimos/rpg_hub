@@ -26,7 +26,7 @@
     <small>2) W razie wątpliwości skonsultuj się z MG zanim przekażesz wiedzę innym postaciom.</small><br>
     <br>
 
-    <form method="POST" action=".#page-bottom" class="allowed-profiles-form-knowledge">
+    <form method="POST" class="multiselect-form-small">
         {% csrf_token %}
         {{ form|crispy }}
         <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>

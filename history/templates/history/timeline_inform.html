@@ -77,7 +77,7 @@
 
     <br>
 
-    <form method="POST" class="allowed-profiles-form-history">
+    <form method="POST" class="multiselect-form-small">
         {% csrf_token %}
         {{ form.informed|as_crispy_field }}<br>
         <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
