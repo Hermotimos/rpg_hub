@@ -20,4 +20,4 @@ class KnowledgePacketInformForm(forms.ModelForm):
                                                                            Q(character_status='living_npc') |
                                                                            Q(character_status='gm') |
                                                                            Q(id__in=already_allowed_profiles))
-        self.fields['allowed_profiles'].widget.attrs['size'] = 10
+        self.fields['allowed_profiles'].widget.attrs = {'size': 10}

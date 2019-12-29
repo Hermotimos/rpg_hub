@@ -22,7 +22,7 @@ class GeneralLocationInformForm(forms.ModelForm):
                                                                            Q(character_status='gm') |
                                                                            Q(id__in=already_known_directly) |
                                                                            Q(id__in=already_known_indirectly))
-        self.fields['known_indirectly'].widget.attrs['size'] = 10
+        self.fields['known_indirectly'].widget.attrs = {'size': 10}
 
 
 class SpecificLocationInformForm(forms.ModelForm):
@@ -43,4 +43,4 @@ class SpecificLocationInformForm(forms.ModelForm):
                                                                            Q(character_status='gm') |
                                                                            Q(id__in=already_known_directly) |
                                                                            Q(id__in=already_known_indirectly))
-        self.fields['known_indirectly'].widget.attrs['size'] = 10
+        self.fields['known_indirectly'].widget.attrs = {'size': 10}

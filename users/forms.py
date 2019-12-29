@@ -7,12 +7,7 @@ from .models import Profile
 class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
-        fields = [
-            'username',
-            'email',
-            'password1',
-            'password2'
-        ]
+        fields = ['username', 'email', 'password1', 'password2']
 
     email = forms.EmailField(required=False)
 
@@ -20,10 +15,7 @@ class UserRegistrationForm(UserCreationForm):
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = [
-            'username',
-            'email',
-        ]
+        fields = ['username', 'email']
 
     email = forms.EmailField(required=False)
 
@@ -31,10 +23,7 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = [
-            'character_name',
-            'image'
-        ]
+        fields = ['character_name', 'image']
 
     # With this there's error: 'ProfileUpdateForm' object has no attribute 'get'
     # def __init__(self, *args, **kwargs):
@@ -55,7 +44,6 @@ class ProfileUpdateForm(forms.ModelForm):
             }
         )
     )
-
     image = forms.ImageField(
         label='Awatar'
     )

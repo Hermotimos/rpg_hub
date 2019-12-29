@@ -10,7 +10,7 @@ from users.models import Profile
 class ChronicleEventCreateForm(forms.ModelForm):
     class Meta:
         model = ChronicleEvent
-        exclude = ()
+        exclude = []
 
     def __init__(self, *args, **kwargs):
         super(ChronicleEventCreateForm, self).__init__(*args, **kwargs)
@@ -23,7 +23,7 @@ class ChronicleEventCreateForm(forms.ModelForm):
 class ChronicleEventEditForm(forms.ModelForm):
     class Meta:
         model = ChronicleEvent
-        exclude = ()
+        exclude = []
 
     def __init__(self, *args, **kwargs):
         super(ChronicleEventEditForm, self).__init__(*args, **kwargs)
@@ -51,7 +51,7 @@ class ChronicleEventInformForm(forms.ModelForm):
                                                                    Q(character_status='living_npc') |
                                                                    Q(character_status='gm') |
                                                                    Q(id__in=the_knowing_ids))
-        self.fields['informed'].widget.attrs['size'] = 10
+        self.fields['informed'].widget.attrs = {'size': 10}
 
 
 class ChronicleEventNoteForm(forms.ModelForm):
@@ -67,9 +67,11 @@ class ChronicleEventNoteForm(forms.ModelForm):
         self.fields['color'].label = 'Kolor tekstu'
         self.fields['text'].label = ''
         self.fields['text'].required = False
-        self.fields['text'].widget.attrs['placeholder'] = 'Twoje przemyślenia (max. 4000 znaków)*'
-        self.fields['text'].widget.attrs['cols'] = 60
-        self.fields['text'].widget.attrs['rows'] = 10
+        self.fields['text'].widget.attrs = {
+            'cols': 60,
+            'rows': 10,
+            'placeholder': 'Twoje przemyślenia (max. 4000 znaków)*',
+        }
 
 
 # ------ TimelineEvent model ------
@@ -108,7 +110,7 @@ class TimelineEventInformForm(forms.ModelForm):
                                                                    Q(character_status='living_npc') |
                                                                    Q(character_status='gm') |
                                                                    Q(id__in=the_knowing_ids))
-        self.fields['informed'].widget.attrs['size'] = 10
+        self.fields['informed'].widget.attrs = {'size': 10}
 
 
 class TimelineEventEditForm(forms.ModelForm):
@@ -139,6 +141,8 @@ class TimelineEventNoteForm(forms.ModelForm):
         self.fields['color'].label = 'Kolor tekstu'
         self.fields['text'].label = ''
         self.fields['text'].required = False
-        self.fields['text'].widget.attrs['cols'] = 60
-        self.fields['text'].widget.attrs['rows'] = 10
-        self.fields['text'].widget.attrs['placeholder'] = 'Twoje przemyślenia (max. 4000 znaków)*'
+        self.fields['text'].widget.attrs = {
+            'cols': 60,
+            'rows': 10,
+            'placeholder': 'Twoje przemyślenia (max. 4000 znaków)*',
+        }
