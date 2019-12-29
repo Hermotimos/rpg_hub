@@ -668,11 +668,9 @@ def timeline_inform_view(request, event_id):
                                        data=request.POST,
                                        instance=event)
         if form.is_valid():
-            event = form.save()
-
-            informed = form.cleaned_data['informed']
-            informed |= Profile.objects.filter(id__in=old_informed_ids)
-            event.informed.set(informed)
+            # event = form.save()
+            informed_new = form.cleaned_data['informed']
+            event.informed.add(*list(informed_new))
 
             subject = f"[RPG] {profile} podzielił się z Tobą swoją historią!"
             message = f"{profile} znów rozprawia o swoich przygodach.\n\n" \
@@ -683,10 +681,8 @@ def timeline_inform_view(request, event_id):
                       f"Wydarzenie zostało zapisane w Twoim Kalendarium."
             sender = settings.EMAIL_HOST_USER
             receivers = []
-            for profile in event.informed.all():
-                # exclude previously informed users from mailing to avoid spam
-                if profile not in old_informed:
-                    receivers.append(profile.user.email)
+            for new_profile in informed_new:
+                receivers.append(new_profile.user.email)
             if profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
