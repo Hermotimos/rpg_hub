@@ -25,9 +25,9 @@ class DemandsCreateForm(forms.ModelForm):
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
-        self.fields['text'].widget.attrs['placeholder'] = 'Twój dezyderat (max. 4000 znaków)*'
-        self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60
+        self.fields['text'].widget.attrs['rows'] = 10
+        self.fields['text'].widget.attrs['placeholder'] = 'Twój dezyderat (max. 4000 znaków)*'
 
 
 class DemandAnswerForm(forms.ModelForm):
@@ -40,9 +40,9 @@ class DemandAnswerForm(forms.ModelForm):
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
-        self.fields['text'].widget.attrs['placeholder'] = 'Odpowiedź (max. 4000 znaków)*'
-        self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60
+        self.fields['text'].widget.attrs['rows'] = 10
+        self.fields['text'].widget.attrs['placeholder'] = 'Odpowiedź (max. 4000 znaków)*'
 
 
 # ------------------- PLANS -------------------
@@ -59,9 +59,9 @@ class PlansCreateForm(forms.ModelForm):
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
-        self.fields['text'].widget.attrs['placeholder'] = 'Twój plan... (max. 4000 znaków)*'
-        self.fields['text'].widget.attrs['rows'] = 15
         self.fields['text'].widget.attrs['cols'] = 60
+        self.fields['text'].widget.attrs['rows'] = 15
+        self.fields['text'].widget.attrs['placeholder'] = 'Twój plan... (max. 4000 znaków)*'
 
 
 class PlansModifyForm(forms.ModelForm):
@@ -75,6 +75,6 @@ class PlansModifyForm(forms.ModelForm):
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
-        self.fields['text'].widget.attrs['placeholder'] = 'Treść (max. 4000 znaków)*'
-        self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60
+        self.fields['text'].widget.attrs['rows'] = 10
+        self.fields['text'].widget.attrs['placeholder'] = 'Treść (max. 4000 znaków)*'
