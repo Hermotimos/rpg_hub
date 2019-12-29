@@ -21,16 +21,19 @@
         {% endif %}
         ">
     </p>
+<p><a class="pl-1" href="{% url 'toponomikon:inform' 0 spec_loc.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></p>
     <p class="font-italic text-justify">{{ spec_loc.description|linebreaksbr }}</p>
 
     <br><br>
-    <h2><b class="hover-blue" data-toggle="collapse" data-target="#knowledge-packets">Szczegółowe informacje o krainie</b></h2>
+    <h2><b class="hover-blue" data-toggle="collapse" data-target="#knowledge-packets">Szczegółowe informacje o lokacji</b></h2>
     <div id="knowledge-packets" class="collapse">
-        {% for kn_packet in spec_loc.knowledge_packets.all %}
-
-            {% include '_knowledge_packet.html' %}
-
-        {% endfor %}
+        {% if spec_loc.knowledge_packets.all %}
+            {% for kn_packet in spec_loc.knowledge_packets.all %}
+                {% include '_knowledge_packet.html' %}
+            {% endfor %}
+        {% else %}
+            <p class="font-18 font-italic pt-1 pl-5 text-justify">Ubi leones...</p>
+        {% endif %}
     </div>
 
 {% endblock content %}
