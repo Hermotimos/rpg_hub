@@ -14,15 +14,14 @@ class GeneralLocationInformForm(forms.ModelForm):
         already_known_directly = kwargs.pop('known_directly_old')
         already_known_indirectly = kwargs.pop('known_indirectly_old')
         super(GeneralLocationInformForm, self).__init__(*args, **kwargs)
-        informable_profiles = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                      Q(character_status='dead_player') |
-                                                      Q(character_status='dead_npc') |
-                                                      Q(character_status='living_npc') |
-                                                      Q(character_status='gm') |
-                                                      Q(id__in=already_known_directly) |
-                                                      Q(id__in=already_known_indirectly))
         self.fields['known_indirectly'].label = ''
-        self.fields['known_indirectly'].queryset = informable_profiles
+        self.fields['known_indirectly'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
+                                                                           Q(character_status='dead_player') |
+                                                                           Q(character_status='dead_npc') |
+                                                                           Q(character_status='living_npc') |
+                                                                           Q(character_status='gm') |
+                                                                           Q(id__in=already_known_directly) |
+                                                                           Q(id__in=already_known_indirectly))
         self.fields['known_indirectly'].widget.attrs['size'] = 10
 
 
@@ -36,13 +35,12 @@ class SpecificLocationInformForm(forms.ModelForm):
         already_known_directly = kwargs.pop('known_directly_old')
         already_known_indirectly = kwargs.pop('known_indirectly_old')
         super(SpecificLocationInformForm, self).__init__(*args, **kwargs)
-        informable_profiles = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                      Q(character_status='dead_player') |
-                                                      Q(character_status='dead_npc') |
-                                                      Q(character_status='living_npc') |
-                                                      Q(character_status='gm') |
-                                                      Q(id__in=already_known_directly) |
-                                                      Q(id__in=already_known_indirectly))
         self.fields['known_indirectly'].label = ''
-        self.fields['known_indirectly'].queryset = informable_profiles
+        self.fields['known_indirectly'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
+                                                                           Q(character_status='dead_player') |
+                                                                           Q(character_status='dead_npc') |
+                                                                           Q(character_status='living_npc') |
+                                                                           Q(character_status='gm') |
+                                                                           Q(id__in=already_known_directly) |
+                                                                           Q(id__in=already_known_indirectly))
         self.fields['known_indirectly'].widget.attrs['size'] = 10
