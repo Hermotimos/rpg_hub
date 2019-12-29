@@ -16,13 +16,9 @@ nav.navbar {
         border-color: white;
 }
 
-@media only screen and (max-width: 600px) {
-    div.set-height {
-        height: 50vh;
-        overflow-y: scroll;
-    }
+.navbar {
+        padding: 0;
 }
-
 
 /* NABAR DROPDOWNS */
 
@@ -55,4 +51,3 @@ nav.navbar {
         text-align: left;
         outline: none;
 }
-
