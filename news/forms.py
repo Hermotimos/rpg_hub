@@ -28,9 +28,9 @@ class CreateNewsForm(forms.ModelForm):
         self.fields['image'].required = False
         self.fields['text'].label = ''
         self.fields['text'].max_length = 4000
-        self.fields['text'].widget.attrs['placeholder'] = 'Twoje ogłoszenie (max. 4000 znaków)*'
         self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60
+        self.fields['text'].widget.attrs['placeholder'] = 'Twoje ogłoszenie (max. 4000 znaków)*'
         self.fields['title'].label = ''
         self.fields['title'].max_length = 100
         self.fields['title'].widget.attrs['placeholder'] = 'Tytuł ogłoszenia (max. 100 znaków)*'
@@ -51,10 +51,10 @@ class CreateNewsAnswerForm(forms.ModelForm):
         self.fields['image'].required = False
         self.fields['text'].label = ''
         self.fields['text'].max_length = 4000
-        self.fields['text'].widget.attrs['placeholder'] = 'Twoja odpowiedź (max. 4000 znaków)*'
         self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60
-        self.fields['text'].widget.attrs['oninput'] = 'showIsTyping()'
+        # self.fields['text'].widget.attrs['oninput'] = 'showIsTyping()'
+        self.fields['text'].widget.attrs['placeholder'] = 'Twoja odpowiedź (max. 4000 znaków)*'
 
 
 class CreateSurveyForm(forms.ModelForm):
@@ -81,9 +81,9 @@ class CreateSurveyForm(forms.ModelForm):
         self.fields['image'].required = False
         self.fields['text'].label = ''
         self.fields['text'].max_length = 4000
-        self.fields['text'].widget.attrs['placeholder'] = 'Wiadomość do ankiety (max. 4000 znaków)*'
         self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60
+        self.fields['text'].widget.attrs['placeholder'] = 'Wiadomość do ankiety (max. 4000 znaków)*'
         self.fields['title'].label = ''
         self.fields['title'].max_length = 100
         self.fields['title'].widget.attrs['placeholder'] = 'Tytuł ankiety (max. 100 znaków)*'
@@ -132,6 +132,6 @@ class CreateSurveyAnswerForm(forms.ModelForm):
         self.fields['image'].required = False
         self.fields['text'].label = ''
         self.fields['text'].max_length = 4000
-        self.fields['text'].widget.attrs['placeholder'] = 'Twoja odpowiedź (max. 4000 znaków)*'
         self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60
+        self.fields['text'].widget.attrs['placeholder'] = 'Twoja odpowiedź (max. 4000 znaków)*'
