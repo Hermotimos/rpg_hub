@@ -68,9 +68,9 @@ class CreateRemarkForm(forms.ModelForm):
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
-        self.fields['text'].widget.attrs['placeholder'] = 'Twój głos w naradzie (max. 4000 znaków)*'
         self.fields['text'].widget.attrs['rows'] = 10
         self.fields['text'].widget.attrs['cols'] = 60
+        self.fields['text'].widget.attrs['placeholder'] = 'Twój głos w naradzie (max. 4000 znaków)*'
 
 
 class InviteForm(forms.ModelForm):
@@ -80,13 +80,12 @@ class InviteForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
-        already_allowed_profiles = kwargs.pop('already_allowed_profiles')
+        old_allowed_profiles = kwargs.pop('old_allowed_profiles')
         super(InviteForm, self).__init__(*args, **kwargs)
-        allowable_profiles = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                     Q(character_status='dead_player') |
-                                                     Q(character_status='dead_npc') |
-                                                     Q(character_status='gm') |
-                                                     Q(id__in=already_allowed_profiles))
         self.fields['allowed_profiles'].label = ''
-        self.fields['allowed_profiles'].queryset = allowable_profiles.exclude(id__in=already_allowed_profiles)
+        self.fields['allowed_profiles'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
+                                                                           Q(character_status='dead_player') |
+                                                                           Q(character_status='dead_npc') |
+                                                                           Q(character_status='gm') |
+                                                                           Q(id__in=old_allowed_profiles))
         self.fields['allowed_profiles'].widget.attrs['size'] = 10
