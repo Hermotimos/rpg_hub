@@ -1,8 +1,13 @@
-from django.db.models import Count, Prefetch, Q, Case, When, Value, IntegerField
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.db.models import Prefetch, Q, Case, When, Value, IntegerField
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 
+from rpg_project import settings
 from rpg_project.utils import query_debugger
+from toponomikon.forms import GeneralLocationInformForm, SpecificLocationInformForm
 from toponomikon.models import GeneralLocation, SpecificLocation
 
 
@@ -92,3 +97,68 @@ def toponomikon_specific_location_view(request, spec_loc_id):
         'spec_loc_known_only_indirectly': spec_loc_known_only_indirectly,
     }
     return render(request, 'toponomikon/toponomikon_specific_location.html', context)
+
+
+@query_debugger
+@login_required
+def toponomikon_inform_view(request, gen_loc_id='0', spec_loc_id='0'):
+    profile = request.user.profile
+    if gen_loc_id != 0:
+        obj = get_object_or_404(GeneralLocation, id=gen_loc_id)
+    else:
+        obj = get_object_or_404(SpecificLocation, id=spec_loc_id)
+
+    known_directly_old = obj.known_directly.all()
+    known_indirectly_old = obj.known_indirectly.all()
+
+    if request.method == 'POST':
+        if isinstance(obj, GeneralLocation):
+            form = GeneralLocationInformForm(authenticated_user=request.user,
+                                             known_directly_old=known_directly_old,
+                                             known_indirectly_old=known_indirectly_old,
+                                             data=request.POST,
+                                             instance=obj)
+        else:
+            form = SpecificLocationInformForm(authenticated_user=request.user,
+                                              known_directly_old=known_directly_old,
+                                              known_indirectly_old=known_indirectly_old,
+                                              data=request.POST,
+                                              instance=obj)
+
+        if form.is_valid():
+            known_indirectly_new = form.cleaned_data['known_indirectly']
+            obj.known_indirectly.add(*list(known_indirectly_new))
+
+            subject = f"[RPG] {profile} opowiedział Ci o pewnym miejscu!"
+            message = f"{profile} opowiedział Ci o miejscu zwanym: {obj.name}.\n" \
+                      f"Informacje zostały zapisane w Twoim Toponomikonie."
+            sender = settings.EMAIL_HOST_USER
+            receivers = []
+            for new_profile in known_indirectly_new:
+                receivers.append(new_profile.user.email)
+            if profile.character_status != 'gm':
+                receivers.append('lukas.kozicki@gmail.com')
+            send_mail(subject, message, sender, receivers)
+
+            messages.info(request, f'Poinformowałeś wybrane postacie!')
+            _next = request.POST.get('next', '/')
+            return HttpResponseRedirect(_next)
+    else:
+        if isinstance(obj, GeneralLocation):
+            form = GeneralLocationInformForm(authenticated_user=request.user,
+                                             known_directly_old=known_directly_old,
+                                             known_indirectly_old=known_indirectly_old)
+        else:
+            form = SpecificLocationInformForm(authenticated_user=request.user,
+                                              known_directly_old=known_directly_old,
+                                              known_indirectly_old=known_indirectly_old)
+
+    context = {
+        'page_title': 'Opowiedz o krainie lub lokacji',
+        'form': form,
+        'obj': obj,
+    }
+    if profile in (obj.known_directly.all() | obj.known_indirectly.all()) or profile.character_status == 'gm':
+        return render(request, 'toponomikon/toponomikon_inform.html', context)
+    else:
+        return redirect('home:dupa')
