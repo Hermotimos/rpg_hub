@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from characters.models import Character
 from knowledge.models import KnowledgePacket
 from rpg_project.utils import query_debugger
 from rules.models import Skill, SkillLevel
+from users.models import Profile
 
 
 @query_debugger
@@ -19,32 +20,37 @@ def tricks_sheet_view(request):
 
 @query_debugger
 @login_required
-def skills_sheet_view(request):
-    profile = request.user.profile
-    if profile.character_status == 'gm':
-        characters = Character.objects.all().select_related('profile').prefetch_related('skill_levels_acquired__skill')
-        skills = []
-    else:
-        skills = Skill.objects\
-            .filter(skill_levels__acquired_by_characters=profile.character)\
+def skills_sheet_view(request, profile_id='0'):
+    try:
+        profile = Profile.objects.get(id=profile_id)
+    except Profile.DoesNotExist:
+        profile = request.user.profile
+
+    skills = Skill.objects\
+        .filter(skill_levels__acquired_by_characters=profile.character)\
+        .prefetch_related(Prefetch(
+            'skill_levels',
+            queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)
             .prefetch_related(Prefetch(
-                'skill_levels',
-                queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)
-                .prefetch_related(Prefetch(
-                    'knowledge_packets',
-                    queryset=KnowledgePacket.objects.filter(allowed_profiles=profile)
-                    ))
-            ))\
-            .distinct()
-        characters = []
+                'knowledge_packets',
+                queryset=KnowledgePacket.objects.filter(allowed_profiles=profile)
+                ))
+        ))\
+        .distinct()
 
     knowledge_packets = KnowledgePacket.objects.all()
     context = {
         'page_title': f'Umiejętności - {profile.character_name}',
-        'characters': characters,
         'skills': skills,
         'knowledge_packets': knowledge_packets
     }
     return render(request, 'characters/skills_sheet.html', context)
 
 
+def skills_sheets_for_gm_view(request):
+    characters = Character.objects.all()
+    context = {
+        'page_title': 'Umiejętności graczy',
+        'characters': characters
+    }
+    return render(request, 'characters/skills_sheets_for_gm.html', context)
