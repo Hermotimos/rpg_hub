@@ -3,6 +3,7 @@ from PIL import Image
 
 
 TYPES = (
+    ('knowledge', 'KNOWLEDGE'),
     ('npc', 'NPC'),
     ('realia', 'REALIA'),
     ('symbola', 'SYMBOLA'),
