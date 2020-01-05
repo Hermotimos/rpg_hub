@@ -29,8 +29,16 @@
                     </td>
                 {% else %}
                     <td valign="top" align="left" colspan="2" class="pl-1">
-                        <h3 class="border-custom-base"><a href="{% url 'toponomikon:general-location' gen_loc.id %}">{{ gen_loc.name }}</a></h3>
-                        <p class="font-italic text-justify"><small>{% if gen_loc.description %}{{ gen_loc.description|linebreaksbr }}{% endif %}</small></p>
+                        <h3 class="border-custom-base">
+                            <a href="{% url 'toponomikon:general-location' gen_loc.id %}">{{ gen_loc.name }}</a>
+                        </h3>
+                        <p class="font-italic text-justify">
+                            <small>
+                                {% if gen_loc.description %}
+                                    {{ gen_loc.description|linebreaksbr }}
+                                {% endif %}
+                            </small>
+                        </p>
                     </td>
                 {% endif %}
             </tr>
