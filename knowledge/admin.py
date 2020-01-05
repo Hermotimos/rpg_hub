@@ -10,11 +10,11 @@ from knowledge.models import KnowledgePacket, KnowledgePacketType
 from users.models import Profile
 
 
-class ForAllowedProfilesAndPicturesForm(forms.ModelForm):
+class KnowledgePacketAdminForm(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
                                                       .exclude(Q(character_status='dead_player') |
                                                                Q(character_status='dead_npc') |
-                                                               Q(character_status='gm') |
+                                                               # Q(character_status='gm') |
                                                                Q(character_status='living_npc')),
                                                       widget=FilteredSelectMultiple('Allowed profiles', False),
                                                       required=False)
@@ -24,7 +24,7 @@ class ForAllowedProfilesAndPicturesForm(forms.ModelForm):
 
 
 class KnowledgePacketAdmin(admin.ModelAdmin):
-    form = ForAllowedProfilesAndPicturesForm
+    form = KnowledgePacketAdminForm
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': 50})},
         models.TextField: {'widget': Textarea(attrs={'rows': 20, 'cols': 100})},
