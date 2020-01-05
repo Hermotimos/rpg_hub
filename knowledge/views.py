@@ -85,7 +85,7 @@ def knowledge_sheet_view(request):
             .prefetch_related('pictures')
 
     context = {
-        'page_title': 'Okruchy wiedzy',
+        'page_title': 'Almanach',
         'arcana_kn_packets': arcana_kn_packets,
         'bestiary_kn_packets': bestiary_kn_packets,
         'geography_kn_packets': geography_kn_packets,

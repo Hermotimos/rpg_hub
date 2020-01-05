@@ -14,7 +14,7 @@ class KnowledgePacketAdminForm(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
                                                       .exclude(Q(character_status='dead_player') |
                                                                Q(character_status='dead_npc') |
-                                                               # Q(character_status='gm') |
+                                                               Q(character_status='gm') |
                                                                Q(character_status='living_npc')),
                                                       widget=FilteredSelectMultiple('Allowed profiles', False),
                                                       required=False)
