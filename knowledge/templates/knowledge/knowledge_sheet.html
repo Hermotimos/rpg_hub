@@ -16,11 +16,11 @@
     {% if arcana_kn_packets %}
         <h2><b>Arkana</b></h2>
         {% for kn_packet in arcana_kn_packets %}
+
             {% with specifier=1 %}
-    
-                {% include '_knowledge_packet.html' %}
-    
+                    {% include '_knowledge_packet.html' %}
             {% endwith %}
+
         {% endfor %}
         <br><br>
     {% endif %}
@@ -28,11 +28,11 @@
     {% if bestiary_kn_packets %}
         <h2><b>Bestiariusz</b></h2>
         {% for kn_packet in bestiary_kn_packets %}
-            {% with specifier=1 %}
-    
-                {% include '_knowledge_packet.html' %}
-    
+
+            {% with specifier=2 %}
+                    {% include '_knowledge_packet.html' %}
             {% endwith %}
+
         {% endfor %}
         <br><br>
     {% endif %}
@@ -41,11 +41,11 @@
     {% if geography_kn_packets %}
         <h2><b>Geografia</b></h2>
         {% for kn_packet in geography_kn_packets %}
-            {% with specifier=2 %}
-    
-                {% include '_knowledge_packet.html' %}
-    
+
+            {% with specifier=3 %}
+                    {% include '_knowledge_packet.html' %}
             {% endwith %}
+
         {% endfor %}
         <br><br>
     {% endif %}
@@ -53,11 +53,11 @@
     {% if history_kn_packets %}
         <h2><b>Historia</b></h2>
         {% for kn_packet in history_kn_packets %}
-            {% with specifier=2 %}
-    
-                {% include '_knowledge_packet.html' %}
-    
+
+            {% with specifier=4 %}
+                    {% include '_knowledge_packet.html' %}
             {% endwith %}
+
         {% endfor %}
         <br><br>
     {% endif %}
@@ -66,11 +66,11 @@
     {% if library_kn_packets %}
         <h2><b>Biblioteka</b></h2>
         {% for kn_packet in library_kn_packets %}
-            {% with specifier=2 %}
-    
-                {% include '_knowledge_packet.html' %}
-    
+
+            {% with specifier=5 %}
+                    {% include '_knowledge_packet.html' %}
             {% endwith %}
+
         {% endfor %}
         <br><br>
     {% endif %}
@@ -78,11 +78,11 @@
     {% if theology_kn_packets %}
         <h2><b>Teologia</b></h2>
         {% for kn_packet in theology_kn_packets %}
-            {% with specifier=2 %}
-    
-                {% include '_knowledge_packet.html' %}
-    
+
+            {% with specifier=6 %}
+                    {% include '_knowledge_packet.html' %}
             {% endwith %}
+
         {% endfor %}
         <br><br>
     {% endif %}
@@ -90,11 +90,11 @@
     {% if varia_kn_packets %}
         <h2><b>Varia</b></h2>
         {% for kn_packet in varia_kn_packets %}
-            {% with specifier=2 %}
-    
-                {% include '_knowledge_packet.html' %}
-    
+
+            {% with specifier=7 %}
+                    {% include '_knowledge_packet.html' %}
             {% endwith %}
+
         {% endfor %}
         <br><br>
     {% endif %}
