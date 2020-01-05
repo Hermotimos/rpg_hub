@@ -33,7 +33,7 @@ nav.navbar {
 }
 
 .dropbtn:hover {
-        pointer-events:none;
+        cursor: default;
 }
 
 .dropdown-content {
