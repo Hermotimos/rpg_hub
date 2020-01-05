@@ -17,33 +17,82 @@ from toponomikon.models import GeneralLocation, SpecificLocation
 def knowledge_sheet_view(request):
     profile = request.user.profile
     if profile.character_status == 'gm':
-        skills_kn_packets = KnowledgePacket.objects\
-            .filter(skill_levels__in=SkillLevel.objects.all())\
-            .prefetch_related('pictures')
-        toponomikon_kn_packets = (
-                KnowledgePacket.objects.filter(general_locations__in=GeneralLocation.objects.all()) |
-                KnowledgePacket.objects.filter(specific_locations__in=SpecificLocation.objects.all())
-        )\
+        arcana_kn_packets = KnowledgePacket.objects \
+            .filter(package_types__name='Arkana')\
             .distinct()\
             .prefetch_related('pictures')
-    else:
-        skills_kn_packets = KnowledgePacket.objects\
-            .filter(skill_levels__in=profile.character.skill_levels_acquired.all())\
+        bestiary_kn_packets = KnowledgePacket.objects \
+            .filter(package_types__name='Bestiariusz') \
+            .distinct()\
+            .prefetch_related('pictures')
+        geography_kn_packets = KnowledgePacket.objects \
+            .filter(package_types__name='Geografia') \
+            .distinct()\
+            .prefetch_related('pictures')
+        history_kn_packets = KnowledgePacket.objects \
+            .filter(package_types__name='Historia') \
+            .distinct()\
+            .prefetch_related('pictures')
+        library_kn_packets = KnowledgePacket.objects \
+            .filter(package_types__name='Biblioteka') \
+            .distinct()\
+            .prefetch_related('pictures')
+        theology_kn_packets = KnowledgePacket.objects \
+            .filter(package_types__name='Teologia') \
+            .distinct()\
             .prefetch_related('pictures')
 
-        known_gen_locs = (profile.gen_locs_known_directly.all() | profile.gen_locs_known_indirectly.all()).distinct()
-        known_spec_locs = (profile.spec_locs_known_directly.all() | profile.spec_locs_known_indirectly.all()).distinct()
-        toponomikon_kn_packets = (
-                KnowledgePacket.objects.filter(general_locations__in=known_gen_locs) |
-                KnowledgePacket.objects.filter(specific_locations__in=known_spec_locs)
-        )\
+        varia_kn_packets = KnowledgePacket.objects \
+            .filter(package_types__name='Varia') \
+            .distinct() \
+            .prefetch_related('pictures')
+    else:
+        arcana_kn_packets = KnowledgePacket.objects\
+            .filter(allowed_profiles=profile) \
+            .filter(package_types__name='Arkana')\
             .distinct()\
+            .prefetch_related('pictures')
+        bestiary_kn_packets = KnowledgePacket.objects \
+            .filter(allowed_profiles=profile) \
+            .filter(package_types__name='Bestiariusz') \
+            .distinct()\
+            .prefetch_related('pictures')
+        geography_kn_packets = KnowledgePacket.objects \
+            .filter(allowed_profiles=profile) \
+            .filter(package_types__name='Geografia') \
+            .distinct()\
+            .prefetch_related('pictures')
+        history_kn_packets = KnowledgePacket.objects \
+            .filter(allowed_profiles=profile) \
+            .filter(package_types__name='Historia') \
+            .distinct()\
+            .prefetch_related('pictures')
+        library_kn_packets = KnowledgePacket.objects \
+            .filter(allowed_profiles=profile) \
+            .filter(package_types__name='Biblioteka') \
+            .distinct()\
+            .prefetch_related('pictures')
+        theology_kn_packets = KnowledgePacket.objects \
+            .filter(allowed_profiles=profile) \
+            .filter(package_types__name='Teologia') \
+            .distinct()\
+            .prefetch_related('pictures')
+
+        varia_kn_packets = KnowledgePacket.objects \
+            .filter(allowed_profiles=profile) \
+            .filter(package_types__name='UMIEJĘTNOŚCI') \
+            .distinct() \
             .prefetch_related('pictures')
 
     context = {
         'page_title': 'Okruchy wiedzy',
-        'skills_kn_packets': skills_kn_packets,
-        'toponomikon_kn_packets': toponomikon_kn_packets,
+        'arcana_kn_packets': arcana_kn_packets,
+        'bestiary_kn_packets': bestiary_kn_packets,
+        'geography_kn_packets': geography_kn_packets,
+        'history_kn_packets': history_kn_packets,
+        'library_kn_packets': library_kn_packets,
+        'theology_kn_packets': theology_kn_packets,
+        'varia_kn_packets': varia_kn_packets,
     }
     return render(request, 'knowledge/knowledge_sheet.html', context)
 

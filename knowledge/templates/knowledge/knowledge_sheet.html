@@ -13,24 +13,90 @@
 {% block content %}
     <br><br><br>
 
-    <h2><b>Umiejętności</b></h2>
-    {% for kn_packet in skills_kn_packets %}
-        {% with specifier=1 %}
+    {% if arcana_kn_packets %}
+        <h2><b>Arkana</b></h2>
+        {% for kn_packet in arcana_kn_packets %}
+            {% with specifier=1 %}
+    
+                {% include '_knowledge_packet.html' %}
+    
+            {% endwith %}
+        {% endfor %}
+        <br><br>
+    {% endif %}
 
-            {% include '_knowledge_packet.html' %}
+    {% if bestiary_kn_packets %}
+        <h2><b>Bestiariusz</b></h2>
+        {% for kn_packet in bestiary_kn_packets %}
+            {% with specifier=1 %}
+    
+                {% include '_knowledge_packet.html' %}
+    
+            {% endwith %}
+        {% endfor %}
+        <br><br>
+    {% endif %}
 
-        {% endwith %}
-    {% endfor %}
-    <br><br>
+   
+    {% if geography_kn_packets %}
+        <h2><b>Geografia</b></h2>
+        {% for kn_packet in geography_kn_packets %}
+            {% with specifier=2 %}
+    
+                {% include '_knowledge_packet.html' %}
+    
+            {% endwith %}
+        {% endfor %}
+        <br><br>
+    {% endif %}
 
-    <h2><b>Toponomikon</b></h2>
-    {% for kn_packet in toponomikon_kn_packets %}
-        {% with specifier=2 %}
+    {% if history_kn_packets %}
+        <h2><b>Historia</b></h2>
+        {% for kn_packet in history_kn_packets %}
+            {% with specifier=2 %}
+    
+                {% include '_knowledge_packet.html' %}
+    
+            {% endwith %}
+        {% endfor %}
+        <br><br>
+    {% endif %}
 
-            {% include '_knowledge_packet.html' %}
 
-        {% endwith %}
-    {% endfor %}
-    <br><br>
+    {% if library_kn_packets %}
+        <h2><b>Biblioteka</b></h2>
+        {% for kn_packet in library_kn_packets %}
+            {% with specifier=2 %}
+    
+                {% include '_knowledge_packet.html' %}
+    
+            {% endwith %}
+        {% endfor %}
+        <br><br>
+    {% endif %}
+
+    {% if theology_kn_packets %}
+        <h2><b>Teologia</b></h2>
+        {% for kn_packet in theology_kn_packets %}
+            {% with specifier=2 %}
+    
+                {% include '_knowledge_packet.html' %}
+    
+            {% endwith %}
+        {% endfor %}
+        <br><br>
+    {% endif %}
+
+    {% if varia_kn_packets %}
+        <h2><b>Varia</b></h2>
+        {% for kn_packet in varia_kn_packets %}
+            {% with specifier=2 %}
+    
+                {% include '_knowledge_packet.html' %}
+    
+            {% endwith %}
+        {% endfor %}
+        <br><br>
+    {% endif %}
 
 {% endblock content %}
