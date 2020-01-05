@@ -6,7 +6,7 @@ from django.db import models
 from django.forms.widgets import Textarea, TextInput
 
 from imaginarion.models import Picture
-from knowledge.models import KnowledgePacket
+from knowledge.models import KnowledgePacket, KnowledgePacketType
 from users.models import Profile
 
 
@@ -35,3 +35,4 @@ class KnowledgePacketAdmin(admin.ModelAdmin):
 
 
 admin.site.register(KnowledgePacket, KnowledgePacketAdmin)
+admin.site.register(KnowledgePacketType)

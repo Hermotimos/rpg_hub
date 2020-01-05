@@ -6,8 +6,19 @@ from rpg_project.utils import create_sorting_name
 from users.models import Profile
 
 
+class KnowledgePacketType(models.Model):
+    name = models.CharField(max_length=30, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name']
+
+
 class KnowledgePacket(models.Model):
     title = models.CharField(max_length=100, unique=True)
+    package_type = models.ManyToManyField(KnowledgePacketType, related_name='knowledge_pakcets')
     text = models.TextField()
     pictures = models.ManyToManyField(Picture, related_name='knowledge_packets', blank=True)
     allowed_profiles = models.ManyToManyField(Profile, related_name='allowed_knowledge_packets', blank=True)
