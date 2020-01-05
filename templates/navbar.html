@@ -35,14 +35,13 @@
                             <a class="font-14 nav-item nav-link small-caps" href="{% url 'history:chronicle-main' %}">&#10023; Kronika</a>
                             <a class="font-14 nav-item nav-link small-caps" href="{% url 'debates:main' %}">&#10023; Narady</a>
 <!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Prosoponomikon</a>-->
-                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'toponomikon:main' %}">&#10023; Toponomikon</a>
                         </div>
                     </div>
 
                     <div class="dropdown pr-4">
-                        <button class="font-18 nav-item nav-link dropbtn small-caps">Almanach</button>
+                        <button class="font-18 nav-item nav-link dropbtn small-caps">Wiedza</button>
                         <div class="dropdown-content">
-                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'knowledge:knowledge-sheet' %}">&#10023; Okruchy wiedzy</a>
+                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'toponomikon:main' %}">&#10023; Toponomikon</a>
 <!--                    <a class="nav-item nav-link small-caps" href="#">&#10023; Arkana</a>-->
 <!--                    <a class="nav-item nav-link small-caps" href="#">&#10023; Bestiariusz</a>-->
 <!--                    <a class="nav-item nav-link small-caps" href="#">&#10023; Biblioteka</a>-->
@@ -60,10 +59,25 @@
 <!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Doświadczenie | Tabela awansów</a>-->
 <!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Ekwipunek | Skrytki</a>-->
                             <a class="font-14 nav-item nav-link small-caps" href="{% url 'characters:skills-sheet' '0' %}">&#10023; Umiejętności</a>
+                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'knowledge:knowledge-sheet' %}">&#10023; Almanach</a>
                             <a class="font-14 nav-item nav-link small-caps" href="{% url 'characters:tricks-sheet' %}">&#10023; Podstępy</a>
 <!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Moce</a>-->
                             <a class="font-14 nav-item nav-link small-caps" href="{% url 'contact:plans-main' %}">&#10023; Plany</a>
 <!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Przemyślenia</a>-->
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="dropdown pr-4">
+                        <button class="font-18 nav-item nav-link dropbtn small-caps">Postacie</button>
+                        <div class="dropdown-content">
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Cechy i walka</a>-->
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Doświadczenie | Tabela awansów</a>-->
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Ekwipunek | Skrytki</a>-->
+                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'characters:skills-sheets-for-gm' %}">&#10023; Umiejętności graczy</a>
+                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'knowledge:knowledge-sheet' %}">&#10023; Almanach</a>
+                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'characters:tricks-sheet' %}">&#10023; Podstępy graczy</a>
+                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'contact:plans-for-gm' %}">&#10023; Plany graczy</a>
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Moce</a>-->
                         </div>
                     </div>
                     {% endif %}
