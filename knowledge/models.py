@@ -18,7 +18,7 @@ class KnowledgePacketType(models.Model):
 
 class KnowledgePacket(models.Model):
     title = models.CharField(max_length=100, unique=True)
-    package_type = models.ManyToManyField(KnowledgePacketType, related_name='knowledge_pakcets')
+    package_types = models.ManyToManyField(KnowledgePacketType, related_name='knowledge_packets')
     text = models.TextField()
     pictures = models.ManyToManyField(Picture, related_name='knowledge_packets', blank=True)
     allowed_profiles = models.ManyToManyField(Profile, related_name='allowed_knowledge_packets', blank=True)
@@ -35,16 +35,13 @@ class KnowledgePacket(models.Model):
         ordering = ['title']
 
 
-def add_gms_to_allowed_profiles(sender, instance, **kwargs):
-    knowledge_packet = instance
-    gms = Profile.objects.filter(character_status='gm')
-    perform = False
-    for gm in gms:
-        if gm not in knowledge_packet.allowed_profiles.all():
-            perform = True
-    if perform:
-        knowledge_packet.allowed_profiles.add(*gms)
-        knowledge_packet.save()
-
-
-post_save.connect(add_gms_to_allowed_profiles, sender=KnowledgePacket)
+# not working:
+# def add_gms_to_allowed_profiles(sender, instance, **kwargs):
+#     gms = Profile.objects.filter(character_status='gm')
+#     for gm in gms:
+#         if gm not in instance.allowed_profiles.all():
+#             instance.allowed_profiles.add(gm)
+#             instance.m2msave()
+#
+#
+# post_save.connect(add_gms_to_allowed_profiles, sender=KnowledgePacket)
