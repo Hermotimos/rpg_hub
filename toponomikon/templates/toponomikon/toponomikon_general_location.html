@@ -57,11 +57,10 @@
                                 <h5 class="border-custom-base">
                                     <a href="{% url 'toponomikon:specific-location' spec_loc.id %}">{{ spec_loc.name }}</a>
                                 </h5>
-                                &emsp;
                                 <p class="font-italic text-justify">
                                     <small>
                                         {% if spec_loc.description %}
-                                            {{ spec_loc.description|truncatewords:30|linebreaksbr }}
+                                            {{ spec_loc.description|truncatewords:40|linebreaksbr }}
                                         {% endif %}
                                     </small>
                                 </p>
