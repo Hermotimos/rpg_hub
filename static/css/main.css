@@ -24,33 +24,21 @@ body {
         display: none;
 }
 
-.pt-6, .py-6 {
-  padding-top: 5rem !important;
-}
-.pr-6, .px-6 {
-  padding-right: 5rem !important;
-}
-.pb-6, .py-6 {
-  padding-bottom: 5rem !important;
-}
-.pl-6, .px-6 {
-  padding-left: 5rem !important;
-}
+.pt-6, .py-6 {padding-top: 5rem !important;}
+.pr-6, .px-6 {padding-right: 5rem !important;}
+.pb-6, .py-6 {padding-bottom: 5rem !important;}
+.pl-6, .px-6 {padding-left: 5rem !important;}
 
+.pt-7, .py-7 {padding-top: 6rem !important;}
+.pr-7, .px-7 {padding-right: 6rem !important;}
+.pb-7, .py-7 {padding-bottom: 6rem !important;}
+.pl-7, .px-7 {padding-left: 6rem !important;}
 
+.pt-3_9rem, .py-3_9rem {padding-top: 3.9rem !important;}
+.pr-3_9rem, .px-3_9rem {padding-right: 3.9rem !important;}
+.pb-3_9rem, .py-3_9rem {padding-bottom: 3.9rem !important;}
+.pl-3_9rem, .px-3_9rem {padding-left: 3.9rem !important;}
 
-.pt-7, .py-7 {
-  padding-top: 6rem !important;
-}
-.pr-7, .px-7 {
-  padding-right: 6rem !important;
-}
-.pb-7, .py-7 {
-  padding-bottom: 6rem !important;
-}
-.pl-7, .px-7 {
-  padding-left: 6rem !important;
-}
 
 td.align-center {
         text-align: center;

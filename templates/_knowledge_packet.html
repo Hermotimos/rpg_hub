@@ -1,10 +1,10 @@
 {% load static %}
 
-<h5 class="pl-6 pt-2" data-toggle="collapse" data-target="#id_{{ skill_level.id }}_{{ kn_packet.id }}_{{ specifier }}">
+<h5 class="pl-3_9rem pt-2" data-toggle="collapse" data-target="#id_{{ skill_level.id }}_{{ kn_packet.id }}_{{ specifier }}">
     <b class="hover-blue">&#10023; {{ kn_packet.title }}</b>
 </h5>
 <div id="id_{{ skill_level.id }}_{{ kn_packet.id }}_{{ specifier }}" class="collapse">
-    <div class="pl-7 text-justify">
+    <div class="pl-6 text-justify">
         <a class="pl-1" href="{% url 'knowledge:knowledge-inform' kn_packet.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a>
         <br><br>
         <p class="font-18 font-italic pt-1 text-justify">{{ kn_packet.text|linebreaksbr }}</p>
