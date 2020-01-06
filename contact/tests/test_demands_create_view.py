@@ -1,8 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
 from contact import views
-from contact.models import Demand, Plan, DemandAnswer
-from contact.forms import DemandsCreateForm, DemandAnswerForm, PlansCreateForm, PlansModifyForm
+from contact.models import Demand
+from contact.forms import DemandsCreateForm
 from users.models import User
 
 
