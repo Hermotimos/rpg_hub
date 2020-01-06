@@ -1,7 +1,7 @@
 *.pyc
 *~
 __pycache__
-virtualenv
+
 .DS_Store
 .idea
 
@@ -12,3 +12,4 @@ migrations/
 
 db.sqlite3
 media
+myenv
