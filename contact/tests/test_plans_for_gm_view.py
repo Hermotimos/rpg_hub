@@ -1,8 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
 from contact import views
-from contact.models import Demand, Plan, DemandAnswer
-from contact.forms import DemandsCreateForm, DemandAnswerForm, PlansCreateForm, PlansModifyForm
 from users.models import User
 
 
@@ -11,6 +9,7 @@ class PlansForGmTest(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user1.profile.character_status = 'gm'
+        self.user1.profile.save()
         self.url = reverse('contact:plans-for-gm')
 
     def test_login_required(self):
@@ -25,7 +24,7 @@ class PlansForGmTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_get(self):
-        # case user.profile.character_status == 'gm' is allowed to plans_for_gm_view()
+        # user.profile.character_status == 'gm' is allowed to view plans_for_gm_view()
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
