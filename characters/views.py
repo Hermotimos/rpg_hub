@@ -47,8 +47,10 @@ def skills_sheet_view(request, profile_id='0'):
     return render(request, 'characters/skills_sheet.html', context)
 
 
+@query_debugger
+@login_required
 def skills_sheets_for_gm_view(request):
-    characters = Character.objects.all()
+    characters = Character.objects.all().select_related('profile')
     context = {
         'page_title': 'Umiejętności graczy',
         'characters': characters
