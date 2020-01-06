@@ -18,7 +18,7 @@ class PlansDeleteTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # only authors are allowed to view plans
+        # only authors are allowed to delete plans
         self.client.force_login(self.user2)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
