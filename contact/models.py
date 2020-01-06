@@ -10,7 +10,7 @@ class Demand(models.Model):
     addressee = models.ForeignKey(User, related_name='received_demands', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000)
     date_created = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(blank=True, null=True, upload_to='contact_pics')
+    image = models.ImageField(upload_to='contact_pics', blank=True, null=True)
     is_done = models.BooleanField(default=False)
 
     class Meta:
