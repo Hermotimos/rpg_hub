@@ -39,11 +39,13 @@ class DemandsCreateTest(TestCase):
         form = response.context.get('form')
         self.assertIsInstance(form, DemandsCreateForm)
 
-    # TODO this does not work. Why?
+    # ---IMPORTANT NOTE---
+    # Manual test - OK. Tests fails when there's a custom queryset for 'addressee' field in the form.
+    # When the form is left without custom queryset for 'addressee' field, the test passes.
     def test_valid_post_data(self):
         self.client.force_login(self.user1)
         data = {
-            'addressee': self.user2.id,     # by ForeignKeyField pk or id has to be provided
+            'addressee': '2',     # by ForeignKeyField pk or id has to be provided
             'text': 'Demand2',
         }
         self.assertFalse(Demand.objects.exists())
