@@ -10,7 +10,7 @@ class PlansModifyTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
-        self.plan1 = Plan.objects.create(id=1, author=self.user1, text='Plan1')
+        self.plan1 = Plan.objects.create(author=self.user1, text='Plan1')
         self.url = reverse('contact:plans-modify', kwargs={'plan_id': self.plan1.id})
 
     def test_login_required(self):
@@ -19,6 +19,7 @@ class PlansModifyTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
+        # only authors are allowed to modify plans
         self.client.force_login(self.user2)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -50,43 +51,27 @@ class PlansModifyTest(TestCase):
         form = response.context.get('form')
         self.assertIsInstance(form, PlansModifyForm)
 
-    # # TODO Nonsense error for field image with null=True, blank=True:
-    # # ValueError: The 'image' attribute has no file associated with it.
-    # def test_valid_post_data(self):
-    #     self.client.force_login(self.user1)
-    #     form = PlansModifyForm(instance=self.plan1)
-    #     data = form.initial
-    #     data['text'] = 'changed text'
-    #     print('\n', data)
-    #     response = self.client.post(self.url, data)
-    #     form = response.context.get('form')
-    #     print('\n', form.errors)
-    #     # self.client.post(self.url, data)
-    #     self.assertTrue(Plan.objects.get(id=1).text == 'changed text')
+    def test_valid_post_data(self):
+        self.client.force_login(self.user1)
+        form = PlansModifyForm(instance=self.plan1)
+        data = form.initial
+        data['text'] = 'changed text'
+        data['image'] = ''      # Necessary, otherwise ValueError: The 'image' attribute has no file associated with it.
+        self.client.post(self.url, data)
+        self.assertTrue(Plan.objects.get(id=1).text == 'changed text')
 
-    # # TODO Nonsense error for field image with null=True, blank=True:
-    # # ValueError: The 'image' attribute has no file associated with it.
-    # def test_invalid_post_data(self):
-    #     self.client.force_login(self.user1)
-    #     form = PlansModifyForm(instance=self.plan1)
-    #     data = form.initial
-    #     data['inform_gm'] = 'Invalid data for BooleanField'
-    #     response = self.client.post(self.url, data)
-    #     form = response.context.get('form')
-    #     # should show the form again, not redirect
-    #     self.assertEquals(response.status_code, 200)
-    #     self.assertTrue(form.errors)
-    #
-    # # TODO Nonsense error for field image with null=True, blank=True:
-    # # ValueError: The 'image' attribute has no file associated with it.
-    # def test_invalid_post_data_empty_fields(self):
-    #     self.client.force_login(self.user1)
-    #     form = PlansModifyForm(instance=self.plan1)
-    #     data = form.initial
-    #     data['text'] = ''
-    #     response = self.client.post(self.url, data)
-    #     form = response.context.get('form')
-    #     # should show the form again, not redirect
-    #     self.assertEquals(response.status_code, 200)
-    #     self.assertTrue(form.errors)
-    #     self.assertTrue(Plan.objects.get(id=1).text == 'Demand1')
+    def test_invalid_post_data(self):
+        # There is no possibility to provide invalid data apart from providing empty 'text' field (next test)
+        pass
+
+    def test_invalid_post_data_empty_fields(self):
+        self.client.force_login(self.user1)
+        form = PlansModifyForm(instance=self.plan1)
+        data = form.initial
+        data['text'] = ''
+        data['image'] = ''      # Necessary, otherwise ValueError: The 'image' attribute has no file associated with it.
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+        self.assertTrue(Plan.objects.get(id=1).text == 'Plan1')
