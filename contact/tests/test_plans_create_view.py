@@ -1,8 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
 from contact import views
-from contact.models import Demand, Plan, DemandAnswer
-from contact.forms import DemandsCreateForm, DemandAnswerForm, PlansCreateForm, PlansModifyForm
+from contact.models import Plan
+from contact.forms import PlansCreateForm
 from users.models import User
 
 
@@ -41,8 +41,9 @@ class PlansCreateTest(TestCase):
         data = {
             'text': 'plan2',
         }
+        self.assertFalse(Plan.objects.exists())
         self.client.post(self.url, data)
-        self.assertTrue(Plan.objects.count() == 1)
+        self.assertTrue(Plan.objects.exists())
 
     def test_invalid_post_data(self):
         self.client.force_login(self.user1)
@@ -52,7 +53,7 @@ class PlansCreateTest(TestCase):
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
         self.assertTrue(form.errors)
-        self.assertTrue(Plan.objects.count() == 0)
+        self.assertFalse(Plan.objects.exists())
 
     def test_invalid_post_data_empty_fields(self):
         self.client.force_login(self.user1)
@@ -64,4 +65,4 @@ class PlansCreateTest(TestCase):
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
         self.assertTrue(form.errors)
-        self.assertTrue(Plan.objects.count() == 0)
+        self.assertFalse(Plan.objects.exists())
