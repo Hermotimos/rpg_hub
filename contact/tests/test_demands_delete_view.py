@@ -9,7 +9,7 @@ class DemandsDeleteTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
-        self.demand1 = Demand.objects.create(id=1, author=self.user1, addressee=self.user2, text='Demand1')
+        self.demand1 = Demand.objects.create(author=self.user1, addressee=self.user2, text='Demand1')
         self.url = reverse('contact:demands-delete', kwargs={'demand_id': self.demand1.id})
 
     def test_login_required(self):
