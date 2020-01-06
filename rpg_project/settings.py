@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     # imported
     'crispy_forms',
+    'coverage',
 
     # own
     'characters',
