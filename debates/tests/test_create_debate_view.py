@@ -13,9 +13,10 @@ class CreateDebateTest(TestCase):
         self.user4.profile.character_status = 'gm'
         self.user4.profile.save()
 
-        self.topic1 = Topic.objects.create(id=1, title='Topic1')
-        self.debate1 = Debate.objects.create(id=1, topic=self.topic1, starter=self.user1)
+        self.topic1 = Topic.objects.create(title='Topic1')
+        self.debate1 = Debate.objects.create(topic=self.topic1, starter=self.user1)
         self.debate1.allowed_profiles.set([self.user1.profile, ])
+
         self.url = reverse('debates:create-debate', kwargs={'topic_id': self.topic1.id})
 
     def test_login_required(self):
