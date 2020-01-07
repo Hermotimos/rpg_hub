@@ -72,7 +72,7 @@ class DebatesInviteTest(TestCase):
                           authenticated_user=self.user1,
                           old_allowed_profiles=[self.user1.profile.id, ])
         data = form.initial
-        data['allowed_profiles'] = 'Wrong kind of data'
+        data['allowed_profiles'] = 'Invalid data',     # invalid data given here
         response = self.client.post(self.url, data)
         form = response.context.get('form')
         # should show the form again, not redirect
