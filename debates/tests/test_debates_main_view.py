@@ -14,11 +14,12 @@ class DebatesMainTest(TestCase):
         self.user4.profile.character_status = 'gm'
         self.user4.profile.save()
 
-        self.topic1 = Topic.objects.create(id=1, title='Topic1')
-        self.debate1 = Debate.objects.create(id=1, name='Debate1', topic=self.topic1, starter=self.user1)
-        self.debate2 = Debate.objects.create(id=2, name='Debate2', topic=self.topic1, starter=self.user1)
+        self.topic1 = Topic.objects.create(title='Topic1')
+        self.debate1 = Debate.objects.create(name='Debate1', topic=self.topic1, starter=self.user1)
+        self.debate2 = Debate.objects.create(name='Debate2', topic=self.topic1, starter=self.user1)
         self.debate1.allowed_profiles.set([self.user1.profile, ])
         self.debate2.allowed_profiles.set([self.user3.profile, ])
+
         self.url = reverse('debates:main')
 
     def test_login_required(self):
@@ -40,21 +41,21 @@ class DebatesMainTest(TestCase):
         linked_url2 = reverse('debates:create-debate', kwargs={'topic_id': self.topic1.id})
         linked_url3 = reverse('debates:debate', kwargs={'topic_id': self.topic1.id, 'debate_id': self.debate1.id})
 
-        # case request.user.profile  in debate1.allowed_profiles
+        # request.user.profile in debate1.allowed_profiles
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
         self.assertContains(response, f'href="{linked_url2}"')
         self.assertContains(response, f'href="{linked_url3}"')
 
-        # case request.user.profile not in debate1.allowed_profiles
+        # request.user.profile not in debate1.allowed_profiles
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
         self.assertNotContains(response, f'href="{linked_url2}"')
         self.assertNotContains(response, f'href="{linked_url3}"')
 
-        # case request.user.profile in debate2.allowed_profiles and not in debate1.allowed_profiles
+        # request.user.profile in debate2.allowed_profiles and not in debate1.allowed_profiles
         self.client.force_login(self.user3)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
