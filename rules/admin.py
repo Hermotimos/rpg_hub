@@ -4,6 +4,7 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db.models import Q
 from django.db import models
 from django.forms import Textarea
+from django.utils.translation import ugettext_lazy
 
 from imaginarion.models import Picture
 from rules.models import Skill, SkillLevel, Synergy, CharacterClass, CharacterProfession, EliteClass, EliteProfession, \
@@ -47,6 +48,22 @@ class ForAllowedProfilesAndSkillsForm(forms.ModelForm):
                                             required=False)
 
 
+class SkillLevelFilter(admin.SimpleListFilter):
+    title = ugettext_lazy('skill__name')
+    parameter_name = 'skill__name'
+
+    def lookups(self, request, model_admin):
+        qs = model_admin.get_queryset(request)
+        qs.distinct()
+        list_with_duplicates = [(i, i) for i in qs.values_list('skill__name', flat=True).distinct()]
+        list_without_duplicates = list(dict.fromkeys(list_with_duplicates))
+        return list_without_duplicates
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(skill__name__exact=self.value())
+
+
 class SkillLevelAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 80})},
@@ -54,7 +71,7 @@ class SkillLevelAdmin(admin.ModelAdmin):
 
     list_display = ['name', 'description']
     list_editable = ['description']
-    list_filter = ['skill']
+    list_filter = [SkillLevelFilter]
     search_fields = ['level', 'description']
 
     def name(self, obj):
