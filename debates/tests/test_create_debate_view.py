@@ -83,12 +83,25 @@ class CreateDebateTest(TestCase):
         self.client.post(self.url, data)
         self.assertTrue(Debate.objects.count() == 2)
 
-    def test_invalid_post_data_form1(self):
+    def test_invalid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {}
+        response = self.client.post(self.url, data)
+        form1 = response.context.get('debate_form')
+        form2 = response.context.get('remark_form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form1.errors)
+        self.assertTrue(form2.errors)
+        self.assertFalse(Remark.objects.exists())
+        self.assertFalse(Debate.objects.count() == 2)
+
+    def test_invalid_post_data_only_form1(self):
         self.client.force_login(self.user1)
         data = {
             # debate_form
             'name': 'Debate1',
-            'allowed_profiles': 'Wrong data',
+            'allowed_profiles': 'Invalid data',     # invalid data given here
             # remark_form
             'author': self.user1.id,
             'text': 'Remark text',
@@ -103,14 +116,14 @@ class CreateDebateTest(TestCase):
         self.assertFalse(Remark.objects.exists())
         self.assertFalse(Debate.objects.count() == 2)
 
-    def test_invalid_post_data_form2(self):
+    def test_invalid_post_data_only_form2(self):
         self.client.force_login(self.user1)
         data = {
             # debate_form
             'name': 'Debate1',
             'allowed_profiles': [self.user2.profile.id, ],
             # remark_form
-            'author': 'Wrong data',
+            'author': 'Invalid data',
             'text': 'Remark text',
         }
         response = self.client.post(self.url, data)

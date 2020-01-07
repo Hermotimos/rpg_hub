@@ -65,11 +65,26 @@ class CreateTopicTest(TestCase):
         self.client.post(self.url, data)
         self.assertTrue(Topic.objects.exists())
 
-    def test_invalid_post_data_form1(self):
+    def test_invalid_post_data(self):
+        self.client.force_login(self.user1)
+        data = {}
+        response = self.client.post(self.url, data)
+        form1 = response.context.get('topic_form')
+        form2 = response.context.get('debate_form')
+        form3 = response.context.get('remark_form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form1.errors)
+        self.assertTrue(form2.errors)
+        self.assertTrue(form3.errors)
+        self.assertFalse(Topic.objects.exists())
+        self.assertFalse(Debate.objects.exists())
+        self.assertFalse(Remark.objects.exists())
+
+    def test_invalid_post_data_only_form1(self):
         self.client.force_login(self.user1)
         data = {
-            # topic_form
-            'title': '',        # TopicForm cannot be given invalid data apart from empty string for field 'title'
+            # topic_form: invalid data given for field 'title' (by omitting it)
             # debate_form
             'name': 'Debate1',
             'allowed_profiles': [self.user2.profile.id, ],
@@ -90,14 +105,12 @@ class CreateTopicTest(TestCase):
         self.assertFalse(Debate.objects.exists())
         self.assertFalse(Remark.objects.exists())
 
-    def test_invalid_post_data_form2(self):
+    def test_invalid_post_data_only_form2(self):
         self.client.force_login(self.user1)
         data = {
             # topic_form
             'title': 'Topic1',
-            # debate_form
-            'name': 'Debate1',
-            'allowed_profiles': 'Invalid data',       # invalid data given here
+            # debate_form: invalid data given for field 'name' and 'allowed_profiles' (by omitting them)
             # remark_form
             'author': self.user1.id,
             'text': 'Remark text',
@@ -115,7 +128,7 @@ class CreateTopicTest(TestCase):
         self.assertFalse(Debate.objects.exists())
         self.assertFalse(Remark.objects.exists())
 
-    def test_invalid_post_data_form3(self):
+    def test_invalid_post_data_only_form3(self):
         self.client.force_login(self.user1)
         data = {
             # topic_form
@@ -123,9 +136,7 @@ class CreateTopicTest(TestCase):
             # debate_form
             'name': 'Debate1',
             'allowed_profiles': [self.user2.profile.id, ],
-            # remark_form
-            'author': 'Invalid data',     # invalid data given here
-            'text': 'Remark text',
+            # remark_form: invalid data given for field 'author' and 'text' (by omitting them)
         }
         response = self.client.post(self.url, data)
         form1 = response.context.get('topic_form')
