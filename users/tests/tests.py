@@ -276,5 +276,7 @@ class TestChangePassword(TestCase):
 #     }
 #     print('DATA:\n', data)
 #     response = self.client.post(self.url, data)
-#     form = response.context.get('form_name')    # usually form_name is just 'form'
-#     print('ERRORS:\n', form_name.errors)        # To be run multiple times as only first error in form gets printed
+#     form1 = response.context.get('form1_name')    # by one form usually form_name is just 'form' - depends how in view
+#     form2 = response.context.get('form2_name')
+#     print('ERRORS:\n', form1.errors)        # To be run multiple times as only first error in form gets printed
+#     print('ERRORS:\n', form2.errors)        # To be run multiple times as only first error in form gets printed

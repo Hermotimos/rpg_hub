@@ -91,3 +91,17 @@ class DebatesInviteTest(TestCase):
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
         self.assertTrue(form.errors)
+
+
+#######################################################################################################################
+# HINT FOR DEBUGGING FORMS' TESTS:
+# If test fails, see list of errors for details. Compare it with data sent.
+#     data = {
+#         'some_data': 'some_value'
+#     }
+#     print('DATA:\n', data)
+#     response = self.client.post(self.url, data)
+#     form1 = response.context.get('form1_name')    # by one form usually form_name is just 'form' - depends how in view
+#     form2 = response.context.get('form2_name')
+#     print('ERRORS:\n', form1.errors)        # To be run multiple times as only first error in form gets printed
+#     print('ERRORS:\n', form2.errors)        # To be run multiple times as only first error in form gets printed
