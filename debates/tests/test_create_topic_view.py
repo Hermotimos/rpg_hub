@@ -95,3 +95,15 @@ class CreateTopicTest(TestCase):
     #     self.assertTrue(form1.errors)
     #     self.assertTrue(form2.errors)
     #     self.assertTrue(form3.errors)
+
+
+#######################################################################################################################
+# HINT FOR DEBUGGING FORMS' TESTS:
+# If test fails, see list of errors for details. Compare it with data sent.
+#     data = {
+#         'some_data': 'some_value'
+#     }
+#     print('DATA:\n', data)
+#     response = self.client.post(self.url, data)
+#     form = response.context.get('form_name')    # usually form_name is just 'form'
+#     print('ERRORS:\n', form_name.errors)        # To be run multiple times as only first error in form gets printed
