@@ -9,6 +9,7 @@ from users.models import User
 class CreateTopicTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
+        self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.url = reverse('debates:create-topic')
 
     def test_login_required(self):
@@ -22,7 +23,7 @@ class CreateTopicTest(TestCase):
         self.assertEquals(response.status_code, 200)
 
     def test_url_resolves_view(self):
-        view = resolve('/debates/create_topic/')
+        view = resolve('/debates/create-topic/')
         self.assertEquals(view.func, views.create_topic_view)
 
     def test_csrf(self):
@@ -48,53 +49,121 @@ class CreateTopicTest(TestCase):
         form = response.context.get('remark_form')
         self.assertIsInstance(form, CreateRemarkForm)
 
-    # TODO view with 3 forms - no idea how to test it
-    # def test_valid_post_data(self):
-    #     self.client.force_login(self.user1)
-    #     data = {
-    #         # Topic
-    #         'title': 'Title1',
-    #         'description': 'Description1',
-    #         # TODO should data for other forms go here???
-    #     }
-    #     self.client.post(self.url, data)
-    #     self.assertTrue(Topic.objects.exists())
-
-    def test_invalid_post_data(self):
+    def test_valid_post_data(self):
         self.client.force_login(self.user1)
-        data = {}
+        data = {
+            # topic_form
+            'title': 'Topic1',
+            # debate_form
+            'name': 'Debate1',
+            'allowed_profiles': [self.user2.profile.id, ],
+            # remark_form
+            'author': self.user1.id,
+            'text': 'Remark text',
+        }
+        self.assertFalse(Topic.objects.exists())
+        self.client.post(self.url, data)
+        self.assertTrue(Topic.objects.exists())
+
+    def test_invalid_post_data_form1(self):
+        self.client.force_login(self.user1)
+        data = {
+            # topic_form
+            'title': '',        # TopicForm cannot be given invalid data apart from empty string for field 'title'
+            # debate_form
+            'name': 'Debate1',
+            'allowed_profiles': [self.user2.profile.id, ],
+            # remark_form
+            'author': self.user1.id,
+            'text': 'Remark text',
+        }
         response = self.client.post(self.url, data)
         form1 = response.context.get('topic_form')
         form2 = response.context.get('debate_form')
         form3 = response.context.get('remark_form')
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
+        self.assertTrue(form1.errors)
+        self.assertFalse(form2.errors)
+        self.assertFalse(form3.errors)
         self.assertFalse(Topic.objects.exists())
         self.assertFalse(Debate.objects.exists())
         self.assertFalse(Remark.objects.exists())
+
+    def test_invalid_post_data_form2(self):
+        self.client.force_login(self.user1)
+        data = {
+            # topic_form
+            'title': 'Topic1',
+            # debate_form
+            'name': 'Debate1',
+            'allowed_profiles': 'Invalid data',       # invalid data given here
+            # remark_form
+            'author': self.user1.id,
+            'text': 'Remark text',
+        }
+        response = self.client.post(self.url, data)
+        form1 = response.context.get('topic_form')
+        form2 = response.context.get('debate_form')
+        form3 = response.context.get('remark_form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertFalse(form1.errors)
+        self.assertTrue(form2.errors)
+        self.assertFalse(form3.errors)
+        self.assertFalse(Topic.objects.exists())
+        self.assertFalse(Debate.objects.exists())
+        self.assertFalse(Remark.objects.exists())
+
+    def test_invalid_post_data_form3(self):
+        self.client.force_login(self.user1)
+        data = {
+            # topic_form
+            'title': 'Topic1',
+            # debate_form
+            'name': 'Debate1',
+            'allowed_profiles': [self.user2.profile.id, ],
+            # remark_form
+            'author': 'Invalid data',     # invalid data given here
+            'text': 'Remark text',
+        }
+        response = self.client.post(self.url, data)
+        form1 = response.context.get('topic_form')
+        form2 = response.context.get('debate_form')
+        form3 = response.context.get('remark_form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertFalse(form1.errors)
+        self.assertFalse(form2.errors)
+        self.assertTrue(form3.errors)
+        self.assertFalse(Topic.objects.exists())
+        self.assertFalse(Debate.objects.exists())
+        self.assertFalse(Remark.objects.exists())
+
+    def test_invalid_post_data_empty_fields(self):
+        self.client.force_login(self.user1)
+        data = {
+            # topic_form
+            'title': '',
+            # debate_form
+            'name': '',
+            'allowed_profiles': '',
+            # remark_form
+            'author': '',
+            'text': '',
+        }
+        response = self.client.post(self.url, data)
+        form1 = response.context.get('topic_form')
+        form2 = response.context.get('debate_form')
+        form3 = response.context.get('remark_form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
         self.assertTrue(form1.errors)
         self.assertTrue(form2.errors)
         self.assertTrue(form3.errors)
-
-    # TODO Here empty fields given only for topic_form, other forms have no data. How should this be done?
-    # def test_invalid_post_data_empty_fields(self):
-    #     self.client.force_login(self.user1)
-    #     data = {
-    #         'title': '',
-    #         'description': '',
-    #     }
-    #     response = self.client.post(self.url, data)
-    #     form1 = response.context.get('topic_form')
-    #     form2 = response.context.get('debate_form')
-    #     form3 = response.context.get('remark_form')
-    #     # should show the form again, not redirect
-    #     self.assertEquals(response.status_code, 200)
-    #     self.assertFalse(Topic.objects.exists())
-    #     self.assertFalse(Debate.objects.exists())
-    #     self.assertFalse(Remark.objects.exists())
-    #     self.assertTrue(form1.errors)
-    #     self.assertTrue(form2.errors)
-    #     self.assertTrue(form3.errors)
+        self.assertFalse(Topic.objects.exists())
+        self.assertFalse(Debate.objects.exists())
+        self.assertFalse(Remark.objects.exists())
 
 
 #######################################################################################################################
