@@ -6,7 +6,7 @@ from django.db.models import Count, Case, When, IntegerField, Max, Min, Prefetch
 from django.shortcuts import render, redirect, get_object_or_404
 
 from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm, InviteForm
-from debates.models import Topic, Debate
+from debates.models import Topic, Debate, Remark
 from rpg_project.utils import query_debugger
 from users.models import User
 
@@ -167,17 +167,18 @@ def debate_view(request, topic_id, debate_id):
     debate_allowed_profiles = debate.allowed_profiles.exclude(character_status='gm')
     debate_followers = debate.followers.exclude(character_status='gm')
     remarks = debate.remarks.all().select_related('author__profile')
-    first_remark = debate.remarks.exclude(author__profile__character_status='gm').order_by('date_posted')[0] \
-        if debate.remarks.exclude(author__profile__character_status='gm') \
-        else False
-    last_remark = debate.remarks.order_by('-date_posted')[0]
 
-    last_remark_seen_by_imgs = ()
-    if not debate.is_ended:
-        seen_by = last_remark.seen_by.all()
-        if profile not in seen_by:
-            last_remark.seen_by.add(profile)
-        last_remark_seen_by_imgs = (p.image for p in last_remark.seen_by.all())
+    first_remark = None
+    last_remark = None
+    last_remark_seen_by_imgs = []
+    if debate.remarks.exclude(author__profile__character_status='gm'):
+        first_remark = debate.remarks.order_by('date_posted')[0]
+        last_remark = debate.remarks.order_by('date_posted')[-1]
+        if not debate.is_ended:
+            seen_by = last_remark.seen_by.all()
+            if profile not in seen_by:
+                last_remark.seen_by.add(profile)
+            last_remark_seen_by_imgs = [p.image for p in last_remark.seen_by.all()]
 
     if request.method == 'POST':
         form = CreateRemarkForm(request.POST, request.FILES, debate_id=debate_id)
