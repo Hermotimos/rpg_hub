@@ -15,8 +15,8 @@ class ChronicleAllChaptersTest(TestCase):
         self.user4.profile.save()
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
-        self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
-        self.event1 = ChronicleEvent.objects.create(id=1, game=self.game1, event_no_in_game=1, )
+        self.game1 = GameSession.objects.create(chapter=self.chapter1, title='Game1')
+        self.event1 = ChronicleEvent.objects.create(game=self.game1, event_no_in_game=1)
         self.event1.participants.set([self.user1.profile])
         self.event1.informed.set([self.user2.profile])
 
@@ -37,22 +37,22 @@ class ChronicleAllChaptersTest(TestCase):
         self.assertEquals(view.func, views.chronicle_all_chapters_view)
 
     def test_links(self):
-        # case request.user.profile in event1.participants.all()
+        # request.user.profile in event1.participants.all()
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="#{self.chapter1.id}"')
 
-        # case request.user.profile in event1.informed.all()
+        # request.user.profile in event1.informed.all()
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="#{self.chapter1.id}"')
 
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # request.user.profile neither in informed nor in participants, nor character_status == 'gm'
         self.client.force_login(self.user3)
         response = self.client.get(self.url)
         self.assertNotContains(response, f'href="#{self.chapter1.id}"')
 
-        # case request.user.profile.character_status == 'gm'
+        # request.user.profile.character_status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="#{self.chapter1.id}"')
