@@ -47,7 +47,8 @@ class ChronicleAllChaptersTest(TestCase):
         response = self.client.get(self.url)
         self.assertContains(response, f'href="#{self.chapter1.id}"')
 
-        # request.user.profile neither in informed nor in participants, nor character_status == 'gm'
+        # request.user.profile neither in event1.informed.all() nor in event1.participants.all(),
+        # nor character_status == 'gm'
         self.client.force_login(self.user3)
         response = self.client.get(self.url)
         self.assertNotContains(response, f'href="#{self.chapter1.id}"')

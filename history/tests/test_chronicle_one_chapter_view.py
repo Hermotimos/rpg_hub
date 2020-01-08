@@ -28,7 +28,7 @@ class ChronicleOneChapterTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # request.user.profile neither in event1.informed.all() nor in event1.participants.all()
+        # request.user.profile neither in event1.informed.all() nor in event1.participants.all(),
         # nor character_status == 'gm'
         self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
