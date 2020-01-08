@@ -12,10 +12,11 @@ class ChronicleMainTest(TestCase):
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
         self.user4.profile.character_status = 'gm'
+        self.user4.profile.save()
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
-        self.event1 = ChronicleEvent.objects.create(id=1, game=self.game1, event_no_in_game=1, )
+        self.event1 = ChronicleEvent.objects.create(game=self.game1, event_no_in_game=1)
         self.event1.participants.set([self.user1.profile])
         self.event1.informed.set([self.user2.profile])
 
@@ -38,30 +39,30 @@ class ChronicleMainTest(TestCase):
     def test_links(self):
         linked_url1 = reverse('history:chronicle-all-chapters')
         linked_url2 = reverse('history:chronicle-one-chapter', kwargs={'chapter_id': self.chapter1.id})
-        linked_url3 = reverse('history:chronicle-one-game', kwargs={'game_id': self.game1.id})
+        linked_url3 = reverse('history:chronicle-one-game', kwargs={'game_id': self.game1.id, 'timeline_event_id': 0})
 
-        # case request.user.profile in event1.participants.all()
+        # request.user.profile in event1.participants.all()
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
         self.assertContains(response, f'href="{linked_url2}"')
         self.assertContains(response, f'href="{linked_url3}"')
 
-        # case request.user.profile in event1.informed.all()
+        # request.user.profile in event1.informed.all()
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
         self.assertContains(response, f'href="{linked_url2}"')
         self.assertContains(response, f'href="{linked_url3}"')
 
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # request.user.profile neither in informed nor in participants, nor character_status == 'gm'
         self.client.force_login(self.user3)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
         self.assertNotContains(response, f'href="{linked_url2}"')
         self.assertNotContains(response, f'href="{linked_url3}"')
 
-        # case request.user.profile.character_status == 'gm'
+        # request.user.profile.character_status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
