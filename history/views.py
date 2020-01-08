@@ -215,13 +215,13 @@ def chronicle_inform_view(request, event_id):
     profile = request.user.profile
     event = get_object_or_404(ChronicleEvent, id=event_id)
 
-    participants_ids = [p.id for p in event.participants.all()]
-    old_informed_ids = [p.id for p in event.informed.all()]
+    participants = event.participants.all()
+    old_informed = event.informed.all()
 
     if request.method == 'POST':
         form = ChronicleEventInformForm(authenticated_user=request.user,
-                                        old_informed_ids=old_informed_ids,
-                                        participants_ids=participants_ids,
+                                        old_informed=old_informed,
+                                        participants=participants,
                                         data=request.POST,
                                         instance=event)
         if form.is_valid():
@@ -249,8 +249,8 @@ def chronicle_inform_view(request, event_id):
             return HttpResponseRedirect(_next)
     else:
         form = ChronicleEventInformForm(authenticated_user=request.user,
-                                        old_informed_ids=old_informed_ids,
-                                        participants_ids=participants_ids)
+                                        old_informed=old_informed,
+                                        participants=participants)
 
     context = {
         'page_title': 'Poinformuj o wydarzeniu',
