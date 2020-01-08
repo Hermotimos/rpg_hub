@@ -13,6 +13,7 @@ class ChronicleNoteTest(TestCase):
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
         self.user4.profile.character_status = 'gm'
+        self.user4.profile.save()
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')

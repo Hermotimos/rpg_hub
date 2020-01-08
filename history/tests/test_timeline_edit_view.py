@@ -13,6 +13,7 @@ class TimelineEditView(TestCase):
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
         self.user4.profile.character_status = 'gm'
+        self.user4.profile.save()
 
         self.game1 = GameSession.objects.create(title='Game1')
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
