@@ -181,6 +181,8 @@ def chronicle_one_chapter_view(request, chapter_id):
 def chronicle_one_game_view(request, game_id, timeline_event_id):
     profile = request.user.profile
     game = get_object_or_404(GameSession, id=game_id)
+    event = TimelineEvent.objects.none()
+
     if timeline_event_id != '0':
         event = TimelineEvent.objects.get(id=timeline_event_id)
 
@@ -201,7 +203,7 @@ def chronicle_one_game_view(request, game_id, timeline_event_id):
     }
     if is_allowed_for_chronicle(profile, game_id=game_id):
         return render(request, 'history/chronicle_one_game.html', context)
-    elif profile in event.informed.all():
+    elif event and profile in event.informed.all():
         return redirect('history:chronicle-gap', timeline_event_id=timeline_event_id)
     else:
         return redirect('home:dupa')
