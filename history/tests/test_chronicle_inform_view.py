@@ -11,13 +11,15 @@ class ChronicleInformTest(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
+        self.user3.profile.character_status = 'active_player'
+        self.user3.profile.save()
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
         self.user4.profile.character_status = 'gm'
         self.user4.profile.save()
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
-        self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
-        self.event1 = ChronicleEvent.objects.create(id=1, game=self.game1, event_no_in_game=1, )
+        self.game1 = GameSession.objects.create(chapter=self.chapter1, title='Game1')
+        self.event1 = ChronicleEvent.objects.create(game=self.game1, event_no_in_game=1)
         self.event1.participants.set([self.user1.profile])
         self.event1.informed.set([self.user2.profile])
 
@@ -29,7 +31,8 @@ class ChronicleInformTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # request.user.profile neither in event1.informed.all() nor in event1.participants.all(),
+        # nor character_status == 'gm'
         self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -42,17 +45,17 @@ class ChronicleInformTest(TestCase):
         self.assertEquals(response.status_code, 404)
 
     def test_get(self):
-        # case: request.user.profile in participants:
+        # request.user.profile in event1.participants.all():
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile in informed:
+        # request.user.profile in event1.informed.all():
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile.character_status == 'gm'
+        # request.user.profile.character_status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -72,17 +75,59 @@ class ChronicleInformTest(TestCase):
         form = response.context.get('form')
         self.assertIsInstance(form, ChronicleEventInformForm)
 
-    # TODO no idea how to handle forms kwargs in tests
-    def test_valid_post_data(self):
-        pass
+    def test_valid_post_data1(self):
+        # participant user1 informs an uninformed user3
+        self.client.force_login(self.user1)
+        form = ChronicleEventInformForm(authenticated_user=self.user1,
+                                        old_informed=[self.user2.profile.id, ],
+                                        participants=[self.user1.profile.id, ],
+                                        instance=self.event1)
+        data = form.initial
+        data['informed'] = [self.user3.profile.id]
+        self.assertFalse(self.user3.profile in self.event1.informed.all())
+        self.client.post(self.url, data)
+        self.assertTrue(self.user3.profile in self.event1.informed.all())
 
-    # TODO no idea how to handle forms kwargs in tests
+    def test_valid_post_data2(self):
+        # informed user2 informs an uninformed user3
+        self.client.force_login(self.user2)
+        form = ChronicleEventInformForm(authenticated_user=self.user1,
+                                        old_informed=[self.user2.profile.id, ],
+                                        participants=[self.user1.profile.id, ],
+                                        instance=self.event1)
+        data = form.initial
+        data['informed'] = [self.user3.profile.id]
+        self.assertFalse(self.user3.profile in self.event1.informed.all())
+        self.client.post(self.url, data)
+        self.assertTrue(self.user3.profile in self.event1.informed.all())
+
     def test_invalid_post_data(self):
-        pass
+        self.client.force_login(self.user1)
+        form = ChronicleEventInformForm(authenticated_user=self.user1,
+                                        old_informed=[self.user2.profile.id, ],
+                                        participants=[self.user1.profile.id, ],
+                                        instance=self.event1)
+        data = form.initial
+        data['informed'] = 'Invalid data'
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
 
-    # TODO no idea how to handle forms kwargs in tests
     def test_invalid_post_data_empty_fields(self):
-        pass
+        self.client.force_login(self.user1)
+        form = ChronicleEventInformForm(authenticated_user=self.user1,
+                                        old_informed=[self.user2.profile.id, ],
+                                        participants=[self.user1.profile.id, ],
+                                        instance=self.event1)
+        data = form.initial
+        data['informed'] = ''
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
 
 
 #######################################################################################################################
