@@ -18,69 +18,69 @@ def knowledge_sheet_view(request):
     profile = request.user.profile
     if profile.character_status == 'gm':
         arcana_kn_packets = KnowledgePacket.objects \
-            .filter(package_types__name='Arkana')\
+            .filter(packet_types__name='Arkana')\
             .distinct()\
             .prefetch_related('pictures')
         bestiary_kn_packets = KnowledgePacket.objects \
-            .filter(package_types__name='Bestiariusz') \
+            .filter(packet_types__name='Bestiariusz') \
             .distinct()\
             .prefetch_related('pictures')
         geography_kn_packets = KnowledgePacket.objects \
-            .filter(package_types__name='Geografia') \
+            .filter(packet_types__name='Geografia') \
             .distinct()\
             .prefetch_related('pictures')
         history_kn_packets = KnowledgePacket.objects \
-            .filter(package_types__name='Historia') \
+            .filter(packet_types__name='Historia') \
             .distinct()\
             .prefetch_related('pictures')
         library_kn_packets = KnowledgePacket.objects \
-            .filter(package_types__name='Biblioteka') \
+            .filter(packet_types__name='Biblioteka') \
             .distinct()\
             .prefetch_related('pictures')
         theology_kn_packets = KnowledgePacket.objects \
-            .filter(package_types__name='Teologia') \
+            .filter(packet_types__name='Teologia') \
             .distinct()\
             .prefetch_related('pictures')
 
         varia_kn_packets = KnowledgePacket.objects \
-            .filter(package_types__name='Varia') \
+            .filter(packet_types__name='Varia') \
             .distinct() \
             .prefetch_related('pictures')
     else:
         arcana_kn_packets = KnowledgePacket.objects\
             .filter(allowed_profiles=profile) \
-            .filter(package_types__name='Arkana')\
+            .filter(packet_types__name='Arkana')\
             .distinct()\
             .prefetch_related('pictures')
         bestiary_kn_packets = KnowledgePacket.objects \
             .filter(allowed_profiles=profile) \
-            .filter(package_types__name='Bestiariusz') \
+            .filter(packet_types__name='Bestiariusz') \
             .distinct()\
             .prefetch_related('pictures')
         geography_kn_packets = KnowledgePacket.objects \
             .filter(allowed_profiles=profile) \
-            .filter(package_types__name='Geografia') \
+            .filter(packet_types__name='Geografia') \
             .distinct()\
             .prefetch_related('pictures')
         history_kn_packets = KnowledgePacket.objects \
             .filter(allowed_profiles=profile) \
-            .filter(package_types__name='Historia') \
+            .filter(packet_types__name='Historia') \
             .distinct()\
             .prefetch_related('pictures')
         library_kn_packets = KnowledgePacket.objects \
             .filter(allowed_profiles=profile) \
-            .filter(package_types__name='Biblioteka') \
+            .filter(packet_types__name='Biblioteka') \
             .distinct()\
             .prefetch_related('pictures')
         theology_kn_packets = KnowledgePacket.objects \
             .filter(allowed_profiles=profile) \
-            .filter(package_types__name='Teologia') \
+            .filter(packet_types__name='Teologia') \
             .distinct()\
             .prefetch_related('pictures')
 
         varia_kn_packets = KnowledgePacket.objects \
             .filter(allowed_profiles=profile) \
-            .filter(package_types__name='UMIEJĘTNOŚCI') \
+            .filter(packet_types__name='UMIEJĘTNOŚCI') \
             .distinct() \
             .prefetch_related('pictures')
 

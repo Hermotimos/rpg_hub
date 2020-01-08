@@ -18,7 +18,7 @@ class KnowledgePacketType(models.Model):
 
 class KnowledgePacket(models.Model):
     title = models.CharField(max_length=100, unique=True)
-    package_types = models.ManyToManyField(KnowledgePacketType, related_name='knowledge_packets')
+    packet_types = models.ManyToManyField(KnowledgePacketType, related_name='knowledge_packets')
     text = models.TextField()
     pictures = models.ManyToManyField(Picture, related_name='knowledge_packets', blank=True)
     allowed_profiles = models.ManyToManyField(Profile, related_name='allowed_knowledge_packets', blank=True)
