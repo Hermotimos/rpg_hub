@@ -51,13 +51,15 @@ def toponomikon_general_location_view(request, gen_loc_id):
     gen_loc = get_object_or_404(GeneralLocation, id=gen_loc_id)
     if profile.character_status == 'gm':
         spec_locs = SpecificLocation.objects.filter(general_location__id=gen_loc_id)
+        knowledge_packets = gen_loc.knowledge_packets.all()
         gen_loc_known_only_indirectly = False
     else:
         known_directly = gen_loc.specific_locations.filter(known_directly=profile)
         known_indirectly = gen_loc.specific_locations.filter(known_indirectly=profile).exclude(id__in=known_directly)
         spec_locs = (known_directly | known_indirectly)
+        knowledge_packets = gen_loc.knowledge_packets.filter(allowed_profiles=profile)
         gen_loc_known_only_indirectly = \
-            True if profile in gen_loc.known_indirectly.all() and not profile in gen_loc.known_directly.all() else False
+            True if profile in gen_loc.known_indirectly.all() and profile not in gen_loc.known_directly.all() else False
 
     spec_locs = spec_locs\
         .select_related('main_image')\
@@ -74,6 +76,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
         'page_title': gen_loc.name,
         'gen_loc': gen_loc,
         'gen_loc_known_only_indirectly': gen_loc_known_only_indirectly,
+        'knowledge_packets': knowledge_packets,
         'spec_locs': spec_locs
     }
     return render(request, 'toponomikon/toponomikon_general_location.html', context)
@@ -86,15 +89,18 @@ def toponomikon_specific_location_view(request, spec_loc_id):
     spec_loc = get_object_or_404(SpecificLocation, id=spec_loc_id)
     if profile.character_status == 'gm':
         spec_loc_known_only_indirectly = False
+        knowledge_packets = spec_loc.knowledge_packets.all()
     else:
         spec_loc_known_only_indirectly = \
             True if profile in spec_loc.known_indirectly.all() and profile not in spec_loc.known_directly.all() \
             else False
+        knowledge_packets = spec_loc.knowledge_packets.filter(allowed_profiles=profile)
 
     context = {
         'page_title': spec_loc.name,
         'spec_loc': spec_loc,
         'spec_loc_known_only_indirectly': spec_loc_known_only_indirectly,
+        'knowledge_packets': knowledge_packets
     }
     return render(request, 'toponomikon/toponomikon_specific_location.html', context)
 
