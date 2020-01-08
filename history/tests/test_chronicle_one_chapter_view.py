@@ -15,8 +15,8 @@ class ChronicleOneChapterTest(TestCase):
         self.user4.profile.save()
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
-        self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
-        self.event1 = ChronicleEvent.objects.create(id=1, game=self.game1, event_no_in_game=1, )
+        self.game1 = GameSession.objects.create(chapter=self.chapter1, title='Game1')
+        self.event1 = ChronicleEvent.objects.create(game=self.game1, event_no_in_game=1)
         self.event1.participants.set([self.user1.profile])
         self.event1.informed.set([self.user2.profile])
 
@@ -28,7 +28,8 @@ class ChronicleOneChapterTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # request.user.profile neither in event1.informed.all() nor in event1.participants.all()
+        # nor character_status == 'gm'
         self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -41,17 +42,17 @@ class ChronicleOneChapterTest(TestCase):
         self.assertEquals(response.status_code, 404)
 
     def test_get(self):
-        # case: request.user.profile in participants:
+        # request.user.profile in event1.participants.all():
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile in informed:
+        # request.user.profile in event1.informed.all():
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile.character_status == 'gm'
+        # request.user.profile.character_status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -65,23 +66,21 @@ class ChronicleOneChapterTest(TestCase):
         linked_url2 = reverse('history:chronicle-note', kwargs={'event_id': self.event1.id})
         linked_url3 = reverse('history:chronicle-edit', kwargs={'event_id': self.event1.id})
 
-        # case request.user.profile in event1.participants.all()
+        # request.user.profile in event1.participants.all()
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
         self.assertContains(response, f'href="{linked_url2}"')
         self.assertNotContains(response, f'href="{linked_url3}"')
 
-        # case request.user.profile in event1.informed.all()
+        # request.user.profile in event1.informed.all()
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
         self.assertContains(response, f'href="{linked_url2}"')
         self.assertNotContains(response, f'href="{linked_url3}"')
 
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm' - redirect
-
-        # case request.user.profile.character_status == 'gm'
+        # request.user.profile.character_status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
