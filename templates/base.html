@@ -45,7 +45,7 @@
 
                     <!--   PAGE TITLE   -->
                     <br>
-                    <div class="border-custom-base">
+                    <div id="page-top" class="border-custom-base">
                         <table>
                             <tr>
                                 <td class="align-bottom">
@@ -76,7 +76,9 @@
                 <!--     SIDEBAR       -->
                 {% if user.is_authenticated %}
                     {% include 'sidebar.html' %}
+<!--                    <a href="#" class="scrollup"></a>-->
                 {% endif %}
+                
             </div>
         </main>
 
