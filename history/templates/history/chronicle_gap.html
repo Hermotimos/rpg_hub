@@ -18,9 +18,14 @@
         ale nie znasz dokładnego przebiegu (czyt. jesteś poinformowany w ramach Kalendarium, ale nie w ramach Kroniki).
     </p>
     <p class="font-18 font-italic px-1 py-1 text-justify">
-        Jeśli jest to wydarzenie "ze świata", to nie ma ono odpowiednika w Kronice, ponieważ żaden z bohaterów nie był jego uczestnikiem.
-        Jeśli zaś jest to wydarzenie, w którym któryś ze znanych ci bohaterów brał udział, i pozwala na to sytuacja, w jakiej obecnie się znajdujecie,
-        to możesz zwrócić się do jednego z uczestników lub poinformowanych ({{ participants_and_informed }}),
-        aby opowiedzieli Ci dokładniej te dzieje.
+        {% if participants_and_informed %}
+            Jeśli pozwala na to sytuacja, w jakiej się obecnie znajdujecie, możesz zwrócić się do jednego z uczestników lub poinformowanych,
+            aby opowiedzieli Ci dokładniej te dzieje.
+            Oto kto może wiedzieć coś więcej na ten temat: {{ participants_and_informed }}.
+            <br><br>
+            Wyślij im Dezyderaty i poproś, aby podzielili się z Tobą wiedzą o dokładnym przebiegu tych wydarzeń. Zaznacz, że chodzi o Kronikę!
+        {% else %}
+            Jest to wydarzenie "ze świata", które nie zostało  zapisane w Kronice, ponieważ żaden z bohaterów nie był jego uczestnikiem.
+        {% endif %}
     </p>
 {% endblock content %}
