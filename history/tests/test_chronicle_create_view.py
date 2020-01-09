@@ -11,8 +11,8 @@ class ChronicleCreateTest(TestCase):
         self.game1 = GameSession.objects.create(title='Game1')
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
-        self.user1.profile.character_status = 'gm'
-        self.user1.profile.save()
+        self.user2.profile.character_status = 'gm'
+        self.user2.profile.save()
 
         self.url = reverse('history:chronicle-create')
 
@@ -23,13 +23,14 @@ class ChronicleCreateTest(TestCase):
 
     def test_redirect_if_unallowed(self):
         # request.user.profile.character_status != 'gm'
-        self.client.force_login(self.user2)
+        self.client.force_login(self.user1)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_get(self):
-        self.client.force_login(self.user1)
+        # request.user.profile.character_status == 'gm'
+        self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
@@ -38,18 +39,18 @@ class ChronicleCreateTest(TestCase):
         self.assertEquals(view.func, views.chronicle_create_view)
 
     def test_csrf(self):
-        self.client.force_login(self.user1)
+        self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_contains_form(self):
-        self.client.force_login(self.user1)
+        self.client.force_login(self.user2)
         response = self.client.get(self.url)
         form = response.context.get('form')
         self.assertIsInstance(form, ChronicleEventCreateForm)
 
     def test_valid_post_data(self):
-        self.client.force_login(self.user1)
+        self.client.force_login(self.user2)
         data = {
             'game': self.game1.id,
             'event_no_in_game': 1,
@@ -60,7 +61,7 @@ class ChronicleCreateTest(TestCase):
         self.assertTrue(ChronicleEvent.objects.exists())
 
     def test_invalid_post_data(self):
-        self.client.force_login(self.user1)
+        self.client.force_login(self.user2)
         data = {}
         response = self.client.post(self.url, data)
         form = response.context.get('form')
@@ -70,7 +71,7 @@ class ChronicleCreateTest(TestCase):
         self.assertFalse(ChronicleEvent.objects.exists())
 
     def test_invalid_post_data_empty_fields(self):
-        self.client.force_login(self.user1)
+        self.client.force_login(self.user2)
         data = {
             'game': '',
             'event_no_in_game': '',
