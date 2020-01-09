@@ -325,6 +325,8 @@ def chronicle_edit_view(request, event_id):
         return redirect('home:dupa')
 
 
+@query_debugger
+@login_required
 def chronicle_gap_view(request, timeline_event_id):
     timeline_event = get_object_or_404(TimelineEvent, id=timeline_event_id)
     participants_and_informed = (timeline_event.participants.all() | (timeline_event.informed.all())).distinct()
