@@ -83,6 +83,8 @@ def chronicle_main_view(request):
 @query_debugger
 @login_required
 def chronicle_create_view(request):
+    profile = request.user.profile
+
     if request.method == 'POST':
         form = ChronicleEventCreateForm(request.POST)
         if form.is_valid():
@@ -102,7 +104,10 @@ def chronicle_create_view(request):
         'page_title': 'Nowe wydarzenie: Kronika',
         'form': form
     }
-    return render(request, 'history/chronicle_create.html', context)
+    if profile.character_status == 'gm':
+        return render(request, 'history/chronicle_create.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @query_debugger
