@@ -16,7 +16,7 @@ class ChronicleNoteTest(TestCase):
         self.user4.profile.save()
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
-        self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
+        self.game1 = GameSession.objects.create(chapter=self.chapter1, title='Game1')
         self.event1 = ChronicleEvent.objects.create(id=1, game=self.game1, event_no_in_game=1)
         self.event1.participants.set([self.user1.profile])
         self.event1.informed.set([self.user2.profile])
@@ -29,7 +29,8 @@ class ChronicleNoteTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # request.user.profile neither in event1.informed.all() nor in event1.participants.all(),
+        # nor character_status == 'gm'
         self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -42,17 +43,17 @@ class ChronicleNoteTest(TestCase):
         self.assertEquals(response.status_code, 404)
 
     def test_get(self):
-        # case: request.user.profile in participants:
+        # request.user.profile in event1.participants.all():
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile in informed:
+        # request.user.profile in event1.informed.all():
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile.character_status == 'gm'
+        # request.user.profile.character_status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -80,6 +81,7 @@ class ChronicleNoteTest(TestCase):
             'text': 'Note1',
             'color': '#C70039'
         }
+        self.assertFalse(ChronicleEventNote.objects.exists())
         self.client.post(self.url, data)
         self.assertTrue(ChronicleEventNote.objects.exists())
 
@@ -91,7 +93,7 @@ class ChronicleNoteTest(TestCase):
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
         self.assertTrue(form.errors)
-        self.assertTrue(ChronicleEventNote.objects.count() == 0)
+        self.assertFalse(ChronicleEventNote.objects.exists())
 
     def test_invalid_post_data_empty_fields(self):
         self.client.force_login(self.user1)
@@ -106,7 +108,7 @@ class ChronicleNoteTest(TestCase):
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
         self.assertTrue(form.errors)
-        self.assertTrue(ChronicleEventNote.objects.count() == 0)
+        self.assertFalse(ChronicleEventNote.objects.exists())
 
 
 #######################################################################################################################
