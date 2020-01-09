@@ -1,7 +1,11 @@
+from django import forms
 from django.contrib import admin
+from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
+from django.db.models import Q
 from django.forms import Textarea
 from django.utils.html import format_html
+
 from history.models import (Chapter,
                             GameSession,
                             Thread,
@@ -9,6 +13,51 @@ from history.models import (Chapter,
                             TimelineEventNote,
                             ChronicleEvent,
                             ChronicleEventNote)
+from imaginarion.models import Picture
+from toponomikon.models import GeneralLocation, SpecificLocation
+from users.models import Profile
+
+
+class ChronicleEventAdminForm(forms.ModelForm):
+    participants = forms.ModelMultipleChoiceField(queryset=Profile.objects
+                                                  .exclude(Q(character_status='dead_player') |
+                                                           Q(character_status='dead_npc') |
+                                                           Q(character_status='gm') |
+                                                           Q(character_status='living_npc')),
+                                                  required=False,
+                                                  widget=FilteredSelectMultiple('Participants', False))
+    informed = forms.ModelMultipleChoiceField(queryset=Profile.objects
+                                              .exclude(Q(character_status='dead_player') |
+                                                       Q(character_status='dead_npc') |
+                                                       Q(character_status='gm') |
+                                                       Q(character_status='living_npc')),
+                                              required=False,
+                                              widget=FilteredSelectMultiple('Informed', False))
+    pictures = forms.ModelMultipleChoiceField(queryset=Picture.objects.all(), required=False,
+                                              widget=FilteredSelectMultiple('Pictures', False))
+
+
+class TimelineEventAdminForm(forms.ModelForm):
+    participants = forms.ModelMultipleChoiceField(queryset=Profile.objects
+                                                  .exclude(Q(character_status='dead_player') |
+                                                           Q(character_status='dead_npc') |
+                                                           Q(character_status='gm') |
+                                                           Q(character_status='living_npc')),
+                                                  required=False,
+                                                  widget=FilteredSelectMultiple('Participants', False))
+    informed = forms.ModelMultipleChoiceField(queryset=Profile.objects
+                                              .exclude(Q(character_status='dead_player') |
+                                                       Q(character_status='dead_npc') |
+                                                       Q(character_status='gm') |
+                                                       Q(character_status='living_npc')),
+                                              required=False,
+                                              widget=FilteredSelectMultiple('Informed', False))
+    threads = forms.ModelMultipleChoiceField(queryset=Picture.objects.all(), required=False,
+                                             widget=FilteredSelectMultiple('Threads', False))
+    general_locations = forms.ModelMultipleChoiceField(queryset=GeneralLocation.objects.all(), required=True,
+                                                       widget=FilteredSelectMultiple('General locations', False))
+    specific_locations = forms.ModelMultipleChoiceField(queryset=SpecificLocation.objects.all(), required=True,
+                                                        widget=FilteredSelectMultiple('Specific locations', False))
 
 
 class ChapterAdmin(admin.ModelAdmin):
@@ -33,6 +82,7 @@ class ChronicleEventInline(admin.TabularInline):
 
 class ChronicleEventAdmin(admin.ModelAdmin):
     fields = ['game', 'event_no_in_game', 'description', 'participants', 'informed', 'pictures', 'debate']
+    form = ChronicleEventAdminForm
     list_display = ['game', 'event_no_in_game', 'short_description']
     list_display_links = ['short_description']
     list_editable = ['event_no_in_game', ]
@@ -57,6 +107,7 @@ class GameSessionAdmin(admin.ModelAdmin):
 
 
 class TimelineEventAdmin(admin.ModelAdmin):
+    form = TimelineEventAdminForm
     list_display = ['short_description', 'game', 'date']
     list_filter = ['game']
     search_fields = ['description']
