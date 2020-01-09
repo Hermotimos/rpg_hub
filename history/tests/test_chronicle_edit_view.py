@@ -20,7 +20,7 @@ class ChronicleEditTest(TestCase):
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(chapter=self.chapter1, title='Game1')
-        self.event1 = ChronicleEvent.objects.create(game=self.game1, event_no_in_game=1, description='Event1')
+        self.event1 = ChronicleEvent.objects.create(id=1, game=self.game1, event_no_in_game=1, description='Event1')
         self.event1.participants.set([self.user1.profile])
         self.event1.informed.set([self.user2.profile])
         self.event1.save()
