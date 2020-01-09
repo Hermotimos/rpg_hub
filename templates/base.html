@@ -45,7 +45,7 @@
 
                     <!--   PAGE TITLE   -->
                     <br>
-                    <div id="page-top" class="border-custom-base">
+                    <div class="border-custom-base">
                         <table>
                             <tr>
                                 <td class="align-bottom">
@@ -70,15 +70,20 @@
                     <!--   CONTENT   -->
                     {% block content %}
                     {% endblock content %}
+
                     <br><br><br><br><br><br><br>
+                </div>
+                <div>
+                    <a id="upp" class="scrollup col-md-0"></a>
+
                 </div>
 
                 <!--     SIDEBAR       -->
                 {% if user.is_authenticated %}
                     {% include 'sidebar.html' %}
-<!--                    <a href="#" class="scrollup"></a>-->
                 {% endif %}
                 
+
             </div>
         </main>
 
@@ -89,6 +94,29 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js"></script>
 
+        <!-- Scrolling -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="{% static 'js/jquery.scrollTo.min.js' %}"></script>
+        <script>
+            jQuery(function($)
+            {
+                $.scrollTo(0);
+                
+                $('.scrollup').click(function() { $.scrollTo($('body'), 1000); });
+            }
+            );
+
+            // Show scrollup button when scrolled down > 300px
+            $(window).scroll(function()
+            {
+                if($(this).scrollTop()>300) $('.scrollup').fadeIn();
+                else $('.scrollup').fadeOut();
+            }
+            );
+        </script>
+        
+        
+        
         <script>
             $("body").on("contextmenu", "img", function(e) {
                 return false;
