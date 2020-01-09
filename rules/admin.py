@@ -1,8 +1,8 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.db.models import Q
 from django.db import models
+from django.db.models import Q
 from django.forms import Textarea
 from django.utils.translation import ugettext_lazy
 
