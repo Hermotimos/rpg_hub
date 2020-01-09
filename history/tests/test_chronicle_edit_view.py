@@ -12,18 +12,18 @@ class ChronicleEditTest(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
-        # self.user1.profile.character_status = 'active_player'
-        # self.user1.save()
-        # self.user2.profile.character_status = 'active_player'
-        # self.user2.save()
-        self.user3.profile.character_status = 'gm'
-        self.user3.save()
+        self.user3.profile.character_status = 'active_player'
+        self.user3.profile.save()
+        self.user4 = User.objects.create_user(username='user4', password='pass1111')
+        self.user4.profile.character_status = 'gm'
+        self.user4.profile.save()
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(chapter=self.chapter1, title='Game1')
         self.event1 = ChronicleEvent.objects.create(game=self.game1, event_no_in_game=1, description='Event1')
         self.event1.participants.set([self.user1.profile])
         self.event1.informed.set([self.user2.profile])
+        self.event1.save()
 
         self.topic1 = Topic.objects.create(title='Topic1')
         self.debate1 = Debate.objects.create(topic=self.topic1, starter=self.user1)
@@ -43,17 +43,14 @@ class ChronicleEditTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_404(self):
-        self.client.force_login(self.user3)
+        self.client.force_login(self.user4)
         url = reverse('history:chronicle-edit', kwargs={'event_id': self.event1.id + 999})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 404)
 
     def test_get(self):
-        # self.assertTrue(ChronicleEvent.objects.exists())
-        # self.assertTrue(self.user3.profile.character_status == 'gm')
-
         # request.user.profile.character_status == 'gm'
-        self.client.force_login(self.user3)
+        self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
@@ -61,56 +58,48 @@ class ChronicleEditTest(TestCase):
         view = resolve(f'/history/chronicle/edit:{self.event1.id}/')
         self.assertEquals(view.func, views.chronicle_edit_view)
 
-    # def test_csrf(self):
-    #     self.client.force_login(self.user3)
-    #     response = self.client.get(self.url)
-    #     self.assertContains(response, 'csrfmiddlewaretoken')
-    #
-    # def test_contains_form(self):
-    #     self.client.force_login(self.user3)
-    #     response = self.client.get(self.url)
-    #     form = response.context.get('form')
-    #     self.assertIsInstance(form, ChronicleEventEditForm)
+    def test_csrf(self):
+        self.client.force_login(self.user4)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
 
-    # # TODO won't pass - WHY? error ' "" nie jest poprawną wartością.' though form.data seems legit
-    # def test_valid_post_data(self):
-    #     self.client.force_login(self.user3)
-    #     form = ChronicleEventEditForm(instance=self.event1)
-    #     data = form.initial
-    #
-    #     print('\n', data)
-    #     data['description'] = 'changed text'
-    #     data['participants'] = [self.user1.profile]
-    #     data['informed'] = [self.user1.profile]
-    #     data['debate'] = self.debate1.id
-    #     print('\n', data)
-    #     response = self.client.post(self.url, data)
-    #     form = response.context.get('form')
-    #     print('\n', form.errors)
-    #
-    #     # self.client.post(self.url, data)
-    #     self.assertTrue(ChronicleEvent.objects.get(id=1).description == 'changed text')
+    def test_contains_form(self):
+        self.client.force_login(self.user4)
+        response = self.client.get(self.url)
+        form = response.context.get('form')
+        self.assertIsInstance(form, ChronicleEventEditForm)
 
-    # def test_invalid_post_data(self):
-    #     self.client.force_login(self.user3)
-    #     data = {}
-    #     response = self.client.post(self.url, data)
-    #     form = response.context.get('form')
-    #     # should show the form again, not redirect
-    #     self.assertEquals(response.status_code, 200)
-    #     self.assertTrue(form.errors)
-    #
-    # def test_invalid_post_data_empty_fields(self):
-    #     self.client.force_login(self.user3)
-    #     data = {
-    #         'description': '',
-    #     }
-    #     response = self.client.post(self.url, data)
-    #     form = response.context.get('form')
-    #     # should show the form again, not redirect
-    #     self.assertEquals(response.status_code, 200)
-    #     self.assertTrue(form.errors)
-    #     self.assertTrue(ChronicleEvent.objects.get(id=1).description == 'Event1')
+    def test_valid_post_data(self):
+        self.client.force_login(self.user4)
+        form = ChronicleEventEditForm(instance=self.event1)
+        data = form.initial
+        data['description'] = 'changed text'
+        data['participants'] = [self.user3.profile.id]
+        data['informed'] = [self.user3.profile.id]
+        data['debate'] = self.debate1.id
+        self.client.post(self.url, data)
+        self.assertTrue(ChronicleEvent.objects.get(id=1).description == 'changed text')
+
+    def test_invalid_post_data(self):
+        self.client.force_login(self.user4)
+        data = {}
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+
+    def test_invalid_post_data_empty_fields(self):
+        self.client.force_login(self.user4)
+        data = {
+            'description': '',
+        }
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
+        self.assertTrue(ChronicleEvent.objects.get(id=1).description == 'Event1')
 
 
 #######################################################################################################################
