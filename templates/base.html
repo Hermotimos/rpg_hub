@@ -73,17 +73,15 @@
 
                     <br><br><br><br><br><br><br>
                 </div>
-                <div>
-                    <a id="upp" class="scrollup col-md-0"></a>
-
-                </div>
-
-                <!--     SIDEBAR       -->
+                
+                
+                <!--   SIDEBAR   -->
                 {% if user.is_authenticated %}
                     {% include 'sidebar.html' %}
                 {% endif %}
                 
-
+                <!--   SCROLL-UP BUTTON   -->
+                <a id="upp" class="scrollup col-md-0"></a>
             </div>
         </main>
 
@@ -100,8 +98,9 @@
         <script>
             jQuery(function($)
             {
+                // reset scroll on page loading
                 $.scrollTo(0);
-                
+                // when click on element with class .scrollup scroll to 'body' element (=top)
                 $('.scrollup').click(function() { $.scrollTo($('body'), 1000); });
             }
             );
@@ -114,9 +113,6 @@
             }
             );
         </script>
-        
-        
-        
         <script>
             $("body").on("contextmenu", "img", function(e) {
                 return false;
