@@ -84,9 +84,9 @@ class ChronicleInformTest(TestCase):
                                         instance=self.event1)
         data = form.initial
         data['informed'] = [self.user3.profile.id]
-        self.assertFalse(self.user3.profile in self.event1.informed.all())
+        self.assertFalse(self.user3.profile in ChronicleEvent.objects.get(id=1).informed.all())
         self.client.post(self.url, data)
-        self.assertTrue(self.user3.profile in self.event1.informed.all())
+        self.assertTrue(self.user3.profile in ChronicleEvent.objects.get(id=1).informed.all())
 
     def test_valid_post_data2(self):
         # informed user2 informs an uninformed user3
@@ -97,9 +97,9 @@ class ChronicleInformTest(TestCase):
                                         instance=self.event1)
         data = form.initial
         data['informed'] = [self.user3.profile.id]
-        self.assertFalse(self.user3.profile in self.event1.informed.all())
+        self.assertFalse(self.user3.profile in ChronicleEvent.objects.get(id=1).informed.all())
         self.client.post(self.url, data)
-        self.assertTrue(self.user3.profile in self.event1.informed.all())
+        self.assertTrue(self.user3.profile in ChronicleEvent.objects.get(id=1).informed.all())
 
     def test_invalid_post_data(self):
         self.client.force_login(self.user1)
