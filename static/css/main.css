@@ -53,17 +53,24 @@ td.align-right {
 }
 
 
+
 .scrollup {
         width: 64px;
         height: 64px;
         text-decoration: none;
         background: url('/static/img/up.png') 0px 0px;
-        background-size: cover;                      /* <------ */
+        background-size: cover;
         position: fixed;
         right: 50px;
         bottom: 50px;
         display: none;
+}
 
+@media only screen and (max-width: 600px) {
+        [class*="scrollup"] {
+                bottom: 10px;
+                right: 10px;
+        }
 }
 
 
