@@ -9,12 +9,10 @@ from rules.models import SkillLevel
 
 
 class CharacterAdminForm(forms.ModelForm):
-    skill_levels_acquired = forms.ModelMultipleChoiceField(queryset=SkillLevel.objects.all(),
-                                                           widget=FilteredSelectMultiple('Skill levels', False),
-                                                           required=False)
-    pictures = forms.ModelMultipleChoiceField(queryset=Picture.objects.all(),
-                                              widget=FilteredSelectMultiple('Pictures', False),
-                                              required=False)
+    skill_levels_acquired = forms.ModelMultipleChoiceField(queryset=SkillLevel.objects.all(), required=False,
+                                                           widget=FilteredSelectMultiple('Skill levels', False))
+    pictures = forms.ModelMultipleChoiceField(queryset=Picture.objects.all(), required=False,
+                                              widget=FilteredSelectMultiple('Pictures', False))
 
 
 class CharacterAdmin(admin.ModelAdmin):

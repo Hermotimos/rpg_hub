@@ -12,15 +12,15 @@ class DebateAdminForm(forms.ModelForm):
                                                       .exclude(Q(character_status='dead_player') |
                                                                Q(character_status='dead_npc') |
                                                                Q(character_status='gm')),
-                                                      widget=FilteredSelectMultiple('Allowed profiles', False),
-                                                      required=False)
+                                                      required=False,
+                                                      widget=FilteredSelectMultiple('Allowed profiles', False))
 
     followers = forms.ModelMultipleChoiceField(queryset=Profile.objects
                                                .exclude(Q(character_status='dead_player') |
                                                         Q(character_status='dead_npc') |
                                                         Q(character_status='gm')),
-                                               widget=FilteredSelectMultiple('Followers', False),
-                                               required=False)
+                                               required=False,
+                                               widget=FilteredSelectMultiple('Followers', False))
 
 
 class TopicAdmin(admin.ModelAdmin):
