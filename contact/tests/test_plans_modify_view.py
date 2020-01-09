@@ -58,7 +58,7 @@ class PlansModifyTest(TestCase):
         data['text'] = 'changed text'
         data['image'] = ''      # Necessary, otherwise ValueError: The 'image' attribute has no file associated with it.
         self.client.post(self.url, data)
-        self.assertTrue(Plan.objects.get(id=1).text == 'changed text')
+        self.assertTrue(self.plan1.text == 'changed text')
 
     def test_invalid_post_data(self):
         # There is no possibility to provide invalid data apart from providing empty 'text' field (next test)
@@ -74,7 +74,7 @@ class PlansModifyTest(TestCase):
         form = response.context.get('form')
         self.assertEquals(response.status_code, 200)
         self.assertTrue(form.errors)
-        self.assertTrue(Plan.objects.get(id=1).text == 'Plan1')
+        self.assertTrue(self.plan1.text == 'Plan1')
 
 
 #######################################################################################################################
