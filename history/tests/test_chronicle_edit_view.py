@@ -12,6 +12,10 @@ class ChronicleEditTest(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
+        # self.user1.profile.character_status = 'active_player'
+        # self.user1.save()
+        # self.user2.profile.character_status = 'active_player'
+        # self.user2.save()
         self.user3.profile.character_status = 'gm'
         self.user3.save()
 
@@ -76,7 +80,8 @@ class ChronicleEditTest(TestCase):
     #
     #     print('\n', data)
     #     data['description'] = 'changed text'
-    #     data['informed'] = [self.user2.profile]
+    #     data['participants'] = [self.user1.profile]
+    #     data['informed'] = [self.user1.profile]
     #     data['debate'] = self.debate1.id
     #     print('\n', data)
     #     response = self.client.post(self.url, data)
