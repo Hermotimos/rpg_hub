@@ -33,7 +33,8 @@ class Form2(forms.ModelForm):
                                                                Q(character_status='living_npc')),
                                                       required=False,
                                                       widget=FilteredSelectMultiple('Allowed profiles', False))
-    pictures = forms.ModelMultipleChoiceField(queryset=Picture.objects.all(), required=False,
+    pictures = forms.ModelMultipleChoiceField(queryset=Picture.objects.all(),
+                                              required=False,
                                               widget=FilteredSelectMultiple('Pictures', False))
 
 
@@ -46,20 +47,15 @@ class Form3(forms.ModelForm):
                                                                Q(character_status='living_npc')),
                                                       required=False,
                                                       widget=FilteredSelectMultiple('Allowed profiles', False))
-    skills = forms.ModelMultipleChoiceField(queryset=Skill.objects.all(), required=False,
+    skills = forms.ModelMultipleChoiceField(queryset=Skill.objects.all(),
+                                            required=False,
                                             widget=FilteredSelectMultiple('Skills', False))
 
 
-# 'allowed_profiles' AND 'knowledge_packets' FIELDS AS FilteredSelectMultiple
+# 'knowledge_packets' FIELD AS FilteredSelectMultiple
 class Form4(forms.ModelForm):
-    allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                                      .exclude(Q(character_status='dead_player') |
-                                                               Q(character_status='dead_npc') |
-                                                               Q(character_status='gm') |
-                                                               Q(character_status='living_npc')),
-                                                      required=False,
-                                                      widget=FilteredSelectMultiple('Allowed profiles', False))
-    knowledge_packets = forms.ModelMultipleChoiceField(queryset=KnowledgePacket.objects.all(), required=False,
+    knowledge_packets = forms.ModelMultipleChoiceField(queryset=KnowledgePacket.objects.all(),
+                                                       required=False,
                                                        widget=FilteredSelectMultiple('Knowledge packets', False))
 
 
