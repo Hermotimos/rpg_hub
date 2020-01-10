@@ -173,7 +173,7 @@ def debate_view(request, topic_id, debate_id):
     last_remark_seen_by_imgs = []
     if debate.remarks.exclude(author__profile__character_status='gm'):
         first_remark = debate.remarks.order_by('date_posted')[0]
-        last_remark = debate.remarks.order_by('date_posted')[-1]
+        last_remark = debate.remarks.order_by('-date_posted')[0]
         if not debate.is_ended:
             seen_by = last_remark.seen_by.all()
             if profile not in seen_by:
