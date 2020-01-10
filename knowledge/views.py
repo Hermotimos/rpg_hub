@@ -128,7 +128,7 @@ def knowledge_inform_view(request, kn_packet_id):
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
-            messages.info(request, f'Dokonałeś transferu wiedzy do wybranych postaci!')
+            messages.info(request, f'Podzieliłeś się wiedzą z wybranymi towarzyszami!')
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
     else:
@@ -136,7 +136,7 @@ def knowledge_inform_view(request, kn_packet_id):
                                          already_allowed_profiles=allowed_profiles_old)
 
     context = {
-        'page_title': 'Dokonaj transferu wiedzy',
+        'page_title': 'Podziel się wiedzą',
         'kn_packet': kn_packet,
         'form': form,
     }
