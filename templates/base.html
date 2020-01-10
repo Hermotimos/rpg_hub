@@ -27,7 +27,11 @@
 
     <body>
         <!--  NAVBAR  -->
-        {% include 'navbar.html' %}
+        <header class="site-header">
+            <nav class="navbar navbar-expand-md navbar-dark bg-navbar fixed-top">
+                {% include 'navbar.html' %}
+            </nav>
+        </header>
 
         <main role="main" class="container">
             <div class="row">
@@ -45,18 +49,20 @@
 
                     <!--   PAGE TITLE   -->
                     <br>
-                    <div class="border-custom-base">
-                        <table>
-                            <tr>
-                                <td class="align-bottom">
-                                    <img src="{% static 'img/skadia.png' %}" class="border-double img-page-title">
-                                </td>
-                                <td class="pb-0 pl-3 align-bottom">
-                                    <h1><strong class="align-bottom small-caps">{{ page_title|linebreaksbr }}</strong></h1>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                    <header>
+                        <div class="border-custom-base">
+                            <table>
+                                <tr>
+                                    <td class="align-bottom">
+                                        <img src="{% static 'img/skadia.png' %}" class="border-double img-page-title">
+                                    </td>
+                                    <td class="pb-0 pl-3 align-bottom">
+                                        <h1><strong class="align-bottom small-caps">{{ page_title|linebreaksbr }}</strong></h1>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </header>
 
                     <!--  MESSAGES  -->
                     {% if messages %}
@@ -68,9 +74,11 @@
                     {% endif %}
 
                     <!--   CONTENT   -->
-                    {% block content %}
-                    {% endblock content %}
-
+                    <article>
+                        {% block content %}
+                        {% endblock content %}
+                    </article>
+                    
                     <br><br><br><br><br><br><br>
                 </div>
                 

@@ -5,97 +5,93 @@
     <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
 {% endblock head_extra %}
 
-<header class="site-header">
-    <nav class="navbar navbar-expand-md navbar-dark bg-navbar fixed-top">
-        <div class="container">
-            <span class="navbar-brand navbar-nav mr-5"><a class="nav-link" href="{% url 'home:home' %}">Hyllemath</a></span>
-            <!--  Collapsible menu button when content of navbar overflows screen  -->
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+<div class="container">
+    <span class="navbar-brand navbar-nav mr-5"><a class="nav-link" href="{% url 'home:home' %}">Hyllemath</a></span>
+    <!--  Collapsible menu button when content of navbar overflows screen  -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-                <!-- Navbar Left Side -->
-                <div class="navbar-nav mr-auto">
+        <!-- Navbar Left Side -->
+        <div class="navbar-nav mr-auto">
 
-                    <div class="dropdown pr-4">
-                        <button class="font-18 nav-item nav-link dropbtn small-caps">Organizacyjne</button>
-                        <div class="dropdown-content">
-                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'news:main' %}">&#10023; Ogłoszenia</a>
-                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'contact:demands-main' %}">&#10023; Dezyderaty</a>
-                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'rules:main' %}">&#10023; Zasady</a>
-                        </div>
-                    </div>
+            <div class="dropdown pr-4">
+                <button class="font-18 nav-item nav-link dropbtn small-caps">Organizacyjne</button>
+                <div class="dropdown-content">
+                    <a class="font-14 nav-item nav-link small-caps" href="{% url 'news:main' %}">&#10023; Ogłoszenia</a>
+                    <a class="font-14 nav-item nav-link small-caps" href="{% url 'contact:demands-main' %}">&#10023; Dezyderaty</a>
+                    <a class="font-14 nav-item nav-link small-caps" href="{% url 'rules:main' %}">&#10023; Zasady</a>
+                </div>
+            </div>
 
-                    <div class="dropdown pr-4">
-                        <button class="font-18 nav-item nav-link dropbtn small-caps">Przygody</button>
-                        <div class="dropdown-content">
-                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'history:timeline-main' %}">&#10023; Kalendarium</a>
-                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'history:chronicle-main' %}">&#10023; Kronika</a>
-                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'debates:main' %}">&#10023; Narady</a>
-<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Prosoponomikon</a>-->
-                        </div>
-                    </div>
+            <div class="dropdown pr-4">
+                <button class="font-18 nav-item nav-link dropbtn small-caps">Przygody</button>
+                <div class="dropdown-content">
+                    <a class="font-14 nav-item nav-link small-caps" href="{% url 'history:timeline-main' %}">&#10023; Kalendarium</a>
+                    <a class="font-14 nav-item nav-link small-caps" href="{% url 'history:chronicle-main' %}">&#10023; Kronika</a>
+                    <a class="font-14 nav-item nav-link small-caps" href="{% url 'debates:main' %}">&#10023; Narady</a>
+<!--                    <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Prosoponomikon</a>-->
+                </div>
+            </div>
 
-                    <div class="dropdown pr-4">
-                        <button class="font-18 nav-item nav-link dropbtn small-caps">Wiedza</button>
-                        <div class="dropdown-content">
-                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'toponomikon:main' %}">&#10023; Toponomikon</a>
+            <div class="dropdown pr-4">
+                <button class="font-18 nav-item nav-link dropbtn small-caps">Wiedza</button>
+                <div class="dropdown-content">
+                    <a class="font-14 nav-item nav-link small-caps" href="{% url 'toponomikon:main' %}">&#10023; Toponomikon</a>
 <!--                    <a class="nav-item nav-link small-caps" href="#">&#10023; Arkana</a>-->
 <!--                    <a class="nav-item nav-link small-caps" href="#">&#10023; Bestiariusz</a>-->
 <!--                    <a class="nav-item nav-link small-caps" href="#">&#10023; Biblioteka</a>-->
 <!--                    <a class="nav-item nav-link small-caps" href="#">&#10023; Geografia</a>-->
 <!--                    <a class="nav-item nav-link small-caps" href="#">&#10023; Historia</a>-->
 <!--                    <a class="nav-item nav-link small-caps" href="#">&#10023; Religia</a>-->
-                        </div>
-                    </div>
-
-                    {% if user.profile.character_status != 'gm' %}
-                    <div class="dropdown pr-4">
-                        <button class="font-18 nav-item nav-link dropbtn small-caps">Postać</button>
-                        <div class="dropdown-content">
-<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Cechy i walka</a>-->
-<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Doświadczenie | Tabela awansów</a>-->
-<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Ekwipunek | Skrytki</a>-->
-                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'characters:skills-sheet' '0' %}">&#10023; Umiejętności</a>
-                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'knowledge:knowledge-sheet' %}">&#10023; Almanach</a>
-                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'characters:tricks-sheet' %}">&#10023; Podstępy</a>
-<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Moce</a>-->
-                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'contact:plans-main' %}">&#10023; Plany</a>
-<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Przemyślenia</a>-->
-                        </div>
-                    </div>
-                    {% else %}
-                    <div class="dropdown pr-4">
-                        <button class="font-18 nav-item nav-link dropbtn small-caps">Postacie</button>
-                        <div class="dropdown-content">
-<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Cechy i walka</a>-->
-<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Doświadczenie | Tabela awansów</a>-->
-<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Ekwipunek | Skrytki</a>-->
-                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'characters:skills-sheets-for-gm' %}">&#10023; Umiejętności graczy</a>
-                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'knowledge:knowledge-sheet' %}">&#10023; Almanach</a>
-                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'characters:tricks-sheet' %}">&#10023; Podstępy graczy</a>
-                            <a class="font-14 nav-item nav-link small-caps" href="{% url 'contact:plans-for-gm' %}">&#10023; Plany graczy</a>
-<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Moce</a>-->
-                        </div>
-                    </div>
-                    {% endif %}
-
-
-                </div>
-
-                <!-- Navbar Right Side -->
-                <div class="navbar-nav">
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'contact:demands-create' %}"><img src="{% static 'img/demand.png' %}" class="mr-2 mt-1"></a>
-                        &emsp;
-                        <a class="btn btn-outline-light btn-space" href="{% url 'users:logout' %}">Wyloguj</a>
-                    {% else %}
-                        <a class="btn btn-outline-light btn-space" href="{% url 'users:register' %}">Nowa postać</a>
-                    {% endif %}
                 </div>
             </div>
+
+            {% if user.profile.character_status != 'gm' %}
+            <div class="dropdown pr-4">
+                <button class="font-18 nav-item nav-link dropbtn small-caps">Postać</button>
+                <div class="dropdown-content">
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Cechy i walka</a>-->
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Doświadczenie | Tabela awansów</a>-->
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Ekwipunek | Skrytki</a>-->
+                    <a class="font-14 nav-item nav-link small-caps" href="{% url 'characters:skills-sheet' '0' %}">&#10023; Umiejętności</a>
+                    <a class="font-14 nav-item nav-link small-caps" href="{% url 'knowledge:knowledge-sheet' %}">&#10023; Almanach</a>
+                    <a class="font-14 nav-item nav-link small-caps" href="{% url 'characters:tricks-sheet' %}">&#10023; Podstępy</a>
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Moce</a>-->
+                    <a class="font-14 nav-item nav-link small-caps" href="{% url 'contact:plans-main' %}">&#10023; Plany</a>
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Przemyślenia</a>-->
+                </div>
+            </div>
+            {% else %}
+            <div class="dropdown pr-4">
+                <button class="font-18 nav-item nav-link dropbtn small-caps">Postacie</button>
+                <div class="dropdown-content">
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Cechy i walka</a>-->
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Doświadczenie | Tabela awansów</a>-->
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Ekwipunek | Skrytki</a>-->
+                    <a class="font-14 nav-item nav-link small-caps" href="{% url 'characters:skills-sheets-for-gm' %}">&#10023; Umiejętności graczy</a>
+                    <a class="font-14 nav-item nav-link small-caps" href="{% url 'knowledge:knowledge-sheet' %}">&#10023; Almanach</a>
+                    <a class="font-14 nav-item nav-link small-caps" href="{% url 'characters:tricks-sheet' %}">&#10023; Podstępy graczy</a>
+                    <a class="font-14 nav-item nav-link small-caps" href="{% url 'contact:plans-for-gm' %}">&#10023; Plany graczy</a>
+<!--                            <a class="font-14 nav-item nav-link small-caps" href="#">&#10023; Moce</a>-->
+                </div>
+            </div>
+            {% endif %}
+
+
         </div>
-    </nav>
-</header>
+
+        <!-- Navbar Right Side -->
+        <div class="navbar-nav">
+            {% if user.is_authenticated %}
+                <a href="{% url 'contact:demands-create' %}"><img src="{% static 'img/demand.png' %}" class="mr-2 mt-1"></a>
+                &emsp;
+                <a class="btn btn-outline-light btn-space" href="{% url 'users:logout' %}">Wyloguj</a>
+            {% else %}
+                <a class="btn btn-outline-light btn-space" href="{% url 'users:register' %}">Nowa postać</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
