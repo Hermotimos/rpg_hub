@@ -1,11 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 
 from knowledge.forms import KnowledgePacketInformForm
-from knowledge.models import KnowledgePacket
+from knowledge.models import KnowledgePacket, KnowledgePacketType
 from rpg_project import settings
 from rpg_project.utils import query_debugger
 from rules.models import SkillLevel
@@ -17,82 +18,15 @@ from toponomikon.models import GeneralLocation, SpecificLocation
 def knowledge_sheet_view(request):
     profile = request.user.profile
     if profile.character_status == 'gm':
-        arcana_kn_packets = KnowledgePacket.objects \
-            .filter(packet_types__name='Arkana')\
-            .distinct()\
-            .prefetch_related('pictures')
-        bestiary_kn_packets = KnowledgePacket.objects \
-            .filter(packet_types__name='Bestiariusz') \
-            .distinct()\
-            .prefetch_related('pictures')
-        geography_kn_packets = KnowledgePacket.objects \
-            .filter(packet_types__name='Geografia') \
-            .distinct()\
-            .prefetch_related('pictures')
-        history_kn_packets = KnowledgePacket.objects \
-            .filter(packet_types__name='Historia') \
-            .distinct()\
-            .prefetch_related('pictures')
-        library_kn_packets = KnowledgePacket.objects \
-            .filter(packet_types__name='Biblioteka') \
-            .distinct()\
-            .prefetch_related('pictures')
-        theology_kn_packets = KnowledgePacket.objects \
-            .filter(packet_types__name='Teologia') \
-            .distinct()\
-            .prefetch_related('pictures')
-
-        varia_kn_packets = KnowledgePacket.objects \
-            .filter(packet_types__name='Varia') \
-            .distinct() \
-            .prefetch_related('pictures')
+        kn_packet_types = KnowledgePacketType.objects.prefetch_related('knowledge_packets__pictures')
     else:
-        arcana_kn_packets = KnowledgePacket.objects\
-            .filter(allowed_profiles=profile) \
-            .filter(packet_types__name='Arkana')\
-            .distinct()\
-            .prefetch_related('pictures')
-        bestiary_kn_packets = KnowledgePacket.objects \
-            .filter(allowed_profiles=profile) \
-            .filter(packet_types__name='Bestiariusz') \
-            .distinct()\
-            .prefetch_related('pictures')
-        geography_kn_packets = KnowledgePacket.objects \
-            .filter(allowed_profiles=profile) \
-            .filter(packet_types__name='Geografia') \
-            .distinct()\
-            .prefetch_related('pictures')
-        history_kn_packets = KnowledgePacket.objects \
-            .filter(allowed_profiles=profile) \
-            .filter(packet_types__name='Historia') \
-            .distinct()\
-            .prefetch_related('pictures')
-        library_kn_packets = KnowledgePacket.objects \
-            .filter(allowed_profiles=profile) \
-            .filter(packet_types__name='Biblioteka') \
-            .distinct()\
-            .prefetch_related('pictures')
-        theology_kn_packets = KnowledgePacket.objects \
-            .filter(allowed_profiles=profile) \
-            .filter(packet_types__name='Teologia') \
-            .distinct()\
-            .prefetch_related('pictures')
-
-        varia_kn_packets = KnowledgePacket.objects \
-            .filter(allowed_profiles=profile) \
-            .filter(packet_types__name='UMIEJĘTNOŚCI') \
-            .distinct() \
-            .prefetch_related('pictures')
+        known_kn_packets = KnowledgePacket.objects.filter(allowed_profiles=profile).prefetch_related('pictures')
+        kn_packet_types = KnowledgePacketType.objects\
+            .prefetch_related(Prefetch('knowledge_packets', queryset=known_kn_packets))
 
     context = {
         'page_title': 'Almanach',
-        'arcana_kn_packets': arcana_kn_packets,
-        'bestiary_kn_packets': bestiary_kn_packets,
-        'geography_kn_packets': geography_kn_packets,
-        'history_kn_packets': history_kn_packets,
-        'library_kn_packets': library_kn_packets,
-        'theology_kn_packets': theology_kn_packets,
-        'varia_kn_packets': varia_kn_packets,
+        'kn_packet_types': kn_packet_types
     }
     return render(request, 'knowledge/knowledge_sheet.html', context)
 
