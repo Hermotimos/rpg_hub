@@ -16,7 +16,7 @@
     <div class="border-bottom">
         <h2 class="unblue">
             <img src="{% static 'img/history_all.png' %}" class="border-double img-chapter">
-            <b><a href="{% url 'history:timeline-all-events' %}" class="align-middle pt-2">Pełne Kalendarium</a></b>
+            <b><a href="{% url 'history:timeline-filtered-events' 0 0 0 0 0 '0' 0 %}" class="align-middle pt-2">Pełne Kalendarium</a></b>
         </h2>
         <small>Pełne kalendarium losów Twojej postaci oraz znanych jej wydarzeń</small><br><br>
     </div>
@@ -39,7 +39,7 @@
              <tr>
                  {% for thread in row %}
                  <td class="unblue">
-                    &#10023;<a href="{% url 'history:timeline-thread' thread.id %}">{{ thread.name }}</a>&emsp;&emsp;
+                    &#10023;<a href="{% url 'history:timeline-filtered-events' thread.id 0 0 0 0 '0' 0 %}">{{ thread.name }}</a>&emsp;&emsp;
                  </td>
                  {% endfor %}
              </tr>
@@ -65,10 +65,10 @@
         <br>
         <table>
             <tr>
-                {% for p in participants %}
+                {% for participant in participants %}
                     <td class="unblue-black">
-                        <a href="{% url 'history:timeline-participant' p.id %}">
-                            <img src="{{ p.image.url }}" class="border-double account-img-timeline">
+                        <a href="{% url 'history:timeline-filtered-events' 0 participant.id 0 0 0 '0' 0 %}">
+                            <img src="{{ participant.image.url }}" class="border-double account-img-timeline">
                         </a>&emsp;&emsp;
                     </td>
                     {% if forloop.counter|divisibleby:4 %}
@@ -97,14 +97,14 @@
             {% for gen_loc in gen_locs %}
                 <tr>
                     <td class="unblue" colspan="4">
-                        <br><h4>&#10037;<a href="{% url 'history:timeline-gen-loc' gen_loc.id %}">{{ gen_loc.name }}</a>&emsp;&emsp;</h4>
+                        <br><h4>&#10037;<a href="{% url 'history:timeline-filtered-events' 0 0 gen_loc.id 0 0 '0' 0 %}">{{ gen_loc.name }}</a>&emsp;&emsp;</h4>
                     </td>
                 </tr>
                 {% for row in gen_loc.specific_locations.all|columns:4 %}
                 <tr>
                     {% for spec_loc in row %}
                         <td class="unblue pl-3">
-                            &#10023; <a href="{% url 'history:timeline-spec-loc' spec_loc.id %}">{{ spec_loc.name }}</a>
+                            &#10023; <a href="{% url 'history:timeline-filtered-events' 0 0 0 spec_loc.id 0 '0' 0 %}">{{ spec_loc.name }}</a>
                         </td>
                     {% endfor %}
                 </tr>
@@ -133,26 +133,26 @@
             {% for y in years_with_seasons_dict %}
                 <tr>
                     <td class="unblue">
-                        <a href="{% url 'history:timeline-date' y '0' %}">{{ y }}</a>&emsp;
+                        <a href="{% url 'history:timeline-filtered-events' 0 0 0 0 y '0' 0 %}">{{ y }}</a>&emsp;
                     </td>
                     <td class="unblue">
                         {% if '1' in years_with_seasons_dict|dict_lookup:y %}
-                            <a href="{% url 'history:timeline-date' y '1' %}">Wiosna</a>&emsp;
+                            <a href="{% url 'history:timeline-filtered-events' 0 0 0 0 y '1' 0 %}">Wiosna</a>&emsp;
                         {% endif %}
                     </td>
                     <td class="unblue">
                         {% if '2' in years_with_seasons_dict|dict_lookup:y %}
-                            <a href="{% url 'history:timeline-date' y '2' %}">Lato</a>&emsp;
+                            <a href="{% url 'history:timeline-filtered-events' 0 0 0 0 y '2' 0 %}">Lato</a>&emsp;
                         {% endif %}
                     </td>
                     <td class="unblue">
                         {% if '3' in years_with_seasons_dict|dict_lookup:y %}
-                            <a href="{% url 'history:timeline-date' y '3' %}">Jesień</a>&emsp;
+                            <a href="{% url 'history:timeline-filtered-events' 0 0 0 0 y '3' 0 %}">Jesień</a>&emsp;
                         {% endif %}
                     </td>
                     <td class="unblue">
                         {% if '4' in years_with_seasons_dict|dict_lookup:y %}
-                            <a href="{% url 'history:timeline-date' y '4' %}">Zima</a>&emsp;
+                            <a href="{% url 'history:timeline-filtered-events' 0 0 0 0 y '4' 0 %}">Zima</a>&emsp;
                         {% endif %}
                     </td>
                 </tr>
@@ -181,7 +181,7 @@
              <tr>
                  {% for game in row %}
                  <td class="unblue">
-                     &#10023; <a href="{% url 'history:timeline-game' game.id %}">{{ game.title|truncatechars:55 }}</a>
+                     &#10023; <a href="{% url 'history:timeline-filtered-events' 0 0 0 0 0 '0' game.id %}">{{ game.title|truncatechars:55 }}</a>
                  </td>
                  {% endfor %}
              </tr>
