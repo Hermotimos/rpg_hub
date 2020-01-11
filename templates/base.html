@@ -79,7 +79,12 @@
                         {% endblock content %}
                     </article>
                     
-                    <br><br><br><br><br><br><br>
+                    <footer class="text-center border-top">
+                        <div class="pt-2">
+                            <small>Gra zaczyna się na emeryturze, więc dbajcie o zdrówko!</small>
+                        </div>
+                    </footer>
+
                 </div>
                 
                 
@@ -87,11 +92,13 @@
                 {% if user.is_authenticated %}
                     {% include 'sidebar.html' %}
                 {% endif %}
+
                 
                 <!--   SCROLL-UP BUTTON   -->
                 <a id="upp" class="scrollup col-md-0"></a>
             </div>
         </main>
+        
 
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
