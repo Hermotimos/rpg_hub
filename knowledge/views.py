@@ -9,8 +9,7 @@ from knowledge.forms import KnowledgePacketInformForm
 from knowledge.models import KnowledgePacket, KnowledgePacketType
 from rpg_project import settings
 from rpg_project.utils import query_debugger
-from rules.models import SkillLevel
-from toponomikon.models import GeneralLocation, SpecificLocation
+from rules.models import SkillLevel, Skill
 
 
 @query_debugger
@@ -19,14 +18,31 @@ def knowledge_sheet_view(request):
     profile = request.user.profile
     if profile.character_status == 'gm':
         kn_packet_types = KnowledgePacketType.objects.prefetch_related('knowledge_packets__pictures')
+        theology_skills = Skill.objects\
+            .filter(name__icontains='Doktryn')\
+            .prefetch_related('skill_levels__knowledge_packets')
+
     else:
         known_kn_packets = KnowledgePacket.objects.filter(allowed_profiles=profile).prefetch_related('pictures')
         kn_packet_types = KnowledgePacketType.objects\
             .prefetch_related(Prefetch('knowledge_packets', queryset=known_kn_packets))
+        theology_skills = Skill.objects\
+            .filter(skill_levels__acquired_by_characters=profile.character)\
+            .filter(name__icontains='Doktryn')\
+            .prefetch_related(Prefetch(
+                'skill_levels',
+                queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)
+                .prefetch_related(Prefetch(
+                    'knowledge_packets',
+                    queryset=KnowledgePacket.objects.filter(allowed_profiles=profile)
+                    ))
+            ))\
+            .distinct()
 
     context = {
         'page_title': 'Almanach',
-        'kn_packet_types': kn_packet_types
+        'kn_packet_types': kn_packet_types,
+        'theology_skills': theology_skills
     }
     return render(request, 'knowledge/knowledge_sheet.html', context)
 

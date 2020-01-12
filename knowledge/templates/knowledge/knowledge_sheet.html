@@ -16,13 +16,24 @@
     {% for type in kn_packet_types %}
         {% if type.knowledge_packets.all %}
             <h2><b>{{ type.name }}</b></h2>
-            {% for kn_packet in type.knowledge_packets.all %}
-    
-                {% with specifier=1 %}
-                        {% include '_knowledge_packet.html' %}
-                {% endwith %}
-    
-            {% endfor %}
+            {% if type.name == 'Teologia' %}
+                {% for skill in theology_skills %}
+
+                    <div class="pl-5">
+                        {% include '_skills_with_kn_packets.html' %}
+                    </div>
+
+                {% endfor %}
+            {% else %}
+                    {% for kn_packet in type.knowledge_packets.all %}
+            
+                        {% with specifier=1 %}
+                                {% include '_knowledge_packet.html' %}
+                        {% endwith %}
+            
+                    {% endfor %}
+
+            {% endif %}
             <br>
         {% endif %}
     {% endfor  %}
