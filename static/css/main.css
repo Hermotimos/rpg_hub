@@ -25,7 +25,7 @@ footer {
 /* ------------------ */
 
 
-*:not(textarea, input) {
+*:not(textarea):not(input) {
         user-select: none;
 }
 
