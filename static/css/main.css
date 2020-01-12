@@ -193,7 +193,19 @@ small.smaller {
 }
 
 
+.img-skill {
+        float: left;
+        height: 60px;
+        width: auto;
+        margin-right: 5px;
+}
 
+.img-numeral {
+        float: left;
+        height: 30px;
+        width: auto;
+        margin-right: 5px;
+}
 
 
 /* ------------------------------------------------------------------------------------------------------------------ */
