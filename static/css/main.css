@@ -24,6 +24,12 @@ footer {
 /* ----- GENERAL ----- */
 /* ------------------ */
 
+
+*:not(textarea, input) {
+        user-select: none;
+}
+
+
 .border-custom-base {
         border-bottom: 1px solid #444444;
 }
