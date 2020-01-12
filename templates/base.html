@@ -74,16 +74,19 @@
                     {% endif %}
 
                     <!--   CONTENT   -->
-                    <article>
+                    <article class="content">
                         {% block content %}
                         {% endblock content %}
                     </article>
                     
-                    <footer class="text-center border-top">
-                        <div class="pt-2">
-                            <small>Gra zaczyna się na emeryturze, więc dbajcie o zdrówko!</small>
-                        </div>
-                    </footer>
+                    <!--   FOOTER   -->
+                    {% if user.is_authenticated %}
+                        <footer class="footer pt-5">
+                            <div class="border-top pb-2 pt-2 text-center">
+                                <small>Gra zaczyna się na emeryturze, więc dbajcie o zdrówko!</small>
+                            </div>
+                        </footer>
+                    {% endif %}
 
                 </div>
                 
