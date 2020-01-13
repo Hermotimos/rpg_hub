@@ -3,6 +3,7 @@ from django.urls import reverse, resolve
 from history import views
 from history.models import GameSession, GeneralLocation, SpecificLocation, TimelineEvent
 from history.forms import TimelineEventEditForm
+from imaginarion.models import Picture
 from users.models import User
 
 
@@ -10,19 +11,25 @@ class TimelineEditView(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
+        self.user2.profile.character_status = 'active_player'
+        self.user2.profile.save()
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
         self.user4.profile.character_status = 'gm'
         self.user4.profile.save()
 
         self.game1 = GameSession.objects.create(title='Game1')
-        self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
-        self.spec_loc1 = SpecificLocation.objects.create(name='spec_loc1', general_location=self.gen_loc1)
         self.event1 = TimelineEvent.objects.create(game=self.game1, year=1, season=1, day_start=1,
-                                                   description='Description1', general_location=self.gen_loc1)
+                                                   description='Description1')
+        picture1 = Picture.objects.create(image='site_features_pics/img_for_tests.jpg')
+        self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1', main_image=picture1)
+        self.spec_loc1 = SpecificLocation.objects.create(name='spec_loc1', general_location=self.gen_loc1,
+                                                         main_image=picture1)
+
+        self.event1.general_locations.set([self.gen_loc1, ])
+        self.event1.specific_locations.set([self.spec_loc1, ])
         self.event1.participants.set([self.user1.profile, ])
         self.event1.informed.set([self.user2.profile], )
-        self.event1.specific_locations.set([self.spec_loc1, ])
 
         self.url = reverse('history:timeline-edit', kwargs={'event_id': self.event1.id})
 
@@ -34,17 +41,18 @@ class TimelineEditView(TestCase):
     def test_redirect_if_unallowed(self):
         redirect_url = reverse('home:dupa')
 
-        # case: request.user.profile in event1.participant.all()
+        # request.user.profile in event1.participant.all() but not character_status == 'gm'
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
-        # case: request.user.profile in event1.informed.all()
+        # request.user.profile in event1.informed.all() but not character_status == 'gm'
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # request.user.profile neither in event1.informed.all() nor in event1.participant.all()
+        # nor character_status == 'gm'
         self.client.force_login(self.user3)
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
@@ -56,7 +64,7 @@ class TimelineEditView(TestCase):
         self.assertEquals(response.status_code, 404)
 
     def test_get(self):
-        # case: request.user.profile.character_status == 'gm'
+        # request.user.profile.character_status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -76,23 +84,17 @@ class TimelineEditView(TestCase):
         form = response.context.get('form')
         self.assertIsInstance(form, TimelineEventEditForm)
 
-    # # TODO won't pass - WHY? error ' "" nie jest poprawną wartością.' though form.data seems legit
-    # def test_valid_post_data(self):
-    #     self.client.force_login(self.user4)
-    #     form = TimelineEventEditForm(instance=self.event1)
-    #     data = form.initial
-    #
-    #     print('\n', data)
-    #     data['description'] = 'changed text'
-    #     data['informed'] = [self.user2.profile]
-    #     data['specific_locations'] = [self.spec_loc1]
-    #     print('\n', data)
-    #     response = self.client.post(self.url, data)
-    #     form = response.context.get('form')
-    #     print('\n', form.errors)
-    #
-    #     # self.client.post(self.url, data)
-    #     self.assertTrue(TimelineEvent.objects.get(id=1).description == 'changed text')
+    def test_valid_post_data(self):
+        self.client.force_login(self.user4)
+        form = TimelineEventEditForm(instance=self.event1)
+        data = form.initial
+        data['description'] = 'changed text'
+        data['informed'] = [self.user2.profile.id]
+        data['participants'] = []                           # field not edited, may be left blank
+        data['general_locations'] = [self.gen_loc1.id]
+        data['specific_locations'] = [self.spec_loc1.id]
+        self.client.post(self.url, data)
+        self.assertTrue(TimelineEvent.objects.get(id=1).description == 'changed text')
 
     def test_invalid_post_data(self):
         self.client.force_login(self.user4)
