@@ -435,6 +435,128 @@ def timeline_create_view(request):
     return render(request, 'history/timeline_create.html', context)
 
 
+@query_debugger
+@login_required
+def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_id=0, spec_loc_id=0,
+                                year=0, season='0', game_id=0):
+    profile = request.user.profile
+
+    if thread_id != 0:
+        thread = get_object_or_404(Thread, id=thread_id)
+        page_title = thread.name
+        header = f'{thread.name}... Próbujesz sobie przypomnieć, od czego się to wszystko zaczęło?'
+
+        if profile.character_status == 'gm':
+            events = TimelineEvent.objects.filter(threads=thread)
+        else:
+            events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
+                .filter(threads=thread) \
+                .distinct()
+
+    elif participant_id != 0:
+        participant = get_object_or_404(Profile, id=participant_id)
+        page_title = participant.character_name
+        if profile == participant:
+            header = 'Są czasy, gdy ogarnia Cię zaduma nad Twoim zawikłanym losem...'
+        else:
+            header = f'{participant.character_name.split(" ", 1)[0]}... ' \
+                     f'Niejedno razem przeżyliście. Na dobre i na złe...'
+
+        if profile.character_status == 'gm':
+            events = TimelineEvent.objects.filter(participants=participant_id)
+        else:
+            events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
+                .filter(participants=participant_id) \
+                .distinct()
+
+    elif gen_loc_id != 0:
+        general_location = get_object_or_404(GeneralLocation, id=gen_loc_id)
+        page_title = general_location.name
+        header = f'{general_location.name}... Zastanawiasz się, jakie piętno wywarła na Twoich losach ta kraina...'
+
+        if profile.character_status == 'gm':
+            events = TimelineEvent.objects.filter(general_locations=gen_loc_id)
+        else:
+            events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
+                .filter(general_locations=gen_loc_id) \
+                .distinct()
+
+    elif spec_loc_id != 0:
+        specific_location = get_object_or_404(SpecificLocation, id=spec_loc_id)
+        page_title = specific_location.name
+        header = f'{specific_location.name}... Jak to miejsce odcisnęło się na Twoim losie?'
+
+        if profile.character_status == 'gm':
+            events = TimelineEvent.objects.filter(specific_locations=spec_loc_id)
+        else:
+            events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
+                .filter(specific_locations=spec_loc_id) \
+                .distinct()
+
+    elif game_id != 0:
+        game = get_object_or_404(GameSession, id=game_id)
+        page_title = game.title
+        header = f'{game.title}... Jak to po kolei było?'
+
+        if profile.character_status == 'gm':
+            events = TimelineEvent.objects.filter(game=game_id)
+        else:
+            events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
+                .filter(game=game_id)\
+                .distinct()
+
+    elif year:
+        page_title = ''
+        header = f'Nie wydaje się to wcale aż tak dawno temu...'
+
+        if profile.character_status == 'gm':
+            events = TimelineEvent.objects.all()
+        else:
+            events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
+                .distinct()
+
+        if year and season == '0':
+            events = events.filter(year=year)
+            page_title = f'{year}. rok Archonatu Nemetha Samatiana'
+        elif year:
+            if season == '1':
+                season_name = 'Wiosna'
+            elif season == '2':
+                season_name = "Lato"
+            elif season == '3':
+                season_name = "Jesień"
+            else:
+                season_name = "Zima"
+            events = events.filter(year=year, season=season)
+            page_title = f'{season_name} {year}. roku Archonatu Nemetha Samatiana'
+
+    else:
+        page_title = 'Pełne Kalendarium'
+        header = 'Opisane tu wydarzenia rozpoczęły swój bieg 20. roku Archonatu Nemetha Samatiana w Ebbonie, ' \
+                 'choć zarodki wielu z nich sięgają znacznie odleglejszych czasów...'
+
+        if profile.character_status == 'gm':
+            events = TimelineEvent.objects.all()
+        else:
+            events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
+                .distinct()
+
+    events = events\
+        .select_related('game')\
+        .prefetch_related('threads', 'participants', 'informed', 'general_locations', 'specific_locations', 'notes__author')
+
+    context = {
+        'page_title': page_title,
+        'header': header,
+        'events': events,
+        'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
+    }
+    if events:
+        return render(request, 'history/timeline_events.html', context)
+    else:
+        return redirect('home:dupa')
+
+
 # @query_debugger
 # @login_required
 # def timeline_all_events_view(request):
@@ -793,124 +915,3 @@ def timeline_edit_view(request, event_id):
     else:
         return redirect('home:dupa')
 
-
-@query_debugger
-@login_required
-def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_id=0, spec_loc_id=0,
-                                year=0, season='0', game_id=0):
-    profile = request.user.profile
-
-    if thread_id != 0:
-        thread = get_object_or_404(Thread, id=thread_id)
-        page_title = thread.name
-        header = f'{thread.name}... Próbujesz sobie przypomnieć, od czego się to wszystko zaczęło?'
-
-        if profile.character_status == 'gm':
-            events = TimelineEvent.objects.filter(threads=thread)
-        else:
-            events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
-                .filter(threads=thread) \
-                .distinct()
-
-    elif participant_id != 0:
-        participant = get_object_or_404(Profile, id=participant_id)
-        page_title = participant.character_name
-        if profile == participant:
-            header = 'Są czasy, gdy ogarnia Cię zaduma nad Twoim zawikłanym losem...'
-        else:
-            header = f'{participant.character_name.split(" ", 1)[0]}... ' \
-                     f'Niejedno razem przeżyliście. Na dobre i na złe...'
-
-        if profile.character_status == 'gm':
-            events = TimelineEvent.objects.filter(participants=participant_id)
-        else:
-            events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
-                .filter(participants=participant_id) \
-                .distinct()
-
-    elif gen_loc_id != 0:
-        general_location = get_object_or_404(GeneralLocation, id=gen_loc_id)
-        page_title = general_location.name
-        header = f'{general_location.name}... Zastanawiasz się, jakie piętno wywarła na Twoich losach ta kraina...'
-
-        if profile.character_status == 'gm':
-            events = TimelineEvent.objects.filter(general_locations=gen_loc_id)
-        else:
-            events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
-                .filter(general_locations=gen_loc_id) \
-                .distinct()
-
-    elif spec_loc_id != 0:
-        specific_location = get_object_or_404(SpecificLocation, id=spec_loc_id)
-        page_title = specific_location.name
-        header = f'{specific_location.name}... Jak to miejsce odcisnęło się na Twoim losie?'
-
-        if profile.character_status == 'gm':
-            events = TimelineEvent.objects.filter(specific_locations=spec_loc_id)
-        else:
-            events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
-                .filter(specific_locations=spec_loc_id) \
-                .distinct()
-
-    elif game_id != 0:
-        game = get_object_or_404(GameSession, id=game_id)
-        page_title = game.title
-        header = f'{game.title}... Jak to po kolei było?'
-
-        if profile.character_status == 'gm':
-            events = TimelineEvent.objects.filter(game=game_id)
-        else:
-            events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
-                .filter(game=game_id)\
-                .distinct()
-
-    elif year:
-        page_title = ''
-        header = f'Nie wydaje się to wcale aż tak dawno temu...'
-
-        if profile.character_status == 'gm':
-            events = TimelineEvent.objects.all()
-        else:
-            events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
-                .distinct()
-
-        if year and season == '0':
-            events = events.filter(year=year)
-            page_title = f'{year}. rok Archonatu Nemetha Samatiana'
-        elif year:
-            if season == '1':
-                season_name = 'Wiosna'
-            elif season == '2':
-                season_name = "Lato"
-            elif season == '3':
-                season_name = "Jesień"
-            else:
-                season_name = "Zima"
-            events = events.filter(year=year, season=season)
-            page_title = f'{season_name} {year}. roku Archonatu Nemetha Samatiana'
-
-    else:
-        page_title = 'Pełne Kalendarium'
-        header = 'Opisane tu wydarzenia rozpoczęły swój bieg 20. roku Archonatu Nemetha Samatiana w Ebbonie, ' \
-                 'choć zarodki wielu z nich sięgają znacznie odleglejszych czasów...'
-
-        if profile.character_status == 'gm':
-            events = TimelineEvent.objects.all()
-        else:
-            events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
-                .distinct()
-
-    events = events\
-        .select_related('game')\
-        .prefetch_related('threads', 'participants', 'informed', 'general_locations', 'specific_locations', 'notes__author')
-
-    context = {
-        'page_title': page_title,
-        'header': header,
-        'events': events,
-        'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
-    }
-    if events:
-        return render(request, 'history/timeline_events.html', context)
-    else:
-        return redirect('home:dupa')
