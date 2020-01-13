@@ -90,12 +90,16 @@
 
                 </div>
                 
-                
                 <!--   SIDEBAR   -->
-                {% if user.is_authenticated %}
-                    {% include 'sidebar.html' %}
-                {% endif %}
-
+                <div class="col-md-3">
+                    <div class="content-section-sidebar">
+                        <aside>
+                            {% if user.is_authenticated %}
+                                {% include 'sidebar.html' %}
+                            {% endif %}
+                        </aside>
+                    </div>
+                </div>
                 
                 <!--   SCROLL-UP BUTTON   -->
                 <a id="upp" class="scrollup col-md-0"></a>

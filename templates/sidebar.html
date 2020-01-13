@@ -4,36 +4,31 @@
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 {% endblock head_extra %}
 
-<div class="col-md-3">
-    <div class="content-section-sidebar">
-        <img class="account-img-sidebar mt-50" src="{{ user.profile.image.url }}">
-        <h3>
-            {% if user.profile.character_name != '' %}
-                <a href="{% url 'users:profile' %}">{{ user.profile.character_name }}</a>
-            {% else %}
-                <a href="{% url 'users:profile' %}">Uzupełnij profil</a>
-            {% endif %}
-        </h3>
-        <br>
+<img class="account-img-sidebar mt-50" src="{{ user.profile.image.url }}">
+<h3>
+    {% if user.profile.character_name != '' %}
+        <a href="{% url 'users:profile' %}">{{ user.profile.character_name }}</a>
+    {% else %}
+        <a href="{% url 'users:profile' %}">Uzupełnij profil</a>
+    {% endif %}
+</h3>
+<br>
 
-        <!-- For game master -->
-        {% if user.profile.character_status == 'gm' %}
-            <ul class="list-group hover-pointer unblue">
-                <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#timeline"><h6 class="mb-0">Techniczne</h6></li>
-                <li id="timeline" class="list-group collapse">
-                    <div class="unblue">
-                        <a class="list-group-item list-group-item-light mb-0" href="{% url 'admin:index' %}" target="_blank" rel="noopener noreferrer"><small>ADMIN</small></a>
-                        <a class="list-group-item list-group-item-light" href="{% url 'contact:plans-main' %}"><small>TODOs</small></a>
-                        <a class="list-group-item list-group-item-light" href="{% url 'reload:reload-main' %}"><small>Przeładowanie sorting_name</small></a>
-                        <a class="list-group-item list-group-item-light" href="{% url 'admin:history_gamesession_add' %}"><small>+ SESJA</small></a>
-                        <a class="list-group-item list-group-item-light" href="{% url 'history:chronicle-create' %}"><small>+ Wydarzenie | KRONIKA</small></a>
-                        <a class="list-group-item list-group-item-light" href="{% url 'history:timeline-create' %}"><small>+ Wydarzenie | KALENDARIUM</small></a>
-                        <a class="list-group-item list-group-item-light" href="{% url 'contact:plans-main' %}"><small>TODO</small></a>
-                    </div>
-                </li>
-            </ul>
-        {% endif %}
-        <br>
-    </div>
-</div>
-
+<!-- For game master -->
+{% if user.profile.character_status == 'gm' %}
+    <ul class="list-group hover-pointer unblue">
+        <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#timeline"><h6 class="mb-0">Techniczne</h6></li>
+        <li id="timeline" class="list-group collapse">
+            <div class="unblue">
+                <a class="list-group-item list-group-item-light mb-0" href="{% url 'admin:index' %}" target="_blank" rel="noopener noreferrer"><small>ADMIN</small></a>
+                <a class="list-group-item list-group-item-light" href="{% url 'contact:plans-main' %}"><small>TODOs</small></a>
+                <a class="list-group-item list-group-item-light" href="{% url 'reload:reload-main' %}"><small>Przeładowanie sorting_name</small></a>
+                <a class="list-group-item list-group-item-light" href="{% url 'admin:history_gamesession_add' %}"><small>+ SESJA</small></a>
+                <a class="list-group-item list-group-item-light" href="{% url 'history:chronicle-create' %}"><small>+ Wydarzenie | KRONIKA</small></a>
+                <a class="list-group-item list-group-item-light" href="{% url 'history:timeline-create' %}"><small>+ Wydarzenie | KALENDARIUM</small></a>
+                <a class="list-group-item list-group-item-light" href="{% url 'contact:plans-main' %}"><small>TODO</small></a>
+            </div>
+        </li>
+    </ul>
+{% endif %}
+<br>
