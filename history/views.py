@@ -788,14 +788,12 @@ def timeline_inform_view(request, event_id):
         gen_locs_and_spec_locs_dict[gen_loc.name] = ', '.join(spec_loc.name for spec_loc in gen_loc.filtered_spec_locs)
 
     participants = event.participants.all()
-    participants_ids = [p.id for p in participants]
     old_informed = event.informed.all()
-    old_informed_ids = [p.id for p in old_informed]
 
     if request.method == 'POST':
         form = TimelineEventInformForm(authenticated_user=request.user,
-                                       old_informed_ids=old_informed_ids,
-                                       participants_ids=participants_ids,
+                                       old_informed=old_informed,
+                                       participants=participants,
                                        data=request.POST,
                                        instance=event)
         if form.is_valid():
@@ -823,8 +821,8 @@ def timeline_inform_view(request, event_id):
             return HttpResponseRedirect(_next)
     else:
         form = TimelineEventInformForm(authenticated_user=request.user,
-                                       old_informed_ids=old_informed_ids,
-                                       participants_ids=participants_ids)
+                                       old_informed=old_informed,
+                                       participants=participants)
 
     context = {
         'page_title': 'Poinformuj o wydarzeniu',

@@ -99,9 +99,8 @@ class TimelineEventInformForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
-        old_informed_ids = kwargs.pop('old_informed_ids')
-        participants_ids = kwargs.pop('participants_ids')
-        the_knowing_ids = participants_ids + old_informed_ids
+        old_informed = kwargs.pop('old_informed')
+        participants = kwargs.pop('participants')
         super(TimelineEventInformForm, self).__init__(*args, **kwargs)
         self.fields['informed'].label = ''
         self.fields['informed'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
@@ -109,7 +108,8 @@ class TimelineEventInformForm(forms.ModelForm):
                                                                    Q(character_status='dead_npc') |
                                                                    Q(character_status='living_npc') |
                                                                    Q(character_status='gm') |
-                                                                   Q(id__in=the_knowing_ids))
+                                                                   Q(id__in=old_informed) |
+                                                                   Q(id__in=participants))
         self.fields['informed'].widget.attrs = {'size': 10}
 
 
