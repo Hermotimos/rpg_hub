@@ -24,7 +24,7 @@ urlpatterns = [
          'spec-loc:<int:spec_loc_id>/'
          'date:<int:year>:<str:season>/'
          'game:<int:game_id>/',
-         views.timeline_filter_events_view, name='timeline-filtered-events'),
+         views.timeline_filter_events_view, name='timeline-events'),
     # replaced by timeline_filter_events_view (delete when no longer needed for reference):
     # path('timeline/all-events/', views.timeline_all_events_view, name='timeline-all-events'),
     # path('timeline/thread:<int:thread_id>/', views.timeline_thread_view, name='timeline-thread'),

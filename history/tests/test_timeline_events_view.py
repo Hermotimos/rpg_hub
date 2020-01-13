@@ -33,36 +33,36 @@ class TimelineEventsTest(TestCase):
         self.event1.informed.set([self.user2.profile, ])
 
         self.url1 = reverse(
-            'history:timeline-filtered-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 0,
-                                                        'spec_loc_id': 0, 'year': 0, 'season': 0, 'game_id': 0}
+            'history:timeline-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 0,
+                                               'spec_loc_id': 0, 'year': 0, 'season': 0, 'game_id': 0}
         )
         self.url2 = reverse(
-            'history:timeline-filtered-events', kwargs={'thread_id': 1, 'participant_id': 0, 'gen_loc_id': 0,
-                                                        'spec_loc_id': 0, 'year': 0, 'season': 0, 'game_id': 0}
+            'history:timeline-events', kwargs={'thread_id': 1, 'participant_id': 0, 'gen_loc_id': 0,
+                                               'spec_loc_id': 0, 'year': 0, 'season': 0, 'game_id': 0}
         )
         self.url3 = reverse(
-            'history:timeline-filtered-events', kwargs={'thread_id': 0, 'participant_id': 1, 'gen_loc_id': 0,
-                                                        'spec_loc_id': 0, 'year': 0, 'season': 0, 'game_id': 0}
+            'history:timeline-events', kwargs={'thread_id': 0, 'participant_id': 1, 'gen_loc_id': 0,
+                                               'spec_loc_id': 0, 'year': 0, 'season': 0, 'game_id': 0}
         )
         self.url4 = reverse(
-            'history:timeline-filtered-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 1,
-                                                        'spec_loc_id': 0, 'year': 0, 'season': 0, 'game_id': 0}
+            'history:timeline-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 1,
+                                               'spec_loc_id': 0, 'year': 0, 'season': 0, 'game_id': 0}
         )
         self.url5 = reverse(
-            'history:timeline-filtered-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 0,
-                                                        'spec_loc_id': 1, 'year': 0, 'season': 0, 'game_id': 0}
+            'history:timeline-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 0,
+                                               'spec_loc_id': 1, 'year': 0, 'season': 0, 'game_id': 0}
         )
         self.url6 = reverse(
-            'history:timeline-filtered-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 0,
-                                                        'spec_loc_id': 0, 'year': 1, 'season': 0, 'game_id': 0}
+            'history:timeline-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 0,
+                                               'spec_loc_id': 0, 'year': 1, 'season': 0, 'game_id': 0}
         )
         self.url7 = reverse(
-            'history:timeline-filtered-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 0,
-                                                        'spec_loc_id': 0, 'year': 1, 'season': 1, 'game_id': 0}
+            'history:timeline-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 0,
+                                               'spec_loc_id': 0, 'year': 1, 'season': 1, 'game_id': 0}
         )
         self.url8 = reverse(
-            'history:timeline-filtered-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 0,
-                                                        'spec_loc_id': 0, 'year': 0, 'season': 0, 'game_id': 1}
+            'history:timeline-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 0,
+                                              'spec_loc_id': 0, 'year': 0, 'season': 0, 'game_id': 1}
         )
 
     def test_login_required(self):
@@ -96,37 +96,32 @@ class TimelineEventsTest(TestCase):
 
     def test_links(self):
         linked_url2 = reverse(
-            'history:timeline-filtered-events', kwargs={'thread_id': self.thread1.id, 'participant_id': 0,
-                                                        'gen_loc_id': 0, 'spec_loc_id': 0, 'year': 0, 'season': 0,
-                                                        'game_id': 0}
+            'history:timeline-events', kwargs={'thread_id': self.thread1.id, 'participant_id': 0, 'gen_loc_id': 0,
+                                               'spec_loc_id': 0, 'year': 0, 'season': 0, 'game_id': 0}
         )
         linked_url3 = reverse(
-            'history:timeline-filtered-events', kwargs={'thread_id': 0, 'participant_id': self.user1.profile.id,
-                                                        'gen_loc_id': 0, 'spec_loc_id': 0, 'year': 0, 'season': 0,
-                                                        'game_id': 0}
+            'history:timeline-events', kwargs={'thread_id': 0, 'participant_id': self.user1.profile.id, 'gen_loc_id': 0,
+                                               'spec_loc_id': 0, 'year': 0, 'season': 0, 'game_id': 0}
         )
         linked_url4 = reverse(
-            'history:timeline-filtered-events', kwargs={'thread_id': 0, 'participant_id': 0,
-                                                        'gen_loc_id': self.gen_loc1.id, 'spec_loc_id': 0, 'year': 0,
-                                                        'season': 0, 'game_id': 0}
+            'history:timeline-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': self.gen_loc1.id,
+                                               'spec_loc_id': 0, 'year': 0, 'season': 0, 'game_id': 0}
         )
         linked_url5 = reverse(
-            'history:timeline-filtered-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 0,
-                                                        'spec_loc_id': self.spec_loc1.id, 'year': 0, 'season': 0,
-                                                        'game_id': 0}
+            'history:timeline-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 0,
+                                               'spec_loc_id': self.spec_loc1.id, 'year': 0, 'season': 0, 'game_id': 0}
         )
         linked_url6 = reverse(
-            'history:timeline-filtered-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 0,
-                                                        'spec_loc_id': 0, 'year': 1, 'season': 0, 'game_id': 0}
+            'history:timeline-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 0, 'spec_loc_id': 0,
+                                               'year': 1, 'season': 0, 'game_id': 0}
         )
         linked_url7 = reverse(
-            'history:timeline-filtered-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 0,
-                                                        'spec_loc_id': 0, 'year': 1, 'season': 1, 'game_id': 0}
+            'history:timeline-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 0, 'spec_loc_id': 0,
+                                               'year': 1, 'season': 1, 'game_id': 0}
         )
         linked_url8 = reverse(
-            'history:timeline-filtered-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 0,
-                                                        'spec_loc_id': 0, 'year': 0, 'season': 0,
-                                                        'game_id': self.game1.id}
+            'history:timeline-events', kwargs={'thread_id': 0, 'participant_id': 0, 'gen_loc_id': 0, 'spec_loc_id': 0,
+                                               'year': 0, 'season': 0, 'game_id': self.game1.id}
         )
 
         # request.user.profile in event1.participants.all()
