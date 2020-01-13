@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
 from history import views
-from history.models import GameSession, GeneralLocation, TimelineEvent, TimelineEventNote
+from history.models import GameSession, TimelineEvent, TimelineEventNote
 from history.forms import TimelineEventNoteForm
 from users.models import User
 
@@ -16,9 +16,8 @@ class TimelineNoteView(TestCase):
         self.user4.profile.save()
 
         self.game1 = GameSession.objects.create(title='Game1')
-        gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
         self.event1 = TimelineEvent.objects.create(game=self.game1, year=1, season=1, day_start=1,
-                                                   description='Description1', general_location=gen_loc1)
+                                                   description='Description1')
         self.event1.participants.set([self.user1.profile, ])
         self.event1.informed.set([self.user2.profile, ])
 
@@ -30,7 +29,8 @@ class TimelineNoteView(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # request.user.profile neither in event1.informed.all() nor in event1.participant.all()
+        # nor character_status == 'gm'
         self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -43,17 +43,17 @@ class TimelineNoteView(TestCase):
         self.assertEquals(response.status_code, 404)
 
     def test_get(self):
-        # case: request.user.profile in event1.participant.all()
+        # request.user.profile in event1.participant.all()
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile in event1.informed.all()
+        # request.user.profile in event1.informed.all()
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile.character_status == 'gm'
+        # request.user.profile.character_status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -81,6 +81,7 @@ class TimelineNoteView(TestCase):
             'text': 'Note1',
             'color': '#C70039'
         }
+        self.assertFalse(TimelineEventNote.objects.exists())
         self.client.post(self.url, data)
         self.assertTrue(TimelineEventNote.objects.exists())
 
@@ -92,7 +93,7 @@ class TimelineNoteView(TestCase):
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
         self.assertTrue(form.errors)
-        self.assertTrue(TimelineEventNote.objects.count() == 0)
+        self.assertFalse(TimelineEventNote.objects.exists())
 
     def test_invalid_post_data_empty_fields(self):
         self.client.force_login(self.user1)
@@ -107,7 +108,7 @@ class TimelineNoteView(TestCase):
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
         self.assertTrue(form.errors)
-        self.assertTrue(TimelineEventNote.objects.count() == 0)
+        self.assertFalse(TimelineEventNote.objects.exists())
 
 
 #######################################################################################################################
