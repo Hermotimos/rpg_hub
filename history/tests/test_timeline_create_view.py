@@ -1,8 +1,10 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
+
 from history import views
-from history.models import Chapter, ChronicleEvent, GameSession, GeneralLocation, SpecificLocation, Thread, TimelineEvent
+from history.models import Chapter, GameSession, GeneralLocation, SpecificLocation, Thread, TimelineEvent
 from history.forms import TimelineEventCreateForm
+from imaginarion.models import Picture
 from users.models import User
 
 
@@ -11,8 +13,10 @@ class TimelineCreateTest(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(title='Game1')
-        self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
-        self.spec_loc1 = SpecificLocation.objects.create(name='spec_loc1', general_location=self.gen_loc1)
+        picture1 = Picture.objects.create(image='site_features_pics/img_for_tests.jpg')
+        self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1', main_image=picture1)
+        self.spec_loc1 = SpecificLocation.objects.create(name='spec_loc1', general_location=self.gen_loc1,
+                                                         main_image=picture1)
         self.thread1 = Thread.objects.create(name='Thread1')
 
         self.url = reverse('history:timeline-create')
@@ -52,12 +56,10 @@ class TimelineCreateTest(TestCase):
             'day_end': 0,
             'threads': [self.thread1.id, ],
             'description': 'event1',
-            'general_location': self.gen_loc1.id,
+            'general_locations': [self.gen_loc1.id, ],
             'specific_locations': [self.spec_loc1.id, ]
         }
-        # response = self.client.post(self.url, data)
-        # form = response.context.get('form')
-        # print(form.errors)
+        self.assertFalse(TimelineEvent.objects.exists())
         self.client.post(self.url, data)
         self.assertTrue(TimelineEvent.objects.exists())
 
@@ -68,8 +70,8 @@ class TimelineCreateTest(TestCase):
         form = response.context.get('form')
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
-        self.assertFalse(ChronicleEvent.objects.exists())
         self.assertTrue(form.errors)
+        self.assertFalse(TimelineEvent.objects.exists())
 
     def test_invalid_post_data_empty_fields(self):
         self.client.force_login(self.user1)
@@ -86,8 +88,8 @@ class TimelineCreateTest(TestCase):
         form = response.context.get('form')
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
-        self.assertFalse(ChronicleEvent.objects.exists())
         self.assertTrue(form.errors)
+        self.assertFalse(TimelineEvent.objects.exists())
 
 
 #######################################################################################################################
