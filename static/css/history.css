@@ -1,4 +1,34 @@
 
+/* TIMELINE MAIN PAGE */
+
+/* match all ul tags with class beginning 'with multi-column-' */
+ul[class^='multi-column-'] {
+        list-style-type: none;
+        padding-left: 2rem;
+        margin-bottom: 0rem;
+}
+
+ul.spec-bullets > li:before {
+        content: '✧ ';
+}
+
+ul.multi-column-3 {
+        column-count: 3;
+        -moz-column-count: 3;
+        -webkit-column-count: 3;
+}
+
+ul.multi-column-4 {
+        column-count: 4;
+        -moz-column-count: 4;
+        -webkit-column-count: 4;
+}
+
+
+
+/* TIMELINE EVENTS */
+
+
 .timeline .year {%;}
 .timeline .day {width: %;}
 .timeline .thread {width: 18%;}
