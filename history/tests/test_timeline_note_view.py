@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
+
 from history import views
 from history.models import GameSession, TimelineEvent, TimelineEventNote
 from history.forms import TimelineEventNoteForm
