@@ -67,7 +67,7 @@
             <tr>
                 {% for participant in participants %}
                     <td class="unblue-black">
-                        <a href="{% url 'history:timeline-events' 0 participant.id 0 0 0 '0' 0 %}">
+                        <a href="{% url 'history:timeline-events' 0 participant.id 0 0 0 '0' 0 %}" class="img-link">
                             <img src="{{ participant.image.url }}" class="border-double account-img-timeline">
                         </a>&emsp;&emsp;
                     </td>

@@ -16,7 +16,7 @@
         <tr>
             {% for character in characters %}
                 <td class="unblue-black">
-                    <a href="{% url 'characters:skills-sheet' character.profile.id %}">
+                    <a href="{% url 'characters:skills-sheet' character.profile.id %}" class="img-link">
                         <img src="{{ character.profile.image.url }}" class="border-double account-img-characters">
                     </a>&emsp;&emsp;
                 </td>
