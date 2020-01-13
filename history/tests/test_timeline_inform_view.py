@@ -19,10 +19,11 @@ class TimelineInformView(TestCase):
         self.user4.profile.save()
 
         self.game1 = GameSession.objects.create(title='Game1')
-        picture1 = Picture.objects.create(image='site_features_pics/img_for_tests.jpg')
-        gen_loc1 = GeneralLocation.objects.create(name='gen_loc1', main_image=picture1)
         self.event1 = TimelineEvent.objects.create(game=self.game1, year=1, season=1, day_start=1,
                                                    description='Description1')
+        picture1 = Picture.objects.create(image='site_features_pics/img_for_tests.jpg')
+        gen_loc1 = GeneralLocation.objects.create(name='gen_loc1', main_image=picture1)
+
         self.event1.general_locations.set([gen_loc1, ])
         self.event1.participants.set([self.user1.profile, ])
         self.event1.informed.set([self.user2.profile, ])

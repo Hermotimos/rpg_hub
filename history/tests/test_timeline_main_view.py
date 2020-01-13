@@ -20,13 +20,14 @@ class TimelineMainTest(TestCase):
         self.user4.profile.save()
 
         self.game1 = GameSession.objects.create(title='Game1')
+        self.event1 = TimelineEvent.objects.create(game=self.game1, year=1, season=1, day_start=1,
+                                                   description='Description1')
         picture1 = Picture.objects.create(image='site_features_pics/img_for_tests.jpg')
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1', main_image=picture1)
         self.spec_loc1 = SpecificLocation.objects.create(name='spec_loc1', general_location=self.gen_loc1,
                                                          main_image=picture1)
         self.thread1 = Thread.objects.create(name='Thread1')
-        self.event1 = TimelineEvent.objects.create(game=self.game1, year=1, season=1, day_start=1,
-                                                   description='Description1')
+
         self.event1.threads.set([self.thread1, ])
         self.event1.specific_locations.set([self.spec_loc1, ])
         self.event1.general_locations.set([self.gen_loc1, ])
