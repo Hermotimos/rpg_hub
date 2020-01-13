@@ -3,6 +3,7 @@ from django.urls import reverse, resolve
 from history import views
 from history.models import GameSession, GeneralLocation, TimelineEvent
 from history.forms import TimelineEventInformForm
+from imaginarion.models import Picture
 from users.models import User
 
 
@@ -11,14 +12,18 @@ class TimelineInformView(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
+        self.user3.profile.character_status = 'active_player'
+        self.user3.profile.save()
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
         self.user4.profile.character_status = 'gm'
         self.user4.profile.save()
 
         self.game1 = GameSession.objects.create(title='Game1')
-        gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
+        picture1 = Picture.objects.create(image='site_features_pics/img_for_tests.jpg')
+        gen_loc1 = GeneralLocation.objects.create(name='gen_loc1', main_image=picture1)
         self.event1 = TimelineEvent.objects.create(game=self.game1, year=1, season=1, day_start=1,
-                                                   description='Description1', general_location=gen_loc1)
+                                                   description='Description1')
+        self.event1.general_locations.set([gen_loc1, ])
         self.event1.participants.set([self.user1.profile, ])
         self.event1.informed.set([self.user2.profile, ])
 
@@ -30,7 +35,8 @@ class TimelineInformView(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # request.user.profile neither in event1.informed.all() nor in event1.participant.all()
+        # nor character_status == 'gm'
         self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -43,17 +49,17 @@ class TimelineInformView(TestCase):
         self.assertEquals(response.status_code, 404)
 
     def test_get(self):
-        # case: request.user.profile in event1.participant.all()
+        # request.user.profile in event1.participant.all()
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile in event1.informed.all()
+        # request.user.profile in event1.informed.all()
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile.character_status == 'gm'
+        # request.user.profile.character_status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -73,17 +79,59 @@ class TimelineInformView(TestCase):
         form = response.context.get('form')
         self.assertIsInstance(form, TimelineEventInformForm)
 
-    # TODO no idea how to handle forms kwargs in tests
-    def test_valid_post_data(self):
-        pass
+    def test_valid_post_data1(self):
+        # participant user1 informs an uninformed user3
+        self.client.force_login(self.user1)
+        form = TimelineEventInformForm(authenticated_user=self.user1,
+                                       old_informed=[self.user2.profile.id, ],
+                                       participants=[self.user1.profile.id, ],
+                                       instance=self.event1)
+        data = form.initial
+        data['informed'] = [self.user3.profile.id]
+        self.assertFalse(self.user3.profile in TimelineEvent.objects.get(id=1).informed.all())
+        self.client.post(self.url, data)
+        self.assertTrue(self.user3.profile in TimelineEvent.objects.get(id=1).informed.all())
 
-    # TODO no idea how to handle forms kwargs in tests
+    def test_valid_post_data2(self):
+        # informed user2 informs an uninformed user3
+        self.client.force_login(self.user2)
+        form = TimelineEventInformForm(authenticated_user=self.user1,
+                                       old_informed=[self.user2.profile.id, ],
+                                       participants=[self.user1.profile.id, ],
+                                       instance=self.event1)
+        data = form.initial
+        data['informed'] = [self.user3.profile.id]
+        self.assertFalse(self.user3.profile in TimelineEvent.objects.get(id=1).informed.all())
+        self.client.post(self.url, data)
+        self.assertTrue(self.user3.profile in TimelineEvent.objects.get(id=1).informed.all())
+
     def test_invalid_post_data(self):
-        pass
+        self.client.force_login(self.user1)
+        form = TimelineEventInformForm(authenticated_user=self.user1,
+                                       old_informed=[self.user2.profile.id, ],
+                                       participants=[self.user1.profile.id, ],
+                                       instance=self.event1)
+        data = form.initial
+        data['informed'] = 'Invalid data'
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
 
-    # TODO no idea how to handle forms kwargs in tests
     def test_invalid_post_data_empty_fields(self):
-        pass
+        self.client.force_login(self.user1)
+        form = TimelineEventInformForm(authenticated_user=self.user1,
+                                       old_informed=[self.user2.profile.id, ],
+                                       participants=[self.user1.profile.id, ],
+                                       instance=self.event1)
+        data = form.initial
+        data['informed'] = ''
+        response = self.client.post(self.url, data)
+        form = response.context.get('form')
+        # should show the form again, not redirect
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
 
 
 #######################################################################################################################
