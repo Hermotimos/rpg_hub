@@ -34,24 +34,17 @@
     </table>
     <div id="threads" class="collapse pl-2">
         <br>
-<!--        <table>-->
-<!--            {% for row in threads|columns:3 %}-->
-<!--             <tr>-->
-<!--                 {% for thread in row %}-->
-<!--                 <td class="unblue">-->
-<!--                     <ul class="spec-bullets">-->
-<!--                         <li><a href="{% url 'history:timeline-filtered-events' thread.id 0 0 0 0 '0' 0 %}">{{ thread.name }}</a></li>-->
-<!--                     </ul>-->
-<!--                 </td>-->
-<!--                 {% endfor %}-->
-<!--             </tr>-->
-<!--            {% endfor %}-->
-<!--        </table>-->
-        <ul class="multi-column-3 spec-bullets">
-            {% for thread in threads %}
-                <li><a href="{% url 'history:timeline-filtered-events' thread.id 0 0 0 0 '0' 0 %}">{{ thread.name }}</a></li>
+        <table>
+            {% for row in threads|columns:3 %}
+             <tr>
+                 {% for thread in row %}
+                 <td class="unblue">
+                    &#10023;<a href="{% url 'history:timeline-filtered-events' thread.id 0 0 0 0 '0' 0 %}">{{ thread.name }}</a>&emsp;&emsp;
+                 </td>
+                 {% endfor %}
+             </tr>
             {% endfor %}
-        </ul>
+        </table>
         <br>
     </div>
     <br>
@@ -198,5 +191,4 @@
     </div>
 
 {% endblock content %}
-
 
