@@ -19,5 +19,3 @@ class TestLogout(TestCase):
         view = resolve('/users/logout/')
         # for class-based views add .view_class cause url ClassBasedView.as_views() creates new function
         self.assertEquals(view.func.view_class, views.LogoutView)
-
-
