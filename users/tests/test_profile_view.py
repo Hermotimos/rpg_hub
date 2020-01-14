@@ -78,6 +78,7 @@ class TestProfile(TestCase):
         # self.assertTrue(self.user1.username == 'Changed_name')
         # self.assertTrue(self.user1.email == 'mock_email@new.com')
         # self.assertTrue(self.user1.profile.character_name == 'New character name')
+        print(self.user1.username, self.user1.email, self.user1.profile.character_name)  # confirms user1 wasn't updated
 
     def test_invalid_post_data(self):
         self.client.force_login(self.user1)
