@@ -47,17 +47,83 @@ class TestProfile(TestCase):
         form = response.context.get('profile_form')
         self.assertIsInstance(form, ProfileUpdateForm)
 
-    # TODO no idea how to test views with 2 forms
     def test_valid_post_data(self):
-        pass
+        self.client.force_login(self.user1)
+        form1 = UserUpdateForm(instance=self.user1)
+        form2 = ProfileUpdateForm(instance=self.user1.profile)
+        data1 = form1.initial
+        data2 = form2.initial
 
-    # TODO no idea how to test views with 2 forms
+        data1.update(data2)
+        data1['username'] = 'Changed_name'
+        data1['email'] = 'mock_email@new.com'
+        data1['character_name'] = 'New character name'
+
+        self.assertTrue(self.user1.username == 'user1')
+        self.assertTrue(self.user1.email == '')
+        self.assertTrue(self.user1.profile.character_name == 'user1')
+
+        self.client.post(self.url, data1)
+        response = self.client.get(self.url)
+
+        self.assertContains(response, 'Changed_name')
+        self.assertContains(response, 'mock_email@new.com')
+        self.assertContains(response, 'New character name')
+        # or
+        self.assertEqual(response.context['user_form'].initial['username'], 'Changed_name')
+        self.assertEqual(response.context['user_form'].initial['email'], 'mock_email@new.com')
+        self.assertEqual(response.context['profile_form'].initial['character_name'], 'New character name')
+
+        # TODO: these fail, why?
+        # self.assertTrue(self.user1.username == 'Changed_name')
+        # self.assertTrue(self.user1.email == 'mock_email@new.com')
+        # self.assertTrue(self.user1.profile.character_name == 'New character name')
+
     def test_invalid_post_data(self):
-        pass
+        self.client.force_login(self.user1)
+        data = {}
 
-    # TODO no idea how to test views with 2 forms
+        self.assertTrue(self.user1.username == 'user1')
+        self.assertTrue(self.user1.email == '')
+        self.assertTrue(self.user1.profile.character_name == 'user1')
+
+        self.client.post(self.url, data)
+        response = self.client.get(self.url)
+
+        self.assertNotContains(response, 'Changed_name')
+        self.assertNotContains(response, 'mock_email@new.com')
+        self.assertNotContains(response, 'New character name')
+        # or
+        self.assertNotEqual(response.context['user_form'].initial['username'], 'Changed_name')
+        self.assertNotEqual(response.context['user_form'].initial['email'], 'mock_email@new.com')
+        self.assertNotEqual(response.context['profile_form'].initial['character_name'], 'New character name')
+
     def test_valid_post_data_empty_fields(self):
-        pass
+        self.client.force_login(self.user1)
+        form1 = UserUpdateForm(instance=self.user1)
+        form2 = ProfileUpdateForm(instance=self.user1.profile)
+        data1 = form1.initial
+        data2 = form2.initial
+
+        data1.update(data2)
+        data1['username'] = ''
+        data1['email'] = ''
+        data1['character_name'] = ''
+
+        self.assertTrue(self.user1.username == 'user1')
+        self.assertTrue(self.user1.email == '')
+        self.assertTrue(self.user1.profile.character_name == 'user1')
+
+        self.client.post(self.url, data1)
+        response = self.client.get(self.url)
+
+        self.assertNotContains(response, 'Changed_name')
+        self.assertNotContains(response, 'mock_email@new.com')
+        self.assertNotContains(response, 'New character name')
+        # or
+        self.assertNotEqual(response.context['user_form'].initial['username'], 'Changed_name')
+        self.assertNotEqual(response.context['user_form'].initial['email'], 'mock_email@new.com')
+        self.assertNotEqual(response.context['profile_form'].initial['character_name'], 'New character name')
 
 
 #######################################################################################################################
