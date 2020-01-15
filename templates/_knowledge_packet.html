@@ -11,9 +11,11 @@
                 <p class="font-18 font-italic pt-1 text-justify">{{ kn_packet.text|linebreaksbr }}</p>
                 <br>
                 {% for picture in kn_packet.pictures.all %}
-                    <p class="font-18 font-italic hover-blue pt-1 text-justify" data-toggle="collapse" data-target="#id{{ kn_packet.id }}_{{ picture.id }}">
-                        &#10023; {{ picture.description }}
-                    </p>
+                    <ul class="pl-3">
+                        <li class="bullets-1 font-18 font-italic hover-blue pt-1 text-justify" data-toggle="collapse" data-target="#id{{ kn_packet.id }}_{{ picture.id }}">
+                            <p>{{ picture.description }}</p>
+                        </li>
+                    </ul>
                     <div id="id{{ kn_packet.id }}_{{ picture.id }}" class="collapse">
                         <img src="{{ picture.image.url }}" class="border-double">
                     </div>
