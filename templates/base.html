@@ -50,17 +50,14 @@
                     <!--   PAGE TITLE   -->
                     <br>
                     <header>
-                        <div class="border-custom-base">
-                            <table>
-                                <tr>
-                                    <td class="align-bottom">
-                                        <img src="{% static 'img/skadia.png' %}" class="border-double img-page-title">
-                                    </td>
-                                    <td class="pb-0 pl-3 align-bottom">
-                                        <h1><strong class="align-bottom small-caps">{{ page_title|linebreaksbr }}</strong></h1>
-                                    </td>
-                                </tr>
-                            </table>
+                        <div class="d-flex">
+                            <div>
+                                <img src="{% static 'img/skadia.png' %}" class="border-double img-page-title">
+                            </div>
+                            <div class="border-custom-base d-flex flex-column mt-auto pl-1">
+                                <h1 class="mb-0"><strong class="align-bottom small-caps">{{ page_title|linebreaksbr }}</strong></h1>
+                            </div>
+                            
                         </div>
                     </header>
 
