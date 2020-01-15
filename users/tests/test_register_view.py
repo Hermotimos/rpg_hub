@@ -35,6 +35,7 @@ class TestRegister(TestCase):
             'password1': 'pass1111',
             'password2': 'pass1111',
         }
+        self.assertFalse(User.objects.exists())
         response = self.client.post(self.url, data)
         redirect_url = reverse('users:login')
         self.assertTrue(User.objects.exists())
@@ -44,7 +45,7 @@ class TestRegister(TestCase):
     def test_invalid_post_data(self):
         data = {}
         response = self.client.post(self.url, data)
-        self.assertTrue(User.objects.count() == 0)
+        self.assertFalse(User.objects.exists())
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
 
@@ -54,7 +55,7 @@ class TestRegister(TestCase):
             'password': '',
         }
         response = self.client.post(self.url, data)
-        self.assertTrue(User.objects.count() == 0)
+        self.assertFalse(User.objects.exists())
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
 
