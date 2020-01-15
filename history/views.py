@@ -363,7 +363,11 @@ def timeline_main_view(request):
     if profile.character_status == 'gm':
         threads = Thread.objects.all()
         participants = Profile.objects.filter(character_status__in=['active_player', 'inactive_player', 'dead_player'])
-        gen_locs = GeneralLocation.objects.all().prefetch_related('specific_locations')
+        spec_locs = SpecificLocation.objects.annotate(events_cnt=Count('timeline_events')).filter(events_cnt__gt=0)
+        gen_locs = GeneralLocation.objects\
+            .annotate(events_cnt=Count('timeline_events'))\
+            .filter(events_cnt__gt=0)\
+            .prefetch_related(Prefetch('specific_locations', queryset=spec_locs))
         games = GameSession.objects.annotate(num_events=Count('timeline_events')).filter(num_events__gt=0)
         events = TimelineEvent.objects.all()
     else:
