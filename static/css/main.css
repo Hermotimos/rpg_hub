@@ -8,7 +8,6 @@ body {
         margin-top: 4rem;
 }
 
-
 article.content {
         min-height: 700px
 }
@@ -16,6 +15,8 @@ article.content {
 footer {
         color: gray;
 }
+
+
 
 
 
@@ -28,7 +29,6 @@ footer {
 *:not(textarea):not(input) {
         user-select: none;
 }
-
 
 .border-custom-base {
         border-bottom: 1px solid #444444;
@@ -69,12 +69,6 @@ td.align-center {
 td.align-right {
         text-align: right;
 }
-
-.inline-block {
-   display: inline-block;
-}
-
-
 
 .scrollup {
         width: 64px;
@@ -144,13 +138,13 @@ h1, h2, h3, h4, h5, h6, b{
 }
 
 .font-18 {
-        font-size: 18px
+        font-size: 18px;
 }
 .font-12 {
-        font-size: 12px
+        font-size: 12px;
 }
 .font-14 {
-        font-size: 14px
+        font-size: 14px;
 }
 
 small.red {
