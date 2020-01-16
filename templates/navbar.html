@@ -96,8 +96,7 @@
         <!-- Navbar Right Side -->
         <div class="navbar-nav">
             {% if user.is_authenticated %}
-                <a href="{% url 'contact:demands-create' %}"><img src="{% static 'img/demand.png' %}" class="mr-2 mt-1"></a>
-                &emsp;
+                <a class="pr-4 pt-2" href="{% url 'contact:demands-create' %}"><img src="{% static 'img/demand.png' %}"></a>
                 <a class="btn btn-outline-light btn-space" href="{% url 'users:logout' %}">Wyloguj</a>
             {% else %}
                 <a class="btn btn-outline-light btn-space" href="{% url 'users:register' %}">Nowa postać</a>
