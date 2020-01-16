@@ -154,9 +154,10 @@ h1, h2, h3, h4, h5, h6, b{
         font-size: 14px;
 }
 
-small.red {
-        color: red;
-}
+.font-12 {font-size: 12px;}
+.font-14 {font-size: 14px;}
+.font-18 {font-size: 18px;}
+.font-24 {font-size: 24px;}
 
 small.smaller {
     font-size: 12px;
