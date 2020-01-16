@@ -103,6 +103,7 @@ td.align-right {
 /* ----- BREADCRUMBS & PAGE TITLE ----- */
 /* ----------------------------------- */
 
+/* Breadcrumbs no more in use - no need, simpler layout
 .breadcrumbs small {
         color: #888;
         white-space: nowrap;
@@ -117,8 +118,7 @@ td.align-right {
         height: 100px;
         width: 100px;
 }
-
-
+*/
 
 
 
@@ -135,7 +135,7 @@ td.align-right {
 h1, h2, h3, h4, h5, h6, b{
         color: #444444;
 }
-
+*/
 .deep-red {
         color: #C70039;
 }
@@ -266,29 +266,28 @@ a {
 /* ---------- LISTS ------- */
 /* ----------------------- */
 
-ul.bullets-1,
-li.bullets-1 {
+ul.bullets-1 li {
         list-style: "✧";
 }
 
-ul.bullets-1 > li > * {
-        padding-left: 0.2rem;
+ul.bullets-1 > li a {
+        padding-left: 0.2rem !important;
+        padding-right: 0 !important;
 }
 
-li.bullets-1 > * {
-        padding-left: 0.2rem;
+ul.bullets-1 > li > * {
+    padding-left: 0.5rem;
+
 }
 
 nav ul.bullets-1 {
         margin-bottom: 0.5rem;
 }
-
 nav ul.bullets-1 li {
         color: #cbd5db;
-        padding-left: 0.5rem;
 }
 
-ul.bullets-1 > li > a {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
+div#professions ul.bullets-1 li:before {
+
 }
+
