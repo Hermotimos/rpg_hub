@@ -255,7 +255,7 @@ def vote_yes_view(request, survey_id, option_id):
     profile = request.user.profile
     option = get_object_or_404(SurveyOption, id=option_id)
 
-    if profile in option.survey.addressees.all():
+    if profile in option.survey.addressees.all() or profile.character_status == 'gm':
         option.yes_voters.add(profile)
         if profile in option.no_voters.all():
             option.no_voters.remove(profile)
@@ -272,7 +272,7 @@ def vote_no_view(request, survey_id, option_id):
     profile = request.user.profile
     option = get_object_or_404(SurveyOption, id=option_id)
 
-    if profile in option.survey.addressees.all():
+    if profile in option.survey.addressees.all() or profile.character_status == 'gm':
         option.no_voters.add(profile)
         if profile in option.yes_voters.all():
             option.yes_voters.remove(profile)
@@ -289,7 +289,7 @@ def unvote_view(request, survey_id, option_id):
     profile = request.user.profile
     option = get_object_or_404(SurveyOption, id=option_id)
 
-    if profile in option.survey.addressees.all():
+    if profile in option.survey.addressees.all() or profile.character_status == 'gm':
         if profile in option.yes_voters.all():
             option.yes_voters.remove(profile)
         elif profile in option.no_voters.all():
