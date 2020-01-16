@@ -274,3 +274,11 @@ li.bullets-1 > * {
         padding-left: 0.2rem;
 }
 
+nav ul.bullets-1 li {
+        color: #cbd5db;
+        padding-left: 0.5rem;
+}
+ul.bullets-1 > li > a {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+}
