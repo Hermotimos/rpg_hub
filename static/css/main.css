@@ -270,6 +270,10 @@ li.bullets-1 {
         list-style: "✧";
 }
 
+ul.bullets-1 > li > * {
+        padding-left: 0.2rem;
+}
+
 li.bullets-1 > * {
         padding-left: 0.2rem;
 }
