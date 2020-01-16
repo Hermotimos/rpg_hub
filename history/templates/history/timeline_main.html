@@ -39,7 +39,7 @@
              <tr>
                  {% for thread in row %}
                  <td class="unblue">
-                    &#10023;<a href="{% url 'history:timeline-events' thread.id 0 0 0 0 '0' 0 %}">{{ thread.name }}</a>&emsp;&emsp;
+                     <ul class="bullets-1 mb-0"><li><a href="{% url 'history:timeline-events' thread.id 0 0 0 0 '0' 0 %}">{{ thread.name }}</a></li></ul>
                  </td>
                  {% endfor %}
              </tr>
@@ -97,14 +97,14 @@
             {% for gen_loc in gen_locs %}
                 <tr>
                     <td class="unblue" colspan="4">
-                        <br><h4>&#10037;<a href="{% url 'history:timeline-events' 0 0 gen_loc.id 0 0 '0' 0 %}">{{ gen_loc.name }}</a>&emsp;&emsp;</h4>
+                        <br><h4>&#10037;<a href="{% url 'history:timeline-events' 0 0 gen_loc.id 0 0 '0' 0 %}">{{ gen_loc.name }}</a></h4>
                     </td>
                 </tr>
                 {% for row in gen_loc.specific_locations.all|columns:4 %}
                 <tr>
                     {% for spec_loc in row %}
-                        <td class="unblue pl-3">
-                            &#10023; <a href="{% url 'history:timeline-events' 0 0 0 spec_loc.id 0 '0' 0 %}">{{ spec_loc.name }}</a>
+                        <td class="unblue">
+                            <ul class="bullets-1 mb-0 pl-4"><li><a href="{% url 'history:timeline-events' 0 0 0 spec_loc.id 0 '0' 0 %}">{{ spec_loc.name }}</a></li></ul>
                         </td>
                     {% endfor %}
                 </tr>
