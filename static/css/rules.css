@@ -19,10 +19,6 @@ ol.rules li, ul.rules li {
     font-size: 14px;
 }
 
-li b {
-        color: #444444;
-}
-
 .img-skill {
         float: left;
         height: 60px;
@@ -196,10 +192,6 @@ td .nowrap {
 
 .border-custom-right {
         border-right: 1px solid #363636;
-}
-
-thead.dark th {
-        color: #444444;
 }
 
 thead.align-center th {
