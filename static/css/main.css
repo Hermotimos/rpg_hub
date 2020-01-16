@@ -128,44 +128,22 @@ td.align-right {
 /* ----- TEXT & FONTS ----- */
 /* ----------------------- */
 
-* {
-        font-family: 'IM Fell Great Primer', serif;
-}
-/*
-h1, h2, h3, h4, h5, h6, b{
-        color: #444444;
-}
-*/
-.deep-red {
-        color: #C70039;
-}
+* {font-family: 'IM Fell Great Primer', serif;}
 
-.posts-and-news small {
-        white-space: nowrap;
-}
+.deep-red {color: #C70039;}
 
-.font-18 {
-        font-size: 18px;
-}
-.font-12 {
-        font-size: 12px;
-}
-.font-14 {
-        font-size: 14px;
-}
+.posts-and-news small {white-space: nowrap;}
 
 .font-12 {font-size: 12px;}
 .font-14 {font-size: 14px;}
 .font-18 {font-size: 18px;}
 .font-24 {font-size: 24px;}
 
-small.smaller {
-    font-size: 12px;
-}
+small.red {color: red;}
 
-.small-caps {
-        font-variant: small-caps;
-}
+small.smaller {font-size: 12px;}
+
+.small-caps {font-variant: small-caps;}
 
 
 
@@ -269,6 +247,10 @@ a {
 
 ul.bullets-1 li {
         list-style: "✧";
+}
+
+ul.bullets-2 li {
+        list-style: "✵";
 }
 
 ul.bullets-1 > li a {
