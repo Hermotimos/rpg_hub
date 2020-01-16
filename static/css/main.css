@@ -245,20 +245,15 @@ a {
 /* ---------- LISTS ------- */
 /* ----------------------- */
 
-ul.bullets-1 li {
-        list-style: "✧";
-}
+ul.bullets-1 li {list-style: "✧";}
+ul.bullets-2 li {list-style: "✵";}
 
-ul.bullets-2 li {
-        list-style: "✵";
-}
-
-ul.bullets-1 > li a {
+ul[class^=bullets] > li a {
         padding-left: 0.2rem !important;
         padding-right: 0 !important;
 }
 
-ul.bullets-1 > li > * {
+ul[class^=bullets] > li > * {
     padding-left: 0.5rem;
 
 }
@@ -270,7 +265,4 @@ nav ul.bullets-1 li {
         color: #cbd5db;
 }
 
-div#professions ul.bullets-1 li:before {
-
-}
 
