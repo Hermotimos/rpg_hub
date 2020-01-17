@@ -1,7 +1,7 @@
 {% load static %}
-<ul class="pl-4_7rem">
-    <li class="bullets-1">
-        <h5 class="pt-2" data-toggle="collapse" data-target="#id_{{ skill_level.id }}_{{ kn_packet.id }}_{{ specifier }}">
+<ul class="bullets-1 bullets-big pl-4_7rem">
+    <li>
+        <h5 data-toggle="collapse" data-target="#id_{{ skill_level.id }}_{{ kn_packet.id }}_{{ specifier }}">
             <b class="hover-blue">{{ kn_packet.title }}</b>
         </h5>
         <div id="id_{{ skill_level.id }}_{{ kn_packet.id }}_{{ specifier }}" class="collapse">
@@ -11,8 +11,8 @@
                 <p class="font-18 font-italic pt-1 text-justify">{{ kn_packet.text|linebreaksbr }}</p>
                 <br>
                 {% for picture in kn_packet.pictures.all %}
-                    <ul class="pl-3">
-                        <li class="bullets-1 font-18 font-italic hover-blue pt-1 text-justify" data-toggle="collapse" data-target="#id{{ kn_packet.id }}_{{ picture.id }}">
+                    <ul class="bullets-1 pl-3">
+                        <li class="font-18 font-italic hover-blue pt-1 text-justify" data-toggle="collapse" data-target="#id{{ kn_packet.id }}_{{ picture.id }}">
                             <p>{{ picture.description }}</p>
                         </li>
                     </ul>

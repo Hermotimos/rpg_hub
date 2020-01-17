@@ -264,4 +264,6 @@ nav ul.bullets-1 li {
         color: #cbd5db;
 }
 
-
+.bullets-big li::marker {
+        font-size: 120%;
+}
