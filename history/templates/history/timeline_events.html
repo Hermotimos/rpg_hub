@@ -52,9 +52,11 @@
                     </a>
                 </td>
                 <td class="timeline-event-thread align-top unblue-black">
-                    {% for thread in event.threads.all %}
-                        &#10023;<a class="hover-pointer" href="{% url 'history:timeline-events' thread.id 0 0 0 0 '0' 0 %}">{{ thread }}</a><br>
-                    {% endfor %}
+                    <ul class="bullets-1 pl-2">
+                        {% for thread in event.threads.all %}
+                            <li><a id="thread" class="hover-pointer" href="{% url 'history:timeline-events' thread.id 0 0 0 0 '0' 0 %}">{{ thread }}</a></li>
+                        {% endfor %}
+                    </ul>
                 </td>
                 <td class="timeline-event text-justify align-top unblue-black pl-2 pr-2">
                     <a href="{% url 'history:chronicle-one-game' event.game.id event.id %}">{{ event.description|linebreaksbr }}</a>

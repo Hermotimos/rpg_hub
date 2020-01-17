@@ -1,7 +1,14 @@
+.timeline ul.bulelts-1 {
+        padding-left: 0 !important;
+}
+
+a#thread {
+        padding-left: 0.1rem !important;
+}
 
 .timeline .year {%;}
 .timeline .day {width: %;}
-.timeline .thread {width: 18%;}
+.timeline .thread {width: 17%;}
 .timeline .description {width: %;}
 .timeline .participants {width: 5%;}
 .timeline .locations {width: %;}
