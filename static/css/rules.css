@@ -63,6 +63,10 @@ ol.rules li, ul.rules li {
     border: 0;
 }
 
+#professions ul[class^=bullets] li::marker {
+        font-size: 120%;
+}
+
 .traits .strength-value {width: 80px;}
 .traits .strength-hit {width: 100px;}
 .traits .strength-damage {width: 100px;}
