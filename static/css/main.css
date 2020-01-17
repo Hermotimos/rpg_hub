@@ -265,4 +265,6 @@ nav ul.bullets-1 li {
         color: #cbd5db;
 }
 
-
+#professions ul[class^=bullets] li::marker {
+        font-size: 120%;
+}
