@@ -248,8 +248,9 @@ a {
 ul.bullets-1 li {list-style: "✧";}
 ul.bullets-2 li {list-style: "✵";}
 
+
 ul[class^=bullets] > li > * {
-    padding-left: 0.5rem !important;
+    padding-left: 0.5rem;
 }
 
 ul[class^=bullets] > li a {
