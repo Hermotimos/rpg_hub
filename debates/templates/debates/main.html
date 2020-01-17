@@ -22,35 +22,34 @@
         </h3>
         <a href="{% url 'debates:create-debate' topic.id %}" class="btn btn-outline-dark">Nowa narada</a>
         <br><br>
-
-        {% for debate in topic.debates.all %}
-            <h6 class="unblue">
-                <a href="{% url 'debates:debate' debate.topic.id debate.id %}">
-                    {% if not debate.is_ended %}
-                        <b class="deep-red">&#9758;</b>
-                    {% else %}
-                        &#10023;
-                    {% endif %}
-                    {{ debate.name }}&nbsp;
-                </a>
-                <small class="font-12 text-muted">
-                {% if debate.first_player_remark_date|date:'d-M-Y' != debate.last_player_remark_date|date:'d-M-Y' %}
-                   [{{ debate.first_player_remark_date|date:'d/M' }} - {{ debate.last_player_remark_date|date:'d/M Y' }}
-                {% else %}
-                    [{{ debate.first_player_remark_date|date:'d/M Y' }}
-                {% endif %}
-                
-                &#10033;
-                Wypowiedzi: {{ debate.player_remarks_count }}]
-                &emsp;
-                {% for profile in debate.allowed_profiles.all %}
-                    {% if profile.character_status != 'gm' %}
-                        <img class="rounded-circle img-small" src="{{ profile.image.url }}">
-                    {% endif %}
-                {% endfor %}
-                </small>
-            </h6>
-        {% endfor %}
+        
+        <ul class="bullets-1">
+            {% for debate in topic.debates.all %}
+                <li class="{% if not debate.is_ended %}bullet-ongoing{% endif %}">
+                    <h6>
+                        <a class="unblue" href="{% url 'debates:debate' debate.topic.id debate.id %}">
+                            {{ debate.name }}&nbsp;
+                        </a>
+                        <small class="font-12 text-muted">
+                        {% if debate.first_player_remark_date|date:'d-M-Y' != debate.last_player_remark_date|date:'d-M-Y' %}
+                           [{{ debate.first_player_remark_date|date:'d/M' }} - {{ debate.last_player_remark_date|date:'d/M Y' }}
+                        {% else %}
+                            [{{ debate.first_player_remark_date|date:'d/M Y' }}
+                        {% endif %}
+                        
+                        &#10033;
+                        Wypowiedzi: {{ debate.player_remarks_count }}]
+                        &emsp;
+                        {% for profile in debate.allowed_profiles.all %}
+                            {% if profile.character_status != 'gm' %}
+                                <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                            {% endif %}
+                        {% endfor %}
+                        </small>
+                    </h6>
+                </li>
+            {% endfor %}
+        </ul>
         <br><br>
     {% endfor %}
 
