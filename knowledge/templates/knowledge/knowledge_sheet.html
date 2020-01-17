@@ -27,7 +27,7 @@
             {% else %}
                     {% for kn_packet in type.knowledge_packets.all %}
             
-                        {% with specifier=1 %}
+                        {% with specifier=type.id %}
                                 {% include '_knowledge_packet.html' %}
                         {% endwith %}
             
