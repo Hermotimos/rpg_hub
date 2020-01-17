@@ -32,14 +32,16 @@
             </td>
         </tr>
     </table>
-    <div id="threads" class="collapse pl-2">
+    <div id="threads" class="collapse">
         <br>
         <table>
             {% for row in threads|columns:3 %}
              <tr>
                  {% for thread in row %}
                  <td class="unblue">
-                     <ul class="bullets-1 mb-0"><li><a href="{% url 'history:timeline-events' thread.id 0 0 0 0 '0' 0 %}">{{ thread.name }}</a></li></ul>
+                     <ul class="bullets-1 mb-0">
+                         <li><a href="{% url 'history:timeline-events' thread.id 0 0 0 0 '0' 0 %}">{{ thread.name }}</a></li>
+                     </ul>
                  </td>
                  {% endfor %}
              </tr>
@@ -92,12 +94,14 @@
             </td>
         </tr>
     </table>
-    <div id="general_locations" class="collapse pl-2">
+    <div id="general_locations" class="collapse">
         <table>
             {% for gen_loc in gen_locs %}
                 <tr>
                     <td class="font-24 pt-4 unblue" colspan="4">
-                        <ul class="bullets-2 mb-0 pl-4"><li><a href="{% url 'history:timeline-events' 0 0 gen_loc.id 0 0 '0' 0 %}">{{ gen_loc.name }}</a></li></ul>
+                        <ul class="bullets-2 mb-0 pl-4">
+                            <li><a href="{% url 'history:timeline-events' 0 0 gen_loc.id 0 0 '0' 0 %}">{{ gen_loc.name }}</a></li>
+                        </ul>
                     </td>
                 </tr>
                 {% for row in gen_loc.specific_locations.all|columns:4 %}
@@ -174,14 +178,16 @@
             </td>
         </tr>
     </table>
-    <div id="games" class="collapse pl-2">
+    <div id="games" class="collapse">
         <br>
         <table>
             {% for row in games|columns:2 %}
              <tr>
                  {% for game in row %}
                  <td class="unblue">
-                     <ul class="bullets-1 mb-0 pl-4"><li><a href="{% url 'history:timeline-events' 0 0 0 0 0 '0' game.id %}">{{ game.title|truncatechars:55 }}</a></li></ul>
+                     <ul class="bullets-1 mb-0 pl-4">
+                         <li><a href="{% url 'history:timeline-events' 0 0 0 0 0 '0' game.id %}">{{ game.title|truncatechars:55 }}</a></li>
+                     </ul>
                  </td>
                  {% endfor %}
              </tr>
