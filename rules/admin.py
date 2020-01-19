@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy
 from imaginarion.models import Picture
 from knowledge.models import KnowledgePacket
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, CharacterClass, CharacterProfession, EliteClass, \
-    EliteProfession,WeaponClass, WeaponType, PlateType, ShieldType
+    EliteProfession, WeaponClass, WeaponType, PlateType, ShieldType
 from users.models import Profile
 
 
@@ -150,9 +150,9 @@ class SynergyAdmin(admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 30})},
     }
     inlines = [SynergyLevelInline]
-    list_display = ['id', 'name', 'lvl_1', 'lvl_2', 'lvl_3']
-    list_editable = ['name', 'lvl_1', 'lvl_2', 'lvl_3']
-    search_fields = ['name', 'lvl_1', 'lvl_2', 'lvl_3']
+    list_display = ['id', 'name']
+    list_editable = ['name']
+    search_fields = ['name']
 
 
 class CharacterProfessionInline(admin.TabularInline):

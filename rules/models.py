@@ -66,14 +66,11 @@ class SkillLevel(models.Model):
 class Synergy(models.Model):
     name = models.CharField(max_length=100, verbose_name='Synergia')
     skills = models.ManyToManyField(Skill, related_name='skills')
-    lvl_1 = models.TextField(max_length=4000, blank=True, null=True)
-    lvl_2 = models.TextField(max_length=4000, blank=True, null=True)
-    lvl_3 = models.TextField(max_length=4000, blank=True, null=True)
     allowed_profiles = models.ManyToManyField(Profile, blank=True,
                                               limit_choices_to=Q(character_status='active_player') |
                                                                Q(character_status='inactive_player') |
                                                                Q(character_status='dead_player'),
-                                              related_name='allowed_synergies',)
+                                              related_name='allowed_synergies')
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
