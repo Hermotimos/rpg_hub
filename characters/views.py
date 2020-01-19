@@ -42,7 +42,7 @@ def skills_sheet_view(request, profile_id='0'):
     synergies = Synergy.objects\
         .filter(synergy_levels__acquired_by_characters=profile.character) \
         .prefetch_related(Prefetch(
-            'skill_levels',
+            'synergy_levels',
             queryset=SynergyLevel.objects.filter(acquired_by_characters=profile.character)
             .prefetch_related(Prefetch(
                 'knowledge_packets',
