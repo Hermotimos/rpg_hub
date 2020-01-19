@@ -8,8 +8,8 @@ from django.utils.translation import ugettext_lazy
 
 from imaginarion.models import Picture
 from knowledge.models import KnowledgePacket
-from rules.models import Skill, SkillLevel, Synergy, CharacterClass, CharacterProfession, EliteClass, EliteProfession, \
-    WeaponClass, WeaponType, PlateType, ShieldType
+from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, CharacterClass, CharacterProfession, EliteClass, \
+    EliteProfession,WeaponClass, WeaponType, PlateType, ShieldType
 from users.models import Profile
 
 
@@ -75,6 +75,22 @@ class SkillLevelFilter(admin.SimpleListFilter):
             return queryset.filter(skill__name__exact=self.value())
 
 
+class SynergyLevelFilter(admin.SimpleListFilter):
+    title = ugettext_lazy('synergy__name')
+    parameter_name = 'synergy__name'
+
+    def lookups(self, request, model_admin):
+        qs = model_admin.get_queryset(request)
+        qs.distinct()
+        list_with_duplicates = [(i, i) for i in qs.values_list('synergy__name', flat=True).distinct()]
+        list_without_duplicates = list(dict.fromkeys(list_with_duplicates))
+        return list_without_duplicates
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(synergy__name__exact=self.value())
+
+
 class SkillLevelAdmin(admin.ModelAdmin):
     form = Form4
     formfield_overrides = {
@@ -87,7 +103,7 @@ class SkillLevelAdmin(admin.ModelAdmin):
     search_fields = ['level', 'description']
 
     def name(self, obj):
-        return f'{str(obj.skill.name)} {obj.level}'
+        return f'{str(obj.skill.name)} [{obj.level}]'
 
 
 class SkillLevelInline(admin.TabularInline):
@@ -107,12 +123,33 @@ class SkillAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
+class SynergyLevelAdmin(admin.ModelAdmin):
+    form = Form4
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 80})},
+    }
+
+    list_display = ['name', 'description']
+    list_editable = ['description']
+    list_filter = [SynergyLevelFilter]
+    search_fields = ['level', 'description']
+
+    def name(self, obj):
+        return f'{str(obj.synergy.name)} [{obj.level}]'
+
+
+class SynergyLevelInline(admin.TabularInline):
+    model = SynergyLevel
+    extra = 1
+
+
 class SynergyAdmin(admin.ModelAdmin):
     form = Form3
     formfield_overrides = {
         models.CharField: {'widget': Textarea(attrs={'rows': 3, 'cols': 10})},
         models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 30})},
     }
+    inlines = [SynergyLevelInline]
     list_display = ['id', 'name', 'lvl_1', 'lvl_2', 'lvl_3']
     list_editable = ['name', 'lvl_1', 'lvl_2', 'lvl_3']
     search_fields = ['name', 'lvl_1', 'lvl_2', 'lvl_3']
@@ -232,6 +269,7 @@ class ShieldTypeAdmin(admin.ModelAdmin):
 admin.site.register(Skill, SkillAdmin)
 admin.site.register(SkillLevel, SkillLevelAdmin)
 admin.site.register(Synergy, SynergyAdmin)
+admin.site.register(SynergyLevel, SynergyLevelAdmin)
 admin.site.register(CharacterClass, CharacterClassAdmin)
 admin.site.register(CharacterProfession, CharacterProfessionAdmin)
 admin.site.register(EliteClass, EliteClassAdmin)

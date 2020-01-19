@@ -95,10 +95,10 @@ def rules_skills_view(request):
     profile = request.user.profile
     if profile.character_status == 'gm':
         skills = Skill.objects.all().prefetch_related('skill_levels')
-        synergies = Synergy.objects.all().prefetch_related('skills')
+        synergies = Synergy.objects.all().prefetch_related('skills', 'synergy_levels')
     else:
         skills = profile.allowed_skills.all().prefetch_related('skill_levels')
-        synergies = profile.allowed_synergies.all().prefetch_related('skills')
+        synergies = profile.allowed_synergies.all().prefetch_related('skills', 'synergy_levels')
 
     context = {
         'page_title': 'Umiejętności',
