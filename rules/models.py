@@ -53,7 +53,7 @@ class SkillLevel(models.Model):
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
-        return f'{str(self.skill.name)} {self.level}'
+        return f'{str(self.skill.name)} [{self.level}]'
 
     def save(self, *args, **kwargs):
         self.sorting_name = create_sorting_name(self.__str__())
@@ -69,12 +69,10 @@ class Synergy(models.Model):
     lvl_1 = models.TextField(max_length=4000, blank=True, null=True)
     lvl_2 = models.TextField(max_length=4000, blank=True, null=True)
     lvl_3 = models.TextField(max_length=4000, blank=True, null=True)
-    allowed_profiles = models.ManyToManyField(Profile,
-                                              blank=True,
-                                              limit_choices_to=
-                                              Q(character_status='active_player') |
-                                              Q(character_status='inactive_player') |
-                                              Q(character_status='dead_player'),
+    allowed_profiles = models.ManyToManyField(Profile, blank=True,
+                                              limit_choices_to=Q(character_status='active_player') |
+                                                               Q(character_status='inactive_player') |
+                                                               Q(character_status='dead_player'),
                                               related_name='allowed_synergies',)
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
