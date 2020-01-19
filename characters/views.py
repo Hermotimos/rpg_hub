@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from characters.models import Character
 from knowledge.models import KnowledgePacket
 from rpg_project.utils import query_debugger
-from rules.models import Skill, SkillLevel
+from rules.models import Skill, SkillLevel, Synergy, SynergyLevel
 from users.models import Profile
 
 
@@ -39,10 +39,23 @@ def skills_sheet_view(request, profile_id='0'):
         ))\
         .distinct()
 
+    synergies = Synergy.objects\
+        .filter(synergy_levels__acquired_by_characters=profile.character) \
+        .prefetch_related(Prefetch(
+            'skill_levels',
+            queryset=SynergyLevel.objects.filter(acquired_by_characters=profile.character)
+            .prefetch_related(Prefetch(
+                'knowledge_packets',
+                queryset=KnowledgePacket.objects.filter(allowed_profiles=profile)
+                ))
+        )) \
+        .distinct()
+
     knowledge_packets = KnowledgePacket.objects.all()
     context = {
         'page_title': f'Umiejętności - {profile.character_name}',
         'skills': skills,
+        'synergies': synergies,
         'knowledge_packets': knowledge_packets
     }
     return render(request, 'characters/skills_sheet.html', context)

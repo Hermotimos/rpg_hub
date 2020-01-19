@@ -5,12 +5,15 @@ from django.utils.html import format_html
 
 from characters.models import Character
 from imaginarion.models import Picture
-from rules.models import SkillLevel
+from rules.models import SkillLevel, SynergyLevel
 
 
 class CharacterAdminForm(forms.ModelForm):
     skill_levels_acquired = forms.ModelMultipleChoiceField(queryset=SkillLevel.objects.all(), required=False,
                                                            widget=FilteredSelectMultiple('Skill levels', False))
+    synergy_levels_acquired = forms.ModelMultipleChoiceField(queryset=SynergyLevel.objects.all(), required=False,
+                                                             widget=FilteredSelectMultiple('Synergy levels', False))
+
     pictures = forms.ModelMultipleChoiceField(queryset=Picture.objects.all(), required=False,
                                               widget=FilteredSelectMultiple('Pictures', False))
 
