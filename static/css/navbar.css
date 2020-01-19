@@ -11,16 +11,14 @@
         color: #ffffff;
 }
 
-nav.navbar {
+.navbar {
         border: double;
         border-color: white;
-}
-
-.navbar {
         padding: 0;
 }
 
-/* NABAR DROPDOWNS */
+
+/* NAVBAR DROPDOWNS */
 
 .dropdown .dropbtn {
         border: none;
