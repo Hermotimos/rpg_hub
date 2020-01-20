@@ -14,34 +14,8 @@
 
 {% block content %}
     <br><br><br>
-    <table class="forms">
-        <tr>
-            <td><h6>Sesja:</h6></td>
-            <td><h6 class="font-italic px-1 text-justify">{{ event.game }}</h6></td>
-        </tr>
-        <tr>
-            <td><h6>Wydarzenie:</h6></td>
-            <td><h6 class="font-italic px-1 text-justify">{{ event.description|linebreaksbr|truncatechars:500 }}</h6></td>
-        </tr>
-        <tr>
-            <td><h6>Uczestnicy:</h6></td>
-            <td>
-                {% for profile in event.participants.all %}
-                    <img class="rounded-circle img-small" src="{{ profile.image.url }}">
-                {% endfor %}
-            </td>
-        </tr>
-        {% if informed %}
-        <tr>
-            <td><h6>Poinformowani:</h6></td>
-            <td>
-                {% for profile in event.informed.all %}
-                    <img class="rounded-circle img-small" src="{{ profile.image.url }}">
-                {% endfor %}
-            </td>
-        </tr>
-        {% endif %}
-    </table><br><br>
+    {% include 'history/_chronicle_event_info.html' %}
+    <br><br>
 
     <h6>Poinformuj towarzyszy o wydarzeniu:</h6>
     <small class="red">1) Opowiadaj swoje losy tylko towarzyszom obecnym przy Tobie w chwili zakończenia sesji!</small><br>
