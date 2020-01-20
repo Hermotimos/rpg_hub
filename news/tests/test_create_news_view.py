@@ -48,6 +48,7 @@ class CreateTest(TestCase):
             'text': 'news1',
             'allowed_profiles': [self.user2.id, ]
         }
+        self.assertFalse(News.objects.exists())
         self.client.post(self.url, data)
         self.assertTrue(News.objects.exists())
 
@@ -59,7 +60,7 @@ class CreateTest(TestCase):
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
         self.assertTrue(form.errors)
-        self.assertTrue(News.objects.count() == 0)
+        self.assertFalse(News.objects.exists())
 
     def test_invalid_post_data_empty_fields(self):
         self.client.force_login(self.user1)
@@ -71,7 +72,7 @@ class CreateTest(TestCase):
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
         self.assertTrue(form.errors)
-        self.assertTrue(News.objects.count() == 0)
+        self.assertFalse(News.objects.exists())
 
 
 #######################################################################################################################
