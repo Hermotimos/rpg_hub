@@ -48,13 +48,13 @@ class DetailTest(TestCase):
         linked_url1 = reverse('news:unfollow', kwargs={'news_id': self.news1.id})
         linked_url2 = reverse('news:follow', kwargs={'news_id': self.news1.id})
 
-        # case request.user.profile in news1.followers.all()
+        # request.user.profile in news1.followers.all()
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
         self.assertNotContains(response, f'href="{linked_url2}"')
 
-        # case request.user.profile not in news1.followers.all()
+        # request.user.profile not in news1.followers.all()
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertNotContains(response, f'href="{linked_url1}"')
@@ -76,6 +76,7 @@ class DetailTest(TestCase):
         data = {
             'text': 'news1',
         }
+        self.assertFalse(NewsAnswer.objects.exists())
         self.client.post(self.url, data)
         self.assertTrue(NewsAnswer.objects.exists())
 
@@ -87,7 +88,7 @@ class DetailTest(TestCase):
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
         self.assertTrue(form.errors)
-        self.assertTrue(NewsAnswer.objects.count() == 0)
+        self.assertFalse(NewsAnswer.objects.exists())
 
     def test_invalid_post_data_empty_fields(self):
         self.client.force_login(self.user1)
@@ -99,7 +100,7 @@ class DetailTest(TestCase):
         # should show the form again, not redirect
         self.assertEquals(response.status_code, 200)
         self.assertTrue(form.errors)
-        self.assertTrue(NewsAnswer.objects.count() == 0)
+        self.assertFalse(NewsAnswer.objects.exists())
 
 
 #######################################################################################################################
