@@ -9,8 +9,10 @@ class FollowNewsTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
-        self.news1 = News.objects.create(id=1, title='News1', text='news1', author=self.user1)
+
+        self.news1 = News.objects.create(title='News1', text='news1', author=self.user1)
         self.news1.allowed_profiles.set([self.user1.profile, ])
+
         self.url = reverse('news:follow', kwargs={'news_id': self.news1.id})
 
     def test_login_required(self):
