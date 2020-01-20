@@ -16,9 +16,9 @@ class DetailTest(TestCase):
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
 
         self.survey1 = Survey.objects.create(title='Survey', text='survey1', author=self.user1)
+        self.survey1.addressees.set([self.user1.profile, self.user2.profile, self.user3.profile])
         self.option1 = SurveyOption.objects.create(survey=self.survey1, author=self.user1, option_text='text1')
         self.option2 = SurveyOption.objects.create(survey=self.survey1, author=self.user1, option_text='text2')
-        self.survey1.addressees.set([self.user1.profile, self.user2.profile, self.user3.profile])
         self.option1.yes_voters.set([self.user2.profile])
         self.option1.no_voters.set([self.user3.profile])
 
