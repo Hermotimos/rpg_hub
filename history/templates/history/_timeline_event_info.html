@@ -1,0 +1,57 @@
+{% load static %}
+{% load custom_filters %}
+
+<table class="forms">
+    <tr>
+        <td><h6>Sesja:</h6></td>
+        <td><h6 class="font-italic px-1 text-justify">{{ event.game }}</h6></td>
+    </tr>
+    <tr>
+        <td><h6>Data:</h6></td>
+        <td>
+            <h6 class="font-italic px-1 text-justify">{{ event.date }}</h6>
+        </td>
+    </tr>
+    <tr>
+        <td><h6>Wątki:</h6></td>
+        <td>
+            <h6 class="font-italic px-1 text-justify">
+                {% for thread in event.threads.all %}
+                    *{{ thread }}<br>
+                {% endfor %}
+            </h6>
+        </td>
+    </tr>
+    <tr>
+        <td><h6>Lokacje:</h6></td>
+        <td>
+            <h6 class="font-italic px-1 text-justify">
+                {% for gen_loc in gen_locs_and_spec_locs_dict %}
+                    {{ gen_loc }}: {{ gen_locs_and_spec_locs_dict|dict_lookup:gen_loc }}<br>
+                {% endfor %}
+            </h6>
+        </td>
+    </tr>
+    <tr>
+        <td><h6>Wydarzenie:</h6></td>
+        <td class="justify"><h6 class="font-italic px-1 text-justify">{{ event.description }}</h6></td>
+    </tr>
+    <tr>
+        <td><h6>Uczestnicy:</h6></td>
+        <td>
+            {% for profile in participants %}
+                <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+            {% endfor %}
+        </td>
+    </tr>
+    {% if informed %}
+    <tr>
+        <td><h6>Poinformowani:</h6></td>
+        <td>
+            {% for profile in informed %}
+                <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+            {% endfor %}
+        </td>
+    </tr>
+    {% endif %}
+</table>
