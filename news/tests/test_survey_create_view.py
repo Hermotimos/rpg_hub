@@ -6,7 +6,7 @@ from news.forms import CreateSurveyForm
 from users.models import User
 
 
-class CreateTest(TestCase):
+class SurveyCreateTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
