@@ -65,7 +65,7 @@ class DetailTest(TestCase):
         self.assertContains(response, f'href="{linked_url1}"')
         self.assertContains(response, f'href="{linked_url2}"')
         self.assertNotContains(response, f'href="{linked_url3}"')
-        self.assertContains(response, f'href="{linked_url4}"')
+        self.assertContains(response, f'href="{linked_url4}"')      # shows only when survey option has no votes
         self.assertContains(response, f'href="{linked_url5}"')
 
         # request.user.profile in survey1.yes_voters.all()
