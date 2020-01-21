@@ -12,7 +12,3 @@ table.toponomikon {
         border-collapse: separate;
         border-spacing: 10px;
 }
-
-img.img-grayscale {
-  filter: grayscale(100%);
-}
