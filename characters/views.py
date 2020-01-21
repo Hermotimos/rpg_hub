@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch, Q
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 
 from characters.models import Character
 from knowledge.models import KnowledgePacket
@@ -74,9 +74,14 @@ def skills_sheet_view(request, profile_id='0'):
 @query_debugger
 @login_required
 def skills_sheets_for_gm_view(request):
+    profile = request.user.profile
     characters = Character.objects.all().select_related('profile')
+
     context = {
         'page_title': 'Umiejętności graczy',
         'characters': characters
     }
-    return render(request, 'characters/skills_sheets_for_gm.html', context)
+    if profile.character_status == 'gm':
+        return render(request, 'characters/skills_sheets_for_gm.html', context)
+    else:
+        return redirect('home:dupa')
