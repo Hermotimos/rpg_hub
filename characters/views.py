@@ -61,12 +61,10 @@ def skills_sheet_view(request, profile_id='0'):
         )) \
         .distinct()
 
-    knowledge_packets = KnowledgePacket.objects.all()
     context = {
         'page_title': f'Umiejętności - {profile.character_name}',
         'skills': skills,
         'synergies': synergies,
-        'knowledge_packets': knowledge_packets
     }
     return render(request, 'characters/skills_sheet.html', context)
 
