@@ -31,6 +31,7 @@ urlpatterns = [
     path('reload/', include('reload.urls')),
     path('rules/', include('rules.urls')),
     path('toponomikon/', include('toponomikon.urls')),
+    path('prosoponomikon/', include('prosoponomikon.urls')),
     path('users/', include('users.urls')),
 
 ]

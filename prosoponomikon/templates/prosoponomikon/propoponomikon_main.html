@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/prosoponomikon.css' %}">
+{% endblock head_extra %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active">{{ page_title }}</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+    <br><br><br>
+
+    <article class="propoponomikon-main">
+        <div class="container">
+            
+            <div class="row">
+                {% for profile in players_profiles %}
+                    <div class="col-sm-6 col-md-4 col-lg-3">
+                        <figure>
+                            <a href="#" class="img-link">
+                                <img src="{{ profile.image.url }}" class="border-double account-img-characters img-fluid">
+                            </a>
+                            <figcaption>{{ profile.character_name }}</figcaption>
+                        </figure>
+                    </div>
+                {% endfor %}
+            </div>
+            <br><br>
+    
+            <div class="row">
+                {% for profile in living_npc_profiles %}
+                    <div class="col-sm-4 col-md-3 col-lg-2">
+                        <figure>
+                            <a href="#" class="img-link">
+                                <img src="{{ profile.image.url }}" class="border-double account-img-characters img-fluid mx-auto">
+                            </a>
+                            <figcaption>{{ profile.character_name }}</figcaption>
+                        </figure>
+                    </div>
+                {% endfor %}
+            </div>
+            <br><br>
+            
+            <div class="row">
+                {% for profile in dead_npc_profiles %}
+                    <div class="col-md-2" style="border: solid 1px black">
+                        <figure>
+                            <a href="#" class="img-link">
+                                <img src="{{ profile.image.url }}" class="border-double account-img-characters img-fluid">
+                            </a>
+                            <figcaption>{{ profile.character_name }}</figcaption>
+                        </figure>
+                    </div>
+                {% endfor %}
+            </div>
+            <br><br>
+        </div>
+    </article>
+
+
+
+{% endblock content %}
