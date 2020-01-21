@@ -5,7 +5,7 @@ from characters.models import Character
 from users.models import User
 
 
-class TricksSheetTest(TestCase):
+class SkillsSheetsForGmTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         Character.objects.create(profile=self.user1.profile)
