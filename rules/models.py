@@ -74,7 +74,7 @@ class Synergy(models.Model):
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
-        return ' + '.join(str(s) for s in self.skills.all())
+        return self.name
 
     def save(self, *args, **kwargs):
         if self.name:
