@@ -66,7 +66,10 @@ def skills_sheet_view(request, profile_id='0'):
         'skills': skills,
         'synergies': synergies,
     }
-    return render(request, 'characters/skills_sheet.html', context)
+    if request.user.profile.character_status != 'gm' and profile_id != 0:
+        return redirect('home:dupa')
+    else:
+        return render(request, 'characters/skills_sheet.html', context)
 
 
 @query_debugger
