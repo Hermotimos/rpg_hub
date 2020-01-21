@@ -15,90 +15,102 @@
 {% block content %}
     <br><br><br><br>
 
-<!-- NEWS META INFO-->
-    <table class="forms">
-        <tr>
-            <td class="align-middle"><h6 class="mb-0">Autor:</h6></td>
-            <td><img class="rounded-circle img-small" src="{{ news.author.profile.image.url }}"></td>
-        </tr>
-        <tr>
-            <td class="align-middle"><h6 class="mb-0">Adresaci:</h6></td>
-            <td>
-            {% for profile in news_allowed_profiles %}
-                <img class="rounded-circle img-small" src="{{ profile.image.url }}">
-            {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <td class="align-middle"><h6 class="mb-0">Obserwują:</h6></td>
-            <td>
-            {% for profile in news_followers %}
-                <img class="rounded-circle img-small" src="{{ profile.image.url }}">
-            {% endfor %}
-            </td>
-        </tr>
-    </table>
-    <br>
-
-<!-- FOLLOW/UNFOLLOW BUTTON -->
-    <div class="mb-4">
-        {% if request.user.profile in news_followers %}
-            <a href="{% url 'news:unfollow' news.id %}" class="btn btn-dark">Nie obserwuj</a>
-        {% else %}
-            <a href="{% url 'news:follow' news.id %}" class="btn btn-dark">Obserwuj</a>
-        {% endif %}
-    </div>
-
-<!-- NEWS TEXT -->
-    <br>
-    <div class="post-and-news">
-        <p class="font-18 font-italic text-justify">{{ news.text|capfirst|linebreaksbr }}</p>
-        {% if news.image %}
-            <img src="{{ news.image.url }}" class="border-double">
-        {% endif %}
-        {% for profile in news_seen_by %}
-            <img class="rounded-circle img-small" src="{{ profile.image.url }}">
-        {% endfor %}
-        <br><br>
-    </div>
-
-<!-- NEWS ANSWERS -->
-    <div class="border-top">
-        <br><br>
-        <table>
-            <tbody>
-            {% for answer in answers %}
-
-                {% include 'news/_answers_list.html' %}
-
-            {% endfor %}
-                <tr>
-                    <td></td>
-                    <td>
-                        {% for image in last_answer_seen_by_imgs %}
-                            <img class="rounded-circle img-small" src="{{ image.url }}">
-                        {% endfor %}
-                    </td>
-                </tr>
-                <!-- JS <tr> to show that someone is typing -->
-<!--                <tr class="posts-and-news" id="is-typing"></tr>-->
-            </tbody>
+    <!-- NEWS META INFO-->
+    <header>
+        <table class="forms">
+            <tr>
+                <td class="align-middle"><h6 class="mb-0">Autor:</h6></td>
+                <td><img class="rounded-circle img-small" src="{{ news.author.profile.image.url }}"></td>
+            </tr>
+            <tr>
+                <td class="align-middle"><h6 class="mb-0">Adresaci:</h6></td>
+                <td>
+                {% for profile in news_allowed_profiles %}
+                    <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td class="align-middle"><h6 class="mb-0">Obserwują:</h6></td>
+                <td>
+                {% for profile in news_followers %}
+                    <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                {% endfor %}
+                </td>
+            </tr>
         </table>
-    </div>
-    <br><br>
-
-<!-- NEWS ANSWER FORM -->
-    <div id="page-bottom">
         <br>
-        <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="col-md-12">
-                {{ form.text|as_crispy_field }}
+
+        <!-- FOLLOW/UNFOLLOW BUTTON -->
+        <div class="mb-4">
+            {% if request.user.profile in news_followers %}
+                <a href="{% url 'news:unfollow' news.id %}" class="btn btn-dark">Nie obserwuj</a>
+            {% else %}
+                <a href="{% url 'news:follow' news.id %}" class="btn btn-dark">Obserwuj</a>
+            {% endif %}
+        </div>
+    </header>
+
+
+    <article id="news">
+        
+        <!-- NEWS TEXT -->
+        <section id="news-text">
+            <br>
+            <div class="post-and-news">
+                <p class="font-18 font-italic text-justify">{{ news.text|capfirst|linebreaksbr }}</p>
+                {% if news.image %}
+                    <img src="{{ news.image.url }}" class="border-double">
+                {% endif %}
+                {% for profile in news_seen_by %}
+                    <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                {% endfor %}
+                <br><br>
             </div>
-            {{ form.image|as_crispy_field }}
-            <input class="btn btn-dark" type="submit" value="Odpowiedz">
-        </form>
-    </div>
+        </section>
+        
+        <!-- NEWS ANSWERS -->
+        <section id="news-answers">
+            <div class="border-top">
+                <br><br>
+                <table>
+                    <tbody>
+                    {% for answer in answers %}
+        
+                        {% include 'news/_answers_list.html' %}
+        
+                    {% endfor %}
+                        <tr>
+                            <td></td>
+                            <td>
+                                {% for image in last_answer_seen_by_imgs %}
+                                    <img class="rounded-circle img-small" src="{{ image.url }}">
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <!-- JS <tr> to show that someone is typing -->
+                        <!-- <tr class="posts-and-news" id="is-typing"></tr>-->
+                    </tbody>
+                </table>
+            </div>
+            <br><br>
+        </section>
+
+        <!-- NEWS ANSWER FORM -->
+        <section id="news-answer-form">
+            <div id="page-bottom">
+                <br>
+                <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="col-md-12">
+                        {{ form.text|as_crispy_field }}
+                    </div>
+                    {{ form.image|as_crispy_field }}
+                    <input class="btn btn-dark" type="submit" value="Odpowiedz">
+                </form>
+            </div>
+        </section>
+    </article>
 
 {% endblock content %}
 
