@@ -14,16 +14,16 @@ from users.models import Profile
 def tricks_sheet_view(request):
     profile = request.user.profile
     if profile.character_status == 'gm':
-        profiles = Profile.objects.exclude(Q(character_status='dead_player') |
-                                          Q(character_status='living_npc') |
-                                          Q(character_status='dead_npc') |
-                                          Q(character_status='gm'))
+        players_profiles = Profile.objects.exclude(Q(character_status='dead_player') |
+                                                   Q(character_status='living_npc') |
+                                                   Q(character_status='dead_npc') |
+                                                   Q(character_status='gm'))
     else:
-        profiles = [profile]
+        players_profiles = [profile]
 
     context = {
         'page_title': f'Podstępy - {request.user.profile.character_name}',
-        'players': profiles
+        'players_profiles': players_profiles
     }
     return render(request, 'characters/tricks_sheet.html', context)
 
