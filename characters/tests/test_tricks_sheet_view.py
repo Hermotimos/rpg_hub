@@ -37,10 +37,6 @@ class TricksSheetTest(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        self.client.force_login(self.user4)
-        response = self.client.get(self.url)
-        self.assertEquals(response.status_code, 200)
-
     def test_url_resolves_view(self):
         view = resolve('/characters/tricks-sheet/')
         self.assertEquals(view.func, views.tricks_sheet_view)
