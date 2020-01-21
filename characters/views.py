@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.shortcuts import render, get_object_or_404
 
 from characters.models import Character
@@ -12,8 +12,18 @@ from users.models import Profile
 @query_debugger
 @login_required
 def tricks_sheet_view(request):
+    profile = request.user.profile
+    if profile.character_status == 'gm':
+        profiles = Profile.objects.exclude(Q(character_status='dead_player') |
+                                          Q(character_status='living_npc') |
+                                          Q(character_status='dead_npc') |
+                                          Q(character_status='gm'))
+    else:
+        profiles = [profile]
+
     context = {
-        'page_title': f'Podstępy - {request.user.profile.character_name}'
+        'page_title': f'Podstępy - {request.user.profile.character_name}',
+        'players': profiles
     }
     return render(request, 'characters/tricks_sheet.html', context)
 
