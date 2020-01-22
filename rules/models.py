@@ -170,8 +170,7 @@ class CharacterProfession(models.Model):
     lvl_18 = models.CharField(max_length=500, blank=True, null=True)
     lvl_19 = models.CharField(max_length=500, blank=True, null=True)
     lvl_20 = models.CharField(max_length=500, blank=True, null=True)
-    allowed_profiles = models.ManyToManyField(Profile,
-                                              blank=True,
+    allowed_profiles = models.ManyToManyField(Profile, blank=True,
                                               limit_choices_to=
                                               Q(character_status='active_player') |
                                               Q(character_status='inactive_player') |
@@ -202,8 +201,7 @@ class CharacterProfession(models.Model):
 class EliteClass(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=4000, blank=True, null=True)
-    allowed_profiles = models.ManyToManyField(Profile,
-                                              blank=True,
+    allowed_profiles = models.ManyToManyField(Profile, blank=True,
                                               limit_choices_to=
                                               Q(character_status='active_player') |
                                               Q(character_status='inactive_player') |
@@ -237,8 +235,7 @@ class EliteProfession(models.Model):
     elite_class = models.ForeignKey(EliteClass, related_name='elite_professions', on_delete=models.PROTECT)
     description = models.TextField(max_length=4000, blank=True, null=True)
     start_perks = models.TextField(max_length=4000, blank=True, null=True)
-    allowed_profiles = models.ManyToManyField(Profile,
-                                              blank=True,
+    allowed_profiles = models.ManyToManyField(Profile, blank=True,
                                               limit_choices_to=
                                               Q(character_status='active_player') |
                                               Q(character_status='inactive_player') |
@@ -340,8 +337,7 @@ class WeaponType(models.Model):
     avg_price_currency = models.CharField(max_length=5, choices=CURRENCIES)
     avg_weight = models.DecimalField(max_digits=10, decimal_places=1)
 
-    allowed_profiles = models.ManyToManyField(Profile,
-                                              blank=True,
+    allowed_profiles = models.ManyToManyField(Profile, blank=True,
                                               limit_choices_to=
                                               Q(character_status='active_player') |
                                               Q(character_status='inactive_player') |
@@ -389,6 +385,7 @@ class PlateType(models.Model):
 
     mod_max_agility = models.PositiveSmallIntegerField(blank=True, null=True)
     mod_max_movement = models.CharField(max_length=2, blank=True, null=True)
+
     mod_pickpocketing = models.DecimalField(max_digits=3, decimal_places=2)
     mod_lockpicking = models.DecimalField(max_digits=3, decimal_places=2)
     mod_sneaking_towns = models.DecimalField(max_digits=3, decimal_places=2)
@@ -398,8 +395,7 @@ class PlateType(models.Model):
     mod_climbing = models.DecimalField(max_digits=3, decimal_places=2)
     mod_traps = models.DecimalField(max_digits=3, decimal_places=2)
 
-    allowed_profiles = models.ManyToManyField(Profile,
-                                              blank=True,
+    allowed_profiles = models.ManyToManyField(Profile, blank=True,
                                               limit_choices_to=
                                               Q(character_status='active_player') |
                                               Q(character_status='inactive_player') |
