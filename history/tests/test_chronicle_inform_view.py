@@ -62,7 +62,7 @@ class ChronicleInformTest(TestCase):
         self.assertEquals(response.status_code, 200)
 
     def test_url_resolves_view(self):
-        view = resolve('/history/chronicle/inform:1/')
+        view = resolve(f'/history/chronicle/inform:{self.event1.id}/')
         self.assertEquals(view.func, views.chronicle_inform_view)
 
     def test_csrf(self):
