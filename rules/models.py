@@ -333,8 +333,8 @@ class WeaponType(models.Model):
     range = models.CharField(max_length=100, blank=True, null=True)
     size = models.CharField(max_length=5, choices=SIZES)
     trait = models.CharField(max_length=10, choices=TRAITS)
-    avg_price_value = models.PositiveSmallIntegerField()
-    avg_price_currency = models.CharField(max_length=5, choices=CURRENCIES)
+    avg_price_value = models.PositiveSmallIntegerField(blank=True, null=True)
+    avg_price_currency = models.CharField(max_length=5, choices=CURRENCIES, blank=True, null=True)
     avg_weight = models.DecimalField(max_digits=10, decimal_places=1)
 
     allowed_profiles = models.ManyToManyField(Profile, blank=True,
