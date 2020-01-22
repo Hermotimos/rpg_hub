@@ -431,8 +431,7 @@ class ShieldType(models.Model):
     armor_class_bonus_distance_combat = models.PositiveSmallIntegerField()
     weight = models.DecimalField(max_digits=10, decimal_places=1)
 
-    allowed_profiles = models.ManyToManyField(Profile,
-                                              blank=True,
+    allowed_profiles = models.ManyToManyField(Profile, blank=True,
                                               limit_choices_to=
                                               Q(character_status='active_player') |
                                               Q(character_status='inactive_player') |
