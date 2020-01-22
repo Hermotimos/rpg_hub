@@ -20,12 +20,12 @@ class SkillsSheetTest(TestCase):
         self.user4.profile.character_status = 'gm'
         self.user4.profile.save()
 
-        self.skill_1 = Skill.objects.create(name='Skill-1', tested_trait='n/a')
+        self.skill_1 = Skill.objects.create(name='Skill-1')
         self.skill_1.save()
         self.skill_1_lvl_1 = SkillLevel.objects.create(skill=self.skill_1, level='1')
         self.skill_1_lvl_2 = SkillLevel.objects.create(skill=self.skill_1, level='2')
 
-        self.skill_2 = Skill.objects.create(name='Skill-2', tested_trait='n/a')
+        self.skill_2 = Skill.objects.create(name='Skill-2')
         self.skill_2.save()
         self.skill_2_lvl_1 = SkillLevel.objects.create(skill=self.skill_2, level='1')
         self.skill_2_lvl_2 = SkillLevel.objects.create(skill=self.skill_2, level='2')
