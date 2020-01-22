@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.signals import m2m_changed, post_save
 
 from imaginarion.models import Picture
 from rpg_project.utils import create_sorting_name
