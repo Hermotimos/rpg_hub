@@ -14,9 +14,9 @@ class RulesArmorTest(TestCase):
         self.user3.profile.character_status = 'gm'
         self.user3.profile.save()
 
-        self.armor1 = PlateType.objects.create(name='Armor1', description='Desc-armor1', endurance=10, weight=10,
+        self.plate1 = PlateType.objects.create(name='Armor1', description='Desc-armor1', endurance=10, weight=10,
                                                sorting_number=1)
-        self.armor1.allowed_profiles.set([self.user1.profile])
+        self.plate1.allowed_profiles.set([self.user1.profile])
 
         self.shield1 = ShieldType.objects.create(name='Shield1', description='Desc-shield1', enemies_no=1, weight=10,
                                                  sorting_number=1)
