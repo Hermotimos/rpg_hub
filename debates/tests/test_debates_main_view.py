@@ -63,7 +63,7 @@ class DebatesMainTest(TestCase):
         self.assertContains(response, f'href="{linked_url2}"')
         self.assertNotContains(response, f'href="{linked_url3}"')
 
-        # case request.user.profile.character_status == 'gm'
+        # request.user.profile.character_status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
