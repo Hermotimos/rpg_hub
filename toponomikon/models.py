@@ -83,6 +83,7 @@ class SpecificLocation(models.Model):
         ordering = ['sorting_name']
 
 
+@query_debugger
 def update_known_general_locations(sender, instance, **kwargs):
     known_directly = instance.known_directly.all()
     known_indirectly = instance.known_indirectly.all()
