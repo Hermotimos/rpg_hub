@@ -49,6 +49,7 @@ def toponomikon_main_view(request):
 def toponomikon_general_location_view(request, gen_loc_id):
     profile = request.user.profile
     gen_loc = get_object_or_404(GeneralLocation, id=gen_loc_id)
+
     if profile.character_status == 'gm':
         spec_locs = SpecificLocation.objects.filter(general_location__id=gen_loc_id)
         knowledge_packets = gen_loc.knowledge_packets.all()
@@ -79,7 +80,10 @@ def toponomikon_general_location_view(request, gen_loc_id):
         'knowledge_packets': knowledge_packets,
         'spec_locs': spec_locs
     }
-    return render(request, 'toponomikon/toponomikon_general_location.html', context)
+    if profile in (gen_loc.known_directly.all() | gen_loc.known_indirectly.all()) or profile.character_status == 'gm':
+        return render(request, 'toponomikon/toponomikon_general_location.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @query_debugger
@@ -87,6 +91,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
 def toponomikon_specific_location_view(request, spec_loc_id):
     profile = request.user.profile
     spec_loc = get_object_or_404(SpecificLocation, id=spec_loc_id)
+
     if profile.character_status == 'gm':
         spec_loc_known_only_indirectly = False
         knowledge_packets = spec_loc.knowledge_packets.all()
@@ -102,7 +107,10 @@ def toponomikon_specific_location_view(request, spec_loc_id):
         'spec_loc_known_only_indirectly': spec_loc_known_only_indirectly,
         'knowledge_packets': knowledge_packets
     }
-    return render(request, 'toponomikon/toponomikon_specific_location.html', context)
+    if profile in (spec_loc.known_directly.all() | spec_loc.known_indirectly.all()) or profile.character_status == 'gm':
+        return render(request, 'toponomikon/toponomikon_specific_location.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @query_debugger
