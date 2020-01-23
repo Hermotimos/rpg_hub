@@ -78,13 +78,13 @@ class ToponomikonMainTest(TestCase):
         # request.user.profile in gen_loc2.known_indirectly.all()
         self.client.force_login(self.user1)     # request.user.profile.character_status == 'active_player'
         response = self.client.get(self.url)
-        self.assertContains(response, f'href="{linked_url1}"')
+        self.assertContains(response, f'href="{linked_url2}"')
         self.client.force_login(self.user2)     # request.user.profile.character_status == 'inactive_player'
         response = self.client.get(self.url)
-        self.assertContains(response, f'href="{linked_url1}"')
+        self.assertContains(response, f'href="{linked_url2}"')
         self.client.force_login(self.user3)     # request.user.profile.character_status == 'dead_player'
         response = self.client.get(self.url)
-        self.assertContains(response, f'href="{linked_url1}"')
+        self.assertContains(response, f'href="{linked_url2}"')
 
         # request.user.profile neither in gen_loc1.known_directly.all() nor in gen_loc2.known_indirectly.all()
         # nor in known_directly or known_indirectly of spec_loc belonging to gen_loc3
