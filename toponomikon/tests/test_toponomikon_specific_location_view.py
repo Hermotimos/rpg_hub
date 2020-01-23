@@ -94,11 +94,17 @@ class ToponomikonSpecificLocationTest(TestCase):
         self.assertContains(response, f'href="{linked_url1}"')
 
     def test_contains(self):
+        # request.user.profile in kn_packet.allowed_profiles.all()
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertContains(response, 'KnPacket1')
 
+        # request.user.profile not in kn_packet.allowed_profiles.all()
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertNotContains(response, 'KnPacket1')
 
+        # request.user.profile.character_status == 'gm'
+        self.client.force_login(self.user4)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'KnPacket1')
