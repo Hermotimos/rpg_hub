@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 
 from imaginarion.models import Picture
+from knowledge.models import KnowledgePacketType, KnowledgePacket
 from toponomikon import views
 from toponomikon.models import GeneralLocation, SpecificLocation
 from users.models import User
@@ -38,6 +39,13 @@ class ToponomikonGeneralLocationTest(TestCase):
         self.spec_loc_1.known_directly.set([self.user1.profile])
         self.spec_loc_1.known_indirectly.set([self.user2.profile])
 
+        self.kn_packet_type1 = KnowledgePacketType.objects.create(name='Varia')
+        self.kn_packet_1 = KnowledgePacket.objects.create(title='KnPacket1', text='Text1')
+        self.kn_packet_1.packet_types.set([self.kn_packet_type1])
+        self.kn_packet_1.allowed_profiles.set([self.user1.profile])
+
+        self.gen_loc_1.knowledge_packets.set([self.kn_packet_1])
+
         self.url = reverse('toponomikon:general-location', kwargs={'gen_loc_id': self.gen_loc_1.id})
 
     def test_login_required(self):
@@ -72,25 +80,45 @@ class ToponomikonGeneralLocationTest(TestCase):
         self.assertEquals(view.func, views.toponomikon_general_location_view)
 
     def test_links(self):
-        linked_url1 = reverse('toponomikon:specific-location', kwargs={'spec_loc_id': self.spec_loc_1.id})
-        linked_url2 = reverse('toponomikon:specific-location', kwargs={'spec_loc_id': self.spec_loc_2.id})
+        linked_url1 = reverse('toponomikon:inform', kwargs={'gen_loc_id': self.gen_loc_1.id, 'spec_loc_id': 0})
+        linked_url2 = reverse('toponomikon:specific-location', kwargs={'spec_loc_id': self.spec_loc_1.id})
+        linked_url3 = reverse('toponomikon:specific-location', kwargs={'spec_loc_id': self.spec_loc_2.id})
 
         # request.user.profile in spec_loc1.known_directly.all()
         # but neither in spec_loc2.known_directly.all() or spec_loc2.known_indirectly.all()
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
-        self.assertNotContains(response, f'href="{linked_url2}"')
+        self.assertContains(response, f'href="{linked_url2}"')
+        self.assertNotContains(response, f'href="{linked_url3}"')
 
         # request.user.profile in spec_loc1.known_indirectly.all()
         # but neither in spec_loc2.known_directly.all() or spec_loc2.known_indirectly.all()
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
-        self.assertNotContains(response, f'href="{linked_url2}"')
+        self.assertContains(response, f'href="{linked_url2}"')
+        self.assertNotContains(response, f'href="{linked_url3}"')
 
         # request.user.profile.character_status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
         self.assertContains(response, f'href="{linked_url2}"')
+        self.assertContains(response, f'href="{linked_url3}"')
+
+    def test_contains(self):
+        # request.user.profile in kn_packet.allowed_profiles.all()
+        self.client.force_login(self.user1)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'KnPacket1')
+
+        # request.user.profile not in kn_packet.allowed_profiles.all()
+        self.client.force_login(self.user2)
+        response = self.client.get(self.url)
+        self.assertNotContains(response, 'KnPacket1')
+
+        # request.user.profile.character_status == 'gm'
+        self.client.force_login(self.user4)
+        response = self.client.get(self.url)
+        self.assertContains(response, 'KnPacket1')
