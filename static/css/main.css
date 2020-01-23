@@ -29,10 +29,11 @@ footer {
 /* ----- GENERAL ----- */
 /* ------------------ */
 
-
+/* PREVENTS USERS FROM SELECTING TEXT ON PAGE:
 *:not(textarea):not(input) {
         user-select: none;
 }
+*/
 
 .border-custom-base {
         border-bottom: 1px solid #444444;
