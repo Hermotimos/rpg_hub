@@ -18,7 +18,7 @@
             {% for gen_loc in gen_locs %}
                 <div class="row mb-4">
     
-                    <div class="col-md-4 p-0">
+                    <div class="col-md-4 px-0 py-1">
                         <figure class="m-0 mr-2">
                             <a href="{% url 'toponomikon:general-location' gen_loc.id %}">
                                 <img src="{{ gen_loc.main_image.image.url }}" alt="{{ gen_loc.name }}"
