@@ -15,6 +15,7 @@
     <br><br><br>
 
     <article>
+        
         <section>
             <p class="toponomikon-gen-loc-img">
                 <img src="{{ gen_loc.main_image.image.url }}" class="border-double
@@ -33,11 +34,8 @@
             <div id="specific_locations" class="collapse mt-4 ml-2">
                 
                 {% if not spec_locs %}
-                
                     <p class="font-18 font-italic pt-1 pl-5 text-justify">Terra incognita...</p>
-                
                 {% else %}
-                
                     <div class="container pr-0">
                         {% for spec_loc in spec_locs %}
                             <div class="row mb-4">
@@ -67,7 +65,6 @@
                             </div>
                         {% endfor %}
                     </div>
-                
                 {% endif %}
                 
             </div>
@@ -87,11 +84,3 @@
         
     </article>
 {% endblock content %}
-
-
-
-
-
-
-
-
