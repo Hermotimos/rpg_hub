@@ -14,32 +14,31 @@
 
 {% block content %}
     <br><br><br>
-    <p class="toponomikon-gen-loc-img">
-        <img src="{{ spec_loc.main_image.image.url }}" class="border-double
-        {% if spec_loc_known_only_indirectly %}
-            {{ 'img-grayscale' }}
-        {% endif %}
-        ">
-    </p>
-    <p><a class="pl-1" href="{% url 'toponomikon:inform' 0 spec_loc.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></p>
-    <p class="font-italic text-justify">{{ spec_loc.description|linebreaksbr }}</p>
 
-    {% if knowledge_packets %}
-        <br><br>
-        <h2><b class="hover-blue" data-toggle="collapse" data-target="#knowledge-packets">Szczegółowe informacje o lokacji</b></h2>
-        <div id="knowledge-packets" class="collapse mt-4">
-                {% for kn_packet in knowledge_packets %}
-                    {% include '_knowledge_packet.html' %}
-                {% endfor %}
-        </div>
-    {% endif %}
-
+    <article>
+        
+        <section>
+            <p class="toponomikon-gen-loc-img">
+                <img src="{{ spec_loc.main_image.image.url }}" class="border-double
+                {% if spec_loc_known_only_indirectly %}
+                    {{ 'img-grayscale' }}
+                {% endif %}
+                ">
+            </p>
+            <p><a class="pl-1" href="{% url 'toponomikon:inform' 0 spec_loc.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></p>
+            <p class="font-italic text-justify">{{ spec_loc.description|linebreaksbr }}</p>
+        </section>
+        
+        <section>
+            {% if knowledge_packets %}
+                <h2><b class="hover-blue" data-toggle="collapse" data-target="#knowledge-packets">Szczegółowe informacje o lokacji</b></h2>
+                <div id="knowledge-packets" class="collapse mt-4">
+                    {% for kn_packet in knowledge_packets %}
+                        {% include '_knowledge_packet.html' %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </section>
+        
+    </article>
 {% endblock content %}
-
-
-
-
-
-
-
-
