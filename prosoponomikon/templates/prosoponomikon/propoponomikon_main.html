@@ -23,11 +23,9 @@
                             <figure class="text-center">
                                 <a href="#" class="img-link">
                                     <img src="{{ profile.image.url }}"
-                                         class="border-double img-fluid
-                                         {% if profile.character_status == 'dead_player' %}
-                                            img-grayscale
-                                         {% endif %}"
-                                         alt="{{ profile.character_name }}">
+                                         alt="{{ profile.character_name }}"
+                                         class="border-double img-fluid {% if profile.character_status == 'dead_player' %} img-grayscale {% endif %}"
+                                    >
                                 </a>
                                 <figcaption class="pt-1">{{ profile.character_name }}</figcaption>
                             </figure>
