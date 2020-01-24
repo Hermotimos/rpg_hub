@@ -1,8 +1,4 @@
 
-.propoponomikon-main figure > a:hover {
-        color: #444444;
-}
-
 img.img-grayscale:hover {
         filter: grayscale(0%);
 }
