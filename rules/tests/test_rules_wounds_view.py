@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
+
 from rules import views
 from users.models import User
 

@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
+
 from rules import views
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel
 from users.models import User
