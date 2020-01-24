@@ -33,3 +33,4 @@ class ToponomikonMainTest(TestCase):
 
     # def test_links(self):
     #     linked_url1 = reverse('prosoponomikon:XXXXXXXXXXXXX', kwargs={'profile_id': self.user1.profile.id})
+    # TODO
