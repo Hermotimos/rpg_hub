@@ -3,11 +3,21 @@
 {% block content %}
 <br><br><br>
 
-    <u>Kronika i Kalendarium:</u><br>
-    <a href="{% url 'reload:reload-history' %}">PRZEŁADUJ WSZYSTKO</a><br>
+    <h4>Kronika i Kalendarium:</h4>
+    <small>Przeładowuje modele: Thread ('sorting_name'), TimelineEvent (signal 'update_known_specific_locations') </small>
+    <br>
+    <a href="{% url 'reload:reload-history' %}">PRZEŁADUJ</a><br>
     <br><br>
 
-    <u>Zasady:</u><br>
-    <a href="{% url 'reload:reload-rules' %}">PRZEŁADUJ WSZYSTKO</a><br>
+    <h4>Toponomikon:</h4>
+    <small>Przeładowuje modele: GeneralLocation, SpecificLocation</small>
+    <br>
+    <a href="{% url 'reload:reload-toponomikon' %}">PRZEŁADUJ</a><br>
+    <br><br>
+
+    <h4>Zasady:</h4>
+    <small>Przeładowuje modele: Skill, Synergy, CharacterClass, CharacterProfession, EliteClass, EliteProfession, WeaponClass, WeaponType</small>
+    <br>
+    <a href="{% url 'reload:reload-rules' %}">PRZEŁADUJ</a><br>
 
 {% endblock content %}
