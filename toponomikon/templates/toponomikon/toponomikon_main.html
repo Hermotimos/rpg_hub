@@ -12,39 +12,41 @@
 
 {% block content %}
     <br><br><br>
-    {% for gen_loc in gen_locs %}
-        <table class="toponomikon">
-            <tr class="toponomikon-img pb-3">
-                <td class="unblue-black align-top">
-                    <img src="{{ gen_loc.main_image.image.url }}" class="border-double
-                    {% if gen_loc.known_only_indirectly %}
-                        {{ 'img-grayscale' }}
-                    {% endif %}
-                    ">
-                </td>
-                {% if gen_loc.known_only_indirectly %}
-                    <td valign="top" align="left" colspan="2" class="pl-1">
-                        <h2 class="border-custom-base"><small class="text-muted"><a href="{% url 'toponomikon:general-location' gen_loc.id %}">{{ gen_loc.name }} (znasz z opowieści)</a></small></h2>
-                        <p class="font-italic text-justify"><small class="text-muted">{% if gen_loc.description %}{{ gen_loc.description|linebreaksbr }}{% endif %}</small></p>
-                    </td>
-                {% else %}
-                    <td valign="top" align="left" colspan="2" class="pl-1">
-                        <h3 class="border-custom-base">
-                            <a href="{% url 'toponomikon:general-location' gen_loc.id %}">{{ gen_loc.name }}</a>
-                        </h3>
-                        <p class="font-italic text-justify">
-                            <small>
-                                {% if gen_loc.description %}
-                                    {{ gen_loc.description|linebreaksbr }}
-                                {% endif %}
+
+    <article>
+        <div class="container pr-0">
+            {% for gen_loc in gen_locs %}
+                <div class="row mb-4">
+    
+                    <div class="col-md-4 p-0">
+                        <figure class="m-0 mr-2">
+                            <a href="{% url 'toponomikon:general-location' gen_loc.id %}">
+                                <img src="{{ gen_loc.main_image.image.url }}" alt="{{ gen_loc.name }}"
+                                     class="img-fluid border-double toponomikon-img {% if gen_loc.known_only_indirectly %} img-grayscale {% endif %}"
+                                >
+                            </a>
+                        </figure>
+                    </div>
+                
+                    <div class="col-md-8 ml-n2">
+                        <h2 class="border-custom-base">
+                            <small class="pr-5 {% if gen_loc.known_only_indirectly %} text-muted {% endif %}">
+                                {{ gen_loc.name }}
+                                {% if gen_loc.known_only_indirectly %} (znasz z opowieści) {% endif %}
+                            </small>
+                        </h2>
+                        <p class="font-italic text-justify {% if gen_loc.known_only_indirectly %} text-muted {% endif %}">
+                            <small class="">
+                                {% if gen_loc.description %} {{ gen_loc.description|linebreaksbr }} {% endif %}
                             </small>
                         </p>
-                    </td>
-                {% endif %}
-            </tr>
-        </table>
-        <br>
-    {% endfor %}
+                    </div>
+                
+                </div>
+            {% endfor %}
+        </div>
+    </article>
+
 {% endblock content %}
 
 
