@@ -20,14 +20,14 @@
                 <div class="row">
                     {% for profile in players_profiles %}
                         <div class="col-sm-6 col-md-4 col-lg-3">
-                            <figure class="text-center">
+                            <figure>
                                 <a href="#" class="img-link">
                                     <img src="{{ profile.image.url }}"
                                          alt="{{ profile.character_name }}"
-                                         class="border-double img-fluid {% if profile.character_status == 'dead_player' %} img-grayscale {% endif %}"
+                                         class="border-double d-block mx-auto img-fluid {% if profile.character_status == 'dead_player' %} img-grayscale {% endif %}"
                                     >
                                 </a>
-                                <figcaption class="pt-1">{{ profile.character_name }}</figcaption>
+                                <figcaption class="pt-1 text-center">{{ profile.character_name }}</figcaption>
                             </figure>
                         </div>
                     {% endfor %}
