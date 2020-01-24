@@ -16,49 +16,53 @@
     <article class="propoponomikon-main">
         <div class="container">
             
-            <div class="row">
-                {% for profile in players_profiles %}
-                    <div class="col-sm-6 col-md-4 col-lg-3">
-                        <figure class="text-center">
-                            <a href="#" class="img-link">
-                                <img src="{{ profile.image.url }}"
-                                     class="border-double img-fluid {% if profile.character_status == 'dead_player' %} img-grayscale {% endif %}"
-                                     alt="{{ profile.character_name }}">
-                            </a>
-                            <figcaption class="pt-1">{{ profile.character_name }}</figcaption>
-                        </figure>
-                    </div>
-                {% endfor %}
-            </div>
-            <br><br>
-    
-            <div class="row">
-                {% for profile in living_npc_profiles %}
-                    <div class="col-sm-4 col-md-3 col-lg-2">
-                        <figure class="text-center">
-                            <a href="#" class="img-link">
-                                <img src="{{ profile.image.url }}" class="border-double img-fluid" alt="{{ profile.character_name }}">
-                            </a>
-                            <figcaption class="font-12 pt-1">{{ profile.character_name }}</figcaption>
-                        </figure>
-                    </div>
-                {% endfor %}
-            </div>
-            <br><br>
+            <section class="mb-5">
+                <div class="row">
+                    {% for profile in players_profiles %}
+                        <div class="col-sm-6 col-md-4 col-lg-3">
+                            <figure class="text-center">
+                                <a href="#" class="img-link">
+                                    <img src="{{ profile.image.url }}"
+                                         class="border-double img-fluid {% if profile.character_status == 'dead_player' %} img-grayscale {% endif %}"
+                                         alt="{{ profile.character_name }}">
+                                </a>
+                                <figcaption class="pt-1">{{ profile.character_name }}</figcaption>
+                            </figure>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
             
-            <div class="row">
-                {% for profile in dead_npc_profiles %}
-                    <div class="col-sm-4 col-md-3 col-lg-2">
-                        <figure class="text-center">
-                            <a href="#" class="img-link">
-                                <img src="{{ profile.image.url }}" class="border-double img-fluid img-grayscale" alt="{{ profile.character_name }}">
-                            </a>
-                            <figcaption class="font-12 pt-1">{{ profile.character_name }}</figcaption>
-                        </figure>
-                    </div>
-                {% endfor %}
-            </div>
-            <br><br>
+            <section class="mb-5">
+                <div class="row">
+                    {% for profile in living_npc_profiles %}
+                        <div class="col-sm-4 col-md-3 col-lg-2">
+                            <figure class="text-center">
+                                <a href="#" class="img-link">
+                                    <img src="{{ profile.image.url }}" class="border-double img-fluid" alt="{{ profile.character_name }}">
+                                </a>
+                                <figcaption class="font-12 pt-1">{{ profile.character_name }}</figcaption>
+                            </figure>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+            
+            <section class="mb-5">
+                <div class="row">
+                    {% for profile in dead_npc_profiles %}
+                        <div class="col-sm-4 col-md-3 col-lg-2">
+                            <figure class="text-center">
+                                <a href="#" class="img-link">
+                                    <img src="{{ profile.image.url }}" class="border-double img-fluid img-grayscale" alt="{{ profile.character_name }}">
+                                </a>
+                                <figcaption class="font-12 pt-1">{{ profile.character_name }}</figcaption>
+                            </figure>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+            
         </div>
     </article>
 
