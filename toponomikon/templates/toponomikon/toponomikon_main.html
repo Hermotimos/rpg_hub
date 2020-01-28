@@ -20,7 +20,7 @@
     
                     <div class="col-md-4 px-0 py-1">
                         <figure class="m-0 mr-2">
-                            <a href="{% url 'toponomikon:general-location' gen_loc.id %}">
+                            <a class="img-link" href="{% url 'toponomikon:general-location' gen_loc.id %}">
                                 <img src="{{ gen_loc.main_image.image.url }}" alt="{{ gen_loc.name }}"
                                      class="img-fluid border-double toponomikon-img {% if gen_loc.known_only_indirectly %} img-grayscale {% endif %}"
                                 >
