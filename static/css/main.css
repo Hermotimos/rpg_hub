@@ -189,10 +189,12 @@ small.smaller {font-size: 12px;}
 }
 
 a.img-link {
-        opacity: 0.94;
+        opacity: 0.95;
+        filter: grayscale(40%)
 }
 a.img-link:hover {
         opacity: 1;
+        filter: grayscale(0%)
 }
 
 img.img-grayscale {
