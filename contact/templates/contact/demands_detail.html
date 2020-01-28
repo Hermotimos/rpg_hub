@@ -20,7 +20,7 @@
                 <img class="rounded-circle article-img" src="{{ demand.author.profile.image.url }}">
             </td>
             <td class="font-18 font-italic px-1 py-1 text-justify">
-                <small class="font-italic text-nowrap text-muted">{{ demand.date_created|date:'d-M-Y, H:i' }}</small>
+                <small class="font-italic text-nowrap text-muted">{{ demand.date_created|date:'d-M-Y | H:i' }}</small>
                 <br>
                 {{ demand.text|capfirst|linebreaksbr }}
                 {% if demand.image %}
@@ -40,7 +40,7 @@
                     <img class="rounded-circle article-img" src="{{ answer.author.profile.image.url }}">
                 </td>
                 <td class="font-18 font-italic px-2 py-2 text-justify">
-                    <small class="text-nowrap text-muted">{{ answer.date_posted|date:'d-M-Y, H:i' }}</small>
+                    <small class="text-nowrap text-muted">{{ answer.date_posted|date:'d-M-Y | H:i' }}</small>
                     <br>
                     {{ answer.text|capfirst|linebreaksbr }}
                     {% if answer.image %}

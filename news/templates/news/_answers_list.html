@@ -6,7 +6,7 @@
         <small class="font-12 font-italic text-nowrap text-muted">{{ answer.author.profile.character_name }}</small>
     </td>
     <td class="font-18 font-italic px-2 py-2 text-justify">
-        <small class="text-muted text-nowrap">{{ answer.date_posted|date:'d-M-Y, H:i' }}</small><br>
+        <small class="text-muted text-nowrap">{{ answer.date_posted|date:'d-M-Y | H:i' }}</small><br>
         <p>{{ answer.text|capfirst|linebreaksbr }}</p>
         {% if answer.image %}
             <img src="{{ answer.image.url }}" class="border-double">
