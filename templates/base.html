@@ -29,7 +29,7 @@
         <!--  NAVBAR  -->
         <header class="site-header">
             <nav class="navbar navbar-expand-md navbar-dark bg-navbar fixed-top">
-                {% include 'navbar.html' %}
+                {% include '_navbar.html' %}
             </nav>
         </header>
 
@@ -80,7 +80,7 @@
                     <div class="content-section-sidebar">
                         <aside>
                             {% if user.is_authenticated %}
-                                {% include 'sidebar.html' %}
+                                {% include '_sidebar.html' %}
                             {% endif %}
                         </aside>
                     </div>
