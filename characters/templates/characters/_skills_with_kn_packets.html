@@ -18,7 +18,7 @@
         {% for skill_level in skill.skill_levels.all %}
         <tr>
             {% with level_img='img/'|add:skill_level.level|add:'.png' %}
-                <td class="align-top"><img class="img-numeral" src="{% static level_img %}" alt="{{ skill_level.level }}"></td>
+                <td class="align-top"><img class="img-numeral" src="{% static level_img %}" alt="Skill level img"></td>
                 <td class="align-bottom pl-1 text-justify">{% if skill_level.description %}{{ skill_level.description|linebreaksbr }}{% endif %}<br><br></td>
             {% endwith %}
         </tr>

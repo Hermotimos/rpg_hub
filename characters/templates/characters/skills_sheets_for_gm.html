@@ -22,7 +22,7 @@
                             <a class="img-link" href="{% url 'characters:skills-sheet' character.profile.id %}" >
                                 <img class="img-fluid {% if character.profile.character_status == 'dead_player' %} img-grayscale {% endif %}"
                                      src="{{ character.profile.image.url }}"
-                                     alt="{{ profile.character_name }}">
+                                     alt="Profile img">
                             </a>
                             <figcaption class="pt-1">{{ profile.character_name }}</figcaption>
                         </figure>
