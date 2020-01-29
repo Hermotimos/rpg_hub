@@ -64,7 +64,7 @@
                                 <div>
                                 {% for p in plate.pictures.all %}
                                     <div class="d-inline-block">
-                                    <img src="{{ p.image.url }}" class="border-double">
+                                    <img src="{{ p.image.url }}" alt="Plate img">
                                     {% if p.description %}
                                         <small>{{ p.description }}</small>
                                     {% endif %}
@@ -157,7 +157,7 @@
                                 <div>
                                 {% for p in shield.pictures.all %}
                                     <div class="inline-block">
-                                    <img src="{{ p.image.url }}" class="border-double">
+                                    <img src="{{ p.image.url }}" alt="Shield img">
                                     {% if p.description %}
                                         <small>{{ p.description }}</small>
                                     {% endif %}

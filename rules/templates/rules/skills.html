@@ -46,7 +46,9 @@
         <br>
         <table>
             <tr>
-                <td class="align-top"><img src="{% static 'img/0.png' %}" class="border-double img-numeral"></td>
+                <td class="align-top">
+                    <img class="img-numeral" src="{% static 'img/0.png' %}" alt="Level 1 img">
+                </td>
                 <td class="align-bottom pl-1 justify">
                     <b>Brak umiejętności</b><br>
                     Postać nie posiada jakiejkolwiek sprawności w danym zakresie, która wykraczałaby ponad przeciętne rozeznanie w świecie i rozgarnięcie życiowe.
@@ -57,7 +59,9 @@
                 </td>
             </tr>
             <tr>
-                <td class="align-top"><img src="{% static 'img/1.png' %}" class="border-double img-numeral"></td>
+                <td class="align-top">
+                    <img class="img-numeral" src="{% static 'img/1.png' %}" alt="Level 2 img">
+                </td>
                 <td class="align-bottom pl-1 justify">
                     <b>Sprawność</b><br>
                     Pozwala na wykonywanie standardowych testów za powodzenie zastosowania danej Umiejętności z modyfikatorami zależnymi od sytuacji.
@@ -66,7 +70,9 @@
                 </td>
             </tr>
             <tr>
-                <td class="align-top"><img src="{% static 'img/2.png' %}" class="border-double img-numeral"></td>
+                <td class="align-top">
+                    <img class="img-numeral" src="{% static 'img/2.png' %}" alt="Level 2 img">
+                </td>
                 <td class="align-bottom pl-1 justify">
                     <b>Poziom ekspercki</b><br>
                     Pozwala na pełne wykorzystanie danej Umiejętności oraz eksperymentowanie poza jej zakresem standardowego zastosowania.
@@ -75,7 +81,9 @@
                 </td>
             </tr>
             <tr>
-                <td class="align-top"><img src="{% static 'img/3.png' %}" class="border-double img-numeral"></td>
+                <td class="align-top">
+                    <img class="img-numeral" src="{% static 'img/3.png' %}" alt="Level 3 img">
+                </td>
                 <td class="align-bottom pl-1 justify">
                     <b>Poziom legendarny</b><br>
                     Pozwala na działania wykraczające poza zdolności pojmowania przeciętnego człowieka i przesuwające granicę między rzeczywistością a eposem…<br>
@@ -98,9 +106,9 @@
         <div id="skills" class="collapse">
             {% for skill in skills %}
                 {% if skill.image %}
-                    <img src="{{ skill.image.url }}" class="border-double img-skill">
+                    <img class="img-skill" src="{{ skill.image.url }}" alt="Skill img">
                 {% else %}
-                    <img src="{% static 'img/skill-default.png' %}" class="border-double img-skill">
+                    <img class="img-skill" src="{% static 'img/skill-default.png' %}" alt="Skill img">
                 {% endif %}
                 <h1 class="pt-2" data-toggle="collapse" data-target="#{{ skill.short_name }}">
                     <b class="hover-blue">&nbsp;{{ skill.name }}</b>
@@ -112,8 +120,13 @@
                         {% for skill_level in skill.skill_levels.all %}
                             <tr>
                                 {% with level_img='img/'|add:skill_level.level|add:'.png' %}
-                                <td class="align-top pt-2"><img src="{% static level_img %}" class="border-double img-numeral"></td>
-                                <td class="align-bottom pl-1 pt-2 text-justify">{% if skill_level.description %}{{ skill_level.description|linebreaksbr }}{% endif %}<br><br></td>
+                                <td class="align-top pt-2">
+                                    <img class="img-numeral" src="{% static level_img %}" alt="Skill level img">
+                                </td>
+                                <td class="align-bottom pl-1 pt-2 text-justify">
+                                    {% if skill_level.description %}{{ skill_level.description|linebreaksbr }}{% endif %}
+                                    <br><br>
+                                </td>
                                 {% endwith %}
                             </tr>
                         {% endfor %}
@@ -133,7 +146,7 @@
             {% for synergy in synergies %}
                 {% for skill in synergy.skills.all %}
                     {% if skill.image %}
-                        <img src="{{ skill.image.url }}" class="border-double img-skill">
+                        <img class="img-skill" src="{{ skill.image.url }}" alt="Skill img">
                     {% endif %}
                 {% endfor %}
                 <h2 class="hover-blue pt-3" data-toggle="collapse" data-target="#{{ synergy.short_name }}">
@@ -145,29 +158,16 @@
                         {% for synergy_level in synergy.synergy_levels.all %}
                             <tr>
                                 {% with level_img='img/'|add:synergy_level.level|add:'.png' %}
-                                    <td class="align-top pt-2"><img src="{% static level_img %}" class="border-double img-numeral"></td>
-                                    <td class="align-bottom pl-1 pt-2 text-justify">{% if synergy_level.description %}{{ synergy_level.description|linebreaksbr }}{% endif %}<br><br></td>
+                                    <td class="align-top pt-2">
+                                        <img class="img-numeral" src="{% static level_img %}" alt="Skill level img">
+                                    </td>
+                                    <td class="align-bottom pl-1 pt-2 text-justify">
+                                        {% if synergy_level.description %}{{ synergy_level.description|linebreaksbr }}{% endif %}
+                                        <br><br>
+                                    </td>
                                 {% endwith %}
                             </tr>
                         {% endfor %}
-<!--                        {% if synergy.lvl_1 %}-->
-<!--                        <tr>-->
-<!--                            <td class="align-top"><img src="{% static 'img/1.png' %}" class="border-double img-numeral"></td>-->
-<!--                            <td class="align-bottom pl-1 text-justify">{{ synergy.lvl_1|linebreaksbr }}<br><br></td>-->
-<!--                        </tr>-->
-<!--                        {% endif %}-->
-<!--                        {% if synergy.lvl_2 %}-->
-<!--                        <tr>-->
-<!--                            <td class="align-top"><img src="{% static 'img/2.png' %}" class="border-double img-numeral"></td>-->
-<!--                            <td class="align-bottom pl-1 text-justify">{{ synergy.lvl_2|linebreaksbr }}<br><br></td>-->
-<!--                        </tr>-->
-<!--                        {% endif %}-->
-<!--                        {% if synergy.lvl_3 %}-->
-<!--                        <tr>-->
-<!--                            <td class="align-top"><img src="{% static 'img/3.png' %}" class="border-double img-numeral"></td>-->
-<!--                            <td class="align-bottom pl-1 text-justify">{{ synergy.lvl_3|linebreaksbr }}<br><br></td>-->
-<!--                        </tr>-->
-<!--                        {% endif %}-->
                     </table>
                     <br>
                 </div>
