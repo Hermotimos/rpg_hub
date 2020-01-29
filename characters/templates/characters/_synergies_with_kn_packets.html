@@ -22,7 +22,7 @@
         {% for synergy_level in synergy.synergy_levels.all %}
         <tr>
             {% with level_img='img/'|add:synergy_level.level|add:'.png' %}
-                <td class="align-top"><img src="{% static level_img %}" class="border-double img-numeral"></td>
+                <td class="align-top"><img class="border-double img-numeral" src="{% static level_img %}" alt="{{ synergy_level }}"></td>
                 <td class="align-bottom pl-1 text-justify">{% if synergy_level.description %}{{ synergy_level.description|linebreaksbr }}{% endif %}<br><br></td>
             {% endwith %}
         </tr>

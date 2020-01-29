@@ -19,9 +19,9 @@
                 {% for character in characters %}
                     <div class="col-sm-6 col-md-4 col-lg-3">
                         <figure>
-                            <a href="{% url 'characters:skills-sheet' character.profile.id %}" class="img-link">
-                                <img src="{{ character.profile.image.url }}"
-                                     class="border-double img-fluid {% if character.profile.character_status == 'dead_player' %} img-grayscale {% endif %}"
+                            <a class="img-link" href="{% url 'characters:skills-sheet' character.profile.id %}" >
+                                <img class="border-double img-fluid {% if character.profile.character_status == 'dead_player' %} img-grayscale {% endif %}"
+                                     src="{{ character.profile.image.url }}"
                                      alt="{{ profile.character_name }}">
                             </a>
                             <figcaption class="pt-1">{{ profile.character_name }}</figcaption>
