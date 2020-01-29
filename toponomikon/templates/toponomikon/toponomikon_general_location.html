@@ -18,13 +18,12 @@
         
         <section>
             <p class="toponomikon-gen-loc-img">
-                <img src="{{ gen_loc.main_image.image.url }}" class="border-double
-                {% if gen_loc_known_only_indirectly %}
-                    {{ 'img-grayscale' }}
-                {% endif %}
-                ">
+                <img class="{% if gen_loc_known_only_indirectly %} img-grayscale {% endif %}"
+                     src="{{ gen_loc.main_image.image.url }}"
+                     alt="General location img"
+                >
             </p>
-            <p><a class="pl-1" href="{% url 'toponomikon:inform' gen_loc.id '0' %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></p>
+            <p><a class="pl-1" href="{% url 'toponomikon:inform' gen_loc.id '0' %}"><img class="border-0 small-img" src="{% static 'img/inform.png' %}" alt="Inform button img"></a></p>
             <p class="font-italic text-justify">{{ gen_loc.description|linebreaksbr }}</p>
             <br><br>
         </section>
@@ -43,8 +42,9 @@
                                 <div class="col-md-4 px-0 py-1">
                                     <figure class="m-0 mr-2">
                                         <a class="img-link" href="{% url 'toponomikon:specific-location' spec_loc.id %}">
-                                            <img src="{{ spec_loc.main_image.image.url }}" alt="{{ spec_loc.name }}"
-                                                 class="img-fluid border-double toponomikon-img {% if spec_loc.known_only_indirectly %} img-grayscale {% endif %}"
+                                            <img class="img-fluid toponomikon-img {% if spec_loc.known_only_indirectly %} img-grayscale {% endif %}"
+                                                 src="{{ spec_loc.main_image.image.url }}"
+                                                 alt="Specific location img"
                                             >
                                         </a>
                                     </figure>
