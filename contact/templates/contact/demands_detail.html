@@ -17,14 +17,14 @@
     <table class="border-bottom">
         <tr>
             <td class="align-top px-1 py-1">
-                <img class="rounded-circle article-img" src="{{ demand.author.profile.image.url }}">
+                <img class="rounded-circle article-img" src="{{ demand.author.profile.image.url }}" alt="Demand author image">
             </td>
             <td class="font-18 font-italic px-1 py-1 text-justify">
                 <small class="font-italic text-nowrap text-muted">{{ demand.date_created|date:'d-M-Y | H:i' }}</small>
                 <br>
                 {{ demand.text|capfirst|linebreaksbr }}
                 {% if demand.image %}
-                    <img src="{{ demand.image.url }}" class="border-double">
+                    <img src="{{ demand.image.url }}" class="border-double" alt="Demand image">
                 {% endif %}
                 <br><br>
             </td>
@@ -37,14 +37,14 @@
         {% for answer in answers %}
             <tr>
                 <td class="align-top px-1 py-1">
-                    <img class="rounded-circle article-img" src="{{ answer.author.profile.image.url }}">
+                    <img class="rounded-circle article-img" src="{{ answer.author.profile.image.url }}" alt="Answer author image">
                 </td>
                 <td class="font-18 font-italic px-2 py-2 text-justify">
                     <small class="text-nowrap text-muted">{{ answer.date_posted|date:'d-M-Y | H:i' }}</small>
                     <br>
                     {{ answer.text|capfirst|linebreaksbr }}
                     {% if answer.image %}
-                        <img src="{{ answer.image.url }}" class="border-double">
+                        <img src="{{ answer.image.url }}" class="border-double" alt="Answer image">
                     {% endif %}
                     <br><br>
                 </td>
