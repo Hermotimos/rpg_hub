@@ -24,7 +24,8 @@ def knowledge_sheet_view(request):
     else:
         known_kn_packets = KnowledgePacket.objects.filter(allowed_profiles=profile).prefetch_related('pictures')
         kn_packet_types = KnowledgePacketType.objects\
-            .prefetch_related(Prefetch('knowledge_packets', queryset=known_kn_packets))
+            .prefetch_related(Prefetch('knowledge_packets', queryset=known_kn_packets))\
+            # .filter(knowledge_packets__in=known_kn_packets)
         theology_skills = Skill.objects\
             .filter(skill_levels__acquired_by_characters=profile.character)\
             .filter(name__icontains='Doktryn')\

@@ -64,22 +64,24 @@ class KnowledgeSheetTest(TestCase):
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertContains(response, 'Varia')
-        self.assertNotContains(response, 'Teologia')
         self.assertContains(response, 'KnPacket1')
+        self.assertNotContains(response, 'Teologia')
+        self.assertNotContains(response, 'KnPacket2')
         self.assertNotContains(response, 'Skill-1')     # shouldn't contain skill name unless packet type == 'Teologia'
 
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
-        self.assertContains(response, 'Teologia')
         self.assertNotContains(response, 'Varia')
+        self.assertNotContains(response, 'KnPacket1')
+        self.assertContains(response, 'Teologia')
         self.assertContains(response, 'KnPacket2')
         self.assertContains(response, 'Doktryna-1')     # should contain skill name because packet type == 'Teologia'
 
         self.client.force_login(self.user3)
         response = self.client.get(self.url)
         self.assertContains(response, 'Varia')
-        self.assertContains(response, 'Teologia')
         self.assertContains(response, 'KnPacket1')
+        self.assertContains(response, 'Teologia')
         self.assertContains(response, 'KnPacket2')
         self.assertNotContains(response, 'Skill-1')     # shouldn't contain skill name unless packet type == 'Teologia'
         self.assertContains(response, 'Doktryna-1')     # should contain skill name because packet type == 'Teologia'
