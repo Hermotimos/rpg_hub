@@ -16,7 +16,7 @@
     {% for chapter in chapters %}
         <h3 class="unblue mb-0">
             {% if chapter.image %}
-                <img src="{{ chapter.image.url }}" class="border-double img-chapter">
+                <img class="img-chapter" src="{{ chapter.image.url }}" alt="Chapter img">
             {% endif %}
             <a href="#{{ chapter.id }}" class="align-middle pt-2 small-caps border-custom-base">{{ chapter.title }}</a>
         </h3>
@@ -45,7 +45,7 @@
                         <span id="{{chapter.id}}">
                             <br><br>
                             {% if chapter.image %}
-                                <img src="{{ chapter.image.url }}" class="border-double img-chapter-header">
+                                <img class="img-chapter-header" src="{{ chapter.image.url }}" alt="Chapter img">
                             {% endif %}
                             <br>
                             {{ chapter.title }}

@@ -15,15 +15,16 @@
 
     <div class="border-bottom">
         <h2 class="unblue">
-            <img src="{% static 'img/history_all.png' %}" class="border-double img-chapter">
+            <img class="img-chapter" src="{% static 'img/history_all.png' %}" alt="Timeline img">
             <b><a href="{% url 'history:timeline-events' 0 0 0 0 0 '0' 0 %}" class="align-middle pt-2">Pełne Kalendarium</a></b>
         </h2>
         <small>Pełne kalendarium losów Twojej postaci oraz znanych jej wydarzeń</small><br><br>
     </div>
-<br><br>
+    <br><br>
+
     <table>
         <tr>
-            <td class="align-top"><img src="{% static 'img/timeline_threads.png' %}" class="border-double img-timeline"></td>
+            <td class="align-top"><img class="img-timeline" src="{% static 'img/timeline_threads.png' %}" alt="Threads img"></td>
             <td class="align-top">
                 <h3 class="align-middle mb-0" data-toggle="collapse" data-target="#threads">
                     <b class="hover-blue">Wątki</b>
@@ -54,7 +55,7 @@
 
     <table>
         <tr>
-            <td class="align-top"><img src="{% static 'img/timeline_participants.png' %}" class="border-double img-timeline"></td>
+            <td class="align-top"><img class="img-timeline" src="{% static 'img/timeline_participants.png' %}" alt="Participants img"></td>
             <td class="align-top">
                 <h3 class="align-middle mb-0" data-toggle="collapse" data-target="#participants">
                     <b class="hover-blue">Uczestnicy</b>
@@ -70,7 +71,7 @@
                 {% for participant in participants %}
                     <td class="unblue-black">
                         <a href="{% url 'history:timeline-events' 0 participant.id 0 0 0 '0' 0 %}" class="img-link">
-                            <img src="{{ participant.image.url }}" class="border-double account-img-timeline">
+                            <img class="account-img-timeline" src="{{ participant.image.url }}" alt="{{ participant.character_name }}">
                         </a>&emsp;&emsp;
                     </td>
                     {% if forloop.counter|divisibleby:4 %}
@@ -85,7 +86,7 @@
 
     <table>
         <tr>
-            <td class="align-top"><img src="{% static 'img/timeline_locations.png' %}" class="border-double img-timeline"></td>
+            <td class="align-top"><img class="img-timeline" src="{% static 'img/timeline_locations.png' %}" alt="Locations img"></td>
             <td class="align-top">
                 <h3 class="align-middle mb-0" data-toggle="collapse" data-target="#general_locations">
                     <b class="hover-blue">Lokacje</b>
@@ -122,7 +123,7 @@
 
     <table>
         <tr>
-            <td class="align-top"><img src="{% static 'img/timeline_years_and_seasons.png' %}" class="border-double img-timeline"></td>
+            <td class="align-top"><img class="img-timeline" src="{% static 'img/timeline_years_and_seasons.png' %}" alt="Dates img"></td>
             <td class="align-top">
                 <h3 class="align-middle mb-0" data-toggle="collapse" data-target="#years">
                     <b class="hover-blue">Lata i pory roku</b>
@@ -169,7 +170,7 @@
 
     <table>
         <tr>
-            <td class="align-top"><img src="{% static 'img/timeline_games.png' %}" class="border-double img-timeline"></td>
+            <td class="align-top"><img class="img-timeline" src="{% static 'img/timeline_games.png' %}" alt="Games img"></td>
             <td class="align-top">
                 <h3 class="align-middle mb-0" data-toggle="collapse" data-target="#games">
                     <b class="hover-blue">Sesje</b>

@@ -13,14 +13,14 @@
 {% block content %}
     <br><br><br>
     <h2 class="unblue">
-        <img src="{% static 'img/history_all.png' %}" class="border-double img-chapter">
+        <img class="img-chapter" src="{% static 'img/history_all.png' %}" alt="Chapter img">
         <b><a href="{% url 'history:chronicle-all-chapters' %}" class="align-middle pt-2">Pełna kronika</a></b>
     </h2>
     <br><br>
     {% for chapter in chapters %}
         <br>
         {% if chapter.image %}
-            <img src="{{ chapter.image.url }}" class="border-double img-chapter">
+            <img class="img-chapter" src="{{ chapter.image.url }}" alt="Chapter img">
         {% endif %}
         <h3 class="unblue">
             <b>
