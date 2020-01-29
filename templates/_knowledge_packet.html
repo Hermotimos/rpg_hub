@@ -6,9 +6,13 @@
         </h5>
         <div id="id_{{ skill_level.id }}_{{ kn_packet.id }}_{{ specifier }}" class="collapse">
             <div class="text-justify">
-                <a class="pl-1" href="{% url 'knowledge:knowledge-inform' kn_packet.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a>
+                <a class="pl-1" href="{% url 'knowledge:knowledge-inform' kn_packet.id %}">
+                    <img class="small-img" src="{% static 'img/inform.png' %}" alt="Inform button img">
+                </a>
                 <br><br>
-                <p class="font-18 font-italic pt-1 text-justify">{{ kn_packet.text|linebreaksbr }}</p>
+                <p class="font-18 font-italic pt-1 text-justify">
+                    {{ kn_packet.text|linebreaksbr }}
+                </p>
                 <br>
                 {% for picture in kn_packet.pictures.all %}
                     <ul class="bullets-1 pl-3">
@@ -17,7 +21,7 @@
                         </li>
                     </ul>
                     <div id="id{{ kn_packet.id }}_{{ picture.id }}" class="collapse">
-                        <img src="{{ picture.image.url }}" class="border-double">
+                        <img src="{{ picture.image.url }}" alt="Knowledge packet img">
                     </div>
                 {% endfor %}
                 <br>

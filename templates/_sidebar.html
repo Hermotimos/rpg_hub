@@ -5,7 +5,7 @@
     <script src="{% static 'js/showTime.js' %}"></script>
 {% endblock head_extra %}
 
-<img onload="showTime()" class="account-img-sidebar mt-50" src="{{ user.profile.image.url }}">
+<img class="account-img-sidebar mt-50" onload="showTime()" src="{{ user.profile.image.url }}" alt="Profile img">
 <h3>
     {% if user.profile.character_name != '' %}
         <a href="{% url 'users:profile' %}">{{ user.profile.character_name }}</a>
