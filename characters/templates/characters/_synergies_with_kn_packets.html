@@ -5,9 +5,9 @@
 
 {% for skill in synergy.skills.all %}
     {% if skill.image %}
-        <img src="{{ skill.image.url }}" class="border-double img-skill">
+        <img src="{{ skill.image.url }}" class="img-skill">
     {% else %}
-        <img src="{% static 'img/skill-default.png' %}" class="border-double img-skill">
+        <img src="{% static 'img/skill-default.png' %}" class="img-skill">
     {% endif %}
 {% endfor %}
 
@@ -22,7 +22,7 @@
         {% for synergy_level in synergy.synergy_levels.all %}
         <tr>
             {% with level_img='img/'|add:synergy_level.level|add:'.png' %}
-                <td class="align-top"><img class="border-double img-numeral" src="{% static level_img %}" alt="{{ synergy_level }}"></td>
+                <td class="align-top"><img class="img-numeral" src="{% static level_img %}" alt="{{ synergy_level.level }}"></td>
                 <td class="align-bottom pl-1 text-justify">{% if synergy_level.description %}{{ synergy_level.description|linebreaksbr }}{% endif %}<br><br></td>
             {% endwith %}
         </tr>
