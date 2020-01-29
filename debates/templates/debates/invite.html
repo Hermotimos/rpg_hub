@@ -27,7 +27,7 @@
             <td class="align-middle"><h6>Uczestnicy:</h6></td>
             <td>
                 {% for profile in old_allowed_profiles %}
-                    <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Debate allowed profiles images">
+                    <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="{{ profile.character_name }}">
                 {% endfor %}
             </td>
         </tr>

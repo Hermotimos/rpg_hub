@@ -23,7 +23,7 @@
             <td class="align-middle"><h6>Inicjator:</h6></td>
             <td>
                 {% if first_remark %}
-                    <img class="rounded-circle img-small" src="{{ first_remark.author.profile.image.url }}" alt="Debate first remark author image">
+                    <img class="rounded-circle img-small" src="{{ first_remark.author.profile.image.url }}" alt="{{ first_remark.author.profile.character_name }}">
                 {% endif %}
             </td>
         </tr>
@@ -31,7 +31,7 @@
             <td class="align-middle"><h6>Uczestnicy:</h6></td>
             <td>
                 {% for profile in debate_allowed_profiles %}
-                    <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Debate allowed profiles images">
+                    <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="{{ profile.character_name }}">
                 {% endfor %}
             </td>
         </tr>
@@ -39,7 +39,7 @@
             <td class="align-middle"><h6 class="mb-0">Uważni uczestnicy:</h6></td>
             <td>
                 {% for profile in debate_followers %}
-                    <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Debate followers images">
+                    <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="{{ profile.character_name }}">
                 {% endfor %}
 
             </td>
@@ -65,7 +65,7 @@
                         <td colspan="2" class="font-18 font-italic text-justify">
                             {{ remark.text|capfirst|linebreaks }}
                             {% if remark.image %}
-                                <img class="border-double" src="{{ remark.image.url }}" alt="Remark image">
+                                <img src="{{ remark.image.url }}" alt="Remark img">
                                 <br>
                             {% endif %}
                         </td>
@@ -73,7 +73,7 @@
                 {% else %}
                     <tr class="posts-and-news">
                         <td class="align-top align-center pt-3 px-2">
-                            <img class="rounded-circle article-img" src="{{ remark.author.profile.image.url }}" alt="Remark author image">
+                            <img class="rounded-circle article-img" src="{{ remark.author.profile.image.url }}" alt="{{ remark.author.profile.character_name }}">
                             <br>
                             <small class="font-12 font-italic text-nowrap text-muted">{{ remark.author.profile.character_name }}</small>
                         </td>
@@ -81,7 +81,7 @@
                             <small class="text-muted text-nowrap">{{ remark.date_posted|date:'d-M-Y | H:i' }}</small><br>
                             {{ remark.text|capfirst|linebreaks }}
                             {% if remark.image %}
-                                <img class="border-double" src="{{ remark.image.url }}" alt="Remark image">
+                                <img src="{{ remark.image.url }}" alt="Remark img">
                             {% endif %}
                         </td>
                     </tr>
@@ -92,14 +92,14 @@
                     {% if last_remark.author.profile.character_status == 'gm' %}
                         <td>
                             {% for image in last_remark_seen_by_imgs %}
-                                <img class="rounded-circle img-small" src="{{ image.url }}">
+                                <img class="rounded-circle img-small" src="{{ image.url }}" alt="Profile small img">
                             {% endfor %}
                         </td>
                     {% else %}
                         <td></td>
                         <td>
                             {% for image in last_remark_seen_by_imgs %}
-                                <img class="rounded-circle img-small" src="{{ image.url }}">
+                                <img class="rounded-circle img-small" src="{{ image.url }}" alt="Profile small img">
                             {% endfor %}
                         </td>
                     {% endif %}
