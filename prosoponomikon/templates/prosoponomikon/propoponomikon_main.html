@@ -22,7 +22,7 @@
                         <div class="col-sm-6 col-md-4 col-lg-3">
                             <figure>
                                 <a href="#" class="img-link">
-                                    <img class="border-double d-block mx-auto img-fluid {% if profile.character_status == 'dead_player' %} img-grayscale {% endif %}"
+                                    <img class="d-block mx-auto img-fluid {% if profile.character_status == 'dead_player' %} img-grayscale {% endif %}"
                                          src="{{ profile.image.url }}"
                                          alt="{{ profile.character_name }}"
                                     >
@@ -40,7 +40,7 @@
                         <div class="col-sm-4 col-md-3 col-lg-2 px-1">
                             <figure class="text-center">
                                 <a class="img-link" href="#">
-                                    <img class="border-double img-fluid" src="{{ profile.image.url }}" alt="{{ profile.character_name }}">
+                                    <img class="img-fluid" src="{{ profile.image.url }}" alt="{{ profile.character_name }}">
                                 </a>
                                 <figcaption class="font-12 pt-1">{{ profile.character_name }}</figcaption>
                             </figure>
@@ -55,7 +55,7 @@
                         <div class="col-sm-4 col-md-3 col-lg-2 px-1">
                             <figure class="text-center">
                                 <a href="#" class="img-link">
-                                    <img class="border-double img-fluid img-grayscale" src="{{ profile.image.url }}" alt="{{ profile.character_name }}">
+                                    <img class="img-fluid img-grayscale" src="{{ profile.image.url }}" alt="{{ profile.character_name }}">
                                 </a>
                                 <figcaption class="font-12 pt-1">{{ profile.character_name }}</figcaption>
                             </figure>
