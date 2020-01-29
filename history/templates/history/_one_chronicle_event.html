@@ -39,10 +39,10 @@
     </td>
     <td class="align-top">
         <br>
-        <h6><a href="{% url 'history:chronicle-inform' event.id %}"><img src="{% static 'img/inform.png' %}" class="small-img"></a></h6>
-        <h6><a href="{% url 'history:chronicle-note' event.id %}"><img src="{% static 'img/note.png' %}" class="small-img"></a></h6>
+        <h6><a href="{% url 'history:chronicle-inform' event.id %}"><img class="border-0 small-img" src="{% static 'img/inform.png' %}" alt="Inform button img"></a></h6>
+        <h6><a href="{% url 'history:chronicle-note' event.id %}"><img class="border-0 small-img" src="{% static 'img/note.png' %}" alt="Note button img"></a></h6>
         {% if request.user.profile.character_status == 'gm' %}
-            <h6><a href="{% url 'history:chronicle-edit' event.id %}"><img src="{% static 'img/edit.png' %}" class="small-img"></a></h6>
+            <h6><a href="{% url 'history:chronicle-edit' event.id %}"><img class="border-0 small-img" src="{% static 'img/edit.png' %}" alt="Edit button img"></a></h6>
         {% endif %}
     </td>
 </tr>
