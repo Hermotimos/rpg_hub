@@ -162,7 +162,7 @@ small.smaller {font-size: 12px;}
         margin-right: auto;
 }
 
-.border-double {
+img {
         border-style: double;
 }
 
@@ -171,6 +171,7 @@ small.smaller {font-size: 12px;}
         width: auto;
         margin-left: auto;
         margin-right: auto;
+        border: solid 1px black;
 }
 
 
