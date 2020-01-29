@@ -24,7 +24,7 @@
                 <br>
                 {{ demand.text|capfirst|linebreaksbr }}
                 {% if demand.image %}
-                    <img src="{{ demand.image.url }}" class="border-double" alt="Demand image">
+                    <img class="border-double" src="{{ demand.image.url }}" alt="Demand image">
                 {% endif %}
                 <br><br>
             </td>
@@ -44,7 +44,7 @@
                     <br>
                     {{ answer.text|capfirst|linebreaksbr }}
                     {% if answer.image %}
-                        <img src="{{ answer.image.url }}" class="border-double" alt="Answer image">
+                        <img class="border-double" src="{{ answer.image.url }}" alt="Answer image">
                     {% endif %}
                     <br><br>
                 </td>
