@@ -9,7 +9,7 @@
         <small class="text-muted text-nowrap">{{ answer.date_posted|date:'d-M-Y | H:i' }}</small><br>
         <p>{{ answer.text|capfirst|linebreaksbr }}</p>
         {% if answer.image %}
-            <img src="{{ answer.image.url }}" class="border-double">
+            <img src="{{ answer.image.url }}" alt="Answer img">
         {% endif %}
     </td>
 </tr>
