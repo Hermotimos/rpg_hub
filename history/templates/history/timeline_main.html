@@ -71,7 +71,7 @@
                 {% for participant in participants %}
                     <td class="unblue-black">
                         <a href="{% url 'history:timeline-events' 0 participant.id 0 0 0 '0' 0 %}" class="img-link">
-                            <img class="account-img-timeline" src="{{ participant.image.url }}" alt="{{ participant.character_name }}">
+                            <img class="account-img-timeline" src="{{ participant.image.url }}" alt="Participant img">
                         </a>&emsp;&emsp;
                     </td>
                     {% if forloop.counter|divisibleby:4 %}

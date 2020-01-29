@@ -17,7 +17,7 @@
         <td><h6>Uczestnicy:</h6></td>
         <td>
             {% for profile in event.participants.all %}
-                <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile img">
             {% endfor %}
         </td>
     </tr>
@@ -26,7 +26,7 @@
         <td><h6>Poinformowani:</h6></td>
         <td>
             {% for profile in event.informed.all %}
-                <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile img">
             {% endfor %}
         </td>
     </tr>
