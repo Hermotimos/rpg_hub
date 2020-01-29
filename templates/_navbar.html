@@ -100,7 +100,7 @@
         <!-- Navbar Right Side -->
         <div class="navbar-nav pb-1">
             {% if user.is_authenticated %}
-                <a class="pr-4 pt-2" href="{% url 'contact:demands-create' %}"><img src="{% static 'img/demand.png' %}" alt="Demand button img"></a>
+                <a class="pr-4 pt-2" href="{% url 'contact:demands-create' %}"><img class="border-0" src="{% static 'img/demand.png' %}" alt="Demand button img"></a>
                 <a class="btn btn-outline-light btn-space" href="{% url 'users:logout' %}">Wyloguj</a>
             {% else %}
                 <a class="btn btn-outline-light btn-space" href="{% url 'users:register' %}">Nowa postać</a>
