@@ -90,7 +90,7 @@ def knowledge_inform_view(request, kn_packet_id):
             subject = f"[RPG] Transfer wiedzy: '{kn_packet.title}'"
             message = f"{profile} przekazał Ci wiedzę na temat: '{kn_packet.title}'.\n"\
                 f"Więdzę tę możesz odnaleźć w zakładce Wiedza/Okruchy wiedzy: " \
-                f"{request.get_host()}/knowledge/knowledge-almanac/\n"\
+                f"{request.get_host()}/knowledge/almanac/\n"\
                 f"Zobaczysz tam, z jakimi elementami jest powiązana ta wiedza (Umiejętności, Toponomikon itp.).\n" \
                 f"Wiedzę możesz przeglądać zarówno w Okruchach wiedzy, jak i we wskazanych tam miejscach."
             sender = settings.EMAIL_HOST_USER
