@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 
 from knowledge.forms import KnowledgePacketInformForm
-from knowledge.models import KnowledgePacket, KnowledgePacketType
+from knowledge.models import KnowledgePacket
 from rpg_project import settings
 from rpg_project.utils import query_debugger
 from rules.models import SkillLevel, Skill
@@ -36,12 +36,12 @@ def knowledge_sheet_view(request):
             ))\
             .distinct()
 
-    context = {
-        'page_title': 'Almanach',
-        'kn_packet_types': kn_packet_types,
-        'theology_skills': theology_skills
-    }
-    return render(request, 'knowledge/knowledge_sheet.html', context)
+    # context = {
+    #     'page_title': 'Almanach',
+    #     'kn_packet_types': kn_packet_types,
+    #     'theology_skills': theology_skills
+    # }
+    # return render(request, 'knowledge/knowledge_sheet.html', context)
 
 
 @query_debugger
@@ -50,16 +50,17 @@ def knowledge_inform_view(request, kn_packet_id):
     profile = request.user.profile
     kn_packet = get_object_or_404(KnowledgePacket, id=kn_packet_id)
 
-    allowed_profiles_old = kn_packet.allowed_profiles.all()
+    allowed_characters_old = kn_packet.characters.all()
 
     if request.method == 'POST':
         form = KnowledgePacketInformForm(authenticated_user=request.user,
-                                         already_allowed_profiles=allowed_profiles_old,
+                                         allowed_characters_old=allowed_characters_old,
                                          data=request.POST,
                                          instance=kn_packet)
         if form.is_valid():
-            allowed_profiles_new = form.cleaned_data['allowed_profiles']
-            kn_packet.allowed_profiles.add(*list(allowed_profiles_new))
+            characters_new = form.cleaned_data['characters']
+            for character in characters_new:
+                character.knowledge_packets.add(kn_packet)
 
             subject = f"[RPG] Transfer wiedzy: '{kn_packet.title}'"
             message = f"{profile} przekazał Ci wiedzę na temat: '{kn_packet.title}'.\n"\
@@ -69,8 +70,8 @@ def knowledge_inform_view(request, kn_packet_id):
                 f"Wiedzę możesz przeglądać zarówno w Okruchach wiedzy, jak i we wskazanych tam miejscach."
             sender = settings.EMAIL_HOST_USER
             receivers = []
-            for p in allowed_profiles_new:
-                receivers.append(p.user.email)
+            for profile in [ch.profile for ch in characters_new]:
+                receivers.append(profile.user.email)
             if profile.character_status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
@@ -80,14 +81,14 @@ def knowledge_inform_view(request, kn_packet_id):
             return HttpResponseRedirect(_next)
     else:
         form = KnowledgePacketInformForm(authenticated_user=request.user,
-                                         already_allowed_profiles=allowed_profiles_old)
+                                         allowed_characters_old=allowed_characters_old)
 
     context = {
         'page_title': 'Podziel się wiedzą',
         'kn_packet': kn_packet,
         'form': form,
     }
-    if profile in kn_packet.allowed_profiles.all() or profile.character_status == 'gm':
+    if kn_packet in profile.character.knowledge_packets.all() or profile.character_status == 'gm':
         return render(request, 'knowledge/knowledge_inform.html', context)
     else:
         return redirect('home:dupa')
