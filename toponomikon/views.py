@@ -58,7 +58,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
         known_directly = gen_loc.specific_locations.filter(known_directly=profile)
         known_indirectly = gen_loc.specific_locations.filter(known_indirectly=profile).exclude(id__in=known_directly)
         spec_locs = (known_directly | known_indirectly)
-        knowledge_packets = gen_loc.knowledge_packets.filter(allowed_profiles=profile)
+        knowledge_packets = gen_loc.knowledge_packets.filter(characters=profile.character)
         gen_loc_known_only_indirectly = \
             True if profile in gen_loc.known_indirectly.all() and profile not in gen_loc.known_directly.all() else False
 
@@ -99,7 +99,7 @@ def toponomikon_specific_location_view(request, spec_loc_id):
         spec_loc_known_only_indirectly = \
             True if profile in spec_loc.known_indirectly.all() and profile not in spec_loc.known_directly.all() \
             else False
-        knowledge_packets = spec_loc.knowledge_packets.filter(allowed_profiles=profile)
+        knowledge_packets = spec_loc.knowledge_packets.filter(characters=profile.character)
 
     context = {
         'page_title': spec_loc.name,
