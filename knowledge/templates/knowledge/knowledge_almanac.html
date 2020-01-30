@@ -15,9 +15,25 @@
 
     {% for skill in skills_with_kn_packets %}
 
-        <div class="pl-5">
-            {% include 'characters/_skills_with_knowledge_packets.html' %}
-        </div>
+    <div class="pb-2">
+        {% if skill.image %}
+            <img src="{{ skill.image.url }}" class="border-double img-skill">
+        {% else %}
+            <img src="{% static 'img/skill-default.png' %}" class="border-double img-skill">
+        {% endif %}
+        <h1 class="pt-2" data-toggle="collapse" data-target="#{{ skill.short_name }}">
+            <b class="hover-blue">&nbsp;{{ skill.name }}</b>
+        </h1>
+    </div>
+    
+    <div class="pl-4 collapse show" id="{{ skill.short_name }}">
+        {% for kn_packet in skill.knowledge_packets.all %}
+    
+            {% include '_knowledge_packet.html' %}
+    
+        {% endfor %}
+    </div>
+            <br>
 
     {% endfor  %}
 

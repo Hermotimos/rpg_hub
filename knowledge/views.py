@@ -14,32 +14,39 @@ from rules.models import SkillLevel, Skill
 
 @query_debugger
 @login_required
-def knowledge_sheet_view(request):
+def knowledge_almanac_view(request):
     profile = request.user.profile
+
     if profile.character_status == 'gm':
-        kn_packet_types = KnowledgePacketType.objects.prefetch_related('knowledge_packets__pictures')
-        theology_skills = Skill.objects\
-            .filter(name__icontains='Doktryn')\
-            .prefetch_related('skill_levels__knowledge_packets__pictures')
+        known_kn_packets = KnowledgePacket.objects.all()
+        skills_with_kn_packets = Skill.objects\
+            .exclude(name__icontains='Doktryn')\
+            .filter(knowledge_packets__in=known_kn_packets)\
+            .prefetch_related(
+                Prefetch('knowledge_packets', queryset=known_kn_packets),
+                Prefetch(
+                    'skill_levels', queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)
+                ),
+                'knowledge_packets__pictures'
+            )\
+            .distinct()
     else:
-        known_kn_packets = KnowledgePacket.objects.filter(allowed_profiles=profile).prefetch_related('pictures')
-        kn_packet_types = KnowledgePacketType.objects\
-            .prefetch_related(Prefetch('knowledge_packets', queryset=known_kn_packets))\
-            # .filter(knowledge_packets__in=known_kn_packets)
-        theology_skills = Skill.objects\
-            .filter(skill_levels__acquired_by_characters=profile.character)\
-            .filter(name__icontains='Doktryn')\
-            .prefetch_related(Prefetch(
-                'skill_levels',
-                queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)
-                .prefetch_related(Prefetch('knowledge_packets', queryset=known_kn_packets))
-            ))\
+        known_kn_packets = profile.character.knowledge_packets.all()
+        skills_with_kn_packets = Skill.objects\
+            .exclude(name__icontains='Doktryn') \
+            .filter(knowledge_packets__in=known_kn_packets)\
+            .prefetch_related(
+                Prefetch('knowledge_packets', queryset=known_kn_packets),
+                Prefetch(
+                    'skill_levels', queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)
+                ),
+                'knowledge_packets__pictures'
+            )\
             .distinct()
 
     context = {
         'page_title': 'Almanach',
-        'kn_packet_types': kn_packet_types,
-        'theology_skills': theology_skills
+        'skills_with_kn_packets': skills_with_kn_packets
     }
     return render(request, 'knowledge/knowledge_almanac.html', context)
 
