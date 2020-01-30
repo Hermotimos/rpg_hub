@@ -52,16 +52,15 @@ def knowledge_theology_view(request):
     if profile.character_status == 'gm':
         theology_skills = Skill.objects\
             .filter(name__icontains='Doktryn')\
-            .prefetch_related('knowledge_packets__pictures')
+            .prefetch_related('skill_levels', 'knowledge_packets__pictures')
     else:
         theology_skills = Skill.objects\
-            .filter(skill_levels__acquired_by_characters=profile.character)\
             .filter(name__icontains='Doktryn')\
             .prefetch_related(
                 Prefetch('skill_levels', queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
-                Prefetch('knowledge_packets', queryset=profile.character.knowledge_packets.all())
-                )\
-            .distinct()
+                Prefetch('knowledge_packets', queryset=profile.character.knowledge_packets.all()),
+                'knowledge_packets__pictures'
+                )
 
     context = {
         'page_title': 'Teologia',
