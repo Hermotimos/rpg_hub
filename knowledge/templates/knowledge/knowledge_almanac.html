@@ -13,28 +13,12 @@
 {% block content %}
     <br><br><br>
 
-    {% for type in kn_packet_types %}
-        {% if type.knowledge_packets.all %}
-            <h2><b>{{ type.name }}</b></h2>
-            {% if type.name == 'Teologia' %}
-                {% for skill in theology_skills %}
+    {% for skill in skills_with_kn_packets %}
 
-                    <div class="pl-5">
-                        {% include 'characters/_skills_with_kn_packets.html' %}
-                    </div>
+        <div class="pl-5">
+            {% include 'characters/_skills_with_knowledge_packets.html' %}
+        </div>
 
-                {% endfor %}
-            {% else %}
-                    {% for kn_packet in type.knowledge_packets.all %}
-            
-                        {% with specifier=type.id %}
-                                {% include '_knowledge_packet.html' %}
-                        {% endwith %}
-            
-                    {% endfor %}
-            {% endif %}
-            <br>
-        {% endif %}
     {% endfor  %}
 
 {% endblock content %}
