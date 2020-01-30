@@ -46,6 +46,32 @@ def knowledge_sheet_view(request):
 
 @query_debugger
 @login_required
+def knowledge_theology_view(request):
+    profile = request.user.profile
+
+    if profile.character_status == 'gm':
+        theology_skills = Skill.objects\
+            .filter(name__icontains='Doktryn')\
+            .prefetch_related('knowledge_packets__pictures')
+    else:
+        theology_skills = Skill.objects\
+            .filter(skill_levels__acquired_by_characters=profile.character)\
+            .filter(name__icontains='Doktryn')\
+            .prefetch_related(
+                Prefetch('skill_levels', queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
+                Prefetch('knowledge_packets', queryset=profile.character.knowledge_packets.all())
+                )\
+            .distinct()
+
+    context = {
+        'page_title': 'Teologia',
+        'theology_skills': theology_skills
+    }
+    return render(request, 'knowledge/knowledge_theology.html', context)
+
+
+@query_debugger
+@login_required
 def knowledge_inform_view(request, kn_packet_id):
     profile = request.user.profile
     kn_packet = get_object_or_404(KnowledgePacket, id=kn_packet_id)
