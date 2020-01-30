@@ -36,12 +36,12 @@ def knowledge_sheet_view(request):
             ))\
             .distinct()
 
-    # context = {
-    #     'page_title': 'Almanach',
-    #     'kn_packet_types': kn_packet_types,
-    #     'theology_skills': theology_skills
-    # }
-    # return render(request, 'knowledge/knowledge_sheet.html', context)
+    context = {
+        'page_title': 'Almanach',
+        'kn_packet_types': kn_packet_types,
+        'theology_skills': theology_skills
+    }
+    return render(request, 'knowledge/knowledge_almanac.html', context)
 
 
 @query_debugger
@@ -65,7 +65,7 @@ def knowledge_inform_view(request, kn_packet_id):
             subject = f"[RPG] Transfer wiedzy: '{kn_packet.title}'"
             message = f"{profile} przekazał Ci wiedzę na temat: '{kn_packet.title}'.\n"\
                 f"Więdzę tę możesz odnaleźć w zakładce Wiedza/Okruchy wiedzy: " \
-                f"{request.get_host()}/knowledge/knowledge-sheet/\n"\
+                f"{request.get_host()}/knowledge/knowledge-almanac/\n"\
                 f"Zobaczysz tam, z jakimi elementami jest powiązana ta wiedza (Umiejętności, Toponomikon itp.).\n" \
                 f"Wiedzę możesz przeglądać zarówno w Okruchach wiedzy, jak i we wskazanych tam miejscach."
             sender = settings.EMAIL_HOST_USER

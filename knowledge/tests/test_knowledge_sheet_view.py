@@ -58,7 +58,7 @@ class KnowledgeSheetTest(TestCase):
 
     def test_url_resolves_view(self):
         view = resolve('/knowledge/knowledge-sheet/')
-        self.assertEquals(view.func, views.knowledge_sheet_view)
+        self.assertEquals(view.func, views.knowledge_almanac_view)
 
     def test_contains(self):
         self.client.force_login(self.user1)
