@@ -42,10 +42,6 @@ def skills_sheet_view(request, profile_id='0'):
         .prefetch_related(Prefetch(
             'skill_levels',
             queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)
-            .prefetch_related(Prefetch(
-                'knowledge_packets',
-                queryset=KnowledgePacket.objects.filter(allowed_profiles=profile)
-                ))
         ))\
         .distinct()
 
@@ -54,10 +50,6 @@ def skills_sheet_view(request, profile_id='0'):
         .prefetch_related(Prefetch(
             'synergy_levels',
             queryset=SynergyLevel.objects.filter(acquired_by_characters=profile.character)
-            .prefetch_related(Prefetch(
-                'knowledge_packets',
-                queryset=KnowledgePacket.objects.filter(allowed_profiles=profile)
-                ))
         )) \
         .distinct()
 
