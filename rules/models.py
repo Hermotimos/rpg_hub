@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import Q
 
 from imaginarion.models import Picture
-from knowledge.models import KnowledgePacket
+# from knowledge.models import KnowledgePacket
 from rpg_project.utils import create_sorting_name
 from users.models import Profile
 
@@ -49,7 +49,7 @@ class SkillLevel(models.Model):
     skill = models.ForeignKey(Skill, related_name='skill_levels', on_delete=models.PROTECT)
     level = models.CharField(max_length=10, choices=S_LEVELS)
     description = models.TextField(max_length=4000, blank=True, null=True)
-    knowledge_packets = models.ManyToManyField(KnowledgePacket, related_name='skill_levels', blank=True)
+    # knowledge_packets = models.ManyToManyField(KnowledgePacket, related_name='skill_levels', blank=True)
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
@@ -98,7 +98,7 @@ class SynergyLevel(models.Model):
     synergy = models.ForeignKey(Synergy, related_name='synergy_levels', on_delete=models.PROTECT)
     level = models.CharField(max_length=10, choices=S_LEVELS[1:])
     description = models.TextField(max_length=4000, blank=True, null=True)
-    knowledge_packets = models.ManyToManyField(KnowledgePacket, related_name='synergy_levels', blank=True)
+    # knowledge_packets = models.ManyToManyField(KnowledgePacket, related_name='synergy_levels', blank=True)
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
