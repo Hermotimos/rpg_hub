@@ -6,12 +6,16 @@ from django.forms.widgets import Textarea, TextInput
 
 from imaginarion.models import Picture
 from knowledge.models import KnowledgePacket
+from rules.models import Skill
 
 
 class KnowledgePacketAdminForm(forms.ModelForm):
     pictures = forms.ModelMultipleChoiceField(queryset=Picture.objects.all(),
                                               widget=FilteredSelectMultiple('Pictures', False),
                                               required=False)
+    skills = forms.ModelMultipleChoiceField(queryset=Skill.objects.all(),
+                                            widget=FilteredSelectMultiple('Skills', False),
+                                            required=False)
 
 
 class KnowledgePacketAdmin(admin.ModelAdmin):
