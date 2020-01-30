@@ -44,10 +44,11 @@ class DemandsCreateTest(TestCase):
     # When the form is left without custom queryset for 'addressee' field, the test passes.
     def test_valid_post_data(self):
         self.client.force_login(self.user1)
-        data = {
-            'addressee': '2',     # by ForeignKeyField pk or id has to be provided
+        self.demand_ = {
+            'addressee': '2',  # by ForeignKeyField pk or id has to be provided
             'text': 'Demand2',
         }
+        data = self.demand_
         self.assertFalse(Demand.objects.exists())
         self.client.post(self.url, data)
         self.assertTrue(Demand.objects.exists())
