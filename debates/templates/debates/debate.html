@@ -65,7 +65,7 @@
                         <td colspan="2" class="font-18 font-italic text-justify">
                             {{ remark.text|capfirst|linebreaks }}
                             {% if remark.image %}
-                                <img src="{{ remark.image.url }}" alt="Remark img">
+                                <p><img class="img-fluid mx-auto d-block" src="{{ remark.image.url }}" alt="Remark img"></p>
                                 <br>
                             {% endif %}
                         </td>
@@ -81,7 +81,7 @@
                             <small class="text-muted text-nowrap">{{ remark.date_posted|date:'d-M-Y | H:i' }}</small><br>
                             {{ remark.text|capfirst|linebreaks }}
                             {% if remark.image %}
-                                <img src="{{ remark.image.url }}" alt="Remark img">
+                                <p><img class="img-fluid mx-auto d-block" src="{{ remark.image.url }}" alt="Remark img"></p>
                             {% endif %}
                         </td>
                     </tr>
