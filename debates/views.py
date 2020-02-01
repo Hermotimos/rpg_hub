@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db.models import Count, Case, When, IntegerField, Max, Min, Prefetch, Q
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.html import format_html
 
 from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm, InviteForm
 from debates.models import Topic, Debate, Remark
@@ -172,8 +173,8 @@ def debate_view(request, topic_id, debate_id):
     last_remark = None
     last_remark_seen_by_imgs = []
     if debate.remarks.exclude(author__profile__character_status='gm'):
-        first_remark = debate.remarks.order_by('date_posted')[0]
-        last_remark = debate.remarks.order_by('-date_posted')[0]
+        first_remark = debate.remarks.order_by('date_posted').select_related('author__profile')[0]
+        last_remark = debate.remarks.order_by('-date_posted').prefetch_related('seen_by')[0]
         if not debate.is_ended:
             seen_by = last_remark.seen_by.all()
             if profile not in seen_by:
