@@ -4,10 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db.models import Count, Case, When, IntegerField, Max, Min, Prefetch, Q
 from django.shortcuts import render, redirect, get_object_or_404
-from django.utils.html import format_html
 
 from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm, InviteForm
-from debates.models import Topic, Debate, Remark
+from debates.models import Topic, Debate
 from rpg_project.utils import query_debugger
 from users.models import User
 
