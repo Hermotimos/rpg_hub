@@ -10,19 +10,17 @@
                     <img class="border-0 small-img" src="{% static 'img/inform.png' %}" alt="Inform button img">
                 </a>
                 <br><br>
-                <h6 class="font-18 font-italic pt-1 text-justify">
+                <h6 class="font-18 font-italic pt-1 text-justify linebreaks-style">
                     {{ kn_packet.text|linebreaks }}
                 </h6>
-                <br>
                 {% for picture in kn_packet.pictures.all %}
                     <ul class="bullets-1 pl-3">
                         <li class="font-18 font-italic hover-blue pt-1 text-justify" data-toggle="collapse" data-target="#id{{ kn_packet.id }}_{{ picture.id }}">
                             <p>{{ picture.description }}</p>
                         </li>
                     </ul>
-                    <div id="id{{ kn_packet.id }}_{{ picture.id }}" class="collapse">
+                    <div id="id{{ kn_packet.id }}_{{ picture.id }}" class="collapse pb-3 pl-4">
                         <img src="{{ picture.image.url }}" alt="Knowledge packet img">
-                        <br>
                     </div>
                 {% endfor %}
             </div>
