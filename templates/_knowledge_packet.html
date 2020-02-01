@@ -10,9 +10,9 @@
                     <img class="border-0 small-img" src="{% static 'img/inform.png' %}" alt="Inform button img">
                 </a>
                 <br><br>
-                <p class="font-18 font-italic pt-1 text-justify">
-                    {{ kn_packet.text|linebreaksbr }}
-                </p>
+                <h6 class="font-18 font-italic pt-1 text-justify">
+                    {{ kn_packet.text|linebreaks }}
+                </h6>
                 <br>
                 {% for picture in kn_packet.pictures.all %}
                     <ul class="bullets-1 pl-3">
