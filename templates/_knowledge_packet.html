@@ -19,10 +19,13 @@
                             <p>{{ picture.description }}</p>
                         </li>
                     </ul>
-                    <div id="id{{ kn_packet.id }}_{{ picture.id }}" class="collapse pb-3 pl-4">
+                    <div id="id{{ kn_packet.id }}_{{ picture.id }}" class="collapse pl-4 pb-3">
                         <img class="img-fluid" src="{{ picture.image.url }}" alt="Knowledge packet img">
                     </div>
                 {% endfor %}
+                <div class="text-right">
+                    <p class="btn btn-outline-secondary" data-toggle="collapse" data-target="#id_{{ kn_packet.id }}_{{ specifier }}">Zwiń</p>
+                </div>
             </div>
         </div>
     </li>
