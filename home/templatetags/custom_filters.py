@@ -2,6 +2,8 @@
 
 from django import template
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
+
 register = template.Library()
 
 
@@ -94,4 +96,4 @@ def get_max_skill_level(skill_levels_list):
 @register.filter
 def format_as_html(text):
     text = format_html(text)
-    return text
+    return mark_safe(text)
