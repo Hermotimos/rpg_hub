@@ -1,7 +1,7 @@
 # Custom filters; ex. for dict lookup
 
 from django import template
-
+from django.utils.html import format_html
 register = template.Library()
 
 
@@ -89,3 +89,9 @@ def percentage(value):
 def get_max_skill_level(skill_levels_list):
     levels = [skill_lvl.level for skill_lvl in skill_levels_list]
     return max(levels)
+
+
+@register.filter
+def format_as_html(text):
+    text = format_html(text)
+    return text
