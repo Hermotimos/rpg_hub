@@ -35,11 +35,11 @@
                 {% if not spec_locs %}
                     <p class="font-18 font-italic pt-1 pl-5 text-justify">Terra incognita...</p>
                 {% else %}
-                    <div class="container pr-0">
+                    <div class="container px-2">
                         {% for spec_loc in spec_locs %}
                             <div class="row mb-4">
                                 
-                                <div class="col-md-4 px-0 py-1">
+                                <div class="col-md-4 px-3 py-2">
                                     <figure class="m-0 mr-2">
                                         <a class="img-link" href="{% url 'toponomikon:specific-location' spec_loc.id %}">
                                             <img class="img-fluid toponomikon-img {% if spec_loc.known_only_indirectly %} img-grayscale {% endif %}"
