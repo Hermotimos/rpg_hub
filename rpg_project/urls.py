@@ -35,9 +35,10 @@ urlpatterns = [
     path('prosoponomikon/', include('prosoponomikon.urls')),
     path('users/', include('users.urls')),
 
-    path(r'^__debug__', include(debug_toolbar.urls))
+
 ]
 
 # only for development phase (= when DEBUG is True), not suitable for production
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += [path(r'^__debug__', include(debug_toolbar.urls)), ]
