@@ -18,6 +18,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+import debug_toolbar
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,6 +35,7 @@ urlpatterns = [
     path('prosoponomikon/', include('prosoponomikon.urls')),
     path('users/', include('users.urls')),
 
+    path(r'^__debug__', include(debug_toolbar.urls))
 ]
 
 # only for development phase (= when DEBUG is True), not suitable for production
