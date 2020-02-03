@@ -200,12 +200,15 @@ a.img-link {
 }
 a.img-link:hover {
         opacity: 1;
-        filter: grayscale(0%)
+        filter: grayscale(0%);
+        color: #444444;
 }
 
 img.img-grayscale {
         filter: grayscale(100%);
 }
+
+
 
 
 /* ------------------------------------------------------------------------------------------------------------------ */
@@ -235,9 +238,7 @@ a {
         color: #212529;
 }
 
-figure > a:hover {
-        color: #444444;
-}
+
 
 
 /* ------------------------------------------------------------------------------------------------------------------ */
@@ -249,7 +250,6 @@ figure > a:hover {
         min-height: 150px;
         width: 400px;
 }
-
 
 .forms td {
         vertical-align: top;
@@ -264,7 +264,6 @@ figure > a:hover {
 
 ul.bullets-1 li {list-style: "✧";}
 ul.bullets-2 li {list-style: "✵";}
-
 
 ul[class^=bullets] > li > * {
     padding-left: 0.5rem;
