@@ -547,7 +547,8 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
 
     events = events\
         .select_related('game')\
-        .prefetch_related('threads', 'participants', 'informed', 'general_locations', 'specific_locations', 'notes__author')
+        .prefetch_related('threads', 'participants', 'informed', 'general_locations',
+                          'specific_locations__general_location', 'notes__author')
 
     context = {
         'page_title': page_title,
