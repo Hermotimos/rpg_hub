@@ -36,12 +36,10 @@
                 <div class="row">
                     {% for profile in living_npc_profiles %}
                         <div class="col-sm-4 col-md-3 col-lg-2 px-1">
-                            <figure class="text-center">
-                                <a class="img-link" href="#">
-                                    <img class="img-fluid mx-auto d-block" src="{{ profile.image.url }}" alt="Profile img">
-                                </a>
-                                <figcaption class="font-12 pt-1">{{ profile.character_name }}</figcaption>
-                            </figure>
+                            <a class="img-link" href="#">
+                                <img class="img-fluid mx-auto d-block" src="{{ profile.image.url }}" alt="Profile img">
+                            </a>
+                            <p class="font-12 pt-1">{{ profile.character_name }}</p>
                         </div>
                     {% endfor %}
                 </div>
@@ -51,12 +49,10 @@
                 <div class="row">
                     {% for profile in dead_npc_profiles %}
                         <div class="col-sm-4 col-md-3 col-lg-2 px-1">
-                            <figure class="text-center">
-                                <a href="#" class="img-link">
-                                    <img class="img-fluid mx-auto d-block img-grayscale" src="{{ profile.image.url }}" alt="Profile img">
-                                </a>
-                                <figcaption class="font-12 pt-1">{{ profile.character_name }}</figcaption>
-                            </figure>
+                            <a href="#" class="img-link">
+                                <img class="img-fluid mx-auto d-block img-grayscale" src="{{ profile.image.url }}" alt="Profile img">
+                            </a>
+                            <p class="font-12 pt-1">{{ profile.character_name }}</p>
                         </div>
                     {% endfor %}
                 </div>

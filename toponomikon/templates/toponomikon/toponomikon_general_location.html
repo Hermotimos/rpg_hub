@@ -35,28 +35,25 @@
                 {% if not spec_locs %}
                     <p class="font-18 font-italic pt-1 pl-5 text-justify">Terra incognita...</p>
                 {% else %}
-                    <div class="container px-2">
+                    <div class="container">
                         {% for spec_loc in spec_locs %}
                             <div class="row mb-4">
-                                
-                                <div class="col-md-4 px-3 py-2">
-                                    <figure class="m-0 mr-2">
-                                        <a class="img-link" href="{% url 'toponomikon:specific-location' spec_loc.id %}">
-                                            <img class="img-fluid toponomikon-img {% if spec_loc.known_only_indirectly %} img-grayscale {% endif %}"
-                                                 src="{{ spec_loc.main_image.image.url }}"
-                                                 alt="Specific location img"
-                                            >
-                                        </a>
-                                    </figure>
+                                <div class="col-md-4 px-2 py-1">
+                                    <a class="img-link" href="{% url 'toponomikon:specific-location' spec_loc.id %}">
+                                        <img class="img-fluid toponomikon-img {% if spec_loc.known_only_indirectly %} img-grayscale {% endif %}"
+                                             src="{{ spec_loc.main_image.image.url }}"
+                                             alt="Specific location img"
+                                        >
+                                    </a>
                                 </div>
                                 
                                 <div class="col-md-8 ml-n2">
-                                    <h2 class="border-custom-base">
+                                    <h3 class="border-custom-base">
                                         <small class="pr-5 {% if spec_loc.known_only_indirectly %} text-muted {% endif %}">
                                             {{ spec_loc.name }}
                                             {% if spec_loc.known_only_indirectly %} (znasz z opowieści) {% endif %}
                                         </small>
-                                    </h2>
+                                    </h3>
                                     <p class="font-italic text-justify {% if spec_loc.known_only_indirectly %} text-muted {% endif %}">
                                         <small>{% if spec_loc.description %} {{ spec_loc.description|linebreaksbr }} {% endif %}</small>
                                     </p>
