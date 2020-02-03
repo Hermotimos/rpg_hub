@@ -20,15 +20,13 @@
                 <div class="row">
                     {% for profile in players_profiles %}
                         <div class="col-sm-6 col-md-4 col-lg-3">
-                            <figure>
-                                <a href="#" class="img-link">
-                                    <img class="img-fluid mx-auto d-block {% if profile.character_status == 'dead_player' %} img-grayscale {% endif %}"
-                                         src="{{ profile.image.url }}"
-                                         alt="Profile img"
-                                    >
-                                </a>
-                                <figcaption class="pt-1 text-center">{{ profile.character_name }}</figcaption>
-                            </figure>
+                            <a href="#" class="img-link">
+                                <img class="img-fluid mx-auto d-block {% if profile.character_status == 'dead_player' %} img-grayscale {% endif %}"
+                                     src="{{ profile.image.url }}"
+                                     alt="Profile img"
+                                >
+                            </a>
+                            <p class="pt-1 text-center">{{ profile.character_name }}</p>
                         </div>
                     {% endfor %}
                 </div>
@@ -66,7 +64,5 @@
             
         </div>
     </article>
-
-
 
 {% endblock content %}
