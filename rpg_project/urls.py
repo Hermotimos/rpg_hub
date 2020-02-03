@@ -41,4 +41,8 @@ urlpatterns = [
 # only for development phase (= when DEBUG is True), not suitable for production
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += [path(r'^__debug__', include(debug_toolbar.urls)), ]
+    urlpatterns += [path(r'__debug__', include(debug_toolbar.urls)), ]
+    # was r'^__debug__' but Pycharm warned about it, so testing without ^
+# WARNINGS:
+# ?: (2_0.W001) Your URL pattern '^__debug__' has a route that contains '(?P<', begins with a '^', or ends with a '$'.
+# This was likely an oversight when migrating to django.urls.path().
