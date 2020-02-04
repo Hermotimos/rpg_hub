@@ -2,7 +2,6 @@ from django.db import models
 from django.db.models import Q
 
 from imaginarion.models import Picture
-# from knowledge.models import KnowledgePacket
 from rpg_project.utils import create_sorting_name
 from users.models import Profile
 
