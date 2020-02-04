@@ -37,8 +37,9 @@ class Chapter(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        super().save()
-        if self.image:
+        first_save = True if not self.pk else False
+        super().save(*args, **kwargs)
+        if first_save and self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:
                 output_size = (700, 700)

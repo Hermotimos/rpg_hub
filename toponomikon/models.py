@@ -39,7 +39,7 @@ class GeneralLocation(models.Model):
     def save(self, *args, **kwargs):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
-        super(GeneralLocation, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ['sorting_name']
@@ -77,7 +77,7 @@ class SpecificLocation(models.Model):
     def save(self, *args, **kwargs):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
-        super(SpecificLocation, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ['sorting_name']

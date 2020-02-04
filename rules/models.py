@@ -24,7 +24,7 @@ class Skill(models.Model):
     def save(self, *args, **kwargs):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
-        super(Skill, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def short_name(self):
         short_name = ''
@@ -57,7 +57,7 @@ class SkillLevel(models.Model):
 
     def save(self, *args, **kwargs):
         self.sorting_name = create_sorting_name(self.__str__())
-        super(SkillLevel, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ['sorting_name']
@@ -79,7 +79,7 @@ class Synergy(models.Model):
     def save(self, *args, **kwargs):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
-        super(Synergy, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def short_name(self):
         short_name = ''
@@ -106,7 +106,7 @@ class SynergyLevel(models.Model):
 
     def save(self, *args, **kwargs):
         self.sorting_name = create_sorting_name(self.__str__())
-        super(SynergyLevel, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ['sorting_name']
@@ -123,7 +123,7 @@ class CharacterClass(models.Model):
     def save(self, *args, **kwargs):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
-        super(CharacterClass, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def short_name(self):
         short_name = ''
@@ -185,7 +185,7 @@ class CharacterProfession(models.Model):
     def save(self, *args, **kwargs):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
-        super(CharacterProfession, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def short_name(self):
         short_name = ''
@@ -215,7 +215,7 @@ class EliteClass(models.Model):
     def save(self, *args, **kwargs):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
-        super(EliteClass, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def short_name(self):
         short_name = ''
@@ -249,7 +249,7 @@ class EliteProfession(models.Model):
     def save(self, *args, **kwargs):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
-        super(EliteProfession, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def short_name(self):
         short_name = ''
@@ -275,7 +275,7 @@ class WeaponClass(models.Model):
     def save(self, *args, **kwargs):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
-        super(WeaponClass, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def short_name(self):
         short_name = ''
@@ -351,7 +351,7 @@ class WeaponType(models.Model):
     def save(self, *args, **kwargs):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
-        super(WeaponType, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def short_name(self):
         short_name = ''

@@ -23,8 +23,9 @@ class News(models.Model):
         return self.title[:50] + '...' if len(str(self.title)) > 100 else self.title
 
     def save(self, *args, **kwargs):
-        super().save()
-        if self.image:
+        first_save = True if not self.pk else False
+        super().save(*args, **kwargs)
+        if first_save and self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:
                 output_size = (700, 700)
@@ -52,8 +53,9 @@ class NewsAnswer(models.Model):
         return self.text[:100] + '...' if len(str(self.text)) > 100 else self.text
 
     def save(self, *args, **kwargs):
-        super().save()
-        if self.image:
+        first_save = True if not self.pk else False
+        super().save(*args, **kwargs)
+        if first_save and self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:
                 output_size = (700, 700)
@@ -77,8 +79,9 @@ class Survey(models.Model):
         return self.title[:50] + '...' if len(str(self.title)) > 50 else self.title
 
     def save(self, *args, **kwargs):
-        super().save()
-        if self.image:
+        first_save = True if not self.pk else False
+        super().save(*args, **kwargs)
+        if first_save and self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:
                 output_size = (700, 700)
@@ -115,8 +118,9 @@ class SurveyAnswer(models.Model):
         return self.text[:100] + '...' if len(str(self.text)) > 100 else self.text
 
     def save(self, *args, **kwargs):
-        super().save()
-        if self.image:
+        first_save = True if not self.pk else False
+        super().save(*args, **kwargs)
+        if first_save and self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:
                 output_size = (700, 700)
@@ -132,7 +136,8 @@ class SurveyAnswer(models.Model):
 @receiver(post_save, sender=NewsAnswer)
 @receiver(post_save, sender=SurveyAnswer)
 def delete_if_doubled(sender, instance, **kwargs):
-    time_span = datetime.datetime.now() - datetime.timedelta(minutes=1)
+    time_span = datetime.datetime.now() - datetime.timedelta(minutes=2)
+    doubled = 0
     if isinstance(instance, NewsAnswer):
         doubled = NewsAnswer.objects.filter(text=instance.text, author=instance.author, date_posted__gte=time_span)
     elif isinstance(instance, SurveyAnswer):

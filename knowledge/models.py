@@ -30,7 +30,7 @@ class KnowledgePacket(models.Model):
 
     def save(self, *args, **kwargs):
         self.sorting_name = create_sorting_name(self.__str__())
-        super(KnowledgePacket, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ['title']

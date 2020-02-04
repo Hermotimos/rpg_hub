@@ -50,8 +50,9 @@ class Remark(models.Model):
         return self.__str__()
 
     def save(self, *args, **kwargs):
-        super().save()
-        if self.image:
+        first_save = True if not self.pk else False
+        super().save(*args, **kwargs)
+        if first_save and self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:
                 output_size = (700, 700)
@@ -79,7 +80,7 @@ m2m_changed.connect(update_topic_allowed_profiles, sender=Debate.allowed_profile
 
 
 def delete_if_doubled(sender, instance, **kwargs):
-    time_span = datetime.datetime.now() - datetime.timedelta(minutes=1)
+    time_span = datetime.datetime.now() - datetime.timedelta(minutes=2)
     doubled = Remark.objects.filter(text=instance.text, author=instance.author, date_posted__gte=time_span)
     if doubled.count() > 1:
         instance.delete()

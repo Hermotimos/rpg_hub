@@ -26,9 +26,9 @@ class Picture(models.Model):
         return f'{str(self.type).upper()}__{str(self.title).split("_", 1)[1]}'
 
     def save(self, *args, **kwargs):
+        first_save = True if not self.pk else False
         super().save(*args, **kwargs)
-
-        if self.image:
+        if first_save and self.image:
             img = Image.open(self.image.path)
             if img.height > 1000 or img.width > 1000:
                 output_size = (1000, 1000)
