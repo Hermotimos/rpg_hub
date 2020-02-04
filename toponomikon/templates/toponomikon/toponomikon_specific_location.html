@@ -16,17 +16,32 @@
     <br>
 
     <article>
-        
-        <section>
-            <img class="mb-1 toponomikon {% if spec_loc_known_only_indirectly %} img-grayscale {% endif %}"
-                 src="{{ spec_loc.main_image.image.url }}"
-                 alt="Specific location img"
-            >
-            <button class="btn btn-outline-secondary">
-                <a href="{% url 'toponomikon:inform' 0 spec_loc.id %}"><img class="border-0 small-img" src="{% static 'img/inform.png' %}" alt="Inform button img"></a>
-            </button>
-            <p class="font-italic text-justify">{{ spec_loc.description|linebreaksbr }}</p>
+        <section class="mb-5">
+            <div class="container">
+                
+                <div class="row">
+                    <img class="mb-1 toponomikon {% if spec_loc_known_only_indirectly %} img-grayscale {% endif %}"
+                         src="{{ spec_loc.main_image.image.url }}"
+                         alt="Specific location img">
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-11 p-0">
+                        <p class="font-italic text-justify">{{ spec_loc.description|linebreaksbr }}</p>
+                    </div>
+                    <div class="col-md-1">
+                        <a class="btn btn-outline-dark mt-1" href="{% url 'toponomikon:inform' 0 spec_loc.id %}">
+                            <i class="icon-inform"></i>
+                        </a>
+                        <a class="btn btn-outline-dark mt-1 disabled" href="#">
+                            <i class="icon-note"></i>
+                        </a>
+                    </div>
+                </div>
+                
+            </div>
         </section>
+
         
         <section>
             {% if knowledge_packets %}
