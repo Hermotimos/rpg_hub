@@ -1,5 +1,20 @@
 {% extends 'base.html' %}
 
+
 {% block content %}
-    <p>Strona główna w budowie...</p>
+    <br>
+
+    <div class="container">
+        <div class="row"  id="prosopa" onload="refreshProsopa()">
+            {% for profile in rand_profiles %}
+                <div class="col-sm-6  col-lg-3">
+                    <img class="img-fluid mx-auto d-block {% if profile.character_status == 'dead_player' %} img-grayscale {% endif %}"
+                         src="{{ profile.image.url }}"
+                         alt="Profile img">
+                    <p class="pt-1 text-center">{{ profile.character_name }}</p>
+                </div>
+            {% endfor %}
+        </div>
+            
+    </div>
 {% endblock content %}

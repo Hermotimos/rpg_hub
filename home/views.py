@@ -1,13 +1,37 @@
+from random import randrange
+
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 from rpg_project.utils import query_debugger
+from users.models import Profile
 
 
 @query_debugger
 @login_required
 def home_view(request):
-    return render(request, 'home/home.html')
+    profile = request.user.profile
+
+    if profile.character_status == 'gm':
+        known_profiles = Profile.objects.exclude(id=profile.id)
+    else:
+        known_profiles = []
+
+    rand_profiles = []
+    rand_nums = []
+    counter = 0
+    while counter < 4:
+        rand = randrange(len(known_profiles))
+        if rand not in rand_nums:
+            rand_profiles.append(known_profiles[rand])
+            rand_nums.append(rand)
+            counter += 1
+
+    context = {
+        'page_title': 'Hyllemath',
+        'rand_profiles': rand_profiles,
+    }
+    return render(request, 'home/home.html', context)
 
 
 @query_debugger
