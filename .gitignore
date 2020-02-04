@@ -1,16 +1,23 @@
-*.pyc
-*~
-__pycache__
+credentials.py
+settings.py
+requirements.txt
+db.sqlite3
+PyCharm_ReferenceCard.pdf
 
 .DS_Store
 .idea
 
-credentials.py
-settings.py
-requirements.txt
-
 migrations/
-
-db.sqlite3
 media
 myenv
+
+*.pyc
+*~
+__pycache__
+
+
+
+
+
+
+
