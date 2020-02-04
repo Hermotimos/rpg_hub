@@ -56,5 +56,20 @@
 }
  
 .icon-inform:before { content: '\e800'; } /* '' */
+.icon-inform-small:before {
+    content: '\e800';
+    font-size: 0.6rem;
+
+}
+
 .icon-note:before { content: '\e802'; } /* '' */
+.icon-note-small:before {
+    content: '\e802';
+    font-size: 0.6rem;
+}
+
 .icon-edit:before { content: '\e803'; } /* '' */
+.icon-edit-small:before {
+    content: '\e803';
+    font-size: 0.6rem;
+}
