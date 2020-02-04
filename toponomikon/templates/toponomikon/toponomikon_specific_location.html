@@ -18,13 +18,13 @@
     <article>
         
         <section>
-            <p class="toponomikon-gen-loc-img">
-                <img class="{% if spec_loc_known_only_indirectly %} img-grayscale {% endif %}"
-                     src="{{ spec_loc.main_image.image.url }}"
-                     alt="Specific location img"
-                >
-            </p>
-            <p><a class="pl-1" href="{% url 'toponomikon:inform' 0 spec_loc.id %}"><img class="border-0 small-img" src="{% static 'img/inform.png' %}" alt="Inform button img"></a></p>
+            <img class="mb-1 toponomikon {% if spec_loc_known_only_indirectly %} img-grayscale {% endif %}"
+                 src="{{ spec_loc.main_image.image.url }}"
+                 alt="Specific location img"
+            >
+            <button class="btn btn-outline-secondary">
+                <a href="{% url 'toponomikon:inform' 0 spec_loc.id %}"><img class="border-0 small-img" src="{% static 'img/inform.png' %}" alt="Inform button img"></a>
+            </button>
             <p class="font-italic text-justify">{{ spec_loc.description|linebreaksbr }}</p>
         </section>
         
