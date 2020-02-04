@@ -8,10 +8,12 @@
 
 {% block content %}
     <br><br><br>
-    <h2 class="unblue">
-        <img class="img-chapter" src="{% static 'img/history_all.png' %}" alt="Chapter img">
-        <b><a href="{% url 'history:chronicle-all-chapters' %}" class="align-middle pt-2">Pełna kronika</a></b>
-    </h2>
+    <div class="border-bottom">
+        <h2 class="unblue pb-3">
+            <img class="img-chapter" src="{% static 'img/history_all.png' %}" alt="Chapter img">
+            <b><a href="{% url 'history:chronicle-all-chapters' %}" class="align-middle pt-2">Pełna Kronika</a></b>
+        </h2>
+    </div>
     <br><br>
     {% for chapter in chapters %}
         <br>
