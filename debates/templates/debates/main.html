@@ -22,27 +22,30 @@
         <ul class="bullets-1">
             {% for debate in topic.debates.all %}
                 <li class="{% if not debate.is_ended %}bullet-ongoing{% endif %}">
-                    <h6>
-                        <a class="unblue" href="{% url 'debates:debate' debate.topic.id debate.id %}">
-                            {{ debate.name }}&nbsp;
-                        </a>
-                        <small class="font-12 text-muted">
-                        {% if debate.first_player_remark_date|date:'d-M-Y' != debate.last_player_remark_date|date:'d-M-Y' %}
-                           [{{ debate.first_player_remark_date|date:'d/M' }} - {{ debate.last_player_remark_date|date:'d/M Y' }}
-                        {% else %}
-                            [{{ debate.first_player_remark_date|date:'d/M Y' }}
-                        {% endif %}
-                        
-                        &#10033;
-                        Wypowiedzi: {{ debate.player_remarks_count }}]
-                        &emsp;
-                        {% for profile in debate.allowed_profiles.all %}
-                            {% if profile.character_status != 'gm' %}
-                                <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile img">
-                            {% endif %}
-                        {% endfor %}
-                        </small>
-                    </h6>
+                    <div>
+                        <h5 class="mb-0">
+                            <a class="pr-2" href="{% url 'debates:debate' debate.topic.id debate.id %}">
+                                {{ debate.name }}&nbsp;
+                            </a>
+                            <br class="d-md-none"/>
+                            {% for profile in debate.allowed_profiles.all %}
+                                {% if profile.character_status != 'gm' %}
+                                    <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile img">
+                                {% endif %}
+                            {% endfor %}
+                        </h5>
+                        <p>
+                            <small class="font-12 text-muted">
+                                {% if debate.first_player_remark_date|date:'d-M-Y' != debate.last_player_remark_date|date:'d-M-Y' %}
+                                   [{{ debate.first_player_remark_date|date:'d/M' }} - {{ debate.last_player_remark_date|date:'d/M Y' }}
+                                {% else %}
+                                    [{{ debate.first_player_remark_date|date:'d/M Y' }}
+                                {% endif %}
+                                &#10033;
+                                Wypowiedzi: {{ debate.player_remarks_count }}]
+                            </small>
+                        </p>
+                    </div>
                 </li>
             {% endfor %}
         </ul>
