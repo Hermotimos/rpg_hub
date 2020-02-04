@@ -17,14 +17,29 @@
     <article>
         
         <section>
-            <p class="toponomikon-gen-loc-img">
-                <img class="{% if gen_loc_known_only_indirectly %} img-grayscale {% endif %}"
-                     src="{{ gen_loc.main_image.image.url }}"
-                     alt="General location img"
-                >
-            </p>
-            <p><a class="pl-1" href="{% url 'toponomikon:inform' gen_loc.id '0' %}"><img class="border-0 small-img" src="{% static 'img/inform.png' %}" alt="Inform button img"></a></p>
-            <p class="font-italic text-justify">{{ gen_loc.description|linebreaksbr }}</p>
+            <div class="container">
+                <div class="row">
+                    <img class="mb-3 toponomikon {% if gen_loc_known_only_indirectly %} img-grayscale {% endif %}"
+                         src="{{ gen_loc.main_image.image.url }}"
+                         alt="General location img"
+                    >
+                </div>
+                <div class="row">
+                    <div class="col-md-11 p-0">
+                        <p class="font-italic text-justify">{{ gen_loc.description|linebreaksbr }}</p>
+                    </div>
+                    <div class="col-md-1">
+                        <a class="btn btn-outline-dark mt-1" href="{% url 'toponomikon:inform' gen_loc.id '0' %}">
+                            <i class="icon-inform"></i>
+                        </a>
+                        <a class="btn btn-outline-dark mt-1" href="{% url 'toponomikon:inform' gen_loc.id '0' %}">
+                            <i class="icon-note"></i>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
             <br><br>
         </section>
         
