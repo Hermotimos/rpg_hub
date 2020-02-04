@@ -38,11 +38,16 @@
         <br>
     </td>
     <td class="align-top">
-        <br>
-        <h6><a href="{% url 'history:chronicle-inform' event.id %}"><img class="border-0 small-img" src="{% static 'img/inform.png' %}" alt="Inform button img"></a></h6>
-        <h6><a href="{% url 'history:chronicle-note' event.id %}"><img class="border-0 small-img" src="{% static 'img/note.png' %}" alt="Note button img"></a></h6>
+        <a class="btn btn-outline-dark mt-1" href="{% url 'history:chronicle-inform' event.id %}">
+            <i class="icon-inform-medium"></i>
+        </a>
+        <a class="btn btn-outline-dark mt-1" href="{% url 'history:chronicle-note' event.id %}">
+            <i class="icon-note-medium"></i>
+        </a>
         {% if request.user.profile.character_status == 'gm' %}
-            <h6><a href="{% url 'history:chronicle-edit' event.id %}"><img class="border-0 small-img" src="{% static 'img/edit.png' %}" alt="Edit button img"></a></h6>
+            <a class="btn btn-outline-dark mt-1" href="{% url 'history:chronicle-edit' event.id %}">
+                <i class="icon-edit-medium"></i>
+            </a>
         {% endif %}
     </td>
 </tr>
