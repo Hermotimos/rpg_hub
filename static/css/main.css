@@ -268,11 +268,12 @@ ul.bullets-2 li {list-style: "✵";}
 ul[class^=bullets] > li > * {
     padding-left: 0.5rem;
 }
-
+/*
 ul[class^=bullets] > li a {
         padding-left: 0.2rem !important;
         padding-right: 0 !important;
 }
+*/
 nav ul.bullets-1 {
         margin-bottom: 0.5rem;
 }

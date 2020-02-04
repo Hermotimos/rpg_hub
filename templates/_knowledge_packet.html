@@ -6,9 +6,13 @@
         </h5>
         <div id="id_{{ kn_packet.id }}_{{ specifier }}" class="collapse">
             <div class="text-justify pb-3">
-                <a class="pl-1" href="{% url 'knowledge:knowledge-inform' kn_packet.id %}">
-                    <img class="border-0 small-img" src="{% static 'img/inform.png' %}" alt="Inform button img">
+                <a class="btn btn-outline-dark mt-1" href="{% url 'knowledge:knowledge-inform' kn_packet.id %}">
+                    <i class="icon-inform"></i>
                 </a>
+                <a class="btn btn-outline-dark mt-1 disabled" href="#">
+                    <i class="icon-note"></i>
+                </a>
+
                 <br><br>
                 <h6 class="font-18 font-italic pt-1 text-justify linebreaks-style">
                     {{ kn_packet.text|linebreaks }}
