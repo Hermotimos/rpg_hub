@@ -21,8 +21,7 @@
             </td>
             <td class="font-18 font-italic px-1 py-1 text-justify">
                 <small class="font-italic text-nowrap text-muted">{{ demand.date_created|date:'d-M-Y | H:i' }}</small>
-                <br>
-                {{ demand.text|capfirst|linebreaksbr }}
+                <p>{{ demand.text|capfirst|linebreaksbr }}</p>
                 {% if demand.image %}
                     <img src="{{ demand.image.url }}" alt="Demand img">
                 {% endif %}
