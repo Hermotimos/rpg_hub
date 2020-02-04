@@ -25,13 +25,22 @@
         {% endif %}
 
         {% if event.debate %}
-            <p class="font-18 font-italic px-1 py-1 text-justify"><a href="{% url 'debates:debate' event.debate.topic.id event.debate.id %}">Narada: {{ event.debate.name }}</a></p>
+            <div class="font-18 font-italic text-justify px-1 py-1">
+                <p>
+                    <a href="{% url 'debates:debate' event.debate.topic.id event.debate.id %}">
+                        Narada: {{ event.debate.name }}
+                    </a>
+                </p>
+            </div>
         {% endif %}
 
         {% for note in event.notes.all %}
             {% if request.user == note.author %}
                 {% if note.text != '' %}
-                    <a style="color:{{ note.color }}"><br>Przemyślenia:<br>{{ note.text|linebreaksbr }}</a>
+                    <div class="font-italic text-justify px-1 py-1" style="color:{{ note.color }}">
+                        <h5>Przemyślenia:</h5>
+                        <p>{{ note.text|linebreaksbr }}</p>
+                    </div>
                 {% endif %}
             {% endif %}
         {% endfor %}
