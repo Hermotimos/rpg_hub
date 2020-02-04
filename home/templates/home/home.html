@@ -3,18 +3,42 @@
 
 {% block content %}
     <br>
-
-    <div class="container">
-        <div class="row"  id="prosopa" onload="refreshProsopa()">
-            {% for profile in rand_profiles %}
-                <div class="col-sm-6  col-lg-3">
-                    <img class="img-fluid mx-auto d-block {% if profile.character_status == 'dead_player' %} img-grayscale {% endif %}"
-                         src="{{ profile.image.url }}"
-                         alt="Profile img">
-                    <p class="pt-1 text-center">{{ profile.character_name }}</p>
+    <article>
+        
+        <!--   Random pictures from Prosoponomikon    -->
+        <section>
+            <div class="container">
+                <div class="row">
+                    {% for profile in rand_profiles %}
+                        <div class="col-sm-6  col-lg-3">
+                            <img class="img-fluid mx-auto d-block {% if profile.character_status == 'dead_player' %} img-grayscale {% endif %}"
+                                 src="{{ profile.image.url }}"
+                                 alt="Profile img">
+                            <p class="pt-1 text-center">{{ profile.character_name }}</p>
+                        </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-        </div>
-            
-    </div>
+            </div>
+        </section>
+        
+        <!--   Random pictures from Toponomikon    -->
+        <section>
+            <div class="container">
+                <div class="row">
+                
+                </div>
+            </div>
+        </section>
+        
+        <!--   Random pictures from Therarion    -->
+        <section>
+            <div class="container">
+                <div class="row">
+                
+                </div>
+            </div>
+        </section>
+        
+    </article>
+
 {% endblock content %}
