@@ -14,7 +14,7 @@ class DemandsCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
-        super(DemandsCreateForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['addressee'].label = 'Adresat:'
         self.fields['addressee'].queryset = User.objects.exclude(Q(id=authenticated_user.id) |
                                                                  Q(profile__character_status='dead_player') |
@@ -38,7 +38,7 @@ class DemandAnswerForm(forms.ModelForm):
         fields = ['text', 'image']
 
     def __init__(self, *args, **kwargs):
-        super(DemandAnswerForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
@@ -58,7 +58,7 @@ class PlansCreateForm(forms.ModelForm):
         fields = ['inform_gm', 'text', 'image']
 
     def __init__(self, *args, **kwargs):
-        super(PlansCreateForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['inform_gm'].label = 'Poinformuj MG'
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
@@ -76,7 +76,7 @@ class PlansModifyForm(forms.ModelForm):
         fields = ['inform_gm', 'text', 'image']
 
     def __init__(self, *args, **kwargs):
-        super(PlansModifyForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['inform_gm'].label = 'Poinformuj MG'
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False

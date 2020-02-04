@@ -13,7 +13,7 @@ class GeneralLocationInformForm(forms.ModelForm):
         authenticated_user = kwargs.pop('authenticated_user')
         already_known_directly = kwargs.pop('known_directly_old')
         already_known_indirectly = kwargs.pop('known_indirectly_old')
-        super(GeneralLocationInformForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['known_indirectly'].label = ''
         self.fields['known_indirectly'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
                                                                            Q(character_status='dead_player') |
@@ -34,7 +34,7 @@ class SpecificLocationInformForm(forms.ModelForm):
         authenticated_user = kwargs.pop('authenticated_user')
         already_known_directly = kwargs.pop('known_directly_old')
         already_known_indirectly = kwargs.pop('known_indirectly_old')
-        super(SpecificLocationInformForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['known_indirectly'].label = ''
         self.fields['known_indirectly'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
                                                                            Q(character_status='dead_player') |

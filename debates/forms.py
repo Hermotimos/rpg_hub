@@ -12,7 +12,7 @@ class CreateTopicForm(forms.ModelForm):
         fields = ['title']
 
     def __init__(self, *args, **kwargs):
-        super(CreateTopicForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['title'].label = ''
         self.fields['title'].max_length = 50
         self.fields['title'].widget.attrs = {
@@ -29,7 +29,7 @@ class CreateDebateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
-        super(CreateDebateForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['allowed_profiles'].label = ''
         self.fields['allowed_profiles'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
                                                                            Q(character_status='dead_player') |
@@ -55,7 +55,7 @@ class CreateRemarkForm(forms.ModelForm):
         else:
             debate_allowed_profiles = Profile.objects.exclude(Q(character_status='dead_player') |
                                                               Q(character_status='dead_npc'))
-        super(CreateRemarkForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['author'].label = 'Autor:'
         self.fields['author'].queryset = User.objects\
             .filter(Q(profile__character_status='gm') | Q(profile__in=debate_allowed_profiles))\
@@ -78,7 +78,7 @@ class InviteForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
         old_allowed_profiles = kwargs.pop('old_allowed_profiles')
-        super(InviteForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['allowed_profiles'].label = ''
         self.fields['allowed_profiles'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
                                                                            Q(character_status='dead_player') |

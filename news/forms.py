@@ -11,7 +11,7 @@ class CreateNewsForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
-        super(CreateNewsForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['allowed_profiles'].label = ''
         self.fields['allowed_profiles'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
                                                                            Q(character_status='dead_player') |
@@ -42,7 +42,7 @@ class CreateNewsAnswerForm(forms.ModelForm):
         fields = ['text', 'image']
 
     def __init__(self, *args, **kwargs):
-        super(CreateNewsAnswerForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
@@ -62,7 +62,7 @@ class CreateSurveyForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
-        super(CreateSurveyForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['addressees'].label = ''
         self.fields['addressees'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
                                                                      Q(character_status='dead_player') |
@@ -92,7 +92,7 @@ class CreateSurveyOptionForm(forms.ModelForm):
         fields = ['option_text']
 
     def __init__(self, *args, **kwargs):
-        super(CreateSurveyOptionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['option_text'].label = ''
         self.fields['option_text'].max_length = 50
         self.fields['option_text'].widget.attrs = {'placeholder':  'Nowa opcja ankiety (max. 50 znaków)*'}
@@ -104,7 +104,7 @@ class ModifySurveyOptionForm(forms.ModelForm):
         fields = ['option_text']
 
     def __init__(self, *args, **kwargs):
-        super(ModifySurveyOptionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['option_text'].label = ''
         self.fields['option_text'].max_length = 50
         self.fields['option_text'].widget.attrs = {'placeholder':  'Zmieniona opcja ankiety (max. 50 znaków)*'}
@@ -116,7 +116,7 @@ class CreateSurveyAnswerForm(forms.ModelForm):
         fields = ['image', 'text']
 
     def __init__(self, *args, **kwargs):
-        super(CreateSurveyAnswerForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''

@@ -22,7 +22,7 @@ class KnowledgePacketInformForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
         allowed_characters_old = kwargs.pop('allowed_characters_old')
-        super(KnowledgePacketInformForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # Code from the source of this solution, not used now
         # if kwargs.get('instance'):

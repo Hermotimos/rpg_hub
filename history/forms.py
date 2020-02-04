@@ -13,7 +13,7 @@ class ChronicleEventCreateForm(forms.ModelForm):
         exclude = []
 
     def __init__(self, *args, **kwargs):
-        super(ChronicleEventCreateForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['description'].widget.attrs = {'cols': 60, 'rows': 10}
         self.fields['informed'].widget.attrs = {'size': 10}
         self.fields['participants'].widget.attrs = {'size': 10}
@@ -26,7 +26,7 @@ class ChronicleEventEditForm(forms.ModelForm):
         exclude = []
 
     def __init__(self, *args, **kwargs):
-        super(ChronicleEventEditForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['description'].widget.attrs = {'cols': 60, 'rows': 10}
         self.fields['informed'].widget.attrs = {'size': 10}
         self.fields['participants'].widget.attrs = {'size': 10}
@@ -42,7 +42,7 @@ class ChronicleEventInformForm(forms.ModelForm):
         authenticated_user = kwargs.pop('authenticated_user')
         old_informed = kwargs.pop('old_informed')
         participants = kwargs.pop('participants')
-        super(ChronicleEventInformForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['informed'].label = ''
         self.fields['informed'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
                                                                    Q(character_status='dead_player') |
@@ -63,7 +63,7 @@ class ChronicleEventNoteForm(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
-        super(ChronicleEventNoteForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['color'].label = 'Kolor tekstu'
         self.fields['text'].label = ''
         self.fields['text'].required = False
@@ -83,7 +83,7 @@ class TimelineEventCreateForm(forms.ModelForm):
         exclude = ()
 
     def __init__(self, *args, **kwargs):
-        super(TimelineEventCreateForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['description'].widget.attrs = {'cols': 60, 'rows': 10}
         self.fields['informed'].widget.attrs = {'size': 10}
         self.fields['participants'].widget.attrs = {'size': 10}
@@ -101,7 +101,7 @@ class TimelineEventInformForm(forms.ModelForm):
         authenticated_user = kwargs.pop('authenticated_user')
         old_informed = kwargs.pop('old_informed')
         participants = kwargs.pop('participants')
-        super(TimelineEventInformForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['informed'].label = ''
         self.fields['informed'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
                                                                    Q(character_status='dead_player') |
@@ -119,7 +119,7 @@ class TimelineEventEditForm(forms.ModelForm):
         exclude = ()
 
     def __init__(self, *args, **kwargs):
-        super(TimelineEventEditForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['description'].widget.attrs = {'cols': 60, 'rows': 10}
         self.fields['informed'].widget.attrs = {'size': 10}
         self.fields['participants'].widget.attrs = {'size': 10}
@@ -137,7 +137,7 @@ class TimelineEventNoteForm(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
-        super(TimelineEventNoteForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['color'].label = 'Kolor tekstu'
         self.fields['text'].label = ''
         self.fields['text'].required = False
