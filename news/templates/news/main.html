@@ -7,13 +7,9 @@
     <link rel="stylesheet" href="{% static 'css/news.css' %}">
 {% endblock head_extra %}
 
-{% block breadcrumb %}
-    <li class="breadcrumb-item active">{{ page_title }}</li>
-{% endblock breadcrumb %}
-
 {% block content %}
 
-<!-- NEW NEWS & NEW SURVEY BUTTONS-->
+    <!-- NEW NEWS & NEW SURVEY BUTTONS-->
     <div class="mt-4">
         <a href="{% url 'news:create' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
         {% if request.user.profile.character_status == 'gm' %}
@@ -24,7 +20,7 @@
     </div>
     <br><br><br>
 
-<!-- SURVEYS -->
+    <!-- SURVEYS -->
     {% for survey in surveys %}
         <table>
             <tbody>
@@ -50,7 +46,7 @@
     {% endfor %}
     <br><br>
 
-<!-- NEWS -->
+    <!-- NEWS -->
     {% for news in newss %}
         <table class="border-top">
             <tbody>

@@ -7,12 +7,6 @@
     <link rel="stylesheet" href="{% static 'css/history.css' %}">
 {% endblock head_extra %}
 
-{% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{% url 'history:chronicle-main' %}">Kronika</a></li>
-    <li class="breadcrumb-item"><a href="javascript:history.go(-1)">(...)</a></li>
-    <li class="breadcrumb-item active">{{ page_title }}</li>
-{% endblock breadcrumb %}
-
 {% block content %}
     <br><br><br>
     <form method="POST">
