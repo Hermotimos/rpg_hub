@@ -24,8 +24,8 @@
                 <li class="{% if not debate.is_ended %}bullet-ongoing{% endif %}">
                     <div>
                         <h5 class="mb-0">
-                            <a class="pr-2" href="{% url 'debates:debate' debate.topic.id debate.id %}">
-                                {{ debate.name }}&nbsp;
+                            <a class="pr-3" href="{% url 'debates:debate' debate.topic.id debate.id %}">
+                                {{ debate.name }}
                             </a>
                             <br class="d-md-none"/>
                             {% for profile in debate.allowed_profiles.all %}
