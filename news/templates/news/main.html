@@ -24,13 +24,13 @@
     {% for survey in surveys %}
         <table>
             <tbody>
-                <tr class="posts-and-news">
-                    <td class="align-top pt-2 px-2">
+                <tr>
+                    <td class="align-top pt-2 pr-2">
                         <img class="rounded-circle article-img" src="{{ survey.author.profile.image.url }}">
                         <br>
                     </td>
                     <td>
-                        <small class="font-italic text-muted">{{ survey.date_posted|date:'d-M-Y, H:i' }}</small>
+                        <small class="font-italic text-muted">{{ survey.date_posted|date:'d-M-Y | H:i' }}</small>
                         <h3 class="unblue"><a href="{% url 'news:survey-detail' survey.id %}">ANKIETA: {{ survey.title }}</a></h3>
                         {% if survey.survey_answers.all %}
                         <h5>
@@ -50,13 +50,13 @@
     {% for news in newss %}
         <table class="border-top">
             <tbody>
-                <tr class="posts-and-news">
-                    <td class="align-top pt-3 px-2">
+                <tr>
+                    <td class="align-top pt-3 pr-2">
                         <img class="rounded-circle article-img" src="{{ news.author.profile.image.url }}">
                         <br>
                     </td>
                     <td class="pt-2">
-                        <small class="font-italic text-nowrap text-muted">{{ news.date_posted|date:'d-M-Y, H:i' }}</small>
+                        <small class="font-italic text-nowrap text-muted">{{ news.date_posted|date:'d-M-Y | H:i' }}</small>
                         <h3 class="unblue"><a href="{% url 'news:detail' news.id %}">{{ news.title }}</a></h3>
                         {% if news.news_answers.all %}
                             {% for answer in news.news_answers.all %}
@@ -68,9 +68,9 @@
                         <small class="font-italic text-muted">
                             Ostatnia aktywność:
                             {% if news.last_news_answer %}
-                                {{ news.last_news_answer|date:'d-M-Y, H:i' }}<br>
+                                {{ news.last_news_answer|date:'d-M-Y | H:i' }}<br>
                             {% else %}
-                                {{ news.date_posted|date:'d-M-Y, H:i' }}<br>
+                                {{ news.date_posted|date:'d-M-Y | H:i' }}<br>
                             {% endif %}
                         </small>
                     </td>
