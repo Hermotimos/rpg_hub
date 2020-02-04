@@ -20,8 +20,9 @@ class Demand(models.Model):
         return f'{self.text[0:50]}...' if len(str(self.text)) > 50 else self.text
 
     def save(self, *args, **kwargs):
-        super().save()
-        if self.image:
+        first_save = True if not self.pk else False
+        super().save(*args, **kwargs)
+        if first_save and self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:
                 output_size = (700, 700)
@@ -40,8 +41,9 @@ class DemandAnswer(models.Model):
         ordering = ['date_posted']
 
     def save(self, *args, **kwargs):
-        super().save()
-        if self.image:
+        first_save = True if not self.pk else False
+        super().save(*args, **kwargs)
+        if first_save and self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:
                 output_size = (700, 700)
@@ -63,8 +65,9 @@ class Plan(models.Model):
         return f'{self.text[0:100] if len(str(self.text)) > 100 else self.text}...'
 
     def save(self, *args, **kwargs):
-        super().save()
-        if self.image:
+        first_save = True if not self.pk else False
+        super().save(*args, **kwargs)
+        if first_save and self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:
                 output_size = (700, 700)
@@ -81,7 +84,7 @@ class Plan(models.Model):
 
 
 def delete_if_doubled(sender, instance, **kwargs):
-    time_span = datetime.datetime.now() - datetime.timedelta(minutes=1)
+    time_span = datetime.datetime.now() - datetime.timedelta(minutes=2)
     doubled = DemandAnswer.objects.filter(text=instance.text, author=instance.author, date_posted__gte=time_span)
     if doubled.count() > 1:
         instance.delete()
