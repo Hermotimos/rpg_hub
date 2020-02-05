@@ -4,6 +4,8 @@ from django.core.mail import send_mail
 from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views import View
+from django.utils.decorators import method_decorator
 
 from knowledge.forms import KnowledgePacketInformForm
 from knowledge.models import KnowledgePacket
@@ -74,6 +76,31 @@ def knowledge_theology_view(request):
         'theology_skills': theology_skills
     }
     return render(request, 'knowledge/knowledge_theology.html', context)
+
+
+class TheologyView(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        profile = request.user.profile
+
+        if profile.character_status == 'gm':
+            theology_skills = Skill.objects \
+                .filter(name__icontains='Doktryn') \
+                .prefetch_related('skill_levels', 'knowledge_packets__pictures')
+        else:
+            theology_skills = Skill.objects \
+                .filter(name__icontains='Doktryn') \
+                .prefetch_related(
+                    Prefetch('skill_levels', queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
+                    Prefetch('knowledge_packets', queryset=profile.character.knowledge_packets.all()),
+                    'knowledge_packets__pictures'
+                )
+
+        context = {
+            'page_title': 'Teologia',
+            'theology_skills': theology_skills
+        }
+        return render(request, 'knowledge/knowledge_theology.html', context)
 
 
 @query_debugger
