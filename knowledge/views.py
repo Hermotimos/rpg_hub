@@ -79,6 +79,8 @@ def knowledge_theology_view(request):
 
 
 class TheologyView(View):
+    template_name = 'knowledge/knowledge_theology.html'
+
     @method_decorator(login_required)
     def get(self, request):
         profile = request.user.profile
@@ -100,7 +102,7 @@ class TheologyView(View):
             'page_title': 'Teologia',
             'theology_skills': theology_skills
         }
-        return render(request, 'knowledge/knowledge_theology.html', context)
+        return render(request, self.template_name, context)
 
 
 @query_debugger
