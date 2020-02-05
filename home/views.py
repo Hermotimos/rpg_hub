@@ -1,7 +1,9 @@
 from random import randrange
 
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.utils.decorators import method_decorator
+from django.views import View
 
 from rpg_project.utils import query_debugger
 from users.models import Profile
@@ -35,7 +37,14 @@ def home_view(request):
     return render(request, 'home/home.html', context)
 
 
-@query_debugger
-@login_required
-def dupa_view(request):
-    return render(request, 'home/dupa.html', {'page_title': 'Dupa!'})
+# @query_debugger
+# @login_required
+# def dupa_view(request):
+#     return render(request, 'home/dupa.html', {'page_title': 'Dupa!'})
+
+
+class DupaView(View):
+
+    @method_decorator(login_required)
+    def get(self, request):
+        return render(request, 'home/dupa.html', {'page_title': 'Dupa!'})
