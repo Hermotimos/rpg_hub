@@ -5,6 +5,7 @@ from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
+from django.views.generic import ListView
 from django.utils.decorators import method_decorator
 
 from knowledge.forms import KnowledgePacketInformForm
@@ -51,6 +52,43 @@ def knowledge_almanac_view(request):
         'skills_with_kn_packets': skills_with_kn_packets
     }
     return render(request, 'knowledge/knowledge_almanac.html', context)
+
+
+class AlmanacListView(ListView):
+    template_name = 'knowledge/knowledge_almanac.html'
+    # TODO no skills returned (even when 'skills_with_kn_packets' in template changed to 'queryset')
+
+    def get_queryset(self):
+        profile = self.request.user.profile
+
+        if profile.character_status == 'gm':
+            known_kn_packets = KnowledgePacket.objects.all()
+            skills_with_kn_packets = Skill.objects \
+                .exclude(name__icontains='Doktryn') \
+                .filter(knowledge_packets__in=known_kn_packets) \
+                .prefetch_related(
+                    Prefetch('knowledge_packets', queryset=known_kn_packets),
+                    Prefetch(
+                        'skill_levels', queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)
+                    ),
+                    'knowledge_packets__pictures'
+                ) \
+                .distinct()
+        else:
+            known_kn_packets = profile.character.knowledge_packets.all()
+            skills_with_kn_packets = Skill.objects \
+                .exclude(name__icontains='Doktryn') \
+                .filter(knowledge_packets__in=known_kn_packets) \
+                .prefetch_related(
+                    Prefetch('knowledge_packets', queryset=known_kn_packets),
+                    Prefetch(
+                        'skill_levels', queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)
+                    ),
+                    'knowledge_packets__pictures'
+                ) \
+                .distinct()
+
+        return skills_with_kn_packets, print(skills_with_kn_packets)
 
 
 @query_debugger
