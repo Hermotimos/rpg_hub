@@ -30,7 +30,7 @@ class KnowledgeAlmanacTest(TestCase):
         self.kn_packet_2.skills.set([self.skill_2])
         self.character2.knowledge_packets.set([self.kn_packet_2])
 
-        self.url = reverse('knowledge:knowledge-sheet')
+        self.url = reverse('knowledge:almanac')
 
     def test_login_required(self):
         redirect_url = reverse('users:login') + '?next=' + self.url
@@ -43,8 +43,8 @@ class KnowledgeAlmanacTest(TestCase):
         self.assertEquals(response.status_code, 200)
 
     def test_url_resolves_view(self):
-        view = resolve('/knowledge/knowledge-sheet/')
-        self.assertEquals(view.func, views.knowledge_almanac_view)
+        view = resolve('/knowledge/almanac/')
+        self.assertEquals(view.func.view_class, views.AlmanacListView)
 
     def test_contains(self):
         self.client.force_login(self.user1)

@@ -21,7 +21,7 @@ class KnowledgeInformTest(TestCase):
         self.kn_packet_1 = KnowledgePacket.objects.create(title='KnPacket1', text='Text1')
         self.kn_packet_1.allowed_profiles.set([self.user1.profile])
 
-        self.url = reverse('knowledge:knowledge-inform', kwargs={'kn_packet_id': self.kn_packet_1.id})
+        self.url = reverse('knowledge:inform', kwargs={'kn_packet_id': self.kn_packet_1.id})
 
     def test_login_required(self):
         redirect_url = reverse('users:login') + '?next=' + self.url
@@ -37,7 +37,7 @@ class KnowledgeInformTest(TestCase):
 
     def test_404(self):
         self.client.force_login(self.user1)
-        url = reverse('knowledge:knowledge-inform', kwargs={'kn_packet_id': self.kn_packet_1.id + 999})
+        url = reverse('knowledge:inform', kwargs={'kn_packet_id': self.kn_packet_1.id + 999})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 404)
 
@@ -53,7 +53,7 @@ class KnowledgeInformTest(TestCase):
         self.assertEquals(response.status_code, 200)
 
     def test_url_resolves_view(self):
-        view = resolve(f'/knowledge/knowledge-inform:{self.kn_packet_1.id}/')
+        view = resolve(f'/knowledge/inform:{self.kn_packet_1.id}/')
         self.assertEquals(view.func, views.knowledge_inform_view)
 
     def test_csrf(self):
