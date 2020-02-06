@@ -8,13 +8,14 @@ from rules.models import Skill
 from users.models import User
 
 
-class KnowledgeAlmanacTest(TestCase):
+class AlmanacTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.character1 = Character.objects.create(profile=self.user1.profile)
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.character2 = Character.objects.create(profile=self.user2.profile)
         self.user3 = User.objects.create_user(username='user4', password='pass1111')
+        self.character3 = Character.objects.create(profile=self.user3.profile)
         self.user3.profile.character_status = 'gm'
         self.user3.profile.save()
 
