@@ -51,8 +51,8 @@ from rules.models import SkillLevel, Skill
 
 
 class AlmanacListView(ListView):
-    template_name = 'knowledge/knowledge_almanac.html'
     context_object_name = 'skills_with_kn_packets'
+    template_name = 'knowledge/knowledge_almanac.html'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -94,29 +94,29 @@ class AlmanacListView(ListView):
         return skills_with_kn_packets
 
 
-@query_debugger
-@login_required
-def knowledge_theology_view(request):
-    profile = request.user.profile
-
-    if profile.character_status == 'gm':
-        theology_skills = Skill.objects\
-            .filter(name__icontains='Doktryn')\
-            .prefetch_related('skill_levels', 'knowledge_packets__pictures')
-    else:
-        theology_skills = Skill.objects\
-            .filter(name__icontains='Doktryn')\
-            .prefetch_related(
-                Prefetch('skill_levels', queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
-                Prefetch('knowledge_packets', queryset=profile.character.knowledge_packets.all()),
-                'knowledge_packets__pictures'
-                )
-
-    context = {
-        'page_title': 'Teologia',
-        'theology_skills': theology_skills
-    }
-    return render(request, 'knowledge/knowledge_theology.html', context)
+# @query_debugger
+# @login_required
+# def knowledge_theology_view(request):
+#     profile = request.user.profile
+#
+#     if profile.character_status == 'gm':
+#         theology_skills = Skill.objects\
+#             .filter(name__icontains='Doktryn')\
+#             .prefetch_related('skill_levels', 'knowledge_packets__pictures')
+#     else:
+#         theology_skills = Skill.objects\
+#             .filter(name__icontains='Doktryn')\
+#             .prefetch_related(
+#                 Prefetch('skill_levels', queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
+#                 Prefetch('knowledge_packets', queryset=profile.character.knowledge_packets.all()),
+#                 'knowledge_packets__pictures'
+#                 )
+#
+#     context = {
+#         'page_title': 'Teologia',
+#         'theology_skills': theology_skills
+#     }
+#     return render(request, 'knowledge/knowledge_theology.html', context)
 
 
 class TheologyView(View):
