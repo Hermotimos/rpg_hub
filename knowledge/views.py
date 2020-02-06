@@ -55,8 +55,8 @@ class AlmanacListView(ListView):
     context_object_name = 'skills_with_kn_packets'
 
     @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -123,6 +123,9 @@ class TheologyView(View):
     template_name = 'knowledge/knowledge_theology.html'
 
     @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
     def get(self, request):
         profile = request.user.profile
 
