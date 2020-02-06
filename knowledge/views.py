@@ -54,6 +54,10 @@ class AlmanacListView(ListView):
     template_name = 'knowledge/knowledge_almanac.html'
     context_object_name = 'skills_with_kn_packets'
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['page_title'] = 'Almanach'
@@ -82,8 +86,7 @@ class AlmanacListView(ListView):
                 .prefetch_related(
                     Prefetch('knowledge_packets', queryset=known_kn_packets),
                     Prefetch('skill_levels',
-                             queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)
-                        ),
+                             queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
                     'knowledge_packets__pictures'
                 )\
                 .distinct()
