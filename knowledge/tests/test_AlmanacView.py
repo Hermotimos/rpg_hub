@@ -45,7 +45,7 @@ class AlmanacTest(TestCase):
 
     def test_url_resolves_view(self):
         view = resolve('/knowledge/almanac/')
-        self.assertEquals(view.func.view_class, views.AlmanacListView)
+        self.assertEquals(view.func.view_class, views.AlmanacView)
 
     def test_contains(self):
         self.client.force_login(self.user1)

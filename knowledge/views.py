@@ -50,21 +50,14 @@ from rules.models import SkillLevel, Skill
 #     return render(request, 'knowledge/almanac.html', context)
 
 
-class AlmanacListView(ListView):
-    context_object_name = 'skills_with_kn_packets'
-    template_name = 'knowledge/almanac.html'
+class AlmanacView(View):
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['page_title'] = 'Almanach'
-        return context
-
-    def get_queryset(self):
-        profile = self.request.user.profile
+    def get(self, request):
+        profile = request.user.profile
 
         if profile.character_status == 'gm':
             known_kn_packets = KnowledgePacket.objects.all()
@@ -91,7 +84,11 @@ class AlmanacListView(ListView):
                 )\
                 .distinct()
 
-        return skills_with_kn_packets
+        context = {
+            'page_title': 'Almanach',
+            'skills_with_kn_packets': skills_with_kn_packets
+        }
+        return render(request, 'knowledge/almanac.html', context)
 
 
 # @query_debugger
