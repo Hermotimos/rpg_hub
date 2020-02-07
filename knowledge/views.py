@@ -27,7 +27,8 @@ from rules.models import SkillLevel, Skill
 #             .filter(knowledge_packets__in=known_kn_packets)\
 #             .prefetch_related(
 #                 Prefetch('knowledge_packets', queryset=known_kn_packets),
-#                 Prefetch('skill_levels', queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
+#                 Prefetch('skill_levels',
+#                 queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
 #                 'knowledge_packets__pictures'
 #             )\
 #             .distinct()
@@ -38,7 +39,8 @@ from rules.models import SkillLevel, Skill
 #             .filter(knowledge_packets__in=known_kn_packets)\
 #             .prefetch_related(
 #                 Prefetch('knowledge_packets', queryset=known_kn_packets),
-#                 Prefetch('skill_levels', queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
+#                 Prefetch('skill_levels',
+#                 queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
 #                 'knowledge_packets__pictures'
 #             )\
 #             .distinct()
@@ -101,7 +103,8 @@ class AlmanacView(View):
 #         theology_skills = Skill.objects\
 #             .filter(name__icontains='Doktryn')\
 #             .prefetch_related(
-#                 Prefetch('skill_levels', queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
+#                 Prefetch('skill_levels',
+#                 queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
 #                 Prefetch('knowledge_packets', queryset=profile.character.knowledge_packets.all()),
 #                 'knowledge_packets__pictures'
 #                 )
