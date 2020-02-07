@@ -25,7 +25,7 @@ class TricksSheetTest(TestCase):
         self.user4.profile.character_status = 'gm'
         self.user4.profile.save()
 
-        self.url = reverse('characters:tricks-sheet')
+        self.url = reverse('characters:tricks')
 
     def test_login_required(self):
         redirect_url = reverse('users:login') + '?next=' + self.url
@@ -38,7 +38,7 @@ class TricksSheetTest(TestCase):
         self.assertEquals(response.status_code, 200)
 
     def test_url_resolves_view(self):
-        view = resolve('/characters/tricks-sheet/')
+        view = resolve('/characters/tricks/')
         self.assertEquals(view.func, views.tricks_sheet_view)
 
     def test_contains(self):
