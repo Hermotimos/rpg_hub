@@ -53,9 +53,6 @@ from rules.models import SkillLevel, Skill
 class AlmanacView(View):
 
     @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
     def get(self, request):
         profile = request.user.profile
 
@@ -120,9 +117,6 @@ class TheologyView(View):
     template_name = 'knowledge/knowledge_theology.html'
 
     @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
     def get(self, request):
         profile = request.user.profile
 
@@ -134,7 +128,8 @@ class TheologyView(View):
             theology_skills = Skill.objects \
                 .filter(name__icontains='Doktryn') \
                 .prefetch_related(
-                    Prefetch('skill_levels', queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
+                    Prefetch('skill_levels',
+                             queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
                     Prefetch('knowledge_packets', queryset=profile.character.knowledge_packets.all()),
                     'knowledge_packets__pictures'
                 )

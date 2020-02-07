@@ -3,6 +3,7 @@ from django.db.models import Prefetch, Q
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.generic import ListView
 
 from characters.models import Character
 from rpg_project.utils import query_debugger
@@ -90,17 +91,51 @@ def skills_sheet_view(request, profile_id='0'):
         return render(request, 'characters/skills_sheet.html', context)
 
 
-@query_debugger
-@login_required
-def skills_sheets_for_gm_view(request):
-    profile = request.user.profile
-    characters = Character.objects.all().select_related('profile')
+# @query_debugger
+# @login_required
+# def skills_sheets_for_gm_view(request):
+#     profile = request.user.profile
+#     characters = Character.objects.all().select_related('profile')
+#
+#     context = {
+#         'page_title': 'Umiejętności graczy',
+#         'characters': characters
+#     }
+#     if profile.character_status == 'gm':
+#         return render(request, 'characters/skills_sheets_for_gm.html', context)
+#     else:
+#         return redirect('home:dupa')
 
-    context = {
-        'page_title': 'Umiejętności graczy',
-        'characters': characters
-    }
-    if profile.character_status == 'gm':
-        return render(request, 'characters/skills_sheets_for_gm.html', context)
-    else:
-        return redirect('home:dupa')
+
+# class SkillsForGmListView(ListView):
+#     context_object_name = 'characters'
+#     queryset = Character.objects.all().select_related('profile')
+#     template_name = 'characters/skills_sheets_for_gm.html'
+#
+#     @method_decorator(login_required)
+#     def dispatch(self, request, *args, **kwargs):
+#         if request.user.profile.character_status != 'gm':
+#             return redirect('home:dupa')
+#         return super().dispatch(request, *args, **kwargs)
+#
+#     def get_context_data(self, *args, **kwargs):
+#         context = super().get_context_data(*args, **kwargs)
+#         context['page_title'] = 'Umiejętności graczy'
+#         return context
+
+
+class SkillsForGmView(View):
+
+    @method_decorator(login_required)
+    def get(self, request):
+        profile = request.user.profile
+        characters = Character.objects.all().select_related('profile')
+
+        context = {
+            'page_title': 'Umiejętności graczy',
+            'characters': characters
+        }
+        if profile.character_status == 'gm':
+            return render(request, 'characters/skills_sheets_for_gm.html', context)
+        else:
+            return redirect('home:dupa')
