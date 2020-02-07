@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import Q
 from django.forms import Textarea
 
-from history.models import GeneralLocation, SpecificLocation
+from toponomikon.models import GeneralLocation, SpecificLocation, LocationType
 from imaginarion.models import Picture
 from knowledge.models import KnowledgePacket
 from users.models import Profile
@@ -60,5 +60,6 @@ class GeneralLocationAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description']
 
 
+admin.site.register(LocationType)
 admin.site.register(GeneralLocation, GeneralLocationAdmin)
 admin.site.register(SpecificLocation, SpecificLocationAdmin)

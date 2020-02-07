@@ -25,7 +25,7 @@ def toponomikon_main_view(request):
         spec_locs = (profile.spec_locs_known_directly.all() | profile.spec_locs_known_indirectly.all()).distinct()
 
     gen_locs = gen_locs\
-        .prefetch_related(Prefetch('specific_locations', queryset=spec_locs))\
+        .prefetch_related(Prefetch('specific_locations', queryset=spec_locs),)\
         .select_related('main_image')\
         .distinct()\
         .annotate(known_only_indirectly=Case(
