@@ -4,7 +4,7 @@ from characters import views
 from users.models import User
 
 
-class TricksSheetTest(TestCase):
+class TricksViewTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user1.profile.character_status = 'active_player'

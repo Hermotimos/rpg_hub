@@ -12,7 +12,7 @@ from users.models import Profile
 
 # @query_debugger
 # @login_required
-# def tricks_sheet_view(request):
+# def tricks_view(request):
 #     profile = request.user.profile
 #
 #     if profile.character_status == 'gm':
@@ -27,7 +27,7 @@ from users.models import Profile
 #         'page_title': f'Podstępy - {profile.character_name}',
 #         'players_profiles': players_profiles
 #     }
-#     return render(request, 'characters/tricks_sheet.html', context)
+#     return render(request, 'characters/tricks.html', context)
 
 
 class TricksView(View):
@@ -51,7 +51,7 @@ class TricksView(View):
             'page_title': f'Podstępy - {profile.character_name}',
             'players_profiles': players_profiles
         }
-        return render(request, 'characters/tricks_sheet.html', context)
+        return render(request, 'characters/tricks.html', context)
 
 
 @query_debugger
