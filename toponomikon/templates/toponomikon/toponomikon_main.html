@@ -16,7 +16,7 @@
                     <div class="col-md-4 px-2 py-1">
                         <a class="img-link" href="{% url 'toponomikon:general-location' gen_loc.id %}">
                             <img class="img-fluid toponomikon-img {% if gen_loc.known_only_indirectly %} img-grayscale {% endif %}"
-                                 src="{{ gen_loc.main_image.image.url }}"
+                                 src="{% if gen_loc.main_image %} {{ gen_loc.main_image.image.url }} {% else %} {{ gen_loc.location_type.default_img.image.url }} {% endif %}"
                                  alt="General location img"
                             >
                         </a>
