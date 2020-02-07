@@ -17,7 +17,7 @@ from rules.models import SkillLevel, Skill
 
 # @query_debugger
 # @login_required
-# def knowledge_almanac_view(request):
+# def almanac_view(request):
 #     profile = request.user.profile
 #
 #     if profile.character_status == 'gm':
@@ -47,12 +47,12 @@ from rules.models import SkillLevel, Skill
 #         'page_title': 'Almanach',
 #         'skills_with_kn_packets': skills_with_kn_packets
 #     }
-#     return render(request, 'knowledge/knowledge_almanac.html', context)
+#     return render(request, 'knowledge/almanac.html', context)
 
 
 class AlmanacListView(ListView):
     context_object_name = 'skills_with_kn_packets'
-    template_name = 'knowledge/knowledge_almanac.html'
+    template_name = 'knowledge/almanac.html'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
