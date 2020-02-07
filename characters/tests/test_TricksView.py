@@ -39,7 +39,7 @@ class TricksViewTest(TestCase):
 
     def test_url_resolves_view(self):
         view = resolve('/characters/tricks/')
-        self.assertEquals(view.func, views.tricks_sheet_view)
+        self.assertEquals(view.func.view_class, views.TricksView)
 
     def test_contains(self):
         self.client.force_login(self.user1)
