@@ -1,31 +1,57 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch, Q
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
+from django.views import View
 
 from characters.models import Character
-from knowledge.models import KnowledgePacket
 from rpg_project.utils import query_debugger
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel
 from users.models import Profile
 
 
-@query_debugger
-@login_required
-def tricks_sheet_view(request):
-    profile = request.user.profile
-    if profile.character_status == 'gm':
-        players_profiles = Profile.objects.exclude(Q(character_status='dead_player') |
-                                                   Q(character_status='living_npc') |
-                                                   Q(character_status='dead_npc') |
-                                                   Q(character_status='gm'))
-    else:
-        players_profiles = [profile]
+# @query_debugger
+# @login_required
+# def tricks_sheet_view(request):
+#     profile = request.user.profile
+#
+#     if profile.character_status == 'gm':
+#         players_profiles = Profile.objects.exclude(Q(character_status='dead_player') |
+#                                                    Q(character_status='living_npc') |
+#                                                    Q(character_status='dead_npc') |
+#                                                    Q(character_status='gm'))
+#     else:
+#         players_profiles = [profile]
+#
+#     context = {
+#         'page_title': f'Podstępy - {profile.character_name}',
+#         'players_profiles': players_profiles
+#     }
+#     return render(request, 'characters/tricks_sheet.html', context)
 
-    context = {
-        'page_title': f'Podstępy - {request.user.profile.character_name}',
-        'players_profiles': players_profiles
-    }
-    return render(request, 'characters/tricks_sheet.html', context)
+
+class TricksView(View):
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def get(self, request):
+        profile = request.user.profile
+
+        if profile.character_status == 'gm':
+            players_profiles = Profile.objects.exclude(Q(character_status='dead_player') |
+                                                       Q(character_status='living_npc') |
+                                                       Q(character_status='dead_npc') |
+                                                       Q(character_status='gm'))
+        else:
+            players_profiles = [profile]
+
+        context = {
+            'page_title': f'Podstępy - {profile.character_name}',
+            'players_profiles': players_profiles
+        }
+        return render(request, 'characters/tricks_sheet.html', context)
 
 
 @query_debugger
