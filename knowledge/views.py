@@ -4,9 +4,9 @@ from django.core.mail import send_mail
 from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import ListView
-from django.utils.decorators import method_decorator
 
 from knowledge.forms import KnowledgePacketInformForm
 from knowledge.models import KnowledgePacket
