@@ -63,6 +63,8 @@ Requires creation of 'media' directory with following subdirectories:
 ## Content
 
 Listed as per site logic, not alphabetically:
+### home app
+In development. In future will contain a random selection of pictures of places and people known to the authenticated user.
 ### users app
 User authorization, additional Profile model as an overlay for User model. Differentiates profiles into 5 categories resulting in different permissions scope (full permissions for 'game master' type of profile, restricted permissions for the rest).
 ### characters app
@@ -73,7 +75,18 @@ Enables sending of and responding to demands among players and game master. Also
 Contains news and surveys for organizational purposes (next meetings, changes in rules etc.).
 ### rules app
 Contains set of rules for the live RPG games. Some of which are accessible based on permissions granted by the 'game master' user(s).
-
+### history app
+Contains timeline and chronicle sections serving as quest-logs and ongoing biographies for individual players.
+### knowledge app
+Contains knowledge units (packets) attributed to individual players base on their biographies and skillsets. 
+### prosoponomikon app
+[In development] Contains set of player & non-player characters known to individual players as per biographies and participated game events.
+### toponomikon app
+Contains set of places known to individual players as per biographies and participated game events.
+### imaginarion app
+Pictures with description used by other apps.
+### reload app
+Quick links to re-saving of certain models whose alphabetical order depends on fields modified in overriden save() method or for firing up signals.
 
 ## Status
 TODO:  
