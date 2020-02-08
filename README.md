@@ -17,7 +17,7 @@ The project has been put into production as a web site, however its content is o
 
 While already in production the project remains a sandbox for learning new technologies. Recently: RWD, Bootstrap, JavaScript. Occasional inconsistencies and errors may result from this.
 
-Should anybody be interested in using this code for their own RPG-like purposes or else, permission will be granted. Please contact me on lukas.kozicki@gmail.com
+Should anybody be interested in using this code for their own RPG-like purposes or else, permission will be granted. Please contact me at lukas.kozicki@gmail.com
 
 Note: site features have Polish names as this was created for Polish users.
 
@@ -44,7 +44,7 @@ Requires creation and customization of settings.py.
 
 Requires creation of SQLite database. 
 
-   Note: Project was created using SQLite, some model fields and indexes may not meet standards of MySQL (particularly the sum   of max_length of model fields combines within indexes).
+   Note: Project was created using SQLite, so some model fields and indexes may not meet standards of MySQL (particularly the sum of max_length of model fields combined within indexes).
    
 Requires creation of 'media' directory with following subdirectories:
 - contact_pics
@@ -62,16 +62,18 @@ Requires creation of 'media' directory with following subdirectories:
 
 ## Content
 
-### main.py
-Main module.
-### browsing_flow.py
-Defines steps of automated browsing flow.
-### report_class.py
-Defines class that prints out log during execution and saves it to a report file afterwards.
-### movements_and_clicks.py
-Functions for reactions to site features.
-### image_processing.py
-Functions for recognition of site features.
+Listed as per site logic, not alphabetically:
+### users app
+User authorization, additional Profile model as an overlay for User model. Differentiates profiles into 5 categories resulting in different permissions scope (full permissions for 'game master' type of profile, restricted permissions for the rest).
+### characters app
+Additional Character model as and overlay for Profile model (serves only for players' profiles as opposed to non-player profiles). Contains list of skills and tricks.
+### contact app
+Enables sending of and responding to demands among players and game master. Also enables saving of individual plans.
+### news app
+Contains news and surveys for organizational purposes (next meetings, changes in rules etc.).
+### rules app
+Contains set of rules for the live RPG games. Some of which are accessible based on permissions granted by the 'game master' user(s).
+
 
 ## Status
 TODO:  
