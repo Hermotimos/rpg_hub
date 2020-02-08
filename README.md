@@ -29,9 +29,13 @@ JavaScript
 
 ## Setup
 Requires creation of virtualenv.
+
 Requires creation and customization of settings.py.
+
 Requires creation of SQLite database. 
+
    Note: Project was created using SQLite, some model fields and indexes may not meet standards of MySQL (particularly the sum   of max_length of model fields combines within indexes).
+   
 Requires creation of 'media' directory with following subdirectories:
 - contact_pics
 - news_pics
@@ -41,8 +45,8 @@ Requires creation of 'media' directory with following subdirectories:
 - site_features_pics
 
 ## Features
-Authorization: creation of new accounts, login, logout, password change
-Blog & forum features: adding and responding to adverts; creating new topics; adding and responding to posts; sending and responding to individual demands; following/unfollowing news and discussions
+- Authorization: creation of new accounts, login, logout, password change
+- Blog & forum features: adding and responding to adverts; creating new topics; adding and responding to posts; sending and responding to individual demands; following/unfollowing news and discussions
 
 
 ## Content
