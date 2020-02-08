@@ -90,4 +90,4 @@ Quick links to re-saving of certain models whose alphabetical order depends on f
 
 ## Status
 TODO:  
-    * .............
+    * Every couple of days todo_list.pop(some_number) :)
