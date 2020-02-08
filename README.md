@@ -23,6 +23,8 @@ Python 3.7
 
 Django 2.2.1
 
+SQLite
+
 HTML 5
 
 CSS 3
@@ -50,9 +52,10 @@ Requires creation of 'media' directory with following subdirectories:
 - site_features_pics
 
 ## Features
-- Authorization: creation of new accounts, login, logout, password change
-- Blog & forum: adding and responding to adverts; creating new topics; adding and responding to posts; sending and responding to individual demands; following/unfollowing news and discussions
-
+- Authorization: creation of new accounts, login, logout, password change.
+- Blog & forum: adding and responding to adverts; creating new topics; adding and responding to posts; sending and responding to individual demands; following/unfollowing news and discussions.
+- Static content: rules section (contains rules for RPG game; some accessible only to specified participants).
+- Customized admin (mostly inlines, filtering of querysets for M2M fields and custom forms).
 
 ## Content
 
