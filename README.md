@@ -64,7 +64,7 @@ Requires creation of 'media' directory with following subdirectories:
 
 Listed as per site logic, not alphabetically:
 ### home app
-In development. In future will contain a random selection of pictures of places and people known to the authenticated user.
+[In development] In future will contain a random selection of pictures of places and people known to the authenticated user.
 ### users app
 User authorization, additional Profile model as an overlay for User model. Differentiates profiles into 5 categories resulting in different permissions scope (full permissions for 'game master' type of profile, restricted permissions for the rest).
 ### characters app
