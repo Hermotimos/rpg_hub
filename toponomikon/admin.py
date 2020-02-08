@@ -60,6 +60,11 @@ class GeneralLocationAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description']
 
 
-admin.site.register(LocationType)
+class LocationTypeAdmin(admin.ModelAdmin):
+    list_display = ['name', 'default_img']
+    list_editable = ['default_img']
+
+
+admin.site.register(LocationType, LocationTypeAdmin)
 admin.site.register(GeneralLocation, GeneralLocationAdmin)
 admin.site.register(SpecificLocation, SpecificLocationAdmin)
