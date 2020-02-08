@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db.models import Prefetch, Q, Case, When, Value, IntegerField
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 
 from rpg_project import settings
@@ -26,7 +26,7 @@ def toponomikon_main_view(request):
 
     gen_locs = gen_locs\
         .prefetch_related(Prefetch('specific_locations', queryset=spec_locs),)\
-        .select_related('main_image')\
+        .select_related('main_image', 'location_type__default_img')\
         .distinct()\
         .annotate(known_only_indirectly=Case(
             When(
@@ -48,7 +48,13 @@ def toponomikon_main_view(request):
 @login_required
 def toponomikon_general_location_view(request, gen_loc_id):
     profile = request.user.profile
-    gen_loc = get_object_or_404(GeneralLocation, id=gen_loc_id)
+    try:
+        gen_loc = GeneralLocation.objects.filter(id=gen_loc_id)\
+            .prefetch_related('knowledge_packets')\
+            .select_related('main_image')\
+            .first()
+    except GeneralLocation.DoesNotExist:
+        raise Http404("Lokacja nie istnieje")
 
     if profile.character_status == 'gm':
         spec_locs = SpecificLocation.objects.filter(general_location__id=gen_loc_id)
