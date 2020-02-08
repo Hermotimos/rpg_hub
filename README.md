@@ -20,10 +20,15 @@ The project remains a sandbox for learning new technologies. Recently: RWD, Boot
 
 ## Technologies
 Python 3.7
+
 Django 2.2.1
+
 HTML 5
+
 CSS 3
+
 Bootstrap 4
+
 JavaScript 
 
 
@@ -46,7 +51,7 @@ Requires creation of 'media' directory with following subdirectories:
 
 ## Features
 - Authorization: creation of new accounts, login, logout, password change
-- Blog & forum features: adding and responding to adverts; creating new topics; adding and responding to posts; sending and responding to individual demands; following/unfollowing news and discussions
+- Blog & forum: adding and responding to adverts; creating new topics; adding and responding to posts; sending and responding to individual demands; following/unfollowing news and discussions
 
 
 ## Content
