@@ -10,18 +10,40 @@
 
 
 ## General info
-Project started as a tutorial-based blog app, later developed as forum for a group of role playing games players. 
-Site features include timeline of events, biographies of players and discussions among them, as well as an ever growing mass of knowlege (places, people, historical events) accessible to players based on the events in the real life RPG games.
+This project started as a tutorial-based blog app and developed into a forum for a group of RPG (role playing games) players. 
+Site features include timeline of events, biographies of players and discussions among them, as well as an ever growing mass of knowledge (places, people, historical events) accessible to players based on their participation in events unfolding in our live RPG games.
+
+
+
+The project remains a sandbox for learning new technologies. Recently: RWD, Bootstrap, JavaScript.
+
 
 ## Technologies
-Python 3.7 (especially pyautogui module)
+Python 3.7
+Django 2.2.1
+HTML 5
+CSS 3
+Bootstrap 4
+JavaScript 
+
 
 ## Setup
-Program created and run in IDE (PyCharm 2019.1.1 Community Edition) under Windows 7.  
-May be converted to .exe with pyinstaller.
+Requires creation of virtualenv.
+Requires creation and customization of settings.py.
+Requires creation of SQLite database. 
+   Note: Project was created using SQLite, some model fields and indexes may not meet standards of MySQL (particularly the sum   of max_length of model fields combines within indexes).
+Requires creation of 'media' directory with following subdirectories:
+- contact_pics
+- news_pics
+- notes_pics
+- post_pics
+- profile_pics
+- site_features_pics
 
 ## Features
-Automated handling of a scraping program and browsed pages opened inside it.
+Authorization: creation of new accounts, login, logout, password change
+Blog & forum features: adding and responding to adverts; creating new topics; adding and responding to posts; sending and responding to individual demands; following/unfollowing news and discussions
+
 
 ## Content
 
@@ -38,4 +60,4 @@ Functions for recognition of site features.
 
 ## Status
 TODO:  
-    * Create another class for browsed pages countdown. Class would prevent resetting of browsed pages count by program recalibration in cases of RecursionError in functions.  
+    * .............
