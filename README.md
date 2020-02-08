@@ -11,12 +11,15 @@
 
 ## General info
 This project started as a tutorial-based blog app and developed into a forum for a group of RPG (role playing games) players. 
-Site features include timeline of events, biographies of players and discussions among them, as well as an ever growing mass of knowledge (places, people, historical events) accessible to players based on their participation in events unfolding in our live RPG games.
+Site features include authorization and blog/forum like stuff; and in terms of RPG inner logic: timeline of events, biographies of players and discussions among them, as well as an ever growing mass of knowledge (places, people, historical events) accessible to players based on their participation in events unfolding in our live RPG games.
 
+The project has been put into production as a web site, however its content is only accessible upon login due to demand for a highly customized content rendering for individual players, which corresponds to their biographies and game event participation in the live RPG game. Therefore, although it's possible for an outsider to create an account and view the site, it would be rendered to them almost entirely empty, as they wouldn't be participants of any live game events. This may seem unfortunate, but remains necessary in order to prevent unsupervised access to site content by the actual players.
 
+While already in production the project remains a sandbox for learning new technologies. Recently: RWD, Bootstrap, JavaScript. Occasional inconsistencies and errors may result from this.
 
-The project remains a sandbox for learning new technologies. Recently: RWD, Bootstrap, JavaScript.
+Should anybody be interested in using this code for their own RPG-like purposes or else, permission will be granted. Please contact me on lukas.kozicki@gmail.com
 
+Note: site features have Polish names as this was created for Polish users.
 
 ## Technologies
 Python 3.7
