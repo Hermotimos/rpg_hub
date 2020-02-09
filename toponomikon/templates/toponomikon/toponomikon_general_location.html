@@ -55,14 +55,14 @@
                                 </div>
                                 
                                 <div class="col-md-8 ml-n2">
-                                    <h3 class="border-custom-base">
+                                    <h2 class="border-custom-base">
                                         <small class="pr-5 {% if spec_loc.known_only_indirectly %} text-muted {% endif %}">
                                             {{ spec_loc.name }}
                                             {% if spec_loc.known_only_indirectly %} (znasz z opowieści) {% endif %}
                                         </small>
-                                    </h3>
+                                    </h2>
                                     <p class="font-italic text-justify {% if spec_loc.known_only_indirectly %} text-muted {% endif %}">
-                                        <small>{% if spec_loc.description %} {{ spec_loc.description|linebreaksbr }} {% endif %}</small>
+                                        {% if spec_loc.description %} {{ spec_loc.description|linebreaksbr }} {% endif %}
                                     </p>
                                 </div>
                                 

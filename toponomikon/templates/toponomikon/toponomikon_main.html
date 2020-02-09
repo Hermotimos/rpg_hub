@@ -30,7 +30,7 @@
                             </small>
                         </h2>
                         <p class="font-italic text-justify {% if gen_loc.known_only_indirectly %} text-muted {% endif %}">
-                            <small>{% if gen_loc.description %} {{ gen_loc.description|linebreaksbr }} {% endif %}</small>
+                            {% if gen_loc.description %} {{ gen_loc.description|linebreaksbr }} {% endif %}
                         </p>
                     </div>
                 
