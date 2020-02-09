@@ -125,9 +125,9 @@ td.align-right {
 
 .font-11 {font-size: 0.7rem;}
 .font-12 {font-size: 0.75rem;}
-.font-14 {font-size: 14px;}
-.font-18 {font-size: 18px;}
-.font-24 {font-size: 24px;}
+.font-14 {font-size: 0.875rem;}
+.font-18 {font-size: 1.125rem;}
+.font-24 {font-size: 1.5rem;}
 
 small.red {color: red;}
 
