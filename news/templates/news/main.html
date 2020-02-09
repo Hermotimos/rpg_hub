@@ -10,7 +10,7 @@
 {% block content %}
 
     <!-- NEW NEWS & NEW SURVEY BUTTONS-->
-    <div class="mt-4">
+    <div class="mt-2 mb-5">
         <a href="{% url 'news:create' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
         {% if request.user.profile.character_status == 'gm' %}
             <a href="{% url 'admin:news_survey_add' %}" class="btn btn-outline-dark">Nowa ankieta</a>
@@ -18,7 +18,6 @@
             <a href="{% url 'news:survey-create' %}" class="btn btn-outline-dark">Nowa ankieta</a>
         {% endif %}
     </div>
-    <br><br><br>
 
     <!-- SURVEYS -->
     {% for survey in surveys %}
