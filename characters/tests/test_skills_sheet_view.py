@@ -69,7 +69,7 @@ class SkillsSheetTest(TestCase):
 
     def test_url_resolves_view(self):
         view = resolve('/characters/skills-sheets-for-gm/')
-        self.assertEquals(view.func, views.skills_sheets_for_gm_view)
+        self.assertEquals(view.func.view_class, views.SkillsForGmView)
 
     def test_contains(self):
         self.client.force_login(self.user1)
