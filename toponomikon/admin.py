@@ -36,10 +36,10 @@ class ToponomikonKnownForm(forms.ModelForm):
 
 class SpecificLocationAdmin(admin.ModelAdmin):
     form = ToponomikonKnownForm
-    list_display = ['name', 'location_type', 'general_location', 'main_image', 'description']
-    list_editable = ['location_type', 'general_location', 'description', 'main_image']
+    list_display = ['name', 'location_type', 'general_location', 'description']
+    list_editable = ['location_type', 'general_location', 'description']
     list_filter = ['general_location']
-    search_fields = ['name', 'description', 'location_type']
+    search_fields = ['name', 'description']
 
 
 class SpecificLocationInline(admin.TabularInline):
@@ -55,9 +55,9 @@ class SpecificLocationInline(admin.TabularInline):
 class GeneralLocationAdmin(admin.ModelAdmin):
     form = ToponomikonKnownForm
     inlines = [SpecificLocationInline]
-    list_display = ['name', 'location_type', 'main_image', 'description']
-    list_editable = ['location_type', 'description', 'main_image']
-    search_fields = ['name', 'description', 'location_type']
+    list_display = ['name', 'location_type', 'description']
+    list_editable = ['location_type', 'description']
+    search_fields = ['name', 'description']
 
 
 class LocationTypeAdmin(admin.ModelAdmin):
