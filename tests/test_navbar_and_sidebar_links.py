@@ -43,7 +43,7 @@ class TestNavbarAndSidebarLinks(TestCase):
         response = self.client.get(self.url)
 
         # NAVBAR - for gm users:
-        self.assertContains(response, f'href="{reverse("characters:skills-sheets-for-gm")}"')
+        self.assertContains(response, f'href="{reverse("characters:character-all-skills-for-gm")}"')
         self.assertContains(response, f'href="{reverse("contact:plans-for-gm")}"')
 
         # SIDEBAR - for game-master users:

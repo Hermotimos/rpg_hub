@@ -18,7 +18,7 @@ class SkillsSheetsForGmTest(TestCase):
         self.user4.profile.character_status = 'gm'
         self.user4.profile.save()
 
-        self.url = reverse('characters:skills-sheets-for-gm')
+        self.url = reverse('characters:character-all-skills-for-gm')
 
     def test_login_required(self):
         redirect_url = reverse('users:login') + '?next=' + self.url
@@ -39,8 +39,8 @@ class SkillsSheetsForGmTest(TestCase):
         self.assertEquals(response.status_code, 200)
 
     def test_url_resolves_view(self):
-        view = resolve('/characters/skills-sheets-for-gm/')
-        self.assertEquals(view.func.view_class, views.SkillsForGmView)
+        view = resolve('/characters/character-all-skills-for-gm/')
+        self.assertEquals(view.func.view_class, views.CharacterAllSkillsForGmView)
 
     def test_contains(self):
         self.client.force_login(self.user4)

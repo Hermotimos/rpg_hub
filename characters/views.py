@@ -64,10 +64,10 @@ class CharacterSkillsView(View):
         if request.user.profile.character_status != 'gm' and profile_id != 0:
             return redirect('home:dupa')
         else:
-            return render(request, 'characters/skills_sheet.html', context)
+            return render(request, 'characters/character_skills.html', context)
 
 
-class SkillsForGmView(View):
+class CharacterAllSkillsForGmView(View):
 
     @method_decorator(login_required)
     def get(self, request):
@@ -79,7 +79,7 @@ class SkillsForGmView(View):
             'characters': characters
         }
         if profile.character_status == 'gm':
-            return render(request, 'characters/skills_sheets_for_gm.html', context)
+            return render(request, 'characters/character_all_skills_for_gm.html', context)
         else:
             return redirect('home:dupa')
 
@@ -87,7 +87,7 @@ class SkillsForGmView(View):
 # class SkillsForGmListView(ListView):
 #     context_object_name = 'characters'
 #     queryset = Character.objects.all().select_related('profile')
-#     template_name = 'characters/skills_sheets_for_gm.html'
+#     template_name = 'characters/character_all_skills_for_gm.html'
 #
 #     @method_decorator(login_required)
 #     def dispatch(self, request, *args, **kwargs):
@@ -103,7 +103,7 @@ class SkillsForGmView(View):
 
 # @query_debugger
 # @login_required
-# def tricks_view(request):
+# def character_tricks_view(request):
 #     profile = request.user.profile
 #
 #     if profile.character_status == 'gm':
@@ -123,7 +123,7 @@ class SkillsForGmView(View):
 
 # @query_debugger
 # @login_required
-# def skills_sheet_view(request, profile_id='0'):
+# def character_skills_view(request, profile_id='0'):
 #     try:
 #         profile = Profile.objects.get(id=profile_id)
 #     except Profile.DoesNotExist:
@@ -154,7 +154,7 @@ class SkillsForGmView(View):
 #     if request.user.profile.character_status != 'gm' and profile_id != 0:
 #         return redirect('home:dupa')
 #     else:
-#         return render(request, 'characters/skills_sheet.html', context)
+#         return render(request, 'characters/character_skills.html', context)
 
 
 # @query_debugger
@@ -168,6 +168,6 @@ class SkillsForGmView(View):
 #         'characters': characters
 #     }
 #     if profile.character_status == 'gm':
-#         return render(request, 'characters/skills_sheets_for_gm.html', context)
+#         return render(request, 'characters/character_all_skills_for_gm.html', context)
 #     else:
 #         return redirect('home:dupa')
