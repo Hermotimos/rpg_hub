@@ -14,7 +14,7 @@
         <section class="mb-5">
             <div class="container">
                 <div class="row">
-                    <img class="mb-3 toponomikon {% if gen_loc_known_only_indirectly %} img-grayscale {% endif %}"
+                    <img class="mb-3 toponomikon {% if is_gen_loc_known_only_indirectly %} img-grayscale {% endif %}"
                          src="{% if gen_loc.main_image %} {{ gen_loc.main_image.image.url }} {% else %} {{ gen_loc.location_type.default_img.image.url }} {% endif %}"
                          alt="General location img">
                 </div>

@@ -48,24 +48,18 @@ def toponomikon_main_view(request):
 @login_required
 def toponomikon_general_location_view(request, gen_loc_id):
     profile = request.user.profile
-    try:
-        gen_loc = GeneralLocation.objects.filter(id=gen_loc_id)\
-            .prefetch_related('knowledge_packets')\
-            .select_related('main_image')\
-            .first()
-    except GeneralLocation.DoesNotExist:
-        raise Http404("Lokacja nie istnieje")
+    gen_loc = get_object_or_404(GeneralLocation, id=gen_loc_id)
 
     if profile.character_status == 'gm':
         spec_locs = SpecificLocation.objects.filter(general_location__id=gen_loc_id)
         knowledge_packets = gen_loc.knowledge_packets.all()
-        gen_loc_known_only_indirectly = False
+        is_gen_loc_known_only_indirectly = False
     else:
         known_directly = gen_loc.specific_locations.filter(known_directly=profile)
         known_indirectly = gen_loc.specific_locations.filter(known_indirectly=profile).exclude(id__in=known_directly)
         spec_locs = (known_directly | known_indirectly)
         knowledge_packets = gen_loc.knowledge_packets.filter(characters=profile.character)
-        gen_loc_known_only_indirectly = \
+        is_gen_loc_known_only_indirectly = \
             True if profile in gen_loc.known_indirectly.all() and profile not in gen_loc.known_directly.all() else False
 
     spec_locs = spec_locs\
@@ -82,7 +76,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
     context = {
         'page_title': gen_loc.name,
         'gen_loc': gen_loc,
-        'gen_loc_known_only_indirectly': gen_loc_known_only_indirectly,
+        'is_gen_loc_known_only_indirectly': is_gen_loc_known_only_indirectly,
         'knowledge_packets': knowledge_packets,
         'spec_locs': spec_locs
     }
