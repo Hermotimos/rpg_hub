@@ -28,7 +28,7 @@ class TestNavbarAndSidebarLinks(TestCase):
         self.assertContains(self.response, f'href="{reverse("debates:main")}"')
         self.assertContains(self.response, f'href="{reverse("toponomikon:main")}"')
         self.assertContains(self.response,
-                            f'href="{reverse("characters:skills-sheet", kwargs={"profile_id": "0"})}"')
+                            f'href="{reverse("characters:character-skills", kwargs={"profile_id": "0"})}"')
         self.assertContains(self.response, f'href="{reverse("knowledge:knowledge-sheet")}"')
         self.assertContains(self.response, f'href="{reverse("characters:tricks")}"')
         self.assertContains(self.response, f'href="{reverse("contact:plans-main")}"')

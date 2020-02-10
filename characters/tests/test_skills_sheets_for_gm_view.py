@@ -45,7 +45,7 @@ class SkillsSheetsForGmTest(TestCase):
     def test_contains(self):
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
-        self.assertContains(response, f'href="/characters/skills-sheet:{self.user1.profile.id}/"')
-        self.assertContains(response, f'href="/characters/skills-sheet:{self.user2.profile.id}/"')
+        self.assertContains(response, f'href="/characters/character-skills:{self.user1.profile.id}/"')
+        self.assertContains(response, f'href="/characters/character-skills:{self.user2.profile.id}/"')
         # user/profile has no corresponding 'character':
-        self.assertNotContains(response, f'href="/characters/skills-sheet:{self.user3.profile.id}/"')
+        self.assertNotContains(response, f'href="/characters/character-skills:{self.user3.profile.id}/"')

@@ -40,9 +40,9 @@ class SkillsSheetTest(TestCase):
         self.character2.skill_levels_acquired.set([self.skill_2_lvl_1, self.skill_2_lvl_2])
 
         # user's own skills sheet:
-        self.url_1 = reverse('characters:skills-sheet', kwargs={'profile_id': '0'})
+        self.url_1 = reverse('characters:character-skills', kwargs={'profile_id': '0'})
         # skills sheet of specific user:
-        self.url_2 = reverse('characters:skills-sheet', kwargs={'profile_id': '2'})
+        self.url_2 = reverse('characters:character-skills', kwargs={'profile_id': '2'})
 
     def test_login_required(self):
         redirect_url = reverse('users:login') + '?next=' + self.url_1
