@@ -15,8 +15,8 @@ class ToponomikonKnownForm(forms.ModelForm):
     known_directly = forms.ModelMultipleChoiceField(queryset=Profile.objects
                                                     .exclude(Q(character_status='dead_player') |
                                                              Q(character_status='dead_npc') |
-                                                            Q(character_status='gm') |
-                                                            Q(character_status='living_npc')),
+                                                             Q(character_status='gm') |
+                                                             Q(character_status='living_npc')),
                                                     widget=FilteredSelectMultiple('Known directly', False),
                                                     required=False)
     known_indirectly = forms.ModelMultipleChoiceField(queryset=Profile.objects
@@ -36,10 +36,10 @@ class ToponomikonKnownForm(forms.ModelForm):
 
 class SpecificLocationAdmin(admin.ModelAdmin):
     form = ToponomikonKnownForm
-    list_display = ['name', 'general_location', 'main_image', 'description']
-    list_editable = ['general_location', 'description', 'main_image']
+    list_display = ['name', 'location_type', 'general_location', 'main_image', 'description']
+    list_editable = ['location_type', 'general_location', 'description', 'main_image']
     list_filter = ['general_location']
-    search_fields = ['name', 'description']
+    search_fields = ['name', 'description', 'location_type']
 
 
 class SpecificLocationInline(admin.TabularInline):
@@ -48,16 +48,16 @@ class SpecificLocationInline(admin.TabularInline):
 
     form = ToponomikonKnownForm
     formfield_overrides = {
-        models.TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 30})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 25})},
     }
 
 
 class GeneralLocationAdmin(admin.ModelAdmin):
     form = ToponomikonKnownForm
     inlines = [SpecificLocationInline]
-    list_display = ['name', 'main_image', 'description']
-    list_editable = ['description', 'main_image']
-    search_fields = ['name', 'description']
+    list_display = ['name', 'location_type', 'main_image', 'description']
+    list_editable = ['location_type', 'description', 'main_image']
+    search_fields = ['name', 'description', 'location_type']
 
 
 class LocationTypeAdmin(admin.ModelAdmin):
