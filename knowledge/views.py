@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
@@ -125,11 +125,11 @@ class TheologyView(View):
 
         if profile.character_status == 'gm':
             theology_skills = Skill.objects \
-                .filter(name__icontains='Doktryn') \
+                .filter(Q(name__icontains='Doktryn') | Q(name__icontains='Kult') | Q(name__icontains='Teologi')) \
                 .prefetch_related('skill_levels', 'knowledge_packets__pictures')
         else:
             theology_skills = Skill.objects \
-                .filter(name__icontains='Doktryn') \
+                .filter(Q(name__icontains='Doktryn') | Q(name__icontains='Kult') | Q(name__icontains='Teologi')) \
                 .prefetch_related(
                     Prefetch('skill_levels',
                              queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
