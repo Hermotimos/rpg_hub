@@ -80,16 +80,12 @@ Contains set of rules for the live RPG games. Some of which are accessible based
 ### history app
 Contains timeline and chronicle sections serving as quest-logs and ongoing biographies for individual players.
 ### knowledge app
-Contains knowledge units (packets) attributed to individual players base on their biographies and skillsets. 
+Contains knowledge units (packets) attributed to individual players based on their biographies and skillsets. 
 ### prosoponomikon app
 [In development] Contains set of player & non-player characters known to individual players as per biographies and participated game events.
 ### toponomikon app
 Contains set of places known to individual players as per biographies and participated game events.
 ### imaginarion app
-Pictures with description used by other apps.
+Pictures with descriptions used by other apps.
 ### reload app
 Quick links to re-saving of certain models whose alphabetical order depends on fields modified in overriden save() method or for firing up signals.
-
-## Status
-TODO:  
-    * Every couple of days todo_list.pop(some_number) :)
