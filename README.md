@@ -20,6 +20,7 @@ While already in production the project remains a sandbox for learning new techn
 Should anybody be interested in using this code for their own RPG-like purposes or else, permission will be granted. Please contact me at lukas.kozicki@gmail.com
 
 Note: site features have Polish names as this was created for Polish users.
+
 Note: this project contains no docstrings due to its self-educational purpose. Modules, classes and functions are modified frequently as a result of learning process or for experiments, so keeping docstrings up-to-date would be non-ergonomic.
 
 ## Technologies
