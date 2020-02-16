@@ -17,7 +17,6 @@ class CreateTopicForm(forms.ModelForm):
         self.fields['title'].max_length = 50
         self.fields['title'].widget.attrs = {
             'size': 60,
-            'rows': 10,
             'placeholder': 'Nowy temat narad (max. 50 znaków)*'
         }
 
