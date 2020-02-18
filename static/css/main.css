@@ -117,7 +117,12 @@ td.align-right {
 /* ----- TEXT & FONTS ----- */
 /* ----------------------- */
 
-* {font-family: 'IM Fell Great Primer', serif;}
+@font-face {
+  font-family: 'IM Fell Great Primer';
+  src: url("../font/IMFeGPrm29P.ttf");
+}
+
+* {font-family: 'IM Fell Great Primer';}
 
 .deep-red {color: #C70039;}
 
