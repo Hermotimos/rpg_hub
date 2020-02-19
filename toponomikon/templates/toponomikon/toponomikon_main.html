@@ -29,9 +29,9 @@
                                 {% if gen_loc.known_only_indirectly %} (znasz z opowieści) {% endif %}
                             </small>
                         </h2>
-                        <p class="font-italic text-justify {% if gen_loc.known_only_indirectly %} text-muted {% endif %}">
-                            {% if gen_loc.description %} {{ gen_loc.description|linebreaksbr }} {% endif %}
-                        </p>
+                        <h6 class="font-italic linebreaks-style text-justify {% if gen_loc.known_only_indirectly %} text-muted {% endif %}">
+                            {% if gen_loc.description %} {{ gen_loc.description|linebreaks }} {% endif %}
+                        </h6>
                     </div>
                 
                 </div>

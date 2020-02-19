@@ -21,7 +21,7 @@
                 
                 <div class="row">
                     <div class="col-md-11 p-0">
-                        <p class="font-18 font-italic text-justify">{{ gen_loc.description|linebreaksbr }}</p>
+                        <h6 class="font-18 font-italic linebreaks-style text-justify">{{ gen_loc.description|linebreaks }}</h6>
                     </div>
                     <div class="col-md-1">
                         <a class="btn btn-outline-dark mt-1" href="{% url 'toponomikon:inform' gen_loc.id '0' %}">
@@ -61,9 +61,9 @@
                                             {% if spec_loc.known_only_indirectly %} (znasz z opowieści) {% endif %}
                                         </small>
                                     </h2>
-                                    <p class="font-italic text-justify {% if spec_loc.known_only_indirectly %} text-muted {% endif %}">
-                                        {% if spec_loc.description %} {{ spec_loc.description|linebreaksbr }} {% endif %}
-                                    </p>
+                                    <h6 class="font-italic linebreaks-style text-justify {% if spec_loc.known_only_indirectly %} text-muted {% endif %}">
+                                        {% if spec_loc.description %} {{ spec_loc.description|linebreaks }} {% endif %}
+                                    </h6>
                                 </div>
                                 
                             </div>
