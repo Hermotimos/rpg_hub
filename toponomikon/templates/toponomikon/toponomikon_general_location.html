@@ -10,18 +10,18 @@
     <br>
 
     <article>
-        
         <section class="mb-5">
             <div class="container">
+                
                 <div class="row">
-                    <img class="mb-3 toponomikon {% if is_gen_loc_known_only_indirectly %} img-grayscale {% endif %}"
+                    <img class="mb-4 toponomikon {% if is_gen_loc_known_only_indirectly %} img-grayscale {% endif %}"
                          src="{% if gen_loc.main_image %} {{ gen_loc.main_image.image.url }} {% else %} {{ gen_loc.location_type.default_img.image.url }} {% endif %}"
                          alt="General location img">
                 </div>
                 
                 <div class="row">
                     <div class="col-md-11 p-0">
-                        <p class="font-italic text-justify">{{ gen_loc.description|linebreaksbr }}</p>
+                        <p class="font-18 font-italic text-justify">{{ gen_loc.description|linebreaksbr }}</p>
                     </div>
                     <div class="col-md-1">
                         <a class="btn btn-outline-dark mt-1" href="{% url 'toponomikon:inform' gen_loc.id '0' %}">

@@ -14,14 +14,14 @@
             <div class="container">
                 
                 <div class="row">
-                    <img class="mb-1 toponomikon {% if spec_loc_known_only_indirectly %} img-grayscale {% endif %}"
+                    <img class="mb-4 toponomikon {% if spec_loc_known_only_indirectly %} img-grayscale {% endif %}"
                          src="{% if spec_loc.main_image %} {{ spec_loc.main_image.image.url }} {% else %} {{ spec_loc.location_type.default_img.image.url }} {% endif %}"
                          alt="Specific location img">
                 </div>
                 
                 <div class="row">
                     <div class="col-md-11 p-0">
-                        <p class="font-italic text-justify">{{ spec_loc.description|linebreaksbr }}</p>
+                        <p class="font-18 font-italic text-justify">{{ spec_loc.description|linebreaksbr }}</p>
                     </div>
                     <div class="col-md-1">
                         <a class="btn btn-outline-dark mt-1" href="{% url 'toponomikon:inform' 0 spec_loc.id %}">
