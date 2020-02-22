@@ -1,6 +1,6 @@
-
 {% load static %}
 {% load custom_filters %}
+
 
 {% if skill.image %}
     <img class="img-skill" src="{{ skill.image.url }}" alt="Skill img">
@@ -8,7 +8,12 @@
     <img class="img-skill" src="{% static 'img/skill-default.png' %}" alt="Skill img">
 {% endif %}
 <h1 class="pt-2" data-toggle="collapse" data-target="#{{ skill.short_name }}">
-    <b class="hover-blue">&nbsp;{{ skill.name }} [{{ skill.skill_levels.all|get_max_skill_level }}]</b>
+    <b class="hover-blue">
+        &nbsp;{{ skill.name }}
+        {% if skill.skill_levels.all %}
+            [{{ skill.skill_levels.all|get_max_skill_level }}]
+        {% endif %}
+    </b>
     <small class="text-muted smaller"> [{{ skill.tested_trait }}]</small>
 </h1>
 
