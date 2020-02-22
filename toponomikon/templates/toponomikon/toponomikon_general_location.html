@@ -18,18 +18,13 @@
                          src="{% if gen_loc.main_image %} {{ gen_loc.main_image.image.url }} {% else %} {{ gen_loc.location_type.default_img.image.url }} {% endif %}"
                          alt="General location img">
                 </div>
-                
                 <div class="row">
                     <div class="col-md-11 p-0">
                         <h6 class="font-18 font-italic linebreaks-style text-justify">{{ gen_loc.description|linebreaks }}</h6>
                     </div>
                     <div class="col-md-1">
-                        <a class="btn btn-outline-dark mt-1" href="{% url 'toponomikon:inform' gen_loc.id '0' %}">
-                            <i class="icon-inform"></i>
-                        </a>
-                        <a class="btn btn-outline-dark mt-1 disabled" href="#">
-                            <i class="icon-note"></i>
-                        </a>
+                        <a class="btn btn-outline-dark icon-inform mt-1" href="{% url 'toponomikon:inform' gen_loc.id '0' %}"></a>
+                        <a class="btn btn-outline-dark icon-note mt-1 disabled" href="#"></a>
                     </div>
                 </div>
                 
@@ -39,38 +34,17 @@
         <section>
             <h2><b class="hover-blue" data-toggle="collapse" data-target="#specific_locations">Lokacje</b></h2>
             <div id="specific_locations" class="collapse mt-4 ml-2">
-                
                 {% if not spec_locs %}
                     <p class="font-18 font-italic pt-1 pl-5 text-justify">Terra incognita...</p>
                 {% else %}
                     <div class="container">
-                        {% for spec_loc in spec_locs %}
-                            <div class="row mb-4">
-                                <div class="col-md-4 px-2 py-1">
-                                    <a class="img-link" href="{% url 'toponomikon:specific-location' spec_loc.id %}">
-                                        <img class="img-fluid toponomikon-img {% if spec_loc.known_only_indirectly %} img-grayscale {% endif %}"
-                                             src="{% if spec_loc.main_image %} {{ spec_loc.main_image.image.url }} {% else %} {{ spec_loc.location_type.default_img.image.url }} {% endif %}"
-                                             alt="Specific location img">
-                                    </a>
-                                </div>
-                                
-                                <div class="col-md-8 ml-n2">
-                                    <h2 class="border-custom-base">
-                                        <small class="pr-5 {% if spec_loc.known_only_indirectly %} text-muted {% endif %}">
-                                            {{ spec_loc.name }}
-                                            {% if spec_loc.known_only_indirectly %} (znasz z opowieści) {% endif %}
-                                        </small>
-                                    </h2>
-                                    <h6 class="font-italic linebreaks-style text-justify {% if spec_loc.known_only_indirectly %} text-muted {% endif %}">
-                                        {% if spec_loc.description %} {{ spec_loc.description|linebreaks }} {% endif %}
-                                    </h6>
-                                </div>
-                                
-                            </div>
+                        {% for location in spec_locs %}
+                        {% with view='toponomikon:specific-location' %}
+                            {% include 'toponomikon/_location.html' %}
+                        {% endwith %}
                         {% endfor %}
                     </div>
                 {% endif %}
-                
             </div>
             <br>
         </section>

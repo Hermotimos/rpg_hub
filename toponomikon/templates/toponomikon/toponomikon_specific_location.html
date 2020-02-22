@@ -18,24 +18,18 @@
                          src="{% if spec_loc.main_image %} {{ spec_loc.main_image.image.url }} {% else %} {{ spec_loc.location_type.default_img.image.url }} {% endif %}"
                          alt="Specific location img">
                 </div>
-                
                 <div class="row">
                     <div class="col-md-11 p-0">
                         <h6 class="font-18 font-italic linebreaks-style text-justify">{{ spec_loc.description|linebreaks }}</h6>
                     </div>
                     <div class="col-md-1">
-                        <a class="btn btn-outline-dark mt-1" href="{% url 'toponomikon:inform' 0 spec_loc.id %}">
-                            <i class="icon-inform"></i>
-                        </a>
-                        <a class="btn btn-outline-dark mt-1 disabled" href="#">
-                            <i class="icon-note"></i>
-                        </a>
+                        <a class="btn btn-outline-dark icon-inform mt-1" href="{% url 'toponomikon:inform' 0 spec_loc.id %}"></a>
+                        <a class="btn btn-outline-dark icon-note mt-1 disabled" href="#"></a>
                     </div>
                 </div>
                 
             </div>
         </section>
-
         
         <section>
             {% if knowledge_packets %}

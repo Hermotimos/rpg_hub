@@ -11,30 +11,10 @@
 
     <article>
         <div class="container">
-            {% for gen_loc in gen_locs %}
-                <div class="row mb-4">
-                    <div class="col-md-4 px-2 py-1">
-                        <a class="img-link" href="{% url 'toponomikon:general-location' gen_loc.id %}">
-                            <img class="img-fluid toponomikon-img {% if gen_loc.known_only_indirectly %} img-grayscale {% endif %}"
-                                 src="{% if gen_loc.main_image %} {{ gen_loc.main_image.image.url }} {% else %} {{ gen_loc.location_type.default_img.image.url }} {% endif %}"
-                                 alt="General location img"
-                            >
-                        </a>
-                    </div>
-                
-                    <div class="col-md-8 ml-n2">
-                        <h2 class="border-custom-base">
-                            <small class="pr-5 {% if gen_loc.known_only_indirectly %} text-muted {% endif %}">
-                                {{ gen_loc.name }}
-                                {% if gen_loc.known_only_indirectly %} (znasz z opowieści) {% endif %}
-                            </small>
-                        </h2>
-                        <h6 class="font-italic linebreaks-style text-justify {% if gen_loc.known_only_indirectly %} text-muted {% endif %}">
-                            {% if gen_loc.description %} {{ gen_loc.description|linebreaks }} {% endif %}
-                        </h6>
-                    </div>
-                
-                </div>
+            {% for location in gen_locs %}
+            {% with view='toponomikon:general-location' %}
+                {% include 'toponomikon/_location.html' %}
+            {% endwith %}
             {% endfor %}
         </div>
     </article>
