@@ -55,8 +55,8 @@ class SpecificLocationInline(admin.TabularInline):
 class GeneralLocationAdmin(admin.ModelAdmin):
     form = ToponomikonKnownForm
     inlines = [SpecificLocationInline]
-    list_display = ['name', 'location_type', 'description']
-    list_editable = ['location_type', 'description']
+    list_display = ['name', 'location_type', 'description', 'main_image']
+    list_editable = ['location_type', 'description', 'main_image']
     search_fields = ['name', 'description']
 
 
