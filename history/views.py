@@ -240,7 +240,7 @@ def chronicle_inform_view(request, event_id):
                       f"Podczas przygody '{event.game.title}' rozegrało się co następuje:\n{event.description}\n" \
                       f"Tak było i nie inaczej...\n\n" \
                       f"Wydarzenie zostało zapisane w Twojej Kronice: " \
-                      f"{request.get_host()}/history/chronicle/one-game:{event.game.id}/"
+                      f"{request.get_host()}/history/chronicle/one-game:{event.game.id}:0/"
             sender = settings.EMAIL_HOST_USER
             receivers = []
             for profile in new_informed:
