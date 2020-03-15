@@ -30,7 +30,9 @@ from users.models import Profile
 # #################### CHRONICLE: model ChronicleEvent ####################
 
 
-def is_allowed_for_chronicle(profile, chapter_id=0, game_id=0, chronicle_event_id=0, timeline_event_id=0):
+def is_allowed_for_chronicle(profile, chapter_id=0, game_id=0,
+                             chronicle_event_id=0, timeline_event_id=0):
+    
     if profile.character_status == 'gm':
         return True
     elif chapter_id:
@@ -40,7 +42,8 @@ def is_allowed_for_chronicle(profile, chapter_id=0, game_id=0, chronicle_event_i
             return True
     elif game_id:
         if game_id in [g.id for g in GameSession.objects.filter(
-                Q(chronicle_events__participants=profile) | Q(chronicle_events__informed=profile))]:
+                Q(chronicle_events__participants=profile)
+                | Q(chronicle_events__informed=profile))]:
             return True
     elif chronicle_event_id:
         if chronicle_event_id in [e.id for e in ChronicleEvent.objects.filter(
@@ -62,7 +65,8 @@ def chronicle_main_view(request):
     if request.user.profile.character_status == 'gm':
         chapters = Chapter.objects.prefetch_related('game_sessions')
     else:
-        events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all())\
+        events = (profile.chronicle_events_participated.all()
+                  | profile.chronicle_events_informed.all())\
             .distinct()
 
         games = GameSession.objects.filter(chronicle_events__in=events)\
@@ -123,7 +127,8 @@ def chronicle_all_chapters_view(request):
             'game_sessions__chronicle_events__debate__topic'
         )
     else:
-        events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all())\
+        events = (profile.chronicle_events_participated.all()
+                  | profile.chronicle_events_informed.all())\
             .distinct()\
             .select_related('debate__topic')\
             .prefetch_related('informed', 'pictures', 'notes__author')
@@ -160,7 +165,8 @@ def chronicle_one_chapter_view(request, chapter_id):
             'chronicle_events__debate__topic'
             )
     else:
-        events = (profile.chronicle_events_participated.all() | profile.chronicle_events_informed.all())\
+        events = (profile.chronicle_events_participated.all()
+                  | profile.chronicle_events_informed.all())\
             .distinct()\
             .select_related('debate__topic')\
             .prefetch_related('informed', 'pictures', 'notes__author')\
@@ -209,7 +215,8 @@ def chronicle_one_game_view(request, game_id, timeline_event_id):
     if is_allowed_for_chronicle(profile, game_id=game_id):
         return render(request, 'history/chronicle_one_game.html', context)
     elif event and profile in event.informed.all():
-        return redirect('history:chronicle-gap', timeline_event_id=timeline_event_id)
+        return redirect('history:chronicle-gap',
+                        timeline_event_id=timeline_event_id)
     else:
         return redirect('home:dupa')
 
@@ -237,7 +244,8 @@ def chronicle_inform_view(request, event_id):
 
             subject = f"[RPG] {profile} podzielił się z Tobą swoją historią!"
             message = f"{profile} znów rozprawia o swoich przygodach.\n\n" \
-                      f"Podczas przygody '{event.game.title}' rozegrało się co następuje:\n{event.description}\n" \
+                      f"Podczas przygody '{event.game.title}' " \
+                      f"rozegrało się co następuje:\n{event.description}\n" \
                       f"Tak było i nie inaczej...\n\n" \
                       f"Wydarzenie zostało zapisane w Twojej Kronice: " \
                       f"{request.get_host()}/history/chronicle/one-game:{event.game.id}:0/"
@@ -276,7 +284,8 @@ def chronicle_note_view(request, event_id):
     current_note = None
 
     try:
-        current_note = ChronicleEventNote.objects.get(event=event, author=request.user)
+        current_note = ChronicleEventNote.objects.get(event=event,
+                                                      author=request.user)
     except ChronicleEventNote.DoesNotExist:
         pass
 
@@ -334,8 +343,10 @@ def chronicle_edit_view(request, event_id):
 @login_required
 def chronicle_gap_view(request, timeline_event_id):
     timeline_event = get_object_or_404(TimelineEvent, id=timeline_event_id)
-    participants_and_informed = (timeline_event.participants.all() | (timeline_event.informed.all())).distinct()
-    participants_and_informed_str = ', '.join(p.character_name.split(' ', 1)[0] for p in participants_and_informed)
+    participants_and_informed = (timeline_event.participants.all()
+                                 | (timeline_event.informed.all())).distinct()
+    participants_and_informed_str = ', '.join(p.character_name.split(' ', 1)[0]
+                                              for p in participants_and_informed)
 
     context = {
         'page_title': 'Luka w Kronice',
