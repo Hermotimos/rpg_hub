@@ -85,8 +85,8 @@ class ChronicleEventAdmin(admin.ModelAdmin):
     form = ChronicleEventAdminForm
     list_display = ['game', 'event_no_in_game', 'short_description']
     list_display_links = ['short_description']
-    list_editable = ['event_no_in_game', ]
-    list_filter = ['participants', 'informed', 'game', ]
+    list_editable = ['event_no_in_game']
+    list_filter = ['participants', 'informed', 'game']
     search_fields = ['description']
 
 

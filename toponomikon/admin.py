@@ -38,7 +38,7 @@ class SpecificLocationAdmin(admin.ModelAdmin):
     form = ToponomikonKnownForm
     list_display = ['name', 'location_type', 'general_location', 'description']
     list_editable = ['location_type', 'general_location', 'description']
-    list_filter = ['general_location']
+    list_filter = ['general_location__name']
     search_fields = ['name', 'description']
 
 
