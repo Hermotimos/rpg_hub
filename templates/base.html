@@ -100,33 +100,17 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js"></script>
-
         <!-- Scrolling -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="{% static 'js/jquery.scrollTo.min.js' %}"></script>
-        <script>
-            jQuery(function($)
-            {
-                // reset scroll on page loading
-                $.scrollTo(0);
-                // when click on element with class .scrollup scroll to 'body' element (=top)
-                $('.scrollup').click(function() { $.scrollTo($('body'), 1000); });
-            }
-            );
-
-            // Show scrollup button when scrolled down > 300px
-            $(window).scroll(function()
-            {
-                if($(this).scrollTop()>300) $('.scrollup').fadeIn();
-                else $('.scrollup').fadeOut();
-            }
-            );
-        </script>
-        <script>
-            $("body").on("contextmenu", "img", function(e) {
-                return false;
-            });
-        </script>
+        <script src="{% static 'js/scrollTo.js' %}"></script>
+        
+        <!--  What is this for?      -->
+        <!--        <script>-->
+        <!--            $("body").on("contextmenu", "img", function(e) {-->
+        <!--                return false;-->
+        <!--            });-->
+        <!--        </script>-->
 
         {% block javascript %}
         {% endblock javascript %}
