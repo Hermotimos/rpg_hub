@@ -14,11 +14,16 @@ article.content {min-height: 700px}
 footer {color: gray;}
 
 .header-img {
-    height: 100px;
-    width: 100px;
+    height: 6.25rem;
+    width: 6.25rem;
 }
 
-
+@media only screen and (max-width: 600px) {
+    .header-img {
+        height: 5rem;
+        width: 5rem;
+    }
+}
 
 
 /* ------------------------------------------------------------------------------------------------------------------ */
