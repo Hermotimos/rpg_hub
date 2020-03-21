@@ -1,0 +1,15 @@
+{% load crispy_forms_tags %}
+
+<h6>Podziel się wiedzą o krainie/lokacji</h6>
+<small class="red">1) Wybieraj jedynie postacie, którym w kompleksowy sposób przekazałeś już tę wiedzę w świecie gry!</small><br>
+<small>2) W razie wątpliwości skonsultuj się z MG zanim przekażesz wiedzę innym postaciom.</small><br>
+<br>
+
+<form method="POST" class="multiselect-form-small">
+    {% csrf_token %}
+    {{ form|crispy }}<br>
+    <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
+    <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
+    <input class="btn btn-dark" type="submit" value="Poinformuj">
+</form>
+
