@@ -2,14 +2,13 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db.models import Prefetch, Q, Case, When, Value, IntegerField
-from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 
 from rpg_project import settings
 from rpg_project.utils import query_debugger
-from toponomikon.forms import GeneralLocationInformForm, SpecificLocationInformForm
 from toponomikon.models import GeneralLocation, SpecificLocation
 from users.models import Profile
+
 
 @query_debugger
 @login_required
