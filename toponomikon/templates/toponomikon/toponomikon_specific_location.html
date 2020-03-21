@@ -10,11 +10,11 @@
     <br>
 
     <article>
-        <section class="mb-5">
+        
+        <header class="mb-5">
             <div class="container">
-                
                 <div class="row">
-                    <img class="mb-4 toponomikon {% if spec_loc_known_only_indirectly %} img-grayscale {% endif %}"
+                    <img class="mb-4 toponomikon {% if is_spec_loc_known_only_indirectly %} img-grayscale {% endif %}"
                          src="{% if spec_loc.main_image %} {{ spec_loc.main_image.image.url }} {% else %} {{ spec_loc.location_type.default_img.image.url }} {% endif %}"
                          alt="Specific location img">
                 </div>
@@ -27,20 +27,56 @@
                         <a class="btn btn-outline-dark icon-note mt-1 disabled" href="#"></a>
                     </div>
                 </div>
-                
             </div>
-        </section>
+        </header>
+       
         
-        <section>
+        <div class="tabset">
+            <!-- Tabs -->
+            
+<!-- FOR LATER USE: sub_spec_locs -->
+<!--            {% if spec_locs %}-->
+<!--                <input type="radio" name="tabset" id="tab1" aria-controls="lokacje" checked>-->
+<!--                <label class="h3" for="tab1">Lokacje</label>-->
+<!--            {% endif %}-->
             {% if knowledge_packets %}
-                <h2><b class="hover-blue" data-toggle="collapse" data-target="#knowledge-packets">Szczegółowe informacje o lokacji</b></h2>
-                <div id="knowledge-packets" class="collapse mt-4">
-                    {% for kn_packet in knowledge_packets %}
-                        {% include '_knowledge_packet.html' %}
-                    {% endfor %}
-                </div>
+                <input type="radio" name="tabset" id="tab2" aria-controls="wiedza" checked>
+                <label class="h3" for="tab2">Wiedza</label>
             {% endif %}
-        </section>
+            {% if pictures %}
+                <input type="radio" name="tabset" id="tab3" aria-controls="obrazy">
+                <label class="h3" for="tab3">Obrazy</label>
+            {% endif %}
+            
+            <!-- Tabs content -->
+            <div class="tab-panels">
+            
+<!-- FOR LATER USE: sub_spec_locs -->
+<!--                {% if spec_locs %}-->
+<!--                    <section id="lokacje" class="tab-panel">-->
+<!--                        <div class="container">-->
+<!--                            {% for location in spec_locs %}-->
+<!--                            {% with view='toponomikon:specific-location' %}-->
+<!--                                {% include 'toponomikon/_location.html' %}-->
+<!--                            {% endwith %}-->
+<!--                            {% endfor %}-->
+<!--                        </div>-->
+<!--                    </section>-->
+<!--                {% endif %}-->
+                {% if knowledge_packets %}
+                    <section id="wiedza" class="tab-panel">
+                        {% for kn_packet in knowledge_packets %}
+                            {% include '_knowledge_packet.html' %}
+                        {% endfor %}
+                    </section>
+                {% endif %}
+                {% if pictures %}
+                    <section id="obrazy" class="tab-panel">
+                        {{ pictures }}
+                    </section>
+                {% endif %}
+            </div>
+        </div>
         
     </article>
 {% endblock content %}
