@@ -36,22 +36,21 @@
         </header>
 
         <main role="main" class="container p-2">
+            
             <div class="row">
+                
                 <div class="col-md-9">
-
                     <!--   PAGE HEADER   -->
                     <header>
-                        <div class="">
-                            <div class="d-flex mt-auto">
-                                <img class="img-page-title" src="{% static 'img/skadia.png' %}" alt="Page title img">
-                                <h1 class="border-custom-base mb-0 mt-auto pb-1 pl-2 pr-4"><strong class="align-bottom small-caps">{{ page_title|linebreaksbr }}</strong></h1>
-                            </div>
-<!--                            <div class="col-sx-10 border-custom-base mt-auto pb-1 pl-2 pr-4">-->
-<!--                            -->
-<!--                            </div>-->
+                        <div class="d-flex text-break">
+                            <img class="header-img" src="{% static 'img/skadia.png' %}" alt="Page title img">
+                            <h1 class="border-base mb-0 mt-auto pb-1 pl-2 pr-4">
+                                <strong class="small-caps">
+                                    {{ page_title|linebreaksbr }}
+                                </strong>
+                            </h1>
                         </div>
                     </header>
-
                     <!--  MESSAGES  -->
                     {% if messages %}
                         {% for message in messages %}
@@ -60,11 +59,9 @@
                             </div>
                         {% endfor %}
                     {% endif %}
-
                     <!--   CONTENT   -->
                     {% block content %}
                     {% endblock content %}
-
                 </div>
                 
                 <!--   SIDEBAR   -->
@@ -78,7 +75,6 @@
                 <a id="upp" class="scrollup col-md-0"></a>
                 
             </div>
-            
             
             <!--   FOOTER   -->
             <div class="row mt-5 pt-5">

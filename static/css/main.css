@@ -13,9 +13,9 @@ article.content {min-height: 700px}
 
 footer {color: gray;}
 
-.img-page-title {
-    max-height: 100px;
-    max-width: 100px;
+.header-img {
+    height: 100px;
+    width: 100px;
 }
 
 
@@ -32,7 +32,7 @@ footer {color: gray;}
 }
 */
 
-.border-custom-base {border-bottom: 1px solid #444444;}
+.border-base {border-bottom: 1px solid #444444;}
 
 .btn-space {margin: 2px;}
 
