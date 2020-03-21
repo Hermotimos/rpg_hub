@@ -23,12 +23,19 @@
                         <h6 class="font-18 font-italic linebreaks-style text-justify">{{ gen_loc.description|linebreaks }}</h6>
                     </div>
                     <div class="col-md-1">
-                        <a class="btn btn-outline-dark icon-inform mt-1" href="{% url 'toponomikon:inform' gen_loc.id '0' %}"></a>
+                        <p class="btn btn-outline-dark icon-inform mt-1" id="btnModal"></p>
                         <a class="btn btn-outline-dark icon-note mt-1 disabled" href="#"></a>
                     </div>
                 </div>
             </div>
         </header>
+        
+        
+        
+      
+        
+        
+        
         
         
         <div class="tabset">
@@ -75,4 +82,20 @@
         </div>
         
     </article>
+
+
+    <!-- The Modal -->
+    <div id="informModal" class="modal">
+        <div class="modal-contents">
+            <h1 class="close">✖</h1>
+            {% include 'toponomikon/inform.html' %}
+        </div>
+    </div>
+
 {% endblock content %}
+
+
+
+{% block javascript %}
+    <script src="{% static 'js/informModal.js' %}"></script>
+{% endblock javascript %}

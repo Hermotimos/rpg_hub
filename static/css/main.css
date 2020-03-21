@@ -19,7 +19,7 @@ footer {color: gray;}
 }
 
 .page-title {
-    font-size: 2.5rem;
+    font-size: 2.62rem;
     line-height: 1;
 }
 
@@ -259,13 +259,9 @@ nav ul.bullets-1 li {color: #cbd5db;}
 /* ---------- TABS ------- */
 /* ----------------------- */
 
-/*
-Source: https://codepen.io/markcaron/pen/MvGRYV
-*/
+/* Tab Source: https://codepen.io/markcaron/pen/MvGRYV */
 
-/*
- CSS for the main interaction
-*/
+/* Tab main interaction */
 .tabset > input[type="radio"] {
   position: absolute;
   left: -200vw;
@@ -282,17 +278,7 @@ Source: https://codepen.io/markcaron/pen/MvGRYV
   display: block;
 }
 
-/*
- Styling
-*/
-/*
-body {
-  font: 16px/1.5em "Overpass", "Open Sans", Helvetica, sans-serif;
-  color: #333;
-  font-weight: 300;
-}
-*/
-
+/* Tab Styling */
 .tabset > label {
   position: relative;
   display: inline-block;
@@ -302,23 +288,6 @@ body {
   cursor: pointer;
   font-weight: 600;
 }
-
-/*
-.tabset > label::after {
-  content: "";
-  position: absolute;
-  left: 15px;
-  bottom: 10px;
-  width: 22px;
-  height: 4px;
-  background: #8d8d8d;
-}
-
-.tabset > label:hover,
-.tabset > input:focus + label {
-  color: #06c;
-}
-*/
 
 .tabset > label:hover {color: #06c;}
 
@@ -337,20 +306,66 @@ body {
   border-top: 1px solid #ccc;
 }
 
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* ------------------------- */
+/* ---------- MODAL ------- */
+/* ----------------------- */
+
+/* Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-contents {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 60%;
+  height: auto;
+}
+
+/* Modal Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Responsive container inside modal */
+.resp-container {
+    position: relative;
+    overflow: hidden;
+    padding-top: 56.25%;    /* <== change to adjust shape */
+}
 /*
- Demo purposes only
-
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
+.resp-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
 }
-
-body {
-  padding: 30px;
-}
-
-.tabset {
-  max-width: 65em;
-}
-*/
