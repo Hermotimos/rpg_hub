@@ -14,8 +14,8 @@ article.content {min-height: 700px}
 footer {color: gray;}
 
 .img-page-title {
-    height: 100px;
-    width: 100px;
+    max-height: 100px;
+    max-width: 100px;
 }
 
 
