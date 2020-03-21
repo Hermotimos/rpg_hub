@@ -98,8 +98,10 @@ td.align-right {text-align: right;}
 }
 .linebreaks-style p {margin-bottom: 0.55rem;}
 
-
-
+.border-double {
+    border: double #444444;
+    border-style: ;
+}
 
 
 
@@ -331,11 +333,11 @@ nav ul.bullets-1 li {color: #cbd5db;}
 
 /* Modal Content */
 .modal-contents {
-  background-color: #fefefe;
+  background-color: #fafafa;
   margin: auto;
-  padding: 20px;
+  padding: 12px;
   border: 1px solid #888;
-  width: 60%;
+  width: 50%;
   height: auto;
 }
 
@@ -345,6 +347,7 @@ nav ul.bullets-1 li {color: #cbd5db;}
   float: right;
   font-size: 28px;
   font-weight: bold;
+  padding: 10px;
 }
 
 .close:hover,
@@ -352,20 +355,4 @@ nav ul.bullets-1 li {color: #cbd5db;}
   color: #000;
   text-decoration: none;
   cursor: pointer;
-}
-
-/* Responsive container inside modal */
-.resp-container {
-    position: relative;
-    overflow: hidden;
-    padding-top: 56.25%;    /* <== change to adjust shape */
-}
-/*
-.resp-iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
 }

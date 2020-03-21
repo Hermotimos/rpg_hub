@@ -1,15 +1,18 @@
-{% load crispy_forms_tags %}
 
-<h6>Podziel się wiedzą o krainie/lokacji</h6>
-<small class="red">1) Wybieraj jedynie postacie, którym w kompleksowy sposób przekazałeś już tę wiedzę w świecie gry!</small><br>
-<small>2) W razie wątpliwości skonsultuj się z MG zanim przekażesz wiedzę innym postaciom.</small><br>
-<br>
+<div class="py-3 border-double">
+    <h5 class="text-center text-danger">
+        Informuj jedynie postacie, którym w kompleksowy sposób przekazałeś wiedzę w świecie gry.
+        <br>
+        W razie wątpliwości skonsultuj się z MG.
+    </h5>
+    <br>
+    <h4 class="text-center">
+        {% for profile in informable.all %}
+            <a class="img-link" href="{% url 'toponomikon:inform' profile.id gen_loc_id spec_loc_id %}">
+                <img class="article-img rounded-circle" src="{{ profile.image.url }}">
+            </a>
+        {% endfor %}
+    </h4>
+</div>
 
-<form method="POST" class="multiselect-form-small">
-    {% csrf_token %}
-    {{ form|crispy }}<br>
-    <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
-    <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
-    <input class="btn btn-dark" type="submit" value="Poinformuj">
-</form>
 
