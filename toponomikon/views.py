@@ -50,6 +50,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
     profile = request.user.profile
     gen_loc = get_object_or_404(GeneralLocation, id=gen_loc_id)
 
+    # CONTENT
     if profile.character_status == 'gm':
         spec_locs = SpecificLocation.objects.filter(general_location__id=gen_loc_id)
         knowledge_packets = gen_loc.knowledge_packets.all()
@@ -73,6 +74,44 @@ def toponomikon_general_location_view(request, gen_loc_id):
             output_field=IntegerField()
         ))
 
+    # INFORM FORM
+
+    known_directly_old = gen_loc.known_directly.all()
+    known_indirectly_old = gen_loc.known_indirectly.all()
+    allowed = (gen_loc.known_directly.all() | gen_loc.known_indirectly.all())
+
+    if request.method == 'POST':
+        form = GeneralLocationInformForm(
+            authenticated_user=request.user,
+            known_directly_old=known_directly_old,
+            known_indirectly_old=known_indirectly_old,
+            data=request.POST,
+            instance=gen_loc
+        )
+    
+        if form.is_valid():
+            known_indirectly_new = form.cleaned_data['known_indirectly']
+            gen_loc.known_indirectly.add(*list(known_indirectly_new))
+        
+            subject = f"[RPG] {profile} opowiedział Ci o pewnym miejscu!"
+            message = f"{profile} opowiedział Ci o miejscu zwanym: {gen_loc.name}.\n" \
+                      f"Informacje zostały zapisane w Twoim Toponomikonie."
+            sender = settings.EMAIL_HOST_USER
+            receivers = []
+            for new_profile in known_indirectly_new:
+                receivers.append(new_profile.user.email)
+            if profile.character_status != 'gm':
+                receivers.append('lukas.kozicki@gmail.com')
+            send_mail(subject, message, sender, receivers)
+        
+            messages.info(request, f'Poinformowałeś wybrane postacie!')
+    else:
+        form = GeneralLocationInformForm(
+            authenticated_user=request.user,
+            known_directly_old=known_directly_old,
+            known_indirectly_old=known_indirectly_old
+        )
+        
     context = {
         'page_title': gen_loc.name,
         'gen_loc': gen_loc,
@@ -80,8 +119,9 @@ def toponomikon_general_location_view(request, gen_loc_id):
         'knowledge_packets': knowledge_packets,
         'spec_locs': spec_locs,
         'pictures': None,
+        'form': form,
     }
-    if profile in (gen_loc.known_directly.all() | gen_loc.known_indirectly.all()) or profile.character_status == 'gm':
+    if profile in allowed or profile.character_status == 'gm':
         return render(request, 'toponomikon/toponomikon_general_location.html', context)
     else:
         return redirect('home:dupa')
@@ -126,20 +166,25 @@ def toponomikon_inform_view(request, gen_loc_id='0', spec_loc_id='0'):
 
     known_directly_old = obj.known_directly.all()
     known_indirectly_old = obj.known_indirectly.all()
-
+    allowed = (obj.known_directly.all() | obj.known_indirectly.all())
+    
     if request.method == 'POST':
         if isinstance(obj, GeneralLocation):
-            form = GeneralLocationInformForm(authenticated_user=request.user,
-                                             known_directly_old=known_directly_old,
-                                             known_indirectly_old=known_indirectly_old,
-                                             data=request.POST,
-                                             instance=obj)
+            form = GeneralLocationInformForm(
+                authenticated_user=request.user,
+                known_directly_old=known_directly_old,
+                known_indirectly_old=known_indirectly_old,
+                data=request.POST,
+                instance=obj
+            )
         else:
-            form = SpecificLocationInformForm(authenticated_user=request.user,
-                                              known_directly_old=known_directly_old,
-                                              known_indirectly_old=known_indirectly_old,
-                                              data=request.POST,
-                                              instance=obj)
+            form = SpecificLocationInformForm(
+                authenticated_user=request.user,
+                known_directly_old=known_directly_old,
+                known_indirectly_old=known_indirectly_old,
+                data=request.POST,
+                instance=obj
+            )
 
         if form.is_valid():
             known_indirectly_new = form.cleaned_data['known_indirectly']
@@ -161,20 +206,24 @@ def toponomikon_inform_view(request, gen_loc_id='0', spec_loc_id='0'):
             return HttpResponseRedirect(_next)
     else:
         if isinstance(obj, GeneralLocation):
-            form = GeneralLocationInformForm(authenticated_user=request.user,
-                                             known_directly_old=known_directly_old,
-                                             known_indirectly_old=known_indirectly_old)
+            form = GeneralLocationInformForm(
+                authenticated_user=request.user,
+                known_directly_old=known_directly_old,
+                known_indirectly_old=known_indirectly_old
+            )
         else:
-            form = SpecificLocationInformForm(authenticated_user=request.user,
-                                              known_directly_old=known_directly_old,
-                                              known_indirectly_old=known_indirectly_old)
+            form = SpecificLocationInformForm(
+                authenticated_user=request.user,
+                known_directly_old=known_directly_old,
+                known_indirectly_old=known_indirectly_old
+            )
 
     context = {
         'page_title': 'Opowiedz o krainie lub lokacji',
         'form': form,
         'obj': obj,
     }
-    if profile in (obj.known_directly.all() | obj.known_indirectly.all()) or profile.character_status == 'gm':
-        return render(request, 'toponomikon/toponomikon_inform.html', context)
+    if profile in allowed or profile.character_status == 'gm':
+        return render(request, 'toponomikon/inform.html', context)
     else:
         return redirect('home:dupa')
