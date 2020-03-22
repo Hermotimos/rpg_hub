@@ -13,7 +13,7 @@
 
     {% for topic in topics %}
         <h3 class="small-caps">
-            <b class="border-custom-base">{{ topic.title }}</b>
+            <b class="border-bottom-dark">{{ topic.title }}</b>
         </h3>
         <a href="{% url 'debates:create-debate' topic.id %}" class="btn btn-outline-dark">Nowa narada</a>
         <br><br>
