@@ -312,9 +312,9 @@ nav ul.bullets-1 li {color: #cbd5db;}
 
 
 /* ------------------------------------------------------------------------------------------------------------------ */
-/* ------------------------- */
-/* ---------- MODAL ------- */
-/* ----------------------- */
+/* ----------------------------------------- */
+/* ---------- MODAL WITH INFORM FORM------- */
+/* --------------------------------------- */
 
 /* Modal (background) */
 .modal {
@@ -341,6 +341,12 @@ nav ul.bullets-1 li {color: #cbd5db;}
   height: auto;
 }
 
+@media only screen and (max-width: 600px) {
+    .modal-contents {width: 100%;}
+    .modal-contents h5 {padding-top: 30px;}
+}
+
+
 /* Modal Close Button */
 .close {
   color: #aaaaaa;
@@ -358,7 +364,7 @@ nav ul.bullets-1 li {color: #cbd5db;}
 }
 
 
-/* INFORM */
+/* Inform form */
 
 input.select-profile[type=checkbox] {display:none;}
 input.select-profile[type=checkbox] + label img:hover {cursor: pointer;}
