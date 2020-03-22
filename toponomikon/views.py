@@ -48,6 +48,10 @@ def toponomikon_main_view(request):
 def toponomikon_general_location_view(request, gen_loc_id):
     profile = request.user.profile
     gen_loc = get_object_or_404(GeneralLocation, id=gen_loc_id)
+    
+    gen_loc_known_directly = gen_loc.known_directly.all()
+    gen_loc_known_indirectly = gen_loc.known_indirectly.all()
+    allowed = (gen_loc_known_directly | gen_loc_known_indirectly)
 
     # TABS
     if profile.character_status == 'gm':
@@ -55,14 +59,16 @@ def toponomikon_general_location_view(request, gen_loc_id):
             general_location__id=gen_loc_id
         )
         knowledge_packets = gen_loc.knowledge_packets.all()
-        is_gen_loc_known_only_indirectly = False
+        only_indirectly = False
     else:
         known_directly = gen_loc.specific_locations.filter(known_directly=profile)
         known_indirectly = gen_loc.specific_locations.filter(known_indirectly=profile).exclude(id__in=known_directly)
         spec_locs = (known_directly | known_indirectly)
         knowledge_packets = gen_loc.knowledge_packets.filter(characters=profile.character)
-        is_gen_loc_known_only_indirectly = \
-            True if profile in gen_loc.known_indirectly.all() and profile not in gen_loc.known_directly.all() else False
+        only_indirectly = True \
+            if profile in gen_loc_known_indirectly\
+            and profile not in gen_loc_known_directly \
+            else False
 
     spec_locs = spec_locs\
         .select_related('main_image')\
@@ -76,13 +82,10 @@ def toponomikon_general_location_view(request, gen_loc_id):
         ))
 
     # INFORM
-    allowed = (gen_loc.known_directly.all() | gen_loc.known_indirectly.all())
     informable = Profile.objects.filter(
-        character_status__in=['active_player', 'inactive_player', 'dead_player']   # todo remove inactive_player
+        character_status__in=['active_player']
     ).exclude(
-        Q(user__profile=profile)
-        | Q(id__in=allowed)
-        
+        Q(user__profile=profile) | Q(id__in=allowed)
     )
     
     if request.method == 'POST':
@@ -110,7 +113,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
     context = {
         'page_title': gen_loc.name,
         'gen_loc': gen_loc,
-        'is_gen_loc_known_only_indirectly': is_gen_loc_known_only_indirectly,
+        'only_indirectly': only_indirectly,
         # Tabs
         'knowledge_packets': knowledge_packets,
         'spec_locs': spec_locs,
@@ -119,7 +122,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
         'informable': informable,
     }
     if profile in allowed or profile.character_status == 'gm':
-        return render(request, 'toponomikon/toponomikon_general_location.html', context)
+        return render(request, 'toponomikon/general_location.html', context)
     else:
         return redirect('home:dupa')
 
@@ -131,10 +134,10 @@ def toponomikon_specific_location_view(request, spec_loc_id):
     spec_loc = get_object_or_404(SpecificLocation, id=spec_loc_id)
 
     if profile.character_status == 'gm':
-        is_spec_loc_known_only_indirectly = False
+        only_indirectly = False
         knowledge_packets = spec_loc.knowledge_packets.all()
     else:
-        is_spec_loc_known_only_indirectly = \
+        only_indirectly = \
             True if profile in spec_loc.known_indirectly.all() and profile not in spec_loc.known_directly.all() \
             else False
         knowledge_packets = spec_loc.knowledge_packets.filter(characters=profile.character)
@@ -142,11 +145,11 @@ def toponomikon_specific_location_view(request, spec_loc_id):
     context = {
         'page_title': spec_loc.name,
         'spec_loc': spec_loc,
-        'is_spec_loc_known_only_indirectly': is_spec_loc_known_only_indirectly,
+        'only_indirectly': only_indirectly,
         'knowledge_packets': knowledge_packets,
         'pictures': None,
     }
     if profile in (spec_loc.known_directly.all() | spec_loc.known_indirectly.all()) or profile.character_status == 'gm':
-        return render(request, 'toponomikon/toponomikon_specific_location.html', context)
+        return render(request, 'toponomikon/specific_location.html', context)
     else:
         return redirect('home:dupa')
