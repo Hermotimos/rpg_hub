@@ -1,14 +1,21 @@
-from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
+from django.db.models import Prefetch, Q
 # imports for LoginView and LogoutView:
-from django.contrib.auth.views import (SuccessURLAllowedHostsMixin, FormView, TemplateView, AuthenticationForm,
-                                       REDIRECT_FIELD_NAME, HttpResponseRedirect, resolve_url, settings, is_safe_url,
-                                       get_current_site, never_cache, auth_logout, method_decorator, csrf_protect,
-                                       auth_login, sensitive_post_parameters)
+from django.contrib.auth.views import (
+    SuccessURLAllowedHostsMixin, FormView, TemplateView, AuthenticationForm,
+    REDIRECT_FIELD_NAME, HttpResponseRedirect, resolve_url, settings,
+    is_safe_url, get_current_site, never_cache, auth_logout, method_decorator,
+    csrf_protect, auth_login, sensitive_post_parameters
+)
+from django.shortcuts import render, redirect
+
+from rpg_project.utils import query_debugger
+from rules.models import Skill, SkillLevel, Synergy, SynergyLevel
 from users.forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
+from users.models import Profile
 
 
 def register_view(request):
@@ -199,3 +206,79 @@ class LogoutView(SuccessURLAllowedHostsMixin, TemplateView):
             'page_title': 'Wylogowanie'
         })
         return context
+
+
+# CHARACTER VIEWS
+
+@query_debugger
+@login_required
+def character_tricks_view(request):
+    profile = request.user.profile
+    
+    if profile.status == 'gm':
+        players_profiles = Profile.objects.exclude(
+            Q(status='dead_player') | Q(status='living_npc')
+            | Q(status='dead_npc') | Q(status='gm')
+        )
+    else:
+        players_profiles = [profile]
+
+    context = {
+        'page_title': f'Podstępy - {profile.character_name}',
+        'players_profiles': players_profiles
+    }
+    return render(request, 'users/character_tricks.html', context)
+
+
+@query_debugger
+@login_required
+def character_skills_view(request, profile_id='0'):
+    try:
+        profile = Profile.objects.get(id=profile_id)
+    except Profile.DoesNotExist:
+        profile = request.user.profile
+
+    skills = Skill.objects\
+        .filter(skill_levels__acquired_by=profile)\
+        .exclude(name__icontains='Doktryn')\
+        .prefetch_related(Prefetch(
+            'skill_levels',
+            queryset=SkillLevel.objects.filter(acquired_by=profile)
+        ))\
+        .distinct()
+
+    synergies = Synergy.objects\
+        .filter(synergy_levels__acquired_by=profile) \
+        .prefetch_related(Prefetch(
+            'synergy_levels',
+            queryset=SynergyLevel.objects.filter(acquired_by=profile)
+        )) \
+        .distinct()
+
+    context = {
+        'page_title': f'Umiejętności - {profile.character_name}',
+        'skills': skills,
+        'synergies': synergies,
+    }
+    if request.user.profile.status != 'gm' and profile_id != 0:
+        return redirect('home:dupa')
+    else:
+        return render(request, 'users/character_skills.html', context)
+
+
+@query_debugger
+@login_required
+def character_skills_for_gm_view(request):
+    profile = request.user.profile
+    profiles = Profile.objects.filter(
+        status__in=['active_player', 'inactive_player', 'dead_player']
+    )
+    
+    context = {
+        'page_title': 'Umiejętności graczy',
+        'profiles': profiles,
+    }
+    if profile.status == 'gm':
+        return render(request, 'users/character_all_skills_for_gm.html', context)
+    else:
+        return redirect('home:dupa')

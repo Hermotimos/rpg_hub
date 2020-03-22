@@ -8,5 +8,12 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('profile/', views.profile_view, name='profile'),
-    path('profile/change_password/', views.change_password_view, name='change-password')
+    path('profile/change_password/', views.change_password_view, name='change-password'),
+    
+    path('character-tricks/', views.character_tricks_view, name='tricks'),
+    path('character-skills:<int:profile_id>/', views.character_skills_view,
+         name='skills'),
+    path('character-skills-for-gm/', views.character_skills_for_gm_view,
+         name='skills-for-gm'),
+
 ]

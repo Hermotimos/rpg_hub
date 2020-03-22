@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/characters.css' %}" xmlns="http://www.w3.org/1999/html">
+{% endblock head_extra %}
+
+{% block content %}
+    <br><br><br>
+
+    <h5 class="rules">Karta Podstępów</h5>
+    <p class="font-18 pl-1 font-italic text-justify">
+        Karta Podstępów widoczna poniżej nie ma opcji zapisu zmian (to ograniczenie obiektywne, nie da się tego zmienić).
+        W celu wprowadzenia zmian - klijnij link 'EDYTUJ' poniżej. Edytować można tylko te pola, które podlegają zmianie w trakcie gry:
+        ZRC, Umiejętności, Zbroję oraz informację o rozwoju Podstępów w toku awansów Profesji.
+    </p>
+    <br>
+
+    {% for profile in players_profiles %}
+        <span class="font-18">{{ profile.character_name }}: </span>
+
+        {% if 'Dalamar' in profile.character_name  %}
+            <u><a href="https://1drv.ms/x/s!AiRT0FtymkyPgW0hHa37jMTs4tIE">EDYTUJ</a></u>
+            <br><br>
+            <iframe width="820" height="530" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21237&authkey=%21AHq8HwyaG7EjQQ8&em=2&wdAllowInteractivity=False&AllowTyping=True&Item='Podst%C4%99py'!A1%3AJ23&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+        {% endif %}
+        {% if 'Davos' in profile.character_name  %}
+            <u class="font-18"><a href="https://1drv.ms/x/s!AiRT0FtymkyPgW6rfBpshUeS74zo">EDYTUJ</a></u>
+            <br><br>
+            <iframe width="820" height="530" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21238&authkey=%21AAbAwRxSv1LmlCU&em=2&wdAllowInteractivity=False&AllowTyping=True&Item='Podst%C4%99py'!A1%3AJ23&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+        {% endif %}
+        {% if 'Gondar' in profile.character_name  %}
+            <u class="font-18"><a href="https://1drv.ms/x/s!AiRT0FtymkyPgW9BvuW__emysXe9">EDYTUJ</a></u>
+            <br><br>
+            <iframe width="820" height="530" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21239&authkey=%21AO-R34Nd2gN_HLc&em=2&wdAllowInteractivity=False&AllowTyping=True&Item='Podst%C4%99py'!A1%3AJ23&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+        {% endif %}
+        {% if 'Landar' in profile.character_name  %}
+            <u class="font-18"><a href="https://1drv.ms/x/s!AiRT0FtymkyPgXAul2A7Ev5bm4l6">EDYTUJ</a></u>
+            <br><br>
+            <iframe width="820" height="530" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21240&authkey=%21AD9Vt3mkCFmVHUE&em=2&wdAllowInteractivity=False&AllowTyping=True&Item='Podst%C4%99py'!A1%3AJ23&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+        {% endif %}
+        {% if 'Mamert' in profile.character_name  %}
+            <u class="font-18"><a href="https://1drv.ms/x/s!AiRT0FtymkyPgXEUw8sZaAmC7Sau">EDYTUJ</a></u>
+            <br><br>
+            <iframe width="820" height="530" frameborder="0" scrolling="no" src="https://onedrive.live.com/embed?resid=8F4C9A725BD05324%21241&authkey=%21ALLvypGKvHigmuY&em=2&wdAllowInteractivity=False&AllowTyping=True&Item='Podst%C4%99py'!A1%3AJ23&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True"></iframe>
+        {% endif %}
+        <br><br><br>
+
+    {% endfor %}
+
+    <br><br>
+    <h5 class="rules">Przydatne linki:</h5>
+    <p class="font-18 pl-1 font-italic text-justify">
+        &#10023; Zasady => <u><a href="{% url 'rules:tricks' %}">Podstępy</a></u>
+    </p>
+{% endblock content %}
