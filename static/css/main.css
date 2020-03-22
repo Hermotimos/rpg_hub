@@ -159,7 +159,6 @@ img {border-style: double;}
     border: solid 1px black;
 }
 
-
 .img-skill {
     float: left;
     height: 60px;
@@ -346,7 +345,6 @@ nav ul.bullets-1 li {color: #cbd5db;}
     .modal-contents h5 {padding-top: 30px;}
 }
 
-
 /* Modal Close Button */
 .close {
   color: #aaaaaa;
@@ -363,9 +361,7 @@ nav ul.bullets-1 li {color: #cbd5db;}
   cursor: pointer;
 }
 
-
 /* Inform form */
-
 input.select-profile[type=checkbox] {display:none;}
 input.select-profile[type=checkbox] + label img:hover {cursor: pointer;}
 
