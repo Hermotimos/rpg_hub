@@ -23,7 +23,7 @@
                         <h6 class="font-18 font-italic linebreaks-style text-justify">{{ spec_loc.description|linebreaks }}</h6>
                     </div>
                     <div class="col-md-1">
-                        <a class="btn btn-outline-dark icon-inform mt-1" href="{% url 'toponomikon:inform' 0 spec_loc.id %}"></a>
+                        <p class="btn btn-outline-dark icon-inform mt-1" id="btnModal"></p>
                         <a class="btn btn-outline-dark icon-note mt-1 disabled" href="#"></a>
                     </div>
                 </div>
@@ -79,4 +79,22 @@
         </div>
         
     </article>
+
+
+    <!-- The Modal -->
+    <div id="informModal" class="modal">
+        <div class="modal-contents">
+            <span class="close">✖</span>
+            <div class="">
+                {% include 'toponomikon/inform.html' %}
+            </div>
+            
+        </div>
+    </div>
+
 {% endblock content %}
+
+
+{% block javascript %}
+    <script src="{% static 'js/informModal.js' %}"></script>
+{% endblock javascript %}
