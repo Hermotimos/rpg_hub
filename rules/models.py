@@ -10,7 +10,7 @@ class Skill(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name='Umiejętność')
     tested_trait = models.CharField(max_length=50, verbose_name='Cecha/Cechy')
     image = models.ImageField(blank=True, null=True, upload_to='site_features_pics')
-    allowed_profiles = models.ManyToManyField(Profile, blank=True,
+    allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
                                               limit_choices_to=Q(character_status='active_player') |
                                                                Q(character_status='inactive_player') |
                                                                Q(character_status='dead_player'),
@@ -45,7 +45,7 @@ S_LEVELS = [
 
 
 class SkillLevel(models.Model):
-    skill = models.ForeignKey(Skill, related_name='skill_levels', on_delete=models.PROTECT)
+    skill = models.ForeignKey(to=Skill, related_name='skill_levels', on_delete=models.PROTECT)
     level = models.CharField(max_length=10, choices=S_LEVELS)
     description = models.TextField(max_length=4000, blank=True, null=True)
     acquired_by = models.ManyToManyField(to=Profile,
@@ -67,7 +67,7 @@ class SkillLevel(models.Model):
 class Synergy(models.Model):
     name = models.CharField(max_length=100, verbose_name='Synergia')
     skills = models.ManyToManyField(Skill, related_name='skills')
-    allowed_profiles = models.ManyToManyField(Profile, blank=True,
+    allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
                                               limit_choices_to=Q(character_status='active_player') |
                                                                Q(character_status='inactive_player') |
                                                                Q(character_status='dead_player'),
@@ -204,7 +204,7 @@ class CharacterProfession(models.Model):
 class EliteClass(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=4000, blank=True, null=True)
-    allowed_profiles = models.ManyToManyField(Profile, blank=True,
+    allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
                                               limit_choices_to=
                                               Q(character_status='active_player') |
                                               Q(character_status='inactive_player') |
@@ -235,10 +235,10 @@ class EliteClass(models.Model):
 
 class EliteProfession(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    elite_class = models.ForeignKey(EliteClass, related_name='elite_professions', on_delete=models.PROTECT)
+    elite_class = models.ForeignKey(to=EliteClass, related_name='elite_professions', on_delete=models.PROTECT)
     description = models.TextField(max_length=4000, blank=True, null=True)
     start_perks = models.TextField(max_length=4000, blank=True, null=True)
-    allowed_profiles = models.ManyToManyField(Profile, blank=True,
+    allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
                                               limit_choices_to=
                                               Q(character_status='active_player') |
                                               Q(character_status='inactive_player') |
@@ -321,7 +321,7 @@ CURRENCIES = [
 
 
 class WeaponType(models.Model):
-    weapon_class = models.ForeignKey(WeaponClass, related_name='weapon_types', on_delete=models.PROTECT)
+    weapon_class = models.ForeignKey(to=WeaponClass, related_name='weapon_types', on_delete=models.PROTECT)
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=4000, blank=True, null=True)
     pictures = models.ManyToManyField(Picture, related_name='weapon_pics', blank=True)
@@ -340,7 +340,7 @@ class WeaponType(models.Model):
     avg_price_currency = models.CharField(max_length=5, choices=CURRENCIES, blank=True, null=True)
     avg_weight = models.DecimalField(max_digits=10, decimal_places=1)
 
-    allowed_profiles = models.ManyToManyField(Profile, blank=True,
+    allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
                                               limit_choices_to=
                                               Q(character_status='active_player') |
                                               Q(character_status='inactive_player') |
@@ -379,7 +379,7 @@ class WeaponType(models.Model):
 class PlateType(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=4000, blank=True, null=True)
-    pictures = models.ManyToManyField(Picture, related_name='plate_pics', blank=True)
+    pictures = models.ManyToManyField(to=Picture, related_name='plate_pics', blank=True)
 
     armor_class_bonus = models.PositiveSmallIntegerField(blank=True, null=True)
     parrying = models.PositiveSmallIntegerField(blank=True, null=True)
@@ -398,7 +398,7 @@ class PlateType(models.Model):
     mod_climbing = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
     mod_traps = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
 
-    allowed_profiles = models.ManyToManyField(Profile, blank=True,
+    allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
                                               limit_choices_to=
                                               Q(character_status='active_player') |
                                               Q(character_status='inactive_player') |
@@ -423,14 +423,14 @@ class PlateType(models.Model):
 class ShieldType(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=4000, blank=True, null=True)
-    pictures = models.ManyToManyField(Picture, related_name='shield_pics', blank=True)
+    pictures = models.ManyToManyField(to=Picture, related_name='shield_pics', blank=True)
 
     enemies_no = models.PositiveSmallIntegerField()
     armor_class_bonus_close_combat = models.PositiveSmallIntegerField(blank=True, null=True)
     armor_class_bonus_distance_combat = models.PositiveSmallIntegerField(blank=True, null=True)
     weight = models.DecimalField(max_digits=10, decimal_places=1)
 
-    allowed_profiles = models.ManyToManyField(Profile, blank=True,
+    allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
                                               limit_choices_to=
                                               Q(character_status='active_player') |
                                               Q(character_status='inactive_player') |

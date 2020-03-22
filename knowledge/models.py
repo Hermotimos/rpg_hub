@@ -3,11 +3,12 @@ from django.db import models
 from imaginarion.models import Picture
 from rpg_project.utils import create_sorting_name
 from rules.models import Skill
+from users.models import Profile
 
 
 class KnowledgePacket(models.Model):
     title = models.CharField(max_length=100, unique=True)
-    skills = models.ManyToManyField(Skill, related_name='knowledge_packets')
+    skills = models.ManyToManyField(to=Skill, related_name='knowledge_packets')
     text = models.TextField()
     acquired_by = models.ManyToManyField(to=Profile,
                                          related_name='kn_packets',

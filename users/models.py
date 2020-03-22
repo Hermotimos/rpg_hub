@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 
 from PIL import Image
 
+
 STATUS = [
     # players
     ('active_player', 'Gracz'),
@@ -21,6 +22,7 @@ STATUS = [
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='profile_pics/profile_default.jpg', upload_to='profile_pics')
+
     character_name = models.CharField(max_length=50, default='')
     character_status = models.CharField(max_length=50, choices=STATUS, default='living_npc')
 
