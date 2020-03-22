@@ -43,9 +43,9 @@ class Profile(models.Model):
                 img.save(self.image.path)
 
 
-@receiver(post_save, sender=User)                          # After a User is saved send signal 'post_save'
-def create_profile(sender, instance, created, **kwargs):   # the receiver will be create_profile (via decoration)
-    if created:                                            # if User has just been created (False for already existing)
-        p = Profile.objects.create(user=instance)          # than create instance of Profile which is equal to User
-        p.character_name = instance.username.replace('_', ' ')      # whose name will be the username without '_'
-        p.save()                                                    # save Profile to save new character_name
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        p = Profile.objects.create(user=instance)
+        p.character_name = instance.username.replace('_', ' ')
+        p.save()
