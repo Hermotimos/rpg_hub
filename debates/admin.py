@@ -9,16 +9,16 @@ from users.models import Profile
 
 class DebateAdminForm(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                                      .exclude(Q(character_status='dead_player') |
-                                                               Q(character_status='dead_npc') |
-                                                               Q(character_status='gm')),
+                                                      .exclude(Q(status='dead_player') |
+                                                               Q(status='dead_npc') |
+                                                               Q(status='gm')),
                                                       required=False,
                                                       widget=FilteredSelectMultiple('Allowed profiles', False))
 
     followers = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                               .exclude(Q(character_status='dead_player') |
-                                                        Q(character_status='dead_npc') |
-                                                        Q(character_status='gm')),
+                                               .exclude(Q(status='dead_player') |
+                                                        Q(status='dead_npc') |
+                                                        Q(status='gm')),
                                                required=False,
                                                widget=FilteredSelectMultiple('Followers', False))
 

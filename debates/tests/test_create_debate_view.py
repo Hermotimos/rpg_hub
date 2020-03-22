@@ -12,7 +12,7 @@ class CreateDebateTest(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
         self.user4.profile.save()
 
         self.topic1 = Topic.objects.create(title='Topic1')
@@ -44,7 +44,7 @@ class CreateDebateTest(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case request.user.profile.character_status == 'gm'
+        # case request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)

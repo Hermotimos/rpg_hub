@@ -80,16 +80,16 @@ class ChronicleEvent(models.Model):
     participants = models.ManyToManyField(Profile,
                                           related_name='chronicle_events_participated',
                                           limit_choices_to=
-                                          Q(character_status='active_player') |
-                                          Q(character_status='inactive_player') |
-                                          Q(character_status='dead_player'),
+                                          Q(status='active_player') |
+                                          Q(status='inactive_player') |
+                                          Q(status='dead_player'),
                                           blank=True)
     informed = models.ManyToManyField(Profile,
                                       related_name='chronicle_events_informed',
                                       limit_choices_to=
-                                      Q(character_status='active_player') |
-                                      Q(character_status='inactive_player') |
-                                      Q(character_status='dead_player'),
+                                      Q(status='active_player') |
+                                      Q(status='inactive_player') |
+                                      Q(status='dead_player'),
                                       blank=True)
     pictures = models.ManyToManyField(Picture, related_name='chronicle_events_pics', blank=True)
     debate = models.OneToOneField(Debate,
@@ -159,15 +159,15 @@ class TimelineEvent(models.Model):
     participants = models.ManyToManyField(Profile,
                                           related_name='timeline_events_participated',
                                           limit_choices_to=
-                                          Q(character_status='active_player') |
-                                          Q(character_status='inactive_player') |
-                                          Q(character_status='dead_player'),
+                                          Q(status='active_player') |
+                                          Q(status='inactive_player') |
+                                          Q(status='dead_player'),
                                           blank=True)
     informed = models.ManyToManyField(Profile,
                                       related_name='timeline_events_informed',
                                       limit_choices_to=
-                                      Q(character_status='active_player') |
-                                      Q(character_status='inactive_player'),
+                                      Q(status='active_player') |
+                                      Q(status='inactive_player'),
                                       blank=True)
     general_locations = models.ManyToManyField(GeneralLocation, related_name='timeline_events')
     specific_locations = models.ManyToManyField(SpecificLocation, related_name='timeline_events')

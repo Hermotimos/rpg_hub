@@ -13,10 +13,10 @@ class ChronicleEditTest(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
-        self.user3.profile.character_status = 'active_player'
+        self.user3.profile.status = 'active_player'
         self.user3.profile.save()
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
         self.user4.profile.save()
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
@@ -37,7 +37,7 @@ class ChronicleEditTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # request.user.profile.character_status != 'gm'
+        # request.user.profile.status != 'gm'
         self.client.force_login(self.user1)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -50,7 +50,7 @@ class ChronicleEditTest(TestCase):
         self.assertEquals(response.status_code, 404)
 
     def test_get(self):
-        # request.user.profile.character_status == 'gm'
+        # request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)

@@ -32,12 +32,12 @@
             <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
         </fieldset>
 
-        {% if request.user.profile.character_status == 'gm' %}
+        {% if request.user.profile.status == 'gm' %}
             {{ debate_form.is_individual|as_crispy_field }}<br>
         {% endif %}
 
         <!-- NEW REMARK -->
-        {% if request.user.profile.character_status == 'gm' %}
+        {% if request.user.profile.status == 'gm' %}
             <div class="col-md-3">
                 {{ remark_form.author|as_crispy_field }}
             </div>

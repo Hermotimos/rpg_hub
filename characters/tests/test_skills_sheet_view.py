@@ -17,7 +17,7 @@ class SkillsSheetTest(TestCase):
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
 
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
         self.user4.profile.save()
 
         self.skill_1 = Skill.objects.create(name='Skill-1')
@@ -62,7 +62,7 @@ class SkillsSheetTest(TestCase):
         response = self.client.get(self.url_1)
         self.assertEquals(response.status_code, 200)
 
-        # another user's skills sheet (url_2) accessible for user4.profile.character_status == 'gm':
+        # another user's skills sheet (url_2) accessible for user4.profile.status == 'gm':
         self.client.force_login(self.user4)
         response = self.client.get(self.url_2)
         self.assertEquals(response.status_code, 200)

@@ -31,9 +31,9 @@ class CreateDebateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['allowed_profiles'].label = ''
         self.fields['allowed_profiles'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                                           Q(character_status='dead_player') |
-                                                                           Q(character_status='dead_npc') |
-                                                                           Q(character_status='gm'))
+                                                                           Q(status='dead_player') |
+                                                                           Q(status='dead_npc') |
+                                                                           Q(status='gm'))
         self.fields['allowed_profiles'].widget.attrs['size'] = 10
         self.fields['is_individual'].label = 'Dyskusja indywidualna?'
         self.fields['name'].label = ''
@@ -52,12 +52,12 @@ class CreateRemarkForm(forms.ModelForm):
             debate = Debate.objects.get(id=debate_id)
             debate_allowed_profiles = debate.allowed_profiles.all()
         else:
-            debate_allowed_profiles = Profile.objects.exclude(Q(character_status='dead_player') |
-                                                              Q(character_status='dead_npc'))
+            debate_allowed_profiles = Profile.objects.exclude(Q(status='dead_player') |
+                                                              Q(status='dead_npc'))
         super().__init__(*args, **kwargs)
         self.fields['author'].label = 'Autor:'
         self.fields['author'].queryset = User.objects\
-            .filter(Q(profile__character_status='gm') | Q(profile__in=debate_allowed_profiles))\
+            .filter(Q(profile__status='gm') | Q(profile__in=debate_allowed_profiles))\
             .order_by('profile__character_name')
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
@@ -80,8 +80,8 @@ class InviteForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['allowed_profiles'].label = ''
         self.fields['allowed_profiles'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                                           Q(character_status='dead_player') |
-                                                                           Q(character_status='dead_npc') |
-                                                                           Q(character_status='gm') |
+                                                                           Q(status='dead_player') |
+                                                                           Q(status='dead_npc') |
+                                                                           Q(status='gm') |
                                                                            Q(id__in=old_allowed_profiles))
         self.fields['allowed_profiles'].widget.attrs = {'size': 10}

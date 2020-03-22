@@ -8,11 +8,11 @@ from users.models import User
 class ToponomikonMainTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-        self.user1.profile.character_status = 'active_player'
+        self.user1.profile.status = 'active_player'
         self.user1.profile.save()
 
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
-        self.user2.profile.character_status = 'gm'
+        self.user2.profile.status = 'gm'
         self.user2.profile.save()
 
         self.url = reverse('prosoponomikon:main')

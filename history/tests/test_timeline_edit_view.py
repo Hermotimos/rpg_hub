@@ -12,11 +12,11 @@ class TimelineEditView(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
-        self.user2.profile.character_status = 'active_player'
+        self.user2.profile.status = 'active_player'
         self.user2.profile.save()
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
         self.user4.profile.save()
 
         self.game1 = GameSession.objects.create(title='Game1')
@@ -42,18 +42,18 @@ class TimelineEditView(TestCase):
     def test_redirect_if_unallowed(self):
         redirect_url = reverse('home:dupa')
 
-        # request.user.profile in event1.participant.all() but not character_status == 'gm'
+        # request.user.profile in event1.participant.all() but not status == 'gm'
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
-        # request.user.profile in event1.informed.all() but not character_status == 'gm'
+        # request.user.profile in event1.informed.all() but not status == 'gm'
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
         # request.user.profile neither in event1.informed.all() nor in event1.participant.all()
-        # nor character_status == 'gm'
+        # nor status == 'gm'
         self.client.force_login(self.user3)
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
@@ -65,7 +65,7 @@ class TimelineEditView(TestCase):
         self.assertEquals(response.status_code, 404)
 
     def test_get(self):
-        # request.user.profile.character_status == 'gm'
+        # request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)

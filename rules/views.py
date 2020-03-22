@@ -20,7 +20,7 @@ def rules_main_view(request):
 @login_required
 def rules_armor_view(request):
     profile = request.user.profile
-    if profile.character_status == 'gm':
+    if profile.status == 'gm':
         plates = PlateType.objects.all().prefetch_related('pictures')
         shields = ShieldType.objects.all().prefetch_related('pictures')
     else:
@@ -66,7 +66,7 @@ def rules_masteries_view(request):
 @login_required
 def rules_professions_view(request):
     profile = request.user.profile
-    if profile.character_status == 'gm':
+    if profile.status == 'gm':
         classes = CharacterClass.objects.all().prefetch_related('professions')
         elite_classes = EliteClass.objects.all().prefetch_related('elite_professions')
     else:
@@ -93,7 +93,7 @@ def rules_professions_view(request):
 @login_required
 def rules_skills_view(request):
     profile = request.user.profile
-    if profile.character_status == 'gm':
+    if profile.status == 'gm':
         skills = Skill.objects.all().prefetch_related('skill_levels')
         synergies = Synergy.objects.all().prefetch_related('skills', 'synergy_levels')
     else:
@@ -121,7 +121,7 @@ def rules_traits_view(request):
 @login_required
 def rules_tricks_view(request):
     profile = request.user.profile
-    if profile.character_status == 'gm':
+    if profile.status == 'gm':
         plates = PlateType.objects.all()
     else:
         plates = profile.allowed_plate_types.all()
@@ -137,7 +137,7 @@ def rules_tricks_view(request):
 @login_required
 def rules_weapons_view(request):
     profile = request.user.profile
-    if profile.character_status == 'gm':
+    if profile.status == 'gm':
         weapon_classes = WeaponClass.objects.all().prefetch_related('weapon_types__pictures')
     else:
         weapon_types = profile.allowed_weapon_types.prefetch_related('pictures')

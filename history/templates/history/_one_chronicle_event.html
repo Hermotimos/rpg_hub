@@ -2,7 +2,7 @@
 {% load static %}
 <tr>
     <td class="border-0">
-        {% if request.user.profile.character_status != 'gm' and request.user.profile in event.informed.all %}
+        {% if request.user.profile.status != 'gm' and request.user.profile in event.informed.all %}
             <p><small class="text-muted">(Znasz z opowieści) {{ event.description|linebreaksbr }}</small></p>
         {% else %}
             <p class="font-18 font-italic px-1 py-1 text-justify">{{ event.description|linebreaksbr }}</p>
@@ -53,7 +53,7 @@
         <a class="btn btn-outline-dark mt-1" href="{% url 'history:chronicle-note' event.id %}">
             <i class="icon-note-medium"></i>
         </a>
-        {% if request.user.profile.character_status == 'gm' %}
+        {% if request.user.profile.status == 'gm' %}
             <a class="btn btn-outline-dark mt-1" href="{% url 'history:chronicle-edit' event.id %}">
                 <i class="icon-edit-medium"></i>
             </a>

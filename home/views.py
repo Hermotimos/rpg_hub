@@ -15,7 +15,7 @@ def home_view(request):
     profile = request.user.profile
     rand_profiles = []
 
-    if profile.character_status == 'gm':
+    if profile.status == 'gm':
         known_profiles = Profile.objects.exclude(id=profile.id)
     # else:
     #     known_profiles = [profile]

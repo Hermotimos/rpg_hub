@@ -15,11 +15,11 @@ class CharacterTricksView(View):
     def get(self, request):
         profile = request.user.profile
 
-        if profile.character_status == 'gm':
-            players_profiles = Profile.objects.exclude(Q(character_status='dead_player') |
-                                                       Q(character_status='living_npc') |
-                                                       Q(character_status='dead_npc') |
-                                                       Q(character_status='gm'))
+        if profile.status == 'gm':
+            players_profiles = Profile.objects.exclude(Q(status='dead_player') |
+                                                       Q(status='living_npc') |
+                                                       Q(status='dead_npc') |
+                                                       Q(status='gm'))
         else:
             players_profiles = [profile]
 
@@ -61,7 +61,7 @@ class CharacterSkillsView(View):
             'skills': skills,
             'synergies': synergies,
         }
-        if request.user.profile.character_status != 'gm' and profile_id != 0:
+        if request.user.profile.status != 'gm' and profile_id != 0:
             return redirect('home:dupa')
         else:
             return render(request, 'characters/character_skills.html', context)
@@ -78,7 +78,7 @@ class CharacterAllSkillsForGmView(View):
             'page_title': 'Umiejętności graczy',
             'characters': characters
         }
-        if profile.character_status == 'gm':
+        if profile.status == 'gm':
             return render(request, 'characters/character_all_skills_for_gm.html', context)
         else:
             return redirect('home:dupa')
@@ -91,7 +91,7 @@ class CharacterAllSkillsForGmView(View):
 #
 #     @method_decorator(login_required)
 #     def dispatch(self, request, *args, **kwargs):
-#         if request.user.profile.character_status != 'gm':
+#         if request.user.profile.status != 'gm':
 #             return redirect('home:dupa')
 #         return super().dispatch(request, *args, **kwargs)
 #
@@ -106,11 +106,11 @@ class CharacterAllSkillsForGmView(View):
 # def character_tricks_view(request):
 #     profile = request.user.profile
 #
-#     if profile.character_status == 'gm':
-#         players_profiles = Profile.objects.exclude(Q(character_status='dead_player') |
-#                                                    Q(character_status='living_npc') |
-#                                                    Q(character_status='dead_npc') |
-#                                                    Q(character_status='gm'))
+#     if profile.status == 'gm':
+#         players_profiles = Profile.objects.exclude(Q(status='dead_player') |
+#                                                    Q(status='living_npc') |
+#                                                    Q(status='dead_npc') |
+#                                                    Q(status='gm'))
 #     else:
 #         players_profiles = [profile]
 #
@@ -151,7 +151,7 @@ class CharacterAllSkillsForGmView(View):
 #         'skills': skills,
 #         'synergies': synergies,
 #     }
-#     if request.user.profile.character_status != 'gm' and profile_id != 0:
+#     if request.user.profile.status != 'gm' and profile_id != 0:
 #         return redirect('home:dupa')
 #     else:
 #         return render(request, 'characters/character_skills.html', context)
@@ -167,7 +167,7 @@ class CharacterAllSkillsForGmView(View):
 #         'page_title': 'Umiejętności graczy',
 #         'characters': characters
 #     }
-#     if profile.character_status == 'gm':
+#     if profile.status == 'gm':
 #         return render(request, 'characters/character_all_skills_for_gm.html', context)
 #     else:
 #         return redirect('home:dupa')

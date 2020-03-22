@@ -16,7 +16,7 @@ from news.forms import CreateNewsForm, CreateNewsAnswerForm, CreateSurveyForm, C
 @login_required
 def main_view(request):
     profile = request.user.profile
-    if profile.character_status == 'gm':
+    if profile.status == 'gm':
         newss = News.objects.all()
         surveys = Survey.objects.all()
     else:
@@ -63,7 +63,7 @@ def create_news_view(request):
             for profile in news.allowed_profiles.all():
                 if profile.user != request.user:
                     receivers.append(profile.user.email)
-            if profile.character_status != 'gm':
+            if profile.status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
@@ -118,7 +118,7 @@ def news_detail_view(request, news_id):
             for user in User.objects.all():
                 if user.profile in news_followers and user != request.user:
                     receivers.append(user.email)
-            if profile.character_status != 'gm':
+            if profile.status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
@@ -137,7 +137,7 @@ def news_detail_view(request, news_id):
         'news_allowed_profiles': news_allowed_profiles,
         'news_followers': news_followers,
     }
-    if profile in news.allowed_profiles.all() or profile.character_status == 'gm':
+    if profile in news.allowed_profiles.all() or profile.status == 'gm':
         return render(request, 'news/news_detail.html', context)
     else:
         return redirect('home:dupa')
@@ -214,7 +214,7 @@ def survey_detail_view(request, survey_id):
             for user in User.objects.all():
                 if user.profile in survey.addressees.all() and user != request.user:
                     receivers.append(user.email)
-            if profile.character_status != 'gm':
+            if profile.status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
@@ -243,7 +243,7 @@ def survey_detail_view(request, survey_id):
         'answer_form': answer_form,
         'option_form': option_form
     }
-    if profile in survey.addressees.all() or profile.character_status == 'gm':
+    if profile in survey.addressees.all() or profile.status == 'gm':
         return render(request, 'news/survey_detail.html', context)
     else:
         return redirect('home:dupa')
@@ -255,7 +255,7 @@ def vote_yes_view(request, survey_id, option_id):
     profile = request.user.profile
     option = get_object_or_404(SurveyOption, id=option_id)
 
-    if profile in option.survey.addressees.all() or profile.character_status == 'gm':
+    if profile in option.survey.addressees.all() or profile.status == 'gm':
         option.yes_voters.add(profile)
         if profile in option.no_voters.all():
             option.no_voters.remove(profile)
@@ -272,7 +272,7 @@ def vote_no_view(request, survey_id, option_id):
     profile = request.user.profile
     option = get_object_or_404(SurveyOption, id=option_id)
 
-    if profile in option.survey.addressees.all() or profile.character_status == 'gm':
+    if profile in option.survey.addressees.all() or profile.status == 'gm':
         option.no_voters.add(profile)
         if profile in option.yes_voters.all():
             option.yes_voters.remove(profile)
@@ -289,7 +289,7 @@ def unvote_view(request, survey_id, option_id):
     profile = request.user.profile
     option = get_object_or_404(SurveyOption, id=option_id)
 
-    if profile in option.survey.addressees.all() or profile.character_status == 'gm':
+    if profile in option.survey.addressees.all() or profile.status == 'gm':
         if profile in option.yes_voters.all():
             option.yes_voters.remove(profile)
         elif profile in option.no_voters.all():
@@ -325,7 +325,7 @@ def survey_create_view(request):
             for profile in survey.addressees.all():
                 if profile.user != request.user:
                     receivers.append(profile.user.email)
-            if profile.character_status != 'gm':
+            if profile.status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 

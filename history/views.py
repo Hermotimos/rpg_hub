@@ -33,7 +33,7 @@ from users.models import Profile
 def is_allowed_for_chronicle(profile, chapter_id=0, game_id=0,
                              chronicle_event_id=0, timeline_event_id=0):
     
-    if profile.character_status == 'gm':
+    if profile.status == 'gm':
         return True
     elif chapter_id:
         if chapter_id in [ch.id for ch in Chapter.objects.filter(
@@ -62,7 +62,7 @@ def is_allowed_for_chronicle(profile, chapter_id=0, game_id=0,
 def chronicle_main_view(request):
     profile = request.user.profile
 
-    if request.user.profile.character_status == 'gm':
+    if request.user.profile.status == 'gm':
         chapters = Chapter.objects.prefetch_related('game_sessions')
     else:
         events = (profile.chronicle_events_participated.all()
@@ -108,7 +108,7 @@ def chronicle_create_view(request):
         'page_title': 'Nowe wydarzenie: Kronika',
         'form': form
     }
-    if profile.character_status == 'gm':
+    if profile.status == 'gm':
         return render(request, 'history/chronicle_create.html', context)
     else:
         return redirect('home:dupa')
@@ -119,7 +119,7 @@ def chronicle_create_view(request):
 def chronicle_all_chapters_view(request):
     profile = request.user.profile
 
-    if profile.character_status == 'gm':
+    if profile.status == 'gm':
         chapters = Chapter.objects.prefetch_related(
             'game_sessions__chronicle_events__informed',
             'game_sessions__chronicle_events__pictures',
@@ -157,7 +157,7 @@ def chronicle_one_chapter_view(request, chapter_id):
     profile = request.user.profile
     chapter = get_object_or_404(Chapter, id=chapter_id)
 
-    if profile.character_status == 'gm':
+    if profile.status == 'gm':
         games = chapter.game_sessions.prefetch_related(
             'chronicle_events__informed',
             'chronicle_events__pictures',
@@ -197,7 +197,7 @@ def chronicle_one_game_view(request, game_id, timeline_event_id):
     if timeline_event_id != '0':
         event = TimelineEvent.objects.get(id=timeline_event_id)
 
-    if profile.character_status == 'gm':
+    if profile.status == 'gm':
         events = game.chronicle_events.all()\
             .select_related('debate__topic')\
             .prefetch_related('informed', 'pictures', 'notes__author')
@@ -253,7 +253,7 @@ def chronicle_inform_view(request, event_id):
             receivers = []
             for profile in new_informed:
                 receivers.append(profile.user.email)
-            if profile.character_status != 'gm':
+            if profile.status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
@@ -333,7 +333,7 @@ def chronicle_edit_view(request, event_id):
         'page_title': 'Edycja wydarzenia',
         'form': form
     }
-    if profile.character_status == 'gm':
+    if profile.status == 'gm':
         return render(request, 'history/chronicle_edit.html', context)
     else:
         return redirect('home:dupa')
@@ -371,9 +371,9 @@ SEASONS_WITH_STYLES_DICT = {
 def timeline_main_view(request):
     profile = request.user.profile
 
-    if profile.character_status == 'gm':
+    if profile.status == 'gm':
         threads = Thread.objects.all()
-        participants = Profile.objects.filter(character_status__in=['active_player', 'inactive_player', 'dead_player'])
+        participants = Profile.objects.filter(status__in=['active_player', 'inactive_player', 'dead_player'])
         spec_locs = SpecificLocation.objects.annotate(events_cnt=Count('timeline_events')).filter(events_cnt__gt=0)
         gen_locs = GeneralLocation.objects\
             .annotate(events_cnt=Count('timeline_events'))\
@@ -386,7 +386,7 @@ def timeline_main_view(request):
             .filter(Q(timeline_events__participants=profile) | Q(timeline_events__informed=profile))\
             .distinct()
         participants = Profile.objects\
-            .filter(character_status__in=['active_player', 'inactive_player', 'dead_player'])\
+            .filter(status__in=['active_player', 'inactive_player', 'dead_player'])\
             .filter(timeline_events_participated__in=profile.timeline_events_participated.all())\
             .distinct()
         spec_locs = SpecificLocation.objects \
@@ -461,7 +461,7 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
         page_title = thread.name
         header = f'{thread.name}... Próbujesz sobie przypomnieć, od czego się to wszystko zaczęło?'
 
-        if profile.character_status == 'gm':
+        if profile.status == 'gm':
             events = TimelineEvent.objects.filter(threads=thread)
         else:
             events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
@@ -477,7 +477,7 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
             header = f'{participant.character_name.split(" ", 1)[0]}... ' \
                      f'Niejedno razem przeżyliście. Na dobre i na złe...'
 
-        if profile.character_status == 'gm':
+        if profile.status == 'gm':
             events = TimelineEvent.objects.filter(participants=participant_id)
         else:
             events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
@@ -489,7 +489,7 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
         page_title = general_location.name
         header = f'{general_location.name}... Zastanawiasz się, jakie piętno wywarła na Twoich losach ta kraina...'
 
-        if profile.character_status == 'gm':
+        if profile.status == 'gm':
             events = TimelineEvent.objects.filter(general_locations=gen_loc_id)
         else:
             events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
@@ -501,7 +501,7 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
         page_title = specific_location.name
         header = f'{specific_location.name}... Jak to miejsce odcisnęło się na Twoim losie?'
 
-        if profile.character_status == 'gm':
+        if profile.status == 'gm':
             events = TimelineEvent.objects.filter(specific_locations=spec_loc_id)
         else:
             events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
@@ -513,7 +513,7 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
         page_title = game.title
         header = f'{game.title}... Jak to po kolei było?'
 
-        if profile.character_status == 'gm':
+        if profile.status == 'gm':
             events = TimelineEvent.objects.filter(game=game_id)
         else:
             events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
@@ -524,7 +524,7 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
         page_title = ''
         header = f'Nie wydaje się to wcale aż tak dawno temu...'
 
-        if profile.character_status == 'gm':
+        if profile.status == 'gm':
             events = TimelineEvent.objects.all()
         else:
             events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
@@ -550,7 +550,7 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
         header = 'Opisane tu wydarzenia rozpoczęły swój bieg 20. roku Archonatu Nemetha Samatiana w Ebbonie, ' \
                  'choć zarodki wielu z nich sięgają znacznie odleglejszych czasów...'
 
-        if profile.character_status == 'gm':
+        if profile.status == 'gm':
             events = TimelineEvent.objects.all()
         else:
             events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
@@ -578,7 +578,7 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
 # def timeline_all_events_view(request):
 #     profile = request.user.profile
 #
-#     if profile.character_status == 'gm':
+#     if profile.status == 'gm':
 #         events = TimelineEvent.objects.all()
 #     else:
 #         events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
@@ -604,7 +604,7 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
 #     profile = request.user.profile
 #     thread = get_object_or_404(Thread, id=thread_id)
 #
-#     if profile.character_status == 'gm':
+#     if profile.status == 'gm':
 #         events = TimelineEvent.objects.filter(threads=thread)
 #     else:
 #         events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
@@ -633,7 +633,7 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
 #     profile = request.user.profile
 #     participant = get_object_or_404(Profile, id=participant_id)
 #
-#     if profile.character_status == 'gm':
+#     if profile.status == 'gm':
 #         events = TimelineEvent.objects.filter(participants=participant_id)
 #     else:
 #         events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
@@ -667,7 +667,7 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
 #     profile = request.user.profile
 #     general_location = get_object_or_404(GeneralLocation, id=gen_loc_id)
 #
-#     if profile.character_status == 'gm':
+#     if profile.status == 'gm':
 #         events = TimelineEvent.objects.filter(general_locations=gen_loc_id)
 #     else:
 #         events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
@@ -696,7 +696,7 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
 #     profile = request.user.profile
 #     specific_location = get_object_or_404(SpecificLocation, id=spec_loc_id)
 #
-#     if profile.character_status == 'gm':
+#     if profile.status == 'gm':
 #         events = TimelineEvent.objects.filter(specific_locations=spec_loc_id)
 #     else:
 #         events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
@@ -724,7 +724,7 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
 # def timeline_date_view(request, year, season='0'):
 #     profile = request.user.profile
 #
-#     if profile.character_status == 'gm':
+#     if profile.status == 'gm':
 #         events = TimelineEvent.objects.all()
 #     else:
 #         events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
@@ -767,7 +767,7 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
 #     profile = request.user.profile
 #     game = get_object_or_404(GameSession, id=game_id)
 #
-#     if profile.character_status == 'gm':
+#     if profile.status == 'gm':
 #         events = TimelineEvent.objects.filter(game=game_id)
 #     else:
 #         events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
@@ -828,7 +828,7 @@ def timeline_inform_view(request, event_id):
             receivers = []
             for new_profile in informed_new:
                 receivers.append(new_profile.user.email)
-            if profile.character_status != 'gm':
+            if profile.status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
@@ -848,7 +848,7 @@ def timeline_inform_view(request, event_id):
         'participants': participants,
         'informed': old_informed
     }
-    if profile in (event.participants.all() | event.informed.all()) or profile.character_status == 'gm':
+    if profile in (event.participants.all() | event.informed.all()) or profile.status == 'gm':
         return render(request, 'history/timeline_inform.html', context)
     else:
         return redirect('home:dupa')
@@ -898,7 +898,7 @@ def timeline_note_view(request, event_id):
         'participants': participants,
         'informed': informed
     }
-    if profile in (event.participants.all() | event.informed.all()) or profile.character_status == 'gm':
+    if profile in (event.participants.all() | event.informed.all()) or profile.status == 'gm':
         return render(request, 'history/timeline_note.html', context)
     else:
         return redirect('home:dupa')
@@ -924,7 +924,7 @@ def timeline_edit_view(request, event_id):
         'page_title': 'Edycja wydarzenia',
         'form': form
     }
-    if profile.character_status == 'gm':
+    if profile.status == 'gm':
         return render(request, 'history/timeline_edit.html', context)
     else:
         return redirect('home:dupa')

@@ -22,8 +22,8 @@ class Migration(migrations.Migration):
                 ('day_start', models.PositiveSmallIntegerField(validators=[django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(90)])),
                 ('day_end', models.PositiveSmallIntegerField(blank=True, null=True, validators=[django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(90)])),
                 ('description', models.TextField(max_length=4000)),
-                ('informed', models.ManyToManyField(blank=True, limit_choices_to={'character_status': 'player'}, related_name='events_informed', to='users.Profile')),
-                ('participants', models.ManyToManyField(blank=True, limit_choices_to={'character_status': 'player'}, related_name='events_participated', to='users.Profile')),
+                ('informed', models.ManyToManyField(blank=True, limit_choices_to={'status': 'player'}, related_name='events_informed', to='users.Profile')),
+                ('participants', models.ManyToManyField(blank=True, limit_choices_to={'status': 'player'}, related_name='events_participated', to='users.Profile')),
             ],
         ),
     ]

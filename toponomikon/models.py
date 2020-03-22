@@ -26,14 +26,14 @@ class GeneralLocation(models.Model):
     description = models.TextField(max_length=4000, blank=True, null=True)
     known_directly = models.ManyToManyField(Profile,  blank=True, related_name='gen_locs_known_directly',
                                             limit_choices_to=
-                                            Q(character_status='active_player') |
-                                            Q(character_status='inactive_player') |
-                                            Q(character_status='dead_player'))
+                                            Q(status='active_player') |
+                                            Q(status='inactive_player') |
+                                            Q(status='dead_player'))
     known_indirectly = models.ManyToManyField(Profile, blank=True, related_name='gen_locs_known_indirectly',
                                               limit_choices_to=
-                                              Q(character_status='active_player') |
-                                              Q(character_status='inactive_player') |
-                                              Q(character_status='dead_player'))
+                                              Q(status='active_player') |
+                                              Q(status='inactive_player') |
+                                              Q(status='dead_player'))
     main_image = models.ForeignKey(Picture, related_name='gen_loc_main_pics', on_delete=models.PROTECT, blank=True,
                                    null=True)
     knowledge_packets = models.ManyToManyField(KnowledgePacket, related_name='general_locations', blank=True)
@@ -56,7 +56,7 @@ class GeneralLocation(models.Model):
         known_indirectly = self.known_indirectly.all()
         known_to = (known_directly | known_indirectly).distinct()
         informable = Profile.objects.filter(
-            character_status='active_player'
+            status='active_player'
         ).exclude(id__in=known_to)
         return informable
 
@@ -69,14 +69,14 @@ class SpecificLocation(models.Model):
     description = models.TextField(max_length=4000, blank=True, null=True)
     known_directly = models.ManyToManyField(Profile,  blank=True,  related_name='spec_locs_known_directly',
                                             limit_choices_to=
-                                            Q(character_status='active_player') |
-                                            Q(character_status='inactive_player') |
-                                            Q(character_status='dead_player'))
+                                            Q(status='active_player') |
+                                            Q(status='inactive_player') |
+                                            Q(status='dead_player'))
     known_indirectly = models.ManyToManyField(Profile,  blank=True,  related_name='spec_locs_known_indirectly',
                                               limit_choices_to=
-                                              Q(character_status='active_player') |
-                                              Q(character_status='inactive_player') |
-                                              Q(character_status='dead_player'))
+                                              Q(status='active_player') |
+                                              Q(status='inactive_player') |
+                                              Q(status='dead_player'))
     main_image = models.ForeignKey(Picture, related_name='spec_loc_main_pics', on_delete=models.PROTECT, blank=True,
                                    null=True)
     knowledge_packets = models.ManyToManyField(KnowledgePacket, related_name='specific_locations', blank=True)
@@ -99,7 +99,7 @@ class SpecificLocation(models.Model):
         known_indirectly = self.known_indirectly.all()
         known_to = (known_directly | known_indirectly).distinct()
         informable = Profile.objects.filter(
-            character_status='active_player'
+            status='active_player'
         ).exclude(id__in=known_to)
         return informable
 

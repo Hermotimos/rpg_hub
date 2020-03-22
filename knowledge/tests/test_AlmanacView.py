@@ -16,7 +16,7 @@ class AlmanacTest(TestCase):
         self.character2 = Character.objects.create(profile=self.user2.profile)
         self.user3 = User.objects.create_user(username='user4', password='pass1111')
         self.character3 = Character.objects.create(profile=self.user3.profile)
-        self.user3.profile.character_status = 'gm'
+        self.user3.profile.status = 'gm'
         self.user3.profile.save()
 
         self.skill_1 = Skill.objects.create(name='Skill-1')

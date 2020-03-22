@@ -14,7 +14,7 @@ def reload_main_view(request):
     context = {
         'page_title': 'Przeładowanie sorting_name'
     }
-    if request.user.profile.character_status == 'gm':
+    if request.user.profile.status == 'gm':
         return render(request, 'reload/reload_main.html', context)
     else:
         return redirect('home:dupa')
@@ -23,7 +23,7 @@ def reload_main_view(request):
 @query_debugger
 @login_required
 def reload_history(request):
-    if request.user.profile.character_status == 'gm':
+    if request.user.profile.status == 'gm':
 
         for obj in Thread.objects.all():
             obj.save()
@@ -40,7 +40,7 @@ def reload_history(request):
 @query_debugger
 @login_required
 def reload_toponomikon(request):
-    if request.user.profile.character_status == 'gm':
+    if request.user.profile.status == 'gm':
 
         for obj in GeneralLocation.objects.all():
             obj.save()
@@ -57,7 +57,7 @@ def reload_toponomikon(request):
 @query_debugger
 @login_required
 def reload_rules(request):
-    if request.user.profile.character_status == 'gm':
+    if request.user.profile.status == 'gm':
 
         for obj in Skill.objects.all():
             obj.save()

@@ -10,7 +10,7 @@ class CreateTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
-        self.user2.profile.character_status = 'active_player'
+        self.user2.profile.status = 'active_player'
         self.user2.profile.save()
 
         self.url = reverse('news:create')

@@ -12,7 +12,7 @@ class DebatesMainTest(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
         self.user4.profile.save()
 
         self.topic1 = Topic.objects.create(title='Topic1')
@@ -63,7 +63,7 @@ class DebatesMainTest(TestCase):
         self.assertContains(response, f'href="{linked_url2}"')
         self.assertNotContains(response, f'href="{linked_url3}"')
 
-        # request.user.profile.character_status == 'gm'
+        # request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')

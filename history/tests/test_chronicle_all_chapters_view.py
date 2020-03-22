@@ -12,7 +12,7 @@ class ChronicleAllChaptersTest(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
         self.user4.profile.save()
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
@@ -49,12 +49,12 @@ class ChronicleAllChaptersTest(TestCase):
         self.assertContains(response, f'href="#{self.chapter1.id}"')
 
         # request.user.profile neither in event1.informed.all() nor in event1.participants.all(),
-        # nor character_status == 'gm'
+        # nor status == 'gm'
         self.client.force_login(self.user3)
         response = self.client.get(self.url)
         self.assertNotContains(response, f'href="#{self.chapter1.id}"')
 
-        # request.user.profile.character_status == 'gm'
+        # request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="#{self.chapter1.id}"')

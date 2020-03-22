@@ -11,11 +11,11 @@ class KnowledgeInformTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
-        self.user2.profile.character_status = 'active_player'
+        self.user2.profile.status = 'active_player'
         self.user2.profile.save()
 
         self.user3 = User.objects.create_user(username='user4', password='pass1111')
-        self.user3.profile.character_status = 'gm'
+        self.user3.profile.status = 'gm'
         self.user3.profile.save()
 
         self.kn_packet_1 = KnowledgePacket.objects.create(title='KnPacket1', text='Text1')
@@ -29,7 +29,7 @@ class KnowledgeInformTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # request.user.profile neither in kn_packet_1.allowed_profiles.all() nor character_status == 'gm'
+        # request.user.profile neither in kn_packet_1.allowed_profiles.all() nor status == 'gm'
         self.client.force_login(self.user2)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -47,7 +47,7 @@ class KnowledgeInformTest(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # request.user.profile.character_status == 'gm'
+        # request.user.profile.status == 'gm'
         self.client.force_login(self.user3)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)

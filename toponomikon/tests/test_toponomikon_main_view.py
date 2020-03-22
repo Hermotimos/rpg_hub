@@ -10,23 +10,23 @@ from users.models import User
 class ToponomikonMainTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-        self.user1.profile.character_status = 'active_player'
+        self.user1.profile.status = 'active_player'
         self.user1.profile.save()
 
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
-        self.user2.profile.character_status = 'inactive_player'
+        self.user2.profile.status = 'inactive_player'
         self.user2.profile.save()
 
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
-        self.user3.profile.character_status = 'dead_player'
+        self.user3.profile.status = 'dead_player'
         self.user3.profile.save()
 
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'living_npc'
+        self.user4.profile.status = 'living_npc'
         self.user4.profile.save()
 
         self.user5 = User.objects.create_user(username='user5', password='pass1111')
-        self.user5.profile.character_status = 'gm'
+        self.user5.profile.status = 'gm'
         self.user5.profile.save()
 
         pic1 = Picture.objects.create(image='post_pics/topoi_anomeia_MAIN.jpg', type='topoi', title='Title1')
@@ -65,24 +65,24 @@ class ToponomikonMainTest(TestCase):
         linked_url3 = reverse('toponomikon:general-location', kwargs={'gen_loc_id': self.gen_loc_3.id})
 
         # request.user.profile in gen_loc1.known_directly.all()
-        self.client.force_login(self.user1)     # request.user.profile.character_status == 'active_player'
+        self.client.force_login(self.user1)     # request.user.profile.status == 'active_player'
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
-        self.client.force_login(self.user2)     # request.user.profile.character_status == 'inactive_player'
+        self.client.force_login(self.user2)     # request.user.profile.status == 'inactive_player'
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
-        self.client.force_login(self.user3)     # request.user.profile.character_status == 'dead_player'
+        self.client.force_login(self.user3)     # request.user.profile.status == 'dead_player'
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
 
         # request.user.profile in gen_loc2.known_indirectly.all()
-        self.client.force_login(self.user1)     # request.user.profile.character_status == 'active_player'
+        self.client.force_login(self.user1)     # request.user.profile.status == 'active_player'
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url2}"')
-        self.client.force_login(self.user2)     # request.user.profile.character_status == 'inactive_player'
+        self.client.force_login(self.user2)     # request.user.profile.status == 'inactive_player'
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url2}"')
-        self.client.force_login(self.user3)     # request.user.profile.character_status == 'dead_player'
+        self.client.force_login(self.user3)     # request.user.profile.status == 'dead_player'
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url2}"')
 
@@ -94,7 +94,7 @@ class ToponomikonMainTest(TestCase):
         self.assertNotContains(response, f'href="{linked_url2}"')
         self.assertNotContains(response, f'href="{linked_url3}"')
 
-        # request.user.profile.character_status == 'gm'
+        # request.user.profile.status == 'gm'
         self.client.force_login(self.user5)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')

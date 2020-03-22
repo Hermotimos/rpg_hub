@@ -11,7 +11,7 @@ class RulesProfessionsTest(TestCase):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
-        self.user3.profile.character_status = 'gm'
+        self.user3.profile.status = 'gm'
         self.user3.profile.save()
 
         self.class1 = CharacterClass.objects.create(name='Class1')

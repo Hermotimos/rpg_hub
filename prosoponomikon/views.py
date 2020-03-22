@@ -9,11 +9,11 @@ from users.models import Profile
 @query_debugger
 @login_required
 def prosoponomikon_main_view(request):
-    players_profiles = Profile.objects.exclude(Q(character_status='living_npc') |
-                                               Q(character_status='dead_npc') |
-                                               Q(character_status='gm'))
-    living_npc_profiles = Profile.objects.filter(character_status='living_npc')
-    dead_npc_profiles = Profile.objects.filter(character_status='dead_npc')
+    players_profiles = Profile.objects.exclude(Q(status='living_npc') |
+                                               Q(status='dead_npc') |
+                                               Q(status='gm'))
+    living_npc_profiles = Profile.objects.filter(status='living_npc')
+    dead_npc_profiles = Profile.objects.filter(status='dead_npc')
 
     context = {
         'page_title': 'Prosoponomikon',

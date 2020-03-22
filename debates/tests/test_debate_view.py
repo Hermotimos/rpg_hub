@@ -13,7 +13,7 @@ class DebateTest(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
 
         self.topic1 = Topic.objects.create(title='Topic1')
         self.debate1 = Debate.objects.create(topic=self.topic1, starter=self.user1)

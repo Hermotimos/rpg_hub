@@ -20,7 +20,7 @@ from rules.models import SkillLevel, Skill
 # def almanac_view(request):
 #     profile = request.user.profile
 #
-#     if profile.character_status == 'gm':
+#     if profile.status == 'gm':
 #         known_kn_packets = KnowledgePacket.objects.all()
 #         skills_with_kn_packets = Skill.objects\
 #             .exclude(name__icontains='Doktryn')\
@@ -58,7 +58,7 @@ class AlmanacView(View):
     def get(self, request):
         profile = request.user.profile
 
-        if profile.character_status == 'gm':
+        if profile.status == 'gm':
             known_kn_packets = KnowledgePacket.objects.all()
             skills_with_kn_packets = Skill.objects \
                 .exclude(name__icontains='Doktryn') \
@@ -95,7 +95,7 @@ class AlmanacView(View):
 # def knowledge_theology_view(request):
 #     profile = request.user.profile
 #
-#     if profile.character_status == 'gm':
+#     if profile.status == 'gm':
 #         theology_skills = Skill.objects\
 #             .filter(name__icontains='Doktryn')\
 #             .prefetch_related('skill_levels', 'knowledge_packets__pictures')
@@ -123,7 +123,7 @@ class TheologyView(View):
     def get(self, request):
         profile = request.user.profile
 
-        if profile.character_status == 'gm':
+        if profile.status == 'gm':
             theology_skills = Skill.objects \
                 .filter(Q(name__icontains='Doktryn') | Q(name__icontains='Kult') | Q(name__icontains='Teologi')) \
                 .prefetch_related('skill_levels', 'knowledge_packets__pictures')
@@ -172,7 +172,7 @@ def knowledge_inform_view(request, kn_packet_id):
             receivers = []
             for profile in [ch.profile for ch in characters_new]:
                 receivers.append(profile.user.email)
-            if profile.character_status != 'gm':
+            if profile.status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
@@ -188,7 +188,7 @@ def knowledge_inform_view(request, kn_packet_id):
         'kn_packet': kn_packet,
         'form': form,
     }
-    if kn_packet in profile.character.knowledge_packets.all() or profile.character_status == 'gm':
+    if kn_packet in profile.character.knowledge_packets.all() or profile.status == 'gm':
         return render(request, 'knowledge/knowledge_inform.html', context)
     else:
         return redirect('home:dupa')

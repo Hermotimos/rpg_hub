@@ -207,7 +207,7 @@ def plans_main_view(request):
             todos = Plan.objects.get(text__contains='=>Lista rzeczy do uzupełnienia')
             todos.text = text
         except Plan.DoesNotExist:
-            Plan.objects.create(text=text, author=User.objects.get(profile__character_status='gm'))
+            Plan.objects.create(text=text, author=User.objects.get(profile__status='gm'))
     else:
         try:
             Plan.objects.get(text__contains='=>Lista rzeczy do uzupełnienia').delete()
@@ -228,7 +228,7 @@ def plans_for_gm_view(request):
         'page_title': 'Plany graczy',
         'plans': Plan.objects.filter(inform_gm=True).select_related('author__profile'),
     }
-    if request.user.profile.character_status == 'gm':
+    if request.user.profile.status == 'gm':
         return render(request, 'contact/plans_for_gm.html', context)
     else:
         return redirect('home:dupa')

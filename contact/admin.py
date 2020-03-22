@@ -32,7 +32,7 @@ class PlanAdmin(admin.ModelAdmin):
     search_fields = ['text']
 
     def get_plan_caption(self, obj):
-        if obj.author.profile.character_status == 'gm' or obj.inform_gm:
+        if obj.author.profile.status == 'gm' or obj.inform_gm:
             return obj.text[:100] + '...' if len(str(obj.text)) > 100 else obj.text
         else:
             return format_html('<b><font color="red">TOP SECRET</font></b>')

@@ -13,17 +13,17 @@ from users.models import Profile
 
 class ToponomikonKnownForm(forms.ModelForm):
     known_directly = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                                    .exclude(Q(character_status='dead_player') |
-                                                             Q(character_status='dead_npc') |
-                                                             Q(character_status='gm') |
-                                                             Q(character_status='living_npc')),
+                                                    .exclude(Q(status='dead_player') |
+                                                             Q(status='dead_npc') |
+                                                             Q(status='gm') |
+                                                             Q(status='living_npc')),
                                                     widget=FilteredSelectMultiple('Known directly', False),
                                                     required=False)
     known_indirectly = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                                      .exclude(Q(character_status='dead_player') |
-                                                               Q(character_status='dead_npc') |
-                                                               Q(character_status='gm') |
-                                                               Q(character_status='living_npc')),
+                                                      .exclude(Q(status='dead_player') |
+                                                               Q(status='dead_npc') |
+                                                               Q(status='gm') |
+                                                               Q(status='living_npc')),
                                                       widget=FilteredSelectMultiple('Known indirectly', False),
                                                       required=False)
     knowledge_packets = forms.ModelMultipleChoiceField(queryset=KnowledgePacket.objects.all(),

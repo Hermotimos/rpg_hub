@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('image', models.ImageField(default='default.jpg', upload_to='profile_pics')),
                 ('character_name', models.CharField(default='!!!', max_length=50)),
-                ('character_status', models.CharField(choices=[('player', 'Postać gracza'), ('npc', 'BN'), ('gm', 'MG')], default='none', max_length=20)),
+                ('status', models.CharField(choices=[('player', 'Postać gracza'), ('npc', 'BN'), ('gm', 'MG')], default='none', max_length=20)),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),

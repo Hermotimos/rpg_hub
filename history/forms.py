@@ -45,10 +45,10 @@ class ChronicleEventInformForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['informed'].label = ''
         self.fields['informed'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                                   Q(character_status='dead_player') |
-                                                                   Q(character_status='dead_npc') |
-                                                                   Q(character_status='living_npc') |
-                                                                   Q(character_status='gm') |
+                                                                   Q(status='dead_player') |
+                                                                   Q(status='dead_npc') |
+                                                                   Q(status='living_npc') |
+                                                                   Q(status='gm') |
                                                                    Q(id__in=old_informed) |
                                                                    Q(id__in=participants))
         self.fields['informed'].widget.attrs = {'size': 10}
@@ -104,10 +104,10 @@ class TimelineEventInformForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['informed'].label = ''
         self.fields['informed'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                                   Q(character_status='dead_player') |
-                                                                   Q(character_status='dead_npc') |
-                                                                   Q(character_status='living_npc') |
-                                                                   Q(character_status='gm') |
+                                                                   Q(status='dead_player') |
+                                                                   Q(status='dead_npc') |
+                                                                   Q(status='living_npc') |
+                                                                   Q(status='gm') |
                                                                    Q(id__in=old_informed) |
                                                                    Q(id__in=participants))
         self.fields['informed'].widget.attrs = {'size': 10}

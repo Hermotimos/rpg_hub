@@ -4,9 +4,9 @@ from .models import Profile
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['id', 'get_img', 'user', 'character_name', 'character_status', 'image']
-    list_editable = ['character_name', 'character_status', 'image']
-    list_filter = ['character_status']
+    list_display = ['id', 'get_img', 'user', 'character_name', 'status', 'image']
+    list_editable = ['character_name', 'status', 'image']
+    list_filter = ['status']
     search_fields = ['user', 'character_name']
 
     def get_img(self, obj):

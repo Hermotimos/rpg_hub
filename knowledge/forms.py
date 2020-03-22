@@ -13,10 +13,10 @@ class KnowledgePacketInformForm(forms.ModelForm):
 
     # this creates sth like new field on the model to use in this form:
     characters = forms.ModelMultipleChoiceField(
-        queryset=Character.objects.exclude(Q(profile__character_status='dead_player') |
-                                           Q(profile__character_status='dead_npc') |
-                                           Q(profile__character_status='living_npc') |
-                                           Q(profile__character_status='gm'))
+        queryset=Character.objects.exclude(Q(profile__status='dead_player') |
+                                           Q(profile__status='dead_npc') |
+                                           Q(profile__status='living_npc') |
+                                           Q(profile__status='gm'))
     )
 
     def __init__(self, *args, **kwargs):

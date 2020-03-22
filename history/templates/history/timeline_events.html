@@ -99,7 +99,7 @@
                     <a class="btn btn-outline-dark btn-sm py-0" href="{% url 'history:timeline-note' event.id %}">
                         <i class="icon-note-small"></i>
                     </a>
-                    {% if request.user.profile.character_status == 'gm' %}
+                    {% if request.user.profile.status == 'gm' %}
                         <a class="btn btn-outline-dark btn-sm py-0" href="{% url 'history:timeline-edit' event.id %}">
                             <i class="icon-edit-small"></i>
                         </a>

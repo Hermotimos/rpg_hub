@@ -16,10 +16,10 @@ class GeneralLocationInformForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['known_indirectly'].label = ''
         self.fields['known_indirectly'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                                           Q(character_status='dead_player') |
-                                                                           Q(character_status='dead_npc') |
-                                                                           Q(character_status='living_npc') |
-                                                                           Q(character_status='gm') |
+                                                                           Q(status='dead_player') |
+                                                                           Q(status='dead_npc') |
+                                                                           Q(status='living_npc') |
+                                                                           Q(status='gm') |
                                                                            Q(id__in=already_known_directly) |
                                                                            Q(id__in=already_known_indirectly))
         self.fields['known_indirectly'].widget.attrs = {'size': 10}
@@ -37,10 +37,10 @@ class SpecificLocationInformForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['known_indirectly'].label = ''
         self.fields['known_indirectly'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                                           Q(character_status='dead_player') |
-                                                                           Q(character_status='dead_npc') |
-                                                                           Q(character_status='living_npc') |
-                                                                           Q(character_status='gm') |
+                                                                           Q(status='dead_player') |
+                                                                           Q(status='dead_npc') |
+                                                                           Q(status='living_npc') |
+                                                                           Q(status='gm') |
                                                                            Q(id__in=already_known_directly) |
                                                                            Q(id__in=already_known_indirectly))
         self.fields['known_indirectly'].widget.attrs = {'size': 10}

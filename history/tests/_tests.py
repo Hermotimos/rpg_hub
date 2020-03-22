@@ -19,7 +19,7 @@ class ChronicleMainTest(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
@@ -62,14 +62,14 @@ class ChronicleMainTest(TestCase):
         self.assertContains(response, f'href="{linked_url2}"')
         self.assertContains(response, f'href="{linked_url3}"')
 
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # case request.user.profile neither in informed nor in participants nor status == 'gm'
         self.client.force_login(self.user3)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
         self.assertNotContains(response, f'href="{linked_url2}"')
         self.assertNotContains(response, f'href="{linked_url3}"')
 
-        # case request.user.profile.character_status == 'gm'
+        # case request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
@@ -150,7 +150,7 @@ class ChronicleAllChaptersTest(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
@@ -185,12 +185,12 @@ class ChronicleAllChaptersTest(TestCase):
         response = self.client.get(self.url)
         self.assertContains(response, f'href="#{self.chapter1.id}"')
 
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # case request.user.profile neither in informed nor in participants nor status == 'gm'
         self.client.force_login(self.user3)
         response = self.client.get(self.url)
         self.assertNotContains(response, f'href="#{self.chapter1.id}"')
 
-        # case request.user.profile.character_status == 'gm'
+        # case request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="#{self.chapter1.id}"')
@@ -202,7 +202,7 @@ class ChronicleOneChapterTest(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
@@ -218,7 +218,7 @@ class ChronicleOneChapterTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # case request.user.profile neither in informed nor in participants nor status == 'gm'
         self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -241,7 +241,7 @@ class ChronicleOneChapterTest(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile.character_status == 'gm'
+        # case: request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -269,9 +269,9 @@ class ChronicleOneChapterTest(TestCase):
         self.assertContains(response, f'href="{linked_url2}"')
         self.assertNotContains(response, f'href="{linked_url3}"')
 
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm' - redirect
+        # case request.user.profile neither in informed nor in participants nor status == 'gm' - redirect
 
-        # case request.user.profile.character_status == 'gm'
+        # case request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
@@ -285,7 +285,7 @@ class ChronicleOneGameTest(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
@@ -301,7 +301,7 @@ class ChronicleOneGameTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # case request.user.profile neither in informed nor in participants nor status == 'gm'
         self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -324,7 +324,7 @@ class ChronicleOneGameTest(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile.character_status == 'gm'
+        # case: request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -352,9 +352,9 @@ class ChronicleOneGameTest(TestCase):
         self.assertContains(response, f'href="{linked_url2}"')
         self.assertNotContains(response, f'href="{linked_url3}"')
 
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm' - redirect
+        # case request.user.profile neither in informed nor in participants nor status == 'gm' - redirect
 
-        # case request.user.profile.character_status == 'gm'
+        # case request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
@@ -368,7 +368,7 @@ class ChronicleInformTest(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
@@ -384,7 +384,7 @@ class ChronicleInformTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # case request.user.profile neither in informed nor in participants nor status == 'gm'
         self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -407,7 +407,7 @@ class ChronicleInformTest(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile.character_status == 'gm'
+        # case: request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -446,7 +446,7 @@ class ChronicleNoteTest(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
         self.game1 = GameSession.objects.create(id=1, chapter=self.chapter1, title='Game1')
@@ -462,7 +462,7 @@ class ChronicleNoteTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # case request.user.profile neither in informed nor in participants nor status == 'gm'
         self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -485,7 +485,7 @@ class ChronicleNoteTest(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile.character_status == 'gm'
+        # case: request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -545,10 +545,10 @@ class ChronicleNoteTest(TestCase):
 class ChronicleEditTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-        self.user1.profile.character_status = 'gm'
+        self.user1.profile.status = 'gm'
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
         self.user4.save()
 
         self.chapter1 = Chapter.objects.create(chapter_no=1, title='Chapter1')
@@ -568,7 +568,7 @@ class ChronicleEditTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # case: request.user.profile.character_status != 'gm'
+        # case: request.user.profile.status != 'gm'
         self.client.force_login(self.user2)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -581,7 +581,7 @@ class ChronicleEditTest(TestCase):
         self.assertEquals(response.status_code, 404)
 
     def test_get(self):
-        # case: request.user.profile.character_status == 'gm'
+        # case: request.user.profile.status == 'gm'
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -650,7 +650,7 @@ class TimelineMainTest(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
 
         self.game1 = GameSession.objects.create(title='Game1')
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
@@ -725,7 +725,7 @@ class TimelineMainTest(TestCase):
         self.assertNotContains(response, f'href="{linked_url7}"')
         self.assertNotContains(response, f'href="{linked_url8}"')
 
-        # case request.user.profile.character_status == 'gm'
+        # case request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
@@ -828,7 +828,7 @@ class TimelineAllEventsTest(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
 
         self.game1 = GameSession.objects.create(title='Game1')
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
@@ -900,7 +900,7 @@ class TimelineAllEventsTest(TestCase):
         self.assertNotContains(response, f'href="{linked_url7}"')
         self.assertNotContains(response, f'href="{linked_url8}"')
 
-        # case request.user.profile.character_status == 'gm'
+        # case request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url2}"')
@@ -918,7 +918,7 @@ class TimelineThreadTest(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
 
         self.game1 = GameSession.objects.create(title='Game1')
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
@@ -940,7 +940,7 @@ class TimelineThreadTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # case request.user.profile neither in informed nor in participants nor status == 'gm'
         self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -963,7 +963,7 @@ class TimelineThreadTest(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile.character_status == 'gm'
+        # case: request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -1003,9 +1003,9 @@ class TimelineThreadTest(TestCase):
         self.assertContains(response, f'href="{linked_url7}"')
         self.assertContains(response, f'href="{linked_url8}"')
 
-        # case request.user.profile neither in participants nor informed nor character_status == 'gm'
+        # case request.user.profile neither in participants nor informed nor status == 'gm'
 
-        # case request.user.profile.character_status == 'gm'
+        # case request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url2}"')
@@ -1023,7 +1023,7 @@ class TimelineParticipantTest(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
 
         self.game1 = GameSession.objects.create(title='Game1')
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
@@ -1045,7 +1045,7 @@ class TimelineParticipantTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # case request.user.profile neither in informed nor in participants nor status == 'gm'
         self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -1073,7 +1073,7 @@ class TimelineParticipantTest(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile.character_status == 'gm'
+        # case: request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -1113,9 +1113,9 @@ class TimelineParticipantTest(TestCase):
         self.assertContains(response, f'href="{linked_url7}"')
         self.assertContains(response, f'href="{linked_url8}"')
 
-        # case request.user.profile neither in participants nor informed nor character_status == 'gm'
+        # case request.user.profile neither in participants nor informed nor status == 'gm'
 
-        # case request.user.profile.character_status == 'gm'
+        # case request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url2}"')
@@ -1133,7 +1133,7 @@ class TimelineGeneralLocationtTest(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
 
         self.game1 = GameSession.objects.create(title='Game1')
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
@@ -1155,7 +1155,7 @@ class TimelineGeneralLocationtTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # case request.user.profile neither in informed nor in participants nor status == 'gm'
         self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -1178,7 +1178,7 @@ class TimelineGeneralLocationtTest(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile.character_status == 'gm'
+        # case: request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -1218,9 +1218,9 @@ class TimelineGeneralLocationtTest(TestCase):
         self.assertContains(response, f'href="{linked_url7}"')
         self.assertContains(response, f'href="{linked_url8}"')
 
-        # case request.user.profile neither in participants nor informed nor character_status == 'gm'
+        # case request.user.profile neither in participants nor informed nor status == 'gm'
 
-        # case request.user.profile.character_status == 'gm'
+        # case request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url2}"')
@@ -1238,7 +1238,7 @@ class TimelineSpecificLocationtTest(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
 
         self.game1 = GameSession.objects.create(title='Game1')
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
@@ -1260,7 +1260,7 @@ class TimelineSpecificLocationtTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # case request.user.profile neither in informed nor in participants nor status == 'gm'
         self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -1283,7 +1283,7 @@ class TimelineSpecificLocationtTest(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile.character_status == 'gm'
+        # case: request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -1323,9 +1323,9 @@ class TimelineSpecificLocationtTest(TestCase):
         self.assertContains(response, f'href="{linked_url7}"')
         self.assertContains(response, f'href="{linked_url8}"')
 
-        # case request.user.profile neither in participants nor informed nor character_status == 'gm'
+        # case request.user.profile neither in participants nor informed nor status == 'gm'
 
-        # case request.user.profile.character_status == 'gm'
+        # case request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url2}"')
@@ -1343,7 +1343,7 @@ class TimelineDateTest(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
 
         self.game1 = GameSession.objects.create(title='Game1')
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
@@ -1366,7 +1366,7 @@ class TimelineDateTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # case request.user.profile neither in informed nor in participants nor status == 'gm'
         self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url_only_year)
@@ -1389,7 +1389,7 @@ class TimelineDateTest(TestCase):
         self.assertEquals(response_only_year.status_code, 200)
         self.assertEquals(response_year_and_season.status_code, 200)
 
-        # case: request.user.profile.character_status == 'gm'
+        # case: request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response_only_year = self.client.get(self.url_only_year)
         response_year_and_season = self.client.get(self.url_year_and_season)
@@ -1433,9 +1433,9 @@ class TimelineDateTest(TestCase):
         self.assertContains(response, f'href="{linked_url7}"')
         self.assertContains(response, f'href="{linked_url8}"')
 
-        # case request.user.profile neither in participants nor informed nor character_status == 'gm'
+        # case request.user.profile neither in participants nor informed nor status == 'gm'
 
-        # case request.user.profile.character_status == 'gm'
+        # case request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url_year_and_season)
         self.assertContains(response, f'href="{linked_url2}"')
@@ -1453,7 +1453,7 @@ class TimelineGameTest(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
 
         self.game1 = GameSession.objects.create(title='Game1')
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
@@ -1475,7 +1475,7 @@ class TimelineGameTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # case request.user.profile neither in informed nor in participants nor status == 'gm'
         self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -1498,7 +1498,7 @@ class TimelineGameTest(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile.character_status == 'gm'
+        # case: request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -1538,9 +1538,9 @@ class TimelineGameTest(TestCase):
         self.assertContains(response, f'href="{linked_url7}"')
         self.assertContains(response, f'href="{linked_url8}"')
 
-        # case request.user.profile neither in participants nor informed nor character_status == 'gm'
+        # case request.user.profile neither in participants nor informed nor status == 'gm'
 
-        # case request.user.profile.character_status == 'gm'
+        # case request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url2}"')
@@ -1558,7 +1558,7 @@ class TimelineInformView(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
 
         self.game1 = GameSession.objects.create(title='Game1')
         gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
@@ -1575,7 +1575,7 @@ class TimelineInformView(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # case request.user.profile neither in informed nor in participants nor status == 'gm'
         self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -1598,7 +1598,7 @@ class TimelineInformView(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile.character_status == 'gm'
+        # case: request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -1637,7 +1637,7 @@ class TimelineNoteView(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
 
         self.game1 = GameSession.objects.create(title='Game1')
         gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
@@ -1654,7 +1654,7 @@ class TimelineNoteView(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # case request.user.profile neither in informed nor in participants nor status == 'gm'
         self.client.force_login(self.user3)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
@@ -1677,7 +1677,7 @@ class TimelineNoteView(TestCase):
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
 
-        # case: request.user.profile.character_status == 'gm'
+        # case: request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)
@@ -1740,7 +1740,7 @@ class TimelineEditView(TestCase):
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
 
         self.game1 = GameSession.objects.create(title='Game1')
         self.gen_loc1 = GeneralLocation.objects.create(name='gen_loc1')
@@ -1771,7 +1771,7 @@ class TimelineEditView(TestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
-        # case request.user.profile neither in informed nor in participants nor character_status == 'gm'
+        # case request.user.profile neither in informed nor in participants nor status == 'gm'
         self.client.force_login(self.user3)
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
@@ -1783,7 +1783,7 @@ class TimelineEditView(TestCase):
         self.assertEquals(response.status_code, 404)
 
     def test_get(self):
-        # case: request.user.profile.character_status == 'gm'
+        # case: request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)

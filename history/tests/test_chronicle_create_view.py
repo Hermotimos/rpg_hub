@@ -12,7 +12,7 @@ class ChronicleCreateTest(TestCase):
         self.game1 = GameSession.objects.create(title='Game1')
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
-        self.user2.profile.character_status = 'gm'
+        self.user2.profile.status = 'gm'
         self.user2.profile.save()
 
         self.url = reverse('history:chronicle-create')
@@ -23,14 +23,14 @@ class ChronicleCreateTest(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_redirect_if_unallowed(self):
-        # request.user.profile.character_status != 'gm'
+        # request.user.profile.status != 'gm'
         self.client.force_login(self.user1)
         redirect_url = reverse('home:dupa')
         response = self.client.get(self.url)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     def test_get(self):
-        # request.user.profile.character_status == 'gm'
+        # request.user.profile.status == 'gm'
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)

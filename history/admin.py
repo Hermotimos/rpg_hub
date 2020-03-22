@@ -20,17 +20,17 @@ from users.models import Profile
 
 class ChronicleEventAdminForm(forms.ModelForm):
     participants = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                                  .exclude(Q(character_status='dead_player') |
-                                                           Q(character_status='dead_npc') |
-                                                           Q(character_status='gm') |
-                                                           Q(character_status='living_npc')),
+                                                  .exclude(Q(status='dead_player') |
+                                                           Q(status='dead_npc') |
+                                                           Q(status='gm') |
+                                                           Q(status='living_npc')),
                                                   required=False,
                                                   widget=FilteredSelectMultiple('Participants', False))
     informed = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                              .exclude(Q(character_status='dead_player') |
-                                                       Q(character_status='dead_npc') |
-                                                       Q(character_status='gm') |
-                                                       Q(character_status='living_npc')),
+                                              .exclude(Q(status='dead_player') |
+                                                       Q(status='dead_npc') |
+                                                       Q(status='gm') |
+                                                       Q(status='living_npc')),
                                               required=False,
                                               widget=FilteredSelectMultiple('Informed', False))
     pictures = forms.ModelMultipleChoiceField(queryset=Picture.objects.all(), required=False,
@@ -39,17 +39,17 @@ class ChronicleEventAdminForm(forms.ModelForm):
 
 class TimelineEventAdminForm(forms.ModelForm):
     participants = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                                  .exclude(Q(character_status='dead_player') |
-                                                           Q(character_status='dead_npc') |
-                                                           Q(character_status='gm') |
-                                                           Q(character_status='living_npc')),
+                                                  .exclude(Q(status='dead_player') |
+                                                           Q(status='dead_npc') |
+                                                           Q(status='gm') |
+                                                           Q(status='living_npc')),
                                                   required=False,
                                                   widget=FilteredSelectMultiple('Participants', False))
     informed = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                              .exclude(Q(character_status='dead_player') |
-                                                       Q(character_status='dead_npc') |
-                                                       Q(character_status='gm') |
-                                                       Q(character_status='living_npc')),
+                                              .exclude(Q(status='dead_player') |
+                                                       Q(status='dead_npc') |
+                                                       Q(status='gm') |
+                                                       Q(status='living_npc')),
                                               required=False,
                                               widget=FilteredSelectMultiple('Informed', False))
     threads = forms.ModelMultipleChoiceField(queryset=Picture.objects.all(), required=False,

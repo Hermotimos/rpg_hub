@@ -17,10 +17,10 @@ class DemandsCreateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['addressee'].label = 'Adresat:'
         self.fields['addressee'].queryset = User.objects.exclude(Q(id=authenticated_user.id) |
-                                                                 Q(profile__character_status='dead_player') |
-                                                                 Q(profile__character_status='inactive_player') |
-                                                                 Q(profile__character_status='dead_npc') |
-                                                                 Q(profile__character_status='living_npc')
+                                                                 Q(profile__status='dead_player') |
+                                                                 Q(profile__status='inactive_player') |
+                                                                 Q(profile__status='dead_npc') |
+                                                                 Q(profile__status='living_npc')
                                                                  ).order_by('username')
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False

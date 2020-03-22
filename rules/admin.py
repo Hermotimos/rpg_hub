@@ -16,10 +16,10 @@ from users.models import Profile
 # 'allowed_profiles' FIELD AS FilteredSelectMultiple
 class Form1(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                                      .exclude(Q(character_status='dead_player') |
-                                                               Q(character_status='dead_npc') |
-                                                               Q(character_status='gm') |
-                                                               Q(character_status='living_npc')),
+                                                      .exclude(Q(status='dead_player') |
+                                                               Q(status='dead_npc') |
+                                                               Q(status='gm') |
+                                                               Q(status='living_npc')),
                                                       required=False,
                                                       widget=FilteredSelectMultiple('Allowed profiles', False))
 
@@ -27,10 +27,10 @@ class Form1(forms.ModelForm):
 # 'allowed_profiles' AND 'pictures' FIELDS AS FilteredSelectMultiple
 class Form2(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                                      .exclude(Q(character_status='dead_player') |
-                                                               Q(character_status='dead_npc') |
-                                                               Q(character_status='gm') |
-                                                               Q(character_status='living_npc')),
+                                                      .exclude(Q(status='dead_player') |
+                                                               Q(status='dead_npc') |
+                                                               Q(status='gm') |
+                                                               Q(status='living_npc')),
                                                       required=False,
                                                       widget=FilteredSelectMultiple('Allowed profiles', False))
     pictures = forms.ModelMultipleChoiceField(queryset=Picture.objects.all(),
@@ -41,10 +41,10 @@ class Form2(forms.ModelForm):
 # 'allowed_profiles' AND 'skills' FIELDS AS FilteredSelectMultiple
 class Form3(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                                      .exclude(Q(character_status='dead_player') |
-                                                               Q(character_status='dead_npc') |
-                                                               Q(character_status='gm') |
-                                                               Q(character_status='living_npc')),
+                                                      .exclude(Q(status='dead_player') |
+                                                               Q(status='dead_npc') |
+                                                               Q(status='gm') |
+                                                               Q(status='living_npc')),
                                                       required=False,
                                                       widget=FilteredSelectMultiple('Allowed profiles', False))
     skills = forms.ModelMultipleChoiceField(queryset=Skill.objects.all(),

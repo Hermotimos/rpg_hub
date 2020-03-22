@@ -14,7 +14,7 @@ from users.models import Profile
 @login_required
 def toponomikon_main_view(request):
     profile = request.user.profile
-    if profile.character_status == 'gm':
+    if profile.status == 'gm':
         gen_locs = GeneralLocation.objects.all()
         spec_locs = SpecificLocation.objects.all()
     else:
@@ -54,7 +54,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
     allowed = (gen_loc_known_directly | gen_loc_known_indirectly)
 
     # TABS
-    if profile.character_status == 'gm':
+    if profile.status == 'gm':
         spec_locs = gen_loc.specific_locations.all()
         knowledge_packets = gen_loc.knowledge_packets.all()
         only_indirectly = False
@@ -96,7 +96,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
         receivers = [
             p.user.email for p in Profile.objects.filter(id__in=informed_ids)
         ]
-        if profile.character_status != 'gm':
+        if profile.status != 'gm':
             receivers.append('lukas.kozicki@gmail.com')
             
         send_mail(subject, message, sender, receivers)
@@ -114,7 +114,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
         # Inform
         'informable': gen_loc.informable(),
     }
-    if profile in allowed or profile.character_status == 'gm':
+    if profile in allowed or profile.status == 'gm':
         return render(request, 'toponomikon/general_location.html', context)
     else:
         return redirect('home:dupa')
@@ -130,7 +130,7 @@ def toponomikon_specific_location_view(request, spec_loc_id):
     spec_loc_known_indirectly = spec_loc.known_indirectly.all()
     allowed = (spec_loc_known_directly | spec_loc_known_indirectly)
 
-    if profile.character_status == 'gm':
+    if profile.status == 'gm':
         knowledge_packets = spec_loc.knowledge_packets.all()
         only_indirectly = False
     else:
@@ -159,7 +159,7 @@ def toponomikon_specific_location_view(request, spec_loc_id):
         receivers = [
             p.user.email for p in Profile.objects.filter(id__in=informed_ids)
         ]
-        if profile.character_status != 'gm':
+        if profile.status != 'gm':
             receivers.append('lukas.kozicki@gmail.com')
     
         send_mail(subject, message, sender, receivers)
@@ -176,7 +176,7 @@ def toponomikon_specific_location_view(request, spec_loc_id):
         # Inform
         'informable': spec_loc.informable(),
     }
-    if profile in allowed or profile.character_status == 'gm':
+    if profile in allowed or profile.status == 'gm':
         return render(request, 'toponomikon/specific_location.html', context)
     else:
         return redirect('home:dupa')

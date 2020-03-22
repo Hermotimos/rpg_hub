@@ -11,9 +11,9 @@ class Skill(models.Model):
     tested_trait = models.CharField(max_length=50, verbose_name='Cecha/Cechy')
     image = models.ImageField(blank=True, null=True, upload_to='site_features_pics')
     allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
-                                              limit_choices_to=Q(character_status='active_player') |
-                                                               Q(character_status='inactive_player') |
-                                                               Q(character_status='dead_player'),
+                                              limit_choices_to=Q(status='active_player') |
+                                                               Q(status='inactive_player') |
+                                                               Q(status='dead_player'),
                                               related_name='allowed_skills')
     sorting_name = models.CharField(max_length=101, blank=True, null=True)
 
@@ -68,9 +68,9 @@ class Synergy(models.Model):
     name = models.CharField(max_length=100, verbose_name='Synergia')
     skills = models.ManyToManyField(Skill, related_name='skills')
     allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
-                                              limit_choices_to=Q(character_status='active_player') |
-                                                               Q(character_status='inactive_player') |
-                                                               Q(character_status='dead_player'),
+                                              limit_choices_to=Q(status='active_player') |
+                                                               Q(status='inactive_player') |
+                                                               Q(status='dead_player'),
                                               related_name='allowed_synergies')
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
@@ -175,10 +175,10 @@ class CharacterProfession(models.Model):
     lvl_20 = models.CharField(max_length=500, blank=True, null=True)
     allowed_profiles = models.ManyToManyField(Profile, blank=True,
                                               limit_choices_to=
-                                              Q(character_status='active_player') |
-                                              Q(character_status='inactive_player') |
-                                              Q(character_status='inactive_player') |
-                                              Q(character_status='dead_player'),
+                                              Q(status='active_player') |
+                                              Q(status='inactive_player') |
+                                              Q(status='inactive_player') |
+                                              Q(status='dead_player'),
                                               related_name='allowed_professions')
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
@@ -206,9 +206,9 @@ class EliteClass(models.Model):
     description = models.TextField(max_length=4000, blank=True, null=True)
     allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
                                               limit_choices_to=
-                                              Q(character_status='active_player') |
-                                              Q(character_status='inactive_player') |
-                                              Q(character_status='dead_player'),
+                                              Q(status='active_player') |
+                                              Q(status='inactive_player') |
+                                              Q(status='dead_player'),
                                               related_name='allowed_elite_classes')
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
@@ -240,9 +240,9 @@ class EliteProfession(models.Model):
     start_perks = models.TextField(max_length=4000, blank=True, null=True)
     allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
                                               limit_choices_to=
-                                              Q(character_status='active_player') |
-                                              Q(character_status='inactive_player') |
-                                              Q(character_status='dead_player'),
+                                              Q(status='active_player') |
+                                              Q(status='inactive_player') |
+                                              Q(status='dead_player'),
                                               related_name='allowed_elite_professions')
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
@@ -342,9 +342,9 @@ class WeaponType(models.Model):
 
     allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
                                               limit_choices_to=
-                                              Q(character_status='active_player') |
-                                              Q(character_status='inactive_player') |
-                                              Q(character_status='dead_player'),
+                                              Q(status='active_player') |
+                                              Q(status='inactive_player') |
+                                              Q(status='dead_player'),
                                               related_name='allowed_weapon_types')
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
@@ -400,9 +400,9 @@ class PlateType(models.Model):
 
     allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
                                               limit_choices_to=
-                                              Q(character_status='active_player') |
-                                              Q(character_status='inactive_player') |
-                                              Q(character_status='dead_player'),
+                                              Q(status='active_player') |
+                                              Q(status='inactive_player') |
+                                              Q(status='dead_player'),
                                               related_name='allowed_plate_types')
     sorting_number = models.DecimalField(max_digits=3, decimal_places=2)
 
@@ -432,9 +432,9 @@ class ShieldType(models.Model):
 
     allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
                                               limit_choices_to=
-                                              Q(character_status='active_player') |
-                                              Q(character_status='inactive_player') |
-                                              Q(character_status='dead_player'),
+                                              Q(status='active_player') |
+                                              Q(status='inactive_player') |
+                                              Q(status='dead_player'),
                                               related_name='allowed_shield_types')
     sorting_number = models.DecimalField(max_digits=3, decimal_places=2)
 

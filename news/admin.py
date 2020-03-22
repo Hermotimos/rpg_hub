@@ -9,25 +9,25 @@ from users.models import Profile
 
 class NewsAdminForm(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                                      .exclude(Q(character_status='dead_player') |
-                                                               Q(character_status='dead_npc') |
-                                                               Q(character_status='gm')),
+                                                      .exclude(Q(status='dead_player') |
+                                                               Q(status='dead_npc') |
+                                                               Q(status='gm')),
                                                       widget=FilteredSelectMultiple('Allowed profiles', False),
                                                       required=False)
 
     followers = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                               .exclude(Q(character_status='dead_player') |
-                                                        Q(character_status='dead_npc') |
-                                                        Q(character_status='gm')),
+                                               .exclude(Q(status='dead_player') |
+                                                        Q(status='dead_npc') |
+                                                        Q(status='gm')),
                                                widget=FilteredSelectMultiple('Followers', False),
                                                required=False)
 
 
 class SurveyAdminForm(forms.ModelForm):
     addressees = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                                .exclude(Q(character_status='dead_player') |
-                                                         Q(character_status='dead_npc') |
-                                                         Q(character_status='gm')),
+                                                .exclude(Q(status='dead_player') |
+                                                         Q(status='dead_npc') |
+                                                         Q(status='gm')),
                                                 required=False,
                                                 widget=FilteredSelectMultiple('Addressees', False))
 

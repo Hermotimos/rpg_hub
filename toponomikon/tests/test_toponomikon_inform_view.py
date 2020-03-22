@@ -11,23 +11,23 @@ from users.models import User
 class ToponomikonMainTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
-        self.user1.profile.character_status = 'active_player'
+        self.user1.profile.status = 'active_player'
         self.user1.profile.save()
 
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
-        self.user2.profile.character_status = 'inactive_player'
+        self.user2.profile.status = 'inactive_player'
         self.user2.profile.save()
 
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
-        self.user3.profile.character_status = 'inactive_player'
+        self.user3.profile.status = 'inactive_player'
         self.user3.profile.save()
 
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'living_npc'
+        self.user4.profile.status = 'living_npc'
         self.user4.profile.save()
 
         self.user5 = User.objects.create_user(username='user5', password='pass1111')
-        self.user5.profile.character_status = 'gm'
+        self.user5.profile.status = 'gm'
         self.user5.profile.save()
 
         pic1 = Picture.objects.create(image='post_pics/topoi_anomeia_MAIN.jpg', type='topoi', title='Title1')

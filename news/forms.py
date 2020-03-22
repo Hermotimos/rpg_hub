@@ -14,11 +14,11 @@ class CreateNewsForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['allowed_profiles'].label = ''
         self.fields['allowed_profiles'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                                           Q(character_status='dead_player') |
-                                                                           Q(character_status='inactive_player') |
-                                                                           Q(character_status='living_npc') |
-                                                                           Q(character_status='dead_npc') |
-                                                                           Q(character_status='gm'))
+                                                                           Q(status='dead_player') |
+                                                                           Q(status='inactive_player') |
+                                                                           Q(status='living_npc') |
+                                                                           Q(status='dead_npc') |
+                                                                           Q(status='gm'))
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
@@ -65,10 +65,10 @@ class CreateSurveyForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['addressees'].label = ''
         self.fields['addressees'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                                     Q(character_status='dead_player') |
-                                                                     Q(character_status='inactive_player') |
-                                                                     Q(character_status='living_npc') |
-                                                                     Q(character_status='dead_npc'))
+                                                                     Q(status='dead_player') |
+                                                                     Q(status='inactive_player') |
+                                                                     Q(status='living_npc') |
+                                                                     Q(status='dead_npc'))
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''

@@ -9,7 +9,7 @@ class TestNavbarAndSidebarLinks(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.user2 = User.objects.create_user(username='user2', password='pass1111')
-        self.user2.profile.character_status = 'gm'
+        self.user2.profile.status = 'gm'
         self.user2.profile.save()
 
         self.character1 = Character.objects.create(profile=self.user1.profile)
@@ -52,4 +52,4 @@ class TestNavbarAndSidebarLinks(TestCase):
         self.assertContains(response, f'href="{reverse("history:timeline-create")}"')
 
         # SIDEBAR - for visitor users:
-        # no such character_status at the moment
+        # no such status at the moment

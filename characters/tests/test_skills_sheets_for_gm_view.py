@@ -15,7 +15,7 @@ class SkillsSheetsForGmTest(TestCase):
         self.user3 = User.objects.create_user(username='user3', password='pass1111')
 
         self.user4 = User.objects.create_user(username='user4', password='pass1111')
-        self.user4.profile.character_status = 'gm'
+        self.user4.profile.status = 'gm'
         self.user4.profile.save()
 
         self.url = reverse('characters:character-all-skills-for-gm')
