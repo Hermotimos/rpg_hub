@@ -49,7 +49,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
     profile = request.user.profile
     gen_loc = get_object_or_404(GeneralLocation, id=gen_loc_id)
 
-    # TABS CONTENT
+    # TABS
     if profile.character_status == 'gm':
         spec_locs = SpecificLocation.objects.filter(
             general_location__id=gen_loc_id
@@ -75,31 +75,48 @@ def toponomikon_general_location_view(request, gen_loc_id):
             output_field=IntegerField()
         ))
 
-    # INFORM FEATURE
-    known_directly_old = gen_loc.known_directly.all()
-    known_indirectly_old = gen_loc.known_indirectly.all()
+    # INFORM
     allowed = (gen_loc.known_directly.all() | gen_loc.known_indirectly.all())
-    
     informable = Profile.objects.filter(
-        character_status__in=['active_player', 'inactive_player']   # todo remove inactive_player
+        character_status__in=['active_player', 'inactive_player', 'dead_player']   # todo remove inactive_player
     ).exclude(
         Q(user__profile=profile)
-        | Q(id__in=known_directly_old)
-        | Q(id__in=known_indirectly_old)
+        | Q(id__in=allowed)
+        
     )
+    
+    if request.method == 'POST':
+        data = dict(request.POST)
+        data.pop('csrfmiddlewaretoken')
+        informed_ids = [id_ for id_ in data.keys()]
+        gen_loc.known_indirectly.add(*informed_ids)
+
+        informed_profiles = Profile.objects.filter(id__in=informed_ids)
+        
+        subject = f"[RPG] {profile} opowiedział Ci o pewnym miejscu!"
+        message = f"{profile} opowiedział Ci o miejscu zwanym:" \
+                  f" '{gen_loc.name}'.\n" \
+                  f"Informacje zostały zapisane w Twoim Toponomikonie: " \
+                  f"{request.build_absolute_uri()}"
+        sender = settings.EMAIL_HOST_USER
+        
+        receivers = [profile.user.email for profile in informed_profiles]
+        if profile.character_status != 'gm':
+            receivers.append('lukas.kozicki@gmail.com')
+            
+        send_mail(subject, message, sender, receivers)
+        messages.info(request, f'Poinformowano wybrane postacie!')
 
     context = {
         'page_title': gen_loc.name,
         'gen_loc': gen_loc,
         'is_gen_loc_known_only_indirectly': is_gen_loc_known_only_indirectly,
-        # Tabs content
+        # Tabs
         'knowledge_packets': knowledge_packets,
         'spec_locs': spec_locs,
         'pictures': None,
-        # Inform feature
+        # Inform
         'informable': informable,
-        'gen_loc_id': gen_loc.id,
-        'spec_loc_id': 0,
     }
     if profile in allowed or profile.character_status == 'gm':
         return render(request, 'toponomikon/toponomikon_general_location.html', context)
@@ -133,112 +150,3 @@ def toponomikon_specific_location_view(request, spec_loc_id):
         return render(request, 'toponomikon/toponomikon_specific_location.html', context)
     else:
         return redirect('home:dupa')
-
-
-@query_debugger
-@login_required
-def toponomikon_inform_view(request, profile_id, gen_loc_id='0', spec_loc_id='0'):  # todo check if works without defaults
-    profile = request.user.profile
-    if gen_loc_id != 0:
-        obj = get_object_or_404(GeneralLocation, id=gen_loc_id)
-    else:
-        obj = get_object_or_404(SpecificLocation, id=spec_loc_id)
-
-    allowed = (obj.known_directly.all() | obj.known_indirectly.all())
-    
-    if profile in allowed or profile.character_status == 'gm':
-        informed_new = get_object_or_404(Profile, id=profile_id)
-        obj.known_indirectly.add(informed_new)
-
-        subject = f"[RPG] {profile} opowiedział Ci o pewnym miejscu!"
-        message = f"{profile} opowiedział Ci o miejscu zwanym: {obj.name}.\n" \
-                  f"Informacje zostały zapisane w Twoim Toponomikonie."
-        sender = settings.EMAIL_HOST_USER
-        receivers = [informed_new.user.email]
-        if profile.character_status != 'gm':
-            receivers.append('lukas.kozicki@gmail.com')
-        send_mail(subject, message, sender, receivers)
-    
-        messages.info(request, f'{informed_new} został poinformowany!')
-
-        if gen_loc_id != 0:
-            return redirect('toponomikon:general-location', gen_loc_id=obj.id)
-        else:
-            return redirect('toponomikon:specific-location', spec_loc_id=obj.id)
-    else:
-        return redirect('home:dupa')
-
-
-
-# @query_debugger
-# @login_required
-# def toponomikon_inform_view(request, gen_loc_id='0', spec_loc_id='0'):
-#     profile = request.user.profile
-#     if gen_loc_id != 0:
-#         obj = get_object_or_404(GeneralLocation, id=gen_loc_id)
-#     else:
-#         obj = get_object_or_404(SpecificLocation, id=spec_loc_id)
-#
-#     known_directly_old = obj.known_directly.all()
-#     known_indirectly_old = obj.known_indirectly.all()
-#     allowed = (obj.known_directly.all() | obj.known_indirectly.all())
-#
-#     if request.method == 'POST':
-#         if isinstance(obj, GeneralLocation):
-#             form = GeneralLocationInformForm(
-#                 authenticated_user=request.user,
-#                 known_directly_old=known_directly_old,
-#                 known_indirectly_old=known_indirectly_old,
-#                 data=request.POST,
-#                 instance=obj
-#             )
-#         else:
-#             form = SpecificLocationInformForm(
-#                 authenticated_user=request.user,
-#                 known_directly_old=known_directly_old,
-#                 known_indirectly_old=known_indirectly_old,
-#                 data=request.POST,
-#                 instance=obj
-#             )
-#
-#         if form.is_valid():
-#             known_indirectly_new = form.cleaned_data['known_indirectly']
-#             obj.known_indirectly.add(*list(known_indirectly_new))
-#
-#             subject = f"[RPG] {profile} opowiedział Ci o pewnym miejscu!"
-#             message = f"{profile} opowiedział Ci o miejscu zwanym: {obj.name}.\n" \
-#                       f"Informacje zostały zapisane w Twoim Toponomikonie."
-#             sender = settings.EMAIL_HOST_USER
-#             receivers = []
-#             for new_profile in known_indirectly_new:
-#                 receivers.append(new_profile.user.email)
-#             if profile.character_status != 'gm':
-#                 receivers.append('lukas.kozicki@gmail.com')
-#             send_mail(subject, message, sender, receivers)
-#
-#             messages.info(request, f'Poinformowałeś wybrane postacie!')
-#             _next = request.POST.get('next', '/')
-#             return HttpResponseRedirect(_next)
-#     else:
-#         if isinstance(obj, GeneralLocation):
-#             form = GeneralLocationInformForm(
-#                 authenticated_user=request.user,
-#                 known_directly_old=known_directly_old,
-#                 known_indirectly_old=known_indirectly_old
-#             )
-#         else:
-#             form = SpecificLocationInformForm(
-#                 authenticated_user=request.user,
-#                 known_directly_old=known_directly_old,
-#                 known_indirectly_old=known_indirectly_old
-#             )
-#
-#     context = {
-#         'page_title': 'Opowiedz o krainie lub lokacji',
-#         'form': form,
-#         'obj': obj,
-#     }
-#     if profile in allowed or profile.character_status == 'gm':
-#         return render(request, 'toponomikon/toponomikon_inform.html', context)
-#     else:
-#         return redirect('home:dupa')

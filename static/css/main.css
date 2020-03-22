@@ -356,3 +356,20 @@ nav ul.bullets-1 li {color: #cbd5db;}
   text-decoration: none;
   cursor: pointer;
 }
+
+
+/* INFORM */
+
+input.select-profile[type=checkbox] {display:none;}
+input.select-profile[type=checkbox] + label img:hover {cursor: pointer;}
+
+input.select-profile[type=checkbox] + label {
+    filter: grayscale(100%);
+    display:inline-block;
+}
+
+input.select-profile[type=checkbox]:checked + label {
+    filter: grayscale(0%);
+    display:inline-block;
+}
+
