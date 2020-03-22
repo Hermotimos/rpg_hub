@@ -11,12 +11,12 @@ from users.models import Profile
 class LocationType(models.Model):
     name = models.CharField(max_length=100)
     default_img = models.ForeignKey(Picture, related_name='location_types', on_delete=models.SET_NULL, null=True)
+    
+    class Meta:
+        ordering = ['name']
 
     def __str__(self):
         return self.name
-
-    class Meta:
-        ordering = ['name']
 
 
 class GeneralLocation(models.Model):
@@ -40,6 +40,9 @@ class GeneralLocation(models.Model):
     pictures = models.ManyToManyField(Picture, related_name='gen_loc_pics', blank=True)
     sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
 
+    class Meta:
+        ordering = ['sorting_name']
+
     def __str__(self):
         return self.name
 
@@ -47,9 +50,15 @@ class GeneralLocation(models.Model):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
         super().save(*args, **kwargs)
-
-    class Meta:
-        ordering = ['sorting_name']
+        
+    def informable(self):
+        known_directly = self.known_directly.all()
+        known_indirectly = self.known_indirectly.all()
+        known_to = (known_directly | known_indirectly).distinct()
+        informable = Profile.objects.filter(
+            character_status='active_player'
+        ).exclude(id__in=known_to)
+        return informable
 
 
 class SpecificLocation(models.Model):
@@ -74,6 +83,9 @@ class SpecificLocation(models.Model):
     pictures = models.ManyToManyField(Picture, related_name='spec_loc_pics', blank=True)
     sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
 
+    class Meta:
+        ordering = ['sorting_name']
+
     def __str__(self):
         return self.name
 
@@ -82,8 +94,14 @@ class SpecificLocation(models.Model):
             self.sorting_name = create_sorting_name(self.name)
         super().save(*args, **kwargs)
 
-    class Meta:
-        ordering = ['sorting_name']
+    def informable(self):
+        known_directly = self.known_directly.all()
+        known_indirectly = self.known_indirectly.all()
+        known_to = (known_directly | known_indirectly).distinct()
+        informable = Profile.objects.filter(
+            character_status='active_player'
+        ).exclude(id__in=known_to)
+        return informable
 
 
 @query_debugger

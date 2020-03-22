@@ -80,12 +80,6 @@ def toponomikon_general_location_view(request, gen_loc_id):
         ))
 
     # INFORM
-    informable = Profile.objects.filter(
-        character_status__in=['active_player']
-    ).exclude(
-        Q(user__profile=profile) | Q(id__in=allowed)
-    )
-    
     if request.method == 'POST':
         data = dict(request.POST)
         data.pop('csrfmiddlewaretoken')
@@ -118,7 +112,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
         'spec_locs': spec_locs,
         'pictures': gen_loc.pictures.all(),
         # Inform
-        'informable': informable,
+        'informable': gen_loc.informable(),
     }
     if profile in allowed or profile.character_status == 'gm':
         return render(request, 'toponomikon/general_location.html', context)
@@ -149,12 +143,6 @@ def toponomikon_specific_location_view(request, spec_loc_id):
             else False
 
     # INFORM
-    informable = Profile.objects.filter(
-        character_status__in=['active_player']
-    ).exclude(
-        Q(user__profile=profile) | Q(id__in=allowed)
-    )
-
     if request.method == 'POST':
         data = dict(request.POST)
         data.pop('csrfmiddlewaretoken')
@@ -186,7 +174,7 @@ def toponomikon_specific_location_view(request, spec_loc_id):
         'knowledge_packets': knowledge_packets,
         'pictures': spec_loc.pictures.all(),
         # Inform
-        'informable': informable,
+        'informable': spec_loc.informable(),
     }
     if profile in allowed or profile.character_status == 'gm':
         return render(request, 'toponomikon/specific_location.html', context)
