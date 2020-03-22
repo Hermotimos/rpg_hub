@@ -12,12 +12,12 @@ class KnowledgePacket(models.Model):
     pictures = models.ManyToManyField(Picture, related_name='knowledge_packets', blank=True)
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
+    class Meta:
+        ordering = ['title']
+
     def __str__(self):
         return self.title
 
     def save(self, *args, **kwargs):
         self.sorting_name = create_sorting_name(self.__str__())
         super().save(*args, **kwargs)
-
-    class Meta:
-        ordering = ['title']
