@@ -55,9 +55,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
 
     # TABS
     if profile.character_status == 'gm':
-        spec_locs = SpecificLocation.objects.filter(
-            general_location__id=gen_loc_id
-        )
+        spec_locs = gen_loc.specific_locations.all()
         knowledge_packets = gen_loc.knowledge_packets.all()
         only_indirectly = False
     else:
@@ -117,7 +115,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
         # Tabs
         'knowledge_packets': knowledge_packets,
         'spec_locs': spec_locs,
-        'pictures': None,
+        'pictures': gen_loc.pictures.all(),
         # Inform
         'informable': informable,
     }
