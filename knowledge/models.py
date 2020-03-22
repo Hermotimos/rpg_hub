@@ -9,7 +9,12 @@ class KnowledgePacket(models.Model):
     title = models.CharField(max_length=100, unique=True)
     skills = models.ManyToManyField(Skill, related_name='knowledge_packets')
     text = models.TextField()
-    pictures = models.ManyToManyField(Picture, related_name='knowledge_packets', blank=True)
+    acquired_by = models.ManyToManyField(to=Profile,
+                                         related_name='kn_packets',
+                                         blank=True)
+    pictures = models.ManyToManyField(to=Picture,
+                                      related_name='knowledge_packets',
+                                      blank=True)
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     class Meta:
