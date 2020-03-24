@@ -54,10 +54,10 @@ class GeneralLocation(models.Model):
     def informable(self):
         known_directly = self.known_directly.all()
         known_indirectly = self.known_indirectly.all()
-        known_to = (known_directly | known_indirectly).distinct()
+        excluded = (known_directly | known_indirectly).distinct()
         informable = Profile.objects.filter(
             status='active_player'
-        ).exclude(id__in=known_to)
+        ).exclude(id__in=excluded)
         return informable
 
 
@@ -97,10 +97,10 @@ class SpecificLocation(models.Model):
     def informable(self):
         known_directly = self.known_directly.all()
         known_indirectly = self.known_indirectly.all()
-        known_to = (known_directly | known_indirectly).distinct()
+        excluded = (known_directly | known_indirectly).distinct()
         informable = Profile.objects.filter(
             status='active_player'
-        ).exclude(id__in=known_to)
+        ).exclude(id__in=excluded)
         return informable
 
 
