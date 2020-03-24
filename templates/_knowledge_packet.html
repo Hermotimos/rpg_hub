@@ -3,17 +3,21 @@
 
 <ul class="bullets-1 bullets-big pl-4_7rem">
     <li>
+        
         <h5 data-toggle="collapse" data-target="#id_{{ kn_packet.id }}_{{ specifier }}">
             <b class="hover-blue">{{ kn_packet.title }}</b>
         </h5>
+        
         <div id="id_{{ kn_packet.id }}_{{ specifier }}" class="collapse">
             <div class="text-justify pb-3">
-                <a class="btn btn-outline-dark mt-1" href="{% url 'knowledge:inform' kn_packet.id %}">
-                    <i class="icon-inform"></i>
-                </a>
-                <a class="btn btn-outline-dark mt-1 disabled" href="#">
-                    <i class="icon-note"></i>
-                </a>
+                <p class="btn btn-outline-dark icon-inform mt-1" data-toggle="modal" data-target="#infoKnPacketModal_{{ kn_packet.id }}"></p>
+                    <!-- The Modal -->
+                    <div class="modal fade" id="infoKnPacketModal_{{ kn_packet.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                        {% with informable=kn_packet.informable %}
+                            {% include '_inform.html' %}
+                        {% endwith %}
+                    </div>
+                <p class="btn btn-outline-dark icon-note mt-1 disabled"><a href="#"></a></p>
 
                 <br><br>
                 <h6 class="font-18 font-italic pt-1 text-justify linebreaks-style">
@@ -34,5 +38,6 @@
                 </div>
             </div>
         </div>
+        
     </li>
 </ul>
