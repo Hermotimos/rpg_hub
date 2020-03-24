@@ -23,8 +23,14 @@
                         <h6 class="font-18 font-italic linebreaks-style text-justify">{{ gen_loc.description|linebreaks }}</h6>
                     </div>
                     <div class="col-md-1">
-                        <p class="btn btn-outline-dark icon-inform mt-1" id="btnModal"></p>
-                        <p class="btn btn-outline-dark icon-note mt-1 disabled" href="#"></p>
+                        <p class="btn btn-outline-dark icon-inform mt-1" data-toggle="modal" data-target="#infoLocationModal"></p>
+                            <!-- The Modal -->
+                            <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                {% with informable=gen_loc.informable %}
+                                    {% include '_inform.html' %}
+                                {% endwith %}
+                            </div>
+                        <p class="btn btn-outline-dark icon-note mt-1 disabled"><a href="#"></a></p>
                     </div>
                 </div>
             </div>
@@ -76,22 +82,4 @@
         
     </article>
 
-
-    <!-- The Modal -->
-    <div id="informModal" class="modal">
-        <div class="modal-contents">
-            <span class="close">✖</span>
-            <div class="">
-                {% include '_inform.html' %}
-            </div>
-            
-        </div>
-    </div>
-
 {% endblock content %}
-
-
-
-{% block javascript %}
-    <script src="{% static 'js/informModal.js' %}"></script>
-{% endblock javascript %}
