@@ -8,6 +8,10 @@ from knowledge.models import KnowledgePacket
 from rpg_project import settings
 from rpg_project.utils import query_debugger
 from toponomikon.models import GeneralLocation, SpecificLocation
+from toponomikon.utils import (
+    send_mails_inform_location,
+    send_mails_inform_kn_packet,
+)
 from users.models import Profile
 
 
@@ -80,40 +84,28 @@ def toponomikon_general_location_view(request, gen_loc_id):
             output_field=IntegerField()
         ))
 
-    # INFORM LOCATION
     if request.method == 'POST' and 'location' in request.POST:
         data = dict(request.POST)
-        data.pop('csrfmiddlewaretoken')
-        informed_ids = [id_ for id_, list_ in data.items() if 'on' in list_]
-        # Following data is returned by dict(request.POST).items():
-        # < QueryDict: {
+        print(dict(request.POST).items())
+        # INFORM LOCATION
+        
+        data = dict(request.POST)
+        informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
+        # dict(request.POST).items() == < QueryDict: {
         #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
         #     '2': ['on'],
         #     'location': ['']
         # } >
         gen_loc.known_indirectly.add(*informed_ids)
-      
-        subject = f"[RPG] {profile} opowiedział Ci o pewnym miejscu!"
-        message = f"{profile} opowiedział Ci o miejscu zwanym:" \
-                  f" '{gen_loc.name}'.\n" \
-                  f"Informacje zostały zapisane w Twoim Toponomikonie: " \
-                  f"{request.build_absolute_uri()}"
         
-        sender = settings.EMAIL_HOST_USER
-        receivers = [
-            p.user.email for p in Profile.objects.filter(id__in=informed_ids)
-        ]
-        if profile.status != 'gm':
-            receivers.append('lukas.kozicki@gmail.com')
-        send_mail(subject, message, sender, receivers)
+        send_mails_inform_location(request, gen_loc, informed_ids)
         messages.info(request, f'Poinformowano wybrane postacie!')
 
     # INFORM KNOWLEDGE PACKETS
     elif request.method == 'POST' and 'kn_packet' in request.POST:
         data = dict(request.POST)
-        data.pop('csrfmiddlewaretoken')
-        informed_ids = [id_ for id_, list_ in data.items() if 'on' in list_]
-        # < QueryDict: {
+        informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
+        # dict(request.POST).items() == < QueryDict: {
         #   'csrfmiddlewaretoken': ['42GqawP0aa5WOfpuTkKixYsROBaKSQng...'],
         #   '2': ['on'],
         #   'kn_packet': ['38']
@@ -122,19 +114,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
         kn_packet = KnowledgePacket.objects.get(id=kn_packet_id)
         kn_packet.acquired_by.add(*informed_ids)
 
-        subject = f"[RPG] Transfer wiedzy: '{kn_packet.title}'"
-        message = f"{profile} przekazał Ci wiedzę: '{kn_packet.title}'.\n"\
-            f"Więdzę tę możesz odnaleźć pod umiejętnością/ami:" \
-            f" {', '.join(s.name for s in kn_packet.skills.all())}" \
-            f" w zakładce Almanach: {request.get_host()}/knowledge/almanac/\n"
-        
-        sender = settings.EMAIL_HOST_USER
-        receivers = [
-            p.user.email for p in Profile.objects.filter(id__in=informed_ids)
-        ]
-        if profile.status != 'gm':
-            receivers.append('lukas.kozicki@gmail.com')
-        send_mail(subject, message, sender, receivers)
+        send_mails_inform_kn_packet(request, kn_packet, informed_ids)
         messages.info(request, f'Poinformowano wybrane postacie!')
 
     context = {

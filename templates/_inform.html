@@ -10,7 +10,7 @@
         
         {% if informable %}
         
-            <form method="POST" action="">
+            <form method="POST" action="." name="{{ inform_type }}_form{{ id_ }}">
                 {% csrf_token %}
                 <div class="modal-body">
                     <h5 class="text-center text-danger">
@@ -21,8 +21,8 @@
                     <br>
                     <h4 class="text-center">
                         {% for profile in informable %}
-                            <input class="select-profile" type="checkbox" id="id_{{ forloop.counter }}" name="{{ profile.id }}">
-                            <label for="id_{{ forloop.counter }}">
+                            <input class="select-profile" type="checkbox" id="id_{{ forloop.counter }}{{ id_ }}" name="{{ profile.id }}">
+                            <label for="id_{{ forloop.counter }}{{ id_ }}">
                                 <img class="article-img rounded-circle" src="{{ profile.image.url }}">
                             </label>
                         {% endfor %}
@@ -30,8 +30,8 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-dark" type="submit"
-                            name="{{ inform_button_name }}"
-                            value="{{ inform_button_value }}">
+                            name="{{ inform_type }}"
+                            value="{{ id_ }}">
                         Poinformuj
                     </button>
                 </div>
