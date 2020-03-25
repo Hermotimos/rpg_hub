@@ -11,7 +11,7 @@ class KnowledgePacket(models.Model):
     skills = models.ManyToManyField(to=Skill, related_name='knowledge_packets')
     text = models.TextField()
     acquired_by = models.ManyToManyField(to=Profile,
-                                         related_name='kn_packets',
+                                         related_name='knowledge_packets',
                                          blank=True)
     pictures = models.ManyToManyField(to=Picture,
                                       related_name='knowledge_packets',

@@ -27,19 +27,19 @@ from rules.models import SkillLevel, Skill
 #             .prefetch_related(
 #                 Prefetch('knowledge_packets', queryset=known_kn_packets),
 #                 Prefetch('skill_levels',
-#                 queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
+#                 queryset=SkillLevel.objects.filter(acquired_by=profile)),
 #                 'knowledge_packets__pictures'
 #             )\
 #             .distinct()
 #     else:
-#         known_kn_packets = profile.character.knowledge_packets.all()
+#         known_kn_packets = profile.knowledge_packets.all()
 #         skills_with_kn_packets = Skill.objects\
 #             .exclude(name__icontains='Doktryn') \
 #             .filter(knowledge_packets__in=known_kn_packets)\
 #             .prefetch_related(
 #                 Prefetch('knowledge_packets', queryset=known_kn_packets),
 #                 Prefetch('skill_levels',
-#                 queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
+#                 queryset=SkillLevel.objects.filter(acquired_by=profile)),
 #                 'knowledge_packets__pictures'
 #             )\
 #             .distinct()
@@ -65,19 +65,19 @@ class AlmanacView(View):
                 .prefetch_related(
                     Prefetch('knowledge_packets', queryset=known_kn_packets),
                     Prefetch('skill_levels',
-                             queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
+                             queryset=SkillLevel.objects.filter(acquired_by=profile)),
                     'knowledge_packets__pictures'
                 ) \
                 .distinct()
         else:
-            known_kn_packets = profile.character.knowledge_packets.all()
+            known_kn_packets = profile.knowledge_packets.all()
             skills_with_kn_packets = Skill.objects \
                 .exclude(name__icontains='Doktryn') \
                 .filter(knowledge_packets__in=known_kn_packets) \
                 .prefetch_related(
                     Prefetch('knowledge_packets', queryset=known_kn_packets),
                     Prefetch('skill_levels',
-                             queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
+                             queryset=SkillLevel.objects.filter(acquired_by=profile)),
                     'knowledge_packets__pictures'
                 )\
                 .distinct()
@@ -103,8 +103,8 @@ class AlmanacView(View):
 #             .filter(name__icontains='Doktryn')\
 #             .prefetch_related(
 #                 Prefetch('skill_levels',
-#                 queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
-#                 Prefetch('knowledge_packets', queryset=profile.character.knowledge_packets.all()),
+#                 queryset=SkillLevel.objects.filter(acquired_by=profile)),
+#                 Prefetch('knowledge_packets', queryset=profile.knowledge_packets.all()),
 #                 'knowledge_packets__pictures'
 #                 )
 #
@@ -131,8 +131,8 @@ class TheologyView(View):
                 .filter(Q(name__icontains='Doktryn') | Q(name__icontains='Kult') | Q(name__icontains='Teologi')) \
                 .prefetch_related(
                     Prefetch('skill_levels',
-                             queryset=SkillLevel.objects.filter(acquired_by_characters=profile.character)),
-                    Prefetch('knowledge_packets', queryset=profile.character.knowledge_packets.all()),
+                             queryset=SkillLevel.objects.filter(acquired_by=profile)),
+                    Prefetch('knowledge_packets', queryset=profile.knowledge_packets.all()),
                     'knowledge_packets__pictures'
                 )
 
