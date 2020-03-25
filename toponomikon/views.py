@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 from django.db.models import Prefetch, Q, Case, When, Value, IntegerField
 from django.shortcuts import render, redirect, get_object_or_404
 
+from knowledge.models import KnowledgePacket
 from rpg_project import settings
 from rpg_project.utils import query_debugger
 from toponomikon.models import GeneralLocation, SpecificLocation
@@ -79,11 +80,17 @@ def toponomikon_general_location_view(request, gen_loc_id):
             output_field=IntegerField()
         ))
 
-    # INFORM
-    if request.method == 'POST':
+    # INFORM LOCATION
+    if request.method == 'POST' and 'location' in request.POST:
         data = dict(request.POST)
         data.pop('csrfmiddlewaretoken')
-        informed_ids = [id_ for id_ in data.keys()]
+        informed_ids = [id_ for id_, list_ in data.items() if 'on' in list_]
+        # Following data is returned by dict(request.POST).items():
+        # < QueryDict: {
+        #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
+        #     '2': ['on'],
+        #     'location': ['']
+        # } >
         gen_loc.known_indirectly.add(*informed_ids)
       
         subject = f"[RPG] {profile} opowiedział Ci o pewnym miejscu!"
@@ -91,14 +98,42 @@ def toponomikon_general_location_view(request, gen_loc_id):
                   f" '{gen_loc.name}'.\n" \
                   f"Informacje zostały zapisane w Twoim Toponomikonie: " \
                   f"{request.build_absolute_uri()}"
-        sender = settings.EMAIL_HOST_USER
         
+        sender = settings.EMAIL_HOST_USER
         receivers = [
             p.user.email for p in Profile.objects.filter(id__in=informed_ids)
         ]
         if profile.status != 'gm':
             receivers.append('lukas.kozicki@gmail.com')
-            
+        send_mail(subject, message, sender, receivers)
+        messages.info(request, f'Poinformowano wybrane postacie!')
+
+    # INFORM KNOWLEDGE PACKETS
+    elif request.method == 'POST' and 'kn_packet' in request.POST:
+        data = dict(request.POST)
+        data.pop('csrfmiddlewaretoken')
+        informed_ids = [id_ for id_, list_ in data.items() if 'on' in list_]
+        # < QueryDict: {
+        #   'csrfmiddlewaretoken': ['42GqawP0aa5WOfpuTkKixYsROBaKSQng...'],
+        #   '2': ['on'],
+        #   'kn_packet': ['38']
+        # } >
+        kn_packet_id = data['kn_packet'][0]
+        kn_packet = KnowledgePacket.objects.get(id=kn_packet_id)
+        kn_packet.acquired_by.add(*informed_ids)
+
+        subject = f"[RPG] Transfer wiedzy: '{kn_packet.title}'"
+        message = f"{profile} przekazał Ci wiedzę: '{kn_packet.title}'.\n"\
+            f"Więdzę tę możesz odnaleźć pod umiejętnością/ami:" \
+            f" {', '.join(s.name for s in kn_packet.skills.all())}" \
+            f" w zakładce Almanach: {request.get_host()}/knowledge/almanac/\n"
+        
+        sender = settings.EMAIL_HOST_USER
+        receivers = [
+            p.user.email for p in Profile.objects.filter(id__in=informed_ids)
+        ]
+        if profile.status != 'gm':
+            receivers.append('lukas.kozicki@gmail.com')
         send_mail(subject, message, sender, receivers)
         messages.info(request, f'Poinformowano wybrane postacie!')
 
@@ -142,11 +177,17 @@ def toponomikon_specific_location_view(request, spec_loc_id):
             and profile not in spec_loc_known_indirectly \
             else False
 
-    # INFORM
-    if request.method == 'POST':
+    # INFORM LOCATION
+    if request.method == 'POST' and 'location' in request.POST:
         data = dict(request.POST)
         data.pop('csrfmiddlewaretoken')
-        informed_ids = [id_ for id_ in data.keys()]
+        informed_ids = [id_ for id_, list_ in data.items() if 'on' in list_]
+        # Following data is returned by dict(request.POST).items():
+        # < QueryDict: {
+        #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
+        #     '2': ['on'],
+        #     'location': ['']
+        # } >
         spec_loc.known_indirectly.add(*informed_ids)
     
         subject = f"[RPG] {profile} opowiedział Ci o pewnym miejscu!"
@@ -154,14 +195,42 @@ def toponomikon_specific_location_view(request, spec_loc_id):
                   f" '{spec_loc.name}'.\n" \
                   f"Informacje zostały zapisane w Twoim Toponomikonie: " \
                   f"{request.build_absolute_uri()}"
-        sender = settings.EMAIL_HOST_USER
     
+        sender = settings.EMAIL_HOST_USER
         receivers = [
             p.user.email for p in Profile.objects.filter(id__in=informed_ids)
         ]
         if profile.status != 'gm':
             receivers.append('lukas.kozicki@gmail.com')
+        send_mail(subject, message, sender, receivers)
+        messages.info(request, f'Poinformowano wybrane postacie!')
+
+    # INFORM KNOWLEDGE PACKETS
+    elif request.method == 'POST' and 'kn_packet' in request.POST:
+        data = dict(request.POST)
+        data.pop('csrfmiddlewaretoken')
+        informed_ids = [id_ for id_, list_ in data.items() if 'on' in list_]
+        # < QueryDict: {
+        #   'csrfmiddlewaretoken': ['42GqawP0aa5WOfpuTkKixYsROBaKSQng...'],
+        #   '2': ['on'],
+        #   'kn_packet': ['38']
+        # } >
+        kn_packet_id = data['kn_packet'][0]
+        kn_packet = KnowledgePacket.objects.get(id=kn_packet_id)
+        kn_packet.acquired_by.add(*informed_ids)
     
+        subject = f"[RPG] Transfer wiedzy: '{kn_packet.title}'"
+        message = f"{profile} przekazał Ci wiedzę: '{kn_packet.title}'.\n" \
+                  f"Więdzę tę możesz odnaleźć pod umiejętnością/ami:" \
+                  f" {', '.join(s.name for s in kn_packet.skills.all())}" \
+                  f" w zakładce Almanach: {request.get_host()}/knowledge/almanac/\n"
+    
+        sender = settings.EMAIL_HOST_USER
+        receivers = [
+            p.user.email for p in Profile.objects.filter(id__in=informed_ids)
+        ]
+        if profile.status != 'gm':
+            receivers.append('lukas.kozicki@gmail.com')
         send_mail(subject, message, sender, receivers)
         messages.info(request, f'Poinformowano wybrane postacie!')
 
