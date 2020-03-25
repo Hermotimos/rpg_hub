@@ -10,5 +10,4 @@ urlpatterns = [
     path('almanac/', query_debugger(views.AlmanacView.as_view()), name='almanac'),
     # path('theology/', views.knowledge_theology_view, name='theology'),
     path('theology/', query_debugger(views.TheologyView.as_view()), name='theology'),
-    path('inform:<int:kn_packet_id>/', views.knowledge_inform_view, name='inform')
 ]

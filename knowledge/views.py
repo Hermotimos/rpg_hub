@@ -8,7 +8,6 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import ListView
 
-from knowledge.forms import KnowledgePacketInformForm
 from knowledge.models import KnowledgePacket
 from rpg_project import settings
 from rpg_project.utils import query_debugger
@@ -142,53 +141,3 @@ class TheologyView(View):
             'theology_skills': theology_skills
         }
         return render(request, self.template_name, context)
-
-
-@query_debugger
-@login_required
-def knowledge_inform_view(request, kn_packet_id):
-    profile = request.user.profile
-    kn_packet = get_object_or_404(KnowledgePacket, id=kn_packet_id)
-
-    allowed_characters_old = kn_packet.characters.all()
-
-    if request.method == 'POST':
-        form = KnowledgePacketInformForm(authenticated_user=request.user,
-                                         allowed_characters_old=allowed_characters_old,
-                                         data=request.POST,
-                                         instance=kn_packet)
-        if form.is_valid():
-            characters_new = form.cleaned_data['characters']
-            for character in characters_new:
-                character.knowledge_packets.add(kn_packet)
-
-            subject = f"[RPG] Transfer wiedzy: '{kn_packet.title}'"
-            message = f"{profile} przekazał Ci wiedzę na temat: '{kn_packet.title}'.\n"\
-                f"Więdzę tę możesz odnaleźć w zakładce Wiedza/Okruchy wiedzy: " \
-                f"{request.get_host()}/knowledge/almanac/\n"\
-                f"Zobaczysz tam, z jakimi elementami jest powiązana ta wiedza (Umiejętności, Toponomikon itp.).\n" \
-                f"Wiedzę możesz przeglądać zarówno w Okruchach wiedzy, jak i we wskazanych tam miejscach."
-            sender = settings.EMAIL_HOST_USER
-            receivers = []
-            for profile in [ch.profile for ch in characters_new]:
-                receivers.append(profile.user.email)
-            if profile.status != 'gm':
-                receivers.append('lukas.kozicki@gmail.com')
-            send_mail(subject, message, sender, receivers)
-
-            messages.info(request, f'Podzieliłeś się wiedzą z wybranymi towarzyszami!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-    else:
-        form = KnowledgePacketInformForm(authenticated_user=request.user,
-                                         allowed_characters_old=allowed_characters_old)
-
-    context = {
-        'page_title': 'Podziel się wiedzą',
-        'kn_packet': kn_packet,
-        'form': form,
-    }
-    if kn_packet in profile.character.knowledge_packets.all() or profile.status == 'gm':
-        return render(request, 'knowledge/knowledge_inform.html', context)
-    else:
-        return redirect('home:dupa')
