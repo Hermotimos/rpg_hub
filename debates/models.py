@@ -7,9 +7,13 @@ from users.models import Profile
 
 
 class Topic(models.Model):
-    title = models.CharField(max_length=100, unique=True, verbose_name='tytuł tematu')
+    title = models.CharField(max_length=100, unique=True)
     date_created = models.DateTimeField(auto_now_add=True)
-    allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_topics', blank=True)
+    allowed_profiles = models.ManyToManyField(
+        to=Profile,
+        related_name='allowed_topics',
+        blank=True
+    )
 
     class Meta:
         ordering = ['-date_created']
@@ -19,12 +23,19 @@ class Topic(models.Model):
 
 
 class Debate(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name='tytuł narady')
+    name = models.CharField(max_length=100, unique=True)
     date_created = models.DateTimeField(auto_now_add=True)
-    topic = models.ForeignKey(Topic, related_name='debates', on_delete=models.CASCADE)
-    starter = models.ForeignKey(User, related_name='debates', on_delete=models.CASCADE)
-    allowed_profiles = models.ManyToManyField(to=Profile, related_name='allowed_debates')
-    followers = models.ManyToManyField(to=Profile, related_name='followed_debates', blank=True)
+    topic = models.ForeignKey(to=Topic, related_name='debates',
+                              on_delete=models.CASCADE)
+    starter = models.ForeignKey(to=User, related_name='debates',
+                                on_delete=models.CASCADE)
+    allowed_profiles = models.ManyToManyField(to=Profile,
+                                              related_name='allowed_debates')
+    followers = models.ManyToManyField(
+        to=Profile,
+        related_name='followed_debates',
+        blank=True
+    )
     is_ended = models.BooleanField(default=False)
     is_individual = models.BooleanField(default=False)
 
@@ -37,14 +48,18 @@ class Debate(models.Model):
 
 class Remark(models.Model):
     text = models.TextField(max_length=4000)
-    debate = models.ForeignKey(Debate, related_name='remarks', on_delete=models.CASCADE)
+    debate = models.ForeignKey(to=Debate, related_name='remarks',
+                               on_delete=models.CASCADE)
     date_posted = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, related_name='remarks', on_delete=models.CASCADE)
+    author = models.ForeignKey(to=User, related_name='remarks',
+                               on_delete=models.CASCADE)
     image = models.ImageField(blank=True, null=True, upload_to='post_pics')
-    seen_by = models.ManyToManyField(Profile, related_name='remarks_seen', blank=True)
+    seen_by = models.ManyToManyField(to=Profile, related_name='remarks_seen',
+                                     blank=True)
 
     def __str__(self):
-        return f'{self.text[:100]}...' if len(str(self.text)) > 100 else self.text
+        text = self.text
+        return f'{text[:100]}...' if len(str(text)) > 100 else text
 
     def text_begin(self):
         return self.__str__()
@@ -60,28 +75,27 @@ class Remark(models.Model):
                 img.save(self.image.path)
 
 
-# ---------------------------------------------------------------------------------------------------------------------
-# -------------------------------------------------- SIGNALS ---------------------------------------------------------
-# ---------------------------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# ---------------------------------------- SIGNALS ----------------------------
+# -----------------------------------------------------------------------------
 
 
 def update_topic_allowed_profiles(sender, instance, **kwargs):
     topic = instance.topic
-    allowed = []
-    for debate in topic.debates.all().prefetch_related('allowed_profiles'):
-        for profile in debate.allowed_profiles.all():
-            allowed.append(profile)
-    topic.allowed_profiles.set(allowed)
+    allowed = [profile for profile in instance.allowed_profiles.all()]
+    topic.allowed_profiles.add(*allowed)
     topic.save()
 
 
 post_save.connect(update_topic_allowed_profiles, sender=Debate)
-m2m_changed.connect(update_topic_allowed_profiles, sender=Debate.allowed_profiles.through)
+m2m_changed.connect(update_topic_allowed_profiles,
+                    sender=Debate.allowed_profiles.through)
 
 
 def delete_if_doubled(sender, instance, **kwargs):
     time_span = datetime.datetime.now() - datetime.timedelta(minutes=2)
-    doubled = Remark.objects.filter(text=instance.text, author=instance.author, date_posted__gte=time_span)
+    doubled = Remark.objects.filter(text=instance.text, author=instance.author,
+                                    date_posted__gte=time_span)
     if doubled.count() > 1:
         instance.delete()
 
