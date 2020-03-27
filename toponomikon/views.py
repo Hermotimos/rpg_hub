@@ -83,12 +83,9 @@ def toponomikon_general_location_view(request, gen_loc_id):
             default=Value(0),
             output_field=IntegerField()
         ))
-
+    
+    # INFORM LOCATION
     if request.method == 'POST' and 'location' in request.POST:
-        data = dict(request.POST)
-        print(dict(request.POST).items())
-        # INFORM LOCATION
-        
         data = dict(request.POST)
         informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
         # dict(request.POST).items() == < QueryDict: {
@@ -160,7 +157,6 @@ def toponomikon_specific_location_view(request, spec_loc_id):
     # INFORM LOCATION
     if request.method == 'POST' and 'location' in request.POST:
         data = dict(request.POST)
-        data.pop('csrfmiddlewaretoken')
         informed_ids = [id_ for id_, list_ in data.items() if 'on' in list_]
         # Following data is returned by dict(request.POST).items():
         # < QueryDict: {
@@ -175,7 +171,6 @@ def toponomikon_specific_location_view(request, spec_loc_id):
                   f" '{spec_loc.name}'.\n" \
                   f"Informacje zostały zapisane w Twoim Toponomikonie: " \
                   f"{request.build_absolute_uri()}"
-    
         sender = settings.EMAIL_HOST_USER
         receivers = [
             p.user.email for p in Profile.objects.filter(id__in=informed_ids)
@@ -183,12 +178,12 @@ def toponomikon_specific_location_view(request, spec_loc_id):
         if profile.status != 'gm':
             receivers.append('lukas.kozicki@gmail.com')
         send_mail(subject, message, sender, receivers)
+        
         messages.info(request, f'Poinformowano wybrane postacie!')
 
     # INFORM KNOWLEDGE PACKETS
     elif request.method == 'POST' and 'kn_packet' in request.POST:
         data = dict(request.POST)
-        data.pop('csrfmiddlewaretoken')
         informed_ids = [id_ for id_, list_ in data.items() if 'on' in list_]
         # < QueryDict: {
         #   'csrfmiddlewaretoken': ['42GqawP0aa5WOfpuTkKixYsROBaKSQng...'],
@@ -203,8 +198,8 @@ def toponomikon_specific_location_view(request, spec_loc_id):
         message = f"{profile} przekazał Ci wiedzę: '{kn_packet.title}'.\n" \
                   f"Więdzę tę możesz odnaleźć pod umiejętnością/ami:" \
                   f" {', '.join(s.name for s in kn_packet.skills.all())}" \
-                  f" w zakładce Almanach: {request.get_host()}/knowledge/almanac/\n"
-    
+                  f" w zakładce Almanach: " \
+                  f"{request.get_host()}/knowledge/almanac/\n"
         sender = settings.EMAIL_HOST_USER
         receivers = [
             p.user.email for p in Profile.objects.filter(id__in=informed_ids)
@@ -212,6 +207,7 @@ def toponomikon_specific_location_view(request, spec_loc_id):
         if profile.status != 'gm':
             receivers.append('lukas.kozicki@gmail.com')
         send_mail(subject, message, sender, receivers)
+        
         messages.info(request, f'Poinformowano wybrane postacie!')
 
     context = {
