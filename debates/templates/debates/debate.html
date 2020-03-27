@@ -15,14 +15,6 @@
             <td><h6 class="font-italic px-1 text-justify">{{ debate.topic.title }}</h6></td>
         </tr>
         <tr>
-            <td class="align-middle"><h6>Inicjator:</h6></td>
-            <td>
-                {% if first_remark %}
-                    <img class="rounded-circle img-small" src="{{ first_remark.author.profile.image.url }}" alt="Profile img">
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
             <td class="align-middle"><h6>Uczestnicy:</h6></td>
             <td>
                 {% for profile in debate_allowed_profiles %}

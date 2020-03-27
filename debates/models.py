@@ -27,8 +27,8 @@ class Debate(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     topic = models.ForeignKey(to=Topic, related_name='debates',
                               on_delete=models.CASCADE)
-    starter = models.ForeignKey(to=User, related_name='debates',
-                                on_delete=models.CASCADE)
+    # starter = models.ForeignKey(to=User, related_name='debates',
+    #                             on_delete=models.CASCADE)
     allowed_profiles = models.ManyToManyField(to=Profile,
                                               related_name='allowed_debates')
     followers = models.ManyToManyField(

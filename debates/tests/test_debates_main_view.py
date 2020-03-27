@@ -16,8 +16,8 @@ class DebatesMainTest(TestCase):
         self.user4.profile.save()
 
         self.topic1 = Topic.objects.create(title='Topic1')
-        self.debate1 = Debate.objects.create(name='Debate1', topic=self.topic1, starter=self.user1)
-        self.debate2 = Debate.objects.create(name='Debate2', topic=self.topic1, starter=self.user1)
+        self.debate1 = Debate.objects.create(name='Debate1', topic=self.topic1)
+        self.debate2 = Debate.objects.create(name='Debate2', topic=self.topic1)
         self.debate1.allowed_profiles.set([self.user1.profile, ])
         self.debate2.allowed_profiles.set([self.user3.profile, ])
 

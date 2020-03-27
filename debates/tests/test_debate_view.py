@@ -16,7 +16,7 @@ class DebateTest(TestCase):
         self.user4.profile.status = 'gm'
 
         self.topic1 = Topic.objects.create(title='Topic1')
-        self.debate1 = Debate.objects.create(topic=self.topic1, starter=self.user1)
+        self.debate1 = Debate.objects.create(topic=self.topic1)
         self.debate1.allowed_profiles.set([self.user1.profile, self.user2.profile, ])
         self.debate1.followers.set([self.user1.profile, ])
 

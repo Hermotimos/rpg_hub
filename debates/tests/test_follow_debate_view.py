@@ -10,7 +10,7 @@ class FollowDebateTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username='user1', password='pass1111')
         self.topic1 = Topic.objects.create(title='Topic1')
-        self.debate1 = Debate.objects.create(topic=self.topic1, starter=self.user1)
+        self.debate1 = Debate.objects.create(topic=self.topic1)
         self.debate1.allowed_profiles.set([self.user1.profile, ])
 
         self.url = reverse('debates:follow', kwargs={'topic_id': self.topic1.id, 'debate_id': self.debate1.id})

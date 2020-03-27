@@ -558,7 +558,7 @@ class ChronicleEditTest(TestCase):
         self.event1.informed.set([self.user2.profile])
 
         self.topic1 = Topic.objects.create(id=1, title='Topic1')
-        self.debate1 = Debate.objects.create(id=1, topic=self.topic1, starter=self.user1)
+        self.debate1 = Debate.objects.create(id=1, topic=self.topic1)
 
         self.url = reverse('history:chronicle-edit', kwargs={'event_id': self.event1.id})
 

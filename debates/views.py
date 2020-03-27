@@ -59,7 +59,7 @@ def create_topic_view(request):
 
             debate = debate_form.save(commit=False)
             debate.topic = topic
-            debate.starter = request.user
+            # debate.starter = request.user
             debate.save()
 
             new_allowed_profiles = debate_form.cleaned_data['allowed_profiles']
@@ -114,7 +114,7 @@ def create_debate_view(request, topic_id):
 
             debate = debate_form.save(commit=False)
             debate.topic = Topic.objects.get(id=topic_id)
-            debate.starter = request.user
+            # debate.starter = request.user
             debate.save()
             new_allowed_profiles = debate_form.cleaned_data['allowed_profiles']
             debate.allowed_profiles.add(*list(new_allowed_profiles))
@@ -168,11 +168,9 @@ def debate_view(request, topic_id, debate_id):
     debate_followers = debate.followers.exclude(status='gm')
     remarks = debate.remarks.all().select_related('author__profile')
 
-    first_remark = None
     last_remark = None
     last_remark_seen_by_imgs = []
     if debate.remarks.exclude(author__profile__status='gm'):
-        first_remark = debate.remarks.order_by('date_posted').select_related('author__profile')[0]
         last_remark = debate.remarks.order_by('-date_posted').prefetch_related('seen_by')[0]
         if not debate.is_ended:
             seen_by = last_remark.seen_by.all()
@@ -214,7 +212,6 @@ def debate_view(request, topic_id, debate_id):
         'debate_allowed_profiles': debate_allowed_profiles,
         'debate_followers': debate_followers,
         'remarks': remarks,
-        'first_remark': first_remark,
         'last_remark': last_remark,
         'last_remark_seen_by_imgs': last_remark_seen_by_imgs,
         'form': form,
