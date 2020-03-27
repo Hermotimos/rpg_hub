@@ -153,8 +153,8 @@ def toponomikon_specific_location_view(request, spec_loc_id):
             acquired_by=profile
         )
         only_indirectly = True \
-            if profile in spec_loc_known_directly\
-            and profile not in spec_loc_known_indirectly \
+            if profile in spec_loc_known_indirectly\
+            and profile not in spec_loc_known_directly \
             else False
 
     # INFORM LOCATION
