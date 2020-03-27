@@ -69,19 +69,19 @@ class CreateRemarkForm(forms.ModelForm):
         }
 
 
-class InviteForm(forms.ModelForm):
-    class Meta:
-        model = Debate
-        fields = ['allowed_profiles']
-
-    def __init__(self, *args, **kwargs):
-        authenticated_user = kwargs.pop('authenticated_user')
-        old_allowed_profiles = kwargs.pop('old_allowed_profiles')
-        super().__init__(*args, **kwargs)
-        self.fields['allowed_profiles'].label = ''
-        self.fields['allowed_profiles'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                                           Q(status='dead_player') |
-                                                                           Q(status='dead_npc') |
-                                                                           Q(status='gm') |
-                                                                           Q(id__in=old_allowed_profiles))
-        self.fields['allowed_profiles'].widget.attrs = {'size': 10}
+# class InviteForm(forms.ModelForm):
+#     class Meta:
+#         model = Debate
+#         fields = ['allowed_profiles']
+#
+#     def __init__(self, *args, **kwargs):
+#         authenticated_user = kwargs.pop('authenticated_user')
+#         old_allowed_profiles = kwargs.pop('old_allowed_profiles')
+#         super().__init__(*args, **kwargs)
+#         self.fields['allowed_profiles'].label = ''
+#         self.fields['allowed_profiles'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
+#                                                                            Q(status='dead_player') |
+#                                                                            Q(status='dead_npc') |
+#                                                                            Q(status='gm') |
+#                                                                            Q(id__in=old_allowed_profiles))
+#         self.fields['allowed_profiles'].widget.attrs = {'size': 10}

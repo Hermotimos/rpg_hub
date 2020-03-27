@@ -44,6 +44,13 @@ class Debate(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def informable(self):
+        excluded = self.allowed_profiles.all()
+        informable = Profile.objects.filter(
+            status='active_player'
+        ).exclude(id__in=excluded)
+        return informable
 
 
 class Remark(models.Model):
@@ -93,7 +100,7 @@ m2m_changed.connect(update_topic_allowed_profiles,
 
 
 def delete_if_doubled(sender, instance, **kwargs):
-    time_span = datetime.datetime.now() - datetime.timedelta(minutes=2)
+    time_span = datetime.datetime.now() - datetime.timedelta(minutes=5)
     doubled = Remark.objects.filter(text=instance.text, author=instance.author,
                                     date_posted__gte=time_span)
     if doubled.count() > 1:

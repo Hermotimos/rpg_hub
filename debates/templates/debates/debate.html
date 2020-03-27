@@ -34,14 +34,22 @@
     </table>
 
     <br>
-    <div class="mb-4">
-        <a href="{% url 'debates:invite' debate.topic.id debate.id %}" class="btn btn-outline-dark">Dodaj uczestników narady</a>&emsp;
-        {% if request.user.profile in debate_followers %}
-            <a href="{% url 'debates:unfollow' topic.id debate.id %}" class="btn btn-dark">Nie obserwuj</a>
-        {% else %}
-            <a href="{% url 'debates:follow' topic.id debate.id %}" class="btn btn-dark">Obserwuj</a>
-        {% endif %}
-    </div>
+    {% if not debate.is_ended %}
+        <div class="mb-4">
+            <p class="btn btn-outline-dark icon-inform mt-1" data-toggle="modal" data-target="#infoLocationModal"></p>
+                <!-- The Modal -->
+                <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    {% with informable=debate.informable inform_type='debate' %}
+                        {% include '_inform.html' %}
+                    {% endwith %}
+                </div>
+            {% if request.user.profile in debate_followers %}
+                <a href="{% url 'debates:unfollow' topic.id debate.id %}" class="align-top btn btn-dark mt-1">Nie obserwuj</a>
+            {% else %}
+                <a href="{% url 'debates:follow' topic.id debate.id %}" class="align-top btn btn-dark mt-1">Obserwuj</a>
+            {% endif %}
+        </div>
+    {% endif %}
     <br>
 
     <table>

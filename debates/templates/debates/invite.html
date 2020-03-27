@@ -1,50 +1,50 @@
-{% extends 'base.html' %}
-{% load static %}
-{% load crispy_forms_tags %}
+<!--{% extends 'base.html' %}-->
+<!--{% load static %}-->
+<!--{% load crispy_forms_tags %}-->
 
-{% block head_extra %}
-    <link rel="stylesheet" href="{% static 'css/debates.css' %}">
-{% endblock head_extra %}
+<!--{% block head_extra %}-->
+<!--    <link rel="stylesheet" href="{% static 'css/debates.css' %}">-->
+<!--{% endblock head_extra %}-->
 
-{% block content %}
-    <br><br><br>
-    <table class="forms">
-        <tr>
-            <td><h6>Temat:</h6></td>
-            <td><h6 class="font-italic px-1 text-justify">{{ debate.topic.title }}</h6></td>
-        </tr>
-        <tr>
-            <td><h6>Narada:</h6></td>
-            <td><h6 class="font-italic px-1 text-justify">{{ debate.name }}</h6></td>
-        </tr>
-        <tr>
-            <td class="align-middle"><h6>Uczestnicy:</h6></td>
-            <td>
-                {% for profile in old_allowed_profiles %}
-                    <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile img">
-                {% endfor %}
-            </td>
-        </tr>
-    </table><br><br>
+<!--{% block content %}-->
+<!--    <br><br><br>-->
+<!--    <table class="forms">-->
+<!--        <tr>-->
+<!--            <td><h6>Temat:</h6></td>-->
+<!--            <td><h6 class="font-italic px-1 text-justify">{{ debate.topic.title }}</h6></td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td><h6>Narada:</h6></td>-->
+<!--            <td><h6 class="font-italic px-1 text-justify">{{ debate.name }}</h6></td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td class="align-middle"><h6>Uczestnicy:</h6></td>-->
+<!--            <td>-->
+<!--                {% for profile in old_allowed_profiles %}-->
+<!--                    <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile img">-->
+<!--                {% endfor %}-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--    </table><br><br>-->
 
-    {% if debate.is_ended %}
-        <h4><b>Ta narada już się zakończyła.</b></h4>
-    {% elif debate.is_individual %}
-        <h4><b>Nie możesz dodać uczestników do tej rozmowy.</b></h4>
-    {% else %}
-        <h6>Włącz uczestników do narady:</h6>
-        <small>1) Nowi uczestnicy uzyskają dostęp do całości narady.</small><br>
-        <small>2) Włączaj tylko postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji.</small><br>
-        <small>3) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small><br>
-        <small>4) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small><br>
-        <small>5) Jeśli chcesz się naradzić z postacią, której nie ma na liście, powiadom MG.</small><br>
-        <br>
+<!--    {% if debate.is_ended %}-->
+<!--        <h4><b>Ta narada już się zakończyła.</b></h4>-->
+<!--    {% elif debate.is_individual %}-->
+<!--        <h4><b>Nie możesz dodać uczestników do tej rozmowy.</b></h4>-->
+<!--    {% else %}-->
+<!--        <h6>Włącz uczestników do narady:</h6>-->
+<!--        <small>1) Nowi uczestnicy uzyskają dostęp do całości narady.</small><br>-->
+<!--        <small>2) Włączaj tylko postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji.</small><br>-->
+<!--        <small>3) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small><br>-->
+<!--        <small>4) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small><br>-->
+<!--        <small>5) Jeśli chcesz się naradzić z postacią, której nie ma na liście, powiadom MG.</small><br>-->
+<!--        <br>-->
 
-        <form method="POST" action=".#page-bottom" class="allowed-profiles-form-debate">
-            {% csrf_token %}
-            {{ form.allowed_profiles|as_crispy_field }}
-            <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
-            <input class="btn btn-dark" type="submit" value="Dodaj uczestników narady">
-        </form>
-    {% endif %}
-{% endblock content %}
+<!--        <form method="POST" action=".#page-bottom" class="allowed-profiles-form-debate">-->
+<!--            {% csrf_token %}-->
+<!--            {{ form.allowed_profiles|as_crispy_field }}-->
+<!--            <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>-->
+<!--            <input class="btn btn-dark" type="submit" value="Dodaj uczestników narady">-->
+<!--        </form>-->
+<!--    {% endif %}-->
+<!--{% endblock content %}-->
