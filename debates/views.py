@@ -31,7 +31,9 @@ def debates_main_view(request):
                 last_player_remark_date=Max('remarks__date_posted'),
                 player_remarks_count=Count(
                     Case(
-                        When(~Q(remarks__author__profile__status='gm'), then=1),
+                        When(
+                            ~Q(remarks__author__profile__status='gm'), then=1
+                        ),
                         output_field=IntegerField()
                     )
                 )
@@ -52,15 +54,17 @@ def create_topic_view(request):
     profile = request.user.profile
     if request.method == 'POST':
         topic_form = CreateTopicForm(request.POST)
-        debate_form = CreateDebateForm(authenticated_user=request.user, data=request.POST)
-        remark_form = CreateRemarkForm(request.POST, request.FILES, debate_id=0)
+        debate_form = CreateDebateForm(authenticated_user=request.user,
+                                       data=request.POST)
+        remark_form = CreateRemarkForm(request.POST, request.FILES,
+                                       debate_id=0)
 
-        if topic_form.is_valid() and debate_form.is_valid() and remark_form.is_valid():
+        if topic_form.is_valid() and debate_form.is_valid() \
+                and remark_form.is_valid():
             topic = topic_form.save()
 
             debate = debate_form.save(commit=False)
             debate.topic = topic
-            # debate.starter = request.user
             debate.save()
 
             new_allowed_profiles = debate_form.cleaned_data['allowed_profiles']
@@ -72,26 +76,26 @@ def create_topic_view(request):
             remark.save()
 
             subject = f"[RPG] Nowa narada w nowym temacie: {debate.name}"
-            message = f"{remark.author.profile} włączył/a Cię do nowej narady " \
-                f"'{debate.name}' w temacie '{debate.topic}'.\n" \
-                f"Uczestnicy: " \
-                f"{', '.join(p.character_name for p in debate.allowed_profiles.exclude(status='gm'))}\n" \
-                f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
+            message = f"{remark.author.profile} włączył/a Cię do nowej " \
+                      f"narady '{debate.name}' w temacie '{debate.topic}'.\n" \
+                      f"Weź udział w naradzie: " \
+                      f"{request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
-            receivers = []
-            for new_profile in new_allowed_profiles:
-                if new_profile.user != request.user:
-                    receivers.append(new_profile.user.email)
+            receivers = [
+                p.user.email for p in new_allowed_profiles if p != profile
+            ]
             if profile.status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
 
             messages.info(request, f'Utworzono nową naradę w nowym temacie!')
-            return redirect('debates:debate', topic_id=topic.id, debate_id=debate.id)
+            return redirect('debates:debate', topic_id=topic.id,
+                            debate_id=debate.id)
     else:
         topic_form = CreateTopicForm()
         debate_form = CreateDebateForm(authenticated_user=request.user)
-        remark_form = CreateRemarkForm(initial={'author': request.user}, debate_id=0)
+        remark_form = CreateRemarkForm(initial={'author': request.user},
+                                       debate_id=0)
 
     context = {
         'page_title': 'Nowa narada w nowym temacie',
@@ -130,14 +134,12 @@ def create_debate_view(request, topic_id):
             subject = f"[RPG] Nowa narada: {debate.name}"
             message = f"{remark.author.profile} włączył/a Cię do nowej " \
                       f"narady '{debate.name}' w temacie '{debate.topic}'.\n" \
-                      f"Weź udział w naradzie: {request.build_absolute_uri()}"
+                      f"Weź udział w naradzie: " \
+                      f"{request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
             sender = settings.EMAIL_HOST_USER
             receivers = [
                 p.user.email for p in new_allowed_profiles if p != profile
             ]
-            # for new_profile in new_allowed_profiles:
-            #     if new_profile != request.user.profile:
-            #         receivers.append(new_profile.user.email)
             if profile.status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
@@ -176,12 +178,15 @@ def debate_view(request, topic_id, debate_id):
     last_remark = None
     last_remark_seen_by_imgs = []
     if debate.remarks.exclude(author__profile__status='gm'):
-        last_remark = debate.remarks.order_by('-date_posted').prefetch_related('seen_by')[0]
+        last_remark = debate.remarks.order_by('-date_posted') \
+            .prefetch_related('seen_by')[0]
         if not debate.is_ended:
             seen_by = last_remark.seen_by.all()
             if profile not in seen_by:
                 last_remark.seen_by.add(profile)
-            last_remark_seen_by_imgs = [p.image for p in last_remark.seen_by.all()]
+            last_remark_seen_by_imgs = [
+                p.image for p in last_remark.seen_by.all()
+            ]
 
     # INFORM DEBATE
     if request.method == 'POST' and 'debate' in request.POST:
@@ -253,55 +258,6 @@ def debate_view(request, topic_id, debate_id):
         return render(request, 'debates/debate.html', context)
     else:
         return redirect('home:dupa')
-
-
-# @query_debugger
-# @login_required
-# def debates_invite_view(request, topic_id, debate_id):
-#     profile = request.user.profile
-#     debate = get_object_or_404(Debate, id=debate_id)
-#
-#     old_allowed_profiles = debate.allowed_profiles.all()
-#
-#     if request.method == 'POST':
-#         form = InviteForm(authenticated_user=request.user,
-#                           old_allowed_profiles=old_allowed_profiles,
-#                           data=request.POST,
-#                           instance=debate)
-#         if form.is_valid():
-#             new_allowed_profiles = form.cleaned_data['allowed_profiles']
-#             debate.allowed_profiles.add(*list(new_allowed_profiles))
-#             debate.followers.add(*list(new_allowed_profiles))
-#
-#             subject = f"[RPG] Dołączenie do narady: '{debate.name}'"
-#             message = f"{profile} dołączył/a Cię do narady '{debate.name}' w temacie '{debate.topic}'.\n"\
-#                 f"Uczestnicy: " \
-#                 f"{', '.join(p.character_name for p in debate.allowed_profiles.exclude(status='gm'))}\n" \
-#                 f"Weź udział w naradzie: {request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
-#             sender = settings.EMAIL_HOST_USER
-#             receivers = []
-#             for new_profile in new_allowed_profiles:
-#                 receivers.append(new_profile.user.email)
-#             if profile.status != 'gm':
-#                 receivers.append('lukas.kozicki@gmail.com')
-#             send_mail(subject, message, sender, receivers)
-#
-#             messages.info(request, f'Wybrane postaci zostały dodane do narady!')
-#             return redirect('debates:debate', topic_id=topic_id, debate_id=debate_id)
-#     else:
-#         form = InviteForm(authenticated_user=request.user,
-#                           old_allowed_profiles=old_allowed_profiles)
-#
-#     context = {
-#         'page_title': 'Dodaj uczestników narady',
-#         'debate': debate,
-#         'old_allowed_profiles': old_allowed_profiles,
-#         'form': form,
-#     }
-#     if profile in debate.allowed_profiles.all() or profile.status == 'gm':
-#         return render(request, 'debates/invite.html', context)
-#     else:
-#         return redirect('home:dupa')
 
 
 @query_debugger
