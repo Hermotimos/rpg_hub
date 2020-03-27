@@ -168,7 +168,6 @@ def debate_view(request, topic_id, debate_id):
     profile = request.user.profile
     topic = get_object_or_404(Topic, id=topic_id)
     debate = get_object_or_404(Debate, id=debate_id)
-    form = None
     
     debate_allowed_profiles = debate.allowed_profiles.exclude(status='gm')
     debate_followers = debate.followers.exclude(status='gm')
@@ -212,7 +211,7 @@ def debate_view(request, topic_id, debate_id):
         messages.info(request, f'Wybrane postaci zostały dodane do narady!')
 
     # REMARK FORM
-    elif request.method == 'POST':
+    if request.method == 'POST' and 'debate' not in request.POST:
         form = CreateRemarkForm(request.POST, request.FILES,
                                 debate_id=debate_id)
         if form.is_valid():
