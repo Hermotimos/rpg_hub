@@ -54,13 +54,13 @@ def toponomikon_general_location_view(request, gen_loc_id):
     # TABS
     if profile.status == 'gm':
         spec_locs = gen_loc.specific_locations.all()
-        knowledge_packets = gen_loc.knowledge_packets.all()
+        kn_packets = gen_loc.knowledge_packets.all()
         only_indirectly = False
     else:
         known_directly = gen_loc.specific_locations.filter(known_directly=profile)
         known_indirectly = gen_loc.specific_locations.filter(known_indirectly=profile).exclude(id__in=known_directly)
         spec_locs = (known_directly | known_indirectly)
-        knowledge_packets = gen_loc.knowledge_packets.filter(acquired_by=profile)
+        kn_packets = gen_loc.knowledge_packets.filter(acquired_by=profile)
         only_indirectly = True \
             if profile in gen_loc_known_indirectly\
             and profile not in gen_loc_known_directly \
@@ -113,7 +113,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
         'gen_loc': gen_loc,
         'only_indirectly': only_indirectly,
         # Tabs
-        'knowledge_packets': knowledge_packets,
+        'kn_packets': kn_packets,
         'spec_locs': spec_locs,
         'pictures': gen_loc.pictures.all(),
         # Inform
@@ -136,12 +136,10 @@ def toponomikon_specific_location_view(request, spec_loc_id):
     allowed = (spec_loc_known_directly | spec_loc_known_indirectly)
 
     if profile.status == 'gm':
-        knowledge_packets = spec_loc.knowledge_packets.all()
+        kn_packets = spec_loc.knowledge_packets.all()
         only_indirectly = False
     else:
-        knowledge_packets = spec_loc.knowledge_packets.filter(
-            acquired_by=profile
-        )
+        kn_packets = spec_loc.knowledge_packets.filter(acquired_by=profile)
         only_indirectly = True \
             if profile in spec_loc_known_indirectly\
             and profile not in spec_loc_known_directly \
@@ -184,7 +182,7 @@ def toponomikon_specific_location_view(request, spec_loc_id):
         'spec_loc': spec_loc,
         'only_indirectly': only_indirectly,
         # Tabs
-        'knowledge_packets': knowledge_packets,
+        'kn_packets': kn_packets,
         'pictures': spec_loc.pictures.all(),
         # Inform
         'informable': spec_loc.informable(),

@@ -43,7 +43,7 @@
                 <input type="radio" name="tabset" id="tab1" aria-controls="lokacje" checked>
                 <label class="h3" for="tab1">Lokacje</label>
             {% endif %}
-            {% if knowledge_packets %}
+            {% if kn_packets %}
                 <input type="radio" name="tabset" id="tab2" aria-controls="wiedza">
                 <label class="h3" for="tab2">Wiedza</label>
             {% endif %}
@@ -65,9 +65,9 @@
                         </div>
                     </section>
                 {% endif %}
-                {% if knowledge_packets %}
+                {% if kn_packets %}
                     <section id="wiedza" class="tab-panel">
-                        {% for kn_packet in knowledge_packets %}
+                        {% for kn_packet in kn_packets %}
                             {% include '_knowledge_packet.html' %}
                         {% endfor %}
                     </section>
