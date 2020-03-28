@@ -104,7 +104,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
         kn_packet = KnowledgePacket.objects.get(id=kn_packet_id)
         kn_packet.acquired_by.add(*informed_ids)
 
-        send_emails(request, informed_ids, kn_pakcet=kn_packet)
+        send_emails(request, informed_ids, kn_packet=kn_packet)
         messages.info(request, f'Poinformowano wybrane postacie!')
 
     context = {
@@ -173,7 +173,7 @@ def toponomikon_specific_location_view(request, spec_loc_id):
         kn_packet = KnowledgePacket.objects.get(id=kn_packet_id)
         kn_packet.acquired_by.add(*informed_ids)
     
-        send_emails(request, informed_ids, kn_pakcet=kn_packet)
+        send_emails(request, informed_ids, kn_packet=kn_packet)
         messages.info(request, f'Poinformowano wybrane postacie!')
 
     context = {
