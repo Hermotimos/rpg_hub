@@ -1,15 +1,12 @@
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
 from django.db.models import (Count, Case, When, IntegerField, Max, Min,
                               Prefetch, Q)
 from django.shortcuts import render, redirect, get_object_or_404
 
 from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm
 from debates.models import Topic, Debate
-from rpg_project.utils import query_debugger
-from users.models import Profile
+from rpg_project.utils import query_debugger, send_emails
 
 
 @query_debugger
@@ -74,20 +71,10 @@ def create_topic_view(request):
             remark = remark_form.save(commit=False)
             remark.debate = debate
             remark.save()
+            
+            informed_ids = [p.id for p in new_allowed_profiles if p != profile]
 
-            subject = f"[RPG] Nowa narada w nowym temacie: {debate.name}"
-            message = f"{remark.author.profile} włączył/a Cię do nowej " \
-                      f"narady '{debate.name}' w temacie '{debate.topic}'.\n" \
-                      f"Weź udział w naradzie: " \
-                      f"{request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
-            sender = settings.EMAIL_HOST_USER
-            receivers = [
-                p.user.email for p in new_allowed_profiles if p != profile
-            ]
-            if profile.status != 'gm':
-                receivers.append('lukas.kozicki@gmail.com')
-            send_mail(subject, message, sender, receivers)
-
+            send_emails(request, informed_ids, debate_new_topic=debate)
             messages.info(request, f'Utworzono nową naradę w nowym temacie!')
             return redirect('debates:debate', topic_id=topic.id,
                             debate_id=debate.id)
@@ -130,20 +117,10 @@ def create_debate_view(request, topic_id):
             remark = remark_form.save(commit=False)
             remark.debate = debate
             remark.save()
+            
+            informed_ids = [p.id for p in new_allowed_profiles if p != profile]
 
-            subject = f"[RPG] Nowa narada: {debate.name}"
-            message = f"{remark.author.profile} włączył/a Cię do nowej " \
-                      f"narady '{debate.name}' w temacie '{debate.topic}'.\n" \
-                      f"Weź udział w naradzie: " \
-                      f"{request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
-            sender = settings.EMAIL_HOST_USER
-            receivers = [
-                p.user.email for p in new_allowed_profiles if p != profile
-            ]
-            if profile.status != 'gm':
-                receivers.append('lukas.kozicki@gmail.com')
-            send_mail(subject, message, sender, receivers)
-
+            send_emails(request, informed_ids, debate_new=debate)
             messages.info(request, f'Utworzono nową naradę!')
             return redirect('debates:debate', topic_id=topic_id,
                             debate_id=debate.id)
@@ -188,7 +165,7 @@ def debate_view(request, topic_id, debate_id):
                 p.image for p in last_remark.seen_by.all()
             ]
 
-    # INFORM DEBATE
+    # INFORM FORM
     if request.method == 'POST' and 'debate' in request.POST:
         data = dict(request.POST)
         informed_ids = [id_ for id_, list_ in data.items() if 'on' in list_]
@@ -200,19 +177,8 @@ def debate_view(request, topic_id, debate_id):
         # } >
         debate.allowed_profiles.add(*informed_ids)
         debate.followers.add(*informed_ids)
-
-        subject = f"[RPG] Dołączenie do narady: '{debate.name}'"
-        message = f"{profile} dołączył/a Cię do narady '{debate.name}' " \
-                  f"w temacie '{debate.topic}'.\n" \
-                  f"Weź udział w naradzie:\n{request.build_absolute_uri()}"
-        sender = settings.EMAIL_HOST_USER
-        receivers = [
-            p.user.email for p in Profile.objects.filter(id__in=informed_ids)
-        ]
-        if profile.status != 'gm':
-            receivers.append('lukas.kozicki@gmail.com')
-        send_mail(subject, message, sender, receivers)
         
+        send_emails(request, informed_ids, debate_info=debate)
         messages.info(request, f'Wybrane postaci zostały dodane do narady!')
 
     # REMARK FORM
@@ -224,18 +190,9 @@ def debate_view(request, topic_id, debate_id):
             remark.debate = debate
             remark.save()
 
-            subject = f"[RPG] Głos w naradzie: '{debate.name[:30]}...'"
-            message = f"{remark.author.profile} zabrał/a głos w naradzie " \
-                      f"'{debate.name}':\n" \
-                      f"Weź udział w naradzie:\n{request.build_absolute_uri()}"
-            sender = settings.EMAIL_HOST_USER
-            receivers = [
-                p.user.email for p in debate_followers if p != profile
-            ]
-            if profile.status != 'gm':
-                receivers.append('lukas.kozicki@gmail.com')
-            send_mail(subject, message, sender, receivers)
-            
+            informed_ids = [p.id for p in debate_followers if p != profile]
+
+            send_emails(request, informed_ids, debate_remark=debate)
             messages.info(request, f'Twój głos zabrzmiał w naradzie!')
             return redirect('debates:debate', topic_id=topic_id,
                             debate_id=debate_id)
