@@ -1,18 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
 from django.db.models import Prefetch, Q, Case, When, Value, IntegerField
 from django.shortcuts import render, redirect, get_object_or_404
 
 from knowledge.models import KnowledgePacket
-from rpg_project import settings
-from rpg_project.utils import query_debugger
+from rpg_project.utils import query_debugger, send_emails
 from toponomikon.models import GeneralLocation, SpecificLocation
-from toponomikon.utils import (
-    send_mails_inform_location,
-    send_mails_inform_kn_packet,
-)
-from users.models import Profile
 
 
 @query_debugger
@@ -95,7 +88,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
         # } >
         gen_loc.known_indirectly.add(*informed_ids)
         
-        send_mails_inform_location(request, gen_loc, informed_ids)
+        send_emails(request, informed_ids, location=gen_loc)
         messages.info(request, f'Poinformowano wybrane postacie!')
 
     # INFORM KNOWLEDGE PACKETS
@@ -111,7 +104,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
         kn_packet = KnowledgePacket.objects.get(id=kn_packet_id)
         kn_packet.acquired_by.add(*informed_ids)
 
-        send_mails_inform_kn_packet(request, kn_packet, informed_ids)
+        send_emails(request, informed_ids, kn_pakcet=kn_packet)
         messages.info(request, f'Poinformowano wybrane postacie!')
 
     context = {
@@ -166,19 +159,7 @@ def toponomikon_specific_location_view(request, spec_loc_id):
         # } >
         spec_loc.known_indirectly.add(*informed_ids)
     
-        subject = f"[RPG] {profile} opowiedział Ci o pewnym miejscu!"
-        message = f"{profile} opowiedział Ci o miejscu zwanym:" \
-                  f" '{spec_loc.name}'.\n" \
-                  f"Informacje zostały zapisane w Twoim Toponomikonie: " \
-                  f"{request.build_absolute_uri()}"
-        sender = settings.EMAIL_HOST_USER
-        receivers = [
-            p.user.email for p in Profile.objects.filter(id__in=informed_ids)
-        ]
-        if profile.status != 'gm':
-            receivers.append('lukas.kozicki@gmail.com')
-        send_mail(subject, message, sender, receivers)
-        
+        send_emails(request, informed_ids, location=spec_loc)
         messages.info(request, f'Poinformowano wybrane postacie!')
 
     # INFORM KNOWLEDGE PACKETS
@@ -194,20 +175,7 @@ def toponomikon_specific_location_view(request, spec_loc_id):
         kn_packet = KnowledgePacket.objects.get(id=kn_packet_id)
         kn_packet.acquired_by.add(*informed_ids)
     
-        subject = f"[RPG] Transfer wiedzy: '{kn_packet.title}'"
-        message = f"{profile} przekazał Ci wiedzę: '{kn_packet.title}'.\n" \
-                  f"Więdzę tę możesz odnaleźć pod umiejętnością/ami:" \
-                  f" {', '.join(s.name for s in kn_packet.skills.all())}" \
-                  f" w zakładce Almanach: " \
-                  f"{request.get_host()}/knowledge/almanac/\n"
-        sender = settings.EMAIL_HOST_USER
-        receivers = [
-            p.user.email for p in Profile.objects.filter(id__in=informed_ids)
-        ]
-        if profile.status != 'gm':
-            receivers.append('lukas.kozicki@gmail.com')
-        send_mail(subject, message, sender, receivers)
-        
+        send_emails(request, informed_ids, kn_pakcet=kn_packet)
         messages.info(request, f'Poinformowano wybrane postacie!')
 
     context = {
