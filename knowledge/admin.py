@@ -26,6 +26,7 @@ class KnowledgePacketAdmin(admin.ModelAdmin):
     }
     list_display = ['id', 'title', 'text']
     list_editable = ['title', 'text']
+    list_filter = ['skills']
     search_fields = ['title', 'text']
 
 
