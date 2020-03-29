@@ -14,7 +14,11 @@
             [{{ skill.skill_levels.all|get_max_skill_level }}]
         {% endif %}
     </b>
-    <small class="text-muted smaller"> [{{ skill.tested_trait }}]</small>
+    <small class="text-muted smaller">
+        {% if skill.tested_trait %}
+            [{{ skill.tested_trait }}]
+        {% endif %}
+    </small>
 </h1>
 
 <div id="{{ skill.short_name }}" class="collapse">
