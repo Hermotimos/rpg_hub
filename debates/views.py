@@ -166,15 +166,14 @@ def debate_view(request, topic_id, debate_id):
             ]
 
     # INFORM FORM
+    # dict(request.POST).items() == < QueryDict: {
+    #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
+    #     '2': ['on'],
+    #     'debate': ['']
+    # } >
     if request.method == 'POST' and 'debate' in request.POST:
         data = dict(request.POST)
-        informed_ids = [id_ for id_, list_ in data.items() if 'on' in list_]
-        # Following data is returned by dict(request.POST).items():
-        # < QueryDict: {
-        #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
-        #     '2': ['on'],
-        #     'location': ['']
-        # } >
+        informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
         debate.allowed_profiles.add(*informed_ids)
         debate.followers.add(*informed_ids)
         
