@@ -11,6 +11,7 @@ from rules.models import SkillLevel, Skill
 
 
 class AlmanacView(View):
+    template_name = 'knowledge/_skills_with_kn_packets.html'
 
     @method_decorator(login_required)
     def get(self, request):
@@ -21,7 +22,7 @@ class AlmanacView(View):
         else:
             known_kn_packets = profile.knowledge_packets.all()
 
-        skills_with_kn_packets = Skill.objects \
+        skills = Skill.objects \
             .exclude(name__icontains='Doktryn') \
             .exclude(name__icontains='Teolog') \
             .exclude(name__icontains='Kult') \
@@ -40,9 +41,9 @@ class AlmanacView(View):
 
         context = {
             'page_title': 'Almanach',
-            'skills_with_kn_packets': skills_with_kn_packets
+            'skills': skills,
         }
-        return render(request, 'knowledge/almanac.html', context)
+        return render(request, self.template_name, context)
 
     @method_decorator(login_required)
     def post(self, request):
@@ -66,7 +67,7 @@ class AlmanacView(View):
 
 
 class TheologyView(View):
-    template_name = 'knowledge/theology.html'
+    template_name = 'knowledge/_skills_with_kn_packets.html'
 
     @method_decorator(login_required)
     def get(self, request):
@@ -97,13 +98,13 @@ class TheologyView(View):
 
         context = {
             'page_title': 'Teologia',
-            'theology_skills': theology_skills
+            'skills': theology_skills
         }
         return render(request, self.template_name, context)
     
     
 # class TheologyView(View):
-#     template_name = 'knowledge/theology.html'
+#     template_name = 'knowledge/_skills_with_kn_packets.html'
 #
 #     @method_decorator(login_required)
 #     def get(self, request):
@@ -149,7 +150,7 @@ class TheologyView(View):
 #     else:
 #         known_kn_packets = profile.knowledge_packets.all()
 #
-#     skills_with_kn_packets = Skill.objects \
+#     skills = Skill.objects \
 #         .exclude(name__icontains='Doktryn') \
 #         .filter(knowledge_packets__in=known_kn_packets) \
 #         .prefetch_related(
@@ -178,9 +179,9 @@ class TheologyView(View):
 #
 #     context = {
 #         'page_title': 'Almanach',
-#         'skills_with_kn_packets': skills_with_kn_packets
+#         'skills': skills,
 #     }
-#     return render(request, 'knowledge/almanac.html', context)
+#     return render(request, 'knowledge/_skills_with_kn_packets.html', context)
 
 
 # @query_debugger
@@ -206,6 +207,6 @@ class TheologyView(View):
 #         'page_title': 'Teologia',
 #         'theology_skills': theology_skills
 #     }
-#     return render(request, 'knowledge/theology.html', context)
+#     return render(request, 'knowledge/_skills_with_kn_packets.html', context)
 
 

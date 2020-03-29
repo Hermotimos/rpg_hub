@@ -2,6 +2,7 @@
 {% load static %}
 {% load custom_filters %}
 
+
 {% block head_extra %}
     <link rel="stylesheet" href="{% static 'css/knowledge.css' %}" xmlns="http://www.w3.org/1999/html">
 {% endblock head_extra %}
@@ -9,7 +10,7 @@
 {% block content %}
     <br><br><br>
 
-    {% for skill in skills_with_kn_packets %}
+    {% for skill in skills %}
         <section class="pb-5">
             <div class="pb-2">
                 {% if skill.image %}
