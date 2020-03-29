@@ -58,7 +58,7 @@
                     <section id="lokacje" class="tab-panel">
                         <div class="container">
                             {% for location in spec_locs %}
-                            {% with view='toponomikon:specific-location' %}
+                            {% with loc_view='toponomikon:specific-location' %}
                                 {% include 'toponomikon/_location.html' %}
                             {% endwith %}
                             {% endfor %}

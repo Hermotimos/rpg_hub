@@ -12,7 +12,7 @@
     <article>
         <div class="container">
             {% for location in gen_locs %}
-            {% with view='toponomikon:general-location' %}
+            {% with loc_view='toponomikon:general-location' %}
                 {% include 'toponomikon/_location.html' %}
             {% endwith %}
             {% endfor %}
