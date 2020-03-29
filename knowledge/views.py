@@ -78,7 +78,7 @@ class TheologyView(View):
                 Q(name__icontains='Doktryn')
                 | Q(name__icontains='Kult')
                 | Q(name__icontains='Teologi')
-            ).prefetch_related('skill_levels', 'knowledge_packets__pictures')
+            ).prefetch_related('knowledge_packets__pictures')
         else:
             theology_skills = Skill.objects.filter(
                 Q(name__icontains='Doktryn')
@@ -112,7 +112,8 @@ class TheologyView(View):
         theology_skills = theology_skills.annotate(my_field=is_match)
 
         # Order by the annotated field in reverse, so `True` is first (0 < 1).
-        theology_skills = theology_skills.order_by('-my_field')
+        # As second order level user 'name' field
+        theology_skills = theology_skills.order_by('-my_field', 'name')
 
         context = {
             'page_title': 'Teologia',
