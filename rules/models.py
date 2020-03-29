@@ -8,7 +8,8 @@ from users.models import Profile
 
 class Skill(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name='Umiejętność')
-    tested_trait = models.CharField(max_length=50, verbose_name='Cecha/Cechy')
+    tested_trait = models.CharField(max_length=50, verbose_name='Cecha/Cechy',
+                                    blank=True, null=True)
     image = models.ImageField(blank=True, null=True, upload_to='site_features_pics')
     allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
                                               limit_choices_to=Q(status='active_player') |
