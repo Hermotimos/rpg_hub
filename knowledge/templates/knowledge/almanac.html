@@ -24,9 +24,7 @@
             
             <div class="pl-4 collapse show" id="{{ skill.short_name }}">
                 {% for kn_packet in skill.knowledge_packets.all %}
-            
-                        {% include '_knowledge_packet.html' with specifier=skill.id %}
-
+                    {% include '_knowledge_packet.html' with specifier=skill.id %}
                 {% endfor %}
             </div>
         </section>
