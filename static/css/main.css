@@ -11,6 +11,10 @@ body {
 
 article.content {min-height: 700px}
 
+article.space {margin-top: 5rem;}
+article.image {margin-top: 1.5rem;}
+article.button {margin-top: 0.5rem;}
+
 footer {
     color: gray;
     margin-top: 10rem;

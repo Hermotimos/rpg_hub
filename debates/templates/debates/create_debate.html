@@ -7,45 +7,50 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <br><br><br>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <fieldset class="allowed-profiles-form-debate">
-            {{ debate_form.name|as_crispy_field }}<br>
-            {{ debate_form.name.errors }}<br>
-
-            <h6>Włącz uczestników do narady:</h6>
-            <small>1) Włączaj tylko postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji.</small><br>
-            <small>2) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small><br>
-            <small>3) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small><br>
-            <small>4) Jeśli chcesz się naradzić z postacią, której nie ma na liście, powiadom MG.</small>
-
-            <br><br>
-            {{ debate_form.allowed_profiles|as_crispy_field }}
-            <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
-        </fieldset>
-
-        {% if request.user.profile.status == 'gm' %}
-            {{ debate_form.is_individual|as_crispy_field }}<br>
-        {% endif %}
-
-        <!-- NEW REMARK -->
-        {% if request.user.profile.status == 'gm' %}
-            <div class="col-md-3">
-                {{ remark_form.author|as_crispy_field }}
+    <article class="space">
+        
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="allowed-profiles-form-debate">
+                {{ debate_form.name|as_crispy_field }}<br>
+                {% if debate_form.name.errors %}
+                    {{ debate_form.name.errors }}<br>
+                {% endif %}
+    
+                <h6>Włącz uczestników do narady:</h6>
+                <small>1) Włączaj tylko postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji.</small><br>
+                <small>2) Postacie będące w pobliżu, ale nie włączone do narady, mogą to zauważyć.</small><br>
+                <small>3) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small><br>
+                <small>4) Jeśli chcesz się naradzić z postacią, której nie ma na liście, powiadom MG.</small>
+    
+                <br><br>
+                {{ debate_form.allowed_profiles|as_crispy_field }}
+                <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
+            </fieldset>
+    
+            {% if request.user.profile.status == 'gm' %}
+                {{ debate_form.is_individual|as_crispy_field }}<br>
+            {% endif %}
+    
+            <!-- NEW REMARK -->
+            {% if request.user.profile.status == 'gm' %}
+                <div class="col-md-3">
+                    {{ remark_form.author|as_crispy_field }}
+                </div>
+            {% else %}
+            <!--  necessary for form to validate - hidden author form field  -->
+                <div class="collapse">
+                    {{ remark_form.author }}
+                </div>
+            {% endif %}
+            {{ remark_form.author.errors }}
+    
+            <div class="col-md-12">
+                {{ remark_form.text|as_crispy_field }}
             </div>
-        {% else %}
-        <!--  necessary for form to validate - hidden author form field  -->
-            <div class="collapse">
-                {{ remark_form.author }}
-            </div>
-        {% endif %}
-        {{ remark_form.author.errors }}
-
-        <div class="col-md-12">
-            {{ remark_form.text|as_crispy_field }}
-        </div>
-        {{ remark_form.image|as_crispy_field }}
-        <input class="btn btn-dark" type="submit" value="Rozpocznij naradę"/>
-    </form>
+            {{ remark_form.image|as_crispy_field }}
+            <input class="btn btn-dark" type="submit" value="Rozpocznij naradę"/>
+        </form>
+        
+    </article>
 {% endblock content %}
