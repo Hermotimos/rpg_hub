@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch, Q
+from django.db.models import Prefetch, Q, ExpressionWrapper, BooleanField
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -83,18 +83,36 @@ class TheologyView(View):
             theology_skills = Skill.objects.filter(
                 Q(name__icontains='Doktryn')
                 | Q(name__icontains='Kult')
-                | Q(name__icontains='Teologi')
+                | Q(name__icontains='Teologi'),
+                skill_levels__acquired_by=profile
             ).prefetch_related(
-                Prefetch(
-                    'skill_levels',
-                    queryset=SkillLevel.objects.filter(acquired_by=profile)
-                ),
+                # Prefetch(
+                #     'skill_levels',
+                #     queryset=SkillLevel.objects.filter(acquired_by=profile)
+                # ),
                 Prefetch(
                     'knowledge_packets',
                     queryset=profile.knowledge_packets.all()
                 ),
                 'knowledge_packets__pictures'
-            )
+            ).distinct()
+
+        # Custom sorting to bring 'Teolog*' skills to the top:
+        # Source: https://stackoverflow.com/questions/11622501/order-query-results-by-startswith-match
+        
+        search_term = 'Teolog'
+
+        # Encapsulate the comparison expression.
+        expression = Q(name__startswith=search_term)
+
+        # Wrap the expression to specify the field type.
+        is_match = ExpressionWrapper(expression, output_field=BooleanField())
+
+        # Annotate each object with the comparison.
+        theology_skills = theology_skills.annotate(my_field=is_match)
+
+        # Order by the annotated field in reverse, so `True` is first (0 < 1).
+        theology_skills = theology_skills.order_by('-my_field')
 
         context = {
             'page_title': 'Teologia',
