@@ -23,7 +23,6 @@ import debug_toolbar
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
-    path('characters/', include('characters.urls')),
     path('contact/', include('contact.urls')),
     path('debates/', include('debates.urls')),
     path('history/', include('history.urls')),
@@ -38,7 +37,7 @@ urlpatterns = [
 
 ]
 
-# only for development phase (= when DEBUG is True), not suitable for production
+# only for development phase (= when DEBUG is True), unsuitable for production
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += [path(r'__debug__', include(debug_toolbar.urls)), ]
