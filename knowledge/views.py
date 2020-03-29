@@ -18,36 +18,25 @@ class AlmanacView(View):
 
         if profile.status == 'gm':
             known_kn_packets = KnowledgePacket.objects.all()
-            skills_with_kn_packets = Skill.objects \
-                .exclude(name__icontains='Doktryn') \
-                .filter(knowledge_packets__in=known_kn_packets) \
-                .prefetch_related(
-                    Prefetch(
-                        'knowledge_packets',
-                        queryset=known_kn_packets
-                    ),
-                    Prefetch(
-                        'skill_levels',
-                        queryset=SkillLevel.objects.filter(acquired_by=profile)
-                    ),
-                    'knowledge_packets__pictures'
-                ).distinct()
         else:
             known_kn_packets = profile.knowledge_packets.all()
-            skills_with_kn_packets = Skill.objects \
-                .exclude(name__icontains='Doktryn') \
-                .filter(knowledge_packets__in=known_kn_packets) \
-                .prefetch_related(
-                    Prefetch(
-                        'knowledge_packets',
-                        queryset=known_kn_packets
-                    ),
-                    Prefetch(
-                        'skill_levels',
-                        queryset=SkillLevel.objects.filter(acquired_by=profile)
-                    ),
-                    'knowledge_packets__pictures'
-                ).distinct()
+
+        skills_with_kn_packets = Skill.objects \
+            .exclude(name__icontains='Doktryn') \
+            .exclude(name__icontains='Teolog') \
+            .exclude(name__icontains='Kult') \
+            .filter(knowledge_packets__in=known_kn_packets) \
+            .prefetch_related(
+                Prefetch(
+                    'knowledge_packets',
+                    queryset=known_kn_packets
+                ),
+                Prefetch(
+                    'skill_levels',
+                    queryset=SkillLevel.objects.filter(acquired_by=profile)
+                ),
+                'knowledge_packets__pictures'
+            ).distinct()
 
         context = {
             'page_title': 'Almanach',
@@ -111,6 +100,43 @@ class TheologyView(View):
             'theology_skills': theology_skills
         }
         return render(request, self.template_name, context)
+    
+    
+# class TheologyView(View):
+#     template_name = 'knowledge/theology.html'
+#
+#     @method_decorator(login_required)
+#     def get(self, request):
+#         profile = request.user.profile
+#
+#         if profile.status == 'gm':
+#             theology_skills = Skill.objects.filter(
+#                 Q(name__icontains='Doktryn')
+#                 | Q(name__icontains='Kult')
+#                 | Q(name__icontains='Teologi')
+#             ).prefetch_related('skill_levels', 'knowledge_packets__pictures')
+#         else:
+#             theology_skills = Skill.objects.filter(
+#                 Q(name__icontains='Doktryn')
+#                 | Q(name__icontains='Kult')
+#                 | Q(name__icontains='Teologi')
+#             ).prefetch_related(
+#                 Prefetch(
+#                     'skill_levels',
+#                     queryset=SkillLevel.objects.filter(acquired_by=profile)
+#                 ),
+#                 Prefetch(
+#                     'knowledge_packets',
+#                     queryset=profile.knowledge_packets.all()
+#                 ),
+#                 'knowledge_packets__pictures'
+#             )
+#
+#         context = {
+#             'page_title': 'Teologia',
+#             'theology_skills': theology_skills
+#         }
+#         return render(request, self.template_name, context)
 
 
 # @query_debugger
@@ -120,36 +146,19 @@ class TheologyView(View):
 #
 #     if profile.status == 'gm':
 #         known_kn_packets = KnowledgePacket.objects.all()
-#         skills_with_kn_packets = Skill.objects \
-#             .exclude(name__icontains='Doktryn') \
-#             .filter(knowledge_packets__in=known_kn_packets) \
-#             .prefetch_related(
-#                 Prefetch(
-#                     'knowledge_packets',
-#                     queryset=known_kn_packets
-#                 ),
-#                 Prefetch(
-#                     'skill_levels',
-#                     queryset=SkillLevel.objects.filter(acquired_by=profile)
-#                 ),
-#                 'knowledge_packets__pictures'
-#             ).distinct()
 #     else:
 #         known_kn_packets = profile.knowledge_packets.all()
-#         skills_with_kn_packets = Skill.objects \
-#             .exclude(name__icontains='Doktryn') \
-#             .filter(knowledge_packets__in=known_kn_packets) \
-#             .prefetch_related(
-#                 Prefetch(
-#                     'knowledge_packets',
-#                     queryset=known_kn_packets
-#                 ),
-#                 Prefetch(
-#                     'skill_levels',
-#                     queryset=SkillLevel.objects.filter(acquired_by=profile)
-#                 ),
-#                 'knowledge_packets__pictures'
-#             ).distinct()
+#
+#     skills_with_kn_packets = Skill.objects \
+#         .exclude(name__icontains='Doktryn') \
+#         .filter(knowledge_packets__in=known_kn_packets) \
+#         .prefetch_related(
+#             Prefetch('knowledge_packets',
+#                      queryset=known_kn_packets),
+#             Prefetch('skill_levels',
+#                      queryset=SkillLevel.objects.filter(acquired_by=profile)),
+#             'knowledge_packets__pictures',
+#         ).distinct()
 #
 #     # INFORM FORM
 #     # dict(request.POST).items() == < QueryDict: {
