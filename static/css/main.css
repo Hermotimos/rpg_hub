@@ -11,7 +11,10 @@ body {
 
 article.content {min-height: 700px}
 
-footer {color: gray;}
+footer {
+    color: gray;
+    margin-top: 10rem;
+}
 
 .header-img {
     height: 6.25rem;
