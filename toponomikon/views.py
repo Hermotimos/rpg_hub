@@ -89,7 +89,8 @@ def toponomikon_general_location_view(request, gen_loc_id):
         gen_loc.known_indirectly.add(*informed_ids)
         
         send_emails(request, informed_ids, location=gen_loc)
-        messages.info(request, f'Poinformowano wybrane postacie!')
+        if informed_ids:
+            messages.info(request, f'Poinformowano wybrane postacie!')
 
     # INFORM KNOWLEDGE PACKETS
     # dict(request.POST).items() == < QueryDict: {
@@ -105,7 +106,8 @@ def toponomikon_general_location_view(request, gen_loc_id):
         kn_packet.acquired_by.add(*informed_ids)
 
         send_emails(request, informed_ids, kn_packet=kn_packet)
-        messages.info(request, f'Poinformowano wybrane postacie!')
+        if informed_ids:
+            messages.info(request, f'Poinformowano wybrane postacie!')
 
     context = {
         # General
@@ -155,7 +157,8 @@ def toponomikon_specific_location_view(request, spec_loc_id):
         spec_loc.known_indirectly.add(*informed_ids)
     
         send_emails(request, informed_ids, location=spec_loc)
-        messages.info(request, f'Poinformowano wybrane postacie!')
+        if informed_ids:
+            messages.info(request, f'Poinformowano wybrane postacie!')
 
     # INFORM KNOWLEDGE PACKETS
     # dict(request.POST).items() == < QueryDict: {
@@ -172,7 +175,8 @@ def toponomikon_specific_location_view(request, spec_loc_id):
         kn_packet.acquired_by.add(*informed_ids)
     
         send_emails(request, informed_ids, kn_packet=kn_packet)
-        messages.info(request, f'Poinformowano wybrane postacie!')
+        if informed_ids:
+            messages.info(request, f'Poinformowano wybrane postacie!')
 
     context = {
         # General

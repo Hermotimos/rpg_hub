@@ -178,7 +178,8 @@ def debate_view(request, topic_id, debate_id):
         debate.followers.add(*informed_ids)
         
         send_emails(request, informed_ids, debate_info=debate)
-        messages.info(request, f'Wybrane postaci zostały dodane do narady!')
+        if informed_ids:
+            messages.info(request, f'Wybrane postaci zostały dodane do narady!')
 
     # REMARK FORM
     if request.method == 'POST' and 'debate' not in request.POST:
@@ -192,7 +193,8 @@ def debate_view(request, topic_id, debate_id):
             informed_ids = [p.id for p in debate_followers if p != profile]
 
             send_emails(request, informed_ids, debate_remark=debate)
-            messages.info(request, f'Twój głos zabrzmiał w naradzie!')
+            if informed_ids:
+                messages.info(request, f'Twój głos zabrzmiał w naradzie!')
             return redirect('debates:debate', topic_id=topic_id,
                             debate_id=debate_id)
     else:
