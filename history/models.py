@@ -191,6 +191,15 @@ class TimelineEvent(models.Model):
         else:
             season = 'Zimy'
         return f'{self.days()}. dnia {season} {self.year}. roku Archonatu Nemetha Samatiana'
+    
+    def informable(self):
+        participants = self.participants.all()
+        informed = self.informed.all()
+        excluded = (participants | informed).distinct()
+        informable = Profile.objects.filter(
+            status='active_player'
+        ).exclude(id__in=excluded)
+        return informable
 
     class Meta:
         # ordering via 'description' before 'game' to leave flexibility for events with later 'id'-s

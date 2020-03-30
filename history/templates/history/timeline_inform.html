@@ -3,27 +3,66 @@
 {% load crispy_forms_tags %}
 {% load custom_filters %}
 
-{% block head_extra %}
-    <link rel="stylesheet" href="{% static 'css/history.css' %}">
-{% endblock head_extra %}
 
 {% block content %}
-    <br><br><br>
-    {% include 'history/_timeline_event_info.html' %}
-    <br><br>
 
-    <h6>Poinformuj towarzyszy o wydarzeniu:</h6>
-    <small class="red">1) Opowiadaj swoje losy tylko towarzyszom obecnym przy Tobie w chwili zakończenia sesji!</small><br>
-    <small>2) Inne postacie znajdujące się w pobliżu mogą podsłuchać Twoją opowieść.</small><br>
-    <small>3) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small><br>
+    <div class="mt-5">
+        <!-- This is superfluous at the moment, but may be needed when I am able to do this a modal -->
+        {% with informable=event.informable inform_type='chronicle_event' id_=event.id %}
+            
+            {% if informable %}
+            
+                <form method="POST" action="." name="{{ inform_type }}_form{{ id_ }}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <h5 class="text-center text-danger">
+                            Informuj jedynie postacie, którym przekazałeś wiedzę w świecie gry.
+                            <br>
+                            W razie wątpliwości skonsultuj się z MG.
+                        </h5>
+                        <br>
+                        <h4 class="text-center">
+                            {% for profile in informable %}
+                                <input class="select-profile" type="checkbox" id="id_{{ forloop.counter }}{{ id_ }}" name="{{ profile.id }}">
+                                <label for="id_{{ forloop.counter }}{{ id_ }}">
+                                    <img class="article-img rounded-circle" src="{{ profile.image.url }}">
+                                </label>
+                            {% endfor %}
+                        </h4>
+                        <div class="text-center pt-3">
+                            <button class="btn btn-dark" type="submit" name="{{ inform_type }}" value="{{ id_ }}">
+                                Poinformuj
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            
+            {% else %}
+            
+                <div class="modal-body mb-1">
+                    <h5 class="text-center text-danger">
+                        Wszyscy obecni człokowie drużyny dobrze już o tym wiedzą.
+                    </h5>
+                </div>
+            
+            {% endif %}
+    
+        {% endwith %}
+    </div>
 
-    <br>
 
-    <form method="POST" class="multiselect-form-small">
-        {% csrf_token %}
-        {{ form.informed|as_crispy_field }}<br>
-        <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>
-        <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
-        <input class="btn btn-dark" type="submit" value="Poinformuj">
-    </form>
+<!--    <h6>Poinformuj towarzyszy o wydarzeniu:</h6>-->
+<!--    <small class="red">1) Opowiadaj swoje losy tylko towarzyszom obecnym przy Tobie w chwili zakończenia sesji!</small><br>-->
+<!--    <small>2) Inne postacie znajdujące się w pobliżu mogą podsłuchać Twoją opowieść.</small><br>-->
+<!--    <small>3) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small><br>-->
+
+<!--    <br>-->
+
+<!--    <form method="POST" class="multiselect-form-small">-->
+<!--        {% csrf_token %}-->
+<!--        {{ form.informed|as_crispy_field }}<br>-->
+<!--        <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>-->
+<!--        <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">-->
+<!--        <input class="btn btn-dark" type="submit" value="Poinformuj">-->
+<!--    </form>-->
 {% endblock content %}
