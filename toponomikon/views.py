@@ -116,8 +116,6 @@ def toponomikon_general_location_view(request, gen_loc_id):
         'kn_packets': kn_packets,
         'spec_locs': spec_locs,
         'pictures': gen_loc.pictures.all(),
-        # Inform
-        'informable': gen_loc.informable(),
     }
     if profile in allowed or profile.status == 'gm':
         return render(request, 'toponomikon/general_location.html', context)
@@ -184,8 +182,6 @@ def toponomikon_specific_location_view(request, spec_loc_id):
         # Tabs
         'kn_packets': kn_packets,
         'pictures': spec_loc.pictures.all(),
-        # Inform
-        'informable': spec_loc.informable(),
     }
     if profile in allowed or profile.status == 'gm':
         return render(request, 'toponomikon/specific_location.html', context)
