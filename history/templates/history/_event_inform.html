@@ -8,7 +8,7 @@
 
     <div class="mt-5">
         <!-- This is superfluous at the moment, but may be needed when I am able to do this a modal -->
-        {% with informable=event.informable inform_type='chronicle_event' id_=event.id %}
+        {% with informable=event.informable inform_type=event_type id_=event.id %}
             
             {% if informable %}
             
@@ -30,7 +30,7 @@
                             {% endfor %}
                         </h4>
                         <div class="text-center pt-3">
-                            <button class="btn btn-dark" type="submit" name="{{ inform_type }}" value="{{ id_ }}" onclick="window.close()">
+                            <button class="btn btn-dark" type="submit" name="{{ inform_type }}" value="{{ id_ }}">
                                 Poinformuj
                             </button>
                         </div>
@@ -50,19 +50,4 @@
         {% endwith %}
     </div>
 
-
-<!--    <h6>Poinformuj towarzyszy o wydarzeniu:</h6>-->
-<!--    <small class="red">1) Opowiadaj swoje losy tylko towarzyszom obecnym przy Tobie w chwili zakończenia sesji!</small><br>-->
-<!--    <small>2) Inne postacie znajdujące się w pobliżu mogą podsłuchać Twoją opowieść.</small><br>-->
-<!--    <small>3) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.</small><br>-->
-
-<!--    <br>-->
-
-<!--    <form method="POST" class="multiselect-form-small">-->
-<!--        {% csrf_token %}-->
-<!--        {{ form.informed|as_crispy_field }}<br>-->
-<!--        <small>***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.</small><br><br>-->
-<!--        <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">-->
-<!--        <input class="btn btn-dark" type="submit" value="Poinformuj">-->
-<!--    </form>-->
 {% endblock content %}

@@ -3,7 +3,9 @@
 <tr>
     <td class="border-0">
         {% if request.user.profile.status != 'gm' and request.user.profile in event.informed.all %}
-            <p><small class="text-muted">(Znasz z opowieści) {{ event.description|linebreaksbr }}</small></p>
+            <p class="font-18 font-italic px-1 py-1 text-justify">
+                <small class="text-muted">(Znasz z opowieści) {{ event.description|linebreaksbr }}</small>
+            </p>
         {% else %}
             <p class="font-18 font-italic px-1 py-1 text-justify">{{ event.description|linebreaksbr }}</p>
         {% endif %}
@@ -24,7 +26,7 @@
             <br>
         {% endif %}
 
-        {% if event.debate %}
+        {% if event.debate and request.user.profile not in event.informed.all %}
             <div class="font-18 font-italic text-justify px-1 py-1">
                 <p>
                     <a href="{% url 'debates:debate' event.debate.topic.id event.debate.id %}">
@@ -47,9 +49,13 @@
         <br>
     </td>
     <td class="align-top">
-        <a class="btn btn-outline-dark mt-1" href="{% url 'history:chronicle-inform' event.id %}">
+        <a class="btn btn-outline-dark mt-1" href="{% url 'history:chronicle-inform' event.id %}" target="_blank">
             <i class="icon-inform-medium"></i>
         </a>
+        <a class="btn btn-outline-dark btn-sm py-0" href="{% url 'history:timeline-inform' event.id %}" target="_blank">
+            <i class="icon-inform-small"></i>
+        </a>
+
         <a class="btn btn-outline-dark mt-1" href="{% url 'history:chronicle-note' event.id %}">
             <i class="icon-note-medium"></i>
         </a>
