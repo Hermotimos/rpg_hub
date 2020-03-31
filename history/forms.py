@@ -33,27 +33,6 @@ class ChronicleEventEditForm(forms.ModelForm):
         self.fields['pictures'].widget.attrs = {'size': 10}
 
 
-class ChronicleEventInformForm(forms.ModelForm):
-    class Meta:
-        model = ChronicleEvent
-        fields = ['informed']
-
-    def __init__(self, *args, **kwargs):
-        authenticated_user = kwargs.pop('authenticated_user')
-        old_informed = kwargs.pop('old_informed')
-        participants = kwargs.pop('participants')
-        super().__init__(*args, **kwargs)
-        self.fields['informed'].label = ''
-        self.fields['informed'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                                   Q(status='dead_player') |
-                                                                   Q(status='dead_npc') |
-                                                                   Q(status='living_npc') |
-                                                                   Q(status='gm') |
-                                                                   Q(id__in=old_informed) |
-                                                                   Q(id__in=participants))
-        self.fields['informed'].widget.attrs = {'size': 10}
-
-
 class ChronicleEventNoteForm(forms.ModelForm):
     class Meta:
         model = ChronicleEventNote
@@ -90,27 +69,6 @@ class TimelineEventCreateForm(forms.ModelForm):
         self.fields['specific_locations'].widget.attrs = {'size': 10}
         self.fields['threads'].queryset = Thread.objects.exclude(is_ended=True)
         self.fields['threads'].widget.attrs = {'size': 10}
-
-
-class TimelineEventInformForm(forms.ModelForm):
-    class Meta:
-        model = TimelineEvent
-        fields = ['informed']
-
-    def __init__(self, *args, **kwargs):
-        authenticated_user = kwargs.pop('authenticated_user')
-        old_informed = kwargs.pop('old_informed')
-        participants = kwargs.pop('participants')
-        super().__init__(*args, **kwargs)
-        self.fields['informed'].label = ''
-        self.fields['informed'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                                   Q(status='dead_player') |
-                                                                   Q(status='dead_npc') |
-                                                                   Q(status='living_npc') |
-                                                                   Q(status='gm') |
-                                                                   Q(id__in=old_informed) |
-                                                                   Q(id__in=participants))
-        self.fields['informed'].widget.attrs = {'size': 10}
 
 
 class TimelineEventEditForm(forms.ModelForm):
