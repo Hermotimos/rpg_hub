@@ -53,11 +53,11 @@ class GameSession(models.Model):
     chapter = models.ForeignKey(Chapter, related_name='game_sessions', on_delete=models.PROTECT, blank=True, null=True)
     date = models.DateField(blank=True, null=True)
 
-    def __str__(self):
-        return f'{self.game_no} - {self.title}'
-
     class Meta:
         ordering = ['game_no']
+
+    def __str__(self):
+        return f'{self.game_no} - {self.title}'
 
 
 # ------ ChronicleEvent model and connected models ------
@@ -115,9 +115,6 @@ class ChronicleEvent(models.Model):
 
     def short_description(self):
         return f'{self.description[:100]}...{self.description[-100:] if len(str(self.description)) > 200 else self.description}'
-
-    class Meta:
-        ordering = ['game', 'event_no_in_game']
 
 
 class ChronicleEventNote(models.Model):
@@ -183,36 +180,7 @@ class TimelineEvent(models.Model):
                                       blank=True)
     general_locations = models.ManyToManyField(GeneralLocation, related_name='timeline_events')
     specific_locations = models.ManyToManyField(SpecificLocation, related_name='timeline_events')
-
-    def __str__(self):
-        return f'{self.description[0:100]}{"..." if len(self.description[::]) > 100 else ""}'
-
-    def short_description(self):
-        return self.__str__()
-
-    def days(self):
-        return f'{self.day_start}-{self.day_end}' if self.day_end else self.day_start
-
-    def date(self):
-        if self.season == 'spring':
-            season = 'Wiosny'
-        elif self.season == 'summer':
-            season = 'Lata'
-        elif self.season == 'autumn':
-            season = 'Jesieni'
-        else:
-            season = 'Zimy'
-        return f'{self.days()}. dnia {season} {self.year}. roku Archonatu Nemetha Samatiana'
     
-    def informable(self):
-        participants = self.participants.all()
-        informed = self.informed.all()
-        excluded = (participants | informed).distinct()
-        informable = Profile.objects.filter(
-            status='active_player'
-        ).exclude(id__in=excluded)
-        return informable
-
     class Meta:
         # ordering via 'description' before 'game' to leave flexibility for events with later 'id'-s
         ordering = ['year', 'season', 'day_start', 'day_end', 'description', 'game']
@@ -226,11 +194,35 @@ class TimelineEvent(models.Model):
             models.Index(fields=['game', ]),
         ]
 
-    # Steps to migrate these models:
-    # 1) delete migration files, delete tables in db, DELETE FROM django_migrations WHERE app="history";
-    # 2) comment out all other models than TimelineEvent
-    # 1) migrate Events without any M2M fields or ForeignKeys.
-    # 2) uncomment other fields and classes and migrate.
+    def __str__(self):
+        return f'{self.description[0:100]}{"..." if len(self.description[::]) > 100 else ""}'
+
+    def days(self):
+        return f'{self.day_start}-{self.day_end}' if self.day_end else self.day_start
+
+    def date(self):
+        if self.season == 'spring':
+            season = 'Wiosny'
+        elif self.season == 'summer':
+            season = 'Lata'
+        elif self.season == 'autumn':
+            season = 'Jesieni'
+        else:
+            season = 'Zimy'
+        return f'{self.days()}. dnia {season} {self.year}. ' \
+               f'roku Archonatu Nemetha Samatiana'
+    
+    def informable(self):
+        participants = self.participants.all()
+        informed = self.informed.all()
+        excluded = (participants | informed).distinct()
+        informable = Profile.objects.filter(
+            status='active_player'
+        ).exclude(id__in=excluded)
+        return informable
+    
+    def short_description(self):
+        return self.__str__()
 
 
 class TimelineEventNote(models.Model):
