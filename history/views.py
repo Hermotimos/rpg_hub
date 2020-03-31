@@ -1,7 +1,5 @@
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
 from django.db.models import Count, Prefetch, Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
@@ -16,14 +14,12 @@ from history.models import (TimelineEvent,
                             GeneralLocation,
                             SpecificLocation)
 from history.forms import (TimelineEventCreateForm,
-                           TimelineEventInformForm,
                            TimelineEventEditForm,
                            TimelineEventNoteForm,
                            ChronicleEventNoteForm,
                            ChronicleEventCreateForm,
-                           ChronicleEventInformForm,
                            ChronicleEventEditForm)
-from rpg_project.utils import query_debugger
+from rpg_project.utils import query_debugger, send_emails
 from users.models import Profile
 
 
@@ -225,53 +221,36 @@ def chronicle_one_game_view(request, game_id, timeline_event_id):
 @login_required
 def chronicle_inform_view(request, event_id):
     profile = request.user.profile
-    event = get_object_or_404(ChronicleEvent, id=event_id)
+    chronicle_event = get_object_or_404(ChronicleEvent, id=event_id)
 
-    participants = event.participants.all()
-    old_informed = event.informed.all()
+    participants = chronicle_event.participants.all()
+    informed = chronicle_event.informed.all()
+    allowed = (participants | informed)
 
-    if request.method == 'POST':
-        form = ChronicleEventInformForm(authenticated_user=request.user,
-                                        old_informed=old_informed,
-                                        participants=participants,
-                                        data=request.POST,
-                                        instance=event)
-        if form.is_valid():
-            event = form.save()
-
-            new_informed = form.cleaned_data['informed']
-            event.informed.add(*list(new_informed))
-
-            subject = f"[RPG] {profile} podzielił się z Tobą swoją historią!"
-            message = f"{profile} znów rozprawia o swoich przygodach.\n\n" \
-                      f"Podczas przygody '{event.game.title}' " \
-                      f"rozegrało się co następuje:\n{event.description}\n" \
-                      f"Tak było i nie inaczej...\n\n" \
-                      f"Wydarzenie zostało zapisane w Twojej Kronice: " \
-                      f"{request.get_host()}/history/chronicle/one-game:{event.game.id}:0/"
-            sender = settings.EMAIL_HOST_USER
-            receivers = []
-            for profile in new_informed:
-                receivers.append(profile.user.email)
-            if profile.status != 'gm':
-                receivers.append('lukas.kozicki@gmail.com')
-            send_mail(subject, message, sender, receivers)
-
-            messages.info(request, f'Poinformowałeś wybrane postaci!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-    else:
-        form = ChronicleEventInformForm(authenticated_user=request.user,
-                                        old_informed=old_informed,
-                                        participants=participants)
+    # INFORM FORM
+    # dict(request.POST).items() == < QueryDict: {
+    #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
+    #     '2': ['on'],
+    #     'chronicle_event': ['122']
+    # } >
+    if request.method == 'POST' and 'chronicle_event' in request.POST:
+        data = dict(request.POST)
+        informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
+        chronicle_event.informed.add(*informed_ids)
+    
+        send_emails(request, informed_ids, chronicle_event=chronicle_event)
+        if informed_ids:
+            messages.info(request, f'Poinformowano wybrane postacie!')
 
     context = {
         'page_title': 'Poinformuj o wydarzeniu',
-        'form': form,
-        'event': event,
+        'event': chronicle_event,
+        'event_type': 'chronicle_event'
     }
-    if is_allowed_for_chronicle(profile, chronicle_event_id=event_id):
-        return render(request, 'history/chronicle_inform.html', context)
+
+    # if is_allowed_for_chronicle(profile, chronicle_event_id=event_id):
+    if profile in allowed or profile.status == 'gm':
+        return render(request, 'history/_event_inform.html', context)
     else:
         return redirect('home:dupa')
 
@@ -794,62 +773,34 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
 @login_required
 def timeline_inform_view(request, event_id):
     profile = request.user.profile
-    event = get_object_or_404(TimelineEvent, id=event_id)
+    timeline_event = get_object_or_404(TimelineEvent, id=event_id)
 
-    spec_locs = event.specific_locations.all()
-    gen_locs = event.general_locations\
-        .prefetch_related(Prefetch('specific_locations', queryset=spec_locs, to_attr='filtered_spec_locs'))
-    gen_locs_and_spec_locs_dict = {}
-    for gen_loc in gen_locs:
-        gen_locs_and_spec_locs_dict[gen_loc.name] = ', '.join(spec_loc.name for spec_loc in gen_loc.filtered_spec_locs)
+    participants = timeline_event.participants.all()
+    informed = timeline_event.informed.all()
+    allowed = (participants | informed)
 
-    participants = event.participants.all()
-    old_informed = event.informed.all()
-
-    if request.method == 'POST':
-        form = TimelineEventInformForm(authenticated_user=request.user,
-                                       old_informed=old_informed,
-                                       participants=participants,
-                                       data=request.POST,
-                                       instance=event)
-        if form.is_valid():
-            # event = form.save()
-            informed_new = form.cleaned_data['informed']
-            event.informed.add(*list(informed_new))
-
-            subject = f"[RPG] {profile} podzielił się z Tobą swoją historią!"
-            message = f"{profile} znów rozprawia o swoich przygodach.\n\n" \
-                      f"'{event.date()} rozegrało się co następuje:\n {event.description}\n" \
-                      f"Tak było i nie inaczej...'\n" \
-                      f"A było to w miejscu: {', '.join(l.name for l in event.general_locations.all())}" \
-                      f", a dokładniej: {', '.join(l.name for l in event.specific_locations.all())}.\n\n" \
-                      f"Wydarzenie zostało zapisane w Twoim Kalendarium."
-            sender = settings.EMAIL_HOST_USER
-            receivers = []
-            for new_profile in informed_new:
-                receivers.append(new_profile.user.email)
-            if profile.status != 'gm':
-                receivers.append('lukas.kozicki@gmail.com')
-            send_mail(subject, message, sender, receivers)
-
-            messages.info(request, f'Poinformowałeś wybrane postaci!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-    else:
-        form = TimelineEventInformForm(authenticated_user=request.user,
-                                       old_informed=old_informed,
-                                       participants=participants)
+    # INFORM FORM
+    # dict(request.POST).items() == < QueryDict: {
+    #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
+    #     '2': ['on'],
+    #     'timeline_event': ['122']
+    # } >
+    if request.method == 'POST' and 'timeline_event' in request.POST:
+        data = dict(request.POST)
+        informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
+        timeline_event.informed.add(*informed_ids)
+    
+        send_emails(request, informed_ids, timeline_event=timeline_event)
+        if informed_ids:
+            messages.info(request, f'Poinformowano wybrane postacie!')
 
     context = {
         'page_title': 'Poinformuj o wydarzeniu',
-        'form': form,
-        'event': event,
-        'gen_locs_and_spec_locs_dict': gen_locs_and_spec_locs_dict,
-        'participants': participants,
-        'informed': old_informed
+        'event': timeline_event,
+        'event_type': 'timeline_event'
     }
-    if profile in (event.participants.all() | event.informed.all()) or profile.status == 'gm':
-        return render(request, 'history/timeline_inform.html', context)
+    if profile in allowed or profile.status == 'gm':
+        return render(request, 'history/_event_inform.html', context)
     else:
         return redirect('home:dupa')
 

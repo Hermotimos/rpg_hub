@@ -109,10 +109,26 @@ def send_emails(request, profile_ids, **kwargs):
                   f"w temacie '{debate.topic}'." \
                   f"\nWeź udział w naradzie:\n{request.build_absolute_uri()}"
     
+    elif 'timeline_event' in kwargs:
+        event = kwargs['timeline_event']
+        subject = "[RPG] Nowa opowieść o wydarzeniach!"
+        message = f"{profile} rozprawia o swoich przygodach.\n" \
+                  f"'{event.date()} rozegrało się co następuje...\n " \
+                  f"Wydarzenie zostało zapisane w Twoim Kalendarium."
+
+    elif 'chronicle_event' in kwargs:
+        event = kwargs['chronicle_event']
+        subject = "[RPG] Nowa opowieść o wydarzeniach!"
+        message = f"{profile} rozprawia o swoich przygodach.\n" \
+                  f"Podczas przygody '{event.game.title}' " \
+                  f"rozegrało się co następuje:...\n" \
+                  f"Wydarzenie zostało zapisane w Twojej Kronice: " \
+                  f"{request.get_host()}/history/chronicle/one-game:{event.game.id}:0/"
+
     else:
         subject = 'Błąd'
         message = f"URL: {request.build_absolute_uri()}\n" \
                   f"kwargs: {kwargs}"
-    
+    print(kwargs)
     send_mail(subject, message, sender, receivers)
     return None

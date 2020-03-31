@@ -97,9 +97,21 @@ class ChronicleEvent(models.Model):
                                   on_delete=models.PROTECT,
                                   blank=True,
                                   null=True)
-
+    
+    class Meta:
+        ordering = ['game', 'event_no_in_game']
+        
     def __str__(self):
-        return f'{self.description[0:100]}...'
+        return f'{self.description[0:100]}{"..." if len(self.description[::]) > 100 else ""}'
+    
+    def informable(self):
+        participants = self.participants.all()
+        informed = self.informed.all()
+        excluded = (participants | informed).distinct()
+        informable = Profile.objects.filter(
+            status='active_player'
+        ).exclude(id__in=excluded)
+        return informable
 
     def short_description(self):
         return f'{self.description[:100]}...{self.description[-100:] if len(str(self.description)) > 200 else self.description}'
