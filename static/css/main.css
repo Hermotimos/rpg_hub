@@ -201,12 +201,12 @@ img.img-grayscale {filter: grayscale(100%);}
 /* ----- LINKS & COLLAPSIBLES ----- */
 /* ------------------------------- */
 
+a {color: #444444;}
+
 a:hover {
     text-decoration: none;
     color: #3366cc;
 }
-
-a {color: #444444;}
 
 .hover-pointer li:hover, a:hover {cursor: pointer;}
 
