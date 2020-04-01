@@ -1,19 +1,25 @@
 
-<table>
-    <tr>
-        <td class="align-top px-2 py-2 text-nowrap">
-            <img class="rounded-circle img-small" src="{{ demand.author.profile.image.url }}" alt="Profile img">
+
+
+<div class="container mb-2">
+    <div class="row">
+        <div class="col-2 text-nowrap">
+            <img class="rounded-circle img-grayscale img-small" src="{{ demand.author.profile.image.url }}" alt="Profile img">
             &#9755;
-            <img class="rounded-circle img-small" src="{{ demand.addressee.profile.image.url }}" alt="Profile img">
-            <br>
-            <small class="font-italic text-nowrap text-muted">{{ demand.date_created|date:'d-M-Y' }}</small>
-        </td>
-        <td class="font-18 font-italic px-2 py-2 td-middle text-justify unblue"><a href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a></td>
-        <td class="align-top px-2"><a href="{% url 'contact:undone' demand.id %}" class="btn btn-dark">&nbsp;&#9757;&nbsp;</a></td>
-        {% if request.user == demand.author %}
-            <td class="align-top"><a href="{% url 'contact:demands-delete' demand.id %}" class="btn btn-danger">&#10008;</a></td>
-        {% endif %}
-    </tr>
-</table>
-
-
+            <img class="rounded-circle img-grayscale img-small" src="{{ demand.addressee.profile.image.url }}" alt="Profile img">
+            {% if request.user == demand.author %}
+                <a href="{% url 'contact:demands-delete' demand.id %}" class="btn btn-danger ml-3">&#10008;</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2 text-nowrap">
+            <small class="font-italic text-muted">{{ demand.date_created|date:'d-M-Y' }}</small>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 font-18 font-italic text-justify">
+            <a class="text-gray" href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a>
+        </div>
+    </div>
+</div>

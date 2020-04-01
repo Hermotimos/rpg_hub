@@ -14,24 +14,43 @@
             <a href="{% url 'contact:demands-create' %}" class="btn btn-outline-dark">Nowy dezyderat</a>
         </header>
 
-        <article>
-            <ul class="tabs">
-                <li class="tab">
-                    <input type="radio" name="tabs" checked="checked" id="tab1"/>
-                    <label for="tab1">OTRZYMANE</label>
-                    <div id="tab-content1" class="content">
-                        {% include 'contact/received_demands.html' %}
-                    </div>
-                </li>
-                <li class="tab">
-                    <input type="radio" name="tabs" id="tab2"/>
-                    <label for="tab2">WYSŁANE</label>
-                    <div id="tab-content2" class="content">
-                        {% include 'contact/sent_demands.html' %}
-                    </div>
-                </li>
-            </ul>
-        </article>
+<!--        <article>-->
+<!--            <ul class="tabs">-->
+<!--                <li class="tab">-->
+<!--                    <input type="radio" name="tabs" checked="checked" id="tab1"/>-->
+<!--                    <label for="tab1">OTRZYMANE</label>-->
+<!--                    <div id="tab-content1" class="content">-->
+<!--                        {% include 'contact/_received_demands.html' %}-->
+<!--                    </div>-->
+<!--                </li>-->
+<!--                <li class="tab">-->
+<!--                    <input type="radio" name="tabs" id="tab2"/>-->
+<!--                    <label for="tab2">WYSŁANE</label>-->
+<!--                    <div id="tab-content2" class="content">-->
+<!--                        {% include 'contact/_sent_demands.html' %}-->
+<!--                    </div>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </article>-->
         
+        <article class="pt-5 tabset">
+            <!-- Tabs -->
+            <input type="radio" name="tabset" id="tab1" aria-controls="otrzymane" checked>
+            <label class="h3" for="tab1">OTRZYMANE</label>
+            
+            <input type="radio" name="tabset" id="tab2" aria-controls="wysłane">
+            <label class="h3" for="tab2">WYSŁANE</label>
+            
+            <!-- Tabs content -->
+            <div class="tab-panels pt-1">
+                <section id="otrzymane" class="tab-panel">
+                    {% include 'contact/_received_demands.html' %}
+                </section>
+                <section id="wysłane" class="tab-panel">
+                    {% include 'contact/_sent_demands.html' %}
+                </section>
+            </div>
+        </article>
+
     </article>
 {% endblock content %}
