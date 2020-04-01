@@ -19,7 +19,7 @@
     </div>
     <div class="row">
         <div class="col-12 font-18 font-italic text-justify">
-            <a class="text-gray" href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a>
+            <a href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a>
         </div>
     </div>
 </div>
