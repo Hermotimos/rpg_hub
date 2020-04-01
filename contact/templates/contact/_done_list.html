@@ -7,8 +7,9 @@
             <img class="rounded-circle img-grayscale img-small" src="{{ demand.author.profile.image.url }}" alt="Profile img">
             &#9755;
             <img class="rounded-circle img-grayscale img-small" src="{{ demand.addressee.profile.image.url }}" alt="Profile img">
+            <a href="{% url 'contact:undone' demand.id %}" class="btn btn-dark ml-3">&nbsp;&#9757;&nbsp;</a>
             {% if request.user == demand.author %}
-                <a href="{% url 'contact:demands-delete' demand.id %}" class="btn btn-danger ml-3">&#10008;</a>
+                <a href="{% url 'contact:demands-delete' demand.id %}" class="btn btn-danger">&#10008;</a>
             {% endif %}
         </div>
     </div>
