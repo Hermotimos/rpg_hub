@@ -13,3 +13,25 @@
     </tr>
 </table>
 
+<div class="container mb-2">
+    <div class="row">
+        <div class="col-2 text-nowrap">
+            <img class="rounded-circle img-small" src="{{ demand.author.profile.image.url }}" alt="Profile img">
+            &#9755;
+            <img class="rounded-circle img-small" src="{{ demand.addressee.profile.image.url }}" alt="Profile img">
+            {% if request.user == demand.author %}
+                <a href="{% url 'contact:demands-delete' demand.id %}" class="btn btn-danger ml-3">&#10008;</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2 text-nowrap">
+            <small class="font-italic text-muted">{{ demand.date_created|date:'d-M-Y' }}</small>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 font-18 font-italic text-justify">
+            <a href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a>
+        </div>
+    </div>
+</div>
