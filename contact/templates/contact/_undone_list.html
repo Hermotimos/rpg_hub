@@ -1,22 +1,62 @@
 
 
 <div class="container mb-2">
-    <div class="row">
-        <div class="col-2 text-nowrap">
-            <img class="rounded-circle img-small" src="{{ demand.author.profile.image.url }}" alt="Profile img">
-            &#9755;
-            <img class="rounded-circle img-small" src="{{ demand.addressee.profile.image.url }}" alt="Profile img">
-            <a href="{% url 'contact:done' demand.id %}" class="btn btn-dark ml-3">&#10004;</a>
+    <header>
+        <div class="row">
+            <div class="col-2 text-nowrap">
+                <div class="d-inline">
+                    <img class="rounded-circle img-small" src="{{ demand.author.profile.image.url }}" alt="Profile img">
+                    ☛
+                    <img class="rounded-circle img-small" src="{{ demand.addressee.profile.image.url }}" alt="Profile img">
+                </div>
+                <div class="d-inline ml-3">
+                    {% if demand.demand_answers.all %}
+                        <span class="btn btn-dark px-2" data-toggle="collapse" data-target="#demand{{ demand.id }}">&nbsp;☷&nbsp;</span>
+                    {% endif %}
+                    <a href="{% url 'contact:done' demand.id %}" class="btn btn-dark">✔</a>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-2 text-nowrap">
-            <small class="font-italic text-muted">{{ demand.date_created|date:'d-M-Y' }}</small>
+    </header>
+    
+    <article>
+        <div class="row">
+            <div class="col-2 text-nowrap">
+                <small class="font-italic text-muted">{{ demand.date_created|date:'d-M-Y' }}</small>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-12 font-18 font-italic text-justify">
-            <a href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a>
+        <div class="row">
+            <div class="col-12 font-18 font-italic text-justify">
+                <a href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a>
+            </div>
+            
+            <div class="collapse container mb-5" id="demand{{ demand.id }}">
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-11">
+                        <table>
+                            <tbody>
+                            {% for answer in demand.demand_answers.all %}
+                                <tr>
+                                    <td class="align-top p-1">
+                                        <img class="mt-2 rounded-circle img-small" src="{{ answer.author.profile.image.url }}" alt="Profile img">
+                                    </td>
+                                    <td class="font-italic px-2 text-justify">
+                                        <small class="align-bottom smaller text-nowrap text-muted">{{ answer.date_posted|date:'d-M-Y | H:i' }}</small>
+                                        <br>
+                                        {{ answer.text|capfirst|linebreaksbr }}
+                                        {% if answer.image %}
+                                            <img src="{{ answer.image.url }}" alt="Answer img">
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </article>
+    
 </div>

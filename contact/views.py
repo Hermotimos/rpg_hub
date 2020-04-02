@@ -20,21 +20,22 @@ from users.models import User
 @query_debugger
 @login_required
 def demands_main_view(request):
-    received_undone = Demand.objects.filter(is_done=False, addressee=request.user).exclude(author=request.user).\
-        select_related('author__profile', 'addressee__profile')
-    received_done = Demand.objects.filter(is_done=True, addressee=request.user).exclude(author=request.user).\
-        select_related('author__profile', 'addressee__profile')
-    sent_undone = Demand.objects.filter(is_done=False, author=request.user).exclude(addressee=request.user).\
-        select_related('author__profile', 'addressee__profile')
-    sent_done = Demand.objects.filter(is_done=True, author=request.user).exclude(addressee=request.user).\
-        select_related('author__profile', 'addressee__profile')
+    user = request.user
+    ds = Demand.objects.all().\
+        select_related('author__profile', 'addressee__profile').\
+        prefetch_related('demand_answers__author__profile')     # TODO image ?
+    # excludes necessery to filter out plans (Demands sent to oneself)
+    received_u = ds.filter(is_done=False, addressee=user).exclude(author=user)
+    received_d = ds.filter(is_done=True, addressee=user).exclude(author=user)
+    sent_u = ds.filter(is_done=False, author=user).exclude(addressee=user)
+    sent_d = ds.filter(is_done=True, author=user).exclude(addressee=user)
 
     context = {
         'page_title': 'Dezyderaty',
-        'received_undone': received_undone,
-        'received_done': received_done,
-        'sent_undone': sent_undone,
-        'sent_done': sent_done
+        'received_undone': received_u,
+        'received_done': received_d,
+        'sent_undone': sent_u,
+        'sent_done': sent_d,
     }
     return render(request, 'contact/demands_main.html', context)
 

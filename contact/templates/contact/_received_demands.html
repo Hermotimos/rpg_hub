@@ -1,19 +1,15 @@
 
 <div class="container">
-    <br><br>
     {% if received_undone %}
-        <h4>OCZEKUJĄCE:</h4>
-        <br>
         {% for demand in received_undone %}
             {% include 'contact/_undone_list.html' %}
         {% endfor %}
     {% else %}
-        <h4>BRAK OCZEKUJĄCYCH!</h4>
+        <h3>BRAK OCZEKUJĄCYCH!</h3>
     {% endif %}
     <br><br><br>
     
-    <h4>ZROBIONE:</h4>
-    <br>
+    <h3 class="border-top pt-4 pb-5">ARCHIWUM:</h3>
     {% for demand in received_done %}
         {% include 'contact/_done_list.html' %}
     {% endfor %}
