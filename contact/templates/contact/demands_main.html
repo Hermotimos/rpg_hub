@@ -24,12 +24,53 @@
             
             <!-- Tabs content -->
             <div class="tab-panels pt-1">
+                
                 <section id="otrzymane" class="tab-panel">
-                    {% include 'contact/_received_demands.html' %}
+                    <div class="container">
+                        {% if received_undone %}
+                            {% for demand in received_undone %}
+                                {% with is_done=False %}
+                                    {% include 'contact/_demands_list.html' %}
+                                {% endwith %}
+                            {% endfor %}
+                        {% else %}
+                            <h3>BRAK OCZEKUJĄCYCH!</h3>
+                        {% endif %}
+                        <br><br><br>
+                        
+                        <h3 class="border-top pt-4 pb-5">ARCHIWUM:</h3>
+                        {% for demand in received_done %}
+                            {% with is_done='True' %}
+                                {% include 'contact/_demands_list.html' %}
+                            {% endwith %}
+                        {% endfor %}
+                        <br><br>
+                    </div>
                 </section>
+                
                 <section id="wysłane" class="tab-panel">
-                    {% include 'contact/_sent_demands.html' %}
+                    <div class="container">
+                        {% if sent_undone %}
+                            {% for demand in sent_undone %}
+                                {% with is_done=False %}
+                                    {% include 'contact/_demands_list.html' %}
+                                {% endwith %}
+                            {% endfor %}
+                        {% else %}
+                            <h3>BRAK OCZEKUJĄCYCH!</h3>
+                        {% endif %}
+                        <br><br><br>
+                        
+                        <h3 class="border-top pt-4 pb-5">ARCHIWUM:</h3>
+                        {% for demand in sent_done %}
+                            {% with is_done='True' %}
+                                {% include 'contact/_demands_list.html' %}
+                            {% endwith %}
+                        {% endfor %}
+                        <br><br>
+                    </div>
                 </section>
+                
             </div>
         </article>
 
