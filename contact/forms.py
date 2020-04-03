@@ -13,8 +13,9 @@ class DemandsCreateForm(forms.ModelForm):
         fields = ['addressee', 'image', 'text']
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
         authenticated_user = kwargs.pop('authenticated_user')
+        super().__init__(*args, **kwargs)
+        
         self.fields['addressee'].label = 'Adresat:'
         self.fields['addressee'].queryset = User.objects.exclude(
             Q(id=authenticated_user.id)

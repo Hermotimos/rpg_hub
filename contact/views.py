@@ -10,7 +10,7 @@ from django.utils import timezone
 from contact.forms import (DemandsCreateForm, DemandAnswerForm,
                            PlansCreateForm, PlansModifyForm)
 from contact.models import Demand, DemandAnswer, Plan
-from rpg_project.utils import query_debugger
+from rpg_project.utils import query_debugger, send_emails
 from rules.models import Skill, Synergy, WeaponType, PlateType
 from users.models import User
 
@@ -31,12 +31,31 @@ def demands_main_view(request):
     sent_u = ds.filter(is_done=False, author=user).exclude(addressee=user)
     sent_d = ds.filter(is_done=True, author=user).exclude(addressee=user)
 
+    form = DemandAnswerForm(request.POST, request.FILES or None)
+    if form.is_valid():
+        id_ = request.POST.get('form_id')
+        demand = Demand.objects.get(id=id_)
+        answer = form.save(commit=False)
+        answer.demand = demand
+        answer.author = request.user
+        answer.save()
+
+        if user == demand.author:
+            informed_ids = [demand.addressee.profile.id]
+        else:
+            informed_ids = [demand.author.profile.id]
+
+        send_emails(request, informed_ids, demand_answer=answer)
+        messages.info(request, f'Dodano odpowiedź!')
+        return redirect('contact:demands-main')
+    
     context = {
         'page_title': 'Dezyderaty',
         'received_undone': received_u,
         'received_done': received_d,
         'sent_undone': sent_u,
         'sent_done': sent_d,
+        'form': form,
     }
     return render(request, 'contact/demands_main.html', context)
 
@@ -51,7 +70,7 @@ def demands_create_view(request):
             demand.author = request.user
             demand.save()
 
-            subject = f"[RPG] Dezyderat nr {demand.id}"
+            subject = f"[RPG] Dezyderat {demand.id} [nowy]"
             message = f"Dezyderat od {demand.author}:\n{demand.text}\n" \
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             sender = settings.EMAIL_HOST_USER

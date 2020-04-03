@@ -125,6 +125,12 @@ def send_emails(request, profile_ids, **kwargs):
                   f"Wydarzenie zostało zapisane w Twojej Kronice: " \
                   f"{request.get_host()}/history/chronicle/one-game:{event.game.id}:0/"
 
+    elif 'demand_answer' in kwargs:
+        demand_answer = kwargs['demand_answer']
+        subject = f"[RPG] Dezyderat {demand_answer.id} [odpowiedź]"
+        message = f"Odpowiedź od {demand_answer.author}:\n{demand_answer.text}\n" \
+                  f"{request.get_host()}/contact/demands/detail:{demand_answer.id}/\n\n"
+
     else:
         subject = 'Błąd'
         message = f"URL: {request.build_absolute_uri()}\n" \
