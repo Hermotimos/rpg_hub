@@ -7,7 +7,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
-from contact.forms import DemandsCreateForm, DemandAnswerForm, PlansCreateForm, PlansModifyForm
+from contact.forms import (DemandsCreateForm, DemandAnswerForm,
+                           PlansCreateForm, PlansModifyForm)
 from contact.models import Demand, DemandAnswer, Plan
 from rpg_project.utils import query_debugger
 from rules.models import Skill, Synergy, WeaponType, PlateType
@@ -23,7 +24,7 @@ def demands_main_view(request):
     user = request.user
     ds = Demand.objects.all().\
         select_related('author__profile', 'addressee__profile').\
-        prefetch_related('demand_answers__author__profile')     # TODO image ?
+        prefetch_related('demand_answers__author__profile')
     # excludes necessery to filter out plans (Demands sent to oneself)
     received_u = ds.filter(is_done=False, addressee=user).exclude(author=user)
     received_d = ds.filter(is_done=True, addressee=user).exclude(author=user)

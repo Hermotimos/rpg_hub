@@ -13,15 +13,16 @@ class DemandsCreateForm(forms.ModelForm):
         fields = ['addressee', 'image', 'text']
 
     def __init__(self, *args, **kwargs):
-        authenticated_user = kwargs.pop('authenticated_user')
         super().__init__(*args, **kwargs)
+        authenticated_user = kwargs.pop('authenticated_user')
         self.fields['addressee'].label = 'Adresat:'
-        self.fields['addressee'].queryset = User.objects.exclude(Q(id=authenticated_user.id) |
-                                                                 Q(profile__status='dead_player') |
-                                                                 Q(profile__status='inactive_player') |
-                                                                 Q(profile__status='dead_npc') |
-                                                                 Q(profile__status='living_npc')
-                                                                 ).order_by('username')
+        self.fields['addressee'].queryset = User.objects.exclude(
+            Q(id=authenticated_user.id)
+            | Q(profile__status='dead_player')
+            | Q(profile__status='inactive_player')
+            | Q(profile__status='dead_npc')
+            | Q(profile__status='living_npc')
+        ).order_by('username')
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''

@@ -8,9 +8,11 @@ from users.models import User
 
 
 class Demand(models.Model):
-    author = models.ForeignKey(to=User, related_name='authored_demands',
+    author = models.ForeignKey(to=User,
+                               related_name='authored_demands',
                                on_delete=models.CASCADE)
-    addressee = models.ForeignKey(to=User, related_name='received_demands',
+    addressee = models.ForeignKey(to=User,
+                                  related_name='received_demands',
                                   on_delete=models.CASCADE)
     text = models.TextField(max_length=4000)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -36,9 +38,11 @@ class Demand(models.Model):
 
 
 class DemandAnswer(models.Model):
-    demand = models.ForeignKey(to=Demand, related_name='demand_answers',
+    demand = models.ForeignKey(to=Demand,
+                               related_name='demand_answers',
                                on_delete=models.CASCADE)
-    author = models.ForeignKey(to=User, related_name='demand_answers',
+    author = models.ForeignKey(to=User,
+                               related_name='demand_answers',
                                on_delete=models.CASCADE)
     text = models.TextField(max_length=4000)
     date_posted = models.DateTimeField(auto_now_add=True)
@@ -63,12 +67,16 @@ class DemandAnswer(models.Model):
 
 
 class Plan(models.Model):
-    author = models.ForeignKey(to=User, related_name='plans',
+    author = models.ForeignKey(to=User,
+                               related_name='plans',
                                on_delete=models.CASCADE)
     inform_gm = models.BooleanField(default=False)
     text = models.TextField(max_length=4000)
     date_created = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='contact_pics', blank=True, null=True)
+    
+    class Meta:
+        ordering = ['-date_created']
 
     def __str__(self):
         text = self.text
@@ -83,9 +91,6 @@ class Plan(models.Model):
                 output_size = (700, 700)
                 img.thumbnail(output_size)
                 img.save(self.image.path)
-
-    class Meta:
-        ordering = ['-date_created']
 
 
 # -----------------------------------------------------------------------------

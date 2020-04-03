@@ -1,17 +1,19 @@
-from contact.models import Demand, Plan, DemandAnswer
 from django.contrib import admin
 from django.utils.html import format_html
 
+from contact.models import Demand, Plan, DemandAnswer
+
 
 class DemandAdmin(admin.ModelAdmin):
-    list_display = ['id', 'author', 'author_to_addressee', 'demand_caption', 'is_done']
+    list_display = ['id', 'author', 'from_to', 'demand_caption', 'is_done']
     search_fields = ['text']
 
-    def author_to_addressee(self, obj):
-        return str(obj.author) + ' => ' + str(obj.addressee)
-
     def demand_caption(self, obj):
-        return obj.text[:100] + '...' if len(str(obj.text)) > 100 else obj.text
+        text = obj.text
+        return text[:100] + '...' if len(str(text)) > 100 else text
+    
+    def from_to(self, obj):
+        return str(obj.author) + ' => ' + str(obj.addressee)
 
 
 class DemandAnswerAdmin(admin.ModelAdmin):
@@ -20,11 +22,13 @@ class DemandAnswerAdmin(admin.ModelAdmin):
 
     def get_demand_info(self, obj):
         return format_html(f'Dezyderat nr {obj.demand.id}'
-                           f'<br>[{str(obj.demand.author)} => {str(obj.demand.addressee)}]'
+                           f'<br>[{str(obj.demand.author)} '
+                           f'=> {str(obj.demand.addressee)}]'
                            f'<br><b>{obj.demand}</b>')
 
     def get_answer_caption(self, obj):
-        return obj.text[:100] + '...' if len(str(obj.text)) > 100 else obj.text
+        text = obj.text
+        return text[:100] + '...' if len(str(text)) > 100 else text
 
 
 class PlanAdmin(admin.ModelAdmin):
@@ -32,8 +36,9 @@ class PlanAdmin(admin.ModelAdmin):
     search_fields = ['text']
 
     def get_plan_caption(self, obj):
+        text = obj.text
         if obj.author.profile.status == 'gm' or obj.inform_gm:
-            return obj.text[:100] + '...' if len(str(obj.text)) > 100 else obj.text
+            return text[:100] + '...' if len(str(text)) > 100 else text
         else:
             return format_html('<b><font color="red">TOP SECRET</font></b>')
 
