@@ -40,6 +40,7 @@ class DemandAdmin(admin.ModelAdmin):
 class DemandAnswerAdmin(admin.ModelAdmin):
     list_display = ['id', 'get_demand_info', 'get_answer_caption']
     search_fields = ['text']
+    ordering = ['-date_posted']
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
