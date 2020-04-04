@@ -11,7 +11,7 @@ from rules.models import SkillLevel, Skill
 
 
 class AlmanacView(View):
-    template_name = 'knowledge/_skills_with_kn_packets.html'
+    template_name = 'knowledge/skills_with_kn_packets.html'
 
     @method_decorator(login_required)
     def get(self, request):
@@ -67,7 +67,7 @@ class AlmanacView(View):
 
 
 class TheologyView(View):
-    template_name = 'knowledge/_skills_with_kn_packets.html'
+    template_name = 'knowledge/skills_with_kn_packets.html'
 
     @method_decorator(login_required)
     def get(self, request):
@@ -123,7 +123,7 @@ class TheologyView(View):
     
     
 # class TheologyView(View):
-#     template_name = 'knowledge/_skills_with_kn_packets.html'
+#     template_name = 'knowledge/skills_with_kn_packets.html'
 #
 #     @method_decorator(login_required)
 #     def get(self, request):
@@ -200,7 +200,7 @@ class TheologyView(View):
 #         'page_title': 'Almanach',
 #         'skills': skills,
 #     }
-#     return render(request, 'knowledge/_skills_with_kn_packets.html', context)
+#     return render(request, 'knowledge/skills_with_kn_packets.html', context)
 
 
 # @query_debugger
@@ -226,6 +226,6 @@ class TheologyView(View):
 #         'page_title': 'Teologia',
 #         'theology_skills': theology_skills
 #     }
-#     return render(request, 'knowledge/_skills_with_kn_packets.html', context)
+#     return render(request, 'knowledge/skills_with_kn_packets.html', context)
 
 

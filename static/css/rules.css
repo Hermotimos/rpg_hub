@@ -19,12 +19,6 @@ ol.rules li, ul.rules li {
     font-size: 14px;
 }
 
-.img-skill {
-        float: left;
-        height: 60px;
-        width: auto;
-        margin-right: 5px;
-}
 
 .img-rules {
         float: left;
@@ -33,9 +27,6 @@ ol.rules li, ul.rules li {
         margin-right: 5px;
 }
 
-.img-skill h3:hover {
-        pointer-events: none;
-}
 
 .no-bullets {
         list-style: none;

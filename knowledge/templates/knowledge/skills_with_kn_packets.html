@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/knowledge.css' %}" xmlns="http://www.w3.org/1999/html">
+{% endblock head_extra %}
+
+{% block content %}
+    <br><br><br>
+
+    {% for skill in skills %}
+        <div class="container">
+            <div class="row no-gutters mb-4">
+                <div class="col-1">
+                    {% if skill.image %}
+                        <img class="img-skill" src="{{ skill.image.url }}" alt="Skill img">
+                    {% else %}
+                        <img class="img-skill" src="{% static 'img/skill-default.png' %}" alt="Skill img">
+                    {% endif %}
+                </div>
+                <div class="col-11">
+                    <h1 class="py-2" data-toggle="collapse" data-target="#{{ skill.short_name }}">
+                        <b class="hover-blue">&nbsp;{{ skill.name }}</b>
+                    </h1>
+                    <div class="collapse show" id="{{ skill.short_name }}">
+                        {% for kn_packet in skill.knowledge_packets.all %}
+                            {% include 'knowledge/_knowledge_packet.html' with specifier=skill.id %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor  %}
+
+{% endblock content %}

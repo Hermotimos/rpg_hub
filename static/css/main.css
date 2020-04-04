@@ -169,7 +169,7 @@ img {border-style: double;}
 .img-skill {
     float: left;
     height: 60px;
-    width: auto;
+    width: 60px;
     margin-right: 5px;
 }
 
