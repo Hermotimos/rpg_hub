@@ -48,7 +48,7 @@ def demands_main_view(request):
                 informed_ids = [demand.author.profile.id]
     
             send_emails(request, informed_ids, demand_answer=answer)
-            messages.info(request, f'Dodano odpowiedź!')
+            messages.info(request, 'Dodano odpowiedź!')
             return redirect('contact:demands-main')
     else:
         form = DemandAnswerForm()
@@ -81,7 +81,7 @@ def demands_create_view(request):
             receivers = [demand.addressee.email]
             send_mail(subject, message, sender, receivers)
 
-            messages.info(request, f'Dezyderat został wysłany!')
+            messages.info(request, 'Dezyderat został wysłany!')
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
     else:
@@ -131,7 +131,7 @@ def demands_detail_view(request, demand_id):
                 receivers = [demand.author.email]
             send_mail(subject, message, sender, receivers)
 
-            messages.info(request, f'Dodano odpowiedź!')
+            messages.info(request, 'Dodano odpowiedź!')
             _next = request.POST.get('next', '/')
             return HttpResponseRedirect(_next)
     else:
@@ -209,39 +209,40 @@ def mark_undone_view(request, demand_id):
 @query_debugger
 @login_required
 def plans_main_view(request):
+    user = request.user
+    profile = user.profile
+    plans = Plan.objects.filter(author=user).select_related('author__profile')
 
-    skills_no_allowed = Skill.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
-    skills_to_do = [s.name for s in skills_no_allowed]
-    synergies_no_allowed = Synergy.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
-    synergies_to_do = [s.name for s in synergies_no_allowed]
-
-    weapon_types_no_allowed = WeaponType.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
-    weapon_types_to_do = [wt.name for wt in weapon_types_no_allowed]
-    plate_types_no_allowed = PlateType.objects.annotate(num_allowed=Count('allowed_profiles')).filter(num_allowed=0)
-    plate_types_to_do = [pt.name for pt in plate_types_no_allowed]
-
-    text = \
-        f'=>Lista rzeczy do uzupełnienia:\n ' \
-        f'1) Skille z 0 allowed_profiles:\n{[s for s in skills_to_do] if skills_to_do else 0}\n' \
-        f'2) Synergie z 0 allowed_profiles:\n{[s for s in synergies_to_do] if synergies_to_do else 0}\n' \
-        f'3) Bronie z 0 allowed_profiles:\n{[s for s in weapon_types_to_do] if weapon_types_to_do else 0}\n' \
-        f'4) Zbroje z 0 allowed_profiles:\n{[s for s in plate_types_to_do] if plate_types_to_do else 0}\n'
-
-    if skills_to_do or synergies_to_do or weapon_types_to_do or plate_types_to_do:
-        try:
-            todos = Plan.objects.get(text__contains='=>Lista rzeczy do uzupełnienia')
-            todos.text = text
-        except Plan.DoesNotExist:
-            Plan.objects.create(text=text, author=User.objects.get(profile__status='gm'))
-    else:
-        try:
-            Plan.objects.get(text__contains='=>Lista rzeczy do uzupełnienia').delete()
-        except Plan.DoesNotExist:
-            pass
-
+    if profile.status == 'gm':
+        models = [Skill, Synergy, WeaponType, PlateType]
+        # Objs known to no profile: {'model_1': [obj1, obj2], model_2: [obj1]}
+        todos = {}
+        for m in models:
+            todos[f'{m._meta.verbose_name_plural}'] = \
+                m.objects.annotate(cnt=Count('allowed_profiles')).filter(cnt=0)
+    
+        text = '=>Do uzupełnienia:\n\n '
+        create_todo = False
+        for cnt, (model_name, objs) in enumerate(todos.items()):
+            text += f'{cnt}) {model_name} z 0 allowed_profiles:\n' \
+                    f'{[str(o) for o in objs] if objs else ""}\n\n'
+            if objs:
+                create_todo = True
+                
+        if create_todo:
+            Plan.objects.update_or_create(
+                text__contains='=>Do uzupełnienia:',
+                defaults={'text': text, 'author': request.user}
+            )
+        else:
+            try:
+                Plan.objects.get(text__contains='=>Do uzupełnienia:').delete()
+            except Plan.DoesNotExist:
+                pass
+    
     context = {
         'page_title': 'Plany',
-        'plans': Plan.objects.filter(author=request.user).select_related('author__profile'),
+        'plans': plans,
     }
     return render(request, 'contact/plans_main.html', context)
 

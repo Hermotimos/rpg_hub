@@ -92,8 +92,8 @@ class Synergy(models.Model):
 
     class Meta:
         ordering = ['sorting_name']
-        verbose_name = 'Synergy'
-        verbose_name_plural = 'Synergies'
+        verbose_name = 'synergy'
+        verbose_name_plural = 'synergies'
 
 
 class SynergyLevel(models.Model):
