@@ -8,11 +8,9 @@ from users.models import User
 
 
 class Demand(models.Model):
-    author = models.ForeignKey(to=User,
-                               related_name='authored_demands',
+    author = models.ForeignKey(to=User, related_name='authored_demands',
                                on_delete=models.CASCADE)
-    addressee = models.ForeignKey(to=User,
-                                  related_name='received_demands',
+    addressee = models.ForeignKey(to=User, related_name='received_demands',
                                   on_delete=models.CASCADE)
     text = models.TextField(max_length=4000)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -29,6 +27,7 @@ class Demand(models.Model):
     def save(self, *args, **kwargs):
         first_save = True if not self.pk else False
         super().save(*args, **kwargs)
+        
         if first_save and self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:
@@ -38,11 +37,9 @@ class Demand(models.Model):
 
 
 class DemandAnswer(models.Model):
-    demand = models.ForeignKey(to=Demand,
-                               related_name='demand_answers',
+    demand = models.ForeignKey(to=Demand, related_name='demand_answers',
                                on_delete=models.CASCADE)
-    author = models.ForeignKey(to=User,
-                               related_name='demand_answers',
+    author = models.ForeignKey(to=User, related_name='demand_answers',
                                on_delete=models.CASCADE)
     text = models.TextField(max_length=4000)
     date_posted = models.DateTimeField(auto_now_add=True)
@@ -54,6 +51,7 @@ class DemandAnswer(models.Model):
     def save(self, *args, **kwargs):
         first_save = True if not self.pk else False
         super().save(*args, **kwargs)
+        
         if first_save and self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:
@@ -67,11 +65,10 @@ class DemandAnswer(models.Model):
 
 
 class Plan(models.Model):
-    author = models.ForeignKey(to=User,
-                               related_name='plans',
+    author = models.ForeignKey(to=User, related_name='plans',
                                on_delete=models.CASCADE)
-    inform_gm = models.BooleanField(default=False)
     text = models.TextField(max_length=4000)
+    inform_gm = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='contact_pics', blank=True, null=True)
     
@@ -85,6 +82,7 @@ class Plan(models.Model):
     def save(self, *args, **kwargs):
         first_save = True if not self.pk else False
         super().save(*args, **kwargs)
+        
         if first_save and self.image:
             img = Image.open(self.image.path)
             if img.height > 700 or img.width > 700:
