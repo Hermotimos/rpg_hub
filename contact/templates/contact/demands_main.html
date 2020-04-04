@@ -16,16 +16,16 @@
         
         <article class="pt-5 tabset">
             <!-- Tabs -->
-            <input type="radio" name="tabset" id="tab1" aria-controls="otrzymane" checked>
+            <input type="radio" name="tabset" id="tab1" aria-controls="received" checked>
             <label for="tab1">OTRZYMANE</label>
             
-            <input type="radio" name="tabset" id="tab2" aria-controls="wysłane">
+            <input type="radio" name="tabset" id="tab2" aria-controls="sent">
             <label for="tab2">WYSŁANE</label>
             
             <!-- Tabs content -->
             <div class="tab-panels pt-1">
                 
-                <section id="otrzymane" class="tab-panel">
+                <section id="received" class="tab-panel">
                     <div class="container">
                         {% if received_undone %}
                             {% for demand in received_undone %}
@@ -48,7 +48,7 @@
                     </div>
                 </section>
                 
-                <section id="wysłane" class="tab-panel">
+                <section id="sent" class="tab-panel">
                     <div class="container">
                         {% if sent_undone %}
                             {% for demand in sent_undone %}

@@ -44,11 +44,11 @@
 <!--                <label class="h3" for="tab1">Lokacje</label>-->
 <!--            {% endif %}-->
             {% if kn_packets %}
-                <input type="radio" name="tabset" id="tab2" aria-controls="wiedza" checked>
+                <input type="radio" name="tabset" id="tab2" aria-controls="knowledge" checked>
                 <label class="h3" for="tab2">Wiedza</label>
             {% endif %}
             {% if pictures %}
-                <input type="radio" name="tabset" id="tab3" aria-controls="obrazy">
+                <input type="radio" name="tabset" id="tab3" aria-controls="pictures">
                 <label class="h3" for="tab3">Obrazy</label>
             {% endif %}
             
@@ -68,14 +68,14 @@
 <!--                    </section>-->
 <!--                {% endif %}-->
                 {% if kn_packets %}
-                    <section id="wiedza" class="tab-panel">
+                    <section id="knowledge" class="tab-panel">
                         {% for kn_packet in kn_packets %}
                             {% include 'knowledge/_knowledge_packet.html' %}
                         {% endfor %}
                     </section>
                 {% endif %}
                 {% if pictures %}
-                    <section id="obrazy" class="tab-panel">
+                    <section id="pictures" class="tab-panel">
                         {{ pictures }}
                     </section>
                 {% endif %}
