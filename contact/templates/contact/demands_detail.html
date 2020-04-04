@@ -11,10 +11,10 @@
     <br><br><br><br>
     <table class="border-bottom">
         <tr>
-            <td class="align-top px-1 py-1">
+            <td class="align-top pt-3 px-2">
                 <img class="rounded-circle article-img" src="{{ demand.author.profile.image.url }}" alt="Profile img">
             </td>
-            <td class="font-18 font-italic px-1 py-1 text-justify">
+            <td class="font-18 font-italic px-2 py-2 text-justify">
                 <small class="font-italic text-nowrap text-muted">{{ demand.date_created|date:'d-M-Y | H:i' }}</small>
                 <p>{{ demand.text|capfirst|linebreaksbr }}</p>
                 {% if demand.image %}
@@ -30,7 +30,7 @@
         <tbody>
         {% for answer in answers %}
             <tr>
-                <td class="align-top px-1 py-1">
+                <td class="align-top pt-3 px-2">
                     <img class="rounded-circle article-img" src="{{ answer.author.profile.image.url }}" alt="Profile img">
                 </td>
                 <td class="font-18 font-italic px-2 py-2 text-justify">

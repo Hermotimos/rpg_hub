@@ -10,7 +10,7 @@
 {% block content %}
     <article class="top-space">
         
-        <header class="container">
+        <header class="container mb-5">
             <div class="row my-2">
                 <div class="col-3 d-inline"><h5>Temat:</h5></div>
                 <div class="col-9 d-inline font-italic px-1 text-justify">
@@ -50,16 +50,14 @@
                     {% endif %}
                 </div>
             {% endif %}
-
         </header>
         
-    
-    
+        
         <table>
             <tbody>
                 {% for remark in remarks %}
                     {% if remark.author.profile.status == 'gm' %}
-                        <tr class="posts-and-news">
+                        <tr>
                             <td colspan="2" class="font-18 font-italic text-justify">
                                 {{ remark.text|capfirst|linebreaks }}
                                 {% if remark.image %}
@@ -69,7 +67,7 @@
                             </td>
                         </tr>
                     {% else %}
-                        <tr class="posts-and-news">
+                        <tr>
                             <td class="align-top align-center pt-3 px-2">
                                 <img class="rounded-circle article-img" src="{{ remark.author.profile.image.url }}" alt="Profile img">
                                 <br>
