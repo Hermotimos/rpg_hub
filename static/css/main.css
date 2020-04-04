@@ -313,6 +313,12 @@ nav ul.bullets-1 li {color: #cbd5db;}
   border-top: 1px solid #ccc;
 }
 
+.tabset label {font-size: 1.75rem;}
+
+
+@media only screen and (max-width: 600px) {
+    .tabset label {font-size: 1.1rem;}
+}
 
 
 
