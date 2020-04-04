@@ -25,29 +25,33 @@ def demands_main_view(request):
     ds = Demand.objects.all().\
         select_related('author__profile', 'addressee__profile').\
         prefetch_related('demand_answers__author__profile')
+    
     # excludes necessery to filter out plans (Demands sent to oneself)
     received_u = ds.filter(is_done=False, addressee=user).exclude(author=user)
     received_d = ds.filter(is_done=True, addressee=user).exclude(author=user)
     sent_u = ds.filter(is_done=False, author=user).exclude(addressee=user)
     sent_d = ds.filter(is_done=True, author=user).exclude(addressee=user)
 
-    form = DemandAnswerForm(request.POST, request.FILES or None)
-    if form.is_valid():
-        id_ = request.POST.get('form_id')
-        demand = Demand.objects.get(id=id_)
-        answer = form.save(commit=False)
-        answer.demand = demand
-        answer.author = request.user
-        answer.save()
-
-        if user == demand.author:
-            informed_ids = [demand.addressee.profile.id]
-        else:
-            informed_ids = [demand.author.profile.id]
-
-        send_emails(request, informed_ids, demand_answer=answer)
-        messages.info(request, f'Dodano odpowiedź!')
-        return redirect('contact:demands-main')
+    if request.method == 'POST':
+        form = DemandAnswerForm(request.POST, request.FILES)
+        if form.is_valid():
+            id_ = request.POST.get('form_id')
+            demand = Demand.objects.get(id=id_)
+            answer = form.save(commit=False)
+            answer.demand = demand
+            answer.author = request.user
+            answer.save()
+    
+            if user == demand.author:
+                informed_ids = [demand.addressee.profile.id]
+            else:
+                informed_ids = [demand.author.profile.id]
+    
+            send_emails(request, informed_ids, demand_answer=answer)
+            messages.info(request, f'Dodano odpowiedź!')
+            return redirect('contact:demands-main')
+    else:
+        form = DemandAnswerForm()
     
     context = {
         'page_title': 'Dezyderaty',

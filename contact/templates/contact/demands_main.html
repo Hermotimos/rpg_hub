@@ -30,7 +30,7 @@
                         {% if received_undone %}
                             {% for demand in received_undone %}
                                 {% with is_done=False %}
-                                    {% include 'contact/_demands_list.html' %}
+                                    {% include 'contact/_demand.html' %}
                                 {% endwith %}
                             {% endfor %}
                         {% else %}
@@ -41,7 +41,7 @@
                         <h3 class="border-top pt-4 pb-5">ARCHIWUM:</h3>
                         {% for demand in received_done %}
                             {% with is_done='True' %}
-                                {% include 'contact/_demands_list.html' %}
+                                {% include 'contact/_demand.html' %}
                             {% endwith %}
                         {% endfor %}
                         <br><br>
@@ -53,7 +53,7 @@
                         {% if sent_undone %}
                             {% for demand in sent_undone %}
                                 {% with is_done=False %}
-                                    {% include 'contact/_demands_list.html' %}
+                                    {% include 'contact/_demand.html' %}
                                 {% endwith %}
                             {% endfor %}
                         {% else %}
@@ -64,7 +64,7 @@
                         <h3 class="border-top pt-4 pb-5">ARCHIWUM:</h3>
                         {% for demand in sent_done %}
                             {% with is_done='True' %}
-                                {% include 'contact/_demands_list.html' %}
+                                {% include 'contact/_demand.html' %}
                             {% endwith %}
                         {% endfor %}
                         <br><br>
