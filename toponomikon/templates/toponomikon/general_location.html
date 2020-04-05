@@ -20,15 +20,15 @@
                     <div class="col-md-11 p-0">
                         <h6 class="font-18 font-italic linebreaks-style text-justify">{{ gen_loc.description|linebreaks }}</h6>
                     </div>
-                    <div class="col-md-1">
-                        <p class="btn btn-outline-dark icon-inform mt-1" data-toggle="modal" data-target="#infoLocationModal"></p>
+                    <div class="col-md-1 pl-0 pl-md-3">
+                        <p class="btn btn-outline-dark icon-inform-medium mt-1" data-toggle="modal" data-target="#infoLocationModal"></p>
                             <!-- The Modal -->
                             <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
                                 {% with informable=gen_loc.informable inform_type='location' %}
                                     {% include '_inform.html' %}
                                 {% endwith %}
                             </div>
-                        <p class="btn btn-outline-dark icon-note mt-1 disabled"><a href="#"></a></p>
+                        <p class="btn btn-outline-dark icon-note-medium disabled"><a href="#"></a></p>
                     </div>
                 </div>
             </div>
