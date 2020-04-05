@@ -17,8 +17,7 @@ class CreateNewsForm(forms.ModelForm):
                                                                            Q(status='dead_player') |
                                                                            Q(status='inactive_player') |
                                                                            Q(status='living_npc') |
-                                                                           Q(status='dead_npc') |
-                                                                           Q(status='gm'))
+                                                                           Q(status='dead_npc'))
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''

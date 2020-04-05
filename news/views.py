@@ -149,9 +149,8 @@ def unfollow_news_view(request, news_id):
     profile = request.user.profile
     news = get_object_or_404(News, id=news_id)
 
-    if profile in news.allowed_profiles.all():
+    if profile in news.allowed_profiles.all() or profile.status == 'gm':
         news.followers.remove(profile)
-
         messages.info(request, 'Przestałeś obserwować ogłoszenie!')
         return redirect('news:detail', news_id=news_id)
     else:
@@ -164,9 +163,8 @@ def follow_news_view(request, news_id):
     profile = request.user.profile
     news = get_object_or_404(News, id=news_id)
 
-    if profile in news.allowed_profiles.all():
+    if profile in news.allowed_profiles.all() or profile.status == 'gm':
         news.followers.add(profile)
-
         messages.info(request, 'Obserwujesz ogłoszenie!')
         return redirect('news:detail', news_id=news_id)
     else:
