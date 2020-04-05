@@ -11,7 +11,7 @@
     <br><br><br><br>
 
 <!-- SURVEY MESSAGE -->
-    <div class="post-and-news">
+    <div>
         <p class="font-18 font-italic text-justify">{{ survey.text|capfirst|linebreaksbr }}</p>
         {% if survey.image %}
             <p><img class="img-fluid mx-auto d-block" src="{{ survey.image.url }}" alt="Survey img"></p>
@@ -95,11 +95,11 @@
         <br><br>
         <table>
             <tbody>
-            {% for answer in answers %}
-
-                {% include 'news/_news_answer.html' %}
-
-            {% endfor %}
+                {% for answer in answers %}
+                    {% with post=answer %}
+                        {% include '_post.html' %}
+                    {% endwith %}
+                {% endfor %}
                 <tr>
                     <td></td>
                     <td>
