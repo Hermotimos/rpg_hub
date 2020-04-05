@@ -13,13 +13,11 @@
         <header class="mb-3 mb-sm-5">
             <table>
                 <tr>
-                    <td><h5>Temat:</h5></td>
-                    <td><h5>{{ debate.topic.title }}</h5></td>
+                    <td class="align-middle"><h5>Temat:</h5></td>
+                    <td><h5 class="mr-2 mr-sm-3">{{ debate.topic.title }}</h5></td>
                 </tr>
                 <tr>
-                    <td class="align-middle">
-                        <h5 class="mb-0 mr-2 mr-sm-3">Uczestnicy:</h5>
-                    </td>
+                    <td class="align-middle"><h5>Uczestnicy:</h5></td>
                     <td>
                         {% for profile in debate_allowed_profiles %}
                             <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile img">
@@ -28,7 +26,7 @@
                 </tr>
                 <tr>
                     <td class="align-middle">
-                        <h5 class="mb-0 mr-2 mr-sm-3 text-nowrap">Uważni uczestnicy:</h5>
+                        <h5 class="mr-2 mr-sm-3 text-nowrap">Uważni uczestnicy:</h5>
                     </td>
                     <td>
                         {% for profile in debate_followers %}
