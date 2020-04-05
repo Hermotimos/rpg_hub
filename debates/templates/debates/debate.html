@@ -10,30 +10,34 @@
 {% block content %}
     <article class="top-space">
         
-        <header class="container mb-5">
-            <div class="row my-2">
-                <div class="col-3 d-inline"><h5>Temat:</h5></div>
-                <div class="col-9 d-inline font-italic px-1 text-justify">
-                    <h5>{{ debate.topic.title }}</h5>
-                </div>
-            </div>
-            <div class="row my-2">
-                <div class="col-3 d-inline"><h5>Uczestnicy:</h5></div>
-                <div class="col-9">
-                    {% for profile in debate_allowed_profiles %}
-                        <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile img">
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="row my-2">
-                <div class="col-3 d-inline"><h5>Uważni uczestnicy:</h5></div>
-                <div class="col-9">
-                    {% for profile in debate_allowed_profiles %}
-                        <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile img">
-                    {% endfor %}
-                </div>
-            </div>
-            
+        <header class="mb-3 mb-sm-5">
+            <table>
+                <tr>
+                    <td><h5>Temat:</h5></td>
+                    <td><h5>{{ debate.topic.title }}</h5></td>
+                </tr>
+                <tr>
+                    <td class="align-middle">
+                        <h5 class="mb-0 mr-2 mr-sm-3">Uczestnicy:</h5>
+                    </td>
+                    <td>
+                        {% for profile in debate_allowed_profiles %}
+                            <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile img">
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="align-middle">
+                        <h5 class="mb-0 mr-2 mr-sm-3 text-nowrap">Uważni uczestnicy:</h5>
+                    </td>
+                    <td>
+                        {% for profile in debate_followers %}
+                            <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile img">
+                        {% endfor %}
+                    </td>
+                </tr>
+            </table>
+
             {% if not debate.is_ended %}
                 <div class="my-4">
                     <p class="btn btn-outline-dark icon-inform mt-1" data-toggle="modal" data-target="#infoLocationModal"></p>
@@ -50,6 +54,7 @@
                     {% endif %}
                 </div>
             {% endif %}
+            
         </header>
         
         
@@ -68,13 +73,13 @@
                         </tr>
                     {% else %}
                         <tr>
-                            <td class="align-top align-center pt-3 px-2">
+                            <td class="align-top align-center py-3 px-sm-2">
                                 <img class="rounded-circle article-img" src="{{ remark.author.profile.image.url }}" alt="Profile img">
                                 <br>
                                 <small class="font-12 font-italic text-nowrap text-muted">{{ remark.author.profile.character_name }}</small>
                             </td>
                             <td class="font-18 font-italic px-2 py-2 text-justify">
-                                <small class="text-muted text-nowrap">{{ remark.date_posted|date:'d-M-Y | H:i' }}</small><br>
+                                <small class="text-muted">{{ remark.date_posted|date:'d-M-Y | H:i' }}</small><br>
                                 {{ remark.text|capfirst|linebreaks }}
                                 {% if remark.image %}
                                     <p><img class="img-fluid mx-auto d-block" src="{{ remark.image.url }}" alt="Remark img"></p>
