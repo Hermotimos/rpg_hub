@@ -60,6 +60,7 @@
         
         <table>
             <tbody>
+            
                 <!-- REMARKS -->
                 {% for remark in remarks %}
                     {% if remark.author.profile.status == 'gm' %}
@@ -89,6 +90,7 @@
                         </tr>
                     {% endif %}
                 {% endfor %}
+                
                 <!-- SEEN BY -->
                 <tr>
                     {% if not debate.is_ended %}

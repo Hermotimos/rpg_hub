@@ -12,25 +12,33 @@
 
     <!-- NEWS META INFO-->
     <header>
-        <table class="forms">
+        <table>
             <tr>
-                <td class="align-middle"><h6 class="mb-0">Autor:</h6></td>
-                <td><img class="rounded-circle img-small" src="{{ news.author.profile.image.url }}"></td>
-            </tr>
-            <tr>
-                <td class="align-middle"><h6 class="mb-0">Adresaci:</h6></td>
+                <td class="align-middle">
+                    <h5 class="mb-0 mr-2 mr-sm-3">Autor:</h5>
+                </td>
                 <td>
-                {% for profile in news_allowed_profiles %}
-                    <img class="rounded-circle img-small" src="{{ profile.image.url }}">
-                {% endfor %}
+                    <img class="rounded-circle img-small" src="{{ news.author.profile.image.url }}">
                 </td>
             </tr>
             <tr>
-                <td class="align-middle"><h6 class="mb-0">Obserwują:</h6></td>
+                <td class="align-middle">
+                    <h5 class="mb-0 mr-2 mr-sm-3">Adresaci:</h5>
+                </td>
                 <td>
-                {% for profile in news_followers %}
-                    <img class="rounded-circle img-small" src="{{ profile.image.url }}">
-                {% endfor %}
+                    {% for profile in news_allowed_profiles %}
+                        <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td class="align-middle">
+                    <h5 class="mb-0 mr-2 mr-sm-3 text-nowrap">Obserwują:</h5>
+                </td>
+                <td>
+                    {% for profile in news_followers %}
+                        <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                    {% endfor %}
                 </td>
             </tr>
         </table>
@@ -44,6 +52,7 @@
                 <a href="{% url 'news:follow' news.id %}" class="btn btn-dark">Obserwuj</a>
             {% endif %}
         </div>
+        
     </header>
 
 
@@ -72,7 +81,7 @@
                     <tbody>
                     {% for answer in answers %}
         
-                        {% include 'news/_answers_list.html' %}
+                        {% include 'news/_news_answer.html' %}
         
                     {% endfor %}
                         <tr>
