@@ -10,7 +10,8 @@ from users.models import Profile
 
 class LocationType(models.Model):
     name = models.CharField(max_length=100)
-    default_img = models.ForeignKey(Picture, related_name='location_types', on_delete=models.SET_NULL, null=True)
+    default_img = models.ForeignKey(Picture, related_name='location_types',
+                                    on_delete=models.SET_NULL, null=True)
     
     class Meta:
         ordering = ['name']
@@ -21,24 +22,38 @@ class LocationType(models.Model):
 
 class GeneralLocation(models.Model):
     name = models.CharField(max_length=100)
-    location_type = models.ForeignKey(LocationType, related_name='general_locations', on_delete=models.SET_NULL,
-                                      null=True)
+    location_type = models.ForeignKey(to=LocationType, null=True,
+                                      related_name='general_locations',
+                                      on_delete=models.SET_NULL)
     description = models.TextField(max_length=4000, blank=True, null=True)
-    known_directly = models.ManyToManyField(Profile,  blank=True, related_name='gen_locs_known_directly',
-                                            limit_choices_to=
-                                            Q(status='active_player') |
-                                            Q(status='inactive_player') |
-                                            Q(status='dead_player'))
-    known_indirectly = models.ManyToManyField(Profile, blank=True, related_name='gen_locs_known_indirectly',
-                                              limit_choices_to=
-                                              Q(status='active_player') |
-                                              Q(status='inactive_player') |
-                                              Q(status='dead_player'))
-    main_image = models.ForeignKey(Picture, related_name='gen_loc_main_pics', on_delete=models.PROTECT, blank=True,
-                                   null=True)
-    knowledge_packets = models.ManyToManyField(KnowledgePacket, related_name='general_locations', blank=True)
-    pictures = models.ManyToManyField(Picture, related_name='gen_loc_pics', blank=True)
-    sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
+    known_directly = models.ManyToManyField(
+        to=Profile,
+        blank=True,
+        related_name='gen_locs_known_directly',
+        limit_choices_to=Q(status='active_player')
+                         | Q(status='inactive_player')
+                         | Q(status='dead_player')
+    )
+    known_indirectly = models.ManyToManyField(
+        to=Profile,
+        blank=True,
+        related_name='gen_locs_known_indirectly',
+        limit_choices_to=Q(status='active_player')
+                         | Q(status='inactive_player')
+                         | Q(status='dead_player')
+    )
+    main_image = models.ForeignKey(to=Picture,  blank=True, null=True,
+                                   related_name='gen_loc_main_pics',
+                                   on_delete=models.PROTECT)
+    knowledge_packets = models.ManyToManyField(
+        to=KnowledgePacket,
+        related_name='general_locations',
+        blank=True
+    )
+    pictures = models.ManyToManyField(to=Picture, related_name='gen_loc_pics',
+                                      blank=True)
+    sorting_name = models.CharField(unique=True, max_length=250,
+                                    blank=True, null=True)
 
     class Meta:
         ordering = ['sorting_name']
@@ -63,25 +78,41 @@ class GeneralLocation(models.Model):
 
 class SpecificLocation(models.Model):
     name = models.CharField(max_length=100)
-    location_type = models.ForeignKey(LocationType, related_name='specific_locations', on_delete=models.SET_NULL,
-                                      null=True)
-    general_location = models.ForeignKey(GeneralLocation, related_name='specific_locations', on_delete=models.PROTECT)
+    location_type = models.ForeignKey(to=LocationType, null=True,
+                                      related_name='specific_locations',
+                                      on_delete=models.SET_NULL)
+    general_location = models.ForeignKey(to=GeneralLocation,
+                                         related_name='specific_locations',
+                                         on_delete=models.PROTECT)
     description = models.TextField(max_length=4000, blank=True, null=True)
-    known_directly = models.ManyToManyField(Profile,  blank=True,  related_name='spec_locs_known_directly',
-                                            limit_choices_to=
-                                            Q(status='active_player') |
-                                            Q(status='inactive_player') |
-                                            Q(status='dead_player'))
-    known_indirectly = models.ManyToManyField(Profile,  blank=True,  related_name='spec_locs_known_indirectly',
-                                              limit_choices_to=
-                                              Q(status='active_player') |
-                                              Q(status='inactive_player') |
-                                              Q(status='dead_player'))
-    main_image = models.ForeignKey(Picture, related_name='spec_loc_main_pics', on_delete=models.PROTECT, blank=True,
-                                   null=True)
-    knowledge_packets = models.ManyToManyField(KnowledgePacket, related_name='specific_locations', blank=True)
-    pictures = models.ManyToManyField(Picture, related_name='spec_loc_pics', blank=True)
-    sorting_name = models.CharField(max_length=250, blank=True, null=True, unique=True)
+    known_directly = models.ManyToManyField(
+        to=Profile,
+        blank=True,
+        related_name='spec_locs_known_directly',
+        limit_choices_to=Q(status='active_player')
+                         | Q(status='inactive_player')
+                         | Q(status='dead_player')
+    )
+    known_indirectly = models.ManyToManyField(
+        to=Profile,
+        blank=True,
+        related_name='spec_locs_known_indirectly',
+        limit_choices_to=Q(status='active_player')
+                         | Q(status='inactive_player')
+                         | Q(status='dead_player')
+    )
+    main_image = models.ForeignKey(to=Picture, blank=True, null=True,
+                                   related_name='spec_loc_main_pics',
+                                   on_delete=models.PROTECT)
+    knowledge_packets = models.ManyToManyField(
+        to=KnowledgePacket,
+        related_name='specific_locations',
+        blank=True
+    )
+    pictures = models.ManyToManyField(to=Picture, related_name='spec_loc_pics',
+                                      blank=True)
+    sorting_name = models.CharField(unique=True, max_length=250,
+                                    blank=True, null=True)
 
     class Meta:
         ordering = ['sorting_name']
@@ -114,6 +145,9 @@ def update_known_general_locations(sender, instance, **kwargs):
     gen_loc.known_indirectly.add(*known_indirectly)
 
 
-post_save.connect(update_known_general_locations, sender=SpecificLocation)
-m2m_changed.connect(update_known_general_locations, sender=SpecificLocation.known_directly.through)
-m2m_changed.connect(update_known_general_locations, sender=SpecificLocation.known_indirectly.through)
+post_save.connect(update_known_general_locations,
+                  sender=SpecificLocation)
+m2m_changed.connect(update_known_general_locations,
+                    sender=SpecificLocation.known_directly.through)
+m2m_changed.connect(update_known_general_locations,
+                    sender=SpecificLocation.known_indirectly.through)
