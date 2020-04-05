@@ -74,20 +74,9 @@
                             </td>
                         </tr>
                     {% else %}
-                        <tr>
-                            <td class="align-top align-center py-3 px-sm-2">
-                                <img class="rounded-circle article-img" src="{{ remark.author.profile.image.url }}" alt="Profile img">
-                                <br>
-                                <small class="font-12 font-italic sm-nowrap text-muted">{{ remark.author.profile.character_name }}</small>
-                            </td>
-                            <td class="align-top font-18 font-italic px-2 py-2 text-justify">
-                                <small class="text-muted">{{ remark.date_posted|date:'d-M-Y | H:i' }}</small><br>
-                                {{ remark.text|capfirst|linebreaks }}
-                                {% if remark.image %}
-                                    <p><img class="img-fluid mx-auto d-block" src="{{ remark.image.url }}" alt="Remark img"></p>
-                                {% endif %}
-                            </td>
-                        </tr>
+                        {% with post=remark %}
+                            {% include '_post.html' %}
+                        {% endwith %}
                     {% endif %}
                 {% endfor %}
                 

@@ -1,0 +1,15 @@
+
+<tr>
+    <td class="align-top align-center py-3 px-sm-2">
+        <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+        <br>
+        <small class="font-12 font-italic sm-nowrap text-muted">{{ post.author.profile.character_name }}</small>
+    </td>
+    <td class="align-top font-18 font-italic px-2 py-2 text-justify">
+        <small class="text-muted">{{ post.date_posted|date:'d-M-Y | H:i' }}</small><br>
+        <p>{{ post.text|capfirst|linebreaksbr }}</p>
+        {% if post.image %}
+            <p><img class="img-fluid mx-auto d-block" src="{{ post.image.url }}" alt="Post img"></p>
+        {% endif %}
+    </td>
+</tr>

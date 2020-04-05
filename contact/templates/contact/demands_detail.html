@@ -28,22 +28,11 @@
 
     <table>
         <tbody>
-        {% for answer in answers %}
-            <tr>
-                <td class="align-top pt-3 px-2">
-                    <img class="rounded-circle article-img" src="{{ answer.author.profile.image.url }}" alt="Profile img">
-                </td>
-                <td class="font-18 font-italic px-2 py-2 text-justify">
-                    <small class="text-nowrap text-muted">{{ answer.date_posted|date:'d-M-Y | H:i' }}</small>
-                    <br>
-                    {{ answer.text|capfirst|linebreaksbr }}
-                    {% if answer.image %}
-                        <img src="{{ answer.image.url }}" alt="Answer img">
-                    {% endif %}
-                    <br><br>
-                </td>
-            </tr>
-        {% endfor %}
+            {% for answer in answers %}
+                {% with post=answer %}
+                    {% include '_post.html' %}
+                {% endwith %}
+            {% endfor %}
         </tbody>
     </table>
     <br><br>

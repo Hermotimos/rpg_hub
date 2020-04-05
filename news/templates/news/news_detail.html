@@ -79,11 +79,11 @@
                 <br><br>
                 <table>
                     <tbody>
-                    {% for answer in answers %}
-        
-                        {% include 'news/_news_answer.html' %}
-        
-                    {% endfor %}
+                        {% for answer in answers %}
+                            {% with post=answer %}
+                                {% include '_post.html' %}
+                            {% endwith %}
+                        {% endfor %}
                         <tr>
                             <td></td>
                             <td>
