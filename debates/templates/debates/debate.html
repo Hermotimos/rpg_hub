@@ -60,6 +60,7 @@
         
         <table>
             <tbody>
+                <!-- REMARKS -->
                 {% for remark in remarks %}
                     {% if remark.author.profile.status == 'gm' %}
                         <tr>
@@ -76,9 +77,9 @@
                             <td class="align-top align-center py-3 px-sm-2">
                                 <img class="rounded-circle article-img" src="{{ remark.author.profile.image.url }}" alt="Profile img">
                                 <br>
-                                <small class="font-12 font-italic text-nowrap text-muted">{{ remark.author.profile.character_name }}</small>
+                                <small class="font-12 font-italic sm-nowrap text-muted">{{ remark.author.profile.character_name }}</small>
                             </td>
-                            <td class="font-18 font-italic px-2 py-2 text-justify">
+                            <td class="align-top font-18 font-italic px-2 py-2 text-justify">
                                 <small class="text-muted">{{ remark.date_posted|date:'d-M-Y | H:i' }}</small><br>
                                 {{ remark.text|capfirst|linebreaks }}
                                 {% if remark.image %}
@@ -88,6 +89,7 @@
                         </tr>
                     {% endif %}
                 {% endfor %}
+                <!-- SEEN BY -->
                 <tr>
                     {% if not debate.is_ended %}
                         {% if last_remark.author.profile.status == 'gm' %}
@@ -113,6 +115,7 @@
         {% if debate.is_ended %}
             <h4><b>Tak zakończyła się Wasza rozmowa.</b></h4><br>
         {% else %}
+        
             <div id="page-bottom">
                 <br>
                 <form method="POST" action=".#page-bottom" enctype="multipart/form-data">

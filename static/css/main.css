@@ -140,6 +140,9 @@ small.smaller {font-size: 12px;}
 
 
 
+@media only screen and (min-width: 600px) {
+    .sm-nowrap {white-space: nowrap;}
+}
 
 
 /* ------------------------------------------------------------------------------------------------------------------ */
@@ -152,6 +155,10 @@ small.smaller {font-size: 12px;}
     width: auto;
     margin-left: auto;
     margin-right: auto;
+}
+
+@media only screen and (max-width: 600px) {
+    .article-img {height: 4rem;}
 }
 
 img {border-style: double;}
