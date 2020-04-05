@@ -1,6 +1,9 @@
 import functools
+import os
 import time
 
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 from django.core.mail import send_mail
 from django.db import connection, reset_queries
 
@@ -8,6 +11,21 @@ from rpg_project.settings import EMAIL_HOST_USER
 from users.models import Profile
 
 
+class ReplaceFileStorage(FileSystemStorage):
+
+    def get_available_name(self, name, max_length=None):
+        """
+        Returns a filename that's free on the target storage system, and
+        available for new content to be written to.
+        Found at http://djangosnippets.org/snippets/976/
+        This file storage solves overwrite on upload problem.
+        """
+        # If the filename already exists, remove it
+        if self.exists(name):
+            os.remove(os.path.join(settings.MEDIA_ROOT, name))
+        return name
+    
+    
 def create_sorting_name(obj):
     name = str(obj).lower()
     name = name.replace('a', 'aa')
