@@ -91,7 +91,7 @@ class ChronicleEvent(models.Model):
                                       Q(status='inactive_player') |
                                       Q(status='dead_player'),
                                       blank=True)
-    pictures = models.ManyToManyField(Picture, related_name='chronicle_events_pics', blank=True)
+    pictures = models.ManyToManyField(to=Picture, related_name='chronicle_events_pics', blank=True)
     debate = models.OneToOneField(Debate,
                                   related_name='chronicle_event',
                                   on_delete=models.PROTECT,

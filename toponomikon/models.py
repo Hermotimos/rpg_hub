@@ -10,7 +10,7 @@ from users.models import Profile
 
 class LocationType(models.Model):
     name = models.CharField(max_length=100)
-    default_img = models.ForeignKey(Picture, related_name='location_types',
+    default_img = models.ForeignKey(to=Picture, related_name='location_types',
                                     on_delete=models.SET_NULL, null=True)
     
     class Meta:

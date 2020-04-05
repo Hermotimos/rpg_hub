@@ -325,7 +325,7 @@ class WeaponType(models.Model):
     weapon_class = models.ForeignKey(to=WeaponClass, related_name='weapon_types', on_delete=models.PROTECT)
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=4000, blank=True, null=True)
-    pictures = models.ManyToManyField(Picture, related_name='weapon_pics', blank=True)
+    pictures = models.ManyToManyField(to=Picture, related_name='weapon_pics', blank=True)
 
     delay = models.PositiveSmallIntegerField()
     damage_small_dices = models.CharField(max_length=10, blank=True, null=True)
