@@ -30,50 +30,50 @@
             <col class="positive">
         </colgroup>
         {% for option in options %}
-        <tr>
-            <td class="align-middle align-right text-nowrap">
-                {% for profile in option.no_voters.all %}
-                    {% if profile == request.user.profile %}
-                        <a href="{% url 'news:survey-unvote' survey.id option.id %}">
+            <tr>
+                <td class="align-middle align-right text-nowrap">
+                    {% for profile in option.no_voters.all %}
+                        {% if profile == request.user.profile %}
+                            <a href="{% url 'news:survey-unvote' survey.id option.id %}">
+                                <img class="rounded-circle img-small border-2 border-danger" src="{{ profile.image.url }}">
+                            </a>
+                        {% else %}
                             <img class="rounded-circle img-small border-2 border-danger" src="{{ profile.image.url }}">
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td class="align-middle">
+                    <a href="{% url 'news:survey-no' survey.id option.id %}" class="btn btn-dark">-</a>
+                </td>
+                <td>
+                    &ensp;&ensp;{{ option.option_text }}
+                    {% if request.user == option.author and not option.yes_voters.all and not option.no_voters.all %}
+                        <a href="{% url 'news:survey-option-modify' survey.id option.id %}">
+                            &nbsp;<img src="{% static 'img/edit.png' %}" class="img-edit">
                         </a>
-                    {% else %}
-                        <img class="rounded-circle img-small border-2 border-danger" src="{{ profile.image.url }}">
+                        <a href="{% url 'news:survey-option-delete' survey.id option.id %}" class="btn">
+                            &#10008;
+                        </a>
                     {% endif %}
-                {% endfor %}
-            </td>
-            <td class="align-middle">
-                <a href="{% url 'news:survey-no' survey.id option.id %}" class="btn btn-dark">-</a>
-            </td>
-            <td>
-                &ensp;&ensp;{{ option.option_text }}
-                {% if request.user == option.author and not option.yes_voters.all and not option.no_voters.all %}
-                    <a href="{% url 'news:survey-option-modify' survey.id option.id %}">
-                        &nbsp;<img src="{% static 'img/edit.png' %}" class="img-edit">
-                    </a>
-                    <a href="{% url 'news:survey-option-delete' survey.id option.id %}" class="btn">
-                        &#10008;
-                    </a>
-                {% endif %}
-                &ensp;&ensp;
-                <br>
-            </td>
-            <td class="align-middle">
-                <a href="{% url 'news:survey-yes' survey.id option.id %}" class="btn btn-dark">+</a>
-            </td>
-            <td class="text-nowrap">
-                &ensp;&ensp;
-                {% for profile in option.yes_voters.all %}
-                    {% if profile == request.user.profile %}
-                        <a href="{% url 'news:survey-unvote' survey.id option.id %}">
+                    &ensp;&ensp;
+                    <br>
+                </td>
+                <td class="align-middle">
+                    <a href="{% url 'news:survey-yes' survey.id option.id %}" class="btn btn-dark">+</a>
+                </td>
+                <td class="text-nowrap">
+                    &ensp;&ensp;
+                    {% for profile in option.yes_voters.all %}
+                        {% if profile == request.user.profile %}
+                            <a href="{% url 'news:survey-unvote' survey.id option.id %}">
+                                <img class="rounded-circle img-small border-2 border-success" src="{{ profile.image.url }}">
+                            </a>
+                        {% else %}
                             <img class="rounded-circle img-small border-2 border-success" src="{{ profile.image.url }}">
-                        </a>
-                    {% else %}
-                        <img class="rounded-circle img-small border-2 border-success" src="{{ profile.image.url }}">
-                    {% endif %}
-                {% endfor %}
-            </td>
-        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
         {% endfor %}
     </table>
     <br><br>

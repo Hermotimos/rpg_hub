@@ -17,6 +17,14 @@
                     <td><h5 class="mr-2 mr-sm-3">{{ debate.topic.title }}</h5></td>
                 </tr>
                 <tr>
+                    <td class="align-middle"><h5>Przejdź do Kroniki:</h5></td>
+                    <td>
+                        <h5 class="mr-2 mr-sm-3">
+                            <a href="{% url 'history:chronicle-one-game' debate.chronicle_event.game.id '0' %}#debate_{{ debate.id }}">"{{ debate.chronicle_event.game.title }}"</a>
+                        </h5>
+                    </td>
+                </tr>
+                <tr>
                     <td class="align-middle"><h5>Uczestnicy:</h5></td>
                     <td>
                         {% for profile in debate_allowed_profiles %}
