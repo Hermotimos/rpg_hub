@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm
 from debates.models import Topic, Debate
 from rpg_project.utils import query_debugger, send_emails
+from users.models import Profile
 
 
 @query_debugger
@@ -65,6 +66,7 @@ def create_topic_view(request):
             debate.save()
 
             new_allowed_profiles = debate_form.cleaned_data['allowed_profiles']
+            new_allowed_profiles |= Profile.objects.filter(id=profile.id)
             debate.allowed_profiles.add(*list(new_allowed_profiles))
             debate.followers.add(*list(new_allowed_profiles))
 
@@ -111,6 +113,7 @@ def create_debate_view(request, topic_id):
             debate.save()
             
             new_allowed_profiles = debate_form.cleaned_data['allowed_profiles']
+            new_allowed_profiles |= Profile.objects.filter(id=profile.id)
             debate.allowed_profiles.add(*list(new_allowed_profiles))
             debate.followers.add(*list(new_allowed_profiles))
 
