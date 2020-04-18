@@ -19,7 +19,7 @@ class KnowledgePacket(models.Model):
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     class Meta:
-        ordering = ['title']
+        ordering = ['sorting_name']
 
     def __str__(self):
         return self.title
