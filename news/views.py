@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from news.models import News, Survey, SurveyOption
 from rpg_project.utils import query_debugger
-from users.models import User, Profile
+from users.models import Profile
 from news.forms import CreateNewsForm, CreateNewsAnswerForm, CreateSurveyForm, CreateSurveyOptionForm, \
     CreateSurveyAnswerForm, ModifySurveyOptionForm
 
@@ -115,9 +115,9 @@ def news_detail_view(request, news_id):
                       f"Odpowiedź:\n{answer.text}"
             sender = settings.EMAIL_HOST_USER
             receivers = []
-            for user in User.objects.all():
-                if user.profile in news_followers and user != request.user:
-                    receivers.append(user.email)
+            for profile in news_followers:
+                if profile.user != request.user:
+                    receivers.append(profile.user.email)
             if profile.status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
@@ -209,9 +209,9 @@ def survey_detail_view(request, survey_id):
                       f"Wypowiedź: {answer.text}"
             sender = settings.EMAIL_HOST_USER
             receivers = []
-            for user in User.objects.all():
-                if user.profile in survey.addressees.all() and user != request.user:
-                    receivers.append(user.email)
+            for profile in survey.addressees.all():
+                if profile.user != request.user:
+                    receivers.append(profile.user.email)
             if profile.status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
