@@ -45,9 +45,13 @@ class TopicAdmin(admin.ModelAdmin):
 class DebateAdmin(admin.ModelAdmin):
     form = DebateAdminForm
     list_display = ['name', 'topic', 'is_ended', 'is_individual', 'chronicle_event']
-    # list_editable = ['chronicle_event']
     search_fields = ['name']
     
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.prefetch_related('chronicle_event')
+        return qs
+
 
 class RemarkAdmin(admin.ModelAdmin):
     list_display = ['text_begin', 'debate', 'author', 'date_posted', 'image']
