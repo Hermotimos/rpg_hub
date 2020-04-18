@@ -5,11 +5,12 @@ from django.core.mail import send_mail
 from django.db.models import Max
 from django.shortcuts import render, redirect, get_object_or_404
 
+from news.forms import (CreateNewsForm, CreateNewsAnswerForm, CreateSurveyForm,
+                        CreateSurveyOptionForm, CreateSurveyAnswerForm,
+                        ModifySurveyOptionForm)
 from news.models import News, Survey, SurveyOption
 from rpg_project.utils import query_debugger
 from users.models import Profile
-from news.forms import CreateNewsForm, CreateNewsAnswerForm, CreateSurveyForm, CreateSurveyOptionForm, \
-    CreateSurveyAnswerForm, ModifySurveyOptionForm
 
 
 @query_debugger
@@ -115,9 +116,9 @@ def news_detail_view(request, news_id):
                       f"Odpowiedź:\n{answer.text}"
             sender = settings.EMAIL_HOST_USER
             receivers = []
-            for profile in news_followers:
-                if profile.user != request.user:
-                    receivers.append(profile.user.email)
+            for p in news_followers:
+                if p.user != request.user:
+                    receivers.append(p.user.email)
             if profile.status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
@@ -209,9 +210,9 @@ def survey_detail_view(request, survey_id):
                       f"Wypowiedź: {answer.text}"
             sender = settings.EMAIL_HOST_USER
             receivers = []
-            for profile in survey.addressees.all():
-                if profile.user != request.user:
-                    receivers.append(profile.user.email)
+            for p in survey.addressees.all():
+                if p.user != request.user:
+                    receivers.append(p.user.email)
             if profile.status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
@@ -320,9 +321,9 @@ def survey_create_view(request):
                       f"Ogłoszenie: {survey.text}"
             sender = settings.EMAIL_HOST_USER
             receivers = []
-            for profile in survey.addressees.all():
-                if profile.user != request.user:
-                    receivers.append(profile.user.email)
+            for p in survey.addressees.all():
+                if p.user != request.user:
+                    receivers.append(p.user.email)
             if profile.status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)
