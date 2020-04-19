@@ -22,7 +22,6 @@ class KnowledgePacketAdmin(admin.ModelAdmin):
     form = KnowledgePacketAdminForm
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': 50})},
-        models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 150})},
     }
     list_display = ['id', 'title', 'text']
     list_editable = ['title', 'text']

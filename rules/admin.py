@@ -13,50 +13,55 @@ from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, CharacterClas
 from users.models import Profile
 
 
-# 'allowed_profiles' FIELD AS FilteredSelectMultiple
 class Form1(forms.ModelForm):
-    allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                                      .exclude(Q(status='dead_player') |
-                                                               Q(status='dead_npc') |
-                                                               Q(status='gm') |
-                                                               Q(status='living_npc')),
-                                                      required=False,
-                                                      widget=FilteredSelectMultiple('Allowed profiles', False))
+    allowed_profiles = forms.ModelMultipleChoiceField(
+        queryset=Profile.objects.exclude(Q(status='dead_player')
+                                         | Q(status='dead_npc')
+                                         | Q(status='gm')
+                                         | Q(status='living_npc')),
+        required=False,
+        widget=FilteredSelectMultiple('Allowed profiles', False),
+    )
 
 
-# 'allowed_profiles' AND 'pictures' FIELDS AS FilteredSelectMultiple
 class Form2(forms.ModelForm):
-    allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                                      .exclude(Q(status='dead_player') |
-                                                               Q(status='dead_npc') |
-                                                               Q(status='gm') |
-                                                               Q(status='living_npc')),
-                                                      required=False,
-                                                      widget=FilteredSelectMultiple('Allowed profiles', False))
-    pictures = forms.ModelMultipleChoiceField(queryset=Picture.objects.all(),
-                                              required=False,
-                                              widget=FilteredSelectMultiple('Pictures', False))
+    allowed_profiles = forms.ModelMultipleChoiceField(
+        queryset=Profile.objects.exclude(Q(status='dead_player')
+                                         | Q(status='dead_npc')
+                                         | Q(status='gm')
+                                         | Q(status='living_npc')),
+        required=False,
+        widget=FilteredSelectMultiple('Allowed profiles', False),
+    )
+    pictures = forms.ModelMultipleChoiceField(
+        queryset=Picture.objects.all(),
+        required=False,
+        widget=FilteredSelectMultiple('Pictures', False),
+    )
 
 
-# 'allowed_profiles' AND 'skills' FIELDS AS FilteredSelectMultiple
 class Form3(forms.ModelForm):
-    allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                                      .exclude(Q(status='dead_player') |
-                                                               Q(status='dead_npc') |
-                                                               Q(status='gm') |
-                                                               Q(status='living_npc')),
-                                                      required=False,
-                                                      widget=FilteredSelectMultiple('Allowed profiles', False))
-    skills = forms.ModelMultipleChoiceField(queryset=Skill.objects.all(),
-                                            required=False,
-                                            widget=FilteredSelectMultiple('Skills', False))
+    allowed_profiles = forms.ModelMultipleChoiceField(
+        queryset=Profile.objects.exclude(Q(status='dead_player')
+                                         | Q(status='dead_npc')
+                                         | Q(status='gm')
+                                         | Q(status='living_npc')),
+        required=False,
+        widget=FilteredSelectMultiple('Allowed profiles', False)
+    )
+    skills = forms.ModelMultipleChoiceField(
+        queryset=Skill.objects.all(),
+        required=False,
+        widget=FilteredSelectMultiple('Skills', False)
+    )
 
 
-# 'knowledge_packets' FIELD AS FilteredSelectMultiple
 class Form4(forms.ModelForm):
-    knowledge_packets = forms.ModelMultipleChoiceField(queryset=KnowledgePacket.objects.all(),
-                                                       required=False,
-                                                       widget=FilteredSelectMultiple('Knowledge packets', False))
+    knowledge_packets = forms.ModelMultipleChoiceField(
+        queryset=KnowledgePacket.objects.all(),
+        required=False,
+        widget=FilteredSelectMultiple('Knowledge packets', False)
+    )
 
 
 class SkillLevelFilter(admin.SimpleListFilter):
@@ -100,6 +105,7 @@ class SkillLevelAdmin(admin.ModelAdmin):
     list_display = ['name', 'description']
     list_editable = ['description']
     list_filter = [SkillLevelFilter]
+    list_select_related = ['skill']
     search_fields = ['level', 'description']
 
     def name(self, obj):
@@ -132,6 +138,7 @@ class SynergyLevelAdmin(admin.ModelAdmin):
     list_display = ['name', 'description']
     list_editable = ['description']
     list_filter = [SynergyLevelFilter]
+    list_select_related = ['synergy']
     search_fields = ['level', 'description']
 
     def name(self, obj):

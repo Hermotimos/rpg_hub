@@ -9,11 +9,9 @@ from users.models import Profile
 class Topic(models.Model):
     title = models.CharField(max_length=100, unique=True)
     date_created = models.DateTimeField(auto_now_add=True)
-    allowed_profiles = models.ManyToManyField(
-        to=Profile,
-        related_name='allowed_topics',
-        blank=True
-    )
+    allowed_profiles = models.ManyToManyField(to=Profile,
+                                              related_name='allowed_topics',
+                                              blank=True)
 
     class Meta:
         ordering = ['-date_created']
@@ -27,15 +25,11 @@ class Debate(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     topic = models.ForeignKey(to=Topic, related_name='debates',
                               on_delete=models.CASCADE)
-    # starter = models.ForeignKey(to=User, related_name='debates',
-    #                             on_delete=models.CASCADE)
     allowed_profiles = models.ManyToManyField(to=Profile,
                                               related_name='allowed_debates')
-    followers = models.ManyToManyField(
-        to=Profile,
-        related_name='followed_debates',
-        blank=True
-    )
+    followers = models.ManyToManyField(to=Profile,
+                                       related_name='followed_debates',
+                                       blank=True)
     is_ended = models.BooleanField(default=False)
     is_individual = models.BooleanField(default=False)
 
@@ -61,7 +55,8 @@ class Remark(models.Model):
     author = models.ForeignKey(to=User, related_name='remarks',
                                on_delete=models.CASCADE)
     image = models.ImageField(blank=True, null=True, upload_to='post_pics')
-    seen_by = models.ManyToManyField(to=Profile, related_name='remarks_seen',
+    seen_by = models.ManyToManyField(to=Profile,
+                                     related_name='remarks_seen',
                                      blank=True)
 
     def __str__(self):

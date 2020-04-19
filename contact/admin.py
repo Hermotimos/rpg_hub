@@ -6,11 +6,8 @@ from contact.models import Demand, Plan, DemandAnswer
 
 class DemandAdmin(admin.ModelAdmin):
     list_display = ['id', 'author', 'from_to', 'demand_caption', 'is_done']
+    list_select_related = ['author__profile', 'addressee__profile']
     search_fields = ['text']
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.prefetch_related('author__profile', 'addressee__profile')
 
     def demand_caption(self, obj):
         text = obj.text
@@ -39,12 +36,9 @@ class DemandAdmin(admin.ModelAdmin):
 
 class DemandAnswerAdmin(admin.ModelAdmin):
     list_display = ['id', 'get_demand_info', 'get_answer_caption']
+    list_select_related = ['demand__author', 'demand__addressee']
     search_fields = ['text']
     ordering = ['-date_posted']
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.prefetch_related('demand__author', 'demand__addressee')
 
     def get_answer_caption(self, obj):
         text = obj.text
@@ -59,11 +53,8 @@ class DemandAnswerAdmin(admin.ModelAdmin):
 
 class PlanAdmin(admin.ModelAdmin):
     list_display = ['id', 'author', 'inform_gm', 'get_plan_caption']
+    list_select_related = ['author__profile']
     search_fields = ['text']
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.prefetch_related('author__profile')
 
     def get_plan_caption(self, obj):
         text = obj.text

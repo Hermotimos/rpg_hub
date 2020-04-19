@@ -55,7 +55,7 @@ class SpecificLocationAdmin(admin.ModelAdmin):
         request = kwargs['request']
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
        
-        if db_field.name in ['general_location', 'location_type']:
+        if db_field.name in 'location_type':
             choices = getattr(request, '_location_type_choices_cache', None)
             if choices is None:
                 request._main_location_type_cache = choices = list(
@@ -141,6 +141,7 @@ class GeneralLocationAdmin(admin.ModelAdmin):
 class LocationTypeAdmin(admin.ModelAdmin):
     list_display = ['name', 'default_img']
     list_editable = ['default_img']
+    list_select_related = ['default_img']
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
