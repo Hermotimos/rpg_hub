@@ -48,7 +48,7 @@ class Debate(models.Model):
     def informable(self):
         excluded = self.allowed_profiles.all()
         informable = Profile.objects.filter(
-            status='active_player'
+            status__in=['active_player', 'inactive_player']
         ).exclude(id__in=excluded)
         return informable
 
