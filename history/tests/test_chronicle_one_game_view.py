@@ -79,28 +79,28 @@ class ChronicleOneGameTest(TestCase):
 
     def test_links(self):
         linked_url1 = reverse('history:chronicle-inform', kwargs={'event_id': self.event1.id})
-        linked_url2 = reverse('history:chronicle-note', kwargs={'event_id': self.event1.id})
+        # linked_url2 = reverse('history:chronicle-note', kwargs={'event_id': self.event1.id})
         linked_url3 = reverse('history:chronicle-edit', kwargs={'event_id': self.event1.id})
 
         # case request.user.profile in event1.participants.all()
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
-        self.assertContains(response, f'href="{linked_url2}"')
+        # self.assertContains(response, f'href="{linked_url2}"')
         self.assertNotContains(response, f'href="{linked_url3}"')
 
         # case request.user.profile in event1.informed.all()
         self.client.force_login(self.user2)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
-        self.assertContains(response, f'href="{linked_url2}"')
+        # self.assertContains(response, f'href="{linked_url2}"')
         self.assertNotContains(response, f'href="{linked_url3}"')
 
         # case request.user.profile.status == 'gm'
         self.client.force_login(self.user4)
         response = self.client.get(self.url)
         self.assertContains(response, f'href="{linked_url1}"')
-        self.assertContains(response, f'href="{linked_url2}"')
+        # self.assertContains(response, f'href="{linked_url2}"')
         self.assertContains(response, f'href="{linked_url3}"')
 
 

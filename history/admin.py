@@ -10,9 +10,7 @@ from history.models import (Chapter,
                             GameSession,
                             Thread,
                             TimelineEvent,
-                            TimelineEventNote,
-                            ChronicleEvent,
-                            ChronicleEventNote)
+                            ChronicleEvent)
 from imaginarion.models import Picture
 from toponomikon.models import GeneralLocation, SpecificLocation
 from users.models import Profile
@@ -190,15 +188,6 @@ class ChronicleEventAdmin(admin.ModelAdmin):
     search_fields = ['description']
 
 
-class ChronicleEventNoteAdmin(admin.ModelAdmin):
-    fields = ['author', 'event']
-    list_display = ['id', 'author', 'text_secret']
-    search_fields = ['text']
-
-    def text_secret(self, obj):
-        return format_html('<b><font color="red">TOP SECRET</font></b>')
-
-
 class GameSessionAdmin(admin.ModelAdmin):
     inlines = [TimelineEventInline, ChronicleEventInline]
     list_display = ['id', 'game_no', 'title', 'chapter', 'date']
@@ -228,15 +217,6 @@ class TimelineEventAdmin(admin.ModelAdmin):
     search_fields = ['description']
 
 
-class TimelineEventNoteAdmin(admin.ModelAdmin):
-    fields = ['author', 'event']
-    list_display = ['id', 'author', 'text_secret']
-    search_fields = ['text']
-
-    def text_secret(self, obj):
-        return format_html('<b><font color="red">TOP SECRET</font></b>')
-
-
 class ThreadAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'is_ended']
     list_editable = ['name', 'is_ended']
@@ -247,8 +227,6 @@ admin.site.register(Chapter, ChapterAdmin)
 admin.site.register(Thread, ThreadAdmin)
 admin.site.register(GameSession, GameSessionAdmin)
 admin.site.register(TimelineEvent, TimelineEventAdmin)
-admin.site.register(TimelineEventNote, TimelineEventNoteAdmin)
 admin.site.register(ChronicleEvent, ChronicleEventAdmin)
-admin.site.register(ChronicleEventNote, ChronicleEventNoteAdmin)
 
 

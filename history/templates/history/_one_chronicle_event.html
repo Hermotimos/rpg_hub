@@ -36,23 +36,23 @@
             </div>
         {% endif %}
 
-        {% for note in event.notes.all %}
-            {% if request.user == note.author %}
-                {% if note.text != '' %}
-                    <div class="font-italic text-justify px-1 py-1" style="color:{{ note.color }}">
-                        <h5>Przemyślenia:</h5>
-                        <p>{{ note.text|linebreaksbr }}</p>
-                    </div>
-                {% endif %}
-            {% endif %}
-        {% endfor %}
+<!--        {% for note in event.notes.all %}-->
+<!--            {% if request.user == note.author %}-->
+<!--                {% if note.text != '' %}-->
+<!--                    <div class="font-italic text-justify px-1 py-1" style="color:{{ note.color }}">-->
+<!--                        <h5>Przemyślenia:</h5>-->
+<!--                        <p>{{ note.text|linebreaksbr }}</p>-->
+<!--                    </div>-->
+<!--                {% endif %}-->
+<!--            {% endif %}-->
+<!--        {% endfor %}-->
         <br>
     </td>
     <td class="align-top">
         <a class="btn btn-outline-dark mt-1" href="{% url 'history:chronicle-inform' event.id %}" target="_blank">
             <i class="icon-inform-medium"></i>
         </a>
-        <a class="btn btn-outline-dark mt-1" href="{% url 'history:chronicle-note' event.id %}">
+        <a class="btn btn-outline-dark mt-1 disabled" href="#">
             <i class="icon-note-medium"></i>
         </a>
         {% if request.user.profile.status == 'gm' %}

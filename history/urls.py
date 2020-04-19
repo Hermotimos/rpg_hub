@@ -11,7 +11,6 @@ urlpatterns = [
     path('chronicle/one-chapter:<int:chapter_id>/', views.chronicle_one_chapter_view, name='chronicle-one-chapter'),
     path('chronicle/one-game:<int:game_id>:<timeline_event_id>/', views.chronicle_one_game_view, name='chronicle-one-game'),
     path('chronicle/inform:<int:event_id>/', views.chronicle_inform_view, name='chronicle-inform'),
-    path('chronicle/note:<int:event_id>/', views.chronicle_note_view, name='chronicle-note'),
     path('chronicle/edit:<int:event_id>/', views.chronicle_edit_view, name='chronicle-edit'),
     path('chronicle/gap:<int:timeline_event_id>/', views.chronicle_gap_view, name='chronicle-gap'),
     # timeline
@@ -35,6 +34,5 @@ urlpatterns = [
     # path('timeline/game:<int:game_id>/', views.timeline_game_view, name='timeline-game'),
 
     path('timeline/inform:<int:event_id>/', views.timeline_inform_view, name='timeline-inform'),
-    path('timeline/note:<int:event_id>/', views.timeline_note_view, name='timeline-note'),
     path('timeline/edit:<int:event_id>/', views.timeline_edit_view, name='timeline-edit'),
 ]

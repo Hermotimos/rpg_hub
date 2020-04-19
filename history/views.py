@@ -5,9 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 
 from history.models import (TimelineEvent,
-                            TimelineEventNote,
                             ChronicleEvent,
-                            ChronicleEventNote,
                             Chapter,
                             GameSession,
                             Thread,
@@ -15,8 +13,6 @@ from history.models import (TimelineEvent,
                             SpecificLocation)
 from history.forms import (TimelineEventCreateForm,
                            TimelineEventEditForm,
-                           TimelineEventNoteForm,
-                           ChronicleEventNoteForm,
                            ChronicleEventCreateForm,
                            ChronicleEventEditForm)
 from rpg_project.utils import query_debugger, send_emails
@@ -119,7 +115,7 @@ def chronicle_all_chapters_view(request):
         chapters = Chapter.objects.prefetch_related(
             'game_sessions__chronicle_events__informed',
             'game_sessions__chronicle_events__pictures',
-            'game_sessions__chronicle_events__notes__author',
+            # 'game_sessions__chronicle_events__notes__author',
             'game_sessions__chronicle_events__debate__topic'
         )
     else:
@@ -127,7 +123,10 @@ def chronicle_all_chapters_view(request):
                   | profile.chronicle_events_informed.all())\
             .distinct()\
             .select_related('debate__topic')\
-            .prefetch_related('informed', 'pictures', 'notes__author')
+            .prefetch_related('informed',
+                              'pictures',
+                              # 'notes__author'
+                              )
 
         games = GameSession.objects\
             .filter(chronicle_events__in=events)\
@@ -157,7 +156,7 @@ def chronicle_one_chapter_view(request, chapter_id):
         games = chapter.game_sessions.prefetch_related(
             'chronicle_events__informed',
             'chronicle_events__pictures',
-            'chronicle_events__notes__author',
+            # 'chronicle_events__notes__author',
             'chronicle_events__debate__topic'
             )
     else:
@@ -165,7 +164,9 @@ def chronicle_one_chapter_view(request, chapter_id):
                   | profile.chronicle_events_informed.all())\
             .distinct()\
             .select_related('debate__topic')\
-            .prefetch_related('informed', 'pictures', 'notes__author')\
+            .prefetch_related('informed', 'pictures',
+                              # 'notes__author'
+                              )\
             .filter(game__chapter=chapter_id)
 
         games = chapter.game_sessions\
@@ -196,13 +197,17 @@ def chronicle_one_game_view(request, game_id, timeline_event_id):
     if profile.status == 'gm':
         events = game.chronicle_events.all()\
             .select_related('debate__topic')\
-            .prefetch_related('informed', 'pictures', 'notes__author')
+            .prefetch_related('informed', 'pictures',
+                              # 'notes__author'
+                              )
     else:
         events = game.chronicle_events\
             .filter(Q(informed=profile) | Q(participants=profile))\
             .distinct()\
             .select_related('debate__topic') \
-            .prefetch_related('informed', 'pictures', 'notes__author')
+            .prefetch_related('informed', 'pictures',
+                              # 'notes__author'
+                              )
 
     context = {
         'page_title': game.title,
@@ -251,43 +256,6 @@ def chronicle_inform_view(request, event_id):
     # if is_allowed_for_chronicle(profile, chronicle_event_id=event_id):
     if profile in allowed or profile.status == 'gm':
         return render(request, 'history/_event_inform.html', context)
-    else:
-        return redirect('home:dupa')
-
-
-@query_debugger
-@login_required
-def chronicle_note_view(request, event_id):
-    profile = request.user.profile
-    event = get_object_or_404(ChronicleEvent, id=event_id)
-    current_note = None
-
-    try:
-        current_note = ChronicleEventNote.objects.get(event=event,
-                                                      author=request.user)
-    except ChronicleEventNote.DoesNotExist:
-        pass
-
-    if request.method == 'POST':
-        form = ChronicleEventNoteForm(request.POST, instance=current_note)
-        if form.is_valid():
-            note = form.save(commit=False)
-            note.author = request.user
-            note.event = event
-            note.save()
-            messages.info(request, f'Dodano/zmieniono notatkę!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-    else:
-        form = ChronicleEventNoteForm(instance=current_note)
-
-    context = {
-        'page_title': 'Przemyślenia',
-        'event': event,
-        'form': form,
-    }
-    if is_allowed_for_chronicle(profile, chronicle_event_id=event_id):
-        return render(request, 'history/chronicle_note.html', context)
     else:
         return redirect('home:dupa')
 
@@ -538,7 +506,9 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
     events = events\
         .select_related('game')\
         .prefetch_related('threads', 'participants', 'informed', 'general_locations',
-                          'specific_locations__general_location', 'notes__author')
+                          'specific_locations__general_location',
+                          # 'notes__author'
+                          )
 
     context = {
         'page_title': page_title,
@@ -584,56 +554,6 @@ def timeline_inform_view(request, event_id):
     }
     if profile in allowed or profile.status == 'gm':
         return render(request, 'history/_event_inform.html', context)
-    else:
-        return redirect('home:dupa')
-
-
-@query_debugger
-@login_required
-def timeline_note_view(request, event_id):
-    profile = request.user.profile
-    event = get_object_or_404(TimelineEvent, id=event_id)
-    current_note = None
-
-    spec_locs = event.specific_locations.all()
-    gen_locs = event.general_locations\
-        .prefetch_related(Prefetch('specific_locations', queryset=spec_locs, to_attr='filtered_spec_locs'))
-    gen_locs_and_spec_locs_dict = {}
-    for gen_loc in gen_locs:
-        gen_locs_and_spec_locs_dict[gen_loc.name] = ', '.join(spec_loc.name for spec_loc in gen_loc.filtered_spec_locs)
-
-    participants = event.participants.all()
-    informed = event.informed.all()
-
-    try:
-        current_note = TimelineEventNote.objects.get(event=event, author=request.user)
-    except TimelineEventNote.DoesNotExist:
-        pass
-
-    if request.method == 'POST':
-        form = TimelineEventNoteForm(request.POST, instance=current_note)
-        if form.is_valid():
-            note = form.save(commit=False)
-            note.author = request.user
-            note.event = event
-            note.save()
-            messages.info(request, f'Dodano/zmieniono notatkę!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-
-    else:
-        form = TimelineEventNoteForm(instance=current_note)
-
-    context = {
-        'page_title': 'Przemyślenia',
-        'event': event,
-        'form': form,
-        'gen_locs_and_spec_locs_dict': gen_locs_and_spec_locs_dict,
-        'participants': participants,
-        'informed': informed
-    }
-    if profile in (event.participants.all() | event.informed.all()) or profile.status == 'gm':
-        return render(request, 'history/timeline_note.html', context)
     else:
         return redirect('home:dupa')
 

@@ -117,14 +117,14 @@ class ChronicleEvent(models.Model):
         return f'{self.description[:100]}...{self.description[-100:] if len(str(self.description)) > 200 else self.description}'
 
 
-class ChronicleEventNote(models.Model):
-    author = models.ForeignKey(User, related_name='chronicle_events_notes', on_delete=models.CASCADE)
-    text = models.TextField(max_length=4000, blank=True, null=True)
-    event = models.ForeignKey(ChronicleEvent, related_name='notes', on_delete=models.PROTECT)
-    color = models.CharField(max_length=20, choices=COLORS, default='#C70039')
-
-    def __str__(self):
-        return f'{self.text[0:50]}...'
+# class ChronicleEventNote(models.Model):
+#     author = models.ForeignKey(User, related_name='chronicle_events_notes', on_delete=models.CASCADE)
+#     text = models.TextField(max_length=4000, blank=True, null=True)
+#     event = models.ForeignKey(ChronicleEvent, related_name='notes', on_delete=models.PROTECT)
+#     color = models.CharField(max_length=20, choices=COLORS, default='#C70039')
+#
+#     def __str__(self):
+#         return f'{self.text[0:50]}...'
 
 
 # ------ TimelineEvent model and connected models ------
@@ -225,14 +225,14 @@ class TimelineEvent(models.Model):
         return self.__str__()
 
 
-class TimelineEventNote(models.Model):
-    author = models.ForeignKey(User, related_name='timeline_events_notes', on_delete=models.CASCADE)
-    text = models.TextField(max_length=4000, blank=True, null=True)
-    event = models.ForeignKey(TimelineEvent, related_name='notes', on_delete=models.PROTECT)
-    color = models.CharField(max_length=20, choices=COLORS, default='#C70039')
-
-    def __str__(self):
-        return f'{self.text[0:50]}...'
+# class TimelineEventNote(models.Model):
+#     author = models.ForeignKey(User, related_name='timeline_events_notes', on_delete=models.CASCADE)
+#     text = models.TextField(max_length=4000, blank=True, null=True)
+#     event = models.ForeignKey(TimelineEvent, related_name='notes', on_delete=models.PROTECT)
+#     color = models.CharField(max_length=20, choices=COLORS, default='#C70039')
+#
+#     def __str__(self):
+#         return f'{self.text[0:50]}...'
 
 
 def update_known_specific_locations(sender, instance, **kwargs):

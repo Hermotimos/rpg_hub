@@ -55,13 +55,13 @@
                 </td>
                 <td class="timeline-event text-justify align-top unblue-black pl-2 pr-2">
                     <a href="{% url 'history:chronicle-one-game' event.game.id event.id %}">{{ event.description|linebreaksbr }}</a>
-                    {% for note in event.notes.all %}
-                        {% if request.user == note.author %}
-                            {% if note.text != '' %}
-                                <a style="color:{{ note.color }}"><br>Przemyślenia:<br>{{ note.text|linebreaksbr }}</a>
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
+<!--                    {% for note in event.notes.all %}-->
+<!--                        {% if request.user == note.author %}-->
+<!--                            {% if note.text != '' %}-->
+<!--                                <a style="color:{{ note.color }}"><br>Przemyślenia:<br>{{ note.text|linebreaksbr }}</a>-->
+<!--                            {% endif %}-->
+<!--                        {% endif %}-->
+<!--                    {% endfor %}-->
                 </td>
                 <td class="timeline-small align-top unblue-black">
                     {% for profile in event.participants.all %}
@@ -96,7 +96,7 @@
                     <a class="btn btn-outline-dark btn-sm py-0" href="{% url 'history:timeline-inform' event.id %}" target="_blank">
                         <i class="icon-inform-small"></i>
                     </a>
-                    <a class="btn btn-outline-dark btn-sm py-0" href="{% url 'history:timeline-note' event.id %}">
+                    <a class="btn btn-outline-dark btn-sm py-0 disabled" href="#">
                         <i class="icon-note-small"></i>
                     </a>
                     {% if request.user.profile.status == 'gm' %}
