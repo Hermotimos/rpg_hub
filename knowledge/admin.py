@@ -45,18 +45,19 @@ class KnowledgePacketAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.instance.id is None:
+        id_ = self.instance.id
+        if id_ is None:
             # trick to avoid new forms being populated with previous data
             # I don't understand why that happens, but this works...
             # TODO research this
             return
         try:
-            gen_locs = GeneralLocation.objects.filter(knowledge_packets=self.instance.id)
+            gen_locs = GeneralLocation.objects.filter(knowledge_packets=id_)
             self.__dict__['initial'].update({'general_locations': gen_locs})
         except AttributeError:
             pass
         try:
-            spec_locs = SpecificLocation.objects.filter(knowledge_packets=self.instance.id)
+            spec_locs = SpecificLocation.objects.filter(knowledge_packets=id_)
             self.__dict__['initial'].update({'specific_locations': spec_locs})
         except AttributeError:
             pass
@@ -88,11 +89,26 @@ class KnowledgePacketAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': 50})},
     }
-    list_display = ['id', 'title', 'text']
+    list_display = ['id', 'title', 'text', 'get_acquired_by']
     list_editable = ['title', 'text']
     list_filter = ['skills__name']
     search_fields = ['title', 'text']
     
+    def get_acquired_by(self, obj):
+        img_urls = [profile.image.url for profile in obj.acquired_by.all()]
+        html = ''
+        if img_urls:
+            for url in img_urls:
+                html += f'<img width="40" height="40" src="{url}">&nbsp;'
+        else:
+            html = '<h1><font color="red">NIKT</font></h1>'
+        return format_html(html)
+    
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.prefetch_related('acquired_by')
+        return qs
+
 
 admin.site.register(KnowledgePacket, KnowledgePacketAdmin)
 
