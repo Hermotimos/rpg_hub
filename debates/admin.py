@@ -45,6 +45,7 @@ class TopicAdmin(admin.ModelAdmin):
 class DebateAdmin(admin.ModelAdmin):
     form = DebateAdminForm
     list_display = ['name', 'topic', 'is_ended', 'is_individual', 'chronicle_event']
+    list_filter = ['topic']
     search_fields = ['name']
     
     def get_queryset(self, request):
@@ -55,6 +56,7 @@ class DebateAdmin(admin.ModelAdmin):
 
 class RemarkAdmin(admin.ModelAdmin):
     list_display = ['text_begin', 'debate', 'author', 'date_posted', 'image']
+    list_filter = ['debate']
     search_fields = ['text']
 
 
