@@ -87,7 +87,7 @@ def send_emails(request, profile_ids, **kwargs):
         message = f"{profile} opowiedział/a Ci o miejscu zwanym" \
                   f" '{location.name}'." \
                   f"\nInformacje zostały zapisane w Twoim Toponomikonie: " \
-                  f"\n{request.build_absolute_uri()}"
+                  f"\n{request.build_absolute_uri()}\n"
     
     elif 'kn_packet' in kwargs:
         kn_packet = kwargs['kn_packet']
@@ -95,7 +95,7 @@ def send_emails(request, profile_ids, **kwargs):
         message = f"{profile} przekazał/a Ci wiedzę nt. '{kn_packet.title}'." \
                   f"\nWiędzę tę możesz odnaleźć w Almanachu pod:" \
                   f" {', '.join(s.name for s in kn_packet.skills.all())}:" \
-                  f"\n{request.get_host()}/knowledge/almanac/"
+                  f"\n{request.get_host()}/knowledge/almanac/\n"
     
     elif 'debate_new_topic' in kwargs:
         debate = kwargs['debate_new_topic']
@@ -103,7 +103,7 @@ def send_emails(request, profile_ids, **kwargs):
         message = f"{profile} włączył/a Cię do nowej narady '{debate.name}' " \
                   f"w nowym temacie '{debate.topic}'." \
                   f"\nWeź udział w naradzie:\n" \
-                  f"{request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
+                  f"{request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/\n"
     
     elif 'debate_new' in kwargs:
         debate = kwargs['debate_new']
@@ -111,21 +111,23 @@ def send_emails(request, profile_ids, **kwargs):
         message = f"{profile} włączył/a Cię do nowej narady '{debate.name}' " \
                   f"w temacie '{debate.topic}'." \
                   f"\nWeź udział w naradzie:\n" \
-                  f"{request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/"
+                  f"{request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/\n"
     
     elif 'debate_info' in kwargs:
         debate = kwargs['debate_info']
         subject = '[RPG] Dołączenie do narady!'
         message = f"{profile} dołączył/a Cię do narady '{debate.name}' " \
                   f"w temacie '{debate.topic}'." \
-                  f"\nWeź udział w naradzie:\n{request.build_absolute_uri()}"
+                  f"\nWeź udział w naradzie:" \
+                  f"\n{request.build_absolute_uri()}\n"
     
     elif 'debate_remark' in kwargs:
         debate = kwargs['debate_remark']
         subject = '[RPG] Wypowiedź w naradzie!'
         message = f"{profile} zabrał/a głos w naradzie '{debate.name}' " \
                   f"w temacie '{debate.topic}'." \
-                  f"\nWeź udział w naradzie:\n{request.build_absolute_uri()}"
+                  f"\nWeź udział w naradzie:" \
+                  f"\n{request.build_absolute_uri()}#page-bottom\n"
     
     elif 'timeline_event' in kwargs:
         event = kwargs['timeline_event']
@@ -141,13 +143,13 @@ def send_emails(request, profile_ids, **kwargs):
                   f"Podczas przygody '{event.game.title}' " \
                   f"rozegrało się co następuje:...\n" \
                   f"Wydarzenie zostało zapisane w Twojej Kronice: " \
-                  f"{request.get_host()}/history/chronicle/one-game:{event.game.id}:0/"
+                  f"{request.get_host()}/history/chronicle/one-game:{event.game.id}:0/\n"
 
     elif 'demand_answer' in kwargs:
         demand_answer = kwargs['demand_answer']
         subject = f"[RPG] Dezyderat {demand_answer.id} [odpowiedź]"
-        message = f"Odpowiedź od {demand_answer.author}:\n{demand_answer.text}\n" \
-                  f"{request.get_host()}/contact/demands/detail:{demand_answer.id}/\n\n"
+        message = f"Odpowiedź od {demand_answer.author}:\n" \
+                  f"{request.get_host()}/contact/demands/detail:{demand_answer.demand.id}/#page-bottom\n"
 
     else:
         subject = 'Błąd'

@@ -95,7 +95,7 @@
                 {% endfor %}
                 
                 <!-- SEEN BY -->
-                <tr>
+                <tr id="page-bottom">
                     {% if not debate.is_ended %}
                         {% if last_remark.author.profile.status == 'gm' %}
                             <td>
@@ -115,13 +115,12 @@
                 </tr>
             </tbody>
         </table>
-        <br><br>
+        <br>
     
         {% if debate.is_ended %}
             <h4><b>Tak zakończyła się Wasza rozmowa.</b></h4><br>
         {% else %}
-        
-            <div id="page-bottom">
+            <div>
                 <br>
                 <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -130,7 +129,7 @@
                             {{ form.author|as_crispy_field }}
                         </div>
                     {% else %}
-                    <!--  necessary for form to validate - hidden author form field  -->
+                        <!--  necessary for form to validate - hidden author form field  -->
                         <div class="collapse">
                             {{ form.author }}
                         </div>
