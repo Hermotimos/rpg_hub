@@ -11,7 +11,7 @@
                     <img class="rounded-circle img-small {% if is_done %} img-grayscale {% endif %}" src="{{ demand.addressee.profile.image.url }}" alt="Profile img">
                 </div>
                 <div class="d-inline ml-3">
-                    <span class="btn btn-dark px-2" data-toggle="collapse" data-target="#demand{{ demand.id }}">&nbsp;☷&nbsp;</span>
+                    <a class="btn btn-dark px-2" href="{% url 'contact:demands-detail' demand.id %}">&nbsp;☷&nbsp;</a>
                     {% if is_done %}
                         <a href="{% url 'contact:undone' demand.id %}" class="btn btn-dark">&nbsp;☝&nbsp;</a>
                         {% if request.user == demand.author %}
@@ -33,7 +33,7 @@
         </div>
         <div class="row">
             <div class="col-12 font-18 font-italic text-justify">
-                <a href="{% url 'contact:demands-detail' demand.id %}">{{ demand.text|capfirst|linebreaks }}</a>
+                <a data-toggle="collapse" data-target="#demand{{ demand.id }}">{{ demand.text|capfirst|linebreaks }}</a>
                 {% if demand.image %}
                     <img src="{{ demand.image.url }}" alt="Demand img">
                 {% endif %}
