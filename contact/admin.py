@@ -37,8 +37,8 @@ class DemandAdmin(admin.ModelAdmin):
 class DemandAnswerAdmin(admin.ModelAdmin):
     list_display = ['id', 'get_demand_info', 'get_answer_caption']
     list_select_related = ['demand__author', 'demand__addressee']
-    search_fields = ['text']
     ordering = ['-date_posted']
+    search_fields = ['text']
 
     def get_answer_caption(self, obj):
         text = obj.text

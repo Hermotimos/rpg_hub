@@ -8,40 +8,45 @@ from users.models import Profile
 
 
 class NewsAdminForm(forms.ModelForm):
-    allowed_profiles = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                                      .exclude(Q(status='dead_player') |
-                                                               Q(status='dead_npc') |
-                                                               Q(status='gm')),
-                                                      widget=FilteredSelectMultiple('Allowed profiles', False),
-                                                      required=False)
+    allowed_profiles = forms.ModelMultipleChoiceField(
+        queryset=Profile.objects.exclude(Q(status='dead_player')
+                                         | Q(status='dead_npc')
+                                         | Q(status='gm')),
+        required=False,
+        widget=FilteredSelectMultiple('Allowed profiles', False),
+    )
 
-    followers = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                               .exclude(Q(status='dead_player') |
-                                                        Q(status='dead_npc') |
-                                                        Q(status='gm')),
-                                               widget=FilteredSelectMultiple('Followers', False),
-                                               required=False)
+    followers = forms.ModelMultipleChoiceField(
+        queryset=Profile.objects.exclude(Q(status='dead_player')
+                                         | Q(status='dead_npc')
+                                         | Q(status='gm')),
+        required=False,
+        widget=FilteredSelectMultiple('Followers', False),
+    )
 
 
 class SurveyAdminForm(forms.ModelForm):
-    addressees = forms.ModelMultipleChoiceField(queryset=Profile.objects
-                                                .exclude(Q(status='dead_player') |
-                                                         Q(status='dead_npc') |
-                                                         Q(status='gm')),
-                                                required=False,
-                                                widget=FilteredSelectMultiple('Addressees', False))
+    addressees = forms.ModelMultipleChoiceField(
+        queryset=Profile.objects.exclude(Q(status='dead_player')
+                                         | Q(status='dead_npc')
+                                         | Q(status='gm')),
+        required=False,
+        widget=FilteredSelectMultiple('Addressees', False),
+    )
 
 
 class NewsAdmin(admin.ModelAdmin):
     form = NewsAdminForm
     list_display = ['id', 'author', 'title', 'date_posted', 'image']
     list_editable = ['title', 'image']
+    ordering = ['-date_posted']
     readonly_fields = ['seen_by']
     search_fields = ['title']
 
 
 class NewsAnswerAdmin(admin.ModelAdmin):
     list_display = ['id', 'news_title', 'author', 'get_caption', 'date_posted']
+    ordering = ['-date_posted']
     readonly_fields = ['seen_by']
     search_fields = ['text']
 
