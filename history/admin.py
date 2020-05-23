@@ -190,8 +190,8 @@ class ChronicleEventAdmin(admin.ModelAdmin):
 
 class GameSessionAdmin(admin.ModelAdmin):
     inlines = [TimelineEventInline, ChronicleEventInline]
-    list_display = ['id', 'game_no', 'title', 'chapter', 'date']
-    list_editable = ['game_no', 'title', 'chapter', 'date']
+    list_display = ['game_no', 'title', 'chapter', 'date']
+    list_editable = ['title', 'chapter', 'date']
     list_select_related = ['chapter']
     search_fields = ['title']
 
