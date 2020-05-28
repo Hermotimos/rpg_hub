@@ -183,7 +183,7 @@ class TimelineEvent(models.Model):
     
     class Meta:
         # ordering via 'description' before 'game' to leave flexibility for events with later 'id'-s
-        ordering = ['year', 'season', 'day_start', 'day_end', 'description', 'game']
+        ordering = ['game', 'year', 'season', 'day_start', 'day_end', 'description']
         indexes = [
             models.Index(fields=['year', 'season', 'day_start', 'day_end', 'description', 'game']),
             models.Index(fields=['year', ]),
