@@ -9,11 +9,9 @@ from news.forms import (CreateNewsForm, CreateNewsAnswerForm, CreateSurveyForm,
                         CreateSurveyOptionForm, CreateSurveyAnswerForm,
                         ModifySurveyOptionForm)
 from news.models import News, Survey, SurveyOption
-from rpg_project.utils import query_debugger
 from users.models import Profile
 
 
-@query_debugger
 @login_required
 def main_view(request):
     profile = request.user.profile
@@ -40,7 +38,6 @@ def main_view(request):
     return render(request, 'news/main.html', context)
 
 
-@query_debugger
 @login_required
 def create_news_view(request):
     profile = request.user.profile
@@ -80,7 +77,6 @@ def create_news_view(request):
     return render(request, 'news/news_create.html', context)
 
 
-@query_debugger
 @login_required
 def news_detail_view(request, news_id):
     profile = request.user.profile
@@ -144,7 +140,6 @@ def news_detail_view(request, news_id):
         return redirect('home:dupa')
 
 
-@query_debugger
 @login_required
 def unfollow_news_view(request, news_id):
     profile = request.user.profile
@@ -158,7 +153,6 @@ def unfollow_news_view(request, news_id):
         return redirect('home:dupa')
 
 
-@query_debugger
 @login_required
 def follow_news_view(request, news_id):
     profile = request.user.profile
@@ -172,7 +166,7 @@ def follow_news_view(request, news_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def survey_detail_view(request, survey_id):
     profile = request.user.profile
@@ -248,7 +242,7 @@ def survey_detail_view(request, survey_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def vote_yes_view(request, survey_id, option_id):
     profile = request.user.profile
@@ -265,7 +259,7 @@ def vote_yes_view(request, survey_id, option_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def vote_no_view(request, survey_id, option_id):
     profile = request.user.profile
@@ -282,7 +276,7 @@ def vote_no_view(request, survey_id, option_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def unvote_view(request, survey_id, option_id):
     profile = request.user.profile
@@ -300,7 +294,7 @@ def unvote_view(request, survey_id, option_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def survey_create_view(request):
     profile = request.user.profile
@@ -340,7 +334,7 @@ def survey_create_view(request):
     return render(request, 'news/survey_create.html', context)
 
 
-@query_debugger
+
 @login_required
 def survey_option_modify_view(request, survey_id, option_id):
     option = get_object_or_404(SurveyOption, id=option_id)
@@ -365,7 +359,7 @@ def survey_option_modify_view(request, survey_id, option_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def survey_option_delete_view(request, survey_id, option_id):
     option = get_object_or_404(SurveyOption, id=option_id)

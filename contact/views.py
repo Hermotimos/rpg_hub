@@ -10,7 +10,7 @@ from django.utils import timezone
 from contact.forms import (DemandsCreateForm, DemandAnswerForm,
                            PlansCreateForm, PlansModifyForm)
 from contact.models import Demand, DemandAnswer, Plan
-from rpg_project.utils import query_debugger, send_emails
+from rpg_project.utils import send_emails
 from rules.models import Skill, Synergy, WeaponType, PlateType
 from users.models import User
 
@@ -18,7 +18,7 @@ from users.models import User
 # ----------------------------- DEMANDS -----------------------------
 
 
-@query_debugger
+
 @login_required
 def demands_main_view(request):
     user = request.user
@@ -64,7 +64,7 @@ def demands_main_view(request):
     return render(request, 'contact/demands_main.html', context)
 
 
-@query_debugger
+
 @login_required
 def demands_create_view(request):
     if request.method == 'POST':
@@ -94,7 +94,7 @@ def demands_create_view(request):
     return render(request, 'contact/demands_create.html', context)
 
 
-@query_debugger
+
 @login_required
 def demands_delete_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
@@ -107,7 +107,7 @@ def demands_delete_view(request, demand_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def demands_detail_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
@@ -149,7 +149,7 @@ def demands_detail_view(request, demand_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def mark_done_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
@@ -177,7 +177,7 @@ def mark_done_view(request, demand_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def mark_undone_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
@@ -206,7 +206,7 @@ def mark_undone_view(request, demand_id):
 # ----------------------------- PLANS -----------------------------
 
 
-@query_debugger
+
 @login_required
 def plans_main_view(request):
     user = request.user
@@ -247,7 +247,7 @@ def plans_main_view(request):
     return render(request, 'contact/plans_main.html', context)
 
 
-@query_debugger
+
 @login_required
 def plans_for_gm_view(request):
     context = {
@@ -260,7 +260,7 @@ def plans_for_gm_view(request):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def plans_create_view(request):
     if request.method == 'POST':
@@ -292,7 +292,7 @@ def plans_create_view(request):
     return render(request, 'contact/plans_create.html', context)
 
 
-@query_debugger
+
 @login_required
 def plans_delete_view(request, plan_id):
     plan = get_object_or_404(Plan, id=plan_id)
@@ -305,7 +305,7 @@ def plans_delete_view(request, plan_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def plans_modify_view(request, plan_id):
     plan = get_object_or_404(Plan, id=plan_id)

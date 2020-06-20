@@ -15,7 +15,7 @@ from history.forms import (TimelineEventCreateForm,
                            TimelineEventEditForm,
                            ChronicleEventCreateForm,
                            ChronicleEventEditForm)
-from rpg_project.utils import query_debugger, send_emails
+from rpg_project.utils import send_emails
 from users.models import Profile
 
 
@@ -49,7 +49,7 @@ def is_allowed_for_chronicle(profile, chapter_id=0, game_id=0,
         return False
 
 
-@query_debugger
+
 @login_required
 def chronicle_main_view(request):
     profile = request.user.profile
@@ -76,7 +76,7 @@ def chronicle_main_view(request):
     return render(request, 'history/chronicle_main.html', context)
 
 
-@query_debugger
+
 @login_required
 def chronicle_create_view(request):
     profile = request.user.profile
@@ -106,7 +106,7 @@ def chronicle_create_view(request):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def chronicle_all_chapters_view(request):
     profile = request.user.profile
@@ -146,7 +146,7 @@ def chronicle_all_chapters_view(request):
     return render(request, 'history/chronicle_all_chapters.html', context)
 
 
-@query_debugger
+
 @login_required
 def chronicle_one_chapter_view(request, chapter_id):
     profile = request.user.profile
@@ -184,7 +184,7 @@ def chronicle_one_chapter_view(request, chapter_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def chronicle_one_game_view(request, game_id, timeline_event_id):
     profile = request.user.profile
@@ -222,7 +222,7 @@ def chronicle_one_game_view(request, game_id, timeline_event_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def chronicle_inform_view(request, event_id):
     profile = request.user.profile
@@ -260,7 +260,7 @@ def chronicle_inform_view(request, event_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def chronicle_edit_view(request, event_id):
     profile = request.user.profile
@@ -286,7 +286,7 @@ def chronicle_edit_view(request, event_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def chronicle_gap_view(request, timeline_event_id):
     timeline_event = get_object_or_404(TimelineEvent, id=timeline_event_id)
@@ -313,7 +313,7 @@ SEASONS_WITH_STYLES_DICT = {
 }
 
 
-@query_debugger
+
 @login_required
 def timeline_main_view(request):
     profile = request.user.profile
@@ -369,7 +369,7 @@ def timeline_main_view(request):
     return render(request, 'history/timeline_main.html', context)
 
 
-@query_debugger
+
 @login_required
 def timeline_create_view(request):
     if request.method == 'POST':
@@ -397,7 +397,7 @@ def timeline_create_view(request):
     return render(request, 'history/timeline_create.html', context)
 
 
-@query_debugger
+
 @login_required
 def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_id=0, spec_loc_id=0,
                                 year=0, season='0', game_id=0):
@@ -522,7 +522,7 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def timeline_inform_view(request, event_id):
     profile = request.user.profile
@@ -558,7 +558,7 @@ def timeline_inform_view(request, event_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def timeline_edit_view(request, event_id):
     profile = request.user.profile

@@ -2,12 +2,11 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
 
-from rpg_project.utils import query_debugger
 from rules.models import Skill, Synergy, CharacterClass, CharacterProfession, EliteClass, EliteProfession, \
     WeaponClass, WeaponType, PlateType, ShieldType
 
 
-@query_debugger
+
 @login_required
 def rules_main_view(request):
     context = {
@@ -16,7 +15,7 @@ def rules_main_view(request):
     return render(request, 'rules/main.html', context)
 
 
-@query_debugger
+
 @login_required
 def rules_armor_view(request):
     profile = request.user.profile
@@ -35,7 +34,7 @@ def rules_armor_view(request):
     return render(request, 'rules/armor.html', context)
 
 
-@query_debugger
+
 @login_required
 def rules_character_sheet_view(request):
     context = {
@@ -44,7 +43,7 @@ def rules_character_sheet_view(request):
     return render(request, 'rules/character_sheet.html', context)
 
 
-@query_debugger
+
 @login_required
 def rules_combat_view(request):
     context = {
@@ -53,7 +52,7 @@ def rules_combat_view(request):
     return render(request, 'rules/combat.html', context)
 
 
-@query_debugger
+
 @login_required
 def rules_masteries_view(request):
     context = {
@@ -62,7 +61,7 @@ def rules_masteries_view(request):
     return render(request, 'rules/masteries.html', context)
 
 
-@query_debugger
+
 @login_required
 def rules_professions_view(request):
     profile = request.user.profile
@@ -89,7 +88,7 @@ def rules_professions_view(request):
     return render(request, 'rules/professions.html', context)
 
 
-@query_debugger
+
 @login_required
 def rules_skills_view(request):
     profile = request.user.profile
@@ -108,7 +107,7 @@ def rules_skills_view(request):
     return render(request, 'rules/skills.html', context)
 
 
-@query_debugger
+
 @login_required
 def rules_traits_view(request):
     context = {
@@ -117,7 +116,7 @@ def rules_traits_view(request):
     return render(request, 'rules/traits.html', context)
 
 
-@query_debugger
+
 @login_required
 def rules_tricks_view(request):
     profile = request.user.profile
@@ -133,7 +132,7 @@ def rules_tricks_view(request):
     return render(request, 'rules/tricks.html', context)
 
 
-@query_debugger
+
 @login_required
 def rules_weapons_view(request):
     profile = request.user.profile
@@ -153,7 +152,7 @@ def rules_weapons_view(request):
     return render(request, 'rules/weapons.html', context)
 
 
-@query_debugger
+
 @login_required
 def rules_wounds_view(request):
     context = {

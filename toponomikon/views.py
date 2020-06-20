@@ -4,11 +4,11 @@ from django.db.models import Prefetch, Q, Case, When, Value, IntegerField
 from django.shortcuts import render, redirect, get_object_or_404
 
 from knowledge.models import KnowledgePacket
-from rpg_project.utils import query_debugger, send_emails
+from rpg_project.utils import send_emails
 from toponomikon.models import GeneralLocation, SpecificLocation
 
 
-@query_debugger
+
 @login_required
 def toponomikon_main_view(request):
     profile = request.user.profile
@@ -41,7 +41,7 @@ def toponomikon_main_view(request):
     return render(request, 'toponomikon/toponomikon_main.html', context)
 
 
-@query_debugger
+
 @login_required
 def toponomikon_general_location_view(request, gen_loc_id):
     profile = request.user.profile
@@ -125,7 +125,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def toponomikon_specific_location_view(request, spec_loc_id):
     profile = request.user.profile

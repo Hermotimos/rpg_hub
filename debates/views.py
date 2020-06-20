@@ -6,11 +6,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm
 from debates.models import Topic, Debate
-from rpg_project.utils import query_debugger, send_emails
+from rpg_project.utils import send_emails
 from users.models import Profile
 
 
-@query_debugger
+
 @login_required
 def debates_main_view(request):
     profile = request.user.profile
@@ -46,7 +46,7 @@ def debates_main_view(request):
     return render(request, 'debates/main.html', context)
 
 
-@query_debugger
+
 @login_required
 def create_topic_view(request):
     profile = request.user.profile
@@ -95,7 +95,7 @@ def create_topic_view(request):
     return render(request, 'debates/create_topic.html', context)
 
 
-@query_debugger
+
 @login_required
 def create_debate_view(request, topic_id):
     profile = request.user.profile
@@ -144,7 +144,7 @@ def create_debate_view(request, topic_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def debate_view(request, topic_id, debate_id):
     profile = request.user.profile
@@ -221,7 +221,7 @@ def debate_view(request, topic_id, debate_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def unfollow_debate_view(request, topic_id, debate_id):
     profile = request.user.profile
@@ -235,7 +235,7 @@ def unfollow_debate_view(request, topic_id, debate_id):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def follow_debate_view(request, topic_id, debate_id):
     profile = request.user.profile

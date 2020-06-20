@@ -2,11 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch, Q
 from django.shortcuts import render, redirect, get_object_or_404
 
-from rpg_project.utils import query_debugger
 from users.models import Profile
 
 
-@query_debugger
 @login_required
 def prosoponomikon_main_view(request):
     players_profiles = Profile.objects.exclude(Q(status='living_npc') |

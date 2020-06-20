@@ -12,7 +12,6 @@ from django.contrib.auth.views import (
 )
 from django.shortcuts import render, redirect
 
-from rpg_project.utils import query_debugger
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel
 from users.forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
 from users.models import Profile
@@ -210,7 +209,7 @@ class LogoutView(SuccessURLAllowedHostsMixin, TemplateView):
 
 # CHARACTER VIEWS
 
-@query_debugger
+
 @login_required
 def character_tricks_view(request):
     profile = request.user.profile
@@ -230,7 +229,7 @@ def character_tricks_view(request):
     return render(request, 'users/character_tricks.html', context)
 
 
-@query_debugger
+
 @login_required
 def character_skills_view(request, profile_id='0'):
     try:
@@ -266,7 +265,7 @@ def character_skills_view(request, profile_id='0'):
         return render(request, 'users/character_skills.html', context)
 
 
-@query_debugger
+
 @login_required
 def character_skills_for_gm_view(request):
     profile = request.user.profile

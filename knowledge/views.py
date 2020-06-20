@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 
 from knowledge.models import KnowledgePacket
-from rpg_project.utils import query_debugger, send_emails
+from rpg_project.utils import send_emails
 from rules.models import SkillLevel, Skill
 
 
@@ -159,7 +159,7 @@ class TheologyView(View):
 #         return render(request, self.template_name, context)
 
 
-# @query_debugger
+#
 # @login_required
 # def almanac_view(request):
 #     profile = request.user.profile
@@ -203,7 +203,7 @@ class TheologyView(View):
 #     return render(request, 'knowledge/skills_with_kn_packets.html', context)
 
 
-# @query_debugger
+#
 # @login_required
 # def theology_view(request):
 #     profile = request.user.profile

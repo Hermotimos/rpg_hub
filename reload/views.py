@@ -5,10 +5,9 @@ from django.shortcuts import render, redirect
 from history.models import Thread, SpecificLocation, GeneralLocation, TimelineEvent
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, CharacterClass, CharacterProfession, EliteClass, \
     EliteProfession, WeaponClass, WeaponType
-from rpg_project.utils import query_debugger
 
 
-@query_debugger
+
 @login_required
 def reload_main_view(request):
     context = {
@@ -20,7 +19,7 @@ def reload_main_view(request):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def reload_history(request):
     if request.user.profile.status == 'gm':
@@ -37,7 +36,7 @@ def reload_history(request):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def reload_toponomikon(request):
     if request.user.profile.status == 'gm':
@@ -54,7 +53,7 @@ def reload_toponomikon(request):
         return redirect('home:dupa')
 
 
-@query_debugger
+
 @login_required
 def reload_rules(request):
     if request.user.profile.status == 'gm':

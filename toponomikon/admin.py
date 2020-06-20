@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import Q
 from django.forms import Textarea
 
-from toponomikon.models import GeneralLocation, SpecificLocation, LocationType
+from toponomikon.models import GeneralLocation, SpecificLocation, LocationType, Location
 from imaginarion.models import Picture
 from knowledge.models import KnowledgePacket
 from users.models import Profile
@@ -66,6 +66,38 @@ class SpecificLocationAdmin(admin.ModelAdmin):
             choices = getattr(request, '_general_location_choices_cache', None)
             if choices is None:
                 request._main_general_location_cache = choices = list(
+                    formfield.choices)
+            formfield.choices = choices
+    
+        return formfield
+
+
+class LocationAdmin(admin.ModelAdmin):
+    form = ToponomikonKnownForm
+    list_display = ['name', 'location_type', 'in_location', 'description']
+    list_editable = ['location_type', 'in_location', 'description']
+    list_filter = ['in_location__name']
+    list_select_related = ['location_type', 'in_location', 'main_image']
+    search_fields = ['name', 'description']
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
+        # Reduces greatly queries in main view, doubles in detail view
+        # The trade-off is still very good
+        request = kwargs['request']
+        formfield = super().formfield_for_dbfield(db_field, **kwargs)
+       
+        if db_field.name in 'location_type':
+            choices = getattr(request, '_location_type_choices_cache', None)
+            if choices is None:
+                request._main_location_type_cache = choices = list(
+                    formfield.choices)
+            formfield.choices = choices
+    
+        if db_field.name == 'in_location':
+            choices = getattr(request, '_in_location_choices_cache', None)
+            if choices is None:
+                request._main_in_location_cache = choices = list(
                     formfield.choices)
             formfield.choices = choices
     
@@ -161,3 +193,5 @@ class LocationTypeAdmin(admin.ModelAdmin):
 admin.site.register(LocationType, LocationTypeAdmin)
 admin.site.register(GeneralLocation, GeneralLocationAdmin)
 admin.site.register(SpecificLocation, SpecificLocationAdmin)
+
+admin.site.register(Location, LocationAdmin)

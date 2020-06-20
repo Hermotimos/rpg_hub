@@ -1,11 +1,8 @@
-import functools
 import os
-import time
 
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import send_mail
-from django.db import connection, reset_queries
 
 from rpg_project.settings import EMAIL_HOST_USER
 from users.models import Profile
@@ -46,30 +43,6 @@ def create_sorting_name(obj):
     name = name.replace('ż', 'zż')
     name = name.replace('ź', 'zź')
     return name
-
-
-def query_debugger(func):
-    """
-    Source of query_debugger: https://medium.com/@goutomroy/django-select-related-and-prefetch-related-f23043fd635d
-    """
-    @functools.wraps(func)
-    def inner_func(*args, **kwargs):
-
-        reset_queries()
-        start_queries = len(connection.queries)
-
-        start = time.perf_counter()
-        result = func(*args, **kwargs)
-        end = time.perf_counter()
-        
-        end_queries = len(connection.queries)
-
-        print(f'Function : {func.__name__}')
-        print(f'Number of Queries : {end_queries - start_queries}')
-        print(f'Finished in : {(end - start):.2f}s')
-        return result
-
-    return inner_func
 
 
 def send_emails(request, profile_ids, **kwargs):
