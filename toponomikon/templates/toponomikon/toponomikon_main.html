@@ -9,10 +9,8 @@
 {% block content %}
     <article class="top-space">
         <div class="container">
-            {% for location in gen_locs %}
-            {% with loc_view='toponomikon:general-location' %}
+            {% for location in locs_lvl_1 %}
                 {% include 'toponomikon/_location.html' %}
-            {% endwith %}
             {% endfor %}
         </div>
     </article>
