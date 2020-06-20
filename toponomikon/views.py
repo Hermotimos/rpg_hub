@@ -299,7 +299,8 @@ def toponomikon_location_view(request, loc_name):
             messages.info(request, f'Poinformowano wybrane postacie!')
 
     page_title = location.name + ' (znasz z opowieści)' \
-        if profile not in location.known_directly.all() else location.name
+        if profile not in location.known_directly.all() and profile.status != 'gm'\
+        else location.name
     
     context = {
         # General
