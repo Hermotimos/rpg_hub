@@ -42,6 +42,9 @@ def create_sorting_name(obj):
     name = name.replace('z', 'zz')
     name = name.replace('ż', 'zż')
     name = name.replace('ź', 'zź')
+    
+    name = name.replace('"', '')
+    
     return name
 
 

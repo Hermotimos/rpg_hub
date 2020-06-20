@@ -136,14 +136,17 @@ class SpecificLocation(models.Model):
 
 
 class Location(models.Model):
-    name = models.CharField(unique=True, max_length=100)
+    name = models.CharField(
+        unique=True,
+        max_length=100)
     description = models.TextField(blank=True, null=True)
     main_image = models.ForeignKey(
         to=Picture,
         blank=True,
         null=True,
         related_name='locations_main_pics',
-        on_delete=models.PROTECT
+        # on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
     )
     pictures = models.ManyToManyField(
         to=Picture,
@@ -159,12 +162,13 @@ class Location(models.Model):
         to=LocationType,
         null=True,
         related_name='locations',
-        on_delete=models.SET_NULL
+        on_delete=models.SET_NULL,
     )
     in_location = models.ForeignKey(
         to='self',
         null=True,
         related_name='locations',
+        # on_delete=models.CASCADE,
         on_delete=models.PROTECT,
     )
     known_directly = models.ManyToManyField(

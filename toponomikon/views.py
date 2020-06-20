@@ -5,24 +5,26 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from knowledge.models import KnowledgePacket
 from rpg_project.utils import send_emails
-from toponomikon.models import GeneralLocation, SpecificLocation
-
+from toponomikon.models import GeneralLocation, SpecificLocation, Location
 
 
 @login_required
 def toponomikon_main_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
-        gen_locs = GeneralLocation.objects.all()
-        spec_locs = SpecificLocation.objects.all()
+        locs_lvl_1 = Location.objects.filter(in_location=None)
+        locs_lvl_2 = Location.objects.filter(~Q(in_location=None))
     else:
-        known_directly = profile.gen_locs_known_directly.all()
-        known_indirectly = profile.gen_locs_known_indirectly.exclude(id__in=known_directly)
-        gen_locs = (known_directly | known_indirectly)
-        spec_locs = (profile.spec_locs_known_directly.all() | profile.spec_locs_known_indirectly.all()).distinct()
+        known_directly = profile.locations_known_directly.filter(in_location=None)
+        known_indirectly = profile.locations_known_indirectly.filter(in_location=None)
+        locs_lvl_1 = (known_directly | known_indirectly)
+        locs_lvl_2 = (
+                profile.locations_known_directly.filter(~Q(in_location=None))
+                | profile.locations_known_indirectly.filter(~Q(in_location=None))
+        ).distinct()
 
-    gen_locs = gen_locs\
-        .prefetch_related(Prefetch('specific_locations', queryset=spec_locs),)\
+    locs_lvl_1 = locs_lvl_1\
+        .prefetch_related(Prefetch('locations', queryset=locs_lvl_2))\
         .select_related('main_image', 'location_type__default_img')\
         .distinct()\
         .annotate(known_only_indirectly=Case(
@@ -36,8 +38,47 @@ def toponomikon_main_view(request):
 
     context = {
         'page_title': 'Toponomikon',
-        'gen_locs': gen_locs,
+        'gen_locs': locs_lvl_1,
     }
+
+    # for gen_loc in GeneralLocation.objects.all():
+    #     loc = Location.objects.create(
+    #         name=gen_loc.name,
+    #         description=gen_loc.description,
+    #         main_image=gen_loc.main_image,
+    #         # pictures=gen_loc.pictures,
+    #         # knowledge_packets=gen_loc.knowledge_packets,
+    #         location_type=gen_loc.location_type,
+    #         in_location=None,
+    #         # known_directly=gen_loc.known_directly,
+    #         # known_indirectly=gen_loc.known_indirectly,
+    #         sorting_name=None,
+    #     )
+    #     loc.pictures.set([o for o in gen_loc.pictures.all()])
+    #     loc.knowledge_packets.set([o for o in gen_loc.knowledge_packets.all()])
+    #     loc.known_directly.set([o for o in gen_loc.known_directly.all()])
+    #     loc.known_indirectly.set([o for o in gen_loc.known_indirectly.all()])
+    #
+    # for spec_loc in SpecificLocation.objects.all():
+    #     loc = Location.objects.create(
+    #         name=spec_loc.name,
+    #         description=spec_loc.description,
+    #         main_image=spec_loc.main_image,
+    #         # pictures=spec_loc.pictures,
+    #         # knowledge_packets=spec_loc.knowledge_packets,
+    #         location_type=spec_loc.location_type,
+    #         # in_location=spec_loc.general_location,
+    #         # known_directly=spec_loc.known_directly,
+    #         # known_indirectly=spec_loc.known_indirectly,
+    #         sorting_name=spec_loc.sorting_name,
+    #     )
+    #     loc.pictures.set([o for o in spec_loc.pictures.all()])
+    #     loc.knowledge_packets.set([o for o in spec_loc.knowledge_packets.all()])
+    #     loc.known_directly.set([o for o in spec_loc.known_directly.all()])
+    #     loc.known_indirectly.set([o for o in spec_loc.known_indirectly.all()])
+    #     loc.in_location = Location.objects.get(name=spec_loc.general_location.name)
+    #     loc.save()
+
     return render(request, 'toponomikon/toponomikon_main.html', context)
 
 
@@ -45,7 +86,7 @@ def toponomikon_main_view(request):
 @login_required
 def toponomikon_general_location_view(request, gen_loc_id):
     profile = request.user.profile
-    gen_loc = get_object_or_404(GeneralLocation, id=gen_loc_id)
+    gen_loc = get_object_or_404(Location, id=gen_loc_id)
     
     gen_loc_known_directly = gen_loc.known_directly.all()
     gen_loc_known_indirectly = gen_loc.known_indirectly.all()
@@ -53,12 +94,12 @@ def toponomikon_general_location_view(request, gen_loc_id):
 
     # TABS
     if profile.status == 'gm':
-        spec_locs = gen_loc.specific_locations.all()
+        spec_locs = gen_loc.locations.all()
         kn_packets = gen_loc.knowledge_packets.all()
         only_indirectly = False
     else:
-        known_directly = gen_loc.specific_locations.filter(known_directly=profile)
-        known_indirectly = gen_loc.specific_locations.filter(known_indirectly=profile).exclude(id__in=known_directly)
+        known_directly = gen_loc.locations.filter(known_directly=profile)
+        known_indirectly = gen_loc.locations.filter(known_indirectly=profile).exclude(id__in=known_directly)
         spec_locs = (known_directly | known_indirectly)
         kn_packets = gen_loc.knowledge_packets.filter(acquired_by=profile)
         only_indirectly = True \
@@ -129,7 +170,7 @@ def toponomikon_general_location_view(request, gen_loc_id):
 @login_required
 def toponomikon_specific_location_view(request, spec_loc_id):
     profile = request.user.profile
-    spec_loc = get_object_or_404(SpecificLocation, id=spec_loc_id)
+    spec_loc = get_object_or_404(Location, id=spec_loc_id)
     
     spec_loc_known_directly = spec_loc.known_directly.all()
     spec_loc_known_indirectly = spec_loc.known_indirectly.all()
