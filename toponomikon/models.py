@@ -135,6 +135,85 @@ class SpecificLocation(models.Model):
         return informable
 
 
+class Location(models.Model):
+    name = models.CharField(unique=True, max_length=100)
+    description = models.TextField(blank=True, null=True)
+    main_image = models.ForeignKey(
+        to=Picture,
+        blank=True,
+        null=True,
+        related_name='locations_main_pics',
+        on_delete=models.PROTECT
+    )
+    pictures = models.ManyToManyField(
+        to=Picture,
+        blank=True,
+        related_name='locations_pics'
+    )
+    knowledge_packets = models.ManyToManyField(
+        to=KnowledgePacket,
+        blank=True,
+        related_name='locations'
+    )
+    location_type = models.ForeignKey(
+        to=LocationType,
+        null=True,
+        related_name='locations',
+        on_delete=models.SET_NULL
+    )
+    in_location = models.ForeignKey(
+        to='self',
+        null=True,
+        related_name='locations',
+        on_delete=models.PROTECT,
+    )
+    known_directly = models.ManyToManyField(
+        to=Profile,
+        blank=True,
+        related_name='locations_known_directly',
+        limit_choices_to=Q(
+            status__in=[
+                'active_player',
+                'inactive_player',
+                'dead_player'
+            ]
+        ),
+    )
+    known_indirectly = models.ManyToManyField(
+        to=Profile,
+        blank=True,
+        related_name='locations_known_indirectly',
+        limit_choices_to=Q(
+            status__in=[
+                'active_player',
+                'inactive_player',
+                'dead_player'
+            ]
+        ),
+    )
+    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+
+    class Meta:
+        ordering = ['sorting_name']
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.sorting_name = create_sorting_name(self.name)
+        super().save(*args, **kwargs)
+
+    def informable(self):
+        known_directly = self.known_directly.all()
+        known_indirectly = self.known_indirectly.all()
+        excluded = (known_directly | known_indirectly).distinct()
+        informable = Profile.objects.filter(
+            status='active_player'
+        ).exclude(id__in=excluded)
+        return informable
+
+
 @query_debugger
 def update_known_general_locations(sender, instance, **kwargs):
     known_directly = instance.known_directly.all()

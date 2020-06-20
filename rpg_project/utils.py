@@ -141,7 +141,7 @@ def send_emails(request, profile_ids, **kwargs):
         subject = "[RPG] Nowa opowieść o wydarzeniach!"
         message = f"{profile} rozprawia o swoich przygodach.\n" \
                   f"Podczas przygody '{event.game.title}' " \
-                  f"rozegrało się co następuje:...\n" \
+                  f"rozegrało się co następuje...\n" \
                   f"Wydarzenie zostało zapisane w Twojej Kronice: " \
                   f"{request.get_host()}/history/chronicle/one-game:{event.game.id}:0/\n"
 
@@ -155,6 +155,5 @@ def send_emails(request, profile_ids, **kwargs):
         subject = 'Błąd'
         message = f"URL: {request.build_absolute_uri()}\n" \
                   f"kwargs: {kwargs}"
-    print(kwargs)
+
     send_mail(subject, message, sender, receivers)
-    return None
