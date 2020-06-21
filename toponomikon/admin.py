@@ -41,14 +41,10 @@ class ToponomikonForm(forms.ModelForm):
 
 
 class LocationInline(admin.TabularInline):
-    # TODO hundreds of queries due to inlines - optimize django admin inline
     model = Location
     extra = 0
-    fields = ['name', 'location_type', 'description', 'main_image',
-              'known_directly', 'known_indirectly', 'pictures',
-              'knowledge_packets']
-
     form = ToponomikonForm
+    fields = ['name', 'location_type', 'in_location', 'main_image', 'description']
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 30})},
         models.CharField: {'widget': TextInput(attrs={'size': 20})},
@@ -69,6 +65,13 @@ class LocationInline(admin.TabularInline):
                     formfield.choices)
             formfield.choices = choices
            
+        if db_field.name == 'in_location':
+            choices = getattr(request, '_in_location_choices_cache', None)
+            if choices is None:
+                request._main_in_location_cache = choices = list(
+                    formfield.choices)
+            formfield.choices = choices
+           
         if db_field.name == 'main_image':
             choices = getattr(request, '_main_image_choices_cache', None)
             if choices is None:
@@ -76,34 +79,51 @@ class LocationInline(admin.TabularInline):
                     formfield.choices)
             formfield.choices = choices
             
+        return formfield
+    
+
+class LocationAdmin(admin.ModelAdmin):
+    form = ToponomikonForm
+    formfield_overrides = {
+        models.ForeignKey: {'widget': Select(attrs={'style': 'width:200px'})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 70})},
+    }
+    inlines = [LocationInline]
+    list_display = ['name', 'location_type', 'in_location', 'main_image', 'description']
+    list_editable = ['location_type', 'in_location', 'main_image', 'description']
+    list_filter = ['location_type__name']
+    list_select_related = ['location_type__default_img', 'in_location', 'main_image']
+    search_fields = ['name', 'description']
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
+        # Reduces greatly queries in main view, doubles in detail view
+        # The trade-off is still very good
+        request = kwargs['request']
+        formfield = super().formfield_for_dbfield(db_field, **kwargs)
+    
+        if db_field.name == 'location_type':
+            choices = getattr(request, '_location_type_choices_cache', None)
+            if choices is None:
+                request._main_location_type_cache = choices = list(
+                    formfield.choices)
+            formfield.choices = choices
+            
+        if db_field.name == 'in_location':
+            choices = getattr(request, '_in_location_choices_cache', None)
+            if choices is None:
+                request._main_in_location_cache = choices = list(
+                    formfield.choices)
+            formfield.choices = choices
+    
         if db_field.name == 'main_image':
             choices = getattr(request, '_main_image_choices_cache', None)
             if choices is None:
                 request._main_main_image_cache = choices = list(
                     formfield.choices)
             formfield.choices = choices
-  
-        return formfield
-
-
-class LocationAdmin(admin.ModelAdmin):
-    form = ToponomikonForm
-    inlines = [LocationInline]
-    list_display = ['name', 'location_type', 'in_location', 'description', 'main_image']
-    list_editable = ['location_type', 'in_location', 'description', 'main_image']
-    list_filter = ['location_type__name']
-    list_select_related = ['location_type', 'in_location', 'main_image']
-    search_fields = ['name', 'description']
     
-    # def get_queryset(self, request):
-    #     qs = super().get_queryset(request)
-    #     qs = qs.prefetch_related(
-    #         'pictures',
-    #         'known_directly',
-    #         'known_indirectly',
-    #         'knowledge_packets',
-    #     )
-    #     return qs
+        return formfield
     
     
 class LocationTypeAdmin(admin.ModelAdmin):
