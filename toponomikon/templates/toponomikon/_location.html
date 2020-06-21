@@ -4,20 +4,20 @@
 <div class="row mb-5 mb-md-4">
     <div class="col-md-4 px-0 py-2">
         <a class="img-link" href="{% url 'toponomikon:location' location.name %}">
-            <img class="img-fluid toponomikon-img {% if request.user.profile not in location.known_directly.all and request.user.profile.status != 'gm' %} img-grayscale {% endif %}"
+            <img class="img-fluid toponomikon-img {% if location.only_indirectly %} img-grayscale {% endif %}"
                  src="{% if location.main_image %} {{ location.main_image.image.url }} {% else %} {{ location.location_type.default_img.image.url }} {% endif %}"
                  alt="Location img">
         </a>
     </div>
     <div class="col-md-8 ml-n2 pl-2 pr-0 pl-md-4 pr-0">
         <h2 class="border-bottom-dark">
-            <small class="pr-5 {% if request.user.profile not in location.known_directly.all and request.user.profile.status != 'gm' %} text-muted {% endif %}">
+            <small class="pr-5 {% if location.only_indirectly %} text-muted {% endif %}">
                 {{ location.name }}
-                {% if request.user.profile not in location.known_directly.all and request.user.profile.status != 'gm'  %} (znasz z opowieści) {% endif %}
+                {% if location.only_indirectly  %} (znasz z opowieści) {% endif %}
             </small>
         </h2>
         <h6 class="font-italic linebreaks-style text-justify
-            {% if request.user.profile not in location.known_directly.all and request.user.profile.status != 'gm' %} text-muted {% endif %}">
+            {% if location.only_indirectly %} text-muted {% endif %}">
             {% if location.description %} {{ location.description|linebreaks }} {% endif %}
         </h6>
     </div>

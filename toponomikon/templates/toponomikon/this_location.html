@@ -18,7 +18,10 @@
                 </div>
                 <div class="row">
                     <div class="col-md-11 p-0">
-                        <h6 class="font-18 font-italic linebreaks-style text-justify">{{ location.description|linebreaks }}</h6>
+                        <h6 class="font-18 font-italic linebreaks-style text-justify
+                            {% if request.user.profile not in location.known_directly.all and request.user.profile.status != 'gm' %} text-muted {% endif %}">
+                            {{ location.description|linebreaks }}
+                        </h6>
                     </div>
                     <div class="col-md-1 pl-0 pl-md-3">
                         <p class="btn btn-outline-dark icon-inform-medium mt-1" data-toggle="modal" data-target="#infoLocationModal"></p>

@@ -1,16 +1,19 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch, Q
+from django.db.models import Prefetch, Q, When, Case, Value, IntegerField
 from django.shortcuts import render, redirect, get_object_or_404
 
 from knowledge.models import KnowledgePacket
 from rpg_project.utils import send_emails
-from toponomikon.models import Location
+from toponomikon.models import Location, LocationType
 
 
 @login_required
 def toponomikon_main_view(request):
     profile = request.user.profile
+    known_only_indirectly = profile.locs_known_indirectly.exclude(
+        id__in=profile.locs_known_directly.all()
+    )
     if profile.status == 'gm':
         general_locs = Location.objects.filter(in_location=None)
         specific_locs = Location.objects.filter(~Q(in_location=None))
@@ -23,14 +26,21 @@ def toponomikon_main_view(request):
                 | profile.locs_known_indirectly.filter(~Q(in_location=None))
         ).distinct()
 
-    general_locs = general_locs\
+    locations = general_locs\
         .prefetch_related(Prefetch('locations', queryset=specific_locs))\
         .select_related('main_image', 'location_type__default_img')\
+        .annotate(
+            only_indirectly=Case(
+                When(id__in=known_only_indirectly, then=Value(1)),
+                default=Value(0),
+                output_field=IntegerField()
+            )
+        )\
         .distinct()
 
     context = {
         'page_title': 'Toponomikon',
-        'general_locs': general_locs,
+        'locations': locations,
     }
     return render(request, 'toponomikon/toponomikon_main.html', context)
 
@@ -39,6 +49,9 @@ def toponomikon_main_view(request):
 def toponomikon_location_view(request, loc_name):
     profile = request.user.profile
     location = get_object_or_404(Location, name=loc_name)
+    known_only_indirectly = profile.locs_known_indirectly.exclude(
+        id__in=profile.locs_known_directly.all()
+    )
     
     known_directly_to = location.known_directly.all()
     known_indirectly_to = location.known_indirectly.all()
@@ -47,6 +60,7 @@ def toponomikon_location_view(request, loc_name):
     # TABS
     if profile.status == 'gm':
         locations = location.locations.all()
+        # location_types = LocationType.objects.all()
         kn_packets = location.knowledge_packets.all()
     else:
         known_directly = location.locations.filter(known_directly=profile)
@@ -55,7 +69,17 @@ def toponomikon_location_view(request, loc_name):
         locations = (known_directly | known_indirectly)
         kn_packets = location.knowledge_packets.filter(acquired_by=profile)
     
-    locations = locations.select_related('main_image').distinct()
+    locations = locations\
+        .select_related('main_image')\
+        .distinct() \
+        .annotate(
+            only_indirectly=Case(
+                When(id__in=known_only_indirectly, then=Value(1)),
+                default=Value(0),
+                output_field=IntegerField()
+            )
+        ) \
+        .distinct()
     
     # INFORM LOCATION
     # dict(request.POST).items() == < QueryDict: {
@@ -70,7 +94,7 @@ def toponomikon_location_view(request, loc_name):
         
         send_emails(request, informed_ids, location=location)
         if informed_ids:
-            messages.info(request, f'Poinformowano wybrane postacie!')
+            messages.info(request, f'Poinformowano wybrane postaci!')
     
     # INFORM KNOWLEDGE PACKETS
     # dict(request.POST).items() == < QueryDict: {
@@ -87,7 +111,7 @@ def toponomikon_location_view(request, loc_name):
         
         send_emails(request, informed_ids, kn_packet=kn_packet)
         if informed_ids:
-            messages.info(request, f'Poinformowano wybrane postacie!')
+            messages.info(request, f'Poinformowano wybrane postaci!')
 
     page_title = location.name + ' (znasz z opowieści)' \
         if profile not in location.known_directly.all() and profile.status != 'gm'\
