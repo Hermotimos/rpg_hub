@@ -107,7 +107,7 @@
                         </ul>
                     </td>
                 </tr>
-                {% for row in gen_loc.specific_locations.all|columns:4 %}
+                {% for row in gen_loc.locations.all|columns:4 %}
                 <tr>
                     {% for spec_loc in row %}
                         <td class="unblue">

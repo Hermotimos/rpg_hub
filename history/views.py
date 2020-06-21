@@ -4,18 +4,12 @@ from django.db.models import Count, Prefetch, Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 
-from history.models import (TimelineEvent,
-                            ChronicleEvent,
-                            Chapter,
-                            GameSession,
-                            Thread,
-                            GeneralLocation,
-                            SpecificLocation)
-from history.forms import (TimelineEventCreateForm,
-                           TimelineEventEditForm,
-                           ChronicleEventCreateForm,
-                           ChronicleEventEditForm)
+from history.forms import (TimelineEventCreateForm, TimelineEventEditForm,
+                           ChronicleEventCreateForm, ChronicleEventEditForm)
+from history.models import (TimelineEvent, ChronicleEvent, Chapter,
+                            GameSession, Thread)
 from rpg_project.utils import send_emails
+from toponomikon.models import Location
 from users.models import Profile
 
 
@@ -49,7 +43,6 @@ def is_allowed_for_chronicle(profile, chapter_id=0, game_id=0,
         return False
 
 
-
 @login_required
 def chronicle_main_view(request):
     profile = request.user.profile
@@ -74,7 +67,6 @@ def chronicle_main_view(request):
         'chapters': chapters
     }
     return render(request, 'history/chronicle_main.html', context)
-
 
 
 @login_required
@@ -104,7 +96,6 @@ def chronicle_create_view(request):
         return render(request, 'history/chronicle_create.html', context)
     else:
         return redirect('home:dupa')
-
 
 
 @login_required
@@ -146,7 +137,6 @@ def chronicle_all_chapters_view(request):
     return render(request, 'history/chronicle_all_chapters.html', context)
 
 
-
 @login_required
 def chronicle_one_chapter_view(request, chapter_id):
     profile = request.user.profile
@@ -182,7 +172,6 @@ def chronicle_one_chapter_view(request, chapter_id):
         return render(request, 'history/chronicle_one_chapter.html', context)
     else:
         return redirect('home:dupa')
-
 
 
 @login_required
@@ -222,7 +211,6 @@ def chronicle_one_game_view(request, game_id, timeline_event_id):
         return redirect('home:dupa')
 
 
-
 @login_required
 def chronicle_inform_view(request, event_id):
     profile = request.user.profile
@@ -260,7 +248,6 @@ def chronicle_inform_view(request, event_id):
         return redirect('home:dupa')
 
 
-
 @login_required
 def chronicle_edit_view(request, event_id):
     profile = request.user.profile
@@ -284,7 +271,6 @@ def chronicle_edit_view(request, event_id):
         return render(request, 'history/chronicle_edit.html', context)
     else:
         return redirect('home:dupa')
-
 
 
 @login_required
@@ -313,20 +299,26 @@ SEASONS_WITH_STYLES_DICT = {
 }
 
 
-
 @login_required
 def timeline_main_view(request):
     profile = request.user.profile
 
     if profile.status == 'gm':
         threads = Thread.objects.all()
-        participants = Profile.objects.filter(status__in=['active_player', 'inactive_player', 'dead_player'])
-        spec_locs = SpecificLocation.objects.annotate(events_cnt=Count('timeline_events')).filter(events_cnt__gt=0)
-        gen_locs = GeneralLocation.objects\
-            .annotate(events_cnt=Count('timeline_events'))\
+        participants = Profile.objects\
+            .filter(status__in=['active_player', 'inactive_player', 'dead_player'])
+        locs_lvl_2 = Location.objects\
+            .filter(~Q(in_location=None))\
+            .annotate(events_cnt=Count('timeline_events_in_spec'))\
+            .filter(events_cnt__gt=0)
+        locs_lvl_1 = Location.objects\
+            .filter(in_location=None)\
+            .annotate(events_cnt=Count('timeline_events_in_gen'))\
             .filter(events_cnt__gt=0)\
-            .prefetch_related(Prefetch('specific_locations', queryset=spec_locs))
-        games = GameSession.objects.annotate(num_events=Count('timeline_events')).filter(num_events__gt=0)
+            .prefetch_related(Prefetch('locations', queryset=locs_lvl_2))
+        games = GameSession.objects\
+            .annotate(num_events=Count('timeline_events'))\
+            .filter(num_events__gt=0)
         events = TimelineEvent.objects.all()
     else:
         threads = Thread.objects\
@@ -336,13 +328,15 @@ def timeline_main_view(request):
             .filter(status__in=['active_player', 'inactive_player', 'dead_player'])\
             .filter(timeline_events_participated__in=profile.timeline_events_participated.all())\
             .distinct()
-        spec_locs = SpecificLocation.objects \
-            .filter(Q(timeline_events__participants=profile) | Q(timeline_events__informed=profile)) \
+        locs_lvl_2 = Location.objects\
+            .filter(~Q(in_location=None)) \
+            .filter(Q(timeline_events_in_spec__participants=profile) | Q(timeline_events_in_spec__informed=profile)) \
             .distinct()
-        gen_locs = GeneralLocation.objects\
-            .filter(specific_locations__in=spec_locs)\
+        locs_lvl_1 = Location.objects\
+            .filter(in_location=None)\
+            .filter(locations__in=locs_lvl_2)\
             .distinct()\
-            .prefetch_related(Prefetch('specific_locations', queryset=spec_locs))
+            .prefetch_related(Prefetch('locations', queryset=locs_lvl_2))
         games = GameSession.objects \
             .filter(Q(timeline_events__participants=profile) | Q(timeline_events__informed=profile)) \
             .distinct()
@@ -357,17 +351,32 @@ def timeline_main_view(request):
         seasons.sort()
         years_with_seasons_dict[y] = seasons
 
+    # for event in TimelineEvent.objects.all():
+    #
+    #     gen_locs = event.general_locations.all()
+    #     gen_locs_names = [gl.name for gl in gen_locs]
+    #     locs_1 = Location.objects.filter(name__in=gen_locs_names)
+    #
+    #     spec_locs = event.specific_locations.all()
+    #     spec_locs_names = [sl.name for sl in spec_locs]
+    #     locs_2 = Location.objects.filter(name__in=spec_locs_names)
+    #
+    #     print(locs_1)
+    #     print(locs_2)
+    #     event.gen_locations.set(locs_1)
+    #     event.spec_locations.set(locs_2)
+    #     event.save()
+
     context = {
         'page_title': 'Kalendarium',
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
         'years_with_seasons_dict': years_with_seasons_dict,
         'threads': threads,
         'participants': participants,
-        'gen_locs': gen_locs,
+        'gen_locs': locs_lvl_1,
         'games': games,
     }
     return render(request, 'history/timeline_main.html', context)
-
 
 
 @login_required
@@ -395,7 +404,6 @@ def timeline_create_view(request):
         'form': form
     }
     return render(request, 'history/timeline_create.html', context)
-
 
 
 @login_required
@@ -432,27 +440,27 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
                 .distinct()
 
     elif gen_loc_id != 0:
-        general_location = get_object_or_404(GeneralLocation, id=gen_loc_id)
+        general_location = get_object_or_404(Location, id=gen_loc_id)
         page_title = general_location.name
         header = f'{general_location.name}... Zastanawiasz się, jakie piętno wywarła na Twoich losach ta kraina...'
 
         if profile.status == 'gm':
-            events = TimelineEvent.objects.filter(general_locations=gen_loc_id)
+            events = TimelineEvent.objects.filter(gen_locations=gen_loc_id)
         else:
             events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
-                .filter(general_locations=gen_loc_id) \
+                .filter(gen_locations=gen_loc_id) \
                 .distinct()
 
     elif spec_loc_id != 0:
-        specific_location = get_object_or_404(SpecificLocation, id=spec_loc_id)
+        specific_location = get_object_or_404(Location, id=spec_loc_id)
         page_title = specific_location.name
         header = f'{specific_location.name}... Jak to miejsce odcisnęło się na Twoim losie?'
 
         if profile.status == 'gm':
-            events = TimelineEvent.objects.filter(specific_locations=spec_loc_id)
+            events = TimelineEvent.objects.filter(spec_locations=spec_loc_id)
         else:
             events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
-                .filter(specific_locations=spec_loc_id) \
+                .filter(spec_locations=spec_loc_id) \
                 .distinct()
 
     elif game_id != 0:
@@ -522,7 +530,6 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
         return redirect('home:dupa')
 
 
-
 @login_required
 def timeline_inform_view(request, event_id):
     profile = request.user.profile
@@ -556,7 +563,6 @@ def timeline_inform_view(request, event_id):
         return render(request, 'history/_event_inform.html', context)
     else:
         return redirect('home:dupa')
-
 
 
 @login_required
