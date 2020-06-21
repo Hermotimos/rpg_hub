@@ -238,16 +238,25 @@ class TimelineEvent(models.Model):
 #         return f'{self.text[0:50]}...'
 
 
-def update_known_specific_locations(sender, instance, **kwargs):
+def update_known_spec_locations(sender, instance, **kwargs):
+    """Whenever a profile becomes 'participant' or 'informed' of an event in
+    specific location add this location to profile's 'known_directly'
+    (if participant) or 'known_indirectly' (if informed).
+    """
     participants = instance.participants.all()
     informed = instance.informed.all()
-    spec_locs = instance.specific_locations.all()
-    for spec_loc in spec_locs:
-        spec_loc.known_directly.add(*participants)
-        spec_loc.known_indirectly.add(*informed)
+    spec_locations = instance.spec_locations.all()
+    for spec_location in spec_locations:
+        spec_location.known_directly.add(*participants)
+        spec_location.known_indirectly.add(*informed)
 
 
-post_save.connect(update_known_specific_locations, sender=TimelineEvent)
-m2m_changed.connect(update_known_specific_locations, sender=TimelineEvent.participants.through)
-m2m_changed.connect(update_known_specific_locations, sender=TimelineEvent.informed.through)
-m2m_changed.connect(update_known_specific_locations, sender=TimelineEvent.specific_locations.through)
+post_save.connect(update_known_spec_locations, sender=TimelineEvent)
+
+# Run signal by each change of 'participants', 'informed' or 'spec_locations':
+m2m_changed.connect(update_known_spec_locations,
+                    sender=TimelineEvent.participants.through)
+m2m_changed.connect(update_known_spec_locations,
+                    sender=TimelineEvent.informed.through)
+m2m_changed.connect(update_known_spec_locations,
+                    sender=TimelineEvent.spec_locations.through)

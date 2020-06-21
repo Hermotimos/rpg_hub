@@ -215,18 +215,21 @@ class Location(models.Model):
         return informable
 
 
-def update_known_general_locations(sender, instance, **kwargs):
+def update_known_gen_locations(sender, instance, **kwargs):
+    """Whenever a location becomes 'known_directly' or 'known_indirectly' to
+    a profile, add this location's 'in_location' (i.e. more general location)
+    to profile's 'known_directly' or 'known_indirectly', respectively.
+    """
     known_directly = instance.known_directly.all()
     known_indirectly = instance.known_indirectly.all()
-    gen_loc = instance.general_location
+    gen_location = instance.in_location
+    if gen_location:
+        gen_location.known_directly.add(*known_directly)
+        gen_location.known_indirectly.add(*known_indirectly)
 
-    gen_loc.known_directly.add(*known_directly)
-    gen_loc.known_indirectly.add(*known_indirectly)
 
-
-post_save.connect(update_known_general_locations,
-                  sender=SpecificLocation)
-m2m_changed.connect(update_known_general_locations,
-                    sender=SpecificLocation.known_directly.through)
-m2m_changed.connect(update_known_general_locations,
-                    sender=SpecificLocation.known_indirectly.through)
+post_save.connect(update_known_gen_locations, sender=Location)
+m2m_changed.connect(update_known_gen_locations,
+                    sender=Location.known_directly.through)
+m2m_changed.connect(update_known_gen_locations,
+                    sender=Location.known_indirectly.through)
