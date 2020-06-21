@@ -4,12 +4,8 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
 from django.db.models import Q
 from django.forms import Textarea
-from django.utils.html import format_html
 
-from history.models import (Chapter,
-                            GameSession,
-                            Thread,
-                            TimelineEvent,
+from history.models import (Chapter, GameSession, Thread, TimelineEvent,
                             ChronicleEvent)
 from imaginarion.models import Picture
 from toponomikon.models import Location
@@ -228,5 +224,3 @@ admin.site.register(Thread, ThreadAdmin)
 admin.site.register(GameSession, GameSessionAdmin)
 admin.site.register(TimelineEvent, TimelineEventAdmin)
 admin.site.register(ChronicleEvent, ChronicleEventAdmin)
-
-

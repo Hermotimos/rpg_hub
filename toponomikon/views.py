@@ -32,45 +32,6 @@ def toponomikon_main_view(request):
         'page_title': 'Toponomikon',
         'general_locs': general_locs,
     }
-
-    # for gen_loc in GeneralLocation.objects.all():
-    #     loc = Location.objects.create(
-    #         name=gen_loc.name,
-    #         description=gen_loc.description,
-    #         main_image=gen_loc.main_image,
-    #         # pictures=gen_loc.pictures,
-    #         # knowledge_packets=gen_loc.knowledge_packets,
-    #         location_type=gen_loc.location_type,
-    #         in_location=None,
-    #         # known_directly=gen_loc.known_directly,
-    #         # known_indirectly=gen_loc.known_indirectly,
-    #         sorting_name=None,
-    #     )
-    #     loc.pictures.set([o for o in gen_loc.pictures.all()])
-    #     loc.knowledge_packets.set([o for o in gen_loc.knowledge_packets.all()])
-    #     loc.known_directly.set([o for o in gen_loc.known_directly.all()])
-    #     loc.known_indirectly.set([o for o in gen_loc.known_indirectly.all()])
-    #
-    # for spec_loc in SpecificLocation.objects.all():
-    #     loc = Location.objects.create(
-    #         name=spec_loc.name,
-    #         description=spec_loc.description,
-    #         main_image=spec_loc.main_image,
-    #         # pictures=spec_loc.pictures,
-    #         # knowledge_packets=spec_loc.knowledge_packets,
-    #         location_type=spec_loc.location_type,
-    #         # in_location=spec_loc.general_location,
-    #         # known_directly=spec_loc.known_directly,
-    #         # known_indirectly=spec_loc.known_indirectly,
-    #         sorting_name=spec_loc.sorting_name,
-    #     )
-    #     loc.pictures.set([o for o in spec_loc.pictures.all()])
-    #     loc.knowledge_packets.set([o for o in spec_loc.knowledge_packets.all()])
-    #     loc.known_directly.set([o for o in spec_loc.known_directly.all()])
-    #     loc.known_indirectly.set([o for o in spec_loc.known_indirectly.all()])
-    #     loc.in_location = Location.objects.get(name=spec_loc.general_location.name)
-    #     loc.save()
-
     return render(request, 'toponomikon/toponomikon_main.html', context)
 
 
