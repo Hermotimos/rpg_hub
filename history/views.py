@@ -295,22 +295,6 @@ def timeline_main_view(request):
         seasons.sort()
         years_with_seasons_dict[y] = seasons
 
-    # for event in TimelineEvent.objects.all():
-    #
-    #     gen_locs = event.general_locations.all()
-    #     gen_locs_names = [gl.name for gl in gen_locs]
-    #     locs_1 = Location.objects.filter(name__in=gen_locs_names)
-    #
-    #     spec_locs = event.specific_locations.all()
-    #     spec_locs_names = [sl.name for sl in spec_locs]
-    #     locs_2 = Location.objects.filter(name__in=spec_locs_names)
-    #
-    #     print(locs_1)
-    #     print(locs_2)
-    #     event.gen_locations.set(locs_1)
-    #     event.spec_locations.set(locs_2)
-    #     event.save()
-
     context = {
         'page_title': 'Kalendarium',
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
@@ -357,9 +341,9 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
                 .distinct()
 
     elif gen_loc_id != 0:
-        general_location = get_object_or_404(Location, id=gen_loc_id)
-        page_title = general_location.name
-        header = f'{general_location.name}... Zastanawiasz się, jakie piętno wywarła na Twoich losach ta kraina...'
+        gen_location = get_object_or_404(Location, id=gen_loc_id)
+        page_title = gen_location.name
+        header = f'{gen_location.name}... Zastanawiasz się, jakie piętno wywarła na Twoich losach ta kraina...'
 
         if profile.status == 'gm':
             events = TimelineEvent.objects.filter(gen_locations=gen_loc_id)
@@ -369,9 +353,9 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
                 .distinct()
 
     elif spec_loc_id != 0:
-        specific_location = get_object_or_404(Location, id=spec_loc_id)
-        page_title = specific_location.name
-        header = f'{specific_location.name}... Jak to miejsce odcisnęło się na Twoim losie?'
+        spec_location = get_object_or_404(Location, id=spec_loc_id)
+        page_title = spec_location.name
+        header = f'{spec_location.name}... Jak to miejsce odcisnęło się na Twoim losie?'
 
         if profile.status == 'gm':
             events = TimelineEvent.objects.filter(spec_locations=spec_loc_id)

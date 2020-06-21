@@ -23,7 +23,7 @@ class KnowledgePacketAdminForm(forms.ModelForm):
         required=False,
         widget=FilteredSelectMultiple('Skills', False),
     )
-    general_locations = forms.ModelMultipleChoiceField(
+    gen_locations = forms.ModelMultipleChoiceField(
         queryset=Location.objects.filter(in_location=None),
         required=False,
         widget=FilteredSelectMultiple('General locations', False),
@@ -33,7 +33,7 @@ class KnowledgePacketAdminForm(forms.ModelForm):
                           'PODAJ LOKACJĘ W DRUGIEJ TURZE :)'
                           '</b>'),
     )
-    specific_locations = forms.ModelMultipleChoiceField(
+    spec_locations = forms.ModelMultipleChoiceField(
         queryset=Location.objects.filter(~Q(in_location=None)),
         required=False,
         widget=FilteredSelectMultiple('Specific locations', False),
@@ -54,19 +54,19 @@ class KnowledgePacketAdminForm(forms.ModelForm):
             return
         try:
             gen_locs = Location.objects.filter(in_location=None).filter(knowledge_packets=id_)
-            self.__dict__['initial'].update({'general_locations': gen_locs})
+            self.__dict__['initial'].update({'gen_locations': gen_locs})
         except AttributeError:
             pass
         try:
             spec_locs = Location.objects.filter(~Q(in_location=None)).filter(knowledge_packets=id_)
-            self.__dict__['initial'].update({'specific_locations': spec_locs})
+            self.__dict__['initial'].update({'spec_locations': spec_locs})
         except AttributeError:
             pass
 
     def save(self, *args, **kwargs):
         instance = super().save(*args, **kwargs)
-        gen_loc_ids = self.cleaned_data['general_locations']
-        spec_loc_ids = self.cleaned_data['specific_locations']
+        gen_loc_ids = self.cleaned_data['gen_locations']
+        spec_loc_ids = self.cleaned_data['spec_locations']
         try:
             for gen_loc in Location.objects.filter(in_location=None).filter(id__in=gen_loc_ids):
                 gen_loc.knowledge_packets.add(instance)

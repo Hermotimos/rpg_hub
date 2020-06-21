@@ -105,17 +105,17 @@ class TimelineEventInline(admin.TabularInline):
                     formfield.choices)
             formfield.choices = choices
 
-        if db_field.name == 'general_locations':
-            choices = getattr(request, '_general_locations_choices_cache', None)
+        if db_field.name == 'gen_locations':
+            choices = getattr(request, '_gen_locations_choices_cache', None)
             if choices is None:
-                request._main_general_locations_cache = choices = list(
+                request._main_gen_locations_cache = choices = list(
                     formfield.choices)
             formfield.choices = choices
 
-        if db_field.name == 'specific_locations':
-            choices = getattr(request, '_specific_locations_choices_cache', None)
+        if db_field.name == 'spec_locations':
+            choices = getattr(request, '_spec_locations_choices_cache', None)
             if choices is None:
-                request._main_specific_locations_cache = choices = list(
+                request._main_spec_locations_cache = choices = list(
                     formfield.choices)
             formfield.choices = choices
 
