@@ -40,12 +40,12 @@
 
         <article class="tabset">
             <!-- Tabs -->
-            {% if locations %}
+            {% if location_types %}
                 <input type="radio" name="tabset" id="tab1" aria-controls="locations" checked>
                 <label class="h3" for="tab1">Lokacje</label>
             {% endif %}
             {% if kn_packets %}
-                {% if not locations %}
+                {% if not location_types %}
                     <input type="radio" name="tabset" id="tab2" aria-controls="knowledge" checked>
                 {% else %}
                     <input type="radio" name="tabset" id="tab2" aria-controls="knowledge">
@@ -53,7 +53,7 @@
                 <label class="h3" for="tab2">Wiedza</label>
             {% endif %}
             {% if pictures %}
-                {% if not locations and not kn_packets %}
+                {% if not location_types and not kn_packets %}
                     <input type="radio" name="tabset" id="tab3" aria-controls="pictures" checked>
                 {% else %}
                     <input type="radio" name="tabset" id="tab3" aria-controls="pictures">
@@ -63,7 +63,7 @@
             
             <!-- Tabs content -->
             <div class="tab-panels pt-1">
-                {% if locations %}
+                {% if location_types %}
                     <section id="locations" class="tab-panel">
                         <div class="container">
                             {% for location_type in location_types %}

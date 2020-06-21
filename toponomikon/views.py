@@ -64,7 +64,6 @@ def toponomikon_location_view(request, loc_name):
     # TABS
     if profile.status == 'gm':
         locations = location.locations.all()
-        
         kn_packets = location.knowledge_packets.all()
     else:
         known_directly = location.locations.filter(known_directly=profile)
@@ -73,7 +72,7 @@ def toponomikon_location_view(request, loc_name):
         locations = (known_directly | known_indirectly)
         kn_packets = location.knowledge_packets.filter(acquired_by=profile)
     
-    known_indirectly = profile.locs_known_indirectly.exclude(
+    only_indirectly = profile.locs_known_indirectly.exclude(
         id__in=profile.locs_known_directly.all()
     )
     locations = locations\
@@ -81,7 +80,7 @@ def toponomikon_location_view(request, loc_name):
         .distinct() \
         .annotate(
             only_indirectly=Case(
-                When(id__in=known_indirectly, then=Value(1)),
+                When(id__in=only_indirectly, then=Value(1)),
                 default=Value(0),
                 output_field=IntegerField()
             )
