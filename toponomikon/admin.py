@@ -91,7 +91,7 @@ class LocationAdmin(admin.ModelAdmin):
     inlines = [LocationInline]
     list_display = ['name', 'location_type', 'in_location', 'description', 'main_image']
     list_editable = ['location_type', 'in_location', 'description', 'main_image']
-    list_filter = ['in_location__name']
+    list_filter = ['location_type__name']
     list_select_related = ['location_type', 'in_location', 'main_image']
     search_fields = ['name', 'description']
     
@@ -107,8 +107,8 @@ class LocationAdmin(admin.ModelAdmin):
     
     
 class LocationTypeAdmin(admin.ModelAdmin):
-    list_display = ['name', 'default_img']
-    list_editable = ['default_img']
+    list_display = ['id', 'order_no', 'name', 'name_plural', 'default_img']
+    list_editable = ['order_no', 'name', 'name_plural', 'default_img']
     list_select_related = ['default_img']
 
     def formfield_for_dbfield(self, db_field, **kwargs):

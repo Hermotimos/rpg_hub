@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Q
 from django.db.models.signals import post_save, m2m_changed
@@ -10,11 +11,13 @@ from users.models import Profile
 
 class LocationType(models.Model):
     name = models.CharField(max_length=100)
+    name_plural = models.CharField(max_length=100, blank=True, null=True)
     default_img = models.ForeignKey(to=Picture, related_name='location_types',
                                     on_delete=models.SET_NULL, null=True)
+    order_no = models.SmallIntegerField(validators=[MinValueValidator(0)], blank=True, null=True)
     
     class Meta:
-        ordering = ['name']
+        ordering = ['order_no']
 
     def __str__(self):
         return self.name

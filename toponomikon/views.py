@@ -49,18 +49,22 @@ def toponomikon_main_view(request):
 def toponomikon_location_view(request, loc_name):
     profile = request.user.profile
     location = get_object_or_404(Location, name=loc_name)
-    known_only_indirectly = profile.locs_known_indirectly.exclude(
-        id__in=profile.locs_known_directly.all()
-    )
     
-    known_directly_to = location.known_directly.all()
-    known_indirectly_to = location.known_indirectly.all()
-    allowed = (known_directly_to | known_indirectly_to)
+    directly = location.known_directly.all()
+    indirectly = location.known_indirectly.all()
+    allowed = (directly | indirectly)
     
+    if profile in indirectly and profile not in directly and profile.status != 'gm':
+        loc_known_indirectly = True
+        page_title = location.name + ' (znasz z opowieści)'
+    else:
+        loc_known_indirectly = False
+        page_title = location.name
+
     # TABS
     if profile.status == 'gm':
         locations = location.locations.all()
-        # location_types = LocationType.objects.all()
+        
         kn_packets = location.knowledge_packets.all()
     else:
         known_directly = location.locations.filter(known_directly=profile)
@@ -69,16 +73,24 @@ def toponomikon_location_view(request, loc_name):
         locations = (known_directly | known_indirectly)
         kn_packets = location.knowledge_packets.filter(acquired_by=profile)
     
+    known_indirectly = profile.locs_known_indirectly.exclude(
+        id__in=profile.locs_known_directly.all()
+    )
     locations = locations\
-        .select_related('main_image')\
+        .select_related('main_image', 'location_type')\
         .distinct() \
         .annotate(
             only_indirectly=Case(
-                When(id__in=known_only_indirectly, then=Value(1)),
+                When(id__in=known_indirectly, then=Value(1)),
                 default=Value(0),
                 output_field=IntegerField()
             )
         ) \
+        .distinct()
+
+    location_types = LocationType.objects\
+        .filter(locations__in=locations)\
+        .prefetch_related(Prefetch('locations', queryset=locations))\
         .distinct()
     
     # INFORM LOCATION
@@ -113,17 +125,15 @@ def toponomikon_location_view(request, loc_name):
         if informed_ids:
             messages.info(request, f'Poinformowano wybrane postaci!')
 
-    page_title = location.name + ' (znasz z opowieści)' \
-        if profile not in location.known_directly.all() and profile.status != 'gm'\
-        else location.name
-    
     context = {
         # General
         'page_title': page_title,
         'location': location,
+        'loc_known_indirectly': loc_known_indirectly,
         # Tabs
         'kn_packets': kn_packets,
         'locations': locations,
+        'location_types': location_types,
         'pictures': location.pictures.all(),
     }
     if profile in allowed or profile.status == 'gm':
