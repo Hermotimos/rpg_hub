@@ -8,7 +8,7 @@ from django.db.models.signals import post_save, m2m_changed
 from debates.models import Debate
 from imaginarion.models import Picture
 from rpg_project.utils import create_sorting_name
-from toponomikon.models import Location, GeneralLocation, SpecificLocation
+from toponomikon.models import Location
 from users.models import User, Profile
 
 COLORS = (
@@ -178,8 +178,8 @@ class TimelineEvent(models.Model):
                                       Q(status='active_player') |
                                       Q(status='inactive_player'),
                                       blank=True)
-    general_locations = models.ManyToManyField(GeneralLocation, related_name='timeline_events')
-    specific_locations = models.ManyToManyField(SpecificLocation, related_name='timeline_events')
+    # general_locations = models.ManyToManyField(GeneralLocation, related_name='timeline_events')
+    # specific_locations = models.ManyToManyField(SpecificLocation, related_name='timeline_events')
     gen_locations = models.ManyToManyField(Location, related_name='timeline_events_in_gen')
     spec_locations = models.ManyToManyField(Location, related_name='timeline_events_in_spec')
     # locations = models.ManyToManyField(Location, related_name='timeline_events')

@@ -4,8 +4,6 @@ from django.db.models import Count, Prefetch, Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 
-from history.forms import (TimelineEventCreateForm, TimelineEventEditForm,
-                           ChronicleEventCreateForm, ChronicleEventEditForm)
 from history.models import (TimelineEvent, ChronicleEvent, Chapter,
                             GameSession, Thread)
 from rpg_project.utils import send_emails
@@ -67,35 +65,6 @@ def chronicle_main_view(request):
         'chapters': chapters
     }
     return render(request, 'history/chronicle_main.html', context)
-
-
-@login_required
-def chronicle_create_view(request):
-    profile = request.user.profile
-
-    if request.method == 'POST':
-        form = ChronicleEventCreateForm(request.POST)
-        if form.is_valid():
-            event = form.save()
-            event.participants.set(form.cleaned_data['participants'])
-            event.informed.set(form.cleaned_data['informed'])
-            event.save()
-            messages.info(request, f'Dodano nowe wydarzenie!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-        else:
-            messages.warning(request, 'Popraw poniższy błąd!')
-    else:
-        form = ChronicleEventCreateForm()
-
-    context = {
-        'page_title': 'Nowe wydarzenie: Kronika',
-        'form': form
-    }
-    if profile.status == 'gm':
-        return render(request, 'history/chronicle_create.html', context)
-    else:
-        return redirect('home:dupa')
 
 
 @login_required
@@ -249,31 +218,6 @@ def chronicle_inform_view(request, event_id):
 
 
 @login_required
-def chronicle_edit_view(request, event_id):
-    profile = request.user.profile
-    event = get_object_or_404(ChronicleEvent, id=event_id)
-
-    if request.method == 'POST':
-        form = ChronicleEventEditForm(request.POST, instance=event)
-        if form.is_valid():
-            form.save()
-            messages.info(request, f'Zmodyfikowano wydarzenie!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-    else:
-        form = ChronicleEventEditForm(instance=event)
-
-    context = {
-        'page_title': 'Edycja wydarzenia',
-        'form': form
-    }
-    if profile.status == 'gm':
-        return render(request, 'history/chronicle_edit.html', context)
-    else:
-        return redirect('home:dupa')
-
-
-@login_required
 def chronicle_gap_view(request, timeline_event_id):
     timeline_event = get_object_or_404(TimelineEvent, id=timeline_event_id)
     participants_and_informed = (timeline_event.participants.all()
@@ -377,33 +321,6 @@ def timeline_main_view(request):
         'games': games,
     }
     return render(request, 'history/timeline_main.html', context)
-
-
-@login_required
-def timeline_create_view(request):
-    if request.method == 'POST':
-        form = TimelineEventCreateForm(request.POST)
-        if form.is_valid():
-            event = form.save()
-            event.threads.set(form.cleaned_data['threads'])
-            event.participants.set(form.cleaned_data['participants'])
-            event.informed.set(form.cleaned_data['informed'])
-            event.specific_locations.set(form.cleaned_data['specific_locations'])
-            event.save()
-            messages.info(request, f'Dodano nowe wydarzenie!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-        else:
-            messages.warning(request, 'Popraw poniższy błąd!')
-
-    else:
-        form = TimelineEventCreateForm()
-
-    context = {
-        'page_title': 'Nowe wydarzenie: Kalendarium',
-        'form': form
-    }
-    return render(request, 'history/timeline_create.html', context)
 
 
 @login_required
@@ -513,8 +430,8 @@ def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_
 
     events = events\
         .select_related('game')\
-        .prefetch_related('threads', 'participants', 'informed', 'general_locations',
-                          'specific_locations__general_location',
+        .prefetch_related('threads', 'participants', 'informed', 'gen_locations',
+                          'spec_locations__in_location',
                           # 'notes__author'
                           )
 
@@ -563,29 +480,3 @@ def timeline_inform_view(request, event_id):
         return render(request, 'history/_event_inform.html', context)
     else:
         return redirect('home:dupa')
-
-
-@login_required
-def timeline_edit_view(request, event_id):
-    profile = request.user.profile
-    event = get_object_or_404(TimelineEvent, id=event_id)
-
-    if request.method == 'POST':
-        form = TimelineEventEditForm(request.POST, instance=event)
-        if form.is_valid():
-            form.save()
-            messages.info(request, f'Zmodyfikowano wydarzenie!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
-    else:
-        form = TimelineEventEditForm(instance=event)
-
-    context = {
-        'page_title': 'Edycja wydarzenia',
-        'form': form
-    }
-    if profile.status == 'gm':
-        return render(request, 'history/timeline_edit.html', context)
-    else:
-        return redirect('home:dupa')
-

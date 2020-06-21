@@ -12,7 +12,7 @@ from history.models import (Chapter,
                             TimelineEvent,
                             ChronicleEvent)
 from imaginarion.models import Picture
-from toponomikon.models import GeneralLocation, SpecificLocation
+from toponomikon.models import Location
 from users.models import Profile
 
 
@@ -58,17 +58,17 @@ class TimelineEventAdminForm(forms.ModelForm):
         widget=FilteredSelectMultiple('Informed', False),
     )
     threads = forms.ModelMultipleChoiceField(
-        queryset=Picture.objects.all(),
+        queryset=Thread.objects.all(),
         required=False,
         widget=FilteredSelectMultiple('Threads', False),
     )
-    general_locations = forms.ModelMultipleChoiceField(
-        queryset=GeneralLocation.objects.all(),
+    gen_locations = forms.ModelMultipleChoiceField(
+        queryset=Location.objects.filter(in_location=None),
         required=True,
         widget=FilteredSelectMultiple('General locations', False),
     )
-    specific_locations = forms.ModelMultipleChoiceField(
-        queryset=SpecificLocation.objects.all(),
+    spec_locations = forms.ModelMultipleChoiceField(
+        queryset=Location.objects.filter(~Q(in_location=None)),
         required=True,
         widget=FilteredSelectMultiple('Specific locations', False),
     )

@@ -2,13 +2,14 @@ from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
+from django.db.models import Q
 from django.forms.widgets import TextInput
 from django.utils.html import format_html
 
 from imaginarion.models import Picture
 from knowledge.models import KnowledgePacket
 from rules.models import Skill
-from toponomikon.models import GeneralLocation, SpecificLocation
+from toponomikon.models import Location
 
 
 class KnowledgePacketAdminForm(forms.ModelForm):
@@ -23,7 +24,7 @@ class KnowledgePacketAdminForm(forms.ModelForm):
         widget=FilteredSelectMultiple('Skills', False),
     )
     general_locations = forms.ModelMultipleChoiceField(
-        queryset=GeneralLocation.objects.all(),
+        queryset=Location.objects.filter(in_location=None),
         required=False,
         widget=FilteredSelectMultiple('General locations', False),
         label=format_html('<b style="color:red">'
@@ -33,7 +34,7 @@ class KnowledgePacketAdminForm(forms.ModelForm):
                           '</b>'),
     )
     specific_locations = forms.ModelMultipleChoiceField(
-        queryset=SpecificLocation.objects.all(),
+        queryset=Location.objects.filter(~Q(in_location=None)),
         required=False,
         widget=FilteredSelectMultiple('Specific locations', False),
         label=format_html('<b style="color:red">'
@@ -52,12 +53,12 @@ class KnowledgePacketAdminForm(forms.ModelForm):
             # TODO research this
             return
         try:
-            gen_locs = GeneralLocation.objects.filter(knowledge_packets=id_)
+            gen_locs = Location.objects.filter(in_location=None).filter(knowledge_packets=id_)
             self.__dict__['initial'].update({'general_locations': gen_locs})
         except AttributeError:
             pass
         try:
-            spec_locs = SpecificLocation.objects.filter(knowledge_packets=id_)
+            spec_locs = Location.objects.filter(~Q(in_location=None)).filter(knowledge_packets=id_)
             self.__dict__['initial'].update({'specific_locations': spec_locs})
         except AttributeError:
             pass
@@ -67,10 +68,10 @@ class KnowledgePacketAdminForm(forms.ModelForm):
         gen_loc_ids = self.cleaned_data['general_locations']
         spec_loc_ids = self.cleaned_data['specific_locations']
         try:
-            for gen_loc in GeneralLocation.objects.filter(id__in=gen_loc_ids):
+            for gen_loc in Location.objects.filter(in_location=None).filter(id__in=gen_loc_ids):
                 gen_loc.knowledge_packets.add(instance)
                 gen_loc.save()
-            for spec_loc in SpecificLocation.objects.filter(id__in=spec_loc_ids):
+            for spec_loc in Location.objects.filter(~Q(in_location=None)).filter(id__in=spec_loc_ids):
                 spec_loc.knowledge_packets.add(instance)
                 spec_loc.save()
         except ValueError:

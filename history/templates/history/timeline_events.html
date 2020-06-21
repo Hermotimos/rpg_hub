@@ -72,11 +72,11 @@
                     {% endfor %}
                 </td>
                 <td class="timeline-small align-top unblue-black">
-                    {% for gen_loc in event.general_locations.all %}
-                        <a class="hover-pointer"  href="{% url 'history:timeline-events' 0 0 gen_loc.id 0 0 '0' 0 %}">{{ gen_loc.name }}</a><br>
-                        {% for spec_loc in event.specific_locations.all %}
-                            {% if spec_loc.general_location.id == gen_loc.id %}
-                                <a class="hover-pointer" href="{% url 'history:timeline-events' 0 0 0 spec_loc.id 0 '0' 0 %}"><small>{{ spec_loc.name }}</small></a><br>
+                    {% for gen_location in event.gen_locations.all %}
+                        <a class="hover-pointer"  href="{% url 'history:timeline-events' 0 0 gen_location.id 0 0 '0' 0 %}">{{ gen_location.name }}</a><br>
+                        {% for spec_location in event.spec_locations.all %}
+                            {% if spec_location.in_location.id == gen_location.id %}
+                                <a class="hover-pointer" href="{% url 'history:timeline-events' 0 0 0 spec_location.id 0 '0' 0 %}"><small>{{ spec_location.name }}</small></a><br>
                             {% endif %}
                         {% endfor %}
                     {% endfor %}
@@ -99,11 +99,6 @@
                     <a class="btn btn-outline-dark btn-sm py-0 disabled" href="#">
                         <i class="icon-note-small"></i>
                     </a>
-                    {% if request.user.profile.status == 'gm' %}
-                        <a class="btn btn-outline-dark btn-sm py-0" href="{% url 'history:timeline-edit' event.id %}">
-                            <i class="icon-edit-small"></i>
-                        </a>
-                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

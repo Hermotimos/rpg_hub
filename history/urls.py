@@ -6,16 +6,13 @@ app_name = 'history'
 urlpatterns = [
     # chronicle
     path('chronicle/', views.chronicle_main_view, name='chronicle-main'),
-    path('chronicle/create/', views.chronicle_create_view, name='chronicle-create'),
     path('chronicle/all-chapters/', views.chronicle_all_chapters_view, name='chronicle-all-chapters'),
     path('chronicle/one-chapter:<int:chapter_id>/', views.chronicle_one_chapter_view, name='chronicle-one-chapter'),
     path('chronicle/one-game:<int:game_id>:<timeline_event_id>/', views.chronicle_one_game_view, name='chronicle-one-game'),
     path('chronicle/inform:<int:event_id>/', views.chronicle_inform_view, name='chronicle-inform'),
-    path('chronicle/edit:<int:event_id>/', views.chronicle_edit_view, name='chronicle-edit'),
     path('chronicle/gap:<int:timeline_event_id>/', views.chronicle_gap_view, name='chronicle-gap'),
     # timeline
     path('timeline/', views.timeline_main_view, name='timeline-main'),
-    path('timeline/create/', views.timeline_create_view, name='timeline-create'),
     path('timeline/'
          'thread:<int:thread_id>/'
          'participant:<int:participant_id>/'
@@ -34,5 +31,4 @@ urlpatterns = [
     # path('timeline/game:<int:game_id>/', views.timeline_game_view, name='timeline-game'),
 
     path('timeline/inform:<int:event_id>/', views.timeline_inform_view, name='timeline-inform'),
-    path('timeline/edit:<int:event_id>/', views.timeline_edit_view, name='timeline-edit'),
 ]

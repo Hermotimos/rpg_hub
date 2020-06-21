@@ -2,10 +2,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-from history.models import Thread, SpecificLocation, GeneralLocation, TimelineEvent
+from history.models import Thread, Location, TimelineEvent
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, CharacterClass, CharacterProfession, EliteClass, \
     EliteProfession, WeaponClass, WeaponType
-
 
 
 @login_required
@@ -17,7 +16,6 @@ def reload_main_view(request):
         return render(request, 'reload/reload_main.html', context)
     else:
         return redirect('home:dupa')
-
 
 
 @login_required
@@ -36,22 +34,15 @@ def reload_history(request):
         return redirect('home:dupa')
 
 
-
 @login_required
 def reload_toponomikon(request):
     if request.user.profile.status == 'gm':
-
-        for obj in GeneralLocation.objects.all():
+        for obj in Location.objects.all():
             obj.save()
-        for obj in SpecificLocation.objects.all():
-            obj.save()
-
         messages.info(request, f'Przeładowano "sorting_name" dla aplikacji "toponomikon"!')
-
         return redirect('reload:reload-main')
     else:
         return redirect('home:dupa')
-
 
 
 @login_required
