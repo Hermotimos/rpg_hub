@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count, Prefetch, Q
+from django.db.models import Prefetch, Q, When, Case, Value, IntegerField, Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -45,21 +45,28 @@ def is_allowed_for_chronicle(profile, chapter_id=0, game_id=0,
 def chronicle_main_view(request):
     profile = request.user.profile
 
-    if request.user.profile.status == 'gm':
+    if profile.status == 'gm':
         chapters = Chapter.objects.prefetch_related('game_sessions')
     else:
-        events = (profile.chronicle_events_participated.all()
-                  | profile.chronicle_events_informed.all())\
-            .distinct()
-
+        participated_events = profile.chronicle_events_participated.all()
+        informed_events = profile.chronicle_events_informed.all()
+        events = (participated_events | informed_events).distinct()
+        
         games = GameSession.objects.filter(chronicle_events__in=events)\
-            .distinct()\
-            .prefetch_related(Prefetch('chronicle_events', queryset=events))
-
+            .prefetch_related(Prefetch('chronicle_events', queryset=events)) \
+            .annotate(
+                any_known_directly=Count(
+                    'chronicle_events',
+                    filter=Q(chronicle_events__in=participated_events)
+                )
+            ) \
+            .distinct()
+        
         chapters = Chapter.objects\
             .prefetch_related(Prefetch('game_sessions', queryset=games))\
-            .filter(game_sessions__in=games).distinct()
-
+            .filter(game_sessions__in=games)\
+            .distinct()
+            
     context = {
         'page_title': 'Kronika',
         'chapters': chapters

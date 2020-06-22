@@ -29,9 +29,12 @@
         </h3>
         <br>
         {% for game in chapter.game_sessions.all %}
-            <h6 class="unblue">
+            <h6 class="unblue {% if not game.any_known_directly and request.user.profile.status != 'gm' %} text-muted {% endif %}">
                 {{ forloop.counter }}.
-                <a href="{% url 'history:chronicle-one-game' game.id '0' %}">{{ game.title }}</a>
+                <a href="{% url 'history:chronicle-one-game' game.id '0' %}"
+                   class="{% if not game.any_known_directly and request.user.profile.status != 'gm' %} text-muted {% endif %}">
+                    {{ game.title }}
+                </a>
             </h6>
         {% endfor %}
         <br>
