@@ -55,10 +55,5 @@
         <a class="btn btn-outline-dark mt-1 disabled" href="#">
             <i class="icon-note-medium"></i>
         </a>
-        {% if request.user.profile.status == 'gm' %}
-            <a class="btn btn-outline-dark mt-1" href="{% url 'history:chronicle-edit' event.id %}">
-                <i class="icon-edit-medium"></i>
-            </a>
-        {% endif %}
     </td>
 </tr>
