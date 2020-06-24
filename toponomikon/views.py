@@ -10,6 +10,9 @@ from toponomikon.models import Location, LocationType
 
 @login_required
 def toponomikon_main_view(request):
+    
+    # TODO - replace this with call to MainLocation proxy model !!!
+    
     profile = request.user.profile
     known_only_indirectly = profile.locs_known_indirectly.exclude(
         id__in=profile.locs_known_directly.all()

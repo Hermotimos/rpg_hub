@@ -103,6 +103,20 @@ class Location(models.Model):
         return informable
 
 
+class MainLocationManager(models.Manager):
+    
+    def get_queryset(self):
+        qs = super(MainLocationManager, self).get_queryset()
+        return qs.filter(in_location=None)
+
+
+class MainLocation(Location):
+    objects = MainLocationManager()
+    
+    class Meta:
+        proxy = True
+        
+
 def update_known_gen_locations(sender, instance, **kwargs):
     """Whenever a location becomes 'known_directly' or 'known_indirectly' to
     a profile, add this location's 'in_location' (i.e. more general location)
