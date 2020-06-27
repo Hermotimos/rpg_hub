@@ -10,7 +10,6 @@ from rpg_project.utils import send_emails
 from users.models import Profile
 
 
-
 @login_required
 def debates_main_view(request):
     profile = request.user.profile

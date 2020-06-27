@@ -11,16 +11,18 @@
         {% endif %}
 
         {% if event.pictures.all and request.user.profile not in event.informed.all %}
-            <table class="chronicle-img">
+            <table class="chronicle-img text-center">
                 <tr>
-                {% for p in event.pictures.all %}
                     <td class="align-top">
-                        <img src="{{ p.image.url }}" alt="Event img">
-                        {% if p.description %}
-                            <small>{{ p.description }}</small>
-                        {% endif %}
+                        <div class="row">
+                            {% for p in event.pictures.all %}
+                                <div class="col p-0">
+                                    <img src="{{ p.image.url }}" alt="Event img">
+                                    {% if p.description %}<small>{{ p.description }}</small>{% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
                     </td>
-                {% endfor %}
                 </tr>
             </table>
             <br>
