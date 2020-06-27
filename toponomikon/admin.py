@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import Q
 from django.forms import Textarea, TextInput, Select
 
-from toponomikon.models import LocationType, Location, MainLocation
+from toponomikon.models import LocationType, Location, PrimaryLocation, SecondaryLocation
 from imaginarion.models import Picture
 from knowledge.models import KnowledgePacket
 from users.models import Profile
@@ -126,7 +126,34 @@ class LocationAdmin(admin.ModelAdmin):
         return formfield
     
 
-class MainLocationAdmin(admin.ModelAdmin):
+class PrimaryLocationAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        models.ForeignKey: {'widget': Select(attrs={'style': 'width:300px'})},
+    }
+    inlines = [LocationInline]
+    list_display = ['id', 'name', 'main_image', 'description']
+    list_editable = ['name', 'main_image', 'description']
+    list_select_related = ['main_image']
+    search_fields = ['name', 'description']
+    
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
+        # Reduces greatly queries in main view, doubles in detail view
+        # The trade-off is still very good
+        request = kwargs['request']
+        formfield = super().formfield_for_dbfield(db_field, **kwargs)
+
+        if db_field.name == 'main_image':
+            choices = getattr(request, '_main_image_choices_cache', None)
+            if choices is None:
+                request._main_main_image_cache = choices = list(
+                    formfield.choices)
+            formfield.choices = choices
+
+        return formfield
+    
+    
+class SecondaryLocationAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.ForeignKey: {'widget': Select(attrs={'style': 'width:300px'})},
     }
@@ -175,4 +202,5 @@ class LocationTypeAdmin(admin.ModelAdmin):
 
 admin.site.register(LocationType, LocationTypeAdmin)
 admin.site.register(Location, LocationAdmin)
-admin.site.register(MainLocation, MainLocationAdmin)
+admin.site.register(PrimaryLocation, PrimaryLocationAdmin)
+admin.site.register(SecondaryLocation, SecondaryLocationAdmin)

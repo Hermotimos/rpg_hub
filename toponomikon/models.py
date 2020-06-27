@@ -103,15 +103,29 @@ class Location(models.Model):
         return informable
 
 
-class MainLocationManager(models.Manager):
+class PrimaryLocationManager(models.Manager):
     
     def get_queryset(self):
-        qs = super(MainLocationManager, self).get_queryset()
+        qs = super(PrimaryLocationManager, self).get_queryset()
         return qs.filter(in_location=None)
 
 
-class MainLocation(Location):
-    objects = MainLocationManager()
+class PrimaryLocation(Location):
+    objects = PrimaryLocationManager()
+    
+    class Meta:
+        proxy = True
+        
+        
+class SecondaryLocationManager(models.Manager):
+    
+    def get_queryset(self):
+        qs = super(SecondaryLocationManager, self).get_queryset()
+        return qs.filter(~Q(in_location=None))
+
+
+class SecondaryLocation(Location):
+    objects = SecondaryLocationManager()
     
     class Meta:
         proxy = True
