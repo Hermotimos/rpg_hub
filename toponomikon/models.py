@@ -14,7 +14,7 @@ class LocationType(models.Model):
     name_plural = models.CharField(max_length=100, blank=True, null=True)
     default_img = models.ForeignKey(to=Picture, related_name='location_types',
                                     on_delete=models.SET_NULL, null=True)
-    order_no = models.SmallIntegerField(validators=[MinValueValidator(0)], blank=True, null=True)
+    order_no = models.PositiveSmallIntegerField()
     
     class Meta:
         ordering = ['order_no']

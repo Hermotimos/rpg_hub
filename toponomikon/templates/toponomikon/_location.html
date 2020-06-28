@@ -20,6 +20,15 @@
             {% if location.only_indirectly %} text-muted {% endif %}">
             {% if location.description %} {{ location.description|linebreaks }} {% endif %}
         </h6>
+        <p class="text-justify">
+            {% for location in location.locations.all %}
+                <small class="smaller">
+                    <a class="text-muted" href="{% url 'toponomikon:location' location.name %}">{{ location }}</a>
+                    {% if not forloop.last %} |{% endif %}
+                </small>
+            {% endfor %}
+        </p>
+
     </div>
 </div>
 
