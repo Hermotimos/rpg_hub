@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from chronicles.models import Date, EventType, Event, ChronologySystem, Era, Period
+from chronicles.models import Date, EventType, Event, ChronologySystem, Era, Period, SingularEvent
 
 
 admin.site.register(Date)
@@ -11,4 +11,5 @@ admin.site.register(Event)
 admin.site.register(ChronologySystem)
 admin.site.register(Era)
 admin.site.register(Period)
+admin.site.register(SingularEvent)
 
