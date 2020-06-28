@@ -34,7 +34,7 @@ class Debate(models.Model):
     is_individual = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['date_created']
+        ordering = ['-date_created']
 
     def __str__(self):
         return self.name
