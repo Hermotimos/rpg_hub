@@ -175,7 +175,8 @@ class PeriodManager(models.Manager):
         qs = qs.filter(
             ~Q(in_event=None) &
             ~Q(in_event__in_event=None) &
-            Q(in_event__in_event__in_event=None)
+            Q(in_event__in_event__in_event=None) &
+            ~Q(events=None)
         )
         return qs
     
