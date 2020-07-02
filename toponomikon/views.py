@@ -39,7 +39,8 @@ def toponomikon_main_view(request):
 @login_required
 def toponomikon_location_view(request, loc_name):
     profile = request.user.profile
-    location = get_object_or_404(Location, name=loc_name)
+    # location = get_object_or_404(Location, name=loc_name)
+    location = Location.objects.select_related('main_image').get(name=loc_name)
     
     directly = location.known_directly.all()
     indirectly = location.known_indirectly.all()
@@ -67,7 +68,9 @@ def toponomikon_location_view(request, loc_name):
         id__in=profile.locs_known_directly.all()
     )
     locations = locations\
-        .select_related('main_image', 'location_type')\
+        .only('id', 'name', 'description', 'main_image_id', 'location_type_id', 'in_location_id', 'sorting_name')\
+        .select_related('main_image')\
+        .prefetch_related('locations')\
         .distinct() \
         .annotate(
             only_indirectly=Case(
@@ -77,6 +80,7 @@ def toponomikon_location_view(request, loc_name):
             )
         ) \
         .distinct()
+
 
     location_types = LocationType.objects\
         .filter(locations__in=locations)\
