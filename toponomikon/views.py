@@ -5,42 +5,30 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from knowledge.models import KnowledgePacket
 from rpg_project.utils import send_emails
-from toponomikon.models import Location, LocationType
+from toponomikon.models import Location, LocationType, PrimaryLocation, SecondaryLocation
 
 
 @login_required
 def toponomikon_main_view(request):
-    
-    # TODO - replace this with call to MainLocation proxy model !!!
-    
     profile = request.user.profile
     known_only_indirectly = profile.locs_known_indirectly.exclude(
         id__in=profile.locs_known_directly.all()
     )
     if profile.status == 'gm':
-        general_locs = Location.objects.filter(in_location=None)
-        specific_locs = Location.objects.filter(~Q(in_location=None))
+        locations = PrimaryLocation.objects.all()
     else:
-        known_directly = profile.locs_known_directly.filter(in_location=None)
-        known_indirectly = profile.locs_known_indirectly.filter(in_location=None)
-        general_locs = (known_directly | known_indirectly)
-        specific_locs = (
-                profile.locs_known_directly.filter(~Q(in_location=None))
-                | profile.locs_known_indirectly.filter(~Q(in_location=None))
-        ).distinct()
-
-    locations = general_locs\
-        .prefetch_related(Prefetch('locations', queryset=specific_locs))\
-        .select_related('main_image', 'location_type__default_img')\
-        .annotate(
-            only_indirectly=Case(
-                When(id__in=known_only_indirectly, then=Value(1)),
-                default=Value(0),
-                output_field=IntegerField()
-            )
-        )\
-        .distinct()
-
+        locations = PrimaryLocation.objects.filter(
+            Q(id__in=profile.locs_known_directly.all())
+            | Q(id__in=profile.locs_known_indirectly.all())
+        )
+    locations = locations.prefetch_related('locations')
+    locations = locations.select_related('main_image', 'location_type')
+    locations = locations.annotate(only_indirectly=Case(
+        When(id__in=known_only_indirectly, then=Value(1)),
+        default=Value(0),
+        output_field=IntegerField()
+    ))
+    
     context = {
         'page_title': 'Toponomikon',
         'locations': locations,
