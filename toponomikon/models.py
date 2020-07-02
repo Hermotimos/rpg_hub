@@ -61,11 +61,7 @@ class Location(models.Model):
         blank=True,
         related_name='locs_known_directly',
         limit_choices_to=Q(
-            status__in=[
-                'active_player',
-                'inactive_player',
-                'dead_player'
-            ]
+            status__in=['active_player', 'inactive_player', 'dead_player']
         ),
     )
     known_indirectly = models.ManyToManyField(
@@ -73,11 +69,7 @@ class Location(models.Model):
         blank=True,
         related_name='locs_known_indirectly',
         limit_choices_to=Q(
-            status__in=[
-                'active_player',
-                'inactive_player',
-                'dead_player'
-            ]
+            status__in=['active_player', 'inactive_player', 'dead_player']
         ),
     )
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
@@ -93,13 +85,13 @@ class Location(models.Model):
             self.sorting_name = create_sorting_name(self.name)
         super().save(*args, **kwargs)
 
+    @property
     def informable(self):
-        known_directly = self.known_directly.all()
-        known_indirectly = self.known_indirectly.all()
-        excluded = (known_directly | known_indirectly).distinct()
         informable = Profile.objects.filter(
             status='active_player'
-        ).exclude(id__in=excluded)
+        ).exclude(
+            id__in=(self.known_directly.all() | self.known_indirectly.all())
+        )
         return informable
 
 
