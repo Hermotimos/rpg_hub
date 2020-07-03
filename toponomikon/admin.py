@@ -46,9 +46,9 @@ class LocationInline(admin.TabularInline):
     form = ToponomikonForm
     fields = ['name', 'location_type', 'main_image', 'description']
     formfield_overrides = {
-        models.TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 30})},
         models.CharField: {'widget': TextInput(attrs={'size': 20})},
         models.ForeignKey: {'widget': Select(attrs={'style': 'width:220px'})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 100})},
     }
 
     def formfield_for_dbfield(self, db_field, **kwargs):
@@ -85,8 +85,9 @@ class LocationInline(admin.TabularInline):
 class LocationAdmin(admin.ModelAdmin):
     form = ToponomikonForm
     formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size': 15})},
         models.ForeignKey: {'widget': Select(attrs={'style': 'width:200px'})},
-        models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 70})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 55})},
     }
     inlines = [LocationInline]
     list_display = ['id', 'name', 'location_type', 'in_location', 'main_image', 'description']
@@ -153,31 +154,8 @@ class PrimaryLocationAdmin(admin.ModelAdmin):
         return formfield
     
     
-class SecondaryLocationAdmin(admin.ModelAdmin):
-    formfield_overrides = {
-        models.ForeignKey: {'widget': Select(attrs={'style': 'width:300px'})},
-    }
-    inlines = [LocationInline]
-    list_display = ['id', 'name', 'main_image', 'description']
-    list_editable = ['name', 'main_image', 'description']
-    list_select_related = ['main_image']
-    search_fields = ['name', 'description']
-    
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
-        # Reduces greatly queries in main view, doubles in detail view
-        # The trade-off is still very good
-        request = kwargs['request']
-        formfield = super().formfield_for_dbfield(db_field, **kwargs)
-
-        if db_field.name == 'main_image':
-            choices = getattr(request, '_main_image_choices_cache', None)
-            if choices is None:
-                request._main_main_image_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-
-        return formfield
+class SecondaryLocationAdmin(LocationAdmin):
+    pass
     
     
 class LocationTypeAdmin(admin.ModelAdmin):
