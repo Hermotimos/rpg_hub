@@ -12,14 +12,14 @@
         <header class="mb-5">
             <div class="container">
                 <div class="row">
-                    <img class="mb-4 toponomikon {% if loc_known_indirectly %} img-grayscale {% endif %}"
+                    <img class="mb-4 toponomikon {% if location.only_indirectly %} img-grayscale {% endif %}"
                          src="{% if location.main_image %} {{ location.main_image.image.url }} {% else %} {{ location.location_type.default_img.image.url }} {% endif %}"
                          alt="Location img">
                 </div>
                 <div class="row">
                     <div class="col-md-11 p-0">
                         <h6 class="font-18 font-italic linebreaks-style text-justify
-                            {% if loc_known_indirectly %} text-muted {% endif %}">
+                            {% if location.only_indirectly %} text-muted {% endif %}">
                             {{ location.description|linebreaks }}
                         </h6>
                     </div>
@@ -52,7 +52,7 @@
                 {% endif %}
                 <label class="h3" for="tab2">Wiedza</label>
             {% endif %}
-            {% if pictures %}
+            {% if location.pictures.all %}
                 {% if not location_types and not kn_packets %}
                     <input type="radio" name="tabset" id="tab3" aria-controls="pictures" checked>
                 {% else %}
@@ -86,9 +86,11 @@
                         {% endfor %}
                     </section>
                 {% endif %}
-                {% if pictures %}
+                {% if location.pictures.all %}
                     <section id="pictures" class="tab-panel">
-                        {{ pictures }}
+                        {% for picture in location.pictures.all %}
+                            {{ picture }}
+                        {% endfor %}
                     </section>
                 {% endif %}
             </div>

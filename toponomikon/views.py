@@ -11,23 +11,32 @@ from toponomikon.models import Location, LocationType, PrimaryLocation, Secondar
 @login_required
 def toponomikon_main_view(request):
     profile = request.user.profile
-    known_only_indirectly = profile.locs_known_indirectly.exclude(
-        id__in=profile.locs_known_directly.all()
-    )
-    if profile.status == 'gm':
-        locations = PrimaryLocation.objects.all()
-    else:
+    locations = PrimaryLocation.objects.prefetch_related('locations')
+    
+    if not profile.status == 'gm':
+        known_only_indirectly = profile.locs_known_indirectly.exclude(
+            id__in=profile.locs_known_directly.all()
+        )
         locations = PrimaryLocation.objects.filter(
             Q(id__in=profile.locs_known_directly.all())
             | Q(id__in=profile.locs_known_indirectly.all())
         )
-    locations = locations.prefetch_related('locations')
-    locations = locations.select_related('main_image', 'location_type')
-    locations = locations.annotate(only_indirectly=Case(
-        When(id__in=known_only_indirectly, then=Value(1)),
-        default=Value(0),
-        output_field=IntegerField()
-    ))
+        locations = locations.prefetch_related(
+            Prefetch(
+                'locations',
+                queryset=SecondaryLocation.objects.filter(
+                    id__in=(profile.locs_known_directly.all()
+                            | profile.locs_known_indirectly.all())
+                )
+            )
+        )
+        locations = locations.annotate(only_indirectly=Case(
+            When(id__in=known_only_indirectly, then=Value(1)),
+            default=Value(0),
+            output_field=IntegerField(),
+        ))
+
+    locations = locations.select_related('main_image')
     
     context = {
         'page_title': 'Toponomikon',
@@ -39,53 +48,63 @@ def toponomikon_main_view(request):
 @login_required
 def toponomikon_location_view(request, loc_name):
     profile = request.user.profile
-    # location = get_object_or_404(Location, name=loc_name)
-    location = Location.objects.select_related('main_image').get(name=loc_name)
-    
-    directly = location.known_directly.all()
-    indirectly = location.known_indirectly.all()
-    allowed = (directly | indirectly)
-    
-    if profile in indirectly and profile not in directly and profile.status != 'gm':
-        loc_known_indirectly = True
-        page_title = location.name + ' (znasz z opowieści)'
-    else:
-        loc_known_indirectly = False
-        page_title = location.name
+    known_directly = profile.locs_known_directly.all()
+    known_indirectly = profile.locs_known_indirectly.all()
+    known_only_indirectly = known_indirectly.exclude(id__in=known_directly)
+    known_all = (known_directly | known_indirectly)
+
+    # Get this location with prefetched data and annotations
+    location = Location.objects.select_related('main_image')
+    location = location.prefetch_related(
+        Prefetch(
+            'knowledge_packets',
+            queryset=profile.knowledge_packets.all()
+        ),
+        'knowledge_packets__pictures',
+        'pictures',
+    )
+    location = location.annotate(
+        only_indirectly=Case(
+            When(id__in=known_only_indirectly, then=Value(1)),
+            default=Value(0),
+            output_field=IntegerField(),
+        )
+    )
+    location = location.get(name=loc_name)
+
+    page_title = location.name
+    if location in known_only_indirectly:
+        page_title += ' (znasz z opowieści)'
 
     # TABS
-    if profile.status == 'gm':
-        locations = location.locations.all()
-        kn_packets = location.knowledge_packets.all()
-    else:
-        known_directly = location.locations.filter(known_directly=profile)
-        known_indirectly = location.locations.filter(
-            known_indirectly=profile).exclude(id__in=known_directly)
-        locations = (known_directly | known_indirectly)
-        kn_packets = location.knowledge_packets.filter(acquired_by=profile)
+    locations = location.locations.all()
+    if not profile.status == 'gm':
+        locations = location.locations.filter(id__in=known_all)
     
-    only_indirectly = profile.locs_known_indirectly.exclude(
-        id__in=profile.locs_known_directly.all()
-    )
-    locations = locations\
-        .only('id', 'name', 'description', 'main_image_id', 'location_type_id', 'in_location_id', 'sorting_name')\
-        .select_related('main_image')\
-        .prefetch_related('locations')\
-        .distinct() \
-        .annotate(
-            only_indirectly=Case(
-                When(id__in=only_indirectly, then=Value(1)),
-                default=Value(0),
-                output_field=IntegerField()
+    locations = locations.select_related('main_image')
+    locations = locations.prefetch_related(
+        Prefetch(
+            'locations',
+            queryset=location.locations.filter(
+                id__in=(profile.locs_known_directly.all()
+                        | profile.locs_known_indirectly.all())
             )
-        ) \
-        .distinct()
+        ),
+    )
+    locations = locations.annotate(
+        only_indirectly=Case(
+            When(id__in=known_only_indirectly, then=Value(1)),
+            default=Value(0),
+            output_field=IntegerField()
+        )
+    )
+    locations = locations.distinct()
 
-
-    location_types = LocationType.objects\
-        .filter(locations__in=locations)\
-        .prefetch_related(Prefetch('locations', queryset=locations))\
-        .distinct()
+    location_types = LocationType.objects.filter(locations__in=locations)
+    location_types = location_types.prefetch_related(
+        Prefetch('locations', queryset=locations)
+    )
+    location_types = location_types.distinct()
     
     # INFORM LOCATION
     # dict(request.POST).items() == < QueryDict: {
@@ -123,14 +142,10 @@ def toponomikon_location_view(request, loc_name):
         # General
         'page_title': page_title,
         'location': location,
-        'loc_known_indirectly': loc_known_indirectly,
         # Tabs
-        'kn_packets': kn_packets,
-        'locations': locations,
         'location_types': location_types,
-        'pictures': location.pictures.all(),
     }
-    if profile in allowed or profile.status == 'gm':
+    if location in known_all or profile.status == 'gm':
         return render(request, 'toponomikon/this_location.html', context)
     else:
         return redirect('home:dupa')

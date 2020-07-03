@@ -85,7 +85,6 @@ class Location(models.Model):
             self.sorting_name = create_sorting_name(self.name)
         super().save(*args, **kwargs)
 
-    @property
     def informables(self):
         qs = Profile.objects.filter(status__in=[
             'active_player',
