@@ -39,12 +39,13 @@ class Debate(models.Model):
     def __str__(self):
         return self.name
     
-    def informable(self):
-        excluded = self.allowed_profiles.all()
-        informable = Profile.objects.filter(
-            status__in=['active_player', 'inactive_player']
-        ).exclude(id__in=excluded)
-        return informable
+    def informables(self):
+        qs = Profile.objects.filter(status__in=[
+            'active_player',
+            'inactive_player',
+        ])
+        qs = qs.exclude(id__in=self.allowed_profiles.all())
+        return qs
 
 
 class Remark(models.Model):

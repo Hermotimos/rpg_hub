@@ -104,14 +104,12 @@ class ChronicleEvent(models.Model):
     def __str__(self):
         return f'{self.description[0:100]}{"..." if len(self.description[::]) > 100 else ""}'
     
-    def informable(self):
-        participants = self.participants.all()
-        informed = self.informed.all()
-        excluded = (participants | informed).distinct()
-        informable = Profile.objects.filter(
-            status='active_player'
-        ).exclude(id__in=excluded)
-        return informable
+    def informables(self):
+        qs = Profile.objects.filter(status__in=[
+            'active_player',
+        ])
+        qs = qs.exclude(id__in=(self.participants.all() | self.informed.all()))
+        return qs
 
     def short_description(self):
         return f'{self.description[:100]}...{self.description[-100:] if len(str(self.description)) > 200 else self.description}'
@@ -212,14 +210,12 @@ class TimelineEvent(models.Model):
         return f'{self.days()}. dnia {season} {self.year}. ' \
                f'roku Archonatu Nemetha Samatiana'
     
-    def informable(self):
-        participants = self.participants.all()
-        informed = self.informed.all()
-        excluded = (participants | informed).distinct()
-        informable = Profile.objects.filter(
-            status='active_player'
-        ).exclude(id__in=excluded)
-        return informable
+    def informables(self):
+        qs = Profile.objects.filter(status__in=[
+            'active_player',
+        ])
+        qs = qs.exclude(id__in=(self.participants.all() | self.informed.all()))
+        return qs
     
     def short_description(self):
         return self.__str__()

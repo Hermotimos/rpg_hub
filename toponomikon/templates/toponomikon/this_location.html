@@ -27,7 +27,7 @@
                         <p class="btn btn-outline-dark icon-inform-medium mt-1" data-toggle="modal" data-target="#infoLocationModal"></p>
                             <!-- The Modal -->
                             <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
-                                {% with informable=location.informable inform_type='location' %}
+                                {% with informables=location.informables inform_type='location' %}
                                     {% include '_inform.html' %}
                                 {% endwith %}
                             </div>
@@ -44,7 +44,7 @@
                 <input type="radio" name="tabset" id="tab1" aria-controls="locations" checked>
                 <label class="h3" for="tab1">Lokacje</label>
             {% endif %}
-            {% if kn_packets %}
+            {% if location.knowledge_packets.all %}
                 {% if not location_types %}
                     <input type="radio" name="tabset" id="tab2" aria-controls="knowledge" checked>
                 {% else %}
@@ -79,9 +79,9 @@
                         </div>
                     </section>
                 {% endif %}
-                {% if kn_packets %}
+                {% if location.knowledge_packets.all %}
                     <section id="knowledge" class="tab-panel">
-                        {% for kn_packet in kn_packets %}
+                        {% for kn_packet in location.knowledge_packets.all %}
                             {% include 'knowledge/_knowledge_packet.html' %}
                         {% endfor %}
                     </section>

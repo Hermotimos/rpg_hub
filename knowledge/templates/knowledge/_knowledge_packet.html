@@ -12,7 +12,7 @@
                 <p class="btn btn-outline-dark icon-inform mt-1" data-toggle="modal" data-target="#infoKnPacketModal_{{ kn_packet.id }}"></p>
                     <!-- The Modal -->
                     <div class="modal fade" id="infoKnPacketModal_{{ kn_packet.id }}" tabindex="-1" role="dialog" aria-hidden="true">
-                        {% with informable=kn_packet.informable inform_type='kn_packet' id_=kn_packet.id %}
+                        {% with informables=kn_packet.informables inform_type='kn_packet' id_=kn_packet.id %}
                             {% include '_inform.html' %}
                         {% endwith %}
                     </div>

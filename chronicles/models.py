@@ -168,14 +168,14 @@ class Event(models.Model):
             res = res[:-1] + f' {self.in_event.name_genetive}' + res[-1]
         return res
     
-    def informable(self):
-        known_directly = self.known_directly.all()
-        known_indirectly = self.known_indirectly.all()
-        excluded = (known_directly | known_indirectly).distinct()
-        informable = Profile.objects.filter(
-            status='active_player'
-        ).exclude(id__in=excluded)
-        return informable
+    def informables(self):
+        qs = Profile.objects.filter(status__in=[
+            'active_player',
+        ])
+        qs = qs.exclude(
+            id__in=(self.known_directly.all() | self.known_indirectly.all())
+        )
+        return qs
 
 
 # ----------------------------------------------------------------------------

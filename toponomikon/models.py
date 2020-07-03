@@ -86,20 +86,21 @@ class Location(models.Model):
         super().save(*args, **kwargs)
 
     @property
-    def informable(self):
-        informable = Profile.objects.filter(
-            status='active_player'
-        ).exclude(
+    def informables(self):
+        qs = Profile.objects.filter(status__in=[
+            'active_player',
+        ])
+        qs = qs.exclude(
             id__in=(self.known_directly.all() | self.known_indirectly.all())
         )
-        return informable
+        return qs
 
 
 class PrimaryLocationManager(models.Manager):
-    
     def get_queryset(self):
         qs = super(PrimaryLocationManager, self).get_queryset()
-        return qs.filter(in_location=None)
+        qs = qs.filter(in_location=None)
+        return qs
 
 
 class PrimaryLocation(Location):
@@ -110,10 +111,10 @@ class PrimaryLocation(Location):
         
         
 class SecondaryLocationManager(models.Manager):
-    
     def get_queryset(self):
         qs = super(SecondaryLocationManager, self).get_queryset()
-        return qs.filter(~Q(in_location=None))
+        qs = qs.filter(~Q(in_location=None))
+        return qs
 
 
 class SecondaryLocation(Location):

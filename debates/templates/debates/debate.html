@@ -57,7 +57,7 @@
                     <p class="btn btn-outline-dark icon-inform mt-1" data-toggle="modal" data-target="#infoLocationModal"></p>
                         <!-- The Modal -->
                         <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
-                            {% with informable=debate.informable inform_type='debate' %}
+                            {% with informables=debate.informables inform_type='debate' %}
                                 {% include '_inform.html' %}
                             {% endwith %}
                         </div>

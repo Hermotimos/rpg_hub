@@ -27,10 +27,10 @@ class KnowledgePacket(models.Model):
     def save(self, *args, **kwargs):
         self.sorting_name = create_sorting_name(self.__str__())
         super().save(*args, **kwargs)
-
-    def informable(self):
-        excluded = self.acquired_by.all()
-        informable = Profile.objects.filter(
-            status='active_player'
-        ).exclude(id__in=excluded)
-        return informable
+    
+    def informables(self):
+        qs = Profile.objects.filter(status__in=[
+            'active_player',
+        ])
+        qs = qs.exclude(id__in=self.acquired_by.all())
+        return qs

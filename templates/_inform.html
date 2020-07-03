@@ -8,7 +8,7 @@
             </button>
         </div>
         
-        {% if informable %}
+        {% if informables %}
         
             <form method="POST" action="." name="{{ inform_type }}_form{{ id_ }}">
                 {% csrf_token %}
@@ -22,7 +22,7 @@
                     </h5>
                     <br>
                     <h4 class="text-center">
-                        {% for profile in informable %}
+                        {% for profile in informables %}
                             <input class="select-profile" type="checkbox" id="id_{{ forloop.counter }}{{ id_ }}" name="{{ profile.id }}">
                             <label for="id_{{ forloop.counter }}{{ id_ }}">
                                 <img class="article-img rounded-circle" src="{{ profile.image.url }}">
