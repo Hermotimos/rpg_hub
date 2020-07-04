@@ -6,6 +6,6 @@ app_name = 'chronicles'
 urlpatterns = [
     path('', views_recreate.recreate, name='recreate'),
     
-    path('chapters', views.chapters_view, name='chapters'),
+    path('chronicle/', views.chronicle_content_view, name='chronicle-content'),
 
 ]

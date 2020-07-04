@@ -43,7 +43,7 @@ from users.models import Profile
 
 
 @login_required
-def chapters_view(request):
+def chronicle_content_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
         chapters = Chapter.objects.prefetch_related('game_sessions')
@@ -74,48 +74,55 @@ def chapters_view(request):
         'page_title': 'Kronika',
         'chapters': chapters
     }
-    return render(request, 'chronicles/chapters.html', context)
+    return render(request, 'chronicles/chronicle_content.html', context)
 
 
-# @login_required
-# def chronicle_all_chapters_view(request):
-#     profile = request.user.profile
-#
-#     if profile.status == 'gm':
-#         chapters = Chapter.objects.prefetch_related(
-#             'game_sessions__chronicle_events__informed',
-#             'game_sessions__chronicle_events__pictures',
-#             # 'game_sessions__chronicle_events__notes__author',
-#             'game_sessions__chronicle_events__debate__topic'
-#         )
-#     else:
-#         events = (profile.chronicle_events_participated.all()
-#                   | profile.chronicle_events_informed.all())\
-#             .distinct()\
-#             .select_related('debate__topic')\
-#             .prefetch_related('informed',
-#                               'pictures',
-#                               # 'notes__author'
-#                               )
-#
-#         games = GameSession.objects\
-#             .filter(chronicle_events__in=events)\
-#             .distinct()\
-#             .prefetch_related(Prefetch('chronicle_events', queryset=events))
-#
-#         chapters = Chapter.objects\
-#             .prefetch_related(Prefetch('game_sessions', queryset=games))\
-#             .filter(game_sessions__in=games)\
-#             .distinct()
-#
-#     context = {
-#         'page_title': 'Pełna kronika',
-#         'chapters': chapters,
-#         'profile': profile,
-#     }
-#     return render(request, 'history/chronicle_all_chapters.html', context)
-#
-#
+@login_required
+def all_chapters_view(request):
+    profile = request.user.profile
+
+    if profile.status == 'gm':
+        chapters = Chapter.objects.all()
+        # chapters = Chapter.objects.prefetch_related(
+        #     'game_sessions__chronicle_events__informed',
+        #     'game_sessions__chronicle_events__pictures',
+        #     # 'game_sessions__chronicle_events__notes__author',
+        #     'game_sessions__chronicle_events__debate__topic'
+        # )
+    else:
+        known = GameEvent.objects.filter(
+            Q(id__in=profile.events_known_directly.all())
+            | Q(id__in=profile.events_known_indirectly.all())
+        )
+        # known_directly = GameEvent.objects.filter(
+        #     id__in=profile.events_known_directly.all()
+        # )
+        known = known.distinct()\
+            .select_related('debate__topic')\
+            .prefetch_related('informed',
+                              'pictures',
+                              # 'notes__author'
+                              )
+
+        games = GameSession.objects\
+            .filter(chronicle_events__in=known)\
+            .distinct()\
+            .prefetch_related(Prefetch('chronicle_events', queryset=known))
+
+        chapters = Chapter.objects\
+            .prefetch_related(Prefetch('game_sessions', queryset=games))\
+            .filter(game_sessions__in=games)\
+            .distinct()
+
+    context = {
+        'page_title': 'Pełna kronika',
+        'chapters': chapters,
+        'profile': profile,
+    }
+    return render(request, 'history/chronicle_all_chapters.html', context)
+
+
+
 # @login_required
 # def chronicle_one_chapter_view(request, chapter_id):
 #     profile = request.user.profile
