@@ -23,7 +23,7 @@ class Chapter(models.Model):
 
     class Meta:
         ordering = ['chapter_no']
-        verbose_name = 'I. Chapter'
+        verbose_name = '** Chapter'
 
     def __str__(self):
         return self.title
@@ -53,7 +53,7 @@ class GameSession(models.Model):
 
     class Meta:
         ordering = ['game_no']
-        verbose_name = 'II. Game session'
+        verbose_name = '* Game session'
 
     def __str__(self):
         return f'{self.game_no} - {self.title}'
@@ -332,7 +332,7 @@ class GameEvent(TimeUnit):
     class Meta:
         proxy = True
         ordering = ['game', 'event_no_in_game']
-        verbose_name = 'III. Game event'
+        verbose_name = '*** Game event'
         
     def __str__(self):
         # return self.description_short or str(self.pk)     # TODO after transition is done

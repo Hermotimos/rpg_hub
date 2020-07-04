@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/history.css' %}">
+{% endblock head_extra %}
+
+{% block content %}
+    <br><br><br>
+    <div class="border-bottom">
+        <h2 class="unblue pb-3">
+            <img class="img-chapter" src="{% static 'img/history_all.png' %}" alt="Chapter img">
+            <b><a href="{% url 'history:chronicle-all-chapters' %}" class="align-middle pt-2">Pełna Kronika</a></b>
+        </h2>
+    </div>
+    <br><br>
+    {% for chapter in chapters %}
+        <br>
+        {% if chapter.image %}
+            <img class="img-chapter" src="{{ chapter.image.url }}" alt="Chapter img">
+        {% endif %}
+        <h3 class="unblue">
+            <b>
+                <a href="{% url 'history:chronicle-one-chapter' chapter.id %}" class="align-middle pt-2 small-caps border-bottom-dark">
+                {{ chapter.title }}
+                </a>
+            </b>
+        </h3>
+        <br>
+        {% for game in chapter.game_sessions.all %}
+            <h6 class="unblue {% if not game.any_known_directly and request.user.profile.status != 'gm' %} text-muted {% endif %}">
+                {{ forloop.counter }}.
+                <a href="{% url 'history:chronicle-one-game' game.id '0' %}"
+                   class="{% if not game.any_known_directly and request.user.profile.status != 'gm' %} text-muted {% endif %}">
+                    {{ game.title }}
+                </a>
+            </h6>
+        {% endfor %}
+        <br>
+    {% endfor %}
+
+{% endblock content %}
