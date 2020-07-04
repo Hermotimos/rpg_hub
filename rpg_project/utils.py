@@ -123,7 +123,7 @@ def send_emails(request, profile_ids, **kwargs):
 
     elif 'demand_answer' in kwargs:
         demand_answer = kwargs['demand_answer']
-        subject = f"[RPG] Dezyderat {demand_answer.id} [odpowiedź]"
+        subject = f"[RPG] Dezyderat {demand_answer.demand.id} [odpowiedź]"
         message = f"Odpowiedź od {demand_answer.author}:\n" \
                   f"{request.get_host()}/contact/demands/detail:{demand_answer.demand.id}/#page-bottom\n"
 
