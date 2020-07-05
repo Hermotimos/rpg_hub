@@ -43,7 +43,7 @@ from users.models import Profile
 
 
 @login_required
-def chronicle_content_view(request):
+def chronicle_contents_view(request):
     profile = request.user.profile
     
     if profile.status == 'gm':
@@ -77,11 +77,11 @@ def chronicle_content_view(request):
         'page_title': 'Kronika',
         'chapters': chapters,
     }
-    return render(request, 'chronicles/chronicle_content.html', context)
+    return render(request, 'chronicles/chronicle_contents.html', context)
 
 
 @login_required
-def game_view(request, game_title):
+def chronicle_game_view(request, game_title):
     profile = request.user.profile
     game = get_object_or_404(GameSession, title=game_title)
     
@@ -103,13 +103,13 @@ def game_view(request, game_title):
         'events': events,
     }
     if events:
-        return render(request, 'chronicles/game.html', context)
+        return render(request, 'chronicles/chronicle_game.html', context)
     else:
         return redirect('home:dupa')
 
 
 @login_required
-def chapter_view(request, chapter_title):
+def chronicle_chapter_view(request, chapter_title):
     profile = request.user.profile
     chapter = get_object_or_404(Chapter, title=chapter_title)
 
@@ -136,13 +136,13 @@ def chapter_view(request, chapter_title):
         'games': games,
     }
     if games:
-        return render(request, 'chronicles/chapter.html', context)
+        return render(request, 'chronicles/chronicle_chapter.html', context)
     else:
         return redirect('home:dupa')
 
 
 @login_required
-def all_chapters_view(request):
+def chronicle_all_view(request):
     profile = request.user.profile
     
     events = GameEvent.objects.prefetch_related(
@@ -172,7 +172,7 @@ def all_chapters_view(request):
         'chapters': chapters,
     }
     if chapters:
-        return render(request, 'chronicles/all_chapters.html', context)
+        return render(request, 'chronicles/chronicle_all.html', context)
     else:
         return redirect('home:dupa')
     

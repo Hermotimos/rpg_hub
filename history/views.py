@@ -110,7 +110,7 @@ def chronicle_all_chapters_view(request):
         'chapters': chapters,
         'profile': profile,
     }
-    return render(request, 'history/chronicle_all_chapters.html', context)
+    return render(request, 'history/chronicle_all.html', context)
 
 
 @login_required

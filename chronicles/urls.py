@@ -5,10 +5,13 @@ from chronicles import views
 app_name = 'chronicles'
 urlpatterns = [
     path('', views_recreate.recreate, name='recreate'),
-    
-    path('contents/', views.chronicle_content_view, name='chronicle-content'),
-    path('game:<str:game_title>/', views.game_view, name='game'),
-    path('chapter:<str:chapter_title>/', views.chapter_view, name='chapter'),
-    path('all-chapters/', views.all_chapters_view, name='all-chapters'),
+    # chronicle
+    path('chronicle/contents/', views.chronicle_contents_view,
+         name='chronicle-contents'),
+    path('chronicle/all/', views.chronicle_all_view, name='chronicle-all'),
+    path('chronicle/game:<str:game_title>/', views.chronicle_game_view,
+         name='chronicle-game'),
+    path('chronicle/chapter:<str:chapter_title>/', views.chronicle_chapter_view,
+         name='chronicle-chapter'),
 
 ]
