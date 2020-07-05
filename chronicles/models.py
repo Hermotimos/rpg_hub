@@ -114,14 +114,7 @@ class Date(models.Model):
 class TimeUnitManager(models.Manager):
     def get_queryset(self):
         qs = super(TimeUnitManager, self).get_queryset()
-        qs = qs.select_related(
-            'game',
-            'date_start',
-            'date_end',
-            'in_timeunit',
-            'debate',
-        )
-        # qs = qs.prefetch_related('events')
+        qs = qs.select_related()
         return qs
 
 

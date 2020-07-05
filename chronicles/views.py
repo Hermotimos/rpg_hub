@@ -276,28 +276,27 @@ SEASONS_WITH_STYLES_DICT = {
 def timeline_view(request):
     profile = request.user.profile
 
-    page_title = 'Pełne Kalendarium'
-    header = 'Opisane tu wydarzenia rozpoczęły swój bieg 20. roku Archonatu Nemetha Samatiana w Ebbonie, ' \
-             'choć zarodki wielu z nich sięgają znacznie odleglejszych czasów...'
-    
-    events = GameEvent.objects.select_related('game')
+    events = GameEvent.objects.all()
+    if not profile.status == 'gm':
+        events = events.filter(
+            Q(id__in=profile.events_known_directly.all())
+            | Q(id__in=profile.events_known_indirectly.all())
+        )
+        events = events.distinct()
+        
+    events = events.select_related()
     events = events.prefetch_related(
         'threads',
         'known_directly',
         'known_indirectly',
-        'primary_locations',
-        'secondary_locations__in_location',
+        'locations',
     )
-    if not profile.status == 'gm':
-        events = GameEvent.objects.filter(
-            Q(id__in=profile.events_known_directly.all())
-            | Q(id__in=profile.events_known_indirectly.all())
-        )
-    events = events.distinct()
-
+    
     context = {
-        'page_title': page_title,
-        'header': header,
+        'page_title': 'Pełne Kalendarium',
+        'header': '''Opisane tu wydarzenia rozpoczęły swój bieg 20. roku
+            Archonatu Nemetha Samatiana w Ebbonie, choć zarodki wielu z nich
+            sięgają znacznie odleglejszych czasów...''',
         'events': events,
         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
@@ -305,38 +304,3 @@ def timeline_view(request):
         return render(request, 'chronicles/timeline.html', context)
     else:
         return redirect('home:dupa')
-
-
-# @login_required
-# def timeline_inform_view(request, event_id):
-#     profile = request.user.profile
-#     timeline_event = get_object_or_404(TimelineEvent, id=event_id)
-#
-#     participants = timeline_event.participants.all()
-#     informed = timeline_event.informed.all()
-#     allowed = (participants | informed)
-#
-#     # INFORM FORM
-#     # dict(request.POST).items() == < QueryDict: {
-#     #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
-#     #     '2': ['on'],
-#     #     'timeline_event': ['122']
-#     # } >
-#     if request.method == 'POST' and 'timeline_event' in request.POST:
-#         data = dict(request.POST)
-#         informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
-#         timeline_event.informed.add(*informed_ids)
-#
-#         send_emails(request, informed_ids, timeline_event=timeline_event)
-#         if informed_ids:
-#             messages.info(request, f'Poinformowano wybrane postacie!')
-#
-#     context = {
-#         'page_title': 'Poinformuj o wydarzeniu',
-#         'event': timeline_event,
-#         'event_type': 'timeline_event'
-#     }
-#     if profile in allowed or profile.status == 'gm':
-#         return render(request, 'history/_event_inform.html', context)
-#     else:
-#         return redirect('home:dupa')

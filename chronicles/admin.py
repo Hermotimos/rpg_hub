@@ -41,8 +41,8 @@ class GameEventAdminForm(forms.ModelForm):
     )
     locations = forms.ModelMultipleChoiceField(
         queryset=Location.objects.all(),
-        required=True,
-        widget=FilteredSelectMultiple('Primary locations', False),
+        required=False,
+        widget=FilteredSelectMultiple('Locations', False),
     )
 
 
