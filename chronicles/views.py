@@ -45,23 +45,26 @@ from users.models import Profile
 @login_required
 def chronicle_content_view(request):
     profile = request.user.profile
+    
     if profile.status == 'gm':
         chapters = Chapter.objects.prefetch_related('game_sessions')
     else:
-        known = GameEvent.objects.filter(
+        events = GameEvent.objects.filter(
             Q(id__in=profile.events_known_directly.all())
             | Q(id__in=profile.events_known_indirectly.all())
         )
-        known_directly = GameEvent.objects.filter(
+        events_known_directly = GameEvent.objects.filter(
             id__in=profile.events_known_directly.all()
         )
         
-        games = GameSession.objects.filter(game_events__in=known)
-        games = games.prefetch_related(Prefetch('game_events', queryset=known))
-        games = games.annotate(any_known_directly=Count(
-            'game_events',
-            filter=Q(game_events__in=known_directly)
-        ))
+        games = GameSession.objects.filter(events__in=events)
+        games = games.prefetch_related(Prefetch('events', queryset=events))
+        games = games.annotate(
+            any_known_directly=Count(
+                'events',
+                filter=Q(events__in=events_known_directly)
+            )
+        )
         games = games.distinct()
         
         chapters = Chapter.objects.filter(game_sessions__in=games)
@@ -72,129 +75,115 @@ def chronicle_content_view(request):
         
     context = {
         'page_title': 'Kronika',
-        'chapters': chapters
+        'chapters': chapters,
     }
     return render(request, 'chronicles/chronicle_content.html', context)
 
 
 @login_required
+def game_view(request, game_title):
+    profile = request.user.profile
+    game = get_object_or_404(GameSession, title=game_title)
+    
+    events = GameEvent.objects.filter(game=game)
+    events = events.prefetch_related(
+        'known_directly',
+        'known_indirectly',
+        'pictures',
+    )
+    events = events.select_related('debate__topic')
+    if not profile.status == 'gm':
+        events = events.filter(
+            Q(known_directly=profile) | Q(known_indirectly=profile)
+        )
+        events = events.distinct()
+
+    context = {
+        'page_title': game_title,
+        'events': events,
+    }
+    if events:
+        return render(request, 'chronicles/game.html', context)
+    else:
+        return redirect('home:dupa')
+
+
+@login_required
+def chapter_view(request, chapter_title):
+    profile = request.user.profile
+    chapter = get_object_or_404(Chapter, title=chapter_title)
+
+    events = GameEvent.objects.filter(game__chapter=chapter)
+    events = events.prefetch_related(
+        'known_directly',
+        'known_indirectly',
+        'pictures',
+    )
+    events = events.select_related('debate__topic')
+    if not profile.status == 'gm':
+        events = events.filter(
+            Q(known_directly=profile) | Q(known_indirectly=profile)
+        )
+        events = events.distinct()
+        
+    games = GameSession.objects.filter(chapter=chapter)
+    games = GameSession.objects.filter(events__in=events)
+    games = games.prefetch_related(Prefetch('events', queryset=events))
+    games = games.distinct()
+    
+    context = {
+        'page_title': chapter_title,
+        'games': games,
+    }
+    if games:
+        return render(request, 'chronicles/chapter.html', context)
+    else:
+        return redirect('home:dupa')
+
+
+@login_required
 def all_chapters_view(request):
     profile = request.user.profile
-
-    if profile.status == 'gm':
-        chapters = Chapter.objects.all()
-        # chapters = Chapter.objects.prefetch_related(
-        #     'game_sessions__chronicle_events__informed',
-        #     'game_sessions__chronicle_events__pictures',
-        #     # 'game_sessions__chronicle_events__notes__author',
-        #     'game_sessions__chronicle_events__debate__topic'
-        # )
-    else:
-        known = GameEvent.objects.filter(
-            Q(id__in=profile.events_known_directly.all())
-            | Q(id__in=profile.events_known_indirectly.all())
+    
+    events = GameEvent.objects.prefetch_related(
+        'known_directly',
+        'known_indirectly',
+        'pictures',
+    )
+    events = events.select_related('debate__topic')
+    if not profile.status == 'gm':
+        events = events.filter(
+            Q(known_directly=profile) | Q(known_indirectly=profile)
         )
-        # known_directly = GameEvent.objects.filter(
-        #     id__in=profile.events_known_directly.all()
-        # )
-        known = known.distinct()\
-            .select_related('debate__topic')\
-            .prefetch_related('informed',
-                              'pictures',
-                              # 'notes__author'
-                              )
-
-        games = GameSession.objects\
-            .filter(chronicle_events__in=known)\
-            .distinct()\
-            .prefetch_related(Prefetch('chronicle_events', queryset=known))
-
-        chapters = Chapter.objects\
-            .prefetch_related(Prefetch('game_sessions', queryset=games))\
-            .filter(game_sessions__in=games)\
-            .distinct()
-
+        events = events.distinct()
+    
+    games = GameSession.objects.filter(events__in=events)
+    games = games.prefetch_related(Prefetch('events', queryset=events))
+    games = games.distinct()
+    
+    chapters = Chapter.objects.filter(game_sessions__in=games)
+    chapters = chapters.prefetch_related(
+        Prefetch('game_sessions', queryset=games)
+    )
+    chapters = chapters.distinct()
+    
     context = {
         'page_title': 'Pełna kronika',
         'chapters': chapters,
-        'profile': profile,
     }
-    return render(request, 'history/chronicle_all_chapters.html', context)
+    if chapters:
+        return render(request, 'chronicles/all_chapters.html', context)
+    else:
+        return redirect('home:dupa')
+    
 
 
 
-# @login_required
-# def chronicle_one_chapter_view(request, chapter_id):
-#     profile = request.user.profile
-#     chapter = get_object_or_404(Chapter, id=chapter_id)
-#
-#     if profile.status == 'gm':
-#         games = chapter.game_sessions.prefetch_related(
-#             'chronicle_events__informed',
-#             'chronicle_events__pictures',
-#             # 'chronicle_events__notes__author',
-#             'chronicle_events__debate__topic'
-#             )
-#     else:
-#         events = (profile.chronicle_events_participated.all()
-#                   | profile.chronicle_events_informed.all())\
-#             .distinct()\
-#             .select_related('debate__topic')\
-#             .prefetch_related('informed', 'pictures',
-#                               # 'notes__author'
-#                               )\
-#             .filter(game__chapter=chapter_id)
-#
-#         games = chapter.game_sessions\
-#             .filter(chronicle_events__in=events)\
-#             .distinct()\
-#             .prefetch_related(Prefetch('chronicle_events', queryset=events))
-#
-#     context = {
-#         'page_title': chapter.title,
-#         'games': games,
-#     }
-#     if is_allowed_for_chronicle(profile, chapter_id=chapter_id):
-#         return render(request, 'history/chronicle_one_chapter.html', context)
-#     else:
-#         return redirect('home:dupa')
-#
-#
-# @login_required
-# def chronicle_one_game_view(request, game_id, timeline_event_id):
-#     profile = request.user.profile
-#     game = get_object_or_404(GameSession, id=game_id)
-#     event = TimelineEvent.objects.none()
-#
-#     if timeline_event_id != '0':
-#         event = TimelineEvent.objects.get(id=timeline_event_id)
-#
-#     if profile.status == 'gm':
-#         events = game.chronicle_events.all()\
-#             .select_related('debate__topic')\
-#             .prefetch_related('informed', 'pictures',
-#                               # 'notes__author'
-#                               )
-#     else:
-#         events = game.chronicle_events\
-#             .filter(Q(informed=profile) | Q(participants=profile))\
-#             .distinct()\
-#             .select_related('debate__topic') \
-#             .prefetch_related('informed', 'pictures',
-#                               # 'notes__author'
-#                               )
-#
-#     context = {
-#         'page_title': game.title,
-#         'events': events,
-#     }
-#     if is_allowed_for_chronicle(profile, game_id=game_id):
-#         return render(request, 'history/chronicle_one_game.html', context)
-#     elif event and profile in event.informed.all():
-#         return redirect('history:chronicle-gap',
-#                         timeline_event_id=timeline_event_id)
-#     else:
-#         return redirect('home:dupa')
+
+
+
+
+
 #
 #
 # @login_required

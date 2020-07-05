@@ -1,0 +1,57 @@
+
+{% load static %}
+<tr>
+    <td class="border-0">
+        {% if request.user.profile in event.known_indirectly.all %}
+            <p class="font-18 font-italic px-1 py-1 text-justify">
+                <small class="text-muted">(Znasz z opowieści) {{ event.description_long|linebreaksbr }}</small>
+            </p>
+        {% else %}
+            <p class="font-18 font-italic px-1 py-1 text-justify">{{ event.description_long|linebreaksbr }}</p>
+        {% endif %}
+
+        {% if event.pictures.all and request.user.profile not in event.known_indirectly.all %}
+            <table class="chronicle-img text-center">
+                <tr>
+                {% for picture in event.pictures.all %}
+                    <td class="align-top">
+                        <img src="{{ picture.image.url }}" alt="Event img">
+                        {% if picture.description %}<small>{{ picture.description }}</small>{% endif %}
+                    </td>
+                {% endfor %}
+                </tr>
+            </table>
+            <br>
+        {% endif %}
+
+        {% if event.debate and request.user.profile not in event.known_indirectly.all %}
+            <div class="font-18 font-italic text-justify px-1 py-1">
+                <p>
+                    <a href="{% url 'debates:debate' event.debate.topic.id event.debate.id %}" id="debate_{{ event.debate.id }}">
+                        ❖ Narada: {{ event.debate.name }}
+                    </a>
+                </p>
+            </div>
+        {% endif %}
+
+<!--        {% for note in event.notes.all %}-->
+<!--            {% if request.user == note.author %}-->
+<!--                {% if note.text != '' %}-->
+<!--                    <div class="font-italic text-justify px-1 py-1" style="color:{{ note.color }}">-->
+<!--                        <h5>Przemyślenia:</h5>-->
+<!--                        <p>{{ note.text|linebreaksbr }}</p>-->
+<!--                    </div>-->
+<!--                {% endif %}-->
+<!--            {% endif %}-->
+<!--        {% endfor %}-->
+        <br>
+    </td>
+    <td class="align-top">
+        <a class="btn btn-outline-dark mt-1" href="{% url 'history:chronicle-inform' event.id %}" target="_blank">
+            <i class="icon-inform-medium"></i>
+        </a>
+        <a class="btn btn-outline-dark mt-1 disabled" href="#">
+            <i class="icon-note-medium"></i>
+        </a>
+    </td>
+</tr>

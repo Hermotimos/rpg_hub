@@ -122,9 +122,8 @@ class TimeUnit(models.Model):
     name_genetive = models.CharField(max_length=256, blank=True, null=True)
     game = models.ForeignKey(
         to=GameSession,
-        related_name='game_events',
+        related_name='events',
         on_delete=models.PROTECT,
-        default=35,
     )
     event_no_in_game = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(1)],
