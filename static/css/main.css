@@ -192,7 +192,7 @@ a.img-link {
 
 a.img-link:hover {
     opacity: 0.95;
-    filter: grayscale(20%)
+    filter: grayscale(20%);
     color: #444444;
 }
 
