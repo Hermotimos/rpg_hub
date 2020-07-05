@@ -112,7 +112,9 @@ class PrimaryLocation(Location):
 class SecondaryLocationManager(models.Manager):
     def get_queryset(self):
         qs = super(SecondaryLocationManager, self).get_queryset()
-        qs = qs.filter(~Q(in_location=None)).filter(in_location__in_location=None)
+        qs = qs.filter(~Q(in_location=None))
+        # In case of TertiaryLocation:
+        # qs = qs.filter(in_location__in_location=None)
         return qs
 
 
@@ -123,19 +125,19 @@ class SecondaryLocation(Location):
         proxy = True
         
 
-class TertiaryLocationManager(models.Manager):
-    def get_queryset(self):
-        qs = super(TertiaryLocationManager, self).get_queryset()
-        qs = qs.filter(~Q(in_location__in_location=None))
-        return qs
-
-
-class TertiaryLocation(Location):
-    objects = TertiaryLocationManager()
-    
-    class Meta:
-        proxy = True
-        
+# class TertiaryLocationManager(models.Manager):
+#     def get_queryset(self):
+#         qs = super(TertiaryLocationManager, self).get_queryset()
+#         qs = qs.filter(~Q(in_location__in_location=None))
+#         return qs
+#
+#
+# class TertiaryLocation(Location):
+#     objects = TertiaryLocationManager()
+#
+#     class Meta:
+#         proxy = True
+#
 
 def update_known_gen_locations(sender, instance, **kwargs):
     """Whenever a location becomes 'known_directly' or 'known_indirectly' to
