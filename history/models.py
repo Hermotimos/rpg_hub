@@ -199,11 +199,11 @@ class TimelineEvent(models.Model):
         return f'{self.day_start}-{self.day_end}' if self.day_end else self.day_start
 
     def date(self):
-        if self.season == 'spring':
+        if self.season == '1':
             season = 'Wiosny'
-        elif self.season == 'summer':
+        elif self.season == '2':
             season = 'Lata'
-        elif self.season == 'autumn':
+        elif self.season == '3':
             season = 'Jesieni'
         else:
             season = 'Zimy'
