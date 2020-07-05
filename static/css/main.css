@@ -186,13 +186,13 @@ img {border-style: double;}
 }
 
 a.img-link {
-    opacity: 0.95;
-    filter: grayscale(20%)
+    opacity: 1;
+    filter: grayscale(0%);
 }
 
 a.img-link:hover {
-    opacity: 1;
-    filter: grayscale(0%);
+    opacity: 0.95;
+    filter: grayscale(20%)
     color: #444444;
 }
 
