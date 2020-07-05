@@ -27,7 +27,7 @@
                 <th>Wątki</th>
                 <th>Wydarzenie</th>
                 <th>Postaci</th>
-                <th>Lokacja</th>
+                <th>Lokacje</th>
                 <th>Sesja</th>
                 <th>Akcja</th>
             </tr>
@@ -37,7 +37,9 @@
         {% for event in events %}
             <tr>
                 <td class="align-center align-top unblue-black">
-                    <a class="hover-pointer" href="#">{{ event.date_start }} - {{ event.date_end }}</a>
+                    <a class="hover-pointer" href="#">
+                        {{ event.dates }}
+                    </a>
                 </td>
                 <td class="timeline-event-thread align-top unblue-black">
                     <ul class="bullets-1 pl-2">
@@ -47,7 +49,7 @@
                     </ul>
                 </td>
                 <td class="timeline-event text-justify align-top unblue-black pl-2 pr-2">
-                    <a href="#">{{ event.description|linebreaksbr }}</a>
+                    <a href="#">{{ event.description_short|linebreaksbr }}</a>
 <!--                    {% for note in event.notes.all %}-->
 <!--                        {% if request.user == note.author %}-->
 <!--                            {% if note.text != '' %}-->
@@ -57,32 +59,37 @@
 <!--                    {% endfor %}-->
                 </td>
                 <td class="timeline-small align-top unblue-black">
-                    {% for profile in event.participants.all %}
-                        <a class="hover-pointer" href="#"><small>{{ profile.character_name|get_first_word }}</small></a><br>
+                    {% for profile in event.known_directly.all %}
+                        <a class="hover-pointer" href="#">
+                            <small>{{ profile.character_name|get_first_word }}</small>
+                        </a>
+                    <br>
                     {% endfor %}
-                    {% for profile in event.informed.all %}
-                        <a class="hover-pointer" href="#"><small>+{{ profile.character_name|get_first_word }}</small></a><br>
+                    {% for profile in event.known_indirectly.all %}
+                        <a class="hover-pointer" href="#">
+                            <small>+{{ profile.character_name|get_first_word }}</small>
+                        </a>
+                        <br>
                     {% endfor %}
                 </td>
                 <td class="timeline-small align-top unblue-black">
-                    {% for gen_location in event.gen_locations.all %}
-                        <a class="hover-pointer"  href="#">{{ gen_location.name }}</a><br>
-                        {% for spec_location in event.spec_locations.all %}
-                            {% if spec_location.in_location.id == gen_location.id %}
-                                <a class="hover-pointer" href="#"><small>{{ spec_location.name }}</small></a><br>
-                            {% endif %}
-                        {% endfor %}
+                    {% for location in event.locations.all %}
+                        <a class="hover-pointer"  href="#">{{ location.name }}</a>
                     {% endfor %}
                 </td>
                 <td class="align-center align-top unblue-black">
                     {% if event.game.game_no > 0 %}
-                        <small><a href="#">
-                            -{{ event.game.game_no }}-
-                        </a></small>
+                        <small>
+                            <a href="#">
+                                -{{ event.game.game_no }}-
+                            </a>
+                        </small>
                     {% elif event.game.game_no == 0 %}
                         <small hidden><b>***</b></small>
                     {% else %}
-                        <small><a href="#">-X-</a></small>
+                        <small>
+                            <a href="#">-X-</a>
+                        </small>
                     {% endif %}
                 </td>
                 <td class="align-top">

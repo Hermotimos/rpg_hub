@@ -105,10 +105,10 @@ class Date(models.Model):
 
     def __str__(self):
         if self.season and self.day:
-            return f'{self.day}. dnia {self.season} {self.year} roku'
+            return f'{self.day}. dnia {self.season} {self.year}. roku'
         elif self.season:
-            return f'{self.season} {self.year} roku'
-        return f'{self.year} roku'
+            return f'{self.season} {self.year}. roku'
+        return f'{self.year}. roku'
 
 
 class TimeUnitManager(models.Manager):
@@ -210,6 +210,7 @@ class TimeUnit(models.Model):
         blank=True,
         null=True,
     )
+    dates = models.CharField(max_length=255, blank=True, null=True)
     year_start_ab_urbe_condita = models.IntegerField(blank=True, null=True)
     year_end_ab_urbe_condita = models.IntegerField(blank=True, null=True)
     
@@ -232,6 +233,21 @@ class TimeUnit(models.Model):
             res = res[:-1] + f' | {self.in_timeunit.name_genetive}' + res[-1]
         return res
     
+    def save(self, *args, **kwargs):
+        start = self.date_start
+        end = self.date_end
+        if start:
+            if not end:
+                dates = f'{start}'
+            elif start.year == end.year and start.season == end.season:
+                dates = f'{start.day} - {end}'
+            elif start.year == end.year:
+                dates = f'{start.day} dnia {start.season} - {end}'
+            else:
+                dates = f'{start} - {end}'
+            self.dates = dates + f' {self.in_timeunit.name_genetive}'
+        super().save(*args, **kwargs)
+
     def informables(self):
         qs = Profile.objects.filter(status__in=[
             'active_player',
