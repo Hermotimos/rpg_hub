@@ -8,7 +8,7 @@ from django.db.models.signals import post_save, m2m_changed
 from debates.models import Debate
 from imaginarion.models import Picture
 from rpg_project.utils import create_sorting_name
-from toponomikon.models import PrimaryLocation, SecondaryLocation
+from toponomikon.models import Location
 from users.models import Profile
 
 
@@ -80,10 +80,10 @@ class Thread(models.Model):
 class Date(models.Model):
 
     SEASONS = (
-        ('1', 'Wiosna'),
-        ('2', 'Lato'),
-        ('3', 'Jesień'),
-        ('4', 'Zima')
+        ('Wiosny', 'Wiosny'),
+        ('Lata', 'Lata'),
+        ('Jesieni', 'Jesieni'),
+        ('Zimy', 'Zimy')
     )
     
     year = models.IntegerField()
@@ -104,7 +104,11 @@ class Date(models.Model):
         verbose_name = '- Date'
 
     def __str__(self):
-        return str(self.year)
+        if self.season and self.day:
+            return f'{self.day}. dnia {self.season} {self.year} roku'
+        elif self.season:
+            return f'{self.season} {self.year} roku'
+        return f'{self.year} roku'
 
 
 class TimeUnitManager(models.Manager):
@@ -189,13 +193,9 @@ class TimeUnit(models.Model):
         | Q(status='dead_player'),
         blank=True,
     )
-    primary_locations = models.ManyToManyField(
-        to=PrimaryLocation,
-        related_name='events_as_primary_loc',
-    )
-    secondary_locations = models.ManyToManyField(
-        to=SecondaryLocation,
-        related_name='events_as_secondary_loc',
+    locations = models.ManyToManyField(
+        to=Location,
+        related_name='events',
         blank=True,
     )
     pictures = models.ManyToManyField(

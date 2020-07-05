@@ -39,15 +39,10 @@ class GameEventAdminForm(forms.ModelForm):
         required=False,
         widget=FilteredSelectMultiple('Threads', False),
     )
-    primary_locations = forms.ModelMultipleChoiceField(
-        queryset=Location.objects.filter(in_location=None),
+    locations = forms.ModelMultipleChoiceField(
+        queryset=Location.objects.all(),
         required=True,
         widget=FilteredSelectMultiple('Primary locations', False),
-    )
-    secondary_locations = forms.ModelMultipleChoiceField(
-        queryset=Location.objects.filter(~Q(in_location=None)),
-        required=True,
-        widget=FilteredSelectMultiple('Secondary locations', False),
     )
 
 
@@ -68,6 +63,7 @@ class GameEventInline(admin.TabularInline):
     model = GameEvent
     exclude = ['name', 'name_genetive']
     extra = 3
+    form = GameEventAdminForm
     list_select_related = ['chapter__image', 'date_start', 'date_end', 'in_timeunit', 'debate']
     
     formfield_overrides = {
@@ -127,18 +123,11 @@ class GameEventInline(admin.TabularInline):
                 request._main_known_indirectly_cache = choices = list(
                     formfield.choices)
             formfield.choices = choices
-        
-        if db_field.name == 'primary_locations':
-            choices = getattr(request, '_primary_locations_choices_cache', None)
+            
+        if db_field.name == 'locations':
+            choices = getattr(request, '_locations_choices_cache', None)
             if choices is None:
-                request._main_primary_locations_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-        
-        if db_field.name == 'secondary_locations':
-            choices = getattr(request, '_secondary_locations_choices_cache', None)
-            if choices is None:
-                request._main_secondary_locations_cache = choices = list(
+                request._main_locations_cache = choices = list(
                     formfield.choices)
             formfield.choices = choices
         
@@ -165,8 +154,7 @@ class GameEventInline(admin.TabularInline):
             'known_directly',
             'known_indirectly',
             'threads',
-            'primary_locations',
-            'secondary_locations',
+            'locations',
             'pictures',
             'in_timeunit',
         )
