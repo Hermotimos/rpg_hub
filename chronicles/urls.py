@@ -15,5 +15,8 @@ urlpatterns = [
          name='chronicle-chapter'),
     path('inform/game-event:<int:game_event_id>/',
          views.game_event_inform_view, name='game-event-inform'),
+    
+    # timeline
+    path('timeline/', views.timeline_view, name='timeline'),
 
 ]

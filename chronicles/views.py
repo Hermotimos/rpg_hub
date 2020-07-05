@@ -198,16 +198,16 @@ def game_event_inform_view(request, game_event_id):
 
 #
 # # #################### TIMELINE: model TimelineEvent ####################
-#
-#
-# SEASONS_WITH_STYLES_DICT = {
-#     '1': 'season-spring',
-#     '2': 'season-summer',
-#     '3': 'season-autumn',
-#     '4': 'season-winter'
-# }
-#
-#
+
+
+SEASONS_WITH_STYLES_DICT = {
+    '1': 'season-spring',
+    '2': 'season-summer',
+    '3': 'season-autumn',
+    '4': 'season-winter'
+}
+
+
 # @login_required
 # def timeline_main_view(request):
 #     profile = request.user.profile
@@ -271,131 +271,42 @@ def game_event_inform_view(request, game_event_id):
 #     }
 #     return render(request, 'history/timeline_main.html', context)
 #
-#
-# @login_required
-# def timeline_filter_events_view(request, thread_id=0, participant_id=0, gen_loc_id=0, spec_loc_id=0,
-#                                 year=0, season='0', game_id=0):
-#     profile = request.user.profile
-#
-#     if thread_id != 0:
-#         thread = get_object_or_404(Thread, id=thread_id)
-#         page_title = thread.name
-#         header = f'{thread.name}... Próbujesz sobie przypomnieć, od czego się to wszystko zaczęło?'
-#
-#         if profile.status == 'gm':
-#             events = TimelineEvent.objects.filter(threads=thread)
-#         else:
-#             events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
-#                 .filter(threads=thread) \
-#                 .distinct()
-#
-#     elif participant_id != 0:
-#         participant = get_object_or_404(Profile, id=participant_id)
-#         page_title = participant.character_name
-#         if profile == participant:
-#             header = 'Są czasy, gdy ogarnia Cię zaduma nad Twoim zawikłanym losem...'
-#         else:
-#             header = f'{participant.character_name.split(" ", 1)[0]}... ' \
-#                      f'Niejedno razem przeżyliście. Na dobre i na złe...'
-#
-#         if profile.status == 'gm':
-#             events = TimelineEvent.objects.filter(participants=participant_id)
-#         else:
-#             events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
-#                 .filter(participants=participant_id) \
-#                 .distinct()
-#
-#     elif gen_loc_id != 0:
-#         gen_location = get_object_or_404(Location, id=gen_loc_id)
-#         page_title = gen_location.name
-#         header = f'{gen_location.name}... Zastanawiasz się, jakie piętno wywarła na Twoich losach ta kraina...'
-#
-#         if profile.status == 'gm':
-#             events = TimelineEvent.objects.filter(gen_locations=gen_loc_id)
-#         else:
-#             events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
-#                 .filter(gen_locations=gen_loc_id) \
-#                 .distinct()
-#
-#     elif spec_loc_id != 0:
-#         spec_location = get_object_or_404(Location, id=spec_loc_id)
-#         page_title = spec_location.name
-#         header = f'{spec_location.name}... Jak to miejsce odcisnęło się na Twoim losie?'
-#
-#         if profile.status == 'gm':
-#             events = TimelineEvent.objects.filter(spec_locations=spec_loc_id)
-#         else:
-#             events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
-#                 .filter(spec_locations=spec_loc_id) \
-#                 .distinct()
-#
-#     elif game_id != 0:
-#         game = get_object_or_404(GameSession, id=game_id)
-#         page_title = game.title
-#         header = f'{game.title}... Jak to po kolei było?'
-#
-#         if profile.status == 'gm':
-#             events = TimelineEvent.objects.filter(game=game_id)
-#         else:
-#             events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
-#                 .filter(game=game_id)\
-#                 .distinct()
-#
-#     elif year:
-#         page_title = ''
-#         header = f'Nie wydaje się to wcale aż tak dawno temu...'
-#
-#         if profile.status == 'gm':
-#             events = TimelineEvent.objects.all()
-#         else:
-#             events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
-#                 .distinct()
-#
-#         if year and season == '0':
-#             events = events.filter(year=year)
-#             page_title = f'{year}. rok Archonatu Nemetha Samatiana'
-#         elif year:
-#             if season == '1':
-#                 season_name = 'Wiosna'
-#             elif season == '2':
-#                 season_name = "Lato"
-#             elif season == '3':
-#                 season_name = "Jesień"
-#             else:
-#                 season_name = "Zima"
-#             events = events.filter(year=year, season=season)
-#             page_title = f'{season_name} {year}. roku Archonatu Nemetha Samatiana'
-#
-#     else:
-#         page_title = 'Pełne Kalendarium'
-#         header = 'Opisane tu wydarzenia rozpoczęły swój bieg 20. roku Archonatu Nemetha Samatiana w Ebbonie, ' \
-#                  'choć zarodki wielu z nich sięgają znacznie odleglejszych czasów...'
-#
-#         if profile.status == 'gm':
-#             events = TimelineEvent.objects.all()
-#         else:
-#             events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all()) \
-#                 .distinct()
-#
-#     events = events\
-#         .select_related('game')\
-#         .prefetch_related('threads', 'participants', 'informed', 'gen_locations',
-#                           'spec_locations__in_location',
-#                           # 'notes__author'
-#                           )
-#
-#     context = {
-#         'page_title': page_title,
-#         'header': header,
-#         'events': events,
-#         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
-#     }
-#     if events:
-#         return render(request, 'history/timeline_events.html', context)
-#     else:
-#         return redirect('home:dupa')
-#
-#
+
+@login_required
+def timeline_view(request):
+    profile = request.user.profile
+
+    page_title = 'Pełne Kalendarium'
+    header = 'Opisane tu wydarzenia rozpoczęły swój bieg 20. roku Archonatu Nemetha Samatiana w Ebbonie, ' \
+             'choć zarodki wielu z nich sięgają znacznie odleglejszych czasów...'
+    
+    events = GameEvent.objects.select_related('game')
+    events = events.prefetch_related(
+        'threads',
+        'known_directly',
+        'known_indirectly',
+        'primary_locations',
+        'secondary_locations__in_location',
+    )
+    if not profile.status == 'gm':
+        events = GameEvent.objects.filter(
+            Q(id__in=profile.events_known_directly.all())
+            | Q(id__in=profile.events_known_indirectly.all())
+        )
+    events = events.distinct()
+
+    context = {
+        'page_title': page_title,
+        'header': header,
+        'events': events,
+        'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
+    }
+    if events:
+        return render(request, 'chronicles/timeline.html', context)
+    else:
+        return redirect('home:dupa')
+
+
 # @login_required
 # def timeline_inform_view(request, event_id):
 #     profile = request.user.profile
