@@ -22,7 +22,7 @@
         {% endif %}
         <h3 class="unblue">
             <b>
-                <a href="{% url 'chronicles:chronicle-chapter' chapter.title %}" class="align-middle pt-2 small-caps border-bottom-dark">
+                <a href="{% url 'chronicles:chronicle-chapter' chapter.id %}" class="align-middle pt-2 small-caps border-bottom-dark">
                 {{ chapter.title }}
                 </a>
             </b>
@@ -31,7 +31,7 @@
         {% for game in chapter.game_sessions.all %}
             <h6 class="unblue {% if not game.any_known_directly and request.user.profile.status != 'gm' %} text-muted {% endif %}">
                 {{ forloop.counter }}.
-                <a href="{% url 'chronicles:chronicle-game' game.title %}"
+                <a href="{% url 'chronicles:chronicle-game' game.id %}"
                    class="{% if not game.any_known_directly and request.user.profile.status != 'gm' %} text-muted {% endif %}">
                     {{ game.title }}
                 </a>

@@ -213,7 +213,7 @@ class TimeUnit(models.Model):
 
     class Meta:
         ordering = ['year_start_ab_urbe_condita', 'date_start']
-        verbose_name_plural = '* Time Units (Time spans, History events, Game events)'
+        verbose_name_plural = 'Time Units (Time spans, History events, Game events)'
 
     def __str__(self):
         res = str(self.name)
@@ -233,6 +233,7 @@ class TimeUnit(models.Model):
         qs = qs.exclude(
             id__in=(self.known_directly.all() | self.known_indirectly.all())
         )
+        print(qs)
         return qs
 
 

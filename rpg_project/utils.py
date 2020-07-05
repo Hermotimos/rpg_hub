@@ -112,6 +112,7 @@ def send_emails(request, profile_ids, **kwargs):
                   f"'{event.date()} rozegrało się co następuje...\n " \
                   f"Wydarzenie zostało zapisane w Twoim Kalendarium."
 
+    #  OLD - history app
     elif 'chronicle_event' in kwargs:
         event = kwargs['chronicle_event']
         subject = "[RPG] Nowa opowieść o wydarzeniach!"
@@ -120,6 +121,16 @@ def send_emails(request, profile_ids, **kwargs):
                   f"rozegrało się co następuje...\n" \
                   f"Wydarzenie zostało zapisane w Twojej Kronice: " \
                   f"{request.get_host()}/history/chronicle/one-game:{event.game.id}:0/\n"
+
+    #  NEW - chronicles app
+    elif 'game_event' in kwargs:
+        game_event = kwargs['game_event']
+        subject = "[RPG] Nowa opowieść o wydarzeniach!"
+        message = f"{profile} rozprawia o swoich przygodach.\n" \
+                  f"Podczas przygody '{game_event.game.title}' " \
+                  f"rozegrało się co następuje...\n" \
+                  f"Wydarzenie zostało zapisane w Twojej Kronice: " \
+                  f"{request.get_host()}/chronicles/chronicle/game:{game_event.game.id}/\n"
 
     elif 'demand_answer' in kwargs:
         demand_answer = kwargs['demand_answer']

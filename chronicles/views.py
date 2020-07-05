@@ -6,40 +6,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 # from history.models import (TimelineEvent, ChronicleEvent, Chapter,
 #                             GameSession, Thread)
-from chronicles.models import (Chapter, GameSession, Thread, Date, GameEvent)
+from chronicles.models import (Chapter, GameSession, Thread, Date, GameEvent, TimeUnit)
 from rpg_project.utils import send_emails
 from toponomikon.models import Location
 from users.models import Profile
 
 
-# #################### CHRONICLE: model ChronicleEvent ####################
-
-
-# def is_allowed_for_chronicle(profile, chapter_id=0, game_id=0,
-#                              chronicle_event_id=0, timeline_event_id=0):
-#
-#     if profile.status == 'gm':
-#         return True
-#     elif chapter_id:
-#         if chapter_id in [ch.id for ch in Chapter.objects.filter(
-#                 Q(game_sessions__chronicle_events__participants=profile)
-#                 | Q(game_sessions__chronicle_events__informed=profile))]:
-#             return True
-#     elif game_id:
-#         if game_id in [g.id for g in GameSession.objects.filter(
-#                 Q(chronicle_events__participants=profile)
-#                 | Q(chronicle_events__informed=profile))]:
-#             return True
-#     elif chronicle_event_id:
-#         if chronicle_event_id in [e.id for e in GameEvent.objects.filter(
-#                 Q(participants=profile) | Q(informed=profile))]:
-#             return True
-#     elif timeline_event_id:
-#         if timeline_event_id in [e.id for e in TimelineEvent.objects.filter(
-#                 Q(participants=profile) | Q(informed=profile))]:
-#             return True
-#     else:
-#         return False
+# #################### CHRONICLE ####################
 
 
 @login_required
@@ -81,9 +54,9 @@ def chronicle_contents_view(request):
 
 
 @login_required
-def chronicle_game_view(request, game_title):
+def chronicle_game_view(request, game_id):
     profile = request.user.profile
-    game = get_object_or_404(GameSession, title=game_title)
+    game = get_object_or_404(GameSession, id=game_id)
     
     events = GameEvent.objects.filter(game=game)
     events = events.prefetch_related(
@@ -99,7 +72,7 @@ def chronicle_game_view(request, game_title):
         events = events.distinct()
 
     context = {
-        'page_title': game_title,
+        'page_title': game.title,
         'events': events,
     }
     if events:
@@ -109,9 +82,9 @@ def chronicle_game_view(request, game_title):
 
 
 @login_required
-def chronicle_chapter_view(request, chapter_title):
+def chronicle_chapter_view(request, chapter_id):
     profile = request.user.profile
-    chapter = get_object_or_404(Chapter, title=chapter_title)
+    chapter = get_object_or_404(Chapter, id=chapter_id)
 
     events = GameEvent.objects.filter(game__chapter=chapter)
     events = events.prefetch_related(
@@ -126,13 +99,12 @@ def chronicle_chapter_view(request, chapter_title):
         )
         events = events.distinct()
         
-    games = GameSession.objects.filter(chapter=chapter)
     games = GameSession.objects.filter(events__in=events)
     games = games.prefetch_related(Prefetch('events', queryset=events))
     games = games.distinct()
     
     context = {
-        'page_title': chapter_title,
+        'page_title': chapter.title,
         'games': games,
     }
     if games:
@@ -177,6 +149,41 @@ def chronicle_all_view(request):
         return redirect('home:dupa')
     
 
+#  TODO another view for HistoryEvent ?
+#  TODO or maybe just check if id in GameEvent or HistoryEvent
+@login_required
+def game_event_inform_view(request, game_event_id):
+    profile = request.user.profile
+    game_event = get_object_or_404(TimeUnit, id=game_event_id)
+    allowed = (
+        game_event.known_directly.all() | game_event.known_indirectly.all()
+    )
+    allowed = allowed.filter(status__in=['active_player', 'inactive_player'])
+    
+    # INFORM FORM
+    # dict(request.POST).items() == < QueryDict: {
+    #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
+    #     '2': ['on'],
+    #     'chronicle_event': ['122']
+    # } >
+    if request.method == 'POST' and 'game_event' in request.POST:
+        data = dict(request.POST)
+        informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
+        game_event.known_indirectly.add(*informed_ids)
+
+        send_emails(request, informed_ids, game_event=game_event)
+        if informed_ids:
+            messages.info(request, f'Poinformowano wybrane postacie!')
+
+    context = {
+        'page_title': 'Poinformuj o wydarzeniu',
+        'event': game_event,
+        'event_type': 'game_event'
+    }
+    if profile in allowed or profile.status == 'gm':
+        return render(request, 'chronicles/_event_inform.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 
@@ -184,59 +191,11 @@ def chronicle_all_view(request):
 
 
 
-#
-#
-# @login_required
-# def chronicle_inform_view(request, event_id):
-#     profile = request.user.profile
-#     chronicle_event = get_object_or_404(ChronicleEvent, id=event_id)
-#
-#     participants = chronicle_event.participants.all()
-#     informed = chronicle_event.informed.all()
-#     allowed = (participants | informed)
-#
-#     # INFORM FORM
-#     # dict(request.POST).items() == < QueryDict: {
-#     #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
-#     #     '2': ['on'],
-#     #     'chronicle_event': ['122']
-#     # } >
-#     if request.method == 'POST' and 'chronicle_event' in request.POST:
-#         data = dict(request.POST)
-#         informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
-#         chronicle_event.informed.add(*informed_ids)
-#
-#         send_emails(request, informed_ids, chronicle_event=chronicle_event)
-#         if informed_ids:
-#             messages.info(request, f'Poinformowano wybrane postacie!')
-#
-#     context = {
-#         'page_title': 'Poinformuj o wydarzeniu',
-#         'event': chronicle_event,
-#         'event_type': 'chronicle_event'
-#     }
-#
-#     # if is_allowed_for_chronicle(profile, chronicle_event_id=event_id):
-#     if profile in allowed or profile.status == 'gm':
-#         return render(request, 'history/_event_inform.html', context)
-#     else:
-#         return redirect('home:dupa')
-#
-#
-# @login_required
-# def chronicle_gap_view(request, timeline_event_id):
-#     timeline_event = get_object_or_404(TimelineEvent, id=timeline_event_id)
-#     participants_and_informed = (timeline_event.participants.all()
-#                                  | (timeline_event.informed.all())).distinct()
-#     participants_and_informed_str = ', '.join(p.character_name.split(' ', 1)[0]
-#                                               for p in participants_and_informed)
-#
-#     context = {
-#         'page_title': 'Luka w Kronice',
-#         'participants_and_informed': participants_and_informed_str
-#     }
-#     return render(request, 'history/chronicle_gap.html', context)
-#
+
+
+
+
+
 #
 # # #################### TIMELINE: model TimelineEvent ####################
 #
