@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import Q
 from django.forms import Textarea, TextInput, Select
 
-from toponomikon.models import LocationType, Location, PrimaryLocation, SecondaryLocation
+from toponomikon.models import LocationType, Location, PrimaryLocation, SecondaryLocation, TertiaryLocation
 from imaginarion.models import Picture
 from knowledge.models import KnowledgePacket
 from users.models import Profile
@@ -156,6 +156,10 @@ class PrimaryLocationAdmin(admin.ModelAdmin):
     
 class SecondaryLocationAdmin(LocationAdmin):
     pass
+
+
+class TertiaryLocationAdmin(LocationAdmin):
+    pass
     
     
 class LocationTypeAdmin(admin.ModelAdmin):
@@ -182,3 +186,4 @@ admin.site.register(LocationType, LocationTypeAdmin)
 admin.site.register(Location, LocationAdmin)
 admin.site.register(PrimaryLocation, PrimaryLocationAdmin)
 admin.site.register(SecondaryLocation, SecondaryLocationAdmin)
+admin.site.register(TertiaryLocation, TertiaryLocationAdmin)
