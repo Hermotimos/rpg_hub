@@ -22,7 +22,7 @@
                     <a href="{% url 'debates:create-debate' topic.id %}" class="btn btn-outline-dark">Nowa narada</a>
                     <br><br>
                     
-                    <ul class="bullets-1">
+                    <ul class="bullets-3">
                         {% for debate in topic.debates.all %}
                             <li class="{% if not debate.is_ended %} bullet-ongoing {% endif %} pb-3">
                                 <div class="d-md-inline">
