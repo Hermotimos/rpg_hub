@@ -143,13 +143,12 @@ def create_debate_view(request, topic_id):
         return redirect('home:dupa')
 
 
-
 @login_required
-def debate_view(request, topic_id, debate_id):
+def debate_view(request, debate_id):
     profile = request.user.profile
-    topic = get_object_or_404(Topic, id=topic_id)
-    debate = get_object_or_404(Debate, id=debate_id)
-    
+    debate = Debate.objects.select_related().get(id=debate_id)
+    topic = debate.topic
+
     debate_allowed_profiles = debate.allowed_profiles.exclude(status='gm')
     debate_followers = debate.followers.exclude(status='gm')
     remarks = debate.remarks.all().select_related('author__profile')
@@ -157,8 +156,7 @@ def debate_view(request, topic_id, debate_id):
     last_remark = None
     last_remark_seen_by_imgs = []
     if debate.remarks.exclude(author__profile__status='gm'):
-        last_remark = debate.remarks.order_by('-date_posted') \
-            .prefetch_related('seen_by')[0]
+        last_remark = debate.remarks.order_by('-date_posted')[0]
         if not debate.is_ended:
             seen_by = last_remark.seen_by.all()
             if profile not in seen_by:
@@ -197,7 +195,7 @@ def debate_view(request, topic_id, debate_id):
             send_emails(request, informed_ids, debate_remark=debate)
             if informed_ids:
                 messages.info(request, f'Twój głos zabrzmiał w naradzie!')
-            return redirect('debates:debate', topic_id=topic_id,
+            return redirect('debates:debate', topic_id=topic.id,
                             debate_id=debate_id)
     else:
         form = CreateRemarkForm(initial={'author': request.user},
@@ -220,29 +218,27 @@ def debate_view(request, topic_id, debate_id):
         return redirect('home:dupa')
 
 
-
 @login_required
-def unfollow_debate_view(request, topic_id, debate_id):
+def unfollow_debate_view(request, debate_id):
     profile = request.user.profile
     debate = get_object_or_404(Debate, id=debate_id)
     if profile in debate.allowed_profiles.all() or profile.status == 'gm':
         debate.followers.remove(profile)
         messages.info(request, 'Przestałeś uważnie uczestniczyć w naradzie!')
-        return redirect('debates:debate', topic_id=topic_id,
+        return redirect('debates:debate', topic_id=debate.topic.id,
                         debate_id=debate_id)
     else:
         return redirect('home:dupa')
 
 
-
 @login_required
-def follow_debate_view(request, topic_id, debate_id):
+def follow_debate_view(request, debate_id):
     profile = request.user.profile
     debate = get_object_or_404(Debate, id=debate_id)
     if profile in debate.allowed_profiles.all() or profile.status == 'gm':
         debate.followers.add(profile)
         messages.info(request, 'Od teraz uważnie uczestniczysz w naradzie!')
-        return redirect('debates:debate', topic_id=topic_id,
+        return redirect('debates:debate', topic_id=debate.topic.id,
                         debate_id=debate_id)
     else:
         return redirect('home:dupa')
