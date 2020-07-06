@@ -64,9 +64,6 @@ class Remark(models.Model):
         text = self.text
         return f'{text[:100]}...' if len(str(text)) > 100 else text
 
-    def text_begin(self):
-        return self.__str__()
-
     def save(self, *args, **kwargs):
         first_save = True if not self.pk else False
         super().save(*args, **kwargs)

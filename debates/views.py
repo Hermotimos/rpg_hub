@@ -1,7 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import (Count, Case, When, IntegerField, Max, Min,
-                              Prefetch, Q)
+from django.db.models import Prefetch
 from django.shortcuts import render, redirect, get_object_or_404
 
 from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm
@@ -13,37 +12,21 @@ from users.models import Profile
 @login_required
 def debates_main_view(request):
     profile = request.user.profile
-    if profile.status == 'gm':
-        topics = Topic.objects.all()
-        debates = Debate.objects.all().prefetch_related('allowed_profiles')
-    else:
-        topics = Topic.objects.filter(allowed_profiles=profile)
-        debates = Debate.objects.filter(allowed_profiles=profile).prefetch_related('allowed_profiles')
+    debates = Debate.objects.all().prefetch_related('allowed_profiles')
+    if profile.status != 'gm':
+        debates = Debate.objects.filter(allowed_profiles=profile)
+        debates = debates.select_related('chronicle_event__game')
+        debates = debates.prefetch_related('allowed_profiles')
 
-    topics = topics.prefetch_related(
-        Prefetch(
-            'debates',
-            queryset=debates.annotate(
-                first_player_remark_date=Min('remarks__date_posted'),
-                last_player_remark_date=Max('remarks__date_posted'),
-                player_remarks_count=Count(
-                    Case(
-                        When(
-                            ~Q(remarks__author__profile__status='gm'), then=1
-                        ),
-                        output_field=IntegerField()
-                    )
-                )
-            )
-        ),
-    )
+    topics = Topic.objects.filter(debates__in=debates)
+    topics = topics.prefetch_related(Prefetch('debates', queryset=debates))
+    topics = topics.distinct()
 
     context = {
         'page_title': 'Narady',
         'topics': topics,
     }
     return render(request, 'debates/main.html', context)
-
 
 
 @login_required
@@ -77,8 +60,7 @@ def create_topic_view(request):
 
             send_emails(request, informed_ids, debate_new_topic=debate)
             messages.info(request, f'Utworzono nową naradę w nowym temacie!')
-            return redirect('debates:debate', topic_id=topic.id,
-                            debate_id=debate.id)
+            return redirect('debates:debate', debate_id=debate.id)
     else:
         topic_form = CreateTopicForm()
         debate_form = CreateDebateForm(authenticated_user=request.user)
@@ -92,7 +74,6 @@ def create_topic_view(request):
         'remark_form': remark_form,
     }
     return render(request, 'debates/create_topic.html', context)
-
 
 
 @login_required
@@ -124,8 +105,7 @@ def create_debate_view(request, topic_id):
 
             send_emails(request, informed_ids, debate_new=debate)
             messages.info(request, f'Utworzono nową naradę!')
-            return redirect('debates:debate', topic_id=topic_id,
-                            debate_id=debate.id)
+            return redirect('debates:debate', debate_id=debate.id)
     else:
         debate_form = CreateDebateForm(authenticated_user=request.user)
         remark_form = CreateRemarkForm(initial={'author': request.user},
@@ -195,8 +175,7 @@ def debate_view(request, debate_id):
             send_emails(request, informed_ids, debate_remark=debate)
             if informed_ids:
                 messages.info(request, f'Twój głos zabrzmiał w naradzie!')
-            return redirect('debates:debate', topic_id=topic.id,
-                            debate_id=debate_id)
+            return redirect('debates:debate', debate_id=debate_id)
     else:
         form = CreateRemarkForm(initial={'author': request.user},
                                 debate_id=debate_id)
@@ -225,8 +204,7 @@ def unfollow_debate_view(request, debate_id):
     if profile in debate.allowed_profiles.all() or profile.status == 'gm':
         debate.followers.remove(profile)
         messages.info(request, 'Przestałeś uważnie uczestniczyć w naradzie!')
-        return redirect('debates:debate', topic_id=debate.topic.id,
-                        debate_id=debate_id)
+        return redirect('debates:debate', debate_id=debate_id)
     else:
         return redirect('home:dupa')
 
@@ -238,7 +216,6 @@ def follow_debate_view(request, debate_id):
     if profile in debate.allowed_profiles.all() or profile.status == 'gm':
         debate.followers.add(profile)
         messages.info(request, 'Od teraz uważnie uczestniczysz w naradzie!')
-        return redirect('debates:debate', topic_id=debate.topic.id,
-                        debate_id=debate_id)
+        return redirect('debates:debate', debate_id=debate_id)
     else:
         return redirect('home:dupa')

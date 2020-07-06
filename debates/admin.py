@@ -55,7 +55,7 @@ class DebateAdmin(admin.ModelAdmin):
 
 
 class RemarkAdmin(admin.ModelAdmin):
-    list_display = ['text_begin', 'debate', 'author', 'date_posted', 'image']
+    list_display = ['__str__', 'debate', 'author', 'date_posted', 'image']
     list_filter = ['debate']
     search_fields = ['text']
 
