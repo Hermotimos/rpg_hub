@@ -93,9 +93,13 @@ m2m_changed.connect(update_topic_allowed_profiles,
 
 
 def delete_if_doubled(sender, instance, **kwargs):
-    time_span = datetime.datetime.now() - datetime.timedelta(minutes=5)
-    doubled = Remark.objects.filter(text=instance.text, author=instance.author,
-                                    date_posted__gte=time_span)
+    time_span = instance.date_posted + datetime.timedelta(minutes=1)
+    doubled = Remark.objects.filter(debate=instance.debate,
+                                    text=instance.text,
+                                    author=instance.author,
+                                    date_posted__lt=time_span,  # TODO this doesnt work
+                                    )
+
     if doubled.count() > 1:
         instance.delete()
 
