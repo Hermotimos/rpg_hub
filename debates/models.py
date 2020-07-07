@@ -28,8 +28,6 @@ class Debate(models.Model):
         to=Profile,
         related_name='debates_known_directly',
     )
-    allowed_profiles = models.ManyToManyField(to=Profile,
-                                              related_name='allowed_debates')
     # followers = models.ManyToManyField(
     #     to=Profile,
     #     related_name='followed_debates',

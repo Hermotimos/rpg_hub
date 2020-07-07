@@ -127,9 +127,18 @@ class TimeUnit(models.Model):
         to=GameSession,
         related_name='events',
         on_delete=models.PROTECT,
+        blank=True,
+        null=True,
     )
     event_no_in_game = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(1)],
+        blank=True,
+        null=True,
+    )
+    in_timeunit = models.ForeignKey(
+        to='self',
+        related_name='events',
+        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
@@ -147,13 +156,6 @@ class TimeUnit(models.Model):
         related_name='events_ended',
         on_delete=models.PROTECT,
         verbose_name='Date end (year of the encompassing unit)',
-        blank=True,
-        null=True,
-    )
-    in_timeunit = models.ForeignKey(
-        to='self',
-        related_name='events',
-        on_delete=models.PROTECT,
         blank=True,
         null=True,
     )
@@ -238,7 +240,8 @@ class TimeUnit(models.Model):
                 dates = f'{start.day} dnia {start.season} - {end}'
             else:
                 dates = f'{start} - {end}'
-            self.dates = dates + f' {self.in_timeunit.name_genetive}'
+            if self.in_timeunit:
+                self.dates = dates + f' {self.in_timeunit.name_genetive}'
         super().save(*args, **kwargs)
 
     def informables(self):

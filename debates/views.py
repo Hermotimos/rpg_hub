@@ -11,9 +11,6 @@ from users.models import Profile
 
 @login_required
 def debates_main_view(request):
-    for debate in Debate.objects.all():
-        debate.known_directly.add(*debate.allowed_profiles.all())
-        debate.save()
     profile = request.user.profile
     debates = Debate.objects.all().prefetch_related('known_directly')
     if profile.status != 'gm':
