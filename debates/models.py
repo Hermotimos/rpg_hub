@@ -93,13 +93,14 @@ class Remark(models.Model):
 
 
 def delete_if_doubled(sender, instance, **kwargs):
-    time_span = instance.date_posted + datetime.timedelta(minutes=1)
-    doubled = Remark.objects.filter(debate=instance.debate,
-                                    text=instance.text,
-                                    author=instance.author,
-                                    date_posted__lt=time_span,  # TODO this doesnt work
-                                    )
-
+    start = instance.created_at - datetime.timedelta(minutes=1)
+    end = instance.created_at
+    doubled = Remark.objects.filter(
+        debate=instance.debate,
+        text=instance.text,
+        author=instance.author,
+        created_at__range=[start, end],
+    )
     if doubled.count() > 1:
         instance.delete()
 
