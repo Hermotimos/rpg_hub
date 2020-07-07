@@ -38,7 +38,7 @@ class DebateAdminForm(forms.ModelForm):
     
     
 class TopicAdmin(admin.ModelAdmin):
-    list_display = ['title', 'date_created']
+    list_display = ['title', 'created_at']
     search_fields = ['title']
 
 
@@ -55,7 +55,7 @@ class DebateAdmin(admin.ModelAdmin):
 
 
 class RemarkAdmin(admin.ModelAdmin):
-    list_display = ['__str__', 'debate', 'author', 'date_posted', 'image']
+    list_display = ['__str__', 'debate', 'author', 'created_at', 'image']
     list_filter = ['debate']
     search_fields = ['text']
 

@@ -12,11 +12,11 @@ from users.models import Profile
 @login_required
 def debates_main_view(request):
     profile = request.user.profile
-    debates = Debate.objects.all().prefetch_related('allowed_profiles')
+    debates = Debate.objects.all().prefetch_related('known_directly')
     if profile.status != 'gm':
-        debates = Debate.objects.filter(allowed_profiles=profile)
+        debates = Debate.objects.filter(known_directly=profile)
         debates = debates.select_related('chronicle_event__game')
-        debates = debates.prefetch_related('allowed_profiles')
+        debates = debates.prefetch_related('known_directly')
 
     topics = Topic.objects.filter(debates__in=debates)
     topics = topics.prefetch_related(Prefetch('debates', queryset=debates))
@@ -47,16 +47,15 @@ def create_topic_view(request):
             debate.topic = topic
             debate.save()
 
-            new_allowed_profiles = debate_form.cleaned_data['allowed_profiles']
-            new_allowed_profiles |= Profile.objects.filter(id=profile.id)
-            debate.allowed_profiles.add(*list(new_allowed_profiles))
-            debate.followers.add(*list(new_allowed_profiles))
+            new_known_directly = debate_form.cleaned_data['known_directly']
+            new_known_directly |= Profile.objects.filter(id=profile.id)
+            debate.known_directly.add(*list(new_known_directly))
 
             remark = remark_form.save(commit=False)
             remark.debate = debate
             remark.save()
             
-            informed_ids = [p.id for p in new_allowed_profiles if p != profile]
+            informed_ids = [p.id for p in new_known_directly if p != profile]
 
             send_emails(request, informed_ids, debate_new_topic=debate)
             messages.info(request, f'Utworzono nową naradę w nowym temacie!')
@@ -92,16 +91,15 @@ def create_debate_view(request, topic_id):
             debate.topic = Topic.objects.get(id=topic_id)
             debate.save()
             
-            new_allowed_profiles = debate_form.cleaned_data['allowed_profiles']
-            new_allowed_profiles |= Profile.objects.filter(id=profile.id)
-            debate.allowed_profiles.add(*list(new_allowed_profiles))
-            debate.followers.add(*list(new_allowed_profiles))
+            new_known_directly = debate_form.cleaned_data['known_directly']
+            new_known_directly |= Profile.objects.filter(id=profile.id)
+            debate.known_directly.add(*list(new_known_directly))
 
             remark = remark_form.save(commit=False)
             remark.debate = debate
             remark.save()
             
-            informed_ids = [p.id for p in new_allowed_profiles if p != profile]
+            informed_ids = [p.id for p in new_known_directly if p != profile]
 
             send_emails(request, informed_ids, debate_new=debate)
             messages.info(request, f'Utworzono nową naradę!')
@@ -117,10 +115,7 @@ def create_debate_view(request, topic_id):
         'remark_form': remark_form,
         'topic': topic
     }
-    if profile in topic.allowed_profiles.all() or profile.status == 'gm':
-        return render(request, 'debates/create_debate.html', context)
-    else:
-        return redirect('home:dupa')
+    return render(request, 'debates/create_debate.html', context)
 
 
 @login_required
@@ -129,14 +124,13 @@ def debate_view(request, debate_id):
     debate = Debate.objects.select_related().get(id=debate_id)
     topic = debate.topic
 
-    debate_allowed_profiles = debate.allowed_profiles.exclude(status='gm')
-    debate_followers = debate.followers.exclude(status='gm')
+    debate_known_directly = debate.known_directly.exclude(status='gm')
     remarks = debate.remarks.all().select_related('author__profile')
 
     last_remark = None
     last_remark_seen_by_imgs = []
     if debate.remarks.exclude(author__profile__status='gm'):
-        last_remark = debate.remarks.order_by('-date_posted')[0]
+        last_remark = debate.remarks.order_by('-created_at')[0]
         if not debate.is_ended:
             seen_by = last_remark.seen_by.all()
             if profile not in seen_by:
@@ -154,8 +148,7 @@ def debate_view(request, debate_id):
     if request.method == 'POST' and 'debate' in request.POST:
         data = dict(request.POST)
         informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
-        debate.allowed_profiles.add(*informed_ids)
-        debate.followers.add(*informed_ids)
+        debate.known_directly.add(*informed_ids)
         
         send_emails(request, informed_ids, debate_info=debate)
         if informed_ids:
@@ -170,7 +163,7 @@ def debate_view(request, debate_id):
             remark.debate = debate
             remark.save()
 
-            informed_ids = [p.id for p in debate_followers if p != profile]
+            informed_ids = [p.id for p in debate_known_directly if p != profile]
 
             send_emails(request, informed_ids, debate_remark=debate)
             if informed_ids:
@@ -184,38 +177,34 @@ def debate_view(request, debate_id):
         'page_title': debate.name,
         'topic': topic,
         'debate': debate,
-        'debate_allowed_profiles': debate_allowed_profiles,
-        'debate_followers': debate_followers,
+        'debate_known_directly': debate_known_directly,
         'remarks': remarks,
         'last_remark': last_remark,
         'last_remark_seen_by_imgs': last_remark_seen_by_imgs,
         'form': form,
     }
-    if profile in debate.allowed_profiles.all() or profile.status == 'gm':
-        return render(request, 'debates/debate.html', context)
-    else:
-        return redirect('home:dupa')
+    return render(request, 'debates/debate.html', context)
 
 
-@login_required
-def unfollow_debate_view(request, debate_id):
-    profile = request.user.profile
-    debate = get_object_or_404(Debate, id=debate_id)
-    if profile in debate.allowed_profiles.all() or profile.status == 'gm':
-        debate.followers.remove(profile)
-        messages.info(request, 'Przestałeś uważnie uczestniczyć w naradzie!')
-        return redirect('debates:debate', debate_id=debate_id)
-    else:
-        return redirect('home:dupa')
-
-
-@login_required
-def follow_debate_view(request, debate_id):
-    profile = request.user.profile
-    debate = get_object_or_404(Debate, id=debate_id)
-    if profile in debate.allowed_profiles.all() or profile.status == 'gm':
-        debate.followers.add(profile)
-        messages.info(request, 'Od teraz uważnie uczestniczysz w naradzie!')
-        return redirect('debates:debate', debate_id=debate_id)
-    else:
-        return redirect('home:dupa')
+# @login_required
+# def unfollow_debate_view(request, debate_id):
+#     profile = request.user.profile
+#     debate = get_object_or_404(Debate, id=debate_id)
+#     if profile in debate.known_directly.all() or profile.status == 'gm':
+#         debate.followers.remove(profile)
+#         messages.info(request, 'Przestałeś uważnie uczestniczyć w naradzie!')
+#         return redirect('debates:debate', debate_id=debate_id)
+#     else:
+#         return redirect('home:dupa')
+#
+#
+# @login_required
+# def follow_debate_view(request, debate_id):
+#     profile = request.user.profile
+#     debate = get_object_or_404(Debate, id=debate_id)
+#     if profile in debate.known_directly.all() or profile.status == 'gm':
+#         debate.followers.add(profile)
+#         messages.info(request, 'Od teraz uważnie uczestniczysz w naradzie!')
+#         return redirect('debates:debate', debate_id=debate_id)
+#     else:
+#         return redirect('home:dupa')

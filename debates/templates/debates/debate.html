@@ -38,18 +38,6 @@
                         {% endfor %}
                     </td>
                 </tr>
-                {% if debate_followers %}
-                    <tr>
-                        <td class="align-middle">
-                            <h5 class="mr-2 mr-sm-3 text-nowrap">Uważni uczestnicy:</h5>
-                        </td>
-                        <td>
-                            {% for profile in debate_followers %}
-                                <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile img">
-                            {% endfor %}
-                        </td>
-                    </tr>
-                {% endif %}
             </table>
 
             {% if not debate.is_ended %}
@@ -61,11 +49,6 @@
                                 {% include '_inform.html' %}
                             {% endwith %}
                         </div>
-                    {% if request.user.profile in debate_followers %}
-                        <a href="{% url 'debates:unfollow' debate.id %}" class="align-top btn btn-dark mt-1">Nie obserwuj</a>
-                    {% else %}
-                        <a href="{% url 'debates:follow' debate.id %}" class="align-top btn btn-dark mt-1">Obserwuj</a>
-                    {% endif %}
                 </div>
             {% endif %}
             

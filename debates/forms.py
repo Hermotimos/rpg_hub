@@ -24,17 +24,17 @@ class CreateTopicForm(forms.ModelForm):
 class CreateDebateForm(forms.ModelForm):
     class Meta:
         model = Debate
-        fields = ['allowed_profiles', 'is_individual', 'name']
+        fields = ['known_directly', 'is_individual', 'name']
 
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
         super().__init__(*args, **kwargs)
-        self.fields['allowed_profiles'].label = ''
-        self.fields['allowed_profiles'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
+        self.fields['known_directly'].label = ''
+        self.fields['known_directly'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
                                                                            Q(status='dead_player') |
                                                                            Q(status='dead_npc') |
                                                                            Q(status='gm'))
-        self.fields['allowed_profiles'].widget.attrs['size'] = 10
+        self.fields['known_directly'].widget.attrs['size'] = 10
         self.fields['is_individual'].label = 'Dyskusja indywidualna?'
         self.fields['name'].label = ''
         self.fields['name'].max_length = 100
@@ -50,14 +50,14 @@ class CreateRemarkForm(forms.ModelForm):
         debate_id = kwargs.pop('debate_id')
         if debate_id:
             debate = Debate.objects.get(id=debate_id)
-            debate_allowed_profiles = debate.allowed_profiles.all()
+            debate_known_directly = debate.known_directly.all()
         else:
-            debate_allowed_profiles = Profile.objects.exclude(Q(status='dead_player') |
+            debate_known_directly = Profile.objects.exclude(Q(status='dead_player') |
                                                               Q(status='dead_npc'))
         super().__init__(*args, **kwargs)
         self.fields['author'].label = 'Autor:'
         self.fields['author'].queryset = User.objects\
-            .filter(Q(profile__status='gm') | Q(profile__in=debate_allowed_profiles))\
+            .filter(Q(profile__status='gm') | Q(profile__in=debate_known_directly))\
             .order_by('profile__character_name')
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
