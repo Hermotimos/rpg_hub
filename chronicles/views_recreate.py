@@ -10,13 +10,13 @@ from chronicles.models import Thread, Date, TimeUnit, Chronology, \
     Era, Period, GameEvent, Chapter, GameSession, GameEvent
 
 
-
 from history.models import (
     GameSession as GameSession_H,
     Thread as Thread_H,
     Chapter as Chapter_H,
     ChronicleEvent as ChronicleEvent_H
 )
+
 
 def recreate(request):
 
@@ -50,13 +50,11 @@ def recreate(request):
             )
         except Exception as exc:
             print(f'Failed creating from: {GameSession_H.__name__}: {game.title}\n{exc}')
+            
     # TODO - chapter.image - gotta do it manually
     # TODO - GameSession with no 0 fails - 'Wydarzenia na świecie' - add manually
     
     
-    
-    
-    #
     # Create CHRONOLOGIA
     e_chrono = Chronology.objects.create(
         name='Chronologia Traegharon i Hyllemath',
@@ -101,36 +99,32 @@ def recreate(request):
     e_period.save()
     print('HURRRRRRRRRRAY\n' * 50)
     
-    
     # TODO - delete all redundantly created instances of Chronology, Era, Period - otherwise .get() will return > 1
     
 
-    for chronicle_event in ChronicleEvent_H.objects.all():
-        failed = []
-        try:
-            sing_event = GameEvent.objects.create(
-                name=None,
-                name_genetive=None,
-                description_short=None,
-                description_long=chronicle_event.description,
-                in_timeunit=TimeUnit.objects.get(name='Archonat Nemetha Samatiana'),
-                date_start=None,
-                date_end=None,
-                game=GameSession.objects.get(title=chronicle_event.game.title),
-                event_no_in_game=chronicle_event.event_no_in_game,
-                debate=chronicle_event.debate,
-            )
-            sing_event.known_directly.set(*[chronicle_event.participants.all()])
-            sing_event.known_indirectly.set(*[chronicle_event.informed.all()])
-            sing_event.pictures.set(*[chronicle_event.pictures.all()])
-            sing_event.save()
-            print(f'Sukces: {chronicle_event.description[:50]}')
-        except Exception as exc:
-            failed += f'{chronicle_event.game.title}{chronicle_event.description[:20]}'
-        print(failed)
-
-    
-    
+    # for chronicle_event in ChronicleEvent_H.objects.all():
+    #     failed = []
+    #     try:
+    #         sing_event = GameEvent.objects.create(
+    #             name=None,
+    #             name_genetive=None,
+    #             description_short=None,
+    #             description_long=chronicle_event.description,
+    #             in_timeunit=TimeUnit.objects.get(name='Archonat Nemetha Samatiana'),
+    #             date_start=None,
+    #             date_end=None,
+    #             game=GameSession.objects.get(title=chronicle_event.game.title),
+    #             event_no_in_game=chronicle_event.event_no_in_game,
+    #             debate=chronicle_event.debate,
+    #         )
+    #         sing_event.known_directly.set(*[chronicle_event.participants.all()])
+    #         sing_event.known_indirectly.set(*[chronicle_event.informed.all()])
+    #         sing_event.pictures.set(*[chronicle_event.pictures.all()])
+    #         sing_event.save()
+    #         print(f'Sukces: {chronicle_event.description[:50]}')
+    #     except Exception as exc:
+    #         failed += f'{chronicle_event.game.title}{chronicle_event.description[:20]}'
+    #     print(failed)
     
     return redirect('home:dupa')
     # TODO - reconnect events that took place before 'Archonat Nemetha Samatiana ' to other Periods etc.

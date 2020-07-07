@@ -27,7 +27,7 @@
         {% if event.debate and request.user.profile not in event.known_indirectly.all %}
             <div class="font-18 font-italic text-justify px-1 py-1">
                 <p>
-                    <a href="{% url 'debates:debate' event.debate.topic.id event.debate.id %}" id="debate_{{ event.debate.id }}">
+                    <a href="{% url 'debates:debate' event.debate.id %}" id="debate_{{ event.debate.id }}">
                         ❖ Narada: {{ event.debate.name }}
                     </a>
                 </p>

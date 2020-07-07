@@ -33,7 +33,7 @@
                 <tr>
                     <td class="align-middle"><h5>Uczestnicy:</h5></td>
                     <td>
-                        {% for profile in debate_allowed_profiles %}
+                        {% for profile in debate_known_directly %}
                             <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile img">
                         {% endfor %}
                     </td>

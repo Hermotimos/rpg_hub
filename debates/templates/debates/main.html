@@ -33,7 +33,7 @@
                                     </h5>
                                 </div>
                                 <div class="d-sm-inline">
-                                    {% for profile in debate.allowed_profiles.all %}
+                                    {% for profile in debate.known_directly.all %}
                                         {% if profile.status != 'gm' %}
                                             <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile img">
                                         {% endif %}
