@@ -28,11 +28,6 @@ class Debate(models.Model):
         to=Profile,
         related_name='debates_known_directly',
     )
-    # followers = models.ManyToManyField(
-    #     to=Profile,
-    #     related_name='followed_debates',
-    #     blank=True,
-    # )
     is_ended = models.BooleanField(default=False)
     is_individual = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
