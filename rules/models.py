@@ -65,6 +65,30 @@ class SkillLevel(models.Model):
         ordering = ['sorting_name']
 
 
+class TheologySkillManager(models.Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(Q(name__icontains='Doktryn')
+                       | Q(name__icontains='Kult')
+                       | Q(name__icontains='Teolog'))
+        return qs
+    
+
+class TheologySkill(Skill):
+    objects = TheologySkillManager()
+
+
+class BooksSkillManager(models.Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(Q(name__icontains='Księg'))
+        return qs
+    
+
+class BooksSkill(Skill):
+    objects = BooksSkillManager()
+
+
 class Synergy(models.Model):
     name = models.CharField(max_length=100, verbose_name='Synergia')
     skills = models.ManyToManyField(Skill, related_name='skills')

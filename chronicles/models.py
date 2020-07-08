@@ -262,7 +262,7 @@ class TimeUnit(models.Model):
 
 class ChronologyManager(models.Manager):
     def get_queryset(self):
-        qs = super(ChronologyManager, self).get_queryset()
+        qs = super().get_queryset()
         qs = qs.filter(Q(in_timeunit=None))
         qs = qs.prefetch_related('events')
         return qs
@@ -278,7 +278,7 @@ class Chronology(TimeUnit):
 
 class EraManager(models.Manager):
     def get_queryset(self):
-        qs = super(EraManager, self).get_queryset()
+        qs = super().get_queryset()
         qs = qs.select_related('in_timeunit', 'date_start', 'date_end')
         qs = qs.prefetch_related('events')
         qs = qs.filter(~Q(in_timeunit=None) & Q(in_timeunit__in_timeunit=None))
@@ -296,7 +296,7 @@ class Era(TimeUnit):
 
 class PeriodManager(models.Manager):
     def get_queryset(self):
-        qs = super(PeriodManager, self).get_queryset()
+        qs = super().get_queryset()
         qs = qs.select_related('in_timeunit', 'date_start', 'date_end')
         qs = qs.prefetch_related('events')
         qs = qs.filter(
@@ -319,7 +319,7 @@ class Period(TimeUnit):
 
 class HistoryEventManager(models.Manager):
     def get_queryset(self):
-        qs = super(HistoryEventManager, self).get_queryset()
+        qs = super().get_queryset()
         qs = qs.select_related('in_timeunit', 'date_start', 'date_end')
         qs = qs.filter(Q(game=None), events=None)
         return qs
@@ -338,7 +338,7 @@ class HistoryEvent(TimeUnit):
 
 class GameEventManager(models.Manager):
     def get_queryset(self):
-        qs = super(GameEventManager, self).get_queryset()
+        qs = super().get_queryset()
         qs = qs.select_related('in_timeunit', 'date_start', 'date_end')
         qs = qs.filter(~Q(game=None))
         return qs

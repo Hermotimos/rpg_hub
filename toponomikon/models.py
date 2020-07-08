@@ -12,8 +12,12 @@ from users.models import Profile
 class LocationType(models.Model):
     name = models.CharField(max_length=100)
     name_plural = models.CharField(max_length=100, blank=True, null=True)
-    default_img = models.ForeignKey(to=Picture, related_name='location_types',
-                                    on_delete=models.SET_NULL, null=True)
+    default_img = models.ForeignKey(
+        to=Picture,
+        related_name='location_types',
+        on_delete=models.SET_NULL,
+        null=True,
+    )
     order_no = models.PositiveSmallIntegerField()
     
     class Meta:
@@ -47,7 +51,7 @@ class Location(models.Model):
         to=LocationType,
         null=True,
         related_name='locations',
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
     )
     in_location = models.ForeignKey(
         to='self',
@@ -97,7 +101,7 @@ class Location(models.Model):
 
 class PrimaryLocationManager(models.Manager):
     def get_queryset(self):
-        qs = super(PrimaryLocationManager, self).get_queryset()
+        qs = super().get_queryset()
         qs = qs.filter(in_location=None)
         return qs
 
@@ -111,7 +115,7 @@ class PrimaryLocation(Location):
         
 class SecondaryLocationManager(models.Manager):
     def get_queryset(self):
-        qs = super(SecondaryLocationManager, self).get_queryset()
+        qs = super().get_queryset()
         qs = qs.filter(~Q(in_location=None))
         # In case of TertiaryLocation:
         # qs = qs.filter(in_location__in_location=None)
@@ -127,7 +131,7 @@ class SecondaryLocation(Location):
 
 # class TertiaryLocationManager(models.Manager):
 #     def get_queryset(self):
-#         qs = super(TertiaryLocationManager, self).get_queryset()
+#         qs = super().get_queryset()
 #         qs = qs.filter(~Q(in_location__in_location=None))
 #         return qs
 #
@@ -146,10 +150,10 @@ def update_known_gen_locations(sender, instance, **kwargs):
     """
     known_directly = instance.known_directly.all()
     known_indirectly = instance.known_indirectly.all()
-    gen_location = instance.in_location
-    if gen_location:
-        gen_location.known_directly.add(*known_directly)
-        gen_location.known_indirectly.add(*known_indirectly)
+    in_location = instance.in_location
+    if in_location:
+        in_location.known_directly.add(*known_directly)
+        in_location.known_indirectly.add(*known_indirectly)
 
 
 post_save.connect(update_known_gen_locations, sender=Location)
