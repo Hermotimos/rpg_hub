@@ -12,7 +12,7 @@ from users.models import Profile
 class News(models.Model):
     title = models.CharField(max_length=100, unique=True)
     text = models.TextField(max_length=4000)
-    date_posted = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, related_name='news', on_delete=models.CASCADE)
     allowed_profiles = models.ManyToManyField(Profile, related_name='allowed_news')
     followers = models.ManyToManyField(Profile, related_name='followed_news', blank=True)
@@ -33,7 +33,7 @@ class News(models.Model):
                 img.save(self.image.path)
 
     class Meta:
-        ordering = ['-date_posted']
+        ordering = ['-created_at']
         verbose_name = 'News'
         verbose_name_plural = 'News'
 
@@ -42,12 +42,12 @@ class NewsAnswer(models.Model):
     news = models.ForeignKey(News, related_name='news_answers', on_delete=models.CASCADE)
     author = models.ForeignKey(User, related_name='news_answers', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000)
-    date_posted = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(blank=True, null=True, upload_to='news_pics')
     seen_by = models.ManyToManyField(Profile, related_name='news_answers_seen', blank=True)
 
     class Meta:
-        ordering = ['date_posted']
+        ordering = ['created_at']
 
     def __str__(self):
         return self.text[:100] + '...' if len(str(self.text)) > 100 else self.text
@@ -68,12 +68,12 @@ class Survey(models.Model):
     author = models.ForeignKey(User, related_name='surveys_authored', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000)
     image = models.ImageField(blank=True, null=True, upload_to='news_pics')
-    date_posted = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     addressees = models.ManyToManyField(Profile, related_name='surveys_received')
     seen_by = models.ManyToManyField(Profile, related_name='surveys_seen', blank=True)
 
     class Meta:
-        ordering = ['-date_posted']
+        ordering = ['-created_at']
 
     def __str__(self):
         return self.title[:50] + '...' if len(str(self.title)) > 50 else self.title
@@ -107,12 +107,12 @@ class SurveyAnswer(models.Model):
     survey = models.ForeignKey(Survey, related_name='survey_answers', on_delete=models.CASCADE)
     author = models.ForeignKey(User, related_name='survey_answers', on_delete=models.CASCADE)
     text = models.TextField(max_length=4000)
-    date_posted = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(blank=True, null=True, upload_to='news_pics')
     seen_by = models.ManyToManyField(Profile, related_name='survey_answers_seen', blank=True)
 
     class Meta:
-        ordering = ['date_posted']
+        ordering = ['created_at']
 
     def __str__(self):
         return self.text[:100] + '...' if len(str(self.text)) > 100 else self.text
@@ -139,8 +139,8 @@ def delete_if_doubled(sender, instance, **kwargs):
     time_span = datetime.datetime.now() - datetime.timedelta(minutes=2)
     doubled = 0
     if isinstance(instance, NewsAnswer):
-        doubled = NewsAnswer.objects.filter(text=instance.text, author=instance.author, date_posted__gte=time_span)
+        doubled = NewsAnswer.objects.filter(text=instance.text, author=instance.author, created_at__gte=time_span)
     elif isinstance(instance, SurveyAnswer):
-        doubled = SurveyAnswer.objects.filter(text=instance.text, author=instance.author, date_posted__gte=time_span)
+        doubled = SurveyAnswer.objects.filter(text=instance.text, author=instance.author, created_at__gte=time_span)
     if doubled.count() > 1:
         instance.delete()

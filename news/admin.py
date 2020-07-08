@@ -37,16 +37,16 @@ class SurveyAdminForm(forms.ModelForm):
 
 class NewsAdmin(admin.ModelAdmin):
     form = NewsAdminForm
-    list_display = ['id', 'author', 'title', 'date_posted', 'image']
+    list_display = ['id', 'author', 'title', 'created_at', 'image']
     list_editable = ['title', 'image']
-    ordering = ['-date_posted']
+    ordering = ['-created_at']
     readonly_fields = ['seen_by']
     search_fields = ['title']
 
 
 class NewsAnswerAdmin(admin.ModelAdmin):
-    list_display = ['id', 'news_title', 'author', 'get_caption', 'date_posted']
-    ordering = ['-date_posted']
+    list_display = ['id', 'news_title', 'author', 'get_caption', 'created_at']
+    ordering = ['-created_at']
     readonly_fields = ['seen_by']
     search_fields = ['text']
 

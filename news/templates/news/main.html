@@ -29,7 +29,7 @@
                         <br>
                     </td>
                     <td>
-                        <small class="font-italic text-muted">{{ survey.date_posted|date:'d-M-Y | H:i' }}</small>
+                        <small class="font-italic text-muted">{{ survey.created_at|date:'d-M-Y | H:i' }}</small>
                         <h3 class="unblue"><a href="{% url 'news:survey-detail' survey.id %}">ANKIETA: {{ survey.title }}</a></h3>
                         {% if survey.survey_answers.all %}
                         <h5>
@@ -55,7 +55,7 @@
                         <br>
                     </td>
                     <td class="pt-2">
-                        <small class="font-italic text-nowrap text-muted">{{ news.date_posted|date:'d-M-Y | H:i' }}</small>
+                        <small class="font-italic text-nowrap text-muted">{{ news.created_at|date:'d-M-Y | H:i' }}</small>
                         <h3 class="unblue"><a href="{% url 'news:detail' news.id %}">{{ news.title }}</a></h3>
                         {% if news.news_answers.all %}
                             {% for answer in news.news_answers.all %}
@@ -69,7 +69,7 @@
                             {% if news.last_news_answer %}
                                 {{ news.last_news_answer|date:'d-M-Y | H:i' }}<br>
                             {% else %}
-                                {{ news.date_posted|date:'d-M-Y | H:i' }}<br>
+                                {{ news.created_at|date:'d-M-Y | H:i' }}<br>
                             {% endif %}
                         </small>
                     </td>

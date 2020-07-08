@@ -22,7 +22,7 @@ def main_view(request):
         newss = profile.allowed_news.all()
         surveys = profile.surveys_received.all()\
 
-    newss = newss.annotate(last_news_answer=Max('news_answers__date_posted'))\
+    newss = newss.annotate(last_news_answer=Max('news_answers__created_at'))\
         .select_related('author__profile') \
         .prefetch_related('news_answers__author__profile')
 
@@ -93,7 +93,7 @@ def news_detail_view(request, news_id):
     last_answer_seen_by_imgs = []
     if news.news_answers.all():
         answers = news.news_answers.all().select_related('author__profile')
-        last_answer = news.news_answers.order_by('-date_posted')[0]
+        last_answer = news.news_answers.order_by('-created_at')[0]
         if profile not in last_answer.seen_by.all():
             last_answer.seen_by.add(profile)
         last_answer_seen_by_imgs = (p.image for p in last_answer.seen_by.all())
@@ -183,7 +183,7 @@ def survey_detail_view(request, survey_id):
 
     last_answer_seen_by_imgs = []
     if answers:
-        last_answer = answers.order_by('-date_posted')[0]
+        last_answer = answers.order_by('-created_at')[0]
         if profile not in last_answer.seen_by.all():
             last_answer.seen_by.add(profile)
         last_answer_seen_by_imgs = (p.image for p in last_answer.seen_by.all())
