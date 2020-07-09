@@ -30,12 +30,12 @@ def chronicle_contents_view(request):
             id__in=profile.events_known_directly.all()
         )
         
-        games = GameSession.objects.filter(events__in=events)
-        games = games.prefetch_related(Prefetch('events', queryset=events))
+        games = GameSession.objects.filter(game_events__in=events)
+        games = games.prefetch_related(Prefetch('game_events', queryset=events))
         games = games.annotate(
             any_known_directly=Count(
-                'events',
-                filter=Q(events__in=events_known_directly)
+                'game_events',
+                filter=Q(game_events__in=events_known_directly)
             )
         )
         games = games.distinct()
@@ -87,6 +87,7 @@ def chronicle_chapter_view(request, chapter_id):
     chapter = get_object_or_404(Chapter, id=chapter_id)
 
     events = GameEvent.objects.filter(game__chapter=chapter)
+    print(events)
     events = events.prefetch_related(
         'known_directly',
         'known_indirectly',
@@ -99,10 +100,10 @@ def chronicle_chapter_view(request, chapter_id):
         )
         events = events.distinct()
         
-    games = GameSession.objects.filter(events__in=events)
-    games = games.prefetch_related(Prefetch('events', queryset=events))
+    games = GameSession.objects.filter(game_events__in=events)
+    games = games.prefetch_related(Prefetch('game_events', queryset=events))
     games = games.distinct()
-    
+    print(events)
     context = {
         'page_title': chapter.title,
         'games': games,
@@ -129,8 +130,8 @@ def chronicle_all_view(request):
         )
         events = events.distinct()
     
-    games = GameSession.objects.filter(events__in=events)
-    games = games.prefetch_related(Prefetch('events', queryset=events))
+    games = GameSession.objects.filter(game_events__in=events)
+    games = games.prefetch_related(Prefetch('game_events', queryset=events))
     games = games.distinct()
     
     chapters = Chapter.objects.filter(game_sessions__in=games)

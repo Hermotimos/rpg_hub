@@ -13,38 +13,30 @@ from users.models import Profile
 
 
 class GameEventAdminForm(forms.ModelForm):
-    known_directly = forms.ModelMultipleChoiceField(
-        queryset=Profile.objects.exclude(Q(status='dead_player')
-                                         | Q(status='dead_npc')
-                                         | Q(status='gm')
-                                         | Q(status='living_npc')),
-        required=False,
-        widget=FilteredSelectMultiple('Know directly', False),
-    )
-    known_indirectly = forms.ModelMultipleChoiceField(
-        queryset=Profile.objects.exclude(Q(status='dead_player')
-                                         | Q(status='dead_npc')
-                                         | Q(status='gm')
-                                         | Q(status='living_npc')),
-        required=False,
-        widget=FilteredSelectMultiple('Know indirectly', False),
-    )
-    pictures = forms.ModelMultipleChoiceField(
-        queryset=Picture.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Pictures', False),
-    )
-    threads = forms.ModelMultipleChoiceField(
-        queryset=Thread.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Threads', False),
-    )
-    locations = forms.ModelMultipleChoiceField(
-        queryset=Location.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Locations', False),
-    )
-
+    class Meta:
+        model = GameEvent
+        fields = ['event_no_in_game', 'date_start', 'date_end', 'in_timeunit',
+                  'description_short', 'description_long', 'threads',
+                  'locations', 'known_directly', 'known_indirectly',
+                  'pictures', 'debate', ]
+        widgets = {
+            'known_directly': FilteredSelectMultiple(
+                'Known directly', False, attrs={'style': 'height:100px'}
+            ),
+            'known_indirectly': FilteredSelectMultiple(
+                'Known indirectly', False, attrs={'style': 'height:100px'}
+            ),
+            'locations': FilteredSelectMultiple(
+                'Locations', False, attrs={'style': 'height:100px'}
+            ),
+            'pictures': FilteredSelectMultiple(
+                'Pictures', False, attrs={'style': 'height:100px'}
+            ),
+            'threads': FilteredSelectMultiple(
+                'Threads', False, attrs={'style': 'height:100px'}
+            ),
+        }
+        
 
 class ChapterAdmin(admin.ModelAdmin):
     list_display = ['chapter_no', 'title', 'image']
@@ -61,16 +53,17 @@ class ThreadAdmin(admin.ModelAdmin):
 
 class GameEventInline(admin.TabularInline):
     model = GameEvent
-    exclude = ['name', 'name_genetive']
+    fields = ['event_no_in_game', 'date_start', 'date_end', 'in_timeunit',
+              'description_short', 'description_long', 'threads', 'locations',
+              'known_directly', 'known_indirectly', 'pictures', 'debate', ]
     extra = 3
     form = GameEventAdminForm
     list_select_related = ['chapter__image', 'date_start', 'date_end', 'in_timeunit', 'debate']
     
     formfield_overrides = {
-        models.TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 50})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 12, 'cols': 45})},
         models.CharField: {'widget': TextInput(attrs={'size': 15})},
-        models.ForeignKey: {'widget': Select(attrs={'style': 'width:200px'})},
-        models.ManyToManyField: {'widget': SelectMultiple(attrs={'style': 'width:250px'})},
+        models.ForeignKey: {'widget': Select(attrs={'style': 'width:180px'})},
         models.OneToOneField: {'widget': Select(attrs={'style': 'width:200px'})},
     }
     
