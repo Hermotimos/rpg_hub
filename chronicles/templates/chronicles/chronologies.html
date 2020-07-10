@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/history.css' %}">
+{% endblock head_extra %}
+
+{% block content %}
+    <br>
+    <p class="font-18 font-italic text-justify">{{ header }}</p>
+    <br><br><br>
+
+    {% for chronology in chronologies %}
+        <h1>{{ chronology }}</h1>
+        {% for era in chronology.events.all %}
+            <h3 class="ml-2">{{ era }}</h3>
+            {% for period in era.events.all %}
+                <h4 class="ml-4">{{ period }}</h4>
+                {% for event in period.events.all %}
+                    <h6 class="ml-5">{{ event }}</h6>
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+    {% endfor %}
+
+{% endblock content %}
+

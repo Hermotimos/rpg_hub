@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 # from history.models import (TimelineEvent, ChronicleEvent, Chapter,
 #                             GameSession, Thread)
-from chronicles.models import (Chapter, GameSession, Thread, Date, GameEvent, TimeUnit)
+from chronicles.models import (Chapter, GameSession, Thread, Date, GameEvent, TimeUnit, Chronology)
 from rpg_project.utils import send_emails
 from toponomikon.models import Location
 from users.models import Profile
@@ -187,14 +187,24 @@ def game_event_inform_view(request, game_event_id):
         return redirect('home:dupa')
 
 
-
-
-
-
-
-
-
-
+def chronologies_view(request):
+    chronologies = Chronology.objects.prefetch_related(
+        'events__events__events',
+        'events__date_start',
+        'events__date_end',
+        'events__events__date_start',
+        'events__events__date_end',
+        'events__events__events__date_start',
+        'events__events__events__date_end',
+        
+    ).select_related('in_timeunit')
+    
+    context = {
+        'page_title': 'Chronologie',
+        'chronologies': chronologies,
+        'event_type': 'game_event'
+    }
+    return render(request, 'chronicles/chronologies.html', context)
 
 
 #

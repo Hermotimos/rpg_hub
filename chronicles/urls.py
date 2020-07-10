@@ -18,5 +18,6 @@ urlpatterns = [
     
     # timeline
     path('timeline/', views.timeline_view, name='timeline'),
+    path('chronologies/', views.chronologies_view, name='chronologies'),
 
 ]
