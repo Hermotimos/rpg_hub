@@ -3,7 +3,7 @@
 {% load custom_filters %}
 
 {% block head_extra %}
-    <link rel="stylesheet" href="{% static 'css/history.css' %}">
+    <link rel="stylesheet" href="{% static 'css/chronicles.css' %}">
 {% endblock head_extra %}
 
 {% block content %}
@@ -18,27 +18,25 @@
             <col class="description">
             <col class="participants">
             <col class="locations">
-            <col class="game">
             <col class="actions">
         </colgroup>
         <thead>
             <tr>
-                <th>Data</th>
-                <th>Wątki</th>
-                <th>Wydarzenie</th>
-                <th>Postaci</th>
-                <th>Lokacje</th>
-                <th>Sesja</th>
-                <th>Akcja</th>
+                <th class="align-middle">Data</th>
+                <th class="align-middle">Wątki</th>
+                <th class="align-middle">Wydarzenie</th>
+                <th class="align-middle">Postaci</th>
+                <th class="align-middle">Lokacje</th>
+                <th class="align-middle">Sesja<br>Akcja</th>
             </tr>
         </thead>
         
         <tbody>
         {% for event in events %}
             <tr>
-                <td class="align-center align-top unblue-black">
+                <td class="timeline-small align-center align-top unblue-black">
                     <a class="hover-pointer" href="#">
-                        {{ event.dates }}
+                        <small>{{ event.dates }}</small>
                     </a>
                 </td>
                 <td class="timeline-event-thread align-top unblue-black">
@@ -63,7 +61,7 @@
                         <a class="hover-pointer" href="#">
                             <small>{{ profile.character_name|get_first_word }}</small>
                         </a>
-                    <br>
+                        <br>
                     {% endfor %}
                     {% for profile in event.known_indirectly.all %}
                         <a class="hover-pointer" href="#">
@@ -74,26 +72,21 @@
                 </td>
                 <td class="timeline-small align-top unblue-black">
                     {% for location in event.locations.all %}
-                        <a class="hover-pointer"  href="#">{{ location.name }}</a>
+                        <a class="hover-pointer" href="#">
+                            <small>• {{ location.name }}</small>
+                        </a>
+                        <br>
                     {% endfor %}
                 </td>
                 <td class="align-center align-top unblue-black">
                     {% if event.game.game_no > 0 %}
-                        <small>
-                            <a href="#">
-                                -{{ event.game.game_no }}-
-                            </a>
-                        </small>
+                        <a href="#"><small>-{{ event.game.game_no }}-</small></a>
                     {% elif event.game.game_no == 0 %}
                         <small hidden><b>***</b></small>
                     {% else %}
-                        <small>
-                            <a href="#">-X-</a>
-                        </small>
+                        <a href="#"><small>-X-</small></a>
                     {% endif %}
-                </td>
-                <td class="align-top">
-                    <a class="btn btn-outline-dark btn-sm py-0" href="{% url 'chronicles:game-event-inform' event.id %}" target="_blank">
+                    <a class="btn btn-outline-dark btn-sm py-0 mt-1" href="{% url 'chronicles:game-event-inform' event.id %}" target="_blank">
                         <i class="icon-inform-small"></i>
                     </a>
                     <a class="btn btn-outline-dark btn-sm py-0 disabled" href="#">

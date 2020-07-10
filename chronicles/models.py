@@ -105,9 +105,9 @@ class Date(models.Model):
     
     def __str__(self):
         if self.season and self.day:
-            return f'{self.day}. dnia {self.season} {self.year} roku'
+            return f'{self.day}. dnia {self.season} {self.year}. roku'
         elif self.season:
-            return f'{self.season} {self.year} roku'
+            return f'{self.season} {self.year}. roku'
         return f'{self.year} roku'
     
     # TODO make save() calculate the 'ab urbe condita' year, which will be used
@@ -143,6 +143,7 @@ class TimeUnit(models.Model):
         blank=True,
         null=True,
     )
+    dates = models.CharField(max_length=255, blank=True, null=True)
     in_timeunit = models.ForeignKey(
         to='self',
         related_name='events',
@@ -150,9 +151,8 @@ class TimeUnit(models.Model):
         blank=True,
         null=True,
     )
-    dates = models.CharField(max_length=255, blank=True, null=True)
-    description_short = models.TextField(blank=True, null=True) # TODO unique=True
-    description_long = models.TextField(blank=True, null=True)  # TODO unique=True
+    description_short = models.TextField(blank=True, null=True)
+    description_long = models.TextField(blank=True, null=True)
     
     # TimeSpan & HistoryEvent proxies
     known_short_desc = models.ManyToManyField(
@@ -258,6 +258,20 @@ class TimeUnit(models.Model):
         )
         return qs
 
+    def save(self, *args, **kwargs):
+        start = self.date_start
+        end = self.date_end
+        dates = start or '???'
+        if end:
+            if end.year and end.season:
+                if end.season == start.season and end.year == start.year:
+                    dates = f'{start.day}-{end}'
+                elif end.year == start.year:
+                    dates = f'{start.day}. dnia {start.season} - {end}'
+                else:
+                    dates = f'{start} - {end}'
+        self.dates = str(dates) + ' ' + str(self.in_timeunit.name_genetive)
+        super().save(*args, **kwargs)
 
 # ----------------------------------------------------------------------------
 # -------------------------------- PROXIES -----------------------------------
