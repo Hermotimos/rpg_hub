@@ -87,7 +87,6 @@ def chronicle_chapter_view(request, chapter_id):
     chapter = get_object_or_404(Chapter, id=chapter_id)
 
     events = GameEvent.objects.filter(game__chapter=chapter)
-    print(events)
     events = events.prefetch_related(
         'known_directly',
         'known_indirectly',
@@ -103,7 +102,7 @@ def chronicle_chapter_view(request, chapter_id):
     games = GameSession.objects.filter(game_events__in=events)
     games = games.prefetch_related(Prefetch('game_events', queryset=events))
     games = games.distinct()
-    print(events)
+
     context = {
         'page_title': chapter.title,
         'games': games,
@@ -295,7 +294,6 @@ def timeline_view(request):
         )
         events = events.distinct()
         
-    events = events.select_related()
     events = events.prefetch_related(
         'threads',
         'known_directly',

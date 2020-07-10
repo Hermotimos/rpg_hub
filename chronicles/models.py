@@ -344,7 +344,8 @@ class HistoryEvent(TimeUnit):
 class GameEventManager(models.Manager):
     def get_queryset(self):
         qs = super(GameEventManager, self).get_queryset()
-        qs = qs.select_related('in_timeunit', 'date_start', 'date_end', 'debate')
+        qs = qs.select_related('game', 'in_timeunit', 'date_start', 'date_end',
+                               'debate')
         qs = qs.filter(~Q(game=None))
         return qs
 
