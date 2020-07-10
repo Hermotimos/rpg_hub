@@ -79,10 +79,10 @@ class Thread(models.Model):
 
 class Date(models.Model):
     SEASONS = (
-        ('1', 'Wiosna'),
-        ('2', 'Lato'),
-        ('3', 'Jesień'),
-        ('4', 'Zima')
+        ('Wiosny', 'Wiosny'),
+        ('Lata', 'Lata'),
+        ('Jesieni', 'Jesieni'),
+        ('Zimy', 'Zimy')
     )
     
     year = models.IntegerField()
