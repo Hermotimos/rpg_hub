@@ -8,7 +8,7 @@ from django.forms import Textarea, TextInput, Select, SelectMultiple
 from chronicles.models import Thread, Date, TimeUnit, Chronology, \
     Era, Period, HistoryEvent, Chapter, GameSession, GameEvent
 from imaginarion.models import Picture
-from toponomikon.models import Location
+from toponomikon.models import Location, SecondaryLocation
 from users.models import Profile
 
 
@@ -58,7 +58,8 @@ class GameEventInline(admin.TabularInline):
               'known_directly', 'known_indirectly', 'pictures', 'debate', ]
     extra = 3
     form = GameEventAdminForm
-    list_select_related = ['chapter__image', 'date_start', 'date_end', 'in_timeunit', 'debate']
+    list_select_related = ['chapter__image', 'date_start', 'date_end',
+                           'in_timeunit', 'debate']
     
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 12, 'cols': 45})},
@@ -175,8 +176,82 @@ class GameSessionAdmin(admin.ModelAdmin):
 
         return formfield
     
+
+class ChronologyAdminForm(forms.ModelForm):
+    class Meta:
+        model = TimeUnit
+        fields = ['name', 'name_genetive', 'date_start', 'date_end',
+                  'description_short', 'description_long',
+                  'known_short_desc', 'known_long_desc']
+        widgets = {
+            'known_short_desc': FilteredSelectMultiple(
+                'Known short desc', False, attrs={'style': 'height:200px'}
+            ),
+            'known_long_desc': FilteredSelectMultiple(
+                'Known long desc', False, attrs={'style': 'height:200px'}
+            ),
+        }
+
+
+class ChronologyAdmin(admin.ModelAdmin):
+    form = ChronologyAdminForm
     
     
+class TimeSpanForm(forms.ModelForm):
+    class Meta:
+        model = TimeUnit
+        fields = ['name', 'name_genetive', 'date_start', 'date_end',
+                  'in_timeunit', 'description_short', 'description_long',
+                  'known_short_desc', 'known_long_desc']
+        widgets = {
+            'known_short_desc': FilteredSelectMultiple(
+                'Known short desc', False, attrs={'style': 'height:200px'}
+            ),
+            'known_long_desc': FilteredSelectMultiple(
+                'Known long desc', False, attrs={'style': 'height:200px'}
+            ),
+        }
+  
+    
+class EraAdminForm(TimeSpanForm):
+    in_timeunit = forms.ModelChoiceField(queryset=Chronology.objects.all())
+    
+    
+class EraAdmin(admin.ModelAdmin):
+    form = EraAdminForm
+    list_display = ['id', 'name', 'name_genetive', 'date_start', 'date_end',
+                    'in_timeunit', 'description_short', 'description_long']
+    list_editable = ['name', 'name_genetive', 'date_start', 'date_end',
+                     'in_timeunit', 'description_short', 'description_long']
+    search_fields = ['name', 'name_genetive', 'description_short',
+                     'description_long']
+    select_related = []
+    
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 40})},
+        models.CharField: {'widget': TextInput(attrs={'size': 12})},
+        models.ForeignKey: {'widget': Select(attrs={'style': 'width:180px'})},
+    }
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.select_related('date_start', 'date_end', 'in_timeunit')
+        return qs
+    
+    
+class PeriodAdminForm(TimeSpanForm):
+    in_timeunit = forms.ModelChoiceField(queryset=Era.objects.all())
+    locations = forms.ModelMultipleChoiceField(
+        queryset=SecondaryLocation.objects.filter(location_type__name='Kraina'),
+        required=False,
+        widget=FilteredSelectMultiple('Secondary locations', False),
+    )
+    
+    
+class PeriodAdmin(admin.ModelAdmin):
+    form = PeriodAdminForm
+
+
 # Side models
 admin.site.register(Thread, ThreadAdmin)
 admin.site.register(Date)
@@ -187,9 +262,9 @@ admin.site.register(GameSession, GameSessionAdmin)
 admin.site.register(TimeUnit)
 
 # TimeUnit proxies
-admin.site.register(Chronology)
-admin.site.register(Era)
-admin.site.register(Period)
+admin.site.register(Chronology, ChronologyAdmin)
+admin.site.register(Era, EraAdmin)
+admin.site.register(Period, PeriodAdmin)
 admin.site.register(HistoryEvent)
 admin.site.register(GameEvent)
 

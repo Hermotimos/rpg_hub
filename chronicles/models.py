@@ -104,7 +104,11 @@ class Date(models.Model):
         verbose_name = '- Date'
     
     def __str__(self):
-        return str(self.year)
+        if self.season and self.day:
+            return f'{self.day}. dnia {self.season} {self.year} roku'
+        elif self.season:
+            return f'{self.season} {self.year} roku'
+        return f'{self.year} roku'
     
     # TODO make save() calculate the 'ab urbe condita' year, which will be used
     # as reference for all chronology systems (by adding in_timeunit.year_start_ab_urbe_condita -
