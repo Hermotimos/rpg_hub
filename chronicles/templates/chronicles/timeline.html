@@ -56,16 +56,16 @@
 <!--                        {% endif %}-->
 <!--                    {% endfor %}-->
                 </td>
-                <td class="timeline-small align-top unblue-black">
+                <td class="timeline-small align-center align-top unblue-black">
                     {% for profile in event.known_directly.all %}
                         <a class="hover-pointer" href="#">
-                            <small>{{ profile.character_name|get_first_word }}</small>
+                            <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile img">
                         </a>
                         <br>
                     {% endfor %}
                     {% for profile in event.known_indirectly.all %}
                         <a class="hover-pointer" href="#">
-                            <small>+{{ profile.character_name|get_first_word }}</small>
+                            <img class="rounded-circle img-grayscale img-small" src="{{ profile.image.url }}" alt="Profile img">
                         </a>
                         <br>
                     {% endfor %}
