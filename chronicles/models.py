@@ -11,6 +11,13 @@ from rpg_project.utils import create_sorting_name
 from toponomikon.models import Location
 from users.models import Profile
 
+SEASONS = {
+    '1': 'Wiosny',
+    '2': 'Lata',
+    '3': 'Jesieni',
+    '4': 'Zimy'
+}
+
 
 class Chapter(models.Model):
     chapter_no = models.IntegerField(blank=True, null=True)
@@ -79,10 +86,10 @@ class Thread(models.Model):
 
 class Date(models.Model):
     SEASONS = (
-        ('Wiosny', 'Wiosny'),
-        ('Lata', 'Lata'),
-        ('Jesieni', 'Jesieni'),
-        ('Zimy', 'Zimy')
+        ('1', 'Wiosny'),
+        ('2', 'Lata'),
+        ('3', 'Jesieni'),
+        ('4', 'Zimy')
     )
     
     year = models.IntegerField()
@@ -104,9 +111,9 @@ class Date(models.Model):
     
     def __str__(self):
         if self.season and self.day:
-            return f'{self.day}. dnia {self.season} {self.year}. roku'
+            return f'{self.day}. dnia {SEASONS[self.season]} {self.year}. roku'
         elif self.season:
-            return f'{self.season} {self.year}. roku'
+            return f'{SEASONS[self.season]} {self.year}. roku'
         return f'{self.year}. roku'
     
 
@@ -238,9 +245,9 @@ class TimeUnit(models.Model):
     def __str__(self):
         res = str(self.name)
         if self.in_timeunit and self.date_start:
-            res += f' ({self.date_start}-)'
+            res += f' ({self.date_start.year}-)'
             if self.date_end:
-                res = res[:-1] + f'{self.date_end}' + res[-1]
+                res = res[:-1] + f'{self.date_end.year}' + res[-1]
             if not self.events.all():
                 res = res[:-2] + res[-1]
             res = res[:-1] + f' | {self.in_timeunit.name_genetive}' + res[-1]
@@ -256,76 +263,19 @@ class TimeUnit(models.Model):
         return qs
 
     def save(self, *args, **kwargs):
-        # seasons = {
-        #     '1': 'Wiosny',
-        #     '2': 'Lata',
-        #     '3': 'Jesieni',
-        #     '4': 'Zimy'
-        # }
-        # ERA v PERIOD v EVENT
-        if self.in_timeunit:
-            start = self.date_start
-            end = self.date_end
-            date_lvl_1 = start or '???'
-            
-            start_day = f'{start.day}' if start.day else ''
-            start_season = f'{start.season} ' if start.season else ''
-            day_and_season = f'{start_day}. dnia {start_season}'
-            
-            if self.date_end:
-                end_day = start_day = f'{end.day}' if end.day else ''
-                end_season = f'{end.season}' if end.season else ''
-    
-                if end.year and end.season:
-                    if end.season == start.season and end.year == start.year:
-                        date_lvl_1 = f'{start_day}-{end}'
-                    elif end.year == start.year:
-                        date_lvl_1 = f'{start_day}. dnia {start_season} - {end}'
-                    else:
-                        date_lvl_1 = f'{start} - {end}'
-
+        start = self.date_start
+        end = self.date_end
+        dates = start or '???'
+        if end:
+            if end.year and end.season:
                 if end.season == start.season and end.year == start.year:
-                    day_and_season = f'{start_day}-{end_day}. dnia {start_season}'
+                    dates = f'{start.day}-{end}'
                 elif end.year == start.year:
-                    day_and_season = day_and_season + f'- {end_day}. dnia {end_season}'
-        
-            # PERIOD v EVENT
-            if self.in_timeunit.in_timeunit:
-                start = self.in_timeunit.date_start
-                end = self.in_timeunit.date_end
-                date_lvl_2 = f'{day_and_season}' + f'{start}'
-                if end:
-                    date_lvl_2 = f'{start} - {end}'
-            
-                # EVENT (events have empty 'name')
-                if not self.name:
-                    start = self.in_timeunit.in_timeunit.date_start
-                    end = self.in_timeunit.in_timeunit.date_end
-                    date_lvl_3 = f'{day_and_season}' + f'{start}'
-                    if end:
-                        date_lvl_3 = f'{start} - {end}'
-                
-                    period = self.in_timeunit.name_genetive
-                    era = self.in_timeunit.in_timeunit.name_genetive
-                    chronology = self.in_timeunit.in_timeunit.in_timeunit.name_genetive
-                    self.date_in_period = str(date_lvl_1) + ' ' + str(period)
-                    self.date_in_era = str(date_lvl_2) + ' ' + str(era)
-                    self.date_in_chronology = str(date_lvl_3) + ' ' + str(chronology)
-            
-                # PERIOD
+                    dates = f'{start.day}. dnia {start.season} - {end}'
                 else:
-                    era = self.in_timeunit.in_timeunit.name_genetive
-                    chronology = self.in_timeunit.in_timeunit.in_timeunit.name_genetive
-                    self.date_in_era = str(date_lvl_1) + ' ' + str(era)
-                    self.date_in_chronology = str(date_lvl_2) + str(chronology)
-        
-            # ERA
-            else:
-                chronology = self.in_timeunit.in_timeunit.in_timeunit.name_genetive
-                self.date_in_chronology = str(date_lvl_1) + ' ' + str(chronology)
-    
+                    dates = f'{start} - {end}'
+        self.dates = str(dates) + ' ' + str(self.in_timeunit.name_genetive)
         super().save(*args, **kwargs)
-
 
 # ----------------------------------------------------------------------------
 # -------------------------------- PROXIES -----------------------------------
@@ -390,6 +340,91 @@ class Period(TimeUnit):
         verbose_name = '3 - Period'
 
 
+class Event(TimeUnit):
+    """Proxy model to add save() method for GameEvents and HistoryEvents."""
+    class Meta:
+        proxy = True
+
+    def save(self, *args, **kwargs):
+        start = self.date_start
+        end = self.date_end
+        start_day = end_day = ''
+        start_season = end_season = ''
+        start_year_in_period = end_year_in_period = ''
+        
+        if start:
+            start_day = f'{start.day}' if start.day else ''
+            start_season = f'{SEASONS[start.season]}' if start.season else ''
+            start_year_in_period = f'{start.year}'
+        if end:
+            end_day = f'{end.day}' if end.day else ''
+            end_season = f'{SEASONS[end.season]}' if end.season else ''
+            end_year_in_period = f'{end.year}'
+            
+        # Date in period
+        period = self.in_timeunit
+        if not end:
+            prefix = f'{start_day}. dnia {start_season}'
+            date_in_period = f'{start}'
+        else:
+            if start_year_in_period != end_year_in_period:
+                prefix = None                   # is overriden with prefix_yr1 etc.
+                date_in_period = f'{start} - {end}'
+            elif start_season != end_season:
+                prefix_s1 = f'{start_day}. dnia {start_season}'
+                prefix_s2 = f'{end_day}. dnia {end_season}'
+                prefix = prefix_s1 + ' - ' + prefix_s2
+                date_in_period = f'{start_day}. dnia {start_season} - {end}'
+            elif start_day != end_day:
+                prefix = f'{start_day}-{end_day}. dnia {end_season}'
+                date_in_period = f'{start_day}-{end}'
+            else:
+                prefix = f'{start_day}. dnia {start_season}'
+                date_in_period = f'{start}'
+        date_in_period += f' {period.name_genetive}'
+
+        # Date in era
+        era = self.in_timeunit.in_timeunit
+        period_begin_in_era = period.date_start.year
+        start_year_in_era = int(period_begin_in_era) + int(start_year_in_period)
+        
+        if not end:
+            date_in_era = f'{prefix} {start_year_in_era}. roku {era.name_genetive}'
+        else:
+            end_year_in_era = int(period_begin_in_era) + int(end_year_in_period)
+            if start_year_in_period != end_year_in_period:
+                prefix_yr1 = f'{start_day}. dnia {start_season}'
+                prefix_yr2 = f'{end_day}. dnia {end_season}'
+                date_in_era = f'{prefix_yr1} {start_year_in_era}. roku'
+                date_in_era += f' - {prefix_yr2} {end_year_in_era}. roku '
+            else:
+                date_in_era = f'{prefix} {start_year_in_era}. roku '
+            date_in_era += f'{era.name_genetive}'
+            
+        # Date in chronology
+        chronology = self.in_timeunit.in_timeunit.in_timeunit
+        era_begin_in_chronology = era.date_start.year
+        start_year_in_chronology = int(era_begin_in_chronology) + int(period_begin_in_era) + int(start_year_in_period)
+        
+        if not end:
+            date_in_chronology = f'{prefix} {start_year_in_chronology}. roku {chronology.name_genetive}'
+        else:
+            end_year_in_chronology = int(era_begin_in_chronology) + int(period_begin_in_era) + int(end_year_in_period)
+            if start_year_in_period != end_year_in_period:
+                prefix_yr1 = f'{start_day}. dnia {start_season}'
+                prefix_yr2 = f'{end_day}. dnia {end_season}'
+                date_in_chronology = f'{prefix_yr1} {start_year_in_chronology}. roku'
+                date_in_chronology += f' - {prefix_yr2} {end_year_in_chronology}. roku '
+            else:
+                date_in_chronology = f'{prefix} {start_year_in_chronology}. roku '
+            date_in_chronology += f'{chronology.name_genetive}'
+            
+        self.date_in_period = str(date_in_period)
+        self.date_in_era = str(date_in_era)
+        self.date_in_chronology = str(date_in_chronology)
+        super().save(*args, **kwargs)
+
+
 class HistoryEventManager(models.Manager):
     def get_queryset(self):
         qs = super().get_queryset()
@@ -398,7 +433,7 @@ class HistoryEventManager(models.Manager):
         return qs
 
 
-class HistoryEvent(TimeUnit):
+class HistoryEvent(Event):
     objects = HistoryEventManager()
     
     class Meta:
@@ -418,7 +453,7 @@ class GameEventManager(models.Manager):
         return qs
 
 
-class GameEvent(TimeUnit):
+class GameEvent(Event):
     objects = GameEventManager()
     
     class Meta:
@@ -428,10 +463,7 @@ class GameEvent(TimeUnit):
     
     def __str__(self):
         # return self.description_short or str(self.pk)     # TODO after transition is done
-        return self.description_long[:50] or str(self.pk)
-
-# TODO Create model with all nullable fields for users with History skill -
-# TODO - so that they can CREATE NEW OBJECTS AND place their own knowledge of events on the timeline
+        return self.description_long[:100] or str(self.pk)
 
 
 # def update_known_spec_locations(sender, instance, **kwargs):
