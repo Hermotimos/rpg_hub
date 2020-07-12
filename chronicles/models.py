@@ -70,7 +70,7 @@ class Thread(models.Model):
     def save(self, *args, **kwargs):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
-        super(Thread, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
     
     class Meta:
         ordering = ['sorting_name']
@@ -97,7 +97,6 @@ class Date(models.Model):
         blank=True,
         null=True,
     )
-    year_ab_urbe_condita = models.IntegerField(blank=True, null=True)
     
     class Meta:
         unique_together = ['year', 'season', 'day']
@@ -108,12 +107,8 @@ class Date(models.Model):
             return f'{self.day}. dnia {self.season} {self.year}. roku'
         elif self.season:
             return f'{self.season} {self.year}. roku'
-        return f'{self.year} roku'
+        return f'{self.year}. roku'
     
-    # TODO make save() calculate the 'ab urbe condita' year, which will be used
-    # as reference for all chronology systems (by adding in_timeunit.year_start_ab_urbe_condita -
-    #  this will be made for each models direct in_timeunit - the result will be what I need
-
 
 class TimeUnitManager(models.Manager):
     def get_queryset(self):
@@ -143,7 +138,6 @@ class TimeUnit(models.Model):
         blank=True,
         null=True,
     )
-    dates = models.CharField(max_length=255, blank=True, null=True)
     in_timeunit = models.ForeignKey(
         to='self',
         related_name='events',
@@ -151,6 +145,9 @@ class TimeUnit(models.Model):
         blank=True,
         null=True,
     )
+    date_in_period = models.CharField(max_length=99, blank=True, null=True)
+    date_in_era = models.CharField(max_length=99, blank=True, null=True)
+    date_in_chronology = models.CharField(max_length=99, blank=True, null=True)
     description_short = models.TextField(blank=True, null=True)
     description_long = models.TextField(blank=True, null=True)
     
@@ -259,19 +256,76 @@ class TimeUnit(models.Model):
         return qs
 
     def save(self, *args, **kwargs):
-        start = self.date_start
-        end = self.date_end
-        dates = start or '???'
-        if end:
-            if end.year and end.season:
+        # seasons = {
+        #     '1': 'Wiosny',
+        #     '2': 'Lata',
+        #     '3': 'Jesieni',
+        #     '4': 'Zimy'
+        # }
+        # ERA v PERIOD v EVENT
+        if self.in_timeunit:
+            start = self.date_start
+            end = self.date_end
+            date_lvl_1 = start or '???'
+            
+            start_day = f'{start.day}' if start.day else ''
+            start_season = f'{start.season} ' if start.season else ''
+            day_and_season = f'{start_day}. dnia {start_season}'
+            
+            if self.date_end:
+                end_day = start_day = f'{end.day}' if end.day else ''
+                end_season = f'{end.season}' if end.season else ''
+    
+                if end.year and end.season:
+                    if end.season == start.season and end.year == start.year:
+                        date_lvl_1 = f'{start_day}-{end}'
+                    elif end.year == start.year:
+                        date_lvl_1 = f'{start_day}. dnia {start_season} - {end}'
+                    else:
+                        date_lvl_1 = f'{start} - {end}'
+
                 if end.season == start.season and end.year == start.year:
-                    dates = f'{start.day}-{end}'
+                    day_and_season = f'{start_day}-{end_day}. dnia {start_season}'
                 elif end.year == start.year:
-                    dates = f'{start.day}. dnia {start.season} - {end}'
+                    day_and_season = day_and_season + f'- {end_day}. dnia {end_season}'
+        
+            # PERIOD v EVENT
+            if self.in_timeunit.in_timeunit:
+                start = self.in_timeunit.date_start
+                end = self.in_timeunit.date_end
+                date_lvl_2 = f'{day_and_season}' + f'{start}'
+                if end:
+                    date_lvl_2 = f'{start} - {end}'
+            
+                # EVENT (events have empty 'name')
+                if not self.name:
+                    start = self.in_timeunit.in_timeunit.date_start
+                    end = self.in_timeunit.in_timeunit.date_end
+                    date_lvl_3 = f'{day_and_season}' + f'{start}'
+                    if end:
+                        date_lvl_3 = f'{start} - {end}'
+                
+                    period = self.in_timeunit.name_genetive
+                    era = self.in_timeunit.in_timeunit.name_genetive
+                    chronology = self.in_timeunit.in_timeunit.in_timeunit.name_genetive
+                    self.date_in_period = str(date_lvl_1) + ' ' + str(period)
+                    self.date_in_era = str(date_lvl_2) + ' ' + str(era)
+                    self.date_in_chronology = str(date_lvl_3) + ' ' + str(chronology)
+            
+                # PERIOD
                 else:
-                    dates = f'{start} - {end}'
-        self.dates = str(dates) + ' ' + str(self.in_timeunit.name_genetive)
+                    era = self.in_timeunit.in_timeunit.name_genetive
+                    chronology = self.in_timeunit.in_timeunit.in_timeunit.name_genetive
+                    self.date_in_era = str(date_lvl_1) + ' ' + str(era)
+                    self.date_in_chronology = str(date_lvl_2) + str(chronology)
+        
+            # ERA
+            else:
+                chronology = self.in_timeunit.in_timeunit.in_timeunit.name_genetive
+                self.date_in_chronology = str(date_lvl_1) + ' ' + str(chronology)
+    
         super().save(*args, **kwargs)
+
 
 # ----------------------------------------------------------------------------
 # -------------------------------- PROXIES -----------------------------------
@@ -280,7 +334,7 @@ class TimeUnit(models.Model):
 
 class ChronologyManager(models.Manager):
     def get_queryset(self):
-        qs = super(ChronologyManager, self).get_queryset()
+        qs = super().get_queryset()
         qs = qs.select_related()
         qs = qs.prefetch_related('events')
         qs = qs.filter(Q(in_timeunit=None))
@@ -297,7 +351,7 @@ class Chronology(TimeUnit):
 
 class EraManager(models.Manager):
     def get_queryset(self):
-        qs = super(EraManager, self).get_queryset()
+        qs = super().get_queryset()
         qs = qs.select_related()
         qs = qs.prefetch_related('events')
         qs = qs.filter(~Q(in_timeunit=None) & Q(in_timeunit__in_timeunit=None))
@@ -315,7 +369,7 @@ class Era(TimeUnit):
 
 class PeriodManager(models.Manager):
     def get_queryset(self):
-        qs = super(PeriodManager, self).get_queryset()
+        qs = super().get_queryset()
         qs = qs.select_related()
         qs = qs.prefetch_related('events')
         qs = qs.filter(
@@ -338,7 +392,7 @@ class Period(TimeUnit):
 
 class HistoryEventManager(models.Manager):
     def get_queryset(self):
-        qs = super(HistoryEventManager, self).get_queryset()
+        qs = super().get_queryset()
         qs = qs.select_related()
         qs = qs.filter(Q(game=None), events=None)
         return qs
@@ -357,7 +411,7 @@ class HistoryEvent(TimeUnit):
 
 class GameEventManager(models.Manager):
     def get_queryset(self):
-        qs = super(GameEventManager, self).get_queryset()
+        qs = super().get_queryset()
         qs = qs.select_related('game', 'in_timeunit', 'date_start', 'date_end',
                                'debate')
         qs = qs.filter(~Q(game=None))
