@@ -63,9 +63,8 @@
                         </a>
                         {% if forloop.counter|divisibleby:2 and not forloop.last %}<br>{% endif %}
                     {% endfor %}
-                    {% if event.known_indirectly.all %}
-                        <br>-✧-<br>
-                    {% endif %}
+                    {% if event.known_directly.all %}<br>{% endif %}
+                    {% if event.known_indirectly.all %}-✧-<br>{% endif %}
                     {% for profile in event.known_indirectly.all %}
                         <a class="hover-pointer" href="#">
                             <img class="rounded-circle img-grayscale img-smaller" src="{{ profile.image.url }}" alt="Profile img">
