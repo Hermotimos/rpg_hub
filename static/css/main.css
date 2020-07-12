@@ -171,6 +171,14 @@ img {border-style: double;}
     border: solid 1px black;
 }
 
+.img-smaller {
+    height: 20px;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    border: solid 1px black;
+}
+
 .img-skill {
     float: left;
     height: 60px;
