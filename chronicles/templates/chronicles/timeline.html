@@ -73,12 +73,13 @@
                     {% endfor %}
                 </td>
                 <td class="timeline-small align-top unblue-black">
-                    {% for location in event.locations.all %}
-                        <a class="hover-pointer" href="#">
-                            <small>• {{ location.name }}</small>
-                        </a>
-                    <br>
-                    {% endfor %}
+                    <ul class="bullets-4 pl-1">
+                        {% for location in event.locations.all %}
+                            <li>
+                                <a id="location" class="hover-pointer" href="#"><small>{{ location.name }}</small></a>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </td>
                 <td class="align-center align-top unblue-black">
                     {% if event.game.game_no > 0 %}

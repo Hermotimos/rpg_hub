@@ -2,9 +2,8 @@
         padding-left: 0 !important;
 }
 
-a#thread {
-        padding-left: 0.1rem !important;
-}
+a#thread {padding-left: 0.1rem !important;}
+a#location {padding-left: 0.2rem !important;}
 
 .timeline .date {%;}
 .timeline .thread {width: 17%;}
