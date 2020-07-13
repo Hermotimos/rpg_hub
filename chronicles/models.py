@@ -120,7 +120,15 @@ class Date(models.Model):
 class TimeUnitManager(models.Manager):
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.select_related('in_timeunit', 'date_start', 'date_end', 'debate')
+        qs = qs.select_related(
+            'in_timeunit',
+            # 'in_timeunit__in_timeunit',
+            # 'in_timeunit__date_start',
+            # 'in_timeunit__date_end',
+            'date_start',
+            'date_end',
+            'debate',
+        )
         return qs
 
 
@@ -130,7 +138,7 @@ class TimeUnit(models.Model):
     # All proxies
     date_start = models.ForeignKey(
         to=Date,
-        related_name='events_started',
+        related_name='timeunits_started',
         on_delete=models.PROTECT,
         verbose_name='Date start (year of the encompassing unit)',
         #  TODO - blank and null are only for recreating events - delete later
@@ -139,7 +147,7 @@ class TimeUnit(models.Model):
     )
     date_end = models.ForeignKey(
         to=Date,
-        related_name='events_ended',
+        related_name='timeunits_ended',
         on_delete=models.PROTECT,
         verbose_name='Date end (year of the encompassing unit)',
         blank=True,
@@ -147,7 +155,7 @@ class TimeUnit(models.Model):
     )
     in_timeunit = models.ForeignKey(
         to='self',
-        related_name='events',
+        related_name='timeunits',
         on_delete=models.PROTECT,
         blank=True,
         null=True,
@@ -248,7 +256,7 @@ class TimeUnit(models.Model):
             res += f' ({self.date_start.year}-)'
             if self.date_end:
                 res = res[:-1] + f'{self.date_end.year}' + res[-1]
-            if not self.events.all():
+            if not self.timeunits.all():
                 res = res[:-2] + res[-1]
             res = res[:-1] + f' | {self.in_timeunit.name_genetive}' + res[-1]
         return res
@@ -286,7 +294,7 @@ class ChronologyManager(models.Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related()
-        qs = qs.prefetch_related('events')
+        qs = qs.prefetch_related('timeunits')
         qs = qs.filter(Q(in_timeunit=None))
         return qs
 
@@ -303,7 +311,7 @@ class EraManager(models.Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related()
-        qs = qs.prefetch_related('events')
+        qs = qs.prefetch_related('timeunits')
         qs = qs.filter(~Q(in_timeunit=None) & Q(in_timeunit__in_timeunit=None))
         return qs
 
@@ -321,7 +329,7 @@ class PeriodManager(models.Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related()
-        qs = qs.prefetch_related('events')
+        qs = qs.prefetch_related('timeunits')
         qs = qs.filter(
             ~Q(in_timeunit=None)
             & ~Q(in_timeunit__in_timeunit=None)
@@ -429,7 +437,7 @@ class HistoryEventManager(models.Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related()
-        qs = qs.filter(Q(game=None), events=None)
+        qs = qs.filter(Q(game=None), timeunits=None)
         return qs
 
 

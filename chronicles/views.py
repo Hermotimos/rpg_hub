@@ -188,13 +188,13 @@ def game_event_inform_view(request, game_event_id):
 
 def chronologies_view(request):
     chronologies = Chronology.objects.prefetch_related(
-        'events__events__events',
-        'events__date_start',
-        'events__date_end',
-        'events__events__date_start',
-        'events__events__date_end',
-        'events__events__events__date_start',
-        'events__events__events__date_end',
+        'timeunits__timeunits__timeunits',
+        'timeunits__date_start',
+        'timeunits__date_end',
+        'timeunits__timeunits__date_start',
+        'timeunits__timeunits__date_end',
+        'timeunits__timeunits__timeunits__date_start',
+        'timeunits__timeunits__timeunits__date_end',
         
     ).select_related('in_timeunit')
     

@@ -58,8 +58,6 @@ class GameEventInline(admin.TabularInline):
               'known_directly', 'known_indirectly', 'pictures', 'debate', ]
     extra = 3
     form = GameEventAdminForm
-    list_select_related = ['chapter__image', 'date_start', 'date_end',
-                           'in_timeunit', 'debate']
     
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 12, 'cols': 45})},
@@ -150,9 +148,24 @@ class GameEventInline(admin.TabularInline):
             'threads',
             'locations',
             'pictures',
-            'in_timeunit',
         )
         return qs
+
+
+class GameEventAdmin(admin.ModelAdmin):
+    list_display = ['id', 'game', 'event_no_in_game', 'date_in_period',
+                    'description_short', 'description_long']
+    list_editable = ['event_no_in_game', 'description_short',
+                     'description_long']
+    search_fields = ['description_short', 'description_long']
+
+
+class HistoryEventAdmin(admin.ModelAdmin):
+    list_display = ['id', 'date_in_period', 'date_in_era',
+                    'date_in_chronology', 'description_short',
+                    'description_long']
+    list_editable = ['description_short', 'description_long']
+    search_fields = ['description_short', 'description_long']
 
 
 class GameSessionAdmin(admin.ModelAdmin):
@@ -265,7 +278,7 @@ admin.site.register(TimeUnit)
 admin.site.register(Chronology, ChronologyAdmin)
 admin.site.register(Era, EraAdmin)
 admin.site.register(Period, PeriodAdmin)
-admin.site.register(HistoryEvent)
-admin.site.register(GameEvent)
+admin.site.register(HistoryEvent, HistoryEventAdmin)
+admin.site.register(GameEvent, GameEventAdmin)
 
 

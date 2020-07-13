@@ -13,11 +13,11 @@
 
     {% for chronology in chronologies %}
         <h1>{{ chronology }}</h1>
-        {% for era in chronology.events.all %}
+        {% for era in chronology.timeunits.all %}
             <h3 class="ml-2">{{ era }}</h3>
-            {% for period in era.events.all %}
+            {% for period in era.timeunits.all %}
                 <h4 class="ml-4">{{ period }}</h4>
-                {% for event in period.events.all %}
+                {% for event in period.timeunits.all %}
                     <h6 class="ml-5">{{ event }}</h6>
                 {% endfor %}
             {% endfor %}
