@@ -300,7 +300,16 @@ def timeline_view(request):
         'known_indirectly',
         'locations',
     )
-    
+    events = events.order_by(
+        'in_timeunit__in_timeunit__in_timeunit__date_start__year',
+        'in_timeunit__in_timeunit__date_start__year',
+        'in_timeunit__date_start__year',
+        'date_start__year',
+        'date_start__season',
+        'date_start__day',
+        'game',
+        'event_no_in_game',
+    )
     context = {
         'page_title': 'Pełne Kalendarium',
         'header': '''Opisane tu wydarzenia rozpoczęły swój bieg 20. roku
