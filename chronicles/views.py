@@ -31,14 +31,13 @@ def chronicle_contents_view(request):
         )
         
         games = GameSession.objects.filter(game_events__in=events)
-        games = games.prefetch_related(Prefetch('game_events', queryset=events))
+        games = games.prefetch_related('game_events')
         games = games.annotate(
             any_known_directly=Count(
                 'game_events',
                 filter=Q(game_events__in=events_known_directly)
             )
         )
-        games = games.distinct()
         
         chapters = Chapter.objects.filter(game_sessions__in=games)
         chapters = chapters.prefetch_related(
