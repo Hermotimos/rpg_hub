@@ -97,3 +97,23 @@ def get_max_skill_level(skill_levels_list):
 def format_as_html(text):
     text = format_html(text)
     return mark_safe(text)
+
+
+@register.filter
+def add_season_img(text):
+    if text:
+        prefix = text[0:text.index('.')]
+        replaced = {
+            'dnia Wiosny': 'seasons_spring.png',
+            'dnia Lata': 'seasons_summer.png',
+            'dnia Jesieni': 'seasons_autumn.png',
+            'dnia Zimy': 'seasons_winter.png',
+        }
+        for k, v in replaced.items():
+            if k in text:
+                suffix = text[text.index('.') + len(k) + 2:]
+                html = f"""<br><img class="img-season" src="/static/img/{v}" alt="Season"><br>"""
+                text = prefix + html + suffix
+
+    return mark_safe(text)
+

@@ -5,7 +5,7 @@
 a#thread {padding-left: 0.1rem !important;}
 a#location {padding-left: 0.2rem !important;}
 
-.timeline .date {%;}
+.timeline .date {width: 8%;}
 .timeline .thread {width: 17%;}
 .timeline .description {width: %;}
 .timeline .participants {width: 7%;}

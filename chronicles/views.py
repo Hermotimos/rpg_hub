@@ -209,13 +209,6 @@ def chronologies_view(request):
 # # #################### TIMELINE: model TimelineEvent ####################
 
 
-SEASONS_WITH_STYLES_DICT = {
-    '1': 'season-spring',
-    '2': 'season-summer',
-    '3': 'season-autumn',
-    '4': 'season-winter'
-}
-
 
 # @login_required
 # def timeline_main_view(request):
@@ -306,8 +299,8 @@ def timeline_view(request):
         'date_start__year',
         'date_start__season',
         'date_start__day',
-        'game',
-        'event_no_in_game',
+        # 'game',               # Try to avoid so HistoryEvents can be included? - or maybe it doesnt matter - check !
+        # 'event_no_in_game',   # Try to avoid so HistoryEvents can be included? - or maybe it doesnt matter - check !
     )
     context = {
         'page_title': 'Pełne Kalendarium',
@@ -315,7 +308,6 @@ def timeline_view(request):
             Archonatu Nemetha Samatiana w Ebbonie, choć zarodki wielu z nich
             sięgają znacznie odleglejszych czasów...''',
         'events': events,
-        'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
     }
     if events:
         return render(request, 'chronicles/timeline.html', context)
