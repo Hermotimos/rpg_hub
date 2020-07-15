@@ -56,7 +56,7 @@ class GameEventInline(admin.TabularInline):
     fields = ['event_no_in_game', 'date_start', 'date_end', 'in_timeunit',
               'description_short', 'description_long', 'threads', 'locations',
               'known_directly', 'known_indirectly', 'pictures', 'debate', ]
-    extra = 3
+    extra = 0
     form = GameEventAdminForm
     
     formfield_overrides = {

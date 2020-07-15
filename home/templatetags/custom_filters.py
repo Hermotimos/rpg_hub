@@ -103,17 +103,19 @@ def format_as_html(text):
 def add_season_img(text):
     if text:
         prefix = text[0:text.index('.')]
+        text = text[0:text.index('dnia')] + text[text.index('dnia') + len('dnia '):]
         replaced = {
-            'dnia Wiosny': 'seasons_spring.png',
-            'dnia Lata': 'seasons_summer.png',
-            'dnia Jesieni': 'seasons_autumn.png',
-            'dnia Zimy': 'seasons_winter.png',
+            'Wiosny': 'seasons_spring.png',
+            'Lata': 'seasons_summer.png',
+            'Jesieni': 'seasons_autumn.png',
+            'Zimy': 'seasons_winter.png',
         }
         for k, v in replaced.items():
             if k in text:
-                suffix = text[text.index('.') + len(k) + 2:]
+                suffix = text[text.index('.') + len(k) + 3:]
                 html = f"""<br><img class="img-season" src="/static/img/{v}" alt="Season"><br>"""
                 text = prefix + html + suffix
+        print(text)
 
     return mark_safe(text)
 
