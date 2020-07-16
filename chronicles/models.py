@@ -356,9 +356,9 @@ class Event(TimeUnit):
     def save(self, *args, **kwargs):
         start = self.date_start
         end = self.date_end
-        start_day = end_day = None
-        start_season = end_season = None
-        start_year_in_period = end_year_in_period = None
+        start_day = end_day = 0
+        start_season = end_season = 0
+        start_year_in_period = end_year_in_period = 0
         
         if start:
             start_day = f'{start.day}' if start.day else ''
