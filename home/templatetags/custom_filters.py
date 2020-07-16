@@ -102,20 +102,22 @@ def format_as_html(text):
 @register.filter
 def add_season_img(text):
     if text:
-        prefix = text[0:text.index('.')]
-        text = text[0:text.index('dnia')] + text[text.index('dnia') + len('dnia '):]
-        replaced = {
-            'Wiosny': 'seasons_spring.png',
-            'Lata': 'seasons_summer.png',
-            'Jesieni': 'seasons_autumn.png',
-            'Zimy': 'seasons_winter.png',
+        text = text.replace('. dnia', '')
+        replacements = {
+            'Wiosny': '<br><img class="img-season" src="/static/img/seasons_spring.png" alt="Season"><br>',
+            'Lata': '<br><img class="img-season" src="/static/img/seasons_summer.png" alt="Season"><br>',
+            'Jesieni': '<br><img class="img-season" src="/static/img/seasons_autumn.png" alt="Season"><br>',
+            'Zimy': '<br><img class="img-season" src="/static/img/seasons_winter.png" alt="Season"><br>',
         }
-        for k, v in replaced.items():
-            if k in text:
-                suffix = text[text.index('.') + len(k) + 3:]
-                html = f"""<br><img class="img-season" src="/static/img/{v}" alt="Season"><br>"""
-                text = prefix + html + suffix
-        print(text)
-
+        cnt = 0
+        previous = ''
+        for k, v in replacements.items():
+            cnt += 1 if k in text else 0
+            text = text.replace(k, v)
+            if cnt > 1:
+                text = text.replace(previous, '')
+                text = text.replace(v, (previous[:-4] + v[4:]))
+                break
+            previous = v
     return mark_safe(text)
 
