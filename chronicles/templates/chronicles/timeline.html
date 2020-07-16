@@ -85,13 +85,10 @@
                     {% if event.game.game_no > 0 %}
                         <a href="#"><small>-{{ event.game.game_no }}-</small></a>
                     {% elif event.game.game_no == 0 %}
-                        <small hidden><b>***</b></small>
+                        ✴
                     {% else %}
-                        <a href="#"><small>-X-</small></a>
+                        <a href="#"><small>-Bio-</small></a>
                     {% endif %}
-                    <a class="btn btn-outline-dark btn-sm py-0 mt-1" href="{% url 'chronicles:game-event-inform' event.id %}" target="_blank">
-                        <i class="icon-inform-small"></i>
-                    </a>
                     <a class="btn btn-outline-dark btn-sm py-0 disabled" href="#">
                         <i class="icon-note-small"></i>
                     </a>
