@@ -8,8 +8,8 @@ a#location {padding-left: 0.2rem !important;}
 .timeline .date {width: 8%;}
 .timeline .thread {width: 17%;}
 .timeline .description {width: %;}
-.timeline .participants {width: 7%;}
-.timeline .locations {width: 10%;}
+.timeline .participants {width: 6.5%;}
+.timeline .locations {width: 12%;}
 .timeline .actions {width: 3%;}
 
 .chronicle .description {width: %;}

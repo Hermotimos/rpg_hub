@@ -39,7 +39,7 @@
                         <b>{{ event.date_in_period|add_season_img }}</b>
                     </a>
                 </td>
-                <td class="timeline-event-thread align-top unblue-black">
+                <td class="timeline-event-thread align-top unblue-black pl-2">
                     <ul class="bullets-1 pl-2">
                         {% for thread in event.threads.all %}
                             <li><a id="thread" class="hover-pointer" href="#">{{ thread }}</a></li>
