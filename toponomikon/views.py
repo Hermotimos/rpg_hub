@@ -54,16 +54,21 @@ def toponomikon_location_view(request, loc_name):
     known_only_indirectly = known_indirectly.exclude(id__in=known_directly)
     known_all = (known_directly | known_indirectly).distinct()
     
-    # Get this this_location with prefetched data and annotations
+    # Get this_location with prefetched data and annotations
     this_location = Location.objects.select_related('main_image')
-    this_location = this_location.prefetch_related(
-        Prefetch(
-            'knowledge_packets',
-            queryset=profile.knowledge_packets.all()
-        ),
-        'knowledge_packets__pictures',
-        'pictures',
-    )
+    if profile.status == 'gm':
+        this_location = this_location.prefetch_related(
+            'knowledge_packets__pictures',
+        )
+    else:
+        this_location = this_location.prefetch_related(
+            Prefetch(
+                'knowledge_packets',
+                queryset=profile.knowledge_packets.all()
+            ),
+            'knowledge_packets__pictures',
+            'pictures',
+        )
     this_location = this_location.annotate(
         only_indirectly=Case(
             When(id__in=known_only_indirectly, then=Value(1)),
