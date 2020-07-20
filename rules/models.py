@@ -76,6 +76,11 @@ class TheologySkillManager(models.Manager):
 
 class TheologySkill(Skill):
     objects = TheologySkillManager()
+    
+    class Meta:
+        proxy = True
+        verbose_name = 'Skills - THEOLOGY'
+        verbose_name_plural = 'Skills - THEOLOGY'
 
 
 class BooksSkillManager(models.Manager):
@@ -87,6 +92,11 @@ class BooksSkillManager(models.Manager):
 
 class BooksSkill(Skill):
     objects = BooksSkillManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Skills - BOOKS'
+        verbose_name_plural = 'Skills - BOOKS'
 
 
 class Synergy(models.Model):

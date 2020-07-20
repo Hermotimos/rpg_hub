@@ -8,7 +8,8 @@ from django.utils.translation import ugettext_lazy
 
 from imaginarion.models import Picture
 from knowledge.models import KnowledgePacket
-from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, CharacterClass, CharacterProfession, EliteClass, \
+from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, \
+    CharacterClass, CharacterProfession, EliteClass, BooksSkill, TheologySkill, \
     EliteProfession, WeaponClass, WeaponType, PlateType, ShieldType
 from users.models import Profile
 
@@ -127,7 +128,7 @@ class SkillAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'tested_trait', 'image']
     list_editable = ['name', 'tested_trait', 'image']
     search_fields = ['name']
-
+    
 
 class SynergyLevelAdmin(admin.ModelAdmin):
     form = Form4
@@ -274,6 +275,8 @@ class ShieldTypeAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Skill, SkillAdmin)
+admin.site.register(BooksSkill, SkillAdmin)
+admin.site.register(TheologySkill, SkillAdmin)
 admin.site.register(SkillLevel, SkillLevelAdmin)
 admin.site.register(Synergy, SynergyAdmin)
 admin.site.register(SynergyLevel, SynergyLevelAdmin)
