@@ -54,8 +54,6 @@ class LocationInline(admin.TabularInline):
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
-        # Reduces greatly queries in main view, doubles in detail view
-        # The trade-off is still very good
         request = kwargs['request']
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
         
@@ -98,9 +96,6 @@ class LocationAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description']
 
     def formfield_for_dbfield(self, db_field, **kwargs):
-        # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
-        # Reduces greatly queries in main view, doubles in detail view
-        # The trade-off is still very good
         request = kwargs['request']
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
     
@@ -140,8 +135,6 @@ class PrimaryLocationAdmin(admin.ModelAdmin):
     
     def formfield_for_dbfield(self, db_field, **kwargs):
         # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
-        # Reduces greatly queries in main view, doubles in detail view
-        # The trade-off is still very good
         request = kwargs['request']
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
 
@@ -157,10 +150,6 @@ class PrimaryLocationAdmin(admin.ModelAdmin):
     
 class SecondaryLocationAdmin(LocationAdmin):
     pass
-
-#
-# class TertiaryLocationAdmin(LocationAdmin):
-#     pass
     
     
 class LocationTypeAdmin(admin.ModelAdmin):
@@ -187,4 +176,3 @@ admin.site.register(LocationType, LocationTypeAdmin)
 admin.site.register(Location, LocationAdmin)
 admin.site.register(PrimaryLocation, PrimaryLocationAdmin)
 admin.site.register(SecondaryLocation, SecondaryLocationAdmin)
-# admin.site.register(TertiaryLocation, TertiaryLocationAdmin)
