@@ -7,7 +7,7 @@ from django.views import View
 
 from knowledge.models import KnowledgePacket
 from rpg_project.utils import send_emails
-from rules.models import SkillLevel, Skill
+from rules.models import SkillLevel, Skill, TheologySkill, BooksSkill
 
 
 class AlmanacView(View):
@@ -19,25 +19,19 @@ class AlmanacView(View):
 
         if profile.status == 'gm':
             known_kn_packets = KnowledgePacket.objects.all()
+            acquired = SkillLevel.objects.all()
         else:
             known_kn_packets = profile.knowledge_packets.all()
+            acquired = SkillLevel.objects.filter(acquired_by=profile)
 
-        skills = Skill.objects \
-            .exclude(name__icontains='Doktryn') \
-            .exclude(name__icontains='Teolog') \
-            .exclude(name__icontains='Kult') \
-            .filter(knowledge_packets__in=known_kn_packets) \
-            .prefetch_related(
-                Prefetch(
-                    'knowledge_packets',
-                    queryset=known_kn_packets
-                ),
-                Prefetch(
-                    'skill_levels',
-                    queryset=SkillLevel.objects.filter(acquired_by=profile)
-                ),
-                'knowledge_packets__pictures'
-            ).distinct()
+        skills = Skill.objects.exclude(id__in=TheologySkill.objects.all())
+        skills = skills.filter(knowledge_packets__in=known_kn_packets)
+        skills = skills.prefetch_related(
+            Prefetch('knowledge_packets', queryset=known_kn_packets),
+            Prefetch('skill_levels', queryset=acquired),
+            'knowledge_packets__pictures',
+        )
+        skills = skills.distinct()
 
         context = {
             'page_title': 'Almanach',
