@@ -17,10 +17,9 @@ class AlmanacView(View):
     def get(self, request):
         profile = request.user.profile
 
-        if profile.status == 'gm':
-            known_kn_packets = KnowledgePacket.objects.all()
-            acquired = SkillLevel.objects.all()
-        else:
+        known_kn_packets = KnowledgePacket.objects.all()
+        acquired = SkillLevel.objects.all()
+        if not profile.status == 'gm':
             known_kn_packets = profile.knowledge_packets.all()
             acquired = SkillLevel.objects.filter(acquired_by=profile)
 
@@ -37,7 +36,7 @@ class AlmanacView(View):
             'page_title': 'Almanach',
             'skills': skills,
         }
-        return render(request, self.template_name, context)
+        return render(request, 'knowledge/skills_with_kn_packets.html', context)
 
     @method_decorator(login_required)
     def post(self, request):
