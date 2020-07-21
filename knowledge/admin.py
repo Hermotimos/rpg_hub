@@ -112,4 +112,3 @@ class KnowledgePacketAdmin(admin.ModelAdmin):
 
 
 admin.site.register(KnowledgePacket, KnowledgePacketAdmin)
-
