@@ -79,7 +79,7 @@ class TheologySkill(Skill):
     
     class Meta:
         proxy = True
-        verbose_name = 'Skills - THEOLOGY'
+        verbose_name = 'Teologia'
         verbose_name_plural = 'Skills - THEOLOGY'
 
 
@@ -95,7 +95,7 @@ class BooksSkill(Skill):
 
     class Meta:
         proxy = True
-        verbose_name = 'Skills - BOOKS'
+        verbose_name = 'Księgi'
         verbose_name_plural = 'Skills - BOOKS'
 
 

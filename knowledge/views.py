@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch, Q, ExpressionWrapper, BooleanField
@@ -10,168 +11,79 @@ from rpg_project.utils import send_emails
 from rules.models import SkillLevel, Skill, TheologySkill, BooksSkill
 
 
-class AlmanacView(View):
-    template_name = 'knowledge/skills_with_kn_packets.html'
+def prepare_skills(profile, skill_model_name):
+    skills = Skill.objects.all()
+    
+    if profile.status == 'gm':
+        kn_packets = KnowledgePacket.objects.all()
+        skill_levels = SkillLevel.objects.all()
+    else:
+        kn_packets = profile.knowledge_packets.all()
+        skill_levels = SkillLevel.objects.filter(acquired_by=profile)
+    
+    skills = skills.filter(knowledge_packets__in=kn_packets)
+    skills = skills.prefetch_related(
+        Prefetch('knowledge_packets', queryset=kn_packets),
+        Prefetch('skill_levels', queryset=skill_levels),
+        'knowledge_packets__pictures',
+    )
+    skills = skills.distinct()
+    
+    books_filter = Q(id__in=BooksSkill.objects.all())
+    theology_filter = Q(id__in=TheologySkill.objects.all())
+    
+    if skill_model_name == BooksSkill.__name__:
+        skills = skills.filter(books_filter)
+    elif skill_model_name == TheologySkill.__name__:
+        skills = skills.filter(theology_filter)
+    else:
+        skills = skills.exclude(theology_filter)
+        skills = skills.exclude(books_filter)
 
-    @method_decorator(login_required)
-    def get(self, request):
-        profile = request.user.profile
+    skill_models = [
+        m for m in apps.get_app_config('rules').get_models()
+        if m == Skill or issubclass(m, Skill)
+    ]
+    skill_model_verbose_names = {
+        m.__name__: m._meta.verbose_name for m in skill_models
+    }
+    page_title = skill_model_verbose_names.get(skill_model_name) or 'Almanach'
+    
+    return page_title, skills
 
-        known_kn_packets = KnowledgePacket.objects.all()
-        acquired = SkillLevel.objects.all()
-        if not profile.status == 'gm':
-            known_kn_packets = profile.knowledge_packets.all()
-            acquired = SkillLevel.objects.filter(acquired_by=profile)
 
-        skills = Skill.objects.exclude(id__in=TheologySkill.objects.all())
-        skills = skills.filter(knowledge_packets__in=known_kn_packets)
-        skills = skills.prefetch_related(
-            Prefetch('knowledge_packets', queryset=known_kn_packets),
-            Prefetch('skill_levels', queryset=acquired),
-            'knowledge_packets__pictures',
-        )
-        skills = skills.distinct()
+@login_required
+def skills_view(request, skill_model):
+    page_title, skills = prepare_skills(request.user.profile, skill_model)
 
-        context = {
-            'page_title': 'Almanach',
-            'skills': skills,
-        }
-        return render(request, 'knowledge/skills_with_kn_packets.html', context)
-
-    @method_decorator(login_required)
-    def post(self, request):
-        # INFORM FORM
+    # INFORM FORM
+    if request.method == 'POST' and 'kn_packet' in request.POST:
         # dict(request.POST).items() == < QueryDict: {
         #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
         #     '2': ['on'],
         #     'kn_packet': ['38']
         # } >
-        if request.method == 'POST' and 'kn_packet' in request.POST:
-            data = dict(request.POST)
-            informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
-            kn_packet_id = data['kn_packet'][0]
-            kn_packet = KnowledgePacket.objects.get(id=kn_packet_id)
-            kn_packet.acquired_by.add(*informed_ids)
-
-            send_emails(request, informed_ids, kn_packet=kn_packet)
-            messages.info(request, f'Poinformowano wybrane postacie!')
-
-        return redirect('knowledge:almanac')
-
-
-class TheologyView(View):
-    template_name = 'knowledge/skills_with_kn_packets.html'
-
-    @method_decorator(login_required)
-    def get(self, request):
-        profile = request.user.profile
-
-        if profile.status == 'gm':
-            theology_skills = Skill.objects.filter(
-                Q(name__icontains='Doktryn')
-                | Q(name__icontains='Kult')
-                | Q(name__icontains='Teologi')
-            ).prefetch_related('knowledge_packets__pictures')
-        else:
-            theology_skills = Skill.objects.filter(
-                Q(name__icontains='Doktryn')
-                | Q(name__icontains='Kult')
-                | Q(name__icontains='Teologi'),
-                skill_levels__acquired_by=profile
-            ).prefetch_related(
-                # Prefetch(
-                #     'skill_levels',
-                #     queryset=SkillLevel.objects.filter(acquired_by=profile)
-                # ),
-                Prefetch(
-                    'knowledge_packets',
-                    queryset=profile.knowledge_packets.all()
-                ),
-                'knowledge_packets__pictures'
-            ).distinct()
-
-        # Custom sorting to bring 'Teolog*' skills to the top:
-        # Source: https://stackoverflow.com/questions/11622501/order-query-results-by-startswith-match
-        
-        search_term = 'Teolog'
-
-        # Encapsulate the comparison expression.
-        expression = Q(name__startswith=search_term)
-
-        # Wrap the expression to specify the field type.
-        is_match = ExpressionWrapper(expression, output_field=BooleanField())
-
-        # Annotate each object with the comparison.
-        theology_skills = theology_skills.annotate(my_field=is_match)
-
-        # Order by the annotated field in reverse, so `True` is first (0 < 1).
-        # As second order level user 'name' field
-        theology_skills = theology_skills.order_by('-my_field', 'name')
-
-        context = {
-            'page_title': 'Teologia',
-            'skills': theology_skills
-        }
-        return render(request, self.template_name, context)
+        data = dict(request.POST)
+        informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
+        kn_packet_id = data['kn_packet'][0]
+        kn_packet = KnowledgePacket.objects.get(id=kn_packet_id)
+        kn_packet.acquired_by.add(*informed_ids)
     
-    
-# class TheologyView(View):
-#     template_name = 'knowledge/skills_with_kn_packets.html'
-#
-#     @method_decorator(login_required)
-#     def get(self, request):
-#         profile = request.user.profile
-#
-#         if profile.status == 'gm':
-#             theology_skills = Skill.objects.filter(
-#                 Q(name__icontains='Doktryn')
-#                 | Q(name__icontains='Kult')
-#                 | Q(name__icontains='Teologi')
-#             ).prefetch_related('skill_levels', 'knowledge_packets__pictures')
-#         else:
-#             theology_skills = Skill.objects.filter(
-#                 Q(name__icontains='Doktryn')
-#                 | Q(name__icontains='Kult')
-#                 | Q(name__icontains='Teologi')
-#             ).prefetch_related(
-#                 Prefetch(
-#                     'skill_levels',
-#                     queryset=SkillLevel.objects.filter(acquired_by=profile)
-#                 ),
-#                 Prefetch(
-#                     'knowledge_packets',
-#                     queryset=profile.knowledge_packets.all()
-#                 ),
-#                 'knowledge_packets__pictures'
-#             )
-#
-#         context = {
-#             'page_title': 'Teologia',
-#             'theology_skills': theology_skills
-#         }
-#         return render(request, self.template_name, context)
+        send_emails(request, informed_ids, kn_packet=kn_packet)
+        messages.info(request, f'Poinformowano wybrane postaci!')
+
+    context = {
+        'page_title': page_title,
+        'skills': skills,
+    }
+    return render(request, 'knowledge/skills_with_kn_packets.html', context)
 
 
 #
 # @login_required
 # def almanac_view(request):
 #     profile = request.user.profile
-#
-#     if profile.status == 'gm':
-#         known_kn_packets = KnowledgePacket.objects.all()
-#     else:
-#         known_kn_packets = profile.knowledge_packets.all()
-#
-#     skills = Skill.objects \
-#         .exclude(name__icontains='Doktryn') \
-#         .filter(knowledge_packets__in=known_kn_packets) \
-#         .prefetch_related(
-#             Prefetch('knowledge_packets',
-#                      queryset=known_kn_packets),
-#             Prefetch('skill_levels',
-#                      queryset=SkillLevel.objects.filter(acquired_by=profile)),
-#             'knowledge_packets__pictures',
-#         ).distinct()
+#     skills = prepare_skills(profile)
 #
 #     # INFORM FORM
 #     # dict(request.POST).items() == < QueryDict: {
@@ -187,38 +99,80 @@ class TheologyView(View):
 #         kn_packet.acquired_by.add(*informed_ids)
 #
 #         send_emails(request, informed_ids, kn_packet=kn_packet)
-#         messages.info(request, f'Poinformowano wybrane postacie!')
+#         messages.info(request, f'Poinformowano wybrane postaci!')
 #
 #     context = {
 #         'page_title': 'Almanach',
 #         'skills': skills,
 #     }
 #     return render(request, 'knowledge/skills_with_kn_packets.html', context)
-
-
+#
+#
+# @login_required
+# def books_view(request):
+#     profile = request.user.profile
+#     skills = prepare_skills(profile, skill_model=BooksSkill.__name__)
+#
+#     # INFORM FORM
+#     # dict(request.POST).items() == < QueryDict: {
+#     #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
+#     #     '2': ['on'],
+#     #     'kn_packet': ['38']
+#     # } >
+#     if request.method == 'POST' and 'kn_packet' in request.POST:
+#         data = dict(request.POST)
+#         informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
+#         kn_packet_id = data['kn_packet'][0]
+#         kn_packet = KnowledgePacket.objects.get(id=kn_packet_id)
+#         kn_packet.acquired_by.add(*informed_ids)
+#
+#         send_emails(request, informed_ids, kn_packet=kn_packet)
+#         messages.info(request, f'Poinformowano wybrane postaci!')
+#
+#     context = {
+#         'page_title': 'Księgi',
+#         'skills': skills,
+#     }
+#     return render(request, 'knowledge/skills_with_kn_packets.html', context)
+#
+#
 #
 # @login_required
 # def theology_view(request):
 #     profile = request.user.profile
+#     skills = prepare_skills(profile, skill_model=TheologySkill)
 #
-#     if profile.status == 'gm':
-#         theology_skills = Skill.objects\
-#             .filter(name__icontains='Doktryn')\
-#             .prefetch_related('skill_levels', 'knowledge_packets__pictures')
-#     else:
-#         theology_skills = Skill.objects\
-#             .filter(name__icontains='Doktryn')\
-#             .prefetch_related(
-#                 Prefetch('skill_levels',
-#                 queryset=SkillLevel.objects.filter(acquired_by=profile)),
-#                 Prefetch('knowledge_packets', queryset=profile.knowledge_packets.all()),
-#                 'knowledge_packets__pictures'
-#                 )
+#     # Custom sorting to bring 'Teolog*' skills to the top:
+#     # Source: https://stackoverflow.com/questions/11622501/order-query-results-by-startswith-match
+#     # Encapsulate the comparison expression.
+#     expression = Q(name__startswith='Teolog')
+#     # Wrap the expression to specify the field type.
+#     is_match = ExpressionWrapper(expression, output_field=BooleanField())
+#     # Annotate each object with the comparison.
+#     # Order by annotation in reverse; `True` is first (0 < 1); then by name
+#     skills = skills.annotate(my_field=is_match)
+#     skills = skills.order_by('-my_field', 'name')
+#
+#     # INFORM FORM
+#     # dict(request.POST).items() == < QueryDict: {
+#     #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
+#     #     '2': ['on'],
+#     #     'kn_packet': ['38']
+#     # } >
+#     if request.method == 'POST' and 'kn_packet' in request.POST:
+#         data = dict(request.POST)
+#         informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
+#         kn_packet_id = data['kn_packet'][0]
+#         kn_packet = KnowledgePacket.objects.get(id=kn_packet_id)
+#         kn_packet.acquired_by.add(*informed_ids)
+#
+#         send_emails(request, informed_ids, kn_packet=kn_packet)
+#         messages.info(request, f'Poinformowano wybrane postaci!')
 #
 #     context = {
 #         'page_title': 'Teologia',
-#         'theology_skills': theology_skills
+#         'skills': skills
 #     }
 #     return render(request, 'knowledge/skills_with_kn_packets.html', context)
-
-
+#
+#
