@@ -48,9 +48,9 @@
                     <button class="font-18 nav-item nav-link dropbtn small-caps">Wiedza</button>
                     <div class="dropdown-content">
                         <ul class="bullets-1 pl-4">
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'knowledge:skills' 'Skill' %}">Almanach</a></li>
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'knowledge:skills' 'BooksSkill' %}">Księgi</a></li>
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'knowledge:skills' 'TheologySkill' %}">Teologia</a></li>
+                            <li><a class="font-14 nav-link small-caps" href="{% url 'knowledge:knowledge-packets-in-skills' 'Skill' %}">Almanach</a></li>
+                            <li><a class="font-14 nav-link small-caps" href="{% url 'knowledge:knowledge-packets-in-skills' 'BooksSkill' %}">Biblioteka</a></li>
+                            <li><a class="font-14 nav-link small-caps" href="{% url 'knowledge:knowledge-packets-in-skills' 'TheologySkill' %}">Teologia</a></li>
                             
                             <li><a class="font-14 nav-link small-caps disabled" href="#">Prosoponomikon</a></li>
                             <li><a class="font-14 nav-link small-caps" href="{% url 'toponomikon:main' %}">Toponomikon</a></li>
@@ -59,10 +59,8 @@
     <!--                        SEPARATE MONSTERS:-->
         <!--                    <li><a class="font-14 nav-link small-caps" href="#">Bestiariusz/Therarion</a></li>-->
                                 <!--    SEPARATE BOOKS:                    -->
-        <!--                    <li><a class="font-14 nav-link small-caps" href="#">Biblioteka</a></li>-->
         <!--                    <li><a class="font-14 nav-link small-caps" href="#">Geografia</a></li>-->
         <!--                    <li><a class="font-14 nav-link small-caps" href="#">Historia</a></li>-->
-        <!--                    <li><a class="font-14 nav-link small-caps" href="#">Teologia</a></li>-->
                         </ul>
                     </div>
                 </li>

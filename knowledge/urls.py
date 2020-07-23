@@ -5,5 +5,6 @@ from knowledge import views
 
 app_name = 'knowledge'
 urlpatterns = [
-    path('skills/<str:model_name>/', views.skills_view, name='skills'),
+    path('skills/<str:model_name>/', views.knowledge_packets_in_skills_view,
+         name='knowledge-packets-in-skills'),
 ]

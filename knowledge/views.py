@@ -10,7 +10,7 @@ from rules.models import SkillLevel, Skill
 
 
 @login_required
-def skills_view(request, model_name):
+def knowledge_packets_in_skills_view(request, model_name):
     profile = request.user.profile
     skill_model = apps.get_app_config('rules').get_model(model_name)
     skills = skill_model.objects.all()
