@@ -15,9 +15,6 @@ def toponomikon_main_view(request):
     locations = PrimaryLocation.objects.prefetch_related('locations')
     
     if not profile.status == 'gm':
-        known_only_indirectly = profile.locs_known_indirectly.exclude(
-            id__in=profile.locs_known_directly.all()
-        )
         locations = PrimaryLocation.objects.filter(
             Q(id__in=profile.locs_known_directly.all())
             | Q(id__in=profile.locs_known_indirectly.all())
@@ -31,11 +28,16 @@ def toponomikon_main_view(request):
                 )
             )
         )
-        locations = locations.annotate(only_indirectly=Case(
-            When(id__in=known_only_indirectly, then=Value(1)),
-            default=Value(0),
-            output_field=IntegerField(),
-        ))
+        known_only_indirectly = profile.locs_known_indirectly.exclude(
+            id__in=profile.locs_known_directly.all()
+        )
+        locations = locations.annotate(
+            only_indirectly=Case(
+                When(id__in=known_only_indirectly, then=Value(1)),
+                default=Value(0),
+                output_field=IntegerField(),
+            ),
+        )
     
     locations = locations.select_related('main_image')
     
