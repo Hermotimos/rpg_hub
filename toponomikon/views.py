@@ -4,7 +4,7 @@ from django.db.models import Prefetch, Q, When, Case, Value, IntegerField
 from django.shortcuts import render, redirect, get_object_or_404
 
 from knowledge.models import KnowledgePacket
-from rpg_project.utils import send_emails
+from rpg_project.utils import handle_inform_form
 from toponomikon.models import Location, LocationType, PrimaryLocation, \
     SecondaryLocation
 
@@ -38,7 +38,6 @@ def toponomikon_main_view(request):
                 output_field=IntegerField(),
             ),
         )
-    
     locations = locations.select_related('main_image')
     
     context = {
@@ -108,43 +107,46 @@ def toponomikon_location_view(request, loc_name):
     )
     location_types = location_types.distinct()
     
-    # INFORM LOCATION
-    # dict(request.POST).items() == < QueryDict: {
-    #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
-    #     '2': ['on'],
-    #     'location': ['']
-    # } >
-    if request.method == 'POST' and 'location' in request.POST:
-        data = dict(request.POST)
-        informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
-        this_location.known_indirectly.add(*informed_ids)
+    if request.method == 'POST':
+        handle_inform_form(request)
         
-        send_emails(request, informed_ids, location=this_location)
-        if informed_ids:
-            messages.info(request, f'Poinformowano wybrane postaci!')
-    
-    # INFORM KNOWLEDGE PACKETS
-    # dict(request.POST).items() == < QueryDict: {
-    #   'csrfmiddlewaretoken': ['42GqawP0aa5WOfpuTkKixYsROBaKSQng...'],
-    #   '2': ['on'],
-    #   'kn_packet': ['38']
-    # } >
-    elif request.method == 'POST' and 'kn_packet' in request.POST:
-        data = dict(request.POST)
-        informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
-        kn_packet_id = data['kn_packet'][0]
-        kn_packet = KnowledgePacket.objects.get(id=kn_packet_id)
-        kn_packet.acquired_by.add(*informed_ids)
-        
-        send_emails(request, informed_ids, kn_packet=kn_packet)
-        if informed_ids:
-            messages.info(request, f'Poinformowano wybrane postaci!')
+    # # INFORM LOCATION
+    # # dict(request.POST).items() == < QueryDict: {
+    # #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
+    # #     '2': ['on'],
+    # #     'location': ['77']
+    # # } >
+    # if request.method == 'POST' and 'location' in request.POST:
+    #     data = dict(request.POST)
+    #     informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
+    #     location_id = data['location'][0]
+    #     location = Location.objects.get(id=location_id)
+    #     location.known_indirectly.add(*informed_ids)
+    #
+    #     send_emails(request, informed_ids, location=this_location)
+    #     if informed_ids:
+    #         messages.info(request, f'Poinformowano wybrane postaci!')
+    #
+    # # INFORM KNOWLEDGE PACKETS
+    # # dict(request.POST).items() == < QueryDict: {
+    # #   'csrfmiddlewaretoken': ['42GqawP0aa5WOfpuTkKixYsROBaKSQng...'],
+    # #   '2': ['on'],
+    # #   'kn_packet': ['38']
+    # # } >
+    # elif request.method == 'POST' and 'kn_packet' in request.POST:
+    #     data = dict(request.POST)
+    #     informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
+    #     kn_packet_id = data['kn_packet'][0]
+    #     kn_packet = KnowledgePacket.objects.get(id=kn_packet_id)
+    #     kn_packet.acquired_by.add(*informed_ids)
+    #
+    #     send_emails(request, informed_ids, kn_packet=kn_packet)
+    #     if informed_ids:
+    #         messages.info(request, f'Poinformowano wybrane postaci!')
     
     context = {
-        # General
         'page_title': page_title,
         'this_location': this_location,
-        # Tabs
         'location_types': location_types,
     }
     if this_location in known_all or profile.status == 'gm':

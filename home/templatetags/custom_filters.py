@@ -121,3 +121,7 @@ def add_season_img(text):
             previous = v
     return mark_safe(text)
 
+
+@register.filter
+def get_model_name(obj):
+    return obj.__class__.__name__

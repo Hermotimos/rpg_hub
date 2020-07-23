@@ -18,7 +18,6 @@ from users.models import User
 # ----------------------------- DEMANDS -----------------------------
 
 
-
 @login_required
 def demands_main_view(request):
     user = request.user

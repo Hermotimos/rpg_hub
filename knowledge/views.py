@@ -5,7 +5,7 @@ from django.db.models import Prefetch
 from django.shortcuts import render
 
 from knowledge.models import KnowledgePacket
-from rpg_project.utils import send_emails
+from rpg_project.utils import handle_inform_form
 from rules.models import SkillLevel, Skill
 
 
@@ -41,21 +41,8 @@ def knowledge_packets_in_skills_view(request, model_name):
     )
     skills = skills.distinct()
 
-    # INFORM FORM
-    if request.method == 'POST' and 'kn_packet' in request.POST:
-        # dict(request.POST).items() == < QueryDict: {
-        #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
-        #     '2': ['on'],
-        #     'kn_packet': ['38']
-        # } >
-        data = dict(request.POST)
-        informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
-        kn_packet_id = data['kn_packet'][0]
-        kn_packet = KnowledgePacket.objects.get(id=kn_packet_id)
-        kn_packet.acquired_by.add(*informed_ids)
-        
-        send_emails(request, informed_ids, kn_packet=kn_packet)
-        messages.info(request, f'Poinformowano wybrane postaci!')
+    if request.method == 'POST':
+        handle_inform_form(request)
     
     context = {
         'page_title': page_title,

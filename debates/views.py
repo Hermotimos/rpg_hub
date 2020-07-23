@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm
 from debates.models import Topic, Debate
-from rpg_project.utils import send_emails
+from rpg_project.utils import send_emails, handle_inform_form
 from users.models import Profile
 
 
@@ -139,20 +139,8 @@ def debate_view(request, debate_id):
                 p.image for p in last_remark.seen_by.all()
             ]
 
-    # INFORM FORM
-    # dict(request.POST).items() == < QueryDict: {
-    #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
-    #     '2': ['on'],
-    #     'debate': ['']
-    # } >
-    if request.method == 'POST' and 'debate' in request.POST:
-        data = dict(request.POST)
-        informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
-        debate.known_directly.add(*informed_ids)
-        
-        send_emails(request, informed_ids, debate_info=debate)
-        if informed_ids:
-            messages.info(request, f'Wybrane postaci zostały dodane do narady!')
+    if request.method == 'POST':
+        handle_inform_form(request)
 
     # REMARK FORM
     if request.method == 'POST' and 'debate' not in request.POST:
