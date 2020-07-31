@@ -285,6 +285,7 @@ class TimeUnit(models.Model):
         self.dates = str(dates) + ' ' + str(self.in_timeunit.name_genetive)
         super().save(*args, **kwargs)
 
+
 # ----------------------------------------------------------------------------
 # -------------------------------- PROXIES -----------------------------------
 # ----------------------------------------------------------------------------
@@ -474,26 +475,26 @@ class GameEvent(Event):
         return self.description_long[:100] or str(self.pk)
 
 
-# def update_known_spec_locations(sender, instance, **kwargs):
-#     """Whenever a profile becomes 'participant' or 'informed' of an event in
-#     specific location add this location to profile's 'known_directly'
-#     (if participant) or 'known_indirectly' (if informed).
-#     """
-#     participants = instance.participants.all()
-#     informed = instance.informed.all()
-#     spec_locations = instance.spec_locations.all()
-#     for spec_location in spec_locations:
-#         spec_location.known_directly.add(*participants)
-#         spec_location.known_indirectly.add(*informed)
-#
-#
-# post_save.connect(update_known_spec_locations, sender=TimelineEvent)
-#
-# # Run signal by each change of 'participants', 'informed' or 'spec_locations':
-# m2m_changed.connect(update_known_spec_locations,
-#                     sender=TimelineEvent.participants.through)
-# m2m_changed.connect(update_known_spec_locations,
-#                     sender=TimelineEvent.informed.through)
-# m2m_changed.connect(update_known_spec_locations,
-#                     sender=TimelineEvent.spec_locations.through)
+def update_known_locations(sender, instance, **kwargs):
+    """Whenever a profile becomes 'participant' or 'informed' of an event in
+    specific location add this location to profile's 'known_directly'
+    (if participant) or 'known_indirectly' (if informed).
+    """
+    known_directly = instance.known_directly.all()
+    known_indirectly = instance.known_indirectly.all()
+    locations = instance.locations.all()
+    for location in locations:
+        location.known_directly.add(*known_directly)
+        location.known_indirectly.add(*known_indirectly)
+
+
+post_save.connect(update_known_locations, sender=GameEvent)
+
+# Run by each change of 'known_directly', 'known_indirectly' or 'locations':
+m2m_changed.connect(update_known_locations,
+                    sender=GameEvent.known_directly.through)
+m2m_changed.connect(update_known_locations,
+                    sender=GameEvent.known_indirectly.through)
+m2m_changed.connect(update_known_locations,
+                    sender=GameEvent.locations.through)
 
