@@ -173,6 +173,7 @@ class GameSessionAdmin(admin.ModelAdmin):
     list_display = ['game_no', 'title', 'chapter', 'date']
     list_editable = ['title', 'chapter', 'date']
     list_select_related = ['chapter']
+    ordering = ['-game_no']
     search_fields = ['title']
 
     def formfield_for_dbfield(self, db_field, **kwargs):
