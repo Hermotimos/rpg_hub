@@ -42,7 +42,6 @@
         <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form|crispy }}
-            <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
             <input class="btn btn-dark" type="submit" value="Odpowiedz">
         </form>
     </div>

@@ -3,7 +3,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db.models import Count
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
@@ -12,7 +11,6 @@ from contact.forms import (DemandsCreateForm, DemandAnswerForm,
 from contact.models import Demand, DemandAnswer, Plan
 from rpg_project.utils import send_emails
 from rules.models import Skill, Synergy, WeaponType, PlateType
-from users.models import User
 
 
 # ----------------------------- DEMANDS -----------------------------
@@ -63,7 +61,6 @@ def demands_main_view(request):
     return render(request, 'contact/demands_main.html', context)
 
 
-
 @login_required
 def demands_create_view(request):
     if request.method == 'POST':
@@ -79,10 +76,8 @@ def demands_create_view(request):
             sender = settings.EMAIL_HOST_USER
             receivers = [demand.addressee.email]
             send_mail(subject, message, sender, receivers)
-
             messages.info(request, 'Dezyderat został wysłany!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
+            return redirect('contact:demands-main')
     else:
         form = DemandsCreateForm(authenticated_user=request.user)
 
@@ -93,7 +88,6 @@ def demands_create_view(request):
     return render(request, 'contact/demands_create.html', context)
 
 
-
 @login_required
 def demands_delete_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
@@ -101,10 +95,8 @@ def demands_delete_view(request, demand_id):
         demand.delete()
         messages.info(request, 'Usunięto dezyderat!')
         return redirect('contact:demands-main')
-        # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     else:
         return redirect('home:dupa')
-
 
 
 @login_required
@@ -131,8 +123,7 @@ def demands_detail_view(request, demand_id):
             send_mail(subject, message, sender, receivers)
 
             messages.info(request, 'Dodano odpowiedź!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
+            return redirect('contact:demands-main')
     else:
         form = DemandAnswerForm()
 
@@ -146,7 +137,6 @@ def demands_detail_view(request, demand_id):
         return render(request, 'contact/demands_detail.html', context)
     else:
         return redirect('home:dupa')
-
 
 
 @login_required
@@ -176,7 +166,6 @@ def mark_done_view(request, demand_id):
         return redirect('home:dupa')
 
 
-
 @login_required
 def mark_undone_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
@@ -203,7 +192,6 @@ def mark_undone_view(request, demand_id):
 
 
 # ----------------------------- PLANS -----------------------------
-
 
 
 @login_required
@@ -246,7 +234,6 @@ def plans_main_view(request):
     return render(request, 'contact/plans_main.html', context)
 
 
-
 @login_required
 def plans_for_gm_view(request):
     context = {
@@ -257,7 +244,6 @@ def plans_for_gm_view(request):
         return render(request, 'contact/plans_for_gm.html', context)
     else:
         return redirect('home:dupa')
-
 
 
 @login_required
@@ -279,8 +265,7 @@ def plans_create_view(request):
                 send_mail(subject, message, sender, receivers)
 
             messages.info(request, f'Plan został zapisany!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
+            return redirect('contact:plans-main')
     else:
         form = PlansCreateForm()
 
@@ -291,7 +276,6 @@ def plans_create_view(request):
     return render(request, 'contact/plans_create.html', context)
 
 
-
 @login_required
 def plans_delete_view(request, plan_id):
     plan = get_object_or_404(Plan, id=plan_id)
@@ -299,10 +283,8 @@ def plans_delete_view(request, plan_id):
         plan.delete()
         messages.info(request, 'Usunięto plan!')
         return redirect('contact:plans-main')
-        # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     else:
         return redirect('home:dupa')
-
 
 
 @login_required
@@ -322,8 +304,7 @@ def plans_modify_view(request, plan_id):
                 send_mail(subject, message, sender, receivers)
 
             messages.info(request, 'Zmodyfikowano plan!')
-            _next = request.POST.get('next', '/')
-            return HttpResponseRedirect(_next)
+            return redirect('contact:plans-main')
     else:
         form = PlansModifyForm(instance=plan)
 

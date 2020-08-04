@@ -19,7 +19,6 @@
             {{ form.text|as_crispy_field }}
         </div>
         {{ form.image|as_crispy_field }}
-        <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
         <input class="btn btn-dark" type="submit" value="Wyślij dezyderat">
     </form>
 {% endblock content %}
