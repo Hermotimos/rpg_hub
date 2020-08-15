@@ -293,14 +293,17 @@ def timeline_view(request):
         'locations',
     )
     events = events.order_by(
+        # DON'T ORDER BY 'game': this would mix events from 2+ synchronic games
         'in_timeunit__in_timeunit__in_timeunit__date_start__year',
         'in_timeunit__in_timeunit__date_start__year',
         'in_timeunit__date_start__year',
         'date_start__year',
         'date_start__season',
         'date_start__day',
-        # 'game',               # Try to avoid so HistoryEvents can be included? - or maybe it doesnt matter - check !
-        # 'event_no_in_game',   # Try to avoid so HistoryEvents can be included? - or maybe it doesnt matter - check !
+        
+        # Ordering by event_no_in_game might be problematic for HistoryEvents,
+        # but is necessary to properly order events from to 2+ synchronic games
+        'event_no_in_game',
     )
     context = {
         'page_title': 'Pełne Kalendarium',
