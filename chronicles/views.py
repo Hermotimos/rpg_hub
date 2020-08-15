@@ -301,8 +301,9 @@ def timeline_view(request):
         'date_start__season',
         'date_start__day',
         
-        # Ordering by event_no_in_game might be problematic for HistoryEvents,
+        # Ordering by these might be problematic for HistoryEvents,
         # but is necessary to properly order events from to 2+ synchronic games
+        'game',
         'event_no_in_game',
     )
     context = {
