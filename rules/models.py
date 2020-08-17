@@ -7,15 +7,30 @@ from users.models import Profile
 
 
 class Skill(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name='Umiejętność')
-    tested_trait = models.CharField(max_length=50, verbose_name='Cecha/Cechy',
-                                    blank=True, null=True)
-    image = models.ImageField(blank=True, null=True, upload_to='site_features_pics')
-    allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
-                                              limit_choices_to=Q(status='active_player') |
-                                                               Q(status='inactive_player') |
-                                                               Q(status='dead_player'),
-                                              related_name='allowed_skills')
+    name = models.CharField(
+        max_length=100,
+        unique=True,
+        verbose_name='Umiejętność',
+    )
+    tested_trait = models.CharField(
+        max_length=50,
+        verbose_name='Cecha/Cechy',
+        blank=True,
+        null=True,
+    )
+    image = models.ImageField(
+        blank=True,
+        null=True,
+        upload_to='site_features_pics',
+    )
+    allowed_profiles = models.ManyToManyField(
+        to=Profile,
+        blank=True,
+        limit_choices_to=Q(status='active_player')
+                         | Q(status='inactive_player')
+                         | Q(status='dead_player'),
+        related_name='allowed_skills'
+    )
     sorting_name = models.CharField(max_length=101, blank=True, null=True)
 
     def __str__(self):
@@ -97,6 +112,22 @@ class BooksSkill(Skill):
         proxy = True
         verbose_name = 'Księgi'
         verbose_name_plural = 'Skills - BOOKS'
+
+
+class HistorySkillManager(models.Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(Q(name__icontains='Histor'))
+        return qs
+    
+
+class HistorySkill(Skill):
+    objects = HistorySkillManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Historia'
+        verbose_name_plural = 'Skills - HISTORY'
 
 
 class Synergy(models.Model):
