@@ -32,16 +32,11 @@ def knowledge_packets_in_skills_view(request, model_name):
     skill_model = apps.get_app_config('rules').get_model(model_name)
     skills = skill_model.objects.all()
 
-    # Filter skills queryset according to possible proxy usage
-    skill_proxies = [
-        m for m in apps.get_app_config('rules').get_models()
-        if issubclass(m, Skill) and m.__name__ != Skill.__name__
-    ]
     page_title = skill_model._meta.verbose_name
-    if skill_model == Skill:
+    if page_title == 'Księgi':
+        page_title = 'Biblioteka'
+    elif skill_model == Skill:
         page_title = 'Almanach'
-        for proxy in skill_proxies:
-            skills = skills.exclude(id__in=proxy.objects.all())
 
     # Filter skills queryset according to profile's permissions
     kn_packets = KnowledgePacket.objects.all()
@@ -57,7 +52,8 @@ def knowledge_packets_in_skills_view(request, model_name):
         'knowledge_packets__pictures',
     )
     skills = skills.distinct()
-    skills = custom_sort(skills)
+    if page_title != 'Almanach':
+        skills = custom_sort(skills)
 
     if request.method == 'POST':
         handle_inform_form(request)
