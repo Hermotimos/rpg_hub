@@ -303,7 +303,7 @@ def timeline_view(request):
         
         # Ordering by these might be problematic for HistoryEvents,
         # but is necessary to properly order events from to 2+ synchronic games
-        '-game',
+        'game',     # No -game: later game's events are usually later
         'event_no_in_game',
     )
     context = {
