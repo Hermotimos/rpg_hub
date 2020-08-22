@@ -472,7 +472,9 @@ class GameEvent(Event):
     
     def __str__(self):
         # return self.description_short or str(self.pk)     # TODO after transition is done
-        return self.description_long[:100] or str(self.pk)
+        if self.description_short:
+            return self.description_long[:100]
+        return str(self.pk)
 
 
 def update_known_locations(sender, instance, **kwargs):
