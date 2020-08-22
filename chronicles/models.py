@@ -270,20 +270,20 @@ class TimeUnit(models.Model):
         )
         return qs
 
-    def save(self, *args, **kwargs):
-        start = self.date_start
-        end = self.date_end
-        dates = start or '???'
-        if end:
-            if end.year and end.season:
-                if end.season == start.season and end.year == start.year:
-                    dates = f'{start.day}-{end}'
-                elif end.year == start.year:
-                    dates = f'{start.day}. dnia {start.season} - {end}'
-                else:
-                    dates = f'{start} - {end}'
-        self.dates = str(dates) + ' ' + str(self.in_timeunit.name_genetive)
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     start = self.date_start
+    #     end = self.date_end
+    #     dates = start or '???'
+    #     if end:
+    #         if end.year and end.season:
+    #             if end.season == start.season and end.year == start.year:
+    #                 dates = f'{start.day}-{end}'
+    #             elif end.year == start.year:
+    #                 dates = f'{start.day}. dnia {start.season} - {end}'
+    #             else:
+    #                 dates = f'{start} - {end}'
+    #     self.dates = str(dates) + ' ' + str(self.in_timeunit.name_genetive)
+    #     super().save(*args, **kwargs)
 
 
 # ----------------------------------------------------------------------------
@@ -355,6 +355,8 @@ class Event(TimeUnit):
         proxy = True
 
     def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        
         start = self.date_start
         end = self.date_end
         start_day = end_day = 0
