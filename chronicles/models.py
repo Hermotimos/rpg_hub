@@ -257,7 +257,7 @@ class TimeUnit(models.Model):
             if self.date_end:
                 res = res[:-1] + f'{self.date_end.year}' + res[-1]
             if not self.timeunits.all():
-                res = res[:-2] + res[-1]
+                res = res[:-1] + res[-1]
             res = res[:-1] + f' | {self.in_timeunit.name_genetive}' + res[-1]
         return res
     
