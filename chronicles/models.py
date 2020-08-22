@@ -450,7 +450,9 @@ class HistoryEvent(Event):
         verbose_name = '4 - History Event'
     
     def __str__(self):
-        return self.description_short or str(self.pk)
+        if self.description_short:
+            return self.description_long[:100]
+        return str(self.pk)
 
 
 class GameEventManager(models.Manager):
