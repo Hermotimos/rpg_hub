@@ -214,6 +214,41 @@ a.img-link:hover {
 img.img-grayscale {filter: grayscale(100%);}
 
 
+/* Image zoom on hover */
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.img-hover-zoom {
+    position: relative;
+    margin: auto;
+    overflow: hidden;
+}
+.img-hover-zoom img {
+    max-width: 100%;
+    transition: all 1s;
+    display: block;
+    width: 100%;
+    height: auto;
+    transform: scale(1);
+    border-style: none;
+}
+
+.img-hover-zoom:hover img {
+    transform: scale(1.2);
+}
+
+div.img-hover-zoom {
+    border-style: double;
+    color: #444444;
+}
+/* END Image zoom on hover */
+
+
 
 
 /* ------------------------------------------------------------------------------------------------------------------ */
