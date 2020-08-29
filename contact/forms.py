@@ -31,7 +31,6 @@ class DemandsCreateForm(forms.ModelForm):
         self.fields['text'].widget.attrs = {
             'cols': 60,
             'rows': 10,
-            'placeholder': 'Odpowiedź (max. 4000 znaków)*'
         }
 
 
@@ -48,7 +47,6 @@ class DemandAnswerForm(forms.ModelForm):
         self.fields['text'].widget.attrs = {
             'cols': 60,
             'rows': 10,
-            'placeholder': 'Odpowiedź (max. 4000 znaków)*'
         }
 
 

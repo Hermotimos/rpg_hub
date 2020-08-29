@@ -41,7 +41,7 @@ class DemandAnswer(models.Model):
                                on_delete=models.CASCADE)
     author = models.ForeignKey(to=User, related_name='demand_answers',
                                on_delete=models.CASCADE)
-    text = models.TextField(max_length=4000)
+    text = models.TextField()
     date_posted = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='contact_pics', blank=True, null=True)
 
