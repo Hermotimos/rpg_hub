@@ -18,53 +18,24 @@
         <br>
     {% endfor %}
     <br><br>
+ 
+    {% for chapter in chapters %}
+        <div id="{{chapter.id}}" class="py-5">
+            <br><br>
+            {% if chapter.image %}
+                <img class="img-chapter-header" src="{{ chapter.image.url }}" alt="Chapter img">
+            {% endif %}
+            <h1 class="unblue mt-3">
+                <b>
+                    <a class="align-middle pt-2 small-caps border-bottom-dark">
+                    {{ chapter.title }}
+                    </a>
+                </b>
+            </h1>
+        </div>
+        {% with games=chapter.game_sessions.all %}
+            {% include 'chronicles/_chapter.html' %}
+        {% endwith %}
+    {% endfor %}
 
-    <table class="chronicle" id="chronicle" data-search="true" data-toggle="table">
-        <colgroup>
-            <col class="description">
-            <col class="actions">
-        </colgroup>
-        <!-- This is neccessary to display the table with Search feature nicely  -->
-        <thead class="hide">
-            <tr>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-
-        <tbody>
-            {% for chapter in chapters %}
-            <tr>
-                <td>
-                    <h2>
-                        <span id="{{chapter.id}}">
-                            <br><br>
-                            {% if chapter.image %}
-                                <img class="img-chapter-header" src="{{ chapter.image.url }}" alt="Chapter img">
-                            {% endif %}
-                            <br>
-                            {{ chapter.title }}
-                        </span>
-                    </h2>
-                </td>
-                <td></td>
-            </tr>
-                {% for game in chapter.game_sessions.all %}
-                    <tr>
-                        <td>
-                            <h4>
-                                <strong><br><br>{{ forloop.counter }}. {{ game.title }}</strong><br><br>
-                            </h4>
-                        </td>
-                        <td></td>
-                    </tr>
-                    {% for event in game.game_events.all %}
-
-                        {% include 'chronicles/_event.html' %}
-
-                    {% endfor %}
-                {% endfor %}
-            {% endfor %}
-        </tbody>
-    </table>
 {% endblock content %}
