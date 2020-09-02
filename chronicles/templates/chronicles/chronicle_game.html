@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/chronicles.css' %}">
+{% endblock head_extra %}
+
+{% block content %}
+    <br><br><br>
+        {% for event in events %}
+            {% include 'chronicles/_event.html' %}
+        {% endfor %}
+    <p class="my-5 text-center">✧ ✦ ✧</p>
+{% endblock content %}
