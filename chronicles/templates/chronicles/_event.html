@@ -1,5 +1,6 @@
-
 {% load static %}
+{% load custom_filters %}
+
 <div class="container">
     <div class="row border-top">
         
@@ -27,16 +28,18 @@
             
             <!-- PICTURES -->
             {% if event.pictures.all and request.user.profile not in event.known_indirectly.all %}
-                <table class="chronicle-img text-center">
-                    <tr>
-                    {% for picture in event.pictures.all %}
-                        <td class="align-top">
-                            <img src="{{ picture.image.url }}" alt="Event img">
-                            {% if picture.description %}<small>{{ picture.description }}</small>{% endif %}
-                        </td>
-                    {% endfor %}
-                    </tr>
-                </table>
+                {% for row in event.pictures.all|columns:3 %}
+                    <div class="d-flex justify-content-center">
+                        {% for picture in row %}
+                            <figure class="figure m-auto chronicle-img mb-4">
+                                <img src="{{ picture.image.url }}" alt="Event img">
+                                {% if picture.description %}
+                                    <figcaption class="figure-caption text-center">{{ picture.description }}</figcaption>
+                                {% endif %}
+                            </figure>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
                 <br>
             {% endif %}
             
