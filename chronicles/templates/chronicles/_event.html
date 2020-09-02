@@ -1,39 +1,57 @@
 
 {% load static %}
-<tr>
-    <td class="border-0">
-        {% if request.user.profile in event.known_indirectly.all %}
-            <p class="font-18 font-italic px-1 py-1 text-justify">
-                <small class="text-muted">(Znasz z opowieści) {{ event.description_long|linebreaksbr }}</small>
-            </p>
-        {% else %}
-            <p class="font-18 font-italic px-1 py-1 text-justify">{{ event.description_long|linebreaksbr }}</p>
-        {% endif %}
-
-        {% if event.pictures.all and request.user.profile not in event.known_indirectly.all %}
-            <table class="chronicle-img text-center">
-                <tr>
-                {% for picture in event.pictures.all %}
-                    <td class="align-top">
-                        <img src="{{ picture.image.url }}" alt="Event img">
-                        {% if picture.description %}<small>{{ picture.description }}</small>{% endif %}
-                    </td>
-                {% endfor %}
-                </tr>
-            </table>
-            <br>
-        {% endif %}
-
-        {% if event.debate and request.user.profile not in event.known_indirectly.all %}
-            <div class="font-18 font-italic text-justify px-1 py-1">
-                <p>
-                    <a href="{% url 'debates:debate' event.debate.id %}" id="debate_{{ event.debate.id }}">
-                        ❖ Narada: {{ event.debate.name }}
-                    </a>
+<div class="container">
+    <div class="row border-top">
+        
+        <!-- ACTIONS -->
+        <div class="col-12 col-sm-1 p-0">
+            <a class="btn btn-outline-dark mt-1" href="{% url 'chronicles:game-event-inform' event.id %}" target="_blank">
+                <i class="icon-inform-medium"></i>
+            </a>
+            <a class="btn btn-outline-dark mt-1 disabled" href="#">
+                <i class="icon-note-medium"></i>
+            </a>
+        </div>
+        
+        <!-- EVENT -->
+        <div class="col-12 col-sm-11 mt-2 p-0">
+            
+            <!-- DESCRIPTION -->
+            {% if request.user.profile in event.known_indirectly.all %}
+                <p class="font-18 font-italic px-1 py-1 text-justify">
+                    <small class="text-muted">(Znasz z opowieści) {{ event.description_long|linebreaksbr }}</small>
                 </p>
-            </div>
-        {% endif %}
-
+            {% else %}
+                <p class="font-18 font-italic px-1 py-1 text-justify">{{ event.description_long|linebreaksbr }}</p>
+            {% endif %}
+            
+            <!-- PICTURES -->
+            {% if event.pictures.all and request.user.profile not in event.known_indirectly.all %}
+                <table class="chronicle-img text-center">
+                    <tr>
+                    {% for picture in event.pictures.all %}
+                        <td class="align-top">
+                            <img src="{{ picture.image.url }}" alt="Event img">
+                            {% if picture.description %}<small>{{ picture.description }}</small>{% endif %}
+                        </td>
+                    {% endfor %}
+                    </tr>
+                </table>
+                <br>
+            {% endif %}
+            
+            <!-- DEBATES -->
+            {% if event.debate and request.user.profile not in event.known_indirectly.all %}
+                <div class="font-18 font-italic text-justify px-1 py-1">
+                    <p>
+                        <a href="{% url 'debates:debate' event.debate.id %}" id="debate_{{ event.debate.id }}">
+                            ❖ Narada: {{ event.debate.name }}
+                        </a>
+                    </p>
+                </div>
+            {% endif %}
+            
+            <!-- NOTES -->
 <!--        {% for note in event.notes.all %}-->
 <!--            {% if request.user == note.author %}-->
 <!--                {% if note.text != '' %}-->
@@ -44,14 +62,7 @@
 <!--                {% endif %}-->
 <!--            {% endif %}-->
 <!--        {% endfor %}-->
-        <br>
-    </td>
-    <td class="align-top">
-        <a class="btn btn-outline-dark mt-1" href="{% url 'chronicles:game-event-inform' event.id %}" target="_blank">
-            <i class="icon-inform-medium"></i>
-        </a>
-        <a class="btn btn-outline-dark mt-1 disabled" href="#">
-            <i class="icon-note-medium"></i>
-        </a>
-    </td>
-</tr>
+        </div>
+    </div>
+</div>
+
