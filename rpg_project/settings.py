@@ -27,7 +27,7 @@ def get_secret(setting):
         return secrets[setting]
     except KeyError:
         raise ImproperlyConfigured("Set the {} setting".format(setting))
-    
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/

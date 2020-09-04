@@ -18,7 +18,6 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-import debug_toolbar
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,8 +37,8 @@ urlpatterns = [
 
 ]
 
-# only for development phase (= when DEBUG is True), unsuitable for production
-if settings.DEBUG:
+if 'debug_toolbar' in settings.INSTALLED_APPS:
+    import debug_toolbar
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += [path(r'__debug__', include(debug_toolbar.urls)), ]
     # was r'^__debug__' but Pycharm warned about it, so testing without ^
