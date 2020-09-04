@@ -7,7 +7,7 @@ from django.db.models import Prefetch, Q
 from django.contrib.auth.views import (
     SuccessURLAllowedHostsMixin, FormView, TemplateView, AuthenticationForm,
     REDIRECT_FIELD_NAME, HttpResponseRedirect, resolve_url, settings,
-    is_safe_url, get_current_site, never_cache, auth_logout, method_decorator,
+    url_has_allowed_host_and_scheme, get_current_site, never_cache, auth_logout, method_decorator,
     csrf_protect, auth_login, sensitive_post_parameters
 )
 from django.shortcuts import render, redirect
@@ -115,7 +115,7 @@ class LoginView(SuccessURLAllowedHostsMixin, FormView):
             self.redirect_field_name,
             self.request.GET.get(self.redirect_field_name, '')
         )
-        url_is_safe = is_safe_url(
+        url_is_safe = url_has_allowed_host_and_scheme(
             url=redirect_to,
             allowed_hosts=self.get_success_url_allowed_hosts(),
             require_https=self.request.is_secure(),
@@ -184,7 +184,7 @@ class LogoutView(SuccessURLAllowedHostsMixin, TemplateView):
                 self.redirect_field_name,
                 self.request.GET.get(self.redirect_field_name)
             )
-            url_is_safe = is_safe_url(
+            url_is_safe = url_has_allowed_host_and_scheme(
                 url=next_page,
                 allowed_hosts=self.get_success_url_allowed_hosts(),
                 require_https=self.request.is_secure(),
