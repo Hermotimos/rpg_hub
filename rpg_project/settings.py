@@ -47,7 +47,6 @@ INSTALLED_APPS = [
 
     # imported
     'crispy_forms',
-    'debug_toolbar',
 
     # own
     'chronicles',
@@ -75,6 +74,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 if not get_secret('IS_PRODUCTION'):
+    INSTALLED_APPS.append('debug_toolbar')
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
     
     
