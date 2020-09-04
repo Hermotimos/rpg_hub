@@ -7,10 +7,11 @@ from django.db.models import Prefetch, Q
 from django.contrib.auth.views import (
     SuccessURLAllowedHostsMixin, FormView, TemplateView, AuthenticationForm,
     REDIRECT_FIELD_NAME, HttpResponseRedirect, resolve_url, settings,
-    url_has_allowed_host_and_scheme, get_current_site, never_cache, auth_logout, method_decorator,
+    get_current_site, never_cache, auth_logout, method_decorator,
     csrf_protect, auth_login, sensitive_post_parameters
 )
 from django.shortcuts import render, redirect
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel
 from users.forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
