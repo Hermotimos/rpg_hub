@@ -1,7 +1,7 @@
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch, Q, ExpressionWrapper, BooleanField
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 
 from knowledge.models import KnowledgePacket
 from rpg_project.utils import handle_inform_form
@@ -63,3 +63,17 @@ def knowledge_packets_in_skills_view(request, model_name):
         'skills': skills,
     }
     return render(request, 'knowledge/skills_with_kn_packets.html', context)
+
+
+@login_required
+def knowledge_packet_view(request, kn_packet_id):
+    profile = request.user.profile
+    kn_packet = get_object_or_404(KnowledgePacket, id=kn_packet_id)
+    
+    context = {
+        'page_title': kn_packet.title,
+        'kn_packet': kn_packet,
+    }
+    if profile in kn_packet.acquired_by.all():
+        return render(request, 'knowledge/knowledge_packet.html', context)
+    return redirect('home:dupa')

@@ -1,42 +1,12 @@
 {% load static %}
-{% load custom_filters %}
 
-
+<!-- This snippet is necessary to include knowledge packets links into
+     Toponomikon and elsewhere without listing them by skills! -->
 <ul class="bullets-1 bullets-big mb-2 pl-4">
     <li>
-        <h6 class="hover-blue" data-toggle="collapse" data-target="#id_{{ kn_packet.id }}_{{ specifier }}">
+        <a class="hover-blue" href="{% url 'knowledge:knowledge-packet' kn_packet.id %}">
             {{ kn_packet.title }}
-        </h6>
-        
-        <div id="id_{{ kn_packet.id }}_{{ specifier }}" class="collapse">
-            <div class="text-justify pb-3">
-                <p class="btn btn-outline-dark icon-inform mt-1" data-toggle="modal" data-target="#infoKnPacketModal_{{ kn_packet.id }}"></p>
-                    <!-- The Modal -->
-                    <div class="modal fade" id="infoKnPacketModal_{{ kn_packet.id }}" tabindex="-1" role="dialog" aria-hidden="true">
-                        {% with informables=kn_packet.informables inform_type=kn_packet|get_model_name id_=kn_packet.id %}
-                            {% include '_inform.html' %}
-                        {% endwith %}
-                    </div>
-                <p class="btn btn-outline-dark icon-note mt-1 disabled"><a href="#"></a></p>
-
-                <br><br>
-                <h6 class="font-18 font-italic pt-1 text-justify linebreaks-style">
-                    {{ kn_packet.text|linebreaks }}
-                </h6>
-                {% for picture in kn_packet.pictures.all %}
-                    <ul class="bullets-1 pl-3">
-                        <li class="font-18 font-italic hover-blue pt-1 text-justify" data-toggle="collapse" data-target="#id{{ kn_packet.id }}_{{ picture.id }}">
-                            <p>{{ picture.description }}</p>
-                        </li>
-                    </ul>
-                    <div id="id{{ kn_packet.id }}_{{ picture.id }}" class="collapse pl-4 pb-3">
-                        <img class="img-fluid" src="{{ picture.image.url }}" alt="Knowledge packet img">
-                    </div>
-                {% endfor %}
-                <div class="text-right">
-                    <p class="btn btn-outline-secondary" data-toggle="collapse" data-target="#id_{{ kn_packet.id }}_{{ specifier }}">Zwiń</p>
-                </div>
-            </div>
-        </div>
+        </a>
     </li>
 </ul>
+
