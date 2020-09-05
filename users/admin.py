@@ -4,7 +4,7 @@ from .models import Profile
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['id', 'get_img', 'user', 'character_name', 'status', 'image']
+    list_display = ['get_img', 'user', 'character_name', 'status', 'image']
     list_editable = ['character_name', 'status', 'image']
     list_filter = ['status']
     search_fields = ['user', 'character_name']
@@ -12,8 +12,7 @@ class ProfileAdmin(admin.ModelAdmin):
     def get_img(self, obj):
         if obj.image:
             return format_html(f'<img width="40" height="40" src="{obj.image.url}">')
-        else:
-            return format_html(f'<img width="40" height="40" src="media/profile_pics/profile_default.jpg">')
+        return format_html(f'<img width="40" height="40" src="media/profile_pics/profile_default.jpg">')
 
 
 admin.site.register(Profile, ProfileAdmin)
