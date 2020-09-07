@@ -75,6 +75,17 @@
                             {% include '_post.html' %}
                         {% endwith %}
                     {% endif %}
+                
+                    {% if forloop.last and not debate.is_ended %}
+                        <tr id="page-bottom">
+                            {% if not remark.author.profile.status == 'gm' %}<td></td>{% endif %}
+                            <td>
+                                {% for profile in remark.seen_by.all %}
+                                    <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile small img">
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             
             </tbody>
