@@ -237,6 +237,7 @@ class TimeUnit(models.Model):
         related_name='events',
         blank=True,
     )
+    # TODO delete after transition to .debates is accomplished
     debate = models.OneToOneField(
         to=Debate,
         related_name='event',
