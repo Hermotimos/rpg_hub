@@ -47,7 +47,9 @@
                     </ul>
                 </td>
                 <td class="timeline-event text-justify align-top unblue-black pl-2 pr-2">
-                    <a href="#">{{ event.description_short }}</a>
+                    <a href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">
+                        {{ event.description_short }}
+                    </a>
 <!--                    {% for note in event.notes.all %}-->
 <!--                        {% if request.user == note.author %}-->
 <!--                            {% if note.text != '' %}-->
@@ -76,8 +78,7 @@
                     <ul class="bullets-4 pl-1">
                         {% for location in event.locations.all %}
                             <li>
-                                <a id="location" class="hover-pointer" href="{% url 'toponomikon:location' location.name %}"
-                                data-toggle="tooltip" data-placement="top" title="Tooltip HERE!">
+                                <a id="location" class="hover-pointer" href="{% url 'toponomikon:location' location.name %}">
                                     <small>{{ location.name }}</small>
                                 </a>
                             </li>
@@ -85,12 +86,19 @@
                     </ul>
                 </td>
                 <td class="align-center align-top unblue-black">
-                    {% if event.game.game_no > 0 %}
-                        <a href="{% url 'chronicles:chronicle-game' event.game.id %}"><small>-{{ event.game.game_no }}-</small></a>
-                    {% elif event.game.game_no == 0 %}
+                    {% if event.game.game_no == 0 %}
                         ✴
                     {% else %}
-                        <a href="{% url 'chronicles:chronicle-game' event.game.id %}"><small>-Bio-</small></a>
+                        <a href="{% url 'chronicles:chronicle-game' event.game.id %}">
+                            <small data-toggle="tooltip" data-placement="top" data-html="true"
+                                   title='<span class="font-italic px-2">"{{ event.game.title }}"</span>'>
+                                {% if event.game.game_no > 0 %}
+                                    -{{ event.game.game_no }}-
+                                {% else %}
+                                    -Bio-
+                                {% endif %}
+                            </small>
+                        </a>
                     {% endif %}
                     <a class="btn btn-outline-dark btn-sm py-0 disabled" href="#">
                         <i class="icon-note-small"></i>

@@ -1,6 +1,7 @@
 {% load static %}
 {% load custom_filters %}
 
+<div class="event-anchor" id="event_{{ event.id }}"></div>
 <div class="container">
     <div class="row border-top">
         
@@ -16,7 +17,6 @@
         
         <!-- EVENT -->
         <div class="col-12 col-sm-11 mt-2 p-0">
-            
             <!-- DESCRIPTION -->
             {% if request.user.profile in event.known_indirectly.all %}
                 <p class="font-18 font-italic px-1 py-1 text-justify">
@@ -31,7 +31,7 @@
                 {% for row in event.pictures.all|columns:3 %}
                     <div class="d-flex justify-content-center">
                         {% for picture in row %}
-                            <figure class="figure mx-auto chronicle-img mt-4 p-1">
+                            <figure class="figure mx-auto chronicle-img mb-0 mt-4 px-1">
                                 <img src="{{ picture.image.url }}" alt="Event img">
                                 {% if picture.description %}
                                     <figcaption class="figure-caption text-center pt-1">{{ picture.description }}</figcaption>

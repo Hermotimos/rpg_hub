@@ -149,3 +149,9 @@ a.link-disabled {
 .chapter-title {
         padding-top: 5px;
 }
+
+div.event-anchor {
+    height: 60px;
+    display: inline-block;
+}
+
