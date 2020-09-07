@@ -127,7 +127,6 @@ class TimeUnitManager(models.Manager):
             # 'in_timeunit__date_end',
             'date_start',
             'date_end',
-            'debate',
         )
         return qs
 
@@ -244,6 +243,11 @@ class TimeUnit(models.Model):
         on_delete=models.PROTECT,
         blank=True,
         null=True,
+    )
+    debates = models.ManyToManyField(
+        to=Debate,
+        related_name='events',
+        blank=True,
     )
     
     class Meta:
@@ -460,8 +464,7 @@ class HistoryEvent(Event):
 class GameEventManager(models.Manager):
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.select_related('game', 'in_timeunit', 'date_start', 'date_end',
-                               'debate')
+        qs = qs.select_related('game', 'in_timeunit', 'date_start', 'date_end')
         qs = qs.filter(~Q(game=None))
         return qs
 

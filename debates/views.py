@@ -127,17 +127,12 @@ def debate_view(request, debate_id):
     debate_known_directly = debate.known_directly.exclude(status='gm')
     remarks = debate.remarks.all().select_related('author__profile')
 
-    last_remark = None
-    last_remark_seen_by_imgs = []
     if debate.remarks.exclude(author__profile__status='gm'):
         last_remark = debate.remarks.order_by('-created_at')[0]
         if not debate.is_ended:
             seen_by = last_remark.seen_by.all()
             if profile not in seen_by:
                 last_remark.seen_by.add(profile)
-            last_remark_seen_by_imgs = [
-                p.image for p in last_remark.seen_by.all()
-            ]
 
     if request.method == 'POST':
         handle_inform_form(request)
@@ -167,8 +162,6 @@ def debate_view(request, debate_id):
         'debate': debate,
         'debate_known_directly': debate_known_directly,
         'remarks': remarks,
-        'last_remark': last_remark,
-        'last_remark_seen_by_imgs': last_remark_seen_by_imgs,
         'form': form,
     }
     return render(request, 'debates/debate.html', context)

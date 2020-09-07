@@ -62,6 +62,7 @@ def chronicle_game_view(request, game_id):
         'known_directly',
         'known_indirectly',
         'pictures',
+        'debates',
     )
     events = events.select_related('debate__topic')
     if not profile.status == 'gm':
@@ -90,6 +91,7 @@ def chronicle_chapter_view(request, chapter_id):
         'known_directly',
         'known_indirectly',
         'pictures',
+        'debates',
     )
     events = events.select_related('debate__topic')
     if not profile.status == 'gm':
@@ -120,6 +122,7 @@ def chronicle_all_view(request):
         'known_directly',
         'known_indirectly',
         'pictures',
+        'debates',
     )
     events = events.select_related('debate__topic')
     if not profile.status == 'gm':

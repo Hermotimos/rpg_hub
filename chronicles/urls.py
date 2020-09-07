@@ -4,7 +4,9 @@ from chronicles import views
 
 app_name = 'chronicles'
 urlpatterns = [
-    path('', views_recreate.recreate, name='recreate'),
+    # path('', views_recreate.recreate, name='recreate'),
+    path('mig/', views_recreate.migrate_debates, name='migrate-debates'),
+    
     # chronicle
     path('chronicle/contents/', views.chronicle_contents_view,
          name='chronicle-contents'),

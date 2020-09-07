@@ -18,7 +18,7 @@ class GameEventAdminForm(forms.ModelForm):
         fields = ['event_no_in_game', 'date_start', 'date_end', 'in_timeunit',
                   'description_short', 'description_long', 'threads',
                   'locations', 'known_directly', 'known_indirectly',
-                  'pictures', 'debate', ]
+                  'pictures', 'debates']
         widgets = {
             'known_directly': FilteredSelectMultiple(
                 'Known directly', False, attrs={'style': 'height:100px'}
@@ -34,6 +34,9 @@ class GameEventAdminForm(forms.ModelForm):
             ),
             'threads': FilteredSelectMultiple(
                 'Threads', False, attrs={'style': 'height:100px'}
+            ),
+            'debates': FilteredSelectMultiple(
+                'Debates', False, attrs={'style': 'height:100px'}
             ),
         }
         
@@ -55,7 +58,7 @@ class GameEventInline(admin.TabularInline):
     model = GameEvent
     fields = ['event_no_in_game', 'date_start', 'date_end', 'in_timeunit',
               'description_short', 'description_long', 'threads', 'locations',
-              'known_directly', 'known_indirectly', 'pictures', 'debate', ]
+              'known_directly', 'known_indirectly', 'pictures', 'debates' ]
     extra = 0
     form = GameEventAdminForm
     
@@ -94,11 +97,11 @@ class GameEventInline(admin.TabularInline):
                     formfield.choices)
             formfield.choices = choices
         
-        if db_field.name == 'debate':
-            choices = getattr(request, '_debate_choices_cache',
+        if db_field.name == 'debates':
+            choices = getattr(request, '_debates_choices_cache',
                               None)
             if choices is None:
-                request._main_debate_cache = choices = list(
+                request._main_debates_cache = choices = list(
                     formfield.choices)
             formfield.choices = choices
 

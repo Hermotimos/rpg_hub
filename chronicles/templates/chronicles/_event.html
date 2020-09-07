@@ -44,13 +44,15 @@
             {% endif %}
             
             <!-- DEBATES -->
-            {% if event.debate and request.user.profile not in event.known_indirectly.all %}
+            {% if event.debates and request.user.profile not in event.known_indirectly.all %}
                 <div class="font-18 font-italic text-justify px-1 py-1">
-                    <p>
-                        <a href="{% url 'debates:debate' event.debate.id %}" id="debate_{{ event.debate.id }}">
-                            ❖ Narada: {{ event.debate.name }}
-                        </a>
-                    </p>
+                    {% for debate in event.debates.all %}
+                        <p>
+                            <a href="{% url 'debates:debate' debate.id %}" id="debate_{{ debate.id }}">
+                                ❖ Narada: {{ debate.name }}
+                            </a>
+                        </p>
+                    {% endfor %}
                 </div>
             {% endif %}
             

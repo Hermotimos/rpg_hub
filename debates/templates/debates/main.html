@@ -41,7 +41,10 @@
                                 </div>
                                 <div class="d-xs-inline d-sm-block mt-lg-n2">
                                     <small class="font-11 font-italic text-muted">
-                                        {{ debate.event.game.title }}
+                                        {% for event in debate.events.all %}
+                                            {% if forloop.counter > 1 %} | {% endif %}
+                                            {{ debate.event.game.title }}
+                                        {% endfor %}
                                     </small>
                                 </div>
                             </li>

@@ -126,3 +126,14 @@ def recreate(request):
     
     return redirect('home:dupa')
     # TODO - reconnect events that took place before 'Archonat Nemetha Samatiana ' to other Periods etc.
+
+
+def migrate_debates(request):
+    debates = Debate.objects.all()
+    for debate in debates:
+        try:
+            event = GameEvent.objects.get(id=debate.event.id)
+            event.debates.add(debate)
+        except:
+            pass
+        
