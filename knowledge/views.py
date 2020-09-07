@@ -74,6 +74,6 @@ def knowledge_packet_view(request, kn_packet_id):
         'page_title': kn_packet.title,
         'kn_packet': kn_packet,
     }
-    if profile in kn_packet.acquired_by.all():
+    if profile in kn_packet.acquired_by.all() or profile.status == 'gm':
         return render(request, 'knowledge/knowledge_packet.html', context)
     return redirect('home:dupa')
