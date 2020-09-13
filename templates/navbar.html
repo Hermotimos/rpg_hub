@@ -37,10 +37,12 @@
                     <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Przygody</button>
                     <div class="dropdown-content">
                         <ul class="bullets-1 pl-4">
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'history:timeline-main' %}">Kalendarium</a></li>
+                            <li><a class="font-14 nav-link small-caps" href="{% url 'chronicles:timeline' %}">Kalendarium</a></li>
+                            {% if user.profile.status == 'gm' %}
+                                <li><a class="font-14 nav-link small-caps font-italic" href="{% url 'history:timeline-main' %}"><small>Kalendarium (stare)</small></a></li>
+                            {% endif %}
                             <li><a class="font-14 nav-link small-caps" href="{% url 'chronicles:chronicle-contents' %}">Kronika</a></li>
                             <li><a class="font-14 nav-link small-caps" href="{% url 'debates:main' %}">Narady</a></li>
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'chronicles:timeline' %}">Kalendarium 2.0</a></li>
                             <li><a class="font-14 nav-link small-caps disabled" href="#">Prosoponomikon</a></li>
                             <li><a class="font-14 nav-link small-caps" href="{% url 'toponomikon:main' %}">Toponomikon</a></li>
                         </ul>
