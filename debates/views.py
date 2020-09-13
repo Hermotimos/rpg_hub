@@ -12,12 +12,18 @@ from users.models import Profile
 @login_required
 def debates_main_view(request):
     profile = request.user.profile
+    
     debates = Debate.objects.all().prefetch_related('known_directly')
+    
     if profile.status != 'gm':
-        debates = Debate.objects.filter(known_directly=profile)
-        debates = debates.select_related('chronicle_event__game')
-        debates = debates.prefetch_related('known_directly')
-
+        debates = debates.filter(known_directly=profile)
+        events = (profile.events_known_directly.all()
+                  | profile.events_known_indirectly.all())\
+            .select_related('game')
+        debates = debates.prefetch_related(Prefetch('events', queryset=events))
+    else:
+        debates = debates.prefetch_related('events__game')
+    
     topics = Topic.objects.filter(debates__in=debates)
     topics = topics.prefetch_related(Prefetch('debates', queryset=debates))
     topics = topics.distinct()

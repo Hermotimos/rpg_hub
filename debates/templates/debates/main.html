@@ -43,7 +43,7 @@
                                     <small class="font-11 font-italic text-muted">
                                         {% for event in debate.events.all %}
                                             {% if forloop.counter > 1 %} | {% endif %}
-                                            {{ debate.event.game.title }}
+                                            {{ event.game.title }}
                                         {% endfor %}
                                     </small>
                                 </div>
