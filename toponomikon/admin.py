@@ -56,28 +56,18 @@ class LocationInline(admin.TabularInline):
         # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
         request = kwargs['request']
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
-        
-        if db_field.name == 'location_type':
-            choices = getattr(request, '_location_type_choices_cache', None)
-            if choices is None:
-                request._main_location_type_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-           
-        if db_field.name == 'in_location':
-            choices = getattr(request, '_in_location_choices_cache', None)
-            if choices is None:
-                request._main_in_location_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-           
-        if db_field.name == 'main_image':
-            choices = getattr(request, '_main_image_choices_cache', None)
-            if choices is None:
-                request._main_main_image_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-            
+        fields = [
+            'location_type',
+            'in_location',
+            'main_image',
+        ]
+        for field in fields:
+            if db_field.name == field:
+                choices = getattr(request, f'_{field}_choices_cache', None)
+                if choices is None:
+                    choices = list(formfield.choices)
+                    setattr(request, f'_{field}_choices_cache', choices)
+                formfield.choices = choices
         return formfield
     
 
@@ -96,32 +86,23 @@ class LocationAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description']
 
     def formfield_for_dbfield(self, db_field, **kwargs):
+        # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
         request = kwargs['request']
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
-    
-        if db_field.name == 'location_type':
-            choices = getattr(request, '_location_type_choices_cache', None)
-            if choices is None:
-                request._main_location_type_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-            
-        if db_field.name == 'in_location':
-            choices = getattr(request, '_in_location_choices_cache', None)
-            if choices is None:
-                request._main_in_location_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-    
-        if db_field.name == 'main_image':
-            choices = getattr(request, '_main_image_choices_cache', None)
-            if choices is None:
-                request._main_main_image_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-    
+        fields = [
+            'location_type',
+            'in_location',
+            'main_image',
+        ]
+        for field in fields:
+            if db_field.name == field:
+                choices = getattr(request, f'_{field}_choices_cache', None)
+                if choices is None:
+                    choices = list(formfield.choices)
+                    setattr(request, f'_{field}_choices_cache', choices)
+                formfield.choices = choices
         return formfield
-    
+
 
 class PrimaryLocationAdmin(admin.ModelAdmin):
     formfield_overrides = {
@@ -137,16 +118,18 @@ class PrimaryLocationAdmin(admin.ModelAdmin):
         # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
         request = kwargs['request']
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
-
-        if db_field.name == 'main_image':
-            choices = getattr(request, '_main_image_choices_cache', None)
-            if choices is None:
-                request._main_main_image_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-
+        fields = [
+            'main_image',
+        ]
+        for field in fields:
+            if db_field.name == field:
+                choices = getattr(request, f'_{field}_choices_cache', None)
+                if choices is None:
+                    choices = list(formfield.choices)
+                    setattr(request, f'_{field}_choices_cache', choices)
+                formfield.choices = choices
         return formfield
-    
+
     
 class SecondaryLocationAdmin(LocationAdmin):
     pass
@@ -161,14 +144,16 @@ class LocationTypeAdmin(admin.ModelAdmin):
         # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
         request = kwargs['request']
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
-
-        if db_field.name == 'default_img':
-            choices = getattr(request, '_default_img_choices_cache', None)
-            if choices is None:
-                request._default_img_choices_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-
+        fields = [
+            'default_img',
+        ]
+        for field in fields:
+            if db_field.name == field:
+                choices = getattr(request, f'_{field}_choices_cache', None)
+                if choices is None:
+                    choices = list(formfield.choices)
+                    setattr(request, f'_{field}_choices_cache', choices)
+                formfield.choices = choices
         return formfield
 
 

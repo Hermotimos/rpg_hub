@@ -39,7 +39,7 @@ class GameEventAdminForm(forms.ModelForm):
                 'Debates', False, attrs={'style': 'height:100px'}
             ),
         }
-        
+
 
 class ChapterAdmin(admin.ModelAdmin):
     list_display = ['chapter_no', 'title', 'image']
@@ -58,7 +58,7 @@ class GameEventInline(admin.TabularInline):
     model = GameEvent
     fields = ['event_no_in_game', 'date_start', 'date_end', 'in_timeunit',
               'description_short', 'description_long', 'threads', 'locations',
-              'known_directly', 'known_indirectly', 'pictures', 'debates' ]
+              'known_directly', 'known_indirectly', 'pictures', 'debates']
     extra = 0
     form = GameEventAdminForm
     
@@ -66,7 +66,8 @@ class GameEventInline(admin.TabularInline):
         models.TextField: {'widget': Textarea(attrs={'rows': 12, 'cols': 45})},
         models.CharField: {'widget': TextInput(attrs={'size': 15})},
         models.ForeignKey: {'widget': Select(attrs={'style': 'width:180px'})},
-        models.OneToOneField: {'widget': Select(attrs={'style': 'width:200px'})},
+        models.OneToOneField: {
+            'widget': Select(attrs={'style': 'width:200px'})},
     }
     
     def formfield_for_dbfield(self, db_field, **kwargs):
@@ -75,74 +76,25 @@ class GameEventInline(admin.TabularInline):
         # The trade-off is still very good
         request = kwargs['request']
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
-        
-        if db_field.name == 'date_start':
-            choices = getattr(request, '_date_start_choices_cache', None)
-            if choices is None:
-                request._main_date_start_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-            
-        if db_field.name == 'date_end':
-            choices = getattr(request, '_date_end_choices_cache', None)
-            if choices is None:
-                request._main_date_end_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-            
-        if db_field.name == 'in_timeunit':
-            choices = getattr(request, '_in_timeunit_choices_cache', None)
-            if choices is None:
-                request._main_in_timeunit_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-        
-        if db_field.name == 'debates':
-            choices = getattr(request, '_debates_choices_cache',
-                              None)
-            if choices is None:
-                request._main_debates_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-
-        if db_field.name == 'known_directly':
-            choices = getattr(request, '_known_directly_choices_cache', None)
-            if choices is None:
-                request._main_known_directly_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-        
-        if db_field.name == 'known_indirectly':
-            choices = getattr(request, '_known_indirectly_choices_cache', None)
-            if choices is None:
-                request._main_known_indirectly_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-            
-        if db_field.name == 'locations':
-            choices = getattr(request, '_locations_choices_cache', None)
-            if choices is None:
-                request._main_locations_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-        
-        if db_field.name == 'threads':
-            choices = getattr(request, '_threads_choices_cache', None)
-            if choices is None:
-                request._main_threads_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-
-        if db_field.name == 'pictures':
-            choices = getattr(request, '_pictures_choices_cache',
-                              None)
-            if choices is None:
-                request._main_pictures_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-
+        fields = [
+            'date_start',
+            'date_end',
+            'in_timeunit',
+            'known_directly',
+            'known_indirectly',
+            'locations',
+            'threads',
+            'pictures',
+        ]
+        for field in fields:
+            if db_field.name == field:
+                choices = getattr(request, f'_{field}_choices_cache', None)
+                if choices is None:
+                    choices = list(formfield.choices)
+                    setattr(request, f'_{field}_choices_cache', choices)
+                formfield.choices = choices
         return formfield
-
+    
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         qs = qs.prefetch_related(
@@ -178,21 +130,25 @@ class GameSessionAdmin(admin.ModelAdmin):
     list_select_related = ['chapter']
     ordering = ['-game_no']
     search_fields = ['title']
-
+    
     def formfield_for_dbfield(self, db_field, **kwargs):
         # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
+        # Reduces greatly queries in main view, doubles in detail view
+        # The trade-off is still very good
         request = kwargs['request']
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
-
-        if db_field.name == 'chapter':
-            choices = getattr(request, '_chapter_choices_cache', None)
-            if choices is None:
-                request._chapter_choices_cache = choices = list(
-                    formfield.choices)
-            formfield.choices = choices
-
+        fields = [
+            'chapter',
+        ]
+        for field in fields:
+            if db_field.name == field:
+                choices = getattr(request, f'_{field}_choices_cache', None)
+                if choices is None:
+                    choices = list(formfield.choices)
+                    setattr(request, f'_{field}_choices_cache', choices)
+                formfield.choices = choices
         return formfield
-    
+
 
 class ChronologyAdminForm(forms.ModelForm):
     class Meta:
@@ -212,8 +168,8 @@ class ChronologyAdminForm(forms.ModelForm):
 
 class ChronologyAdmin(admin.ModelAdmin):
     form = ChronologyAdminForm
-    
-    
+
+
 class TimeSpanForm(forms.ModelForm):
     class Meta:
         model = TimeUnit
@@ -228,12 +184,12 @@ class TimeSpanForm(forms.ModelForm):
                 'Known long desc', False, attrs={'style': 'height:200px'}
             ),
         }
-  
-    
+
+
 class EraAdminForm(TimeSpanForm):
     in_timeunit = forms.ModelChoiceField(queryset=Chronology.objects.all())
-    
-    
+
+
 class EraAdmin(admin.ModelAdmin):
     form = EraAdminForm
     list_display = ['id', 'name', 'name_genetive', 'date_start', 'date_end',
@@ -249,22 +205,23 @@ class EraAdmin(admin.ModelAdmin):
         models.CharField: {'widget': TextInput(attrs={'size': 12})},
         models.ForeignKey: {'widget': Select(attrs={'style': 'width:180px'})},
     }
-
+    
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         qs = qs.select_related('date_start', 'date_end', 'in_timeunit')
         return qs
-    
-    
+
+
 class PeriodAdminForm(TimeSpanForm):
     in_timeunit = forms.ModelChoiceField(queryset=Era.objects.all())
     locations = forms.ModelMultipleChoiceField(
-        queryset=SecondaryLocation.objects.filter(location_type__name='Kraina'),
+        queryset=SecondaryLocation.objects.filter(
+            location_type__name='Kraina'),
         required=False,
         widget=FilteredSelectMultiple('Secondary locations', False),
     )
-    
-    
+
+
 class PeriodAdmin(admin.ModelAdmin):
     form = PeriodAdminForm
 

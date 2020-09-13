@@ -1,12 +1,11 @@
 from django import forms
 from django.contrib import admin
-from django.contrib.admin.widgets import FilteredSelectMultiple, \
-    RelatedFieldWidgetWrapper
+from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.db import models
 from django.db.models import Q
-from django.db.models.fields import reverse_related
+from django.forms import Select
 
 from debates.models import Topic, Debate, Remark
-from history.models import ChronicleEvent
 from users.models import Profile
 
 
@@ -39,10 +38,21 @@ class DebateAdmin(admin.ModelAdmin):
     list_filter = ['topic']
     search_fields = ['name']
     
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        qs = qs.prefetch_related('chronicle_event')
-        return qs
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
+        request = kwargs['request']
+        formfield = super().formfield_for_dbfield(db_field, **kwargs)
+        fields = [
+            'topic',
+        ]
+        for field in fields:
+            if db_field.name == field:
+                choices = getattr(request, f'_{field}_choices_cache', None)
+                if choices is None:
+                    choices = list(formfield.choices)
+                    setattr(request, f'_{field}_choices_cache', choices)
+                formfield.choices = choices
+        return formfield
 
 
 class RemarkAdmin(admin.ModelAdmin):
