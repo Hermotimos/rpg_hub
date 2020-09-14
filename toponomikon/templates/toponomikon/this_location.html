@@ -15,7 +15,7 @@
                          src="{% if this_location.main_image %} {{ this_location.main_image.image.url }} {% else %} {{ this_location.location_type.default_img.image.url }} {% endif %}"
                          alt="Location img">
                     {% if this_location|get_audio_path %}
-                        <audio class="toponomikon-audio" controls>
+                        <audio class="toponomikon-audio" controls loop>
                             <!-- For Google Drive construct path by: https://docs.google.com/uc?export=download&id= plus file id -->
                             <source src="{{ this_location|get_audio_path }}" type="audio/mpeg">
                             Your browser does not support the audio element.
