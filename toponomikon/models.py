@@ -37,6 +37,7 @@ class Location(models.Model):
         related_name='locations_main_pics',
         on_delete=models.PROTECT,
     )
+    audio_path = models.TextField(blank=True, null=True)
     pictures = models.ManyToManyField(
         to=Picture,
         blank=True,

@@ -75,14 +75,17 @@ class LocationAdmin(admin.ModelAdmin):
     form = ToponomikonForm
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': 15})},
-        models.ForeignKey: {'widget': Select(attrs={'style': 'width:200px'})},
-        models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 55})},
+        models.ForeignKey: {'widget': Select(attrs={'style': 'width:150px'})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 12, 'cols': 40})},
     }
     inlines = [LocationInline]
-    list_display = ['id', 'name', 'location_type', 'in_location', 'main_image', 'description']
-    list_editable = ['name', 'location_type', 'in_location', 'main_image', 'description']
+    list_display = ['id', 'name', 'location_type', 'in_location', 'main_image',
+                    'description', 'audio_path']
+    list_editable = ['name', 'location_type', 'in_location', 'main_image',
+                     'description', 'audio_path']
     list_filter = ['location_type__name']
-    list_select_related = ['location_type__default_img', 'in_location', 'main_image']
+    list_select_related = ['location_type__default_img', 'in_location',
+                           'main_image']
     search_fields = ['name', 'description']
 
     def formfield_for_dbfield(self, db_field, **kwargs):
@@ -107,10 +110,11 @@ class LocationAdmin(admin.ModelAdmin):
 class PrimaryLocationAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.ForeignKey: {'widget': Select(attrs={'style': 'width:300px'})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 55})},
     }
     inlines = [LocationInline]
-    list_display = ['id', 'name', 'main_image', 'description']
-    list_editable = ['name', 'main_image', 'description']
+    list_display = ['id', 'name', 'main_image', 'description', 'audio_path']
+    list_editable = ['name', 'main_image', 'description', 'audio_path']
     list_select_related = ['main_image']
     search_fields = ['name', 'description']
     

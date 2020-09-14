@@ -11,9 +11,13 @@
         <header class="mb-5">
             <div class="container">
                 <div class="row">
-                    <img class="mb-4 toponomikon {% if this_location.only_indirectly %} img-grayscale {% endif %}"
+                    <img class="mb-n3 toponomikon {% if this_location.only_indirectly %} img-grayscale {% endif %}"
                          src="{% if this_location.main_image %} {{ this_location.main_image.image.url }} {% else %} {{ this_location.location_type.default_img.image.url }} {% endif %}"
                          alt="Location img">
+                    <audio class="mt-n3 px-1 pb-1" controls>
+                        <source src="https://docs.google.com/uc?export=download&id=1xidCOvjB3jinN-0_XhoYufg5K3KLe5pV" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
                 </div>
                 <div class="row mt-0 mt-sm-3">
                     <div class="col-12 col-md-1 p-0">
