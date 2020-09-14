@@ -125,3 +125,12 @@ def add_season_img(text):
 @register.filter
 def get_model_name(obj):
     return obj.__class__.__name__
+
+
+@register.filter
+def get_audio_path(obj):
+    # For Location objects:
+    try:
+        return obj.audio_path or get_audio_path(obj.in_location)
+    except AttributeError:
+        return None

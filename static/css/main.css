@@ -408,8 +408,11 @@ input.select-profile[type=checkbox]:checked + label {
 /* ---------- AUDIO ------- */
 /* --------------------------------------- */
 
-audio {
+audio.toponomikon-audio {
     height: 2rem;
     width:100%;
     max-width: 100rem;
+    margin-top: -2.17rem;
+    padding: 0 0.15rem 0 0.15rem;
+    background-color: none;
 }
