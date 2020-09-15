@@ -5,16 +5,24 @@ from rpg_project.utils import ReplaceFileStorage
 
 # TODO rename app 'imaginarion' -> 'mousarion'
 
+AUDIO_TYPES = (
+    ('npc', 'NPC'),
+    ('topoi', 'TOPOI'),
+    ('varia', 'VARIA'),
+)
+
 
 class Audio(models.Model):
     """A model to store paths to externally stored audio files."""
     
-    class AudioType(models.TextChoices):
-        npc = 'NPC'
-        topoi = 'TOPOI'
-        varia = 'VARIA'
+    # This doesn't work on PythonAnywhere... do they really handle Django 3.1?
+    # class AudioType(models.TextChoices):
+    #     npc = 'NPC'
+    #     topoi = 'TOPOI'
+    #     varia = 'VARIA'
+    # type = models.CharField(max_length=5, choices=AudioType.choices)
     
-    type = models.CharField(max_length=5, choices=AudioType.choices)
+    type = models.CharField(max_length=5, choices=AUDIO_TYPES)
     path = models.TextField()
     title = models.CharField(max_length=200, blank=True, null=True)
     info = models.TextField(max_length=500, unique=True, blank=True, null=True)
@@ -27,7 +35,7 @@ class Audio(models.Model):
 
 
 # TODO delete model, below is a replacement model (work with existing objs...)
-TYPES = (
+IMG_TYPES = (
     ('knowledge', 'KNOWLEDGE'),
     ('npc', 'NPC'),
     ('realia', 'REALIA'),
@@ -43,7 +51,7 @@ class Picture(models.Model):
 
     image = models.ImageField(upload_to='post_pics',
                               storage=ReplaceFileStorage())
-    type = models.CharField(max_length=10, choices=TYPES)
+    type = models.CharField(max_length=10, choices=IMG_TYPES)
     title = models.CharField(max_length=200, unique=True)
     description = models.CharField(max_length=200, blank=True, null=True)
 
