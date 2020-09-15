@@ -96,6 +96,7 @@ class LocationAdmin(admin.ModelAdmin):
             'location_type',
             'in_location',
             'main_image',
+            'audio',
         ]
         for field in fields:
             if db_field.name == field:
@@ -124,6 +125,7 @@ class PrimaryLocationAdmin(admin.ModelAdmin):
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
         fields = [
             'main_image',
+            'audio',
         ]
         for field in fields:
             if db_field.name == field:
