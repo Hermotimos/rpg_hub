@@ -1,9 +1,8 @@
-from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Q
 from django.db.models.signals import post_save, m2m_changed
 
-from imaginarion.models import Picture
+from imaginarion.models import Audio, Picture
 from knowledge.models import KnowledgePacket
 from rpg_project.utils import create_sorting_name
 from users.models import Profile
@@ -37,7 +36,13 @@ class Location(models.Model):
         related_name='locations_main_pics',
         on_delete=models.PROTECT,
     )
-    audio_path = models.TextField(blank=True, null=True)
+    # audio_path = models.TextField(blank=True, null=True)
+    audio = models.ForeignKey(
+        to=Audio,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+    )
     pictures = models.ManyToManyField(
         to=Picture,
         blank=True,

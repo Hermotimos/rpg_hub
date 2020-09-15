@@ -80,9 +80,9 @@ class LocationAdmin(admin.ModelAdmin):
     }
     inlines = [LocationInline]
     list_display = ['id', 'name', 'location_type', 'in_location', 'main_image',
-                    'description', 'audio_path']
+                    'description', 'audio']
     list_editable = ['name', 'location_type', 'in_location', 'main_image',
-                     'description', 'audio_path']
+                     'description', 'audio']
     list_filter = ['location_type__name']
     list_select_related = ['location_type__default_img', 'in_location',
                            'main_image']
@@ -113,8 +113,8 @@ class PrimaryLocationAdmin(admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 55})},
     }
     inlines = [LocationInline]
-    list_display = ['id', 'name', 'main_image', 'description', 'audio_path']
-    list_editable = ['name', 'main_image', 'description', 'audio_path']
+    list_display = ['id', 'name', 'main_image', 'description', 'audio']
+    list_editable = ['name', 'main_image', 'description', 'audio']
     list_select_related = ['main_image']
     search_fields = ['name', 'description']
     

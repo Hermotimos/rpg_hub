@@ -129,8 +129,10 @@ def get_model_name(obj):
 
 @register.filter
 def get_audio_path(obj):
-    # For Location objects:
     try:
-        return obj.audio_path or get_audio_path(obj.in_location)
+        if obj.audio:
+            return obj.audio.path
+        else:
+            return get_audio_path(obj.in_location)
     except AttributeError:
         return None
