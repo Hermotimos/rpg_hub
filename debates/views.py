@@ -12,9 +12,7 @@ from users.models import Profile
 @login_required
 def debates_main_view(request):
     profile = request.user.profile
-    
     debates = Debate.objects.all().prefetch_related('known_directly')
-    
     if profile.status != 'gm':
         debates = debates.filter(known_directly=profile)
         events = (profile.events_known_directly.all()
