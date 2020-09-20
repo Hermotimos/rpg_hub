@@ -8,116 +8,129 @@
 {% endblock head_extra %}
 
 {% block content %}
-       
-    <div class="text-justify pb-3">
-        {% if not debate.is_ended %}
-            <p class="btn btn-outline-dark icon-inform mt-1" data-toggle="modal" data-target="#infoLocationModal"></p>
-                <!-- The Modal -->
-                <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
-                    {% with informables=debate.informables inform_type=debate|get_model_name id_=debate.id %}
-                        {% include '_inform.html' %}
-                    {% endwith %}
-                </div>
-        {% endif %}
-        <p class="btn btn-outline-dark icon-note mt-1 disabled"><a href="#"></a></p>
-    
-        <table class="mt-5">
-            <tr>
-                <td class="align-middle"><h5>Temat:</h5></td>
-                <td>
-                    <h5 class="mr-2 mr-sm-3">
-                        <a href="{% url 'debates:main' %}#topic_{{ debate.topic.id }}">{{ debate.topic.title }}</a>
-                    </h5>
-                </td>
-            </tr>
-            {% if debate.events.all %}
-                <tr>
-                    <td class="align-middle"><h5>Kronika:</h5></td>
-                    <td>
-                        <h5 class="mr-2 mr-sm-3">
-                            {% for event in debate.events.all %}
-                                <a href="{% url 'chronicles:chronicle-game' event.game.id %}#debate_{{ debate.id }}">"{{ event.game.title }}"</a>
-                            {% endfor %}
-                        </h5>
-                    </td>
-                </tr>
-            {% endif %}
-            <tr>
-                <td class="align-middle"><h5>Uczestnicy:</h5></td>
-                <td>
-                    {% for profile in debate_known_directly %}
-                        <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile img">
-                    {% endfor %}
-                </td>
-            </tr>
-        </table>
 
-    </div>
-        
-        
-        <table>
-            <tbody>
-            
-                <!-- REMARKS -->
-                {% for remark in remarks %}
-                    {% if remark.author.profile.status == 'gm' %}
-                        <tr>
-                            <td colspan="2" class="font-18 font-italic text-justify">
-                                {{ remark.text|capfirst|linebreaks }}
-                                {% if remark.image %}
-                                    <p><img class="img-fluid mx-auto d-block" src="{{ remark.image.url }}" alt="Remark img"></p>
-                                    <br>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% else %}
-                        {% with post=remark %}
-                            {% include '_post.html' %}
+<!-- TODO - extract as _debate_header.html-->
+
+    <div class="container">
+        <div class="row">
+            {% if not debate.is_ended %}
+                <p class="btn btn-outline-dark icon-inform mt-1" data-toggle="modal" data-target="#infoLocationModal"></p>
+                    <!-- The Modal -->
+                    <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
+                        {% with informables=debate.informables inform_type=debate|get_model_name id_=debate.id %}
+                            {% include '_inform.html' %}
                         {% endwith %}
-                    {% endif %}
-                
-                    {% if forloop.last and not debate.is_ended %}
-                        <tr id="page-bottom">
-                            {% if not remark.author.profile.status == 'gm' %}<td></td>{% endif %}
-                            <td>
-                                {% for profile in remark.seen_by.all %}
-                                    <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile small img">
-                                {% endfor %}
-                            </td>
-                        </tr>
-                    {% endif %}
+                    </div>
+            {% endif %}
+            <p class="btn btn-outline-dark icon-note mt-1 disabled"><a href="#"></a></p>
+        </div>
+        <div class="row mt-3">
+            <div class="col-2 pl-0 h5">Temat:</div>
+            <div class="col-10 col-sm-10 pl-5 pl-lg-0">
+                <h5 class="mr-2 mr-sm-3">
+                    <a  class="font-italic" href="{% url 'debates:main' %}#topic_{{ debate.topic.id }}">{{ debate.topic.title }}</a>
+                </h5>
+            </div>
+        </div>
+        {% if debate.events.all %}
+            <div class="row">
+                <div class="col-2 pl-0 h5">Kronika:</div>
+                <div class="col-10 pl-5 pl-lg-0">
+                    <h5 class="mr-2 mr-sm-3">
+                        {% for event in debate.events.all %}
+                            <a class="font-italic" href="{% url 'chronicles:chronicle-game' event.game.id %}#debate_{{ debate.id }}">{{ event.game.title }}</a>
+                        {% endfor %}
+                    </h5>
+                </div>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-2 pl-0 h5">Uczestnicy:</div>
+            <div class="col-10 pl-5 pl-lg-0">
+                {% for profile in debate_known_directly %}
+                    <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile img">
                 {% endfor %}
-            
-            </tbody>
-        </table>
-        <br>
+            </div>
+        </div>
+    </div>
+
+
+<!-- TODO - extract as _debate_body.html-->
+    <div class="container mt-5 pt-5 pl-0">
+        
+        <!-- REMARKS -->
+        {% for remark in remarks %}
+            <div class="row my-3">
+                {% if remark.author.profile.status == 'gm' %}
+                    <div class="col-12">
+                        <span class="font-18 font-italic text-justify">{{ remark.text|capfirst|linebreaks }}</span>
+                        {% if remark.image %}
+                            <p><img class="img-fluid mx-auto d-block" src="{{ remark.image.url }}" alt="Remark img"></p>
+                            <br>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    {% with post=remark %}
+                        {% include '_post_divs.html' %}
+                    {% endwith %}
+                {% endif %}
+            </div>
+            {% if forloop.last and not debate.is_ended %}
+                <div class="row mt-n3" id="page-bottom">
+                    {% if remark.author.profile.status == 'gm' %}
+                        <div class="col-12">
+                            {% for profile in remark.seen_by.all %}
+                                <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile small img">
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="col-2"></div>
+                        <div class="col-10">
+                            {% for profile in remark.seen_by.all %}
+                                <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile small img">
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+        
     
         {% if debate.is_ended %}
-            <h4><b>Tak zakończyła się Wasza rozmowa.</b></h4><br>
+        <div class="row mt-5">
+            <div class="col-12">
+                <p class="mt-5 mb-0 text-center">✧</p>
+                <p class="mb-0 text-center">✧ ✦ ✧</p>
+                <p class="mb-5 mt-0 text-center">✧</p>
+            </div>
+        </div>
         {% else %}
-            <div>
-                <br>
-                <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    {% if request.user.profile.status == 'gm' %}
-                        <div class="col-md-3">
-                            {{ form.author|as_crispy_field }}
+            <div class="row mt-5">
+                <div class="col-12">
+                    <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% if request.user.profile.status == 'gm' %}
+                            <div class="col-md-3">
+                                {{ form.author|as_crispy_field }}
+                            </div>
+                        {% else %}
+                            <!--  necessary for form to validate - hidden author form field  -->
+                            <div class="collapse">
+                                {{ form.author }}
+                            </div>
+                        {% endif %}
+                        {{ form.author.errors }}
+        
+                        <div class="col-md-12">
+                            {{ form.text|as_crispy_field }}
                         </div>
-                    {% else %}
-                        <!--  necessary for form to validate - hidden author form field  -->
-                        <div class="collapse">
-                            {{ form.author }}
-                        </div>
-                    {% endif %}
-                    {{ form.author.errors }}
-    
-                    <div class="col-md-12">
-                        {{ form.text|as_crispy_field }}
-                    </div>
-                    {{ form.image|as_crispy_field }}
-                    <input class="btn btn-dark" type="submit" value="Tak rzeknij">
-                </form>
+                        {{ form.image|as_crispy_field }}
+                        <input class="btn btn-dark" type="submit" value="Tak rzeknij">
+                    </form>
+                </div>
             </div>
         {% endif %}
         
+    </div>
+
 {% endblock content %}
