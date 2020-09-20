@@ -45,13 +45,22 @@
             
             <!-- DEBATES -->
             {% if event.debates and request.user.profile not in event.known_indirectly.all %}
-                <div class="font-18 font-italic text-justify px-1 py-1">
+                <div class="mt-5">
                     {% for debate in event.debates.all %}
-                        <p>
-                            <a href="{% url 'debates:debate' debate.id %}" id="debate_{{ debate.id }}">
-                                ❖ Narada: {{ debate.name }}
-                            </a>
-                        </p>
+                    <ul class="bullets-3 pl-3">
+                        <li class="align-middle" >
+                            <span class="font-18 font-italic hover-blue text-justify" data-toggle="collapse" data-target="#debate_{{ debate.id }}">
+                                <span class="small-caps">Narada:</span> {{ debate.name }}
+                            </span>
+                            <div id="debate_{{ debate.id }}" class="collapse show pt-4">
+                                {% include 'debates/_debate_body.html' %}
+                                <div class="text-right">
+                                    <p class="btn btn-outline-secondary" data-toggle="collapse" data-target="#debate_{{ debate.id }}">Zwiń naradę</p>
+                                </div>
+                            </div>
+                            
+                        </li>
+                    </ul>
                     {% endfor %}
                 </div>
             {% endif %}

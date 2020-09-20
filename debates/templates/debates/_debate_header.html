@@ -1,0 +1,45 @@
+{% load custom_filters %}
+
+
+<div class="row">
+    {% if not debate.is_ended %}
+        <p class="btn btn-outline-dark icon-inform mt-1" data-toggle="modal" data-target="#infoLocationModal"></p>
+            <!-- The Modal -->
+            <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
+                {% with informables=debate.informables inform_type=debate|get_model_name id_=debate.id %}
+                    {% include '_inform.html' %}
+                {% endwith %}
+            </div>
+    {% endif %}
+    <p class="btn btn-outline-dark icon-note mt-1 disabled"><a href="#"></a></p>
+</div>
+<div class="row mt-3">
+    <div class="col-2 pl-0 h5">Temat:</div>
+    <div class="col-10 col-sm-10 pl-5 pl-lg-0">
+        <h5 class="mr-2 mr-sm-3">
+            <a  class="font-italic" href="{% url 'debates:main' %}#topic_{{ debate.topic.id }}">{{ debate.topic.title }}</a>
+        </h5>
+    </div>
+</div>
+{% if debate.events.all %}
+    <div class="row">
+        <div class="col-2 pl-0 h5">Kronika:</div>
+        <div class="col-10 pl-5 pl-lg-0">
+            <h5 class="mr-2 mr-sm-3">
+                {% for event in debate.events.all %}
+                    <a class="font-italic" href="{% url 'chronicles:chronicle-game' event.game.id %}#debate_{{ debate.id }}">{{ event.game.title }}</a>
+                {% endfor %}
+            </h5>
+        </div>
+    </div>
+{% endif %}
+<div class="row">
+    <div class="col-2 pl-0 h5">Uczestnicy:</div>
+    <div class="col-10 pl-5 pl-lg-0">
+        {% for profile in debate_known_directly %}
+            <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile img">
+        {% endfor %}
+    </div>
+</div>
+
+

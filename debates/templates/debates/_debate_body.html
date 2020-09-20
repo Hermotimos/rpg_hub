@@ -1,0 +1,39 @@
+{% load crispy_forms_tags %}
+
+
+<!-- REMARKS -->
+{% for remark in debate.remarks.all %}
+    <div class="row my-3">
+        {% if remark.author.profile.status == 'gm' %}
+            <div class="col-12">
+                <span class="font-18 font-italic text-justify">{{ remark.text|capfirst|linebreaks }}</span>
+                {% if remark.image %}
+                    <p><img class="img-fluid mx-auto d-block" src="{{ remark.image.url }}" alt="Remark img"></p>
+                    <br>
+                {% endif %}
+            </div>
+        {% else %}
+            {% with post=remark %}
+                {% include '_post_divs.html' %}
+            {% endwith %}
+        {% endif %}
+    </div>
+    {% if forloop.last and not debate.is_ended %}
+        <div class="row mt-n3" id="page-bottom">
+            {% if remark.author.profile.status == 'gm' %}
+                <div class="col-12">
+                    {% for profile in remark.seen_by.all %}
+                        <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile small img">
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="col-2"></div>
+                <div class="col-10">
+                    {% for profile in remark.seen_by.all %}
+                        <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile small img">
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endfor %}

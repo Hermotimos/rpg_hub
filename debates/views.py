@@ -125,11 +125,12 @@ def create_debate_view(request, topic_id):
 @login_required
 def debate_view(request, debate_id):
     profile = request.user.profile
-    debate = Debate.objects.select_related().get(id=debate_id)
+    debates = Debate.objects.select_related()
+    debates = debates.prefetch_related('remarks__author__profile')
+    debate = debates.get(id=debate_id)
     topic = debate.topic
 
     debate_known_directly = debate.known_directly.exclude(status='gm')
-    remarks = debate.remarks.all().select_related('author__profile')
 
     if debate.remarks.exclude(author__profile__status='gm'):
         last_remark = debate.remarks.order_by('-created_at')[0]
@@ -165,7 +166,6 @@ def debate_view(request, debate_id):
         'topic': topic,
         'debate': debate,
         'debate_known_directly': debate_known_directly,
-        'remarks': remarks,
         'form': form,
     }
     return render(request, 'debates/debate.html', context)

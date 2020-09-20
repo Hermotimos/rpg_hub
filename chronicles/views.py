@@ -62,7 +62,7 @@ def chronicle_game_view(request, game_id):
         'known_directly',
         'known_indirectly',
         'pictures',
-        'debates',
+        'debates__remarks__author__profile',
     )
     events = events.select_related('debate__topic')
     if not profile.status == 'gm':
