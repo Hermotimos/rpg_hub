@@ -57,12 +57,12 @@
                         <p class="mb-5 mt-0 text-center">✧</p>
                         <div class="row">
                             {% for row in all_locs|ordered_columns:3 %}
-                                <div class="col-sm-4">
-                                    <ul class="bullets-2 mb-0">
+                                <div class="col-sm-4 pr-0">
+                                    <ul class="bullets-2 bullets-vbig mb-0">
                                         {% for loc in row %}
                                             <li>
-                                                <a href="{% url 'toponomikon:location' loc.name %}">
-                                                    <b class="h4">{{ loc.name|slice:":1" }}</b>{{ loc.name|slice:"1:" }}
+                                                <a href="{% url 'toponomikon:location' loc.name %}" >
+                                                    <b class="h3">{{ loc.name|slice:":1" }}</b><small>{{ loc.name|slice:"1:" }}</small>
                                                 </a>
                                             </li>
                                         {% endfor %}

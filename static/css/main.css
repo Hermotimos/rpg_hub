@@ -300,7 +300,7 @@ ul.bullets-2 li {list-style: "✵";}
 ul.bullets-3 li {list-style: "❖";}
 ul.bullets-4 li {list-style: "•";}
 
-ul[class^=bullets] > li > * {padding-left: 0.5rem;}
+ul[class^=bullets] > li > * {padding-left: 0.4rem;}
 
 /*
 ul[class^=bullets] > li a {
@@ -313,6 +313,7 @@ nav ul.bullets-1 {margin-bottom: 0.5rem;}
 nav ul.bullets-1 li {color: #cbd5db;}
 
 .bullets-big li::marker {font-size: 120%;}
+.bullets-vbig li::marker {font-size: 170%;}
 
 
 
