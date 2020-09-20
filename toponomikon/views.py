@@ -1,9 +1,7 @@
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch, Q, When, Case, Value, IntegerField
-from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Prefetch, When, Case, Value, IntegerField
+from django.shortcuts import render, redirect
 
-from knowledge.models import KnowledgePacket
 from rpg_project.utils import handle_inform_form
 from toponomikon.models import Location, LocationType, PrimaryLocation, \
     SecondaryLocation
@@ -12,37 +10,36 @@ from toponomikon.models import Location, LocationType, PrimaryLocation, \
 @login_required
 def toponomikon_main_view(request):
     profile = request.user.profile
-    locations = PrimaryLocation.objects.prefetch_related('locations')
+    all_locs = Location.objects.values('name')
+    primary_locs = PrimaryLocation.objects.prefetch_related('locations')
     
-    if not profile.status == 'gm':
-        locations = PrimaryLocation.objects.filter(
-            Q(id__in=profile.locs_known_directly.all())
-            | Q(id__in=profile.locs_known_indirectly.all())
-        )
-        locations = locations.prefetch_related(
+    if profile.status != 'gm':
+        known_dir = profile.locs_known_directly.all()
+        known_indir = profile.locs_known_indirectly.all()
+        all_known = (known_dir | known_indir)
+        
+        all_locs = all_locs.filter(id__in=all_known)
+        primary_locs = PrimaryLocation.objects.filter(id__in=all_known)
+        primary_locs = primary_locs.prefetch_related(
             Prefetch(
                 'locations',
-                queryset=SecondaryLocation.objects.filter(
-                    id__in=(profile.locs_known_directly.all()
-                            | profile.locs_known_indirectly.all())
-                )
+                queryset=SecondaryLocation.objects.filter(id__in=all_known)
             )
         )
-        known_only_indirectly = profile.locs_known_indirectly.exclude(
-            id__in=profile.locs_known_directly.all()
-        )
-        locations = locations.annotate(
+        known_only_indirectly = known_indir.exclude(id__in=known_dir)
+        primary_locs = primary_locs.annotate(
             only_indirectly=Case(
                 When(id__in=known_only_indirectly, then=Value(1)),
                 default=Value(0),
                 output_field=IntegerField(),
             ),
         )
-    locations = locations.select_related('main_image')
+    primary_locs = primary_locs.select_related('main_image')
     
     context = {
         'page_title': 'Toponomikon',
-        'locations': locations,
+        'all_locs': all_locs,
+        'primary_locs': primary_locs,
     }
     return render(request, 'toponomikon/toponomikon_main.html', context)
 

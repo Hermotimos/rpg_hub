@@ -7,13 +7,75 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <article class="top-space">
-        <div class="container">
-            {% for location in locations %}
-                {% include 'toponomikon/_location.html' %}
-            {% endfor %}
+
+    <article class="tabset top-space">
+        
+        <!-- TABS -->
+        <!-- Locations tab -->
+        {% if primary_locs %}
+            <input type="radio" name="tabset" id="tab1" aria-controls="locations" checked>
+            <label class="h3" for="tab1">Lokacje</label>
+        {% endif %}
+        
+        <!-- Index tab -->
+        {% if all_locs %}
+            {% if not primary_locs %}
+                <input type="radio" name="tabset" id="tab2" aria-controls="index" checked>
+            {% else %}
+                <input type="radio" name="tabset" id="tab2" aria-controls="index">
+            {% endif %}
+            <label class="h3" for="tab2">Indeks</label>
+        {% endif %}
+        
+        
+        <!-- TABS CONTENT -->
+        <div class="tab-panels">
+            <!-- Locations content -->
+            {% if primary_locs %}
+                <section id="locations" class="tab-panel pt-1">
+                    <div class="container">
+                        <p class="mt-5 mb-0 text-center">✧</p>
+                        <p class="mb-0 text-center">✧ ✦ ✧</p>
+                        <p class="h3 text-center mb-1">Krainy</p>
+                        <p class="mb-0 text-center">✧ ✦ ✧</p>
+                        <p class="mb-5 mt-0 text-center">✧</p>
+                        {% for location in primary_locs %}
+                            {% include 'toponomikon/_location.html' %}
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endif %}
+            
+            <!-- Index content -->
+            {% if all_locs %}
+                <section id="index" class="tab-panel pt-1">
+                    <div class="container">
+                        <p class="mt-5 mb-0 text-center">✧</p>
+                        <p class="mb-0 text-center">✧ ✦ ✧</p>
+                        <p class="h3 text-center mb-1">Indeks geograficzny</p>
+                        <p class="mb-0 text-center">✧ ✦ ✧</p>
+                        <p class="mb-5 mt-0 text-center">✧</p>
+                        <div class="row">
+                            {% for row in all_locs|ordered_columns:3 %}
+                                <div class="col-sm-4">
+                                    <ul class="bullets-2 mb-0">
+                                        {% for loc in row %}
+                                            <li>
+                                                <a href="{% url 'toponomikon:location' loc.name %}">
+                                                    <b class="h4">{{ loc.name|slice:":1" }}</b>{{ loc.name|slice:"1:" }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
+            {% endif %}
         </div>
     </article>
+
 {% endblock content %}
 
 

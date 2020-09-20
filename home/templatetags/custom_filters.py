@@ -66,6 +66,30 @@ def columns(thelist, n):
 
 
 @register.filter
+def ordered_columns(thelist, n):
+    try:
+        n = int(n)
+        thelist = list(thelist)
+    except (ValueError, TypeError):
+        return [thelist]
+    list_len = len(thelist)
+    split = list_len // n
+    if list_len % n != 0:
+        split += 1
+    res = []
+    # print(thelist)
+    for i in range(split + 1):
+        # print('indx', i)
+        # print('appended:', thelist[0:split])
+        if thelist[0:split]:
+            res.append(thelist[0:split])
+            thelist = thelist[split:]
+            print('thelist:', thelist)
+    # print('RES:', res)
+    return res
+
+
+@register.filter
 def percentage(value):
     return format(value, "%")
 
