@@ -54,7 +54,9 @@
   /* Uncomment for 3D effect */
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
- 
+
+
+/* INFORM */
 .icon-inform:before { content: '\e800'; } /* '' */
 .icon-inform-small:before {
     content: '\e800';
@@ -66,6 +68,7 @@
 }
 
 
+/* NOTE */
 .icon-note:before { content: '\e802'; } /* '' */
 .icon-note-small:before {
     content: '\e802';
@@ -76,6 +79,8 @@
     font-size: 0.8rem;
 }
 
+
+/* EDIT */
 .icon-edit:before { content: '\e803'; } /* '' */
 .icon-edit-small:before {
     content: '\e803';

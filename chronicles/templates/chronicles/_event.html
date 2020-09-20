@@ -52,8 +52,15 @@
                             <span class="font-18 font-italic hover-blue text-justify" data-toggle="collapse" data-target="#debate_{{ debate.id }}">
                                 <span class="small-caps">Narada:</span> {{ debate.name }}
                             </span>
-                            <div id="debate_{{ debate.id }}" class="collapse show pt-4">
-                                {% include 'debates/_debate_body.html' %}
+
+                            <div id="debate_{{ debate.id }}" class="collapse show">
+                                <div class="mt-2">
+                                    <a href="{% url 'debates:debate' debate.id %}" class="btn btn-outline-dark">Idź do narady</a>
+                                    <a class="btn btn-outline-secondary" href="#"  data-toggle="collapse" data-target="#debate_{{ debate.id }}">Zwiń naradę</a>
+                                </div>
+                                <div class="mt-5">
+                                    {% include 'debates/_debate_body.html' %}
+                                </div>
                                 <div class="text-right">
                                     <p class="btn btn-outline-secondary" data-toggle="collapse" data-target="#debate_{{ debate.id }}">Zwiń naradę</p>
                                 </div>
