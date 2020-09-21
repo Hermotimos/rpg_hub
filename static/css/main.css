@@ -250,6 +250,13 @@ div.img-hover-zoom {
 
 
 
+/* Required for img modal to show only imgs and center them on the screen */
+.img-modal .modal-content{display:inline-block; width:auto; max-width:1000px;}
+.img-modal .modal-dialog{text-align:center; width:auto; max-width:1000px}
+.img-modal .modal-body {background-color: none; padding: 0;}
+.img-modal .modal-body img {border: solid black;}
+
+
 
 /* ------------------------------------------------------------------------------------------------------------------ */
 /* --------------------------------- */

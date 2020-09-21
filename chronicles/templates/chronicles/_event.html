@@ -32,11 +32,22 @@
                     <div class="d-flex justify-content-center">
                         {% for picture in row %}
                             <figure class="figure mx-auto chronicle-img mb-0 mt-4 px-1">
-                                <img src="{{ picture.image.url }}" alt="Event img">
+                                <!-- Modal controls -->
+                                <img src="{{ picture.image.url }}" alt="Event img" data-toggle="modal" data-target="#imgModal{{ picture.id }}">
                                 {% if picture.description %}
                                     <figcaption class="figure-caption text-center pt-1">{{ picture.description }}</figcaption>
                                 {% endif %}
                             </figure>
+                            <!-- Modal -->
+                            <div class="modal fade img-modal" id="imgModal{{ picture.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-body">
+                                    <img src="{{ picture.image.url }}" alt="Event img">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                         {% endfor %}
                     </div>
                 {% endfor %}

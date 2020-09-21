@@ -24,12 +24,12 @@
                 <div class="row mt-0 mt-sm-3">
                     <div class="col-12 col-md-1 p-0">
                         <p class="btn btn-outline-dark icon-inform-medium mb-sm-1" data-toggle="modal" data-target="#infoLocationModal"></p>
-                            <!-- The Modal -->
-                            <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
-                                {% with informables=this_location.informables inform_type=this_location|get_model_name id_=this_location.id %}
-                                    {% include '_inform.html' %}
-                                {% endwith %}
-                            </div>
+                        <!-- The Modal -->
+                        <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
+                            {% with informables=this_location.informables inform_type=this_location|get_model_name id_=this_location.id %}
+                                {% include '_inform.html' %}
+                            {% endwith %}
+                        </div>
                         <p class="btn btn-outline-dark icon-note-medium mb-sm-1 disabled"><a href="#"></a></p>
                     </div>
                     <div class="col-12 col-md-11 p-0 pl-sm-2 pl-lg-0">
