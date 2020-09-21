@@ -94,18 +94,17 @@ td img {
 }
 
 .chronicle-img img {
-        max-width: 100%;
-        max-height: 300px;
-}
-/*
-.chronicle-img td {
-        border: none;
+    max-width: 100%;
+    max-height: 300px;
 }
 
-.chronicle-img td:hover {
-        pointer-events: none;
-}
+
+
+/*
+.chronicle-img td {border: none;}
+.chronicle-img td:hover {pointer-events: none;}
 */
+
 .img-chapter {
         float: left;
         height: 45px;
