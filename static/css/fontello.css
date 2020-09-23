@@ -90,3 +90,14 @@
     content: '\e803';
     font-size: 0.8rem;
 }
+
+/* CURSOR - arrow for locatition-up feature  */
+.icon-cursor:before { content: '\e804'; }
+.icon-cursor-small:before {
+    content: '\e804';
+    font-size: 0.6rem;
+}
+.icon-cursor-medium:before {
+    content: '\e804';
+    font-size: 0.8rem;
+}
