@@ -151,6 +151,8 @@ small.smaller {font-size: 12px;}
 /* ----- IMAGES ----- */
 /* ------------------ */
 
+img {border-style: double;}
+
 .article-img {
     height: 5rem;
     width: auto;
@@ -161,8 +163,6 @@ small.smaller {font-size: 12px;}
 @media only screen and (max-width: 600px) {
     .article-img {height: 4rem;}
 }
-
-img {border-style: double;}
 
 .img-small {
     height: 30px;
@@ -254,7 +254,6 @@ div.img-hover-zoom {
 /* Required for img modal to show only imgs and center them on the screen */
 .img-modal .modal-dialog {
     text-align:center;
-
     max-width:100rem;
     margin-top:5rem;
 }
@@ -278,10 +277,18 @@ div.img-hover-zoom {
         max-width: 19rem;
     }
 }
-
-figure > img {
-  cursor: pointer;
+.modal-backdrop
+{
+    opacity:0.9 !important;
 }
+/*
+This is now only for images with modals in Chronicle, but should be applied to
+all images - they all have to get modals, and then these can be generalized:
+*/
+figure.for-modal img,
+div.modal-body img  {pointer-events: none;}
+
+figure.for-modal {cursor: pointer;}
 
 
 
