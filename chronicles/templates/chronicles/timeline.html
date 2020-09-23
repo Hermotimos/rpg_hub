@@ -42,7 +42,11 @@
                 <td class="timeline-event-thread align-top unblue-black pl-2">
                     <ul class="bullets-1 pl-2">
                         {% for thread in event.threads.all %}
-                            <li><a id="thread" class="hover-pointer" href="#">{{ thread }}</a></li>
+                            <li class="{% if thread.is_ended %} text-muted {% endif %}">
+                                <a id="thread" class="hover-pointer {% if thread.is_ended %} text-muted {% endif %}" href="#">
+                                    {{ thread }}
+                                </a>
+                            </li>
                         {% endfor %}
                     </ul>
                 </td>
