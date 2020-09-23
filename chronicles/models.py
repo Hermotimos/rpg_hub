@@ -84,6 +84,38 @@ class Thread(models.Model):
         verbose_name = '- Thread'
 
 
+class ThreadActiveManager(models.Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(is_ended=False)
+        return qs
+
+
+class ThreadActive(Thread):
+    objects = ThreadActiveManager()
+    
+    class Meta:
+        proxy = True
+        verbose_name = '- Active Thread'
+        verbose_name_plural = '- Threads Active'
+
+
+class ThreadEndedManager(models.Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(is_ended=True)
+        return qs
+
+
+class ThreadEnded(Thread):
+    objects = ThreadEndedManager()
+    
+    class Meta:
+        proxy = True
+        verbose_name = '- Ended Thread'
+        verbose_name_plural = '- Threads Ended'
+
+
 class Date(models.Model):
     SEASONS = (
         ('1', 'Wiosny'),
@@ -128,6 +160,7 @@ class TimeUnitManager(models.Manager):
             'date_start',
             'date_end',
         )
+        qs = qs.prefetch_related('timeunits')
         return qs
 
 

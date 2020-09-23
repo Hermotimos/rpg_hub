@@ -2,14 +2,16 @@ from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
-from django.db.models import Q
-from django.forms import Textarea, TextInput, Select, SelectMultiple
+from django.forms import Textarea, TextInput, Select
 
-from chronicles.models import Thread, Date, TimeUnit, Chronology, \
-    Era, Period, HistoryEvent, Chapter, GameSession, GameEvent
-from imaginarion.models import Picture
-from toponomikon.models import Location, SecondaryLocation
-from users.models import Profile
+from chronicles.models import (
+    Thread, ThreadActive, ThreadEnded,
+    Date,
+    TimeUnit, Chronology, Era, Period, HistoryEvent, GameEvent,
+    Chapter,
+    GameSession,
+)
+from toponomikon.models import SecondaryLocation
 
 
 class GameEventAdminForm(forms.ModelForm):
@@ -39,8 +41,13 @@ class GameEventAdminForm(forms.ModelForm):
                 'Debates', False, attrs={'style': 'height:100px'}
             ),
         }
-
-
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['threads'].label = 'Active Threads'
+        self.fields['threads'].queryset = ThreadActive.objects.all()
+        
+        
 class ChapterAdmin(admin.ModelAdmin):
     list_display = ['chapter_no', 'title', 'image']
     list_editable = ['title', 'image']
@@ -52,6 +59,14 @@ class ThreadAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'is_ended']
     list_editable = ['name', 'is_ended']
     search_fields = ['name']
+
+
+class ThreadActiveAdmin(ThreadAdmin):
+    pass
+
+
+class ThreadEndedAdmin(ThreadAdmin):
+    pass
 
 
 class GameEventInline(admin.TabularInline):
@@ -69,7 +84,7 @@ class GameEventInline(admin.TabularInline):
         models.OneToOneField: {
             'widget': Select(attrs={'style': 'width:200px'})},
     }
-    
+   
     def formfield_for_dbfield(self, db_field, **kwargs):
         # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
         # Reduces greatly queries in main view, doubles in detail view
@@ -83,7 +98,7 @@ class GameEventInline(admin.TabularInline):
             'known_directly',
             'known_indirectly',
             'locations',
-            'threads',
+            # 'threads',    # To allow for filtering in GameEventAdminForm
             'pictures',
         ]
         for field in fields:
@@ -95,17 +110,6 @@ class GameEventInline(admin.TabularInline):
                 formfield.choices = choices
         return formfield
     
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        qs = qs.prefetch_related(
-            'known_directly',
-            'known_indirectly',
-            'threads',
-            'locations',
-            'pictures',
-        )
-        return qs
-
 
 class GameEventAdmin(admin.ModelAdmin):
     list_display = ['id', 'game', 'event_no_in_game', 'date_in_period',
@@ -228,6 +232,8 @@ class PeriodAdmin(admin.ModelAdmin):
 
 # Side models
 admin.site.register(Thread, ThreadAdmin)
+admin.site.register(ThreadActive, ThreadActiveAdmin)
+admin.site.register(ThreadEnded, ThreadEndedAdmin)
 admin.site.register(Date)
 admin.site.register(Chapter, ChapterAdmin)
 admin.site.register(GameSession, GameSessionAdmin)
