@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
 
-from rules.models import Skill, Synergy, Profession, Klass, EliteProfession, EliteKlass, \
-    WeaponType, Weapon, Plate, Shield
+from rules.models import Skill, Synergy, Profession, Klass, EliteProfession, \
+    EliteKlass, WeaponType, Plate, Shield
 
 
 @login_required
