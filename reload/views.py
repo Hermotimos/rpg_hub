@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 
 from history.models import Thread, Location, TimelineEvent
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, CharacterClass, CharacterProfession, EliteClass, \
-    EliteProfession, WeaponClass, Weapon
+    EliteProfession, WeaponType, Weapon
 
 
 @login_required
@@ -69,7 +69,7 @@ def reload_rules(request):
         for obj in EliteProfession.objects.all():
             obj.save()
 
-        for obj in WeaponClass.objects.all():
+        for obj in WeaponType.objects.all():
             obj.save()
         for obj in Weapon.objects.all():
             obj.save()

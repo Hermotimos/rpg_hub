@@ -333,7 +333,7 @@ class EliteProfession(models.Model):
         verbose_name_plural = 'Elite professions'
 
 
-class WeaponClass(models.Model):
+class WeaponType(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=4000, blank=True, null=True)
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
@@ -355,8 +355,8 @@ class WeaponClass(models.Model):
 
     class Meta:
         ordering = ['sorting_name']
-        verbose_name = 'Weapon class'
-        verbose_name_plural = 'Weapon classes'
+        verbose_name = 'Weapon type'
+        verbose_name_plural = 'Weapon types'
 
 
 DAMAGE_TYPES = [
@@ -387,7 +387,8 @@ CURRENCIES = [
 
 
 class Weapon(models.Model):
-    weapon_class = models.ForeignKey(to=WeaponClass, related_name='weapons', on_delete=models.PROTECT)
+    weapon_type = models.ForeignKey(to=WeaponType, related_name='weapons', on_delete=models.PROTECT)
+    # weapon_type = models.IntegerField()
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=4000, blank=True, null=True)
     pictures = models.ManyToManyField(to=Picture, related_name='weapon_pics', blank=True)

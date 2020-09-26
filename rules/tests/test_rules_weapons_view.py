@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 
 from rules import views
-from rules.models import WeaponClass, Weapon
+from rules.models import WeaponType, Weapon
 from users.models import User
 
 
@@ -14,7 +14,7 @@ class RulesWeaponsTest(TestCase):
         self.user3.profile.status = 'gm'
         self.user3.profile.save()
 
-        self.weapon_class_1 = WeaponClass.objects.create(name='Class1')
+        self.weapon_class_1 = WeaponType.objects.create(name='Class1')
         self.weapon_type_1 = Weapon.objects.create(name='Type1', weapon_class=self.weapon_class_1, delay=1,
                                                    damage_type='K', size='M', trait='Sił', avg_weight=1)
         self.weapon_type_1.allowed_profiles.set([self.user1.profile])

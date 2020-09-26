@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
 
 from rules.models import Skill, Synergy, CharacterClass, CharacterProfession, EliteClass, EliteProfession, \
-    WeaponClass, Weapon, Plate, Shield
+    WeaponType, Weapon, Plate, Shield
 
 
 @login_required
@@ -127,10 +127,10 @@ def rules_tricks_view(request):
 def rules_weapons_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
-        weapon_classes = WeaponClass.objects.all().prefetch_related('weapons__pictures')
+        weapon_classes = WeaponType.objects.all().prefetch_related('weapons__pictures')
     else:
         weapon_types = profile.allowed_weapons.prefetch_related('pictures')
-        weapon_classes = WeaponClass.objects\
+        weapon_classes = WeaponType.objects\
             .filter(weapons__allowed_profiles=profile)\
             .distinct()\
             .prefetch_related(Prefetch('weapons', queryset=weapon_types))
