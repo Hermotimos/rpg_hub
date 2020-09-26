@@ -51,7 +51,7 @@
                 <h4><b>{{ profession.name }}</b></h4>
                 <p>{{ profession.description|linebreaksbr }}</p>
             
-                <ul class="bullets-1 bullets-big">
+                <ul class="bullets-1 bullets-big ml-4">
                     {% for klass in profession.klasses.all %}
                         <li>
                             <h5 data-toggle="collapse" data-target="#{{ klass.short_name }}">
@@ -128,7 +128,7 @@
             Od momentu deklaracji otwarcia nowej Klasy dalszy rozwój przebiega mniej więcej równolegle,
             to znaczy, że Gracz ma prawo rozdysponować nowo otrzymywane doświadczenie między Klasę wiodącą a dodatkową, wedle następujących zasad:
         </p>
-            <ol class="rules">
+            <ol class="rules ml-4">
                 <li>
                     Punkty doświadczenia za działania cechujące daną Klasę czy to wiodącą, czy dodatkową, są przydzielane przez Mistrza Gry do tej właśnie Klasy
                     (np. za podkradanie się i ukrywanie dla Złodzieja, za tropienie i zastawianie pułapek dla Łowcy,
@@ -204,7 +204,7 @@
                 </h4>
                 <div>
                     <p>{{ elite_profession.description|linebreaksbr }}</p>
-                    <ul class="bullets-1">
+                    <ul class="bullets-1 ml-4">
                         {% for elite_klass in elite_profession.elite_klasses.all %}
                         <li>
                             <h5 data-toggle="collapse" data-target="#{{ elite_profession.short_name }}">
