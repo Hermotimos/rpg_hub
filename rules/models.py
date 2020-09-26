@@ -181,7 +181,7 @@ class SynergyLevel(models.Model):
         ordering = ['sorting_name']
 
 
-class CharacterClass(models.Model):
+class Profession(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=4000, blank=True, null=True)
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
@@ -203,20 +203,20 @@ class CharacterClass(models.Model):
 
     def allowed_list(self):
         allowed_profiles = []
-        for profession in self.professions.all():
-            for profile in profession.allowed_profiles.all():
+        for klass in self.klasses.all():
+            for profile in klass.allowed_profiles.all():
                 allowed_profiles.append(profile)
         return allowed_profiles
 
     class Meta:
         ordering = ['sorting_name']
-        verbose_name = 'Character class'
-        verbose_name_plural = 'Character classes'
+        verbose_name = 'Profession'
+        verbose_name_plural = 'Professions'
 
 
-class CharacterProfession(models.Model):
+class Klass(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    character_class = models.ForeignKey(CharacterClass, related_name='professions', on_delete=models.PROTECT)
+    profession = models.ForeignKey(Profession, related_name='klasses', on_delete=models.PROTECT)
     description = models.TextField(max_length=4000, blank=True, null=True)
     start_perks = models.TextField(max_length=4000, blank=True, null=True)
     lvl_1 = models.CharField(max_length=500, blank=True, null=True)
@@ -245,7 +245,7 @@ class CharacterProfession(models.Model):
                                               Q(status='inactive_player') |
                                               Q(status='inactive_player') |
                                               Q(status='dead_player'),
-                                              related_name='allowed_professions')
+                                              related_name='allowed_klasses')
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
@@ -265,6 +265,8 @@ class CharacterProfession(models.Model):
 
     class Meta:
         ordering = ['sorting_name']
+        verbose_name = 'Klass'
+        verbose_name_plural = 'Klasses'
 
 
 class EliteClass(models.Model):

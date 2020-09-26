@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy
 from imaginarion.models import Picture
 from knowledge.models import KnowledgePacket
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, \
-    CharacterClass, CharacterProfession, EliteClass, BooksSkill, TheologySkill, \
+    Profession, Klass, EliteClass, BooksSkill, TheologySkill, \
     EliteProfession, WeaponType, Weapon, Plate, Shield
 from users.models import Profile
 
@@ -163,8 +163,8 @@ class SynergyAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
-class CharacterProfessionInline(admin.TabularInline):
-    model = CharacterProfession
+class KlassInline(admin.TabularInline):
+    model = Klass
     extra = 2
 
     fields = ['name', 'description', 'start_perks', 'allowed_profiles']
@@ -175,19 +175,19 @@ class CharacterProfessionInline(admin.TabularInline):
     }
 
 
-class CharacterProfessionAdmin(admin.ModelAdmin):
+class KlassAdmin(admin.ModelAdmin):
     form = Form1
     formfield_overrides = {
         models.CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
         models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 60})},
     }
-    list_display = ['name', 'character_class', 'description', 'start_perks']
+    list_display = ['name', 'profession', 'description', 'start_perks']
     list_editable = ['description', 'start_perks']
     search_fields = ['name', 'description', 'start_perks']
 
 
-class CharacterClassAdmin(admin.ModelAdmin):
-    inlines = [CharacterProfessionInline]
+class ProfessionAdmin(admin.ModelAdmin):
+    inlines = [KlassInline]
     list_display = ['name', 'description']
     list_editable = ['description']
     search_fields = ['name', 'description']
@@ -280,8 +280,8 @@ admin.site.register(TheologySkill, SkillAdmin)
 admin.site.register(SkillLevel, SkillLevelAdmin)
 admin.site.register(Synergy, SynergyAdmin)
 admin.site.register(SynergyLevel, SynergyLevelAdmin)
-admin.site.register(CharacterClass, CharacterClassAdmin)
-admin.site.register(CharacterProfession, CharacterProfessionAdmin)
+admin.site.register(Profession, ProfessionAdmin)
+admin.site.register(Klass, KlassAdmin)
 admin.site.register(EliteClass, EliteClassAdmin)
 admin.site.register(EliteProfession, EliteProfessionAdmin)
 admin.site.register(WeaponType, WeaponTypeAdmin)

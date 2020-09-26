@@ -46,20 +46,20 @@
         <h2 class="rules">Lista Klas i Profesji</h2>
         <br>
         <div id="professions">
-            {% for class in classes %}
+            {% for profession in professions %}
 
                 <h4><b>{{ class.name }}</b></h4>
-                <p>{{ class.description|linebreaksbr }}</p>
+                <p>{{ profession.description|linebreaksbr }}</p>
             
                 <ul class="bullets-1 bullets-big">
-                    {% for profession in class.professions.all %}
+                    {% for klass in profession.klasses.all %}
                         <li>
-                            <h5 data-toggle="collapse" data-target="#{{ profession.short_name }}">
-                                <b class="hover-blue">{{ profession.name }}</b>
+                            <h5 data-toggle="collapse" data-target="#{{ klass.short_name }}">
+                                <b class="hover-blue">{{ klass.name }}</b>
                             </h5>
-                            <div id="{{ profession.short_name }}" class="collapse">
-                                <p>{{ profession.description|linebreaksbr }}</p>
-                                <p>{{ profession.start_perks|linebreaksbr }}</p>
+                            <div id="{{ klass.short_name }}" class="collapse">
+                                <p>{{ klass.description|linebreaksbr }}</p>
+                                <p>{{ klass.start_perks|linebreaksbr }}</p>
                                 <br>
         
                                 <table class="professions">
@@ -75,26 +75,26 @@
                                     </thead>
         
                                     <tbody class="align-center dark">
-                                        <tr><td>1</td>  <td class="align-left">&emsp;{{ profession.lvl_1 }}</td></tr>
-                                        <tr><td>2</td>  <td class="align-left">&emsp;{{ profession.lvl_2 }}</td></tr>
-                                        <tr><td>3</td>  <td class="align-left">&emsp;{{ profession.lvl_3 }}</td></tr>
-                                        <tr><td>4</td>  <td class="align-left">&emsp;{{ profession.lvl_4 }}</td></tr>
-                                        <tr><td>5</td>  <td class="align-left">&emsp;{{ profession.lvl_5 }}</td></tr>
-                                        <tr><td>6</td>  <td class="align-left">&emsp;{{ profession.lvl_6 }}</td></tr>
-                                        <tr><td>7</td>  <td class="align-left">&emsp;{{ profession.lvl_7 }}</td></tr>
-                                        <tr><td>8</td>  <td class="align-left">&emsp;{{ profession.lvl_8 }}</td></tr>
-                                        <tr><td>9</td>  <td class="align-left">&emsp;{{ profession.lvl_9 }}</td></tr>
-                                        <tr><td>10</td> <td class="align-left">&emsp;{{ profession.lvl_10 }}</td></tr>
-                                        <tr><td>11</td> <td class="align-left">&emsp;{{ profession.lvl_11 }}</td></tr>
-                                        <tr><td>12</td> <td class="align-left">&emsp;{{ profession.lvl_12 }}</td></tr>
-                                        <tr><td>13</td> <td class="align-left">&emsp;{{ profession.lvl_13 }}</td></tr>
-                                        <tr><td>14</td> <td class="align-left">&emsp;{{ profession.lvl_14 }}</td></tr>
-                                        <tr><td>15</td> <td class="align-left">&emsp;{{ profession.lvl_15 }}</td></tr>
-                                        <tr><td>16</td> <td class="align-left">&emsp;{{ profession.lvl_16 }}</td></tr>
-                                        <tr><td>17</td> <td class="align-left">&emsp;{{ profession.lvl_17 }}</td></tr>
-                                        <tr><td>18</td> <td class="align-left">&emsp;{{ profession.lvl_18 }}</td></tr>
-                                        <tr><td>19</td> <td class="align-left">&emsp;{{ profession.lvl_19 }}</td></tr>
-                                        <tr><td>20</td> <td class="align-left">&emsp;{{ profession.lvl_20 }}</td></tr>
+                                        <tr><td>1</td>  <td class="align-left">&emsp;{{ klass.lvl_1 }}</td></tr>
+                                        <tr><td>2</td>  <td class="align-left">&emsp;{{ klass.lvl_2 }}</td></tr>
+                                        <tr><td>3</td>  <td class="align-left">&emsp;{{ klass.lvl_3 }}</td></tr>
+                                        <tr><td>4</td>  <td class="align-left">&emsp;{{ klass.lvl_4 }}</td></tr>
+                                        <tr><td>5</td>  <td class="align-left">&emsp;{{ klass.lvl_5 }}</td></tr>
+                                        <tr><td>6</td>  <td class="align-left">&emsp;{{ klass.lvl_6 }}</td></tr>
+                                        <tr><td>7</td>  <td class="align-left">&emsp;{{ klass.lvl_7 }}</td></tr>
+                                        <tr><td>8</td>  <td class="align-left">&emsp;{{ klass.lvl_8 }}</td></tr>
+                                        <tr><td>9</td>  <td class="align-left">&emsp;{{ klass.lvl_9 }}</td></tr>
+                                        <tr><td>10</td> <td class="align-left">&emsp;{{ klass.lvl_10 }}</td></tr>
+                                        <tr><td>11</td> <td class="align-left">&emsp;{{ klass.lvl_11 }}</td></tr>
+                                        <tr><td>12</td> <td class="align-left">&emsp;{{ klass.lvl_12 }}</td></tr>
+                                        <tr><td>13</td> <td class="align-left">&emsp;{{ klass.lvl_13 }}</td></tr>
+                                        <tr><td>14</td> <td class="align-left">&emsp;{{ klass.lvl_14 }}</td></tr>
+                                        <tr><td>15</td> <td class="align-left">&emsp;{{ klass.lvl_15 }}</td></tr>
+                                        <tr><td>16</td> <td class="align-left">&emsp;{{ klass.lvl_16 }}</td></tr>
+                                        <tr><td>17</td> <td class="align-left">&emsp;{{ klass.lvl_17 }}</td></tr>
+                                        <tr><td>18</td> <td class="align-left">&emsp;{{ klass.lvl_18 }}</td></tr>
+                                        <tr><td>19</td> <td class="align-left">&emsp;{{ klass.lvl_19 }}</td></tr>
+                                        <tr><td>20</td> <td class="align-left">&emsp;{{ klass.lvl_20 }}</td></tr>
                                     </tbody>
                                 </table>
                                 <br><br>

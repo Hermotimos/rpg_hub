@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
 
-from rules.models import Skill, Synergy, CharacterClass, CharacterProfession, EliteClass, EliteProfession, \
+from rules.models import Skill, Synergy, Profession, Klass, EliteClass, EliteProfession, \
     WeaponType, Weapon, Plate, Shield
 
 
@@ -60,14 +60,14 @@ def rules_masteries_view(request):
 def rules_professions_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
-        classes = CharacterClass.objects.all().prefetch_related('professions')
+        professions = Profession.objects.all().prefetch_related('klasses')
         elite_classes = EliteClass.objects.all().prefetch_related('elite_professions')
     else:
-        professions = CharacterProfession.objects.filter(allowed_profiles=profile)
-        classes = CharacterClass.objects\
-            .filter(professions__allowed_profiles=profile)\
+        klasses = Klass.objects.filter(allowed_profiles=profile)
+        professions = Profession.objects\
+            .filter(klasses__allowed_profiles=profile)\
             .distinct()\
-            .prefetch_related(Prefetch('professions', queryset=professions))
+            .prefetch_related(Prefetch('klasses', queryset=klasses))
 
         elite_professions = EliteProfession.objects.filter(allowed_profiles=profile)
         elite_classes = EliteClass.objects\
@@ -76,7 +76,7 @@ def rules_professions_view(request):
 
     context = {
         'page_title': 'Klasa, Profesja i rozwój postaci',
-        'classes': classes,
+        'professions': professions,
         'elite_classes': elite_classes
     }
     return render(request, 'rules/professions.html', context)
