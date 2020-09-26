@@ -7,12 +7,15 @@ from PIL import Image
 
 
 STATUS = [
-    ('2_player_active', 'Gracz'),
-    ('3_player_inactive', 'Nieaktywny gracz'),
-    ('4_player_dead', 'Martwy gracz'),
-    ('5_npc_alive', 'BN'),
-    ('6_npc_dead', 'Martwy BN'),
-    ('gm', 'Mistrz gry'),            # Don't rename, it's used in allowed tests
+    # players
+    ('active_player', 'Gracz'),
+    ('inactive_player', 'Nieaktywny gracz'),
+    ('dead_player', 'Martwy gracz'),
+    # npc
+    ('living_npc', 'BN'),
+    ('dead_npc', 'Martwy BN'),
+    # other
+    ('gm', 'MG'),
 ]
 
 
@@ -22,7 +25,7 @@ class Profile(models.Model):
     status = models.CharField(
         max_length=50,
         choices=STATUS,
-        default='5_npc_alive',
+        default='living_npc',
     )
     image = models.ImageField(
         default='profile_pics/profile_default.jpg',
