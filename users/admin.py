@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db.models import Case, When, Value
 from django.utils.html import format_html
 
-from .models import Profile
+from users.models import Profile
 
 
 class ProfileAdmin(admin.ModelAdmin):

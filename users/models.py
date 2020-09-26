@@ -32,8 +32,6 @@ class Profile(models.Model):
         upload_to='profile_pics',
     )
     
-    
-
     class Meta:
         ordering = ['status', 'character_name']
 
