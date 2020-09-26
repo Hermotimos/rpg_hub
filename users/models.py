@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 
 from PIL import Image
 
-
 STATUS = [
     # players
     ('active_player', 'Gracz'),
@@ -31,6 +30,7 @@ class Profile(models.Model):
         default='profile_pics/profile_default.jpg',
         upload_to='profile_pics',
     )
+   
     
     class Meta:
         ordering = ['status', 'character_name']

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'chronicles',
     'contact',
     'debates',
+    'development',
     'history',
     'home',
     'imaginarion',
