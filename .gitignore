@@ -1,6 +1,8 @@
 db.sqlite3
 secret.json
 
+rpg_project/static/
+
 PyCharm_ReferenceCard.pdf
 
 .DS_Store
