@@ -127,17 +127,17 @@ def rules_tricks_view(request):
 def rules_weapons_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
-        weapon_classes = WeaponType.objects.all().prefetch_related('weapons__pictures')
+        weapon_types = WeaponType.objects.all().prefetch_related('weapons__pictures')
     else:
-        weapon_types = profile.allowed_weapons.prefetch_related('pictures')
-        weapon_classes = WeaponType.objects\
+        weapons = profile.allowed_weapons.prefetch_related('pictures')
+        weapon_types = WeaponType.objects\
             .filter(weapons__allowed_profiles=profile)\
             .distinct()\
-            .prefetch_related(Prefetch('weapons', queryset=weapon_types))
+            .prefetch_related(Prefetch('weapons', queryset=weapons))
 
     context = {
         'page_title': 'Broń',
-        'weapon_classes': weapon_classes
+        'weapon_types': weapon_types
     }
     return render(request, 'rules/weapons.html', context)
 

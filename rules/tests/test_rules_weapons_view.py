@@ -14,10 +14,10 @@ class RulesWeaponsTest(TestCase):
         self.user3.profile.status = 'gm'
         self.user3.profile.save()
 
-        self.weapon_class_1 = WeaponType.objects.create(name='Class1')
-        self.weapon_type_1 = Weapon.objects.create(name='Type1', weapon_class=self.weapon_class_1, delay=1,
+        self.weapon_type_1 = WeaponType.objects.create(name='Class1')
+        self.weapon_1 = Weapon.objects.create(name='Type1', weapon_type=self.weapon_type_1, delay=1,
                                                    damage_type='K', size='M', trait='Sił', avg_weight=1)
-        self.weapon_type_1.allowed_profiles.set([self.user1.profile])
+        self.weapon_1.allowed_profiles.set([self.user1.profile])
 
         self.url = reverse('rules:weapons')
 

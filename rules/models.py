@@ -387,12 +387,18 @@ CURRENCIES = [
 
 
 class Weapon(models.Model):
-    weapon_type = models.ForeignKey(to=WeaponType, related_name='weapons', on_delete=models.PROTECT)
-    # weapon_type = models.IntegerField()
+    weapon_type = models.ForeignKey(
+        to=WeaponType,
+        related_name='weapons',
+        on_delete=models.PROTECT,
+    )
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=4000, blank=True, null=True)
-    pictures = models.ManyToManyField(to=Picture, related_name='weapon_pics', blank=True)
-
+    pictures = models.ManyToManyField(
+        to=Picture,
+        related_name='weapon_pics',
+        blank=True,
+    )
     delay = models.PositiveSmallIntegerField()
     damage_small_dices = models.CharField(max_length=10, blank=True, null=True)
     damage_small_add = models.PositiveSmallIntegerField(blank=True, null=True)
@@ -465,12 +471,14 @@ class Plate(models.Model):
     mod_climbing = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
     mod_traps = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
 
-    allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
-                                              limit_choices_to=
-                                              Q(status='active_player') |
-                                              Q(status='inactive_player') |
-                                              Q(status='dead_player'),
-                                              related_name='allowed_plates')
+    allowed_profiles = models.ManyToManyField(
+        to=Profile,
+        blank=True,
+        limit_choices_to=Q(status='active_player')
+                         | Q(status='inactive_player')
+                         | Q(status='dead_player'),
+        related_name='allowed_plates',
+    )
     sorting_number = models.DecimalField(max_digits=3, decimal_places=2)
 
     def __str__(self):
@@ -490,19 +498,30 @@ class Plate(models.Model):
 class Shield(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=4000, blank=True, null=True)
-    pictures = models.ManyToManyField(to=Picture, related_name='shield_pics', blank=True)
-
+    pictures = models.ManyToManyField(
+        to=Picture,
+        related_name='shield_pics',
+        blank=True,
+    )
     enemies_no = models.PositiveSmallIntegerField()
-    armor_class_bonus_close_combat = models.PositiveSmallIntegerField(blank=True, null=True)
-    armor_class_bonus_distance_combat = models.PositiveSmallIntegerField(blank=True, null=True)
+    armor_class_bonus_close_combat = models.PositiveSmallIntegerField(
+        blank=True,
+        null=True,
+    )
+    armor_class_bonus_distance_combat = models.PositiveSmallIntegerField(
+        blank=True,
+        null=True,
+    )
     weight = models.DecimalField(max_digits=10, decimal_places=1)
 
-    allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
-                                              limit_choices_to=
-                                              Q(status='active_player') |
-                                              Q(status='inactive_player') |
-                                              Q(status='dead_player'),
-                                              related_name='allowed_shields')
+    allowed_profiles = models.ManyToManyField(
+        to=Profile,
+        blank=True,
+        limit_choices_to=Q(status='active_player')
+                         | Q(status='inactive_player')
+                         | Q(status='dead_player'),
+        related_name='allowed_shields',
+    )
     sorting_number = models.DecimalField(max_digits=3, decimal_places=2)
 
     def __str__(self):
