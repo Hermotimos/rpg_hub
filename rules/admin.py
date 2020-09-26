@@ -9,8 +9,8 @@ from django.utils.translation import ugettext_lazy
 from imaginarion.models import Picture
 from knowledge.models import KnowledgePacket
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, \
-    Profession, Klass, EliteClass, BooksSkill, TheologySkill, \
-    EliteProfession, WeaponType, Weapon, Plate, Shield
+    Profession, Klass, EliteProfession, BooksSkill, TheologySkill, \
+    EliteKlass, WeaponType, Weapon, Plate, Shield
 from users.models import Profile
 
 
@@ -193,8 +193,8 @@ class ProfessionAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description']
 
 
-class EliteProfessionInline(admin.TabularInline):
-    model = EliteProfession
+class EliteKlassInline(admin.TabularInline):
+    model = EliteKlass
     extra = 2
 
     form = Form1
@@ -204,20 +204,20 @@ class EliteProfessionInline(admin.TabularInline):
     }
 
 
-class EliteProfessionAdmin(admin.ModelAdmin):
+class EliteKlassAdmin(admin.ModelAdmin):
     form = Form1
     formfield_overrides = {
         models.CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
         models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 60})},
     }
-    list_display = ['name', 'elite_class', 'description', 'start_perks']
+    list_display = ['name', 'elite_profession', 'description', 'start_perks']
     list_editable = ['description', 'start_perks']
     search_fields = ['name', 'description', 'start_perks']
 
 
-class EliteClassAdmin(admin.ModelAdmin):
+class EliteProfessionAdmin(admin.ModelAdmin):
     form = Form1
-    inlines = [EliteProfessionInline]
+    inlines = [EliteKlassInline]
     list_display = ['name', 'description']
     list_editable = ['description']
     search_fields = ['name', 'description']
@@ -282,8 +282,8 @@ admin.site.register(Synergy, SynergyAdmin)
 admin.site.register(SynergyLevel, SynergyLevelAdmin)
 admin.site.register(Profession, ProfessionAdmin)
 admin.site.register(Klass, KlassAdmin)
-admin.site.register(EliteClass, EliteClassAdmin)
 admin.site.register(EliteProfession, EliteProfessionAdmin)
+admin.site.register(EliteKlass, EliteKlassAdmin)
 admin.site.register(WeaponType, WeaponTypeAdmin)
 admin.site.register(Weapon, WeaponAdmin)
 admin.site.register(Plate, PlateAdmin)

@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from history.models import Thread, Location, TimelineEvent
-from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, Profession, Klass, EliteClass, \
-    EliteProfession, WeaponType, Weapon
+from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, Profession, Klass, EliteProfession, \
+    EliteKlass, WeaponType, Weapon
 
 
 @login_required
@@ -64,9 +64,9 @@ def reload_rules(request):
         for obj in Klass.objects.all():
             obj.save()
 
-        for obj in EliteClass.objects.all():
-            obj.save()
         for obj in EliteProfession.objects.all():
+            obj.save()
+        for obj in EliteKlass.objects.all():
             obj.save()
 
         for obj in WeaponType.objects.all():

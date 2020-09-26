@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 
 from rules import views
-from rules.models import Profession, Klass, EliteClass, EliteProfession
+from rules.models import Profession, Klass, EliteProfession, EliteKlass
 from users.models import User
 
 
@@ -18,9 +18,9 @@ class RulesProfessionsTest(TestCase):
         self.profession1 = Klass.objects.create(name='Profession1', profession=self.class1)
         self.profession1.allowed_profiles.set([self.user1.profile])
 
-        self.elite_class1 = EliteClass.objects.create(name='EliteClass1')
+        self.elite_class1 = EliteProfession.objects.create(name='EliteClass1')
         self.elite_class1.allowed_profiles.set([self.user1.profile])
-        self.elite_profession1 = EliteProfession.objects.create(name='EliteProfession1',  elite_class=self.elite_class1)
+        self.elite_profession1 = EliteKlass.objects.create(name='EliteProfession1', elite_class=self.elite_class1)
         self.elite_profession1.allowed_profiles.set([self.user1.profile])
 
         self.url = reverse('rules:professions')

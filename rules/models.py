@@ -216,7 +216,11 @@ class Profession(models.Model):
 
 class Klass(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    profession = models.ForeignKey(Profession, related_name='klasses', on_delete=models.PROTECT)
+    profession = models.ForeignKey(
+        to=Profession,
+        related_name='klasses',
+        on_delete=models.PROTECT,
+    )
     description = models.TextField(max_length=4000, blank=True, null=True)
     start_perks = models.TextField(max_length=4000, blank=True, null=True)
     lvl_1 = models.CharField(max_length=500, blank=True, null=True)
@@ -239,13 +243,15 @@ class Klass(models.Model):
     lvl_18 = models.CharField(max_length=500, blank=True, null=True)
     lvl_19 = models.CharField(max_length=500, blank=True, null=True)
     lvl_20 = models.CharField(max_length=500, blank=True, null=True)
-    allowed_profiles = models.ManyToManyField(Profile, blank=True,
-                                              limit_choices_to=
-                                              Q(status='active_player') |
-                                              Q(status='inactive_player') |
-                                              Q(status='inactive_player') |
-                                              Q(status='dead_player'),
-                                              related_name='allowed_klasses')
+    allowed_profiles = models.ManyToManyField(
+        to=Profile,
+        blank=True,
+        limit_choices_to=Q(status='active_player')
+                         | Q(status='inactive_player')
+                         | Q(status='inactive_player')
+                         | Q(status='dead_player'),
+        related_name='allowed_klasses',
+    )
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
@@ -269,49 +275,17 @@ class Klass(models.Model):
         verbose_name_plural = 'Klasses'
 
 
-class EliteClass(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    description = models.TextField(max_length=4000, blank=True, null=True)
-    allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
-                                              limit_choices_to=
-                                              Q(status='active_player') |
-                                              Q(status='inactive_player') |
-                                              Q(status='dead_player'),
-                                              related_name='allowed_elite_classes')
-    sorting_name = models.CharField(max_length=250, blank=True, null=True)
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        if self.name:
-            self.sorting_name = create_sorting_name(self.name)
-        super().save(*args, **kwargs)
-
-    def short_name(self):
-        short_name = ''
-        for char in str(self.name):
-            if char in 'abcdefghijklmnopqrstuvwxyz':
-                short_name += char
-        return short_name
-
-    class Meta:
-        ordering = ['sorting_name']
-        verbose_name = 'Elite class'
-        verbose_name_plural = 'Elite classes'
-
-
 class EliteProfession(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    elite_class = models.ForeignKey(to=EliteClass, related_name='elite_professions', on_delete=models.PROTECT)
     description = models.TextField(max_length=4000, blank=True, null=True)
-    start_perks = models.TextField(max_length=4000, blank=True, null=True)
-    allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
-                                              limit_choices_to=
-                                              Q(status='active_player') |
-                                              Q(status='inactive_player') |
-                                              Q(status='dead_player'),
-                                              related_name='allowed_elite_professions')
+    allowed_profiles = models.ManyToManyField(
+        to=Profile,
+        blank=True,
+        limit_choices_to=Q(status='active_player')
+                         | Q(status='inactive_player')
+                         | Q(status='dead_player'),
+        related_name='allowed_elite_classes',
+    )
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
@@ -333,6 +307,46 @@ class EliteProfession(models.Model):
         ordering = ['sorting_name']
         verbose_name = 'Elite profession'
         verbose_name_plural = 'Elite professions'
+
+
+class EliteKlass(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    elite_profession = models.ForeignKey(
+        to=EliteProfession,
+        related_name='elite_klasses',
+        on_delete=models.PROTECT,
+    )
+    description = models.TextField(max_length=4000, blank=True, null=True)
+    start_perks = models.TextField(max_length=4000, blank=True, null=True)
+    allowed_profiles = models.ManyToManyField(
+        to=Profile,
+        blank=True,
+        limit_choices_to=Q(status='active_player')
+                         | Q(status='inactive_player')
+                         | Q(status='dead_player'),
+        related_name='allowed_elite_klasses',
+    )
+    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.sorting_name = create_sorting_name(self.name)
+        super().save(*args, **kwargs)
+
+    def short_name(self):
+        short_name = ''
+        for char in str(self.name):
+            if char in 'abcdefghijklmnopqrstuvwxyz':
+                short_name += char
+        return short_name
+
+    class Meta:
+        ordering = ['sorting_name']
+        verbose_name = 'Elite klass'
+        verbose_name_plural = 'Elite klasses'
 
 
 class WeaponType(models.Model):
