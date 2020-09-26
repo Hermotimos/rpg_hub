@@ -386,8 +386,8 @@ CURRENCIES = [
 ]
 
 
-class WeaponType(models.Model):
-    weapon_class = models.ForeignKey(to=WeaponClass, related_name='weapon_types', on_delete=models.PROTECT)
+class Weapon(models.Model):
+    weapon_class = models.ForeignKey(to=WeaponClass, related_name='weapons', on_delete=models.PROTECT)
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=4000, blank=True, null=True)
     pictures = models.ManyToManyField(to=Picture, related_name='weapon_pics', blank=True)
@@ -411,7 +411,7 @@ class WeaponType(models.Model):
                                               Q(status='active_player') |
                                               Q(status='inactive_player') |
                                               Q(status='dead_player'),
-                                              related_name='allowed_weapon_types')
+                                              related_name='allowed_weapons')
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
@@ -442,7 +442,7 @@ class WeaponType(models.Model):
         ordering = ['sorting_name']
 
 
-class PlateType(models.Model):
+class Plate(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=4000, blank=True, null=True)
     pictures = models.ManyToManyField(to=Picture, related_name='plate_pics', blank=True)
@@ -469,7 +469,7 @@ class PlateType(models.Model):
                                               Q(status='active_player') |
                                               Q(status='inactive_player') |
                                               Q(status='dead_player'),
-                                              related_name='allowed_plate_types')
+                                              related_name='allowed_plates')
     sorting_number = models.DecimalField(max_digits=3, decimal_places=2)
 
     def __str__(self):
@@ -486,7 +486,7 @@ class PlateType(models.Model):
         ordering = ['sorting_number']
 
 
-class ShieldType(models.Model):
+class Shield(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=4000, blank=True, null=True)
     pictures = models.ManyToManyField(to=Picture, related_name='shield_pics', blank=True)
@@ -501,7 +501,7 @@ class ShieldType(models.Model):
                                               Q(status='active_player') |
                                               Q(status='inactive_player') |
                                               Q(status='dead_player'),
-                                              related_name='allowed_shield_types')
+                                              related_name='allowed_shields')
     sorting_number = models.DecimalField(max_digits=3, decimal_places=2)
 
     def __str__(self):

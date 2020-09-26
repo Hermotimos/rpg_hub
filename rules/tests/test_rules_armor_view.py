@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 
 from rules import views
-from rules.models import PlateType, ShieldType
+from rules.models import Plate, Shield
 from users.models import User
 
 
@@ -14,12 +14,12 @@ class RulesArmorTest(TestCase):
         self.user3.profile.status = 'gm'
         self.user3.profile.save()
 
-        self.plate1 = PlateType.objects.create(name='Armor1', description='Desc-armor1', endurance=10, weight=10,
+        self.plate1 = Plate.objects.create(name='Armor1', description='Desc-armor1', endurance=10, weight=10,
                                                sorting_number=1)
         self.plate1.allowed_profiles.set([self.user1.profile])
 
-        self.shield1 = ShieldType.objects.create(name='Shield1', description='Desc-shield1', enemies_no=1, weight=10,
-                                                 sorting_number=1)
+        self.shield1 = Shield.objects.create(name='Shield1', description='Desc-shield1', enemies_no=1, weight=10,
+                                             sorting_number=1)
         self.shield1.allowed_profiles.set([self.user1.profile])
 
         self.url = reverse('rules:armor')

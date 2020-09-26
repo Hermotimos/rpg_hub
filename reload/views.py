@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 
 from history.models import Thread, Location, TimelineEvent
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, CharacterClass, CharacterProfession, EliteClass, \
-    EliteProfession, WeaponClass, WeaponType
+    EliteProfession, WeaponClass, Weapon
 
 
 @login_required
@@ -71,7 +71,7 @@ def reload_rules(request):
 
         for obj in WeaponClass.objects.all():
             obj.save()
-        for obj in WeaponType.objects.all():
+        for obj in Weapon.objects.all():
             obj.save()
 
         messages.info(request, f'Przeładowano "sorting_name" dla aplikacji "rules"!')

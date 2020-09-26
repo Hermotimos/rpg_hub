@@ -10,7 +10,7 @@ from contact.forms import (DemandsCreateForm, DemandAnswerForm,
                            PlansCreateForm, PlansModifyForm)
 from contact.models import Demand, DemandAnswer, Plan
 from rpg_project.utils import send_emails
-from rules.models import Skill, Synergy, WeaponType, PlateType
+from rules.models import Skill, Synergy, Weapon, Plate
 
 
 # ----------------------------- DEMANDS -----------------------------
@@ -201,7 +201,7 @@ def plans_main_view(request):
     plans = Plan.objects.filter(author=user).select_related('author__profile')
 
     if profile.status == 'gm':
-        models = [Skill, Synergy, WeaponType, PlateType]
+        models = [Skill, Synergy, Weapon, Plate]
         # Objs known to no profile: {'model_1': [obj1, obj2], model_2: [obj1]}
         todos = {}
         for m in models:

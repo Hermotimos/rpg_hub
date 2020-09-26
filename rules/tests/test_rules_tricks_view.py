@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 
 from rules import views
-from rules.models import PlateType
+from rules.models import Plate
 from users.models import User
 
 
@@ -14,7 +14,7 @@ class RulesTricksTest(TestCase):
         self.user3.profile.status = 'gm'
         self.user3.profile.save()
 
-        self.plate1 = PlateType.objects.create(name='Armor1', endurance=10, weight=10, sorting_number=1)
+        self.plate1 = Plate.objects.create(name='Armor1', endurance=10, weight=10, sorting_number=1)
         self.plate1.allowed_profiles.set([self.user1.profile])
 
         self.url = reverse('rules:tricks')

@@ -10,7 +10,7 @@ from imaginarion.models import Picture
 from knowledge.models import KnowledgePacket
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, \
     CharacterClass, CharacterProfession, EliteClass, BooksSkill, TheologySkill, \
-    EliteProfession, WeaponClass, WeaponType, PlateType, ShieldType
+    EliteProfession, WeaponClass, Weapon, Plate, Shield
 from users.models import Profile
 
 
@@ -224,7 +224,7 @@ class EliteClassAdmin(admin.ModelAdmin):
 
 
 class WeaponTypeInline(admin.TabularInline):
-    model = WeaponType
+    model = Weapon
     extra = 2
 
     form = Form2
@@ -254,7 +254,7 @@ class WeaponTypeAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description']
 
 
-class PlateTypeAdmin(admin.ModelAdmin):
+class PlateAdmin(admin.ModelAdmin):
     form = Form2
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
@@ -285,6 +285,6 @@ admin.site.register(CharacterProfession, CharacterProfessionAdmin)
 admin.site.register(EliteClass, EliteClassAdmin)
 admin.site.register(EliteProfession, EliteProfessionAdmin)
 admin.site.register(WeaponClass, WeaponClassAdmin)
-admin.site.register(WeaponType, WeaponTypeAdmin)
-admin.site.register(PlateType, PlateTypeAdmin)
-admin.site.register(ShieldType, ShieldTypeAdmin)
+admin.site.register(Weapon, WeaponTypeAdmin)
+admin.site.register(Plate, PlateAdmin)
+admin.site.register(Shield, ShieldTypeAdmin)

@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
 
 from rules.models import Skill, Synergy, CharacterClass, CharacterProfession, EliteClass, EliteProfession, \
-    WeaponClass, WeaponType, PlateType, ShieldType
+    WeaponClass, Weapon, Plate, Shield
 
 
 @login_required
@@ -18,11 +18,11 @@ def rules_main_view(request):
 def rules_armor_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
-        plates = PlateType.objects.all().prefetch_related('pictures')
-        shields = ShieldType.objects.all().prefetch_related('pictures')
+        plates = Plate.objects.all().prefetch_related('pictures')
+        shields = Shield.objects.all().prefetch_related('pictures')
     else:
-        plates = profile.allowed_plate_types.all().prefetch_related('pictures')
-        shields = profile.allowed_shield_types.all().prefetch_related('pictures')
+        plates = profile.allowed_plates.all().prefetch_related('pictures')
+        shields = profile.allowed_shields.all().prefetch_related('pictures')
 
     context = {
         'page_title': 'Pancerz',
@@ -112,9 +112,9 @@ def rules_traits_view(request):
 def rules_tricks_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
-        plates = PlateType.objects.all()
+        plates = Plate.objects.all()
     else:
-        plates = profile.allowed_plate_types.all()
+        plates = profile.allowed_plates.all()
 
     context = {
         'page_title': 'Podstępy',
@@ -127,13 +127,13 @@ def rules_tricks_view(request):
 def rules_weapons_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
-        weapon_classes = WeaponClass.objects.all().prefetch_related('weapon_types__pictures')
+        weapon_classes = WeaponClass.objects.all().prefetch_related('weapons__pictures')
     else:
-        weapon_types = profile.allowed_weapon_types.prefetch_related('pictures')
+        weapon_types = profile.allowed_weapons.prefetch_related('pictures')
         weapon_classes = WeaponClass.objects\
-            .filter(weapon_types__allowed_profiles=profile)\
+            .filter(weapons__allowed_profiles=profile)\
             .distinct()\
-            .prefetch_related(Prefetch('weapon_types', queryset=weapon_types))
+            .prefetch_related(Prefetch('weapons', queryset=weapon_types))
 
     context = {
         'page_title': 'Broń',
