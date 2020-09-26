@@ -7,12 +7,12 @@ from PIL import Image
 
 
 STATUS = [
-    ('1_gm', 'Mistrz gry'),
     ('2_player_active', 'Gracz'),
     ('3_player_inactive', 'Nieaktywny gracz'),
     ('4_player_dead', 'Martwy gracz'),
     ('5_npc_alive', 'BN'),
     ('6_npc_dead', 'Martwy BN'),
+    ('gm', 'Mistrz gry'),            # Don't rename, it's used in allowed tests
 ]
 
 
@@ -28,6 +28,8 @@ class Profile(models.Model):
         default='profile_pics/profile_default.jpg',
         upload_to='profile_pics',
     )
+    
+    
 
     class Meta:
         ordering = ['status', 'character_name']
