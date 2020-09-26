@@ -61,12 +61,18 @@ S_LEVELS = [
 
 
 class SkillLevel(models.Model):
-    skill = models.ForeignKey(to=Skill, related_name='skill_levels', on_delete=models.PROTECT)
+    skill = models.ForeignKey(
+        to=Skill,
+        related_name='skill_levels',
+        on_delete=models.PROTECT,
+    )
     level = models.CharField(max_length=10, choices=S_LEVELS)
     description = models.TextField(max_length=4000, blank=True, null=True)
-    acquired_by = models.ManyToManyField(to=Profile,
-                                         related_name='skill_levels',
-                                         blank=True)
+    acquired_by = models.ManyToManyField(
+        to=Profile,
+        related_name='skill_levels',
+        blank=True,
+    )
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
@@ -133,11 +139,14 @@ class HistorySkill(Skill):
 class Synergy(models.Model):
     name = models.CharField(max_length=100, verbose_name='Synergia')
     skills = models.ManyToManyField(Skill, related_name='skills')
-    allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
-                                              limit_choices_to=Q(status='active_player') |
-                                                               Q(status='inactive_player') |
-                                                               Q(status='dead_player'),
-                                              related_name='allowed_synergies')
+    allowed_profiles = models.ManyToManyField(
+        to=Profile,
+        blank=True,
+        limit_choices_to=Q(status='active_player')
+                         | Q(status='inactive_player')
+                         | Q(status='dead_player'),
+        related_name='allowed_synergies',
+    )
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
@@ -162,12 +171,18 @@ class Synergy(models.Model):
 
 
 class SynergyLevel(models.Model):
-    synergy = models.ForeignKey(Synergy, related_name='synergy_levels', on_delete=models.PROTECT)
+    synergy = models.ForeignKey(
+        to=Synergy,
+        related_name='synergy_levels',
+        on_delete=models.PROTECT,
+    )
     level = models.CharField(max_length=10, choices=S_LEVELS[1:])
     description = models.TextField(max_length=4000, blank=True, null=True)
-    acquired_by = models.ManyToManyField(to=Profile,
-                                         related_name='synergy_levels',
-                                         blank=True)
+    acquired_by = models.ManyToManyField(
+        to=Profile,
+        related_name='synergy_levels',
+        blank=True,
+    )
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
