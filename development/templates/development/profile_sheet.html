@@ -77,31 +77,31 @@
         <!-- Skills tab -->
         {% if skills %}
             <input type="radio" name="tabset" id="tab3" aria-controls="skills">
-            <label class="h3" for="tab2">Umiejetności</label>
+            <label class="h3" for="tab3">Umiejętności</label>
         {% endif %}
         
         <!-- Tricks tab -->
         {% if tricks %}
             <input type="radio" name="tabset" id="tab4" aria-controls="tricks">
-            <label class="h3" for="tab2">Podstępy</label>
+            <label class="h3" for="tab4">Podstępy</label>
         {% endif %}
         
         <!-- Achievements tab -->
         {% if achievements %}
             <input type="radio" name="tabset" id="tab5" aria-controls="achievements">
-            <label class="h3" for="tab2">Osiągnięcia</label>
+            <label class="h3" for="tab5">Osiągnięcia</label>
         {% endif %}
         
         <!-- Plans tab -->
         {% if plans %}
             <input type="radio" name="tabset" id="tab6" aria-controls="plans">
-            <label class="h3" for="tab2">Plany</label>
+            <label class="h3" for="tab6">Plany</label>
         {% endif %}
         
         <!-- Pictures tab -->
         {% if plans %}
             <input type="radio" name="tabset" id="tab7" aria-controls="pictures">
-            <label class="h3" for="tab2">Obrazy</label>
+            <label class="h3" for="tab7">Obrazy</label>
         {% endif %}
         
         
@@ -112,7 +112,7 @@
             
             <!-- Bio content -->
             <section id="bio" class="tab-panel pt-1">
-                <div class="container">
+                <div class="container mt-5 px-0">
 
                 </div>
             </section>
@@ -120,7 +120,7 @@
             <!-- Professions content -->
             {% if professions %}
                 <section id="professions" class="tab-panel pt-1">
-                    <div class="container">
+                    <div class="container mt-5 px-0">
                         Tutaj zawołać profile_klass a nie professions i klasses
                         {% for profession in professions %}
                             <div>
@@ -137,8 +137,21 @@
             <!-- Skills content -->
             {% if skills %}
                 <section id="skills" class="tab-panel pt-1">
-                    <div class="container">
-                    
+                    <div class="container mt-5 px-0">
+                        <div class="mb-4">
+                            {% with show_levels=True %}
+                                {% for skill in skills %}
+                                    {% include 'rules/_skill.html' %}
+                                {% endfor %}
+                            {% endwith %}
+                        </div>
+                        <div class="mb-4">
+                            {% with show_levels=True %}
+                                {% for synergy in synergies %}
+                                    {% include 'rules/_synergy.html' %}
+                                {% endfor %}
+                            {% endwith %}
+                        </div>
                     </div>
                 </section>
             {% endif %}
@@ -146,7 +159,7 @@
             <!-- Tricks content -->
             {% if tricks %}
                 <section id="tricks" class="tab-panel pt-1">
-                    <div class="container">
+                    <div class="container mt-5 px-0">
 
                     </div>
                 </section>
@@ -155,7 +168,7 @@
             <!-- Achievements content -->
             {% if achievements %}
                 <section id="achievements" class="tab-panel pt-1">
-                    <div class="container">
+                    <div class="container mt-5 px-0">
 
                     </div>
                 </section>
@@ -164,7 +177,7 @@
             <!-- Plans content -->
             {% if plans %}
                 <section id="plans" class="tab-panel pt-1">
-                    <div class="container">
+                    <div class="container mt-5 px-0">
 
                     </div>
                 </section>
@@ -173,7 +186,7 @@
             <!-- Pictures content -->
             {% if pictures %}
                 <section id="pictures" class="tab-panel pt-1">
-                    <div class="container">
+                    <div class="container mt-5 px-0">
 
                     </div>
                 </section>
