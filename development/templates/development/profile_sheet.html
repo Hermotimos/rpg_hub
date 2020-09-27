@@ -92,16 +92,10 @@
             <label class="h3" for="tab5">Osiągnięcia</label>
         {% endif %}
         
-        <!-- Plans tab -->
-        {% if plans %}
-            <input type="radio" name="tabset" id="tab6" aria-controls="plans">
-            <label class="h3" for="tab6">Plany</label>
-        {% endif %}
-        
         <!-- Pictures tab -->
-        {% if plans %}
-            <input type="radio" name="tabset" id="tab7" aria-controls="pictures">
-            <label class="h3" for="tab7">Obrazy</label>
+        {% if pictures %}
+            <input type="radio" name="tabset" id="tab6" aria-controls="pictures">
+            <label class="h3" for="tab6">Obrazy</label>
         {% endif %}
         
         
@@ -168,15 +162,6 @@
             <!-- Achievements content -->
             {% if achievements %}
                 <section id="achievements" class="tab-panel pt-1">
-                    <div class="container mt-5 px-0">
-
-                    </div>
-                </section>
-            {% endif %}
-            
-            <!-- Plans content -->
-            {% if plans %}
-                <section id="plans" class="tab-panel pt-1">
                     <div class="container mt-5 px-0">
 
                     </div>

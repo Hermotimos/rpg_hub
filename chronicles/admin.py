@@ -2,6 +2,7 @@ from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
+from django.db.models import Q
 from django.forms import Textarea, TextInput, Select
 
 from chronicles.models import (
@@ -12,9 +13,11 @@ from chronicles.models import (
     GameSession,
 )
 from toponomikon.models import SecondaryLocation
+from users.models import Profile
 
 
 class GameEventAdminForm(forms.ModelForm):
+    
     class Meta:
         model = GameEvent
         fields = ['event_no_in_game', 'date_start', 'date_end', 'in_timeunit',
@@ -46,6 +49,13 @@ class GameEventAdminForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['threads'].label = 'Active Threads'
         self.fields['threads'].queryset = ThreadActive.objects.all()
+        
+        self.fields['known_directly'].queryset = Profile.objects.exclude(
+            Q(status='dead_player') | Q(status='dead_npc') | Q(status='gm')
+        )
+        self.fields['known_indirectly'].queryset = Profile.objects.exclude(
+            Q(status='dead_player') | Q(status='dead_npc') | Q(status='gm')
+        )
         
         
 class ChapterAdmin(admin.ModelAdmin):

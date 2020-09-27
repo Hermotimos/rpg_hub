@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch, Q
 from django.shortcuts import render, redirect
 
+from contact.models import Plan
 from rules.models import Profession, Klass, Skill, SkillLevel, Synergy, SynergyLevel
 from users.models import Profile
 
@@ -52,9 +53,7 @@ def profile_sheet_view(request, profile_id='0'):
     synergies = synergies.distinct()
 
 
-    # XXXX tab
-    
-    
+   
     context = {
         'page_title': f'Karta postaci',
         'profile': profile,
