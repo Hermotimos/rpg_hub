@@ -10,6 +10,7 @@
     <div class="rules-styling">
         <br><br><br>
 
+        <!-- SKILLS RULES  -->
         <h2 class="rules">Umiejętności początkowe i rozwój</h2>
         <br>
         <p>
@@ -36,7 +37,8 @@
             Deklarację o wydaniu 200/500 dośw. można złożyć w dowolnym momencie w trakcie zdobywania nowego poziomu, ale najlepiej po uzyskaniu od Mistrza Gry potwierdzenia, że nauka przynosi pierwsze efekty.
         </p>
         <br><br><br>
-
+        
+        <!-- SKILLS LEVELS  -->
         <h2 class="rules">Poziomy umiejętności</h2>
         <br>
         <table>
@@ -91,7 +93,7 @@
         </table>
         <br><br><br>
 
-
+        <!-- SKILLS  -->
         <h2><b class="hover-blue" data-toggle="collapse" data-target="#skills">Lista Umiejętności</b></h2>
         <small>
             Lista Umiejętności jest otwarta. Jeśli jesteś zainteresowany Umiejętnością z listy, która nie ma jeszcze opisu albo
@@ -99,87 +101,27 @@
         </small>
         <br><br>
         <div id="skills" class="collapse">
-            {% for skill in skills %}
-                <table class="mt-n3">
-                    <thead>
-                        <tr>
-                            <th>
-                                {% if skill.image %}
-                                    <img class="img-skill" src="{{ skill.image.url }}" alt="Skill img">
-                                {% else %}
-                                    <img class="img-skill" src="{% static 'img/skill-default.png' %}" alt="Skill img">
-                                {% endif %}
-                            </th>
-                            <th colspan="2">
-                                <h1 class="pt-2" data-toggle="collapse" data-target="#{{ skill.short_name }}">
-                                    <b class="hover-blue">&nbsp;{{ skill.name }}</b>
-                                    <small class="text-muted smaller">
-                                        {% if skill.tested_trait %}
-                                            [{{ skill.tested_trait }}]
-                                        {% endif %}
-                                    </small>
-                                </h1>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody id="{{ skill.short_name }}" class="collapse">
-                            {% for skill_level in skill.skill_levels.all %}
-                                <tr class="">
-                                    <td class="align-top pt-5"></td>
-                                    {% with level_img='img/'|add:skill_level.level|add:'.png' %}
-                                    <td class="align-top pt-2">
-                                        <img class="img-numeral" src="{% static level_img %}" alt="Skill level img">
-                                    </td>
-                                    <td class="align-bottom pl-1 pt-2 text-justify">
-                                        {% if skill_level.description %}{{ skill_level.description|linebreaksbr }}{% endif %}
-                                        <br><br>
-                                    </td>
-                                    {% endwith %}
-                                </tr>
-                            {% endfor %}
-                    </tbody>
-                    <br>
-        
-                </table>
-             {% endfor %}
+            {% with show_levels=False %}
+                {% for skill in skills %}
+                    {% include 'rules/_skill.html' %}
+                {% endfor %}
+            {% endwith %}
         </div>
         <br>
-
+        
+        <!-- SYNERGIES  -->
         <h2 class="border-top"><br><b class="hover-blue" data-toggle="collapse" data-target="#synergies">Synergie</b></h2>
         <small>
             Synergie to dodatkowe bonusy z tytułu połączenia pary lub więcej Umiejętności. Lista jest otwarta.
         </small>
         <br><br>
         <div id="synergies" class="collapse">
-            {% for synergy in synergies %}
-                {% for skill in synergy.skills.all %}
-                    {% if skill.image %}
-                        <img class="img-skill" src="{{ skill.image.url }}" alt="Skill img">
-                    {% endif %}
+            {% with show_levels=False %}
+                {% for synergy in synergies %}
+                    {% include 'rules/_synergy.html' %}
                 {% endfor %}
-                <h2 class="hover-blue pt-3" data-toggle="collapse" data-target="#{{ synergy.short_name }}">
-                   &nbsp;{{ synergy.name }}
-                </h2>
-                <br>
-                <div id="{{ synergy.short_name }}" class="collapse">
-                    <table class="ml-4">
-                        {% for synergy_level in synergy.synergy_levels.all %}
-                            <tr>
-                                {% with level_img='img/'|add:synergy_level.level|add:'.png' %}
-                                    <td class="align-top pt-2">
-                                        <img class="img-numeral" src="{% static level_img %}" alt="Skill level img">
-                                    </td>
-                                    <td class="align-bottom pl-1 pt-2 text-justify">
-                                        {% if synergy_level.description %}{{ synergy_level.description|linebreaksbr }}{% endif %}
-                                        <br><br>
-                                    </td>
-                                {% endwith %}
-                            </tr>
-                        {% endfor %}
-                    </table>
-                    <br>
-                </div>
-            {% endfor %}
+            {% endwith %}
         </div>
+        
     </div>
 {% endblock content %}

@@ -1,0 +1,50 @@
+{% load static %}
+{% load custom_filters %}
+
+
+<table class="mt-2">
+    <colgroup>
+        <col style="width:9rem">
+        <col>
+        <col>
+    </colgroup>
+    <thead>
+        <tr>
+            <th class="m-0 p-0">
+                <div class="m-0 p-0">
+                    {% for skill in synergy.skills.all %}
+                        {% if skill.image %}
+                            <img class="img-skill" src="{{ skill.image.url }}" alt="Skill img">
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </th>
+            <th colspan="2"  class="m-0 p-0">
+                <h2 class="pt-3" data-toggle="collapse" data-target="#{{ synergy.short_name }}">
+                    <b class="hover-blue">
+                        &nbsp;{{ synergy.name }}
+                        {% if show_levels %}
+                            [{{ synergy.synergy_levels.all|get_max_skill_level }}]
+                        {% endif %}
+                    </b>
+                </h2>
+            </th>
+        </tr>
+    </thead>
+    <tbody id="{{ synergy.short_name }}" class="collapse">
+        {% for synergy_level in synergy.synergy_levels.all %}
+            {% with level_img='img/'|add:synergy_level.level|add:'.png' %}
+                <tr>
+                    <td class="align-top pt-5"></td>
+                    <td class="align-top pt-2">
+                        <img class="img-numeral" src="{% static level_img %}" alt="Synergy level img">
+                    </td>
+                    <td class="align-bottom pl-1 pt-2 text-justify">
+                        {% if synergy_level.description %}{{ synergy_level.description|linebreaksbr }}{% endif %}
+                        <br><br>
+                    </td>
+                </tr>
+            {% endwith %}
+        {% endfor %}
+    </tbody>
+</table>

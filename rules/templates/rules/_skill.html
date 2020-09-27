@@ -1,0 +1,47 @@
+{% load static %}
+{% load custom_filters %}
+
+
+<table class="mt-2">
+    <thead>
+        <tr>
+            <th>
+                {% if skill.image %}
+                    <img class="img-skill" src="{{ skill.image.url }}" alt="Skill img">
+                {% else %}
+                    <img class="img-skill" src="{% static 'img/skill-default.png' %}" alt="Skill img">
+                {% endif %}
+            </th>
+            <th colspan="2">
+                <h2 class="pt-3" data-toggle="collapse" data-target="#{{ skill.short_name }}">
+                    <b class="hover-blue">
+                        &nbsp;{{ skill.name }}
+                        {% if show_levels %}
+                            [{{ skill.skill_levels.all|get_max_skill_level }}]
+                        {% endif %}
+                    </b>
+                    <small class="text-muted smaller">
+                        {% if skill.tested_trait %}
+                            [{{ skill.tested_trait }}]
+                        {% endif %}
+                    </small>
+                </h2>
+            </th>
+        </tr>
+    </thead>
+    <tbody id="{{ skill.short_name }}" class="collapse">
+            {% for skill_level in skill.skill_levels.all %}
+                {% with level_img='img/'|add:skill_level.level|add:'.png' %}
+                    <tr>
+                        <td class="align-top py-3"></td>
+                        <td class="align-top pl-1 pt-3">
+                            <img class="img-numeral" src="{% static level_img %}" alt="Skill level img">
+                        </td>
+                        <td class="align-top pl-1 py-3 text-justify">
+                            {% if skill_level.description %}{{ skill_level.description|linebreaksbr }}{% endif %}
+                        </td>
+                    </tr>
+                {% endwith %}
+            {% endfor %}
+    </tbody>
+</table>
