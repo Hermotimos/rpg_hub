@@ -3,7 +3,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import LoginView, LogoutView
-from django.db.models import Prefetch, Q
+
 from django.shortcuts import render, redirect
 
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel
@@ -84,26 +84,4 @@ class CustomLoginView(LoginView):
         
 class CustomLogoutView(LogoutView):
     template_name = 'users/logout.html'
-
- 
-# CHARACTER VIEWS
-
-@login_required
-def character_tricks_view(request):
-    profile = request.user.profile
-    
-    if profile.status == 'gm':
-        players_profiles = Profile.objects.exclude(
-            Q(status='dead_player') | Q(status='living_npc')
-            | Q(status='dead_npc') | Q(status='gm')
-        )
-    else:
-        players_profiles = [profile]
-
-    context = {
-        'page_title': f'Podstępy - {profile.character_name}',
-        'players_profiles': players_profiles
-    }
-    return render(request, 'users/character_tricks.html', context)
-
 
