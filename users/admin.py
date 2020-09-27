@@ -19,20 +19,22 @@ class ProfileAdmin(admin.ModelAdmin):
         default_img = "media/profile_pics/profile_default.jpg"
         return format_html(f'<img src={default_img} width="70" height="70">')
 
-    # def get_queryset(self, request):
-    #     qs = super().get_queryset(request)
-    #     return qs.order_by(
-    #         Case(
-    #             When(status='active_player', then=Value(0)),
-    #             When(status='inactive_player', then=Value(1)),
-    #             When(status='dead_player', then=Value(2)),
-    #             When(status='living_npc', then=Value(3)),
-    #             When(status='dead_npc', then=Value(4)),
-    #             When(status='gm', then=Value(5)),
-    #             default=Value(100)
-    #         )
-    #     )
-    #     # return qs
+    # TODO This is not working. Generally should be reworked, but it's huge...
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.order_by(
+            Case(
+                When(status='active_player', then=Value(0)),
+                When(status='inactive_player', then=Value(1)),
+                When(status='dead_player', then=Value(2)),
+                When(status='living_npc', then=Value(3)),
+                When(status='dead_npc', then=Value(4)),
+                When(status='gm', then=Value(5)),
+                default=Value(100)
+            )
+        )
+        print(qs)
+        return qs
 
 
 admin.site.register(Profile, ProfileAdmin)

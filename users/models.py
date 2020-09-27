@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 
 from PIL import Image
 
+
+# TODO Statuses should be reworked. But they're used a lot in views and Q queries
 STATUS = [
     # players
     ('active_player', 'Gracz'),
