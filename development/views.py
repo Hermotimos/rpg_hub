@@ -69,3 +69,56 @@ def profile_sheet_view(request, profile_id='0'):
         return redirect('home:dupa')
     else:
         return render(request, 'development/profile_sheet.html', context)
+
+
+@login_required
+def character_skills_view(request, profile_id='0'):
+    try:
+        profile = Profile.objects.get(id=profile_id)
+    except Profile.DoesNotExist:
+        profile = request.user.profile
+    
+    skills = Skill.objects \
+        .filter(skill_levels__acquired_by=profile) \
+        .exclude(name__icontains='Doktryn') \
+        .prefetch_related(Prefetch(
+        'skill_levels',
+        queryset=SkillLevel.objects.filter(acquired_by=profile)
+    )) \
+        .distinct()
+    
+    synergies = Synergy.objects \
+        .filter(synergy_levels__acquired_by=profile) \
+        .prefetch_related(Prefetch(
+        'synergy_levels',
+        queryset=SynergyLevel.objects.filter(acquired_by=profile)
+    )) \
+        .distinct()
+    
+    context = {
+        'page_title': f'Umiejętności - {profile.character_name}',
+        'skills': skills,
+        'synergies': synergies,
+    }
+    if request.user.profile.status != 'gm' and profile_id != 0:
+        return redirect('home:dupa')
+    else:
+        return render(request, 'development/character_skills.html', context)
+
+
+@login_required
+def character_skills_for_gm_view(request):
+    profile = request.user.profile
+    profiles = Profile.objects.filter(
+        status__in=['active_player', 'inactive_player', 'dead_player']
+    )
+    
+    context = {
+        'page_title': 'Umiejętności graczy',
+        'profiles': profiles,
+    }
+    if profile.status == 'gm':
+        return render(request, 'development/character_all_skills_for_gm.html',
+                      context)
+    else:
+        return redirect('home:dupa')

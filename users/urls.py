@@ -11,9 +11,5 @@ urlpatterns = [
     path('profile/change_password/', views.change_password_view, name='change-password'),
     
     path('character-tricks/', views.character_tricks_view, name='tricks'),
-    path('character-skills:<int:profile_id>/', views.character_skills_view,
-         name='skills'),
-    path('character-skills-for-gm/', views.character_skills_for_gm_view,
-         name='skills-for-gm'),
 
 ]
