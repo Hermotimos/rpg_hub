@@ -52,7 +52,8 @@ def profile_sheet_view(request, profile_id='0'):
     )
     synergies = synergies.distinct()
 
-
+    print(professions)
+    print(profile_klasses)
    
     context = {
         'page_title': f'Karta postaci',
@@ -64,7 +65,7 @@ def profile_sheet_view(request, profile_id='0'):
         'skills': skills,
         'synergies': synergies,
     }
-    if request.user.profile.status != 'gm' and profile_id != 0:
+    if request.user.profile.status != 'gm' and profile_id == 0:
         return redirect('home:dupa')
     else:
         return render(request, 'development/profile_sheet.html', context)
