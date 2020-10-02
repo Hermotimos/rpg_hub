@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'contact',
     'debates',
     'development',
+    'equipment',
     'history',
     'home',
     'imaginarion',
@@ -165,12 +166,22 @@ LOGIN_REDIRECT_URL = 'users:profile'
 LOGIN_URL = 'users:login'
 LOGOUT_REDIRECT_URL = 'users:login'
 
+# With 2-step verification turn off:
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_USE_TLS = True
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = get_secret('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = get_secret('EMAIL_HOST_PASSWORD')
+
+
+# With 2-step verification turn on:
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = get_secret('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = get_secret('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_PASSWORD = get_secret('EMAIL_HOST_PASSWORD_TWO_STEP')
 
 
 # For debug-toolbar
