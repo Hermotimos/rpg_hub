@@ -34,10 +34,12 @@
     
     <body>
         <!--  NAVBAR  -->
-        <header class="site-header">
-            {% include 'navbar.html' %}
-        </header>
-
+        {% if user.is_authenticated %}
+            <header class="site-header">
+                {% include 'navbar.html' %}
+            </header>
+        {% endif %}
+        
         <main class="container p-sm-2">
             
             <div class="row">
@@ -67,11 +69,11 @@
                     {% endblock content %}
                 </div>
                 
-                <div class="col-md-3 pl-sm-5">
-                    {% if user.is_authenticated %}
+                {% if user.is_authenticated %}
+                    <div class="col-md-3 pl-sm-5">
                         {% include 'sidebar.html' %}
-                    {% endif %}
-                </div>
+                    </div>
+                {% endif %}
                 
                 <!--   SCROLL-UP BUTTON   -->
                 <a id="upp" class="scrollup col-md-0"></a>
