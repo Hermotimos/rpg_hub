@@ -64,16 +64,3 @@ def knowledge_packets_in_skills_view(request, model_name):
     }
     return render(request, 'knowledge/skills_with_kn_packets.html', context)
 
-
-@login_required
-def knowledge_packet_view(request, kn_packet_id):
-    profile = request.user.profile
-    kn_packet = get_object_or_404(KnowledgePacket, id=kn_packet_id)
-    
-    context = {
-        'page_title': kn_packet.title,
-        'kn_packet': kn_packet,
-    }
-    if profile in kn_packet.acquired_by.all() or profile.status == 'gm':
-        return render(request, 'knowledge/knowledge_packet.html', context)
-    return redirect('home:dupa')

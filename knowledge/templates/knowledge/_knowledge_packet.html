@@ -23,9 +23,11 @@
     <p class="btn btn-outline-dark icon-note mt-1 disabled"><a href="#"></a></p>
     
     <!-- Title -->
-    <p class="mt-5 mb-0 text-center">✧</p>
+    <p class="mt-3 mb-0 text-center">✧</p>
     <p class="mb-0 text-center">✧ ✦ ✧</p>
-    <p class="h3 text-center mb-3 mt-2">{{ kn_packet.title }}</p>
+    <p class="h3 text-center mb-3 mt-2">
+        {{ kn_packet.title|replace:":__<br>"|replace:'[0]__'|replace:'[1]__'|replace:'[2]__'|replace:'[3]__' }}
+    </p>
     <p class="mb-0 text-center">✧ ✦ ✧</p>
     <p class="mb-5 mt-0 text-center">✧</p>
 
