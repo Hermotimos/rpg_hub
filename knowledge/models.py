@@ -50,11 +50,7 @@ class MapPacket(models.Model):
         related_name='map_packets',
         blank=True,
     )
-    pictures = models.ManyToManyField(
-        to=Picture,
-        related_name='map_packets',
-        blank=True,
-    )
+    pictures = models.ManyToManyField(to=Picture, related_name='map_packets')
     sorting_name = models.CharField(max_length=250, blank=True, null=True)
 
     class Meta:
