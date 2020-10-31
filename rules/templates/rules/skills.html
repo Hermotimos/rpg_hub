@@ -100,7 +100,7 @@
             taką, której nie ma na liście (a realnie istnieje), to wyślij Dezyderat do Mistrza Gry.
         </small>
         <br><br>
-        <div id="skills" class="collapse">
+        <div id="skills" class="collapse show">
             {% with show_levels=False %}
                 {% for skill in skills %}
                     {% include 'rules/_skill.html' %}
@@ -115,7 +115,7 @@
             Synergie to dodatkowe bonusy z tytułu połączenia pary lub więcej Umiejętności. Lista jest otwarta.
         </small>
         <br><br>
-        <div id="synergies" class="collapse">
+        <div id="synergies" class="collapse show">
             {% with show_levels=False %}
                 {% for synergy in synergies %}
                     {% include 'rules/_synergy.html' %}
