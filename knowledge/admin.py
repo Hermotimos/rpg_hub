@@ -111,10 +111,73 @@ class KnowledgePacketAdmin(admin.ModelAdmin):
         return qs
 
 
+class MapPacketAdminForm(forms.ModelForm):
+    pictures = forms.ModelMultipleChoiceField(
+        queryset=Picture.objects.all(),
+        required=False,
+        widget=FilteredSelectMultiple('Pictures', False),
+    )
+    gen_locations = forms.ModelMultipleChoiceField(
+        queryset=Location.objects.filter(in_location=None),
+        required=False,
+        widget=FilteredSelectMultiple('General locations', False),
+        label=format_html('<b style="color:red">'
+                          'PRZY TWORZENIU NOWEJ ZAPIS LOKACJI JEST NIEMOŻLIWY'
+                          '<br><br>'
+                          'PODAJ LOKACJĘ W DRUGIEJ TURZE :)'
+                          '</b>'),
+    )
+    spec_locations = forms.ModelMultipleChoiceField(
+        queryset=Location.objects.filter(~Q(in_location=None)),
+        required=False,
+        widget=FilteredSelectMultiple('Specific locations', False),
+        label=format_html('<b style="color:red">'
+                          'PRZY TWORZENIU NOWEJ ZAPIS LOKACJI JEST NIEMOŻLIWY'
+                          '<br><br>'
+                          'PODAJ LOKACJĘ W DRUGIEJ TURZE :)'
+                          '</b>'),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        id_ = self.instance.id
+        if id_ is None:
+            # trick to avoid new forms being populated with previous data
+            # I don't understand why that happens, but this works...
+            # TODO research this
+            return
+        try:
+            gen_locs = Location.objects.filter(in_location=None).filter(map_packets=id_)
+            self.__dict__['initial'].update({'gen_locations': gen_locs})
+        except AttributeError:
+            pass
+        try:
+            spec_locs = Location.objects.filter(~Q(in_location=None)).filter(map_packets=id_)
+            self.__dict__['initial'].update({'spec_locations': spec_locs})
+        except AttributeError:
+            pass
+
+    def save(self, *args, **kwargs):
+        instance = super().save(*args, **kwargs)
+        gen_loc_ids = self.cleaned_data['gen_locations']
+        spec_loc_ids = self.cleaned_data['spec_locations']
+        try:
+            for gen_loc in Location.objects.filter(in_location=None).filter(id__in=gen_loc_ids):
+                gen_loc.map_packets.add(instance)
+                gen_loc.save()
+            for spec_loc in Location.objects.filter(~Q(in_location=None)).filter(id__in=spec_loc_ids):
+                spec_loc.map_packets.add(instance)
+                spec_loc.save()
+        except ValueError:
+            title = self.cleaned_data['title']
+            raise ValueError(
+                'Przy tworzeniu nowej paczki nie da się zapisać lokacji - '
+                'podaj je jeszcze raz !!!\n')
+        return instance
+
+
 class MapPacketAdmin(admin.ModelAdmin):
-    # formfield_overrides = {
-    #     models.CharField: {'widget': TextInput(attrs={'size': 50})},
-    # }
+    form = MapPacketAdminForm
     list_display = ['id', 'title', 'get_acquired_by']
     list_editable = ['title']
     search_fields = ['title']
