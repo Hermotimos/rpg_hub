@@ -169,10 +169,8 @@ class MapPacketAdminForm(forms.ModelForm):
                 spec_loc.map_packets.add(instance)
                 spec_loc.save()
         except ValueError:
-            title = self.cleaned_data['title']
-            raise ValueError(
-                'Przy tworzeniu nowej paczki nie da się zapisać lokacji - '
-                'podaj je jeszcze raz !!!\n')
+            raise ValueError('Przy tworzeniu nowej paczki nie da się zapisać '
+                             'lokacji - podaj jeszcze raz !!!\n')
         return instance
 
 
