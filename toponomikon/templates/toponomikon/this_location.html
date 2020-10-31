@@ -57,11 +57,14 @@
         
 
         <article class="tabset">
-            <!-- Tabs -->
+            
+            <!-- TAB HEADER: Locations -->
             {% if location_types %}
                 <input type="radio" name="tabset" id="tab1" aria-controls="locations" checked>
                 <label class="h3" for="tab1">Lokacje</label>
             {% endif %}
+            
+            <!-- TAB HEADER: Knowledge packets -->
             {% if this_location.knowledge_packets.all %}
                 {% if not location_types %}
                     <input type="radio" name="tabset" id="tab2" aria-controls="knowledge" checked>
@@ -70,17 +73,31 @@
                 {% endif %}
                 <label class="h3" for="tab2">Wiedza</label>
             {% endif %}
-            {% if this_location.pictures.all %}
+            
+            <!-- TAB HEADER: Map packets -->
+            {% if this_location.map_packets.all %}
                 {% if not location_types and not this_location.knowledge_packets.all %}
-                    <input type="radio" name="tabset" id="tab3" aria-controls="pictures" checked>
+                    <input type="radio" name="tabset" id="tab3" aria-controls="maps" checked>
                 {% else %}
-                    <input type="radio" name="tabset" id="tab3" aria-controls="pictures">
+                    <input type="radio" name="tabset" id="tab3" aria-controls="maps">
                 {% endif %}
-                <label class="h3" for="tab3">Obrazy</label>
+                <label class="h3" for="tab3">Mapy</label>
             {% endif %}
             
-            <!-- Tabs content -->
+            <!-- TAB HEADER: Pictures -->
+            {% if this_location.pictures.all %}
+                {% if not location_types and not this_location.knowledge_packets.all and not this_location.map_packets.all %}
+                    <input type="radio" name="tabset" id="tab4" aria-controls="pictures" checked>
+                {% else %}
+                    <input type="radio" name="tabset" id="tab4" aria-controls="pictures">
+                {% endif %}
+                <label class="h3" for="tab4">Obrazy</label>
+            {% endif %}
+            
+            
             <div class="tab-panels">
+                
+                <!-- TAB CONTENT: Locations -->
                 {% if location_types %}
                     <section id="locations" class="tab-panel pt-1">
                         <div class="container">
@@ -97,6 +114,8 @@
                         </div>
                     </section>
                 {% endif %}
+                
+                <!-- TAB CONTENT: Knowledge packets -->
                 {% if this_location.knowledge_packets.all %}
                     <section id="knowledge" class="tab-panel">
                         {% for kn_packet in this_location.knowledge_packets.all %}
@@ -104,6 +123,17 @@
                         {% endfor %}
                     </section>
                 {% endif %}
+                
+                <!-- TAB CONTENT: Map packets -->
+                {% if this_location.map_packets.all %}
+                    <section id="maps" class="tab-panel">
+                        {% for map_packet in this_location.map_packets.all %}
+                            {% include 'knowledge/_map_packet.html' %}
+                        {% endfor %}
+                    </section>
+                {% endif %}
+                
+                <!-- TAB CONTENT: Pictures -->
                 {% if this_location.pictures.all %}
                     <section id="pictures" class="tab-panel">
                         {% for picture in this_location.pictures.all %}
@@ -111,6 +141,7 @@
                         {% endfor %}
                     </section>
                 {% endif %}
+                
             </div>
         </article>
         

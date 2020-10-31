@@ -56,14 +56,17 @@ def toponomikon_location_view(request, loc_name):
     # THIS LOCATION
     prep = Location.objects.select_related('main_image', 'audio')
     if profile.status == 'gm':
-        prep = prep.prefetch_related('knowledge_packets__pictures', 'pictures')
+        prep = prep.prefetch_related(
+            'knowledge_packets__pictures',
+            'map_packets__pictures',
+            'pictures',
+        )
     else:
         prep = prep.prefetch_related(
-            Prefetch(
-                'knowledge_packets',
-                queryset=profile.knowledge_packets.all()
-            ),
+            Prefetch('knowledge_packets', profile.knowledge_packets.all()),
+            Prefetch('map_packets', profile.map_packets.all()),
             'knowledge_packets__pictures',
+            'map_packets__pictures',
             'pictures',
         )
         prep = prep.annotate(

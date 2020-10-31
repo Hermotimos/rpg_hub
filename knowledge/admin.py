@@ -7,7 +7,7 @@ from django.forms.widgets import TextInput
 from django.utils.html import format_html
 
 from imaginarion.models import Picture
-from knowledge.models import KnowledgePacket
+from knowledge.models import KnowledgePacket, MapPacket
 from rules.models import Skill
 from toponomikon.models import Location
 
@@ -111,4 +111,29 @@ class KnowledgePacketAdmin(admin.ModelAdmin):
         return qs
 
 
+class MapPacketAdmin(admin.ModelAdmin):
+    # formfield_overrides = {
+    #     models.CharField: {'widget': TextInput(attrs={'size': 50})},
+    # }
+    list_display = ['id', 'title', 'get_acquired_by']
+    list_editable = ['title']
+    search_fields = ['title']
+    
+    def get_acquired_by(self, obj):
+        img_urls = [profile.image.url for profile in obj.acquired_by.all()]
+        html = ''
+        if img_urls:
+            for url in img_urls:
+                html += f'<img width="40" height="40" src="{url}">&nbsp;'
+        else:
+            html = '<h1><font color="red">NIKT</font></h1>'
+        return format_html(html)
+    
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.prefetch_related('acquired_by')
+        return qs
+
+
 admin.site.register(KnowledgePacket, KnowledgePacketAdmin)
+admin.site.register(MapPacket, MapPacketAdmin)

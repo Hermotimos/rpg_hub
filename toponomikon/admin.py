@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.forms import Textarea, TextInput, Select
 
 from imaginarion.models import Picture
-from knowledge.models import KnowledgePacket
+from knowledge.models import KnowledgePacket, MapPacket
 from toponomikon.models import LocationType, Location, PrimaryLocation, \
     SecondaryLocation
 from users.models import Profile
@@ -32,6 +32,11 @@ class ToponomikonForm(forms.ModelForm):
     knowledge_packets = forms.ModelMultipleChoiceField(
         queryset=KnowledgePacket.objects.all(),
         widget=FilteredSelectMultiple('Knowledge packets', False),
+        required=False
+    )
+    map_packets = forms.ModelMultipleChoiceField(
+        queryset=MapPacket.objects.all(),
+        widget=FilteredSelectMultiple('Map packets', False),
         required=False
     )
     pictures = forms.ModelMultipleChoiceField(

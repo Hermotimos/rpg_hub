@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.db.models.signals import post_save, m2m_changed
 
 from imaginarion.models import Audio, Picture
-from knowledge.models import KnowledgePacket
+from knowledge.models import KnowledgePacket, MapPacket
 from rpg_project.utils import create_sorting_name
 from users.models import Profile
 
@@ -50,6 +50,11 @@ class Location(models.Model):
     )
     knowledge_packets = models.ManyToManyField(
         to=KnowledgePacket,
+        blank=True,
+        related_name='locations'
+    )
+    map_packets = models.ManyToManyField(
+        to=MapPacket,
         blank=True,
         related_name='locations'
     )
