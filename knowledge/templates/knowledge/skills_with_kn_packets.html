@@ -13,7 +13,7 @@
     {% for skill in skills %}
         <div class="container">
             <div class="row mb-2">
-                <div class="col-12">
+                <div class="col-12 p-0">
                     {% if skill.image %}
                         <img class="img-skill" src="{{ skill.image.url }}" alt="Skill img">
                     {% else %}
@@ -26,7 +26,7 @@
             </div>
             <div class="row mb-4">
                 <div class="col-1"></div>
-                <div class="col-11">
+                <div class="col-11 p-0">
                     <div class="collapse show" id="{{ skill.short_name }}">
                         {% for kn_packet in skill.knowledge_packets.all %}
                             {% include 'knowledge/_knowledge_packet.html' %}
