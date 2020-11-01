@@ -1,6 +1,6 @@
-# Custom filters; ex. for dict lookup
 
 from django import template
+from django.template.defaultfilters import linebreaksbr
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
@@ -169,3 +169,18 @@ def replace(obj_as_text, from_to):
     to = from_to.split('__')[1]
     print(from_, to)
     return format_as_html(obj_as_text.replace(from_, to))
+
+
+@register.filter
+def custom_linebreaksbr(value, margin_bottom: int):
+    if not (0 < margin_bottom < 5):
+        msg = """
+            Wrong value for custom_linebreaksbr filter won't have any effect.
+            Provide value from 1 through 5 for Bootstrap class="mb-?"
+        """
+        raise ValueError(msg)
+    else:
+        value = linebreaksbr(value)
+        return mark_safe(
+            value.replace('<br><br>', f'<br class="mb-{margin_bottom}">')
+        )

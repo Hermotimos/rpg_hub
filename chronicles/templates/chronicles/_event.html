@@ -21,7 +21,7 @@
                 {% if request.user.profile in event.known_indirectly.all %}
                     <small class="text-muted">(Znasz z opowieści) {{ event.description_long|linebreaksbr }}</small>
                 {% else %}
-                    {{ event.description_long|linebreaksbr }}
+                    {{ event.description_long|custom_linebreaksbr:2 }}
                 {% endif %}
             </p>
             
