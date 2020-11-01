@@ -3,6 +3,7 @@ from django.db.models import Prefetch, When, Case, Value, IntegerField
 from django.shortcuts import render, redirect
 
 from rpg_project.utils import handle_inform_form
+from knowledge.models import MapPacket
 from toponomikon.models import Location, LocationType, PrimaryLocation, \
     SecondaryLocation
 
@@ -11,15 +12,15 @@ from toponomikon.models import Location, LocationType, PrimaryLocation, \
 def toponomikon_main_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
-        all_locs = Location.objects.values('name')
         primary_locs = PrimaryLocation.objects.prefetch_related('locations')
+        all_locs = Location.objects.values('name')
+        all_maps = MapPacket.objects.all()
     else:
         known_dir = profile.locs_known_directly.all()
         known_indir = profile.locs_known_indirectly.all()
         known_only_indir = known_indir.exclude(id__in=known_dir)
         all_known = (known_dir | known_indir)
         
-        all_locs = Location.objects.values('name').filter(id__in=all_known)
         primary_locs = PrimaryLocation.objects.filter(id__in=all_known)
         primary_locs = primary_locs.prefetch_related(
             Prefetch(
@@ -34,13 +35,14 @@ def toponomikon_main_view(request):
                 output_field=IntegerField(),
             ),
         )
-        
-    primary_locs = primary_locs.select_related('main_image')
+        all_locs = Location.objects.values('name').filter(id__in=all_known)
+        all_maps = profile.map_packets.all()
     
     context = {
         'page_title': 'Toponomikon',
+        'primary_locs': primary_locs.select_related('main_image'),
         'all_locs': all_locs,
-        'primary_locs': primary_locs,
+        'all_maps': all_maps.prefetch_related('pictures'),
     }
     return render(request, 'toponomikon/toponomikon_main.html', context)
 

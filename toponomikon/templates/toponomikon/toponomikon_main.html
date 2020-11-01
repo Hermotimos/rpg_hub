@@ -10,15 +10,13 @@
 
     <article class="tabset top-space">
         
-        <!-- TABS -->
-        
-        <!-- Locations tab -->
+        <!-- TAB HEADER: Locations -->
         {% if primary_locs %}
             <input type="radio" name="tabset" id="tab1" aria-controls="locations" checked>
             <label class="h3" for="tab1">Lokacje</label>
         {% endif %}
         
-        <!-- Index tab -->
+        <!-- TAB HEADER: Index -->
         {% if all_locs %}
             {% if not primary_locs %}
                 <input type="radio" name="tabset" id="tab2" aria-controls="index" checked>
@@ -28,11 +26,20 @@
             <label class="h3" for="tab2">Indeks</label>
         {% endif %}
         
+        <!-- TAB HEADER: Maps -->
+        {% if all_maps %}
+            {% if not primary_locs and not all_locs %}
+                <input type="radio" name="tabset" id="tab3" aria-controls="maps" checked>
+            {% else %}
+                <input type="radio" name="tabset" id="tab3" aria-controls="maps">
+            {% endif %}
+            <label class="h3" for="tab3">Mapy i plany</label>
+        {% endif %}
         
-        <!-- TABS CONTENT -->
+        
         <div class="tab-panels">
             
-            <!-- Locations content -->
+            <!-- TAB CONTENT: Locations -->
             {% if primary_locs %}
                 <section id="locations" class="tab-panel pt-1">
                     <div class="container">
@@ -48,7 +55,7 @@
                 </section>
             {% endif %}
             
-            <!-- Index content -->
+            <!-- TAB CONTENT: Index -->
             {% if all_locs %}
                 <section id="index" class="tab-panel pt-1">
                     <div class="container">
@@ -75,6 +82,18 @@
                     </div>
                 </section>
             {% endif %}
+            
+            <!-- TAB CONTENT: Maps -->
+            {% if all_maps %}
+                <section id="maps" class="tab-panel">
+                    {% for map_packet in all_maps %}
+                        {% include 'knowledge/_map_packet.html' %}
+                    {% endfor %}
+                </section>
+            {% endif %}
+            
+            
+            
         </div>
     </article>
 
