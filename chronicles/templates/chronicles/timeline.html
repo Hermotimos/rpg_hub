@@ -50,7 +50,7 @@
                         {% endfor %}
                     </ul>
                 </td>
-                <td class="timeline-event text-justify align-top unblue-black pl-2 pr-2">
+                <td class="timeline-event text-justify align-top unblue-black pl-2 pr-2 pb-3">
                     <a href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">
                         {{ event.description_short|custom_linebreaksbr:1 }}
                     </a>
