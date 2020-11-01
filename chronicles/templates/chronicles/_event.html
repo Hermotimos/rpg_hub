@@ -1,8 +1,7 @@
 {% load static %}
 {% load custom_filters %}
 
-<div class="event-anchor" id="event_{{ event.id }}"></div>
-<div class="container">
+<div class="container anchor mt-n5" id="event_{{ event.id }}">
     <div class="row border-top">
         
         <!-- ACTIONS -->
@@ -18,18 +17,18 @@
         <!-- EVENT -->
         <div class="col-12 col-sm-11 mt-2 p-0 pl-sm-2 pl-lg-0">
             <!-- DESCRIPTION -->
-            {% if request.user.profile in event.known_indirectly.all %}
-                <p class="font-18 font-italic px-1 py-1 text-justify">
+            <p class="font-18 font-italic px-1 py-1 mb-0 text-justify">
+                {% if request.user.profile in event.known_indirectly.all %}
                     <small class="text-muted">(Znasz z opowieści) {{ event.description_long|linebreaksbr }}</small>
-                </p>
-            {% else %}
-                <p class="font-18 font-italic px-1 py-1 text-justify">{{ event.description_long|linebreaksbr }}</p>
-            {% endif %}
+                {% else %}
+                    {{ event.description_long|linebreaksbr }}
+                {% endif %}
+            </p>
             
             <!-- PICTURES -->
             {% if event.pictures.all and request.user.profile not in event.known_indirectly.all %}
                 {% for row in event.pictures.all|columns:3 %}
-                    <div class="d-flex justify-content-center">
+                    <div class="d-flex justify-content-center mb-4">
                         {% for picture in row %}
                             <!-- Modal controls -->
                             <figure class="figure mx-auto for-modal chronicle-img mb-0 mt-4 px-1" data-toggle="modal" data-target="#imgModal{{ picture.id }}">
@@ -51,14 +50,13 @@
                         {% endfor %}
                     </div>
                 {% endfor %}
-                <br>
             {% endif %}
             
             <!-- DEBATES -->
             {% if event.debates and request.user.profile not in event.known_indirectly.all %}
-                <div class="mt-5">
+                <div>
                     {% for debate in event.debates.all %}
-                    <ul class="bullets-3 pl-3">
+                    <ul class="bullets-3 mt-5 pl-3">
                         <li class="align-middle" >
                             <span class="font-18 font-italic hover-blue text-justify" data-toggle="collapse" data-target="#debate_{{ debate.id }}">
                                 <span class="small-caps">Narada:</span> {{ debate.name }}
@@ -76,7 +74,6 @@
                                     <p class="btn btn-outline-secondary" data-toggle="collapse" data-target="#debate_{{ debate.id }}">Zwiń naradę</p>
                                 </div>
                             </div>
-                            
                         </li>
                     </ul>
                     {% endfor %}

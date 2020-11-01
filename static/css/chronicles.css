@@ -148,8 +148,10 @@ a.link-disabled {
         padding-top: 5px;
 }
 
-div.event-anchor {
-    height: 60px;
-    display: inline-block;
-}
 
+
+div.anchor:before {
+    height: 5rem;
+    content: "";
+    display:block;
+}
