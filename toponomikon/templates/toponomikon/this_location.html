@@ -99,12 +99,12 @@
                 
                 <!-- TAB CONTENT: Locations -->
                 {% if location_types %}
-                    <section id="locations" class="tab-panel pt-1">
+                    <section id="locations" class="tab-panel">
                         <div class="container">
                             {% for location_type in location_types %}
-                                <p class="mt-5 mb-0 text-center">✧</p>
+                                <p class="mb-0 text-center">✧</p>
                                 <p class="mb-0 text-center">✧ ✦ ✧</p>
-                                <p class="h3 text-center mb-1">{{ location_type.name_plural }}</p>
+                                <p class="h3 text-center mb-2 mt-1">{{ location_type.name_plural }}</p>
                                 <p class="mb-0 text-center">✧ ✦ ✧</p>
                                 <p class="mb-5 mt-0 text-center">✧</p>
                                 {% for location in location_type.locations.all %}
