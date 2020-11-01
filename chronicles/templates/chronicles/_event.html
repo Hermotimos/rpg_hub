@@ -27,8 +27,9 @@
             
             <!-- PICTURES -->
             {% if event.pictures.all and request.user.profile not in event.known_indirectly.all %}
+            <div class="mb-4">
                 {% for row in event.pictures.all|columns:3 %}
-                    <div class="d-flex justify-content-center mb-4">
+                    <div class="d-flex justify-content-center">
                         {% for picture in row %}
                             <!-- Modal controls -->
                             <figure class="figure mx-auto for-modal chronicle-img mb-0 mt-4 px-1" data-toggle="modal" data-target="#imgModal{{ picture.id }}">
@@ -50,6 +51,7 @@
                         {% endfor %}
                     </div>
                 {% endfor %}
+            </div>
             {% endif %}
             
             <!-- DEBATES -->
