@@ -16,7 +16,10 @@
                          alt="Location img">
                     {% if this_location|get_main_audio_path %}
                         <audio class="toponomikon-audio-main" controls loop>
-                            <!-- For Google Drive construct path by: https://docs.google.com/uc?export=download&id= plus file id -->
+                            <!-- For Google Drive construct path by: https://docs.google.com/uc?export=download&id=XXXXXXXX
+                             where XXXXXXXX equals file id take from the share link:
+                             https://drive.google.com/file/d/XXXXXXXX/view?usp=sharing ==> XXXXXXXX
+                             RESULT: https://docs.google.com/uc?export=download&id=XXXXXXXX -->
                             <source src="{{ this_location|get_main_audio_path }}" type="audio/mpeg">
                         </audio>
                     {% endif %}

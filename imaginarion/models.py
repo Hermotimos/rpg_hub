@@ -26,7 +26,13 @@ class Audio(Model):
     title = CharField(max_length=200, blank=True, null=True)
     description = TextField(max_length=500, blank=True, null=True)
     type = CharField(max_length=5, choices=AUDIO_TYPES)
-    path = TextField(blank=True, null=True)
+    path = TextField(default='https://docs.google.com/uc?export=download&id=[REPLACE WITH ID]')
+    
+    # For Google Drive construct path by:
+    # https://docs.google.com/uc?export=download&id=XXXXXXXX
+    # where XXXXXXXX equals file id take from the share link:
+    # https://drive.google.com/file/d/XXXXXXXX/view?usp=sharing ==> XXXXXXXX
+    # RESULT: https://docs.google.com/uc?export=download&id=XXXXXXXX
     
     class Meta:
         ordering = ['type', 'title']
