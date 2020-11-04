@@ -1,7 +1,8 @@
-from django.db import models
 from PIL import Image
-from rpg_project.utils import ReplaceFileStorage
+from django.db.models import Model, CharField, TextField, ImageField, \
+    ForeignKey, PROTECT, ManyToManyField
 
+from rpg_project.utils import ReplaceFileStorage
 
 # TODO rename app 'imaginarion' -> 'mousarion'
 
@@ -12,7 +13,7 @@ AUDIO_TYPES = (
 )
 
 
-class Audio(models.Model):
+class Audio(Model):
     """A model to store paths to externally stored audio files."""
     
     # This doesn't work on PythonAnywhere... do they really handle Django 3.1?
@@ -22,10 +23,10 @@ class Audio(models.Model):
     #     varia = 'VARIA'
     # type = models.CharField(max_length=5, choices=AudioType.choices)
     
-    type = models.CharField(max_length=5, choices=AUDIO_TYPES)
-    path = models.TextField()
-    title = models.CharField(max_length=200, blank=True, null=True)
-    info = models.TextField(max_length=500, unique=True, blank=True, null=True)
+    type = CharField(max_length=5, choices=AUDIO_TYPES)
+    path = TextField()
+    title = CharField(max_length=200, blank=True, null=True)
+    info = TextField(max_length=500, unique=True, blank=True, null=True)
     
     class Meta:
         ordering = ['type', 'title']
@@ -46,14 +47,13 @@ IMG_TYPES = (
 )
 
 
-class Picture(models.Model):
+class Picture(Model):
     """A model to store paths to internally stored image files."""
 
-    image = models.ImageField(upload_to='post_pics',
-                              storage=ReplaceFileStorage())
-    type = models.CharField(max_length=10, choices=IMG_TYPES)
-    title = models.CharField(max_length=200, unique=True)
-    description = models.CharField(max_length=200, blank=True, null=True)
+    image = ImageField(upload_to='post_pics', storage=ReplaceFileStorage())
+    type = CharField(max_length=10, choices=IMG_TYPES)
+    title = CharField(max_length=200, unique=True)
+    description = CharField(max_length=200, blank=True, null=True)
 
     class Meta:
         ordering = ['type', 'title', 'description']

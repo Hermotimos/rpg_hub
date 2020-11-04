@@ -1,5 +1,5 @@
-from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Model, Manager, CharField, ForeignKey, \
+    PositiveSmallIntegerField, TextField, ManyToManyField, SET_NULL, PROTECT
 from django.db.models.signals import post_save, m2m_changed
 
 from imaginarion.models import Audio, Picture
@@ -8,16 +8,16 @@ from rpg_project.utils import create_sorting_name
 from users.models import Profile
 
 
-class LocationType(models.Model):
-    name = models.CharField(max_length=100)
-    name_plural = models.CharField(max_length=100, blank=True, null=True)
-    default_img = models.ForeignKey(
+class LocationType(Model):
+    name = CharField(max_length=100)
+    name_plural = CharField(max_length=100, blank=True, null=True)
+    default_img = ForeignKey(
         to=Picture,
         related_name='location_types',
-        on_delete=models.SET_NULL,
+        on_delete=SET_NULL,
         null=True,
     )
-    order_no = models.PositiveSmallIntegerField()
+    order_no = PositiveSmallIntegerField()
     
     class Meta:
         ordering = ['order_no']
@@ -26,52 +26,52 @@ class LocationType(models.Model):
         return self.name
 
 
-class Location(models.Model):
-    name = models.CharField(unique=True, max_length=100)
-    description = models.TextField(blank=True, null=True)
-    main_image = models.ForeignKey(
+class Location(Model):
+    name = CharField(unique=True, max_length=100)
+    description = TextField(blank=True, null=True)
+    main_image = ForeignKey(
         to=Picture,
         blank=True,
         null=True,
         related_name='locations_main_pics',
-        on_delete=models.PROTECT,
+        on_delete=PROTECT,
     )
-    # audio_path = models.TextField(blank=True, null=True)
-    audio = models.ForeignKey(
+    # audio_path = TextField(blank=True, null=True)
+    audio = ForeignKey(
         to=Audio,
-        on_delete=models.SET_NULL,
+        on_delete=SET_NULL,
         blank=True,
         null=True,
     )
-    pictures = models.ManyToManyField(
+    pictures = ManyToManyField(
         to=Picture,
         blank=True,
         related_name='locations_pics'
     )
-    knowledge_packets = models.ManyToManyField(
+    knowledge_packets = ManyToManyField(
         to=KnowledgePacket,
         blank=True,
         related_name='locations'
     )
-    map_packets = models.ManyToManyField(
+    map_packets = ManyToManyField(
         to=MapPacket,
         blank=True,
         related_name='locations'
     )
-    location_type = models.ForeignKey(
+    location_type = ForeignKey(
         to=LocationType,
         null=True,
         related_name='locations',
-        on_delete=models.PROTECT,
+        on_delete=PROTECT,
     )
-    in_location = models.ForeignKey(
+    in_location = ForeignKey(
         to='self',
         blank=True,
         null=True,
         related_name='locations',
-        on_delete=models.PROTECT,
+        on_delete=PROTECT,
     )
-    known_directly = models.ManyToManyField(
+    known_directly = ManyToManyField(
         to=Profile,
         blank=True,
         related_name='locs_known_directly',
@@ -79,7 +79,7 @@ class Location(models.Model):
             status__in=['active_player', 'inactive_player', 'dead_player']
         ),
     )
-    known_indirectly = models.ManyToManyField(
+    known_indirectly = ManyToManyField(
         to=Profile,
         blank=True,
         related_name='locs_known_indirectly',
@@ -87,7 +87,7 @@ class Location(models.Model):
             status__in=['active_player', 'inactive_player', 'dead_player']
         ),
     )
-    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
         ordering = ['sorting_name']
@@ -110,7 +110,7 @@ class Location(models.Model):
         return qs
 
 
-class PrimaryLocationManager(models.Manager):
+class PrimaryLocationManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(in_location=None)
@@ -124,7 +124,7 @@ class PrimaryLocation(Location):
         proxy = True
         
         
-class SecondaryLocationManager(models.Manager):
+class SecondaryLocationManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(~Q(in_location=None))
@@ -140,7 +140,7 @@ class SecondaryLocation(Location):
         proxy = True
         
 
-# class TertiaryLocationManager(models.Manager):
+# class TertiaryLocationManager(Manager):
 #     def get_queryset(self):
 #         qs = super().get_queryset()
 #         qs = qs.filter(~Q(in_location__in_location=None))
