@@ -106,7 +106,11 @@
                 
                 <!-- TAB HEADER: Audio -->
                 {% if request.user.profile.status == 'gm' and audio_set %}
-                    <input type="radio" name="tabset" id="tab77" aria-controls="audios">
+                    {% if not location_types and not this_location.knowledge_packets.all and not this_location.map_packets.all and not this_location.pictures.all %}
+                        <input type="radio" name="tabset" id="tab77" aria-controls="audios" checked>
+                    {% else %}
+                        <input type="radio" name="tabset" id="tab77" aria-controls="audios">
+                    {% endif %}
                     <label class="h3" for="tab77">Audio</label>
                 {% endif %}
     
