@@ -38,7 +38,7 @@ class Audio(Model):
         ordering = ['type', 'title']
 
     def __str__(self):
-        return f'{str(self.type)}: {self.title}'
+        return self.title
 
         
 class AudioSet(Model):
