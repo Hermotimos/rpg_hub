@@ -23,7 +23,7 @@ class Audio(Model):
     #     varia = 'VARIA'
     # type = models.CharField(max_length=5, choices=AudioType.choices)
     
-    title = CharField(max_length=200, blank=True, null=True)
+    title = CharField(max_length=200)
     description = TextField(max_length=500, blank=True, null=True)
     type = CharField(max_length=5, choices=AUDIO_TYPES)
     path = TextField(default='https://docs.google.com/uc?export=download&id=[REPLACE WITH ID]')
