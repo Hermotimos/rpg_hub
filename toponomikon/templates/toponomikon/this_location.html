@@ -7,189 +7,190 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <article class="top-image">
-        <header class="mb-5">
-            <div class="container">
-                <div class="row">
-                    <img class="toponomikon {% if this_location.only_indirectly %} img-grayscale {% endif %}"
-                         src="{% if this_location.main_image %} {{ this_location.main_image.image.url }} {% else %} {{ this_location.location_type.default_img.image.url }} {% endif %}"
-                         alt="Location img">
-                    {% if this_location|get_main_audio_path %}
-                        <audio class="toponomikon-audio-main" controls loop>
-                            <!-- For Google Drive construct path by: https://docs.google.com/uc?export=download&id=XXXXXXXX
-                             where XXXXXXXX equals file id take from the share link:
-                             https://drive.google.com/file/d/XXXXXXXX/view?usp=sharing ==> XXXXXXXX
-                             RESULT: https://docs.google.com/uc?export=download&id=XXXXXXXX -->
-                            <source src="{{ this_location|get_main_audio_path }}" type="audio/mpeg">
-                        </audio>
-                    {% endif %}
-                </div>
-                <div class="row mt-0 mt-2 mt-md-3">
-                    <div class="col-12 col-md-1 p-0 mb-1 mt-md-1 ml-lg-1">
-                        <a class="btn btn-outline-dark icon-cursor-medium mb-sm-1"
-                           href="
-                               {% if this_location.in_location %}
-                                   {% url 'toponomikon:location' this_location.in_location.name %}
-                               {% else %}
-                                   {% url 'toponomikon:main' %}
-                               {% endif %}"
-                           data-toggle="tooltip" data-placement="left" title='Przejdź do lokacji nadrzędnej'>
-                        </a>
-                        <span data-toggle="modal" data-target="#infoLocationModal">
-                            <span class="btn btn-outline-dark icon-inform-medium mb-sm-1"
-                                data-toggle="tooltip" data-placement="left" title='Przekaż wiedzę o lokacji'>
+    {% with audio_set=this_location|get_audio_set %}
+        <article class="top-image">
+            <header class="mb-5">
+                <div class="container">
+                    <div class="row">
+                        <img class="toponomikon {% if this_location.only_indirectly %} img-grayscale {% endif %}"
+                             src="{% if this_location.main_image %} {{ this_location.main_image.image.url }} {% else %} {{ this_location.location_type.default_img.image.url }} {% endif %}"
+                             alt="Location img">
+                        {% if this_location|get_audio_set %}
+                            <audio class="toponomikon-audio-main" controls loop>
+                                <!-- For Google Drive construct path by: https://docs.google.com/uc?export=download&id=XXXXXXXX
+                                 where XXXXXXXX equals file id take from the share link:
+                                 https://drive.google.com/file/d/XXXXXXXX/view?usp=sharing ==> XXXXXXXX
+                                 RESULT: https://docs.google.com/uc?export=download&id=XXXXXXXX -->
+                                <source src="{{ audio_set.main_audio.path }}" type="audio/mpeg">
+                            </audio>
+                        {% endif %}
+                    </div>
+                    <div class="row mt-0 mt-2 mt-md-3">
+                        <div class="col-12 col-md-1 p-0 mb-1 mt-md-1 ml-lg-1">
+                            <a class="btn btn-outline-dark icon-cursor-medium mb-sm-1"
+                               href="
+                                   {% if this_location.in_location %}
+                                       {% url 'toponomikon:location' this_location.in_location.name %}
+                                   {% else %}
+                                       {% url 'toponomikon:main' %}
+                                   {% endif %}"
+                               data-toggle="tooltip" data-placement="left" title='Przejdź do lokacji nadrzędnej'>
+                            </a>
+                            <span data-toggle="modal" data-target="#infoLocationModal">
+                                <span class="btn btn-outline-dark icon-inform-medium mb-sm-1"
+                                    data-toggle="tooltip" data-placement="left" title='Przekaż wiedzę o lokacji'>
+                                </span>
                             </span>
-                        </span>
-                            <!-- The Modal -->
-                            <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
-                                {% with informables=this_location.informables inform_type=this_location|get_model_name id_=this_location.id %}
-                                    {% include '_inform.html' %}
-                                {% endwith %}
-                            </div>
-                        <span class="btn btn-outline-dark icon-note-medium mb-sm-1 disabled"><a href="#"></a></span>
-                    </div>
-                    <div class="col-12 col-md-11 p-0 pl-md-3 ml-lg-n3 ml-xl-n4">
-                        <h6 class="font-18 font-italic linebreaks-style text-justify
-                            {% if this_location.only_indirectly %} text-muted {% endif %}">
-                            {{ this_location.description|linebreaks }}
-                        </h6>
+                                <!-- The Modal -->
+                                <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                    {% with informables=this_location.informables inform_type=this_location|get_model_name id_=this_location.id %}
+                                        {% include '_inform.html' %}
+                                    {% endwith %}
+                                </div>
+                            <span class="btn btn-outline-dark icon-note-medium mb-sm-1 disabled"><a href="#"></a></span>
+                        </div>
+                        <div class="col-12 col-md-11 p-0 pl-md-3 ml-lg-n3 ml-xl-n4">
+                            <h6 class="font-18 font-italic linebreaks-style text-justify
+                                {% if this_location.only_indirectly %} text-muted {% endif %}">
+                                {{ this_location.description|linebreaks }}
+                            </h6>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </header>
-        
-
-        <article class="tabset">
+            </header>
             
-            <!-- TAB HEADER: Locations -->
-            {% if location_types %}
-                <input type="radio" name="tabset" id="tab1" aria-controls="locations" checked>
-                <label class="h3" for="tab1">Lokacje</label>
-            {% endif %}
-            
-            <!-- TAB HEADER: Knowledge packets -->
-            {% if this_location.knowledge_packets.all %}
-                {% if not location_types %}
-                    <input type="radio" name="tabset" id="tab2" aria-controls="knowledge" checked>
-                {% else %}
-                    <input type="radio" name="tabset" id="tab2" aria-controls="knowledge">
-                {% endif %}
-                <label class="h3" for="tab2">Wiedza</label>
-            {% endif %}
-            
-            <!-- TAB HEADER: Map packets -->
-            {% if this_location.map_packets.all %}
-                {% if not location_types and not this_location.knowledge_packets.all %}
-                    <input type="radio" name="tabset" id="tab3" aria-controls="maps" checked>
-                {% else %}
-                    <input type="radio" name="tabset" id="tab3" aria-controls="maps">
-                {% endif %}
-                <label class="h3" for="tab3">Mapy</label>
-            {% endif %}
-            
-            <!-- TAB HEADER: Pictures -->
-            {% if this_location.pictures.all %}
-                {% if not location_types and not this_location.knowledge_packets.all and not this_location.map_packets.all %}
-                    <input type="radio" name="tabset" id="tab4" aria-controls="pictures" checked>
-                {% else %}
-                    <input type="radio" name="tabset" id="tab4" aria-controls="pictures">
-                {% endif %}
-                <label class="h3" for="tab4">Obrazy</label>
-            {% endif %}
-            
-            
-            
-            
-            
-            <!-- LASTLY -->
-            
-            <!-- TAB HEADER: Audio -->
-            {% if request.user.profile.status == 'gm' and this_location.audio_set %}
-                <input type="radio" name="tabset" id="tab77" aria-controls="audios">
-                <label class="h3" for="tab77">Audio</label>
-            {% endif %}
-
-            
-            <div class="tab-panels">
+    
+            <article class="tabset">
                 
-                <!-- TAB CONTENT: Locations -->
+                <!-- TAB HEADER: Locations -->
                 {% if location_types %}
-                    <section id="locations" class="tab-panel">
-                        <div class="container">
-                            {% for location_type in location_types %}
-                                <p class="mb-0 text-center">✧</p>
-                                <p class="mb-0 text-center">✧ ✦ ✧</p>
-                                <p class="h3 text-center mb-2 mt-1">{{ location_type.name_plural }}</p>
-                                <p class="mb-0 text-center">✧ ✦ ✧</p>
-                                <p class="mb-5 mt-0 text-center">✧</p>
-                                {% for location in location_type.locations.all %}
-                                    {% include 'toponomikon/_location.html' %}
-                                {% endfor %}
-                            {% endfor %}
-                        </div>
-                    </section>
+                    <input type="radio" name="tabset" id="tab1" aria-controls="locations" checked>
+                    <label class="h3" for="tab1">Lokacje</label>
                 {% endif %}
                 
-                <!-- TAB CONTENT: Knowledge packets -->
+                <!-- TAB HEADER: Knowledge packets -->
                 {% if this_location.knowledge_packets.all %}
-                    <section id="knowledge" class="tab-panel">
-                        {% for kn_packet in this_location.knowledge_packets.all %}
-                            {% include 'knowledge/_knowledge_packet.html' %}
-                        {% endfor %}
-                    </section>
+                    {% if not location_types %}
+                        <input type="radio" name="tabset" id="tab2" aria-controls="knowledge" checked>
+                    {% else %}
+                        <input type="radio" name="tabset" id="tab2" aria-controls="knowledge">
+                    {% endif %}
+                    <label class="h3" for="tab2">Wiedza</label>
                 {% endif %}
                 
-                <!-- TAB CONTENT: Map packets -->
+                <!-- TAB HEADER: Map packets -->
                 {% if this_location.map_packets.all %}
-                    <section id="maps" class="tab-panel">
-                        {% for map_packet in this_location.map_packets.all %}
-                            {% include 'knowledge/_map_packet.html' %}
-                        {% endfor %}
-                    </section>
+                    {% if not location_types and not this_location.knowledge_packets.all %}
+                        <input type="radio" name="tabset" id="tab3" aria-controls="maps" checked>
+                    {% else %}
+                        <input type="radio" name="tabset" id="tab3" aria-controls="maps">
+                    {% endif %}
+                    <label class="h3" for="tab3">Mapy</label>
                 {% endif %}
                 
-                <!-- TAB CONTENT: Pictures -->
+                <!-- TAB HEADER: Pictures -->
                 {% if this_location.pictures.all %}
-                    <section id="pictures" class="tab-panel">
-                        {% for picture in this_location.pictures.all %}
-                            {{ picture }}
-                        {% endfor %}
-                    </section>
+                    {% if not location_types and not this_location.knowledge_packets.all and not this_location.map_packets.all %}
+                        <input type="radio" name="tabset" id="tab4" aria-controls="pictures" checked>
+                    {% else %}
+                        <input type="radio" name="tabset" id="tab4" aria-controls="pictures">
+                    {% endif %}
+                    <label class="h3" for="tab4">Obrazy</label>
                 {% endif %}
                 
-                <!-- TAB CONTENT: Audio -->
-                <section id="audios" class="tab-panel">
-                    
-                    <!-- Location's main audio first -->
-                    <div class="row">
-                        <div class="col-6">
-                            <audio class="toponomikon-audio-small" controls loop>
-                                <source src="{{ this_location|get_main_audio_path }}" type="audio/mpeg">
-                            </audio>
-                        </div>
-                        <div class="col-6">
-                            {{ this_location.audio_set.main_audio }}
-                        </div>
-                    </div>
-                    
-                    <br>
-                    {% for audio in this_location.audio_set.audios.all %}
-                    <div class="row">
-                        <div class="col-6">
-                            <audio class="toponomikon-audio-small" controls loop>
-                                <source src="{{ audio.path }}" type="audio/mpeg">
-                            </audio>
-                        </div>
-                        <div class="col-6">
-                            {{ audio }}
-                        </div>
-                    </div>
-                    {% endfor %}
-                </section>
                 
-            </div>
+                
+                
+                
+                <!-- LASTLY -->
+                
+                <!-- TAB HEADER: Audio -->
+                {% if request.user.profile.status == 'gm' and audio_set %}
+                    <input type="radio" name="tabset" id="tab77" aria-controls="audios">
+                    <label class="h3" for="tab77">Audio</label>
+                {% endif %}
+    
+                
+                <div class="tab-panels">
+                    
+                    <!-- TAB CONTENT: Locations -->
+                    {% if location_types %}
+                        <section id="locations" class="tab-panel">
+                            <div class="container">
+                                {% for location_type in location_types %}
+                                    <p class="mb-0 text-center">✧</p>
+                                    <p class="mb-0 text-center">✧ ✦ ✧</p>
+                                    <p class="h3 text-center mb-2 mt-1">{{ location_type.name_plural }}</p>
+                                    <p class="mb-0 text-center">✧ ✦ ✧</p>
+                                    <p class="mb-5 mt-0 text-center">✧</p>
+                                    {% for location in location_type.locations.all %}
+                                        {% include 'toponomikon/_location.html' %}
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endif %}
+                    
+                    <!-- TAB CONTENT: Knowledge packets -->
+                    {% if this_location.knowledge_packets.all %}
+                        <section id="knowledge" class="tab-panel">
+                            {% for kn_packet in this_location.knowledge_packets.all %}
+                                {% include 'knowledge/_knowledge_packet.html' %}
+                            {% endfor %}
+                        </section>
+                    {% endif %}
+                    
+                    <!-- TAB CONTENT: Map packets -->
+                    {% if this_location.map_packets.all %}
+                        <section id="maps" class="tab-panel">
+                            {% for map_packet in this_location.map_packets.all %}
+                                {% include 'knowledge/_map_packet.html' %}
+                            {% endfor %}
+                        </section>
+                    {% endif %}
+                    
+                    <!-- TAB CONTENT: Pictures -->
+                    {% if this_location.pictures.all %}
+                        <section id="pictures" class="tab-panel">
+                            {% for picture in this_location.pictures.all %}
+                                {{ picture }}
+                            {% endfor %}
+                        </section>
+                    {% endif %}
+                    
+                    <!-- TAB CONTENT: Audio -->
+                    <section id="audios" class="tab-panel">
+                        
+                        <!-- Location's main audio first -->
+                        <div class="row">
+                            <div class="col-6">
+                                <audio class="toponomikon-audio-small" controls loop>
+                                    <source src="{{ audio_set.main_audio.path }}" type="audio/mpeg">
+                                </audio>
+                            </div>
+                            <div class="col-6">
+                                {{ audio_set.main_audio }}
+                            </div>
+                        </div>
+                        
+                        <!-- Location's other audios -->
+                        {% for audio in audio_set.audios.all %}
+                            <div class="row">
+                                <div class="col-6">
+                                    <audio class="toponomikon-audio-small" controls loop>
+                                        <source src="{{ audio.path }}" type="audio/mpeg">
+                                    </audio>
+                                </div>
+                                <div class="col-6">
+                                    {{ audio }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </section>
+                    
+                </div>
+            </article>
+            
         </article>
-        
-    </article>
-
+    {% endwith %}
 {% endblock content %}

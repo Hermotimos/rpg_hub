@@ -160,6 +160,17 @@ def get_main_audio_path(obj):
             return get_main_audio_path(obj.in_location)
     except AttributeError:
         return None
+    
+    
+@register.filter
+def get_audio_set(obj):
+    try:
+        if obj.audio_set:
+            return obj.audio_set
+        else:
+            return get_audio_set(obj.in_location)
+    except AttributeError:
+        return None
 
 
 @register.filter
