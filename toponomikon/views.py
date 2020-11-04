@@ -56,7 +56,7 @@ def toponomikon_location_view(request, loc_name):
     known_all = (known_dir | known_indir).distinct()
     
     # THIS LOCATION
-    prep = Location.objects.select_related('main_image', 'audio')
+    prep = Location.objects.select_related('main_image', 'audio_set')
     if profile.status == 'gm':
         prep = prep.prefetch_related(
             'knowledge_packets__pictures',

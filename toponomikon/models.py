@@ -2,7 +2,7 @@ from django.db.models import Q, Model, Manager, CharField, ForeignKey, \
     PositiveSmallIntegerField, TextField, ManyToManyField, SET_NULL, PROTECT
 from django.db.models.signals import post_save, m2m_changed
 
-from imaginarion.models import Audio, Picture
+from imaginarion.models import AudioSet, Picture
 from knowledge.models import KnowledgePacket, MapPacket
 from rpg_project.utils import create_sorting_name
 from users.models import Profile
@@ -31,15 +31,8 @@ class Location(Model):
     description = TextField(blank=True, null=True)
     main_image = ForeignKey(
         to=Picture,
-        blank=True,
-        null=True,
         related_name='locations_main_pics',
         on_delete=PROTECT,
-    )
-    # audio_path = TextField(blank=True, null=True)
-    audio = ForeignKey(
-        to=Audio,
-        on_delete=SET_NULL,
         blank=True,
         null=True,
     )
@@ -48,44 +41,51 @@ class Location(Model):
         blank=True,
         related_name='locations_pics'
     )
+    audio_set = ForeignKey(
+        to=AudioSet,
+        related_name='locations',
+        on_delete=PROTECT,
+        blank=True,
+        null=True,
+    )
     knowledge_packets = ManyToManyField(
         to=KnowledgePacket,
-        blank=True,
-        related_name='locations'
+        related_name='locations',
+        blank = True,
     )
     map_packets = ManyToManyField(
         to=MapPacket,
         blank=True,
-        related_name='locations'
+        related_name='locations',
     )
     location_type = ForeignKey(
         to=LocationType,
-        null=True,
         related_name='locations',
         on_delete=PROTECT,
+        null=True,
     )
     in_location = ForeignKey(
         to='self',
-        blank=True,
-        null=True,
         related_name='locations',
         on_delete=PROTECT,
+        blank=True,
+        null=True,
     )
     known_directly = ManyToManyField(
         to=Profile,
-        blank=True,
         related_name='locs_known_directly',
         limit_choices_to=Q(
             status__in=['active_player', 'inactive_player', 'dead_player']
         ),
+        blank=True,
     )
     known_indirectly = ManyToManyField(
         to=Profile,
-        blank=True,
         related_name='locs_known_indirectly',
         limit_choices_to=Q(
             status__in=['active_player', 'inactive_player', 'dead_player']
         ),
+        blank=True,
     )
     sorting_name = CharField(max_length=250, blank=True, null=True)
 

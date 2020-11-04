@@ -152,12 +152,12 @@ def get_model_name(obj):
 
 
 @register.filter
-def get_audio_path(obj):
+def get_main_audio_path(obj):
     try:
-        if obj.audio:
-            return obj.audio.path
+        if obj.audio_set.main_audio:
+            return obj.audio_set.main_audio.path
         else:
-            return get_audio_path(obj.in_location)
+            return get_main_audio_path(obj.in_location)
     except AttributeError:
         return None
 

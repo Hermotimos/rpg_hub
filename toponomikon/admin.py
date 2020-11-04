@@ -85,9 +85,9 @@ class LocationAdmin(admin.ModelAdmin):
     }
     inlines = [LocationInline]
     list_display = ['id', 'name', 'location_type', 'in_location', 'main_image',
-                    'description', 'audio']
+                    'description', 'audio_set']
     list_editable = ['name', 'location_type', 'in_location', 'main_image',
-                     'description', 'audio']
+                     'description', 'audio_set']
     list_filter = ['location_type__name']
     list_select_related = ['location_type__default_img', 'in_location',
                            'main_image']
@@ -101,7 +101,7 @@ class LocationAdmin(admin.ModelAdmin):
             'location_type',
             'in_location',
             'main_image',
-            'audio',
+            'audio_set',
         ]
         for field in fields:
             if db_field.name == field:
@@ -119,8 +119,8 @@ class PrimaryLocationAdmin(admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 55})},
     }
     inlines = [LocationInline]
-    list_display = ['id', 'name', 'main_image', 'description', 'audio']
-    list_editable = ['name', 'main_image', 'description', 'audio']
+    list_display = ['id', 'name', 'main_image', 'description', 'audio_set']
+    list_editable = ['name', 'main_image', 'description', 'audio_set']
     list_select_related = ['main_image']
     search_fields = ['name', 'description']
     
@@ -130,7 +130,7 @@ class PrimaryLocationAdmin(admin.ModelAdmin):
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
         fields = [
             'main_image',
-            'audio',
+            'audio_set',
         ]
         for field in fields:
             if db_field.name == field:

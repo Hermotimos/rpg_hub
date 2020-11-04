@@ -23,10 +23,10 @@ class Audio(Model):
     #     varia = 'VARIA'
     # type = models.CharField(max_length=5, choices=AudioType.choices)
     
+    title = CharField(max_length=200, blank=True, null=True)
+    description = TextField(max_length=500, blank=True, null=True)
     type = CharField(max_length=5, choices=AUDIO_TYPES)
     path = TextField()
-    title = CharField(max_length=200, blank=True, null=True)
-    info = TextField(max_length=500, unique=True, blank=True, null=True)
     
     class Meta:
         ordering = ['type', 'title']
@@ -35,6 +35,22 @@ class Audio(Model):
         return f'{str(self.type)}: {self.title}'
 
 
+class AudioSet(Model):
+    title = CharField(max_length=200)
+    description = TextField(max_length=500, blank=True, null=True)
+    main_audio = ForeignKey(
+        to=Audio,
+        on_delete=PROTECT,
+    )
+    audios = ManyToManyField(to=Audio, related_name='audio_sets', blank=True)
+    
+    class Meta:
+        ordering = ['title']
+
+    def __str__(self):
+        return self.title
+
+    
 # TODO delete model, below is a replacement model (work with existing objs...)
 IMG_TYPES = (
     ('knowledge', 'KNOWLEDGE'),
