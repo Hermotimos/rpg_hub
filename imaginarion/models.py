@@ -26,7 +26,7 @@ class Audio(Model):
     title = CharField(max_length=200, blank=True, null=True)
     description = TextField(max_length=500, blank=True, null=True)
     type = CharField(max_length=5, choices=AUDIO_TYPES)
-    path = TextField()
+    path = TextField(blank=True, null=True)
     
     class Meta:
         ordering = ['type', 'title']
@@ -34,7 +34,7 @@ class Audio(Model):
     def __str__(self):
         return f'{str(self.type)}: {self.title}'
 
-
+        
 class AudioSet(Model):
     title = CharField(max_length=200)
     description = TextField(max_length=500, blank=True, null=True)
