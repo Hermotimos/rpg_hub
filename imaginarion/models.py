@@ -35,7 +35,7 @@ class Audio(Model):
     # RESULT: https://docs.google.com/uc?export=download&id=XXXXXXXX
     
     class Meta:
-        ordering = ['type', 'title']
+        ordering = ['type', '-title']
 
     def __str__(self):
         return self.title

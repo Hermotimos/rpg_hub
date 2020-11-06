@@ -3,19 +3,19 @@ from imaginarion.models import Picture, Audio, AudioSet
 
 
 class AudioAdmin(admin.ModelAdmin):
-    list_display = ['id', 'admin_title', 'type', 'path']
-    list_editable = ['type', 'path']
+    list_display = ['id', 'admin_title', 'type', 'description', 'path']
+    list_editable = ['type', 'description', 'path']
     list_filter = ['type']
-    search_fields = ['title']
+    search_fields = ['title', 'description']
     
     def admin_title(self, obj):
         return obj.__str__()
     
     
 class AudioSetAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'main_audio']
-    list_editable = ['title', 'main_audio']
-    search_fields = ['title', 'main_audio']
+    list_display = ['id', 'title', 'description', 'main_audio']
+    list_editable = ['title', 'description', 'main_audio']
+    search_fields = ['title', 'description', 'main_audio']
     
     
 class PictureAdmin(admin.ModelAdmin):
