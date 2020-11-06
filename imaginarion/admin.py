@@ -1,8 +1,14 @@
 from django.contrib import admin
+from django.db.models import TextField
+from django.forms import Textarea
+
 from imaginarion.models import Picture, Audio, AudioSet
 
 
 class AudioAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 50})},
+    }
     list_display = ['id', 'admin_title', 'type', 'description', 'path']
     list_editable = ['type', 'description', 'path']
     list_filter = ['type']
@@ -13,6 +19,9 @@ class AudioAdmin(admin.ModelAdmin):
     
     
 class AudioSetAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 50})},
+    }
     list_display = ['id', 'title', 'description', 'main_audio']
     list_editable = ['title', 'description', 'main_audio']
     search_fields = ['title', 'description', 'main_audio']
