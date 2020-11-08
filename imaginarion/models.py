@@ -68,12 +68,12 @@ class AudioSet(Model):
 IMG_TYPES = (
     ('knowledge', 'KNOWLEDGE'),
     ('npc', 'NPC'),
+    ('players-notes', 'PLAYERS-NOTES'),
     ('realia', 'REALIA'),
     ('symbola', 'SYMBOLA'),
     ('thera', 'THERA'),
     ('topoi', 'TOPOI'),
     ('varia', 'VARIA'),
-    ('players-notes', 'PLAYERS-NOTES'),
 )
 
 

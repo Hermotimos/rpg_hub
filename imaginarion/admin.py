@@ -30,6 +30,7 @@ class AudioSetAdmin(admin.ModelAdmin):
 class PictureAdmin(admin.ModelAdmin):
     list_display = ['id', 'admin_title', 'type', 'description', 'image']
     list_editable = ['type', 'description', 'image']
+    list_filter = ['type']
     search_fields = ['title', 'description']
 
     def admin_title(self, obj):
