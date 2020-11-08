@@ -2,6 +2,7 @@
 {% load static %}
 {% load custom_filters %}
 
+
 {% block head_extra %}
     <link rel="stylesheet" href="{% static 'css/debates.css' %}">
 {% endblock head_extra %}
@@ -13,9 +14,9 @@
             <a href="{% url 'debates:create-topic' %}" class="btn btn-outline-dark">Nowy temat narad</a>
         </header>
     
-        <article class="pt-5">
+        <div class="pt-5">
             {% for topic in topics %}
-                <section id="topic_{{ topic.id }}">
+                <div id="topic_{{ topic.id }}">
                     <h3 class="small-caps">
                         <b class="border-bottom-dark">{{ topic.title }}</b>
                     </h3>
@@ -51,9 +52,9 @@
                         {% endfor %}
                     </ul>
                     <br>
-                </section>
+                </div>
             {% endfor %}
-        </article>
+        </div>
         
     </article>
 {% endblock content %}

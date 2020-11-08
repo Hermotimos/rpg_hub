@@ -51,7 +51,7 @@ class Location(Model):
     knowledge_packets = ManyToManyField(
         to=KnowledgePacket,
         related_name='locations',
-        blank = True,
+        blank=True,
     )
     map_packets = ManyToManyField(
         to=MapPacket,
