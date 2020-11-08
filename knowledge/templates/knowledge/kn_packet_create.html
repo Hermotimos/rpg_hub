@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/knowledge.css' %}">
+{% endblock head_extra %}
+
+{% block content %}
+    <article class="top-space">
+        
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+    
+            {{ form.title|as_crispy_field }}<br>
+            {{ form.text|as_crispy_field }}<br>
+            
+            <fieldset class="allowed-profiles-form-debate">
+                {{ form.skills|as_crispy_field }}
+                <small>Aby zaznaczyć wiele umiejętności - użyj CTRL albo SHIFT.</small><br><br>
+            </fieldset>
+            
+            <fieldset class="allowed-profiles-form-debate">
+                {{ form.locations|as_crispy_field }}
+                <small>Aby zaznaczyć wiele umiejętności - użyj CTRL albo SHIFT.</small><br><br>
+            </fieldset>
+            
+            {% if request.user.profile.status == 'gm' %}
+                {{ form.pictures|as_crispy_field }}
+            {% else %}
+                {{ form.description_1|as_crispy_field }} {{ form.picture_1|as_crispy_field }}<br>
+                {{ form.description_2|as_crispy_field }} {{ form.picture_2|as_crispy_field }}<br>
+                {{ form.description_3|as_crispy_field }} {{ form.picture_3|as_crispy_field }}<br>
+            {% endif %}
+            
+            <input class="btn btn-dark" type="submit" value="Utwórz paczkę wiedzy"/>
+            
+        </form>
+        
+    </article>
+{% endblock content %}

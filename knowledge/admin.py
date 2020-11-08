@@ -7,7 +7,7 @@ from django.forms.widgets import TextInput
 from django.utils.html import format_html
 
 from imaginarion.models import Picture
-from knowledge.models import KnowledgePacket, MapPacket
+from knowledge.models import KnowledgePacket, MapPacket, PlayerKnowledgePacket
 from rules.models import Skill
 from toponomikon.models import Location
 
@@ -109,8 +109,8 @@ class KnowledgePacketAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         qs = qs.prefetch_related('acquired_by')
         return qs
-
-
+        
+        
 class MapPacketAdminForm(forms.ModelForm):
     pictures = forms.ModelMultipleChoiceField(
         queryset=Picture.objects.all(),
@@ -197,4 +197,5 @@ class MapPacketAdmin(admin.ModelAdmin):
 
 
 admin.site.register(KnowledgePacket, KnowledgePacketAdmin)
+admin.site.register(PlayerKnowledgePacket)
 admin.site.register(MapPacket, MapPacketAdmin)

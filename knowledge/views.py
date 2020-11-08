@@ -1,12 +1,15 @@
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch, Q, ExpressionWrapper, BooleanField
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect
 
+from knowledge.forms import KnPacketCreateForm, PlayerKnPacketCreateForm
 from knowledge.models import KnowledgePacket
 from rpg_project.utils import handle_inform_form
 from rules.models import SkillLevel, Skill
-
+from imaginarion.models import Picture
+from datetime import datetime
+from django.contrib import messages
 
 def custom_sort(skills_qs):
     # Custom sorting to bring specific skills to the front of the queryset:
@@ -31,20 +34,20 @@ def knowledge_packets_in_skills_view(request, model_name):
     profile = request.user.profile
     skill_model = apps.get_app_config('rules').get_model(model_name)
     skills = skill_model.objects.all()
-
+    
     page_title = skill_model._meta.verbose_name
     if page_title == 'Księgi':
         page_title = 'Biblioteka'
     elif skill_model == Skill:
         page_title = 'Almanach'
-
+    
     # Filter skills queryset according to profile's permissions
     kn_packets = KnowledgePacket.objects.all()
     skill_levels = SkillLevel.objects.all()
     if profile.status != 'gm':
         kn_packets = kn_packets.filter(acquired_by=profile)
         skill_levels = skill_levels.filter(acquired_by=profile)
-        
+    
     skills = skills.filter(knowledge_packets__in=kn_packets)
     skills = skills.prefetch_related(
         Prefetch('knowledge_packets', queryset=kn_packets),
@@ -54,7 +57,7 @@ def knowledge_packets_in_skills_view(request, model_name):
     skills = skills.distinct()
     if page_title != 'Almanach':
         skills = custom_sort(skills)
-
+    
     if request.method == 'POST':
         handle_inform_form(request)
     
@@ -63,4 +66,55 @@ def knowledge_packets_in_skills_view(request, model_name):
         'skills': skills,
     }
     return render(request, 'knowledge/skills_with_kn_packets.html', context)
+
+
+@login_required
+def kn_packet_create_view(request):
+    profile = request.user.profile
+    if profile.status == 'gm':
+        form = KnPacketCreateForm(data=request.POST or None,
+                                  files=request.FILES or None)
+    else:
+        form = PlayerKnPacketCreateForm(
+            data=request.POST or None,
+            files=request.FILES or None,
+            profile=profile,
+        )
+    
+    if form.is_valid():
+        if profile.status == 'gm':
+            kn_packet = form.save()
+        else:
+            kn_packet = form.save(commit=False)
+            kn_packet.author = profile
+            kn_packet.save()
+            
+            kn_packet.acquired_by.add(profile)
+            kn_packet.skills.set(form.cleaned_data['skills'])
+
+            pictures = [v for k, v in form.cleaned_data.items()
+                        if 'picture' in k and v is not None]
+            for cnt, picture in enumerate(pictures, 1):
+                now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                pic = Picture.objects.create(
+                    image=picture,
+                    type='players-notes',
+                    title=f'PLAYERS-NOTES__{profile}_{now}_[{cnt}]',
+                    description=form.cleaned_data[f'description_{cnt}'] or now,
+                )
+                kn_packet.pictures.add(pic)
+            
+        for location in form.cleaned_data['locations']:
+            location.knowledge_packets.add(kn_packet)
+
+        messages.success(request, 'Utworzono nowy pakiet wiedzy!')
+        return redirect('knowledge:knowledge-packets-in-skills', 'Skill')
+    else:
+        messages.warning(request, form.errors)
+        
+    context = {
+        'page_title': 'Nowy pakiet wiedzy',
+        'form': form,
+    }
+    return render(request, 'knowledge/kn_packet_create.html', context)
 

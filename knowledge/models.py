@@ -1,4 +1,11 @@
-from django.db import models
+from django.db.models import (
+    CharField,
+    ForeignKey,
+    ManyToManyField as M2MField,
+    Model,
+    PROTECT,
+    TextField,
+)
 
 from imaginarion.models import Picture
 from rpg_project.utils import create_sorting_name
@@ -6,24 +13,13 @@ from rules.models import Skill
 from users.models import Profile
 
 
-class KnowledgePacket(models.Model):
-    title = models.CharField(max_length=100, unique=True)
-    text = models.TextField()
-    skills = models.ManyToManyField(
-        to=Skill,
-        related_name='knowledge_packets',
-    )
-    acquired_by = models.ManyToManyField(
-        to=Profile,
-        related_name='knowledge_packets',
-        blank=True,
-    )
-    pictures = models.ManyToManyField(
-        to=Picture,
-        related_name='knowledge_packets',
-        blank=True,
-    )
-    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+class KnowledgePacket(Model):
+    title = CharField(max_length=100, unique=True)
+    text = TextField()
+    skills = M2MField(to=Skill, related_name='knowledge_packets')
+    acquired_by = M2MField(to=Profile, related_name='knowledge_packets', blank=True)
+    pictures = M2MField(to=Picture, related_name='knowledge_packets', blank=True)
+    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
         ordering = ['sorting_name']
@@ -43,15 +39,19 @@ class KnowledgePacket(models.Model):
         return qs
 
 
-class MapPacket(models.Model):
-    title = models.CharField(max_length=100, unique=True)
-    acquired_by = models.ManyToManyField(
+class PlayerKnowledgePacket(KnowledgePacket):
+    author = ForeignKey(
         to=Profile,
-        related_name='map_packets',
-        blank=True,
+        related_name='authored_kn_packets',
+        on_delete=PROTECT,
     )
-    pictures = models.ManyToManyField(to=Picture, related_name='map_packets')
-    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+    
+
+class MapPacket(Model):
+    title = CharField(max_length=100, unique=True)
+    acquired_by = M2MField(to=Profile, related_name='map_packets', blank=True)
+    pictures = M2MField(to=Picture, related_name='map_packets')
+    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
         ordering = ['sorting_name']
