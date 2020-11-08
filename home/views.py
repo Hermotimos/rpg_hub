@@ -11,17 +11,19 @@ def home_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
         known_profiles = Profile.objects.exclude(id=profile.id)
-    # else:
-    #     known_profiles = [profile]
-    rand_profiles = []
-    rand_nums = []
+    else:
+        known_profiles = []
+        
+    rand_profiles = rand_nums = []
     counter = 0
-    while counter < 4:
-        rand = randrange(len(known_profiles))
-        if rand not in rand_nums:
-            rand_profiles.append(known_profiles[rand])
-            rand_nums.append(rand)
-            counter += 1
+    
+    if known_profiles:
+        while counter < 4:
+            rand = randrange(len(known_profiles))
+            if rand not in rand_nums:
+                rand_profiles.append(known_profiles[rand])
+                rand_nums.append(rand)
+                counter += 1
 
     context = {
         'page_title': 'Hyllemath',
