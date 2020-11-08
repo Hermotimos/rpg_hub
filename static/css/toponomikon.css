@@ -8,8 +8,3 @@ table.toponomikon {
         border-collapse: separate;
         border-spacing: 10px;
 }
-
-.map-img img {
-    max-width: 100%;
-    max-height: 400px;
-}
