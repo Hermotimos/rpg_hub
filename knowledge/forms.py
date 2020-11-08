@@ -1,8 +1,13 @@
-from django.forms import ModelForm, ModelMultipleChoiceField, FileField, CharField, Textarea, SelectMultiple
+from django.forms import (
+    CharField,
+    FileField,
+    ModelForm,
+    ModelMultipleChoiceField,
+)
 from django.forms.widgets import SelectMultiple
-from knowledge.models import KnowledgePacket, PlayerKnowledgePacket
+
+from knowledge.models import KnowledgePacket
 from toponomikon.models import Location
-from imaginarion.models import Picture
 
 
 class KnPacketCreateForm(ModelForm):
@@ -19,25 +24,8 @@ class KnPacketCreateForm(ModelForm):
         required=False,
     )
     
-    picture_1 = FileField(required=False, label='')
-    picture_2 = FileField(required=False, label='')
-    picture_3 = FileField(required=False, label='')
-    description_1 = CharField(required=False, label='')
-    description_2 = CharField(required=False, label='')
-    description_3 = CharField(required=False, label='')
-    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['description_1'].widget.attrs = {
-            'placeholder': 'Podpis grafiki nr 1',
-        }
-        self.fields['description_2'].widget.attrs = {
-            'cols': 10,
-            'placeholder': 'Podpis grafiki nr 2',
-        }
-        self.fields['description_3'].widget.attrs = {
-            'placeholder': 'Podpis grafiki nr 3',
-        }
         self.fields['locations'].label = 'Połącz z lokacjami (opcjonalnie):'
         self.fields['locations'].widget.attrs['size'] = 10
         self.fields['skills'].label = 'Połącz z umiejętnościami:'
@@ -57,12 +45,28 @@ class KnPacketCreateForm(ModelForm):
 class PlayerKnPacketCreateForm(KnPacketCreateForm):
     """Form to create KnowledgePackets by 'player' status profiles."""
     class Meta:
-        model = PlayerKnowledgePacket
+        model = KnowledgePacket
         exclude = ['acquired_by', 'pictures', 'sorting_name', 'author']
-        
+    
+    picture_1 = FileField(required=False, label='')
+    picture_2 = FileField(required=False, label='')
+    picture_3 = FileField(required=False, label='')
+    description_1 = CharField(required=False, label='')
+    description_2 = CharField(required=False, label='')
+    description_3 = CharField(required=False, label='')
+
     def __init__(self, *args, **kwargs):
         profile = kwargs.pop('profile')
         super().__init__(*args, **kwargs)
+        self.fields['description_1'].widget.attrs = {
+            'placeholder': 'Podpis grafiki nr 1',
+        }
+        self.fields['description_2'].widget.attrs = {
+            'placeholder': 'Podpis grafiki nr 2',
+        }
+        self.fields['description_3'].widget.attrs = {
+            'placeholder': 'Podpis grafiki nr 3',
+        }
         self.fields['locations'].queryset = (
                 profile.locs_known_directly.all()
                 | profile.locs_known_indirectly.all()

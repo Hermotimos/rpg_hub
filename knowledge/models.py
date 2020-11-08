@@ -14,6 +14,13 @@ from users.models import Profile
 
 
 class KnowledgePacket(Model):
+    author = ForeignKey(
+        to=Profile,
+        related_name='authored_kn_packets',
+        on_delete=PROTECT,
+        null=True,
+        blank=True,
+    )
     title = CharField(max_length=100, unique=True)
     text = TextField()
     skills = M2MField(to=Skill, related_name='knowledge_packets')
@@ -37,14 +44,6 @@ class KnowledgePacket(Model):
         ])
         qs = qs.exclude(id__in=self.acquired_by.all())
         return qs
-
-
-class PlayerKnowledgePacket(KnowledgePacket):
-    author = ForeignKey(
-        to=Profile,
-        related_name='authored_kn_packets',
-        on_delete=PROTECT,
-    )
     
 
 class MapPacket(Model):

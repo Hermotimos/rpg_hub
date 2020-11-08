@@ -6,6 +6,9 @@
 <ul class="bullets-1 bullets-big mb-2 pl-4">
     <li>
         <span class="hover-blue" data-toggle="collapse" data-target="#kn_packet{{ kn_packet.id }}">
+            {% if kn_packet.author %}
+                <img class="rounded-circle img-smaller mr-1" src="{{ kn_packet.author.image.url }}" alt="Profile img">
+            {% endif %}
             {{ kn_packet.title }}
         </span>
     </li>
