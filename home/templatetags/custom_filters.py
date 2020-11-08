@@ -84,7 +84,7 @@ def ordered_columns(thelist, n):
         if thelist[0:split]:
             res.append(thelist[0:split])
             thelist = thelist[split:]
-            print('thelist:', thelist)
+            # print('thelist:', thelist)
     # print('RES:', res)
     return res
 
@@ -178,7 +178,7 @@ def replace(obj_as_text, from_to):
     """Parameter 'from_to' like '&__and' to replace '&' to 'and'."""
     from_ = from_to.split('__')[0]
     to = from_to.split('__')[1]
-    print(from_, to)
+    # print(from_, to)
     return format_as_html(obj_as_text.replace(from_, to))
 
 

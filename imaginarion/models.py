@@ -1,6 +1,13 @@
 from PIL import Image
-from django.db.models import Model, CharField, TextField, ImageField, \
-    ForeignKey, PROTECT, ManyToManyField
+from django.db.models import (
+    CharField,
+    ForeignKey,
+    ImageField,
+    ManyToManyField as M2MField,
+    Model,
+    PROTECT,
+    TextField,
+)
 
 from rpg_project.utils import ReplaceFileStorage
 
@@ -48,7 +55,7 @@ class AudioSet(Model):
         to=Audio,
         on_delete=PROTECT,
     )
-    audios = ManyToManyField(to=Audio, related_name='audio_sets', blank=True)
+    audios = M2MField(to=Audio, related_name='audio_sets', blank=True)
     
     class Meta:
         ordering = ['title']
@@ -66,6 +73,7 @@ IMG_TYPES = (
     ('thera', 'THERA'),
     ('topoi', 'TOPOI'),
     ('varia', 'VARIA'),
+    ('players-notes', 'PLAYERS-NOTES'),
 )
 
 
@@ -73,7 +81,7 @@ class Picture(Model):
     """A model to store paths to internally stored image files."""
 
     image = ImageField(upload_to='post_pics', storage=ReplaceFileStorage())
-    type = CharField(max_length=10, choices=IMG_TYPES)
+    type = CharField(max_length=20, choices=IMG_TYPES)
     title = CharField(max_length=200, unique=True)
     description = CharField(max_length=200, blank=True, null=True)
 
