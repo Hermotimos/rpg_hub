@@ -69,17 +69,22 @@ def knowledge_packets_in_skills_view(request, model_name):
 
 
 @login_required
-def kn_packet_create_view(request):
+def kn_packet_create_and_update_view(request, kn_packet_id):
     profile = request.user.profile
+    try:
+        kn_packet = KnowledgePacket.objects.get(id=kn_packet_id)
+    except KnowledgePacket.DoesNotExist:
+        kn_packet = None
+        
     if profile.status == 'gm':
         form = KnPacketCreateForm(data=request.POST or None,
-                                  files=request.FILES or None)
+                                  files=request.FILES or None,
+                                  instance=kn_packet)
     else:
-        form = PlayerKnPacketCreateForm(
-            data=request.POST or None,
-            files=request.FILES or None,
-            profile=profile,
-        )
+        form = PlayerKnPacketCreateForm(data=request.POST or None,
+                                        files=request.FILES or None,
+                                        instance=kn_packet,
+                                        profile=profile)
     
     if form.is_valid():
         if profile.status == 'gm':
@@ -106,8 +111,11 @@ def kn_packet_create_view(request):
             
         for location in form.cleaned_data['locations']:
             location.knowledge_packets.add(kn_packet)
-
-        messages.success(request, 'Utworzono nowy pakiet wiedzy!')
+            
+        if not kn_packet_id:
+            messages.success(request, 'Utworzono nowy pakiet wiedzy!')
+        else:
+            messages.success(request, 'Zmodyfikowano pakiet wiedzy!')
         return redirect('knowledge:knowledge-packets-in-skills', 'Skill')
     else:
         messages.warning(request, form.errors)
@@ -116,5 +124,8 @@ def kn_packet_create_view(request):
         'page_title': 'Nowy pakiet wiedzy',
         'form': form,
     }
-    return render(request, 'knowledge/kn_packet_create.html', context)
-
+    if not kn_packet_id or profile.status == 'gm' \
+            or profile.knowledge_packets.filter(id=kn_packet_id):
+        return render(request, 'knowledge/kn_packet_create_and_update.html', context)
+    else:
+        return redirect('home:dupa')

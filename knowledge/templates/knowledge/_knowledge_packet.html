@@ -23,6 +23,9 @@
                 {% include '_inform.html' %}
             {% endwith %}
         </div>
+    {% if request.user.profile == kn_packet.author or request.user.profile.status == 'gm' and not kn_packet.author %}
+        <a class="btn btn-outline-dark icon-edit mt-1 mb-3" href="{% url 'knowledge:kn-packet-create-and-update' kn_packet.id %}"></a>
+    {% endif %}
     <p class="btn btn-outline-dark icon-note mt-1 disabled"><a href="#"></a></p>
     
     <!-- Title -->
