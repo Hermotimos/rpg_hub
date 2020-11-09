@@ -1,0 +1,22 @@
+
+<div class="d-flex justify-content-center">
+    {% for picture in row %}
+        <!-- Modal controls -->
+        <figure class="modal-img figure mx-auto for-modal mb-0 mt-4 px-1" data-toggle="modal" data-target="#imgModal{{ picture.id }}">
+            <img src="{{ picture.image.url }}" alt="Event img">
+            {% if picture.description %}
+                <figcaption class="figure-caption text-center pt-1">{{ picture.description }}</figcaption>
+            {% endif %}
+        </figure>
+        <!-- Modal -->
+        <div class="modal fade img-modal" id="imgModal{{ picture.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                <img src="{{ picture.image.url }}" alt="Event img">
+              </div>
+            </div>
+          </div>
+        </div>
+    {% endfor %}
+</div>
