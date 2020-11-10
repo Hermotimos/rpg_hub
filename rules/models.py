@@ -1,4 +1,15 @@
-from django.db import models
+from django.db.models import (
+    CharField,
+    DecimalField,
+    ForeignKey,
+    ImageField,
+    Manager,
+    ManyToManyField,
+    Model,
+    PositiveSmallIntegerField,
+    PROTECT,
+    TextField,
+)
 from django.db.models import Q
 
 from imaginarion.models import Picture
@@ -6,32 +17,19 @@ from rpg_project.utils import create_sorting_name
 from users.models import Profile
 
 
-class Skill(models.Model):
-    name = models.CharField(
-        max_length=100,
-        unique=True,
-        verbose_name='Umiejętność',
-    )
-    tested_trait = models.CharField(
-        max_length=50,
-        verbose_name='Cecha/Cechy',
-        blank=True,
-        null=True,
-    )
-    image = models.ImageField(
-        blank=True,
-        null=True,
-        upload_to='site_features_pics',
-    )
-    allowed_profiles = models.ManyToManyField(
+class Skill(Model):
+    name = CharField('Umiejętność', max_length=100, unique=True)
+    tested_trait = CharField('Cecha/Cechy', max_length=50, blank=True, null=True)
+    image = ImageField(upload_to='site_features_pics', blank=True, null=True)
+    allowed_profiles = ManyToManyField(
         to=Profile,
-        blank=True,
         limit_choices_to=Q(status='active_player')
                          | Q(status='inactive_player')
                          | Q(status='dead_player'),
-        related_name='allowed_skills'
+        related_name='allowed_skills',
+        blank = True,
     )
-    sorting_name = models.CharField(max_length=101, blank=True, null=True)
+    sorting_name = CharField(max_length=101, blank=True, null=True)
 
     def __str__(self):
         return str(self.name)
@@ -60,20 +58,20 @@ S_LEVELS = [
 ]
 
 
-class SkillLevel(models.Model):
-    skill = models.ForeignKey(
+class SkillLevel(Model):
+    skill = ForeignKey(
         to=Skill,
         related_name='skill_levels',
-        on_delete=models.PROTECT,
+        on_delete=PROTECT,
     )
-    level = models.CharField(max_length=10, choices=S_LEVELS)
-    description = models.TextField(max_length=4000, blank=True, null=True)
-    acquired_by = models.ManyToManyField(
+    level = CharField(max_length=10, choices=S_LEVELS)
+    description = TextField(max_length=4000, blank=True, null=True)
+    acquired_by = ManyToManyField(
         to=Profile,
         related_name='skill_levels',
         blank=True,
     )
-    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
         return f'{str(self.skill.name)} [{self.level}]'
@@ -86,7 +84,7 @@ class SkillLevel(models.Model):
         ordering = ['sorting_name']
 
 
-class TheologySkillManager(models.Manager):
+class TheologySkillManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(Q(name__icontains='Doktryn')
@@ -105,7 +103,7 @@ class TheologySkill(Skill):
         verbose_name_plural = 'Skills - THEOLOGY'
 
 
-class BooksSkillManager(models.Manager):
+class BooksSkillManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(Q(name__icontains='Księg'))
@@ -121,7 +119,7 @@ class BooksSkill(Skill):
         verbose_name_plural = 'Skills - BOOKS'
 
 
-class HistorySkillManager(models.Manager):
+class HistorySkillManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(Q(name__icontains='Histor'))
@@ -137,18 +135,18 @@ class HistorySkill(Skill):
         verbose_name_plural = 'Skills - HISTORY'
 
 
-class Synergy(models.Model):
-    name = models.CharField(max_length=100, verbose_name='Synergia')
-    skills = models.ManyToManyField(Skill, related_name='skills')
-    allowed_profiles = models.ManyToManyField(
+class Synergy(Model):
+    name = CharField(max_length=100, verbose_name='Synergia')
+    skills = ManyToManyField(to=Skill, related_name='skills')
+    allowed_profiles = ManyToManyField(
         to=Profile,
-        blank=True,
         limit_choices_to=Q(status='active_player')
                          | Q(status='inactive_player')
                          | Q(status='dead_player'),
         related_name='allowed_synergies',
+        blank=True,
     )
-    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -171,20 +169,20 @@ class Synergy(models.Model):
         verbose_name_plural = 'synergies'
 
 
-class SynergyLevel(models.Model):
-    synergy = models.ForeignKey(
+class SynergyLevel(Model):
+    synergy = ForeignKey(
         to=Synergy,
         related_name='synergy_levels',
-        on_delete=models.PROTECT,
+        on_delete=PROTECT,
     )
-    level = models.CharField(max_length=10, choices=S_LEVELS[1:])
-    description = models.TextField(max_length=4000, blank=True, null=True)
-    acquired_by = models.ManyToManyField(
+    level = CharField(max_length=10, choices=S_LEVELS[1:])
+    description = TextField(max_length=4000, blank=True, null=True)
+    acquired_by = ManyToManyField(
         to=Profile,
         related_name='synergy_levels',
         blank=True,
     )
-    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
         return f'{str(self.synergy.name)} [{self.level}]'
@@ -197,10 +195,10 @@ class SynergyLevel(models.Model):
         ordering = ['sorting_name']
 
 
-class Profession(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    description = models.TextField(max_length=4000, blank=True, null=True)
-    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+class Profession(Model):
+    name = CharField(max_length=100, unique=True)
+    description = TextField(max_length=4000, blank=True, null=True)
+    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -230,45 +228,45 @@ class Profession(models.Model):
         verbose_name_plural = 'Professions'
 
 
-class Klass(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    profession = models.ForeignKey(
+class Klass(Model):
+    name = CharField(max_length=100, unique=True)
+    profession = ForeignKey(
         to=Profession,
         related_name='klasses',
-        on_delete=models.PROTECT,
+        on_delete=PROTECT,
     )
-    description = models.TextField(max_length=4000, blank=True, null=True)
-    start_perks = models.TextField(max_length=4000, blank=True, null=True)
-    lvl_1 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_2 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_3 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_4 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_5 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_6 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_7 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_8 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_9 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_10 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_11 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_12 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_13 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_14 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_15 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_16 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_17 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_18 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_19 = models.CharField(max_length=500, blank=True, null=True)
-    lvl_20 = models.CharField(max_length=500, blank=True, null=True)
-    allowed_profiles = models.ManyToManyField(
+    description = TextField(max_length=4000, blank=True, null=True)
+    start_perks = TextField(max_length=4000, blank=True, null=True)
+    lvl_1 = CharField(max_length=500, blank=True, null=True)
+    lvl_2 = CharField(max_length=500, blank=True, null=True)
+    lvl_3 = CharField(max_length=500, blank=True, null=True)
+    lvl_4 = CharField(max_length=500, blank=True, null=True)
+    lvl_5 = CharField(max_length=500, blank=True, null=True)
+    lvl_6 = CharField(max_length=500, blank=True, null=True)
+    lvl_7 = CharField(max_length=500, blank=True, null=True)
+    lvl_8 = CharField(max_length=500, blank=True, null=True)
+    lvl_9 = CharField(max_length=500, blank=True, null=True)
+    lvl_10 = CharField(max_length=500, blank=True, null=True)
+    lvl_11 = CharField(max_length=500, blank=True, null=True)
+    lvl_12 = CharField(max_length=500, blank=True, null=True)
+    lvl_13 = CharField(max_length=500, blank=True, null=True)
+    lvl_14 = CharField(max_length=500, blank=True, null=True)
+    lvl_15 = CharField(max_length=500, blank=True, null=True)
+    lvl_16 = CharField(max_length=500, blank=True, null=True)
+    lvl_17 = CharField(max_length=500, blank=True, null=True)
+    lvl_18 = CharField(max_length=500, blank=True, null=True)
+    lvl_19 = CharField(max_length=500, blank=True, null=True)
+    lvl_20 = CharField(max_length=500, blank=True, null=True)
+    allowed_profiles = ManyToManyField(
         to=Profile,
-        blank=True,
         limit_choices_to=Q(status='active_player')
                          | Q(status='inactive_player')
                          | Q(status='inactive_player')
                          | Q(status='dead_player'),
         related_name='allowed_klasses',
+        blank=True,
     )
-    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -291,18 +289,18 @@ class Klass(models.Model):
         verbose_name_plural = 'Klasses'
 
 
-class EliteProfession(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    description = models.TextField(max_length=4000, blank=True, null=True)
-    allowed_profiles = models.ManyToManyField(
+class EliteProfession(Model):
+    name = CharField(max_length=100, unique=True)
+    description = TextField(max_length=4000, blank=True, null=True)
+    allowed_profiles = ManyToManyField(
         to=Profile,
-        blank=True,
         limit_choices_to=Q(status='active_player')
                          | Q(status='inactive_player')
                          | Q(status='dead_player'),
         related_name='allowed_elite_classes',
+        blank=True,
     )
-    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -325,24 +323,24 @@ class EliteProfession(models.Model):
         verbose_name_plural = 'Elite professions'
 
 
-class EliteKlass(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    elite_profession = models.ForeignKey(
+class EliteKlass(Model):
+    name = CharField(max_length=100, unique=True)
+    elite_profession = ForeignKey(
         to=EliteProfession,
         related_name='elite_klasses',
-        on_delete=models.PROTECT,
+        on_delete=PROTECT,
     )
-    description = models.TextField(max_length=4000, blank=True, null=True)
-    start_perks = models.TextField(max_length=4000, blank=True, null=True)
-    allowed_profiles = models.ManyToManyField(
+    description = TextField(max_length=4000, blank=True, null=True)
+    start_perks = TextField(max_length=4000, blank=True, null=True)
+    allowed_profiles = ManyToManyField(
         to=Profile,
-        blank=True,
         limit_choices_to=Q(status='active_player')
                          | Q(status='inactive_player')
                          | Q(status='dead_player'),
         related_name='allowed_elite_klasses',
+        blank=True,
     )
-    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -365,10 +363,10 @@ class EliteKlass(models.Model):
         verbose_name_plural = 'Elite klasses'
 
 
-class WeaponType(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    description = models.TextField(max_length=4000, blank=True, null=True)
-    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+class WeaponType(Model):
+    name = CharField(max_length=100, unique=True)
+    description = TextField(max_length=4000, blank=True, null=True)
+    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -418,40 +416,42 @@ CURRENCIES = [
 ]
 
 
-class Weapon(models.Model):
-    weapon_type = models.ForeignKey(
+class Weapon(Model):
+    weapon_type = ForeignKey(
         to=WeaponType,
         related_name='weapons',
-        on_delete=models.PROTECT,
+        on_delete=PROTECT,
     )
-    name = models.CharField(max_length=100, unique=True)
-    description = models.TextField(max_length=4000, blank=True, null=True)
-    pictures = models.ManyToManyField(
+    name = CharField(max_length=100, unique=True)
+    description = TextField(max_length=4000, blank=True, null=True)
+    pictures = ManyToManyField(
         to=Picture,
         related_name='weapon_pics',
         blank=True,
     )
-    delay = models.PositiveSmallIntegerField()
-    damage_small_dices = models.CharField(max_length=10, blank=True, null=True)
-    damage_small_add = models.PositiveSmallIntegerField(blank=True, null=True)
-    damage_big_dices = models.CharField(max_length=10, blank=True, null=True)
-    damage_big_add = models.PositiveSmallIntegerField(blank=True, null=True)
-    damage_type = models.CharField(max_length=10, choices=DAMAGE_TYPES)
-    special = models.TextField(max_length=4000, blank=True, null=True)
-    range = models.CharField(max_length=100, blank=True, null=True)
-    size = models.CharField(max_length=5, choices=SIZES)
-    trait = models.CharField(max_length=10, choices=TRAITS)
-    avg_price_value = models.PositiveSmallIntegerField(blank=True, null=True)
-    avg_price_currency = models.CharField(max_length=5, choices=CURRENCIES, blank=True, null=True)
-    avg_weight = models.DecimalField(max_digits=10, decimal_places=1)
+    delay = PositiveSmallIntegerField()
+    damage_small_dices = CharField(max_length=10, blank=True, null=True)
+    damage_small_add = PositiveSmallIntegerField(blank=True, null=True)
+    damage_big_dices = CharField(max_length=10, blank=True, null=True)
+    damage_big_add = PositiveSmallIntegerField(blank=True, null=True)
+    damage_type = CharField(max_length=10, choices=DAMAGE_TYPES)
+    special = TextField(max_length=4000, blank=True, null=True)
+    range = CharField(max_length=100, blank=True, null=True)
+    size = CharField(max_length=5, choices=SIZES)
+    trait = CharField(max_length=10, choices=TRAITS)
+    avg_price_value = PositiveSmallIntegerField(blank=True, null=True)
+    avg_price_currency = CharField(max_length=5, choices=CURRENCIES, blank=True, null=True)
+    avg_weight = DecimalField(max_digits=10, decimal_places=1)
 
-    allowed_profiles = models.ManyToManyField(to=Profile, blank=True,
-                                              limit_choices_to=
-                                              Q(status='active_player') |
-                                              Q(status='inactive_player') |
-                                              Q(status='dead_player'),
-                                              related_name='allowed_weapons')
-    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+    allowed_profiles = ManyToManyField(
+        to=Profile,
+        limit_choices_to=Q(status='active_player')
+                         | Q(status='inactive_player')
+                         | Q(status='dead_player'),
+        related_name='allowed_weapons',
+        blank=True,
+    )
+    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -481,37 +481,40 @@ class Weapon(models.Model):
         ordering = ['sorting_name']
 
 
-class Plate(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    description = models.TextField(max_length=4000, blank=True, null=True)
-    pictures = models.ManyToManyField(to=Picture, related_name='plate_pics', blank=True)
-
-    armor_class_bonus = models.PositiveSmallIntegerField(blank=True, null=True)
-    parrying = models.PositiveSmallIntegerField(blank=True, null=True)
-    endurance = models.PositiveSmallIntegerField()
-    weight = models.DecimalField(max_digits=10, decimal_places=1)
-
-    mod_max_agility = models.PositiveSmallIntegerField(blank=True, null=True)
-    mod_max_movement = models.CharField(max_length=2, blank=True, null=True)
-
-    mod_pickpocketing = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    mod_lockpicking = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    mod_sneaking_towns = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    mod_sneaking_wilderness = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    mod_hiding_towns = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    mod_hiding_wilderness = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    mod_climbing = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    mod_traps = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-
-    allowed_profiles = models.ManyToManyField(
-        to=Profile,
+class Plate(Model):
+    name = CharField(max_length=100, unique=True)
+    description = TextField(max_length=4000, blank=True, null=True)
+    pictures = ManyToManyField(
+        to=Picture,
+        related_name='plate_pics',
         blank=True,
+    )
+    armor_class_bonus = PositiveSmallIntegerField(blank=True, null=True)
+    parrying = PositiveSmallIntegerField(blank=True, null=True)
+    endurance = PositiveSmallIntegerField()
+    weight = DecimalField(max_digits=10, decimal_places=1)
+
+    mod_max_agility = PositiveSmallIntegerField(blank=True, null=True)
+    mod_max_movement = CharField(max_length=2, blank=True, null=True)
+
+    mod_pickpocketing = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
+    mod_lockpicking = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
+    mod_sneaking_towns = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
+    mod_sneaking_wilderness = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
+    mod_hiding_towns = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
+    mod_hiding_wilderness = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
+    mod_climbing = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
+    mod_traps = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
+
+    allowed_profiles = ManyToManyField(
+        to=Profile,
         limit_choices_to=Q(status='active_player')
                          | Q(status='inactive_player')
                          | Q(status='dead_player'),
         related_name='allowed_plates',
+        blank=True,
     )
-    sorting_number = models.DecimalField(max_digits=3, decimal_places=2)
+    sorting_number = DecimalField(max_digits=3, decimal_places=2)
 
     def __str__(self):
         return self.name
@@ -527,34 +530,34 @@ class Plate(models.Model):
         ordering = ['sorting_number']
 
 
-class Shield(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    description = models.TextField(max_length=4000, blank=True, null=True)
-    pictures = models.ManyToManyField(
+class Shield(Model):
+    name = CharField(max_length=100, unique=True)
+    description = TextField(max_length=4000, blank=True, null=True)
+    pictures = ManyToManyField(
         to=Picture,
         related_name='shield_pics',
         blank=True,
     )
-    enemies_no = models.PositiveSmallIntegerField()
-    armor_class_bonus_close_combat = models.PositiveSmallIntegerField(
+    enemies_no = PositiveSmallIntegerField()
+    armor_class_bonus_close_combat = PositiveSmallIntegerField(
         blank=True,
         null=True,
     )
-    armor_class_bonus_distance_combat = models.PositiveSmallIntegerField(
+    armor_class_bonus_distance_combat = PositiveSmallIntegerField(
         blank=True,
         null=True,
     )
-    weight = models.DecimalField(max_digits=10, decimal_places=1)
+    weight = DecimalField(max_digits=10, decimal_places=1)
 
-    allowed_profiles = models.ManyToManyField(
+    allowed_profiles = ManyToManyField(
         to=Profile,
-        blank=True,
         limit_choices_to=Q(status='active_player')
                          | Q(status='inactive_player')
                          | Q(status='dead_player'),
         related_name='allowed_shields',
+        blank=True,
     )
-    sorting_number = models.DecimalField(max_digits=3, decimal_places=2)
+    sorting_number = DecimalField(max_digits=3, decimal_places=2)
 
     def __str__(self):
         return self.name

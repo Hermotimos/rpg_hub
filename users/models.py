@@ -1,4 +1,10 @@
-from django.db import models
+from django.db.models import (
+    CASCADE,
+    CharField,
+    ImageField,
+    Model,
+    OneToOneField,
+)
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
@@ -20,20 +26,15 @@ STATUS = [
 ]
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    character_name = models.CharField(max_length=50, default='')
-    status = models.CharField(
-        max_length=50,
-        choices=STATUS,
-        default='living_npc',
-    )
-    image = models.ImageField(
+class Profile(Model):
+    user = OneToOneField(User, on_delete=CASCADE)
+    character_name = CharField(max_length=50, default='')
+    status = CharField(max_length=50, choices=STATUS, default='living_npc')
+    image = ImageField(
         default='profile_pics/profile_default.jpg',
         upload_to='profile_pics',
     )
    
-    
     class Meta:
         ordering = ['status', 'character_name']
 

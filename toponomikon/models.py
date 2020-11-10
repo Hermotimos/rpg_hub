@@ -1,5 +1,15 @@
-from django.db.models import Q, Model, Manager, CharField, ForeignKey, \
-    PositiveSmallIntegerField, TextField, ManyToManyField, SET_NULL, PROTECT
+from django.db.models import (
+    CharField,
+    ForeignKey,
+    Manager,
+    ManyToManyField,
+    Model,
+    PositiveSmallIntegerField,
+    PROTECT,
+    Q,
+    SET_NULL,
+    TextField,
+)
 from django.db.models.signals import post_save, m2m_changed
 
 from imaginarion.models import AudioSet, Picture
@@ -38,8 +48,8 @@ class Location(Model):
     )
     pictures = ManyToManyField(
         to=Picture,
+        related_name='locations_pics',
         blank=True,
-        related_name='locations_pics'
     )
     audio_set = ForeignKey(
         to=AudioSet,
