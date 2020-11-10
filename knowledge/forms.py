@@ -40,6 +40,9 @@ class KnPacketCreateForm(ModelForm):
         self.fields['title'].widget.attrs = {
             'placeholder': 'Tytuł pakietu wiedzy (max. 100 znaków)*',
         }
+        instance = kwargs.pop('instance')
+        if instance:
+            self.fields['locations'].initial = Location.objects.filter(knowledge_packets=instance)
 
 
 class PlayerKnPacketCreateForm(KnPacketCreateForm):

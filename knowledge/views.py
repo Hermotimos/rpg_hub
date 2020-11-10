@@ -113,15 +113,15 @@ def kn_packet_create_and_update_view(request, kn_packet_id):
             location.knowledge_packets.add(kn_packet)
             
         if not kn_packet_id:
-            messages.success(request, 'Utworzono nowy pakiet wiedzy!')
+            messages.success(request, f'Utworzono "{kn_packet.title}"!')
         else:
-            messages.success(request, 'Zmodyfikowano pakiet wiedzy!')
+            messages.success(request, f'Zmieniono "{kn_packet.title}"!')
         return redirect('knowledge:knowledge-packets-in-skills', 'Skill')
     else:
         messages.warning(request, form.errors)
         
     context = {
-        'page_title': 'Nowy pakiet wiedzy',
+        'page_title': kn_packet.title if kn_packet else 'Nowy pakiet wiedzy',
         'form': form,
     }
     if not kn_packet_id or profile.status == 'gm' \
