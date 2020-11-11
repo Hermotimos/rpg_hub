@@ -55,16 +55,16 @@ def chronicle_contents_view(request):
 @login_required
 def chronicle_game_view(request, game_id):
     profile = request.user.profile
-    game = get_object_or_404(GameSession, id=game_id)
     
+    game = get_object_or_404(GameSession, id=game_id)
     events = GameEvent.objects.filter(game=game)
     events = events.prefetch_related(
         'known_directly',
         'known_indirectly',
         'pictures',
+        'debates__topic',
         'debates__remarks__author__profile',
     )
-    events = events.select_related('debate__topic')
     if not profile.status == 'gm':
         events = events.filter(
             Q(known_directly=profile) | Q(known_indirectly=profile)

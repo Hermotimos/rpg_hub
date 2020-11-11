@@ -1,8 +1,22 @@
 from PIL import Image
 
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db import models
-from django.db.models import Q
+from django.db.models import (
+    BooleanField,
+    CharField,
+    DateField,
+    ForeignKey,
+    ImageField,
+    IntegerField,
+    Manager,
+    ManyToManyField,
+    Model,
+    OneToOneField,
+    PositiveSmallIntegerField,
+    PROTECT,
+    Q,
+    TextField,
+)
 from django.db.models.signals import post_save, m2m_changed
 
 from debates.models import Debate
@@ -19,14 +33,10 @@ SEASONS = {
 }
 
 
-class Chapter(models.Model):
-    chapter_no = models.IntegerField(blank=True, null=True)
-    title = models.CharField(max_length=200, unique=True)
-    image = models.ImageField(
-        blank=True,
-        null=True,
-        upload_to='site_features_pics',
-    )
+class Chapter(Model):
+    chapter_no = IntegerField(blank=True, null=True)
+    title = CharField(max_length=200, unique=True)
+    image = ImageField(upload_to='site_features_pics', blank=True, null=True)
     
     class Meta:
         ordering = ['chapter_no']
@@ -46,17 +56,17 @@ class Chapter(models.Model):
                 img.save(self.image.path)
 
 
-class GameSession(models.Model):
-    game_no = models.IntegerField(null=True)
-    title = models.CharField(max_length=200)
-    chapter = models.ForeignKey(
+class GameSession(Model):
+    game_no = IntegerField(null=True)
+    title = CharField(max_length=200)
+    chapter = ForeignKey(
         to=Chapter,
         related_name='game_sessions',
-        on_delete=models.PROTECT,
+        on_delete=PROTECT,
         blank=True,
         null=True,
     )
-    date = models.DateField(blank=True, null=True)
+    date = DateField(blank=True, null=True)
     
     class Meta:
         ordering = ['game_no']
@@ -66,10 +76,10 @@ class GameSession(models.Model):
         return f'{self.game_no} - {self.title}'
 
 
-class Thread(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    is_ended = models.BooleanField(default=False)
-    sorting_name = models.CharField(max_length=250, blank=True, null=True)
+class Thread(Model):
+    name = CharField(max_length=100, unique=True)
+    is_ended = BooleanField(default=False)
+    sorting_name = CharField(max_length=250, blank=True, null=True)
     
     def __str__(self):
         return self.name
@@ -84,7 +94,7 @@ class Thread(models.Model):
         verbose_name = '- Thread'
 
 
-class ThreadActiveManager(models.Manager):
+class ThreadActiveManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(is_ended=False)
@@ -100,7 +110,7 @@ class ThreadActive(Thread):
         verbose_name_plural = '- Threads Active'
 
 
-class ThreadEndedManager(models.Manager):
+class ThreadEndedManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(is_ended=True)
@@ -116,7 +126,7 @@ class ThreadEnded(Thread):
         verbose_name_plural = '- Threads Ended'
 
 
-class Date(models.Model):
+class Date(Model):
     SEASONS = (
         ('1', 'Wiosny'),
         ('2', 'Lata'),
@@ -124,14 +134,9 @@ class Date(models.Model):
         ('4', 'Zimy')
     )
     
-    year = models.IntegerField()
-    season = models.CharField(
-        max_length=6,
-        choices=SEASONS,
-        blank=True,
-        null=True,
-    )
-    day = models.PositiveSmallIntegerField(
+    year = IntegerField()
+    season = CharField(max_length=6, choices=SEASONS, blank=True, null=True)
+    day = PositiveSmallIntegerField(
         validators=[MaxValueValidator(90)],
         blank=True,
         null=True,
@@ -149,7 +154,7 @@ class Date(models.Model):
         return f'{self.year}. roku'
     
 
-class TimeUnitManager(models.Manager):
+class TimeUnitManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related(
@@ -164,125 +169,97 @@ class TimeUnitManager(models.Manager):
         return qs
 
 
-class TimeUnit(models.Model):
+class TimeUnit(Model):
     objects = TimeUnitManager()
     
-    # All proxies
-    date_start = models.ForeignKey(
+    # Fields for all proxies
+    date_start = ForeignKey(
         to=Date,
         related_name='timeunits_started',
-        on_delete=models.PROTECT,
+        on_delete=PROTECT,
         verbose_name='Date start (year of the encompassing unit)',
         #  TODO - blank and null are only for recreating events - delete later
         blank=True,
         null=True,
     )
-    date_end = models.ForeignKey(
+    date_end = ForeignKey(
         to=Date,
         related_name='timeunits_ended',
-        on_delete=models.PROTECT,
+        on_delete=PROTECT,
         verbose_name='Date end (year of the encompassing unit)',
         blank=True,
         null=True,
     )
-    in_timeunit = models.ForeignKey(
+    in_timeunit = ForeignKey(
         to='self',
         related_name='timeunits',
-        on_delete=models.PROTECT,
+        on_delete=PROTECT,
         blank=True,
         null=True,
     )
-    date_in_period = models.CharField(max_length=99, blank=True, null=True)
-    date_in_era = models.CharField(max_length=99, blank=True, null=True)
-    date_in_chronology = models.CharField(max_length=99, blank=True, null=True)
-    description_short = models.TextField(blank=True, null=True)
-    description_long = models.TextField(blank=True, null=True)
+    date_in_period = CharField(max_length=99, blank=True, null=True)
+    date_in_era = CharField(max_length=99, blank=True, null=True)
+    date_in_chronology = CharField(max_length=99, blank=True, null=True)
+    description_short = TextField(blank=True, null=True)
+    description_long = TextField(blank=True, null=True)
     
-    # TimeSpan & HistoryEvent proxies
-    known_short_desc = models.ManyToManyField(
+    # Fields for TimeSpan & HistoryEvent proxies
+    known_short_desc = ManyToManyField(
         to=Profile,
         related_name='timeunits_known_short_desc',
-        limit_choices_to=
-        Q(status='active_player')
-        | Q(status='inactive_player')
-        | Q(status='dead_player'),
+        limit_choices_to=Q(status='active_player')
+                         | Q(status='inactive_player')
+                         | Q(status='dead_player'),
         blank=True,
     )
-    known_long_desc = models.ManyToManyField(
+    known_long_desc = ManyToManyField(
         to=Profile,
         related_name='timeunits_long_desc',
-        limit_choices_to=
-        Q(status='active_player')
-        | Q(status='inactive_player')
-        | Q(status='dead_player'),
+        limit_choices_to=Q(status='active_player')
+                         | Q(status='inactive_player')
+                         | Q(status='dead_player'),
         blank=True,
     )
 
-    # TimeSpan proxy
-    name = models.CharField(max_length=256, blank=True, null=True)
-    name_genetive = models.CharField(max_length=256, blank=True, null=True)
+    # Fields for TimeSpan proxy
+    name = CharField(max_length=256, blank=True, null=True)
+    name_genetive = CharField(max_length=256, blank=True, null=True)
 
-    # HistoryEvent & GameEvent proxies
-    threads = models.ManyToManyField(
-        to=Thread,
-        related_name='events',
-        blank=True,
-    )
-    locations = models.ManyToManyField(
-        to=Location,
-        related_name='events',
-        blank=True,
-    )
+    # Fields for HistoryEvent & GameEvent proxies
+    threads = ManyToManyField(to=Thread, related_name='events', blank=True)
+    locations = ManyToManyField(to=Location, related_name='events', blank=True)
 
     # GameEvent proxy
-    game = models.ForeignKey(
+    game = ForeignKey(
         to=GameSession,
         related_name='game_events',
-        on_delete=models.PROTECT,
+        on_delete=PROTECT,
         blank=True,
         null=True,
     )
-    event_no_in_game = models.PositiveSmallIntegerField(
+    event_no_in_game = PositiveSmallIntegerField(
         validators=[MinValueValidator(1)],
         blank=True,
         null=True,
     )
-    known_directly = models.ManyToManyField(
+    known_directly = ManyToManyField(
         to=Profile,
         related_name='events_known_directly',
-        limit_choices_to=
-        Q(status='active_player')
-        | Q(status='inactive_player')
-        | Q(status='dead_player'),
+        limit_choices_to=Q(status='active_player')
+                         | Q(status='inactive_player')
+                         | Q(status='dead_player'),
         blank=True,
     )
-    known_indirectly = models.ManyToManyField(
+    known_indirectly = ManyToManyField(
         to=Profile,
         related_name='events_known_indirectly',
-        limit_choices_to=
-        Q(status='active_player')
-        | Q(status='inactive_player')
-        | Q(status='dead_player'),
+        limit_choices_to=Q(status='active_player')
+                         | Q(status='inactive_player')
+                         | Q(status='dead_player'),
         blank=True,
     )
-    pictures = models.ManyToManyField(
-        to=Picture,
-        related_name='events',
-        blank=True,
-    )
-    # TODO delete after transition to .debates is accomplished
-    debate = models.OneToOneField(
-        to=Debate,
-        related_name='event',
-        on_delete=models.PROTECT,
-        blank=True,
-        null=True,
-    )
-    debates = models.ManyToManyField(
-        to=Debate,
-        related_name='events',
-        blank=True,
-    )
+    pictures = ManyToManyField(to=Picture, related_name='events', blank=True)
+    debates = ManyToManyField(to=Debate, related_name='events', blank=True)
     
     class Meta:
         ordering = ['date_start']
@@ -308,20 +285,7 @@ class TimeUnit(models.Model):
         )
         return qs
 
-    # def save(self, *args, **kwargs):
-    #     start = self.date_start
-    #     end = self.date_end
-    #     dates = start or '???'
-    #     if end:
-    #         if end.year and end.season:
-    #             if end.season == start.season and end.year == start.year:
-    #                 dates = f'{start.day}-{end}'
-    #             elif end.year == start.year:
-    #                 dates = f'{start.day}. dnia {start.season} - {end}'
-    #             else:
-    #                 dates = f'{start} - {end}'
-    #     self.dates = str(dates) + ' ' + str(self.in_timeunit.name_genetive)
-    #     super().save(*args, **kwargs)
+
 
 
 # ----------------------------------------------------------------------------
@@ -329,7 +293,7 @@ class TimeUnit(models.Model):
 # ----------------------------------------------------------------------------
 
 
-class ChronologyManager(models.Manager):
+class ChronologyManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related()
@@ -346,7 +310,7 @@ class Chronology(TimeUnit):
         verbose_name_plural = '1 - Chronologies'
 
 
-class EraManager(models.Manager):
+class EraManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related()
@@ -364,7 +328,7 @@ class Era(TimeUnit):
         verbose_name = '2 - Era'
 
 
-class PeriodManager(models.Manager):
+class PeriodManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related()
@@ -474,7 +438,7 @@ class Event(TimeUnit):
         super().save(*args, **kwargs)
 
 
-class HistoryEventManager(models.Manager):
+class HistoryEventManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related()
@@ -495,7 +459,7 @@ class HistoryEvent(Event):
         return str(self.pk)
 
 
-class GameEventManager(models.Manager):
+class GameEventManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related('game', 'in_timeunit', 'date_start', 'date_end')
