@@ -288,10 +288,7 @@ div.img-hover-zoom {
         max-width: 19rem;
     }
 }
-.modal-backdrop
-{
-    opacity:0.9 !important;
-}
+.modal-backdrop {opacity:0.9 !important;}
 /*
 This is now only for images with modals in Chronicle, but should be applied to
 all images - they all have to get modals, and then these can be generalized:
