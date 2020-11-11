@@ -85,15 +85,14 @@ def chronicle_game_view(request, game_id):
 def chronicle_chapter_view(request, chapter_id):
     profile = request.user.profile
     chapter = get_object_or_404(Chapter, id=chapter_id)
-
     events = GameEvent.objects.filter(game__chapter=chapter)
     events = events.prefetch_related(
         'known_directly',
         'known_indirectly',
         'pictures',
-        'debates',
+        'debates__topic',
+        'debates__remarks__author__profile',
     )
-    events = events.select_related('debate__topic')
     if not profile.status == 'gm':
         events = events.filter(
             Q(known_directly=profile) | Q(known_indirectly=profile)
@@ -117,14 +116,13 @@ def chronicle_chapter_view(request, chapter_id):
 @login_required
 def chronicle_all_view(request):
     profile = request.user.profile
-    
     events = GameEvent.objects.prefetch_related(
         'known_directly',
         'known_indirectly',
         'pictures',
-        'debates',
+        'debates__topic',
+        'debates__remarks__author__profile',
     )
-    events = events.select_related('debate__topic')
     if not profile.status == 'gm':
         events = events.filter(
             Q(known_directly=profile) | Q(known_indirectly=profile)
