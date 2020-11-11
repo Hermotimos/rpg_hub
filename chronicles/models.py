@@ -5,11 +5,11 @@ from django.db.models import (
     BooleanField,
     CharField,
     DateField,
-    ForeignKey,
+    ForeignKey as FK,
     ImageField,
     IntegerField,
     Manager,
-    ManyToManyField,
+    ManyToManyField as M2MField,
     Model,
     PositiveSmallIntegerField,
     PROTECT,
@@ -24,6 +24,11 @@ from rpg_project.utils import create_sorting_name
 from toponomikon.models import Location
 from users.models import Profile
 
+PLAYERS = Q(status__in=[
+    'active_player',
+    'inactive_player',
+    'dead_player',
+])
 SEASONS = {
     '1': 'Wiosny',
     '2': 'Lata',
@@ -58,7 +63,7 @@ class Chapter(Model):
 class GameSession(Model):
     game_no = IntegerField(null=True)
     title = CharField(max_length=200)
-    chapter = ForeignKey(
+    chapter = FK(
         to=Chapter,
         related_name='game_sessions',
         on_delete=PROTECT,
@@ -175,7 +180,7 @@ class TimeUnit(Model):
     objects = TimeUnitManager()
     
     # Fields for all proxies
-    date_start = ForeignKey(
+    date_start = FK(
         to=Date,
         related_name='timeunits_started',
         on_delete=PROTECT,
@@ -184,7 +189,7 @@ class TimeUnit(Model):
         blank=True,
         null=True,
     )
-    date_end = ForeignKey(
+    date_end = FK(
         to=Date,
         related_name='timeunits_ended',
         on_delete=PROTECT,
@@ -192,7 +197,7 @@ class TimeUnit(Model):
         blank=True,
         null=True,
     )
-    in_timeunit = ForeignKey(
+    in_timeunit = FK(
         to='self',
         related_name='timeunits',
         on_delete=PROTECT,
@@ -206,20 +211,16 @@ class TimeUnit(Model):
     description_long = TextField(blank=True, null=True)
     
     # Fields for TimeSpan & HistoryEvent proxies
-    known_short_desc = ManyToManyField(
+    known_short_desc = M2MField(
         to=Profile,
         related_name='timeunits_known_short_desc',
-        limit_choices_to=Q(status='active_player')
-                         | Q(status='inactive_player')
-                         | Q(status='dead_player'),
+        limit_choices_to=PLAYERS,
         blank=True,
     )
-    known_long_desc = ManyToManyField(
+    known_long_desc = M2MField(
         to=Profile,
         related_name='timeunits_long_desc',
-        limit_choices_to=Q(status='active_player')
-                         | Q(status='inactive_player')
-                         | Q(status='dead_player'),
+        limit_choices_to=PLAYERS,
         blank=True,
     )
 
@@ -228,11 +229,11 @@ class TimeUnit(Model):
     name_genetive = CharField(max_length=256, blank=True, null=True)
 
     # Fields for HistoryEvent & GameEvent proxies
-    threads = ManyToManyField(to=Thread, related_name='events', blank=True)
-    locations = ManyToManyField(to=Location, related_name='events', blank=True)
+    threads = M2MField(to=Thread, related_name='events', blank=True)
+    locations = M2MField(to=Location, related_name='events', blank=True)
 
     # GameEvent proxy
-    game = ForeignKey(
+    game = FK(
         to=GameSession,
         related_name='game_events',
         on_delete=PROTECT,
@@ -244,24 +245,20 @@ class TimeUnit(Model):
         blank=True,
         null=True,
     )
-    known_directly = ManyToManyField(
+    known_directly = M2MField(
         to=Profile,
         related_name='events_known_directly',
-        limit_choices_to=Q(status='active_player')
-                         | Q(status='inactive_player')
-                         | Q(status='dead_player'),
+        limit_choices_to=PLAYERS,
         blank=True,
     )
-    known_indirectly = ManyToManyField(
+    known_indirectly = M2MField(
         to=Profile,
         related_name='events_known_indirectly',
-        limit_choices_to=Q(status='active_player')
-                         | Q(status='inactive_player')
-                         | Q(status='dead_player'),
+        limit_choices_to=PLAYERS,
         blank=True,
     )
-    pictures = ManyToManyField(to=Picture, related_name='events', blank=True)
-    debates = ManyToManyField(to=Debate, related_name='events', blank=True)
+    pictures = M2MField(to=Picture, related_name='events', blank=True)
+    debates = M2MField(to=Debate, related_name='events', blank=True)
     
     class Meta:
         ordering = ['date_start']

@@ -1,8 +1,8 @@
 from django.db.models import (
     CharField,
-    ForeignKey,
+    ForeignKey as FK,
     Manager,
-    ManyToManyField,
+    ManyToManyField as M2MField,
     Model,
     PositiveSmallIntegerField,
     PROTECT,
@@ -17,11 +17,17 @@ from knowledge.models import KnowledgePacket, MapPacket
 from rpg_project.utils import create_sorting_name
 from users.models import Profile
 
+PLAYERS = Q(status__in=[
+    'active_player',
+    'inactive_player',
+    'dead_player',
+])
+
 
 class LocationType(Model):
     name = CharField(max_length=100)
     name_plural = CharField(max_length=100, blank=True, null=True)
-    default_img = ForeignKey(
+    default_img = FK(
         to=Picture,
         related_name='location_types',
         on_delete=SET_NULL,
@@ -39,62 +45,50 @@ class LocationType(Model):
 class Location(Model):
     name = CharField(unique=True, max_length=100)
     description = TextField(blank=True, null=True)
-    main_image = ForeignKey(
+    main_image = FK(
         to=Picture,
         related_name='locations_main_pics',
         on_delete=PROTECT,
         blank=True,
         null=True,
     )
-    pictures = ManyToManyField(
-        to=Picture,
-        related_name='locations_pics',
-        blank=True,
-    )
-    audio_set = ForeignKey(
+    pictures = M2MField(to=Picture, related_name='locations_pics', blank=True)
+    audio_set = FK(
         to=AudioSet,
         related_name='locations',
         on_delete=PROTECT,
         blank=True,
         null=True,
     )
-    knowledge_packets = ManyToManyField(
+    knowledge_packets = M2MField(
         to=KnowledgePacket,
         related_name='locations',
         blank=True,
     )
-    map_packets = ManyToManyField(
-        to=MapPacket,
-        blank=True,
-        related_name='locations',
-    )
-    location_type = ForeignKey(
+    map_packets = M2MField(to=MapPacket, related_name='locations', blank=True)
+    location_type = FK(
         to=LocationType,
         related_name='locations',
         on_delete=PROTECT,
         null=True,
     )
-    in_location = ForeignKey(
+    in_location = FK(
         to='self',
         related_name='locations',
         on_delete=PROTECT,
         blank=True,
         null=True,
     )
-    known_directly = ManyToManyField(
+    known_directly = M2MField(
         to=Profile,
         related_name='locs_known_directly',
-        limit_choices_to=Q(
-            status__in=['active_player', 'inactive_player', 'dead_player']
-        ),
+        limit_choices_to=PLAYERS,
         blank=True,
     )
-    known_indirectly = ManyToManyField(
+    known_indirectly = M2MField(
         to=Profile,
         related_name='locs_known_indirectly',
-        limit_choices_to=Q(
-            status__in=['active_player', 'inactive_player', 'dead_player']
-        ),
+        limit_choices_to=PLAYERS,
         blank=True,
     )
     sorting_name = CharField(max_length=250, blank=True, null=True)

@@ -1,6 +1,6 @@
 from django.db.models import (
     CharField,
-    ForeignKey,
+    ForeignKey as FK,
     ManyToManyField as M2MField,
     Model,
     PROTECT,
@@ -14,7 +14,7 @@ from users.models import Profile
 
 
 class KnowledgePacket(Model):
-    author = ForeignKey(
+    author = FK(
         to=Profile,
         related_name='authored_kn_packets',
         on_delete=PROTECT,

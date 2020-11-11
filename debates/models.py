@@ -1,14 +1,33 @@
 import datetime
-from django.db import models
-from django.db.models.signals import m2m_changed, post_save
-from django.contrib.auth.models import User
+
 from PIL import Image
+from django.contrib.auth.models import User
+from django.db.models import (
+    BooleanField,
+    CharField,
+    CASCADE,
+    DateTimeField,
+    ForeignKey as FK,
+    ImageField,
+    ManyToManyField as M2MField,
+    Model,
+    Q,
+    TextField,
+)
+from django.db.models.signals import post_save
+
 from users.models import Profile
 
+ALIVE_CHARACTERS = Q(status__in=[
+    'active_player',
+    'inactive_player',
+    'living_npc',
+])
 
-class Topic(models.Model):
-    title = models.CharField(max_length=255, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+
+class Topic(Model):
+    title = CharField(max_length=255, unique=True)
+    created_at = DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['title']
@@ -17,20 +36,17 @@ class Topic(models.Model):
         return self.title
 
 
-class Debate(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    topic = models.ForeignKey(
-        to=Topic,
-        related_name='debates',
-        on_delete=models.CASCADE,
-    )
-    known_directly = models.ManyToManyField(
+class Debate(Model):
+    name = CharField(max_length=255, unique=True)
+    topic = FK(to=Topic, related_name='debates', on_delete=CASCADE)
+    known_directly = M2MField(
         to=Profile,
         related_name='debates_known_directly',
+        limit_choices_to=ALIVE_CHARACTERS,
     )
-    is_ended = models.BooleanField(default=False)
-    is_individual = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+    is_ended = BooleanField(default=False)
+    is_individual = BooleanField(default=False)
+    created_at = DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-created_at']
@@ -47,25 +63,13 @@ class Debate(models.Model):
         return qs
 
 
-class Remark(models.Model):
-    text = models.TextField()
-    debate = models.ForeignKey(
-        to=Debate,
-        related_name='remarks',
-        on_delete=models.CASCADE,
-    )
-    author = models.ForeignKey(
-        to=User,
-        related_name='remarks',
-        on_delete=models.CASCADE,
-    )
-    seen_by = models.ManyToManyField(
-        to=Profile,
-        related_name='remarks_seen',
-        blank=True,
-    )
-    image = models.ImageField(blank=True, null=True, upload_to='post_pics')
-    created_at = models.DateTimeField(auto_now_add=True)
+class Remark(Model):
+    text = TextField()
+    debate = FK(to=Debate, related_name='remarks', on_delete=CASCADE)
+    author = FK(to=User, related_name='remarks', on_delete=CASCADE)
+    seen_by = M2MField(to=Profile, related_name='remarks_seen', blank=True)
+    image = ImageField(blank=True, null=True, upload_to='post_pics')
+    created_at = DateTimeField(auto_now_add=True)
 
     def __str__(self):
         text = self.text

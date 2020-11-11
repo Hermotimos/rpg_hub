@@ -1,7 +1,7 @@
 from PIL import Image
 from django.db.models import (
     CharField,
-    ForeignKey,
+    ForeignKey as FK,
     ImageField,
     ManyToManyField as M2MField,
     Model,
@@ -22,6 +22,7 @@ AUDIO_TYPES = (
 
 class Audio(Model):
     """A model to store paths to externally stored audio files."""
+    LINK_BLUEPRINT = 'https://docs.google.com/uc?export=download&id=[ID HERE]'
     
     # This doesn't work on PythonAnywhere... do they really handle Django 3.1?
     # class AudioType(models.TextChoices):
@@ -33,7 +34,7 @@ class Audio(Model):
     title = CharField(max_length=200)
     description = TextField(max_length=500, blank=True, null=True)
     type = CharField(max_length=5, choices=AUDIO_TYPES)
-    path = TextField(default='https://docs.google.com/uc?export=download&id=[REPLACE WITH ID]')
+    path = TextField(default=LINK_BLUEPRINT)
     
     # For Google Drive construct path by:
     # https://docs.google.com/uc?export=download&id=XXXXXXXX
@@ -51,10 +52,7 @@ class Audio(Model):
 class AudioSet(Model):
     title = CharField(max_length=200)
     description = TextField(max_length=500, blank=True, null=True)
-    main_audio = ForeignKey(
-        to=Audio,
-        on_delete=PROTECT,
-    )
+    main_audio = FK(to=Audio, on_delete=PROTECT)
     audios = M2MField(to=Audio, related_name='audio_sets', blank=True)
     
     class Meta:
@@ -135,5 +133,3 @@ class Picture(Model):
 #                 output_size = (1000, 1000)
 #                 img.thumbnail(output_size)
 #                 img.save(self.image.path)
-
-

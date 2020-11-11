@@ -1,10 +1,10 @@
 from django.db.models import (
     CharField,
     DecimalField,
-    ForeignKey,
+    ForeignKey as FK,
     ImageField,
     Manager,
-    ManyToManyField,
+    ManyToManyField as M2MField,
     Model,
     PositiveSmallIntegerField,
     PROTECT,
@@ -16,18 +16,22 @@ from imaginarion.models import Picture
 from rpg_project.utils import create_sorting_name
 from users.models import Profile
 
+PLAYERS = Q(status__in=[
+    'active_player', 
+    'inactive_player', 
+    'dead_player',
+])
+
 
 class Skill(Model):
     name = CharField('Umiejętność', max_length=100, unique=True)
     tested_trait = CharField('Cecha/Cechy', max_length=50, blank=True, null=True)
     image = ImageField(upload_to='site_features_pics', blank=True, null=True)
-    allowed_profiles = ManyToManyField(
+    allowed_profiles = M2MField(
         to=Profile,
-        limit_choices_to=Q(status='active_player')
-                         | Q(status='inactive_player')
-                         | Q(status='dead_player'),
+        limit_choices_to=PLAYERS,
         related_name='allowed_skills',
-        blank = True,
+        blank=True,
     )
     sorting_name = CharField(max_length=101, blank=True, null=True)
 
@@ -59,18 +63,10 @@ S_LEVELS = [
 
 
 class SkillLevel(Model):
-    skill = ForeignKey(
-        to=Skill,
-        related_name='skill_levels',
-        on_delete=PROTECT,
-    )
+    skill = FK(to=Skill, related_name='skill_levels', on_delete=PROTECT)
     level = CharField(max_length=10, choices=S_LEVELS)
     description = TextField(max_length=4000, blank=True, null=True)
-    acquired_by = ManyToManyField(
-        to=Profile,
-        related_name='skill_levels',
-        blank=True,
-    )
+    acquired_by = M2MField(to=Profile, related_name='skill_levels', blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
@@ -137,12 +133,10 @@ class HistorySkill(Skill):
 
 class Synergy(Model):
     name = CharField(max_length=100, verbose_name='Synergia')
-    skills = ManyToManyField(to=Skill, related_name='skills')
-    allowed_profiles = ManyToManyField(
+    skills = M2MField(to=Skill, related_name='skills')
+    allowed_profiles = M2MField(
         to=Profile,
-        limit_choices_to=Q(status='active_player')
-                         | Q(status='inactive_player')
-                         | Q(status='dead_player'),
+        limit_choices_to=PLAYERS,
         related_name='allowed_synergies',
         blank=True,
     )
@@ -170,14 +164,10 @@ class Synergy(Model):
 
 
 class SynergyLevel(Model):
-    synergy = ForeignKey(
-        to=Synergy,
-        related_name='synergy_levels',
-        on_delete=PROTECT,
-    )
+    synergy = FK(to=Synergy, related_name='synergy_levels', on_delete=PROTECT)
     level = CharField(max_length=10, choices=S_LEVELS[1:])
     description = TextField(max_length=4000, blank=True, null=True)
-    acquired_by = ManyToManyField(
+    acquired_by = M2MField(
         to=Profile,
         related_name='synergy_levels',
         blank=True,
@@ -230,11 +220,7 @@ class Profession(Model):
 
 class Klass(Model):
     name = CharField(max_length=100, unique=True)
-    profession = ForeignKey(
-        to=Profession,
-        related_name='klasses',
-        on_delete=PROTECT,
-    )
+    profession = FK(to=Profession, related_name='klasses', on_delete=PROTECT)
     description = TextField(max_length=4000, blank=True, null=True)
     start_perks = TextField(max_length=4000, blank=True, null=True)
     lvl_1 = CharField(max_length=500, blank=True, null=True)
@@ -257,12 +243,9 @@ class Klass(Model):
     lvl_18 = CharField(max_length=500, blank=True, null=True)
     lvl_19 = CharField(max_length=500, blank=True, null=True)
     lvl_20 = CharField(max_length=500, blank=True, null=True)
-    allowed_profiles = ManyToManyField(
+    allowed_profiles = M2MField(
         to=Profile,
-        limit_choices_to=Q(status='active_player')
-                         | Q(status='inactive_player')
-                         | Q(status='inactive_player')
-                         | Q(status='dead_player'),
+        limit_choices_to=PLAYERS,
         related_name='allowed_klasses',
         blank=True,
     )
@@ -292,11 +275,9 @@ class Klass(Model):
 class EliteProfession(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
-    allowed_profiles = ManyToManyField(
+    allowed_profiles = M2MField(
         to=Profile,
-        limit_choices_to=Q(status='active_player')
-                         | Q(status='inactive_player')
-                         | Q(status='dead_player'),
+        limit_choices_to=PLAYERS,
         related_name='allowed_elite_classes',
         blank=True,
     )
@@ -325,18 +306,16 @@ class EliteProfession(Model):
 
 class EliteKlass(Model):
     name = CharField(max_length=100, unique=True)
-    elite_profession = ForeignKey(
+    elite_profession = FK(
         to=EliteProfession,
         related_name='elite_klasses',
         on_delete=PROTECT,
     )
     description = TextField(max_length=4000, blank=True, null=True)
     start_perks = TextField(max_length=4000, blank=True, null=True)
-    allowed_profiles = ManyToManyField(
+    allowed_profiles = M2MField(
         to=Profile,
-        limit_choices_to=Q(status='active_player')
-                         | Q(status='inactive_player')
-                         | Q(status='dead_player'),
+        limit_choices_to=PLAYERS,
         related_name='allowed_elite_klasses',
         blank=True,
     )
@@ -417,18 +396,10 @@ CURRENCIES = [
 
 
 class Weapon(Model):
-    weapon_type = ForeignKey(
-        to=WeaponType,
-        related_name='weapons',
-        on_delete=PROTECT,
-    )
+    weapon_type = FK(to=WeaponType, related_name='weapons', on_delete=PROTECT)
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
-    pictures = ManyToManyField(
-        to=Picture,
-        related_name='weapon_pics',
-        blank=True,
-    )
+    pictures = M2MField(to=Picture, related_name='weapon_pics', blank=True)
     delay = PositiveSmallIntegerField()
     damage_small_dices = CharField(max_length=10, blank=True, null=True)
     damage_small_add = PositiveSmallIntegerField(blank=True, null=True)
@@ -443,11 +414,9 @@ class Weapon(Model):
     avg_price_currency = CharField(max_length=5, choices=CURRENCIES, blank=True, null=True)
     avg_weight = DecimalField(max_digits=10, decimal_places=1)
 
-    allowed_profiles = ManyToManyField(
+    allowed_profiles = M2MField(
         to=Profile,
-        limit_choices_to=Q(status='active_player')
-                         | Q(status='inactive_player')
-                         | Q(status='dead_player'),
+        limit_choices_to=PLAYERS,
         related_name='allowed_weapons',
         blank=True,
     )
@@ -484,11 +453,7 @@ class Weapon(Model):
 class Plate(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
-    pictures = ManyToManyField(
-        to=Picture,
-        related_name='plate_pics',
-        blank=True,
-    )
+    pictures = M2MField(to=Picture, related_name='plate_pics', blank=True)
     armor_class_bonus = PositiveSmallIntegerField(blank=True, null=True)
     parrying = PositiveSmallIntegerField(blank=True, null=True)
     endurance = PositiveSmallIntegerField()
@@ -506,11 +471,9 @@ class Plate(Model):
     mod_climbing = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
     mod_traps = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
 
-    allowed_profiles = ManyToManyField(
+    allowed_profiles = M2MField(
         to=Profile,
-        limit_choices_to=Q(status='active_player')
-                         | Q(status='inactive_player')
-                         | Q(status='dead_player'),
+        limit_choices_to=PLAYERS,
         related_name='allowed_plates',
         blank=True,
     )
@@ -533,11 +496,7 @@ class Plate(Model):
 class Shield(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
-    pictures = ManyToManyField(
-        to=Picture,
-        related_name='shield_pics',
-        blank=True,
-    )
+    pictures = M2MField(to=Picture, related_name='shield_pics', blank=True)
     enemies_no = PositiveSmallIntegerField()
     armor_class_bonus_close_combat = PositiveSmallIntegerField(
         blank=True,
@@ -549,11 +508,9 @@ class Shield(Model):
     )
     weight = DecimalField(max_digits=10, decimal_places=1)
 
-    allowed_profiles = ManyToManyField(
+    allowed_profiles = M2MField(
         to=Profile,
-        limit_choices_to=Q(status='active_player')
-                         | Q(status='inactive_player')
-                         | Q(status='dead_player'),
+        limit_choices_to=PLAYERS,
         related_name='allowed_shields',
         blank=True,
     )

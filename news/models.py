@@ -2,22 +2,31 @@ import datetime
 from PIL import Image
 
 from django.contrib.auth.models import User
-from django.db import models
+from django.db.models import (
+    CASCADE,
+    CharField,
+    DateTimeField,
+    ForeignKey as FK,
+    ImageField,
+    ManyToManyField as M2MField,
+    Model,
+    TextField,
+)
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from users.models import Profile
 
 
-class News(models.Model):
-    title = models.CharField(max_length=100, unique=True)
-    text = models.TextField(max_length=4000)
-    created_at = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, related_name='news', on_delete=models.CASCADE)
-    allowed_profiles = models.ManyToManyField(Profile, related_name='allowed_news')
-    followers = models.ManyToManyField(Profile, related_name='followed_news', blank=True)
-    image = models.ImageField(blank=True, null=True, upload_to='news_pics')
-    seen_by = models.ManyToManyField(Profile, related_name='news_seen', blank=True)
+class News(Model):
+    title = CharField(max_length=100, unique=True)
+    text = TextField(max_length=4000)
+    created_at = DateTimeField(auto_now_add=True)
+    author = FK(to=User, related_name='news', on_delete=CASCADE)
+    allowed_profiles = M2MField(to=Profile, related_name='allowed_news')
+    followers = M2MField(to=Profile, related_name='followed_news', blank=True)
+    image = ImageField(blank=True, null=True, upload_to='news_pics')
+    seen_by = M2MField(to=Profile, related_name='news_seen', blank=True)
 
     def __str__(self):
         return self.title[:50] + '...' if len(str(self.title)) > 100 else self.title
@@ -38,13 +47,13 @@ class News(models.Model):
         verbose_name_plural = 'News'
 
 
-class NewsAnswer(models.Model):
-    news = models.ForeignKey(News, related_name='news_answers', on_delete=models.CASCADE)
-    author = models.ForeignKey(User, related_name='news_answers', on_delete=models.CASCADE)
-    text = models.TextField(max_length=4000)
-    created_at = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(blank=True, null=True, upload_to='news_pics')
-    seen_by = models.ManyToManyField(Profile, related_name='news_answers_seen', blank=True)
+class NewsAnswer(Model):
+    news = FK(to=News, related_name='news_answers', on_delete=CASCADE)
+    author = FK(to=User, related_name='news_answers', on_delete=CASCADE)
+    text = TextField(max_length=4000)
+    created_at = DateTimeField(auto_now_add=True)
+    image = ImageField(blank=True, null=True, upload_to='news_pics')
+    seen_by = M2MField(to=Profile, related_name='news_answers_seen', blank=True)
 
     class Meta:
         ordering = ['created_at']
@@ -63,14 +72,14 @@ class NewsAnswer(models.Model):
                 img.save(self.image.path)
 
 
-class Survey(models.Model):
-    title = models.CharField(max_length=100, unique=True)
-    author = models.ForeignKey(User, related_name='surveys_authored', on_delete=models.CASCADE)
-    text = models.TextField(max_length=4000)
-    image = models.ImageField(blank=True, null=True, upload_to='news_pics')
-    created_at = models.DateTimeField(auto_now_add=True)
-    addressees = models.ManyToManyField(Profile, related_name='surveys_received')
-    seen_by = models.ManyToManyField(Profile, related_name='surveys_seen', blank=True)
+class Survey(Model):
+    title = CharField(max_length=100, unique=True)
+    author = FK(to=User, related_name='surveys_authored', on_delete=CASCADE)
+    text = TextField(max_length=4000)
+    image = ImageField(blank=True, null=True, upload_to='news_pics')
+    created_at = DateTimeField(auto_now_add=True)
+    addressees = M2MField(to=Profile, related_name='surveys_received')
+    seen_by = M2MField(to=Profile, related_name='surveys_seen', blank=True)
 
     class Meta:
         ordering = ['-created_at']
@@ -89,12 +98,12 @@ class Survey(models.Model):
                 img.save(self.image.path)
 
 
-class SurveyOption(models.Model):
-    survey = models.ForeignKey(Survey, related_name='survey_options', on_delete=models.CASCADE)
-    author = models.ForeignKey(User, related_name='survey_options_authored', on_delete=models.CASCADE)
-    option_text = models.CharField(max_length=50)
-    yes_voters = models.ManyToManyField(Profile, related_name='survey_yes_votes', blank=True)
-    no_voters = models.ManyToManyField(Profile, related_name='survey_no_votes', blank=True)
+class SurveyOption(Model):
+    survey = FK(to=Survey, related_name='survey_options', on_delete=CASCADE)
+    author = FK(to=User, related_name='survey_options_authored', on_delete=CASCADE)
+    option_text = CharField(max_length=50)
+    yes_voters = M2MField(to=Profile, related_name='survey_yes_votes', blank=True)
+    no_voters = M2MField(to=Profile, related_name='survey_no_votes', blank=True)
 
     class Meta:
         ordering = ['option_text']
@@ -103,13 +112,13 @@ class SurveyOption(models.Model):
         return self.option_text[:100] + '...' if len(str(self.option_text)) > 100 else self.option_text
 
 
-class SurveyAnswer(models.Model):
-    survey = models.ForeignKey(Survey, related_name='survey_answers', on_delete=models.CASCADE)
-    author = models.ForeignKey(User, related_name='survey_answers', on_delete=models.CASCADE)
-    text = models.TextField(max_length=4000)
-    created_at = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(blank=True, null=True, upload_to='news_pics')
-    seen_by = models.ManyToManyField(Profile, related_name='survey_answers_seen', blank=True)
+class SurveyAnswer(Model):
+    survey = FK(to=Survey, related_name='survey_answers', on_delete=CASCADE)
+    author = FK(to=User, related_name='survey_answers', on_delete=CASCADE)
+    text = TextField(max_length=4000)
+    created_at = DateTimeField(auto_now_add=True)
+    image = ImageField(blank=True, null=True, upload_to='news_pics')
+    seen_by = M2MField(to=Profile, related_name='survey_answers_seen', blank=True)
 
     class Meta:
         ordering = ['created_at']
@@ -128,9 +137,9 @@ class SurveyAnswer(models.Model):
                 img.save(self.image.path)
 
 
-# ---------------------------------------------------------------------------------------------------------------------
-# -------------------------------------------------- SIGNALS ---------------------------------------------------------
-# ---------------------------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# ---------------------------------- SIGNALS ----------------------------------
+# -----------------------------------------------------------------------------
 
 
 @receiver(post_save, sender=NewsAnswer)

@@ -1,35 +1,32 @@
-from django.db import models
+from django.db.models import (
+    CharField,
+    CASCADE,
+    ForeignKey as FK,
+    ManyToManyField as M2MField,
+    Model,
+    PositiveSmallIntegerField,
+    PROTECT,
+    TextField,
+)
 
 from rules.models import Klass
 from users.models import Profile
 
 
-class Achievement(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-    profile = models.ForeignKey(
-        to=Profile,
-        related_name='achievements',
-        on_delete=models.PROTECT,
-    )
+class Achievement(Model):
+    name = CharField(max_length=100)
+    description = TextField()
+    profile = FK(to=Profile, related_name='achievements', on_delete=PROTECT)
     
     def __str__(self):
         return self.name
 
 
-class ProfileKlass(models.Model):
-    profile = models.ForeignKey(
-        to=Profile,
-        related_name='profile_klasses',
-        on_delete=models.PROTECT,
-    )
-    klass = models.ForeignKey(
-        to=Klass,
-        related_name='profile_klasses',
-        on_delete=models.PROTECT,
-    )
-    title = models.CharField(max_length=200, blank=True, null=True)
-    experience = models.PositiveSmallIntegerField()
+class ProfileKlass(Model):
+    profile = FK(to=Profile, related_name='profile_klasses', on_delete=PROTECT)
+    klass = FK(to=Klass, related_name='profile_klasses', on_delete=PROTECT)
+    title = CharField(max_length=200, blank=True, null=True)
+    experience = PositiveSmallIntegerField()
     
     def __str__(self):
         return f'{self.profile.character_name}: {self.klass.name}'
@@ -40,23 +37,14 @@ class ProfileKlass(models.Model):
         verbose_name_plural = 'Profile Klasses'
     
 
-class Level(models.Model):
-    profile_klass = models.ForeignKey(
-        to=ProfileKlass,
-        related_name='levels',
-        on_delete=models.CASCADE,
-    )
-    achievements = models.ManyToManyField(
-        to=Achievement,
-        related_name='levels',
-        blank=True,
-    )
-    level_number = models.PositiveSmallIntegerField()
-    level_mods = models.TextField()
+class Level(Model):
+    profile_klass = FK(to=ProfileKlass, related_name='levels', on_delete=CASCADE)
+    achievements = M2MField(to=Achievement, related_name='levels', blank=True)
+    level_number = PositiveSmallIntegerField()
+    level_mods = TextField()
 
     def __str__(self):
         return f'{self.profile_klass} [{self.klass.name}]'
 
     class Meta:
         ordering = ['profile_klass', 'level_number']
-

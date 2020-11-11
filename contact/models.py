@@ -1,21 +1,27 @@
 import datetime
 
 from PIL import Image
-from django.db import models
+from django.db.models import (
+    BooleanField,
+    CASCADE,
+    DateTimeField,
+    ForeignKey as FK,
+    ImageField,
+    Model,
+    TextField,
+)
 from django.db.models.signals import post_save
 
 from users.models import User
 
 
-class Demand(models.Model):
-    author = models.ForeignKey(to=User, related_name='authored_demands',
-                               on_delete=models.CASCADE)
-    addressee = models.ForeignKey(to=User, related_name='received_demands',
-                                  on_delete=models.CASCADE)
-    text = models.TextField()
-    date_created = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to='contact_pics', blank=True, null=True)
-    is_done = models.BooleanField(default=False)
+class Demand(Model):
+    author = FK(to=User, related_name='authored_demands', on_delete=CASCADE)
+    addressee = FK(to=User, related_name='received_demands', on_delete=CASCADE)
+    text = TextField()
+    date_created = DateTimeField(auto_now_add=True)
+    image = ImageField(upload_to='contact_pics', blank=True, null=True)
+    is_done = BooleanField(default=False)
 
     class Meta:
         ordering = ['-date_created']
@@ -36,14 +42,12 @@ class Demand(models.Model):
                 img.save(self.image.path)
 
 
-class DemandAnswer(models.Model):
-    demand = models.ForeignKey(to=Demand, related_name='demand_answers',
-                               on_delete=models.CASCADE)
-    author = models.ForeignKey(to=User, related_name='demand_answers',
-                               on_delete=models.CASCADE)
-    text = models.TextField()
-    date_posted = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to='contact_pics', blank=True, null=True)
+class DemandAnswer(Model):
+    demand = FK(to=Demand, related_name='demand_answers', on_delete=CASCADE)
+    author = FK(to=User, related_name='demand_answers', on_delete=CASCADE)
+    text = TextField()
+    date_posted = DateTimeField(auto_now_add=True)
+    image = ImageField(upload_to='contact_pics', blank=True, null=True)
 
     class Meta:
         ordering = ['date_posted']
@@ -64,13 +68,12 @@ class DemandAnswer(models.Model):
         return f'{text[0:100] + "..." if len(str(text)) > 100 else text}'
 
 
-class Plan(models.Model):
-    author = models.ForeignKey(to=User, related_name='plans',
-                               on_delete=models.CASCADE)
-    text = models.TextField(max_length=4000)
-    inform_gm = models.BooleanField(default=False)
-    date_created = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to='contact_pics', blank=True, null=True)
+class Plan(Model):
+    author = FK(to=User, related_name='plans', on_delete=CASCADE)
+    text = TextField(max_length=4000)
+    inform_gm = BooleanField(default=False)
+    date_created = DateTimeField(auto_now_add=True)
+    image = ImageField(upload_to='contact_pics', blank=True, null=True)
     
     class Meta:
         ordering = ['-date_created']
