@@ -16,13 +16,18 @@ from toponomikon.models import SecondaryLocation
 from users.models import Profile
 
 
+# ----------------------------------------------
+# ----------------------------------------------
+# ---------- GameEvent & HistoryEvent ----------
+# ----------------------------------------------
+# ----------------------------------------------
+
 class GameEventAdminForm(forms.ModelForm):
-    
     class Meta:
         model = GameEvent
-        fields = ['event_no_in_game', 'date_start', 'date_end', 'in_timeunit',
-                  'description_short', 'description_long', 'threads',
-                  'locations', 'known_directly', 'known_indirectly',
+        fields = ['game', 'event_no_in_game', 'date_start', 'date_end',
+                  'in_timeunit', 'description_short', 'description_long',
+                  'threads', 'locations', 'known_directly', 'known_indirectly',
                   'pictures', 'debates']
         widgets = {
             'known_directly': FilteredSelectMultiple(
@@ -49,44 +54,35 @@ class GameEventAdminForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['threads'].label = 'Active Threads'
         self.fields['threads'].queryset = ThreadActive.objects.all()
-        
         self.fields['known_directly'].queryset = Profile.objects.exclude(
             Q(status='dead_player') | Q(status='dead_npc') | Q(status='gm')
         )
         self.fields['known_indirectly'].queryset = Profile.objects.exclude(
             Q(status='dead_player') | Q(status='dead_npc') | Q(status='gm')
         )
-        
-        
-class ChapterAdmin(admin.ModelAdmin):
-    list_display = ['chapter_no', 'title', 'image']
-    list_editable = ['title', 'image']
-    search_fields = ['title']
-    select_related = ['image']
 
 
-class ThreadAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'is_ended']
-    list_editable = ['name', 'is_ended']
-    search_fields = ['name']
-
-
-class ThreadActiveAdmin(ThreadAdmin):
-    pass
-
-
-class ThreadEndedAdmin(ThreadAdmin):
-    pass
-
-
+class GameEventAdmin(admin.ModelAdmin):
+    form = GameEventAdminForm
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 12, 'cols': 45})},
+    }
+    list_display = ['id', 'game', 'event_no_in_game', 'date_in_period',
+                    'description_short', 'description_long']
+    list_editable = ['event_no_in_game', 'description_short',
+                     'description_long']
+    list_filter = ['game']
+    search_fields = ['description_short', 'description_long']
+    
+    
+class GameEventInlineForm(GameEventAdminForm):
+    exclude = ['game']
+    
+    
 class GameEventInline(admin.TabularInline):
     model = GameEvent
-    fields = ['event_no_in_game', 'date_start', 'date_end', 'in_timeunit',
-              'description_short', 'description_long', 'threads', 'locations',
-              'known_directly', 'known_indirectly', 'pictures', 'debates']
     extra = 0
-    form = GameEventAdminForm
-    
+    form = GameEventInlineForm
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 12, 'cols': 45})},
         models.CharField: {'widget': TextInput(attrs={'size': 15})},
@@ -94,7 +90,7 @@ class GameEventInline(admin.TabularInline):
         models.OneToOneField: {
             'widget': Select(attrs={'style': 'width:200px'})},
     }
-   
+    
     def formfield_for_dbfield(self, db_field, **kwargs):
         # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
         # Reduces greatly queries in main view, doubles in detail view
@@ -108,7 +104,7 @@ class GameEventInline(admin.TabularInline):
             'known_directly',
             'known_indirectly',
             'locations',
-            # 'threads',    # To allow for filtering in GameEventAdminForm
+            'threads',    # To allow for filtering in GameEventAdminForm
             'pictures',
         ]
         for field in fields:
@@ -120,21 +116,57 @@ class GameEventInline(admin.TabularInline):
                 formfield.choices = choices
         return formfield
     
-
-class GameEventAdmin(admin.ModelAdmin):
-    list_display = ['id', 'game', 'event_no_in_game', 'date_in_period',
-                    'description_short', 'description_long']
-    list_editable = ['event_no_in_game', 'description_short',
-                     'description_long']
-    search_fields = ['description_short', 'description_long']
-
-
+    
+class HistoryEventAdminForm(forms.ModelForm):
+    class Meta:
+        model = GameEvent
+        fields = ['date_start', 'date_end', 'in_timeunit', 'description_short',
+                  'description_long', 'threads', 'locations',
+                  'known_short_desc', 'known_long_desc', 'pictures']
+        widgets = {
+            'known_short_desc': FilteredSelectMultiple(
+                'Known directly', False, attrs={'style': 'height:100px'}
+            ),
+            'known_long_desc': FilteredSelectMultiple(
+                'Known indirectly', False, attrs={'style': 'height:100px'}
+            ),
+            'locations': FilteredSelectMultiple(
+                'Locations', False, attrs={'style': 'height:100px'}
+            ),
+            'pictures': FilteredSelectMultiple(
+                'Pictures', False, attrs={'style': 'height:100px'}
+            ),
+            'threads': FilteredSelectMultiple(
+                'Threads', False, attrs={'style': 'height:100px'}
+            ),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['threads'].label = 'Active Threads'
+        self.fields['threads'].queryset = ThreadActive.objects.all()
+        self.fields['known_short_desc'].queryset = Profile.objects.exclude(
+            Q(status='dead_player') | Q(status='dead_npc') | Q(status='gm')
+        )
+        self.fields['known_long_desc'].queryset = Profile.objects.exclude(
+            Q(status='dead_player') | Q(status='dead_npc') | Q(status='gm')
+        )
+        
+        
 class HistoryEventAdmin(admin.ModelAdmin):
+    form = HistoryEventAdminForm
     list_display = ['id', 'date_in_period', 'date_in_era',
                     'date_in_chronology', 'description_short',
                     'description_long']
     list_editable = ['description_short', 'description_long']
     search_fields = ['description_short', 'description_long']
+    
+    
+# ----------------------------------------------
+# ----------------------------------------------
+# -------- GameSession, Chapter & Thread -------
+# ----------------------------------------------
+# ----------------------------------------------
 
 
 class GameSessionAdmin(admin.ModelAdmin):
@@ -162,6 +194,34 @@ class GameSessionAdmin(admin.ModelAdmin):
                     setattr(request, f'_{field}_choices_cache', choices)
                 formfield.choices = choices
         return formfield
+    
+    
+class ChapterAdmin(admin.ModelAdmin):
+    list_display = ['chapter_no', 'title', 'image']
+    list_editable = ['title', 'image']
+    search_fields = ['title']
+    select_related = ['image']
+
+
+class ThreadAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'is_ended']
+    list_editable = ['name', 'is_ended']
+    search_fields = ['name']
+
+
+class ThreadActiveAdmin(ThreadAdmin):
+    pass
+
+
+class ThreadEndedAdmin(ThreadAdmin):
+    pass
+
+
+# ----------------------------------------------
+# ----------------------------------------------
+# ---------- Chronology, Era & Period ----------
+# ----------------------------------------------
+# ----------------------------------------------
 
 
 class ChronologyAdminForm(forms.ModelForm):
@@ -206,19 +266,19 @@ class EraAdminForm(TimeSpanForm):
 
 class EraAdmin(admin.ModelAdmin):
     form = EraAdminForm
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 40})},
+        models.CharField: {'widget': TextInput(attrs={'size': 12})},
+        models.ForeignKey: {'widget': Select(attrs={'style': 'width:180px'})},
+    }
     list_display = ['id', 'name', 'name_genetive', 'date_start', 'date_end',
                     'in_timeunit', 'description_short', 'description_long']
     list_editable = ['name', 'name_genetive', 'date_start', 'date_end',
                      'in_timeunit', 'description_short', 'description_long']
     search_fields = ['name', 'name_genetive', 'description_short',
                      'description_long']
-    select_related = []
-    
-    formfield_overrides = {
-        models.TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 40})},
-        models.CharField: {'widget': TextInput(attrs={'size': 12})},
-        models.ForeignKey: {'widget': Select(attrs={'style': 'width:180px'})},
-    }
+    # Now that 1 obj exists, no visible effect of select_related, check later
+    # select_related = ['date_start', 'date_end', 'in_timeunit']
     
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -240,7 +300,7 @@ class PeriodAdmin(admin.ModelAdmin):
     form = PeriodAdminForm
 
 
-# Side models
+# Chronicle models
 admin.site.register(Thread, ThreadAdmin)
 admin.site.register(ThreadActive, ThreadActiveAdmin)
 admin.site.register(ThreadEnded, ThreadEndedAdmin)
@@ -257,5 +317,3 @@ admin.site.register(Era, EraAdmin)
 admin.site.register(Period, PeriodAdmin)
 admin.site.register(HistoryEvent, HistoryEventAdmin)
 admin.site.register(GameEvent, GameEventAdmin)
-
-

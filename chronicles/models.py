@@ -11,7 +11,6 @@ from django.db.models import (
     Manager,
     ManyToManyField,
     Model,
-    OneToOneField,
     PositiveSmallIntegerField,
     PROTECT,
     Q,
@@ -95,6 +94,7 @@ class Thread(Model):
 
 
 class ThreadActiveManager(Manager):
+    
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(is_ended=False)
@@ -111,6 +111,7 @@ class ThreadActive(Thread):
 
 
 class ThreadEndedManager(Manager):
+    
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(is_ended=True)
@@ -155,6 +156,7 @@ class Date(Model):
     
 
 class TimeUnitManager(Manager):
+    
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related(
@@ -286,14 +288,13 @@ class TimeUnit(Model):
         return qs
 
 
-
-
 # ----------------------------------------------------------------------------
 # -------------------------------- PROXIES -----------------------------------
 # ----------------------------------------------------------------------------
 
 
 class ChronologyManager(Manager):
+    
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related()
@@ -311,6 +312,7 @@ class Chronology(TimeUnit):
 
 
 class EraManager(Manager):
+    
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related()
@@ -329,6 +331,7 @@ class Era(TimeUnit):
 
 
 class PeriodManager(Manager):
+    
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related()
@@ -352,9 +355,12 @@ class Period(TimeUnit):
 
 
 class Event(TimeUnit):
-    """Proxy model to add save() method for GameEvents and HistoryEvents."""
+    """Intermediary proxy to add shared methods to Game- and HistoryEvents."""
     class Meta:
         proxy = True
+
+    def __str__(self):
+        return self.description_short or str(self.pk)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -439,6 +445,7 @@ class Event(TimeUnit):
 
 
 class HistoryEventManager(Manager):
+    
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related()
@@ -453,13 +460,9 @@ class HistoryEvent(Event):
         proxy = True
         verbose_name = '4 - History Event'
     
-    def __str__(self):
-        if self.description_short:
-            return self.description_long[:100]
-        return str(self.pk)
-
 
 class GameEventManager(Manager):
+    
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related('game', 'in_timeunit', 'date_start', 'date_end')
@@ -475,12 +478,6 @@ class GameEvent(Event):
         ordering = ['game', 'event_no_in_game']
         verbose_name = 'III. Game event'
     
-    def __str__(self):
-        # return self.description_short or str(self.pk)     # TODO after transition is done
-        if self.description_short:
-            return self.description_long[:100]
-        return str(self.pk)
-
 
 def update_known_locations(sender, instance, **kwargs):
     """Whenever a profile becomes 'participant' or 'informed' of an event in
