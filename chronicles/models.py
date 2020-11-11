@@ -19,7 +19,7 @@ from django.db.models import (
 from django.db.models.signals import post_save, m2m_changed
 
 from debates.models import Debate
-from imaginarion.models import Picture
+from imaginarion.models import Picture, Audio
 from rpg_project.utils import create_sorting_name
 from toponomikon.models import Location
 from users.models import Profile
@@ -231,6 +231,13 @@ class TimeUnit(Model):
     # Fields for HistoryEvent & GameEvent proxies
     threads = M2MField(to=Thread, related_name='events', blank=True)
     locations = M2MField(to=Location, related_name='events', blank=True)
+    audio = FK(
+        to=Audio,
+        related_name='events',
+        on_delete=PROTECT,
+        blank=True,
+        null=True,
+    )
 
     # GameEvent proxy
     game = FK(
@@ -294,7 +301,7 @@ class ChronologyManager(Manager):
     
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.select_related()
+        qs = qs.select_related('in_timeunit', 'date_start', 'date_end')
         qs = qs.prefetch_related('timeunits')
         qs = qs.filter(Q(in_timeunit=None))
         return qs
@@ -312,7 +319,7 @@ class EraManager(Manager):
     
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.select_related()
+        qs = qs.select_related('in_timeunit', 'date_start', 'date_end')
         qs = qs.prefetch_related('timeunits')
         qs = qs.filter(~Q(in_timeunit=None) & Q(in_timeunit__in_timeunit=None))
         return qs
@@ -331,7 +338,7 @@ class PeriodManager(Manager):
     
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.select_related()
+        qs = qs.select_related('in_timeunit', 'date_start', 'date_end')
         qs = qs.prefetch_related('timeunits')
         qs = qs.filter(
             ~Q(in_timeunit=None)
@@ -445,7 +452,8 @@ class HistoryEventManager(Manager):
     
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.select_related()
+        qs = qs.select_related('in_timeunit', 'date_start', 'date_end',
+                               'audio')
         qs = qs.filter(Q(game=None), timeunits=None)
         return qs
 
@@ -462,7 +470,8 @@ class GameEventManager(Manager):
     
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.select_related('game', 'in_timeunit', 'date_start', 'date_end')
+        qs = qs.select_related('game', 'in_timeunit', 'date_start', 'date_end',
+                               'audio')
         qs = qs.filter(~Q(game=None))
         return qs
 

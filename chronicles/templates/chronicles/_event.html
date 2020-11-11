@@ -16,6 +16,18 @@
         
         <!-- EVENT -->
         <div class="col-12 col-sm-11 mt-2 p-0 pl-sm-2 pl-lg-0">
+            <!-- AUDIO -->
+            {% if event.audio %}
+                <audio class="chronicle-audio-main" controls loop>
+                    <!-- For Google Drive construct path by: https://docs.google.com/uc?export=download&id=XXXXXXXX
+                     where XXXXXXXX equals file id take from the share link:
+                     https://drive.google.com/file/d/XXXXXXXX/view?usp=sharing ==> XXXXXXXX
+                     RESULT: https://docs.google.com/uc?export=download&id=XXXXXXXX -->
+                    <source src="{{ event.audio.path }}" type="audio/mpeg">
+                </audio>
+            {% endif %}
+            
+            
             <!-- DESCRIPTION -->
             <p class="font-18 font-italic px-1 py-1 mb-0 text-justify">
                 {% if request.user.profile in event.known_indirectly.all %}

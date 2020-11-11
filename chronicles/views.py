@@ -1,15 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch, Q, When, Case, Value, IntegerField, Count
-from django.http import HttpResponseRedirect
+from django.db.models import Prefetch, Q, Count
 from django.shortcuts import render, redirect, get_object_or_404
 
-# from history.models import (TimelineEvent, ChronicleEvent, Chapter,
-#                             GameSession, Thread)
-from chronicles.models import (Chapter, GameSession, Thread, Date, GameEvent, TimeUnit, Chronology)
+
+from chronicles.models import (Chapter, GameSession, GameEvent, TimeUnit, Chronology)
 from rpg_project.utils import send_emails
-from toponomikon.models import Location
-from users.models import Profile
 
 
 # #################### CHRONICLE ####################

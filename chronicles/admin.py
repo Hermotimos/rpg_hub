@@ -28,7 +28,7 @@ class GameEventAdminForm(forms.ModelForm):
         fields = ['game', 'event_no_in_game', 'date_start', 'date_end',
                   'in_timeunit', 'description_short', 'description_long',
                   'threads', 'locations', 'known_directly', 'known_indirectly',
-                  'pictures', 'debates']
+                  'pictures', 'debates', 'audio']
         widgets = {
             'known_directly': FilteredSelectMultiple(
                 'Known directly', False, attrs={'style': 'height:100px'}
@@ -65,14 +65,30 @@ class GameEventAdminForm(forms.ModelForm):
 class GameEventAdmin(admin.ModelAdmin):
     form = GameEventAdminForm
     formfield_overrides = {
-        models.TextField: {'widget': Textarea(attrs={'rows': 12, 'cols': 45})},
+        models.TextField: {'widget': Textarea(attrs={'rows': 12, 'cols': 40})},
     }
     list_display = ['id', 'game', 'event_no_in_game', 'date_in_period',
-                    'description_short', 'description_long']
+                    'description_short', 'description_long', 'audio']
     list_editable = ['event_no_in_game', 'description_short',
-                     'description_long']
+                     'description_long', 'audio']
     list_filter = ['game']
     search_fields = ['description_short', 'description_long']
+    
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        request = kwargs['request']
+        formfield = super().formfield_for_dbfield(db_field, **kwargs)
+        fields = [
+            # Tested that here only audio optimazes queries
+            'audio',
+        ]
+        for field in fields:
+            if db_field.name == field:
+                choices = getattr(request, f'_{field}_choices_cache', None)
+                if choices is None:
+                    choices = list(formfield.choices)
+                    setattr(request, f'_{field}_choices_cache', choices)
+                formfield.choices = choices
+        return formfield
     
     
 class GameEventInlineForm(GameEventAdminForm):
@@ -106,6 +122,7 @@ class GameEventInline(admin.TabularInline):
             'locations',
             'threads',    # To allow for filtering in GameEventAdminForm
             'pictures',
+            'audio',
         ]
         for field in fields:
             if db_field.name == field:
@@ -157,8 +174,8 @@ class HistoryEventAdmin(admin.ModelAdmin):
     form = HistoryEventAdminForm
     list_display = ['id', 'date_in_period', 'date_in_era',
                     'date_in_chronology', 'description_short',
-                    'description_long']
-    list_editable = ['description_short', 'description_long']
+                    'description_long', 'audio']
+    list_editable = ['description_short', 'description_long', 'audio']
     search_fields = ['description_short', 'description_long']
     
     

@@ -144,3 +144,19 @@ div.anchor:before {
     content: "";
     display:block;
 }
+
+
+/* ------------------------------------------------------------------------- */
+/* ----------------------------------------- */
+/* ---------- AUDIO ------- */
+/* --------------------------------------- */
+
+audio.chronicle-audio-main {
+    height: 1.6rem;
+    width: 100%;
+    max-width: 100rem;
+    margin-top: -0.25rem;
+    padding: 0 0.15rem 0 0.15rem;
+    background-color: none;
+    border-radius: 1rem;
+}
