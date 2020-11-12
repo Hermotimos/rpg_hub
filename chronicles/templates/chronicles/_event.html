@@ -28,7 +28,7 @@
             <!-- DESCRIPTION -->
             <p class="font-18 font-italic px-1 py-1 mb-0 text-justify">
                 {% if request.user.profile in event.known_indirectly.all %}
-                    <small class="text-muted">(Znasz z opowieści) {{ event.description_long|linebreaksbr }}</small>
+                    <span class="text-muted">(Znasz z opowieści) {{ event.description_long|linebreaksbr }}</span>
                 {% else %}
                     {{ event.description_long|custom_linebreaksbr:2 }}
                 {% endif %}
