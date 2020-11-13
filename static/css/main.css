@@ -128,11 +128,28 @@ td.align-right {text-align: right;}
 
 .deep-red {color: #C70039;}
 
-.font-11 {font-size: 0.7rem;}
+.font-10 {font-size: 0.625rem;}
+.font-11 {font-size: 0.7rem;}   /* not exactly, but this is desirable */
 .font-12 {font-size: 0.75rem;}
+.font-13 {font-size: 0.8125rem;}
 .font-14 {font-size: 0.875rem;}
+.font-15 {font-size: 0.9375rem;}
+.font-16 {font-size: 1rem;}
+.font-17 {font-size: 1.0625rem;}
 .font-18 {font-size: 1.125rem;}
+
 .font-24 {font-size: 1.5rem;}
+.font-25 {font-size: 1.5625rem;}
+/*
+
+19px 	1.1875rem
+20px 	1.25rem
+21px 	1.3125rem
+22px 	1.375rem
+23px 	1.4375rem
+24px 	1.5rem
+*/
+
 
 small.red {color: red;}
 
