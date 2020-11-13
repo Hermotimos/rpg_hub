@@ -16,9 +16,11 @@ def profile_sheet_view(request, profile_id='0'):
     except Profile.DoesNotExist:
         profile = request.user.profile
     try:
-        birth = profile.events_known_directly.first()
-        birthplace = birth.locations.first()
-        birthtime = f'{birth.date_start} {birth.in_timeunit.name_genetive}'
+        pass
+        # This won't work porperly untli Date model is ordered properly.
+        # birth = profile.events_known_directly.order_by('date_start').first()
+        # birthplace = birth.locations.first()
+        # birthtime = f'{birth.date_start} {birth.in_timeunit.name_genetive}'
     except:
         birthplace = 'To skomplikowane...'
         birthtime = 'To skomplikowane...'
@@ -52,14 +54,14 @@ def profile_sheet_view(request, profile_id='0'):
     )
     synergies = synergies.distinct()
 
-    print(professions)
-    print(profile_klasses)
+    # print(professions)
+    # print(profile_klasses)
    
     context = {
         'page_title': f'Karta postaci',
         'profile': profile,
-        'birthplace': birthplace,
-        'birthtime': birthtime,
+        # 'birthplace': birthplace,
+        # 'birthtime': birthtime,
         'professions': professions,
         'profile_klasses': profile_klasses,
         'skills': skills,
