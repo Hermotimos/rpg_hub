@@ -1,8 +1,7 @@
-.timeline ul.bulelts-1 {
-        padding-left: 0 !important;
-}
 
-a#thread {padding-left: 0.1rem !important;}
+.timeline ul.bulelts-1 {padding-left: 0 !important;}
+
+span#thread {padding-left: 0.1rem !important;}
 a#location {padding-left: 0.2rem !important;}
 
 .timeline .date {width: 8%;}
@@ -40,34 +39,20 @@ table.timeline {
         color: #ffffff;
 }
 
-.timeline th {
-        font-weight: normal;
-}
+.timeline th {font-weight: normal;}
 
 .timeline td {
         border: 1px solid black;
         padding: 5px;
 }
 
-.timeline tr:nth-child(even) {
+.timeline tr:nth-child(4n-1), tr:nth-child(4n) {
+
         background-color: #f2f2f2;
 }
 
 
 
-
-td.season-spring  {
-        background-color: #a9d6ca;
-}
-td.season-summer  {
-        background-color: #fff1cc;
-}
-td.season-autumn {
-        background-color: #e3d1b5;
-}
-td.season-winter  {
-        background-color: #bfd3d9;
-}
 
 
 

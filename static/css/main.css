@@ -338,6 +338,8 @@ a:hover {
 
 .hover-pointer li:hover, a:hover {cursor: pointer;}
 
+td.hover-pointer:hover {cursor: pointer;}
+
 .hover-blue:hover {
     color: #3366cc;
     cursor: pointer;
@@ -373,16 +375,8 @@ ul.bullets-2 li {list-style: "✵";}
 ul.bullets-3 li {list-style: "❖";}
 ul.bullets-4 li {list-style: "•";}
 
-ul[class^=bullets] > li > * {padding-left: 0.4rem;}
 
-/*
-ul[class^=bullets] > li a {
-        padding-left: 0.2rem !important;
-        padding-right: 0 !important;
-}
-*/
 nav ul.bullets-1 {margin-bottom: 0.5rem;}
-
 nav ul.bullets-1 li {color: #cbd5db;}
 
 .bullets-big li::marker {font-size: 120%;}

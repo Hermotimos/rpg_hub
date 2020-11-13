@@ -11,7 +11,7 @@
     <p class="font-18 font-italic text-justify">{{ header }}</p>
     <br><br><br>
 
-    <table class="timeline" data-search="true" data-toggle="table">
+    <table class="timeline">
         <colgroup>
             <col class="date">
             <col class="thread">
@@ -22,41 +22,37 @@
         </colgroup>
         <thead>
             <tr>
-                <th class="align-middle">Data</th>
-                <th class="align-middle">Wątki</th>
-                <th class="align-middle">Wydarzenie</th>
-                <th class="align-middle">Postaci</th>
-                <th class="align-middle">Lokacje</th>
-                <th class="align-middle">Sesja<br>Akcja</th>
+                <th class="px-1 border-right">Data</th>
+                <th class="px-1 border-right">Wątki</th>
+                <th class="px-1 border-right">Wydarzenie</th>
+                <th class="px-1 border-right">Postaci</th>
+                <th class="px-1 border-right">Lokacje</th>
+                <th class="px-1">Sesja<br>Akcja</th>
             </tr>
         </thead>
         
         <tbody>
         {% for event in events %}
             <tr>
-                <td class="timeline-small align-center align-top unblue-black">
-                    <a class="hover-pointer" href="#">
-                        <b>{{ event.date_in_period|add_season_img }}</b>
-                    </a>
+                <td class="font-13 align-center align-top hover-pointer" data-toggle="collapse" data-target="#event_{{ event.id }}">
+                    <b>{{ event.date_in_period|add_season_img }}</b>
                 </td>
-                <td class="timeline-event-thread align-top unblue-black pl-2">
+                <td class="font-13 align-top unblue-black pl-2">
                     <ul class="bullets-1 pl-2">
                         {% for thread in event.threads.all %}
                             <li class="{% if thread.is_ended %} text-muted {% endif %}">
-                                <a id="thread" class="hover-pointer {% if thread.is_ended %} text-muted {% endif %}" href="#">
+                                <span id="thread" class="{% if thread.is_ended %} text-muted {% endif %}">
                                     {{ thread }}
-                                </a>
+                                </span>
                             </li>
                         {% endfor %}
                     </ul>
                 </td>
-                <td class="timeline-event text-justify align-top unblue-black pl-2 pr-2 pb-3">
+                <td class="font-14 text-justify align-top font-italic unblue-black pl-2 pr-2 pb-3">
                     <a href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">
-                        {% if request.user.profile in event.known_indirectly.all %}
-                            <span class="text-muted">{{ event.description_short|custom_linebreaksbr:1 }}</span>
-                        {% else %}
+                        <span class="{% if request.user.profile not in event.known_directly.all and request.user.profile.status != 'gm' %} text-muted {% endif %}">
                             {{ event.description_short|custom_linebreaksbr:1 }}
-                        {% endif %}
+                        </span>
                     </a>
 <!--                    {% for note in event.notes.all %}-->
 <!--                        {% if request.user == note.author %}-->
@@ -66,7 +62,7 @@
 <!--                        {% endif %}-->
 <!--                    {% endfor %}-->
                 </td>
-                <td class="timeline-small align-center align-top unblue-black">
+                <td class="font-13 align-center align-top unblue-black">
                     {% for profile in event.known_directly.all %}
                         <a class="hover-pointer" href="#">
                             <img class="rounded-circle img-smaller" src="{{ profile.image.url }}" alt="Profile img">
@@ -82,7 +78,7 @@
                         {% if forloop.counter|divisibleby:2 and not forloop.last %}<br>{% endif %}
                     {% endfor %}
                 </td>
-                <td class="timeline-small align-top unblue-black">
+                <td class="font-13 align-top unblue-black">
                     <ul class="bullets-4 pl-1">
                         {% for location in event.locations.all %}
                             <li>
@@ -108,11 +104,32 @@
                             </small>
                         </a>
                     {% endif %}
-                    <a class="btn btn-outline-dark btn-sm py-0 disabled" href="#">
+                    <a class="btn btn-outline-dark btn-sm mt-1 py-1 disabled" href="#">
                         <i class="icon-note-small"></i>
                     </a>
                 </td>
             </tr>
+            <tr class="collapse" id="event_{{ event.id }}">
+                {% if event.description_long %}
+                    <td colspan="5" class="font-italic text-justify align-top pl-3 pr-3 pb-3">
+                        <span class="{% if request.user.profile not in event.known_directly.all and request.user.profile.status != 'gm' %} text-muted {% endif %}">
+                            <small>{{ event.description_long|custom_linebreaksbr:2 }}</small>
+                        </span>
+                    </td>
+                {% else %}
+                    <td colspan="5" class="font-italic text-justify align-top pl-3 pr-3 pb-3">
+                        <span class="{% if request.user.profile not in event.known_directly.all and request.user.profile.status != 'gm' %} text-muted {% endif %}">
+                            <small>To wydarzenie nie posiada dokładniejszego opisu.</small>
+                        </span>
+                    </td>
+                {% endif %}
+                <td class="align-center align-top">
+                    <a class="btn btn-outline-dark btn-sm mt-1 py-1" href="{% url 'chronicles:game-event-inform' event.id %}" target="_blank">
+                        <i class="icon-inform-medium"></i>
+                    </a>
+                </td>
+            </tr>
+            
         {% endfor %}
         </tbody>
 
