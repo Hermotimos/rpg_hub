@@ -34,11 +34,11 @@
         <tbody>
         {% for event in events %}
             <tr>
-                <td class="font-13 align-center align-top hover-pointer" data-toggle="collapse" data-target="#event_{{ event.id }}">
-                    <b data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">Pokaż Kronikę wydarzenia</span>'>
-                        {{ event.date_in_period|add_season_img }}
-                    </b>
+                <!-- DATES -->
+                <td class="font-13 align-center align-top" data-toggle="collapse" data-target="#event_{{ event.id }}">
+                    <b>{{ event.date_in_period|add_season_img }}</b>
                 </td>
+                <!-- THREADS -->
                 <td class="font-13 align-top unblue-black pl-2">
                     <ul class="bullets-1 pl-2">
                         {% for thread in event.threads.all %}
@@ -50,22 +50,40 @@
                         {% endfor %}
                     </ul>
                 </td>
-                <td class="font-14 text-justify align-top font-italic unblue-black pl-2 pr-2 pb-3">
-                    <a href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">
-                        <span class="{% if request.user.profile not in event.known_directly.all and request.user.profile.status != 'gm' %} text-muted {% endif %}"
-                              data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">Kronika: wydarzenie</span>'>
-                            {{ event.description_short|custom_linebreaksbr:1 }}
-                        </span>
-                    </a>
-<!--                    {% for note in event.notes.all %}-->
-<!--                        {% if request.user == note.author %}-->
-<!--                            {% if note.text != '' %}-->
-<!--                                <a style="color:{{ note.color }}"><br>Przemyślenia:<br>{{ note.text|linebreaksbr }}</a>-->
-<!--                            {% endif %}-->
-<!--                        {% endif %}-->
-<!--                    {% endfor %}-->
+                <!-- DESCRIPTION SHORT -->
+                <td class="font-14 text-justify align-top font-italic hover-pointer pl-2 pr-2 pb-3"
+                    data-toggle="modal" data-target="#event_{{ event.id }}">
+                    <span class="{% if request.user.profile not in event.known_directly.all and request.user.profile.status != 'gm' %} text-muted {% endif %}"
+                          data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">Pokaż Kronikę wydarzenia</span>'>
+                        {{ event.description_short|custom_linebreaksbr:1 }}
+                    </span>
+                    <!-- Modal -->
+                    <div class="modal fade" id="event_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">
+                                        <a class="btn btn-outline-dark btn-sm mt-1 py-1" href="{% url 'chronicles:game-event-inform' event.id %}" target="_blank"
+                                            data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">Poinformuj o wydarzeniu</span>'>
+                                            <i class="icon-inform-medium"></i>
+                                        </a>
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body font-15">
+                                    {{ event.description_long|custom_linebreaksbr:2 }}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-dark mx-auto" data-dismiss="modal">Zamknij</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </td>
-                <td class="font-13 align-center align-top unblue-black">
+                <!-- KNOWN DIRECTLY AND INDIRECTLY -->
+                <td class="font-13 align-center align-top">
                     {% for profile in event.known_directly.all %}
                         <a>
                             <img class="rounded-circle img-smaller" src="{{ profile.image.url }}" alt="Profile img"
@@ -83,6 +101,7 @@
                         {% if forloop.counter|divisibleby:2 and not forloop.last %}<br>{% endif %}
                     {% endfor %}
                 </td>
+                <!-- SECONDARY LOCATIONS -->
                 <td class="font-13 align-top unblue-black">
                     <ul class="bullets-4 pl-1">
                         {% for location in event.locations.all %}
@@ -95,11 +114,12 @@
                         {% endfor %}
                     </ul>
                 </td>
+                <!-- GAME / ACTION -->
                 <td class="align-center align-top unblue-black">
                     {% if event.game.game_no == 0 %}
                         ✴
                     {% else %}
-                        <a href="{% url 'chronicles:chronicle-game' event.game.id %}">
+                        <a href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">
                             <small data-toggle="tooltip" data-placement="top" data-html="true"
                                    title='<span class="font-italic px-2">Kronika: "{{ event.game.title }}"</span>'>
                                 {% if event.game.game_no > 0 %}
@@ -115,28 +135,6 @@
                     </a>
                 </td>
             </tr>
-            <tr class="collapse" id="event_{{ event.id }}">
-                {% if event.description_long %}
-                    <td colspan="5" class="font-italic text-justify align-top pl-3 pr-3 pb-3">
-                        <span class="{% if request.user.profile not in event.known_directly.all and request.user.profile.status != 'gm' %} text-muted {% endif %}">
-                            <small>{{ event.description_long|custom_linebreaksbr:2 }}</small>
-                        </span>
-                    </td>
-                {% else %}
-                    <td colspan="5" class="font-italic text-justify align-top pl-3 pr-3 pb-3">
-                        <span class="{% if request.user.profile not in event.known_directly.all and request.user.profile.status != 'gm' %} text-muted {% endif %}">
-                            <small>To wydarzenie nie posiada dokładniejszego opisu.</small>
-                        </span>
-                    </td>
-                {% endif %}
-                <td class="align-center align-top">
-                    <a class="btn btn-outline-dark btn-sm mt-1 py-1" href="{% url 'chronicles:game-event-inform' event.id %}" target="_blank"
-                    data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">Poinformuj o wydarzeniu</span>'>
-                        <i class="icon-inform-medium"></i>
-                    </a>
-                </td>
-            </tr>
-            
         {% endfor %}
         </tbody>
 
