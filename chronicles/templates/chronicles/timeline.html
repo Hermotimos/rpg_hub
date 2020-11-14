@@ -11,6 +11,13 @@
     <p class="font-18 font-italic text-justify">{{ header }}</p>
     <br><br><br>
 
+    <form method="get">
+        {{ events_filter.form.as_p }}
+        <input type="submit" />
+    </form>
+
+    <br><br><br>
+
     <table class="timeline">
         <colgroup>
             <col class="date">
@@ -32,7 +39,7 @@
         </thead>
         
         <tbody>
-        {% for event in events %}
+        {% for event in events_filter.qs %}
             <tr>
                 <!-- DATES -->
                 <td class="font-13 align-center align-top" data-toggle="collapse" data-target="#event_{{ event.id }}">
@@ -141,4 +148,3 @@
     </table>
     <br>
 {% endblock content %}
-

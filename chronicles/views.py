@@ -3,8 +3,14 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch, Q, Count
 from django.shortcuts import render, redirect, get_object_or_404
 
-
-from chronicles.models import (Chapter, GameSession, GameEvent, TimeUnit, Chronology)
+from chronicles.filters import GameEventFilter
+from chronicles.models import (
+    Chapter,
+    GameSession,
+    GameEvent,
+    TimeUnit,
+    Chronology,
+)
 from rpg_project.utils import send_emails
 
 
@@ -202,74 +208,12 @@ def chronologies_view(request):
     return render(request, 'chronicles/chronologies.html', context)
 
 
-#
-# # #################### TIMELINE: model TimelineEvent ####################
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# --------------------------------- TIMELINE ----------------------------------
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
-
-
-# @login_required
-# def timeline_main_view(request):
-#     profile = request.user.profile
-#
-#     if profile.status == 'gm':
-#         threads = Thread.objects.all()
-#         participants = Profile.objects\
-#             .filter(status__in=['active_player', 'inactive_player', 'dead_player'])
-#         locs_lvl_2 = Location.objects\
-#             .filter(~Q(in_location=None))\
-#             .annotate(events_cnt=Count('timeline_events_in_spec'))\
-#             .filter(events_cnt__gt=0)
-#         locs_lvl_1 = Location.objects\
-#             .filter(in_location=None)\
-#             .annotate(events_cnt=Count('timeline_events_in_gen'))\
-#             .filter(events_cnt__gt=0)\
-#             .prefetch_related(Prefetch('locations', queryset=locs_lvl_2))
-#         games = GameSession.objects\
-#             .annotate(num_events=Count('timeline_events'))\
-#             .filter(num_events__gt=0)
-#         events = TimelineEvent.objects.all()
-#     else:
-#         threads = Thread.objects\
-#             .filter(Q(timeline_events__participants=profile) | Q(timeline_events__informed=profile))\
-#             .distinct()
-#         participants = Profile.objects\
-#             .filter(status__in=['active_player', 'inactive_player', 'dead_player'])\
-#             .filter(timeline_events_participated__in=profile.timeline_events_participated.all())\
-#             .distinct()
-#         locs_lvl_2 = Location.objects\
-#             .filter(~Q(in_location=None)) \
-#             .filter(Q(timeline_events_in_spec__participants=profile) | Q(timeline_events_in_spec__informed=profile)) \
-#             .distinct()
-#         locs_lvl_1 = Location.objects\
-#             .filter(in_location=None)\
-#             .filter(locations__in=locs_lvl_2)\
-#             .distinct()\
-#             .prefetch_related(Prefetch('locations', queryset=locs_lvl_2))
-#         games = GameSession.objects \
-#             .filter(Q(timeline_events__participants=profile) | Q(timeline_events__informed=profile)) \
-#             .distinct()
-#         events = (profile.timeline_events_participated.all() | profile.timeline_events_informed.all())\
-#             .distinct()
-#
-#     years = list({y for y in (e.year for e in events)})
-#     years.sort()
-#     years_with_seasons_dict = {}
-#     for y in years:
-#         seasons = list({e.season for e in events if e.year == y})
-#         seasons.sort()
-#         years_with_seasons_dict[y] = seasons
-#
-#     context = {
-#         'page_title': 'Kalendarium',
-#         'seasons_with_styles_dict': SEASONS_WITH_STYLES_DICT,
-#         'years_with_seasons_dict': years_with_seasons_dict,
-#         'threads': threads,
-#         'participants': participants,
-#         'gen_locs': locs_lvl_1,
-#         'games': games,
-#     }
-#     return render(request, 'history/timeline_main.html', context)
-#
 
 @login_required
 def timeline_view(request):
@@ -305,10 +249,14 @@ def timeline_view(request):
     )
     context = {
         'page_title': 'Pełne Kalendarium',
-        'header': '''Opisane tu wydarzenia rozpoczęły swój bieg 20. roku
+        'header': """Opisane tu wydarzenia rozpoczęły swój bieg 20. roku
             Archonatu Nemetha Samatiana w Ebbonie, choć zarodki wielu z nich
-            sięgają znacznie odleglejszych czasów...''',
-        'events': events,
+            sięgają znacznie odleglejszych czasów...""",
+        # 'events': events,
+        
+        # TODO the use of filter rises query cnt from 8 to 13, somehow causing
+        # TODO 2x queries for certain fields. Try to resolve it in the future.
+        'events_filter': GameEventFilter(request.GET, queryset=events)
     }
     if events:
         return render(request, 'chronicles/timeline.html', context)

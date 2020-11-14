@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
     # imported
     'crispy_forms',
+    'django_filters',
 
     # own
     'chronicles',
