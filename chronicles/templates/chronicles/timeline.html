@@ -50,7 +50,7 @@
                     <ul class="bullets-1 pl-2">
                         {% for thread in event.threads.all %}
                             <li class="{% if thread.is_ended %} text-muted {% endif %}">
-                                <span id="thread" class="{% if thread.is_ended %} text-muted {% endif %}">
+                                <span class="{% if thread.is_ended %} text-muted {% endif %}">
                                     {{ thread }}
                                 </span>
                             </li>
@@ -113,7 +113,7 @@
                     <ul class="bullets-4 pl-1">
                         {% for location in event.locations.all %}
                             <li>
-                                <a id="location" class="hover-pointer" href="{% url 'toponomikon:location' location.name %}"
+                                <a class="hover-pointer" href="{% url 'toponomikon:location' location.name %}"
                                     data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">Toponomikon: {{ location.name }}</span>'>
                                     <small>{{ location.name }}</small>
                                 </a>

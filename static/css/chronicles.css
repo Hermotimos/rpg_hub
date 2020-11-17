@@ -1,8 +1,10 @@
 
-.timeline ul.bulelts-1 {padding-left: 0 !important;}
 
-span#thread {padding-left: 0.1rem !important;}
-a#location {padding-left: 0.2rem !important;}
+/*****************************************************************************/
+/****************************** TIMELINE Table *******************************/
+/*****************************************************************************/
+
+table.timeline {border: double;}
 
 .timeline .date {width: 8%;}
 .timeline .thread {width: 17%;}
@@ -11,27 +13,8 @@ a#location {padding-left: 0.2rem !important;}
 .timeline .locations {width: 12%;}
 .timeline .actions {width: 3%;}
 
-.chronicle .description {width: %;}
-.chronicle .actions {width: %;}
 
-.small-img {
-        display: block;
-        height: auto;
-        margin-left: auto;
-        margin-right: auto;
-        text-align: center;
-}
-.timeline .small-img {
-        width: 35%;
-}
-
-.chronicle .small-img {
-        padding: 1px 0px 0px 0px;
-}
-
-table.timeline {
-        border: double;
-}
+.timeline tr:nth-child(even) {background-color: #f2f2f2;}
 
 .timeline thead {
         background-color: #363636;
@@ -46,33 +29,15 @@ table.timeline {
         padding: 5px;
 }
 
-.timeline tr:nth-child(even) {background-color: #f2f2f2;}
 
 
 
-
-.chronicle td {
-        margin: 0px;
-        padding: 0px 5px;
-}
-
-td img {
-        /*display: block;*/
-        margin-left: auto;
-        margin-right: auto;
-}
-
-
+/*****************************************************************************/
+/****************************** CHRONICLE imgs *******************************/
+/*****************************************************************************/
 .img-chapter {
         float: left;
         height: 45px;
-        width: auto;
-        margin-right: 5px;
-}
-
-.img-timeline {
-        float: left;
-        height: 55px;
         width: auto;
         margin-right: 5px;
 }
@@ -84,41 +49,12 @@ td img {
         margin-right: 5px;
 }
 
-.account-img-timeline {
-        display: block;
-        height: auto;
-        width: 80%;
-        margin-right: 20px;
-        margin-bottom: 16px;
-}
-
-.bootstrap-table .fixed-table-container .table thead th .th-inner {
-        padding: 10px 3px;
-}
-
-
-a.link-disabled {
-        pointer-events: none;
-        cursor: default;
-}
-
-.chapter-title {
-        padding-top: 5px;
-}
 
 
 
-div.anchor:before {
-    height: 5rem;
-    content: "";
-    display:block;
-}
-
-
-/* ------------------------------------------------------------------------- */
-/* ----------------------------------------- */
-/* ---------- AUDIO ------- */
-/* --------------------------------------- */
+/*****************************************************************************/
+/***************************** CHRONICLE Audio *******************************/
+/*****************************************************************************/
 
 audio.chronicle-audio-main {
     height: 1.6rem;
@@ -129,3 +65,79 @@ audio.chronicle-audio-main {
     background-color: none;
     border-radius: 1rem;
 }
+
+
+/*****************************************************************************/
+/********************************** VARIA ************************************/
+/*****************************************************************************/
+/*
+Needed for the links anchored in GameEvents within Chronicle to preserve
+proper position, not affected by the navbar covering the top of the page.
+*/
+div.anchor:before {
+    height: 5rem;
+    content: "";
+    display:block;
+}
+
+
+
+
+/*****************************************************************************/
+/******************************** PURGATORY **********************************/
+/*****************************************************************************/
+
+/*
+.timeline ul.bulelts-1 {padding-left: 0 !important;}
+
+span#thread {padding-left: 0.1rem !important;}
+a#location {padding-left: 0.2rem !important;}
+
+.small-img {
+        display: block;
+        height: auto;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+}
+.timeline .small-img {
+        width: 35%;
+}
+.chronicle .small-img {
+        padding: 1px 0px 0px 0px;
+}
+.bootstrap-table .fixed-table-container .table thead th .th-inner {
+        padding: 10px 3px;
+}
+
+.account-img-timeline {
+        display: block;
+        height: auto;
+        width: 80%;
+        margin-right: 20px;
+        margin-bottom: 16px;
+}
+a.link-disabled {
+        pointer-events: none;
+        cursor: default;
+}
+.img-timeline {
+        float: left;
+        height: 55px;
+        width: auto;
+        margin-right: 5px;
+}
+.chronicle td {
+        margin: 0px;
+        padding: 0px 5px;
+}
+
+
+
+???????????????????????????????
+td img {
+        margin-left: auto;
+        margin-right: auto;
+}
+
+*/
