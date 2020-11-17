@@ -163,31 +163,34 @@ def send_emails(request, profile_ids, **kwargs):
     if profile.status != 'gm':
         gms = [p.user.email for p in Profile.objects.filter(status='gm')]
         receivers.extend(gms)
-      
-    if 'debate_new_topic' in kwargs:
-        debate = kwargs['debate_new_topic']
-        subject = '[RPG] Nowa narada w nowym temacie!'
-        message = f"{profile} włączył/a Cię do nowej narady '{debate.name}' " \
-                  f"w nowym temacie '{debate.topic}'." \
-                  f"\nWeź udział w naradzie:\n" \
-                  f"{request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/\n"
     
-    elif 'debate_new' in kwargs:
-        debate = kwargs['debate_new']
-        subject = '[RPG] Nowa narada!'
-        message = f"{profile} włączył/a Cię do nowej narady '{debate.name}' " \
-                  f"w temacie '{debate.topic}'." \
-                  f"\nWeź udział w naradzie:\n" \
-                  f"{request.get_host()}/debates/topic:{debate.topic.id}/debate:{debate.id}/\n"
-    
-    elif 'debate_remark' in kwargs:
-        debate = kwargs['debate_remark']
-        subject = '[RPG] Wypowiedź w naradzie!'
-        message = f"{profile} zabrał/a głos w naradzie '{debate.name}' " \
-                  f"w temacie '{debate.topic}'." \
-                  f"\nWeź udział w naradzie:" \
-                  f"\n{request.build_absolute_uri()}#page-bottom\n"
+    # Debates
+    if 'remark' in kwargs:
+        remark = kwargs['remark']
+        debate = remark.debate
+        url = f"{request.get_host()}/debates/debate:{debate.id}/" \
+              f"#remark-{remark.id}\n"
+        new = kwargs['new']
         
+        if new == 'topic':
+            subject = '[RPG] Nowa narada w nowym temacie!'
+            message = f"{profile} włączył/a Cię do nowej narady '{debate}'" \
+                      f" w nowym temacie '{debate.topic}'." \
+                      f"\nWeź udział w naradzie:\n{url}\n"
+
+        elif new == 'debate':
+            subject = '[RPG] Nowa narada!'
+            message = f"{profile} włączył/a Cię do nowej narady '{debate}'" \
+                      f" w temacie '{debate.topic}'." \
+                      f"\nWeź udział w naradzie:\n{url}\n"
+
+        else:  # new == 'remark'
+            subject = '[RPG] Wypowiedź w naradzie!'
+            message = f"{profile} zabrał/a głos w naradzie '{debate}'" \
+                      f" w temacie '{debate.topic}'." \
+                      f"\nWeź udział w naradzie:\n{url}\n"
+    
+    # Demands
     elif 'demand_answer' in kwargs:
         demand_answer = kwargs['demand_answer']
         subject = f"[RPG] Dezyderat {demand_answer.demand.id} [odpowiedź]"

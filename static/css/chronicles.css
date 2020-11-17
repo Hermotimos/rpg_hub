@@ -67,18 +67,6 @@ audio.chronicle-audio-main {
 }
 
 
-/*****************************************************************************/
-/********************************** VARIA ************************************/
-/*****************************************************************************/
-/*
-Needed for the links anchored in GameEvents within Chronicle to preserve
-proper position, not affected by the navbar covering the top of the page.
-*/
-div.anchor:before {
-    height: 5rem;
-    content: "";
-    display:block;
-}
 
 
 

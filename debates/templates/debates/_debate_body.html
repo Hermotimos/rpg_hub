@@ -3,7 +3,8 @@
 
 <!-- REMARKS -->
 {% for remark in debate.remarks.all %}
-    <div class="row my-3">
+<div id="remark-{{ remark.id }}" class="container anchor mt-n5">
+    <div  class="row">
         {% if remark.author.profile.status == 'gm' %}
             <div class="col-12">
                 <span class="font-18 font-italic text-justify">{{ remark.text|capfirst|linebreaks }}</span>
@@ -36,4 +37,5 @@
             {% endif %}
         </div>
     {% endif %}
+</div>
 {% endfor %}

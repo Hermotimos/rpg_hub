@@ -61,7 +61,7 @@ def create_topic_view(request):
             
             informed_ids = [p.id for p in new_known_directly if p != profile]
 
-            send_emails(request, informed_ids, debate_new_topic=debate)
+            send_emails(request, informed_ids, new='topic', remark=remark)
             messages.info(request, f'Utworzono nową naradę w nowym temacie!')
             return redirect('debates:debate', debate_id=debate.id)
     else:
@@ -105,7 +105,7 @@ def create_debate_view(request, topic_id):
             
             informed_ids = [p.id for p in new_known_directly if p != profile]
 
-            send_emails(request, informed_ids, debate_new=debate)
+            send_emails(request, informed_ids, new='debate', remark=remark)
             messages.info(request, f'Utworzono nową naradę!')
             return redirect('debates:debate', debate_id=debate.id)
     else:
@@ -153,7 +153,7 @@ def debate_view(request, debate_id):
 
             informed_ids = [p.id for p in debate_known_directly if p != profile]
 
-            send_emails(request, informed_ids, debate_remark=debate)
+            send_emails(request, informed_ids, new='remark', remark=remark)
             if informed_ids:
                 messages.info(request, f'Twój głos zabrzmiał w naradzie!')
             return redirect('debates:debate', debate_id=debate_id)

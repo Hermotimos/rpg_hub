@@ -463,4 +463,18 @@ input.select-profile[type=checkbox]:checked + label {
 
 
 
+/*****************************************************************************/
+/********************************** VARIA ************************************/
+/*****************************************************************************/
+/*
+Needed for the links anchored in GameEvents in Chronicle, Remarks in Debates
+and others to preserve proper position, not affected by the navbar covering
+the top of the page.
+*/
+div.anchor:before {
+    height: 5rem;
+    content: "";
+    display:block;
+}
+
 
