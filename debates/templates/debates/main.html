@@ -25,7 +25,7 @@
                     
                     <ul class="bullets-3 pl-3">
                         {% for debate in topic.debates.all %}
-                            <li class="{% if not debate.is_ended %} bullet-ongoing {% endif %} pb-2">
+                            <li class="pl-1 {% if not debate.is_ended %} bullet-ongoing {% endif %} pb-2">
                                 <div class="d-md-inline">
                                     <h5 class="d-sm-inline font-18">
                                         <a class="pr-1" href="{% url 'debates:debate' debate.id %}">
