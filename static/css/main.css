@@ -375,9 +375,10 @@ nav ul.bullets-1 li {color: #cbd5db;}
 .bullets-big li::marker {font-size: 120%;}
 .bullets-vbig li::marker {font-size: 170%;}
 
-
-
-
+.pl-0-05  {padding-left: 0.05rem;}
+.pl-0-10  {padding-left: 0.10rem;}
+.pl-0-15  {padding-left: 0.15rem;}
+.pl-0-20  {padding-left: 0.20rem;}
 
 /*****************************************************************************/
 /*********************************** TABS ************************************/
