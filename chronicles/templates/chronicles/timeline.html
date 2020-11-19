@@ -9,14 +9,137 @@
 {% block content %}
     <br>
     <p class="font-18 font-italic text-justify">{{ header }}</p>
-    <br><br><br>
+    <br><br>
 
     <form method="get">
-        {{ events_filter.form.as_p }}
-        <input type="submit" />
+        <div class="container">
+            
+            <div class="row">
+                <!-- Description short -->
+                <div class="col-12 col-lg-6 my-3 container px-0">
+                    <div class="row">
+                        <div class="col-2 px-2">
+                            <div class="d-flex">
+                                <img class="mh-25" src="{% static 'img/timeline_descr_short.png' %}" alt="Dates img">
+                            </div>
+                        </div>
+                        <div class="col-10 container">
+                            <div class="row">
+                                <p class="h4 font-weight-bold">{{ events_filter.form.description_short.label }}</p>
+                            </div>
+                            <div class="row input-18">
+                                {{ events_filter.form.description_short }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Description long -->
+                <div class="col-12 col-lg-6 my-3 container px-0">
+                    <div class="row">
+                        <div class="col-2 px-2">
+                            <div class="d-flex">
+                                <img class="mh-25" src="{% static 'img/timeline_descr_long.png' %}" alt="Timeline img">
+                            </div>
+                        </div>
+                        <div class="col-10 container">
+                            <div class="row">
+                                <p class="h4 font-weight-bold">{{ events_filter.form.description_long.label }}</p>
+                            </div>
+                            <div class="row input-18">
+                                {{ events_filter.form.description_long }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Threads -->
+                <div class="col-12 col-lg-6 my-3 container px-0">
+                    <div class="row">
+                        <div class="col-2 px-2">
+                            <div class="d-flex">
+                                <img class="mh-25" src="{% static 'img/timeline_threads.png' %}" alt="Threads img">
+                            </div>
+                        </div>
+                        <div class="col-10 container">
+                            <div class="row">
+                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.threads.label }}</p>
+                            </div>
+                            <div class="row">
+                                {{ events_filter.form.threads }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Locations -->
+                <div class="col-12 col-lg-6 my-3 container px-0">
+                    <div class="row">
+                        <div class="col-2 px-2">
+                            <div class="d-flex">
+                                <img class="mh-25" src="{% static 'img/timeline_locations.png' %}" alt="Locations img">
+                            </div>
+                        </div>
+                        <div class="col-10 container">
+                            <div class="row">
+                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.locations.label }}</p>
+                            </div>
+                            <div class="row">
+                                {{ events_filter.form.locations }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <!-- Participants -->
+                <div class="col-12 col-lg-6 my-3 container px-0">
+                    <div class="row">
+                        <div class="col-2 px-2">
+                            <div class="d-flex">
+                                <img class="mh-25" src="{% static 'img/timeline_participants.png' %}" alt="Participants img">
+                            </div>
+                        </div>
+                        <div class="col-10 container">
+                            <div class="row">
+                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.participants.label }}</p>
+                            </div>
+                            <div class="row">
+                                {{ events_filter.form.participants }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Games -->
+                <div class="col-12 col-lg-6 my-3 container px-0">
+                    <div class="row">
+                        <div class="col-2 px-2">
+                            <div class="d-flex">
+                                <img class="mh-25" src="{% static 'img/timeline_games.png' %}" alt="Games img">
+                            </div>
+                        </div>
+                        <div class="col-10 container">
+                            <div class="row">
+                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.games.label }}</p>
+                            </div>
+                            <div class="row">
+                                {{ events_filter.form.games }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="text-center mt-5">
+            <input class="btn btn-dark align-center" type="submit" value="Filtruj Kalendarium">
+        </div>
+        
     </form>
 
-    <br><br><br>
+    <br>
 
     <table class="timeline">
         <colgroup>

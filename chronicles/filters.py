@@ -12,12 +12,12 @@ class GameEventFilter(filters.FilterSet):
     # TODO and then do: threads queryset = 'events'.threads or Thread.filter(event__in=enents) etc.
 
     # Fields matching model fields:
-    description_short = filters.CharFilter(lookup_expr='icontains', label="Szukaj w opisie wydarzenia w Kalendarium:")
-    description_long = filters.CharFilter(lookup_expr='icontains', label="Szukaj w opisie wydarzenia w Kronice:")
+    description_short = filters.CharFilter(lookup_expr='icontains', label="Wydarzenie w Kalendarium:")
+    description_long = filters.CharFilter(lookup_expr='icontains', label="Wydarzenie w Kronice:")
     threads = filters.ModelMultipleChoiceFilter(queryset=Thread.objects.all(), label="Wątki:")
     locations = filters.ModelMultipleChoiceFilter(queryset=Location.objects.all(), label="Lokacje:")
-    game = filters.ModelMultipleChoiceFilter(queryset=GameSession.objects.all(), label="Sesje:")
-    known_directly = filters.ModelMultipleChoiceFilter(queryset=Profile.objects.filter(status__icontains='player'), label="Uczestnicy:")
+    games = filters.ModelMultipleChoiceFilter(queryset=GameSession.objects.all(), label="Sesje:")
+    participants = filters.ModelMultipleChoiceFilter(queryset=Profile.objects.filter(status__icontains='player'), label="Uczestnicy:")
     
     class Meta:
         model = GameEvent
