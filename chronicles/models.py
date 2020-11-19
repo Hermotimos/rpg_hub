@@ -77,7 +77,7 @@ class GameSession(Model):
         verbose_name = 'II. Game session'
     
     def __str__(self):
-        return f'{self.game_no} - {self.title}'
+        return self.title
 
 
 class Thread(Model):
