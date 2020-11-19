@@ -25,7 +25,7 @@
                         </div>
                         <div class="col-10 container">
                             <div class="row">
-                                <p class="h4 font-weight-bold">{{ events_filter.form.description_short.label }}</p>
+                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.description_short.label }}</p>
                             </div>
                             <div class="row input-18">
                                 {{ events_filter.form.description_short }}
@@ -43,7 +43,7 @@
                         </div>
                         <div class="col-10 container">
                             <div class="row">
-                                <p class="h4 font-weight-bold">{{ events_filter.form.description_long.label }}</p>
+                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.description_long.label }}</p>
                             </div>
                             <div class="row input-18">
                                 {{ events_filter.form.description_long }}
@@ -93,7 +93,7 @@
             </div>
             
             <div class="row">
-                <!-- Participants -->
+                <!-- Participants = event.known_directly -->
                 <div class="col-12 col-lg-6 my-3 container px-0">
                     <div class="row">
                         <div class="col-2 px-2">
@@ -134,138 +134,141 @@
         </div>
         
         <div class="text-center mt-5">
-            <input class="btn btn-dark align-center" type="submit" value="Filtruj Kalendarium">
+            <input class="btn btn-dark" type="submit" value="Filtruj Kalendarium">
         </div>
         
     </form>
 
     <br>
-
-    <table class="timeline">
-        <colgroup>
-            <col class="date">
-            <col class="thread">
-            <col class="description">
-            <col class="participants">
-            <col class="locations">
-            <col class="actions">
-        </colgroup>
-        <thead>
-            <tr>
-                <th class="px-1 border-right">Data</th>
-                <th class="px-1 border-right">Wątki</th>
-                <th class="px-1 border-right">Wydarzenie</th>
-                <th class="px-1 border-right">Postaci</th>
-                <th class="px-1 border-right">Lokacje</th>
-                <th class="px-1">Sesja<br>Akcja</th>
-            </tr>
-        </thead>
-        
-        <tbody>
-        {% for event in events_filter.qs %}
-            <tr>
-                <!-- DATES -->
-                <td class="font-13 align-center align-top" data-toggle="collapse" data-target="#event_{{ event.id }}">
-                    <b>{{ event.date_in_period|add_season_img }}</b>
-                </td>
-                <!-- THREADS -->
-                <td class="font-13 align-top unblue-black pl-2">
-                    <ul class="bullets-1 pl-2">
-                        {% for thread in event.threads.all %}
-                            <li class="pl-0-15 {% if thread.is_ended %} text-muted {% endif %}">
-                                {{ thread }}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </td>
-                <!-- DESCRIPTION SHORT -->
-                <td class="font-14 text-justify align-top font-italic hover-pointer pl-2 pr-2 pb-3"
-                    data-toggle="modal" data-target="#event_{{ event.id }}">
-                    <span class="{% if request.user.profile not in event.known_directly.all and request.user.profile.status != 'gm' %} text-muted {% endif %}"
-                          data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">Pokaż Kronikę wydarzenia</span>'>
-                        {{ event.description_short|custom_linebreaksbr:1 }}
-                    </span>
-                    <!-- Modal -->
-                    <div class="modal fade" id="event_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">
-                                        <a class="btn btn-outline-dark btn-sm mt-1 py-1" href="{% url 'chronicles:game-event-inform' event.id %}" target="_blank"
-                                            data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">Poinformuj o wydarzeniu</span>'>
-                                            <i class="icon-inform-medium"></i>
-                                        </a>
-                                    </h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body font-15">
-                                    {{ event.description_long|custom_linebreaksbr:2 }}
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-dark mx-auto" data-dismiss="modal">Zamknij</button>
+    {% if not events_filter.qs %}
+        <div class="font-italic text-center h4 mt-4">Brak wydarzeń spełniających podane kryteria.</div>
+    {% else %}
+        <table class="timeline">
+            <colgroup>
+                <col class="date">
+                <col class="thread">
+                <col class="description">
+                <col class="participants">
+                <col class="locations">
+                <col class="actions">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="px-1 border-right">Data</th>
+                    <th class="px-1 border-right">Wątki</th>
+                    <th class="px-1 border-right">Wydarzenie</th>
+                    <th class="px-1 border-right">Postaci</th>
+                    <th class="px-1 border-right">Lokacje</th>
+                    <th class="px-1">Sesja<br>Akcja</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+            {% for event in events_filter.qs %}
+                <tr>
+                    <!-- DATES -->
+                    <td class="font-13 align-center align-top" data-toggle="collapse" data-target="#event_{{ event.id }}">
+                        <b>{{ event.date_in_period|add_season_img }}</b>
+                    </td>
+                    <!-- THREADS -->
+                    <td class="font-13 align-top unblue-black pl-2">
+                        <ul class="bullets-1 pl-2">
+                            {% for thread in event.threads.all %}
+                                <li class="pl-0-15 {% if thread.is_ended %} text-muted {% endif %}">
+                                    {{ thread }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <!-- DESCRIPTION SHORT -->
+                    <td class="font-14 text-justify align-top font-italic hover-pointer pl-2 pr-2 pb-3"
+                        data-toggle="modal" data-target="#event_{{ event.id }}">
+                        <span class="{% if request.user.profile not in event.known_directly.all and request.user.profile.status != 'gm' %} text-muted {% endif %}"
+                              data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">Pokaż Kronikę wydarzenia</span>'>
+                            {{ event.description_short|custom_linebreaksbr:1 }}
+                        </span>
+                        <!-- Modal -->
+                        <div class="modal fade" id="event_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">
+                                            <a class="btn btn-outline-dark btn-sm mt-1 py-1" href="{% url 'chronicles:game-event-inform' event.id %}" target="_blank"
+                                                data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">Poinformuj o wydarzeniu</span>'>
+                                                <i class="icon-inform-medium"></i>
+                                            </a>
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body font-15">
+                                        {{ event.description_long|custom_linebreaksbr:2 }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-dark mx-auto" data-dismiss="modal">Zamknij</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </td>
-                <!-- KNOWN DIRECTLY AND INDIRECTLY -->
-                <td class="font-13 align-center align-top">
-                    {% for profile in event.known_directly.all %}
-                        <a>
-                            <img class="rounded-circle img-smaller" src="{{ profile.image.url }}" alt="Profile img"
-                                 data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">(W budowie) Prosoponomikon:<br>"{{ profile }}"</span>'>
-                        </a>
-                        {% if forloop.counter|divisibleby:2 and not forloop.last %}<br>{% endif %}
-                    {% endfor %}
-                    {% if event.known_directly.all %}<br>{% endif %}
-                    {% if event.known_indirectly.all %}-✧-<br>{% endif %}
-                    {% for profile in event.known_indirectly.all %}
-                        <a>
-                            <img class="rounded-circle img-grayscale img-smaller" src="{{ profile.image.url }}" alt="Profile img"
-                                data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">(W budowie) Prosoponomikon:<br>"{{ profile }}"</span>'>
-                        </a>
-                        {% if forloop.counter|divisibleby:2 and not forloop.last %}<br>{% endif %}
-                    {% endfor %}
-                </td>
-                <!-- SECONDARY LOCATIONS -->
-                <td class="font-13 align-top unblue-black">
-                    <ul class="bullets-4 pl-1">
-                        {% for location in event.locations.all %}
-                            <li class="pl-0-05">
-                                <a class="hover-pointer" href="{% url 'toponomikon:location' location.name %}"
-                                    data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">Toponomikon:<br>"{{ location.name }}"</span>'>
-                                    <small>{{ location.name }}</small>
-                                </a>
-                            </li>
+                    </td>
+                    <!-- KNOWN DIRECTLY AND INDIRECTLY -->
+                    <td class="font-13 align-center align-top">
+                        {% for profile in event.known_directly.all %}
+                            <a>
+                                <img class="rounded-circle img-smaller" src="{{ profile.image.url }}" alt="Profile img"
+                                     data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">(W budowie) Prosoponomikon:<br>"{{ profile }}"</span>'>
+                            </a>
+                            {% if forloop.counter|divisibleby:2 and not forloop.last %}<br>{% endif %}
                         {% endfor %}
-                    </ul>
-                </td>
-                <!-- GAME / ACTION -->
-                <td class="align-center align-top unblue-black">
-                    {% if event.game.game_no == 0 %}
-                        ✴
-                    {% else %}
-                        <a href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">
-                            <small data-toggle="tooltip" data-placement="top" data-html="true"
-                                   title='<span class="font-italic px-2">Kronika:<br>"{{ event.game.title }}"</span>'>
-                                {% if event.game.game_no > 0 %}
-                                    -{{ event.game.game_no }}-
-                                {% else %}
-                                    -Bio-
-                                {% endif %}
-                            </small>
+                        {% if event.known_directly.all %}<br>{% endif %}
+                        {% if event.known_indirectly.all %}-✧-<br>{% endif %}
+                        {% for profile in event.known_indirectly.all %}
+                            <a>
+                                <img class="rounded-circle img-grayscale img-smaller" src="{{ profile.image.url }}" alt="Profile img"
+                                    data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">(W budowie) Prosoponomikon:<br>"{{ profile }}"</span>'>
+                            </a>
+                            {% if forloop.counter|divisibleby:2 and not forloop.last %}<br>{% endif %}
+                        {% endfor %}
+                    </td>
+                    <!-- SECONDARY LOCATIONS -->
+                    <td class="font-13 align-top unblue-black">
+                        <ul class="bullets-4 pl-1">
+                            {% for location in event.locations.all %}
+                                <li class="pl-0-05">
+                                    <a class="hover-pointer" href="{% url 'toponomikon:location' location.name %}"
+                                        data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">Toponomikon:<br>"{{ location.name }}"</span>'>
+                                        <small>{{ location.name }}</small>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <!-- GAME / ACTION -->
+                    <td class="align-center align-top unblue-black">
+                        {% if event.game.game_no == 0 %}
+                            ✴
+                        {% else %}
+                            <a href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">
+                                <small data-toggle="tooltip" data-placement="top" data-html="true"
+                                       title='<span class="font-italic px-2">Kronika:<br>"{{ event.game.title }}"</span>'>
+                                    {% if event.game.game_no > 0 %}
+                                        -{{ event.game.game_no }}-
+                                    {% else %}
+                                        -Bio-
+                                    {% endif %}
+                                </small>
+                            </a>
+                        {% endif %}
+                        <a class="btn btn-outline-dark btn-sm mt-1 py-1 disabled" href="#">
+                            <i class="icon-note-small"></i>
                         </a>
-                    {% endif %}
-                    <a class="btn btn-outline-dark btn-sm mt-1 py-1 disabled" href="#">
-                        <i class="icon-note-small"></i>
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+    
+        </table>
+    {% endif %}
 
-    </table>
-    <br>
 {% endblock content %}
