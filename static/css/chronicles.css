@@ -13,6 +13,13 @@ select option {font-size: 0.85rem; padding-left: 0.3rem;}
 
 .input-18 input[type="text"] {width: 18rem;}
 
+@media only screen and (min-width: 1200px) {
+    .input-18 input[type="text"] {width: 21rem;}
+    select {
+        width: 21rem;
+        height: 13rem;
+    }
+}
 
 
 
