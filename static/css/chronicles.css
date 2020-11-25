@@ -4,22 +4,41 @@
 /***************************** TIMELINE filters ******************************/
 /*****************************************************************************/
 
-select {
-    width: 18rem;
-    height: 13rem;
-}
-
 select option {font-size: 0.85rem; padding-left: 0.3rem;}
+
+select {height: 13rem;}
 
 .input-18 input[type="text"] {width: 18rem;}
 
-@media only screen and (min-width: 1200px) {
-    .input-18 input[type="text"] {width: 21rem;}
-    select {
-        width: 21rem;
-        height: 13rem;
-    }
+@media only screen and (min-width: 200px) and (max-width: 499px) {
+    select {width: 18rem;}
+    .input-18 input[type="text"] {width: 18rem;}
+    .img-timeline-filter {height: 55px;}
 }
+
+@media only screen and (min-width: 500px) and (max-width: 991px) {
+    select {width: 24rem;}
+    .input-18 input[type="text"] {width: 24rem;}
+    .img-timeline-filter {height: 60px;}
+
+}
+@media only screen and (min-width: 992px) {
+    select {width: 17rem;}
+    .input-18 input[type="text"] {width: 17rem;}
+    .img-timeline-filter {height: 50px;}
+}
+@media only screen and (min-width: 1200px) {
+    select {width: 20rem;}
+    .input-18 input[type="text"] {width: 20rem;}
+    .img-timeline-filter {height: 55px;}
+}
+@media only screen and (min-width: 1400px) {
+    select {width: 21rem;}
+    .input-18 input[type="text"] {width: 21rem;}
+}
+
+
+
 
 
 
