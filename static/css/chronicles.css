@@ -13,14 +13,12 @@ select {height: 13rem;}
 @media only screen and (min-width: 200px) and (max-width: 499px) {
     select {width: 18rem;}
     .input-18 input[type="text"] {width: 18rem;}
-    .img-timeline-filter {height: 55px;}
+    .img-timeline-filter {height: 60px;}
 }
-
 @media only screen and (min-width: 500px) and (max-width: 991px) {
     select {width: 24rem;}
     .input-18 input[type="text"] {width: 24rem;}
-    .img-timeline-filter {height: 60px;}
-
+    .img-timeline-filter {height: 65px;}
 }
 @media only screen and (min-width: 992px) {
     select {width: 17rem;}
