@@ -184,7 +184,7 @@
                     <td class="font-14 text-justify align-top font-italic hover-pointer pl-2 pr-2 pb-3"
                         data-toggle="modal" data-target="#event_{{ event.id }}">
                         <span class="{% if request.user.profile not in event.known_directly.all and request.user.profile.status != 'gm' %} text-muted {% endif %}"
-                              data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">Pokaż Kronikę wydarzenia</span>'>
+                              data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic">Pokaż Kronikę wydarzenia</span>'>
                             {{ event.description_short|custom_linebreaksbr:1 }}
                         </span>
                         <!-- Modal -->
@@ -194,7 +194,7 @@
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLabel">
                                             <a class="btn btn-outline-dark btn-sm mt-1 py-1" href="{% url 'chronicles:game-event-inform' event.id %}" target="_blank"
-                                                data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">Poinformuj o wydarzeniu</span>'>
+                                                data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic">Poinformuj o wydarzeniu</span>'>
                                                 <i class="icon-inform-medium"></i>
                                             </a>
                                         </h5>
@@ -217,7 +217,7 @@
                         {% for profile in event.known_directly.all %}
                             <a>
                                 <img class="rounded-circle img-smaller" src="{{ profile.image.url }}" alt="Profile img"
-                                     data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">(W budowie) Prosoponomikon:<br>"{{ profile }}"</span>'>
+                                     data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic">(W budowie)<br>Prosoponomikon:<br>"{{ profile }}"</span>'>
                             </a>
                             {% if forloop.counter|divisibleby:2 and not forloop.last %}<br>{% endif %}
                         {% endfor %}
@@ -226,7 +226,7 @@
                         {% for profile in event.known_indirectly.all %}
                             <a>
                                 <img class="rounded-circle img-grayscale img-smaller" src="{{ profile.image.url }}" alt="Profile img"
-                                    data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">(W budowie) Prosoponomikon:<br>"{{ profile }}"</span>'>
+                                    data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic">(W budowie)<br>Prosoponomikon:<br>"{{ profile }}"</span>'>
                             </a>
                             {% if forloop.counter|divisibleby:2 and not forloop.last %}<br>{% endif %}
                         {% endfor %}
@@ -237,7 +237,7 @@
                             {% for location in event.locations.all %}
                                 <li class="pl-0-05">
                                     <a class="hover-pointer" href="{% url 'toponomikon:location' location.name %}"
-                                        data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic px-2">Toponomikon:<br>"{{ location.name }}"</span>'>
+                                       data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic">Toponomikon:<br>"{{ location.name }}"</span>'>
                                         <small>{{ location.name }}</small>
                                     </a>
                                 </li>
@@ -251,7 +251,7 @@
                         {% else %}
                             <a href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">
                                 <small data-toggle="tooltip" data-placement="top" data-html="true"
-                                       title='<span class="font-italic px-2">Kronika:<br>"{{ event.game.title }}"</span>'>
+                                       title='<span class="font-italic">Kronika:<br>"{{ event.game.title }}"</span>'>
                                     {% if event.game.game_no > 0 %}
                                         -{{ event.game.game_no }}-
                                     {% else %}
