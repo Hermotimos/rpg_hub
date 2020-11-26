@@ -2,7 +2,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-from history.models import Thread, Location, TimelineEvent
+from chronicles.models import Thread, GameEvent
+from toponomikon.models import Location
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, Profession, Klass, EliteProfession, \
     EliteKlass, WeaponType, Weapon
 
@@ -21,14 +22,11 @@ def reload_main_view(request):
 @login_required
 def reload_history(request):
     if request.user.profile.status == 'gm':
-
         for obj in Thread.objects.all():
             obj.save()
-        for obj in TimelineEvent.objects.all():
+        for obj in GameEvent.objects.all():
             obj.save()
-
-        messages.info(request, f'Przeładowano "sorting_name" dla aplikacji "history"!')
-
+        messages.info(request, f'Przeładowano "Thread" i "GameEvent"!')
         return redirect('reload:reload-main')
     else:
         return redirect('home:dupa')
@@ -75,7 +73,6 @@ def reload_rules(request):
             obj.save()
 
         messages.info(request, f'Przeładowano "sorting_name" dla aplikacji "rules"!')
-
         return redirect('reload:reload-main')
     else:
         return redirect('home:dupa')

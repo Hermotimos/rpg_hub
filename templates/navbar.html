@@ -38,9 +38,6 @@
                     <div class="dropdown-content">
                         <ul class="bullets-1 pl-4">
                             <li><a class="font-14 nav-link small-caps" href="{% url 'chronicles:timeline' %}">Kalendarium</a></li>
-                            {% if user.profile.status == 'gm' %}
-                                <li><a class="font-14 nav-link small-caps font-italic" href="{% url 'history:timeline-main' %}"><small>Kalendarium (stare)</small></a></li>
-                            {% endif %}
                             <li><a class="font-14 nav-link small-caps" href="{% url 'chronicles:chronicle-contents' %}">Kronika</a></li>
                             <li><a class="font-14 nav-link small-caps" href="{% url 'debates:main' %}">Narady</a></li>
                             <li><a class="font-14 nav-link small-caps disabled" href="#">Prosoponomikon</a></li>
