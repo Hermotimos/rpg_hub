@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('debates', '0006_remove_debate_allowed_profiles'),
+        ('debates', '0001_initial'),
         ('chronicles', '0013_auto_20200713_0603'),
     ]
 
