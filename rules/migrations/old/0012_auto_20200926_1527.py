@@ -7,7 +7,7 @@ class Migration(migrations.Migration):
     atomic = False
 
     dependencies = [
-        ('users', '0002_auto_20200926_1248'),
+        ('users', '0001_initial'),
         ('rules', '0011_auto_20200926_1525'),
     ]
 

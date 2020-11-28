@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('toponomikon', '0022_auto_20200915_1743'),
-        ('users', '0002_auto_20200926_1248'),
+        ('users', '0001_initial'),
     ]
 
     operations = [

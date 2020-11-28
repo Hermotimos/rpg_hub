@@ -7,7 +7,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('imaginarion', '0005_auto_20200915_1828'),
-        ('users', '0002_auto_20200926_1248'),
+        ('users', '0001_initial'),
         ('knowledge', '0003_auto_20200419_1413'),
     ]
 
