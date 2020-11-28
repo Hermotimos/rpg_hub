@@ -6,8 +6,6 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    replaces = [('rules', '0001_initial'), ('rules', '0002_auto_20200721_2309'), ('rules', '0003_historyskill'), ('rules', '0004_auto_20200926_1117'), ('rules', '0005_auto_20200926_1122'), ('rules', '0006_auto_20200926_1125'), ('rules', '0007_auto_20200926_1128'), ('rules', '0008_auto_20200926_1129'), ('rules', '0009_auto_20200926_1143'), ('rules', '0010_auto_20200926_1524'), ('rules', '0011_auto_20200926_1525'), ('rules', '0012_auto_20200926_1527'), ('rules', '0013_auto_20200926_1536'), ('rules', '0014_auto_20200926_1538'), ('rules', '0015_auto_20200926_1538'), ('rules', '0016_auto_20200926_1540'), ('rules', '0017_auto_20200926_1738'), ('rules', '0018_auto_20201111_1223')]
-
     initial = True
 
     dependencies = [
