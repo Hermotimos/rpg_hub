@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('imaginarion', '0006_audioset'),
+        ('imaginarion', '0001_initial'),
         ('toponomikon', '0024_auto_20201031_1530'),
     ]
 

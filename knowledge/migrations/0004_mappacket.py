@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('imaginarion', '0005_auto_20200915_1828'),
+        ('imaginarion', '0001_initial'),
         ('users', '0001_initial'),
         ('knowledge', '0003_auto_20200419_1413'),
     ]

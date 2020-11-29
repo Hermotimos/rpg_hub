@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         ('toponomikon', '0015_auto_20200627_2324'),
         ('users', '0001_initial'),
         ('debates', '0001_initial'),
-        ('imaginarion', '0002_auto_20200405_1722'),
+        ('imaginarion', '0001_initial'),
     ]
 
     operations = [

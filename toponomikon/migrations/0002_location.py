@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('knowledge', '0003_auto_20200419_1413'),
         ('users', '0001_initial'),
-        ('imaginarion', '0002_auto_20200405_1722'),
+        ('imaginarion', '0001_initial'),
         ('toponomikon', '0001_initial'),
     ]
 
