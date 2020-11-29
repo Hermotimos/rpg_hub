@@ -9,10 +9,10 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('knowledge', '0003_auto_20200419_1413'),
-        ('users', '0001_initial'),
         ('knowledge', '0001_initial'),
-        ('knowledge', '0004_mappacket'),
+        ('users', '0001_initial'),
+        # ('knowledge', '0001_initial'),
+        # ('knowledge', '0004_mappacket'),
         ('imaginarion', '0001_initial'),
     ]
 
