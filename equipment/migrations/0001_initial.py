@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('toponomikon', '0022_auto_20200915_1743'),
+        ('toponomikon', '0001_initial'),
         ('users', '0001_initial'),
     ]
 

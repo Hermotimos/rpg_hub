@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('toponomikon', '0016_tertiarylocation'),
+        ('toponomikon', '0001_initial'),
         ('chronicles', '0004_auto_20200705_1421'),
     ]
 

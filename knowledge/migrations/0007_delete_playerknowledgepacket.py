@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('toponomikon', '0025_auto_20201104_2109'),
+        ('toponomikon', '0001_initial'),
         ('knowledge', '0006_playerknowledgepacket'),
     ]
 
