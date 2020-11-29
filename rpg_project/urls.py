@@ -27,7 +27,6 @@ urlpatterns = [
     path('contact/', include('contact.urls')),
     path('debates/', include('debates.urls')),
     path('development/', include('development.urls')),
-    path('history/', include('history.urls')),
     path('knowledge/', include('knowledge.urls')),
     path('news/', include('news.urls')),
     path('reload/', include('reload.urls')),
