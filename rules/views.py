@@ -2,8 +2,17 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
 
-from rules.models import Skill, Synergy, Profession, Klass, EliteProfession, \
-    EliteKlass, WeaponType, Plate, Shield
+from rules.models import (
+    EliteKlass,
+    EliteProfession,
+    Klass,
+    Plate,
+    Profession,
+    Shield,
+    Skill,
+    Synergy,
+    WeaponType,
+)
 
 
 @login_required
@@ -18,16 +27,16 @@ def rules_main_view(request):
 def rules_armor_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
-        plates = Plate.objects.all().prefetch_related('pictures')
-        shields = Shield.objects.all().prefetch_related('pictures')
+        plates = Plate.objects.all()
+        shields = Shield.objects.all()
     else:
-        plates = profile.allowed_plates.all().prefetch_related('pictures')
-        shields = profile.allowed_shields.all().prefetch_related('pictures')
+        plates = profile.allowed_plates.all()
+        shields = profile.allowed_shields.all()
 
     context = {
         'page_title': 'Pancerz',
-        'plates': plates,
-        'shields': shields
+        'plates': plates.prefetch_related('pictures'),
+        'shields': shields.prefetch_related('pictures'),
     }
     return render(request, 'rules/armor.html', context)
 
@@ -86,16 +95,16 @@ def rules_professions_view(request):
 def rules_skills_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
-        skills = Skill.objects.all().prefetch_related('skill_levels')
-        synergies = Synergy.objects.all().prefetch_related('skills', 'synergy_levels')
+        skills = Skill.objects.all()
+        synergies = Synergy.objects.all()
     else:
-        skills = profile.allowed_skills.all().prefetch_related('skill_levels')
-        synergies = profile.allowed_synergies.all().prefetch_related('skills', 'synergy_levels')
+        skills = profile.allowed_skills.all()
+        synergies = profile.allowed_synergies.all()
 
     context = {
         'page_title': 'Umiejętności',
-        'skills': skills,
-        'synergies': synergies,
+        'skills': skills.prefetch_related('skill_levels'),
+        'synergies': synergies.prefetch_related('skills', 'synergy_levels'),
     }
     return render(request, 'rules/skills.html', context)
 
@@ -118,7 +127,7 @@ def rules_tricks_view(request):
 
     context = {
         'page_title': 'Podstępy',
-        'plates': plates
+        'plates': plates,
     }
     return render(request, 'rules/tricks.html', context)
 
@@ -137,7 +146,7 @@ def rules_weapons_view(request):
 
     context = {
         'page_title': 'Broń',
-        'weapon_types': weapon_types
+        'weapon_types': weapon_types,
     }
     return render(request, 'rules/weapons.html', context)
 
