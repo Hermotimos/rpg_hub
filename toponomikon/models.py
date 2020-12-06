@@ -144,20 +144,6 @@ class SecondaryLocation(Location):
         proxy = True
         
 
-# class TertiaryLocationManager(Manager):
-#     def get_queryset(self):
-#         qs = super().get_queryset()
-#         qs = qs.filter(~Q(in_location__in_location=None))
-#         return qs
-#
-#
-# class TertiaryLocation(Location):
-#     objects = TertiaryLocationManager()
-#
-#     class Meta:
-#         proxy = True
-#
-
 def update_known_gen_locations(sender, instance, **kwargs):
     """Whenever a location becomes 'known_directly' or 'known_indirectly' to
     a profile, add this location's 'in_location' (i.e. more general location)
