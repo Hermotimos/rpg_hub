@@ -30,10 +30,11 @@ class CreateDebateForm(forms.ModelForm):
         authenticated_user = kwargs.pop('authenticated_user')
         super().__init__(*args, **kwargs)
         self.fields['known_directly'].label = ''
-        self.fields['known_directly'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                                           Q(status='dead_player') |
-                                                                           Q(status='dead_npc') |
-                                                                           Q(status='gm'))
+        self.fields['known_directly'].queryset = Profile.objects.exclude(
+            Q(user=authenticated_user)
+            | Q(status__icontains='dead')
+            | Q(status='gm')
+        )
         self.fields['known_directly'].widget.attrs['size'] = 10
         self.fields['is_individual'].label = 'Dyskusja indywidualna?'
         self.fields['name'].label = ''
@@ -52,13 +53,13 @@ class CreateRemarkForm(forms.ModelForm):
             debate = Debate.objects.get(id=debate_id)
             debate_known_directly = debate.known_directly.all()
         else:
-            debate_known_directly = Profile.objects.exclude(Q(status='dead_player') |
-                                                              Q(status='dead_npc'))
+            debate_known_directly = Profile.objects.exclude(status__icontains='dead')
+            
         super().__init__(*args, **kwargs)
         self.fields['author'].label = 'Autor:'
-        self.fields['author'].queryset = User.objects\
-            .filter(Q(profile__status='gm') | Q(profile__in=debate_known_directly))\
-            .order_by('profile__character_name')
+        self.fields['author'].queryset = User.objects.filter(
+            Q(profile__status='gm') | Q(profile__in=debate_known_directly)
+        ).order_by('profile__character_name')
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''

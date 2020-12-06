@@ -13,11 +13,8 @@ class CreateNewsForm(forms.ModelForm):
         authenticated_user = kwargs.pop('authenticated_user')
         super().__init__(*args, **kwargs)
         self.fields['allowed_profiles'].label = ''
-        self.fields['allowed_profiles'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                                           Q(status='dead_player') |
-                                                                           Q(status='inactive_player') |
-                                                                           Q(status='living_npc') |
-                                                                           Q(status='dead_npc'))
+        self.fields['allowed_profiles'].queryset = Profile.objects.filter(
+            status='active_player').exclude(user=authenticated_user)
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
@@ -49,7 +46,6 @@ class CreateNewsAnswerForm(forms.ModelForm):
         self.fields['text'].widget.attrs = {
             'cols': 60,
             'rows': 10,
-            # 'oninput': 'showIsTyping()',
             'placeholder': 'Twoja odpowiedź (max. 4000 znaków)*'
         }
 
@@ -63,11 +59,8 @@ class CreateSurveyForm(forms.ModelForm):
         authenticated_user = kwargs.pop('authenticated_user')
         super().__init__(*args, **kwargs)
         self.fields['addressees'].label = ''
-        self.fields['addressees'].queryset = Profile.objects.exclude(Q(user=authenticated_user) |
-                                                                     Q(status='dead_player') |
-                                                                     Q(status='inactive_player') |
-                                                                     Q(status='living_npc') |
-                                                                     Q(status='dead_npc'))
+        self.fields['addressees'].queryset = Profile.objects.filter(
+            status='active_player').exclude(user=authenticated_user)
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
