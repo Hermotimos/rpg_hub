@@ -39,7 +39,7 @@
 
     <!-- Content -->
     <h6 class="font-18 font-italic text-justify linebreaks-style">
-        {{ kn_packet.text|linebreaks }}
+        {{ kn_packet.text|linebreaksbr }}
     </h6>
     
     {% for row in kn_packet.pictures.all|columns:3 %}

@@ -132,8 +132,6 @@ class SecondaryLocationManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(~Q(in_location=None))
-        # In case of TertiaryLocation:
-        # qs = qs.filter(in_location__in_location=None)
         return qs
 
 
