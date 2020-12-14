@@ -4,6 +4,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from users.models import Profile
 
+# Przenieść to wszystko do users -> przemianować users na prosoponomikon. No przecież...
+
 
 @login_required
 def prosoponomikon_main_view(request):
