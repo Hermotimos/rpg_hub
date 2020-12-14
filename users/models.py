@@ -4,6 +4,7 @@ from django.db.models import (
     ImageField,
     Model,
     OneToOneField,
+    TextField,
 )
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -28,12 +29,14 @@ STATUS = [
 
 class Profile(Model):
     user = OneToOneField(User, on_delete=CASCADE)
-    character_name = CharField(max_length=50, default='')
     status = CharField(max_length=50, choices=STATUS, default='living_npc')
+    
+    character_name = CharField(max_length=50, default='')
     image = ImageField(
         default='profile_pics/profile_default.jpg',
         upload_to='profile_pics',
     )
+    character_description = TextField()
    
     class Meta:
         ordering = ['status', 'character_name']

@@ -10,5 +10,5 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),
     path('profile/change_password/', views.change_password_view, name='change-password'),
     
-
+    path('', views.prosoponomikon_main_view, name='main'),
 ]

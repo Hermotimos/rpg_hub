@@ -3,7 +3,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import LoginView, LogoutView
-
+from django.db.models import Q
 from django.shortcuts import render, redirect
 
 from users.forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
@@ -86,5 +86,24 @@ def profile_view(request):
     return render(request, 'users/profile.html', context)
 
 
+@login_required
+def prosoponomikon_main_view(request):
+    profile = request.user.profile
+    if profile.status == 'gm':
+        players_profiles = Profile.objects.exclude(Q(status='living_npc') |
+                                                   Q(status='dead_npc') |
+                                                   Q(status='gm'))
+        living_npc_profiles = Profile.objects.filter(status='living_npc')
+        dead_npc_profiles = Profile.objects.filter(status='dead_npc')
+    else:
+        players_profiles = []
+        living_npc_profiles = []
+        dead_npc_profiles = []
 
-
+    context = {
+        'page_title': 'Prosoponomikon',
+        'players_profiles': players_profiles,
+        'living_npc_profiles': living_npc_profiles,
+        'dead_npc_profiles': dead_npc_profiles,
+    }
+    return render(request, 'users/propoponomikon_main.html', context)
