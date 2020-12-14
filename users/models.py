@@ -36,7 +36,7 @@ class Profile(Model):
         default='profile_pics/profile_default.jpg',
         upload_to='profile_pics',
     )
-    character_description = TextField()
+    # character_description = TextField()
    
     class Meta:
         ordering = ['status', 'character_name']
