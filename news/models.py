@@ -1,6 +1,6 @@
 import datetime
-from PIL import Image
 
+from PIL import Image
 from django.contrib.auth.models import User
 from django.db.models import (
     CASCADE,
@@ -42,7 +42,6 @@ class News(Model):
                 img.save(self.image.path)
 
     class Meta:
-        ordering = ['-created_at']
         verbose_name = 'News'
         verbose_name_plural = 'News'
 
@@ -80,9 +79,6 @@ class Survey(Model):
     created_at = DateTimeField(auto_now_add=True)
     addressees = M2MField(to=Profile, related_name='surveys_received')
     seen_by = M2MField(to=Profile, related_name='surveys_seen', blank=True)
-
-    class Meta:
-        ordering = ['-created_at']
 
     def __str__(self):
         return self.title[:50] + '...' if len(str(self.title)) > 50 else self.title

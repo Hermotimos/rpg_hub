@@ -22,13 +22,16 @@ def main_view(request):
         newss = profile.allowed_news.all()
         surveys = profile.surveys_received.all()\
 
-    newss = newss.annotate(last_news_answer=Max('news_answers__created_at'))\
-        .select_related('author__profile') \
-        .prefetch_related('news_answers__author__profile')
-
-    surveys = surveys\
-        .select_related('author__profile')\
-        .prefetch_related('survey_answers__author__profile')
+    newss = (newss
+             .annotate(last_news_answer=Max('news_answers__created_at'))
+             .select_related('author__profile')
+             .prefetch_related('news_answers__author__profile')
+             .order_by('-created_at'))
+    
+    surveys = (surveys
+               .select_related('author__profile')
+               .prefetch_related('survey_answers__author__profile')
+               .order_by('-created_at'))
 
     context = {
         'page_title': 'Ogłoszenia',
