@@ -40,7 +40,7 @@
                             <li><a class="font-14 nav-link small-caps" href="{% url 'chronicles:timeline' %}">Kalendarium</a></li>
                             <li><a class="font-14 nav-link small-caps" href="{% url 'chronicles:chronicle-contents' %}">Kronika</a></li>
                             <li><a class="font-14 nav-link small-caps" href="{% url 'debates:main' %}">Narady</a></li>
-                            <li><a class="font-14 nav-link small-caps disabled" href="#">Prosoponomikon</a></li>
+                            <li><a class="font-14 nav-link small-caps {% if request.user.profile.status != 'gm' %} disabled {% endif %}" href="{% url 'prosoponomikon:main' %}">Prosoponomikon</a></li>
                             <li><a class="font-14 nav-link small-caps" href="{% url 'toponomikon:main' %}">Toponomikon</a></li>
                         </ul>
                     </div>

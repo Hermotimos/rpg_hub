@@ -4,7 +4,7 @@ from django.db.models import (
     ImageField,
     Model,
     OneToOneField,
-    TextField,
+    Q,
 )
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -25,24 +25,28 @@ STATUS = [
     # other
     ('gm', 'MG'),
 ]
+PLAYERS = Q(status__in=[
+    'active_player',
+    'inactive_player',
+    'dead_player',
+])
 
 
 class Profile(Model):
-    user = OneToOneField(User, on_delete=CASCADE)
+    user = OneToOneField(to=User, on_delete=CASCADE)
     status = CharField(max_length=50, choices=STATUS, default='living_npc')
-    
+    # TODO migrate character_name to character_name2 in Character
     character_name = CharField(max_length=50, default='')
     image = ImageField(
         default='profile_pics/profile_default.jpg',
         upload_to='profile_pics',
     )
-    # character_description = TextField()
-   
+    
     class Meta:
         ordering = ['status', 'character_name']
 
     def __str__(self):
-        return f'{self.character_name or self.user.username}'
+        return f"{self.character_name or self.user.username}"
     
     def save(self, *args, **kwargs):
         first_save = True if not self.pk else False
@@ -54,7 +58,7 @@ class Profile(Model):
                 img.thumbnail(output_size)
                 img.save(self.image.path)
 
-
+   
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     if created:
