@@ -2,3 +2,8 @@
 img.img-grayscale:hover {
         filter: grayscale(0%);
 }
+
+img.character {
+    max-width: 12rem;
+    width: 100%
+}
