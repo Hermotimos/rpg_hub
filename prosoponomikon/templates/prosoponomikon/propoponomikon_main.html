@@ -28,9 +28,9 @@
             <section class="mb-5">
                 {% for character in npc_characters %}
                     {% if forloop.counter|divisibleby:2 %}
-                        {% include 'prosoponomikon/_character_right.html' %}
+                        {% include 'prosoponomikon/_character_right2.html' %}
                     {% else %}
-                        {% include 'prosoponomikon/_character_left.html' %}
+                        {% include 'prosoponomikon/_character_left2.html' %}
                     {% endif %}
                 {% endfor %}
             </section>

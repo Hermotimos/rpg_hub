@@ -18,7 +18,24 @@ def prosoponomikon_main_view(request):
     context = {
         'page_title': 'Prosoponomikon',
         'player_characters': player_characters.select_related('profile'),
-        'npc_characters': npc_characters,
+        'npc_characters': npc_characters.select_related('profile'),
     }
     return render(request, 'prosoponomikon/propoponomikon_main.html', context)
 
+
+@login_required
+def prosopa_view(request):
+    profile = request.user.profile
+    if profile.status == 'gm':
+        player_characters = PlayerCharacter.objects.all()
+        npc_characters = NonPlayerCharacter.objects.all()
+    else:
+        player_characters = []
+        npc_characters = []
+    
+    context = {
+        'page_title': 'Prosoponomikon',
+        'player_characters': player_characters.select_related('profile'),
+        'npc_characters': npc_characters.select_related('profile'),
+    }
+    return render(request, 'prosoponomikon/prosopa.html', context)
