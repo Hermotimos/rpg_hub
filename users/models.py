@@ -43,10 +43,12 @@ class Profile(Model):
     )
     
     class Meta:
-        ordering = ['status', 'character_name']
+        ordering = ['status']
+        # ordering = ['status', 'character_name']
 
     def __str__(self):
-        return f"{self.character_name or self.user.username}"
+        return self.user.username
+        # return f"{self.character_name or self.user.username}"
     
     def save(self, *args, **kwargs):
         first_save = True if not self.pk else False

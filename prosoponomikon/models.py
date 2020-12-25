@@ -12,6 +12,7 @@ from django.db.models import (
 )
 # from django.db.models.signals import post_save
 # from django.dispatch import receiver
+from rpg_project.utils import create_sorting_name
 
 from imaginarion.models import Picture
 from knowledge.models import BiographyPacket, DialoguePacket
@@ -19,7 +20,14 @@ from knowledge.models import KnowledgePacket
 from toponomikon.models import Location
 from users.models import Profile
 
-PLAYERS = Q(status__in=[
+
+PLAYER_STATUS = [
+    'active_player',
+    'inactive_player',
+    'dead_player',
+]
+
+PLAYERS = Q(profile__status__in=[
     'active_player',
     'inactive_player',
     'dead_player',
@@ -44,34 +52,39 @@ class CharacterGroup(Model):
     def __str__(self):
         return self.name
     
+    # TODO: grous: 'Gracze', 'Tirsenowie', 'Skadyjczycy'
+
     # TODO no signal necessary to include knowledge packets on per group basis
     # TODO -> show them by character.character_groups.knowledge_packets ...
 
 
 class Character(Model):
+    PLAYERS = Q(status__in=[
+        'active_player',
+        'inactive_player',
+        'dead_player',
+    ])
     profile = OneToOneField(to=Profile, on_delete=CASCADE)
-
-    def get_character_name(self):
-        return self.profile.character_name
-    character_name2 = CharField(max_length=100, default=get_character_name)
-    
-    description_short = CharField(max_length=250, blank=True, null=True)
-    description_long = TextField(blank=True, null=True)
+    name = CharField(max_length=100)
+    descr_origin = TextField(blank=True, null=True)
+    descr_occupation = TextField(blank=True, null=True)
+    descr_psychophysical = TextField(blank=True, null=True)
+    descr_for_gm = TextField(blank=True, null=True)
     character_groups = M2M(
         to=CharacterGroup,
         related_name='characters',
         blank=True,
     )
     known_directly = M2M(
-        to='self',
+        to=Profile,
         related_name='characters_known_directly',
-        limit_choices_to=PLAYERS,
+        limit_choices_to=Q(status__in=PLAYER_STATUS),
         blank=True,
     )
     known_indirectly = M2M(
-        to='self',
+        to=Profile,
         related_name='characters_known_indirectly',
-        limit_choices_to=PLAYERS,
+        limit_choices_to=Q(status__in=PLAYER_STATUS),
         blank=True,
     )
     biography_packets = M2M(
@@ -91,12 +104,43 @@ class Character(Model):
     )
     locations = M2M(to=Location, related_name='characters', blank=True)
     pictures = M2M(to=Picture, related_name='characters', blank=True)
+    sorting_name = CharField(max_length=250, blank=True, null=True)
+
+    class Meta:
+        ordering = ['sorting_name']
+    
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.sorting_name = create_sorting_name(self.name)
+        super().save(*args, **kwargs)
+        
+    def __str__(self):
+        return self.name
+ 
+    
+class PlayerCharacterManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(Q(profile__status__in=PLAYER_STATUS))
+        return qs
+    
+    
+class PlayerCharacter(Character):
+    objects = PlayerCharacterManager()
     
     class Meta:
-        ordering = ['character_name2']
+        proxy = True
+
+
+class NonPlayerCharacterManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.exclude(Q(profile__status__in=PLAYER_STATUS))
+        return qs
+
+
+class NonPlayerCharacter(Character):
+    objects = NonPlayerCharacterManager()
     
-    def __str__(self):
-        return self.character_name2
-
-
-
+    class Meta:
+        proxy = True

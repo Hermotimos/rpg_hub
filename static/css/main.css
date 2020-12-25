@@ -167,9 +167,12 @@ br + br {
   display: block;
   margin-top: 0.4rem;
 }
-
-
 */
+@import '../node_modules/bootstrap/scss/bootstrap';
+.text-title {
+    @include font-size(4rem);
+}
+
 
 /*****************************************************************************/
 /********************************* IMAGEST ***********************************/

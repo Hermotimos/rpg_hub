@@ -2,28 +2,23 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch, Q
 from django.shortcuts import render, redirect, get_object_or_404
 
-from users.models import Profile
+from prosoponomikon.models import PlayerCharacter, NonPlayerCharacter
 
 
 @login_required
 def prosoponomikon_main_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
-        players_profiles = Profile.objects.exclude(Q(status='living_npc') |
-                                                   Q(status='dead_npc') |
-                                                   Q(status='gm'))
-        living_npc_profiles = Profile.objects.filter(status='living_npc')
-        dead_npc_profiles = Profile.objects.filter(status='dead_npc')
+        player_characters = PlayerCharacter.objects.all()
+        npc_characters = NonPlayerCharacter.objects.all()
     else:
-        players_profiles = []
-        living_npc_profiles = []
-        dead_npc_profiles = []
-
+        player_characters = []
+        npc_characters = []
+        
     context = {
         'page_title': 'Prosoponomikon',
-        'players_profiles': players_profiles,
-        'living_npc_profiles': living_npc_profiles,
-        'dead_npc_profiles': dead_npc_profiles,
+        'player_characters': player_characters.select_related('profile'),
+        'npc_characters': npc_characters,
     }
     return render(request, 'prosoponomikon/propoponomikon_main.html', context)
 

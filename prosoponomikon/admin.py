@@ -1,3 +1,6 @@
 from django.contrib import admin
+from prosoponomikon.models import Character, PlayerCharacter, NonPlayerCharacter
 
-# Register your models here.
+admin.site.register(Character)
+admin.site.register(PlayerCharacter)
+admin.site.register(NonPlayerCharacter)
