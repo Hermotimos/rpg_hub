@@ -7,12 +7,20 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <br><br><br>
-
-    <article>
+    <article class="top-button">
+        
+        <div class="mb-5">
+            <a href="{% url 'prosoponomikon:create-group' %}" class="btn btn-outline-dark mb-1">Nowa grupa</a>
+        </div>
+        
         <div class="container">
             
-            <section class="mb-5">
+            <p class="mb-0 text-center">✧</p>
+            <p class="mb-0 text-center">✧ ✦ ✧</p>
+            <p class="h3 text-center mb-2 mt-1">Bohaterowie graczy</p>
+            <p class="mb-0 text-center">✧ ✦ ✧</p>
+            <p class="mb-5 mt-0 text-center">✧</p>
+            <section class="my-5 py-5">
                 {% for character in players %}
                     {% if forloop.counter|divisibleby:2 %}
                         {% include 'prosoponomikon/_character_right2.html' %}
@@ -22,10 +30,12 @@
                 {% endfor %}
             </section>
             
-            <br><br>*****<br>
-            
-            
-            <section class="mb-5">
+            <p class="mb-0 text-center">✧</p>
+            <p class="mb-0 text-center">✧ ✦ ✧</p>
+            <p class="h3 text-center mb-2 mt-1">Bohaterowie niezależni</p>
+            <p class="mb-0 text-center">✧ ✦ ✧</p>
+            <p class="mb-5 mt-0 text-center">✧</p>
+            <section class="my-5 py-5">
                 {% for character in npcs %}
                     {% if forloop.counter|divisibleby:2 %}
                         {% include 'prosoponomikon/_character_right2.html' %}
