@@ -15,8 +15,8 @@ from users.models import Profile
 
 
 class InfoPacket(Model):
-    title = CharField(max_length=100, unique=True)
-    text = TextField(blank=True, null=True)
+    title = CharField(max_length=100, unique=True, verbose_name='Tytuł')
+    text = TextField(blank=True, null=True, verbose_name='Treść (niewymagane)')
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
@@ -37,8 +37,17 @@ class KnowledgePacket(InfoPacket):
         blank=True,
     )
     acquired_by = M2M(to=Profile, related_name='knowledge_packets', blank=True)
-    pictures = M2M(to=Picture, related_name='knowledge_packets', blank=True)
-    skills = M2M(to=Skill, related_name='knowledge_packets')
+    pictures = M2M(
+        to=Picture,
+        related_name='knowledge_packets',
+        blank=True,
+        verbose_name='Obrazy [opcjonalnie]:',
+    )
+    skills = M2M(
+        to=Skill,
+        related_name='knowledge_packets',
+        verbose_name='Umiejętności powiązane',
+    )
 
     def __str__(self):
         return self.title
@@ -57,7 +66,11 @@ class KnowledgePacket(InfoPacket):
 
 class MapPacket(InfoPacket):
     acquired_by = M2M(to=Profile, related_name='map_packets', blank=True)
-    pictures = M2M(to=Picture, related_name='map_packets')
+    pictures = M2M(
+        to=Picture,
+        related_name='map_packets',
+        verbose_name='Obrazy [opcjonalnie]:',
+    )
 
     def __str__(self):
         return self.title

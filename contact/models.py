@@ -17,10 +17,20 @@ from users.models import User
 
 class Demand(Model):
     author = FK(to=User, related_name='authored_demands', on_delete=CASCADE)
-    addressee = FK(to=User, related_name='received_demands', on_delete=CASCADE)
-    text = TextField()
+    addressee = FK(
+        to=User,
+        related_name='received_demands',
+        on_delete=CASCADE,
+        verbose_name='Adresat',
+    )
+    text = TextField(verbose_name='Treść')
     date_created = DateTimeField(auto_now_add=True)
-    image = ImageField(upload_to='contact_pics', blank=True, null=True)
+    image = ImageField(
+        upload_to='contact_pics',
+        blank=True,
+        null=True,
+        verbose_name='Obraz [opcjonalnie]:',
+    )
     is_done = BooleanField(default=False)
 
     class Meta:
@@ -45,9 +55,14 @@ class Demand(Model):
 class DemandAnswer(Model):
     demand = FK(to=Demand, related_name='demand_answers', on_delete=CASCADE)
     author = FK(to=User, related_name='demand_answers', on_delete=CASCADE)
-    text = TextField()
+    text = TextField(verbose_name='Odpowiedź')
     date_posted = DateTimeField(auto_now_add=True)
-    image = ImageField(upload_to='contact_pics', blank=True, null=True)
+    image = ImageField(
+        upload_to='contact_pics',
+        blank=True,
+        null=True,
+        verbose_name='Obraz [opcjonalnie]:',
+    )
 
     class Meta:
         ordering = ['date_posted']
@@ -70,10 +85,15 @@ class DemandAnswer(Model):
 
 class Plan(Model):
     author = FK(to=User, related_name='plans', on_delete=CASCADE)
-    text = TextField(max_length=4000)
-    inform_gm = BooleanField(default=False)
+    text = TextField(verbose_name='Treść')
+    inform_gm = BooleanField(default=False, verbose_name='Poinformuj MG')
     date_created = DateTimeField(auto_now_add=True)
-    image = ImageField(upload_to='contact_pics', blank=True, null=True)
+    image = ImageField(
+        upload_to='contact_pics',
+        blank=True,
+        null=True,
+        verbose_name='Obraz [opcjonalnie]:',
+    )
     
     class Meta:
         ordering = ['-date_created']

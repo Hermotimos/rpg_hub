@@ -1,15 +1,17 @@
+from datetime import datetime
+
 from django.apps import apps
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch, Q, ExpressionWrapper, BooleanField
 from django.shortcuts import render, redirect
 
+from imaginarion.models import Picture
 from knowledge.forms import KnPacketCreateForm, PlayerKnPacketCreateForm
 from knowledge.models import KnowledgePacket
 from rpg_project.utils import handle_inform_form
 from rules.models import SkillLevel, Skill
-from imaginarion.models import Picture
-from datetime import datetime
-from django.contrib import messages
+
 
 def custom_sort(skills_qs):
     # Custom sorting to bring specific skills to the front of the queryset:
@@ -126,6 +128,6 @@ def kn_packet_create_and_update_view(request, kn_packet_id):
     }
     if not kn_packet_id or profile.status == 'gm' \
             or profile.knowledge_packets.filter(id=kn_packet_id):
-        return render(request, 'knowledge/kn_packet_create_and_update.html', context)
+        return render(request, '_form.html', context)
     else:
         return redirect('home:dupa')

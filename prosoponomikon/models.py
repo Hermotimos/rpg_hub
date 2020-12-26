@@ -8,6 +8,8 @@ from django.db.models import (
     OneToOneField,
     PROTECT,
     Q,
+    SET_NULL,
+    PositiveSmallIntegerField,
     TextField,
 )
 # from django.db.models.signals import post_save
@@ -27,54 +29,14 @@ PLAYER_STATUS = [
     'dead_player',
 ]
 
-PLAYERS = Q(profile__status__in=[
-    'active_player',
-    'inactive_player',
-    'dead_player',
-])
-
-
-class CharacterGroup(Model):
-    """A mnodel for storing default knowledge packet sets for groups of
-     characters. These should be automatically added to the knowlege packets of
-     a newly created character that belongs to a CharacterGroup (by signals).
-    """
-    name = CharField(max_length=250)
-    knowledge_packets = M2M(
-        to=KnowledgePacket,
-        related_name='character_groups',
-        blank=True,
-    )
-    
-    class Meta:
-        ordering = ['name']
-    
-    def __str__(self):
-        return self.name
-    
-    # TODO: grous: 'Gracze', 'Tirsenowie', 'Skadyjczycy'
-
-    # TODO no signal necessary to include knowledge packets on per group basis
-    # TODO -> show them by character.character_groups.knowledge_packets ...
-
 
 class Character(Model):
-    PLAYERS = Q(status__in=[
-        'active_player',
-        'inactive_player',
-        'dead_player',
-    ])
     profile = OneToOneField(to=Profile, on_delete=CASCADE)
     name = CharField(max_length=100)
     descr_origin = TextField(blank=True, null=True)
     descr_occupation = TextField(blank=True, null=True)
     descr_psychophysical = TextField(blank=True, null=True)
     descr_for_gm = TextField(blank=True, null=True)
-    character_groups = M2M(
-        to=CharacterGroup,
-        related_name='characters',
-        blank=True,
-    )
     known_directly = M2M(
         to=Profile,
         related_name='characters_known_directly',
@@ -144,3 +106,46 @@ class NonPlayerCharacter(Character):
     
     class Meta:
         proxy = True
+
+
+class CharacterGroup(Model):
+    """A mnodel for storing default knowledge packet sets for groups of
+     characters. These should be automatically added to the knowlege packets of
+     a newly created character that belongs to a CharacterGroup (by signals).
+    """
+    name = CharField(max_length=250, verbose_name='Nazwa grupy')
+    author = FK(
+        to=Profile,
+        related_name='character_groups_authored',
+        on_delete=SET_NULL,
+        blank=True,
+        null=True,
+    )
+    characters = M2M(
+        to=Character,
+        related_name='character_groups',
+        verbose_name='Zgrupowane postacie'
+    )
+    default_knowledge_packets = M2M(
+        to=KnowledgePacket,
+        related_name='character_group_defaults',
+        blank=True,
+        verbose_name='Domyślne umiejętności zgrupowanych postaci',
+    )
+    order_no = PositiveSmallIntegerField(
+        blank=True,
+        null=True,
+        verbose_name='Numer porządkowy grupy [opcjonalnie]:',
+    )
+    
+    class Meta:
+        ordering = ['order_no', 'name']
+    
+    def __str__(self):
+        return f"{self.name} [{self.author}]"
+    
+    # TODO: grous: 'Gracze', 'Tirsenowie', 'Skadyjczycy'
+    
+    # TODO no signal necessary to include knowledge packets on per group basis
+    # TODO -> show them by character.character_groups.knowledge_packets ...
+

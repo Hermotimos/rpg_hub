@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/prosoponomikon.css' %}">
+{% endblock head_extra %}
+
+{% block content %}
+    <br><br><br>
+
+    <article>
+        <div class="container">
+            
+            <section class="mb-5">
+                {% for character in players %}
+                    {% if forloop.counter|divisibleby:2 %}
+                        {% include 'prosoponomikon/_character_right2.html' %}
+                    {% else %}
+                        {% include 'prosoponomikon/_character_left2.html' %}
+                    {% endif %}
+                {% endfor %}
+            </section>
+            
+            <br><br>*****<br>
+            
+            
+            <section class="mb-5">
+                {% for character in npcs %}
+                    {% if forloop.counter|divisibleby:2 %}
+                        {% include 'prosoponomikon/_character_right2.html' %}
+                    {% else %}
+                        {% include 'prosoponomikon/_character_left2.html' %}
+                    {% endif %}
+                {% endfor %}
+            </section>
+            
+        </div>
+    </article>
+
+{% endblock content %}

@@ -19,27 +19,26 @@ footer {
     margin-top: 5rem;
 }
 
-.header-img {
-    height: 6.25rem;
-    width: 6.25rem;
-}
-
-.page-title {
-    font-size: 2.62rem;
-    line-height: 1;
-}
-
 @media only screen and (max-width: 600px) {
     .header-img {
-        height: 5rem;
-        width: 5rem;
+        height: 4rem;
+        width: 4rem;
     }
     .page-title {
-        font-size: 1.7rem;
+        font-size: 1.6rem;
         line-height: 1;
     }
 }
-
+@media only screen and (min-width: 601px) {
+    .header-img {
+        height: 6.25rem;
+        width: 6.25rem;
+    }
+    .page-title {
+        font-size: 2.62rem;
+        line-height: 1;
+    }
+}
 
 
 
@@ -264,11 +263,12 @@ img.img-grayscale {filter: grayscale(100%);}
     height: auto;
     transform: scale(1);
     border-style: none;
-}
 
-.img-hover-zoom:hover img {
-    transform: scale(1.2);
 }
+.img-hover-zoom-dead img {filter: grayscale(100%) !important;}
+
+.img-hover-zoom:hover img {transform: scale(1.2);}
+
 
 div.img-hover-zoom {
     border-style: double;
@@ -425,7 +425,7 @@ nav ul.bullets-1 li {color: #cbd5db;}
 
 .tabset > input:checked + label {
   border-color: #ccc;
-  border-bottom: 1px solid #fff;
+  /* border-bottom: 1px solid #fff; */
   margin-bottom: -1px;
 }
 

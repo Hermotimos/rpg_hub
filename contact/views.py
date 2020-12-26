@@ -6,8 +6,7 @@ from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
-from contact.forms import (DemandsCreateForm, DemandAnswerForm,
-                           PlansCreateForm, PlansModifyForm)
+from contact.forms import (DemandsCreateForm, DemandAnswerForm, PlanForm)
 from contact.models import Demand, DemandAnswer, Plan
 from rpg_project.utils import send_emails
 from rules.models import Skill, Synergy, Weapon, Plate
@@ -85,7 +84,7 @@ def demands_create_view(request):
         'page_title': 'Nowy dezyderat',
         'form': form,
     }
-    return render(request, 'contact/demands_create.html', context)
+    return render(request, '_form.html', context)
 
 
 @login_required
@@ -249,7 +248,7 @@ def plans_for_gm_view(request):
 @login_required
 def plans_create_view(request):
     if request.method == 'POST':
-        form = PlansCreateForm(request.POST, request.FILES)
+        form = PlanForm(request.POST, request.FILES)
         if form.is_valid():
             plan = form.save(commit=False)
             plan.author = request.user
@@ -267,13 +266,13 @@ def plans_create_view(request):
             messages.info(request, f'Plan został zapisany!')
             return redirect('contact:plans-main')
     else:
-        form = PlansCreateForm()
+        form = PlanForm()
 
     context = {
         'page_title': 'Nowy plan',
         'form': form,
     }
-    return render(request, 'contact/plans_create.html', context)
+    return render(request, '_form.html', context)
 
 
 @login_required
@@ -291,7 +290,7 @@ def plans_delete_view(request, plan_id):
 def plans_modify_view(request, plan_id):
     plan = get_object_or_404(Plan, id=plan_id)
     if request.method == 'POST':
-        form = PlansModifyForm(instance=plan, data=request.POST, files=request.FILES)
+        form = PlanForm(instance=plan, data=request.POST, files=request.FILES)
         if form.is_valid():
             plan = form.save()
 
@@ -306,13 +305,13 @@ def plans_modify_view(request, plan_id):
             messages.info(request, 'Zmodyfikowano plan!')
             return redirect('contact:plans-main')
     else:
-        form = PlansModifyForm(instance=plan)
+        form = PlanForm(instance=plan)
 
     context = {
         'page_title': 'Zmiana planów?',
-        'form': form
+        'form': form,
     }
     if request.user == plan.author:
-        return render(request, 'contact/plans_modify.html', context)
+        return render(request, '_form.html', context)
     else:
         return redirect('home:dupa')

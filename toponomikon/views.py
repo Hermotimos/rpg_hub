@@ -44,7 +44,7 @@ def toponomikon_main_view(request):
         'all_locs': all_locs,
         'all_maps': all_maps.prefetch_related('pictures'),
     }
-    return render(request, 'toponomikon/toponomikon_main.html', context)
+    return render(request, 'toponomikon/main.html', context)
 
 
 @login_required

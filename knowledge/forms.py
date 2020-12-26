@@ -1,3 +1,5 @@
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 from django.forms import (
     CharField,
     FileField,
@@ -12,6 +14,7 @@ from toponomikon.models import Location
 
 class KnPacketCreateForm(ModelForm):
     """Form to create KnowledgePackets by 'gm' status profiles."""
+    
     class Meta:
         model = KnowledgePacket
         fields = ['title', 'text', 'skills', 'pictures']
@@ -22,52 +25,53 @@ class KnPacketCreateForm(ModelForm):
     locations = ModelMultipleChoiceField(
         queryset=Location.objects.all(),
         required=False,
+        label='Lokacje powiązane (niewymagane)',
     )
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['locations'].label = 'Połącz z lokacjami (opcjonalnie):'
         self.fields['locations'].widget.attrs['size'] = 10
-        self.fields['skills'].label = 'Połącz z umiejętnościami:'
         self.fields['skills'].widget.attrs['size'] = 10
-        self.fields['text'].label = ''
         self.fields['text'].widget.attrs = {
             'cols': 60,
             'rows': 10,
-            'placeholder': 'Treść pakietu wiedzy*',
-        }
-        self.fields['title'].label = ''
-        self.fields['title'].widget.attrs = {
-            'placeholder': 'Tytuł pakietu wiedzy (max. 100 znaków)*',
         }
         instance = kwargs.pop('instance')
         if instance:
-            self.fields['locations'].initial = Location.objects.filter(knowledge_packets=instance)
+            self.fields['locations'].initial = Location.objects.filter(
+                knowledge_packets=instance)
+            
+        self.helper = FormHelper()
+        self.helper.add_input(
+            Submit('submit', 'Zapisz pakiet wiedzy', css_class='btn-dark'))
 
 
 class PlayerKnPacketCreateForm(KnPacketCreateForm):
     """Form to create KnowledgePackets by 'player' status profiles."""
+    
     class Meta:
         model = KnowledgePacket
         exclude = ['acquired_by', 'pictures', 'sorting_name', 'author']
     
     picture_1 = FileField(required=False, label='')
+    descr_1 = CharField(required=False, label='')
+    
     picture_2 = FileField(required=False, label='')
+    descr_2 = CharField(required=False, label='')
+    
     picture_3 = FileField(required=False, label='')
-    description_1 = CharField(required=False, label='')
-    description_2 = CharField(required=False, label='')
-    description_3 = CharField(required=False, label='')
+    descr_3 = CharField(required=False, label='')
 
     def __init__(self, *args, **kwargs):
         profile = kwargs.pop('profile')
         super().__init__(*args, **kwargs)
-        self.fields['description_1'].widget.attrs = {
+        self.fields['descr_1'].widget.attrs = {
             'placeholder': 'Podpis grafiki nr 1',
         }
-        self.fields['description_2'].widget.attrs = {
+        self.fields['descr_2'].widget.attrs = {
             'placeholder': 'Podpis grafiki nr 2',
         }
-        self.fields['description_3'].widget.attrs = {
+        self.fields['descr_3'].widget.attrs = {
             'placeholder': 'Podpis grafiki nr 3',
         }
         self.fields['locations'].queryset = (

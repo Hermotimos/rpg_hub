@@ -10,9 +10,9 @@
 {% block content %}
     <article class="top-button">
         
-        <header class="mb-5">
-            <a href="{% url 'debates:create-topic' %}" class="btn btn-outline-dark">Nowy temat narad</a>
-        </header>
+        <div class="mb-5">
+            <a class="btn btn-outline-dark" href="{% url 'debates:create-topic' %}">Nowy temat narad</a>
+        </div>
     
         <div class="pt-5">
             {% for topic in topics %}
