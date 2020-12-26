@@ -81,7 +81,10 @@ def prosoponomikon_characters_grouped_view(request):
         'character_groups': character_groups,
         'ungrouped': ungrouped.prefetch_related('profile'),
     }
-    return render(request, 'prosoponomikon/characters_grouped.html', context)
+    if character_groups:
+        return render(request, 'prosoponomikon/characters_grouped.html', context)
+    else:
+        return redirect('prosoponomikon:characters-ungrouped')
 
 
 @login_required
