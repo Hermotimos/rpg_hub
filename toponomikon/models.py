@@ -112,6 +112,19 @@ class Location(Model):
             id__in=(self.known_directly.all() | self.known_indirectly.all())
         )
         return qs
+    
+    def with_sublocations(self):
+        with_sublocs = Location.objects.raw(f"""
+            WITH RECURSIVE sublocations AS (
+                SELECT * FROM toponomikon_location WHERE id = {self.pk}
+                UNION ALL
+                SELECT loc.*
+                FROM toponomikon_location AS loc JOIN sublocations AS subloc
+                    ON loc.in_location_id = subloc.id
+            )
+            SELECT * FROM sublocations;
+        """)
+        return with_sublocs
 
 
 class PrimaryLocationManager(Manager):

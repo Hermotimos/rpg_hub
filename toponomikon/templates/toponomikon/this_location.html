@@ -67,53 +67,53 @@
                     <input type="radio" name="tabset" id="tab1" aria-controls="locations" checked>
                     <label class="h3" for="tab1">Lokacje</label>
                 {% endif %}
+
+                <!-- TAB HEADER: Characters (Prosoponomikon) -->
+                {% if all_characters %}
+                    {% if location_types %}
+                        <input type="radio" name="tabset" id="tab2" aria-controls="characters">
+                    {% else %}
+                        <input type="radio" name="tabset" id="tab2" aria-controls="characters" checked>
+                    {% endif %}
+                    <label class="h3" for="tab2">Postacie</label>
+                {% endif %}
                 
                 <!-- TAB HEADER: Knowledge packets -->
                 {% if this_location.knowledge_packets.all %}
-                    {% if location_types %}
-                        <input type="radio" name="tabset" id="tab2" aria-controls="knowledge">
+                    {% if location_types or all_characters %}
+                        <input type="radio" name="tabset" id="tab3" aria-controls="knowledge">
                     {% else %}
-                        <input type="radio" name="tabset" id="tab2" aria-controls="knowledge" checked>
+                        <input type="radio" name="tabset" id="tab3" aria-controls="knowledge" checked>
                     {% endif %}
-                    <label class="h3" for="tab2">Wiedza</label>
+                    <label class="h3" for="tab3">Wiedza</label>
                 {% endif %}
                 
                 <!-- TAB HEADER: Map packets -->
                 {% if this_location.map_packets.all %}
-                    {% if location_types or this_location.knowledge_packets.all %}
-                        <input type="radio" name="tabset" id="tab3" aria-controls="maps">
+                    {% if location_types or all_characters or this_location.knowledge_packets.all %}
+                        <input type="radio" name="tabset" id="tab4" aria-controls="maps">
                     {% else %}
-                        <input type="radio" name="tabset" id="tab3" aria-controls="maps" checked>
+                        <input type="radio" name="tabset" id="tab4" aria-controls="maps" checked>
                     {% endif %}
-                    <label class="h3" for="tab3">Mapy</label>
+                    <label class="h3" for="tab4">Mapy</label>
                 {% endif %}
                 
                 <!-- TAB HEADER: Pictures -->
                 {% if this_location.pictures.all %}
-                    {% if location_types or this_location.knowledge_packets.all or this_location.map_packets.all %}
-                        <input type="radio" name="tabset" id="tab4" aria-controls="pictures">
+                    {% if location_types or all_characters or this_location.knowledge_packets.all or this_location.map_packets.all %}
+                        <input type="radio" name="tabset" id="tab5" aria-controls="pictures">
                     {% else %}
-                        <input type="radio" name="tabset" id="tab4" aria-controls="pictures" checked>
-                    {% endif %}
-                    <label class="h3" for="tab4">Obrazy</label>
-                {% endif %}
-                
-                <!-- TAB HEADER: Characters (Prosoponomikon) -->
-                {% if this_location.characters.all %}
-                    {% if location_types or this_location.knowledge_packets.all or this_location.map_packets.all or this_location.pictures.all %}
-                        <input type="radio" name="tabset" id="tab5" aria-controls="characters">
-                    {% else %}
-                        <input type="radio" name="tabset" id="tab5" aria-controls="characters" checked>
+                        <input type="radio" name="tabset" id="tab5" aria-controls="pictures" checked>
                     {% endif %}
                     <label class="h3" for="tab5">Obrazy</label>
                 {% endif %}
-                
+
                 <!-- TAB HEADER: Audio -->
                 {% if request.user.profile.status == 'gm' and audio_set %}
-                    {% if not location_types and not this_location.knowledge_packets.all and not this_location.map_packets.all and not this_location.pictures.all %}
-                        <input type="radio" name="tabset" id="tab6" aria-controls="audios" checked>
-                    {% else %}
+                    {% if location_types or all_characters or this_location.knowledge_packets.all or this_location.map_packets.all or this_location.pictures.all %}
                         <input type="radio" name="tabset" id="tab6" aria-controls="audios">
+                    {% else %}
+                        <input type="radio" name="tabset" id="tab6" aria-controls="audios" checked>
                     {% endif %}
                     <label class="h3" for="tab6">Audio</label>
                 {% endif %}
@@ -134,6 +134,17 @@
                                     {% for location in location_type.locations.all %}
                                         {% include 'toponomikon/_location.html' %}
                                     {% endfor %}
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endif %}
+
+                    <!-- TAB CONTENT: Characters (Prosoponomikon) -->
+                    {% if all_characters %}
+                        <section id="characters" class="tab-panel py-5">
+                            <div class="container">
+                                {% for character in all_characters %}
+                                    {% include 'prosoponomikon/_character_left_or_right_proxy.html' %}
                                 {% endfor %}
                             </div>
                         </section>
@@ -162,15 +173,6 @@
                         <section id="pictures" class="tab-panel">
                             {% for picture in this_location.pictures.all %}
                                 {{ picture }}
-                            {% endfor %}
-                        </section>
-                    {% endif %}
-                    
-                    <!-- TAB CONTENT: Characters (Prosoponomikon) -->
-                    {% if this_location.characters.all %}
-                        <section id="characters" class="tab-panel">
-                            {% for character in this_location.characters.all %}
-                                {{ character }}
                             {% endfor %}
                         </section>
                     {% endif %}
