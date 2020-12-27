@@ -166,15 +166,12 @@ br + br {
   display: block;
   margin-top: 0.4rem;
 }
-*/
-@import '../node_modules/bootstrap/scss/bootstrap';
-.text-title {
-    @include font-size(4rem);
-}
 
+
+*/
 
 /*****************************************************************************/
-/********************************* IMAGEST ***********************************/
+/********************************* IMAGES ***********************************/
 /*****************************************************************************/
 
 img {border-style: double;}
@@ -274,6 +271,14 @@ div.img-hover-zoom {
     border-style: double;
     color: #444444;
 }
+
+
+.img-indir {
+    filter:  brightness(0.2) grayscale(100%) !important;
+
+}
+
+
 /* END Image zoom on hover */
 
 

@@ -23,7 +23,7 @@
                 {% if character.descr_origin %}                             {{ character.descr_origin|linebreaks }}         {% endif %}
                 {% if character.descr_occupation %}                         {{ character.descr_occupation|linebreaks }}     {% endif %}
                 {% if character.descr_psychophysical %}                     {{ character.descr_psychophysical|linebreaks }} {% endif %}
-                {% if character.descr_for_gm and profile.status == 'gm' %}  {{ character.descr_psychophysical|linebreaks }} {% endif %}
+                {% if character.descr_for_gm and profile.status == 'gm' %}  {{ character.descr_for_gm|linebreaks }}         {% endif %}
             </h6>
         </div>
         

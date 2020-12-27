@@ -18,19 +18,19 @@ img.img-grayscale:hover {
         width: 100%
     }
 }
-@media only screen and (min-width: 601px) {
+@media only screen and (max-width: 1000px) {
     span.character-name {font-size: 1.6rem;}
     img.character {
         max-width: 12rem;
         width: 100%
     }
 }
-
-
-@include media-breakpoint-up(sm) {
-
+@media only screen and (min-width: 1001px) {
+    span.character-name {font-size: 2rem;}
+    img.character {
+        max-width: 14rem;
+        width: 100%
+    }
 }
 
-@include media-breakpoint-up(md) {
 
-}
