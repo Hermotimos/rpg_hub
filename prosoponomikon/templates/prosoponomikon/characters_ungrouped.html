@@ -16,34 +16,26 @@
         <div class="container">
             {% if players %}
                 <section class="py-5">
-                <p class="mb-0 text-center">✧</p>
-                <p class="mb-0 text-center">✧ ✦ ✧</p>
-                <p class="h3 text-center mb-2 mt-1">Bohaterowie graczy</p>
-                <p class="mb-0 text-center">✧ ✦ ✧</p>
-                <p class="mb-5 mt-0 text-center">✧</p>
+                    <p class="mb-0 text-center">✧</p>
+                    <p class="mb-0 text-center">✧ ✦ ✧</p>
+                    <p class="h3 text-center mb-2 mt-1">Bohaterowie graczy</p>
+                    <p class="mb-0 text-center">✧ ✦ ✧</p>
+                    <p class="mb-5 mt-0 text-center">✧</p>
                     {% for character in players %}
-                        {% if forloop.counter|divisibleby:2 %}
-                            {% include 'prosoponomikon/_character_right2.html' %}
-                        {% else %}
-                            {% include 'prosoponomikon/_character_left2.html' %}
-                        {% endif %}
+                       {% include 'prosoponomikon/_character_left_or_right_proxy.html' %}
                     {% endfor %}
                 </section>
             {% endif %}
             
             {% if npcs %}
                 <section class="py-5">
-                <p class="mb-0 text-center">✧</p>
-                <p class="mb-0 text-center">✧ ✦ ✧</p>
-                <p class="h3 text-center mb-2 mt-1">Bohaterowie niezależni</p>
-                <p class="mb-0 text-center">✧ ✦ ✧</p>
-                <p class="mb-5 mt-0 text-center">✧</p>
+                    <p class="mb-0 text-center">✧</p>
+                    <p class="mb-0 text-center">✧ ✦ ✧</p>
+                    <p class="h3 text-center mb-2 mt-1">Bohaterowie niezależni</p>
+                    <p class="mb-0 text-center">✧ ✦ ✧</p>
+                    <p class="mb-5 mt-0 text-center">✧</p>
                     {% for character in npcs %}
-                        {% if forloop.counter|divisibleby:2 %}
-                            {% include 'prosoponomikon/_character_right2.html' %}
-                        {% else %}
-                            {% include 'prosoponomikon/_character_left2.html' %}
-                        {% endif %}
+                        {% include 'prosoponomikon/_character_left_or_right_proxy.html' %}
                     {% endfor %}
                 </section>
             {% endif %}

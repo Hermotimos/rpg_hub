@@ -1,0 +1,10 @@
+
+{% if forloop.counter|divisibleby:2 %}
+    {% with side='right' %}
+        {% include 'prosoponomikon/_character.html' %}
+    {% endwith %}
+{% else %}
+    {% with side='left' %}
+        {% include 'prosoponomikon/_character.html' %}
+    {% endwith %}
+{% endif %}
