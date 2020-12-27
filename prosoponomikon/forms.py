@@ -1,12 +1,6 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from django.forms import (
-    CharField,
-    FileField,
-    ModelForm,
-    ModelMultipleChoiceField,
-)
-from django.forms.widgets import SelectMultiple
+from django.forms import ModelForm
 
 from prosoponomikon.models import CharacterGroup
 
