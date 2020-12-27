@@ -108,19 +108,16 @@ def prosoponomikon_prosopa_view(request):
 @login_required
 def prosoponomikon_character_group_create_view(request):
     profile = request.user.profile
-    
     if profile.status == 'gm':
         form = GMCharacterGroupCreateForm(data=request.POST or None)
     else:
         form = CharacterGroupCreateForm(data=request.POST or None)
     
     if form.is_valid():
-
         character_group = form.save(commit=False)
         character_group.author = profile
         character_group.save()
         character_group.characters.set(form.cleaned_data['characters'])
-
         messages.success(request, f"Utworzono grupę '{character_group.name}'!")
         return redirect('prosoponomikon:characters-grouped')
     else:
