@@ -38,7 +38,7 @@ def participants(request):
         objects = objects.filter(
             events_known_directly__in=profile.events_known_directly.all()
         )
-    return objects.distinct()
+    return objects.distinct().select_related()
 
 
 def games(request):
@@ -49,7 +49,7 @@ def games(request):
             Q(game_events__known_directly=profile)
             | Q(game_events__known_indirectly=profile)
         )
-    return objects.distinct()
+    return objects.distinct().select_related()
 
 
 class GameEventFilter(FilterSet):
@@ -77,4 +77,3 @@ class GameEventFilter(FilterSet):
     class Meta:
         model = GameEvent
         fields = []
-

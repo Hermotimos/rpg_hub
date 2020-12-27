@@ -229,8 +229,8 @@ def timeline_view(request):
         
     events = events.prefetch_related(
         'threads',
-        'known_directly',
-        'known_indirectly',
+        'known_directly__user',
+        'known_indirectly__user',
         'locations',
     )
     events = events.order_by(
@@ -247,18 +247,21 @@ def timeline_view(request):
         'game',     # No -game: later game's events are usually later
         'event_no_in_game',
     )
+    events_filter = GameEventFilter(
+        request.GET, queryset=events, request=request)
+
     context = {
         'page_title': 'Pełne Kalendarium',
         'header': """Opisane tu wydarzenia rozpoczęły swój bieg 20. roku
             Archonatu Nemetha Samatiana w Ebbonie, choć zarodki wielu z nich
             sięgają znacznie odleglejszych czasów...""",
-        # 'events': events,
-        
+       
         # TODO the use of filter rises query cnt from 8 to 13, somehow causing
         # TODO 2x queries for certain fields. Try to resolve it in the future.
-        'events_filter': GameEventFilter(request.GET, queryset=events, request=request)
+        'events_filter': events_filter,
     }
-    if events:
-        return render(request, 'chronicles/timeline.html', context)
-    else:
-        return redirect('home:dupa')
+    return render(request, 'chronicles/timeline.html', context)
+    # if events:
+    #     return render(request, 'chronicles/timeline.html', context)
+    # else:
+    #     return redirect('home:dupa')
