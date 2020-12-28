@@ -41,6 +41,7 @@ def create_topic_view(request):
         debate_form = CreateDebateForm(authenticated_user=request.user,
                                        data=request.POST)
         remark_form = CreateRemarkForm(request.POST, request.FILES,
+                                       authenticated_user=request.user,
                                        debate_id=0)
 
         if topic_form.is_valid() and debate_form.is_valid() \
@@ -68,6 +69,7 @@ def create_topic_view(request):
         topic_form = CreateTopicForm()
         debate_form = CreateDebateForm(authenticated_user=request.user)
         remark_form = CreateRemarkForm(initial={'author': request.user},
+                                       authenticated_user=request.user,
                                        debate_id=0)
 
     context = {
@@ -88,6 +90,7 @@ def create_debate_view(request, topic_id):
         debate_form = CreateDebateForm(authenticated_user=request.user,
                                        data=request.POST)
         remark_form = CreateRemarkForm(request.POST, request.FILES,
+                                       authenticated_user=request.user,
                                        debate_id=0)
         
         if debate_form.is_valid() and remark_form.is_valid():
@@ -111,6 +114,7 @@ def create_debate_view(request, topic_id):
     else:
         debate_form = CreateDebateForm(authenticated_user=request.user)
         remark_form = CreateRemarkForm(initial={'author': request.user},
+                                       authenticated_user=request.user,
                                        debate_id=0)
 
     context = {
@@ -145,6 +149,7 @@ def debate_view(request, debate_id):
     # REMARK FORM
     if request.method == 'POST' and 'debate' not in request.POST:
         form = CreateRemarkForm(request.POST, request.FILES,
+                                authenticated_user=request.user,
                                 debate_id=debate_id)
         if form.is_valid():
             remark = form.save(commit=False)
@@ -159,6 +164,7 @@ def debate_view(request, debate_id):
             return redirect('debates:debate', debate_id=debate_id)
     else:
         form = CreateRemarkForm(initial={'author': request.user},
+                                authenticated_user=request.user,
                                 debate_id=debate_id)
 
     context = {
@@ -169,27 +175,3 @@ def debate_view(request, debate_id):
         'form': form,
     }
     return render(request, 'debates/debate.html', context)
-
-
-# @login_required
-# def unfollow_debate_view(request, debate_id):
-#     profile = request.user.profile
-#     debate = get_object_or_404(Debate, id=debate_id)
-#     if profile in debate.known_directly.all() or profile.status == 'gm':
-#         debate.followers.remove(profile)
-#         messages.info(request, 'Przestałeś uważnie uczestniczyć w naradzie!')
-#         return redirect('debates:debate', debate_id=debate_id)
-#     else:
-#         return redirect('home:dupa')
-#
-#
-# @login_required
-# def follow_debate_view(request, debate_id):
-#     profile = request.user.profile
-#     debate = get_object_or_404(Debate, id=debate_id)
-#     if profile in debate.known_directly.all() or profile.status == 'gm':
-#         debate.followers.add(profile)
-#         messages.info(request, 'Od teraz uważnie uczestniczysz w naradzie!')
-#         return redirect('debates:debate', debate_id=debate_id)
-#     else:
-#         return redirect('home:dupa')

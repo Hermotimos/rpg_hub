@@ -11,6 +11,7 @@ from django.db.models import (
     ImageField,
     ManyToManyField as M2MField,
     Model,
+    PROTECT,
     Q,
     TextField,
 )
@@ -26,7 +27,7 @@ ALIVE_CHARACTERS = Q(status__in=[
 
 
 class Topic(Model):
-    title = CharField(max_length=255, unique=True)
+    title = CharField(max_length=77, unique=True, verbose_name='Temat narady')
     created_at = DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -37,15 +38,24 @@ class Topic(Model):
 
 
 class Debate(Model):
-    name = CharField(max_length=255, unique=True)
+    name = CharField(max_length=77, unique=True, verbose_name='Tytuł narady')
     topic = FK(to=Topic, related_name='debates', on_delete=CASCADE)
     known_directly = M2MField(
         to=Profile,
         related_name='debates_known_directly',
         limit_choices_to=ALIVE_CHARACTERS,
+        verbose_name='Uczestnicy',
+        help_text="""
+            ***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.<br><br>
+            1) Włączaj tylko postacie znajdujące się w pobliżu w chwili
+                zakończenia ostatniej sesji.<br>
+            2) Postacie w pobliżu niewłączone do narady mogą to zauważyć.<br>
+            3) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.<br>
+            4) Jeśli na liście brakuje postaci, powiadom MG.<br><br>
+        """
     )
     is_ended = BooleanField(default=False)
-    is_individual = BooleanField(default=False)
+    is_individual = BooleanField(verbose_name='Narada indywidualna?')
     created_at = DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -66,9 +76,19 @@ class Debate(Model):
 class Remark(Model):
     text = TextField()
     debate = FK(to=Debate, related_name='remarks', on_delete=CASCADE)
-    author = FK(to=User, related_name='remarks', on_delete=CASCADE)
+    author = FK(
+        to=User,
+        related_name='remarks',
+        on_delete=PROTECT,
+        verbose_name='Autor',
+    )
+    image = ImageField(
+        upload_to='post_pics',
+        blank=True,
+        null=True,
+        verbose_name='Obraz [opcjonalnie]',
+    )
     seen_by = M2MField(to=Profile, related_name='remarks_seen', blank=True)
-    image = ImageField(blank=True, null=True, upload_to='post_pics')
     created_at = DateTimeField(auto_now_add=True)
 
     def __str__(self):

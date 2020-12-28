@@ -1,4 +1,5 @@
 from django import forms
+from django.forms.widgets import HiddenInput
 from django.db.models import Q
 
 from debates.models import Remark, Debate, Topic
@@ -13,33 +14,28 @@ class CreateTopicForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['title'].label = ''
-        self.fields['title'].max_length = 50
-        self.fields['title'].widget.attrs = {
-            'size': 60,
-            'placeholder': 'Nowy temat narad (max. 50 znaków)*'
-        }
+        # self.fields['title'].widget.attrs = {
+        #     'size': 60,
+        # }
 
 
 class CreateDebateForm(forms.ModelForm):
     class Meta:
         model = Debate
-        fields = ['known_directly', 'is_individual', 'name']
+        fields = ['name', 'known_directly', 'is_individual']
 
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
         super().__init__(*args, **kwargs)
-        self.fields['known_directly'].label = ''
+        if authenticated_user.profile.status != 'gm':
+            self.fields['is_individual'].widget = HiddenInput()
+            
         self.fields['known_directly'].queryset = Profile.objects.exclude(
             Q(user=authenticated_user)
             | Q(status__icontains='dead')
             | Q(status='gm')
-        )
+        ).select_related()
         self.fields['known_directly'].widget.attrs['size'] = 10
-        self.fields['is_individual'].label = 'Dyskusja indywidualna?'
-        self.fields['name'].label = ''
-        self.fields['name'].max_length = 100
-        self.fields['name'].widget.attrs = {'placeholder': 'Tytuł nowej narady (max. 100 znaków)*'}
 
 
 class CreateRemarkForm(forms.ModelForm):
@@ -55,16 +51,17 @@ class CreateRemarkForm(forms.ModelForm):
         else:
             debate_known_directly = Profile.objects.exclude(status__icontains='dead')
             
+        authenticated_user = kwargs.pop('authenticated_user')
         super().__init__(*args, **kwargs)
-        self.fields['author'].label = 'Autor:'
-        self.fields['author'].queryset = User.objects.filter(
-            Q(profile__status='gm') | Q(profile__in=debate_known_directly)
-        ).order_by('profile__character_name')
-        self.fields['image'].label = 'Załącz obraz:'
-        self.fields['image'].required = False
+        if authenticated_user.profile.status != 'gm':
+            self.fields['author'].widget = HiddenInput()
+        else:
+            self.fields['author'].queryset = User.objects.filter(
+                Q(profile__status='gm') | Q(profile__in=debate_known_directly)
+            ).order_by('profile__character_name')
+            
         self.fields['text'].label = ''
         self.fields['text'].widget.attrs = {
             'cols': 60,
             'rows': 10,
-            'placeholder': 'Twój głos w naradzie (max. 4000 znaków)*'
         }
