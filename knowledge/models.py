@@ -41,7 +41,7 @@ class KnowledgePacket(InfoPacket):
         to=Picture,
         related_name='knowledge_packets',
         blank=True,
-        verbose_name='Obrazy [opcjonalnie]:',
+        verbose_name='Obrazy [opcjonalnie]',
     )
     skills = M2M(
         to=Skill,
@@ -69,7 +69,7 @@ class MapPacket(InfoPacket):
     pictures = M2M(
         to=Picture,
         related_name='map_packets',
-        verbose_name='Obrazy [opcjonalnie]:',
+        verbose_name='Obrazy [opcjonalnie]',
     )
 
     def __str__(self):
