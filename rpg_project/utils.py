@@ -158,10 +158,12 @@ def send_emails(request, profile_ids, **kwargs):
     profile = request.user.profile
     sender = EMAIL_HOST_USER
     receivers = [
-        p.user.email for p in Profile.objects.filter(id__in=profile_ids)
-    ]
+        p.user.email
+        for p in Profile.objects.filter(id__in=profile_ids).select_related()]
     if profile.status != 'gm':
-        gms = [p.user.email for p in Profile.objects.filter(status='gm')]
+        gms = [
+            p.user.email
+            for p in Profile.objects.filter(status='gm').select_related()]
         receivers.extend(gms)
     
     # Debates
