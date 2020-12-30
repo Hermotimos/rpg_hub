@@ -14,9 +14,6 @@ class CreateTopicForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.fields['title'].widget.attrs = {
-        #     'size': 60,
-        # }
 
 
 class CreateDebateForm(forms.ModelForm):

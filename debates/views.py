@@ -13,15 +13,15 @@ from users.models import Profile
 def debates_main_view(request):
     profile = request.user.profile
     debates = Debate.objects.all().prefetch_related('known_directly')
-    if profile.status != 'gm':
+    if profile.status == 'gm':
+        debates = debates.prefetch_related('events__game')
+    else:
         debates = debates.filter(known_directly=profile)
         events = (profile.events_known_directly.all()
-                  | profile.events_known_indirectly.all())\
-            .select_related('game')
+                  | profile.events_known_indirectly.all())
+        events = events.select_related('game')
         debates = debates.prefetch_related(Prefetch('events', queryset=events))
-    else:
-        debates = debates.prefetch_related('events__game')
-    
+
     topics = Topic.objects.filter(debates__in=debates)
     topics = topics.prefetch_related(Prefetch('debates', queryset=debates))
     topics = topics.distinct()
@@ -36,41 +36,34 @@ def debates_main_view(request):
 @login_required
 def create_topic_view(request):
     profile = request.user.profile
-    if request.method == 'POST':
-        topic_form = CreateTopicForm(request.POST)
-        debate_form = CreateDebateForm(authenticated_user=request.user,
-                                       data=request.POST)
-        remark_form = CreateRemarkForm(request.POST, request.FILES,
-                                       authenticated_user=request.user,
-                                       debate_id=0)
+    topic_form = CreateTopicForm(request.POST or None)
+    debate_form = CreateDebateForm(data=request.POST or None,
+                                   authenticated_user=request.user)
+    remark_form = CreateRemarkForm(data=request.POST or None,
+                                   files=request.FILES or None,
+                                   initial={'author': request.user},
+                                   authenticated_user=request.user,
+                                   debate_id=0)
+    
+    if (topic_form.is_valid() and debate_form.is_valid()
+            and remark_form.is_valid()):
+        topic = topic_form.save()
 
-        if topic_form.is_valid() and debate_form.is_valid() \
-                and remark_form.is_valid():
-            topic = topic_form.save()
+        debate = debate_form.save(commit=False)
+        debate.topic = topic
+        debate.save()
+        new_known_directly = debate_form.cleaned_data['known_directly']
+        new_known_directly |= Profile.objects.filter(id=profile.id)
+        debate.known_directly.add(*list(new_known_directly))
 
-            debate = debate_form.save(commit=False)
-            debate.topic = topic
-            debate.save()
-
-            new_known_directly = debate_form.cleaned_data['known_directly']
-            new_known_directly |= Profile.objects.filter(id=profile.id)
-            debate.known_directly.add(*list(new_known_directly))
-
-            remark = remark_form.save(commit=False)
-            remark.debate = debate
-            remark.save()
-            
-            informed_ids = [p.id for p in new_known_directly if p != profile]
-
-            send_emails(request, informed_ids, new='topic', remark=remark)
-            messages.info(request, f'Utworzono nową naradę w nowym temacie!')
-            return redirect('debates:debate', debate_id=debate.id)
-    else:
-        topic_form = CreateTopicForm()
-        debate_form = CreateDebateForm(authenticated_user=request.user)
-        remark_form = CreateRemarkForm(initial={'author': request.user},
-                                       authenticated_user=request.user,
-                                       debate_id=0)
+        remark = remark_form.save(commit=False)
+        remark.debate = debate
+        remark.save()
+        
+        informed_ids = [p.id for p in new_known_directly if p != profile]
+        send_emails(request, informed_ids, new='topic', remark=remark)
+        messages.info(request, f'Utworzono nową naradę w nowym temacie!')
+        return redirect('debates:debate', debate_id=debate.id)
 
     context = {
         'page_title': 'Nowa narada w nowym temacie',
@@ -86,36 +79,30 @@ def create_debate_view(request, topic_id):
     profile = request.user.profile
     topic = get_object_or_404(Topic, id=topic_id)
 
-    if request.method == 'POST':
-        debate_form = CreateDebateForm(authenticated_user=request.user,
-                                       data=request.POST)
-        remark_form = CreateRemarkForm(request.POST, request.FILES,
-                                       authenticated_user=request.user,
-                                       debate_id=0)
+    debate_form = CreateDebateForm(data=request.POST or None,
+                                   authenticated_user=request.user)
+    remark_form = CreateRemarkForm(data=request.POST or None,
+                                   files=request.FILES or None,
+                                   authenticated_user=request.user,
+                                   initial={'author': request.user},
+                                   debate_id=0)
+    
+    if debate_form.is_valid() and remark_form.is_valid():
+        debate = debate_form.save(commit=False)
+        debate.topic = Topic.objects.get(id=topic_id)
+        debate.save()
+        new_known_directly = debate_form.cleaned_data['known_directly']
+        new_known_directly |= Profile.objects.filter(id=profile.id)
+        debate.known_directly.add(*list(new_known_directly))
+
+        remark = remark_form.save(commit=False)
+        remark.debate = debate
+        remark.save()
         
-        if debate_form.is_valid() and remark_form.is_valid():
-            debate = debate_form.save(commit=False)
-            debate.topic = Topic.objects.get(id=topic_id)
-            debate.save()
-            
-            new_known_directly = debate_form.cleaned_data['known_directly']
-            new_known_directly |= Profile.objects.filter(id=profile.id)
-            debate.known_directly.add(*list(new_known_directly))
-
-            remark = remark_form.save(commit=False)
-            remark.debate = debate
-            remark.save()
-            
-            informed_ids = [p.id for p in new_known_directly if p != profile]
-
-            send_emails(request, informed_ids, new='debate', remark=remark)
-            messages.info(request, f'Utworzono nową naradę!')
-            return redirect('debates:debate', debate_id=debate.id)
-    else:
-        debate_form = CreateDebateForm(authenticated_user=request.user)
-        remark_form = CreateRemarkForm(initial={'author': request.user},
-                                       authenticated_user=request.user,
-                                       debate_id=0)
+        informed_ids = [p.id for p in new_known_directly if p != profile]
+        send_emails(request, informed_ids, new='debate', remark=remark)
+        messages.info(request, f'Utworzono nową naradę!')
+        return redirect('debates:debate', debate_id=debate.id)
 
     context = {
         'page_title': 'Nowa narada',
