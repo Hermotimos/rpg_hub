@@ -2,23 +2,23 @@
 
 <!-- BUTTONS -->
 <div class="row">
-    <p>
-        <a class="btn btn-outline-dark icon-cursor-medium mt-1" href="{% url 'debates:main' %}"
-           data-toggle="tooltip" data-placement="bottom" title="Narady">
-        </a>
-    </p>
+    <div data-toggle="tooltip" data-placement="bottom" title="Narady">
+        <a class="btn btn-outline-dark icon-cursor-medium mt-1" href="{% url 'debates:main' %}"></a>
+    </div>
     {% if not debate.is_ended %}
-        <div data-toggle="tooltip" data-placement="bottom" title="Poinformuj o wydarzeniu">
+        <div data-toggle="tooltip" data-placement="bottom" title="Dołącz nowych uczestników do narady">
             <p class="btn btn-outline-dark icon-inform-medium ml-1 mt-1" data-toggle="modal" data-target="#infoLocationModal"></p>
-                <!-- The Modal -->
-                <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
-                    {% with informables=debate.informables inform_type=debate|get_model_name id_=debate.id %}
-                        {% include '_inform.html' %}
-                    {% endwith %}
-                </div>
+            <!-- The Modal -->
+            <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
+                {% with informables=debate.informables inform_type=debate|get_model_name id_=debate.id %}
+                    {% include '_inform.html' %}
+                {% endwith %}
+            </div>
         </div>
     {% endif %}
-    <p class="btn btn-outline-dark icon-note-medium ml-1 mt-1 disabled"><a href="#"></a></p>
+    <div data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">
+        <a class="btn btn-outline-dark icon-note-medium ml-1 mt-1 disabled" href="#"></a>
+    </div>
 </div>
 
 <!-- INFO -->
