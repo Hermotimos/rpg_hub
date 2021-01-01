@@ -339,22 +339,25 @@ img.img-grayscale:hover {filter: grayscale(0%);}
     }
 }
 .modal-backdrop {opacity:0.9 !important;}
-/*
-This is now only for images with modals in Chronicle, but should be applied to
-all images - they all have to get modals, and then these can be generalized:
-*/
-figure.for-modal img,
-div.modal-body img  {pointer-events: none;}
 
+
+
+/*
+TODO
+Applye these classes to all imgs, not only Chronicle: they all have to get
+modals, and then these can be generalized:
+*/
+figure.for-modal img  {pointer-events: none;}
 figure.for-modal {cursor: pointer;}
 
-
-
+img.img-pointer:hover {cursor: pointer;}
 
 .modal-img img {
     max-width: 100%;
     max-height: 300px;
 }
+
+
 
 
 /*****************************************************************************/

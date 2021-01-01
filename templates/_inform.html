@@ -25,7 +25,7 @@
                         {% for profile in informables %}
                             <input class="select-profile" type="checkbox" id="id_{{ forloop.counter }}{{ id_ }}" name="{{ profile.id }}">
                             <label for="id_{{ forloop.counter }}{{ id_ }}">
-                                <img class="article-img rounded-circle" src="{{ profile.image.url }}">
+                                <img class="article-img img-pointer rounded-circle" src="{{ profile.image.url }}">
                             </label>
                         {% endfor %}
                     </h4>
