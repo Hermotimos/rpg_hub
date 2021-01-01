@@ -1,18 +1,27 @@
 {% load custom_filters %}
 
-
+<!-- BUTTONS -->
 <div class="row">
+    <p>
+        <a class="btn btn-outline-dark icon-cursor-medium mt-1" href="{% url 'debates:main' %}"
+           data-toggle="tooltip" data-placement="bottom" title="Narady">
+        </a>
+    </p>
     {% if not debate.is_ended %}
-        <p class="btn btn-outline-dark icon-inform mt-1" data-toggle="modal" data-target="#infoLocationModal"></p>
-            <!-- The Modal -->
-            <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
-                {% with informables=debate.informables inform_type=debate|get_model_name id_=debate.id %}
-                    {% include '_inform.html' %}
-                {% endwith %}
-            </div>
+        <div data-toggle="tooltip" data-placement="bottom" title="Poinformuj o wydarzeniu">
+            <p class="btn btn-outline-dark icon-inform-medium ml-1 mt-1" data-toggle="modal" data-target="#infoLocationModal"></p>
+                <!-- The Modal -->
+                <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    {% with informables=debate.informables inform_type=debate|get_model_name id_=debate.id %}
+                        {% include '_inform.html' %}
+                    {% endwith %}
+                </div>
+        </div>
     {% endif %}
-    <p class="btn btn-outline-dark icon-note mt-1 ml-1 disabled"><a href="#"></a></p>
+    <p class="btn btn-outline-dark icon-note-medium ml-1 mt-1 disabled"><a href="#"></a></p>
 </div>
+
+<!-- INFO -->
 <div class="row mt-3">
     <div class="col-2 pl-0 h5">Temat:</div>
     <div class="col-10 col-sm-10 pl-5 pl-lg-0">
