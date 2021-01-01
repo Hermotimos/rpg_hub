@@ -6,12 +6,12 @@
         
         <!-- ACTIONS -->
         <div class="col-12 col-sm-1 p-0">
-            <a class="btn btn-outline-dark mt-1" href="{% url 'chronicles:game-event-inform' event.id %}" target="_blank">
-                <i class="icon-inform-medium"></i>
-            </a>
-            <a class="btn btn-outline-dark mt-1 disabled" href="#">
-                <i class="icon-note-medium"></i>
-            </a>
+            <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Poinformuj o wydarzeniu">
+                <a class="btn btn-outline-dark icon-inform mt-1 py-2" href="{% url 'chronicles:game-event-inform' event.id %}" target="_blank"></a>
+            </div>
+            <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">
+                <a class="btn btn-outline-dark icon-note mt-1 py-2 disabled" href="#"></a>
+            </div>
         </div>
         
         
