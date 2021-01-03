@@ -29,7 +29,6 @@ STATUS = [
 class Profile(Model):
     user = OneToOneField(to=User, on_delete=CASCADE)
     status = CharField(max_length=50, choices=STATUS, default='living_npc')
-    # TODO remove name and image field when Persona is ready
     image = ImageField(
         default='profile_pics/profile_default.jpg',
         upload_to='profile_pics',
@@ -38,10 +37,9 @@ class Profile(Model):
     
     class Meta:
         ordering = ['status']
-        # ordering = ['status', 'name']
     
     def __str__(self):
-        return self.user.username or self.persona.name
+        return self.persona.name or self.user.username
     
     def save(self, *args, **kwargs):
         first_save = True if not self.pk else False
