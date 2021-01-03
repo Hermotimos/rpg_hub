@@ -1,7 +1,7 @@
 from django.contrib import admin
-from prosoponomikon.models import Character, PlayerCharacter, NonPlayerCharacter, CharacterGroup
+from prosoponomikon.models import Persona, PlayerPersona, NonPlayerPersona, PersonaGroup
 
-admin.site.register(CharacterGroup)
-admin.site.register(Character)
-admin.site.register(PlayerCharacter)
-admin.site.register(NonPlayerCharacter)
+admin.site.register(PersonaGroup)
+admin.site.register(Persona)
+admin.site.register(PlayerPersona)
+admin.site.register(NonPlayerPersona)

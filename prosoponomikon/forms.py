@@ -2,14 +2,14 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django.forms import ModelForm
 
-from prosoponomikon.models import CharacterGroup
+from prosoponomikon.models import PersonaGroup
 
 
-class CharacterGroupCreateForm(ModelForm):
+class PersonaGroupCreateForm(ModelForm):
     """Form to create CharacterGroup's for Players."""
     
     class Meta:
-        model = CharacterGroup
+        model = PersonaGroup
         exclude = ['author', 'default_knowledge_packets']
         help_texts = {
             'characters': """
@@ -26,11 +26,11 @@ class CharacterGroupCreateForm(ModelForm):
             Submit('submit', 'Utwórz grupę', css_class='btn-dark'))
 
 
-class GMCharacterGroupCreateForm(CharacterGroupCreateForm):
+class GMPersonaGroupCreateForm(PersonaGroupCreateForm):
     """Form to create CharacterGroup's for Game Masters."""
     
     class Meta:
-        model = CharacterGroup
+        model = PersonaGroup
         exclude = ['author']
         
     def __init__(self, *args, **kwargs):

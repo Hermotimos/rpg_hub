@@ -15,6 +15,7 @@ from users.models import Profile
 
 
 class InfoPacket(Model):
+    """An abstract class for """
     title = CharField(max_length=100, unique=True, verbose_name='Tytuł')
     text = TextField(blank=True, null=True, verbose_name='Treść (niewymagane)')
     sorting_name = CharField(max_length=250, blank=True, null=True)
@@ -25,10 +26,38 @@ class InfoPacket(Model):
         
 
 class DialoguePacket(InfoPacket):
+    """A class for per-Persona dialogue notes for Game Master."""
     pass
+
+
+class BiographyPacket(InfoPacket):
+    """A class for per-Persona info that may be visible to Players."""
+    author = FK(
+        to=Profile,
+        related_name='authored_bio_packets',
+        on_delete=PROTECT,
+        null=True,
+        blank=True,
+    )
+    acquired_by = M2M(to=Profile, related_name='biography_packets', blank=True)
     
-        
+    def __str__(self):
+        return self.title
+    
+    def save(self, *args, **kwargs):
+        self.sorting_name = create_sorting_name(self.__str__())
+        super().save(*args, **kwargs)
+    
+    def informables(self):
+        qs = Profile.objects.filter(status__in=[
+            'active_player',
+        ])
+        qs = qs.exclude(id__in=self.acquired_by.all())
+        return qs
+
+
 class KnowledgePacket(InfoPacket):
+    """A class for info packets that might be shared among multiple Skills."""
     author = FK(
         to=Profile,
         related_name='authored_kn_packets',
@@ -79,27 +108,3 @@ class MapPacket(InfoPacket):
         self.sorting_name = create_sorting_name(self.__str__())
         super().save(*args, **kwargs)
 
-
-class BiographyPacket(InfoPacket):
-    author = FK(
-        to=Profile,
-        related_name='authored_bio_packets',
-        on_delete=PROTECT,
-        null=True,
-        blank=True,
-    )
-    acquired_by = M2M(to=Profile, related_name='biography_packets', blank=True)
-    
-    def __str__(self):
-        return self.title
-    
-    def save(self, *args, **kwargs):
-        self.sorting_name = create_sorting_name(self.__str__())
-        super().save(*args, **kwargs)
-    
-    def informables(self):
-        qs = Profile.objects.filter(status__in=[
-            'active_player',
-        ])
-        qs = qs.exclude(id__in=self.acquired_by.all())
-        return qs

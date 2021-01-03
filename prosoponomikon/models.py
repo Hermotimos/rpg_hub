@@ -30,42 +30,45 @@ PLAYER_STATUS = [
 ]
 
 
-class Character(Model):
-    profile = OneToOneField(to=Profile, on_delete=CASCADE)
+class Persona(Model):
+    profile = FK(to=Profile, related_name='personas', on_delete=CASCADE)
     name = CharField(max_length=100)
-    descr_origin = TextField(blank=True, null=True)
-    descr_occupation = TextField(blank=True, null=True)
-    descr_psychophysical = TextField(blank=True, null=True)
-    descr_for_gm = TextField(blank=True, null=True)
+    birth_location = FK(
+        to=Location,
+        related_name='personas_born',
+        on_delete=PROTECT,
+    )
+    visited_locations = M2M(to=Location, related_name='visiting_personas', blank=True)
+    picture_main = OneToOneField(
+        to=Picture,
+        on_delete=SET_NULL,
+        blank=True,
+        null=True,
+    )
+    pictures = M2M(to=Picture, related_name='personas', blank=True)
+    description_main = TextField(blank=True, null=True)
+    biography_packets = M2M(
+        to=BiographyPacket,
+        related_name='personas',
+        blank=True,
+    )
+    dialogue_packets = M2M(
+        to=DialoguePacket,
+        related_name='personas',
+        blank=True,
+    )
     known_directly = M2M(
         to=Profile,
-        related_name='characters_known_directly',
+        related_name='personas_known_directly',
         limit_choices_to=Q(status__in=PLAYER_STATUS),
         blank=True,
     )
     known_indirectly = M2M(
         to=Profile,
-        related_name='characters_known_indirectly',
+        related_name='personas_known_indirectly',
         limit_choices_to=Q(status__in=PLAYER_STATUS),
         blank=True,
     )
-    biography_packets = M2M(
-        to=BiographyPacket,
-        related_name='characters',
-        blank=True,
-    )
-    dialogue_packets = M2M(
-        to=DialoguePacket,
-        related_name='characters',
-        blank=True,
-    )
-    birth_location = FK(
-        to=Location,
-        related_name='characters_born',
-        on_delete=PROTECT,
-    )
-    locations = M2M(to=Location, related_name='characters', blank=True)
-    pictures = M2M(to=Picture, related_name='characters', blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
@@ -80,55 +83,55 @@ class Character(Model):
         return self.name
  
     
-class PlayerCharacterManager(Manager):
+class PlayerPersonaManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(Q(profile__status__in=PLAYER_STATUS))
         return qs
     
     
-class PlayerCharacter(Character):
-    objects = PlayerCharacterManager()
+class PlayerPersona(Persona):
+    objects = PlayerPersonaManager()
     
     class Meta:
         proxy = True
 
 
-class NonPlayerCharacterManager(Manager):
+class NonPlayerPersonaManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.exclude(Q(profile__status__in=PLAYER_STATUS))
         return qs
 
 
-class NonPlayerCharacter(Character):
-    objects = NonPlayerCharacterManager()
+class NonPlayerPersona(Persona):
+    objects = NonPlayerPersonaManager()
     
     class Meta:
         proxy = True
 
 
-class CharacterGroup(Model):
+class PersonaGroup(Model):
     """A mnodel for storing default knowledge packet sets for groups of
-     characters. These should be automatically added to the knowlege packets of
-     a newly created character that belongs to a CharacterGroup (by signals).
+     personas. These should be automatically added to the knowlege packets of
+     a newly created Persona that belongs to a PersonaGroup (by signals).
     """
     name = CharField(max_length=250, verbose_name='Nazwa grupy')
     author = FK(
         to=Profile,
-        related_name='character_groups_authored',
+        related_name='persona_groups_authored',
         on_delete=SET_NULL,
         blank=True,
         null=True,
     )
-    characters = M2M(
-        to=Character,
-        related_name='character_groups',
+    personas = M2M(
+        to=Persona,
+        related_name='persona_groups',
         verbose_name='Zgrupowane postacie'
     )
     default_knowledge_packets = M2M(
         to=KnowledgePacket,
-        related_name='character_group_defaults',
+        related_name='persona_group_defaults',
         blank=True,
         verbose_name='Domyślne umiejętności zgrupowanych postaci',
     )

@@ -3,28 +3,28 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch, Q, Case, When, Value, IntegerField
 from django.shortcuts import render, redirect, get_object_or_404
 
-from prosoponomikon.forms import GMCharacterGroupCreateForm, CharacterGroupCreateForm
-from prosoponomikon.models import PlayerCharacter, NonPlayerCharacter, CharacterGroup, Character
+from prosoponomikon.forms import GMPersonaGroupCreateForm, PersonaGroupCreateForm
+from prosoponomikon.models import PlayerPersona, NonPlayerPersona, PersonaGroup, Persona
 
 
 @login_required
 def prosoponomikon_main_view(request):
     profile = request.user.profile
-    if profile.character_groups_authored.all():
-        return redirect('prosoponomikon:characters-grouped')
+    if profile.persona_groups_authored.all():
+        return redirect('prosoponomikon:personas-grouped')
     else:
-        return redirect('prosoponomikon:characters-ungrouped')
+        return redirect('prosoponomikon:personas-ungrouped')
 
 
 @login_required
-def prosoponomikon_characters_ungrouped_view(request):
+def prosoponomikon_personas_ungrouped_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
-        players = PlayerCharacter.objects.all()
-        npcs = NonPlayerCharacter.objects.all()
+        players = PlayerPersona.objects.all()
+        npcs = NonPlayerPersona.objects.all()
     else:
-        known_dir = profile.characters_known_directly.all()
-        known_indir = profile.characters_known_indirectly.all()
+        known_dir = profile.personas_known_directly.all()
+        known_indir = profile.personas_known_indirectly.all()
         known_only_indir = known_indir.exclude(id__in=known_dir)
         
         all_known = (known_dir | known_indir).distinct()
@@ -36,7 +36,7 @@ def prosoponomikon_characters_ungrouped_view(request):
             ),
         )
         players = all_known.filter(profile__status__icontains='player')
-        players = players.exclude(id=profile.character.id)
+        players = players.exclude(id=profile.persona.id)
         npcs = all_known.exclude(profile__status__icontains='player')
 
     context = {
@@ -44,20 +44,20 @@ def prosoponomikon_characters_ungrouped_view(request):
         'players': players.select_related('profile'),
         'npcs': npcs.select_related('profile'),
     }
-    return render(request, 'prosoponomikon/characters_ungrouped.html', context)
+    return render(request, 'prosoponomikon/personas_ungrouped.html', context)
 
 
 @login_required
-def prosoponomikon_characters_grouped_view(request):
+def prosoponomikon_personas_grouped_view(request):
     profile = request.user.profile
-    character_groups = CharacterGroup.objects.filter(author=profile)
+    persona_groups = PersonaGroup.objects.filter(author=profile)
     
     if profile.status == 'gm':
-        ungrouped = Character.objects.exclude(
-            character_groups__in=character_groups)
+        ungrouped = Persona.objects.exclude(
+            persona_groups__in=persona_groups)
     else:
-        known_dir = profile.characters_known_directly.all()
-        known_indir = profile.characters_known_indirectly.all()
+        known_dir = profile.personas_known_directly.all()
+        known_indir = profile.personas_known_indirectly.all()
         known_only_indir = known_indir.exclude(id__in=known_dir)
     
         all_known = (known_dir | known_indir).distinct()
@@ -68,58 +68,58 @@ def prosoponomikon_characters_grouped_view(request):
                 output_field=IntegerField(),
             ),
         )
-        all_known = all_known.exclude(id=profile.character.id)
+        all_known = all_known.exclude(id=profile.persona.id)
         
-        character_groups = character_groups.prefetch_related(
-            Prefetch('characters', queryset=all_known),
-            'characters__profile',
+        persona_groups = persona_groups.prefetch_related(
+            Prefetch('personas', queryset=all_known),
+            'personas__profile',
         )
-        ungrouped = all_known.exclude(character_groups__in=character_groups)
+        ungrouped = all_known.exclude(persona_groups__in=persona_groups)
         
     context = {
         'page_title': 'Prosoponomikon',
-        'character_groups': character_groups,
+        'persona_groups': persona_groups,
         'ungrouped': ungrouped.prefetch_related('profile'),
     }
-    if character_groups:
-        return render(request, 'prosoponomikon/characters_grouped.html', context)
+    if persona_groups:
+        return render(request, 'prosoponomikon/personas_grouped.html', context)
     else:
-        return redirect('prosoponomikon:characters-ungrouped')
+        return redirect('prosoponomikon:personas-ungrouped')
 
 
 @login_required
 def prosoponomikon_prosopa_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
-        player_characters = PlayerCharacter.objects.all()
-        npc_characters = NonPlayerCharacter.objects.all()
+        player_personas = PlayerPersona.objects.all()
+        npc_personas = NonPlayerPersona.objects.all()
     else:
-        player_characters = []
-        npc_characters = []
+        player_personas = []
+        npc_personas = []
     
     context = {
         'page_title': 'Prosoponomikon',
-        'player_characters': player_characters.select_related('profile'),
-        'npc_characters': npc_characters.select_related('profile'),
+        'player_personas': player_personas.select_related('profile'),
+        'npc_personas': npc_personas.select_related('profile'),
     }
-    return render(request, 'prosoponomikon/prosopa.html', context)
+    return render(request, 'prosoponomikon/personas.html', context)
 
 
 @login_required
-def prosoponomikon_character_group_create_view(request):
+def prosoponomikon_persona_group_create_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
-        form = GMCharacterGroupCreateForm(data=request.POST or None)
+        form = GMPersonaGroupCreateForm(data=request.POST or None)
     else:
-        form = CharacterGroupCreateForm(data=request.POST or None)
+        form = PersonaGroupCreateForm(data=request.POST or None)
     
     if form.is_valid():
-        character_group = form.save(commit=False)
-        character_group.author = profile
-        character_group.save()
-        character_group.characters.set(form.cleaned_data['characters'])
-        messages.success(request, f"Utworzono grupę '{character_group.name}'!")
-        return redirect('prosoponomikon:characters-grouped')
+        persona_group = form.save(commit=False)
+        persona_group.author = profile
+        persona_group.save()
+        persona_group.personas.set(form.cleaned_data['personas'])
+        messages.success(request, f"Utworzono grupę '{persona_group.name}'!")
+        return redirect('prosoponomikon:personas-grouped')
     else:
         messages.warning(request, form.errors)
     

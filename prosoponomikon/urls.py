@@ -6,17 +6,17 @@ app_name = 'prosoponomikon'
 urlpatterns = [
     path('', views.prosoponomikon_main_view, name='main'),
     path(
-        'characters-ungrouped',
-        views.prosoponomikon_characters_ungrouped_view,
-        name='characters-ungrouped'
+        'personas-ungrouped',
+        views.prosoponomikon_personas_ungrouped_view,
+        name='personas-ungrouped'
     ),
     path(
-        'characters-grouped',
-        views.prosoponomikon_characters_grouped_view,
-        name='characters-grouped'
+        'personas-grouped',
+        views.prosoponomikon_personas_grouped_view,
+        name='personas-grouped'
     ),
-    path('prosopa/', views.prosoponomikon_prosopa_view, name='prosopa'),
-    path('create-group/', views.prosoponomikon_character_group_create_view,
+    path('personas/', views.prosoponomikon_prosopa_view, name='personas'),
+    path('create-group/', views.prosoponomikon_persona_group_create_view,
          name='create-group'),
 
 ]
