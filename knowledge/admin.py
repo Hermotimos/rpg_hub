@@ -7,7 +7,7 @@ from django.forms.widgets import TextInput
 from django.utils.html import format_html
 
 from imaginarion.models import Picture
-from knowledge.models import KnowledgePacket, MapPacket
+from knowledge.models import KnowledgePacket, MapPacket, BiographyPacket, DialoguePacket
 from rules.models import Skill
 from toponomikon.models import Location
 
@@ -196,5 +196,7 @@ class MapPacketAdmin(admin.ModelAdmin):
         return qs
 
 
+admin.site.register(DialoguePacket)
+admin.site.register(BiographyPacket)
 admin.site.register(KnowledgePacket, KnowledgePacketAdmin)
 admin.site.register(MapPacket, MapPacketAdmin)

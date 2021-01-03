@@ -77,7 +77,9 @@ class Persona(Model):
 
     class Meta:
         ordering = ['sorting_name']
-    
+        verbose_name = '* PERSONAS'
+        verbose_name_plural = '* PERSONAS'
+
     def save(self, *args, **kwargs):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
@@ -99,6 +101,8 @@ class PlayerPersona(Persona):
     
     class Meta:
         proxy = True
+        verbose_name = '--- Player'
+        verbose_name_plural = '--- Players'
 
 
 class NonPlayerPersonaManager(Manager):
@@ -113,6 +117,8 @@ class NonPlayerPersona(Persona):
     
     class Meta:
         proxy = True
+        verbose_name = '--- NPC'
+        verbose_name_plural = '--- NPCs'
 
 
 class PersonaGroup(Model):
@@ -147,6 +153,8 @@ class PersonaGroup(Model):
     
     class Meta:
         ordering = ['order_no', 'name']
+        verbose_name = '* PERSONA GROUP'
+        verbose_name_plural = '* PERSONA GROUPS'
     
     def __str__(self):
         return f"{self.name} [{self.author}]"

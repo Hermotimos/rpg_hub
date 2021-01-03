@@ -37,6 +37,8 @@ class LocationType(Model):
     
     class Meta:
         ordering = ['order_no']
+        verbose_name = '* LOCATION TYPE'
+        verbose_name_plural = '* LOCATION TYPES'
 
     def __str__(self):
         return self.name
@@ -95,6 +97,8 @@ class Location(Model):
 
     class Meta:
         ordering = ['sorting_name']
+        verbose_name = '* LOCATION'
+        verbose_name_plural = '* LOCATIONS'
 
     def __str__(self):
         return self.name
@@ -139,7 +143,9 @@ class PrimaryLocation(Location):
     
     class Meta:
         proxy = True
-        
+        verbose_name = '--- Primary Location'
+        verbose_name_plural = '--- Primary Locations'
+
         
 class SecondaryLocationManager(Manager):
     def get_queryset(self):
@@ -153,7 +159,9 @@ class SecondaryLocation(Location):
     
     class Meta:
         proxy = True
-        
+        verbose_name = '--- Secondary Location'
+        verbose_name_plural = '--- Secondary Locations'
+
 
 def update_known_gen_locations(sender, instance, **kwargs):
     """Whenever a location becomes 'known_directly' or 'known_indirectly' to
