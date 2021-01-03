@@ -35,7 +35,7 @@ class Profile(Model):
     user = OneToOneField(to=User, on_delete=CASCADE)
     status = CharField(max_length=50, choices=STATUS, default='living_npc')
     # TODO remove name and image field when Persona is ready
-    name = CharField(max_length=50, default='')
+    # name = CharField(max_length=50, default='')
     image = ImageField(
         default='profile_pics/profile_default.jpg',
         upload_to='profile_pics',

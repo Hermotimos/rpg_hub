@@ -6,8 +6,8 @@ from users.models import Profile
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['get_img', 'user', 'name', 'status', 'image']
-    list_editable = ['name', 'status', 'image']
+    list_display = ['get_img', 'user', 'status', 'image']
+    list_editable = ['status', 'image']
     list_filter = ['status']
     search_fields = ['user', 'name']
 

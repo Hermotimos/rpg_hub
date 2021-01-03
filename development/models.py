@@ -32,7 +32,7 @@ class ProfileKlass(Model):
         return f'{self.profile.persona.name}: {self.klass.name}'
     
     class Meta:
-        ordering = ['profile__name']
+        ordering = ['profile__persona__name']
         verbose_name = 'Profile Klass'
         verbose_name_plural = 'Profile Klasses'
     
