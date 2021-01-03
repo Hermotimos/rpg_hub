@@ -24,18 +24,12 @@ STATUS = [
     # other
     ('gm', 'MG'),
 ]
-PLAYERS = Q(status__in=[
-    'active_player',
-    'inactive_player',
-    'dead_player',
-])
 
 
 class Profile(Model):
     user = OneToOneField(to=User, on_delete=CASCADE)
     status = CharField(max_length=50, choices=STATUS, default='living_npc')
     # TODO remove name and image field when Persona is ready
-    # name = CharField(max_length=50, default='')
     image = ImageField(
         default='profile_pics/profile_default.jpg',
         upload_to='profile_pics',
@@ -47,8 +41,7 @@ class Profile(Model):
         # ordering = ['status', 'name']
     
     def __str__(self):
-        return self.user.username
-        # return f"{self.name or self.user.username}"
+        return self.user.username or self.persona.name
     
     def save(self, *args, **kwargs):
         first_save = True if not self.pk else False
