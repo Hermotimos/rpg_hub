@@ -29,10 +29,10 @@ class ProfileKlass(Model):
     experience = PositiveSmallIntegerField()
     
     def __str__(self):
-        return f'{self.profile.character_name}: {self.klass.name}'
+        return f'{self.profile.name}: {self.klass.name}'
     
     class Meta:
-        ordering = ['profile__character_name']
+        ordering = ['profile__name']
         verbose_name = 'Profile Klass'
         verbose_name_plural = 'Profile Klasses'
     

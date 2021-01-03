@@ -55,7 +55,7 @@ class CreateRemarkForm(forms.ModelForm):
         else:
             self.fields['author'].queryset = User.objects.filter(
                 Q(profile__status='gm') | Q(profile__in=debate_known_directly)
-            ).order_by('profile__character_name')
+            ).order_by('profile__name')
             
         self.fields['text'].label = ''
         self.fields['text'].widget.attrs = {

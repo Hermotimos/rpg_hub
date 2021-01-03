@@ -6,10 +6,10 @@ from users.models import Profile
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['get_img', 'user', 'character_name', 'status', 'image']
-    list_editable = ['character_name', 'status', 'image']
+    list_display = ['get_img', 'user', 'name', 'status', 'image']
+    list_editable = ['name', 'status', 'image']
     list_filter = ['status']
-    search_fields = ['user', 'character_name']
+    search_fields = ['user', 'name']
 
     def get_img(self, obj):
         if obj.image:

@@ -57,11 +57,11 @@ class TestProfile(TestCase):
         data1.update(data2)
         data1['username'] = 'Changed_name'
         data1['email'] = 'mock_email@new.com'
-        data1['character_name'] = 'New character name'
+        data1['name'] = 'New character name'
 
         self.assertTrue(self.user1.username == 'user1')
         self.assertTrue(self.user1.email == '')
-        self.assertTrue(self.user1.profile.character_name == 'user1')
+        self.assertTrue(self.user1.profile.name == 'user1')
 
         self.client.post(self.url, data1)
         response = self.client.get(self.url)
@@ -72,13 +72,13 @@ class TestProfile(TestCase):
         # or
         self.assertEqual(response.context['user_form'].initial['username'], 'Changed_name')
         self.assertEqual(response.context['user_form'].initial['email'], 'mock_email@new.com')
-        self.assertEqual(response.context['profile_form'].initial['character_name'], 'New character name')
+        self.assertEqual(response.context['profile_form'].initial['name'], 'New character name')
 
         # TODO: these fail, why?
         # self.assertTrue(self.user1.username == 'Changed_name')
         # self.assertTrue(self.user1.email == 'mock_email@new.com')
-        # self.assertTrue(self.user1.profile.character_name == 'New character name')
-        print(self.user1.username, self.user1.email, self.user1.profile.character_name)  # confirms user1 wasn't updated
+        # self.assertTrue(self.user1.profile.name == 'New character name')
+        print(self.user1.username, self.user1.email, self.user1.profile.name)  # confirms user1 wasn't updated
 
     def test_invalid_post_data(self):
         self.client.force_login(self.user1)
@@ -86,7 +86,7 @@ class TestProfile(TestCase):
 
         self.assertTrue(self.user1.username == 'user1')
         self.assertTrue(self.user1.email == '')
-        self.assertTrue(self.user1.profile.character_name == 'user1')
+        self.assertTrue(self.user1.profile.name == 'user1')
 
         self.client.post(self.url, data)
         response = self.client.get(self.url)
@@ -97,7 +97,7 @@ class TestProfile(TestCase):
         # or
         self.assertNotEqual(response.context['user_form'].initial['username'], 'Changed_name')
         self.assertNotEqual(response.context['user_form'].initial['email'], 'mock_email@new.com')
-        self.assertNotEqual(response.context['profile_form'].initial['character_name'], 'New character name')
+        self.assertNotEqual(response.context['profile_form'].initial['name'], 'New character name')
 
     def test_valid_post_data_empty_fields(self):
         self.client.force_login(self.user1)
@@ -109,11 +109,11 @@ class TestProfile(TestCase):
         data1.update(data2)
         data1['username'] = ''
         data1['email'] = ''
-        data1['character_name'] = ''
+        data1['name'] = ''
 
         self.assertTrue(self.user1.username == 'user1')
         self.assertTrue(self.user1.email == '')
-        self.assertTrue(self.user1.profile.character_name == 'user1')
+        self.assertTrue(self.user1.profile.name == 'user1')
 
         self.client.post(self.url, data1)
         response = self.client.get(self.url)
@@ -124,7 +124,7 @@ class TestProfile(TestCase):
         # or
         self.assertNotEqual(response.context['user_form'].initial['username'], 'Changed_name')
         self.assertNotEqual(response.context['user_form'].initial['email'], 'mock_email@new.com')
-        self.assertNotEqual(response.context['profile_form'].initial['character_name'], 'New character name')
+        self.assertNotEqual(response.context['profile_form'].initial['name'], 'New character name')
 
 
 #######################################################################################################################

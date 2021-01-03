@@ -35,8 +35,7 @@ PLAYERS = Q(status__in=[
 class Profile(Model):
     user = OneToOneField(to=User, on_delete=CASCADE)
     status = CharField(max_length=50, choices=STATUS, default='living_npc')
-    # TODO migrate character_name to character_name2 in Character
-    character_name = CharField(max_length=50, default='')
+    name = CharField(max_length=50, default='')
     # TODO remove this field when Persona is ready
     image = ImageField(
         default='profile_pics/profile_default.jpg',
@@ -46,11 +45,11 @@ class Profile(Model):
     
     class Meta:
         ordering = ['status']
-        # ordering = ['status', 'character_name']
+        # ordering = ['status', 'name']
 
     def __str__(self):
         return self.user.username
-        # return f"{self.character_name or self.user.username}"
+        # return f"{self.name or self.user.username}"
     
     def save(self, *args, **kwargs):
         first_save = True if not self.pk else False
@@ -67,5 +66,5 @@ class Profile(Model):
 def create_profile(sender, instance, created, **kwargs):
     if created:
         p = Profile.objects.create(user=instance)
-        p.character_name = instance.username.replace('_', ' ')
+        p.name = instance.username.replace('_', ' ')
         p.save()
