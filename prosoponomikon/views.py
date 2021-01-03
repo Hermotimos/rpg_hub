@@ -20,8 +20,8 @@ def prosoponomikon_main_view(request):
 def prosoponomikon_personas_ungrouped_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
-        players = PlayerPersona.objects.all()
-        npcs = NonPlayerPersona.objects.all()
+        players = PlayerPersona.objects.prefetch_related('biography_packets')
+        npcs = NonPlayerPersona.objects.prefetch_related('biography_packets')
     else:
         known_dir = profile.personas_known_directly.all()
         known_indir = profile.personas_known_indirectly.all()
@@ -34,6 +34,9 @@ def prosoponomikon_personas_ungrouped_view(request):
                 default=Value(0),
                 output_field=IntegerField(),
             ),
+        )
+        all_known = all_known.prefetch_related(
+            Prefetch('biography_packets', queryset=profile.authored_bio_packets.all())
         )
         players = all_known.filter(profile__status__icontains='player')
         players = players.exclude(id=profile.persona.id)
@@ -53,8 +56,11 @@ def prosoponomikon_personas_grouped_view(request):
     persona_groups = PersonaGroup.objects.filter(author=profile)
     
     if profile.status == 'gm':
+        persona_groups = persona_groups.prefetch_related(
+            'personas__biography_packets')
         ungrouped = Persona.objects.exclude(
             persona_groups__in=persona_groups)
+        ungrouped = ungrouped.prefetch_related('biography_packets')
     else:
         known_dir = profile.personas_known_directly.all()
         known_indir = profile.personas_known_indirectly.all()
@@ -69,6 +75,9 @@ def prosoponomikon_personas_grouped_view(request):
             ),
         )
         all_known = all_known.exclude(id=profile.persona.id)
+        all_known = all_known.prefetch_related(
+            Prefetch('biography_packets', queryset=profile.authored_bio_packets.all())
+        )
         
         persona_groups = persona_groups.prefetch_related(
             Prefetch('personas', queryset=all_known),

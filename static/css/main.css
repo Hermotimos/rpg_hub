@@ -283,28 +283,28 @@ img.img-grayscale:hover {filter: grayscale(0%);}
 @media only screen and (max-width: 320px) {
     span.persona-name {font-size: 1rem;}
     img.persona {
-        max-width: 8rem;
+        max-width: 5rem;
         width: 100%
     }
 }
 @media only screen and (max-width: 600px) {
-    span.persona-name {font-size: 1.4rem;}
+    span.persona-name {font-size: 1.2rem;}
     img.persona {
-        max-width: 10rem;
+        max-width: 6rem;
         width: 100%
     }
 }
 @media only screen and (max-width: 1000px) {
-    span.persona-name {font-size: 1.6rem;}
+    span.persona-name {font-size: 1.3rem;}
     img.persona {
-        max-width: 12rem;
+        max-width: 7rem;
         width: 100%
     }
 }
 @media only screen and (min-width: 1001px) {
-    span.persona-name {font-size: 2rem;}
+    span.persona-name {font-size: 1.5rem;}
     img.persona {
-        max-width: 14rem;
+        max-width: 8rem;
         width: 100%
     }
 }

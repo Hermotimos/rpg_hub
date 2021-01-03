@@ -1,5 +1,5 @@
 
-<div class="row mb-5">
+<div class="row mb-4 mb-md-0">
     <div class="col-12 px-0">
         
         {% if not persona.only_indirectly %}
@@ -22,13 +22,18 @@
                     {% if persona.only_indirectly  %} (znasz ze słyszenia) {% endif %}
                 </span>
             </p>
-            <h6 class="font-italic linebreaks-style text-justify
+            <h6 class="font-italic linebreaks-style text-justify mb-2
                 {% if persona.only_indirectly %} text-muted {% endif %}
                 {% if side == 'right' %} text-last-right {% else %} text-last-left {% endif %}">
-                {% if persona.descr_origin %}                             {{ persona.descr_origin|linebreaks }}         {% endif %}
-                {% if persona.descr_occupation %}                         {{ persona.descr_occupation|linebreaks }}     {% endif %}
-                {% if persona.descr_psychophysical %}                     {{ persona.descr_psychophysical|linebreaks }} {% endif %}
-                {% if persona.descr_for_gm and profile.status == 'gm' %}  {{ persona.descr_for_gm|linebreaks }}         {% endif %}
+                {% if persona.description %}
+                    {{ persona.description|linebreaks }}
+                {% endif %}
+                
+                {% for biography_packet in persona.biography_packets.all %}
+                    {% if biography_packet.show_in_prosoponomikon %}
+                        {{ biography_packet|linebreaks }}
+                    {% endif %}
+                {% endfor %}
             </h6>
         </div>
         
