@@ -37,9 +37,11 @@ class Profile(Model):
     status = CharField(max_length=50, choices=STATUS, default='living_npc')
     # TODO migrate character_name to character_name2 in Character
     character_name = CharField(max_length=50, default='')
+    # TODO remove this field when Persona is ready
     image = ImageField(
         default='profile_pics/profile_default.jpg',
         upload_to='profile_pics',
+        blank=True, null=True
     )
     
     class Meta:

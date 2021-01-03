@@ -5,7 +5,7 @@ from django.db.models import (
     Manager,
     ManyToManyField as M2M,
     Model,
-    OneToOneField,
+    OneToOneField as OneToOne,
     PROTECT,
     Q,
     SET_NULL,
@@ -31,22 +31,26 @@ PLAYER_STATUS = [
 
 
 class Persona(Model):
-    profile = FK(to=Profile, related_name='personas', on_delete=CASCADE)
+    profile = OneToOne(to=Profile, related_name='persona', on_delete=CASCADE)
     name = CharField(max_length=100)
     birth_location = FK(
         to=Location,
         related_name='personas_born',
         on_delete=PROTECT,
     )
-    visited_locations = M2M(to=Location, related_name='visiting_personas', blank=True)
-    picture_main = OneToOneField(
+    frequented_locations = M2M(
+        to=Location,
+        related_name='frequented_by_personas',
+        blank=True,
+    )
+    picture_main = OneToOne(
         to=Picture,
         on_delete=SET_NULL,
         blank=True,
         null=True,
     )
     pictures = M2M(to=Picture, related_name='personas', blank=True)
-    description_main = TextField(blank=True, null=True)
+    description = TextField(blank=True, null=True)
     biography_packets = M2M(
         to=BiographyPacket,
         related_name='personas',
@@ -138,7 +142,7 @@ class PersonaGroup(Model):
     order_no = PositiveSmallIntegerField(
         blank=True,
         null=True,
-        verbose_name='Numer porządkowy grupy [opcjonalnie]:',
+        verbose_name='Numer porządkowy grupy [opcjonalnie]',
     )
     
     class Meta:

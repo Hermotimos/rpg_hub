@@ -21,8 +21,8 @@
                     <p class="h3 text-center mb-2 mt-1">Bohaterowie graczy</p>
                     <p class="mb-0 text-center">✧ ✦ ✧</p>
                     <p class="mb-5 mt-0 text-center">✧</p>
-                    {% for character in players %}
-                       {% include 'prosoponomikon/_character_left_or_right_proxy.html' %}
+                    {% for persona in players %}
+                       {% include 'prosoponomikon/_persona_left_or_right_proxy.html' %}
                     {% endfor %}
                 </section>
             {% endif %}
@@ -34,8 +34,8 @@
                     <p class="h3 text-center mb-2 mt-1">Bohaterowie niezależni</p>
                     <p class="mb-0 text-center">✧ ✦ ✧</p>
                     <p class="mb-5 mt-0 text-center">✧</p>
-                    {% for character in npcs %}
-                        {% include 'prosoponomikon/_character_left_or_right_proxy.html' %}
+                    {% for persona in npcs %}
+                        {% include 'prosoponomikon/_persona_left_or_right_proxy.html' %}
                     {% endfor %}
                 </section>
             {% endif %}

@@ -281,29 +281,29 @@ div.img-hover-zoom {
 img.img-grayscale:hover {filter: grayscale(0%);}
 
 @media only screen and (max-width: 320px) {
-    span.character-name {font-size: 1rem;}
-    img.character {
+    span.persona-name {font-size: 1rem;}
+    img.persona {
         max-width: 8rem;
         width: 100%
     }
 }
 @media only screen and (max-width: 600px) {
-    span.character-name {font-size: 1.4rem;}
-    img.character {
+    span.persona-name {font-size: 1.4rem;}
+    img.persona {
         max-width: 10rem;
         width: 100%
     }
 }
 @media only screen and (max-width: 1000px) {
-    span.character-name {font-size: 1.6rem;}
-    img.character {
+    span.persona-name {font-size: 1.6rem;}
+    img.persona {
         max-width: 12rem;
         width: 100%
     }
 }
 @media only screen and (min-width: 1001px) {
-    span.character-name {font-size: 2rem;}
-    img.character {
+    span.persona-name {font-size: 2rem;}
+    img.persona {
         max-width: 14rem;
         width: 100%
     }
