@@ -12,7 +12,6 @@ from django.contrib.auth.models import User
 
 from PIL import Image
 
-
 # TODO Statuses should be reworked. But they're used a lot in views and Q queries
 STATUS = [
     # players
@@ -35,8 +34,8 @@ PLAYERS = Q(status__in=[
 class Profile(Model):
     user = OneToOneField(to=User, on_delete=CASCADE)
     status = CharField(max_length=50, choices=STATUS, default='living_npc')
+    # TODO remove name and image field when Persona is ready
     name = CharField(max_length=50, default='')
-    # TODO remove this field when Persona is ready
     image = ImageField(
         default='profile_pics/profile_default.jpg',
         upload_to='profile_pics',
@@ -46,7 +45,7 @@ class Profile(Model):
     class Meta:
         ordering = ['status']
         # ordering = ['status', 'name']
-
+    
     def __str__(self):
         return self.user.username
         # return f"{self.name or self.user.username}"
@@ -61,7 +60,7 @@ class Profile(Model):
                 img.thumbnail(output_size)
                 img.save(self.image.path)
 
-   
+
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     if created:

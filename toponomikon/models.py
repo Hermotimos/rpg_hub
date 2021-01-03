@@ -2,7 +2,7 @@ from django.db.models import (
     CharField,
     ForeignKey as FK,
     Manager,
-    ManyToManyField as M2MField,
+    ManyToManyField as M2M,
     Model,
     PositiveSmallIntegerField,
     PROTECT,
@@ -52,7 +52,7 @@ class Location(Model):
         blank=True,
         null=True,
     )
-    pictures = M2MField(to=Picture, related_name='locations_pics', blank=True)
+    pictures = M2M(to=Picture, related_name='locations_pics', blank=True)
     audio_set = FK(
         to=AudioSet,
         related_name='locations',
@@ -60,12 +60,12 @@ class Location(Model):
         blank=True,
         null=True,
     )
-    knowledge_packets = M2MField(
+    knowledge_packets = M2M(
         to=KnowledgePacket,
         related_name='locations',
         blank=True,
     )
-    map_packets = M2MField(to=MapPacket, related_name='locations', blank=True)
+    map_packets = M2M(to=MapPacket, related_name='locations', blank=True)
     location_type = FK(
         to=LocationType,
         related_name='locations',
@@ -79,13 +79,13 @@ class Location(Model):
         blank=True,
         null=True,
     )
-    known_directly = M2MField(
+    known_directly = M2M(
         to=Profile,
         related_name='locs_known_directly',
         limit_choices_to=PLAYERS,
         blank=True,
     )
-    known_indirectly = M2MField(
+    known_indirectly = M2M(
         to=Profile,
         related_name='locs_known_indirectly',
         limit_choices_to=PLAYERS,
