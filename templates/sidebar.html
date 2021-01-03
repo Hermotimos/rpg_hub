@@ -9,8 +9,8 @@
     <aside>
         <img class="account-img-sidebar mt-50" onload="showTime()" src="{{ user.profile.image.url }}" alt="Profile img">
         <h3>
-            {% if user.profile.name != '' %}
-                <a href="{% url 'users:profile' %}">{{ user.profile.name }}</a>
+            {% if user.profile.character.name != '' %}
+                <a href="{% url 'users:profile' %}">{{ user.profile.character.name }}</a>
             {% else %}
                 <a href="{% url 'users:profile' %}">Uzupełnij profil</a>
             {% endif %}

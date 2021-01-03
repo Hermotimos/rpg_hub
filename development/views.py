@@ -98,7 +98,7 @@ def character_skills_view(request, profile_id='0'):
         .distinct()
     
     context = {
-        'page_title': f'Umiejętności - {profile.name}',
+        'page_title': f'Umiejętności - {profile.character.name}',
         'skills': skills,
         'synergies': synergies,
     }
@@ -139,7 +139,7 @@ def character_tricks_view(request):
         players_profiles = [profile]
     
     context = {
-        'page_title': f'Podstępy - {profile.name}',
+        'page_title': f'Podstępy - {profile.character.name}',
         'players_profiles': players_profiles
     }
     return render(request, 'development/character_tricks.html', context)
