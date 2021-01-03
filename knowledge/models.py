@@ -16,7 +16,6 @@ from users.models import Profile
 
 
 class InfoPacket(Model):
-    """An abstract class for """
     title = CharField(max_length=100, unique=True, verbose_name='Tytuł')
     text = TextField(blank=True, null=True, verbose_name='Treść (niewymagane)')
     sorting_name = CharField(max_length=250, blank=True, null=True)
