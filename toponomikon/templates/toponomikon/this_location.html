@@ -68,19 +68,19 @@
                     <label class="h3" for="tab1">Lokacje</label>
                 {% endif %}
 
-                <!-- TAB HEADER: Characters (Prosoponomikon) -->
-                {% if all_characters %}
+                <!-- TAB HEADER: Personas (Prosoponomikon) -->
+                {% if personas %}
                     {% if location_types %}
-                        <input type="radio" name="tabset" id="tab2" aria-controls="characters">
+                        <input type="radio" name="tabset" id="tab2" aria-controls="personas">
                     {% else %}
-                        <input type="radio" name="tabset" id="tab2" aria-controls="characters" checked>
+                        <input type="radio" name="tabset" id="tab2" aria-controls="personas" checked>
                     {% endif %}
                     <label class="h3" for="tab2">Postacie</label>
                 {% endif %}
                 
                 <!-- TAB HEADER: Knowledge packets -->
                 {% if this_location.knowledge_packets.all %}
-                    {% if location_types or all_characters %}
+                    {% if location_types or personas %}
                         <input type="radio" name="tabset" id="tab3" aria-controls="knowledge">
                     {% else %}
                         <input type="radio" name="tabset" id="tab3" aria-controls="knowledge" checked>
@@ -90,7 +90,7 @@
                 
                 <!-- TAB HEADER: Map packets -->
                 {% if this_location.map_packets.all %}
-                    {% if location_types or all_characters or this_location.knowledge_packets.all %}
+                    {% if location_types or personas or this_location.knowledge_packets.all %}
                         <input type="radio" name="tabset" id="tab4" aria-controls="maps">
                     {% else %}
                         <input type="radio" name="tabset" id="tab4" aria-controls="maps" checked>
@@ -100,7 +100,7 @@
                 
                 <!-- TAB HEADER: Pictures -->
                 {% if this_location.pictures.all %}
-                    {% if location_types or all_characters or this_location.knowledge_packets.all or this_location.map_packets.all %}
+                    {% if location_types or personas or this_location.knowledge_packets.all or this_location.map_packets.all %}
                         <input type="radio" name="tabset" id="tab5" aria-controls="pictures">
                     {% else %}
                         <input type="radio" name="tabset" id="tab5" aria-controls="pictures" checked>
@@ -110,7 +110,7 @@
 
                 <!-- TAB HEADER: Audio -->
                 {% if request.user.profile.status == 'gm' and audio_set %}
-                    {% if location_types or all_characters or this_location.knowledge_packets.all or this_location.map_packets.all or this_location.pictures.all %}
+                    {% if location_types or personas or this_location.knowledge_packets.all or this_location.map_packets.all or this_location.pictures.all %}
                         <input type="radio" name="tabset" id="tab6" aria-controls="audios">
                     {% else %}
                         <input type="radio" name="tabset" id="tab6" aria-controls="audios" checked>
@@ -139,14 +139,10 @@
                         </section>
                     {% endif %}
 
-                    <!-- TAB CONTENT: Characters (Prosoponomikon) -->
-                    {% if all_characters %}
-                        <section id="characters" class="tab-panel py-5">
-                            <div class="container">
-                                {% for character in all_characters %}
-                                    {% include 'prosoponomikon/_character_left_or_right_proxy.html' %}
-                                {% endfor %}
-                            </div>
+                    <!-- TAB CONTENT: Personas (Prosoponomikon) -->
+                    {% if personas %}
+                        <section id="personas" class="tab-panel py-5">
+                            {% include 'prosoponomikon/_personas.html' %}
                         </section>
                     {% endif %}
                     

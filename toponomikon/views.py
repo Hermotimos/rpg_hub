@@ -65,7 +65,7 @@ def toponomikon_location_view(request, loc_name):
             'knowledge_packets__pictures',
             'map_packets__pictures',
             'pictures',
-            'personas__profile',
+            'frequented_by_personas__profile',
         )
     else:
         prep = prep.prefetch_related(
@@ -89,9 +89,9 @@ def toponomikon_location_view(request, loc_name):
         page_title += ' (znasz z opowieści)'
         
     # Collect all personas in this location and its sub-locations:
-    all_personas = Persona.objects.filter(
-        locations__in=this_location.with_sublocations())
-    all_personas = all_personas.select_related('profile')
+    personas = Persona.objects.filter(
+        frequented_locations__in=this_location.with_sublocations())
+    personas = personas.select_related('profile')
     
     # LOCATIONS TAB
     if profile.status == 'gm':
@@ -124,7 +124,7 @@ def toponomikon_location_view(request, loc_name):
         'page_title': page_title,
         'this_location': this_location,
         'location_types': location_types,
-        'all_personas': all_personas,
+        'personas': personas.distinct(),
     }
     if this_location in known_all or profile.status == 'gm':
         return render(request, 'toponomikon/this_location.html', context)

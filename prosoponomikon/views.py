@@ -11,13 +11,11 @@ from prosoponomikon.models import PlayerPersona, NonPlayerPersona, PersonaGroup,
 def prosoponomikon_main_view(request):
     profile = request.user.profile
 
-
-    from users.models import Profile
-    from toponomikon.models import Location
-    hyllemath = Location.objects.get(name='Hyllemath')
-    for profile in Profile.objects.all():
-        Persona.objects.create(profile=profile, name=profile.name, birth_location=hyllemath)
-        
+    # from users.models import Profile
+    # from toponomikon.models import Location
+    # hyllemath = Location.objects.get(name='Hyllemath')
+    # for profile in Profile.objects.all():
+    #     Persona.objects.create(profile=profile, name=profile.character.name, birth_location=hyllemath)
     
     if profile.persona_groups_authored.all():
         return redirect('prosoponomikon:personas-grouped')
