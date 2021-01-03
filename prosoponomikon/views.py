@@ -88,7 +88,7 @@ def prosoponomikon_personas_grouped_view(request):
 
 
 @login_required
-def prosoponomikon_prosopa_view(request):
+def prosoponomikon_personas_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
         player_personas = PlayerPersona.objects.all()

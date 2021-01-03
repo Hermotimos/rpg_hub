@@ -15,8 +15,11 @@ urlpatterns = [
         views.prosoponomikon_personas_grouped_view,
         name='personas-grouped'
     ),
-    path('personas/', views.prosoponomikon_prosopa_view, name='personas'),
-    path('create-group/', views.prosoponomikon_persona_group_create_view,
-         name='create-group'),
+    path(
+        'create-persona-group/',
+        views.prosoponomikon_persona_group_create_view,
+        name='create-persona-group',
+    ),
+    path('personas/', views.prosoponomikon_personas_view, name='personas'),
 
 ]

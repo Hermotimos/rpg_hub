@@ -10,7 +10,7 @@
     <article class="top-button">
         
         <div class="mb-5">
-            <a href="{% url 'prosoponomikon:create-group' %}" class="btn btn-outline-dark mb-1">Nowa grupa</a>
+            <a href="{% url 'prosoponomikon:create-persona-group' %}" class="btn btn-outline-dark mb-1">Nowa grupa</a>
             <a href="{% url 'debates:create-topic' %}" class="btn btn-outline-dark mb-1">Modyfikuj skład</a>
             <a href="{% url 'debates:create-topic' %}" class="btn btn-outline-dark mb-1">Modyfikuj kolejność</a>
             {% for persona_group in persona_groups %}
