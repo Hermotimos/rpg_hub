@@ -67,6 +67,7 @@ IMG_TYPES = (
     ('knowledge', 'KNOWLEDGE'),
     ('npc', 'NPC'),
     ('players-notes', 'PLAYERS-NOTES'),
+    ('profile', 'PROFILE'),
     ('realia', 'REALIA'),
     ('symbola', 'SYMBOLA'),
     ('thera', 'THERA'),
