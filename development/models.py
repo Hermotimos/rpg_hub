@@ -29,7 +29,7 @@ class ProfileKlass(Model):
     experience = PositiveSmallIntegerField()
     
     def __str__(self):
-        return f'{self.profile.character.name}: {self.klass.name}'
+        return f'{self.profile.persona.name}: {self.klass.name}'
     
     class Meta:
         ordering = ['profile__name']
