@@ -43,12 +43,6 @@ class Persona(Model):
         related_name='frequented_by_personas',
         blank=True,
     )
-    picture_main = OneToOne(
-        to=Picture,
-        on_delete=SET_NULL,
-        blank=True,
-        null=True,
-    )
     pictures = M2M(to=Picture, related_name='personas', blank=True)
     description = TextField(blank=True, null=True)
     biography_packets = M2M(
