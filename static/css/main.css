@@ -237,7 +237,7 @@ a.img-link:hover {
     color: #444444;
 }
 
-img.img-grayscale {filter: grayscale(100%);}
+img.img-grayscale {filter: grayscale(100%) !important;}
 
 
 /* Image zoom on hover */
@@ -262,7 +262,6 @@ img.img-grayscale {filter: grayscale(100%);}
     height: auto;
     transform: scale(1);
     border-style: none;
-
 }
 
 .img-hover-zoom:hover img {transform: scale(1.2);}
@@ -344,7 +343,7 @@ img.img-grayscale:hover {filter: grayscale(0%);}
 
 /*
 TODO
-Applye these classes to all imgs, not only Chronicle: they all have to get
+Apply these classes to all imgs, not only Chronicle: they all have to get
 modals, and then these can be generalized:
 */
 figure.for-modal img  {pointer-events: none;}

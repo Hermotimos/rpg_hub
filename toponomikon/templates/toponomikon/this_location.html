@@ -69,6 +69,7 @@
                 {% endif %}
 
                 <!-- TAB HEADER: Personas (Prosoponomikon) -->
+            {% if request.user.profile.status == 'gm' %}
                 {% if personas %}
                     {% if location_types %}
                         <input type="radio" name="tabset" id="tab2" aria-controls="personas">
@@ -77,6 +78,7 @@
                     {% endif %}
                     <label class="h3" for="tab2">Postacie</label>
                 {% endif %}
+            {% endif %}
                 
                 <!-- TAB HEADER: Knowledge packets -->
                 {% if this_location.knowledge_packets.all %}
