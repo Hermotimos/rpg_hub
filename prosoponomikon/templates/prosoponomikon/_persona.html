@@ -2,16 +2,14 @@
 <div class="row mb-4 mb-md-0">
     <div class="col-12 px-0">
         
-        {% if not persona.only_indirectly %}
-            <div class="{% if side == 'left' %} float-left pr-3 {% else %} float-right pl-3 {% endif %}">
-                <a href="#">
-                    <div class="img-hover-zoom">
-                        <img class="persona {% if persona.profile.status == 'dead_player' %} img-grayscale {% endif %}"
-                             src="{{ persona.profile.image.url }}" alt="Profile img">
-                    </div>
-                </a>
-            </div>
-        {% endif %}
+        <div class="{% if side == 'left' %} float-left pr-3 {% else %} float-right pl-3 {% endif %}">
+            <a href="#">
+                <div class="img-hover-zoom">
+                    <img class="persona {% if persona.profile.status == 'dead_player' %} img-grayscale {% endif %}"
+                         src="{% if not persona.only_indirectly %} {{ persona.profile.image.url }} {% else %} TODO question marks {% endif %}" alt="Profile img">
+                </div>
+            </a>
+        </div>
 
         <div>
             <p class="h4
