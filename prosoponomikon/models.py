@@ -149,9 +149,9 @@ class PersonaGroup(Model):
 
 @receiver(post_save, sender=Persona)
 def create_profile(sender, instance, created, **kwargs):
-    # profile = instance.profile
-    # profile.copied_character_name = instance.name
-    # profile.save()
+    profile = instance.profile
+    profile.copied_character_name = instance.name
+    profile.save()
     if created:
         profile = instance.profile
         profile.copied_character_name = instance.name
