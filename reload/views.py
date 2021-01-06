@@ -6,6 +6,7 @@ from chronicles.models import Thread, GameEvent
 from toponomikon.models import Location
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, Profession, Klass, EliteProfession, \
     EliteKlass, WeaponType, Weapon
+from prosoponomikon.models import Persona
 
 
 @login_required
@@ -38,6 +39,17 @@ def reload_toponomikon(request):
         for obj in Location.objects.all():
             obj.save()
         messages.info(request, f'Przeładowano "sorting_name" dla aplikacji "toponomikon"!')
+        return redirect('reload:reload-main')
+    else:
+        return redirect('home:dupa')\
+        
+        
+@login_required
+def reload_prosoponomikon(request):
+    if request.user.profile.status == 'gm':
+        for obj in Persona.objects.all():
+            obj.save()
+        messages.info(request, f'Przeładowano "sorting_name" dla aplikacji "prosoponomikon"!')
         return redirect('reload:reload-main')
     else:
         return redirect('home:dupa')
