@@ -92,15 +92,15 @@ class PlayerPersona(Persona):
         verbose_name_plural = '--- Players'
 
 
-class NonPlayerPersonaManager(Manager):
+class NPCPersonaManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.exclude(profile__status='player')
+        qs = qs.filter(profile__status='npc')
         return qs
 
 
-class NonPlayerPersona(Persona):
-    objects = NonPlayerPersonaManager()
+class NPCPersona(Persona):
+    objects = NPCPersonaManager()
     
     class Meta:
         proxy = True

@@ -3,7 +3,7 @@ from django.db.models import TextField, CharField
 from django.forms import Textarea, TextInput
 from django.utils.html import format_html
 
-from prosoponomikon.models import Persona, PlayerPersona, NonPlayerPersona, \
+from prosoponomikon.models import Persona, PlayerPersona, NPCPersona, \
     PersonaGroup
 
 
@@ -46,4 +46,4 @@ class PersonaAdmin(admin.ModelAdmin):
 admin.site.register(PersonaGroup)
 admin.site.register(Persona, PersonaAdmin)
 admin.site.register(PlayerPersona, PersonaAdmin)
-admin.site.register(NonPlayerPersona, PersonaAdmin)
+admin.site.register(NPCPersona, PersonaAdmin)

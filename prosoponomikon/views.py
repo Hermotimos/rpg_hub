@@ -1,22 +1,18 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch, Q, Case, When, Value, IntegerField
-from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Prefetch, Case, When, Value, IntegerField
+from django.shortcuts import render, redirect
 
-from prosoponomikon.forms import GMPersonaGroupCreateForm, PersonaGroupCreateForm
-from prosoponomikon.models import PlayerPersona, NonPlayerPersona, PersonaGroup, Persona
+from prosoponomikon.forms import GMPersonaGroupCreateForm, \
+    PersonaGroupCreateForm
+from prosoponomikon.models import PlayerPersona, NPCPersona, \
+    PersonaGroup, Persona
 from users.models import Profile
+
 
 @login_required
 def prosoponomikon_main_view(request):
     profile = request.user.profile
-
-    # from users.models import Profile
-    # from toponomikon.models import Location
-    # hyllemath = Location.objects.get(name='Hyllemath')
-    # for profile in Profile.objects.all():
-    #     Persona.objects.create(profile=profile, name=profile.persona.name, birth_location=hyllemath)
-    
     if profile.persona_groups_authored.all():
         return redirect('prosoponomikon:personas-grouped')
     else:
@@ -28,7 +24,7 @@ def prosoponomikon_personas_ungrouped_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
         players = PlayerPersona.objects.prefetch_related('biography_packets')
-        npcs = NonPlayerPersona.objects.prefetch_related('biography_packets')
+        npcs = NPCPersona.objects.prefetch_related('biography_packets')
     else:
         known_dir = profile.personas_known_directly.all()
         known_indir = profile.personas_known_indirectly.all()
@@ -45,11 +41,8 @@ def prosoponomikon_personas_ungrouped_view(request):
         all_known = all_known.prefetch_related(
             Prefetch('biography_packets', queryset=profile.authored_bio_packets.all())
         )
-        # players = all_known.filter(profile__status__icontains='player')
         players = all_known.filter(profile=Profile.players.all())
-        print(players)
         players = players.exclude(id=profile.persona.id)
-        # npcs = all_known.exclude(profile__status__icontains='player')
         npcs = all_known.filter(profile__in=Profile.npcs.all())
 
     context = {
@@ -111,7 +104,7 @@ def prosoponomikon_personas_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
         player_personas = PlayerPersona.objects.all()
-        npc_personas = NonPlayerPersona.objects.all()
+        npc_personas = NPCPersona.objects.all()
     else:
         player_personas = []
         npc_personas = []
