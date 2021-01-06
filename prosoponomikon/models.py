@@ -130,7 +130,7 @@ class PersonaGroup(Model):
         to=KnowledgePacket,
         related_name='persona_group_defaults',
         blank=True,
-        verbose_name='Domyślne umiejętności zgrupowanych postaci',
+        verbose_name='Domyślne umiejętności NPC w grupie',
     )
     order_no = PositiveSmallIntegerField(
         blank=True,
