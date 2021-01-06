@@ -11,13 +11,6 @@ from users.models import Profile
 
 @login_required
 def debates_main_view(request):
-    
-    # from debates.models import Remark
-    # for o in Remark.objects.all():
-    #     o.author2 = o.author.profile
-    #     o.save()
-        
-    
     profile = request.user.profile
     debates = Debate.objects.all().prefetch_related('known_directly')
     if profile.status == 'gm':

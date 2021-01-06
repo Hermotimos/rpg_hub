@@ -84,17 +84,17 @@ def character_skills_view(request, profile_id='0'):
         .filter(skill_levels__acquired_by=profile) \
         .exclude(name__icontains='Doktryn') \
         .prefetch_related(Prefetch(
-        'skill_levels',
-        queryset=SkillLevel.objects.filter(acquired_by=profile)
-    )) \
+            'skill_levels',
+            queryset=SkillLevel.objects.filter(acquired_by=profile)
+        )) \
         .distinct()
     
     synergies = Synergy.objects \
         .filter(synergy_levels__acquired_by=profile) \
         .prefetch_related(Prefetch(
-        'synergy_levels',
-        queryset=SynergyLevel.objects.filter(acquired_by=profile)
-    )) \
+            'synergy_levels',
+            queryset=SynergyLevel.objects.filter(acquired_by=profile)
+        )) \
         .distinct()
     
     context = {
@@ -111,9 +111,6 @@ def character_skills_view(request, profile_id='0'):
 @login_required
 def character_skills_for_gm_view(request):
     profile = request.user.profile
-    # profiles = Profile.objects.filter(
-    #     status__in=['active_player', 'inactive_player', 'dead_player']
-    # )
     profiles = Profile.players.all()
     
     context = {
@@ -132,10 +129,6 @@ def character_tricks_view(request):
     profile = request.user.profile
     
     if profile.status == 'gm':
-        # players_profiles = Profile.objects.exclude(
-        #     Q(status='dead_player') | Q(status='living_npc')
-        #     | Q(status='dead_npc') | Q(status='gm')
-        # )
         players_profiles = Profile.players(is_alive=True)
     else:
         players_profiles = [profile]

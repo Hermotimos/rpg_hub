@@ -29,7 +29,7 @@ class ProfileKlass(Model):
     experience = PositiveSmallIntegerField()
     
     def __str__(self):
-        return f'{self.profile.persona.name}: {self.klass.name}'
+        return f'{self.profile}: {self.klass.name}'
     
     class Meta:
         ordering = ['profile__persona__name']
@@ -44,7 +44,7 @@ class Level(Model):
     level_mods = TextField()
 
     def __str__(self):
-        return f'{self.profile_klass} [{self.klass.name}]'
+        return f'{self.profile_klass} [{self.level_number}]'
 
     class Meta:
         ordering = ['profile_klass', 'level_number']

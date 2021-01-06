@@ -1,7 +1,6 @@
 import datetime
 
 from PIL import Image
-from django.contrib.auth.models import User
 from django.db.models import (
     BooleanField,
     CharField,
@@ -12,18 +11,11 @@ from django.db.models import (
     ManyToManyField as M2MField,
     Model,
     PROTECT,
-    Q,
     TextField,
 )
 from django.db.models.signals import post_save
 
 from users.models import Profile
-
-ALIVE_CHARACTERS = Q(status__in=[
-    'active_player',
-    'inactive_player',
-    'living_npc',
-])
 
 
 class Topic(Model):
@@ -43,7 +35,6 @@ class Debate(Model):
     known_directly = M2MField(
         to=Profile,
         related_name='debates_known_directly',
-        limit_choices_to=ALIVE_CHARACTERS,
         verbose_name='Uczestnicy',
         help_text="""
             ***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.<br><br>
@@ -65,10 +56,7 @@ class Debate(Model):
         return self.name
     
     def informables(self):
-        qs = Profile.objects.filter(status__in=[
-            'active_player',
-            'inactive_player',
-        ])
+        qs = Profile.players.all(is_alive=True)
         qs = qs.exclude(id__in=self.known_directly.all())
         return qs
 
@@ -76,12 +64,6 @@ class Debate(Model):
 class Remark(Model):
     text = TextField()
     debate = FK(to=Debate, related_name='remarks', on_delete=CASCADE)
-    # author = FK(
-    #     to=User,
-    #     related_name='remarks',
-    #     on_delete=PROTECT,
-    #     verbose_name='Autor',
-    # )
     author = FK(
         to=Profile,
         related_name='remarks',
