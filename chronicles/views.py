@@ -160,7 +160,6 @@ def game_event_inform_view(request, game_event_id):
     allowed = (
         game_event.known_directly.all() | game_event.known_indirectly.all()
     )
-    # allowed = allowed.filter(status__in=['active_player', 'inactive_player'])
     allowed = allowed.filter(status='player')
     
     # INFORM FORM
@@ -262,7 +261,3 @@ def timeline_view(request):
         'events_filter': events_filter,
     }
     return render(request, 'chronicles/timeline.html', context)
-    # if events:
-    #     return render(request, 'chronicles/timeline.html', context)
-    # else:
-    #     return redirect('home:dupa')
