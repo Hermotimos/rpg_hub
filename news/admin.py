@@ -9,17 +9,19 @@ from users.models import Profile
 
 class NewsAdminForm(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(
-        queryset=Profile.objects.exclude(Q(status='dead_player')
-                                         | Q(status='dead_npc')
-                                         | Q(status='gm')),
+        # queryset=Profile.objects.exclude(Q(status='dead_player')
+        #                                  | Q(status='dead_npc')
+        #                                  | Q(status='gm')),
+        queryset=Profile.contactables.all(),
         required=False,
         widget=FilteredSelectMultiple('Allowed profiles', False),
     )
 
     followers = forms.ModelMultipleChoiceField(
-        queryset=Profile.objects.exclude(Q(status='dead_player')
-                                         | Q(status='dead_npc')
-                                         | Q(status='gm')),
+        # queryset=Profile.objects.exclude(Q(status='dead_player')
+        #                                  | Q(status='dead_npc')
+        #                                  | Q(status='gm')),
+        queryset=Profile.contactables.all(),
         required=False,
         widget=FilteredSelectMultiple('Followers', False),
     )
@@ -27,9 +29,10 @@ class NewsAdminForm(forms.ModelForm):
 
 class SurveyAdminForm(forms.ModelForm):
     addressees = forms.ModelMultipleChoiceField(
-        queryset=Profile.objects.exclude(Q(status='dead_player')
-                                         | Q(status='dead_npc')
-                                         | Q(status='gm')),
+        # queryset=Profile.objects.exclude(Q(status='dead_player')
+        #                                  | Q(status='dead_npc')
+        #                                  | Q(status='gm')),
+        queryset=Profile.contactables.all(),
         required=False,
         widget=FilteredSelectMultiple('Addressees', False),
     )

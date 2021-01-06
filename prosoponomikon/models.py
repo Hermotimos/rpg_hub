@@ -23,15 +23,8 @@ from toponomikon.models import Location
 from users.models import Profile
 
 
-PLAYER_STATUS = [
-    'active_player',
-    'inactive_player',
-    'dead_player',
-]
-
-
 class Persona(Model):
-    profile = OneToOne(to=Profile, related_name='persona', on_delete=CASCADE)
+    profile = OneToOne(to=Profile, on_delete=CASCADE)
     name = CharField(max_length=100)
     birth_location = FK(
         to=Location,
@@ -58,13 +51,13 @@ class Persona(Model):
     known_directly = M2M(
         to=Profile,
         related_name='personas_known_directly',
-        limit_choices_to=Q(status__in=PLAYER_STATUS),
+        limit_choices_to=Q(status='player'),
         blank=True,
     )
     known_indirectly = M2M(
         to=Profile,
         related_name='personas_known_indirectly',
-        limit_choices_to=Q(status__in=PLAYER_STATUS),
+        limit_choices_to=Q(status='player'),
         blank=True,
     )
     sorting_name = CharField(max_length=250, blank=True, null=True)
@@ -86,7 +79,7 @@ class Persona(Model):
 class PlayerPersonaManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.filter(Q(profile__status__in=PLAYER_STATUS))
+        qs = qs.filter(profile__status='player')
         return qs
     
     
@@ -102,7 +95,7 @@ class PlayerPersona(Persona):
 class NonPlayerPersonaManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.exclude(Q(profile__status__in=PLAYER_STATUS))
+        qs = qs.exclude(profile__status='player')
         return qs
 
 

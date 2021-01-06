@@ -26,12 +26,14 @@ class CreateDebateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if authenticated_user.profile.status != 'gm':
             self.fields['is_individual'].widget = HiddenInput()
-            
-        self.fields['known_directly'].queryset = Profile.objects.exclude(
-            Q(user=authenticated_user)
-            | Q(status__icontains='dead')
-            | Q(status='gm')
-        ).select_related()
+        # self.fields['known_directly'].queryset = Profile.objects.exclude(
+        #     Q(user=authenticated_user)
+        #     | Q(status__icontains='dead')
+        #     | Q(status='gm')
+        # ).select_related()
+        self.fields['known_directly'].queryset = Profile.debatables.filter(
+            persona__in=authenticated_user.profile.personas_known_directly.all()
+        ).exclude(user=authenticated_user).select_related()
         self.fields['known_directly'].widget.attrs['size'] = 10
 
 
@@ -46,7 +48,7 @@ class CreateRemarkForm(forms.ModelForm):
             debate = Debate.objects.get(id=debate_id)
             debate_known_directly = debate.known_directly.all()
         else:
-            debate_known_directly = Profile.objects.exclude(status__icontains='dead')
+            debate_known_directly = Profile.living.all()
             
         authenticated_user = kwargs.pop('authenticated_user')
         super().__init__(*args, **kwargs)

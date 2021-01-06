@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from prosoponomikon.forms import GMPersonaGroupCreateForm, PersonaGroupCreateForm
 from prosoponomikon.models import PlayerPersona, NonPlayerPersona, PersonaGroup, Persona
-
+from users.models import Profile
 
 @login_required
 def prosoponomikon_main_view(request):
@@ -45,9 +45,12 @@ def prosoponomikon_personas_ungrouped_view(request):
         all_known = all_known.prefetch_related(
             Prefetch('biography_packets', queryset=profile.authored_bio_packets.all())
         )
-        players = all_known.filter(profile__status__icontains='player')
+        # players = all_known.filter(profile__status__icontains='player')
+        players = all_known.filter(profile=Profile.players.all())
+        print(players)
         players = players.exclude(id=profile.persona.id)
-        npcs = all_known.exclude(profile__status__icontains='player')
+        # npcs = all_known.exclude(profile__status__icontains='player')
+        npcs = all_known.filter(profile__in=Profile.npcs.all())
 
     context = {
         'page_title': 'Prosoponomikon',

@@ -50,9 +50,10 @@ class BiographyPacket(InfoPacket):
         super().save(*args, **kwargs)
     
     def informables(self):
-        qs = Profile.objects.filter(status__in=[
-            'active_player',
-        ])
+        # qs = Profile.objects.filter(status__in=[
+        #     'active_player',
+        # ])
+        qs = Profile.active_players.all()
         qs = qs.exclude(id__in=self.acquired_by.all())
         return qs
 
@@ -87,9 +88,10 @@ class KnowledgePacket(InfoPacket):
         super().save(*args, **kwargs)
     
     def informables(self):
-        qs = Profile.objects.filter(status__in=[
-            'active_player',
-        ])
+        # qs = Profile.objects.filter(status__in=[
+        #     'active_player',
+        # ])
+        qs = Profile.active_players.all()
         qs = qs.exclude(id__in=self.acquired_by.all())
         return qs
     

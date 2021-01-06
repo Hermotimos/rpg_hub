@@ -5,7 +5,7 @@
                 {% for persona in personas %}
                     <a href="#">
                         <div class="img-hover-zoom">
-                            <img class="persona-big {% if persona.profile.status == 'dead_player' %} img-grayscale {% endif %}"
+                            <img class="persona-big {% if not persona.profile.is_alive %} img-grayscale {% endif %}"
                                  src="{{ persona.profile.image.url }}" alt="Profile img"
                                  data-toggle="tooltip" data-placement="bottom" title="{{ persona.name }}">
                         </div>

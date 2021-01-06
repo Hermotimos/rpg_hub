@@ -11,7 +11,7 @@
                 <div class="row">
                     {% for profile in rand_profiles %}
                         <div class="col-sm-6  col-lg-3">
-                            <img class="img-fluid mx-auto d-block {% if profile.status == 'dead_player' %} img-grayscale {% endif %}"
+                            <img class="img-fluid mx-auto d-block {% if not profile.is_alive' %} img-grayscale {% endif %}"
                                  src="{{ profile.image.url }}"
                                  alt="Profile img">
                             <p class="pt-1 text-center">{{ profile.persona.name }}</p>

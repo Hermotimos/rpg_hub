@@ -13,8 +13,7 @@ class CreateNewsForm(forms.ModelForm):
         authenticated_user = kwargs.pop('authenticated_user')
         super().__init__(*args, **kwargs)
         self.fields['allowed_profiles'].label = ''
-        self.fields['allowed_profiles'].queryset = Profile.objects.filter(
-            status='active_player').exclude(user=authenticated_user)
+        self.fields['allowed_profiles'].queryset = Profile.active_players.exclude(user=authenticated_user)
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''
@@ -59,8 +58,7 @@ class CreateSurveyForm(forms.ModelForm):
         authenticated_user = kwargs.pop('authenticated_user')
         super().__init__(*args, **kwargs)
         self.fields['addressees'].label = ''
-        self.fields['addressees'].queryset = Profile.objects.filter(
-            status='active_player').exclude(user=authenticated_user)
+        self.fields['addressees'].queryset = Profile.active_players.exclude(user=authenticated_user)
         self.fields['image'].label = 'Załącz obraz:'
         self.fields['image'].required = False
         self.fields['text'].label = ''

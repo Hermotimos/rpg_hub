@@ -24,11 +24,11 @@ from rpg_project.utils import create_sorting_name
 from toponomikon.models import Location
 from users.models import Profile
 
-PLAYERS = Q(status__in=[
-    'active_player',
-    'inactive_player',
-    'dead_player',
-])
+# PLAYERS = Q(status__in=[
+#     'active_player',
+#     'inactive_player',
+#     'dead_player',
+# ])
 SEASONS = {
     '1': 'Wiosny',
     '2': 'Lata',
@@ -214,13 +214,15 @@ class TimeUnit(Model):
     known_short_desc = M2MField(
         to=Profile,
         related_name='timeunits_known_short_desc',
-        limit_choices_to=PLAYERS,
+        # limit_choices_to=PLAYERS,
+        limit_choices_to=Q(status='player'),
         blank=True,
     )
     known_long_desc = M2MField(
         to=Profile,
         related_name='timeunits_long_desc',
-        limit_choices_to=PLAYERS,
+        # limit_choices_to=PLAYERS,
+        limit_choices_to=Q(status='player'),
         blank=True,
     )
 
@@ -255,13 +257,15 @@ class TimeUnit(Model):
     known_directly = M2MField(
         to=Profile,
         related_name='events_known_directly',
-        limit_choices_to=PLAYERS,
+        # limit_choices_to=PLAYERS,
+        limit_choices_to=Q(status='player'),
         blank=True,
     )
     known_indirectly = M2MField(
         to=Profile,
         related_name='events_known_indirectly',
-        limit_choices_to=PLAYERS,
+        # limit_choices_to=PLAYERS,
+        limit_choices_to=Q(status='player'),
         blank=True,
     )
     pictures = M2MField(to=Picture, related_name='events', blank=True)
@@ -283,9 +287,10 @@ class TimeUnit(Model):
         return res
     
     def informables(self):
-        qs = Profile.objects.filter(status__in=[
-            'active_player',
-        ])
+        # qs = Profile.objects.filter(status__in=[
+        #     'active_player',
+        # ])
+        qs = Profile.active_players.all()
         qs = qs.exclude(
             id__in=(self.known_directly.all() | self.known_indirectly.all())
         )

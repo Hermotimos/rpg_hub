@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.db.models import Q, TextField, CharField, ForeignKey, OneToOneField
+from django.db.models import TextField, CharField, ForeignKey, OneToOneField
 from django.forms import Textarea, TextInput, Select
 
 from chronicles.models import (
@@ -53,12 +53,8 @@ class GameEventAdminForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['threads'].label = 'Active Threads'
         self.fields['threads'].queryset = ThreadActive.objects.all()
-        self.fields['known_directly'].queryset = Profile.objects.exclude(
-            Q(status='dead_player') | Q(status='dead_npc') | Q(status='gm')
-        )
-        self.fields['known_indirectly'].queryset = Profile.objects.exclude(
-            Q(status='dead_player') | Q(status='dead_npc') | Q(status='gm')
-        )
+        self.fields['known_directly'].queryset = Profile.non_gm.all()
+        self.fields['known_indirectly'].queryset = Profile.non_gm.all()
 
 
 class GameEventAdmin(admin.ModelAdmin):
@@ -77,7 +73,7 @@ class GameEventAdmin(admin.ModelAdmin):
         request = kwargs['request']
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
         fields = [
-            # Tested that here only audio optimazes queries
+            # Tested that here only audio optimizes queries
             'audio',
         ]
         for field in fields:
@@ -160,12 +156,8 @@ class HistoryEventAdminForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['threads'].label = 'Active Threads'
         self.fields['threads'].queryset = ThreadActive.objects.all()
-        self.fields['known_short_desc'].queryset = Profile.objects.exclude(
-            Q(status='dead_player') | Q(status='dead_npc') | Q(status='gm')
-        )
-        self.fields['known_long_desc'].queryset = Profile.objects.exclude(
-            Q(status='dead_player') | Q(status='dead_npc') | Q(status='gm')
-        )
+        self.fields['known_short_desc'].queryset = Profile.non_gm.all()
+        self.fields['known_long_desc'].queryset = Profile.non_gm.all()
         
         
 class HistoryEventAdmin(admin.ModelAdmin):

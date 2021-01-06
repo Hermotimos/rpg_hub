@@ -5,7 +5,7 @@
         <div class="{% if side == 'left' %} float-left pr-3 {% else %} float-right pl-3 {% endif %}">
             <a href="#">
                 <div class="img-hover-zoom">
-                    <img class="persona {% if persona.profile.status == 'dead_player' %} img-grayscale {% endif %}"
+                    <img class="persona {% if not persona.profile.is_alive %} img-grayscale {% endif %}"
                          src="{% if not persona.only_indirectly %} {{ persona.profile.image.url }} {% else %} TODO question marks {% endif %}" alt="Profile img">
                 </div>
             </a>

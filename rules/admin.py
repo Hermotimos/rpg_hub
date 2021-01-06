@@ -16,10 +16,11 @@ from users.models import Profile
 
 class Form1(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(
-        queryset=Profile.objects.exclude(Q(status='dead_player')
-                                         | Q(status='dead_npc')
-                                         | Q(status='gm')
-                                         | Q(status='living_npc')),
+        # queryset=Profile.objects.exclude(Q(status='dead_player')
+        #                                  | Q(status='dead_npc')
+        #                                  | Q(status='gm')
+        #                                  | Q(status='living_npc')),
+        queryset=Profile.players.filter(is_alive=True),
         required=False,
         widget=FilteredSelectMultiple('Allowed profiles', False),
     )
@@ -27,10 +28,11 @@ class Form1(forms.ModelForm):
 
 class Form2(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(
-        queryset=Profile.objects.exclude(Q(status='dead_player')
-                                         | Q(status='dead_npc')
-                                         | Q(status='gm')
-                                         | Q(status='living_npc')),
+        # queryset=Profile.objects.exclude(Q(status='dead_player')
+        #                                  | Q(status='dead_npc')
+        #                                  | Q(status='gm')
+        #                                  | Q(status='living_npc')),
+        queryset=Profile.players.filter(is_alive=True),
         required=False,
         widget=FilteredSelectMultiple('Allowed profiles', False),
     )
@@ -43,10 +45,11 @@ class Form2(forms.ModelForm):
 
 class Form3(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(
-        queryset=Profile.objects.exclude(Q(status='dead_player')
-                                         | Q(status='dead_npc')
-                                         | Q(status='gm')
-                                         | Q(status='living_npc')),
+        # queryset=Profile.objects.exclude(Q(status='dead_player')
+        #                                  | Q(status='dead_npc')
+        #                                  | Q(status='gm')
+        #                                  | Q(status='living_npc')),
+        queryset=Profile.players.filter(is_alive=True),
         required=False,
         widget=FilteredSelectMultiple('Allowed profiles', False)
     )

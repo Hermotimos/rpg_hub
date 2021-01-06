@@ -17,7 +17,7 @@
                     {% for persona in player_personas %}
                         <div class="col-sm-6 col-md-4 col-lg-3">
                             <a href="#" class="img-link">
-                                <img class="img-fluid mx-auto d-block {% if persona.profile.status == 'dead_player' %} img-grayscale {% endif %}"
+                                <img class="img-fluid mx-auto d-block {% if not persona.profile.is_alive %} img-grayscale {% endif %}"
                                      src="{{ persona.profile.image.url }}"
                                      alt="Profile img">
                             </a>

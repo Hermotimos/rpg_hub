@@ -21,6 +21,7 @@ class PersonaGroupCreateForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['personas'].widget.attrs['size'] = 10
+        # TODO filter queryset as per user's known personas (make such method on profile/user)
         self.helper = FormHelper()
         self.helper.add_input(
             Submit('submit', 'Utwórz grupę', css_class='btn-dark'))

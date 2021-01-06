@@ -17,11 +17,11 @@ from knowledge.models import KnowledgePacket, MapPacket
 from rpg_project.utils import create_sorting_name
 from users.models import Profile
 
-PLAYERS = Q(status__in=[
-    'active_player',
-    'inactive_player',
-    'dead_player',
-])
+# PLAYERS = Q(status__in=[
+#     'active_player',
+#     'inactive_player',
+#     'dead_player',
+# ])
 
 
 class LocationType(Model):
@@ -84,13 +84,13 @@ class Location(Model):
     known_directly = M2M(
         to=Profile,
         related_name='locs_known_directly',
-        limit_choices_to=PLAYERS,
+        limit_choices_to=Q(status='player'),
         blank=True,
     )
     known_indirectly = M2M(
         to=Profile,
         related_name='locs_known_indirectly',
-        limit_choices_to=PLAYERS,
+        limit_choices_to=Q(status='player'),
         blank=True,
     )
     sorting_name = CharField(max_length=250, blank=True, null=True)
@@ -109,9 +109,10 @@ class Location(Model):
         super().save(*args, **kwargs)
 
     def informables(self):
-        qs = Profile.objects.filter(status__in=[
-            'active_player',
-        ])
+        # qs = Profile.objects.filter(status__in=[
+        #     'active_player',
+        # ])
+        qs = Profile.active_players.all()
         qs = qs.exclude(
             id__in=(self.known_directly.all() | self.known_indirectly.all())
         )

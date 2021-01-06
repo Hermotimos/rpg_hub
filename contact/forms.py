@@ -4,7 +4,7 @@ from django import forms
 from django.db.models import Q
 
 from contact.models import Demand, DemandAnswer, Plan
-from users.models import User
+from users.models import User, Profile
 
 
 # ------------------- DEMANDS -------------------
@@ -19,14 +19,18 @@ class DemandsCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
         super().__init__(*args, **kwargs)
+        # self.fields['addressee'].queryset = User.objects.exclude(
+        #     Q(id=authenticated_user.id)
+        #     | Q(profile__status='dead_player')
+        #     | Q(profile__status='inactive_player')
+        #     | Q(profile__status='dead_npc')
+        #     | Q(profile__status='living_npc')
+        # ).order_by('username')
         self.fields['addressee'].queryset = User.objects.exclude(
-            Q(id=authenticated_user.id)
-            | Q(profile__status='dead_player')
-            | Q(profile__status='inactive_player')
-            | Q(profile__status='dead_npc')
-            | Q(profile__status='living_npc')
+            id=authenticated_user.id).filter(
+            profile__in=Profile.contactables.all()
         ).order_by('username')
-
+        
         self.helper = FormHelper()
         self.helper.add_input(
             Submit('submit', 'Wyślij dezyderat', css_class='btn-dark'))

@@ -16,11 +16,11 @@ from imaginarion.models import Picture
 from rpg_project.utils import create_sorting_name
 from users.models import Profile
 
-PLAYERS = Q(status__in=[
-    'active_player', 
-    'inactive_player', 
-    'dead_player',
-])
+# PLAYERS = Q(status__in=[
+#     'active_player',
+#     'inactive_player',
+#     'dead_player',
+# ])
 
 
 class Skill(Model):
@@ -29,7 +29,7 @@ class Skill(Model):
     image = ImageField(upload_to='site_features_pics', blank=True, null=True)
     allowed_profiles = M2MField(
         to=Profile,
-        limit_choices_to=PLAYERS,
+        limit_choices_to=Q(status='player'),
         related_name='allowed_skills',
         blank=True,
     )
@@ -136,7 +136,7 @@ class Synergy(Model):
     skills = M2MField(to=Skill, related_name='skills')
     allowed_profiles = M2MField(
         to=Profile,
-        limit_choices_to=PLAYERS,
+        limit_choices_to=Q(status='player'),
         related_name='allowed_synergies',
         blank=True,
     )
@@ -245,7 +245,7 @@ class Klass(Model):
     lvl_20 = CharField(max_length=500, blank=True, null=True)
     allowed_profiles = M2MField(
         to=Profile,
-        limit_choices_to=PLAYERS,
+        limit_choices_to=Q(status='player'),
         related_name='allowed_klasses',
         blank=True,
     )
@@ -277,7 +277,7 @@ class EliteProfession(Model):
     description = TextField(max_length=4000, blank=True, null=True)
     allowed_profiles = M2MField(
         to=Profile,
-        limit_choices_to=PLAYERS,
+        limit_choices_to=Q(status='player'),
         related_name='allowed_elite_classes',
         blank=True,
     )
@@ -315,7 +315,7 @@ class EliteKlass(Model):
     start_perks = TextField(max_length=4000, blank=True, null=True)
     allowed_profiles = M2MField(
         to=Profile,
-        limit_choices_to=PLAYERS,
+        limit_choices_to=Q(status='player'),
         related_name='allowed_elite_klasses',
         blank=True,
     )
@@ -416,7 +416,7 @@ class Weapon(Model):
 
     allowed_profiles = M2MField(
         to=Profile,
-        limit_choices_to=PLAYERS,
+        limit_choices_to=Q(status='player'),
         related_name='allowed_weapons',
         blank=True,
     )
@@ -473,7 +473,7 @@ class Plate(Model):
 
     allowed_profiles = M2MField(
         to=Profile,
-        limit_choices_to=PLAYERS,
+        limit_choices_to=Q(status='player'),
         related_name='allowed_plates',
         blank=True,
     )
@@ -510,7 +510,7 @@ class Shield(Model):
 
     allowed_profiles = M2MField(
         to=Profile,
-        limit_choices_to=PLAYERS,
+        limit_choices_to=Q(status='player'),
         related_name='allowed_shields',
         blank=True,
     )
