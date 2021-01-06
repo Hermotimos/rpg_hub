@@ -12,8 +12,8 @@ from django.db.models import (
     PositiveSmallIntegerField,
     TextField,
 )
-# from django.db.models.signals import post_save
-# from django.dispatch import receiver
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from rpg_project.utils import create_sorting_name
 
 from imaginarion.models import Picture
@@ -151,3 +151,10 @@ class PersonaGroup(Model):
     # TODO no signal necessary to include knowledge packets on per group basis
     # TODO -> show them by character.character_groups.knowledge_packets ...
 
+
+@receiver(post_save, sender=Persona)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        profile = instance.profile
+        profile.copied_character_name = instance.name
+        profile.save()

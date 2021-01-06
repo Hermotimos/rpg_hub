@@ -88,6 +88,8 @@ class Profile(Model):
         blank=True,
         null=True,
     )
+    # Character name copied from Persona to avoid queries
+    copied_character_name = CharField(max_length=100, blank=True, null=True)
     
     objects = Manager()
     contactables = ContactableProfileManager()
@@ -102,7 +104,8 @@ class Profile(Model):
         ordering = ['-status', '-is_active', 'user__username']
     
     def __str__(self):
-        return self.persona.name or self.user.username
+        # return self.user.username.replace('_', ' ')
+        return self.copied_character_name or self.user.username
     
     def save(self, *args, **kwargs):
         first_save = True if not self.pk else False
