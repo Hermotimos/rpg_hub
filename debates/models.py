@@ -76,8 +76,14 @@ class Debate(Model):
 class Remark(Model):
     text = TextField()
     debate = FK(to=Debate, related_name='remarks', on_delete=CASCADE)
+    # author = FK(
+    #     to=User,
+    #     related_name='remarks',
+    #     on_delete=PROTECT,
+    #     verbose_name='Autor',
+    # )
     author = FK(
-        to=User,
+        to=Profile,
         related_name='remarks',
         on_delete=PROTECT,
         verbose_name='Autor',

@@ -17,16 +17,30 @@ from rules.models import Skill, Synergy, Weapon, Plate
 
 @login_required
 def demands_main_view(request):
-    user = request.user
+    
+    # for o in Plan.objects.all():
+    #     o.author2 = o.author.profile
+    #     o.save()
+    #
+    # for o in DemandAnswer.objects.all():
+    #     o.author2 = o.author.profile
+    #     o.save()
+    #
+    # for o in Demand.objects.all():
+    #     o.author2 = o.author.profile
+    #     o.addressee2 = o.addressee.profile
+    #     o.save()
+    
+    profile = request.user.profile
     ds = Demand.objects.all().\
-        select_related('author__profile', 'addressee__profile').\
-        prefetch_related('demand_answers__author__profile')
+        select_related('author', 'addressee').\
+        prefetch_related('demand_answers__author')
     
     # excludes necessery to filter out plans (Demands sent to oneself)
-    received_u = ds.filter(is_done=False, addressee=user).exclude(author=user)
-    received_d = ds.filter(is_done=True, addressee=user).exclude(author=user)
-    sent_u = ds.filter(is_done=False, author=user).exclude(addressee=user)
-    sent_d = ds.filter(is_done=True, author=user).exclude(addressee=user)
+    received_u = ds.filter(is_done=False, addressee=profile).exclude(author=profile)
+    received_d = ds.filter(is_done=True, addressee=profile).exclude(author=profile)
+    sent_u = ds.filter(is_done=False, author=profile).exclude(addressee=profile)
+    sent_d = ds.filter(is_done=True, author=profile).exclude(addressee=profile)
 
     if request.method == 'POST':
         form = DemandAnswerForm(request.POST, request.FILES)
@@ -35,13 +49,13 @@ def demands_main_view(request):
             demand = Demand.objects.get(id=id_)
             answer = form.save(commit=False)
             answer.demand = demand
-            answer.author = request.user
+            answer.author = request.user.profile
             answer.save()
     
-            if user == demand.author:
-                informed_ids = [demand.addressee.profile.id]
+            if profile == demand.author:
+                informed_ids = [demand.addressee.id]
             else:
-                informed_ids = [demand.author.profile.id]
+                informed_ids = [demand.author.id]
     
             send_emails(request, informed_ids, demand_answer=answer)
             messages.info(request, 'Dodano odpowiedź!')
@@ -66,7 +80,7 @@ def demands_create_view(request):
         form = DemandsCreateForm(authenticated_user=request.user, data=request.POST, files=request.FILES)
         if form.is_valid():
             demand = form.save(commit=False)
-            demand.author = request.user
+            demand.author = request.user.profile
             demand.save()
 
             subject = f"[RPG] Dezyderat {demand.id} [nowy]"
@@ -90,7 +104,7 @@ def demands_create_view(request):
 @login_required
 def demands_delete_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
-    if request.user == demand.author:
+    if request.user.profile == demand.author:
         demand.delete()
         messages.info(request, 'Usunięto dezyderat!')
         return redirect('contact:demands-main')
@@ -101,21 +115,21 @@ def demands_delete_view(request, demand_id):
 @login_required
 def demands_detail_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
-    answers = DemandAnswer.objects.filter(demand=demand).select_related('author__profile').order_by('date_posted')
+    answers = DemandAnswer.objects.filter(demand=demand).select_related('author').order_by('date_posted')
 
     if request.method == 'POST':
         form = DemandAnswerForm(request.POST, request.FILES)
         if form.is_valid():
             answer = form.save(commit=False)
             answer.demand = demand
-            answer.author = request.user
+            answer.author = request.user.profile
             answer.save()
 
             subject = f"[RPG] Dezyderat nr {demand.id}"
             message = f"Odpowiedź od {answer.author}:\n{answer.text}\n" \
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             sender = settings.EMAIL_HOST_USER
-            if request.user == demand.author:
+            if request.user.profile == demand.author:
                 receivers = [demand.addressee.email]
             else:
                 receivers = [demand.author.email]
@@ -132,7 +146,7 @@ def demands_detail_view(request, demand_id):
         'answers': answers,
         'form': form
     }
-    if request.user in [demand.author, demand.addressee]:
+    if request.user.profile in [demand.author, demand.addressee]:
         return render(request, 'contact/demands_detail.html', context)
     else:
         return redirect('home:dupa')
@@ -141,7 +155,7 @@ def demands_detail_view(request, demand_id):
 @login_required
 def mark_done_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
-    if request.user in [demand.author, demand.addressee]:
+    if request.user.profile in [demand.author, demand.addressee]:
         demand.is_done = True
         demand.date_done = timezone.now()
         demand.save()
@@ -152,7 +166,7 @@ def mark_done_view(request, demand_id):
                   f"Dezyderat:\n{demand.text}\n" \
                   f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
         sender = settings.EMAIL_HOST_USER
-        if request.user == demand.author:
+        if request.user.profile == demand.author:
             receivers = [demand.addressee.email]
         else:
             receivers = [demand.author.email]
@@ -168,7 +182,7 @@ def mark_done_view(request, demand_id):
 @login_required
 def mark_undone_view(request, demand_id):
     demand = get_object_or_404(Demand, id=demand_id)
-    if request.user in [demand.author, demand.addressee]:
+    if request.user.profile in [demand.author, demand.addressee]:
         demand.is_done = False
         demand.save()
 
@@ -177,7 +191,7 @@ def mark_undone_view(request, demand_id):
                   f"Dezyderat:\n{demand.text}\n" \
                   f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
         sender = settings.EMAIL_HOST_USER
-        if request.user == demand.author:
+        if request.user.profile == demand.author:
             receivers = [demand.addressee.email]
         else:
             receivers = [demand.author.email]
@@ -197,7 +211,7 @@ def mark_undone_view(request, demand_id):
 def plans_main_view(request):
     user = request.user
     profile = user.profile
-    plans = Plan.objects.filter(author=user).select_related('author__profile')
+    plans = Plan.objects.filter(author=user).select_related('author')
 
     if profile.status == 'gm':
         models = [Skill, Synergy, Weapon, Plate]
@@ -218,7 +232,7 @@ def plans_main_view(request):
         if create_todo:
             Plan.objects.update_or_create(
                 text__contains='=>Do uzupełnienia:',
-                defaults={'text': text, 'author': request.user}
+                defaults={'text': text, 'author': request.user.profile}
             )
         else:
             try:
@@ -237,7 +251,7 @@ def plans_main_view(request):
 def plans_for_gm_view(request):
     context = {
         'page_title': 'Plany graczy',
-        'plans': Plan.objects.filter(inform_gm=True).select_related('author__profile'),
+        'plans': Plan.objects.filter(inform_gm=True).select_related('author'),
     }
     if request.user.profile.status == 'gm':
         return render(request, 'contact/plans_for_gm.html', context)
@@ -251,8 +265,8 @@ def plans_create_view(request):
         form = PlanForm(request.POST, request.FILES)
         if form.is_valid():
             plan = form.save(commit=False)
-            plan.author = request.user
-            plan.addressee = request.user
+            plan.author = request.user.profile
+            plan.addressee = request.user.profile
             plan.save()
 
             if plan.inform_gm:
@@ -278,7 +292,7 @@ def plans_create_view(request):
 @login_required
 def plans_delete_view(request, plan_id):
     plan = get_object_or_404(Plan, id=plan_id)
-    if request.user == plan.author:
+    if request.user.profile == plan.author:
         plan.delete()
         messages.info(request, 'Usunięto plan!')
         return redirect('contact:plans-main')
@@ -311,7 +325,7 @@ def plans_modify_view(request, plan_id):
         'page_title': 'Zmiana planów?',
         'form': form,
     }
-    if request.user == plan.author:
+    if request.user.profile == plan.author:
         return render(request, '_form.html', context)
     else:
         return redirect('home:dupa')

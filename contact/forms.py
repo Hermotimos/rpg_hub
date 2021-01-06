@@ -26,10 +26,9 @@ class DemandsCreateForm(forms.ModelForm):
         #     | Q(profile__status='dead_npc')
         #     | Q(profile__status='living_npc')
         # ).order_by('username')
-        self.fields['addressee'].queryset = User.objects.exclude(
-            id=authenticated_user.id).filter(
-            profile__in=Profile.contactables.all()
-        ).order_by('username')
+        print(Profile.contactables.all())
+        self.fields['addressee'].queryset = Profile.contactables.exclude(
+            id=authenticated_user.profile.id)
         
         self.helper = FormHelper()
         self.helper.add_input(

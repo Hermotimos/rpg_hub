@@ -9,11 +9,33 @@ from news.forms import (CreateNewsForm, CreateNewsAnswerForm, CreateSurveyForm,
                         CreateSurveyOptionForm, CreateSurveyAnswerForm,
                         ModifySurveyOptionForm)
 from news.models import News, Survey, SurveyOption
-from users.models import Profile
+from users.models import Profile, User
 
 
 @login_required
 def main_view(request):
+    
+    # from news.models import NewsAnswer, SurveyAnswer, SurveyOption
+    # for o in News.objects.all():
+    #     o.author2 = o.author.profile
+    #     o.save()
+    #
+    # for o in NewsAnswer.objects.all():
+    #     o.author2 = o.author.profile
+    #     o.save()
+    #
+    # for o in Survey.objects.all():
+    #     o.author2 = o.author.profile
+    #     o.save()
+    #
+    # for o in SurveyAnswer.objects.all():
+    #     o.author2 = o.author.profile
+    #     o.save()
+    #
+    # for o in SurveyOption.objects.all():
+    #     o.author2 = o.author.profile
+    #     o.save()
+
     profile = request.user.profile
     if profile.status == 'gm':
         newss = News.objects.all()
@@ -24,13 +46,13 @@ def main_view(request):
 
     newss = (newss
              .annotate(last_news_answer=Max('news_answers__created_at'))
-             .select_related('author__profile')
-             .prefetch_related('news_answers__author__profile')
+             .select_related('author')
+             .prefetch_related('news_answers__author')
              .order_by('-created_at'))
     
     surveys = (surveys
-               .select_related('author__profile')
-               .prefetch_related('survey_answers__author__profile')
+               .select_related('author')
+               .prefetch_related('survey_answers__author')
                .order_by('-created_at'))
 
     context = {
@@ -48,7 +70,7 @@ def create_news_view(request):
         form = CreateNewsForm(authenticated_user=request.user, data=request.POST, files=request.FILES)
         if form.is_valid():
             news = form.save(commit=False)
-            news.author = request.user
+            news.author = request.user.profile
             news.save()
             allowed_profiles = form.cleaned_data['allowed_profiles']
             allowed_profiles |= Profile.objects.filter(id=request.user.id)
@@ -95,7 +117,7 @@ def news_detail_view(request, news_id):
     answers = []
     last_answer_seen_by_imgs = []
     if news.news_answers.all():
-        answers = news.news_answers.all().select_related('author__profile')
+        answers = news.news_answers.all().select_related('author')
         last_answer = news.news_answers.order_by('-created_at')[0]
         if profile not in last_answer.seen_by.all():
             last_answer.seen_by.add(profile)
@@ -106,7 +128,7 @@ def news_detail_view(request, news_id):
         if form.is_valid():
             answer = form.save(commit=False)
             answer.news = news
-            answer.author = request.user
+            answer.author = request.user.profile
             form.save()
 
             subject = f"[RPG] Odpowiedź na ogłoszenie: '{news.title[:30]}...'"
@@ -181,8 +203,8 @@ def survey_detail_view(request, survey_id):
 
     options = survey.survey_options.all()\
         .prefetch_related('yes_voters', 'no_voters')\
-        .select_related('author__profile')
-    answers = survey.survey_answers.all().select_related('author__profile')
+        .select_related('author')
+    answers = survey.survey_answers.all().select_related('author')
 
     last_answer_seen_by_imgs = []
     if answers:
@@ -198,7 +220,7 @@ def survey_detail_view(request, survey_id):
         if answer_form.is_valid():
             answer = answer_form.save(commit=False)
             answer.survey = survey
-            answer.author = request.user
+            answer.author = request.user.profile
             answer_form.save()
 
             subject = f"[RPG] Wypowiedż do ankiety: '{survey.title[:30]}...'"
@@ -220,7 +242,7 @@ def survey_detail_view(request, survey_id):
         elif option_form.is_valid():
             option = option_form.save(commit=False)
             option.survey = survey
-            option.author = request.user
+            option.author = request.user.profile
             option_form.save()
 
             messages.info(request, f'Powiadom uczestników o nowej opcji!')
@@ -306,7 +328,7 @@ def survey_create_view(request):
 
         if form.is_valid():
             survey = form.save(commit=False)
-            survey.author = request.user
+            survey.author = request.user.profile
             survey.save()
             addressees = form.cleaned_data['addressees']
             addressees |= Profile.objects.filter(id=request.user.id)
@@ -356,7 +378,7 @@ def survey_option_modify_view(request, survey_id, option_id):
         'page_title': 'Zmiana opcji ankiety',
         'form': form,
     }
-    if request.user == option.author:
+    if request.user.profile == option.author:
         return render(request, 'news/survey_option_modify.html', context)
     else:
         return redirect('home:dupa')
@@ -366,7 +388,7 @@ def survey_option_modify_view(request, survey_id, option_id):
 @login_required
 def survey_option_delete_view(request, survey_id, option_id):
     option = get_object_or_404(SurveyOption, id=option_id)
-    if request.user == option.author:
+    if request.user.profile == option.author:
         option.delete()
         return redirect('news:survey-detail', survey_id=survey_id)
     else:

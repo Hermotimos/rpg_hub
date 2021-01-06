@@ -65,7 +65,7 @@ def chronicle_game_view(request, game_id):
         'known_indirectly',
         'pictures',
         'debates__topic',
-        'debates__remarks__author__profile',
+        'debates__remarks__author',
     )
     if not profile.status == 'gm':
         events = events.filter(
@@ -93,7 +93,7 @@ def chronicle_chapter_view(request, chapter_id):
         'known_indirectly',
         'pictures',
         'debates__topic',
-        'debates__remarks__author__profile',
+        'debates__remarks__author',
     )
     if not profile.status == 'gm':
         events = events.filter(
@@ -123,7 +123,7 @@ def chronicle_all_view(request):
         'known_indirectly',
         'pictures',
         'debates__topic',
-        'debates__remarks__author__profile',
+        'debates__remarks__author',
     )
     if not profile.status == 'gm':
         events = events.filter(

@@ -33,31 +33,9 @@ STATUS = [
 class NonGMProfileManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.exclude(status='gm')
-
-
-class ContactableProfileManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(status__in=['gm', 'player'])
-        qs = qs.filter(is_active=True)
+        qs = qs.filter(status__in=['player', 'npc'])
         return qs
-    
 
-class LivingProfileManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(is_alive=True)
-        return qs
-    
-
-class DebatableProfileManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.exclude(status='gm')
-        qs = qs.filter(is_alive=True)
-        return qs
-    
 
 class PlayerProfileManager(Manager):
     def get_queryset(self):
@@ -77,6 +55,22 @@ class NPCProfileManager(Manager):
         return qs.filter(status__icontains='npc')
 
 
+class LivingProfileManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(status__in=['player', 'npc'])
+        qs = qs.filter(is_alive=True)
+        return qs
+
+
+class ContactableProfileManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(status__in=['gm', 'player'])
+        qs = qs.filter(is_active=True)
+        return qs
+
+
 class Profile(Model):
     user = OneToOneField(to=User, on_delete=CASCADE)
     status = CharField(max_length=50, choices=STATUS, default='npc')
@@ -92,19 +86,17 @@ class Profile(Model):
     copied_character_name = CharField(max_length=100, blank=True, null=True)
     
     objects = Manager()
-    contactables = ContactableProfileManager()
-    debatables = DebatableProfileManager()
     non_gm = NonGMProfileManager()
-    npcs = NPCProfileManager()
     players = PlayerProfileManager()
     active_players = ActivePlayerProfileManager()
+    npcs = NPCProfileManager()
     living = LivingProfileManager()
-    
+    contactables = ContactableProfileManager()
+
     class Meta:
         ordering = ['-status', '-is_active', 'user__username']
     
     def __str__(self):
-        # return self.user.username.replace('_', ' ')
         return self.copied_character_name or self.user.username
     
     def save(self, *args, **kwargs):

@@ -146,14 +146,12 @@ class PersonaGroup(Model):
     def __str__(self):
         return f"{self.name} [{self.author}]"
     
-    # TODO: grous: 'Gracze', 'Tirsenowie', 'Skadyjczycy'
-    
-    # TODO no signal necessary to include knowledge packets on per group basis
-    # TODO -> show them by character.character_groups.knowledge_packets ...
-
 
 @receiver(post_save, sender=Persona)
 def create_profile(sender, instance, created, **kwargs):
+    # profile = instance.profile
+    # profile.copied_character_name = instance.name
+    # profile.save()
     if created:
         profile = instance.profile
         profile.copied_character_name = instance.name

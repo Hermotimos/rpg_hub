@@ -31,9 +31,12 @@ class CreateDebateForm(forms.ModelForm):
         #     | Q(status__icontains='dead')
         #     | Q(status='gm')
         # ).select_related()
-        self.fields['known_directly'].queryset = Profile.debatables.filter(
-            persona__in=authenticated_user.profile.personas_known_directly.all()
-        ).exclude(user=authenticated_user).select_related()
+        if authenticated_user.profile.status == 'gm':
+            self.fields['known_directly'].queryset = Profile.living.all()
+        else:
+            self.fields['known_directly'].queryset = Profile.living.filter(
+                persona__in=authenticated_user.profile.personas_known_directly.all()
+            ).exclude(user=authenticated_user).select_related()
         self.fields['known_directly'].widget.attrs['size'] = 10
 
 

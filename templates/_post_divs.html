@@ -1,13 +1,11 @@
 
 <div class="col-2 pr-0">
-    <!--    align-top align-center py-3 px-sm-2-->
     <figure class="figure align-top mx-auto chronicle-img mb-0 px-lg-3 pt-1">
-        <img class="rounded-circle img-fluid" src="{{ post.author.profile.image.url }}">
-        <figcaption class="figure-caption font-12 font-italic text-center pt-1">{{ post.author.profile.persona.name }}</figcaption>
+        <img class="rounded-circle img-fluid" src="{{ post.author.image.url }}">
+        <figcaption class="figure-caption font-12 font-italic text-center pt-1">{{ post.author.persona.name }}</figcaption>
     </figure>
 </div>
 <div class="col-10 font-18 font-italic text-justify ">
-        <!--   align-top font-18 font-italic px-2 py-2     -->
     <small class="text-muted">{{ post.created_at|date:'d-M-Y | H:i' }}</small><br>
     <p class="">{{ post.text|capfirst|linebreaksbr }}</p>
     {% if post.image %}

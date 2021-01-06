@@ -11,6 +11,13 @@ from users.models import Profile
 
 @login_required
 def debates_main_view(request):
+    
+    # from debates.models import Remark
+    # for o in Remark.objects.all():
+    #     o.author2 = o.author.profile
+    #     o.save()
+        
+    
     profile = request.user.profile
     debates = Debate.objects.all().prefetch_related('known_directly')
     if profile.status == 'gm':
@@ -117,13 +124,13 @@ def create_debate_view(request, topic_id):
 def debate_view(request, debate_id):
     profile = request.user.profile
     debates = Debate.objects.select_related()
-    debates = debates.prefetch_related('remarks__author__profile')
+    debates = debates.prefetch_related('remarks__author')
     debate = debates.get(id=debate_id)
     topic = debate.topic
 
     debate_known_directly = debate.known_directly.exclude(status='gm')
 
-    if debate.remarks.exclude(author__profile__status='gm'):
+    if debate.remarks.exclude(author__status='gm'):
         last_remark = debate.remarks.order_by('-created_at')[0]
         if not debate.is_ended:
             seen_by = last_remark.seen_by.all()

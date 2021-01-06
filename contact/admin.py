@@ -6,7 +6,7 @@ from contact.models import Demand, Plan, DemandAnswer
 
 class DemandAdmin(admin.ModelAdmin):
     list_display = ['id', 'author', 'from_to', 'demand_caption', 'is_done']
-    list_select_related = ['author__profile', 'addressee__profile']
+    list_select_related = ['author', 'addressee']
     search_fields = ['text']
 
     def demand_caption(self, obj):
@@ -14,8 +14,8 @@ class DemandAdmin(admin.ModelAdmin):
         return text[:100] + '...' if len(str(text)) > 100 else text
     
     def from_to(self, obj):
-        author_img = obj.author.profile.image.url
-        addressee_img = obj.addressee.profile.image.url
+        author_img = obj.author.image.url
+        addressee_img = obj.addressee.image.url
     
         if author_img:
             author_img = f'<img width="40" height="40" ' \
@@ -53,12 +53,12 @@ class DemandAnswerAdmin(admin.ModelAdmin):
 
 class PlanAdmin(admin.ModelAdmin):
     list_display = ['id', 'author', 'inform_gm', 'get_plan_caption']
-    list_select_related = ['author__profile']
+    list_select_related = ['author']
     search_fields = ['text']
 
     def get_plan_caption(self, obj):
         text = obj.text
-        if obj.author.profile.status == 'gm' or obj.inform_gm:
+        if obj.author.status == 'gm' or obj.inform_gm:
             return text[:100] + '...' if len(str(text)) > 100 else text
         else:
             return format_html('<b><font color="red">TOP SECRET</font></b>')

@@ -25,7 +25,7 @@
             <tbody>
                 <tr>
                     <td class="align-top pt-2 pr-2">
-                        <img class="rounded-circle article-img" src="{{ survey.author.profile.image.url }}">
+                        <img class="rounded-circle article-img" src="{{ survey.author.image.url }}">
                         <br>
                     </td>
                     <td>
@@ -34,7 +34,7 @@
                         {% if survey.survey_answers.all %}
                         <h5>
                             {% for answer in survey.survey_answers.all %}
-                                <img class="rounded-circle img-small" src="{{ answer.author.profile.image.url }}">
+                                <img class="rounded-circle img-small" src="{{ answer.author.image.url }}">
                             {% endfor %}
                         </h5>
                         {% endif %}
@@ -51,7 +51,7 @@
             <tbody>
                 <tr>
                     <td class="align-top pt-3 pr-2">
-                        <img class="rounded-circle article-img" src="{{ news.author.profile.image.url }}">
+                        <img class="rounded-circle article-img" src="{{ news.author.image.url }}">
                         <br>
                     </td>
                     <td class="pt-2">
@@ -59,7 +59,7 @@
                         <h3 class="unblue"><a href="{% url 'news:detail' news.id %}">{{ news.title }}</a></h3>
                         {% if news.news_answers.all %}
                             {% for answer in news.news_answers.all %}
-                                <img class="rounded-circle img-small" src="{{ answer.author.profile.image.url }}">
+                                <img class="rounded-circle img-small" src="{{ answer.author.image.url }}">
                             {% endfor %}
                             <br>
                         {% endif %}

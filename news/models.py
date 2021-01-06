@@ -22,7 +22,10 @@ class News(Model):
     title = CharField(max_length=100, unique=True)
     text = TextField(max_length=4000)
     created_at = DateTimeField(auto_now_add=True)
-    author = FK(to=User, related_name='news', on_delete=CASCADE)
+    
+    # author = FK(to=User, related_name='news', on_delete=CASCADE)
+    author = FK(to=Profile, related_name='news_authored', on_delete=CASCADE)
+    
     allowed_profiles = M2MField(to=Profile, related_name='allowed_news')
     followers = M2MField(to=Profile, related_name='followed_news', blank=True)
     image = ImageField(blank=True, null=True, upload_to='news_pics')
@@ -48,7 +51,10 @@ class News(Model):
 
 class NewsAnswer(Model):
     news = FK(to=News, related_name='news_answers', on_delete=CASCADE)
-    author = FK(to=User, related_name='news_answers', on_delete=CASCADE)
+    
+    # author = FK(to=User, related_name='news_answers', on_delete=CASCADE)
+    author = FK(to=Profile, related_name='news_answers', on_delete=CASCADE)
+    
     text = TextField(max_length=4000)
     created_at = DateTimeField(auto_now_add=True)
     image = ImageField(blank=True, null=True, upload_to='news_pics')
@@ -73,7 +79,10 @@ class NewsAnswer(Model):
 
 class Survey(Model):
     title = CharField(max_length=100, unique=True)
-    author = FK(to=User, related_name='surveys_authored', on_delete=CASCADE)
+    
+    # author = FK(to=User, related_name='surveys_authored', on_delete=CASCADE)
+    author = FK(to=Profile, related_name='surveys_authored', on_delete=CASCADE)
+    
     text = TextField(max_length=4000)
     image = ImageField(blank=True, null=True, upload_to='news_pics')
     created_at = DateTimeField(auto_now_add=True)
@@ -96,7 +105,10 @@ class Survey(Model):
 
 class SurveyOption(Model):
     survey = FK(to=Survey, related_name='survey_options', on_delete=CASCADE)
-    author = FK(to=User, related_name='survey_options_authored', on_delete=CASCADE)
+    
+    # author = FK(to=User, related_name='survey_options_authored', on_delete=CASCADE)
+    author = FK(to=Profile, related_name='survey_options_authored', on_delete=CASCADE)
+    
     option_text = CharField(max_length=50)
     yes_voters = M2MField(to=Profile, related_name='survey_yes_votes', blank=True)
     no_voters = M2MField(to=Profile, related_name='survey_no_votes', blank=True)
@@ -110,7 +122,10 @@ class SurveyOption(Model):
 
 class SurveyAnswer(Model):
     survey = FK(to=Survey, related_name='survey_answers', on_delete=CASCADE)
-    author = FK(to=User, related_name='survey_answers', on_delete=CASCADE)
+    
+    # author = FK(to=User, related_name='survey_answers', on_delete=CASCADE)
+    author = FK(to=Profile, related_name='survey_answers', on_delete=CASCADE)
+    
     text = TextField(max_length=4000)
     created_at = DateTimeField(auto_now_add=True)
     image = ImageField(blank=True, null=True, upload_to='news_pics')

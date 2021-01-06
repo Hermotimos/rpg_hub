@@ -12,13 +12,20 @@ from django.db.models import (
 )
 from django.db.models.signals import post_save
 
-from users.models import User
+from users.models import User, Profile
 
 
 class Demand(Model):
-    author = FK(to=User, related_name='authored_demands', on_delete=CASCADE)
+    # author = FK(to=User, related_name='authored_demands', on_delete=CASCADE)
+    author = FK(to=Profile, related_name='authored_demands', on_delete=CASCADE)
+    # addressee = FK(
+    #     to=User,
+    #     related_name='received_demands',
+    #     on_delete=CASCADE,
+    #     verbose_name='Adresat',
+    # )
     addressee = FK(
-        to=User,
+        to=Profile,
         related_name='received_demands',
         on_delete=CASCADE,
         verbose_name='Adresat',
@@ -54,7 +61,8 @@ class Demand(Model):
 
 class DemandAnswer(Model):
     demand = FK(to=Demand, related_name='demand_answers', on_delete=CASCADE)
-    author = FK(to=User, related_name='demand_answers', on_delete=CASCADE)
+    # author = FK(to=User, related_name='demand_answers', on_delete=CASCADE)
+    author = FK(to=Profile, related_name='demand_answers', on_delete=CASCADE)
     text = TextField(verbose_name='Odpowiedź')
     date_posted = DateTimeField(auto_now_add=True)
     image = ImageField(
@@ -84,7 +92,8 @@ class DemandAnswer(Model):
 
 
 class Plan(Model):
-    author = FK(to=User, related_name='plans', on_delete=CASCADE)
+    # author = FK(to=User, related_name='plans', on_delete=CASCADE)
+    author = FK(to=Profile, related_name='plans', on_delete=CASCADE)
     text = TextField(verbose_name='Treść')
     inform_gm = BooleanField(default=False, verbose_name='Poinformuj MG')
     date_created = DateTimeField(auto_now_add=True)
