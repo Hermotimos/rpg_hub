@@ -38,7 +38,7 @@ def reload_toponomikon(request):
     if request.user.profile.status == 'gm':
         for obj in Location.objects.all():
             obj.save()
-        messages.info(request, f'Przeładowano "sorting_name" dla aplikacji "toponomikon"!')
+        messages.info(request, f'Przeładowano "Location" dla "toponomikon"!')
         return redirect('reload:reload-main')
     else:
         return redirect('home:dupa')\
@@ -49,7 +49,7 @@ def reload_prosoponomikon(request):
     if request.user.profile.status == 'gm':
         for obj in Persona.objects.all():
             obj.save()
-        messages.info(request, f'Przeładowano "sorting_name" dla aplikacji "prosoponomikon"!')
+        messages.info(request, f'Przeładowano "Persona" dla "prosoponomikon"!')
         return redirect('reload:reload-main')
     else:
         return redirect('home:dupa')

@@ -58,9 +58,9 @@ class CreateRemarkForm(forms.ModelForm):
         if authenticated_user.profile.status != 'gm':
             self.fields['author'].widget = HiddenInput()
         else:
-            self.fields['author'].queryset = User.objects.filter(
-                Q(profile__status='gm') | Q(profile__in=debate_known_directly)
-            ).order_by('profile__name')
+            self.fields['author'].queryset = Profile.objects.filter(
+                Q(status='gm') | Q(id__in=debate_known_directly)
+            )
             
         self.fields['text'].label = ''
         self.fields['text'].widget.attrs = {
