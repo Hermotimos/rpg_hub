@@ -75,7 +75,7 @@ def demands_create_view(request):
             message = f"Dezyderat od {demand.author}:\n{demand.text}\n" \
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             sender = settings.EMAIL_HOST_USER
-            receivers = [demand.addressee.email]
+            receivers = [demand.addressee.user.email]
             send_mail(subject, message, sender, receivers)
             messages.info(request, 'Dezyderat został wysłany!')
             return redirect('contact:demands-main')
@@ -121,9 +121,9 @@ def demands_detail_view(request, demand_id):
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             sender = settings.EMAIL_HOST_USER
             if profile == demand.author:
-                receivers = [demand.addressee.email]
+                receivers = [demand.addressee.user.email]
             else:
-                receivers = [demand.author.email]
+                receivers = [demand.author.user.email]
             send_mail(subject, message, sender, receivers)
 
             messages.info(request, 'Dodano odpowiedź!')
@@ -160,9 +160,9 @@ def mark_done_view(request, demand_id):
                   f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
         sender = settings.EMAIL_HOST_USER
         if profile == demand.author:
-            receivers = [demand.addressee.email]
+            receivers = [demand.addressee.user.email]
         else:
-            receivers = [demand.author.email]
+            receivers = [demand.author.user.email]
         send_mail(subject, message, sender, receivers)
 
         messages.info(request, 'Oznaczono jako zrobiony!')
@@ -187,9 +187,9 @@ def mark_undone_view(request, demand_id):
                   f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
         sender = settings.EMAIL_HOST_USER
         if profile == demand.author:
-            receivers = [demand.addressee.email]
+            receivers = [demand.addressee.user.email]
         else:
-            receivers = [demand.author.email]
+            receivers = [demand.author.user.email]
         send_mail(subject, message, sender, receivers)
 
         messages.info(request, 'Oznaczono jako niezrobiony!')
