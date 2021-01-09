@@ -152,7 +152,7 @@ def mark_done_view(request, demand_id):
         demand.is_done = True
         demand.date_done = timezone.now()
         demand.save()
-        DemandAnswer.objects.create(demand=demand, author=request.user, text='Zrobione!')
+        DemandAnswer.objects.create(demand=demand, author=profile, text='Zrobione!')
 
         subject = f"[RPG] Dezyderat nr {demand.id}"
         message = f"{profile} oznaczył dezyderat jako 'zrobiony'.\n" \
@@ -261,8 +261,8 @@ def plans_create_view(request):
         form = PlanForm(request.POST, request.FILES)
         if form.is_valid():
             plan = form.save(commit=False)
-            plan.author = request.user.profile
-            plan.addressee = request.user.profile
+            plan.author = profile
+            plan.addressee = profile
             plan.save()
 
             if plan.inform_gm:
