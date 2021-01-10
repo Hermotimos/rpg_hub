@@ -249,13 +249,8 @@ def plans_create_view(request):
             plan.save()
 
             if plan.inform_gm:
-                subject = f"[RPG] Info o planach od {profile}"
-                message = f"{profile} poinformował o swoich planach:\n\n{plan.text}\n" \
-                          f"{request.get_host()}/contact/plans/for-gm/\n\n"
-                sender = settings.EMAIL_HOST_USER
-                receivers = ['lukas.kozicki@gmail.com']
-                send_mail(subject, message, sender, receivers)
-
+                send_emails(request, plan_created=plan)
+    
             messages.info(request, f'Plan został zapisany!')
             return redirect('contact:plans-main')
     else:
@@ -290,13 +285,9 @@ def plans_modify_view(request, plan_id):
         form = PlanForm(instance=plan, data=request.POST, files=request.FILES)
         if form.is_valid():
             plan = form.save()
+            
             if plan.inform_gm:
-                subject = f"[RPG] Info o zmianie planów od {profile}"
-                message = f"{profile} poinformował o zmianie planów:\n\n{plan.text}\n" \
-                    f"{request.get_host()}/contact/plans/for-gm/\n\n"
-                sender = settings.EMAIL_HOST_USER
-                receivers = ['lukas.kozicki@gmail.com']
-                send_mail(subject, message, sender, receivers)
+                send_emails(request, plan_modified=plan)
 
             messages.info(request, 'Zmodyfikowano plan!')
             return redirect('contact:plans-main')

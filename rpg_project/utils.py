@@ -154,12 +154,12 @@ def handle_inform_form(request):
     send_mail(subject, message, sender, receivers)
 
 
-def send_emails(request, profile_ids, **kwargs):
+def send_emails(request, profile_ids=None, **kwargs):
     profile = request.user.profile
     sender = EMAIL_HOST_USER
     receivers = [
         p.user.email
-        for p in Profile.objects.filter(id__in=profile_ids).select_related()]
+        for p in Profile.objects.filter(id__in=profile_ids or []).select_related()]
     if profile.status != 'gm':
         gms = [
             p.user.email
@@ -222,6 +222,20 @@ def send_emails(request, profile_ids, **kwargs):
         message = f"Odpowiedź od {demand_answer.author}:\n" \
                   f"{request.get_host()}/contact/demands/detail:{demand_answer.demand.id}/#page-bottom\n"
     
+    # Plan created
+    elif 'plan_created' in kwargs:
+        plan = kwargs['plan_created']
+        subject = f"[RPG] Info o planach od {profile}"
+        message = f"{profile} informuje o swoich planach:\n\n{plan.text}\n" \
+                  f"{request.get_host()}/contact/plans/for-gm/\n\n"
+
+    # Plan modified
+    elif 'plan_modified' in kwargs:
+        plan = kwargs['plan_modified']
+        subject = f"[RPG] Info o zmianie planów od {profile}"
+        message = f"{profile} informuje o zmianie planów:\n\n{plan.text}\n" \
+                  f"{request.get_host()}/contact/plans/for-gm/\n\n"
+
     else:
         subject = 'Błąd'
         message = f"URL: {request.build_absolute_uri()}\n" \
