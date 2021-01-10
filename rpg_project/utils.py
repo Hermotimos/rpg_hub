@@ -166,7 +166,8 @@ def send_emails(request, profile_ids=None, **kwargs):
             for p in Profile.objects.filter(status='gm').select_related()]
         receivers.extend(gms)
     
-    # Debates
+    # DEBATES
+    
     if 'remark' in kwargs:
         remark = kwargs['remark']
         debate = remark.debate
@@ -192,28 +193,28 @@ def send_emails(request, profile_ids=None, **kwargs):
                       f" w temacie '{debate.topic}'." \
                       f"\nWeź udział w naradzie:\n{url}\n"
     
-    # Demand
+    # DEMANDS
+    
     elif 'demand' in kwargs:
-        demand = kwargs['demand']
-        subject = f"[RPG] Dezyderat {demand.id} [nowy]"
-        message = f"Dezyderat od {demand.author}:\n" \
-                  f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
         
-    # Demand done
-    elif 'demand_done' in kwargs:
-        demand = kwargs['demand_done']
-        subject = f"[RPG] Dezyderat nr {demand.id} [zrobiony]"
-        message = f"{profile} oznaczył dezyderat jako 'zrobiony'.\n" \
-                  f"Dezyderat:\n" \
-                  f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
-        
-    # Demand undone
-    elif 'demand_undone' in kwargs:
-        demand = kwargs['demand_undone']
-        subject = f"[RPG] Dezyderat nr {demand.id} [NIE-zrobiony!]"
-        message = f"{profile} cofnął dezyderat jako 'NIE-zrobiony'.\n" \
-                  f"Dezyderat:\n" \
-                  f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
+        # Demand done/undone
+        if 'is_done' in kwargs:
+            demand = kwargs['demand']
+            is_done = kwargs['is_done']
+            status = "zrobiony" if is_done else "NIE-zrobiony!"
+            subject = f"[RPG] Dezyderat nr {demand.id} [{status}]"
+            message = f"{profile} oznaczył dezyderat jako '{status}'.\n" \
+                      f"Dezyderat:\n" \
+                      f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
+            messages.info(request, f"Oznaczono jako {status}!")
+            
+        # Demand create
+        else:
+            demand = kwargs['demand']
+            subject = f"[RPG] Dezyderat {demand.id} [nowy]"
+            message = f"Dezyderat od {demand.author}:\n" \
+                      f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
+            messages.info(request, 'Dezyderat został wysłany!')
         
     # DemandAnswer
     elif 'demand_answer' in kwargs:
@@ -221,6 +222,9 @@ def send_emails(request, profile_ids=None, **kwargs):
         subject = f"[RPG] Dezyderat {demand_answer.demand.id} [odpowiedź]"
         message = f"Odpowiedź od {demand_answer.author}:\n" \
                   f"{request.get_host()}/contact/demands/detail:{demand_answer.demand.id}/#page-bottom\n"
+        messages.info(request, 'Dodano odpowiedź!')
+
+    # PLANS
     
     # Plan created
     elif 'plan_created' in kwargs:
@@ -228,6 +232,7 @@ def send_emails(request, profile_ids=None, **kwargs):
         subject = f"[RPG] Info o planach od {profile}"
         message = f"{profile} informuje o swoich planach:\n\n{plan.text}\n" \
                   f"{request.get_host()}/contact/plans/for-gm/\n\n"
+        messages.info(request, f'Plan został zapisany!')
 
     # Plan modified
     elif 'plan_modified' in kwargs:
@@ -235,6 +240,7 @@ def send_emails(request, profile_ids=None, **kwargs):
         subject = f"[RPG] Info o zmianie planów od {profile}"
         message = f"{profile} informuje o zmianie planów:\n\n{plan.text}\n" \
                   f"{request.get_host()}/contact/plans/for-gm/\n\n"
+        messages.info(request, 'Zmodyfikowano plan!')
 
     else:
         subject = 'Błąd'

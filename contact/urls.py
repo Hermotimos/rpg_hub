@@ -11,10 +11,12 @@ urlpatterns = [
          name='demands-delete'),
     path('demands/detail:<int:demand_id>/', views.demands_detail_view,
          name='demands-detail'),
-    path('demands/mark-done:<int:demand_id>/', views.mark_done_view,
-         name='done'),
-    path('demands/mark-undone:<int:demand_id>/', views.mark_undone_view,
-         name='undone'),
+    path('demands/done-undone:<int:demand_id>/done',
+         views.demand_done_undone_view, {'is_done': True},
+         name='demand-done'),
+    path('demands/done-undone:<int:demand_id>/undone',
+         views.demand_done_undone_view, {'is_done': False},
+         name='demand-undone'),
     
     # plans
     path('plans/main/', views.plans_main_view, name='plans-main'),

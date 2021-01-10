@@ -13,12 +13,12 @@
                 <div class="d-inline ml-3">
                     <a class="btn btn-dark px-2" href="{% url 'contact:demands-detail' demand.id %}">&nbsp;☷&nbsp;</a>
                     {% if is_done %}
-                        <a href="{% url 'contact:undone' demand.id %}" class="btn btn-dark">&nbsp;☝&nbsp;</a>
+                        <a href="{% url 'contact:demand-undone' demand.id %}" class="btn btn-dark">&nbsp;☝&nbsp;</a>
                         {% if request.user == demand.author %}
                             <a href="{% url 'contact:demands-delete' demand.id %}" class="btn btn-danger">✘</a>
                         {% endif %}
                     {% else %}
-                        <a href="{% url 'contact:done' demand.id %}" class="btn btn-dark">✔</a>
+                        <a href="{% url 'contact:demand-done' demand.id %}" class="btn btn-dark">✔</a>
                     {% endif %}
                 </div>
             </div>

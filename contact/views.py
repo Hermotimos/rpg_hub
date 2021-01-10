@@ -1,7 +1,5 @@
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
 from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
@@ -43,8 +41,6 @@ def demands_main_view(request):
             else:
                 informed_ids = [demand.author.id]
             send_emails(request, informed_ids, demand_answer=answer)
-            
-            messages.info(request, 'Dodano odpowiedź!')
             return redirect('contact:demands-main')
     else:
         form = DemandAnswerForm()
@@ -65,7 +61,9 @@ def demands_create_view(request):
     profile = request.user.profile
     
     if request.method == 'POST':
-        form = DemandsCreateForm(authenticated_user=request.user, data=request.POST, files=request.FILES)
+        form = DemandsCreateForm(authenticated_user=request.user,
+                                 data=request.POST, files=request.FILES)
+        
         if form.is_valid():
             demand = form.save(commit=False)
             demand.author = profile
@@ -73,8 +71,6 @@ def demands_create_view(request):
 
             informed_ids = [demand.addressee.id]
             send_emails(request, informed_ids, demand=demand)
-            
-            messages.info(request, 'Dezyderat został wysłany!')
             return redirect('contact:demands-main')
     else:
         form = DemandsCreateForm(authenticated_user=request.user)
@@ -107,6 +103,7 @@ def demands_detail_view(request, demand_id):
 
     if request.method == 'POST':
         form = DemandAnswerForm(request.POST, request.FILES)
+        
         if form.is_valid():
             answer = form.save(commit=False)
             answer.demand = demand
@@ -118,8 +115,6 @@ def demands_detail_view(request, demand_id):
             else:
                 informed_ids = [demand.author.id]
             send_emails(request, informed_ids, demand_answer=answer)
-
-            messages.info(request, 'Dodano odpowiedź!')
             return redirect('contact:demands-main')
     else:
         form = DemandAnswerForm()
@@ -137,45 +132,25 @@ def demands_detail_view(request, demand_id):
 
 
 @login_required
-def mark_done_view(request, demand_id):
+def demand_done_undone_view(request, demand_id, is_done):
     profile = request.user.profile
     demand = get_object_or_404(Demand, id=demand_id)
     
     if profile in [demand.author, demand.addressee]:
-        demand.is_done = True
-        demand.date_done = timezone.now()
-        demand.save()
-        DemandAnswer.objects.create(demand=demand, author=profile, text='Zrobione!')
-
-        if profile == demand.author:
-            informed_ids = [demand.addressee.id]
-        else:
-            informed_ids = [demand.author.id]
-        send_emails(request, informed_ids, demand_done=demand)
-
-        messages.info(request, 'Oznaczono jako zrobiony!')
-        return redirect('contact:demands-main')
-
-    else:
-        return redirect('home:dupa')
-
-
-@login_required
-def mark_undone_view(request, demand_id):
-    profile = request.user.profile
-    demand = get_object_or_404(Demand, id=demand_id)
-    
-    if profile in [demand.author, demand.addressee]:
-        demand.is_done = False
+        demand.is_done = is_done
+        
+        if is_done:
+            demand.date_done = timezone.now()
+            demand.save()
+            DemandAnswer.objects.create(demand=demand, author=profile,
+                                        text='Zrobione!')
         demand.save()
 
         if profile == demand.author:
             informed_ids = [demand.addressee.id]
         else:
             informed_ids = [demand.author.id]
-        send_emails(request, informed_ids, demand_undone=demand)
-
-        messages.info(request, 'Oznaczono jako niezrobiony!')
+        send_emails(request, informed_ids, demand=demand, is_done=is_done)
         return redirect('contact:demands-main')
 
     else:
@@ -240,8 +215,10 @@ def plans_for_gm_view(request):
 @login_required
 def plans_create_view(request):
     profile = request.user.profile
+    
     if request.method == 'POST':
         form = PlanForm(request.POST, request.FILES)
+        
         if form.is_valid():
             plan = form.save(commit=False)
             plan.author = profile
@@ -250,8 +227,6 @@ def plans_create_view(request):
 
             if plan.inform_gm:
                 send_emails(request, plan_created=plan)
-    
-            messages.info(request, f'Plan został zapisany!')
             return redirect('contact:plans-main')
     else:
         form = PlanForm()
@@ -270,6 +245,7 @@ def plans_delete_view(request, plan_id):
     
     if profile == plan.author:
         plan.delete()
+        
         messages.info(request, 'Usunięto plan!')
         return redirect('contact:plans-main')
     else:
@@ -283,13 +259,11 @@ def plans_modify_view(request, plan_id):
     
     if request.method == 'POST':
         form = PlanForm(instance=plan, data=request.POST, files=request.FILES)
+        
         if form.is_valid():
             plan = form.save()
-            
             if plan.inform_gm:
                 send_emails(request, plan_modified=plan)
-
-            messages.info(request, 'Zmodyfikowano plan!')
             return redirect('contact:plans-main')
     else:
         form = PlanForm(instance=plan)
