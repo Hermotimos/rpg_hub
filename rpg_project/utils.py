@@ -192,7 +192,30 @@ def send_emails(request, profile_ids, **kwargs):
                       f" w temacie '{debate.topic}'." \
                       f"\nWeź udział w naradzie:\n{url}\n"
     
-    # Demands
+    # Demand
+    elif 'demand' in kwargs:
+        demand = kwargs['demand']
+        subject = f"[RPG] Dezyderat {demand.id} [nowy]"
+        message = f"Dezyderat od {demand.author}:\n" \
+                  f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
+        
+    # Demand done
+    elif 'demand_done' in kwargs:
+        demand = kwargs['demand_done']
+        subject = f"[RPG] Dezyderat nr {demand.id} [zrobiony]"
+        message = f"{profile} oznaczył dezyderat jako 'zrobiony'.\n" \
+                  f"Dezyderat:\n" \
+                  f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
+        
+    # Demand undone
+    elif 'demand_undone' in kwargs:
+        demand = kwargs['demand_undone']
+        subject = f"[RPG] Dezyderat nr {demand.id} [NIE-zrobiony!]"
+        message = f"{profile} cofnął dezyderat jako 'NIE-zrobiony'.\n" \
+                  f"Dezyderat:\n" \
+                  f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
+        
+    # DemandAnswer
     elif 'demand_answer' in kwargs:
         demand_answer = kwargs['demand_answer']
         subject = f"[RPG] Dezyderat {demand_answer.demand.id} [odpowiedź]"

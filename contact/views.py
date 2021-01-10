@@ -42,8 +42,8 @@ def demands_main_view(request):
                 informed_ids = [demand.addressee.id]
             else:
                 informed_ids = [demand.author.id]
-    
             send_emails(request, informed_ids, demand_answer=answer)
+            
             messages.info(request, 'Dodano odpowiedź!')
             return redirect('contact:demands-main')
     else:
@@ -71,12 +71,9 @@ def demands_create_view(request):
             demand.author = profile
             demand.save()
 
-            subject = f"[RPG] Dezyderat {demand.id} [nowy]"
-            message = f"Dezyderat od {demand.author}:\n{demand.text}\n" \
-                      f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
-            sender = settings.EMAIL_HOST_USER
-            receivers = [demand.addressee.user.email]
-            send_mail(subject, message, sender, receivers)
+            informed_ids = [demand.addressee.id]
+            send_emails(request, informed_ids, demand=demand)
+            
             messages.info(request, 'Dezyderat został wysłany!')
             return redirect('contact:demands-main')
     else:
@@ -116,15 +113,11 @@ def demands_detail_view(request, demand_id):
             answer.author = profile
             answer.save()
 
-            subject = f"[RPG] Dezyderat nr {demand.id}"
-            message = f"Odpowiedź od {answer.author}:\n{answer.text}\n" \
-                      f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
-            sender = settings.EMAIL_HOST_USER
             if profile == demand.author:
-                receivers = [demand.addressee.user.email]
+                informed_ids = [demand.addressee.id]
             else:
-                receivers = [demand.author.user.email]
-            send_mail(subject, message, sender, receivers)
+                informed_ids = [demand.author.id]
+            send_emails(request, informed_ids, demand_answer=answer)
 
             messages.info(request, 'Dodano odpowiedź!')
             return redirect('contact:demands-main')
@@ -154,16 +147,11 @@ def mark_done_view(request, demand_id):
         demand.save()
         DemandAnswer.objects.create(demand=demand, author=profile, text='Zrobione!')
 
-        subject = f"[RPG] Dezyderat nr {demand.id}"
-        message = f"{profile} oznaczył dezyderat jako 'zrobiony'.\n" \
-                  f"Dezyderat:\n{demand.text}\n" \
-                  f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
-        sender = settings.EMAIL_HOST_USER
         if profile == demand.author:
-            receivers = [demand.addressee.user.email]
+            informed_ids = [demand.addressee.id]
         else:
-            receivers = [demand.author.user.email]
-        send_mail(subject, message, sender, receivers)
+            informed_ids = [demand.author.id]
+        send_emails(request, informed_ids, demand_done=demand)
 
         messages.info(request, 'Oznaczono jako zrobiony!')
         return redirect('contact:demands-main')
@@ -181,16 +169,11 @@ def mark_undone_view(request, demand_id):
         demand.is_done = False
         demand.save()
 
-        subject = f"[RPG] Dezyderat nr {demand.id}"
-        message = f"{profile} cofnął dezyderat jako 'NIE-zrobiony'.\n" \
-                  f"Dezyderat:\n{demand.text}\n" \
-                  f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
-        sender = settings.EMAIL_HOST_USER
         if profile == demand.author:
-            receivers = [demand.addressee.user.email]
+            informed_ids = [demand.addressee.id]
         else:
-            receivers = [demand.author.user.email]
-        send_mail(subject, message, sender, receivers)
+            informed_ids = [demand.author.id]
+        send_emails(request, informed_ids, demand_undone=demand)
 
         messages.info(request, 'Oznaczono jako niezrobiony!')
         return redirect('contact:demands-main')
