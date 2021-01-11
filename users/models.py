@@ -19,14 +19,6 @@ STATUS = [
     ('gm', 'MG'),
     ('npc', 'BN'),
     ('player', 'GRACZ'),
-
-    # # players
-    # ('active_player', 'Gracz'),
-    # ('inactive_player', 'Nieaktywny gracz'),
-    # ('dead_player', 'Martwy gracz'),
-    # # npc
-    # ('living_npc', 'BN'),
-    # ('dead_npc', 'Martwy BN'),
 ]
 
 
