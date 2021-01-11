@@ -17,12 +17,6 @@ from knowledge.models import KnowledgePacket, MapPacket
 from rpg_project.utils import create_sorting_name
 from users.models import Profile
 
-# PLAYERS = Q(status__in=[
-#     'active_player',
-#     'inactive_player',
-#     'dead_player',
-# ])
-
 
 class LocationType(Model):
     name = CharField(max_length=100)
@@ -109,9 +103,6 @@ class Location(Model):
         super().save(*args, **kwargs)
 
     def informables(self):
-        # qs = Profile.objects.filter(status__in=[
-        #     'active_player',
-        # ])
         qs = Profile.active_players.all()
         qs = qs.exclude(
             id__in=(self.known_directly.all() | self.known_indirectly.all())
