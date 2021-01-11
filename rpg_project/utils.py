@@ -1,8 +1,8 @@
 import os
 
+from django.apps import apps
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.contenttypes.models import ContentType
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import send_mail
 
@@ -51,107 +51,52 @@ def create_sorting_name(obj):
 
 
 def handle_inform_form(request):
-    excluded_apps = ['auth', 'admin', 'sessions', 'contenttypes']
-    all_models_in_apps = {
-        ct.model_class().__name__: ct.model_class()
-        for ct in ContentType.objects.exclude(app_label__in=excluded_apps)
-    }
-    post_data = dict(request.POST)
-    print(post_data)
     # Example post data from form
     # dict(request.POST).items() == < QueryDict: {
     #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
     #     '2': ['on'],
     #     'Location': ['77']
     # } >
-
-    model = obj = None
-    for k, v in post_data.items():
-        if k in all_models_in_apps.keys():
-            model = all_models_in_apps.get(k)
-            obj = model.objects.get(id=v[0])
-    if not obj:
-        return
+    post_data = dict(request.POST)
+    all_models = {model.__name__: model for model in apps.get_models()}
     
-    sender = EMAIL_HOST_USER
     informed_ids = [k for k, v_list in post_data.items() if 'on' in v_list]
-    receivers = [
-        p.user.email for p in Profile.objects.filter(id__in=informed_ids)
-    ]
-    profile = request.user.profile
-    if profile.status != 'gm':
-        gms = [p.user.email for p in Profile.objects.filter(status='gm')]
-        receivers.extend(gms)
 
-    if model.__name__ == 'Location':
+    if 'Location' in post_data.keys():
+        model = all_models['Location']
+        obj = model.objects.get(id=post_data['Location'][0])
         obj.known_indirectly.add(*informed_ids)
-        subject = '[RPG] Transfer wiedzy!'
-        message = f"{profile} opowiedział/a Ci o miejscu zwanym" \
-                  f" '{obj.name}'." \
-                  f"\nInformacje zostały zapisane w Twoim Toponomikonie: " \
-                  f"\n{request.build_absolute_uri()}\n"
-    
-    elif model.__name__ == 'KnowledgePacket':
+        send_emails(request, informed_ids, location=obj)
+
+    elif 'KnowledgePacket' in post_data.keys():
+        model = all_models['KnowledgePacket']
+        obj = model.objects.get(id=post_data['KnowledgePacket'][0])
         obj.acquired_by.add(*informed_ids)
-        subject = '[RPG] Transfer wiedzy!'
-        message = f"{profile} przekazał/a Ci wiedzę nt. '{obj.title}'." \
-                  f"\nWiędzę tę możesz odnaleźć w Almanachu pod:" \
-                  f" {', '.join(s.name for s in obj.skills.all())}:" \
-                  f"\n{request.get_host()}/knowledge/almanac/\n"
+        send_emails(request, informed_ids, kn_packet=obj)
 
-    elif model.__name__ == 'Debate':
+    elif 'Debate' in post_data.keys():
+        model = all_models['Debate']
+        obj = model.objects.get(id=post_data['Debate'][0])
         obj.known_directly.add(*informed_ids)
-        subject = '[RPG] Dołączenie do narady!'
-        message = f"{profile} dołączył/a Cię do narady '{obj.name}' " \
-                  f"w temacie '{obj.topic}'." \
-                  f"\nWeź udział w naradzie:" \
-                  f"\n{request.build_absolute_uri()}\n"
-       
-    elif model.__name__ == 'TimelineEvent':
-        obj.known_indirectly.add(*informed_ids)
-        subject = "[RPG] Nowa opowieść o wydarzeniach!"
-        message = f"{profile} rozprawia o swoich przygodach.\n" \
-                  f"'{obj.date()} rozegrało się co następuje...\n " \
-                  f"Wydarzenie zostało zapisane w Twoim Kalendarium."
+        send_emails(request, informed_ids, debate=obj)
 
-    #  OLD - history app
-    elif model.__name__ == 'ChronicleEvent':
+    elif 'GameEvent' in post_data.keys():
+        model = all_models['GameEvent']
+        obj = model.objects.get(id=post_data['GameEvent'][0])
         obj.known_indirectly.add(*informed_ids)
-        subject = "[RPG] Nowa opowieść o wydarzeniach!"
-        message = f"{profile} rozprawia o swoich przygodach.\n" \
-                  f"Podczas przygody '{obj.game.title}' " \
-                  f"rozegrało się co następuje...\n" \
-                  f"Wydarzenie zostało zapisane w Twojej Kronice: " \
-                  f"{request.get_host()}/history/chronicle/one-game:{obj.game.id}:0/\n"
+        send_emails(request, informed_ids, game_event=obj)
 
-    #  NEW - chronicles app
-    elif model.__name__ == 'GameEvent':
+    elif 'HistoryEvent' in post_data.keys():
+        model = all_models['HistoryEvent']
+        obj = model.objects.get(id=post_data['HistoryEvent'][0])
         obj.known_indirectly.add(*informed_ids)
-        subject = "[RPG] Nowa opowieść o wydarzeniach!"
-        message = f"{profile} rozprawia o swoich przygodach.\n" \
-                  f"Podczas przygody '{obj.game.title}' " \
-                  f"rozegrało się co następuje...\n" \
-                  f"Wydarzenie zostało zapisane w Twojej Kronice: " \
-                  f"{request.get_host()}/chronicles/chronicle/game:{obj.game.id}/\n"
-        
-    #  NEW - chronicles app
-    elif model.__name__ == 'HistoryEvent':
-        obj.known_indirectly.add(*informed_ids)
-        subject = "[RPG] Nowa opowieść o wydarzeniach historycznych!"
-        message = f"{profile} rozprawia o dawnych dziejach.\n" \
-                  f"Było to w czasach...\n" \
-                  # f"Wydarzenie zostało zapisane w Twojej Kronice: " \
-                  # f"{request.get_host()}/chronicles/XXXXXXXX/\n"
+        send_emails(request, informed_ids, history_event=obj)
 
     else:
-        subject = 'Błąd'
-        message = f"URL: {request.build_absolute_uri()}\n" \
-                  f"obj: {obj}"
-        
-    if receivers:
-        messages.info(request, f'Poinformowano wybranych bohaterów!')
-        
-    send_mail(subject, message, sender, receivers)
+        messages.error(
+            request,
+            """Błąd! Prześlij poniższe informacje MG wraz z opisem czynności
+            - kogo o czym informowałeś/do czego dołączałeś.""")
 
 
 def send_emails(request, profile_ids=None, **kwargs):
@@ -165,6 +110,7 @@ def send_emails(request, profile_ids=None, **kwargs):
             p.user.email
             for p in Profile.objects.filter(status='gm').select_related()]
         receivers.extend(gms)
+
     
     # DEBATES
     
@@ -194,7 +140,6 @@ def send_emails(request, profile_ids=None, **kwargs):
                       f"\nWeź udział w naradzie:\n{url}\n"
     
     # DEMANDS
-    
     elif 'demand' in kwargs:
         
         # Demand done/undone
@@ -216,17 +161,15 @@ def send_emails(request, profile_ids=None, **kwargs):
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             messages.info(request, 'Dezyderat został wysłany!')
         
-    # DemandAnswer
+    # DEMAND ANSWER
     elif 'demand_answer' in kwargs:
         demand_answer = kwargs['demand_answer']
         subject = f"[RPG] Dezyderat {demand_answer.demand.id} [odpowiedź]"
         message = f"Odpowiedź od {demand_answer.author}:\n" \
                   f"{request.get_host()}/contact/demands/detail:{demand_answer.demand.id}/#page-bottom\n"
         messages.info(request, 'Dodano odpowiedź!')
-
-    # PLANS
-    
-    # Plan created
+   
+    # PLAN (created)
     elif 'plan_created' in kwargs:
         plan = kwargs['plan_created']
         subject = f"[RPG] Info o planach od {profile}"
@@ -234,13 +177,66 @@ def send_emails(request, profile_ids=None, **kwargs):
                   f"{request.get_host()}/contact/plans/for-gm/\n\n"
         messages.info(request, f'Plan został zapisany!')
 
-    # Plan modified
+    # PLAN (modified)
     elif 'plan_modified' in kwargs:
         plan = kwargs['plan_modified']
         subject = f"[RPG] Info o zmianie planów od {profile}"
         message = f"{profile} informuje o zmianie planów:\n\n{plan.text}\n" \
                   f"{request.get_host()}/contact/plans/for-gm/\n\n"
         messages.info(request, 'Zmodyfikowano plan!')
+
+    # ------------------------------------------------------------------------
+    # ------------------------- INFORM FEATURE -------------------------------
+    # ------------------------------------------------------------------------
+
+    # LOCATION
+    elif 'location' in kwargs:
+        location = kwargs['location']
+        subject = '[RPG] Transfer wiedzy!'
+        message = f"{profile} opowiedział/a Ci o miejscu zwanym" \
+                  f" '{location.name}'." \
+                  f"\nInformacje zostały zapisane w Twoim Toponomikonie: " \
+                  f"\n{request.build_absolute_uri()}\n"
+        messages.info(request, f'Poinformowano wybranych bohaterów!')
+
+    # KNOWLEDGE PACKET
+    elif 'kn_packet' in kwargs:
+        kn_packet = kwargs['kn_packet']
+        subject = '[RPG] Transfer wiedzy!'
+        message = f"{profile} przekazał/a Ci wiedzę nt. '{kn_packet.title}'." \
+                  f"\nWiędzę tę możesz odnaleźć w Almanachu pod:" \
+                  f" {', '.join(s.name for s in kn_packet.skills.all())}:" \
+                  f"\n{request.get_host()}/knowledge/almanac/\n"
+        messages.info(request, f'Poinformowano wybranych bohaterów!')
+
+    # DEBATE
+    elif 'debate' in kwargs:
+        debate = kwargs['debate']
+        subject = '[RPG] Dołączenie do narady!'
+        message = f"{profile} dołączył/a Cię do narady '{debate.name}' " \
+                  f"w temacie '{debate.topic}'." \
+                  f"\nWeź udział w naradzie:" \
+                  f"\n{request.build_absolute_uri()}\n"
+        messages.info(request, f'Dołączono wybrane postacie!')
+
+    # GAME EVENT
+    elif 'game_event' in kwargs:
+        game_event = kwargs['game_event']
+        subject = "[RPG] Nowa opowieść o wydarzeniach!"
+        message = f"{profile} rozprawia o przygodzie '{game_event.game.title}'.\n" \
+                  f"Wydarzenie zostało zapisane w Twojej Kronice: " \
+                  f"{request.get_host()}/chronicles/chronicle/game:{game_event.game.id}/\n"
+        messages.info(request, f'Poinformowano wybranych bohaterów!')
+
+    # HISTORY EVENT
+    elif 'history_event' in kwargs:
+        history_event = kwargs['history_event']
+        subject = "[RPG] Nowa opowieść o wydarzeniach historycznych!"
+        message = f"{profile} rozprawia o dawnych dziejach.\n" \
+                  f"Było to w czasach...\n" \
+                  # f"Wydarzenie zostało zapisane w Twojej Kronice: " \
+                  # f"{request.get_host()}/chronicles/XXXXXXXX/\n"
+        messages.info(request, f'Poinformowano wybranych bohaterów!')
 
     else:
         subject = 'Błąd'
