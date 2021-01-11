@@ -24,11 +24,7 @@ from rpg_project.utils import create_sorting_name
 from toponomikon.models import Location
 from users.models import Profile
 
-# PLAYERS = Q(status__in=[
-#     'active_player',
-#     'inactive_player',
-#     'dead_player',
-# ])
+
 SEASONS = {
     '1': 'Wiosny',
     '2': 'Lata',
@@ -287,9 +283,6 @@ class TimeUnit(Model):
         return res
     
     def informables(self):
-        # qs = Profile.objects.filter(status__in=[
-        #     'active_player',
-        # ])
         qs = Profile.active_players.all()
         qs = qs.exclude(
             id__in=(self.known_directly.all() | self.known_indirectly.all())
