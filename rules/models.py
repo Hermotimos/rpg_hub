@@ -16,12 +16,6 @@ from imaginarion.models import Picture
 from rpg_project.utils import create_sorting_name
 from users.models import Profile
 
-# PLAYERS = Q(status__in=[
-#     'active_player',
-#     'inactive_player',
-#     'dead_player',
-# ])
-
 
 class Skill(Model):
     name = CharField('Umiejętność', max_length=100, unique=True)
