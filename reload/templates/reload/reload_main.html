@@ -27,4 +27,10 @@
     <a href="{% url 'reload:reload-rules' %}">PRZEŁADUJ</a><br>
     <br><br>
 
+    <h4>Content Types:</h4>
+    <small>Usuwa obiekty modelu ContentType, które nie posiadają atrybutu model_class()</small>
+    <br>
+    <a href="{% url 'reload:refresh-contenttypes' %}">PRZEŁADUJ</a><br>
+    <br><br>
+
 {% endblock content %}

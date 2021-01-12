@@ -1,12 +1,22 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render, redirect
+from django.utils.html import format_html
 
 from chronicles.models import Thread, GameEvent
-from toponomikon.models import Location
-from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, Profession, Klass, EliteProfession, \
-    EliteKlass, WeaponType, Weapon
 from prosoponomikon.models import Persona
+from rules.models import (
+    Skill, SkillLevel,
+    Synergy, SynergyLevel,
+    Profession,
+    Klass,
+    EliteProfession,
+    EliteKlass,
+    WeaponType,
+    Weapon,
+)
+from toponomikon.models import Location
 
 
 @login_required
@@ -41,9 +51,9 @@ def reload_toponomikon(request):
         messages.info(request, f'Przeładowano "Location" dla "toponomikon"!')
         return redirect('reload:reload-main')
     else:
-        return redirect('home:dupa')\
+        return redirect('home:dupa')
         
-        
+
 @login_required
 def reload_prosoponomikon(request):
     if request.user.profile.status == 'gm':
@@ -88,5 +98,22 @@ def reload_rules(request):
         return redirect('reload:reload-main')
     else:
         return redirect('home:dupa')
+
+
+@login_required
+def refresh_content_types(request):
+    """Remove stale content types."""
+    if request.user.profile.status == 'gm':
+        deleted = []
+        for c in ContentType.objects.all():
+            if not c.model_class():
+                deleted.append(c.__dict__)
+                c.delete()
+        messages.info(request, f"Usunięto content types: {deleted or 0}")
+        return redirect('reload:reload-main')
+    else:
+        return redirect('home:dupa')
+    
+    
 
 
