@@ -79,6 +79,7 @@ class TheologySkillManager(Manager):
         qs = super().get_queryset()
         qs = qs.filter(Q(name__icontains='Doktryn')
                        | Q(name__icontains='Kult')
+                       | Q(name__icontains='Mister')
                        | Q(name__icontains='Wierzenia')
                        | Q(name__icontains='Teolog'))
         return qs
