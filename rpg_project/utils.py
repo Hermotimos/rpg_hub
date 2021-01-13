@@ -50,6 +50,12 @@ def create_sorting_name(obj):
     return name
 
 
+def rid_of_special_chars(text):
+    return "".join(
+        [ch for ch in text if ch.lower() in 'abcdefghijklmnopqrstuvwxyz']
+    )
+
+
 def handle_inform_form(request):
     # Example post data from form
     # dict(request.POST).items() == < QueryDict: {
@@ -111,7 +117,6 @@ def send_emails(request, profile_ids=None, **kwargs):
             for p in Profile.objects.filter(status='gm').select_related()]
         receivers.extend(gms)
 
-    
     # DEBATES
     
     if 'remark' in kwargs:

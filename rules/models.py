@@ -13,7 +13,7 @@ from django.db.models import (
 from django.db.models import Q
 
 from imaginarion.models import Picture
-from rpg_project.utils import create_sorting_name
+from rpg_project.utils import create_sorting_name, rid_of_special_chars
 from users.models import Profile
 
 
@@ -38,11 +38,7 @@ class Skill(Model):
         super().save(*args, **kwargs)
 
     def short_name(self):
-        short_name = ''
-        for char in str(self.name):
-            if char in 'abcdefghijklmnopqrstuvwxyz':
-                short_name += char
-        return short_name
+        return rid_of_special_chars(self.name)
 
     class Meta:
         ordering = ['sorting_name']
@@ -146,11 +142,7 @@ class Synergy(Model):
         super().save(*args, **kwargs)
 
     def short_name(self):
-        short_name = ''
-        for char in str(self.name):
-            if char in 'abcdefghijklmnopqrstuvwxyz':
-                short_name += char
-        return short_name
+        return rid_of_special_chars(self.name)
 
     class Meta:
         ordering = ['sorting_name']
@@ -194,11 +186,7 @@ class Profession(Model):
         super().save(*args, **kwargs)
 
     def short_name(self):
-        short_name = ''
-        for char in str(self.name):
-            if char in 'abcdefghijklmnopqrstuvwxyz':
-                short_name += char
-        return short_name
+        return rid_of_special_chars(self.name)
 
     def allowed_list(self):
         allowed_profiles = []
@@ -255,11 +243,7 @@ class Klass(Model):
         super().save(*args, **kwargs)
 
     def short_name(self):
-        short_name = ''
-        for char in str(self.name):
-            if char in 'abcdefghijklmnopqrstuvwxyz':
-                short_name += char
-        return short_name
+        return rid_of_special_chars(self.name)
 
     class Meta:
         ordering = ['sorting_name']
@@ -287,11 +271,7 @@ class EliteProfession(Model):
         super().save(*args, **kwargs)
 
     def short_name(self):
-        short_name = ''
-        for char in str(self.name):
-            if char in 'abcdefghijklmnopqrstuvwxyz':
-                short_name += char
-        return short_name
+        return rid_of_special_chars(self.name)
 
     class Meta:
         ordering = ['sorting_name']
@@ -325,11 +305,7 @@ class EliteKlass(Model):
         super().save(*args, **kwargs)
 
     def short_name(self):
-        short_name = ''
-        for char in str(self.name):
-            if char in 'abcdefghijklmnopqrstuvwxyz':
-                short_name += char
-        return short_name
+        return rid_of_special_chars(self.name)
 
     class Meta:
         ordering = ['sorting_name']
@@ -351,11 +327,7 @@ class WeaponType(Model):
         super().save(*args, **kwargs)
 
     def short_name(self):
-        short_name = ''
-        for char in str(self.name):
-            if char in 'abcdefghijklmnopqrstuvwxyz':
-                short_name += char
-        return short_name
+        return rid_of_special_chars(self.name)
 
     class Meta:
         ordering = ['sorting_name']
@@ -426,11 +398,7 @@ class Weapon(Model):
         super().save(*args, **kwargs)
 
     def short_name(self):
-        short_name = ''
-        for char in str(self.name):
-            if char in 'abcdefghijklmnopqrstuvwxyz':
-                short_name += char
-        return short_name
+        return rid_of_special_chars(self.name)
 
     def damage_summary(self):
         damage_small = str(self.damage_small_dices)
@@ -478,11 +446,7 @@ class Plate(Model):
         return self.name
 
     def short_name(self):
-        short_name = ''
-        for char in str(self.name):
-            if char in 'abcdefghijklmnopqrstuvwxyz':
-                short_name += char
-        return short_name
+        return rid_of_special_chars(self.name)
 
     class Meta:
         ordering = ['sorting_number']
