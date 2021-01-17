@@ -72,16 +72,16 @@
                 {% endif %}
 
                 <!-- TAB HEADER: Characters (Prosoponomikon) -->
-            {% if request.user.profile.status == 'gm' %}
-                {% if characters %}
-                    {% if location_types %}
-                        <input type="radio" name="tabset" id="tab2" aria-controls="characters">
-                    {% else %}
-                        <input type="radio" name="tabset" id="tab2" aria-controls="characters" checked>
+                {% if request.user.profile.status == 'gm' %}
+                    {% if characters %}
+                        {% if location_types %}
+                            <input type="radio" name="tabset" id="tab2" aria-controls="characters">
+                        {% else %}
+                            <input type="radio" name="tabset" id="tab2" aria-controls="characters" checked>
+                        {% endif %}
+                        <label class="h3" for="tab2">Postacie</label>
                     {% endif %}
-                    <label class="h3" for="tab2">Postacie</label>
                 {% endif %}
-            {% endif %}
                 
                 <!-- TAB HEADER: Knowledge packets -->
                 {% if this_location.knowledge_packets.all %}
@@ -127,7 +127,6 @@
                 <div class="tab-panels">
                     
                     <!-- TAB CONTENT: Locations -->
-<!--                    {% if location_types %}-->
                         <section id="locations" class="tab-panel">
                             <div class="container">
                                 {% for location_type in location_types %}
@@ -144,10 +143,8 @@
                                 {% endfor %}
                             </div>
                         </section>
-<!--                    {% endif %}-->
 
                     <!-- TAB CONTENT: Characters (Prosoponomikon) -->
-<!--                    {% if characters %}-->
                         <section id="personas" class="tab-panel">
                             <div class="container">
                                 <p class="mb-0 text-center">✧</p>
@@ -158,10 +155,8 @@
                                 {% include 'prosoponomikon/_characters.html' %}
                             </div>
                         </section>
-<!--                    {% endif %}-->
                     
                     <!-- TAB CONTENT: Knowledge packets -->
-<!--                    {% if this_location.knowledge_packets.all %}-->
                         <section id="knowledge" class="tab-panel">
                             <div class="container">
                                 <p class="mb-0 text-center">✧</p>
@@ -174,25 +169,20 @@
                                 {% endfor %}
                             </div>
                         </section>
-<!--                    {% endif %}-->
                     
                     <!-- TAB CONTENT: Map packets -->
-<!--                    {% if this_location.map_packets.all %}-->
                         <section id="maps" class="tab-panel py-5">
                             {% for map_packet in this_location.map_packets.all %}
                                 {% include 'knowledge/_map_packet.html' %}
                             {% endfor %}
                         </section>
-<!--                    {% endif %}-->
                     
                     <!-- TAB CONTENT: Pictures -->
-<!--                    {% if this_location.pictures.all %}-->
                         <section id="pictures" class="tab-panel">
                             {% for picture in this_location.pictures.all %}
                                 {{ picture }}
                             {% endfor %}
                         </section>
-<!--                    {% endif %}-->
                     
                     <!-- TAB CONTENT: Audio -->
                     <section id="audios" class="tab-panel">
