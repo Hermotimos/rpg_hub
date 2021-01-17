@@ -296,7 +296,7 @@ div.img-hover-zoom {
 }
 @media only screen and (min-width: 1200px) {
     span.character-name {font-size: 2rem;}
-    img.character {max-width: 11rem;}
+    img.character {max-width: 12rem;}
     img.character-detail {max-width: 15rem;}
 }
 
