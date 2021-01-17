@@ -1,0 +1,16 @@
+
+    <div class="container">
+        <section class="mb-5">
+            <div class="row">
+                {% for character in characters %}
+                    <a href="#">
+                        <div class="img-hover-zoom">
+                            <img class="character-big {% if not character.profile.is_alive %} img-grayscale {% endif %}"
+                                 src="{{ character.profile.image.url }}" alt="Profile img"
+                                 data-toggle="tooltip" data-placement="bottom" title="{{ character.name }}">
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </section>
+    </div>

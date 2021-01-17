@@ -281,29 +281,29 @@ div.img-hover-zoom {
 
 
 @media only screen and (min-width: 0px) {
-    span.persona-name {font-size: 1.4rem;}
-    img.persona {
+    span.character-name {font-size: 1.4rem;}
+    img.character {
         max-width: 7rem;
         width: 100%;
     }
 }
 @media only screen and (min-width: 600px) {
-    span.persona-name {font-size: 1.6rem;}
-    img.persona {
+    span.character-name {font-size: 1.6rem;}
+    img.character {
         max-width: 8rem;
         width: 100%;
     }
 }
 @media only screen and (min-width: 1000px) {
-    span.persona-name {font-size: 1.8rem;}
-    img.persona {
+    span.character-name {font-size: 1.8rem;}
+    img.character {
         max-width: 10rem;
         width: 100%;
     }
 }
 @media only screen and (min-width: 1001px) {
-    span.persona-name {font-size: 2rem;}
-    img.persona {
+    span.character-name {font-size: 2rem;}
+    img.character {
         max-width: 11rem;
         width: 100%;
     }
@@ -312,34 +312,34 @@ div.img-hover-zoom {
 
 
 @media only screen and (min-width: 320px) {
-    img.persona-big {
+    img.character-big {
         max-width: 5rem;
         width: 100%;
     }
     div.img-hover-zoom {margin: 0.1rem}
 }
 @media only screen and (min-width: 600px) {
-    img.persona-big {
+    img.character-big {
         max-width: 6rem;
         width: 100%;
     }
     div.img-hover-zoom {margin: 0.15rem}
 }
 @media only screen and (min-width: 800px) {
-    img.persona-big {
+    img.character-big {
         max-width: 7rem;
         width: 100%;
     }
     div.img-hover-zoom {margin: 0.15rem}
 }
 @media only screen and (min-width: 1000px) {
-    img.persona-big {
+    img.character-big {
         max-width: 8rem;
         width: 100%;
     }
 }
 @media only screen and (min-width: 1200px) {
-    img.persona-big {
+    img.character-big {
         max-width: 9rem;
         width: 100%;
     }

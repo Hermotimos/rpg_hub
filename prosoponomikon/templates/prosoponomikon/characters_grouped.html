@@ -10,26 +10,26 @@
     <article class="top-button">
         
         <div class="mb-5">
-            <a href="{% url 'prosoponomikon:create-persona-group' %}" class="btn btn-outline-dark mb-1">Nowa grupa</a>
+            <a href="{% url 'prosoponomikon:create-group' %}" class="btn btn-outline-dark mb-1">Nowa grupa</a>
             <a href="{% url 'debates:create-topic' %}" class="btn btn-outline-dark mb-1">Modyfikuj skład</a>
             <a href="{% url 'debates:create-topic' %}" class="btn btn-outline-dark mb-1">Modyfikuj kolejność</a>
-            {% for persona_group in persona_groups %}
-                <a href="{% url 'prosoponomikon:personas-grouped' %}#{{ persona_group.id }}" class="btn btn-dark mb-1">{{ persona_group.name }}</a>
+            {% for character_group in character_groups %}
+                <a href="{% url 'prosoponomikon:grouped' %}#{{ character_group.id }}" class="btn btn-dark mb-1">{{ character_group.name }}</a>
             {% endfor %}
-            <a href="{% url 'prosoponomikon:personas-grouped' %}#ungrouped" class="btn btn-dark mb-1">Pozostali</a>
+            <a href="{% url 'prosoponomikon:grouped' %}#ungrouped" class="btn btn-dark mb-1">Pozostali</a>
         </div>
         
         <div class="container">
             
-            {% for persona_group in persona_groups %}
-                <section class="mb-5 pt-5" id="{{ persona_group.id }}">
+            {% for character_group in character_groups %}
+                <section class="mb-5 pt-5" id="{{ character_group.id }}">
                     <p class="mb-0 text-center">✧</p>
                     <p class="mb-0 text-center">✧ ✦ ✧</p>
-                    <p class="h3 text-center mb-2 mt-1">{{ persona_group.name }}</p>
+                    <p class="h3 text-center mb-2 mt-1">{{ character_group.name }}</p>
                     <p class="mb-0 text-center">✧ ✦ ✧</p>
                     <p class="mb-5 mt-0 text-center">✧</p>
-                    {% for persona in persona_group.personas.all %}
-                        {% include 'prosoponomikon/_persona_left_or_right_proxy.html' %}
+                    {% for character in character_group.characters.all %}
+                        {% include 'prosoponomikon/_character_left_or_right_proxy.html' %}
                     {% endfor %}
                 </section>
             {% endfor %}
@@ -41,8 +41,8 @@
                     <p class="h3 text-center mb-2 mt-1">W pozostałych rolach...</p>
                     <p class="mb-0 text-center">✧ ✦ ✧</p>
                     <p class="mb-5 mt-0 text-center">✧</p>
-                    {% for persona in ungrouped %}
-                        {% include 'prosoponomikon/_persona_left_or_right_proxy.html' %}
+                    {% for character in ungrouped %}
+                        {% include 'prosoponomikon/_character_left_or_right_proxy.html' %}
                     {% endfor %}
                 </section>
             {% endif %}

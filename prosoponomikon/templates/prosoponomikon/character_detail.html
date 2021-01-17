@@ -14,10 +14,10 @@
                 <div class="col-12 px-0">
                     
                     <div class="float-left pr-2">
-                        <a href="{% url 'prosoponomikon:persona' persona.id %}">
+                        <a href="{% url 'prosoponomikon:character' character.id %}">
                             <div class="img-hover-zoom">
-                                <img class="persona {% if not persona.profile.is_alive %} img-grayscale {% endif %}"
-                                     src="{% if not persona.only_indirectly %} {{ persona.profile.image.url }} {% else %} TODO question marks {% endif %}" alt="Profile img">
+                                <img class="character {% if not character.profile.is_alive %} img-grayscale {% endif %}"
+                                     src="{% if not character.only_indirectly %} {{ character.profile.image.url }} {% else %} TODO question marks {% endif %}" alt="Profile img">
                             </div>
                         </a>
                     </div>
@@ -25,13 +25,13 @@
                     <!-- BUTTONS -->
                     <div class="row mt-1">
                         <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Przejdź do Prosoponomikonu">
-                            <a class="btn btn-outline-dark icon-cursor py-2" href="{% url 'prosoponomikon:main' %}#{{ persona.id }}"></a>
+                            <a class="btn btn-outline-dark icon-cursor py-2" href="{% url 'prosoponomikon:main' %}#{{ character.id }}"></a>
                         </div>
                         <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Przekaż wiedzę o postaci">
                             <!-- Modal -->
-                            <span class="btn btn-outline-dark icon-inform py-2" data-toggle="modal" data-target="#infoCharacterModal_{{ persona.id }}"></span>
-                            <div class="modal fade" id="infoCharacterModal_{{ persona.id }}" tabindex="-1" role="dialog" aria-hidden="true">
-                                {% with informables=persona.informables inform_type=persona|get_model_name id_=persona.id %}
+                            <span class="btn btn-outline-dark icon-inform py-2" data-toggle="modal" data-target="#infoCharacterModal_{{ character.id }}"></span>
+                            <div class="modal fade" id="infoCharacterModal_{{ character.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                {% with informables=character.informables inform_type=character|get_model_name id_=character.id %}
                                     {% include '_inform.html' %}
                                 {% endwith %}
                             </div>
@@ -42,9 +42,9 @@
                     </div>
 
                     
-                    <div class="font-italic linebreaks-style text-justify my-2 font-18 {% if persona.only_indirectly %} text-muted {% endif %}">
-                        {% if persona.description %}
-                            {{ persona.description|linebreaks }}
+                    <div class="font-italic linebreaks-style text-justify my-2 font-18 {% if character.only_indirectly %} text-muted {% endif %}">
+                        {% if character.description %}
+                            {{ character.description|linebreaks }}
                         {% endif %}
                     </div>
                         
@@ -59,7 +59,7 @@
             </div>
         
         
-            {% for biography_packet in persona.biography_packets.all %}
+            {% for biography_packet in character.biography_packets.all %}
                 <div>
                     {{ biography_packet|linebreaks }}
                 </div>

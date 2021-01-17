@@ -1,0 +1,32 @@
+
+<div class="row mb-4" id="{{ character.id }}">
+    <div class="col-12 px-0">
+        
+        <div class="{% if side == 'left' %} float-left pr-3 {% else %} float-right pl-3 {% endif %}">
+            <a href="{% url 'prosoponomikon:character' character.name %}">
+                <div class="img-hover-zoom">
+                    <img class="character {% if not character.profile.is_alive %} img-grayscale {% endif %}"
+                         src="{% if not character.only_indirectly %} {{ character.profile.image.url }} {% else %} TODO question marks {% endif %}" alt="Profile img">
+                </div>
+            </a>
+        </div>
+
+        <div>
+            <p class="mb-1 {% if side == 'left' %} text-left {% else %} text-right {% endif %}
+                {% if character.only_indirectly %} text-muted {% endif %}">
+                <span class="border-bottom-dark character-name">
+                    {{ character.name }}
+                    {% if character.only_indirectly  %} (znasz ze słyszenia) {% endif %}
+                </span>
+            </p>
+            <h6 class="font-italic linebreaks-style text-justify mb-2 font-18
+                {% if character.only_indirectly %} text-muted {% endif %}
+                {% if side == 'right' %} text-last-right {% else %} text-last-left {% endif %}">
+                {% if character.description %}
+                    {{ character.description|linebreaks }}
+                {% endif %}
+            </h6>
+        </div>
+        
+    </div>
+</div>

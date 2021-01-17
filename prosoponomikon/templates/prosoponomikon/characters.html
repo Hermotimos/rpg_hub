@@ -14,14 +14,14 @@
             
             <section class="mb-5">
                 <div class="row">
-                    {% for persona in player_personas %}
+                    {% for character in player_character %}
                         <div class="col-sm-6 col-md-4 col-lg-3">
                             <a href="#" class="img-link">
-                                <img class="img-fluid mx-auto d-block {% if not persona.profile.is_alive %} img-grayscale {% endif %}"
-                                     src="{{ persona.profile.image.url }}"
+                                <img class="img-fluid mx-auto d-block {% if not character.profile.is_alive %} img-grayscale {% endif %}"
+                                     src="{{ character.profile.image.url }}"
                                      alt="Profile img">
                             </a>
-                            <p class="pt-1 text-center">{{ persona.name }}</p>
+                            <p class="pt-1 text-center">{{ character.name }}</p>
                         </div>
                     {% endfor %}
                 </div>
@@ -29,12 +29,12 @@
             
             <section class="mb-5">
                 <div class="row">
-                    {% for profile in npc_personas %}
+                    {% for profile in npc_characters %}
                         <div class="col-sm-4 col-md-3 col-lg-2 px-1">
                             <a class="img-link" href="#">
-                                <img class="img-fluid mx-auto d-block" src="{{ persona.profile.image.url }}" alt="Profile img">
+                                <img class="img-fluid mx-auto d-block" src="{{ character.profile.image.url }}" alt="Profile img">
                             </a>
-                            <p class="font-12 pt-1">{{ persona.name }}</p>
+                            <p class="font-12 pt-1">{{ character.name }}</p>
                         </div>
                     {% endfor %}
                 </div>

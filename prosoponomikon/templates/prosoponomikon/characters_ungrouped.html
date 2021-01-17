@@ -10,7 +10,7 @@
     <article class="top-button">
         
         <div class="mb-5">
-            <a href="{% url 'prosoponomikon:create-persona-group' %}" class="btn btn-outline-dark mb-1">Nowa grupa</a>
+            <a href="{% url 'prosoponomikon:create-group' %}" class="btn btn-outline-dark mb-1">Nowa grupa</a>
         </div>
         
         <div class="container">
@@ -21,8 +21,8 @@
                     <p class="h3 text-center mb-2 mt-1">Bohaterowie graczy</p>
                     <p class="mb-0 text-center">✧ ✦ ✧</p>
                     <p class="mb-5 mt-0 text-center">✧</p>
-                    {% for persona in players %}
-                       {% include 'prosoponomikon/_persona_left_or_right_proxy.html' %}
+                    {% for character in players %}
+                       {% include 'prosoponomikon/_character_left_or_right_proxy.html' %}
                     {% endfor %}
                 </section>
             {% endif %}
@@ -34,8 +34,8 @@
                     <p class="h3 text-center mb-2 mt-1">Bohaterowie niezależni</p>
                     <p class="mb-0 text-center">✧ ✦ ✧</p>
                     <p class="mb-5 mt-0 text-center">✧</p>
-                    {% for persona in npcs %}
-                        {% include 'prosoponomikon/_persona_left_or_right_proxy.html' %}
+                    {% for character in npcs %}
+                        {% include 'prosoponomikon/_character_left_or_right_proxy.html' %}
                     {% endfor %}
                 </section>
             {% endif %}

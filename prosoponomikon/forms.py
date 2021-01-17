@@ -2,14 +2,14 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django.forms import ModelForm
 
-from prosoponomikon.models import PersonaGroup
+from prosoponomikon.models import CharacterGroup
 
 
-class PersonaGroupCreateForm(ModelForm):
+class CharacterGroupCreateForm(ModelForm):
     """Form to create CharacterGroup's for Players."""
     
     class Meta:
-        model = PersonaGroup
+        model = CharacterGroup
         exclude = ['author', 'default_knowledge_packets']
         help_texts = {
             'characters': """
@@ -20,18 +20,18 @@ class PersonaGroupCreateForm(ModelForm):
        
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['personas'].widget.attrs['size'] = 10
-        # TODO filter queryset as per user's known personas (make such method on profile/user)
+        self.fields['characters'].widget.attrs['size'] = 10
+        # TODO filter queryset as per user's known characters (make such method on profile/user)
         self.helper = FormHelper()
         self.helper.add_input(
             Submit('submit', 'Utwórz grupę', css_class='btn-dark'))
 
 
-class GMPersonaGroupCreateForm(PersonaGroupCreateForm):
+class GMCharcterGroupCreateForm(CharacterGroupCreateForm):
     """Form to create CharacterGroup's for Game Masters."""
     
     class Meta:
-        model = PersonaGroup
+        model = CharacterGroup
         exclude = ['author']
         
     def __init__(self, *args, **kwargs):

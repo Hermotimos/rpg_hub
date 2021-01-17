@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.utils.html import format_html
 
 from chronicles.models import Thread, GameEvent
-from prosoponomikon.models import Persona
+from prosoponomikon.models import Character
 from rules.models import (
     Skill, SkillLevel,
     Synergy, SynergyLevel,
@@ -57,9 +57,9 @@ def reload_toponomikon(request):
 @login_required
 def reload_prosoponomikon(request):
     if request.user.profile.status == 'gm':
-        for obj in Persona.objects.all():
+        for obj in Character.objects.all():
             obj.save()
-        messages.info(request, f'Przeładowano "Persona" dla "prosoponomikon"!')
+        messages.info(request, f'Przeładowano "Character" dla "prosoponomikon"!')
         return redirect('reload:reload-main')
     else:
         return redirect('home:dupa')
