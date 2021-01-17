@@ -1,0 +1,11 @@
+
+<div class="col-3 px-0">
+    <div class="{% if side == 'left' %} float-left pr-1 pr-sm-2 {% else %} float-right pl-2 pl-sm-3 {% endif %}">
+        <a href="{% url 'prosoponomikon:character' character.name %}">
+            <div class="img-hover-zoom">
+                <img class="character {% if not character.profile.is_alive %} img-grayscale {% endif %}"
+                     src="{% if not character.only_indirectly %} {{ character.profile.image.url }} {% else %} TODO question marks {% endif %}" alt="Profile img">
+            </div>
+        </a>
+    </div>
+</div>

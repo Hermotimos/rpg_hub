@@ -11,21 +11,6 @@ from users.models import Profile
 
 @login_required
 def prosoponomikon_main_view(request):
-    # from prosoponomikon.models import Character
-    # from toponomikon.models import Location
-    # for p in Persona.objects.all():
-    #     character = Character.objects.create(
-    #         profile=p.profile,
-    #         birth_location=Location.objects.get(id=100),
-    #         name=p.name,
-    #         description = p.description,
-    #     )
-    #     character.frequented_locations.set(p.frequented_locations.all())
-    #     character.pictures.set(p.pictures.all())
-    #     character.known_directly.set(p.known_directly.all())
-    #     character.known_indirectly.set(p.known_indirectly.all())
-    #     print(p.name)
-        
     profile = request.user.profile
     if profile.character_groups_authored.all():
         return redirect('prosoponomikon:grouped')
