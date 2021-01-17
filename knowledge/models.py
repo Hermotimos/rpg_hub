@@ -1,5 +1,4 @@
 from django.db.models import (
-    BooleanField,
     CharField,
     ForeignKey as FK,
     ManyToManyField as M2M,
@@ -23,6 +22,9 @@ class InfoPacket(Model):
         abstract = True
         ordering = ['sorting_name']
         
+    def __str__(self):
+        return self.title
+
 
 class DialoguePacket(InfoPacket):
     """A class for per-Persona dialogue notes for Game Master."""
@@ -39,9 +41,6 @@ class BiographyPacket(InfoPacket):
         blank=True,
     )
     acquired_by = M2M(to=Profile, related_name='biography_packets', blank=True)
-    
-    def __str__(self):
-        return self.title
     
     def save(self, *args, **kwargs):
         self.sorting_name = create_sorting_name(self.__str__())
@@ -75,9 +74,6 @@ class KnowledgePacket(InfoPacket):
         verbose_name='Umiejętności powiązane',
     )
 
-    def __str__(self):
-        return self.title
-
     def save(self, *args, **kwargs):
         self.sorting_name = create_sorting_name(self.__str__())
         super().save(*args, **kwargs)
@@ -95,9 +91,6 @@ class MapPacket(InfoPacket):
         related_name='map_packets',
         verbose_name='Obrazy [opcjonalnie]',
     )
-
-    def __str__(self):
-        return self.title
 
     def save(self, *args, **kwargs):
         self.sorting_name = create_sorting_name(self.__str__())
