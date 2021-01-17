@@ -1,0 +1,40 @@
+{% load static %}
+{% load custom_filters %}
+
+<div class="anchor mt-n5" id="bio_packet_{{ biography_packet.id }}">
+    
+    <div class="container mb-5">
+        
+        <!-- TITLE -->
+        <div class="row">
+            <h3 class="mb-3">
+                <span class="border-bottom-dark">
+                    {{ biography_packet.title }}
+                </span>
+            </h3>
+        </div>
+        
+        <div class="row">
+        
+            <!-- ACTIONS -->
+            <div class="col-12 col-sm-1 p-0">
+                <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Poinformuj o biografii">
+                    <a class="btn btn-outline-dark icon-inform mt-1 py-2" href="#"></a>
+                </div>
+                <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">
+                    <a class="btn btn-outline-dark icon-note mt-1 py-2 disabled" href="#"></a>
+                </div>
+            </div>
+            
+            <!-- TEXT -->
+            <div class="col-12 col-sm-11 mt-2 p-0 pl-sm-3 pl-lg-0">
+                <p class="font-italic text-justify linebreaks-style font-18">
+                    {{ biography_packet.text|custom_linebreaksbr:2 }}
+                </p>
+            </div>
+            
+        </div>
+    </div>
+
+</div>
+
