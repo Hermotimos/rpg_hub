@@ -283,7 +283,7 @@ div.img-hover-zoom {
 @media only screen and (min-width: 0px) {
     span.persona-name {font-size: 1.4rem;}
     img.persona {
-        max-width: 6rem;
+        max-width: 7rem;
         width: 100%;
     }
 }
