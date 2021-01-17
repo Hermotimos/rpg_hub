@@ -116,7 +116,7 @@ def toponomikon_location_view(request, loc_name):
         Prefetch('locations', queryset=locations)
     )
     location_types = location_types.distinct()
-    print(request.method)
+
     if request.method == 'POST':
         handle_inform_form(request)
         
