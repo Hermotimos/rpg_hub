@@ -63,6 +63,7 @@ def handle_inform_form(request):
     #     '2': ['on'],
     #     'Location': ['77']
     # } >
+    print(request.POST)
     post_data = dict(request.POST)
     all_models = {model.__name__: model for model in apps.get_models()}
     
@@ -97,6 +98,12 @@ def handle_inform_form(request):
         obj = model.objects.get(id=post_data['HistoryEvent'][0])
         obj.known_indirectly.add(*informed_ids)
         send_emails(request, informed_ids, history_event=obj)
+    
+    elif 'Persona' in post_data.keys():
+        model = all_models['Persona']
+        obj = model.objects.get(id=post_data['Persona'][0])
+        obj.known_indirectly.add(*informed_ids)
+        send_emails(request, informed_ids, persona=obj)
 
     else:
         messages.error(
@@ -241,6 +248,15 @@ def send_emails(request, profile_ids=None, **kwargs):
                   f"Było to w czasach...\n" \
                   # f"Wydarzenie zostało zapisane w Twojej Kronice: " \
                   # f"{request.get_host()}/chronicles/XXXXXXXX/\n"
+        messages.info(request, f'Poinformowano wybranych bohaterów!')
+
+    # PERSONA
+    elif 'persona' in kwargs:
+        persona = kwargs['persona']
+        subject = "[RPG] Nowa opowieść o wydarzeniach historycznych!"
+        message = f"{profile} rozprawia o postaci '{persona.name}'.\n" \
+                  f"Postać została dodana do Twojego Prosoponomikonu: " \
+                  f"{request.get_host()}/prosoponomikon/personas/detail:{persona.id}/\n"
         messages.info(request, f'Poinformowano wybranych bohaterów!')
 
     else:

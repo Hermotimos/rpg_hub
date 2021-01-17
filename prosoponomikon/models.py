@@ -67,14 +67,22 @@ class Persona(Model):
         verbose_name = '* PERSONAS'
         verbose_name_plural = '* PERSONAS'
 
+    def __str__(self):
+        return self.name
+
     def save(self, *args, **kwargs):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
         super().save(*args, **kwargs)
         
-    def __str__(self):
-        return self.name
- 
+    def all_known(self):
+        return self.known_directly.all() | self.known_indirectly.all()
+
+    def informables(self):
+        qs = Profile.active_players.all()
+        qs = qs.exclude(id__in=self.all_known())
+        return qs
+    
     
 class PlayerPersonaManager(Manager):
     def get_queryset(self):

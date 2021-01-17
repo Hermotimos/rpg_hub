@@ -7,6 +7,7 @@ from prosoponomikon.forms import GMPersonaGroupCreateForm, \
     PersonaGroupCreateForm
 from prosoponomikon.models import PlayerPersona, NPCPersona, \
     PersonaGroup, Persona
+from rpg_project.utils import handle_inform_form
 from users.models import Profile
 
 
@@ -99,22 +100,22 @@ def prosoponomikon_personas_grouped_view(request):
         return redirect('prosoponomikon:personas-ungrouped')
 
 
-@login_required
-def prosoponomikon_personas_view(request):
-    profile = request.user.profile
-    if profile.status == 'gm':
-        player_personas = PlayerPersona.objects.all()
-        npc_personas = NPCPersona.objects.all()
-    else:
-        player_personas = []
-        npc_personas = []
-    
-    context = {
-        'page_title': 'Prosoponomikon',
-        'player_personas': player_personas.select_related('profile'),
-        'npc_personas': npc_personas.select_related('profile'),
-    }
-    return render(request, 'prosoponomikon/personas.html', context)
+# @login_required
+# def prosoponomikon_personas_view(request):
+#     profile = request.user.profile
+#     if profile.status == 'gm':
+#         player_personas = PlayerPersona.objects.all()
+#         npc_personas = NPCPersona.objects.all()
+#     else:
+#         player_personas = []
+#         npc_personas = []
+#
+#     context = {
+#         'page_title': 'Prosoponomikon',
+#         'player_personas': player_personas.select_related('profile'),
+#         'npc_personas': npc_personas.select_related('profile'),
+#     }
+#     return render(request, 'prosoponomikon/personas.html', context)
 
 
 @login_required
@@ -140,3 +141,26 @@ def prosoponomikon_persona_group_create_view(request):
         'form': form,
     }
     return render(request, '_form.html', context)
+
+
+@login_required
+def prosoponomikon_persona_view(request, persona_name):
+    profile = request.user.profile
+    persona = Persona.objects.select_related().get(name=persona_name)
+
+    if request.method == 'POST':
+        handle_inform_form(request)
+
+    
+    if profile.status == 'gm':
+        player_personas = PlayerPersona.objects.all()
+        npc_personas = NPCPersona.objects.all()
+    else:
+        player_personas = []
+        npc_personas = []
+    
+    context = {
+        'page_title': persona.name, # TODO (znasz ze słyszenia) if only indirectly
+        'persona': persona,
+    }
+    return render(request, 'prosoponomikon/character_detail.html', context)
