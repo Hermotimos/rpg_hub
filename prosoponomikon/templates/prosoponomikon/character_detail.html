@@ -10,8 +10,8 @@
     <article class="top-image">
         <header class="mb-5">
             
-            <div class="container">
-                <div class="row mb-4">
+            <div class="container mb-3">
+                <div class="row">
                     <div class="col-12 px-0">
                         
                         <!-- CHARACTER PICTURE -->
@@ -55,15 +55,39 @@
                 </div>
             </div>
             
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-sm-6 border-right">
+                        {% for biography_packet in character.biography_packets.all %}
+                            <a class="text-muted" href="#bio_packet_{{ biography_packet.id }}">
+                                <p class="mb-1">{{ biography_packet.title }}</p>
+                            </a>
+                        {% endfor %}
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        {% for dialogue_packet in character.dialogue_packets.all %}
+                            <a class="text-muted" href="#dialogue_packet_{{ dialogue_packet.id }}">
+                                <p class="mb-1">{{ dialogue_packet.title }}</p>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            
         </header>
         
-        
-        
-        {% for biography_packet in character.biography_packets.all %}
-            <div>
-                {{ biography_packet|linebreaks }}
-            </div>
-        {% endfor %}
+        <article>
+            
+            
+            {% for biography_packet in character.biography_packets.all %}
+                {% include 'knowledge/_biography_packet.html' %}
+            {% endfor %}
+            
+            {% for dialogue_packet in character.dialogue_packets.all %}
+                {% include 'knowledge/_dialogue_packet.html' %}
+            {% endfor %}
+        </article>
         
     </article>
 
