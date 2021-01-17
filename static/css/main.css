@@ -158,8 +158,7 @@ small.smaller {font-size: 12px;}
     .sm-nowrap {white-space: nowrap;}
 }
 
-.text-last-right {text-align-last: right;}
-.text-last-left {text-align-last: left;}
+
 
 /* This is for {{ some_text|linebreaksbr }} where <br><br> is rendered because
 in the text I use empty line for visual separations of paragraphs, and these is
