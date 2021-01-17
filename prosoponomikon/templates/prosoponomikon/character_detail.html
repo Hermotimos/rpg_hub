@@ -10,7 +10,7 @@
     <article class="top-image">
         <header class="mb-5">
             
-            <div class="container mb-3">
+            <div class="container mb-4">
                 <div class="row">
                     <div class="col-12 px-0">
                         
@@ -57,18 +57,26 @@
             
             <div class="container">
                 <div class="row">
-                    <div class="col-12 col-sm-6 border-right">
+                    <div class="col-12 col-sm-6 border-left border-right mb-5 mb-sm-0">
                         {% for biography_packet in character.biography_packets.all %}
-                            <a class="text-muted" href="#bio_packet_{{ biography_packet.id }}">
-                                <p class="mb-1">{{ biography_packet.title }}</p>
-                            </a>
+                            <ul class="bullets-1 bullets-big mb-2 pl-4 text-muted">
+                                <li class="pl-1">
+                                    <a class="text-muted" href="#bio_packet_{{ biography_packet.id }}">
+                                        <span class="mb-1">{{ biography_packet.title }}</span>
+                                    </a>
+                                </li>
+                            </ul>
                         {% endfor %}
                     </div>
-                    <div class="col-12 col-sm-6">
+                    <div class="col-12 col-sm-6 border-left border-right">
                         {% for dialogue_packet in character.dialogue_packets.all %}
-                            <a class="text-muted" href="#dialogue_packet_{{ dialogue_packet.id }}">
-                                <p class="mb-1">{{ dialogue_packet.title }}</p>
-                            </a>
+                            <ul class="bullets-1 bullets-big mb-2 pl-4 text-muted">
+                                <li class="pl-1">
+                                    <a class="text-muted" href="#dialogue_packet_{{ dialogue_packet.id }}">
+                                        <span class="mb-1">{{ dialogue_packet.title }}</span>
+                                    </a>
+                                </li>
+                            </ul>
                         {% endfor %}
                     </div>
                 </div>
@@ -78,8 +86,6 @@
         </header>
         
         <article>
-            
-            
             {% for biography_packet in character.biography_packets.all %}
                 {% include 'knowledge/_biography_packet.html' %}
             {% endfor %}
