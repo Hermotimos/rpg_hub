@@ -1,10 +1,20 @@
 
 {% if forloop.counter|divisibleby:2 %}
+
     {% with side='right' %}
-        {% include 'prosoponomikon/_character.html' %}
+        <div class="row mb-4" id="{{ character.id }}">
+            {% include 'prosoponomikon/_char_descr.html' %}
+            {% include 'prosoponomikon/_char_img.html' %}
+        </div>
     {% endwith %}
+
 {% else %}
+
     {% with side='left' %}
-        {% include 'prosoponomikon/_character.html' %}
+        <div class="row mb-4" id="{{ character.id }}">
+            {% include 'prosoponomikon/_char_img.html' %}
+            {% include 'prosoponomikon/_char_descr.html' %}
+        </div>
     {% endwith %}
+
 {% endif %}
