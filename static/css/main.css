@@ -280,31 +280,31 @@ div.img-hover-zoom {
 
 
 
-@media only screen and (max-width: 320px) {
-    span.persona-name {font-size: 1rem;}
-    img.persona {
-        max-width: 5rem;
-        width: 100%;
-    }
-}
-@media only screen and (max-width: 600px) {
-    span.persona-name {font-size: 1.2rem;}
+@media only screen and (min-width: 0px) {
+    span.persona-name {font-size: 1.4rem;}
     img.persona {
         max-width: 6rem;
         width: 100%;
     }
 }
-@media only screen and (max-width: 1000px) {
-    span.persona-name {font-size: 1.3rem;}
+@media only screen and (min-width: 600px) {
+    span.persona-name {font-size: 1.6rem;}
     img.persona {
-        max-width: 7rem;
+        max-width: 8rem;
+        width: 100%;
+    }
+}
+@media only screen and (min-width: 1000px) {
+    span.persona-name {font-size: 1.8rem;}
+    img.persona {
+        max-width: 10rem;
         width: 100%;
     }
 }
 @media only screen and (min-width: 1001px) {
-    span.persona-name {font-size: 1.5rem;}
+    span.persona-name {font-size: 2rem;}
     img.persona {
-        max-width: 8rem;
+        max-width: 11rem;
         width: 100%;
     }
 }

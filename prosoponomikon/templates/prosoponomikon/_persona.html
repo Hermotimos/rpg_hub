@@ -1,5 +1,5 @@
 
-<div class="row mb-4 mb-md-0">
+<div class="row mb-4">
     <div class="col-12 px-0">
         
         <div class="{% if side == 'left' %} float-left pr-3 {% else %} float-right pl-3 {% endif %}">
@@ -12,8 +12,7 @@
         </div>
 
         <div>
-            <p class="h4
-                {% if side == 'left' %} text-left {% else %} text-right {% endif %}
+            <p class="mb-1 {% if side == 'left' %} text-left {% else %} text-right {% endif %}
                 {% if persona.only_indirectly %} text-muted {% endif %}">
                 <span class="border-bottom-dark persona-name">
                     {{ persona.name }}
