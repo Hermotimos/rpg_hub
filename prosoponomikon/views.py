@@ -144,7 +144,8 @@ def prosoponomikon_group_create_view(request):
 @login_required
 def prosoponomikon_character_view(request, character_name):
     profile = request.user.profile
-    character = Character.objects.select_related().get(name=character_name)
+    characters = Character.objects.select_related().prefetch_related('biography_packets', 'dialogue_packets')
+    character = characters.get(name=character_name)
 
     if request.method == 'POST':
         handle_inform_form(request)

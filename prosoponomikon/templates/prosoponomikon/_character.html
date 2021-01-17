@@ -1,0 +1,27 @@
+
+
+<div class="anchor mt-n5" id="character_{{ character.id }}">
+
+<!--    <div class="container mb-5">-->
+    
+    {% if forloop.counter|divisibleby:2 %}
+    
+        {% with side='right' %}
+            <div class="row mb-4">
+                {% include 'prosoponomikon/_char_descr.html' %}
+                {% include 'prosoponomikon/_char_img.html' %}
+            </div>
+        {% endwith %}
+    
+    {% else %}
+    
+        {% with side='left' %}
+            <div class="row mb-4">
+                {% include 'prosoponomikon/_char_img.html' %}
+                {% include 'prosoponomikon/_char_descr.html' %}
+            </div>
+        {% endwith %}
+    
+    {% endif %}
+
+</div>
