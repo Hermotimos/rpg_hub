@@ -18,7 +18,7 @@
                         <div class="float-left pr-2">
                             <a href="{% url 'prosoponomikon:character' character.id %}">
                                 <div class="img-hover-zoom">
-                                    <img class="character {% if not character.profile.is_alive %} img-grayscale {% endif %}"
+                                    <img class="character-detail {% if not character.profile.is_alive %} img-grayscale {% endif %}"
                                          src="{% if not character.only_indirectly %} {{ character.profile.image.url }} {% else %} TODO question marks {% endif %}" alt="Profile img">
                                 </div>
                             </a>
