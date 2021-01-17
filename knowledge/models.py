@@ -38,7 +38,6 @@ class BiographyPacket(InfoPacket):
         null=True,
         blank=True,
     )
-    show_in_prosoponomikon = BooleanField(null=True, blank=True)
     acquired_by = M2M(to=Profile, related_name='biography_packets', blank=True)
     
     def __str__(self):
