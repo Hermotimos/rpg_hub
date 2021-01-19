@@ -1,4 +1,4 @@
-
+{% load custom_filters %}
     
 <div class="col-9 px-0">
     <div>
@@ -12,7 +12,7 @@
         <h6 class="font-italic linebreaks-style text-justify mb-2 font-18
             {% if character.only_indirectly %} text-muted {% endif %}">
             {% if character.description %}
-                {{ character.description|linebreaks }}
+                {{ character.description|custom_linebreaksbr:1 }}
             {% endif %}
         </h6>
     </div>

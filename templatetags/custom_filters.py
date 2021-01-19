@@ -192,6 +192,8 @@ def custom_linebreaksbr(value, margin_bottom: int):
         raise ValueError(msg)
     else:
         value = linebreaksbr(value)
-        return mark_safe(
-            value.replace('<br><br>', f'<br class="mb-{margin_bottom}">')
-        )
+        if '<br><br>' in value:
+            value = value.replace('<br><br>', f'<br class="mb-{margin_bottom}">')
+        else:
+            value = value.replace('<br>', f'<br class="mb-{margin_bottom}">')
+        return mark_safe(value)
