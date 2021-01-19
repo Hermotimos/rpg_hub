@@ -287,17 +287,17 @@ div.img-hover-zoom {
     img.character-detail {max-width: 8rem;}
 }
 @media only screen and (min-width: 600px) {
-    span.character-name {font-size: 1.6rem;}
+    span.character-name {font-size: 1.5rem;}
     img.character {max-width: 8rem;}
     img.character-detail {max-width: 10rem;}
 }
 @media only screen and (min-width: 1000px) {
-    span.character-name {font-size: 1.8rem;}
+    span.character-name {font-size: 1.6rem;}
     img.character {max-width: 10rem;}
     img.character-detail {max-width: 13rem;}
 }
 @media only screen and (min-width: 1200px) {
-    span.character-name {font-size: 2rem;}
+    span.character-name {font-size: 1.7rem;}
     img.character {max-width: 12rem;}
     img.character-detail {max-width: 15rem;}
 }
