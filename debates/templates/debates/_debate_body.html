@@ -5,7 +5,7 @@
 {% for remark in debate.remarks.all %}
 <div id="remark-{{ remark.id }}" class="container anchor mt-n5">
     <div  class="row">
-        {% if remark.author.profile.status == 'gm' %}
+        {% if remark.author.status == 'gm' %}
             <div class="col-12">
                 <span class="font-18 font-italic text-justify">{{ remark.text|capfirst|linebreaks }}</span>
                 {% if remark.image %}
@@ -21,7 +21,7 @@
     </div>
     {% if forloop.last and not debate.is_ended %}
         <div class="row mt-n3" id="page-bottom">
-            {% if remark.author.profile.status == 'gm' %}
+            {% if remark.author.status == 'gm' %}
                 <div class="col-12">
                     {% for profile in remark.seen_by.all %}
                         <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile small img">
