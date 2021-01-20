@@ -99,11 +99,11 @@ def handle_inform_form(request):
         obj.known_indirectly.add(*informed_ids)
         send_emails(request, informed_ids, history_event=obj)
     
-    elif 'Persona' in post_data.keys():
-        model = all_models['Persona']
-        obj = model.objects.get(id=post_data['Persona'][0])
+    elif 'Character' in post_data.keys():
+        model = all_models['Character']
+        obj = model.objects.get(id=post_data['Character'][0])
         obj.known_indirectly.add(*informed_ids)
-        send_emails(request, informed_ids, persona=obj)
+        send_emails(request, informed_ids, character=obj)
 
     else:
         messages.error(
@@ -250,13 +250,13 @@ def send_emails(request, profile_ids=None, **kwargs):
                   # f"{request.get_host()}/chronicles/XXXXXXXX/\n"
         messages.info(request, f'Poinformowano wybranych bohaterów!')
 
-    # PERSONA
-    elif 'persona' in kwargs:
-        persona = kwargs['persona']
+    # CHARACTER
+    elif 'character' in kwargs:
+        character = kwargs['character']
         subject = "[RPG] Nowa opowieść o wydarzeniach historycznych!"
-        message = f"{profile} rozprawia o postaci '{persona.name}'.\n" \
+        message = f"{profile} rozprawia o postaci '{character.name}'.\n" \
                   f"Postać została dodana do Twojego Prosoponomikonu: " \
-                  f"{request.get_host()}/prosoponomikon/personas/detail:{persona.id}/\n"
+                  f"{request.get_host()}/prosoponomikon/character/{character.name}/\n"
         messages.info(request, f'Poinformowano wybranych bohaterów!')
 
     else:

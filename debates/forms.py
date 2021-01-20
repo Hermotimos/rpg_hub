@@ -35,7 +35,7 @@ class CreateDebateForm(forms.ModelForm):
             self.fields['known_directly'].queryset = Profile.living.all()
         else:
             self.fields['known_directly'].queryset = Profile.living.filter(
-                persona__in=authenticated_user.profile.personas_known_directly.all()
+                character__in=authenticated_user.profile.characters_known_directly.all()
             ).exclude(user=authenticated_user).select_related()
         self.fields['known_directly'].widget.attrs['size'] = 10
 
