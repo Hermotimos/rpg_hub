@@ -82,7 +82,6 @@ def character_skills_view(request, profile_id='0'):
     
     skills = Skill.objects \
         .filter(skill_levels__acquired_by=profile) \
-        .exclude(name__icontains='Doktryn') \
         .prefetch_related(Prefetch(
             'skill_levels',
             queryset=SkillLevel.objects.filter(acquired_by=profile)
