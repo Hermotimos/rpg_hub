@@ -14,6 +14,7 @@ from rpg_project.utils import ReplaceFileStorage
 # TODO rename app 'imaginarion' -> 'mousarion'
 
 AUDIO_TYPES = (
+    ('domeny', 'DOMENY'),
     ('npc', 'NPC'),
     ('topoi', 'TOPOI'),
     ('varia', 'VARIA'),
@@ -26,6 +27,7 @@ class Audio(Model):
     
     # This doesn't work on PythonAnywhere... do they really handle Django 3.1?
     # class AudioType(models.TextChoices):
+    #     domeny = 'DOMENY'
     #     npc = 'NPC'
     #     topoi = 'TOPOI'
     #     varia = 'VARIA'
