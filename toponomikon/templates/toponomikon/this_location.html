@@ -71,7 +71,7 @@
                     <label class="h3" for="tab1">Lokacje</label>
                 {% endif %}
 
-        {% if request.user.profile == 'gm' %}
+        {% if request.user.profile.status == 'gm' %}
                 <!-- TAB HEADER: Characters (Prosoponomikon) -->
                 {% if characters %}
                     {% if location_types %}
@@ -146,7 +146,7 @@
                     {% endif %}
 
                     <!-- TAB CONTENT: Characters (Prosoponomikon) -->
-            {% if request.user.profile == 'gm' %}
+            {% if request.user.profile.status == 'gm' %}
                     {% if characters %}
                         <section id="characters" class="tab-panel">
                             <div class="container">
