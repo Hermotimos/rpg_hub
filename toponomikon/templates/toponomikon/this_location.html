@@ -71,18 +71,17 @@
                     <label class="h3" for="tab1">Lokacje</label>
                 {% endif %}
 
+        {% if request.user.profile == 'gm' %}
                 <!-- TAB HEADER: Characters (Prosoponomikon) -->
-                {% if request.user.profile.status == 'gm' %}
-                    {% if characters %}
-                        {% if location_types %}
-                            <input type="radio" name="tabset" id="tab2" aria-controls="characters">
-                        {% else %}
-                            <input type="radio" name="tabset" id="tab2" aria-controls="characters" checked>
-                        {% endif %}
-                        <label class="h3" for="tab2">Postacie</label>
+                {% if characters %}
+                    {% if location_types %}
+                        <input type="radio" name="tabset" id="tab2" aria-controls="characters">
+                    {% else %}
+                        <input type="radio" name="tabset" id="tab2" aria-controls="characters" checked>
                     {% endif %}
+                    <label class="h3" for="tab2">Postacie</label>
                 {% endif %}
-                
+        {% endif %}
                 <!-- TAB HEADER: Knowledge packets -->
                 {% if this_location.knowledge_packets.all %}
                     {% if location_types or characters %}
@@ -127,6 +126,7 @@
                 <div class="tab-panels">
                     
                     <!-- TAB CONTENT: Locations -->
+                    {% if location_types %}
                         <section id="locations" class="tab-panel">
                             <div class="container">
                                 {% for location_type in location_types %}
@@ -143,8 +143,11 @@
                                 {% endfor %}
                             </div>
                         </section>
+                    {% endif %}
 
                     <!-- TAB CONTENT: Characters (Prosoponomikon) -->
+            {% if request.user.profile == 'gm' %}
+                    {% if characters %}
                         <section id="characters" class="tab-panel">
                             <div class="container">
                                 <p class="mb-0 text-center">✧</p>
@@ -155,8 +158,11 @@
                                 {% include 'prosoponomikon/_characters.html' %}
                             </div>
                         </section>
+                    {% endif %}
+            {% endif %}
                     
                     <!-- TAB CONTENT: Knowledge packets -->
+                    {% if this_location.knowledge_packets.all %}
                         <section id="knowledge" class="tab-panel">
                             <div class="container">
                                 <p class="mb-0 text-center">✧</p>
@@ -169,58 +175,65 @@
                                 {% endfor %}
                             </div>
                         </section>
+                    {% endif %}
                     
                     <!-- TAB CONTENT: Map packets -->
+                    {% if this_location.map_packets.all %}
                         <section id="maps" class="tab-panel py-5">
                             {% for map_packet in this_location.map_packets.all %}
                                 {% include 'knowledge/_map_packet.html' %}
                             {% endfor %}
                         </section>
+                    {% endif %}
                     
                     <!-- TAB CONTENT: Pictures -->
+                    {% if this_location.pictures.all %}
                         <section id="pictures" class="tab-panel">
                             {% for picture in this_location.pictures.all %}
                                 {{ picture }}
                             {% endfor %}
                         </section>
+                    {% endif %}
                     
                     <!-- TAB CONTENT: Audio -->
-                    <section id="audios" class="tab-panel">
-                        <div class="container">
-                            <p class="mb-0 text-center">✧</p>
-                            <p class="mb-0 text-center">✧ ✦ ✧</p>
-                            <p class="h3 text-center mb-2 mt-1">Ścieżka dźwiękowa</p>
-                            <p class="mb-0 text-center">✧ ✦ ✧</p>
-                            <p class="mb-5 mt-0 text-center">✧</p>
-
-                            <!-- Location's main audio first -->
-                            <div class="row">
-                                <div class="col-6">
-                                    <audio class="toponomikon-audio-small" controls loop>
-                                        <source src="{{ audio_set.main_audio.path }}" type="audio/mpeg">
-                                    </audio>
-                                </div>
-                                <div class="col-6">
-                                    {{ audio_set.main_audio }}
-                                </div>
-                            </div>
-                            
-                            <!-- Location's other audios -->
-                            {% for audio in audio_set.audios.all %}
+                    {% if request.user.profile.status == 'gm' and audio_set %}
+                        <section id="audios" class="tab-panel">
+                            <div class="container">
+                                <p class="mb-0 text-center">✧</p>
+                                <p class="mb-0 text-center">✧ ✦ ✧</p>
+                                <p class="h3 text-center mb-2 mt-1">Ścieżka dźwiękowa</p>
+                                <p class="mb-0 text-center">✧ ✦ ✧</p>
+                                <p class="mb-5 mt-0 text-center">✧</p>
+    
+                                <!-- Location's main audio first -->
                                 <div class="row">
                                     <div class="col-6">
                                         <audio class="toponomikon-audio-small" controls loop>
-                                            <source src="{{ audio.path }}" type="audio/mpeg">
+                                            <source src="{{ audio_set.main_audio.path }}" type="audio/mpeg">
                                         </audio>
                                     </div>
                                     <div class="col-6">
-                                        {{ audio }}
+                                        {{ audio_set.main_audio }}
                                     </div>
                                 </div>
-                            {% endfor %}
-                            
-                        </div>
-                    </section>
+                                
+                                <!-- Location's other audios -->
+                                {% for audio in audio_set.audios.all %}
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <audio class="toponomikon-audio-small" controls loop>
+                                                <source src="{{ audio.path }}" type="audio/mpeg">
+                                            </audio>
+                                        </div>
+                                        <div class="col-6">
+                                            {{ audio }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                
+                            </div>
+                        </section>
+                    {% endif %}
                     
                 </div>
             </article>
