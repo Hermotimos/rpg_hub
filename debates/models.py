@@ -56,7 +56,7 @@ class Debate(Model):
         return self.name
     
     def informables(self):
-        qs = Profile.players.filter(is_alive=True)
+        qs = Profile.active_players.all()
         qs = qs.exclude(id__in=self.known_directly.all())
         return qs
 

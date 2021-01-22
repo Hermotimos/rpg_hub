@@ -14,10 +14,12 @@
                 {% csrf_token %}
                 <div class="modal-body">
                     <h5 class="text-center text-danger">
-                        Informuj bohaterów, którym przekazałeś wiedzę w grze.
+                        {% if inform_type  != 'Debate' %}
+                            Informuj bohaterów, którym przekazałeś wiedzę w grze.
+                        {% else %}
+                            Dołączaj do narad tylko bohaterów znajdujących się w pobliżu.*
+                        {% endif %}
                         <br>
-                        Dołączaj do narad tylko bohaterów znajdujących się w pobliżu.*
-                        <br><br>
                         W razie wątpliwości skonsultuj się z MG.
                     </h5>
                     <br>
@@ -30,9 +32,13 @@
                         {% endfor %}
                     </h4>
                     <h5 class="text-center text-danger">
-                        <small class="smaller">*Nowi uczestnicy są automatycznie wtajemniczani w całość narady.</small>
-                        <br>
-                        <small class="smaller">*Aby włączyć do narady BNa, wyślij dezyderat.</small>
+                        {% if inform_type  == 'Debate' %}
+                            <small class="smaller">*Nowi uczestnicy są automatycznie wtajemniczani w całość narady.</small>
+                            <br>
+                            <small class="smaller">*Aby włączyć do narady BNa, wyślij dezyderat.</small>
+                        {% else %}
+                            <!-- Fill in if applicable  -->
+                        {% endif %}
                     </h5>
                 </div>
                 <div class="modal-footer">
