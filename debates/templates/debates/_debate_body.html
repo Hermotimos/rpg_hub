@@ -22,14 +22,14 @@
     {% if forloop.last and not debate.is_ended %}
         <div class="row mt-n3" id="page-bottom">
             {% if remark.author.status == 'gm' %}
-                <div class="col-12">
+                <div class="col-12 mt-2">
                     {% for profile in remark.seen_by.all %}
                         <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile small img">
                     {% endfor %}
                 </div>
             {% else %}
                 <div class="col-2"></div>
-                <div class="col-10">
+                <div class="col-10 mt-2">
                     {% for profile in remark.seen_by.all %}
                         <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile small img">
                     {% endfor %}

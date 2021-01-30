@@ -132,7 +132,7 @@ def debate_view(request, debate_id):
 
     # INFORM FORM
     if request.method == 'POST' and 'Debate' in request.POST:
-        form = CreateRemarkForm(authenticated_user=request.user)
+        form = CreateRemarkForm(authenticated_user=request.user, debate_id=debate_id)
         handle_inform_form(request)
 
     # REMARK FORM
