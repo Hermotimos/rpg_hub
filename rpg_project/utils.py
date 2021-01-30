@@ -108,7 +108,7 @@ def handle_inform_form(request):
     else:
         messages.error(
             request,
-            """Błąd! Prześlij poniższe informacje MG wraz z opisem czynności
+            """Błąd! Prześlij informację MG wraz z opisem czynności
             - kogo o czym informowałeś/do czego dołączałeś.""")
 
 

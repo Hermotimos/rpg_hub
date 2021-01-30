@@ -130,11 +130,13 @@ def debate_view(request, debate_id):
             if profile not in seen_by:
                 last_remark.seen_by.add(profile)
 
-    if request.method == 'POST':
+    # INFORM FORM
+    if request.method == 'POST' and 'Debate' in request.POST:
+        form = CreateRemarkForm(authenticated_user=request.user)
         handle_inform_form(request)
 
     # REMARK FORM
-    if request.method == 'POST' and 'debate' not in request.POST:
+    elif request.method == 'POST' and 'author' in request.POST:
         form = CreateRemarkForm(request.POST, request.FILES,
                                 authenticated_user=request.user,
                                 debate_id=debate_id)
@@ -144,7 +146,6 @@ def debate_view(request, debate_id):
             remark.save()
 
             informed_ids = [p.id for p in debate_known_directly if p != profile]
-
             send_emails(request, informed_ids, new='remark', remark=remark)
             if informed_ids:
                 messages.info(request, f'Twój głos zabrzmiał w naradzie!')
