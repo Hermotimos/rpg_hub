@@ -4,8 +4,7 @@ from django.db import IntegrityError
 from django.db.models import Prefetch, Case, When, Value, IntegerField
 from django.shortcuts import render, redirect
 
-from prosoponomikon.forms import CharacterGroupCreateForm, \
-    GMCharcterGroupCreateForm, CharacterManyGroupsEditFormSet, \
+from prosoponomikon.forms import CharacterManyGroupsEditFormSet, \
     CharacterGroupsEditFormSetHelper, CharacterSingleGroupEditFormSet
 from prosoponomikon.models import Character, PlayerCharacter, NPCCharacter, \
     CharacterGroup
@@ -121,31 +120,6 @@ def prosoponomikon_grouped_view(request):
 
 
 @login_required
-def prosoponomikon_group_create_view(request):
-    profile = request.user.profile
-    if profile.status == 'gm':
-        form = GMCharcterGroupCreateForm(data=request.POST or None)
-    else:
-        form = CharacterGroupCreateForm(data=request.POST or None)
-    
-    if form.is_valid():
-        character_group = form.save(commit=False)
-        character_group.author = profile
-        character_group.save()
-        character_group.characters.set(form.cleaned_data['characters'])
-        messages.success(request, f"Utworzono grupę '{character_group.name}'!")
-        return redirect('prosoponomikon:grouped')
-    else:
-        messages.warning(request, form.errors)
-    
-    context = {
-        'page_title': 'Nowa grupa',
-        'form': form,
-    }
-    return render(request, '_form.html', context)
-
-
-@login_required
 def prosoponomikon_character_view(request, character_name):
     profile = request.user.profile
     characters = Character.objects.select_related()
@@ -212,7 +186,7 @@ def prosoponomikon_character_groups_edit_view(request, group_id=0):
                 return redirect('prosoponomikon:groups-modify')
         else:
             messages.warning(request, formset.errors)
-
+            
     else:
         formset = FormSet(queryset=character_groups)
 

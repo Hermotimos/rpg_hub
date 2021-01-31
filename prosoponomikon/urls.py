@@ -9,8 +9,6 @@ urlpatterns = [
          name='character'),
     path('ungrouped/', views.prosoponomikon_ungrouped_view, name='ungrouped'),
     path('grouped/', views.prosoponomikon_grouped_view, name='grouped'),
-    path('create-group/', views.prosoponomikon_group_create_view,
-         name='create-group'),
     path('groups-edit/<int:group_id>/', views.prosoponomikon_character_groups_edit_view,
          name='groups-edit'),
     # path('characters/', views.prosoponomikon_characters_view, name='characters'),
