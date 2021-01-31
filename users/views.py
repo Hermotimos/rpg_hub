@@ -3,9 +3,9 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import LoginView, LogoutView
-from django.db.models import Q
 from django.shortcuts import render, redirect
 
+from prosoponomikon.models import Character
 from users.forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
 from users.models import Profile
 
@@ -24,15 +24,15 @@ class CustomLogoutView(LogoutView):
 
 
 def register_view(request):
-    if request.method == 'POST':
-        form = UserRegistrationForm(request.POST or None)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.info(request, f'Utworzono konto dla {username}! Zaloguj się!')
-            return redirect('users:login')
-    else:
-        form = UserRegistrationForm()
+    form = UserRegistrationForm(request.POST or None)
+    if form.is_valid():
+        user = form.save()
+        profile = Profile.objects.create(user=user)
+        Character.objects.create(
+            profile=profile, name=user.username.replace('_', ' '))
+        messages.info(
+            request, f'Utworzono konto dla {user.username}! Zaloguj się!')
+        return redirect('users:login')
 
     context = {
         'page_title': 'Utwórz profil',

@@ -6,10 +6,7 @@ from django.db.models import (
     Manager,
     Model,
     OneToOneField,
-    Q,
 )
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.contrib.auth.models import User
 
 from PIL import Image
@@ -74,7 +71,7 @@ class Profile(Model):
         blank=True,
         null=True,
     )
-    # Character name copied from Character to avoid queries
+    # Character name copied from Character (by signal) to avoid queries
     copied_character_name = CharField(max_length=100, blank=True, null=True)
     
     objects = Manager()
@@ -90,7 +87,7 @@ class Profile(Model):
     
     def __str__(self):
         return self.copied_character_name or self.user.username
-    
+
     def save(self, *args, **kwargs):
         first_save = True if not self.pk else False
         super().save(*args, **kwargs)
@@ -100,14 +97,3 @@ class Profile(Model):
                 output_size = (300, 300)
                 img.thumbnail(output_size)
                 img.save(self.image.path)
-        else:
-            if self.character:
-                self.copied_character_name = self.character.name
-
-
-@receiver(post_save, sender=User)
-def create_profile(sender, instance, created, **kwargs):
-    if created:
-        p = Profile.objects.create(user=instance)
-        p.name = instance.username.replace('_', ' ')
-        p.save()
