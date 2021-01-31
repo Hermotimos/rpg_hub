@@ -1,6 +1,6 @@
 from crispy_forms.bootstrap import PrependedText
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Column, HTML, Div
+from crispy_forms.layout import Layout, Row, Column, HTML, Div, Field
 from crispy_forms.layout import Submit
 from django.forms import ModelForm, modelformset_factory
 
@@ -41,16 +41,21 @@ class GMCharcterGroupCreateForm(CharacterGroupCreateForm):
         self.fields['default_knowledge_packets'].widget.attrs['size'] = 10
 
 
-CharacterGroupsOrderFormSet = modelformset_factory(
+CharacterManyGroupsEditFormSet = modelformset_factory(
     model=CharacterGroup,
-    fields=['name', 'order_no', 'characters'],
+    fields=['name', 'order_no', 'characters', 'default_knowledge_packets'],
     extra=1,
     can_delete=True,
 )
+CharacterSingleGroupEditFormSet = modelformset_factory(
+    model=CharacterGroup,
+    fields=['name', 'order_no', 'characters', 'default_knowledge_packets'],
+    extra=0,
+)
 
 
-class CharacterGroupsOrderFormSetHelper(FormHelper):
-    def __init__(self, *args, **kwargs):
+class CharacterGroupsEditFormSetHelper(FormHelper):
+    def __init__(self, status=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.add_input(Submit('submit', 'Zapisz zmiany', css_class='btn-dark'))
         self.form_show_labels = False
@@ -67,7 +72,19 @@ class CharacterGroupsOrderFormSetHelper(FormHelper):
             ),
             Row(
                 Column(Div(), css_class='col-sm-3 mb-0'),
-                Column('characters', css_class='form-group col-sm-9 mb-0'),
+                Column(
+                    Field('characters', size=15),
+                    css_class='form-group col-sm-9 mb-0'
+                ),
             ),
         )
-
+        if status == 'gm':
+            self.layout.fields.append(
+                Row(
+                    Column(Div(), css_class='col-sm-3 mb-0'),
+                    Column(
+                        Field('default_knowledge_packets', size=15),
+                        css_class='form-group col-sm-9 mb-0'
+                    ),
+                ),
+            )

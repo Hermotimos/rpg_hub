@@ -4,8 +4,11 @@ from django.db import IntegrityError
 from django.db.models import Prefetch, Case, When, Value, IntegerField
 from django.shortcuts import render, redirect
 
-from prosoponomikon.forms import CharacterGroupCreateForm, GMCharcterGroupCreateForm, CharacterGroupsOrderFormSet, CharacterGroupsOrderFormSetHelper
-from prosoponomikon.models import Character, PlayerCharacter, NPCCharacter, CharacterGroup
+from prosoponomikon.forms import CharacterGroupCreateForm, \
+    GMCharcterGroupCreateForm, CharacterManyGroupsEditFormSet, \
+    CharacterGroupsEditFormSetHelper, CharacterSingleGroupEditFormSet
+from prosoponomikon.models import Character, PlayerCharacter, NPCCharacter, \
+    CharacterGroup
 from rpg_project.utils import handle_inform_form
 from users.models import Profile
 
@@ -167,12 +170,17 @@ def prosoponomikon_character_view(request, character_name):
 
 
 @login_required
-def prosoponomikon_character_groups_modify_view(request):
+def prosoponomikon_character_groups_edit_view(request, group_id=0):
     profile = request.user.profile
     character_groups = CharacterGroup.objects.filter(author=profile)
-    
+    if group_id:
+        character_groups = character_groups.filter(id=group_id)
+        FormSet = CharacterSingleGroupEditFormSet
+    else:
+        FormSet = CharacterManyGroupsEditFormSet
+        
     if request.method == 'POST':
-        formset = CharacterGroupsOrderFormSet(request.POST, queryset=character_groups)
+        formset = FormSet(request.POST, queryset=character_groups)
         if formset.is_valid():
             try:
                 for form in formset:
@@ -206,12 +214,14 @@ def prosoponomikon_character_groups_modify_view(request):
             messages.warning(request, formset.errors)
 
     else:
-        formset = CharacterGroupsOrderFormSet(queryset=character_groups)
+        formset = FormSet(queryset=character_groups)
 
+    # Move 'extra' form to top
     formset.forms = [formset.forms[-1]] + formset.forms[:-1]
+    
     context = {
-        'page_title': "Zmiana kolejności grup",
+        'page_title': "Dodaj/Edytuj grupy postaci",
         'formset': formset,
-        'formset_helper': CharacterGroupsOrderFormSetHelper(),
+        'formset_helper': CharacterGroupsEditFormSetHelper(status=profile.status),
     }
     return render(request, '_formset.html', context)
