@@ -11,6 +11,8 @@ urlpatterns = [
     path('grouped/', views.prosoponomikon_grouped_view, name='grouped'),
     path('create-group/', views.prosoponomikon_group_create_view,
          name='create-group'),
+    path('groups-modify/', views.prosoponomikon_character_groups_modify_view,
+         name='groups-modify'),
     # path('characters/', views.prosoponomikon_characters_view, name='characters'),
 
 ]

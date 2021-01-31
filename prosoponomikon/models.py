@@ -143,7 +143,7 @@ class CharacterGroup(Model):
     order_no = PositiveSmallIntegerField(
         blank=True,
         null=True,
-        verbose_name='Numer porządkowy grupy [opcjonalnie]',
+        verbose_name='Nr porządkowy',
     )
     
     class Meta:

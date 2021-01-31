@@ -1,6 +1,8 @@
+from crispy_forms.bootstrap import PrependedText
 from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Row, Column, HTML, Div
 from crispy_forms.layout import Submit
-from django.forms import ModelForm
+from django.forms import ModelForm, modelformset_factory
 
 from prosoponomikon.models import CharacterGroup
 
@@ -37,3 +39,30 @@ class GMCharcterGroupCreateForm(CharacterGroupCreateForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['default_knowledge_packets'].widget.attrs['size'] = 10
+
+
+CharacterGroupsOrderFormSet = modelformset_factory(
+    model=CharacterGroup,
+    fields=['name', 'order_no', 'characters'],
+    extra=0
+)
+
+
+class CharacterGroupsOrderFormSetHelper(FormHelper):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.add_input(Submit('submit', 'Zapisz zmiany', css_class='btn-dark'))
+        self.form_show_labels = False
+        self.layout = Layout(
+            Row(
+                Column(
+                    PrependedText('order_no', '', placeholder="Nr porządkowy"),
+                    css_class='form-group col-sm-3 mb-0'
+                ),
+                Column('name', css_class='form-group col-sm-9 mb-0'),
+            ),
+            Row(
+                Column(Div(), css_class='col-sm-3 mb-0'),
+                Column('characters', css_class='form-group col-sm-9 mb-0'),
+            ),
+        )

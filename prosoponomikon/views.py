@@ -1,9 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
 from django.db.models import Prefetch, Case, When, Value, IntegerField
 from django.shortcuts import render, redirect
 
-from prosoponomikon.forms import CharacterGroupCreateForm, GMCharcterGroupCreateForm
+from prosoponomikon.forms import CharacterGroupCreateForm, GMCharcterGroupCreateForm, CharacterGroupsOrderFormSet, CharacterGroupsOrderFormSetHelper
 from prosoponomikon.models import Character, PlayerCharacter, NPCCharacter, CharacterGroup
 from rpg_project.utils import handle_inform_form
 from users.models import Profile
@@ -163,3 +164,36 @@ def prosoponomikon_character_view(request, character_name):
         'character': character,
     }
     return render(request, 'prosoponomikon/character_detail.html', context)
+
+
+@login_required
+def prosoponomikon_character_groups_modify_view(request):
+    profile = request.user.profile
+    character_groups = CharacterGroup.objects.filter(author=profile)
+    
+    if request.method == 'POST':
+        formset = CharacterGroupsOrderFormSet(request.POST, queryset=character_groups)
+        formset_helper = CharacterGroupsOrderFormSetHelper()
+        
+        if formset.is_valid():
+            try:
+                for form in formset:
+                    form.save()
+                messages.success(request, f"Zapisano zmiany!")
+                return redirect('prosoponomikon:main')
+            except IntegrityError:
+                messages.warning(request, "Nazwy grup muszą być unikalne!")
+                return redirect('prosoponomikon:groups-modify')
+        else:
+            messages.warning(request, formset.errors)
+
+    else:
+        formset = CharacterGroupsOrderFormSet(queryset=character_groups)
+        formset_helper = CharacterGroupsOrderFormSetHelper()
+        
+    context = {
+        'page_title': "Zmiana kolejności grup",
+        'formset': formset,
+        'formset_helper': formset_helper,
+    }
+    return render(request, '_formset.html', context)
