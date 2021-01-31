@@ -74,7 +74,7 @@ class Profile(Model):
         blank=True,
         null=True,
     )
-    # Character name copied from Persona to avoid queries
+    # Character name copied from Character to avoid queries
     copied_character_name = CharField(max_length=100, blank=True, null=True)
     
     objects = Manager()
@@ -100,6 +100,9 @@ class Profile(Model):
                 output_size = (300, 300)
                 img.thumbnail(output_size)
                 img.save(self.image.path)
+        else:
+            if self.character:
+                self.copied_character_name = self.character.name
 
 
 @receiver(post_save, sender=User)
