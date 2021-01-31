@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.db.models import Prefetch, Case, When, Value, IntegerField
+from django.db.models import Prefetch, Case, When, Value, IntegerField, F
 from django.shortcuts import render, redirect
 
 from prosoponomikon.forms import CharacterManyGroupsEditFormSet, \
@@ -61,11 +61,9 @@ def prosoponomikon_grouped_view(request):
     character_groups = CharacterGroup.objects.filter(author=profile)
     
     if profile.status == 'gm':
-        character_groups = character_groups.prefetch_related(
-            'characters__biography_packets')
+        character_groups = character_groups.prefetch_related('characters')
         ungrouped = Character.objects.exclude(
             character_groups__in=character_groups)
-        ungrouped = ungrouped.prefetch_related('biography_packets')
     else:
         known_dir = profile.characters_known_directly.all()
         known_indir = profile.characters_known_indirectly.all()
@@ -80,19 +78,15 @@ def prosoponomikon_grouped_view(request):
             ),
         )
         all_known = all_known.exclude(id=profile.character.id)
-        all_known = all_known.prefetch_related(
-            Prefetch('biography_packets', queryset=profile.authored_bio_packets.all())
-        )
         
         character_groups = character_groups.prefetch_related(
             Prefetch('characters', queryset=all_known),
-            'characters__profile',
         )
         ungrouped = all_known.exclude(character_groups__in=character_groups)
         
     context = {
         'page_title': 'Prosoponomikon',
-        'character_groups': character_groups,
+        'character_groups': character_groups.order_by(F('order_no').asc(nulls_last=True), F('name')),
         'ungrouped': ungrouped.select_related('profile'),
     }
     if character_groups:
