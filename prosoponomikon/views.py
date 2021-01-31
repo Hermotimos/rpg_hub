@@ -59,7 +59,7 @@ def prosoponomikon_grouped_view(request):
     
     if profile.status == 'gm':
         character_groups = character_groups.prefetch_related(
-            'characterss__biography_packets')
+            'characters__biography_packets')
         ungrouped = Character.objects.exclude(
             character_groups__in=character_groups)
         ungrouped = ungrouped.prefetch_related('biography_packets')
@@ -85,12 +85,12 @@ def prosoponomikon_grouped_view(request):
             Prefetch('characters', queryset=all_known),
             'characters__profile',
         )
-        ungrouped = all_known.exclude(character_groups=character_groups)
+        ungrouped = all_known.exclude(character_groups__in=character_groups)
         
     context = {
         'page_title': 'Prosoponomikon',
         'character_groups': character_groups,
-        'ungrouped': ungrouped.prefetch_related('profile'),
+        'ungrouped': ungrouped.select_related('profile'),
     }
     if character_groups:
         return render(request, 'prosoponomikon/characters_grouped.html', context)

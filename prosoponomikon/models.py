@@ -148,6 +148,7 @@ class CharacterGroup(Model):
     
     class Meta:
         ordering = ['order_no', 'name']
+        unique_together = ('name', 'author')
         verbose_name = '* CHARACTER GROUP'
         verbose_name_plural = '* CHARACTER GROUPS'
     
