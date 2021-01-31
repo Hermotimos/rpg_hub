@@ -155,7 +155,13 @@
                                 <p class="h3 text-center mb-2 mt-1">Mieszkańcy i bywalcy</p>
                                 <p class="mb-0 text-center">✧ ✦ ✧</p>
                                 <p class="mb-5 mt-0 text-center">✧</p>
-                                {% include 'prosoponomikon/_characters.html' %}
+                                <div class="container">
+                                    <div class="row">
+                                        {% for character in characters %}
+                                            {% include 'prosoponomikon/_char_img.html' %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
                             </div>
                         </section>
                     {% endif %}

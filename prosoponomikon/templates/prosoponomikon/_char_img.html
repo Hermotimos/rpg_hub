@@ -4,7 +4,8 @@
         <a href="{% url 'prosoponomikon:character' character.name %}">
             <div class="img-hover-zoom m-0">
                 <img class="character {% if not character.profile.is_alive %} img-grayscale {% endif %}"
-                     src="{% if not character.only_indirectly %} {{ character.profile.image.url }} {% else %} TODO question marks {% endif %}" alt="Profile img">
+                     src="{% if not character.only_indirectly %} {{ character.profile.image.url }} {% else %} TODO question marks {% endif %}" alt="Profile img"
+                     data-toggle="tooltip" data-placement="bottom" title="{{ character.name }}">
             </div>
         </a>
     </div>
