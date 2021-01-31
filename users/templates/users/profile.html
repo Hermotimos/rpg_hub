@@ -14,7 +14,9 @@
             <div class="media-body">
                 <h4 class="account-heading d-flex justify-content-between">
                     {{ user.profile.character.name }}
-                    <a href="{% url 'users:change-password' %}" class="btn btn-outline-dark text-right">Zmiana hasła</a>
+                    <span class="float-right">
+                        <a href="{% url 'users:change-password' %}" class="btn btn-outline-dark">Zmiana hasła</a>
+                    </span>
                 </h4>
                 <p class="text-secondary">{{ user.email }}</p>
 
@@ -26,6 +28,7 @@
             <fieldset class="form-group">
                 <b>
                     {{ user_form|crispy }}
+                    {{ character_form|crispy }}
                     {{ profile_form|crispy }}
                 </b>
             </fieldset>

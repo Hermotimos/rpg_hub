@@ -2,9 +2,9 @@ from crispy_forms.bootstrap import PrependedText
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Div, Field
 from crispy_forms.layout import Submit
-from django.forms import modelformset_factory
+from django.forms import modelformset_factory, ModelForm
 
-from prosoponomikon.models import CharacterGroup
+from prosoponomikon.models import CharacterGroup, Character
 
 
 CharacterManyGroupsEditFormSet = modelformset_factory(
@@ -54,3 +54,23 @@ class CharacterGroupsEditFormSetHelper(FormHelper):
                     ),
                 ),
             )
+
+
+class CharacterForm(ModelForm):
+    
+    class Meta:
+        model = Character
+        fields = ['name', 'description']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['description'].label = "Opis postaci"
+        self.fields['description'].widget.attrs[
+            'placeholder'
+        ] = "Krótka charakterystyka postaci i podstawowe informacje"
+        self.fields['name'].label = "Imię postaci (wyświetlane przy postach)"
+        self.fields['name'].max_length = 50
+        self.fields['name'].widget.attrs[
+            'placeholder'
+        ] = "max. 50 znaków (spacje dozwolone)"
+        self.fields['name'].widget.attrs['size'] = 60

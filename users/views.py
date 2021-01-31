@@ -5,6 +5,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, redirect
 
+from prosoponomikon.forms import CharacterForm
 from prosoponomikon.models import Character
 from users.forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
 from users.models import Profile
@@ -68,20 +69,25 @@ def profile_view(request):
         user_form = UserUpdateForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(request.POST, request.FILES,
                                          instance=request.user.profile)
+        character_form = CharacterForm(request.POST,
+                                       instance=request.user.profile.character)
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            character_form.save()
             messages.info(request, 'Zaktualizowano profil postaci!')
             return redirect('users:profile')
     else:
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
+        character_form = CharacterForm(instance=request.user.profile.character)
 
     context = {
         'page_title': 'Profil',
         'user_form': user_form,
-        'profile_form': profile_form
+        'profile_form': profile_form,
+        'character_form': character_form,
     }
     return render(request, 'users/profile.html', context)
 
