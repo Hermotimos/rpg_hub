@@ -173,14 +173,32 @@ def prosoponomikon_character_groups_modify_view(request):
     
     if request.method == 'POST':
         formset = CharacterGroupsOrderFormSet(request.POST, queryset=character_groups)
-        formset_helper = CharacterGroupsOrderFormSetHelper()
-        
         if formset.is_valid():
             try:
                 for form in formset:
-                    form.save()
-                messages.success(request, f"Zapisano zmiany!")
+                    if form.is_valid():
+                        # Ignore empty extra-form
+                        if form.cleaned_data == {}:
+                            pass
+                        # Existing groups modification/deletion
+                        elif form.cleaned_data.get('id') is not None:
+                            if form.cleaned_data.get('DELETE'):
+                                character_group = form.cleaned_data.get('id')
+                                character_group.delete()
+                                messages.success(request, f"Usunięto grupę '{character_group.name}'!")
+                            else:
+                                character_group = form.save()
+                                messages.success(request, f"Zmodyfikowano grupę '{character_group.name}'!")
+                        # New group
+                        else:
+                            character_group = form.save(commit=False)
+                            character_group.author = profile
+                            character_group.save()
+                            character_group.characters.set(form.cleaned_data['characters'])
+                            messages.success(request, f"Utworzono grupę '{character_group.name}'!")
+                            
                 return redirect('prosoponomikon:main')
+            
             except IntegrityError:
                 messages.warning(request, "Nazwy grup muszą być unikalne!")
                 return redirect('prosoponomikon:groups-modify')
@@ -189,11 +207,11 @@ def prosoponomikon_character_groups_modify_view(request):
 
     else:
         formset = CharacterGroupsOrderFormSet(queryset=character_groups)
-        formset_helper = CharacterGroupsOrderFormSetHelper()
-        
+
+    formset.forms = [formset.forms[-1]] + formset.forms[:-1]
     context = {
         'page_title': "Zmiana kolejności grup",
         'formset': formset,
-        'formset_helper': formset_helper,
+        'formset_helper': CharacterGroupsOrderFormSetHelper(),
     }
     return render(request, '_formset.html', context)

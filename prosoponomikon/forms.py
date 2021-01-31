@@ -44,7 +44,8 @@ class GMCharcterGroupCreateForm(CharacterGroupCreateForm):
 CharacterGroupsOrderFormSet = modelformset_factory(
     model=CharacterGroup,
     fields=['name', 'order_no', 'characters'],
-    extra=0
+    extra=1,
+    can_delete=True,
 )
 
 
@@ -59,10 +60,14 @@ class CharacterGroupsOrderFormSetHelper(FormHelper):
                     PrependedText('order_no', '', placeholder="Nr porządkowy"),
                     css_class='form-group col-sm-3 mb-0'
                 ),
-                Column('name', css_class='form-group col-sm-9 mb-0'),
+                Column(
+                    PrependedText('name', '', placeholder="Nazwa nowej grupy"),
+                    css_class='form-group col-sm-8 mb-0'),
+                Column('DELETE', css_class='form-group col-sm-1 mb-0', title="Usunąć grupę?"),
             ),
             Row(
                 Column(Div(), css_class='col-sm-3 mb-0'),
                 Column('characters', css_class='form-group col-sm-9 mb-0'),
             ),
         )
+

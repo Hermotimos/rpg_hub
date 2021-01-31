@@ -5,6 +5,12 @@
 {% block content %}
     <article class="top-space">
         <form method="POST">
+            
+            <!-- Upper submit button for easier handling of very large formsets -->
+            {% if formset.total_form_count > 10 %}
+                <input id="submit-id-submit" class="btn btn-primary btn-dark mb-3" type="submit" name="submit" value="Zapisz zmiany">
+            {% endif %}
+            
             {% csrf_token %}
             {% crispy formset formset_helper %}
         </form>
