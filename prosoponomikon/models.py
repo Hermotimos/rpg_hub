@@ -26,11 +26,6 @@ from users.models import Profile
 class Character(Model):
     profile = OneToOne(to=Profile, on_delete=CASCADE)
     name = CharField(max_length=100)
-    birth_location = FK(
-        to=Location,
-        related_name='characters_born',
-        on_delete=PROTECT,
-    )
     frequented_locations = M2M(
         to=Location,
         related_name='frequented_by_characters',
@@ -156,12 +151,13 @@ class CharacterGroup(Model):
         return f"{self.name} [{self.author}]"
 
 
-@receiver(post_save, sender=Character)
-def create_profile(sender, instance, created, **kwargs):
+# @receiver(post_save, sender=Character)
+def copy_name_from_character_to_profile(sender, instance, **kwargs):
     profile = instance.profile
     profile.copied_character_name = instance.name
     profile.save()
-    if created:
-        profile = instance.profile
-        profile.copied_character_name = instance.name
-        profile.save()
+
+
+post_save.connect(copy_name_from_character_to_profile, sender=Character)
+post_save.connect(copy_name_from_character_to_profile, sender=NPCCharacter)
+post_save.connect(copy_name_from_character_to_profile, sender=PlayerCharacter)

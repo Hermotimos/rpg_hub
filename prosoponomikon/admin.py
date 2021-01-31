@@ -7,8 +7,8 @@ from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, Char
 
 
 class CharacterAdmin(admin.ModelAdmin):
-    list_display = ['get_img', 'name', 'birth_location', 'description']
-    list_editable = ['name', 'birth_location', 'description']
+    list_display = ['get_img', 'name', 'description']
+    list_editable = ['name', 'description']
     search_fields = ['name', 'description']
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 4, 'cols': 50})},
@@ -22,7 +22,7 @@ class CharacterAdmin(admin.ModelAdmin):
         request = kwargs['request']
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
         fields = [
-            'birth_location',
+            # 'birth_location',
         ]
         for field in fields:
             if db_field.name == field:
