@@ -1,13 +1,13 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.db import models
-from django.db.models import Q
+from django.db.models import Q, CharField
 from django.forms.widgets import TextInput
 from django.utils.html import format_html
 
 from imaginarion.models import Picture
-from knowledge.models import KnowledgePacket, MapPacket, BiographyPacket, DialoguePacket
+from knowledge.models import KnowledgePacket, MapPacket, BiographyPacket, \
+    DialoguePacket
 from rules.models import Skill
 from toponomikon.models import Location
 
@@ -88,7 +88,7 @@ class KnowledgePacketAdminForm(forms.ModelForm):
 class KnowledgePacketAdmin(admin.ModelAdmin):
     form = KnowledgePacketAdminForm
     formfield_overrides = {
-        models.CharField: {'widget': TextInput(attrs={'size': 50})},
+        CharField: {'widget': TextInput(attrs={'size': 50})},
     }
     list_display = ['id', 'title', 'text', 'get_acquired_by']
     list_editable = ['title', 'text']
