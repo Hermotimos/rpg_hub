@@ -74,7 +74,7 @@ class Remark(Model):
         upload_to='post_pics',
         blank=True,
         null=True,
-        verbose_name='Obraz [opcjonalnie]',
+        verbose_name='Obraz',
     )
     seen_by = M2MField(to=Profile, related_name='remarks_seen', blank=True)
     created_at = DateTimeField(auto_now_add=True)

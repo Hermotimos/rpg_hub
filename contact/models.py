@@ -29,7 +29,7 @@ class Demand(Model):
         upload_to='contact_pics',
         blank=True,
         null=True,
-        verbose_name='Obraz [opcjonalnie]',
+        verbose_name='Obraz',
     )
     is_done = BooleanField(default=False)
 
@@ -61,7 +61,7 @@ class DemandAnswer(Model):
         upload_to='contact_pics',
         blank=True,
         null=True,
-        verbose_name='Obraz [opcjonalnie]',
+        verbose_name='Obraz',
     )
 
     class Meta:
@@ -92,7 +92,7 @@ class Plan(Model):
         upload_to='contact_pics',
         blank=True,
         null=True,
-        verbose_name='Obraz [opcjonalnie]',
+        verbose_name='Obraz',
     )
     
     class Meta:

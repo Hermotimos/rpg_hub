@@ -15,7 +15,7 @@ from users.models import Profile
 
 class InfoPacket(Model):
     title = CharField(max_length=100, unique=True, verbose_name='Tytuł')
-    text = TextField(blank=True, null=True, verbose_name='Treść (niewymagane)')
+    text = TextField(blank=True, null=True, verbose_name='Treść')
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
@@ -66,7 +66,7 @@ class KnowledgePacket(InfoPacket):
         to=Picture,
         related_name='knowledge_packets',
         blank=True,
-        verbose_name='Obrazy [opcjonalnie]',
+        verbose_name='Obrazy',
     )
     skills = M2M(
         to=Skill,
@@ -89,7 +89,7 @@ class MapPacket(InfoPacket):
     pictures = M2M(
         to=Picture,
         related_name='map_packets',
-        verbose_name='Obrazy [opcjonalnie]',
+        verbose_name='Obrazy',
     )
 
     def save(self, *args, **kwargs):
