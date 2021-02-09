@@ -179,6 +179,19 @@ br + br {
 
 img {border-style: double;}
 
+/*
+    Make all imgs unclickable. Disables "Pokaż obraz" feature that would enable
+    site users to view the original form of pictures that are presented to them
+    in modified way (ex. grayscale for "known only indirectly").
+*/
+img {pointer-events: none;}
+
+/*
+    Make figure with class .pointer show pointer on hover. This allows pointer
+    over img tags (that fave pointer-events: none).
+*/
+figure.pointer {cursor: pointer;}
+
 .article-img {
     height: 5rem;
     width: auto;
@@ -355,15 +368,8 @@ div.img-hover-zoom {
 
 
 
-/*
-TODO
-Apply these classes to all imgs, not only Chronicle: they all have to get
-modals, and then these can be generalized:
-*/
-figure.for-modal img  {pointer-events: none;}
-figure.for-modal {cursor: pointer;}
 
-img.img-pointer:hover {cursor: pointer;}
+
 
 .modal-img img {
     max-width: 100%;
