@@ -26,12 +26,14 @@
                     <h4 class="text-center">
                         {% for profile in informables %}
                             <input class="select-profile" type="checkbox" id="id_{{ forloop.counter }}{{ id_ }}" name="{{ profile.id }}">
+                        
                             <label for="id_{{ forloop.counter }}{{ id_ }}">
                                 <figure class="pointer">
                                     <img class="article-img img-pointer rounded-circle" src="{{ profile.image.url }}">
                                 </figure>
                                 
                             </label>
+                            
                         {% endfor %}
                     </h4>
                     <h5 class="text-center text-danger">
@@ -46,7 +48,11 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-dark mx-auto" type="submit" name="{{ inform_type }}" value="{{ id_ }}" onclick="window.close()">
-                        Dołącz / Poinformuj
+                        {% if inform_type  == 'Debate' %}
+                            Dołącz
+                        {% else %}
+                            Poinformuj
+                        {% endif %}
                     </button>
                 </div>
             </form>
