@@ -12,6 +12,11 @@
             <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">
                 <a class="btn btn-outline-dark icon-note mt-1 py-2 disabled" href="#"></a>
             </div>
+            {% if request.user.profile.status == 'gm' %}
+                <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Edytuj wydarzenie">
+                    <a class="btn btn-outline-dark icon-edit mt-1 py-2" href="{% url 'admin:chronicles_gameevent_change' event.id %}" target="_blank"></a>
+                </div>
+            {% endif %}
         </div>
         
         
