@@ -265,20 +265,17 @@
                             </a>
                         {% endif %}
                         <div data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">
-                            <a class="btn btn-outline-dark btn-sm mt-1 py-1 disabled" href="#">
-                                <i class="icon-note-small"></i>
-                            </a>
+                            <a class="btn btn-outline-dark btn-sm icon-note-small mt-1 py-1 disabled"
+                               href="#"></a>
                         </div>
                         {% if request.user.profile.status == 'gm' %}
                             <div class="mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj wydarzenie">
-                                <a class="py-1" href="{% url 'admin:chronicles_gameevent_change' event.id %}" target="_blank">
-                                    <i class="btn btn-outline-dark btn-sm icon-edit-small"></i>
-                                </a>
+                                <a class="btn btn-outline-dark btn-sm icon-edit-small py-1"
+                                   href="{% url 'admin:chronicles_gameevent_change' event.id %}" target="_blank"></a>
                             </div>
                             <div class="mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Sesję">
-                                <a class="py-1" href="{% url 'admin:chronicles_gamesession_change' event.game.id %}" target="_blank">
-                                    <i class="btn btn-outline-dark btn-sm icon-edit-small"></i>
-                                </a>
+                                <a class="btn btn-outline-dark btn-sm icon-edit-small py-1"
+                                   href="{% url 'admin:chronicles_gamesession_change' event.game.id %}" target="_blank"></a>
                             </div>
                         {% endif %}
                     </td>
