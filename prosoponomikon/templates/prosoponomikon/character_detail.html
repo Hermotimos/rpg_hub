@@ -37,6 +37,12 @@
                             <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">
                                 <a class="btn btn-outline-dark icon-note py-2 disabled" href="#"></a>
                             </div>
+                            {% if request.user.profile.status == 'gm' %}
+                                <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj postać">
+                                    <a class="btn btn-outline-dark icon-edit py-2" href="{% url 'admin:prosoponomikon_character_change' character.id %}" target="_blank"></a>
+                                </div>
+                            {% endif %}
+
                         </div>
     
                         <!-- CHARACTER DESCRIPTION -->
