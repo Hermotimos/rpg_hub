@@ -50,6 +50,9 @@
                                     {% endwith %}
                                 </div>
                             <span class="btn btn-outline-dark icon-note py-2 mb-sm-1 disabled"><a href="#"></a></span>
+                            {% if request.user.profile.status == 'gm' %}
+                                <a class="btn btn-outline-dark icon-edit py-2 mb-sm-1" href="{% url 'admin:toponomikon_location_change' this_location.id %}" target="_blank"></a>
+                            {% endif %}
                         </div>
                         <!-- DESCRIPTION -->
                         <div class="col-12 col-md-11 p-0 pl-md-3 ml-lg-n3 ml-xl-n4">
