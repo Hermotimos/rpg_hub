@@ -26,7 +26,7 @@ def custom_sort(skills_qs):
         is_match = ExpressionWrapper(expression, output_field=BooleanField())
         skills_qs = skills_qs.annotate(annotation=is_match)
         # Order by the annotated field in reverse, so `True` is first (0 < 1).
-        skills_qs = skills_qs.order_by('-annotation', 'name')
+        skills_qs = skills_qs.order_by('-annotation', 'sorting_name')
     
     return skills_qs
 
