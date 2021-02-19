@@ -16,7 +16,7 @@
                                     {% if request.user.profile in profile.character.known_directly.all or request.user.profile.status == 'gm' %}
                                         {{ profile.image.url }}
                                     {% else %}
-                                        TODO question marks
+                                         /media/profile_pics/profile_known_only_indirectly.jpg
                                     {% endif %}"
                                  alt="Profile img">
                             <p class="pt-1 text-center">{{ profile.character.name }}</p>
