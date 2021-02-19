@@ -34,7 +34,7 @@
                     <p class="mb-0 text-center">✧ ✦ ✧</p>
                     <p class="mb-5 mt-0 text-center">✧</p>
                     {% for character in character_group.characters.all %}
-                        {% include 'prosoponomikon/_character.html' %}
+                        {% include 'prosoponomikon/_character_info.html' %}
                     {% endfor %}
                 </section>
             {% endfor %}
@@ -47,7 +47,7 @@
                     <p class="mb-0 text-center">✧ ✦ ✧</p>
                     <p class="mb-5 mt-0 text-center">✧</p>
                     {% for character in ungrouped %}
-                        {% include 'prosoponomikon/_character.html' %}
+                        {% include 'prosoponomikon/_character_info.html' %}
                     {% endfor %}
                 </section>
             {% endif %}

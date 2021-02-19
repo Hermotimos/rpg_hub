@@ -124,26 +124,31 @@ def prosoponomikon_grouped_view(request):
 @login_required
 def prosoponomikon_character_view(request, character_name):
     profile = request.user.profile
+    
     characters = Character.objects.select_related()
     if profile.status == 'gm':
-
         characters = characters.prefetch_related('biography_packets',
                                                  'dialogue_packets')
     else:
-        # TODO analogicznie do Toponomikonu - wyfiltorwać kto co zna
-        pass
-    
-    character = characters.get(name=character_name)
+        known_bio_packets = (profile.biography_packets.all()
+                             | profile.authored_bio_packets.all())
+        characters = characters.prefetch_related(
+            Prefetch('biography_packets', queryset=known_bio_packets))
+
+    character = characters.filter(name=character_name).first()
 
     # INFORM FORM
     if request.method == 'POST':
         handle_inform_form(request)
     
     context = {
-        'page_title': character.name, # TODO (znasz ze słyszenia) if only indirectly
+        'page_title': character.name,
         'character': character,
     }
-    return render(request, 'prosoponomikon/character_detail.html', context)
+    if profile in character.all_known() or profile.status == 'gm':
+        return render(request, 'prosoponomikon/character.html', context)
+    else:
+        return redirect('home:dupa')
 
 
 @login_required
