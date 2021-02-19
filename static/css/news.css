@@ -1,29 +1,25 @@
 
 
 .allowed-profiles-form-news select {
-        min-height: 150px;
-        width: 300px;
+    min-height: 150px;
+    width: 300px;
 }
 
-.border-2 {
-        border: solid 2px;
-}
+.border-2 {border: solid 2px;}
 
 .img-edit {
-        height: 15px;
-        width: auto;
-        margin-left: auto;
-        margin-right: auto;
+    height: 15px;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.inline {
-        float:left;
-}
+.inline {float:left;}
 
 .btn-modify {
-        color: black;
-        border: 1px solid;
-        padding: 5px;
-        text-align: top;
-        height: 30px;
+    color: black;
+    border: 1px solid;
+    padding: 5px;
+    text-align: top;
+    height: 30px;
 }

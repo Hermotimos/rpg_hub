@@ -1,18 +1,19 @@
 
-h1.rules, h2.rules, h3.rules, h4.rules, h5.rules, h6.rules {
-        font-weight: bold;
-}
+h1.rules,
+h2.rules,
+h3.rules,
+h4.rules,
+h5.rules,
+h6.rules {font-weight: bold;
 
 .rules-styling p {
-        font-size: 18px;
-        font-style: italic;
-        padding: 5px;
-        text-align: justify;
+    font-size: 18px;
+    font-style: italic;
+    padding: 5px;
+    text-align: justify;
 }
 
-ol.content-table {
-        padding-left: 4rem;
-}
+ol.content-table {padding-left: 4rem;}
 
 ol.rules li, ul.rules li {
     font-style: italic;
@@ -21,22 +22,20 @@ ol.rules li, ul.rules li {
 
 
 .img-rules {
-        float: left;
-        height: 45px;
-        width: auto;
-        margin-right: 5px;
+    float: left;
+    height: 45px;
+    width: auto;
+    margin-right: 5px;
 }
 
 
-.no-bullets {
-        list-style: none;
-}
+.no-bullets {list-style: none;}
 
 .img-numeral {
-        float: left;
-        height: 30px;
-        width: auto;
-        margin-right: 5px;
+    float: left;
+    height: 30px;
+    width: auto;
+    margin-right: 5px;
 }
 
 .resp-container {
@@ -126,88 +125,52 @@ ol.rules li, ul.rules li {
 .key .point {width: 25%;}
 .key .explanation {width: %;}
 
-table.weapons {
-        border: double;
-}
+table.weapons {border: double;}
 
-table.key td {
-        padding: 5px 0px 5px 0px;
-}
+table.key td {padding: 5px 0px 5px 0px;}
 
-td .nowrap {
-        white-space: nowrap;
-}
+td .nowrap { white-space: nowrap;}
 
 .weapons thead {
-        background-color: #363636;
-        color: #ffffff;
+    background-color: #363636;
+    color: #ffffff;
 }
 
-.weapons th {
-        font-weight: normal;
-}
+.weapons th {font-weight: normal;}
 
 .key tr:nth-child(even),
 .professions tr:nth-child(even),
 .shields tr:nth-child(even),
 .plate-and-tricks tr:nth-child(2n+3),
-.protection tr:nth-child(even) {
-        background-color: #f2f2f2;
-}
+.protection tr:nth-child(even) {background-color: #f2f2f2;}
 
 .plates tr:nth-child(4n-1),
 .plates tr:nth-child(4n),
 .weapons tbody tr:nth-child(4n-1),
-.weapons tbody tr:nth-child(4n) {
-        background-color: #f2f2f2;
-}
+.weapons tbody tr:nth-child(4n) {background-color: #f2f2f2;}
 
 
 .weapons-img img {
-        display: block;
-        max-width: 100%;
-        max-height: 300px;
-        height: auto;
+    display: block;
+    max-width: 100%;
+    max-height: 300px;
+    height: auto;
 }
 
-.rules-red {
-        color: #993300;
-}
+.rules-red {color: #993300;}
 
-.rules-green {
-        color: #008000;
-}
+.rules-green {color: #008000;}
 
-.back-gray {
-        background-color: #f2f2f2;
-}
+.back-gray {background-color: #f2f2f2;}
 
-.border-custom-right {
-        border-right: 1px solid #363636;
-}
+.border-custom-right {border-right: 1px solid #363636;}
 
-thead.align-center th {
-        text-align: center;
-}
+thead.align-center th {text-align: center;}
+tbody.align-center td {text-align: center;}
 
-tbody.align-center td {
-        text-align: center;
-}
-
-tbody.align-center td.align-right {
-        text-align: right;
-}
-
-tbody.align-center td.align-left {
-        text-align: left;
-}
-
-thead.align-center th.align-left {
-        text-align: left;
-}
-
-thead.align-center th.align-right {
-        text-align: right;
-}
+tbody.align-center td.align-right {text-align: right;}
+tbody.align-center td.align-left {text-align: left;}
+thead.align-center th.align-left {text-align: left;}
+thead.align-center th.align-right {text-align: right;}
 
 
