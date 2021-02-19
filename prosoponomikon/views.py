@@ -40,6 +40,7 @@ def prosoponomikon_ungrouped_view(request):
                 output_field=IntegerField(),
             ),
         )
+        all_known = all_known.prefetch_related('known_directly', 'known_indirectly')
         # all_known = all_known.prefetch_related(
         #     Prefetch('biography_packets', queryset=profile.authored_bio_packets.all())
         # )

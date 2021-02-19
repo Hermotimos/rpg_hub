@@ -4,8 +4,13 @@
         <a href="{% url 'prosoponomikon:character' character.name %}">
             <div class="img-hover-zoom m-0">
                 <img class="character {% if not character.profile.is_alive %} img-grayscale {% endif %}"
-                     src="{% if not character.only_indirectly %} {{ character.profile.image.url }} {% else %} TODO question marks {% endif %}" alt="Profile img"
-                     data-toggle="tooltip" data-placement="bottom" title="{{ character.name }}">
+                     src="
+                        {% if request.user.profile in character.known_directly.all or request.user.profile.status == 'gm' %}
+                            {{ character.profile.image.url }}
+                        {% else %}
+                             /media/profile_pics/profile_known_only_indirectly.jpg
+                        {% endif %}"
+                     alt="Profile img" data-toggle="tooltip" data-placement="bottom" title="{{ character.name }}">
             </div>
         </a>
     </div>
