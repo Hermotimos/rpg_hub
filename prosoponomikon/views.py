@@ -27,8 +27,10 @@ def prosoponomikon_main_view(request):
 def prosoponomikon_ungrouped_view(request):
     profile = request.user.profile
     if profile.status == 'gm':
-        players = PlayerCharacter.objects.all()
-        npcs = NPCCharacter.objects.all()
+        all_characters = Character.objects.prefetch_related(
+            'known_directly', 'known_indirectly')
+        players = all_characters.filter(profile__in=Profile.players.all())
+        npcs = all_characters.filter(profile__in=Profile.npcs.all())
     else:
         known_dir = profile.characters_known_directly.all()
         known_indir = profile.characters_known_indirectly.all()
@@ -42,8 +44,8 @@ def prosoponomikon_ungrouped_view(request):
                 output_field=IntegerField(),
             ),
         )
-        all_known = all_known.prefetch_related('known_directly',
-                                               'known_indirectly')
+        all_known = all_known.prefetch_related(
+            'known_directly', 'known_indirectly')
         # all_known = all_known.prefetch_related(
         #     Prefetch('biography_packets', queryset=profile.authored_bio_packets.all())
         # )
@@ -66,10 +68,13 @@ def prosoponomikon_grouped_view(request):
     
     if profile.status == 'gm':
         character_groups = character_groups.prefetch_related(
-            'characters__profile__user')
+            'characters__profile__user',
+            'characters__known_directly',
+            'characters__known_indirectly')
         ungrouped = Character.objects.exclude(
             character_groups__in=character_groups)
-        ungrouped = ungrouped.prefetch_related('profile__user')
+        ungrouped = ungrouped.prefetch_related(
+            'profile__user', 'known_directly', 'known_indirectly')
     else:
         known_dir = profile.characters_known_directly.all()
         known_indir = profile.characters_known_indirectly.all()
@@ -84,8 +89,8 @@ def prosoponomikon_grouped_view(request):
             ),
         )
         all_known = all_known.exclude(id=profile.character.id)
-        all_known = all_known.prefetch_related('known_directly',
-                                               'known_indirectly')
+        all_known = all_known.prefetch_related(
+            'known_directly', 'known_indirectly')
         
         character_groups = character_groups.prefetch_related(
             Prefetch('characters__profile__user', queryset=all_known),
@@ -105,39 +110,21 @@ def prosoponomikon_grouped_view(request):
         return redirect('prosoponomikon:ungrouped')
 
 
-# @login_required
-# def prosoponomikon_characters_view(request):
-#     profile = request.user.profile
-#     if profile.status == 'gm':
-#         player_characters = PlayerCharactera.objects.all()
-#         npc_characters = NPCCharacter.objects.all()
-#     else:
-#         player_characters = []
-#         npc_characters = []
-#
-#     context = {
-#         'page_title': 'Prosoponomikon',
-#         'player_character': player_characters.select_related('profile'),
-#         'npc_characters': npc_characters.select_related('profile'),
-#     }
-#     return render(request, 'prosoponomikon/characters.html', context)
-
-
 @login_required
-def prosoponomikon_character_view(request, character_name):
+def prosoponomikon_character_view(request, character_id):
     profile = request.user.profile
     
     characters = Character.objects.select_related()
     if profile.status == 'gm':
-        characters = characters.prefetch_related('biography_packets',
-                                                 'dialogue_packets')
+        characters = characters.prefetch_related(
+            'biography_packets', 'dialogue_packets')
     else:
         known_bio_packets = (profile.biography_packets.all()
                              | profile.authored_bio_packets.all())
         characters = characters.prefetch_related(
             Prefetch('biography_packets', queryset=known_bio_packets))
 
-    character = characters.filter(name=character_name).first()
+    character = characters.filter(id=character_id).first()
 
     # INFORM FORM
     if request.method == 'POST':
@@ -195,11 +182,10 @@ def prosoponomikon_character_groups_edit_view(request, group_id=0):
                             obj.author = profile
                             obj.save()
                             obj.characters.set(form.cleaned_data['characters'])
-                            messages.success(
-                                request, f"Utworzono grupę '{obj.name}'!")
-                            
-                return redirect('prosoponomikon:main')
-            
+                            messages.warning(request,
+                                             "Nazwy grup muszą być unikalne!")
+                            return redirect('prosoponomikon:groups-modify')
+
             except IntegrityError:
                 messages.warning(request, "Nazwy grup muszą być unikalne!")
                 return redirect('prosoponomikon:groups-modify')
