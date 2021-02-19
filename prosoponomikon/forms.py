@@ -57,6 +57,7 @@ class CharacterGroupsEditFormSetHelper(FormHelper):
 
 
 class CharacterForm(ModelForm):
+    """Form used in 'users' app to fill in Character details."""
     
     class Meta:
         model = Character
