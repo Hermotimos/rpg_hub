@@ -13,7 +13,7 @@
                         <div class="col-sm-6 col-lg-3">
                             <img class="img-fluid mx-auto d-block {% if not profile.is_alive %} img-grayscale {% endif %}"
                                  src="
-                                    {% if request.user.profile in profile.character.known_directly.all %}
+                                    {% if request.user.profile in profile.character.known_directly.all or request.user.profile.status == 'gm' %}
                                         {{ profile.image.url }}
                                     {% else %}
                                         TODO question marks
@@ -32,7 +32,8 @@
                 <div class="row">
                     {% for location in rand_locations %}
                         <div class="col-sm-12 col-lg-6">
-                            <img class="img-fluid mx-auto d-block {% if not request.user.profile in location.known_directly.all %} img-grayscale {% endif %}"
+                            <img class="img-fluid mx-auto d-block
+                                 {% if not request.user.profile in location.known_directly.all and not request.user.profile.status == 'gm' %} img-grayscale {% endif %}"
                                  src="{{ location.main_image.image.url }}"
                                  alt="Location img">
                             <p class="pt-1 text-center">{{ location.name }}</p>
