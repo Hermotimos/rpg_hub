@@ -40,7 +40,8 @@ def prosoponomikon_ungrouped_view(request):
                 output_field=IntegerField(),
             ),
         )
-        all_known = all_known.prefetch_related('known_directly', 'known_indirectly')
+        all_known = all_known.prefetch_related('known_directly',
+                                               'known_indirectly')
         # all_known = all_known.prefetch_related(
         #     Prefetch('biography_packets', queryset=profile.authored_bio_packets.all())
         # )
@@ -81,6 +82,8 @@ def prosoponomikon_grouped_view(request):
             ),
         )
         all_known = all_known.exclude(id=profile.character.id)
+        all_known = all_known.prefetch_related('known_directly',
+                                               'known_indirectly')
         
         character_groups = character_groups.prefetch_related(
             Prefetch('characters__profile__user', queryset=all_known),
@@ -90,7 +93,8 @@ def prosoponomikon_grouped_view(request):
         
     context = {
         'page_title': 'Prosoponomikon',
-        'character_groups': character_groups.order_by(F('order_no').asc(nulls_last=True), F('name')),
+        'character_groups': character_groups.order_by(
+            F('order_no').asc(nulls_last=True), F('name')),
         'ungrouped': ungrouped.select_related('profile'),
     }
     if character_groups:
@@ -123,7 +127,8 @@ def prosoponomikon_character_view(request, character_name):
     characters = Character.objects.select_related()
     if profile.status == 'gm':
 
-        characters = characters.prefetch_related('biography_packets', 'dialogue_packets')
+        characters = characters.prefetch_related('biography_packets',
+                                                 'dialogue_packets')
     else:
         # TODO analogicznie do Toponomikonu - wyfiltorwać kto co zna
         pass

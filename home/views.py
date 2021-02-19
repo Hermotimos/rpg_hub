@@ -11,12 +11,19 @@ from users.models import Profile
 def home_view(request):
     profile = request.user.profile
 
-    known_profiles = Profile.objects.exclude(id=profile.id).select_related('character').prefetch_related('character__known_directly', 'character__known_indirectly')
-    known_locations = Location.objects.select_related('main_image').prefetch_related('known_directly', 'known_indirectly')
+    known_profiles = Profile.objects.exclude(id=profile.id)
+    known_profiles = known_profiles.select_related('character')
+    known_profiles = known_profiles.prefetch_related(
+        'character__known_directly', 'character__known_indirectly')
+    
+    known_locations = Location.objects.select_related('main_image')
+    known_locations = known_locations.prefetch_related(
+        'known_directly', 'known_indirectly')
 
     if profile.status != 'gm':
         known_profiles = known_profiles.filter(
-            Q(character__known_directly=profile) | Q(character__known_indirectly=profile))
+            Q(character__known_directly=profile)
+            | Q(character__known_indirectly=profile))
         known_locations = known_locations.filter(
             Q(known_directly=profile) | Q(known_indirectly=profile))
         
