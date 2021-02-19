@@ -1,33 +1,33 @@
-from random import randrange
-
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import render
 
+from rpg_project.utils import sample_from_qs
+from toponomikon.models import Location
 from users.models import Profile
 
 
 @login_required
 def home_view(request):
     profile = request.user.profile
-    if profile.status == 'gm':
-        known_profiles = Profile.objects.exclude(id=profile.id)
-    else:
-        known_profiles = []
+
+    known_profiles = Profile.objects.exclude(id=profile.id).select_related('character').prefetch_related('character__known_directly', 'character__known_indirectly')
+    known_locations = Location.objects.select_related('main_image').prefetch_related('known_directly', 'known_indirectly')
+
+    if profile.status != 'gm':
+        known_profiles = known_profiles.filter(
+            Q(character__known_directly=profile) | Q(character__known_indirectly=profile))
+        known_locations = known_locations.filter(
+            Q(known_directly=profile) | Q(known_indirectly=profile))
         
-    rand_profiles = rand_nums = []
-    counter = 0
-    
-    if known_profiles:
-        while counter < 4:
-            rand = randrange(len(known_profiles))
-            if rand not in rand_nums:
-                rand_profiles.append(known_profiles[rand])
-                rand_nums.append(rand)
-                counter += 1
+    # set() ensures that if len(known) < k, than duplicates will be removed
+    rand_profiles = sample_from_qs(qs=known_profiles, max_size=4)
+    rand_locations = sample_from_qs(qs=known_locations, max_size=4)
 
     context = {
         'page_title': 'Hyllemath',
         'rand_profiles': rand_profiles,
+        'rand_locations': rand_locations,
     }
     return render(request, 'home/home.html', context)
 

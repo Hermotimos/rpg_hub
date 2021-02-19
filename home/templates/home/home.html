@@ -10,9 +10,14 @@
             <div class="container">
                 <div class="row">
                     {% for profile in rand_profiles %}
-                        <div class="col-sm-6  col-lg-3">
+                        <div class="col-sm-6 col-lg-3">
                             <img class="img-fluid mx-auto d-block {% if not profile.is_alive %} img-grayscale {% endif %}"
-                                 src="{{ profile.image.url }}"
+                                 src="
+                                    {% if request.user.profile in profile.character.known_directly.all %}
+                                        {{ profile.image.url }}
+                                    {% else %}
+                                        TODO question marks
+                                    {% endif %}"
                                  alt="Profile img">
                             <p class="pt-1 text-center">{{ profile.character.name }}</p>
                         </div>
@@ -25,7 +30,14 @@
         <section>
             <div class="container">
                 <div class="row">
-                
+                    {% for location in rand_locations %}
+                        <div class="col-sm-12 col-lg-6">
+                            <img class="img-fluid mx-auto d-block {% if not request.user.profile in location.known_directly.all %} img-grayscale {% endif %}"
+                                 src="{{ location.main_image.image.url }}"
+                                 alt="Location img">
+                            <p class="pt-1 text-center">{{ location.name }}</p>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </section>

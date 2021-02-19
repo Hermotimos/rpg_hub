@@ -1,4 +1,5 @@
 import os
+from random import sample
 
 from django.apps import apps
 from django.conf import settings
@@ -54,6 +55,12 @@ def rid_of_special_chars(text):
     return "".join(
         [ch for ch in text if ch.lower() in 'abcdefghijklmnopqrstuvwxyz']
     )
+
+
+def sample_from_qs(qs, max_size):
+    obj_set = set(qs)
+    size = max_size if len(obj_set) >= max_size else len(obj_set)
+    return sample(obj_set, k=size)
 
 
 def handle_inform_form(request):
