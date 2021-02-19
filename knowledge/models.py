@@ -49,6 +49,7 @@ class BiographyPacket(InfoPacket):
     def informables(self):
         qs = Profile.active_players.all()
         qs = qs.exclude(id__in=self.acquired_by.all())
+        qs = qs.exclude(id=self.author_id)
         return qs
 
 

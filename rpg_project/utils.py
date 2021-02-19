@@ -88,6 +88,12 @@ def handle_inform_form(request):
         obj.acquired_by.add(*informed_ids)
         send_emails(request, informed_ids, kn_packet=obj)
 
+    elif 'BiographyPacket' in post_data.keys():
+        model = all_models['BiographyPacket']
+        obj = model.objects.get(id=post_data['BiographyPacket'][0])
+        obj.acquired_by.add(*informed_ids)
+        send_emails(request, informed_ids, bio_packet=obj)
+
     elif 'Debate' in post_data.keys():
         model = all_models['Debate']
         obj = model.objects.get(id=post_data['Debate'][0])
@@ -113,7 +119,7 @@ def handle_inform_form(request):
         send_emails(request, informed_ids, character=obj)
 
     else:
-        messages.error(
+        messages.warning(
             request,
             """Błąd! Prześlij informację MG wraz z opisem czynności
             - kogo o czym informowałeś/do czego dołączałeś.""")
@@ -226,6 +232,16 @@ def send_emails(request, profile_ids=None, **kwargs):
                   f"\nWiędzę tę możesz odnaleźć w Almanachu pod:" \
                   f" {', '.join(s.name for s in kn_packet.skills.all())}:" \
                   f"\n{request.get_host()}/knowledge/almanac/\n"
+        messages.info(request, f'Poinformowano wybranych bohaterów!')
+
+    # BIOGRAPHY PACKET
+    elif 'bio_packet' in kwargs:
+        bio_packet = kwargs['bio_packet']
+        subject = '[RPG] Transfer wiedzy!'
+        message = f"{profile} przekazał/a Ci wiedzę nt. '{bio_packet.title}'." \
+                  f"\nWiędzę tę możesz odnaleźć w Prosoponomikonie pod:" \
+                  f" {bio_packet.characters.all().first().name}:" \
+                  f"\n{request.get_host()}/prosoponomikon/character/{bio_packet.characters.all().first().id}/\n"
         messages.info(request, f'Poinformowano wybranych bohaterów!')
 
     # DEBATE
