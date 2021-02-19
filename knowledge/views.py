@@ -73,10 +73,7 @@ def knowledge_packets_in_skills_view(request, model_name):
 @login_required
 def kn_packet_create_and_update_view(request, kn_packet_id):
     profile = request.user.profile
-    try:
-        kn_packet = KnowledgePacket.objects.get(id=kn_packet_id)
-    except KnowledgePacket.DoesNotExist:
-        kn_packet = None
+    kn_packet = KnowledgePacket.objects.filter(id=kn_packet_id).first()
         
     if profile.status == 'gm':
         form = KnPacketCreateForm(data=request.POST or None,
