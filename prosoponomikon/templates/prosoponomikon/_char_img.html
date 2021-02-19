@@ -1,7 +1,7 @@
 
 <div class="col-3 px-0 pt-1">
     <div class="{% if side == 'left' %} float-left pr-2 pr-xl-0 {% else %} float-right pl-2 pl-sm-3 {% endif %}">
-        <a href="{% url 'prosoponomikon:character' character.name %}">
+        <a href="{% url 'prosoponomikon:character' character.id %}">
             <div class="img-hover-zoom m-0">
                 <img class="character {% if not character.profile.is_alive %} img-grayscale {% endif %}"
                      src="

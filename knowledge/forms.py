@@ -8,7 +8,7 @@ from django.forms import (
 )
 from django.forms.widgets import SelectMultiple
 
-from knowledge.models import KnowledgePacket
+from knowledge.models import KnowledgePacket, BiographyPacket
 from toponomikon.models import Location
 
 
@@ -79,3 +79,17 @@ class PlayerKnPacketCreateForm(KnPacketCreateForm):
                 | profile.locs_known_indirectly.all()
         ).distinct()
         self.fields['skills'].queryset = profile.allowed_skills.all()
+
+
+class BioPacketForm(ModelForm):
+    
+    class Meta:
+        model = BiographyPacket
+        fields = ['title', 'text']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+        self.helper.add_input(
+            Submit('submit', 'Zapisz pakiet biograficzny', css_class='btn-dark'))

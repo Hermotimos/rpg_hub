@@ -57,47 +57,78 @@
 
 
 /* INFORM */
-.icon-inform:before { content: '\e800'; } /* '' */
+.icon-inform:before {content: '\e801';} /* '' */
 .icon-inform-small:before {
-    content: '\e800';
+    content: '\e801';
     font-size: 0.6rem;
 }
 .icon-inform-medium:before {
-    content: '\e800';
+    content: '\e801';
+    font-size: 0.8rem;
+}
+
+
+/* CREATE/EDIT PACKET */
+.icon-packet:before { content: '\e806'; } /* '' */
+.icon-packet-small:before {
+    content: '\e806';
+    font-size: 0.6rem;
+}
+.icon-packet-medium:before {
+    content: '\e806';
     font-size: 0.8rem;
 }
 
 
 /* NOTE */
-.icon-note:before { content: '\e802'; } /* '' */
+.icon-note:before {content: '\e803';} /* '' */
 .icon-note-small:before {
-    content: '\e802';
+    content: '\e803';
     font-size: 0.6rem;
 }
 .icon-note-medium:before {
-    content: '\e802';
+    content: '\e803';
     font-size: 0.8rem;
 }
 
 
 /* EDIT */
-.icon-edit:before { content: '\e803'; } /* '' */
+.icon-edit:before {content: '\e804';} /* '' */
 .icon-edit-small:before {
-    content: '\e803';
+    content: '\e804';
     font-size: 0.6rem;
 }
 .icon-edit-medium:before {
-    content: '\e803';
+    content: '\e804';
     font-size: 0.8rem;
 }
 
 /* CURSOR - arrow for locatiion-up feature in Toponomikon */
-.icon-cursor:before { content: '\e804'; }
+.icon-cursor:before {content: '\e805';}
 .icon-cursor-small:before {
-    content: '\e804';
+    content: '\e805';
     font-size: 0.6rem;
 }
 .icon-cursor-medium:before {
-    content: '\e804';
+    content: '\e805';
     font-size: 0.8rem;
 }
+
+/*
+
+.icon-user-add:before { content: '\e801'; } /* '' */
+
+/*
+.icon-list:before { content: '\e803'; } /* '' */
+
+/*
+.icon-edit-alt:before { content: '\e804'; } /* '' */
+
+/*
+.icon-cursor:before { content: '\e805'; } /* '' */
+
+/*
+.icon-indent-right:before { content: '\e806'; } /* '' */
+
+/*
+.icon-cursor:before { content: '\e805'; } /* '' */

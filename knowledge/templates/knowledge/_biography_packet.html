@@ -8,6 +8,11 @@
         <!-- TITLE -->
         <div class="row">
             <h3 class="mb-3">
+                {% if request.user.profile.status == 'gm' %}
+                    {% if biography_packet.author and biography_packet.author.status != 'gm' %}
+                        <img class="rounded-circle img-small mr-1 mt-1" src="{{ biography_packet.author.image.url }}" alt="Profile img">
+                    {% endif %}
+                {% endif %}
                 <span class="border-bottom-dark">
                     {{ biography_packet.title }}
                 </span>
@@ -16,13 +21,16 @@
         
         <div class="row">
         
-            <!-- ACTIONS -->
+            <!-- BUTTONS -->
             <div class="col-12 col-sm-1 p-0">
                 <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Przekaż wiedzę o biografii">
                     <a class="btn btn-outline-dark icon-inform mt-1 py-2" href="#"></a>
                 </div>
                 <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">
                     <a class="btn btn-outline-dark icon-note mt-1 py-2 disabled" href="#"></a>
+                </div>
+                <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Edytuj pakiet biograficzny">
+                    <a class="btn btn-outline-dark icon-packet mt-1 py-2" href="{% url 'prosoponomikon:biography-packet-edit' character.id biography_packet.id %}"></a>
                 </div>
             </div>
             

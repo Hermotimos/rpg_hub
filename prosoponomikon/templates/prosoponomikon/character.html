@@ -40,6 +40,9 @@
                                     {% endwith %}
                                 </div>
                             </div>
+                            <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Nowy pakiet biograficzny">
+                                <a class="btn btn-outline-dark icon-packet py-2" href="{% url 'prosoponomikon:biography-packet-edit' character.id 0 %}"></a>
+                            </div>
                             <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">
                                 <a class="btn btn-outline-dark icon-note py-2 disabled" href="#"></a>
                             </div>

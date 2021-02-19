@@ -4,6 +4,8 @@ from django.db import IntegrityError
 from django.db.models import Prefetch, Case, When, Value, IntegerField, F, Q
 from django.shortcuts import render, redirect
 
+from knowledge.forms import BioPacketForm
+from knowledge.models import BiographyPacket
 from prosoponomikon.forms import CharacterManyGroupsEditFormSet, \
     CharacterGroupsEditFormSetHelper, CharacterSingleGroupEditFormSet
 from prosoponomikon.models import Character, PlayerCharacter, NPCCharacter, \
@@ -222,3 +224,31 @@ def prosoponomikon_character_groups_edit_view(request, group_id=0):
         'formset_helper': CharacterGroupsEditFormSetHelper(status=profile.status),
     }
     return render(request, '_formset.html', context)
+
+
+@login_required
+def prosoponomikon_biography_packet_edit_view(request, bio_packet_id=0, character_id=0):
+    profile = request.user.profile
+
+    bio_packet = BiographyPacket.objects.filter(id=bio_packet_id).first()
+    character = Character.objects.filter(id=character_id).first()
+
+    form = BioPacketForm(data=request.POST or None, instance=bio_packet)
+    # form = BioPacketForm()
+    
+    if form.is_valid():
+        bio_packet = form.save()
+        bio_packet.author = profile
+        bio_packet.save()
+        
+        character.biography_packets.add(bio_packet)
+        
+        messages.success(request, f"Zapisano pakiet biograficzny!")
+        return redirect('prosoponomikon:character', character_id)
+        
+    context = {
+        'page_title': f"Pakiet biograficzny: {character.name}",
+        'form': form,
+    }
+    return render(request, '_form.html', context)
+
