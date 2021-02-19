@@ -7,7 +7,7 @@
     </div>
     {% if not debate.is_ended %}
         <div data-toggle="tooltip" data-placement="bottom" title="Dołącz nowych uczestników do narady">
-            <p class="btn btn-outline-dark icon-inform py-2 ml-1 mt-1" data-toggle="modal" data-target="#infoLocationModal"></p>
+            <p class="btn btn-outline-dark icon-user-add py-2 ml-1 mt-1" data-toggle="modal" data-target="#infoLocationModal"></p>
             <!-- The Modal -->
             <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
                 {% with informables=debate.informables inform_type=debate|get_model_name id_=debate.id %}
@@ -17,7 +17,7 @@
         </div>
     {% endif %}
     <div data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">
-        <a class="btn btn-outline-dark icon-note py-2 ml-1 mt-1 disabled" href="#"></a>
+        <a class="btn btn-outline-dark icon-list py-2 ml-1 mt-1 disabled" href="#"></a>
     </div>
 </div>
 
