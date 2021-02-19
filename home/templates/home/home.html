@@ -19,7 +19,7 @@
                                          /media/profile_pics/profile_known_only_indirectly.jpg
                                     {% endif %}"
                                  alt="Profile img">
-                            <p class="pt-1 text-center">{{ profile.character.name }}</p>
+                            <p class="pt-1 font-italic text-center">{{ profile.character.name }}</p>
                         </div>
                     {% endfor %}
                 </div>
@@ -36,7 +36,7 @@
                                  {% if not request.user.profile in location.known_directly.all and not request.user.profile.status == 'gm' %} img-grayscale {% endif %}"
                                  src="{{ location.main_image.image.url }}"
                                  alt="Location img">
-                            <p class="pt-1 text-center">{{ location.name }}</p>
+                            <p class="pt-1 font-italic text-center">{{ location.name }}</p>
                         </div>
                     {% endfor %}
                 </div>
