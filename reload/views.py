@@ -2,9 +2,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render, redirect
-from django.utils.html import format_html
 
 from chronicles.models import Thread, GameEvent
+from imaginarion.models import Picture
 from prosoponomikon.models import Character
 from rules.models import (
     Skill, SkillLevel,
@@ -31,7 +31,7 @@ def reload_main_view(request):
 
 
 @login_required
-def reload_history(request):
+def reload_chronicles(request):
     if request.user.profile.status == 'gm':
         for obj in Thread.objects.all():
             obj.save()
@@ -44,22 +44,23 @@ def reload_history(request):
 
 
 @login_required
-def reload_toponomikon(request):
+def reload_imaginarion(request):
     if request.user.profile.status == 'gm':
-        for obj in Location.objects.all():
+        for obj in Picture.objects.all():
             obj.save()
-        messages.info(request, f'Przeładowano "Location" dla "toponomikon"!')
+        messages.info(request, f'Przeładowano "Picture" dla "imaginarion"!')
         return redirect('reload:reload-main')
     else:
         return redirect('home:dupa')
-        
+
 
 @login_required
 def reload_prosoponomikon(request):
     if request.user.profile.status == 'gm':
         for obj in Character.objects.all():
             obj.save()
-        messages.info(request, f'Przeładowano "Character" dla "prosoponomikon"!')
+        messages.info(request,
+                      f'Przeładowano "Character" dla "prosoponomikon"!')
         return redirect('reload:reload-main')
     else:
         return redirect('home:dupa')
@@ -98,8 +99,19 @@ def reload_rules(request):
         return redirect('reload:reload-main')
     else:
         return redirect('home:dupa')
+    
 
-
+@login_required
+def reload_toponomikon(request):
+    if request.user.profile.status == 'gm':
+        for obj in Location.objects.all():
+            obj.save()
+        messages.info(request, f'Przeładowano "Location" dla "toponomikon"!')
+        return redirect('reload:reload-main')
+    else:
+        return redirect('home:dupa')
+    
+    
 @login_required
 def refresh_content_types(request):
     """Remove stale content types."""

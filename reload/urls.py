@@ -5,7 +5,8 @@ from reload import views
 app_name = 'reload'
 urlpatterns = [
     path('', views.reload_main_view, name='reload-main'),
-    path('reload-history/', views.reload_history, name='reload-history'),
+    path('reload-chronicles/', views.reload_history, name='reload-chronicles'),
+    path('reload-imaginarion/', views.reload_imaginarion, name='reload-imaginarion'),
     path('reload-rules/', views.reload_rules, name='reload-rules'),
     path('reload-toponomikon/', views.reload_toponomikon, name='reload-toponomikon'),
     path('reload-prosoponomikon/', views.reload_prosoponomikon, name='reload-prosoponomikon'),
