@@ -92,6 +92,8 @@ class PictureImage(Model):
         self.sorting_name = create_sorting_name(self.__str__())
         first_save = True if not self.pk else False
         super().save(*args, **kwargs)
+        
+        # TODO Restore after all is done
         # if first_save and self.image:
         img = Image.open(self.image.path)
         if img.height > 1000 or img.width > 1000:
@@ -109,7 +111,7 @@ class Picture(Model):
     in which it was seen and to whom it is known. This allows to create
     multiple overlays for one image with varying descriptions and types.
     """
-    image_old = ImageField(upload_to='post_pics', storage=ReplaceFileStorage())
+    # image_old = ImageField(upload_to='post_pics', storage=ReplaceFileStorage())
     image = FK(to=PictureImage, on_delete=CASCADE)
     type = CharField(max_length=20, choices=IMG_TYPES)
     description = CharField(max_length=200, blank=True, null=True)
