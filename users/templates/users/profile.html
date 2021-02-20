@@ -12,14 +12,17 @@
         <div class="media">
             <img class="account-img-profile" src="{{ user.profile.image.url }}" alt="Profile img">
             <div class="media-body">
-                <h4 class="account-heading d-flex justify-content-between">
-                    {{ user.profile.character.name }}
-                    <span class="float-right">
-                        <a href="{% url 'users:change-password' %}" class="btn btn-outline-dark">Zmiana hasła</a>
-                    </span>
-                </h4>
-                <p class="text-secondary">{{ user.email }}</p>
-
+                <div class="account-heading h4 d-flex justify-content-between">
+                    <div>
+                        {{ user.profile.character.name }}
+                        
+                        <small class="text-secondary d-block smaller">{{ user.email }}</small>
+                    </div>
+                    <div class="float-right">
+                        <a href="{% url 'prosoponomikon:character' user.profile.character.id %}" class="btn btn-outline-dark float-right mb-1 mr-1">Prosoponomikon</a>
+                        <a href="{% url 'users:change-password' %}" class="btn btn-outline-dark float-right mb-1 mr-1">Zmiana hasła</a>
+                    </div>
+                </div>
             </div>
         </div>
 

@@ -6,21 +6,25 @@ from users.models import Profile
 
 
 class UserRegistrationForm(UserCreationForm):
-    
+    email = forms.EmailField(required=False)
+
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
-    email = forms.EmailField(required=False)
-
 
 class UserUpdateForm(forms.ModelForm):
-    
+    email = forms.EmailField(required=False)
+
     class Meta:
         model = User
         fields = ['username', 'email']
 
-    email = forms.EmailField(required=False)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].label = "EMAIL (niewymagany, ale potrzebny do " \
+                                     "informowania o wydarzeniach itp.)"
+        self.fields['username'].label = "LOGIN"
 
 
 class ProfileUpdateForm(forms.ModelForm):
@@ -31,4 +35,5 @@ class ProfileUpdateForm(forms.ModelForm):
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['image'].label = "Awatar (wyświetlany przy postach)"
+        self.fields['image'].label = "AWATAR (Grafika o wymiarach kwadratu, " \
+                                     "aby ładnie prezentowała się na stronie)"

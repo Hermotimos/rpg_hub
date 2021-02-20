@@ -134,7 +134,8 @@ def prosoponomikon_character_view(request, character_id):
         'page_title': character.name,
         'character': character,
     }
-    if profile in character.all_known() or profile.status == 'gm':
+    if (profile in character.all_known() or profile.character == character
+            or profile.status == 'gm'):
         return render(request, 'prosoponomikon/character.html', context)
     else:
         return redirect('home:dupa')

@@ -18,7 +18,7 @@
                         <div class="float-left mr-3 img-hover-zoom">
                             <img class="character-detail {% if not character.profile.is_alive %} img-grayscale {% endif %}"
                                  src="
-                                    {% if request.user.profile in character.known_directly.all or request.user.profile.status == 'gm' %}
+                                    {% if request.user.profile.character == character or request.user.profile in character.known_directly.all or request.user.profile.status == 'gm' %}
                                         {{ character.profile.image.url }}
                                     {% else %}
                                          /media/profile_pics/profile_known_only_indirectly.jpg
@@ -46,6 +46,11 @@
                             <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">
                                 <a class="btn btn-outline-dark icon-list py-2 disabled" href="#"></a>
                             </div>
+                            {% if request.user.profile.status == 'player' %}
+                                <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj postać">
+                                    <a class="btn btn-outline-dark icon-edit-alt py-2" href="{% url 'users:profile' %}"></a>
+                                </div>
+                            {% endif %}
                             {% if request.user.profile.status == 'gm' %}
                                 <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj postać">
                                     <a class="btn btn-outline-dark icon-edit-alt py-2" href="{% url 'admin:prosoponomikon_character_change' character.id %}" target="_blank"></a>

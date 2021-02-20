@@ -65,11 +65,11 @@ class CharacterForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['description'].label = "Opis postaci"
+        self.fields['description'].label = "OPIS POSTACI"
         self.fields['description'].widget.attrs[
             'placeholder'
         ] = "Krótka charakterystyka postaci i podstawowe informacje"
-        self.fields['name'].label = "Imię postaci (wyświetlane przy postach)"
+        self.fields['name'].label = "IMIĘ POSTACI (wyświetlane przy postach)"
         self.fields['name'].max_length = 50
         self.fields['name'].widget.attrs[
             'placeholder'
