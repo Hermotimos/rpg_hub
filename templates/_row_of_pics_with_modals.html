@@ -1,3 +1,4 @@
+{% load custom_filters %}
 
 <div class="d-flex justify-content-center">
     {% for picture in row %}
@@ -5,7 +6,7 @@
         <figure class="modal-img figure text-center mx-auto pointer mb-0 mt-4 px-1" data-toggle="modal" data-target="#imgModal{{ picture.id }}">
             <img src="{{ picture.image.image.url }}" alt="Image in modal">
             {% if picture.description %}
-                <figcaption class="font-italic font-14 text-center pt-1">{{ picture.description }}</figcaption>
+                <figcaption class="font-italic font-14 text-center pt-1">{{ picture.description|brackets_br }}</figcaption>
             {% endif %}
         </figure>
         <!-- Modal -->

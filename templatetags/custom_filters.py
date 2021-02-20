@@ -118,12 +118,6 @@ def get_max_skill_level(skill_levels_list):
 
 
 @register.filter
-def format_as_html(text):
-    text = format_html(text)
-    return mark_safe(text)
-
-
-@register.filter
 def add_season_img(text):
     if text:
         text = text.replace('. dnia', '')
@@ -174,11 +168,16 @@ def get_audio_set(obj):
 
 
 @register.filter
+def format_as_html(text):
+    text = format_html(text)
+    return mark_safe(text)
+
+
+@register.filter
 def replace(obj_as_text, from_to):
     """Parameter 'from_to' like '&__and' to replace '&' to 'and'."""
     from_ = from_to.split('__')[0]
     to = from_to.split('__')[1]
-    # print(from_, to)
     return format_as_html(obj_as_text.replace(from_, to))
 
 
@@ -197,3 +196,13 @@ def custom_linebreaksbr(value, margin_bottom: int):
         else:
             value = value.replace('<br>', f'<br class="mb-{margin_bottom}">')
         return mark_safe(value)
+
+
+@register.filter
+def brackets_br(text):
+    """Add <br> before "(" to move text in brackets to next line."""
+    if "(" in text:
+        index = text.index("(")
+        pre, post = text[:index], text[index:]
+        return format_as_html(f"{pre}<br>{post}")
+    return text
