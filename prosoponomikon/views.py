@@ -1,15 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.db.models import Prefetch, Case, When, Value, IntegerField, F, Q
+from django.db.models import Prefetch, Case, When, Value, IntegerField, Q
 from django.shortcuts import render, redirect
 
 from knowledge.forms import BioPacketForm
 from knowledge.models import BiographyPacket
 from prosoponomikon.forms import CharacterManyGroupsEditFormSet, \
     CharacterGroupsEditFormSetHelper, CharacterSingleGroupEditFormSet
-from prosoponomikon.models import Character, PlayerCharacter, NPCCharacter, \
-    CharacterGroup
+from prosoponomikon.models import Character, CharacterGroup
 from rpg_project.utils import handle_inform_form
 from users.models import Profile
 
@@ -100,8 +99,7 @@ def prosoponomikon_grouped_view(request):
         
     context = {
         'page_title': 'Prosoponomikon',
-        'character_groups': character_groups.order_by(
-            F('order_no').asc(nulls_last=True), F('name')),
+        'character_groups': character_groups,
         'ungrouped': ungrouped.select_related('profile'),
     }
     if character_groups:
@@ -185,11 +183,12 @@ def prosoponomikon_character_groups_edit_view(request, group_id=0):
                             obj.characters.set(form.cleaned_data['characters'])
                             messages.warning(request,
                                              "Nazwy grup muszą być unikalne!")
-                            return redirect('prosoponomikon:groups-modify')
+                        
+                        return redirect('prosoponomikon:grouped')
 
             except IntegrityError:
                 messages.warning(request, "Nazwy grup muszą być unikalne!")
-                return redirect('prosoponomikon:groups-modify')
+                return redirect('prosoponomikon:groups-edit', group_id=0)
         else:
             messages.warning(request, formset.errors)
             

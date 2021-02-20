@@ -28,7 +28,9 @@ class CharacterGroupsEditFormSetHelper(FormHelper):
         self.layout = Layout(
             Row(
                 Column(
-                    PrependedText('order_no', '', placeholder="Nr porządkowy"),
+                    PrependedText('order_no', '',
+                                  placeholder="Nr porządkowy (równe numery "
+                                              "są sortowane alfabetycznie)"),
                     css_class='form-group col-sm-3 mb-0'
                 ),
                 Column(
@@ -38,20 +40,14 @@ class CharacterGroupsEditFormSetHelper(FormHelper):
             ),
             Row(
                 Column(Div(), css_class='col-sm-3 mb-0'),
-                Column(
-                    Field('characters', size=15),
-                    css_class='form-group col-sm-9 mb-0'
-                ),
+                Column(Field('characters', size=15), css_class='form-group col-sm-9 mb-0'),
             ),
         )
         if status == 'gm':
             self.layout.fields.append(
                 Row(
                     Column(Div(), css_class='col-sm-3 mb-0'),
-                    Column(
-                        Field('default_knowledge_packets', size=15),
-                        css_class='form-group col-sm-9 mb-0'
-                    ),
+                    Column(Field('default_knowledge_packets', size=15), css_class='form-group col-sm-9 mb-0'),
                 ),
             )
 

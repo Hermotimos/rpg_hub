@@ -9,7 +9,7 @@ from django.db.models import (
     PROTECT,
     Q,
     SET_NULL,
-    PositiveSmallIntegerField,
+    SmallIntegerField,
     TextField,
 )
 from django.db.models.signals import post_save
@@ -135,11 +135,7 @@ class CharacterGroup(Model):
         blank=True,
         verbose_name='Domyślne umiejętności NPC w grupie',
     )
-    order_no = PositiveSmallIntegerField(
-        blank=True,
-        null=True,
-        verbose_name='Nr porządkowy',
-    )
+    order_no = SmallIntegerField(default=1, verbose_name='Nr porządkowy')
     
     class Meta:
         ordering = ['order_no', 'name']
