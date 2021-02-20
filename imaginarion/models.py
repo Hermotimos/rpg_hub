@@ -90,8 +90,15 @@ class PictureImage(Model):
         
     def save(self, *args, **kwargs):
         self.sorting_name = create_sorting_name(self.__str__())
+        first_save = True if not self.pk else False
         super().save(*args, **kwargs)
-        
+        if first_save and self.image:
+            img = Image.open(self.image.path)
+            if img.height > 1000 or img.width > 1000:
+                output_size = (1000, 1000)
+                img.thumbnail(output_size)
+                img.save(self.image.path)
+
     def __str__(self):
         return str(self.image.name).replace("post_pics/", "")
 
@@ -122,15 +129,7 @@ class Picture(Model):
 
     def save(self, *args, **kwargs):
         self.sorting_name = create_sorting_name(self.description)
-        first_save = True if not self.pk else False
         super().save(*args, **kwargs)
-        if first_save and self.image:
-            img = Image.open(self.image.path)
-            if img.height > 1000 or img.width > 1000:
-                output_size = (1000, 1000)
-                img.thumbnail(output_size)
-                img.save(self.image.path)
-                
                 
 # TODO: REPLACEMENT !!!!
 # class Picture(models.Model):
