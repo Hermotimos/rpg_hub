@@ -46,13 +46,15 @@ def reload_chronicles(request):
 @login_required
 def reload_imaginarion(request):
     if request.user.profile.status == 'gm':
-        for obj in Picture.objects.all():
-            # obj.image_replacement_field = PictureImage.objects.create(
-            #     image=obj.image,
-            #     description=obj.description,
-            # )
+        # for obj in Picture.objects.all():
+        #     # obj.image_replacement_field = PictureImage.objects.create(
+        #     #     image=obj.image,
+        #     #     description=obj.description,
+        #     # )
+        #     obj.save()
+        for obj in PictureImage.objects.all():
             obj.save()
-        messages.info(request, f'Przeładowano "Picture" dla "imaginarion"!')
+        messages.info(request, f'Przeładowano "PictureImage" dla "imaginarion"!')
         return redirect('reload:reload-main')
     else:
         return redirect('home:dupa')

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db.models import TextField
 from django.forms import Textarea
 
-from imaginarion.models import Picture, Audio, AudioSet
+from imaginarion.models import Picture, PictureImage, Audio, AudioSet
 
 
 class AudioAdmin(admin.ModelAdmin):
@@ -33,15 +33,19 @@ class PictureAdmin(admin.ModelAdmin):
     list_filter = ['type']
     search_fields = ['title', 'description']
 
-    def admin_title(self, obj):
-        return obj.__str__()
-
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         qs = qs.select_related('image')
         return qs
     
+    
+class PictureImageAdmin(admin.ModelAdmin):
+    list_display = ['id', 'description', 'image', 'sorting_name']
+    list_editable = ['description', 'image']
+    search_fields = ['image', 'description']
+    
 
 admin.site.register(Audio, AudioAdmin)
 admin.site.register(AudioSet, AudioSetAdmin)
 admin.site.register(Picture, PictureAdmin)
+admin.site.register(PictureImage, PictureImageAdmin)
