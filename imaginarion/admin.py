@@ -31,7 +31,7 @@ class PictureAdmin(admin.ModelAdmin):
     list_display = ['id', 'type', 'description', 'image']
     list_editable = ['type', 'description']
     list_filter = ['type']
-    search_fields = ['title', 'description']
+    search_fields = ['description', 'image']
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
