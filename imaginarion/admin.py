@@ -42,7 +42,7 @@ class PictureAdmin(admin.ModelAdmin):
 class PictureImageAdmin(admin.ModelAdmin):
     list_display = ['id', 'description', 'image', 'sorting_name']
     list_editable = ['description', 'image']
-    search_fields = ['image', 'description']
+    search_fields = ['description', 'image']
     
 
 admin.site.register(Audio, AudioAdmin)
