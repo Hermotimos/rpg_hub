@@ -94,12 +94,12 @@ class PictureImage(Model):
         super().save(*args, **kwargs)
         
         # TODO Restore after all is done
-        # if first_save and self.image:
-        img = Image.open(self.image.path)
-        if img.height > 1000 or img.width > 1000:
-            output_size = (1000, 1000)
-            img.thumbnail(output_size)
-            img.save(self.image.path)
+        if first_save and self.image:
+            img = Image.open(self.image.path)
+            if img.height > 1000 or img.width > 1000:
+                output_size = (1000, 1000)
+                img.thumbnail(output_size)
+                img.save(self.image.path)
 
     def __str__(self):
         return str(self.image.name).replace("post_pics/", "")
@@ -112,7 +112,7 @@ class Picture(Model):
     multiple overlays for one image with varying descriptions and types.
     """
     # image_old = ImageField(upload_to='post_pics', storage=ReplaceFileStorage())
-    image = FK(to=PictureImage, on_delete=CASCADE)
+    image = FK(to=PictureImage, related_name='used_in_pics', on_delete=CASCADE)
     type = CharField(max_length=20, choices=IMG_TYPES)
     description = CharField(max_length=200, blank=True, null=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
