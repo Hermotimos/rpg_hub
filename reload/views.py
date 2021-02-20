@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render, redirect
 
 from chronicles.models import Thread, GameEvent
-from imaginarion.models import Picture
+from imaginarion.models import Picture, PictureImage
 from prosoponomikon.models import Character
 from rules.models import (
     Skill, SkillLevel,
@@ -47,6 +47,10 @@ def reload_chronicles(request):
 def reload_imaginarion(request):
     if request.user.profile.status == 'gm':
         for obj in Picture.objects.all():
+            obj.image_replacement_field = PictureImage.objects.create(
+                image=obj.image,
+                # description=obj.description,
+            )
             obj.save()
         messages.info(request, f'Przeładowano "Picture" dla "imaginarion"!')
         return redirect('reload:reload-main')

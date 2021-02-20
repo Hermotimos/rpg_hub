@@ -3,7 +3,7 @@
     {% for picture in row %}
         <!-- Modal controls -->
         <figure class="modal-img figure text-center mx-auto pointer mb-0 mt-4 px-1" data-toggle="modal" data-target="#imgModal{{ picture.id }}">
-            <img src="{{ picture.image.url }}" alt="Image in modal">
+            <img src="{{ picture.image_replacement_field.image.url }}" alt="Image in modal">
             {% if picture.description %}
                 <figcaption class="font-italic font-14 text-center pt-1">{{ picture.description }}</figcaption>
             {% endif %}
@@ -13,7 +13,7 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-body">
-                <img src="{{ picture.image.url }}" alt="Event img">
+                <img src="{{ picture.image_replacement_field.image.url }}" alt="Event img">
               </div>
             </div>
           </div>

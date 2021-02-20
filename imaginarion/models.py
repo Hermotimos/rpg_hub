@@ -1,5 +1,6 @@
 from PIL import Image
 from django.db.models import (
+    CASCADE,
     CharField,
     ForeignKey as FK,
     ImageField,
@@ -9,7 +10,7 @@ from django.db.models import (
     TextField,
 )
 
-from rpg_project.utils import ReplaceFileStorage
+from rpg_project.utils import ReplaceFileStorage, create_sorting_name
 
 # TODO rename app 'imaginarion' -> 'mousarion'
 
@@ -78,21 +79,47 @@ IMG_TYPES = (
 )
 
 
-class Picture(Model):
+class PictureImage(Model):
     """A model to store paths to internally stored image files."""
-
     image = ImageField(upload_to='post_pics', storage=ReplaceFileStorage())
-    type = CharField(max_length=20, choices=IMG_TYPES)
-    title = CharField(max_length=200, unique=True)
     description = CharField(max_length=200, blank=True, null=True)
+    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
-        ordering = ['type', 'title', 'description']
+        ordering = ['sorting_name']
+        
+    def save(self, *args, **kwargs):
+        self.sorting_name = create_sorting_name(self.__str__())
+        super().save(*args, **kwargs)
+        
+
+class Picture(Model):
+    """An overlay model to create contextual descriptions for Image objects.
+    One Image object may have multiple descriptions depending on the context
+    in which it was seen and to whom it is known. This allows to create
+    multiple overlays for one image with varying descriptions and types.
+    """
+    image = ImageField(upload_to='post_pics', storage=ReplaceFileStorage())
+    image_replacement_field = FK(to=PictureImage, on_delete=CASCADE,
+                                 null=True, blank=True) # TODO remove after reload
+    type = CharField(max_length=20, choices=IMG_TYPES)
+    description = CharField(max_length=200, blank=True, null=True)
+    sorting_name = CharField(max_length=250, blank=True, null=True)
+
+    class Meta:
+        ordering = ['type', 'sorting_name']
 
     def __str__(self):
-        return f'{str(self.type).upper()}_{str(self.title).split("_", 1)[1]}'
+        type_prefix = str(self.type).upper()
+        filename_without_dir = str(self.image.name).split("/", 1)[1]
+        if '_' in filename_without_dir:
+            filename_without_prefix = filename_without_dir.split("_", 1)[1]
+        else:
+            filename_without_prefix = filename_without_dir
+        return f'{type_prefix}_{filename_without_prefix}'
 
     def save(self, *args, **kwargs):
+        self.sorting_name = create_sorting_name(self.image.name)
         first_save = True if not self.pk else False
         super().save(*args, **kwargs)
         if first_save and self.image:
