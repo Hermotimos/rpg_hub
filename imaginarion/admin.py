@@ -28,14 +28,19 @@ class AudioSetAdmin(admin.ModelAdmin):
     
     
 class PictureAdmin(admin.ModelAdmin):
-    list_display = ['id', 'admin_title', 'type', 'description', 'image']
-    list_editable = ['type', 'description', 'image']
+    list_display = ['id', 'type', 'description', 'image_replacement_field']
+    list_editable = ['type', 'description']
     list_filter = ['type']
     search_fields = ['title', 'description']
 
     def admin_title(self, obj):
         return obj.__str__()
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.select_related('image_replacement_field')
+        return qs
+    
 
 admin.site.register(Audio, AudioAdmin)
 admin.site.register(AudioSet, AudioSetAdmin)

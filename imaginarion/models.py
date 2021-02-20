@@ -92,6 +92,9 @@ class PictureImage(Model):
         self.sorting_name = create_sorting_name(self.__str__())
         super().save(*args, **kwargs)
         
+    def __str__(self):
+        return self.image.name
+
 
 class Picture(Model):
     """An overlay model to create contextual descriptions for Image objects.
@@ -99,7 +102,7 @@ class Picture(Model):
     in which it was seen and to whom it is known. This allows to create
     multiple overlays for one image with varying descriptions and types.
     """
-    image = ImageField(upload_to='post_pics', storage=ReplaceFileStorage())
+    image_old = ImageField(upload_to='post_pics', storage=ReplaceFileStorage())
     image_replacement_field = FK(to=PictureImage, on_delete=CASCADE,
                                  null=True, blank=True) # TODO remove after reload
     type = CharField(max_length=20, choices=IMG_TYPES)
@@ -111,7 +114,7 @@ class Picture(Model):
 
     def __str__(self):
         type_prefix = str(self.type).upper()
-        filename_without_dir = str(self.image.name).split("/", 1)[1]
+        filename_without_dir = str(self.image_replacement_field.image.name).split("/", 1)[1]
         if '_' in filename_without_dir:
             filename_without_prefix = filename_without_dir.split("_", 1)[1]
         else:
@@ -119,7 +122,7 @@ class Picture(Model):
         return f'{type_prefix}_{filename_without_prefix}'
 
     def save(self, *args, **kwargs):
-        self.sorting_name = create_sorting_name(self.image.name)
+        self.sorting_name = create_sorting_name(self.description)
         first_save = True if not self.pk else False
         super().save(*args, **kwargs)
         if first_save and self.image:
