@@ -1,6 +1,6 @@
 import os
 from random import sample
-
+import re
 from django.apps import apps
 from django.conf import settings
 from django.contrib import messages
@@ -24,6 +24,16 @@ class ReplaceFileStorage(FileSystemStorage):
         if self.exists(name):
             os.remove(os.path.join(settings.MEDIA_ROOT, name))
         return name
+
+    def get_valid_name(self, name):
+        """Overrides method which would normally replace whitespaces with
+        underscores and remove special characters.
+            s = str(s).strip().replace(' ', '_')
+            return re.sub(r'(?u)[^-\w.]', '', s)
+        Modified to leave whitespace and to accept it in regular expressions.
+        """
+        name = str(name).strip()
+        return re.sub(r'(?u)[^-\w.\s]', '', name)
     
     
 def create_sorting_name(obj):
