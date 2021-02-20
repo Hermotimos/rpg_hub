@@ -117,6 +117,7 @@ class GameEventInline(admin.TabularInline):
             'threads',    # To allow for filtering in GameEventAdminForm
             'pictures',
             'audio',
+            'debates',
         ]
         for field in fields:
             if db_field.name == field:
