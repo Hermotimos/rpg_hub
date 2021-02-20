@@ -121,13 +121,14 @@ class Picture(Model):
         ordering = ['type', 'sorting_name']
 
     def __str__(self):
-        type_prefix = str(self.type).upper()
-        filename_without_dir = str(self.image.image.name).split("/", 1)[1]
-        if '_' in filename_without_dir:
-            filename_without_prefix = filename_without_dir.split("_", 1)[1]
-        else:
-            filename_without_prefix = filename_without_dir
-        return f'{type_prefix}_{filename_without_prefix}'
+        return f"[{self.type.upper()}] {self.description}"
+        # type_prefix = str(self.type).upper()
+        # filename_without_dir = str(self.image.image.name).split("/", 1)[1]
+        # if '_' in filename_without_dir:
+        #     filename_without_prefix = filename_without_dir.split("_", 1)[1]
+        # else:
+        #     filename_without_prefix = filename_without_dir
+        # return f'{type_prefix}_{filename_without_prefix}'
 
     def save(self, *args, **kwargs):
         self.sorting_name = create_sorting_name(self.description)
