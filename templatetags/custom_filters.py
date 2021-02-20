@@ -1,3 +1,4 @@
+from typing import List
 
 from django import template
 from django.template.defaultfilters import linebreaksbr
@@ -20,7 +21,7 @@ def get_first_word(text):
 
 
 @register.filter
-def columns(thelist, n):
+def columns(thelist, n) -> List[list]:
     """
     [From: https://stackoverflow.com/questions/11864580/rendering-a-list-as-a-2-column-html-table-in-a-django-template]
     Break a list into ``n`` columns, filling up each column to the maximum equal length possible.
@@ -66,7 +67,8 @@ def columns(thelist, n):
 
 
 @register.filter
-def ordered_columns(thelist, n):
+def ordered_columns(thelist, n) -> List[list]:
+    """Sort in one list (used in Toponomikon Index)."""
     try:
         n = int(n)
         thelist = list(thelist)
@@ -77,15 +79,10 @@ def ordered_columns(thelist, n):
     if list_len % n != 0:
         split += 1
     res = []
-    # print(thelist)
     for i in range(split + 1):
-        # print('indx', i)
-        # print('appended:', thelist[0:split])
         if thelist[0:split]:
             res.append(thelist[0:split])
             thelist = thelist[split:]
-            # print('thelist:', thelist)
-    # print('RES:', res)
     return res
 
 
@@ -93,23 +90,6 @@ def ordered_columns(thelist, n):
 def percentage(value):
     return format(value, "%")
 
-
-# @register.filter
-# def underscore_to_space(text):
-#     text = str(text)
-#     return text.replace('_', ' ')
-#
-#
-# @register.filter
-# def rtrim(data, number_of_digits):
-#     data = str(data)
-#     return data[:-number_of_digits]
-#
-#
-# @register.filter
-# def ltrim(data, number_of_digits):
-#     data = str(data)
-#     return data[number_of_digits:]
 
 @register.filter
 def get_max_skill_level(skill_levels_list):
