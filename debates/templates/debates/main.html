@@ -27,20 +27,20 @@
                         {% for debate in topic.debates.all %}
                             <li class="pl-1 pb-2 {% if not debate.is_ended %} bullet-ongoing {% endif %} {% if debate.events.count == 0 %} mb-3 {% endif %}">
                                 <div class="d-md-inline">
-                                    <h5 class="d-sm-inline font-18">
+                                    <h5 class="d-inline font-18">
                                         <a class="pr-1" href="{% url 'debates:debate' debate.id %}">
                                             {{ debate.name }}
                                         </a>
                                     </h5>
                                 </div>
-                                <div class="d-sm-inline">
+                                <div class="d-lg-inline">
                                     {% for profile in debate.known_directly.all %}
                                         {% if profile.status != 'gm' %}
-                                            <img class="rounded-circle img-smaller" src="{{ profile.image.url }}" alt="Profile img">
+                                            <img class="rounded-circle img-smaller mt-n1 mb-lg-1" src="{{ profile.image.url }}" alt="Profile img">
                                         {% endif %}
                                     {% endfor %}
                                 </div>
-                                <div class="d-xs-inline d-sm-block mt-lg-n2">
+                                <div class="d-xs-inline d-sm-block mt-n1 mt-lg-n2">
                                     <small class="font-11 font-italic text-muted">
                                         {% for event in debate.events.all %}
                                             {% if forloop.counter > 1 %} | {% endif %}
