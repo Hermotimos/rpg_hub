@@ -103,8 +103,7 @@ class Picture(Model):
     multiple overlays for one image with varying descriptions and types.
     """
     image_old = ImageField(upload_to='post_pics', storage=ReplaceFileStorage())
-    image_replacement_field = FK(to=PictureImage, on_delete=CASCADE,
-                                 null=True, blank=True) # TODO remove after reload
+    image = FK(to=PictureImage, on_delete=CASCADE)
     type = CharField(max_length=20, choices=IMG_TYPES)
     description = CharField(max_length=200, blank=True, null=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
@@ -114,7 +113,7 @@ class Picture(Model):
 
     def __str__(self):
         type_prefix = str(self.type).upper()
-        filename_without_dir = str(self.image_replacement_field.image.name).split("/", 1)[1]
+        filename_without_dir = str(self.image.image.name).split("/", 1)[1]
         if '_' in filename_without_dir:
             filename_without_prefix = filename_without_dir.split("_", 1)[1]
         else:

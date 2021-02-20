@@ -34,7 +34,7 @@
                         <div class="col-sm-12 col-lg-6">
                             <img class="img-fluid mx-auto d-block
                                  {% if not request.user.profile in location.known_directly.all and not request.user.profile.status == 'gm' %} img-grayscale {% endif %}"
-                                 src="{{ location.main_image.image.url }}" alt="Location img">
+                                 src="{{ location.main_image.image.image.url }}" alt="Location img">
                             <p class="pt-1 font-italic font-14 text-center">{{ location.name }}</p>
                         </div>
                     {% endfor %}

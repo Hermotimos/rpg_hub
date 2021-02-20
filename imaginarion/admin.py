@@ -28,7 +28,7 @@ class AudioSetAdmin(admin.ModelAdmin):
     
     
 class PictureAdmin(admin.ModelAdmin):
-    list_display = ['id', 'type', 'description', 'image_replacement_field']
+    list_display = ['id', 'type', 'description', 'image']
     list_editable = ['type', 'description']
     list_filter = ['type']
     search_fields = ['title', 'description']
@@ -38,7 +38,7 @@ class PictureAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        qs = qs.select_related('image_replacement_field')
+        qs = qs.select_related('image')
         return qs
     
 
