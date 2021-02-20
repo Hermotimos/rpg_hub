@@ -85,10 +85,12 @@ class BioPacketForm(ModelForm):
     
     class Meta:
         model = BiographyPacket
-        fields = ['title', 'text']
+        fields = ['title', 'text', 'order_no']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['order_no'].label = "Nr porządkowy (równe numery są " \
+                                        "sortowane alfabetycznie)"
 
         self.helper = FormHelper()
         self.helper.add_input(

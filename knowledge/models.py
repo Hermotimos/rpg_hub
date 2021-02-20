@@ -3,6 +3,7 @@ from django.db.models import (
     ForeignKey as FK,
     ManyToManyField as M2M,
     Model,
+    SmallIntegerField,
     PROTECT,
     TextField,
 )
@@ -41,7 +42,11 @@ class BiographyPacket(InfoPacket):
         blank=True,
     )
     acquired_by = M2M(to=Profile, related_name='biography_packets', blank=True)
-    
+    order_no = SmallIntegerField(default=1, verbose_name='Nr porządkowy')
+
+    class Meta:
+        ordering = ['order_no', 'sorting_name']
+
     def save(self, *args, **kwargs):
         self.sorting_name = create_sorting_name(self.__str__())
         super().save(*args, **kwargs)
