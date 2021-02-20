@@ -31,7 +31,7 @@ class PictureAdmin(admin.ModelAdmin):
     list_display = ['id', 'type', 'description', 'image']
     list_editable = ['type', 'description']
     list_filter = ['type']
-    search_fields = ['description', 'image']
+    search_fields = ['description']
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -42,7 +42,7 @@ class PictureAdmin(admin.ModelAdmin):
 class PictureImageAdmin(admin.ModelAdmin):
     list_display = ['id', 'description', 'image', 'sorting_name']
     list_editable = ['description', 'image']
-    search_fields = ['description', 'image']
+    search_fields = ['description']
     
 
 admin.site.register(Audio, AudioAdmin)
