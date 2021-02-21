@@ -39,10 +39,10 @@ class BiographyPacket(InfoPacket):
         related_name='authored_bio_packets',
         on_delete=PROTECT,
         null=True,
-        blank=True,
-    )
+        blank=True)
     acquired_by = M2M(to=Profile, related_name='biography_packets', blank=True)
-    order_no = SmallIntegerField(default=1, verbose_name='Nr porządkowy')
+    pictures = M2M(to=Picture, related_name='biography_packets', blank=True)
+    order_no = SmallIntegerField(default=1)
 
     class Meta:
         ordering = ['order_no', 'sorting_name']

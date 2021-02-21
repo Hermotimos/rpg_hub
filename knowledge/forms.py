@@ -12,7 +12,7 @@ from knowledge.models import KnowledgePacket, BiographyPacket
 from toponomikon.models import Location
 
 
-class KnPacketCreateForm(ModelForm):
+class KnPacketForm(ModelForm):
     """Form to create KnowledgePackets by 'gm' status profiles."""
     
     class Meta:
@@ -46,7 +46,7 @@ class KnPacketCreateForm(ModelForm):
             Submit('submit', 'Zapisz pakiet wiedzy', css_class='btn-dark'))
 
 
-class PlayerKnPacketCreateForm(KnPacketCreateForm):
+class PlayerKnPacketForm(KnPacketForm):
     """Form to create KnowledgePackets by 'player' status profiles."""
     
     class Meta:

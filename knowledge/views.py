@@ -5,7 +5,7 @@ from django.db.models import Prefetch, Q, ExpressionWrapper, BooleanField
 from django.shortcuts import render, redirect
 
 from imaginarion.models import Picture, PictureImage
-from knowledge.forms import KnPacketCreateForm, PlayerKnPacketCreateForm
+from knowledge.forms import KnPacketForm, PlayerKnPacketForm
 from knowledge.models import KnowledgePacket
 from rpg_project.utils import handle_inform_form
 from rules.models import SkillLevel, Skill
@@ -69,19 +69,19 @@ def knowledge_packets_in_skills_view(request, model_name):
 
 
 @login_required
-def kn_packet_create_and_update_view(request, kn_packet_id):
+def kn_packet_form_view(request, kn_packet_id):
     profile = request.user.profile
     kn_packet = KnowledgePacket.objects.filter(id=kn_packet_id).first()
         
     if profile.status == 'gm':
-        form = KnPacketCreateForm(data=request.POST or None,
-                                  files=request.FILES or None,
-                                  instance=kn_packet)
+        form = KnPacketForm(data=request.POST or None,
+                            files=request.FILES or None,
+                            instance=kn_packet)
     else:
-        form = PlayerKnPacketCreateForm(data=request.POST or None,
-                                        files=request.FILES or None,
-                                        instance=kn_packet,
-                                        profile=profile)
+        form = PlayerKnPacketForm(data=request.POST or None,
+                                  files=request.FILES or None,
+                                  instance=kn_packet,
+                                  profile=profile)
     
     if form.is_valid():
         if profile.status == 'gm':
@@ -90,7 +90,6 @@ def kn_packet_create_and_update_view(request, kn_packet_id):
             kn_packet = form.save(commit=False)
             kn_packet.author = profile
             kn_packet.save()
-            
             kn_packet.acquired_by.add(profile)
             kn_packet.skills.set(form.cleaned_data['skills'])
 
@@ -111,10 +110,8 @@ def kn_packet_create_and_update_view(request, kn_packet_id):
         for location in form.cleaned_data['locations']:
             location.knowledge_packets.add(kn_packet)
             
-        if not kn_packet_id:
-            messages.success(request, f'Utworzono "{kn_packet.title}"!')
-        else:
-            messages.success(request, f'Zmieniono "{kn_packet.title}"!')
+        messages.success(
+            request, f'Zapisano pakiet wiedzy "{kn_packet.title}"!')
         return redirect('knowledge:knowledge-packets-in-skills', 'Skill')
     else:
         messages.warning(request, form.errors)
