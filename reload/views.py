@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 
 from chronicles.models import Thread, GameEvent
 from imaginarion.models import Picture, PictureImage
-from prosoponomikon.models import Character
+from prosoponomikon.models import Character, NameForm
 from rules.models import (
     Skill, SkillLevel,
     Synergy, SynergyLevel,
@@ -65,8 +65,10 @@ def reload_prosoponomikon(request):
             # if "z" in obj.name:
             #     indx = obj.name.index("z")
             #     obj.cognomen = obj.name[indx:]
+            if obj.name:
+                NameForm.objects.create(form=obj.name)
             
-            obj.save()
+            # obj.save()
         messages.info(request,
                       f'Przeładowano "Character" dla "prosoponomikon"!')
         return redirect('reload:reload-main')
