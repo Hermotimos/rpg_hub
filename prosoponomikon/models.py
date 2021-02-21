@@ -28,7 +28,9 @@ class NameContinuum(Model):
     description = TextField(blank=True, null=True)
 
     def __str__(self):
-        return " | ".join(self.name_forms.all())
+        if self.name_forms.all():
+            return " | ".join([str(name) for name in self.name_forms.all()])
+        return "No names yet"
     
     
 class NameGroup(Model):

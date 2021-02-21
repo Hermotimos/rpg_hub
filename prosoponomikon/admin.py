@@ -6,10 +6,18 @@ from django.utils.html import format_html
 from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, CharacterGroup, NameForm, NameContinuum, NameGroup
 
 
+class NameContinuumAdmin(admin.ModelAdmin):
+    list_display = ['id', 'names_in_continuum', 'description']
+    list_editable = ['description']
+    
+    def names_in_continuum(self, obj):
+        return obj.__str__()
+
+    
 class NameGroupAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'description']
     list_editable = ['title', 'description']
-    
+
     
 class NameFormAdmin(admin.ModelAdmin):
     list_display = ['id', 'form', 'type', 'is_ancient', 'name_continuum']
@@ -71,6 +79,7 @@ class CharacterAdmin(admin.ModelAdmin):
 
 
 admin.site.register(NameForm, NameFormAdmin)
+admin.site.register(NameContinuum, NameContinuumAdmin)
 admin.site.register(NameGroup, NameGroupAdmin)
 admin.site.register(CharacterGroup)
 admin.site.register(Character, CharacterAdmin)
