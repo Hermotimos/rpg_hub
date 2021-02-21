@@ -79,8 +79,12 @@ class Character(Model):
     objects = CharacterManager()
     
     profile = OneToOne(to=Profile, on_delete=CASCADE)
-    name = FK(to=NameForm, related_name='characters', on_delete=PROTECT,
-              blank=True, null=True)
+    name = FK(
+        to=NameForm,
+        related_name='characters',
+        on_delete=PROTECT,
+        blank=True,
+        null=True)
     cognomen = CharField(max_length=250, blank=True, null=True)
     frequented_locations = M2M(
         to=Location,
