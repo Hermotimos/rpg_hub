@@ -48,7 +48,7 @@ from users.models import Profile
 class Character(Model):
     profile = OneToOne(to=Profile, on_delete=CASCADE)
     name = CharField(max_length=100)
-    cognomen = CharField(max_length=250)
+    cognomen = CharField(max_length=250, blank=True, null=True)
     frequented_locations = M2M(
         to=Location,
         related_name='frequented_by_characters',
