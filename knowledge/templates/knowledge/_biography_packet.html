@@ -8,10 +8,8 @@
         <!-- TITLE -->
         <div class="row">
             <h3 class="mb-3">
-                {% if request.user.profile.status == 'gm' %}
-                    {% if biography_packet.author and biography_packet.author.status != 'gm' %}
-                        <img class="rounded-circle img-small mr-1 mt-1" src="{{ biography_packet.author.image.url }}" alt="Profile img">
-                    {% endif %}
+                {% if biography_packet.author and biography_packet.author.status != 'gm' %}
+                    <img class="rounded-circle img-small mr-1 mt-1" src="{{ biography_packet.author.image.url }}" alt="Profile img">
                 {% endif %}
                 <span class="border-bottom-dark">
                     {{ biography_packet.title }}
@@ -47,11 +45,14 @@
                 </p>
             </div>
             
-            <div class="col-12 col-sm-11 mt-2 p-0 pl-sm-3 pl-lg-0">
-                {% for row in biography_packet.pictures.all|columns:3 %}
-                    {% include '_row_of_pics_with_modals.html' %}
-                {% endfor %}
-            </div>
+            <!-- Pictures in BiographyPacket should be visible to the author and GM exclusively -->
+            {% if request.user.profile.status == 'gm' or request.user.profile == biography_packet.author %}
+                <div class="col-12 col-sm-11 mt-2 p-0 pl-sm-3 pl-lg-0">
+                    {% for row in biography_packet.pictures.all|columns:3 %}
+                        {% include '_row_of_pics_with_modals.html' %}
+                    {% endfor %}
+                </div>
+            {% endif %}
             
         </div>
     </div>

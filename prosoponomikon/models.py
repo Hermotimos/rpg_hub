@@ -13,7 +13,6 @@ from django.db.models import (
     TextField,
 )
 from django.db.models.signals import post_save
-from django.dispatch import receiver
 from rpg_project.utils import create_sorting_name
 
 from imaginarion.models import Picture
@@ -21,6 +20,10 @@ from knowledge.models import BiographyPacket, DialoguePacket
 from knowledge.models import KnowledgePacket
 from toponomikon.models import Location
 from users.models import Profile
+
+
+# class Name(Model):
+
 
 
 class Character(Model):
@@ -148,7 +151,6 @@ class CharacterGroup(Model):
         return f"{self.name} [{self.author}]"
 
 
-# @receiver(post_save, sender=Character)
 def copy_name_from_character_to_profile(sender, instance, **kwargs):
     profile = instance.profile
     profile.copied_character_name = instance.name
