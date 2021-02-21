@@ -68,8 +68,6 @@ def reload_prosoponomikon(request):
             
             # if obj.name:
             #     NameForm.objects.create(form=obj.name)
-        
-            obj.name = 1
             
             obj.save()
         messages.info(request,

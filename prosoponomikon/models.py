@@ -98,8 +98,7 @@ class Character(Model):
         return f"{name}{space}{cognomen}"
     
     def save(self, *args, **kwargs):
-        if self.name:
-            self.sorting_name = create_sorting_name(self.__str__)
+        self.sorting_name = create_sorting_name(self.__str__())
         super().save(*args, **kwargs)
     
     def all_known(self):
