@@ -64,8 +64,6 @@ class AudioSet(Model):
     def __str__(self):
         return self.title
 
-    
-
 
 class PictureImage(Model):
     """A model to store paths to internally stored image files."""
