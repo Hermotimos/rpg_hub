@@ -231,6 +231,10 @@ class ThreadEndedAdmin(ThreadAdmin):
 # ----------------------------------------------
 # ----------------------------------------------
 
+class TimeUnitAdmin(admin.ModelAdmin):
+    list_display = ['id', 'description_short', 'description_long']
+    search_fields = ['description_short', 'description_long']
+    
 
 class ChronologyAdminForm(forms.ModelForm):
     class Meta:
@@ -317,7 +321,7 @@ admin.site.register(Chapter, ChapterAdmin)
 admin.site.register(GameSession, GameSessionAdmin)
 
 # TimeUnit model
-admin.site.register(TimeUnit)
+admin.site.register(TimeUnit, TimeUnitAdmin)
 
 # TimeUnit proxies
 admin.site.register(Chronology, ChronologyAdmin)
