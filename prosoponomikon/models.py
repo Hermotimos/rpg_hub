@@ -29,6 +29,21 @@ class NameContinuum(Model):
 
     def __str__(self):
         return " | ".join(self.name_forms.all())
+    
+    
+class NameGroup(Model):
+    title = CharField(max_length=250)
+    description = TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.title
+
+
+NAME_TYPES = (
+    ('male', 'MALE'),
+    ('female', 'FEMALE'),
+    ('daemon', 'DAEMON'),
+)
 
 
 class NameForm(Model):
@@ -39,7 +54,9 @@ class NameForm(Model):
         on_delete=PROTECT,
         blank=True,
         null=True)
+    type = CharField(max_length=20, choices=NAME_TYPES, default='male')
     is_ancient = BooleanField(default=False)
+    name_groups = M2M(to=NameGroup, related_name='names', blank=True)
     locations = M2M(to=Location, related_name="names", blank=True)
     
     class Meta:
@@ -49,9 +66,17 @@ class NameForm(Model):
         return self.form
 
 
+class CharacterManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.select_related('name')
+        return qs
+    
+    
 class Character(Model):
+    objects = CharacterManager()
+    
     profile = OneToOne(to=Profile, on_delete=CASCADE)
-    # name = IntegerField(max_length=100, blank=True, null=True)
     name = FK(to=NameForm, related_name='characters', on_delete=PROTECT,
               blank=True, null=True)
     cognomen = CharField(max_length=250, blank=True, null=True)
