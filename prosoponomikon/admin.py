@@ -6,19 +6,6 @@ from django.utils.html import format_html
 from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, CharacterGroup, NameForm, NameContinuum, NameGroup
 
 
-class NameContinuumAdmin(admin.ModelAdmin):
-    list_display = ['id', 'names_in_continuum', 'description']
-    list_editable = ['description']
-    
-    def names_in_continuum(self, obj):
-        return obj.__str__()
-
-    
-class NameGroupAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'description']
-    list_editable = ['title', 'description']
-
-    
 class NameFormAdmin(admin.ModelAdmin):
     list_display = ['id', 'form', 'type', 'is_ancient', 'name_continuum']
     list_editable = ['form', 'type', 'is_ancient', 'name_continuum']
@@ -40,6 +27,25 @@ class NameFormAdmin(admin.ModelAdmin):
                     setattr(request, f'_{field}_choices_cache', choices)
                 formfield.choices = choices
         return formfield
+
+
+class NameFormInline(admin.TabularInline):
+    model = NameForm
+    extra = 0
+    
+    
+class NameContinuumAdmin(admin.ModelAdmin):
+    inlines = [NameFormInline]
+    list_display = ['id', 'names_in_continuum', 'description']
+    list_editable = ['description']
+    
+    def names_in_continuum(self, obj):
+        return obj.__str__()
+
+    
+class NameGroupAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title', 'description']
+    list_editable = ['title', 'description']
 
 
 class CharacterAdmin(admin.ModelAdmin):
