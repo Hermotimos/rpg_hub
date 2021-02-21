@@ -86,7 +86,10 @@ class Character(Model):
         verbose_name_plural = '* CHARACTERS'
     
     def __str__(self):
-        return f"{self.name} {self.cognomen}"
+        name = self.name or ""
+        space = " " if name else ""
+        cognomen = self.cognomen or ""
+        return f"{name}{space}{cognomen}"
     
     def save(self, *args, **kwargs):
         if self.name:
