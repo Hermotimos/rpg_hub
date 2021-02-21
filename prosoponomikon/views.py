@@ -70,7 +70,8 @@ def prosoponomikon_grouped_view(request):
         character_groups = character_groups.prefetch_related(
             'characters__profile__user',
             'characters__known_directly',
-            'characters__known_indirectly')
+            'characters__known_indirectly',
+            'characters__name')
         ungrouped = Character.objects.exclude(
             character_groups__in=character_groups)
         ungrouped = ungrouped.prefetch_related(
@@ -94,7 +95,6 @@ def prosoponomikon_grouped_view(request):
         
         character_groups = character_groups.prefetch_related(
             Prefetch('characters__profile__user', queryset=all_known),
-            # 'characters__profile__user'
         )
         ungrouped = all_known.exclude(character_groups__in=character_groups)
         
@@ -113,7 +113,7 @@ def prosoponomikon_grouped_view(request):
 def prosoponomikon_character_view(request, character_id):
     profile = request.user.profile
     
-    characters = Character.objects.select_related()
+    characters = Character.objects.select_related('name')
     if profile.status == 'gm':
         characters = characters.prefetch_related(
             'biography_packets', 'dialogue_packets')
