@@ -5,7 +5,7 @@
         <p class="mb-1 {% if side == 'left' %} text-left {% else %} text-right {% endif %}
             {% if character.only_indirectly %} text-muted {% endif %}">
             <span class="border-bottom-dark character-name">
-                {{ character.name }}
+                {{ character }}
                 {% if character.only_indirectly  %} (znasz ze słyszenia) {% endif %}
             </span>
         </p>

@@ -7,9 +7,9 @@ from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, Char
 
 
 class CharacterAdmin(admin.ModelAdmin):
-    list_display = ['get_img', 'name', 'description']
-    list_editable = ['name', 'description']
-    search_fields = ['name', 'description']
+    list_display = ['get_img', 'name', 'cognomen', 'description']
+    list_editable = ['name', 'cognomen', 'description']
+    search_fields = ['name', 'cognomen', 'description']
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 4, 'cols': 50})},
         CharField: {'widget': TextInput(attrs={'size': 25})},

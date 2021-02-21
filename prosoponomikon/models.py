@@ -1,4 +1,5 @@
 from django.db.models import (
+    BooleanField,
     CASCADE,
     CharField,
     ForeignKey as FK,
@@ -22,13 +23,32 @@ from toponomikon.models import Location
 from users.models import Profile
 
 
-# class Name(Model):
-
+# class NameContinuum(Model):
+#     description = TextField(blank=True, null=True)
+#
+#     def __str__(self):
+#         return " | ".join(self.name_forms.all())
+#
+#
+# class NameForm(Model):
+#     form = CharField(max_length=250)
+#     name_continuum = FK(
+#         to=NameContinuum,
+#         related_name="name_forms",
+#         on_delete=PROTECT,
+#         blank=True,
+#         null=True)
+#     is_ancient = BooleanField()
+#     locations = M2M(to=Location, related_name="names", blank=True)
+#
+#     def __str__(self):
+#         return self.form
 
 
 class Character(Model):
     profile = OneToOne(to=Profile, on_delete=CASCADE)
     name = CharField(max_length=100)
+    cognomen = CharField(max_length=250)
     frequented_locations = M2M(
         to=Location,
         related_name='frequented_by_characters',
@@ -66,7 +86,7 @@ class Character(Model):
         verbose_name_plural = '* CHARACTERS'
     
     def __str__(self):
-        return self.name
+        return f"{self.name} {self.cognomen}"
     
     def save(self, *args, **kwargs):
         if self.name:

@@ -130,7 +130,7 @@ def prosoponomikon_character_view(request, character_id):
         handle_inform_form(request)
     
     context = {
-        'page_title': character.name,
+        'page_title': character,
         'character': character,
     }
     if (profile in character.all_known() or profile.character == character
@@ -261,7 +261,7 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
         messages.warning(request, form.errors)
 
     context = {
-        'page_title': f"{character.name}: " + (
+        'page_title': f"{character}: " + (
             bio_packet.title if bio_packet else 'Nowy pakiet wiedzy'),
         'form': form,
     }
