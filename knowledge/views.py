@@ -1,12 +1,10 @@
-from datetime import datetime
-
 from django.apps import apps
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch, Q, ExpressionWrapper, BooleanField
 from django.shortcuts import render, redirect
 
-from imaginarion.models import Picture
+from imaginarion.models import Picture, PictureImage
 from knowledge.forms import KnPacketCreateForm, PlayerKnPacketCreateForm
 from knowledge.models import KnowledgePacket
 from rpg_project.utils import handle_inform_form
@@ -99,13 +97,15 @@ def kn_packet_create_and_update_view(request, kn_packet_id):
             pictures = [v for k, v in form.cleaned_data.items()
                         if 'picture' in k and v is not None]
             for cnt, picture in enumerate(pictures, 1):
-                now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                pic = Picture.objects.create(
+                description = (form.cleaned_data[f'descr_{cnt}']
+                               or f"{kn_packet.title}")
+                pic_img = PictureImage.objects.create(
                     image=picture,
+                    description=description)
+                pic = Picture.objects.create(
+                    image=pic_img,
                     type='players-notes',
-                    title=f'PLAYERS-NOTES__{profile}_{now}_[{cnt}]',
-                    description=form.cleaned_data[f'description_{cnt}'] or now,
-                )
+                    description=description)
                 kn_packet.pictures.add(pic)
             
         for location in form.cleaned_data['locations']:

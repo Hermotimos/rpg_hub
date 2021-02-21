@@ -65,18 +65,6 @@ class AudioSet(Model):
         return self.title
 
     
-# TODO delete model, below is a replacement model (work with existing objs...)
-IMG_TYPES = (
-    ('knowledge', 'KNOWLEDGE'),
-    ('npc', 'NPC'),
-    ('players-notes', 'PLAYERS-NOTES'),
-    ('profile', 'PROFILE'),
-    ('realia', 'REALIA'),
-    ('symbola', 'SYMBOLA'),
-    ('thera', 'THERA'),
-    ('topoi', 'TOPOI'),
-    ('varia', 'VARIA'),
-)
 
 
 class PictureImage(Model):
@@ -101,6 +89,20 @@ class PictureImage(Model):
 
     def __str__(self):
         return str(self.image.name).replace("post_pics/", "")
+
+
+# TODO delete model, below is a replacement model (work with existing objs...)
+IMG_TYPES = (
+    ('knowledge', 'KNOWLEDGE'),
+    ('npc', 'NPC'),
+    ('players-notes', 'PLAYERS-NOTES'),
+    ('profile', 'PROFILE'),
+    ('realia', 'REALIA'),
+    ('symbola', 'SYMBOLA'),
+    ('thera', 'THERA'),
+    ('topoi', 'TOPOI'),
+    ('varia', 'VARIA'),
+)
 
 
 class Picture(Model):
