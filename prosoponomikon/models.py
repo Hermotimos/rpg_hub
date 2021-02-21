@@ -3,6 +3,7 @@ from django.db.models import (
     CASCADE,
     CharField,
     ForeignKey as FK,
+    IntegerField,
     Manager,
     ManyToManyField as M2M,
     Model,
@@ -50,7 +51,9 @@ class NameForm(Model):
 
 class Character(Model):
     profile = OneToOne(to=Profile, on_delete=CASCADE)
-    name = CharField(max_length=100, blank=True, null=True)
+    # name = IntegerField(max_length=100, blank=True, null=True)
+    name = FK(to=NameForm, related_name='characters', on_delete=PROTECT,
+              blank=True, null=True)
     cognomen = CharField(max_length=250, blank=True, null=True)
     frequented_locations = M2M(
         to=Location,
@@ -96,7 +99,7 @@ class Character(Model):
     
     def save(self, *args, **kwargs):
         if self.name:
-            self.sorting_name = create_sorting_name(self.name)
+            self.sorting_name = create_sorting_name(self.__str__)
         super().save(*args, **kwargs)
     
     def all_known(self):
@@ -179,7 +182,7 @@ class CharacterGroup(Model):
 
 def copy_name_from_character_to_profile(sender, instance, **kwargs):
     profile = instance.profile
-    profile.copied_character_name = instance.name
+    profile.copied_character_name = str(instance)
     profile.save()
 
 

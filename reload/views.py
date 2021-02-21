@@ -65,10 +65,13 @@ def reload_prosoponomikon(request):
             # if "z" in obj.name:
             #     indx = obj.name.index("z")
             #     obj.cognomen = obj.name[indx:]
-            if obj.name:
-                NameForm.objects.create(form=obj.name)
             
-            # obj.save()
+            # if obj.name:
+            #     NameForm.objects.create(form=obj.name)
+        
+            obj.name = 1
+            
+            obj.save()
         messages.info(request,
                       f'Przeładowano "Character" dla "prosoponomikon"!')
         return redirect('reload:reload-main')
