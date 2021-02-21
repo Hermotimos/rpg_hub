@@ -4,7 +4,8 @@ from django.db import IntegrityError
 from django.db.models import Prefetch, Case, When, Value, IntegerField, Q
 from django.shortcuts import render, redirect
 
-from knowledge.forms import BioPacketForm
+from imaginarion.models import Picture, PictureImage
+from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
 from prosoponomikon.forms import CharacterManyGroupsEditFormSet, \
     CharacterGroupsEditFormSetHelper, CharacterSingleGroupEditFormSet
@@ -213,28 +214,59 @@ def prosoponomikon_character_groups_edit_view(request, group_id=0):
 
 
 @login_required
-def prosoponomikon_biography_packet_edit_view(request, bio_packet_id=0, character_id=0):
+def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0):
     profile = request.user.profile
 
     bio_packet = BiographyPacket.objects.filter(id=bio_packet_id).first()
     character = Character.objects.filter(id=character_id).first()
 
-    form = BioPacketForm(data=request.POST or None, instance=bio_packet)
-    # form = BioPacketForm()
+    if profile.status == 'gm':
+        form = BioPacketForm(data=request.POST or None,
+                             files=request.FILES or None,
+                             instance=bio_packet)
+    else:
+        form = PlayerBioPacketForm(data=request.POST or None,
+                                   files=request.FILES or None,
+                                   instance=bio_packet)
     
     if form.is_valid():
-        bio_packet = form.save()
-        bio_packet.author = profile
-        bio_packet.save()
-        
+        if profile.status == 'gm':
+            bio_packet = form.save()
+        else:
+            bio_packet = form.save(commit=False)
+            bio_packet.author = profile
+            bio_packet.save()
+            bio_packet.acquired_by.add(profile)
+            
+            pictures = [v for k, v in form.cleaned_data.items()
+                        if 'picture' in k and v is not None]
+            for cnt, picture in enumerate(pictures, 1):
+                description = (form.cleaned_data[f'descr_{cnt}']
+                               or f"{bio_packet.title}")
+                pic_img = PictureImage.objects.create(
+                    image=picture,
+                    description=description)
+                pic = Picture.objects.create(
+                    image=pic_img,
+                    type='players-notes',
+                    description=description)
+                bio_packet.pictures.add(pic)
+
         character.biography_packets.add(bio_packet)
         
         messages.success(request, f"Zapisano pakiet biograficzny!")
         return redirect('prosoponomikon:character', character_id)
-        
+
+    else:
+        messages.warning(request, form.errors)
+
     context = {
-        'page_title': f"Pakiet biograficzny: {character.name}",
+        'page_title': f"{character.name}: " + (
+            bio_packet.title if bio_packet else 'Nowy pakiet wiedzy'),
         'form': form,
     }
-    return render(request, '_form.html', context)
-
+    if not bio_packet_id or profile.status == 'gm' \
+            or profile.biography_packets.filter(id=bio_packet_id):
+        return render(request, '_form.html', context)
+    else:
+        return redirect('home:dupa')

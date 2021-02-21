@@ -286,7 +286,7 @@ def send_emails(request, profile_ids=None, **kwargs):
     # CHARACTER
     elif 'character' in kwargs:
         character = kwargs['character']
-        subject = "[RPG] Nowa opowieść o wydarzeniach historycznych!"
+        subject = "[RPG] Nowa opowieść o postaci!"
         message = f"{profile} rozprawia o postaci '{character.name}'.\n" \
                   f"Postać została dodana do Twojego Prosoponomikonu: " \
                   f"{request.get_host()}/prosoponomikon/character/{character.name}/\n"

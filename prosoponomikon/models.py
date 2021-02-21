@@ -76,6 +76,7 @@ class Character(Model):
     def informables(self):
         qs = Profile.active_players.all()
         qs = qs.exclude(id__in=self.all_known())
+        qs = qs.exclude(character__id=self.pk)
         return qs
 
 

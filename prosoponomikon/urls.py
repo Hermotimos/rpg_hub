@@ -12,7 +12,9 @@ urlpatterns = [
          name='groups-edit'),
     path('character/<int:character_id>/', views.prosoponomikon_character_view,
          name='character'),
-    path('character/<int:character_id>/bio_packet/<int:bio_packet_id>/',
-         views.prosoponomikon_biography_packet_edit_view,
-         name='biography-packet-edit'),
+    
+    path('character/<int:character_id>/bio-packet-form/<int:bio_packet_id>/',
+         views.prosoponomikon_bio_packet_form_view,
+         name='bio-packet-form'),
+
 ]

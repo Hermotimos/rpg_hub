@@ -36,7 +36,7 @@
                     <a class="btn btn-outline-dark icon-list mt-1 py-2 disabled" href="#"></a>
                 </div>
                 <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Edytuj pakiet biograficzny">
-                    <a class="btn btn-outline-dark icon-indent-right mt-1 py-2" href="{% url 'prosoponomikon:biography-packet-edit' character.id biography_packet.id %}"></a>
+                    <a class="btn btn-outline-dark icon-indent-right mt-1 py-2" href="{% url 'prosoponomikon:bio-packet-form' character.id biography_packet.id %}"></a>
                 </div>
             </div>
             
@@ -45,6 +45,12 @@
                 <p class="font-italic text-justify linebreaks-style font-18">
                     {{ biography_packet.text|custom_linebreaksbr:2 }}
                 </p>
+            </div>
+            
+            <div class="col-12 col-sm-11 mt-2 p-0 pl-sm-3 pl-lg-0">
+                {% for row in biography_packet.pictures.all|columns:3 %}
+                    {% include '_row_of_pics_with_modals.html' %}
+                {% endfor %}
             </div>
             
         </div>

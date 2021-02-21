@@ -82,16 +82,53 @@ class PlayerKnPacketCreateForm(KnPacketCreateForm):
 
 
 class BioPacketForm(ModelForm):
+    """Form to create BiographyPackets by 'gm' status profiles."""
     
     class Meta:
         model = BiographyPacket
-        fields = ['title', 'text', 'order_no']
-
+        fields = ['title', 'text', 'pictures', 'order_no']
+        widgets = {
+            'pictures': SelectMultiple(attrs={'size': 15}),
+        }
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['order_no'].label = "Nr porządkowy (równe numery są " \
                                         "sortowane alfabetycznie)"
-
+        self.fields['text'].widget.attrs = {
+            'cols': 60,
+            'rows': 10,
+        }
+        
         self.helper = FormHelper()
         self.helper.add_input(
             Submit('submit', 'Zapisz pakiet biograficzny', css_class='btn-dark'))
+
+
+class PlayerBioPacketForm(BioPacketForm):
+    """Form to create BiographyPackets by 'player' status profiles."""
+    
+    class Meta:
+        model = BiographyPacket
+        exclude = ['acquired_by', 'pictures', 'sorting_name', 'author']
+    
+    picture_1 = FileField(required=False, label='')
+    descr_1 = CharField(required=False, label='')
+    
+    picture_2 = FileField(required=False, label='')
+    descr_2 = CharField(required=False, label='')
+    
+    picture_3 = FileField(required=False, label='')
+    descr_3 = CharField(required=False, label='')
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['descr_1'].widget.attrs = {
+            'placeholder': 'Podpis grafiki nr 1',
+        }
+        self.fields['descr_2'].widget.attrs = {
+            'placeholder': 'Podpis grafiki nr 2',
+        }
+        self.fields['descr_3'].widget.attrs = {
+            'placeholder': 'Podpis grafiki nr 3',
+        }
