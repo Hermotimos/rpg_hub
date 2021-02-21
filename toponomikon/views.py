@@ -88,10 +88,12 @@ def toponomikon_location_view(request, loc_name):
     if this_location in known_only_indir:
         page_title += ' (znasz z opowieści)'
         
+    # CHARACTERS TAB
     # Collect all characters in this location and its sub-locations:
     characters = Character.objects.filter(
         frequented_locations__in=this_location.with_sublocations())
     characters = characters.select_related('profile')
+    characters = characters.prefetch_related('known_directly')
     
     # LOCATIONS TAB
     if profile.status == 'gm':

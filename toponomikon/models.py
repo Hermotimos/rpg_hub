@@ -38,7 +38,16 @@ class LocationType(Model):
         return self.name
 
 
+class LocationManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.select_related('main_image__image')
+        return qs
+
+
 class Location(Model):
+    objects = LocationManager()
+    
     name = CharField(unique=True, max_length=100)
     description = TextField(blank=True, null=True)
     main_image = FK(
