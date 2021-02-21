@@ -21,6 +21,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='nameform',
             name='name_groups',
-            field=models.ManyToManyField(blank=True, related_name='names', to='prosoponomikon.NameGroup'),
+            field=models.ManyToManyField(blank=True, null=True, related_name='names', to='prosoponomikon.NameGroup'),
         ),
     ]
