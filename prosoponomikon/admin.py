@@ -3,12 +3,17 @@ from django.db.models import TextField, CharField
 from django.forms import Textarea, TextInput
 from django.utils.html import format_html
 
-from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, CharacterGroup, NameForm, NameContinuum
+from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, CharacterGroup, NameForm, NameContinuum, NameGroup
 
 
+class NameGroupAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title', 'description']
+    list_editable = ['title', 'description']
+    
+    
 class NameFormAdmin(admin.ModelAdmin):
-    list_display = ['id', 'form', 'is_ancient', 'name_continuum']
-    list_editable = ['form', 'is_ancient', 'name_continuum']
+    list_display = ['id', 'form', 'type', 'is_ancient', 'name_continuum']
+    list_editable = ['form', 'type', 'is_ancient', 'name_continuum']
     
     def formfield_for_dbfield(self, db_field, **kwargs):
         # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
@@ -66,6 +71,7 @@ class CharacterAdmin(admin.ModelAdmin):
 
 
 admin.site.register(NameForm, NameFormAdmin)
+admin.site.register(NameGroup, NameGroupAdmin)
 admin.site.register(CharacterGroup)
 admin.site.register(Character, CharacterAdmin)
 admin.site.register(PlayerCharacter, CharacterAdmin)
