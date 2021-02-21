@@ -62,9 +62,10 @@ def reload_prosoponomikon(request):
         for obj in Character.objects.all():
             
             # TODO REMOVE WHEN DONE
-            if "z" in obj.name:
-                indx = obj.name.index("z")
-                obj.cognomen = obj.name[indx:]
+            # if "z" in obj.name:
+            #     indx = obj.name.index("z")
+            #     obj.cognomen = obj.name[indx:]
+            
             obj.save()
         messages.info(request,
                       f'Przeładowano "Character" dla "prosoponomikon"!')
