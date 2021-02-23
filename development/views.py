@@ -128,7 +128,7 @@ def character_tricks_view(request):
     profile = request.user.profile
     
     if profile.status == 'gm':
-        players_profiles = Profile.players(is_alive=True)
+        players_profiles = Profile.players.filter(is_alive=True)
     else:
         players_profiles = [profile]
     
