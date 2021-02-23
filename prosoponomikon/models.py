@@ -68,10 +68,21 @@ class NameForm(Model):
         return self.form
 
 
+class FamilyName(Model):
+    form = CharField(max_length=250)
+    locations = M2M(to=Location, related_name="family_names", blank=True)
+    
+    class Meta:
+        ordering = ['form']
+    
+    def __str__(self):
+        return self.form
+
+
 class CharacterManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.select_related('name')
+        qs = qs.select_related('name', 'family_name')
         return qs
     
     
@@ -81,6 +92,12 @@ class Character(Model):
     profile = OneToOne(to=Profile, on_delete=CASCADE)
     name = FK(
         to=NameForm,
+        related_name='characters',
+        on_delete=PROTECT,
+        blank=True,
+        null=True)
+    family_name = FK(
+        to=FamilyName,
         related_name='characters',
         on_delete=PROTECT,
         blank=True,
@@ -123,10 +140,10 @@ class Character(Model):
         verbose_name_plural = '* CHARACTERS'
     
     def __str__(self):
-        name = self.name if self.name else ""
-        space = " " if name else ""
-        cognomen = self.cognomen if self.cognomen else ""
-        return f"{name}{space}{cognomen}"
+        name = f"{self.name} " if self.name else ""
+        family_name = f"{self.family_name} " if self.family_name else ""
+        cognomen = f"{self.cognomen} " if self.cognomen else ""
+        return f"{name}{family_name}{cognomen}".strip()
     
     def save(self, *args, **kwargs):
         self.sorting_name = create_sorting_name(self.__str__())

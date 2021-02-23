@@ -3,7 +3,7 @@ from django.db.models import TextField, CharField
 from django.forms import Textarea, TextInput
 from django.utils.html import format_html
 
-from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, CharacterGroup, NameForm, NameContinuum, NameGroup
+from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, CharacterGroup, NameForm, NameContinuum, NameGroup, FamilyName
 
 
 class NameFormAdmin(admin.ModelAdmin):
@@ -11,9 +11,6 @@ class NameFormAdmin(admin.ModelAdmin):
     list_editable = ['form', 'type', 'is_ancient', 'name_continuum']
     
     def formfield_for_dbfield(self, db_field, **kwargs):
-        # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
-        # Reduces greatly queries in main view, doubles in detail view
-        # The trade-off is still very good
         request = kwargs['request']
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
         fields = [
@@ -48,23 +45,26 @@ class NameGroupAdmin(admin.ModelAdmin):
     list_editable = ['title', 'description']
 
 
+class FamilyNameAdmin(admin.ModelAdmin):
+    list_display = ['id', 'form']
+    list_editable = ['form']
+    
+
 class CharacterAdmin(admin.ModelAdmin):
-    list_display = ['get_img', 'name', 'cognomen', 'description']
-    list_editable = ['name', 'cognomen', 'description']
-    search_fields = ['name', 'cognomen', 'description']
+    list_display = ['get_img', 'name', 'family_name', 'cognomen', 'description']
+    list_editable = ['name', 'family_name', 'cognomen', 'description']
+    search_fields = ['name', 'family_name', 'cognomen', 'description']
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 4, 'cols': 50})},
         CharField: {'widget': TextInput(attrs={'size': 25})},
     }
 
     def formfield_for_dbfield(self, db_field, **kwargs):
-        # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
-        # Reduces greatly queries in main view, doubles in detail view
-        # The trade-off is still very good
         request = kwargs['request']
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
         fields = [
-            # 'birth_location',
+            'name',
+            'family_name',
         ]
         for field in fields:
             if db_field.name == field:
@@ -83,8 +83,14 @@ class CharacterAdmin(admin.ModelAdmin):
         default_img = "media/profile_pics/profile_default.jpg"
         return format_html(f'<img src={default_img} width="70" height="70">')
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.select_related('profile')
+        return qs
+
 
 admin.site.register(NameForm, NameFormAdmin)
+admin.site.register(FamilyName, FamilyNameAdmin)
 admin.site.register(NameContinuum, NameContinuumAdmin)
 admin.site.register(NameGroup, NameGroupAdmin)
 admin.site.register(CharacterGroup)
