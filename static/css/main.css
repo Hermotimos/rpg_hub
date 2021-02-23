@@ -244,12 +244,7 @@ a.img-link {
     opacity: 1;
     filter: grayscale(0%);
 }
-
-a.img-link:hover {
-    opacity: 0.95;
-    filter: grayscale(20%);
-    color: #444444;
-}
+a.img-link:hover {color: #444444;}
 
 
 img.img-grayscale {filter: grayscale(100%) !important;}

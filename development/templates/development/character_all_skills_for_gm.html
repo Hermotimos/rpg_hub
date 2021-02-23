@@ -15,12 +15,13 @@
                 {% for profile in profiles %}
                     <div class="col-sm-6 col-md-4 col-lg-3">
                         <a class="img-link" href="{% url 'development:skills' profile.id %}" >
-<!--                            <img class="img-fluid mx-auto d-block {% if profile.status == 'dead_player' %} img-grayscale {% endif %}"-->
-                            <img class="img-fluid mx-auto d-block {% if not profile.is_alive %} img-grayscale {% endif %}"
-                                 src="{{ profile.image.url }}"
-                                 alt="Profile img">
+                            <div class="img-hover-zoom m-0">
+                                <img class="img-fluid mx-auto d-block {% if not profile.is_alive %} img-grayscale {% endif %}"
+                                     src="{{ profile.image.url }}"
+                                     alt="Profile img">
+                            </div>
                         </a>
-                        <p class="pt-1 text-center">{{ profile.character }}</p>
+                        <p class="pt-1 font-italic font-14 text-center">{{ profile.character }}</p>
                     </div>
                 {% endfor %}
             </div>
