@@ -57,7 +57,7 @@ class CharacterForm(ModelForm):
     
     class Meta:
         model = Character
-        fields = ['family_name', 'cognomen', 'description']
+        fields = ['description']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -65,13 +65,3 @@ class CharacterForm(ModelForm):
         self.fields['description'].widget.attrs[
             'placeholder'
         ] = "Krótka charakterystyka - jak postać jawi się nowo poznanym osobom"
-        
-        warning = " (Po zatwierdzeniu edycja jedynie przez MG)"
-        self.fields['family_name'].label = "NAZWISKO" + warning
-        self.fields['family_name'].widget.attrs['size'] = 10
-        self.fields['cognomen'].label = "PRZYDOMEK (np. 'z Astinary')" + warning
-        
-        if self.instance.family_name:
-            self.fields['family_name'].widget = HiddenInput()
-        if self.instance.cognomen:
-            self.fields['cognomen'].widget = HiddenInput()
