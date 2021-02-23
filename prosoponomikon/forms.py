@@ -2,7 +2,7 @@ from crispy_forms.bootstrap import PrependedText
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Div, Field
 from crispy_forms.layout import Submit
-from django.forms import modelformset_factory, ModelForm
+from django.forms import modelformset_factory, ModelForm, HiddenInput
 
 from prosoponomikon.models import CharacterGroup, Character
 
@@ -57,17 +57,21 @@ class CharacterForm(ModelForm):
     
     class Meta:
         model = Character
-        fields = ['name', 'description']
+        fields = ['family_name', 'cognomen', 'description']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['description'].label = "OPIS POSTACI"
         self.fields['description'].widget.attrs[
             'placeholder'
-        ] = "Krótka charakterystyka postaci i podstawowe informacje"
-        self.fields['name'].label = "IMIĘ POSTACI (wyświetlane przy postach)"
-        self.fields['name'].max_length = 50
-        self.fields['name'].widget.attrs[
-            'placeholder'
-        ] = "max. 50 znaków (spacje dozwolone)"
-        self.fields['name'].widget.attrs['size'] = 60
+        ] = "Krótka charakterystyka - jak postać jawi się nowo poznanym osobom"
+        
+        warning = " (Po zatwierdzeniu edycja jedynie przez MG)"
+        self.fields['family_name'].label = "NAZWISKO" + warning
+        self.fields['family_name'].widget.attrs['size'] = 10
+        self.fields['cognomen'].label = "PRZYDOMEK (np. 'z Astinary')" + warning
+        
+        if self.instance.family_name:
+            self.fields['family_name'].widget = HiddenInput()
+        if self.instance.cognomen:
+            self.fields['cognomen'].widget = HiddenInput()
