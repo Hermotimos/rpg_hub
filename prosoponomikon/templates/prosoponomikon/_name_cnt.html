@@ -1,0 +1,13 @@
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-10">
+            <ul class="bullets-1 mb-1"><li class="pl-1">{{ name }}</li></ul>
+        </div>
+        <div class="col-2 px-0">
+            {% for cnt in name.characters.all %}1{% endfor %}
+<!--            {{ name.characters.count }}-->
+        </div>
+    </div>
+</div>

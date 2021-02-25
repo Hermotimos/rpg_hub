@@ -186,3 +186,8 @@ def brackets_br(text):
         pre, post = text[:index], text[index:]
         return format_as_html(f"{pre}<br>{post}")
     return text
+
+
+@register.filter
+def name_type_cnt(names_qs, name_type):
+    return names_qs.filter(type=name_type).count()

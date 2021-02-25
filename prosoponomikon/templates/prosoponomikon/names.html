@@ -7,36 +7,56 @@
 {% endblock head_extra %}
 
 {% block content %}
-    {% regroup name_areas by location_type as loc_types %}
-    {% for location_type in loc_types %}
-        {{ location_type.grouper }}
-        {% for location in location_type %}
-            {{ location }}
-        {% endfor %}
-    {% endfor %}
 
-    <article class="top-button">
-        {% for location in name_areas %}
-            <div class="">
-                <h2 class="border-bottom-dark">
-                    <small class="">{{ location.name }}</small>
-                </h2>
-            </div>
-            <div>
+<article class="top-button">
+    {% for location in name_areas %}
+    
+        <div class="mt-5">
+            <h2 class="border-bottom-dark text-center">
+                <small class="font-weight-bold">{{ location.name }}</small>
+            </h2>
+        </div>
+    
+        <div class="container mt-4">
+            <div class="row">
                 
-                {% with local_names=location.names.all %}
-                
-                    {% regroup local_names by type as name_types %}
-                    {% for name_type, names in name_types %}
-                        <h5><b>{{ name_type }}</b></h5>
-                        {% for name in names %}
-                            {{name}}<br>
+                {% if location.names.all|name_type_cnt:'MALE' > 0 %}
+                    <div class="col-sm-4 px-1">
+                        <h5 class="border-bottom text-center">Mężczyźni</h5>
+                        {% for name in location.names.all %}
+                            {% if name.type == 'MALE' %}
+                                {% include 'prosoponomikon/_name_cnt.html' %}
+                            {% endif %}
                         {% endfor %}
-                    {% endfor %}
+                    </div>
+                {% endif %}
                 
-                {% endwith %}
+                {% if location.names.all|name_type_cnt:'FEMALE' > 0 %}
+                    <div class="col-sm-4 px-1">
+                        <h5 class="border-bottom text-center">Kobiety</h5>
+                        {% for name in location.names.all %}
+                            {% if name.type == 'FEMALE' %}
+                                {% include 'prosoponomikon/_name_cnt.html' %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                {% if location.names.all|name_type_cnt:'DAEMON' > 0 %}
+                    <div class="col-sm-4 px-1">
+                        <h5 class="border-bottom text-center">Duchy i demony</h5>
+                        {% for name in location.names.all %}
+                            {% if name.type == 'DAEMON' %}
+                                {% include 'prosoponomikon/_name_cnt.html' %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
             </div>
-        {% endfor %}
-    </article>
+        </div>
+    
+    {% endfor %}
+</article>
 
 {% endblock content %}

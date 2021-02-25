@@ -292,7 +292,7 @@ def prosoponomikon_names_view(request):
     # Get all locations that are used as name-areas
     name_areas = Location.objects.filter(names__isnull=False)
     name_areas = name_areas.select_related('location_type')
-    name_areas = name_areas.prefetch_related('names')
+    name_areas = name_areas.prefetch_related('names__characters')
     name_areas = name_areas.distinct()
     
     context = {
