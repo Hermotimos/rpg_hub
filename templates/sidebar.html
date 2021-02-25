@@ -17,13 +17,23 @@
             <h5 id="time"></h5>
             <br>
             <ul class="list-group hover-pointer unblue">
-                <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#timeline"><h6 class="mb-0">Techniczne</h6></li>
-                <li id="timeline" class="list-group collapse">
+                <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#technical"><h6 class="mb-0">Techniczne</h6></li>
+                <li id="technical" class="list-group collapse">
                     <div class="unblue">
                         <a class="list-group-item list-group-item-light mb-0" href="{% url 'admin:index' %}" target="_blank" rel="noopener noreferrer"><small>ADMIN</small></a>
                         <a class="list-group-item list-group-item-light" href="{% url 'contact:plans-main' %}"><small>TODOs</small></a>
                         <a class="list-group-item list-group-item-light" href="{% url 'reload:reload-main' %}"><small>Przeładowanie modeli w aplikacjach</small></a>
                         <a class="list-group-item list-group-item-light" href="{% url 'chronicles:chronologies' %}"><small>Chronologie</small></a>
+                    </div>
+                </li>
+            </ul>
+            <ul class="list-group hover-pointer unblue">
+                <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#world"><h6 class="mb-0">Świat</h6></li>
+                <li id="world" class="list-group collapse">
+                    <div class="unblue">
+                        <a class="list-group-item list-group-item-light mb-0" href="{% url 'prosoponomikon:names' %}" target="_blank" rel="noopener noreferrer">
+                            <small>Imiona</small>
+                        </a>
                     </div>
                 </li>
             </ul>

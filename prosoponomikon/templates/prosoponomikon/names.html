@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/prosoponomikon.css' %}">
+{% endblock head_extra %}
+
+{% block content %}
+    {% regroup name_areas by location_type as loc_types %}
+    {% for location_type in loc_types %}
+        {{ location_type.grouper }}
+        {% for location in location_type %}
+            {{ location }}
+        {% endfor %}
+    {% endfor %}
+
+    <article class="top-button">
+        {% for location in name_areas %}
+            <div class="">
+                <h2 class="border-bottom-dark">
+                    <small class="">{{ location.name }}</small>
+                </h2>
+            </div>
+            <div>
+                
+                {% with local_names=location.names.all %}
+                
+                    {% regroup local_names by type as name_types %}
+                    {% for name_type, names in name_types %}
+                        <h5><b>{{ name_type }}</b></h5>
+                        {% for name in names %}
+                            {{name}}<br>
+                        {% endfor %}
+                    {% endfor %}
+                
+                {% endwith %}
+            </div>
+        {% endfor %}
+    </article>
+
+{% endblock content %}

@@ -9,10 +9,10 @@ from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
 from prosoponomikon.forms import CharacterManyGroupsEditFormSet, \
     CharacterGroupsEditFormSetHelper, CharacterSingleGroupEditFormSet
-from prosoponomikon.models import Character, CharacterGroup
+from prosoponomikon.models import Character, CharacterGroup, NameForm, NameContinuum, NameGroup
 from rpg_project.utils import handle_inform_form
 from users.models import Profile
-
+from toponomikon.models import Location
 
 @login_required
 def prosoponomikon_main_view(request):
@@ -281,5 +281,25 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
     if not bio_packet_id or profile.status == 'gm' \
             or profile.biography_packets.filter(id=bio_packet_id):
         return render(request, '_form.html', context)
+    else:
+        return redirect('home:dupa')
+
+
+@login_required
+def prosoponomikon_names_view(request):
+    profile = request.user.profile
+    
+    # Get all locations that are used as name-areas
+    name_areas = Location.objects.filter(names__isnull=False)
+    name_areas = name_areas.select_related('location_type')
+    name_areas = name_areas.prefetch_related('names')
+    name_areas = name_areas.distinct()
+    
+    context = {
+        'page_title': "Imiona",
+        'name_areas': name_areas,
+    }
+    if profile.status == 'gm':
+        return render(request, 'prosoponomikon/names.html', context)
     else:
         return redirect('home:dupa')

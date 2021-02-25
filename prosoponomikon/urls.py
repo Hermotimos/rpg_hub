@@ -16,5 +16,7 @@ urlpatterns = [
     path('character/<int:character_id>/bio-packet-form/<int:bio_packet_id>/',
          views.prosoponomikon_bio_packet_form_view,
          name='bio-packet-form'),
+    
+    path('names/', views.prosoponomikon_names_view, name='names'),
 
 ]

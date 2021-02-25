@@ -42,9 +42,9 @@ class NameGroup(Model):
 
 
 NAME_TYPES = (
-    ('male', 'MALE'),
-    ('female', 'FEMALE'),
-    ('daemon', 'DAEMON'),
+    ('Mężczyźni', 'MALE'),
+    ('Kobiety', 'FEMALE'),
+    ('Duchy i demony', 'DAEMON'),
 )
 
 
