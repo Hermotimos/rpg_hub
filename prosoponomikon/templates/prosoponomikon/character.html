@@ -65,7 +65,6 @@
                             {% endif %}
                         </div>
                         
-                        
                     </div>
                 </div>
             </div>
@@ -97,6 +96,39 @@
                         </div>
                     {% endif %}
                 </div>
+                
+                {% if request.user.profile.status == 'gm' %}
+                    <div class="row mt-4">
+                        <div class="col-12 col-sm-6 border-left border-right mb-5 mb-sm-0">
+                            <ul class="bullets-1 bullets-big mb-2 pl-4 small text-muted">
+                                {% for character_group in character.character_groups.all %}
+                                    {% for kn_packet in character_group.default_knowledge_packets.all %}
+                                        <li class="pl-1">
+                                            <a class="text-muted" href="#kn_packets">
+                                                <span class="mb-1">{{ kn_packet.title }}</span>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-12 col-sm-6 border-left border-right">
+                            <ul class="bullets-1 bullets-big mb-2 pl-4 small text-muted">
+                                {% for character_group in character.character_groups.all %}
+                                    {% for skill in character_group.default_skills.all %}
+                                        <li class="pl-1">
+                                            <a class="text-muted" href="#skills">
+                                                <span class="mb-1">{{ skill.name }}</span>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                
             </div>
 
             
@@ -106,12 +138,48 @@
             {% for biography_packet in character.biography_packets.all %}
                 {% include 'knowledge/_biography_packet.html' %}
             {% endfor %}
+        </article>
+        
+        <article>
             {% if request.user.profile.status == 'gm' %}
                 {% for dialogue_packet in character.dialogue_packets.all %}
                     {% include 'knowledge/_dialogue_packet.html' %}
                 {% endfor %}
             {% endif %}
         </article>
+        
+        {% if request.user.profile.status == 'gm' %}
+            {% if character.character_groups.all %}
+        
+                <!-- DEFAULT KNOWLEDGE PACKETS -->
+                <div class="anchor mt-n5 mb-5" id="kn_packets">
+                    <h3 class="mb-3">
+                        <span class="border-bottom-dark">Domyślne pakiety wiedzy</span>
+                    </h3>
+                    {% for character_group in character.character_groups.all %}
+                        {% for kn_packet in character_group.default_knowledge_packets.all %}
+                            {% include 'knowledge/_knowledge_packet.html' %}
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+        
+                <!-- DEFAULT SKILLS -->
+                <div class="anchor mt-n5 mb-5" id="skills">
+                    <h3 class="mb-3">
+                        <span class="border-bottom-dark">Domyślne umiejętności</span>
+                    </h3>
+                    {% for character_group in character.character_groups.all %}
+                        {% for skill in character_group.default_skills.all %}
+                            {% include 'rules/_skill.html' %}
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+        
+            {% endif %}
+        {% endif %}
+        
+        
+        
         
     </article>
 

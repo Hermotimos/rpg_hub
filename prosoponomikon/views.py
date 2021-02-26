@@ -8,7 +8,7 @@ from imaginarion.models import Picture, PictureImage
 from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
 from prosoponomikon.forms import CharacterManyGroupsEditFormSet, \
-    CharacterGroupsEditFormSetHelper, CharacterSingleGroupEditFormSet
+    CharacterGroupsEditFormSetHelper, CharacterSingleGroupEditFormSet, CharacterGroupCreateForm
 from prosoponomikon.models import Character, CharacterGroup, NameForm, NameContinuum, NameGroup
 from rpg_project.utils import handle_inform_form
 from users.models import Profile
