@@ -41,8 +41,8 @@ class NameContinuumAdmin(admin.ModelAdmin):
 
     
 class NameGroupAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'description']
-    list_editable = ['title', 'description']
+    list_display = ['id', 'name', 'description']
+    list_editable = ['name', 'description']
 
 
 class FamilyNameAdmin(admin.ModelAdmin):

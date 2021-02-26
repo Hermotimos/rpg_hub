@@ -35,11 +35,11 @@ class NameContinuum(Model):
     
     
 class NameGroup(Model):
-    title = CharField(max_length=250)
+    name = CharField(max_length=250)
     description = TextField(blank=True, null=True)
 
     def __str__(self):
-        return self.title
+        return self.name
 
 
 NAME_TYPES = (

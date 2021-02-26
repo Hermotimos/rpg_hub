@@ -8,8 +8,8 @@ from imaginarion.models import Picture, PictureImage
 from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
 from prosoponomikon.forms import CharacterManyGroupsEditFormSet, \
-    CharacterGroupsEditFormSetHelper, CharacterGroupCreateForm
-from prosoponomikon.models import Character, CharacterGroup
+    CharacterGroupsEditFormSetHelper, CharacterGroupCreateForm, CharacterCreateForm
+from prosoponomikon.models import Character, CharacterGroup, NameForm, NameGroup
 from rpg_project.utils import handle_inform_form
 from toponomikon.models import Location
 from users.models import Profile
@@ -248,9 +248,14 @@ def prosoponomikon_names_view(request):
     name_areas = name_areas.prefetch_related('names__characters')
     name_areas = name_areas.distinct()
     
+    names_nonlocal = NameForm.objects.exclude(locations__isnull=True)
+    name_groups = NameGroup.objects.prefetch_related(
+        Prefetch('names', queryset=names_nonlocal))
+    print(name_groups , 'gfds')
     context = {
         'page_title': "Imiona",
         'name_areas': name_areas,
+        'name_groups': name_groups,
     }
     if profile.status == 'gm':
         return render(request, 'prosoponomikon/names.html', context)

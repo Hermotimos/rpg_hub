@@ -57,6 +57,56 @@
         </div>
     
     {% endfor %}
+    
+    
+    {% for group in name_groups %}
+    
+        <div class="mt-5">
+            <h2 class="border-bottom-dark text-center">
+                <small class="font-weight-bold">{{ group.name }}</small>
+            </h2>
+        </div>
+    
+        <div class="container mt-4">
+            <div class="row">
+                
+                {% if group.names.all|name_type_cnt:'MALE' > 0 %}
+                    <div class="col-sm-4 px-1">
+                        <h5 class="border-bottom text-center">Mężczyźni</h5>
+                        {% for name in group.names.all %}
+                            {% if name.type == 'MALE' %}
+                                {% include 'prosoponomikon/_name_cnt.html' %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                {% if group.names.all|name_type_cnt:'FEMALE' > 0 %}
+                    <div class="col-sm-4 px-1">
+                        <h5 class="border-bottom text-center">Kobiety</h5>
+                        {% for name in group.names.all %}
+                            {% if name.type == 'FEMALE' %}
+                                {% include 'prosoponomikon/_name_cnt.html' %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                {% if group.names.all|name_type_cnt:'DAEMON' > 0 %}
+                    <div class="col-sm-4 px-1">
+                        <h5 class="border-bottom text-center">Duchy i demony</h5>
+                        {% for name in group.names.all %}
+                            {% if name.type == 'DAEMON' %}
+                                {% include 'prosoponomikon/_name_cnt.html' %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+            </div>
+        </div>
+    
+    {% endfor %}
 </article>
 
 {% endblock content %}
