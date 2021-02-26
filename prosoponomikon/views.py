@@ -249,9 +249,8 @@ def prosoponomikon_names_view(request):
     name_areas = name_areas.prefetch_related('names__characters')
     name_areas = name_areas.distinct()
     
-    names_nonlocal = NameForm.objects.exclude(locations__isnull=True)
     name_groups = NameGroup.objects.prefetch_related(
-        Prefetch('names', queryset=names_nonlocal))
+        Prefetch('names', queryset=NameForm.objects.all()))
     print(name_groups , 'gfds')
     context = {
         'page_title': "Imiona",
