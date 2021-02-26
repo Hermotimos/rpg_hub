@@ -50,7 +50,7 @@ NAME_TYPES = (
 
 
 class NameForm(Model):
-    form = CharField(max_length=250)
+    form = CharField(max_length=250, unique=True)
     name_continuum = FK(
         to=NameContinuum,
         related_name="name_forms",
@@ -104,35 +104,30 @@ class Character(Model):
         blank=True,
         null=True)
     cognomen = CharField(max_length=250, blank=True, null=True)
+    description = TextField(blank=True, null=True)
     frequented_locations = M2M(
         to=Location,
         related_name='frequented_by_characters',
-        blank=True,
-    )
+        blank=True)
     pictures = M2M(to=Picture, related_name='characters', blank=True)
-    description = TextField(blank=True, null=True)
     biography_packets = M2M(
         to=BiographyPacket,
         related_name='characters',
-        blank=True,
-    )
+        blank=True)
     dialogue_packets = M2M(
         to=DialoguePacket,
         related_name='characters',
-        blank=True,
-    )
+        blank=True)
     known_directly = M2M(
         to=Profile,
         related_name='characters_known_directly',
         limit_choices_to=Q(status='player'),
-        blank=True,
-    )
+        blank=True)
     known_indirectly = M2M(
         to=Profile,
         related_name='characters_known_indirectly',
         limit_choices_to=Q(status='player'),
-        blank=True,
-    )
+        blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
     
     class Meta:

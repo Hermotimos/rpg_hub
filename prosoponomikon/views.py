@@ -12,7 +12,8 @@ from prosoponomikon.forms import CharacterManyGroupsEditFormSet, \
 from prosoponomikon.models import Character, CharacterGroup, NameForm, NameGroup
 from rpg_project.utils import handle_inform_form
 from toponomikon.models import Location
-from users.models import Profile
+from users.models import Profile, User
+from rpg_project.settings import get_secret
 
 
 @login_required
@@ -259,5 +260,40 @@ def prosoponomikon_names_view(request):
     }
     if profile.status == 'gm':
         return render(request, 'prosoponomikon/names.html', context)
+    else:
+        return redirect('home:dupa')
+
+
+@login_required
+def prosoponomikon_character_create_form_view(request):
+    """Handle CharacterCreateForm intended for GM."""
+    profile = request.user.profile
+    form = CharacterCreateForm(
+        data=request.POST or None, files=request.FILES or None)
+    
+    if form.is_valid():
+        character = form.save(commit=False)
+    
+        user = User.objects.create_user(
+            username=form.cleaned_data['username'],
+            password=get_secret('DEFAULT_PASS'))
+        
+        profile = Profile.objects.create(
+            user=user,
+            is_alive=form.cleaned_data['is_alive'],
+            image=form.cleaned_data['image'])
+        
+        character.profile = profile
+        form.save()
+
+        messages.success(request, f"Utworzono postać {character}!")
+        return redirect('prosoponomikon:character-create')
+        
+    context = {
+        'page_title': "Nowa postać",
+        'form': form,
+    }
+    if profile.status == 'gm':
+        return render(request, '_form.html', context)
     else:
         return redirect('home:dupa')
