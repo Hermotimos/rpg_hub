@@ -251,7 +251,7 @@ def prosoponomikon_names_view(request):
     
     name_groups = NameGroup.objects.prefetch_related(
         Prefetch('names', queryset=NameForm.objects.all()))
-    print(name_groups , 'gfds')
+
     context = {
         'page_title': "Imiona",
         'name_areas': name_areas,
