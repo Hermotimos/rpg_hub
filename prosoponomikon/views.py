@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.db.models import Prefetch, Case, When, Value, IntegerField, Q
+from django.db.models import Prefetch, Q
 from django.shortcuts import render, redirect
 
 from imaginarion.models import Picture, PictureImage
@@ -13,6 +13,7 @@ from prosoponomikon.models import Character, CharacterGroup, NameForm, NameConti
 from rpg_project.utils import handle_inform_form
 from users.models import Profile
 from toponomikon.models import Location
+
 
 @login_required
 def prosoponomikon_main_view(request):
@@ -26,37 +27,14 @@ def prosoponomikon_main_view(request):
 @login_required
 def prosoponomikon_ungrouped_view(request):
     profile = request.user.profile
-    if profile.status == 'gm':
-        all_characters = Character.objects.prefetch_related(
-            'known_directly', 'known_indirectly')
-        players = all_characters.filter(profile__in=Profile.players.all())
-        npcs = all_characters.filter(profile__in=Profile.npcs.all())
-    else:
-        known_dir = profile.characters_known_directly.all()
-        known_indir = profile.characters_known_indirectly.all()
-        known_only_indir = known_indir.exclude(id__in=known_dir)
-        
-        all_known = (known_dir | known_indir).distinct()
-        all_known = all_known.annotate(
-            only_indirectly=Case(
-                When(id__in=known_only_indir, then=Value(1)),
-                default=Value(0),
-                output_field=IntegerField(),
-            ),
-        )
-        all_known = all_known.prefetch_related(
-            'known_directly', 'known_indirectly')
-        # all_known = all_known.prefetch_related(
-        #     Prefetch('biography_packets', queryset=profile.authored_bio_packets.all())
-        # )
-        players = all_known.filter(profile__in=Profile.players.all())
-        players = players.exclude(id=profile.character.id)
-        npcs = all_known.filter(profile__in=Profile.npcs.all())
-
+    all_characters = profile.characters_all_known_annotated_if_indirectly()
+    players = all_characters.filter(profile__in=Profile.players.all())
+    npcs = all_characters.filter(profile__in=Profile.npcs.all())
+    
     context = {
         'page_title': 'Prosoponomikon',
-        'players': players.select_related('profile'),
-        'npcs': npcs.select_related('profile'),
+        'players': players,
+        'npcs': npcs,
     }
     return render(request, 'prosoponomikon/characters_ungrouped.html', context)
 
@@ -64,46 +42,15 @@ def prosoponomikon_ungrouped_view(request):
 @login_required
 def prosoponomikon_grouped_view(request):
     profile = request.user.profile
-    character_groups = CharacterGroup.objects.filter(author=profile)
+    all_characters = profile.characters_all_known_annotated_if_indirectly()
+    character_groups = profile.characters_groups_authored_with_characters()
+    ungrouped_characters = all_characters.exclude(
+        character_groups__in=character_groups)
     
-    if profile.status == 'gm':
-        character_groups = character_groups.prefetch_related(
-            'characters__profile__user',
-            'characters__known_directly',
-            'characters__known_indirectly',
-            'characters__name')
-        ungrouped = Character.objects.exclude(
-            character_groups__in=character_groups)
-        ungrouped = ungrouped.prefetch_related(
-            'profile__user', 'known_directly', 'known_indirectly')
-    else:
-        known_dir = profile.characters_known_directly.all()
-        known_indir = profile.characters_known_indirectly.all()
-        known_only_indir = known_indir.exclude(id__in=known_dir)
-    
-        all_known = (known_dir | known_indir).distinct()
-        all_known = all_known.annotate(
-            only_indirectly=Case(
-                When(id__in=known_only_indir, then=Value(1)),
-                default=Value(0),
-                output_field=IntegerField(),
-            ),
-        )
-        all_known = all_known.exclude(id=profile.character.id)
-        
-        character_groups = character_groups.prefetch_related(
-            Prefetch('characters__profile__user', queryset=all_known),
-            'characters__known_directly',
-            'characters__known_indirectly',
-        )
-        ungrouped = all_known.exclude(character_groups__in=character_groups)
-        ungrouped = ungrouped.prefetch_related(
-            'profile__user', 'known_directly', 'known_indirectly')
-        
     context = {
         'page_title': 'Prosoponomikon',
         'character_groups': character_groups,
-        'ungrouped': ungrouped.select_related('profile'),
+        'ungrouped_characters': ungrouped_characters,
     }
     if character_groups:
         return render(request, 'prosoponomikon/characters_grouped.html', context)
@@ -289,9 +236,8 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
 
 @login_required
 def prosoponomikon_names_view(request):
+    """Collect all locations used as name-areas."""
     profile = request.user.profile
-    
-    # Get all locations that are used as name-areas
     name_areas = Location.objects.filter(names__isnull=False)
     name_areas = name_areas.select_related('location_type')
     name_areas = name_areas.prefetch_related('names__characters')
