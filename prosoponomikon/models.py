@@ -20,6 +20,7 @@ from rpg_project.utils import create_sorting_name
 from imaginarion.models import Picture
 from knowledge.models import BiographyPacket, DialoguePacket
 from knowledge.models import KnowledgePacket
+from rules.models import Skill
 from toponomikon.models import Location
 from users.models import Profile
 
@@ -211,6 +212,12 @@ class CharacterGroup(Model):
     )
     default_knowledge_packets = M2M(
         to=KnowledgePacket,
+        related_name='character_group_defaults',
+        blank=True,
+        verbose_name='Domyślne pakiety wiedzy NPC w grupie',
+    )
+    default_skills = M2M(
+        to=Skill,
         related_name='character_group_defaults',
         blank=True,
         verbose_name='Domyślne umiejętności NPC w grupie',

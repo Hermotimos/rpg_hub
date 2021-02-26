@@ -176,6 +176,29 @@ def prosoponomikon_character_groups_edit_view(request):
 
 
 @login_required
+def prosoponomikon_character_group_create_view(request):
+    profile = request.user.profile
+    form = CharacterGroupCreateForm(
+        data=request.POST or None, status=profile.status)
+    if form.is_valid():
+        character_group = form.save()
+        character_group.author = profile
+        character_group.save()
+
+        messages.success(
+            request, f'Utworzono grupę postaci "{character_group.name}"!')
+        return redirect('prosoponomikon:grouped')
+    else:
+        messages.warning(request, form.errors)
+        
+    context = {
+        'page_title': "Nowa grupa postaci",
+        'form': form,
+    }
+    return render(request, '_form.html', context)
+
+    
+@login_required
 def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0):
     profile = request.user.profile
 

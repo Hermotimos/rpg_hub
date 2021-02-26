@@ -7,6 +7,8 @@ urlpatterns = [
     path('_hidden', views.prosoponomikon_main_view, name='main'),
     path('ungrouped/', views.prosoponomikon_ungrouped_view, name='ungrouped'),
     path('grouped/', views.prosoponomikon_grouped_view, name='grouped'),
+    path('groups-create/', views.prosoponomikon_character_group_create_view,
+         name='groups-create'),
     path('groups-edit/<int:group_id>/',
          views.prosoponomikon_character_groups_edit_view,
          name='groups-edit'),

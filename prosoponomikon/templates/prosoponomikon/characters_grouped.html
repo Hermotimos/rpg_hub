@@ -12,6 +12,9 @@
             <a href="{% url 'prosoponomikon:groups-edit' 0 %}" class="btn btn-outline-dark mb-1">
                 Dodaj/Edytuj grupy
             </a>
+            <a href="{% url 'prosoponomikon:groups-create' %}" class="btn btn-outline-dark mb-1">
+                Nowa grupa
+            </a>
             {% for character_group in character_groups %}
                 <a href="{% url 'prosoponomikon:grouped' %}#group_{{ character_group.id }}" class="btn btn-dark mb-1">
                     {{ character_group.name }}

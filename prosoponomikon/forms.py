@@ -10,7 +10,7 @@ from prosoponomikon.models import CharacterGroup, Character
 CharacterManyGroupsEditFormSet = modelformset_factory(
     model=CharacterGroup,
     fields=['name', 'order_no', 'characters', 'default_knowledge_packets'],
-    extra=1,
+    extra=0,
     can_delete=True,
 )
 CharacterSingleGroupEditFormSet = modelformset_factory(
@@ -50,6 +50,36 @@ class CharacterGroupsEditFormSetHelper(FormHelper):
                     Column(Field('default_knowledge_packets', size=15), css_class='form-group col-sm-9 mb-0'),
                 ),
             )
+
+
+class CharacterGroupCreateForm(ModelForm):
+    
+    class Meta:
+        model = CharacterGroup
+        fields = [
+            'name',
+            'characters',
+            'order_no',
+            'default_knowledge_packets',
+            'default_skills',
+        ]
+
+    def __init__(self, status=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].label = "Nazwa nowej grupy"
+        self.fields['order_no'].label = "Nr porządkowy (równe numery " \
+                                        "są sortowane alfabetycznie)"
+        self.fields['characters'].widget.attrs['size'] = 15
+        self.fields['default_knowledge_packets'].widget.attrs['size'] = 15
+        self.fields['default_skills'].widget.attrs['size'] = 15
+
+        if status != 'gm':
+            self.fields['default_knowledge_packets'].widget = HiddenInput()
+            self.fields['default_skills'].widget = HiddenInput()
+            
+        self.helper = FormHelper()
+        self.helper.add_input(
+            Submit('submit', 'Zapisz grupę postaci', css_class='btn-dark'))
 
 
 class CharacterForm(ModelForm):
