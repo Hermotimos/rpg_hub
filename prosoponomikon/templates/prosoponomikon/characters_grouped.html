@@ -15,6 +15,9 @@
             <a href="{% url 'prosoponomikon:groups-edit' %}" class="btn btn-outline-dark mb-1">
                 Edytuj grupy
             </a>
+            <a href="{% url 'prosoponomikon:ungrouped' %}" class="btn btn-outline-info mb-1">
+                Gracze/BN
+            </a>
             {% for character_group in character_groups %}
                 <a href="{% url 'prosoponomikon:grouped' %}#group_{{ character_group.id }}" class="btn btn-dark mb-1">
                     {{ character_group.name }}
@@ -26,16 +29,12 @@
                 </a>
             {% endif %}
         </div>
-        
         <div class="container">
-            
             {% for character_group in character_groups %}
                 <section class="mb-5 pt-5" id="group_{{ character_group.id }}">
                     <p class="mb-0 mt-3 text-center">✧</p>
                     <p class="mb-0 text-center">✧ ✦ ✧</p>
-                    <p class="h3 text-center mb-2 mt-1">
-                        <a href="{% url 'prosoponomikon:groups-edit' %}">{{ character_group.name }}</a>
-                    </p>
+                    <p class="h3 text-center mb-2 mt-1">{{ character_group.name }}</p>
                     <p class="mb-0 text-center">✧ ✦ ✧</p>
                     <p class="mb-5 mt-0 text-center">✧</p>
                     {% for character in character_group.characters.all %}
@@ -43,7 +42,6 @@
                     {% endfor %}
                 </section>
             {% endfor %}
-            
             {% if ungrouped_characters %}
                 <section class="mb-5 pt-5" id="ungrouped">
                     <p class="mb-0 mt-3 text-center">✧</p>
@@ -58,5 +56,4 @@
             {% endif %}
         </div>
     </article>
-
 {% endblock content %}

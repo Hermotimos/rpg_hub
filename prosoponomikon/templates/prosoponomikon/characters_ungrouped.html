@@ -8,7 +8,6 @@
 
 {% block content %}
     <article class="top-button">
-        
         <div class="mb-5">
             <a href="{% url 'prosoponomikon:groups-create' %}" class="btn btn-outline-dark mb-1">
                 Nowa grupa
@@ -16,8 +15,12 @@
             <a href="{% url 'prosoponomikon:groups-edit' %}" class="btn btn-outline-dark mb-1">
                 Edytuj grupy
             </a>
+            {% if request.user.profile.character_groups_authored.all %}
+                <a href="{% url 'prosoponomikon:grouped' %}" class="btn btn-outline-info mb-1">
+                    Grupy
+                </a>
+            {% endif %}
         </div>
-        
         <div class="container">
             {% if players %}
                 <section class="py-5">
@@ -31,7 +34,6 @@
                     {% endfor %}
                 </section>
             {% endif %}
-            
             {% if npcs %}
                 <section class="py-5">
                     <p class="mb-0 text-center">✧</p>
@@ -44,8 +46,6 @@
                     {% endfor %}
                 </section>
             {% endif %}
-            
         </div>
     </article>
-
 {% endblock content %}
