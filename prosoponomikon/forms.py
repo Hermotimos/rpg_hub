@@ -6,17 +6,14 @@ from django.forms import modelformset_factory, ModelForm, HiddenInput
 
 from prosoponomikon.models import CharacterGroup, Character
 
-
 CharacterManyGroupsEditFormSet = modelformset_factory(
     model=CharacterGroup,
-    fields=['name', 'order_no', 'characters', 'default_knowledge_packets'],
+    fields=[
+        'name', 'order_no', 'characters', 'default_knowledge_packets',
+        'default_skills'
+    ],
     extra=0,
     can_delete=True,
-)
-CharacterSingleGroupEditFormSet = modelformset_factory(
-    model=CharacterGroup,
-    fields=['name', 'order_no', 'characters', 'default_knowledge_packets'],
-    extra=0,
 )
 
 
@@ -48,6 +45,12 @@ class CharacterGroupsEditFormSetHelper(FormHelper):
                 Row(
                     Column(Div(), css_class='col-sm-3 mb-0'),
                     Column(Field('default_knowledge_packets', size=15), css_class='form-group col-sm-9 mb-0'),
+                ),
+            )
+            self.layout.fields.append(
+                Row(
+                    Column(Div(), css_class='col-sm-3 mb-0'),
+                    Column(Field('default_skills', size=10), css_class='form-group col-sm-9 mb-0'),
                 ),
             )
 

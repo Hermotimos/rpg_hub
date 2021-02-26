@@ -8,11 +8,11 @@ from imaginarion.models import Picture, PictureImage
 from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
 from prosoponomikon.forms import CharacterManyGroupsEditFormSet, \
-    CharacterGroupsEditFormSetHelper, CharacterSingleGroupEditFormSet, CharacterGroupCreateForm
-from prosoponomikon.models import Character, CharacterGroup, NameForm, NameContinuum, NameGroup
+    CharacterGroupsEditFormSetHelper, CharacterGroupCreateForm
+from prosoponomikon.models import Character, CharacterGroup
 from rpg_project.utils import handle_inform_form
-from users.models import Profile
 from toponomikon.models import Location
+from users.models import Profile
 
 
 @login_required
@@ -103,55 +103,40 @@ def prosoponomikon_character_groups_edit_view(request):
         if formset.is_valid():
             try:
                 formset.save()
+                any_changed = False
                 
-                # for form in formset:
-                #     print('one')
-                #     if form.is_valid():
-                #         print(form.cleaned_data)
-                #         # Ignore empty extra-form
-                #         if form.cleaned_data == {}:
-                #             print(1)
-                #             pass
-                #         # Existing groups modification/deletion
-                #         elif form.cleaned_data.get('id') is not None:
-                #             print(2)
-                #             if form.cleaned_data.get('DELETE'):
-                #                 print(3)
-                #                 obj = form.cleaned_data.get('id')
-                #                 obj.delete()
-                #                 messages.success(
-                #                     request, f"Usunięto grupę '{obj.name}'!")
-                #                 return redirect('prosoponomikon:grouped')
-                #             else:
-                #                 print(4)
-                #                 obj = form.save()
-                #                 print(obj)
-                #                 obj.save()
-                #                 if form.has_changed():
-                #                     print(5)
-                #                     messages.success(
-                #                         request, f"Zmodyfikowano grupę '{obj.name}'!")
-                #                     return redirect('prosoponomikon:grouped')
-                #         # New group
-                #         else:
-                #             print(6)
-                #             obj = form.save()
-                #             obj.author = profile
-                #             obj.save()
-                #             obj.characters.set(form.cleaned_data['characters'])
-                #             messages.success(
-                #                 request, "Utworzono nową grupę '{obj.name}'!")
-                #             return redirect('prosoponomikon:grouped')
-                #
-                #         return redirect('prosoponomikon:grouped')
-                #
-                #     else: # form invalid
-                #         print(7)
+                for form in formset:
+                    if form.is_valid():
+                        # Deletion
+                        if form.cleaned_data.get('DELETE'):
+                            obj = form.cleaned_data.get('id')
+                            obj.delete()
+                            any_changed = True
+                            messages.success(
+                                request, f"Usunięto grupę '{obj.name}'!")
+                        # Modification
+                        else:
+                            obj = form.save()
+                            obj.save()
+                            if form.has_changed():
+                                any_changed = True
+                                messages.success(
+                                    request,  f"Zmodyfikowano grupę '{obj.name}'!")
+                    # form invalid
+                    else:
+                        messages.warning(request, form.errors)
+                        return redirect('prosoponomikon:groups-edit')
+                
+                if not any_changed:
+                    messages.warning(request, "Nie dokonano żadnych zmian!")
+                    
+                return redirect('prosoponomikon:grouped')
 
             except IntegrityError:
-                print(8)
                 messages.warning(request, "Nazwy grup muszą być unikalne!")
                 return redirect('prosoponomikon:groups-edit')
+            
+        # formset invalid
         else:
             messages.warning(request, formset.errors)
             
@@ -163,9 +148,6 @@ def prosoponomikon_character_groups_edit_view(request):
             ).distinct()
             for form in formset:
                 form.fields['characters'].queryset = characters
-
-    # # Move 'extra' form to top
-    # formset.forms = [formset.forms[-1]] + formset.forms[:-1]
     
     context = {
         'page_title': "Dodaj/Edytuj grupy postaci",
