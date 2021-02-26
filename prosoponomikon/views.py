@@ -222,7 +222,7 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
 
         character.biography_packets.add(bio_packet)
         
-        messages.success(request, f"Zapisano pakiet biograficzny!")
+        messages.success(request, "Zapisano pakiet biograficzny!")
         return redirect('prosoponomikon:character', character_id)
 
     else:
