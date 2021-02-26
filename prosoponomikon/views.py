@@ -90,13 +90,15 @@ def prosoponomikon_grouped_view(request):
             ),
         )
         all_known = all_known.exclude(id=profile.character.id)
-        all_known = all_known.prefetch_related(
-            'known_directly', 'known_indirectly')
         
         character_groups = character_groups.prefetch_related(
             Prefetch('characters__profile__user', queryset=all_known),
+            'characters__known_directly',
+            'characters__known_indirectly',
         )
         ungrouped = all_known.exclude(character_groups__in=character_groups)
+        ungrouped = ungrouped.prefetch_related(
+            'profile__user', 'known_directly', 'known_indirectly')
         
     context = {
         'page_title': 'Prosoponomikon',
