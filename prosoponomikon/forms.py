@@ -116,7 +116,7 @@ class CharacterCreateForm(forms.ModelForm):
         ('DAEMON', 'DAEMON'),
     )
     username = forms.CharField(max_length=250)
-    is_alive = forms.BooleanField(required=False)
+    is_alive = forms.BooleanField(required=False, initial=True)
     image = forms.ImageField()
 
     def __init__(self, *args, **kwargs):
@@ -129,9 +129,6 @@ class CharacterCreateForm(forms.ModelForm):
         self.fields = {
             f_name: self.fields[f_name] for f_name in custom_order
         }
-        hint = " [Jeśli  nie istnieje, to powstanie]"
-        self.fields['name'].label = "IMIĘ" + hint
-        self.fields['family_name'].label = "NAZWISKO" + hint
         self.fields['frequented_locations'].widget.attrs['size'] = 12
         self.fields['known_directly'].widget.attrs['size'] = 10
         self.fields['known_indirectly'].widget.attrs['size'] = 10
