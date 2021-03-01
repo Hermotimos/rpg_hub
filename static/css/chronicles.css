@@ -79,7 +79,6 @@ table.timeline {border: double;}
     float: left;
     height: 45px;
     width: auto;
-    margin-right: 5px;
 }
 
 .img-chapter-header {
@@ -91,9 +90,8 @@ table.timeline {border: double;}
 
 .img-game {
     float: left;
-    height: 40px;
+    height: 30px;
     width: auto;
-    margin-right: 5px;
 }
 
 
