@@ -10,7 +10,7 @@
     <br><br><br>
     <div class="container px-2 border-bottom">
         <div class="row">
-            <h2 class="unblue pb-3">
+            <h2 class="pb-3">
                 <img class="img-chapter" src="{% static 'img/chronicle_all.png' %}" alt="Chapter img">
                 <b><a href="{% url 'chronicles:chronicle-all' %}" class="align-middle pt-2">Pełna Kronika</a></b>
             </h2>
@@ -24,14 +24,14 @@
                     <img class="img-chapter" src="{{ chapter.image.url }}" alt="Chapter img">
                 </div>
                 <div class="col-11 pl-4 pl-xs-3 pl-sm-2 pl-lg-0 ml-lg-n2 ml-xl-n3">
-                    <h3 class="unblue mb-3">
+                    <h3 class="mb-3">
                         <a href="{% url 'chronicles:chronicle-chapter' chapter.id %}" class="align-middle pt-2 small-caps border-bottom-dark">
                             <b class="header-title">{{ chapter.title }}</b>
                         </a>
                     </h3>
                     <ol class="ml-n4 ml-sm-2">
                         {% for game in chapter.game_sessions.all %}
-                                <li class="unblue mb-1 {% if not game.any_known_directly and request.user.profile.status != 'gm' %} text-muted {% endif %}">
+                                <li class="mb-1 {% if not game.any_known_directly and request.user.profile.status != 'gm' %} text-muted {% endif %}">
                                     <a href="{% url 'chronicles:chronicle-game' game.id %}"
                                        class="{% if not game.any_known_directly and request.user.profile.status != 'gm' %} text-muted {% endif %}">
                                         {{ game.title }}

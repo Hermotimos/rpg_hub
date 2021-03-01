@@ -30,7 +30,7 @@
                     </td>
                     <td>
                         <small class="font-italic text-muted">{{ survey.created_at|date:'d-M-Y | H:i' }}</small>
-                        <h3 class="unblue"><a href="{% url 'news:survey-detail' survey.id %}">ANKIETA: {{ survey.title }}</a></h3>
+                        <h3><a href="{% url 'news:survey-detail' survey.id %}">ANKIETA: {{ survey.title }}</a></h3>
                         {% if survey.survey_answers.all %}
                         <h5>
                             {% for answer in survey.survey_answers.all %}
@@ -56,7 +56,7 @@
                     </td>
                     <td class="pt-2">
                         <small class="font-italic text-nowrap text-muted">{{ news.created_at|date:'d-M-Y | H:i' }}</small>
-                        <h3 class="unblue"><a href="{% url 'news:detail' news.id %}">{{ news.title }}</a></h3>
+                        <h3><a href="{% url 'news:detail' news.id %}">{{ news.title }}</a></h3>
                         {% if news.news_answers.all %}
                             {% for answer in news.news_answers.all %}
                                 <img class="rounded-circle img-small" src="{{ answer.author.image.url }}">
