@@ -177,7 +177,7 @@ br + br {
 /********************************* IMAGES ***********************************/
 /*****************************************************************************/
 
-img {border-style: double;}
+img {border: double #444444;}
 
 /*
     Make all imgs unclickable. Disables "Pokaż obraz" feature that would enable
@@ -188,7 +188,7 @@ img {pointer-events: none;}
 
 /*
     Make figure with class .pointer show pointer on hover. This allows pointer
-    over img tags (that fave pointer-events: none).
+    over img tags (that have pointer-events: none).
 */
 figure.pointer {cursor: pointer;}
 
@@ -280,6 +280,8 @@ div.img-hover-zoom {
     border-style: double;
     color: #444444;
 }
+
+
 
 /* END Image zoom on hover */
 
@@ -433,6 +435,13 @@ nav ul.bullets-1 li {color: #cbd5db;}
 .pl-0-10  {padding-left: 0.10rem;}
 .pl-0-15  {padding-left: 0.15rem;}
 .pl-0-20  {padding-left: 0.20rem;}
+
+
+li a {
+
+    vertical-align: middle;
+}
+
 
 /*****************************************************************************/
 /*********************************** TABS ************************************/

@@ -89,7 +89,12 @@ table.timeline {border: double;}
     margin-right: 5px;
 }
 
-
+.img-game {
+    float: left;
+    height: 40px;
+    width: auto;
+    margin-right: 5px;
+}
 
 
 /*****************************************************************************/

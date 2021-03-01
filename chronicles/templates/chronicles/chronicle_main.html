@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/chronicles.css' %}">
+{% endblock head_extra %}
+
+{% block content %}
+
+    <section class="mt-5 pt-4">
+        <div class="container mb-5">
+            <div class="row">
+                <div class="col-1 p-0 img-div">
+                    <a href="{% url 'chronicles:chronicle-all' %}">
+                        <figure class="figure" data-toggle="tooltip" data-placement="right" title="Pełna Kronika">
+                            <img class="img-chapter" src="{% static 'img/chronicle_all.png' %}">
+                        </figure>
+                    </a>
+                </div>
+                <div class="col-10 mb-2 col-11 pl-4 pl-xs-3 pl-sm-3 pl-lg-2 ml-lg-n2 ml-xl-n3">
+                    <a href="{% url 'chronicles:chronicle-all' %}" class="h2 font-weight-bold">
+                        <div class="mt-1"><span class="border-bottom small-caps">Pełna Kronika</span></div>
+                    </a>
+                </div>
+            </div>
+            {% for chapter in chapters %}
+                <div class="row mb-n1">
+                    <div class="col-1 p-0 img-div">
+                        <a href="{% url 'chronicles:chronicle-chapter' chapter.id %}">
+                            <figure class="figure mb-0" data-toggle="tooltip" data-placement="right" title="{{ chapter.title }}">
+                                <img class="img-chapter" src="{{ chapter.image.url }}">
+                            </figure>
+                        </a>
+                    </div>
+                    <div class="col-11 pl-4 pl-xs-3 pl-sm-3 pl-lg-2 ml-lg-n2 ml-xl-n3">
+                        <h3 class=" mt-1">
+                            <b class="header-title small-caps border-bottom">{{ chapter.title }}</b>
+                        </h3>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="border-top">
+        <div class="container mt-4">
+            {% for game in games %}
+                {% if game.chapter %}
+                    <div class="row mb-n1">
+                        <div class="col-1 p-0">
+                            <a href="{% url 'chronicles:chronicle-game' game.id %}">
+                                <figure class="figure mb-0" data-toggle="tooltip" data-placement="right" title="{{ game.title }}">
+                                    <img class="img-game" src="{{ game.chapter.image.url }}">
+                                </figure>
+                            </a>
+                        </div>
+                        <div class="col-11 pl-4 pl-xs-1 pl-sm-1 pl-md-n1 ml-lg-n2 ml-xl-n3">
+                            <div class="mt-2 font-italic {% if not game.any_known_directly and request.user.profile.status != 'gm' %} text-muted {% endif %}">
+                                {{ forloop.counter }}. {{ game.title }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </section>
+{% endblock content %}

@@ -23,6 +23,7 @@ def chronicle_contents_view(request):
     
     if profile.status == 'gm':
         chapters = Chapter.objects.prefetch_related('game_sessions')
+        games = GameSession.objects.select_related('chapter')
     else:
         events = GameEvent.objects.filter(
             Q(id__in=profile.events_known_directly.all())
@@ -40,6 +41,7 @@ def chronicle_contents_view(request):
                 filter=Q(game_events__in=events_known_directly)
             )
         )
+        games = games.order_by('game_no').select_related('chapter')
         
         chapters = Chapter.objects.filter(game_sessions__in=games)
         chapters = chapters.prefetch_related(
@@ -50,8 +52,9 @@ def chronicle_contents_view(request):
     context = {
         'page_title': 'Kronika',
         'chapters': chapters,
+        'games': games,
     }
-    return render(request, 'chronicles/chronicle_contents.html', context)
+    return render(request, 'chronicles/chronicle_main.html', context)
 
 
 @login_required
