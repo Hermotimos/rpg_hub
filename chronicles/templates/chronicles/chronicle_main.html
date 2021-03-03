@@ -7,7 +7,6 @@
 {% endblock head_extra %}
 
 {% block content %}
-
     <section class="mt-5 pt-4">
         <div class="container mb-5">
             <div class="row">
@@ -20,7 +19,11 @@
                 </div>
                 <div class="col-10 mb-2 col-11 pl-4 pl-xs-3 pl-sm-3 pl-lg-2 ml-lg-n2 ml-xl-n3">
                     <a href="{% url 'chronicles:chronicle-all' %}" class="h2 font-weight-bold">
-                        <div class="mt-1"><span class="border-bottom small-caps">Pełna Kronika</span></div>
+                        <div class="mt-1">
+                            <span class="border-bottom small-caps">
+                                Pełna Kronika
+                            </span>
+                        </div>
                     </a>
                 </div>
             </div>
@@ -35,7 +38,9 @@
                     </div>
                     <div class="col-11 pl-4 pl-xs-3 pl-sm-3 pl-lg-2 ml-lg-n2 ml-xl-n3">
                         <h3 class=" mt-1">
-                            <b class="header-title small-caps border-bottom">{{ chapter.title }}</b>
+                            <b class="header-title small-caps border-bottom">
+                                {{ chapter.title }}
+                            </b>
                         </h3>
                     </div>
                 </div>
@@ -52,15 +57,13 @@
                              {{ forloop.counter }}.
                         </div>
                         <div class="col-1 p-0  pl-1">
-                            <a href="{% url 'chronicles:chronicle-game' game.id %}">
-                                <figure class="figure mb-0" data-toggle="tooltip" data-placement="right" title="{{ game.title }}">
-                                    <img class="img-game" src="{{ game.chapter.image.url }}">
-                                </figure>
-                            </a>
+                            <img class="img-game" src="{{ game.chapter.image.url }}" data-toggle="tooltip" data-placement="right" title="{{ game.title }}">
                         </div>
                         <div class="col-10 mb-2 ml-n0 pl-2 ml-sm-n2 ml-md-n3 ml-lg-n4 ml-xl-n5 pl-xl-3">
                             <div class="mt-1 font-italic {% if not game.any_known_directly and request.user.profile.status != 'gm' %} text-muted {% endif %}">
-                               {{ game.title }}
+                                <a href="{% url 'chronicles:chronicle-game' game.id %}">
+                                    {{ game.title }}
+                                </a>
                             </div>
                         </div>
                     </div>
