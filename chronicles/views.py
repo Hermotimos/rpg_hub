@@ -24,6 +24,7 @@ def chronicle_main_view(request):
     if profile.status == 'gm':
         chapters = Chapter.objects.prefetch_related('game_sessions')
         games = GameSession.objects.select_related('chapter')
+        games = games.prefetch_related('game_events__known_directly__character')
     else:
         events = GameEvent.objects.filter(
             Q(id__in=profile.events_known_directly.all())
@@ -34,7 +35,7 @@ def chronicle_main_view(request):
         )
         
         games = GameSession.objects.filter(game_events__in=events)
-        games = games.prefetch_related('game_events')
+        games = games.prefetch_related('game_events__known_directly__character')
         games = games.annotate(
             any_known_directly=Count(
                 'game_events',

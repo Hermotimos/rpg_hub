@@ -191,3 +191,13 @@ def brackets_br(text):
 @register.filter
 def name_type_cnt(names_qs, name_type):
     return names_qs.filter(type=name_type).count()
+
+
+@register.filter
+def game_participants(obj):
+    game_events_qs = obj.game_events.all()
+    participants = set()
+    for event in game_events_qs:
+        for profile in event.known_directly.all():
+            participants.add(profile)
+    return participants

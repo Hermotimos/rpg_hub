@@ -61,20 +61,19 @@
                         </div>
                         <div class="col-10 mb-2 ml-n0 pl-2 ml-sm-n2 ml-md-n3 ml-lg-n4 ml-xl-n5 pl-xl-3">
                             <div class="mt-1 font-italic {% if not game.any_known_directly and request.user.profile.status != 'gm' %} text-muted {% endif %}">
-                                <a href="{% url 'chronicles:chronicle-game' game.id %}">
+                                <a href="{% url 'chronicles:chronicle-game' game.id %}" class="mr-2">
                                     {{ game.title }}
                                 </a>
-                                {{game|game_participants}}
-<!--                                {% for profile in game|game_participants %}-->
-<!--                                    &lt;!&ndash; {% url 'prosoponomikon:character' profile.character.id %} &ndash;&gt;-->
-<!--                                    <a href="#"-->
-<!--                                       data-toggle="tooltip" data-placement="top" data-html="true"-->
-<!--                                       title='<span class="font-italic">(W budowie)<br>Prosoponomikon:<br>"{{ profile }}"</span>'>-->
-<!--                                        <div class="d-inline">-->
-<!--                                           <img class="rounded-circle img-smaller" src="{{ profile.image.url }}" alt="Profile img">-->
-<!--                                        </div>-->
-<!--                                    </a>-->
-<!--                                {% endfor %}-->
+                                {% for profile in game|game_participants %}
+                                    <!-- {% url 'prosoponomikon:character' profile.character.id %} -->
+                                    <a href="#"
+                                       data-toggle="tooltip" data-placement="top" data-html="true"
+                                       title='<span class="font-italic">(W budowie)<br>Prosoponomikon:<br>"{{ profile }}"</span>'>
+                                        <div class="d-inline">
+                                           <img class="rounded-circle img-smaller" src="{{ profile.image.url }}" alt="Profile img">
+                                        </div>
+                                    </a>
+                                {% endfor %}
 
                             </div>
                         </div>
