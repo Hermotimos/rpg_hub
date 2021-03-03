@@ -235,6 +235,8 @@ def timeline_view(request):
         'threads',
         'known_directly__user',
         'known_indirectly__user',
+        'known_directly__character',
+        'known_indirectly__character',
         'locations',
     )
     events = events.order_by(

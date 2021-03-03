@@ -219,18 +219,26 @@
                     <!-- KNOWN DIRECTLY AND INDIRECTLY -->
                     <td class="font-13 align-center align-top">
                         {% for profile in event.known_directly.all %}
-                            <a>
-                                <img class="rounded-circle img-smaller" src="{{ profile.image.url }}" alt="Profile img"
-                                     data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic">(W budowie)<br>Prosoponomikon:<br>"{{ profile }}"</span>'>
+                            <!-- {% url 'prosoponomikon:character' profile.character.id %} -->
+                            <a href="#"
+                               data-toggle="tooltip" data-placement="top" data-html="true"
+                               title='<span class="font-italic">(W budowie)<br>Prosoponomikon:<br>"{{ profile }}"</span>'>
+                                <div class="d-inline">
+                                   <img class="rounded-circle img-smaller" src="{{ profile.image.url }}" alt="Profile img">
+                                </div>
                             </a>
                             {% if forloop.counter|divisibleby:2 and not forloop.last %}<br>{% endif %}
                         {% endfor %}
                         {% if event.known_directly.all %}<br>{% endif %}
                         {% if event.known_indirectly.all %}-✧-<br>{% endif %}
                         {% for profile in event.known_indirectly.all %}
-                            <a>
-                                <img class="rounded-circle img-grayscale img-smaller" src="{{ profile.image.url }}" alt="Profile img"
-                                    data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic">(W budowie)<br>Prosoponomikon:<br>"{{ profile }}"</span>'>
+                            <!-- {% url 'prosoponomikon:character' profile.character.id %} -->
+                            <a href="#"
+                               data-toggle="tooltip" data-placement="top" data-html="true"
+                               title='<span class="font-italic">(W budowie)<br>Prosoponomikon:<br>"{{ profile }}"</span>'>
+                                <div class="d-inline">
+                                   <img class="rounded-circle img-grayscale img-smaller" src="{{ profile.image.url }}" alt="Profile img">
+                                </div>
                             </a>
                             {% if forloop.counter|divisibleby:2 and not forloop.last %}<br>{% endif %}
                         {% endfor %}
