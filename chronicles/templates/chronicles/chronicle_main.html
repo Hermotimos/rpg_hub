@@ -60,8 +60,9 @@
                             <img class="img-game" src="{{ game.chapter.image.url }}" data-toggle="tooltip" data-placement="right" title="{{ game.title }}">
                         </div>
                         <div class="col-10 mb-2 ml-n0 pl-2 ml-sm-n2 ml-md-n3 ml-lg-n4 ml-xl-n5 pl-xl-3">
-                            <div class="mt-1 font-italic {% if not game.any_known_directly and request.user.profile.status != 'gm' %} text-muted {% endif %}">
-                                <a href="{% url 'chronicles:chronicle-game' game.id %}" class="mr-2">
+                            <div class="mt-1 font-italic ">
+                                <a href="{% url 'chronicles:chronicle-game' game.id %}"
+                                   class="mr-2 {% if game.any_known_directly == 0 and request.user.profile.status != 'gm' %} text-muted {% endif %}">
                                     {{ game.title }}
                                 </a>
                                 {% for profile in game|game_participants %}
