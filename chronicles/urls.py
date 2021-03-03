@@ -8,8 +8,7 @@ urlpatterns = [
     # path('mig/', views_recreate.migrate_debates, name='migrate-debates'),
     
     # chronicle
-    path('chronicle/contents/', views.chronicle_contents_view,
-         name='chronicle-contents'),
+    path('chronicle/main/', views.chronicle_main_view, name='chronicle-main'),
     path('chronicle/all/', views.chronicle_all_view, name='chronicle-all'),
     path('chronicle/game:<int:game_id>/', views.chronicle_game_view,
          name='chronicle-game'),

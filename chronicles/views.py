@@ -18,7 +18,7 @@ from rpg_project.utils import send_emails
 
 
 @login_required
-def chronicle_contents_view(request):
+def chronicle_main_view(request):
     profile = request.user.profile
     
     if profile.status == 'gm':

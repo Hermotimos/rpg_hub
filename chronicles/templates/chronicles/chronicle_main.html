@@ -64,6 +64,18 @@
                                 <a href="{% url 'chronicles:chronicle-game' game.id %}">
                                     {{ game.title }}
                                 </a>
+                                {{game|game_participants}}
+<!--                                {% for profile in game|game_participants %}-->
+<!--                                    &lt;!&ndash; {% url 'prosoponomikon:character' profile.character.id %} &ndash;&gt;-->
+<!--                                    <a href="#"-->
+<!--                                       data-toggle="tooltip" data-placement="top" data-html="true"-->
+<!--                                       title='<span class="font-italic">(W budowie)<br>Prosoponomikon:<br>"{{ profile }}"</span>'>-->
+<!--                                        <div class="d-inline">-->
+<!--                                           <img class="rounded-circle img-smaller" src="{{ profile.image.url }}" alt="Profile img">-->
+<!--                                        </div>-->
+<!--                                    </a>-->
+<!--                                {% endfor %}-->
+
                             </div>
                         </div>
                     </div>
