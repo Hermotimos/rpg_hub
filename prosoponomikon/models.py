@@ -47,7 +47,6 @@ class AffixGroup(Model):
     name_group = FK(
         to=NameGroup, related_name='affix_groups', on_delete=PROTECT)
     
-    # TODO add unique together affix + name_group
     class Meta:
         ordering = ['name_group', 'affix']
         unique_together = ('affix', 'name_group')
