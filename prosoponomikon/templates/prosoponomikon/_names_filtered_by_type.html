@@ -1,0 +1,39 @@
+
+
+<div class="col-md-6 px-1">
+    <h5 class="border-bottom text-center">{{ type_name }}</h5>
+    {% for affix_group in name_group.affix_groups.all %}
+        {% if affix_group.type == type %}
+            <div>
+                <b>*{{ affix_group.affix }}</b>
+                {% for name in affix_group.names.all %}
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-10">
+                                <ul class="bullets-1 mb-1">
+                                    <li class="pl-1" style="color:{{ name.auxiliary_group.color }};">
+                                        <span data-toggle="tooltip" data-placement="right" data-html="true"
+                                            title='<span class="font-italic">{{ name.auxiliary_group }}</span>'>
+                                            {{ name }}
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-2 px-0">
+                                {% for character in name.characters.all %}
+                                    <a href="{% url 'prosoponomikon:character' character.id %}"
+                                       data-toggle="tooltip" data-placement="top" data-html="true"
+                                       title='<span class="font-italic">{{ character.profile }}</span>'>
+                                        <div class="d-inline">
+                                           <img class="rounded-circle img-smaller" src="{{ character.profile.image.url }}" alt="Profile img">
+                                        </div>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>

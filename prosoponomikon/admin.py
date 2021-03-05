@@ -3,14 +3,15 @@ from django.db.models import TextField, CharField
 from django.forms import Textarea, TextInput
 from django.utils.html import format_html
 
-from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, CharacterGroup, Name, NameGroup, FamilyName
+from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, \
+    CharacterGroup, Name, NameGroup, FamilyName, AffixGroup, AuxiliaryNameGroup
 
 
 class NameAdmin(admin.ModelAdmin):
     list_display = [
-        'id', 'form', 'type', 'is_ancient', 'affix_group', 'auxiliary_group']
-    list_editable = [
-        'form', 'type', 'is_ancient', 'affix_group', 'auxiliary_group']
+        'id', 'form', 'is_ancient', 'affix_group', 'auxiliary_group']
+    list_editable = ['form', 'is_ancient', 'affix_group', 'auxiliary_group']
+    list_select_related = ['affix_group', 'auxiliary_group']
     
     def formfield_for_dbfield(self, db_field, **kwargs):
         request = kwargs['request']
@@ -27,22 +28,32 @@ class NameAdmin(admin.ModelAdmin):
                     setattr(request, f'_{field}_choices_cache', choices)
                 formfield.choices = choices
         return formfield
-
-
+    
+    
 class NameInline(admin.TabularInline):
     model = Name
     extra = 0
     
 
+class FamilyNameAdmin(admin.ModelAdmin):
+    list_display = ['id', 'form']
+    list_editable = ['form']
+    
+    
 class NameGroupAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'description']
     list_editable = ['title', 'description']
 
 
-class FamilyNameAdmin(admin.ModelAdmin):
-    list_display = ['id', 'form']
-    list_editable = ['form']
-    
+class AffixGroupAdmin(admin.ModelAdmin):
+    list_display = ['id', 'affix', 'type', 'name_group']
+    list_editable = ['affix', 'type', 'name_group']
+
+
+class AuxiliaryNameGroupAdmin(admin.ModelAdmin):
+    list_display = ['id', 'color', 'location', 'social_info']
+    list_editable = ['color', 'location', 'social_info']
+
 
 class CharacterAdmin(admin.ModelAdmin):
     list_display = ['get_img', 'name', 'family_name', 'cognomen', 'description']
@@ -83,9 +94,11 @@ class CharacterAdmin(admin.ModelAdmin):
         return qs
 
 
+admin.site.register(NameGroup, NameGroupAdmin)
+admin.site.register(AffixGroup, AffixGroupAdmin)
+admin.site.register(AuxiliaryNameGroup, AuxiliaryNameGroupAdmin)
 admin.site.register(Name, NameAdmin)
 admin.site.register(FamilyName, FamilyNameAdmin)
-admin.site.register(NameGroup, NameGroupAdmin)
 admin.site.register(CharacterGroup)
 admin.site.register(Character, CharacterAdmin)
 admin.site.register(PlayerCharacter, CharacterAdmin)

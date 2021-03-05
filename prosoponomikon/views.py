@@ -244,17 +244,13 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
 def prosoponomikon_names_view(request):
     """Collect all locations used as name-areas."""
     profile = request.user.profile
-    name_areas = Location.objects.filter(names__isnull=False)
-    name_areas = name_areas.select_related('location_type')
-    name_areas = name_areas.prefetch_related('names__characters')
-    name_areas = name_areas.distinct()
-    
     name_groups = NameGroup.objects.prefetch_related(
-        Prefetch('names', queryset=Name.objects.all()))
+        'affix_groups__names__characters__profile',
+        'affix_groups__names__auxiliary_group',
+    )
 
     context = {
         'page_title': "Imiona",
-        'name_areas': name_areas,
         'name_groups': name_groups,
     }
     if profile.status == 'gm':

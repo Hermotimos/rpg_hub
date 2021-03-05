@@ -7,106 +7,25 @@
 {% endblock head_extra %}
 
 {% block content %}
-
-<article class="top-button">
-    {% for location in name_areas %}
-    
-        <div class="mt-5">
-            <h2 class="border-bottom-dark text-center">
-                <small class="font-weight-bold">{{ location.name }}</small>
-            </h2>
-        </div>
-    
-        <div class="container mt-4">
-            <div class="row">
-                
-                <div class="col-sm-4 px-1">
-                    {% if location.names.all|name_type_cnt:'MALE' > 0 %}
-                        <h5 class="border-bottom text-center">Mężczyźni</h5>
-                        {% for name in location.names.all %}
-                            {% if name.type == 'MALE' %}
-                                {% include 'prosoponomikon/_name_cnt.html' %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </div>
-                
-                <div class="col-sm-4 px-1">
-                    {% if location.names.all|name_type_cnt:'FEMALE' > 0 %}
-                        <h5 class="border-bottom text-center">Kobiety</h5>
-                        {% for name in location.names.all %}
-                            {% if name.type == 'FEMALE' %}
-                                {% include 'prosoponomikon/_name_cnt.html' %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </div>
-                
-                <div class="col-sm-4 px-1">
-                    {% if location.names.all|name_type_cnt:'DAEMON' > 0 %}
-                        <h5 class="border-bottom text-center">Duchy i demony</h5>
-                        {% for name in location.names.all %}
-                            {% if name.type == 'DAEMON' %}
-                                {% include 'prosoponomikon/_name_cnt.html' %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </div>
-                
+    <article class="mt-5 pt-3">
+        {% for name_group in name_groups %}
+            <div class="mt-5">
+                <p class="mb-0 text-center">✧</p>
+                <p class="mb-0 text-center">✧ ✦ ✧</p>
+                <p class="h3 text-center mb-2 mt-1">{{ name_group.title }}</p>
+                <p class="mb-0 text-center">✧ ✦ ✧</p>
+                <p class="mb-5 mt-0 text-center">✧</p>
             </div>
-        </div>
-    
-    {% endfor %}
-    
-    
-    {% for group in name_groups %}
-    
-        <div class="mt-5">
-            <h2 class="border-bottom-dark text-center">
-                <small class="font-weight-bold">{{ group.name }}</small>
-            </h2>
-        </div>
-    
-        <div class="container mt-4">
-            <div class="row">
-                
-                {% if group.names.all|name_type_cnt:'MALE' > 0 %}
-                    <div class="col-sm-4 px-1">
-                        <h5 class="border-bottom text-center">Mężczyźni</h5>
-                        {% for name in group.names.all %}
-                            {% if name.type == 'MALE' %}
-                                {% include 'prosoponomikon/_name_cnt.html' %}
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                
-                {% if group.names.all|name_type_cnt:'FEMALE' > 0 %}
-                    <div class="col-sm-4 px-1">
-                        <h5 class="border-bottom text-center">Kobiety</h5>
-                        {% for name in group.names.all %}
-                            {% if name.type == 'FEMALE' %}
-                                {% include 'prosoponomikon/_name_cnt.html' %}
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                
-                {% if group.names.all|name_type_cnt:'DAEMON' > 0 %}
-                    <div class="col-sm-4 px-1">
-                        <h5 class="border-bottom text-center">Duchy i demony</h5>
-                        {% for name in group.names.all %}
-                            {% if name.type == 'DAEMON' %}
-                                {% include 'prosoponomikon/_name_cnt.html' %}
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                
+            <div class="container mt-4">
+                <div class="row">
+                    {% with type='male' type_name='Mężczyźni' %}
+                        {% include 'prosoponomikon/_names_filtered_by_type.html' %}
+                    {% endwith %}
+                    {% with type='female' type_name='Kobiety' %}
+                        {% include 'prosoponomikon/_names_filtered_by_type.html' %}
+                    {% endwith %}
+                </div>
             </div>
-        </div>
-    
-    {% endfor %}
-</article>
-
+        {% endfor %}
+    </article>
 {% endblock content %}

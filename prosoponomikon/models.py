@@ -3,7 +3,6 @@ from django.db.models import (
     CASCADE,
     CharField,
     ForeignKey as FK,
-    IntegerField,
     Manager,
     ManyToManyField as M2M,
     Model,
@@ -29,6 +28,9 @@ class NameGroup(Model):
     title = CharField(max_length=250)
     description = TextField(blank=True, null=True)
 
+    class Meta:
+        ordering = ['title']
+
     def __str__(self):
         return self.title
 
@@ -36,14 +38,20 @@ class NameGroup(Model):
 NAME_TYPES = (
     ('MALE', 'MALE'),
     ('FEMALE', 'FEMALE'),
-    ('DAEMON', 'DAEMON'),
 )
 
 
 class AffixGroup(Model):
     affix = CharField(max_length=100)
-    name_group = FK(to=NameGroup, on_delete=PROTECT)
+    type = CharField(max_length=20, choices=NAME_TYPES, default='male')
+    name_group = FK(
+        to=NameGroup, related_name='affix_groups', on_delete=PROTECT)
     
+    # TODO add unique together affix + name_group
+    class Meta:
+        ordering = ['name_group', 'affix']
+        unique_together = ('affix', 'name_group')
+        
     def __str__(self):
         return f"{self.affix} [{self.name_group}]"
     
@@ -63,18 +71,27 @@ class AuxiliaryNameGroup(Model):
     """
     color = CharField(max_length=100, blank=True, null=True)
     location = FK(to=Location, blank=True, null=True, on_delete=PROTECT)
-    social_info = TextField(help_text='Social group indication if no location')
+    social_info = TextField(
+        help_text='Social group indication if no location',
+        blank=True,
+        null=True)
+
+    class Meta:
+        ordering = ['location', 'social_info']
 
     def __str__(self):
-        return self.location or self.social_info or 'No info provided!'
+        return f"{self.location or self.social_info}"
     
     
 class Name(Model):
     form = CharField(max_length=250, unique=True)
-    type = CharField(max_length=20, choices=NAME_TYPES, default='male')
     is_ancient = BooleanField(default=False)
     # FK fields nullable to allow creation of Character via registration form
-    affix_group = FK(to=AffixGroup, on_delete=PROTECT, blank=True, null=True)
+    affix_group = FK(
+        to=AffixGroup,
+        related_name='names',
+        on_delete=PROTECT,
+        blank=True,  null=True)
     auxiliary_group = FK(
         to=AuxiliaryNameGroup, on_delete=PROTECT, blank=True, null=True)
     
