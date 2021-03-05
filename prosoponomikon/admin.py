@@ -3,18 +3,21 @@ from django.db.models import TextField, CharField
 from django.forms import Textarea, TextInput
 from django.utils.html import format_html
 
-from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, CharacterGroup, NameForm, NameContinuum, NameGroup, FamilyName
+from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, CharacterGroup, Name, NameGroup, FamilyName
 
 
-class NameFormAdmin(admin.ModelAdmin):
-    list_display = ['id', 'form', 'type', 'is_ancient', 'name_continuum']
-    list_editable = ['form', 'type', 'is_ancient', 'name_continuum']
+class NameAdmin(admin.ModelAdmin):
+    list_display = [
+        'id', 'form', 'type', 'is_ancient', 'affix_group', 'auxiliary_group']
+    list_editable = [
+        'form', 'type', 'is_ancient', 'affix_group', 'auxiliary_group']
     
     def formfield_for_dbfield(self, db_field, **kwargs):
         request = kwargs['request']
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
         fields = [
-            'name_continuum',
+            'affix_group',
+            'auxiliary_group',
         ]
         for field in fields:
             if db_field.name == field:
@@ -26,23 +29,14 @@ class NameFormAdmin(admin.ModelAdmin):
         return formfield
 
 
-class NameFormInline(admin.TabularInline):
-    model = NameForm
+class NameInline(admin.TabularInline):
+    model = Name
     extra = 0
     
-    
-class NameContinuumAdmin(admin.ModelAdmin):
-    inlines = [NameFormInline]
-    list_display = ['id', 'names_in_continuum', 'description']
-    list_editable = ['description']
-    
-    def names_in_continuum(self, obj):
-        return obj.__str__()
 
-    
 class NameGroupAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'description']
-    list_editable = ['name', 'description']
+    list_display = ['id', 'title', 'description']
+    list_editable = ['title', 'description']
 
 
 class FamilyNameAdmin(admin.ModelAdmin):
@@ -89,9 +83,8 @@ class CharacterAdmin(admin.ModelAdmin):
         return qs
 
 
-admin.site.register(NameForm, NameFormAdmin)
+admin.site.register(Name, NameAdmin)
 admin.site.register(FamilyName, FamilyNameAdmin)
-admin.site.register(NameContinuum, NameContinuumAdmin)
 admin.site.register(NameGroup, NameGroupAdmin)
 admin.site.register(CharacterGroup)
 admin.site.register(Character, CharacterAdmin)

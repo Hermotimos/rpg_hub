@@ -25,21 +25,12 @@ from toponomikon.models import Location
 from users.models import Profile
 
 
-class NameContinuum(Model):
-    description = TextField(blank=True, null=True)
-
-    def __str__(self):
-        if self.name_forms.all():
-            return " | ".join([str(name) for name in self.name_forms.all()])
-        return "No names yet"
-    
-    
 class NameGroup(Model):
-    name = CharField(max_length=250)
+    title = CharField(max_length=250)
     description = TextField(blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 NAME_TYPES = (
@@ -49,18 +40,43 @@ NAME_TYPES = (
 )
 
 
-class NameForm(Model):
+class AffixGroup(Model):
+    affix = CharField(max_length=100)
+    name_group = FK(to=NameGroup, on_delete=PROTECT)
+    
+    def __str__(self):
+        return f"{self.affix} [{self.name_group}]"
+    
+
+class AuxiliaryNameGroup(Model):
+    """A class for storing info about social or local specifics of a name.
+    This may serve to differentiate names within a "big" location indicated in
+    name.affix_group.name_group, ex.
+        1)
+        name_group ~ Fehzan,
+        auxiliary_name_group ~ social_group='Royal names' or location='Ketra'
+        2)
+        name_group ~ Altankara | Nowa Altankara | Bastos | Skadia,
+        auxiliary_name_group ~ location='Skadia'
+    The 'color' attribute is intended to help distinguish these visually within
+    a NameGroup on site.
+    """
+    color = CharField(max_length=100, blank=True, null=True)
+    location = FK(to=Location, blank=True, null=True, on_delete=PROTECT)
+    social_info = TextField(help_text='Social group indication if no location')
+
+    def __str__(self):
+        return self.location or self.social_info or 'No info provided!'
+    
+    
+class Name(Model):
     form = CharField(max_length=250, unique=True)
-    name_continuum = FK(
-        to=NameContinuum,
-        related_name="name_forms",
-        on_delete=PROTECT,
-        blank=True,
-        null=True)
     type = CharField(max_length=20, choices=NAME_TYPES, default='male')
     is_ancient = BooleanField(default=False)
-    name_groups = M2M(to=NameGroup, related_name='names', blank=True)
-    locations = M2M(to=Location, related_name="names", blank=True)
+    # FK fields nullable to allow creation of Character via registration form
+    affix_group = FK(to=AffixGroup, on_delete=PROTECT, blank=True, null=True)
+    auxiliary_group = FK(
+        to=AuxiliaryNameGroup, on_delete=PROTECT, blank=True, null=True)
     
     class Meta:
         ordering = ['form']
@@ -92,7 +108,7 @@ class Character(Model):
     
     profile = OneToOne(to=Profile, on_delete=CASCADE)
     name = FK(
-        to=NameForm,
+        to=Name,
         related_name='characters',
         on_delete=PROTECT,
         blank=True,

@@ -9,7 +9,7 @@ from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
 from prosoponomikon.forms import CharacterManyGroupsEditFormSet, \
     CharacterGroupsEditFormSetHelper, CharacterGroupCreateForm, CharacterCreateForm
-from prosoponomikon.models import Character, CharacterGroup, NameForm, NameGroup
+from prosoponomikon.models import Character, CharacterGroup, Name, NameGroup
 from rpg_project.utils import handle_inform_form
 from toponomikon.models import Location
 from users.models import Profile, User
@@ -250,7 +250,7 @@ def prosoponomikon_names_view(request):
     name_areas = name_areas.distinct()
     
     name_groups = NameGroup.objects.prefetch_related(
-        Prefetch('names', queryset=NameForm.objects.all()))
+        Prefetch('names', queryset=Name.objects.all()))
 
     context = {
         'page_title': "Imiona",
