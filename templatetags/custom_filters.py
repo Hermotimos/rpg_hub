@@ -102,10 +102,10 @@ def add_season_img(text):
     if text:
         text = text.replace('. dnia', '')
         replacements = {
-            'Wiosny': '<br><img class="img-season" src="/static/img/seasons_spring.png" alt="Season"><br>',
-            'Lata': '<br><img class="img-season" src="/static/img/seasons_summer.png" alt="Season"><br>',
-            'Jesieni': '<br><img class="img-season" src="/static/img/seasons_autumn.png" alt="Season"><br>',
-            'Zimy': '<br><img class="img-season" src="/static/img/seasons_winter.png" alt="Season"><br>',
+            'Wiosny': '<br><img class="img-season" src="/static/img/seasons_spring.png"><br>',
+            'Lata': '<br><img class="img-season" src="/static/img/seasons_summer.png"><br>',
+            'Jesieni': '<br><img class="img-season" src="/static/img/seasons_autumn.png"><br>',
+            'Zimy': '<br><img class="img-season" src="/static/img/seasons_winter.png"><br>',
         }
         cnt = 0
         previous = ''

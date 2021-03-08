@@ -64,7 +64,7 @@
             <div>
                 <p class="font-18 font-italic text-justify">{{ news.text|capfirst|linebreaksbr }}</p>
                 {% if news.image %}
-                    <p><img class="img-fluid mx-auto d-block" src="{{ news.image.url }}" alt="News img"></p>
+                    <p><img class="img-fluid mx-auto d-block" src="{{ news.image.url }}"></p>
                 {% endif %}
                 {% for profile in news_seen_by %}
                     <img class="img-small rounded-circle" src="{{ profile.image.url }}">

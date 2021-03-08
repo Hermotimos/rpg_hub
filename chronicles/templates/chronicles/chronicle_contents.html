@@ -11,7 +11,7 @@
     <div class="container px-2 border-bottom">
         <div class="row">
             <h2 class="pb-3">
-                <img class="img-chapter" src="{% static 'img/chronicle_all.png' %}" alt="Chapter img">
+                <img class="img-chapter" src="{% static 'img/chronicle_all.png' %}">
                 <b><a href="{% url 'chronicles:chronicle-all' %}" class="align-middle pt-2">Pełna Kronika</a></b>
             </h2>
         </div>
@@ -21,7 +21,7 @@
         {% for chapter in chapters %}
             <div class="row mt-2">
                 <div class="col-1 p-0 ">
-                    <img class="img-chapter" src="{{ chapter.image.url }}" alt="Chapter img">
+                    <img class="img-chapter" src="{{ chapter.image.url }}">
                 </div>
                 <div class="col-11 pl-4 pl-xs-3 pl-sm-2 pl-lg-0 ml-lg-n2 ml-xl-n3">
                     <h3 class="mb-3">

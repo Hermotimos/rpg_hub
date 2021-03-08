@@ -20,9 +20,9 @@
                     <div class="row mb-2">
                         <div class="col-12 p-0">
                             {% if skill.image %}
-                                <img class="img-skill" src="{{ skill.image.url }}" alt="Skill img">
+                                <img class="img-skill" src="{{ skill.image.url }}">
                             {% else %}
-                                <img class="img-skill" src="{% static 'img/skill-default.png' %}" alt="Skill img">
+                                <img class="img-skill" src="{% static 'img/skill-default.png' %}">
                             {% endif %}
                             <h1 class="mt-2" data-toggle="collapse" data-target="#{{ skill.short_name }}">
                                 <b class="hover-blue">&nbsp;{{ skill.name }}</b>

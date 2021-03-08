@@ -19,7 +19,7 @@
                                             {% else %}
                                                  /media/profile_pics/profile_known_only_indirectly.jpg
                                             {% endif %}"
-                                         alt="Profile img">
+                                        >
                                 </div>
                             </a>
                             <p class="pt-1 font-italic font-14 text-center">{{ profile.character }}</p>
@@ -39,7 +39,7 @@
                                 <div class="img-hover-zoom m-0" data-toggle="tooltip" data-placement="bottom" title="{{ location.name }}">
                                     <img class="img-fluid mx-auto d-block
                                          {% if not request.user.profile in location.known_directly.all and not request.user.profile.status == 'gm' %} img-grayscale {% endif %}"
-                                         src="{{ location.main_image.image.image.url }}" alt="Location img">
+                                         src="{{ location.main_image.image.image.url }}">
                                 </div>
                             </a>
                             <p class="pt-1 font-italic font-14 text-center">{{ location.name }}</p>

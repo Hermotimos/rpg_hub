@@ -9,7 +9,7 @@
             <div class="col-12">
                 <span class="font-18 font-italic text-justify">{{ remark.text|capfirst|linebreaks }}</span>
                 {% if remark.image %}
-                    <p><img class="img-fluid mx-auto d-block" src="{{ remark.image.url }}" alt="Remark img"></p>
+                    <p><img class="img-fluid mx-auto d-block" src="{{ remark.image.url }}"></p>
                     <br>
                 {% endif %}
             </div>
@@ -24,14 +24,14 @@
             {% if remark.author.status == 'gm' %}
                 <div class="col-12 mt-2">
                     {% for profile in remark.seen_by.all %}
-                        <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile small img">
+                        <img class="rounded-circle img-small" src="{{ profile.image.url }}">
                     {% endfor %}
                 </div>
             {% else %}
                 <div class="col-2"></div>
                 <div class="col-10 mt-2">
                     {% for profile in remark.seen_by.all %}
-                        <img class="rounded-circle img-small" src="{{ profile.image.url }}" alt="Profile small img">
+                        <img class="rounded-circle img-small" src="{{ profile.image.url }}">
                     {% endfor %}
                 </div>
             {% endif %}

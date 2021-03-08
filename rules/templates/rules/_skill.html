@@ -7,9 +7,9 @@
         <tr>
             <th>
                 {% if skill.image %}
-                    <img class="img-skill" src="{{ skill.image.url }}" alt="Skill img">
+                    <img class="img-skill" src="{{ skill.image.url }}">
                 {% else %}
-                    <img class="img-skill" src="{% static 'img/skill-default.png' %}" alt="Skill img">
+                    <img class="img-skill" src="{% static 'img/skill-default.png' %}">
                 {% endif %}
             </th>
             <th colspan="2">
@@ -35,7 +35,7 @@
                     <tr>
                         <td class="align-top py-3"></td>
                         <td class="align-top pl-1 pt-3">
-                            <img class="img-numeral" src="{% static level_img %}" alt="Skill level img">
+                            <img class="img-numeral" src="{% static level_img %}">
                         </td>
                         <td class="align-top pl-1 py-3 text-justify">
                             {% if skill_level.description %}{{ skill_level.description|linebreaksbr }}{% endif %}

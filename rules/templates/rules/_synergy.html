@@ -14,7 +14,7 @@
                 <div class="m-0 p-0">
                     {% for skill in synergy.skills.all %}
                         {% if skill.image %}
-                            <img class="img-skill" src="{{ skill.image.url }}" alt="Skill img">
+                            <img class="img-skill" src="{{ skill.image.url }}">
                         {% endif %}
                     {% endfor %}
                 </div>
@@ -37,7 +37,7 @@
                 <tr>
                     <td class="align-top pt-5"></td>
                     <td class="align-top pt-2">
-                        <img class="img-numeral" src="{% static level_img %}" alt="Synergy level img">
+                        <img class="img-numeral" src="{% static level_img %}">
                     </td>
                     <td class="align-bottom pl-1 pt-2 text-justify">
                         {% if synergy_level.description %}{{ synergy_level.description|linebreaksbr }}{% endif %}

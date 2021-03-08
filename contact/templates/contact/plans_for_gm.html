@@ -13,7 +13,7 @@
         <table>
             <tr>
                 <td class="align-top">
-                    <img class="rounded-circle article-img" src="{{ plan.author.image.url }}" alt="Profile img">
+                    <img class="rounded-circle article-img" src="{{ plan.author.image.url }}">
                     <br>
                     <small class="font-italic text-muted text-nowrap">{{ plan.date_created|date:'d-M-Y' }}</small>
                 </td>
@@ -23,7 +23,7 @@
                 <td></td>
                 <td colspan="3">
                     {% if plan.image %}
-                        <img src="{{ plan.image.url }}" alt="Plan img">
+                        <img src="{{ plan.image.url }}">
                     {% endif %}
                     <br><br>
                 </td>

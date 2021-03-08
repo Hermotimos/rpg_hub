@@ -11,7 +11,7 @@
         <small class="text-muted">{{ post.created_at|date:'d-M-Y | H:i' }}</small><br>
         <p>{{ post.text|capfirst|linebreaksbr }}</p>
         {% if post.image %}
-            <p><img class="img-fluid mx-auto d-block" src="{{ post.image.url }}" alt="Post img"></p>
+            <p><img class="img-fluid mx-auto d-block" src="{{ post.image.url }}"></p>
         {% endif %}
     </td>
 </tr>
