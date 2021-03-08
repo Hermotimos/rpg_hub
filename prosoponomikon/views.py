@@ -246,7 +246,7 @@ def prosoponomikon_names_view(request):
     profile = request.user.profile
     name_groups = NameGroup.objects.prefetch_related(
         'affix_groups__names__characters__profile',
-        'affix_groups__names__auxiliary_group',
+        'affix_groups__names__auxiliary_group__location',
     )
 
     context = {
