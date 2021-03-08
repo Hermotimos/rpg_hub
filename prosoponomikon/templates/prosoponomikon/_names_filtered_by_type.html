@@ -3,7 +3,7 @@
 <div class="col-md-6 px-1">
     <h5 class="border-bottom text-center">{{ type_name }}</h5>
     {% for affix_group in name_group.affix_groups.all %}
-        {% if affix_group.type == type %}
+        {% if affix_group.type|lower == type|lower %}
             <div>
                 <b>*{{ affix_group.affix }}</b>
                 {% for name in affix_group.names.all %}
