@@ -21,10 +21,9 @@
                             </div>
                             <div class="col-2 px-0">
                                 {% for character in name.characters.all %}
-                                    <a href="{% url 'prosoponomikon:character' character.id %}"
-                                       data-toggle="tooltip" data-placement="top" data-html="true"
-                                       title='<span class="font-italic">{{ character.profile }}</span>'>
-                                        <div class="d-inline float-right ml-1">
+                                    <a href="{% url 'prosoponomikon:character' character.id %}">
+                                        <div class="d-inline float-right ml-1" data-toggle="tooltip" data-placement="left" data-html="true"
+                                            title='<span class="font-italic">{{ character.profile }}</span>'>
                                            <img class="rounded-circle img-smaller" src="{{ character.profile.image.url }}">
                                         </div>
                                     </a>
