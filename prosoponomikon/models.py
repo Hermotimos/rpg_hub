@@ -48,11 +48,11 @@ class AffixGroup(Model):
         to=NameGroup, related_name='affix_groups', on_delete=PROTECT)
     
     class Meta:
-        ordering = ['name_group', 'affix']
-        unique_together = ('affix', 'name_group')
+        ordering = ['name_group', 'type', 'affix']
+        unique_together = ('affix', 'type', 'name_group')
         
     def __str__(self):
-        return f"{self.affix} [{self.name_group}]"
+        return f"{self.affix} | {self.type} [{self.name_group}]"
     
 
 class AuxiliaryNameGroup(Model):
