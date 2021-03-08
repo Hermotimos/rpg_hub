@@ -82,7 +82,7 @@
                                 <div>
                                 {% for p in weapon.pictures.all %}
                                     <div class="d-inline-block">
-                                        <img src="{{ p.image.url }}">
+                                        <img src="{{ p.image.image.url }}">
                                         {% if p.description %}
                                             <small>{{ p.description }}</small>
                                         {% endif %}
