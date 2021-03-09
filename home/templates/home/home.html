@@ -20,7 +20,7 @@
             <div class="container">
                 <div class="row">
                     {% for location in rand_locations %}
-                        <div class="col-sm-12 col-lg-6">
+                        <div class="col-sm-12 col-lg-6 px-2">
                             <a class="img-link" href="{% url 'toponomikon:location' location.name %}">
                                 <div class="img-hover-zoom m-0" data-toggle="tooltip" data-placement="bottom" title="{{ location.name }}">
                                     <img class="img-fluid mx-auto d-block
