@@ -8,21 +8,8 @@
         <section>
             <div class="container">
                 <div class="row">
-                    {% for profile in rand_profiles %}
-                        <div class="col-sm-6 col-lg-3">
-                            <a class="img-link" href="#"> <!-- {% url 'prosoponomikon:character' profile.character.id %}-->
-                                <div class="img-hover-zoom m-0" data-toggle="tooltip" data-placement="bottom" title="{{ profile.character }}">
-                                    <img class="img-fluid mx-auto d-block {% if not profile.is_alive %} img-grayscale {% endif %}"
-                                         src="
-                                            {% if request.user.profile in profile.character.known_directly.all or request.user.profile.status == 'gm' %}
-                                                {{ profile.image.url }}
-                                            {% else %}
-                                                 /media/profile_pics/profile_known_only_indirectly.jpg
-                                            {% endif %}">
-                                </div>
-                            </a>
-                            <p class="pt-1 font-italic font-14 text-center">{{ profile.character }}</p>
-                        </div>
+                    {% for character in rand_characters %}
+                        {% include 'prosoponomikon/_char_img.html' %}
                     {% endfor %}
                 </div>
             </div>
