@@ -52,7 +52,7 @@ class AffixGroup(Model):
         unique_together = ('affix', 'type', 'name_group')
         
     def __str__(self):
-        return f"{self.affix} | {self.type} [{self.name_group}]"
+        return f"[{self.name_group}] | {self.type} | {self.affix}"
     
 
 class AuxiliaryNameGroup(Model):
@@ -84,6 +84,7 @@ class AuxiliaryNameGroup(Model):
     
 class FirstName(Model):
     form = CharField(max_length=250, unique=True)
+    info = TextField(blank=True, null=True)
     is_ancient = BooleanField(default=False)
     # FK fields nullable to allow creation of Character via registration form
     affix_group = FK(
