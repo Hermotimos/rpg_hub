@@ -351,18 +351,15 @@ div.img-hover-zoom {
     padding: 0;
 }
 .img-modal .modal-body img {
-    border: solid black;
     max-height: 50rem;
 }
 @media only screen and (max-width: 600px) {
     .img-modal .modal-body img {
-        border: solid black;
         max-height: 60rem;
         max-width: 19rem;
     }
 }
 .modal-backdrop {opacity:0.9 !important;}
-
 
 
 
@@ -515,7 +512,7 @@ input.select-profile[type=checkbox] {display:none;}
 input.select-profile[type=checkbox] + label img:hover {cursor: pointer;}
 
 input.select-profile[type=checkbox] + label {
-    filter: grayscale(100%);
+    filter: saturate(25%) opacity(70%);
     display:inline-block;
 }
 
