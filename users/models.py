@@ -183,5 +183,5 @@ class Profile(Model):
             'characters__profile__user',
             'characters__known_directly',
             'characters__known_indirectly',
-            'characters__name')
+            'characters__first_name')
         return character_groups

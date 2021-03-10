@@ -115,7 +115,7 @@ class FamilyName(Model):
 class CharacterManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.select_related('name', 'family_name')
+        qs = qs.select_related('first_name', 'family_name')
         return qs
     
     
@@ -124,7 +124,7 @@ class Character(Model):
     
     profile = OneToOne(to=Profile, on_delete=CASCADE)
     # name = IntegerField(blank=True, null=True)
-    name = FK(
+    first_name = FK(
         to=FirstName,
         related_name='characters',
         on_delete=PROTECT,
@@ -169,7 +169,7 @@ class Character(Model):
         verbose_name_plural = '* CHARACTERS'
     
     def __str__(self):
-        name = f"{self.name} " if self.name else ""
+        name = f"{self.first_name} " if self.first_name else ""
         family_name = f"{self.family_name} " if self.family_name else ""
         cognomen = f"{self.cognomen} " if self.cognomen else ""
         return f"{name}{family_name}{cognomen}".strip()

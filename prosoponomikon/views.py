@@ -63,7 +63,7 @@ def prosoponomikon_grouped_view(request):
 def prosoponomikon_character_view(request, character_id):
     profile = request.user.profile
     
-    characters = Character.objects.select_related('name')
+    characters = Character.objects.select_related('first_name')
     if profile.status == 'gm':
         characters = characters.prefetch_related(
             'biography_packets', 'dialogue_packets')

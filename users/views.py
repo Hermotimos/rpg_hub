@@ -32,7 +32,7 @@ def register_view(request):
         profile = Profile.objects.create(user=user)
         Character.objects.create(
             profile=profile,
-            name=FirstName.objects.create(
+            first_name=FirstName.objects.create(
                 form=user.username.replace('_', ' '))
         )
         messages.info(

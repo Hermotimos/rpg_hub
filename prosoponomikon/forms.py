@@ -107,7 +107,7 @@ class CharacterCreateForm(forms.ModelForm):
         # their locations and other modalities. Hence it's restricted to admin.
         """
         model = Character
-        fields = ['name', 'family_name', 'cognomen', 'description',
+        fields = ['first_name', 'family_name', 'cognomen', 'description',
                   'frequented_locations', 'known_directly', 'known_indirectly']
 
     NAME_TYPES = (
@@ -122,7 +122,7 @@ class CharacterCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         custom_order = [
-            'username', 'name', 'family_name', 'cognomen', 'is_alive',
+            'username', 'first_name', 'family_name', 'cognomen', 'is_alive',
             'image', 'description', 'frequented_locations', 'known_directly',
             'known_indirectly',
         ]

@@ -14,7 +14,7 @@ def home_view(request):
     known_characters = Character.objects.exclude(profile=profile)
     known_characters = known_characters.select_related('profile')
     known_characters = known_characters.prefetch_related(
-        'known_directly', 'known_indirectly', 'name')
+        'known_directly', 'known_indirectly', 'first_name')
     
     known_locations = Location.objects.select_related('main_image__image')
     known_locations = known_locations.prefetch_related(

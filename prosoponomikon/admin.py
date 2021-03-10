@@ -56,9 +56,9 @@ class AuxiliaryNameGroupAdmin(admin.ModelAdmin):
 
 
 class CharacterAdmin(admin.ModelAdmin):
-    list_display = ['get_img', 'name', 'family_name', 'cognomen', 'description']
-    list_editable = ['name', 'family_name', 'cognomen', 'description']
-    search_fields = ['name', 'family_name', 'cognomen', 'description']
+    list_display = ['get_img', 'first_name', 'family_name', 'cognomen', 'description']
+    list_editable = ['first_name', 'family_name', 'cognomen', 'description']
+    search_fields = ['first_name', 'family_name', 'cognomen', 'description']
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 4, 'cols': 50})},
         CharField: {'widget': TextInput(attrs={'size': 25})},
@@ -68,7 +68,7 @@ class CharacterAdmin(admin.ModelAdmin):
         request = kwargs['request']
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
         fields = [
-            'name',
+            'first_name',
             'family_name',
         ]
         for field in fields:
