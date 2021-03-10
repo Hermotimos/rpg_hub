@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 
 from chronicles.models import Thread, GameEvent
 from imaginarion.models import Picture, PictureImage
-from prosoponomikon.models import Character, Name
+from prosoponomikon.models import Character, FirstName
 from rules.models import (
     Skill, SkillLevel,
     Synergy, SynergyLevel,
@@ -67,7 +67,7 @@ def reload_prosoponomikon(request):
             #     obj.cognomen = obj.name[indx:]
             
             # if obj.name:
-            #     Name.objects.create(form=obj.name)
+            #     FirstName.objects.create(form=obj.name)
             
             obj.save()
         messages.info(request,

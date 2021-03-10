@@ -9,7 +9,7 @@ from prosoponomikon.forms import CharacterForm
 from prosoponomikon.models import Character
 from users.forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
 from users.models import Profile
-from prosoponomikon.models import Name
+from prosoponomikon.models import FirstName
 
 
 class CustomLoginView(LoginView):
@@ -32,7 +32,8 @@ def register_view(request):
         profile = Profile.objects.create(user=user)
         Character.objects.create(
             profile=profile,
-            name=Name.objects.create(form=user.username.replace('_', ' '))
+            name=FirstName.objects.create(
+                form=user.username.replace('_', ' '))
         )
         messages.info(
             request, f'Utworzono konto dla {user.username}! Zaloguj się!')

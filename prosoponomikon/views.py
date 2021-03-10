@@ -9,7 +9,7 @@ from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
 from prosoponomikon.forms import CharacterManyGroupsEditFormSet, \
     CharacterGroupsEditFormSetHelper, CharacterGroupCreateForm, CharacterCreateForm
-from prosoponomikon.models import Character, CharacterGroup, Name, NameGroup
+from prosoponomikon.models import Character, CharacterGroup, NameGroup
 from rpg_project.utils import handle_inform_form
 from toponomikon.models import Location
 from users.models import Profile, User

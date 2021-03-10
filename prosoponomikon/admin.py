@@ -4,10 +4,10 @@ from django.forms import Textarea, TextInput
 from django.utils.html import format_html
 
 from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, \
-    CharacterGroup, Name, NameGroup, FamilyName, AffixGroup, AuxiliaryNameGroup
+    CharacterGroup, FirstName, NameGroup, FamilyName, AffixGroup, AuxiliaryNameGroup
 
 
-class NameAdmin(admin.ModelAdmin):
+class FirstNameAdmin(admin.ModelAdmin):
     list_display = [
         'id', 'form', 'is_ancient', 'affix_group', 'auxiliary_group']
     list_editable = ['form', 'is_ancient', 'affix_group', 'auxiliary_group']
@@ -30,8 +30,8 @@ class NameAdmin(admin.ModelAdmin):
         return formfield
     
     
-class NameInline(admin.TabularInline):
-    model = Name
+class FirstNameInline(admin.TabularInline):
+    model = FirstName
     extra = 0
     
 
@@ -97,7 +97,7 @@ class CharacterAdmin(admin.ModelAdmin):
 admin.site.register(NameGroup, NameGroupAdmin)
 admin.site.register(AffixGroup, AffixGroupAdmin)
 admin.site.register(AuxiliaryNameGroup, AuxiliaryNameGroupAdmin)
-admin.site.register(Name, NameAdmin)
+admin.site.register(FirstName, FirstNameAdmin)
 admin.site.register(FamilyName, FamilyNameAdmin)
 admin.site.register(CharacterGroup)
 admin.site.register(Character, CharacterAdmin)

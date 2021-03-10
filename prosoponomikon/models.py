@@ -11,7 +11,7 @@ from django.db.models import (
     Q,
     SET_NULL,
     SmallIntegerField,
-    TextField,
+    TextField, IntegerField
 )
 from django.db.models.signals import post_save
 from rpg_project.utils import create_sorting_name
@@ -82,7 +82,7 @@ class AuxiliaryNameGroup(Model):
         return f"{self.location or self.social_info}"
     
     
-class Name(Model):
+class FirstName(Model):
     form = CharField(max_length=250, unique=True)
     is_ancient = BooleanField(default=False)
     # FK fields nullable to allow creation of Character via registration form
@@ -123,8 +123,9 @@ class Character(Model):
     objects = CharacterManager()
     
     profile = OneToOne(to=Profile, on_delete=CASCADE)
+    # name = IntegerField(blank=True, null=True)
     name = FK(
-        to=Name,
+        to=FirstName,
         related_name='characters',
         on_delete=PROTECT,
         blank=True,
