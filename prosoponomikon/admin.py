@@ -8,9 +8,13 @@ from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, \
 
 
 class FirstNameAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 40})},
+    }
     list_display = [
-        'id', 'form', 'is_ancient', 'affix_group', 'auxiliary_group']
-    list_editable = ['form', 'is_ancient', 'affix_group', 'auxiliary_group']
+        'id', 'form', 'is_ancient', 'info', 'affix_group', 'auxiliary_group']
+    list_editable = [
+        'form', 'is_ancient', 'info', 'affix_group', 'auxiliary_group']
     list_select_related = ['affix_group', 'auxiliary_group']
     
     def formfield_for_dbfield(self, db_field, **kwargs):
