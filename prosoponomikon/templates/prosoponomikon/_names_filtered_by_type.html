@@ -15,7 +15,17 @@
                                 <li class="pl-1">
                                     <span style="color:{{ name.auxiliary_group.color }};"
                                           data-toggle="tooltip" data-placement="right" data-html="true"
-                                          title='<span class="font-italic">{% if name.auxiliary_group %}{{ name.auxiliary_group }}{% else %}-{% endif %}</span>'>
+                                          title='
+                                            <span class="font-italic">
+                                                {% if name.auxiliary_group %}
+                                                    {{ name.auxiliary_group }}
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                                {% if name.info %}
+                                                    <br>{{ name.info|linebreaks }}
+                                                {% endif %}
+                                            </span>'>
                                         {{ name }}
                                     </span>
                                 </li>
