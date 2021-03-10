@@ -7,7 +7,7 @@
     {% if affix_group.type|lower == type|lower %}
         <div>
             <b>*{{ affix_group.affix }}</b>
-            {% for name in affix_group.names.all %}
+            {% for name in affix_group.first_names.all %}
                 <div class="container">
                     <div class="row">
                         <div class="col-10">
@@ -15,7 +15,7 @@
                                 <li class="pl-1">
                                     <span style="color:{{ name.auxiliary_group.color }};"
                                           data-toggle="tooltip" data-placement="right" data-html="true"
-                                          title='<span class="font-italic">{{ name.auxiliary_group }}</span>'>
+                                          title='<span class="font-italic">{% if name.auxiliary_group %}{{ name.auxiliary_group }}{% else %}-{% endif %}</span>'>
                                         {{ name }}
                                     </span>
                                 </li>

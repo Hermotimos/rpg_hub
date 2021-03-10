@@ -245,8 +245,8 @@ def prosoponomikon_names_view(request):
     """Collect all locations used as name-areas."""
     profile = request.user.profile
     name_groups = NameGroup.objects.prefetch_related(
-        'affix_groups__names__characters__profile',
-        'affix_groups__names__auxiliary_group__location',
+        'affix_groups__first_names__characters__profile',
+        'affix_groups__first_names__auxiliary_group__location',
     )
 
     context = {

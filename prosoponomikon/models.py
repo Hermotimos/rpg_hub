@@ -88,9 +88,9 @@ class FirstName(Model):
     # FK fields nullable to allow creation of Character via registration form
     affix_group = FK(
         to=AffixGroup,
-        related_name='names',
+        related_name='first_names',
         on_delete=PROTECT,
-        blank=True,  null=True)
+        blank=True, null=True)
     auxiliary_group = FK(
         to=AuxiliaryNameGroup, on_delete=PROTECT, blank=True, null=True)
     
@@ -123,7 +123,6 @@ class Character(Model):
     objects = CharacterManager()
     
     profile = OneToOne(to=Profile, on_delete=CASCADE)
-    # name = IntegerField(blank=True, null=True)
     first_name = FK(
         to=FirstName,
         related_name='characters',
