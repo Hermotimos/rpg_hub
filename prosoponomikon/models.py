@@ -41,7 +41,16 @@ NAME_TYPES = (
 )
 
 
+class AffixGroupManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.select_related('name_group')
+        return qs
+
+
 class AffixGroup(Model):
+    objects = AffixGroupManager()
+    
     affix = CharField(max_length=100)
     type = CharField(max_length=20, choices=NAME_TYPES, default='male')
     name_group = FK(
@@ -54,6 +63,13 @@ class AffixGroup(Model):
     def __str__(self):
         return f"[{self.name_group}] | {self.type} | {self.affix}"
     
+
+class AuxiliaryNameGroupManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.select_related('location')
+        return qs
+
 
 class AuxiliaryNameGroup(Model):
     """A class for storing info about social or local specifics of a name.
@@ -68,6 +84,8 @@ class AuxiliaryNameGroup(Model):
     The 'color' attribute is intended to help distinguish these visually within
     a NameGroup on site.
     """
+    objects = AuxiliaryNameGroupManager()
+
     color = CharField(max_length=100, blank=True, null=True)
     location = FK(to=Location, blank=True, null=True, on_delete=PROTECT)
     social_info = TextField(
@@ -80,9 +98,18 @@ class AuxiliaryNameGroup(Model):
 
     def __str__(self):
         return f"{self.location or self.social_info}"
+
+
+class FirstNameManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.select_related('affix_group', 'auxiliary_group')
+        return qs
     
     
 class FirstName(Model):
+    objects = FirstNameManager()
+    
     form = CharField(max_length=250, unique=True)
     info = TextField(blank=True, null=True)
     is_ancient = BooleanField(default=False)

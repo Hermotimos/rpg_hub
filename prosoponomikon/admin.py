@@ -40,10 +40,18 @@ class FirstNameInline(admin.TabularInline):
     
 
 class FamilyNameAdmin(admin.ModelAdmin):
-    list_display = ['id', 'form']
+    list_display = ['id', 'form', 'locs']
     list_editable = ['form']
     
-    
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.prefetch_related('locations')
+        return qs
+
+    def locs(self, obj):
+        return " | ".join([loc.name for loc in obj.locations.all()])
+
+
 class NameGroupAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'description']
     list_editable = ['title', 'description']
@@ -60,7 +68,8 @@ class AuxiliaryNameGroupAdmin(admin.ModelAdmin):
 
 
 class CharacterAdmin(admin.ModelAdmin):
-    list_display = ['get_img', 'first_name', 'family_name', 'cognomen', 'description']
+    list_display = [
+        'get_img', 'first_name', 'family_name', 'cognomen', 'description']
     list_editable = ['first_name', 'family_name', 'cognomen', 'description']
     search_fields = ['first_name', 'family_name', 'cognomen', 'description']
     formfield_overrides = {
@@ -94,7 +103,7 @@ class CharacterAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        qs = qs.select_related('profile')
+        qs = qs.select_related('profile', 'first_name', 'family_name')
         return qs
 
 
