@@ -96,7 +96,7 @@ class FirstName(Model):
         to=AuxiliaryNameGroup, on_delete=PROTECT, blank=True, null=True)
     
     class Meta:
-        ordering = ['form']
+        ordering = ['auxiliary_group', 'form']
 
     def __str__(self):
         return self.form

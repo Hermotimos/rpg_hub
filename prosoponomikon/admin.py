@@ -15,7 +15,7 @@ class FirstNameAdmin(admin.ModelAdmin):
         'id', 'form', 'is_ancient', 'info', 'affix_group', 'auxiliary_group']
     list_editable = [
         'form', 'is_ancient', 'info', 'affix_group', 'auxiliary_group']
-    list_select_related = ['affix_group', 'auxiliary_group']
+    ordering = ['form']
     
     def formfield_for_dbfield(self, db_field, **kwargs):
         request = kwargs['request']
