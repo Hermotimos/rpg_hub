@@ -190,7 +190,8 @@ img {pointer-events: none;}
     Make figure with class .pointer show pointer on hover. This allows pointer
     over img tags (that have pointer-events: none).
 */
-figure.pointer {cursor: pointer;}
+figure.pointer,
+span.pointer {cursor: pointer;}
 
 .article-img {
     height: 5rem;
