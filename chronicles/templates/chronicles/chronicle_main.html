@@ -30,17 +30,16 @@
             {% for chapter in chapters %}
                 <div class="row mb-n1">
                     <div class="col-1 p-0 img-div">
-                        <a href="{% url 'chronicles:chronicle-chapter' chapter.id %}">
-                            <figure class="figure mb-0" data-toggle="tooltip" data-placement="right" title="{{ chapter.title }}">
-                                <img class="img-chapter" src="{{ chapter.image.url }}">
-                            </figure>
-                        </a>
+                        <figure class="figure mb-0" data-toggle="tooltip" data-placement="right" title="{{ chapter.title }}">
+                            <img class="img-chapter" src="{{ chapter.image.url }}">
+                        </figure>
                     </div>
                     <div class="col-11 pl-4 pl-xs-3 pl-sm-3 pl-lg-2 ml-lg-n2 ml-xl-n3">
                         <h3 class=" mt-1">
-                            <b class="header-title small-caps border-bottom">
+                            <a href="{% url 'chronicles:chronicle-chapter' chapter.id %}"
+                               class="header-title small-caps border-bottom font-weight-bold">
                                 {{ chapter.title }}
-                            </b>
+                            </a>
                         </h3>
                     </div>
                 </div>
