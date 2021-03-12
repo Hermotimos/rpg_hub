@@ -15,6 +15,7 @@ class FirstNameAdmin(admin.ModelAdmin):
         'id', 'form', 'is_ancient', 'info', 'affix_group', 'auxiliary_group']
     list_editable = [
         'form', 'is_ancient', 'info', 'affix_group', 'auxiliary_group']
+    list_filter = ['auxiliary_group', 'is_ancient']
     ordering = ['form']
     
     def formfield_for_dbfield(self, db_field, **kwargs):
@@ -60,6 +61,7 @@ class NameGroupAdmin(admin.ModelAdmin):
 class AffixGroupAdmin(admin.ModelAdmin):
     list_display = ['id', 'affix', 'type', 'name_group']
     list_editable = ['affix', 'type', 'name_group']
+    list_filter = ['type']
 
 
 class AuxiliaryNameGroupAdmin(admin.ModelAdmin):

@@ -94,7 +94,7 @@ class AuxiliaryNameGroup(Model):
         null=True)
 
     class Meta:
-        ordering = ['location', 'social_info']
+        ordering = ['social_info', 'location']
 
     def __str__(self):
         return f"{self.location or self.social_info}"
