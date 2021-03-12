@@ -201,3 +201,24 @@ def game_participants(obj):
         for profile in event.known_directly.all():
             participants.add(profile)
     return participants
+
+
+@register.filter
+def pictureset_pictures_in_custom_order(picture_set):
+
+    def get_dimensions_ratio(img):
+        return img.width / img.height
+    
+    pics = [pic for pic in picture_set.pictures.all()]
+    pics_sorted = sorted(pics, key=lambda pic: get_dimensions_ratio(pic.image.image))
+    
+    # sort pictures according to custom cases considering WIDTH:HEIGHT ratio:
+    if len(pics) == 3:
+        # Put the widest pic in the middle
+        return [pics_sorted[0], pics_sorted[2], pics_sorted[1]]
+    # case N
+    elif len(pics) == 4:
+        return [pics_sorted[0], pics_sorted[2], pics_sorted[3], pics_sorted[1]]
+    # default
+    else:
+        return list(pics)
