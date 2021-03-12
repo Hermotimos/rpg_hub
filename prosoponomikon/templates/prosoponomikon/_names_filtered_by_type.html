@@ -38,7 +38,12 @@
                             {% for character in name.characters.all %}
                                 <a href="{% url 'prosoponomikon:character' character.id %}">
                                     <div class="d-inline float-right ml-1" data-toggle="tooltip" data-placement="left" data-html="true"
-                                        title='<span class="font-italic">{{ character.profile }}</span>'>
+                                        title='
+                                            <span class="font-italic">
+                                                <img class="article-img rounded-circle" src="{{ character.profile.image.url }}">
+                                                <br>
+                                                {{ character.profile }}
+                                            </span>'>
                                        <img class="rounded-circle img-smaller" src="{{ character.profile.image.url }}">
                                     </div>
                                 </a>
