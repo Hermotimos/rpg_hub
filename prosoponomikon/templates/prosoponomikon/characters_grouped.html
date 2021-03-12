@@ -9,24 +9,14 @@
 {% block content %}
     <article class="top-button">
         <div class="mb-5">
-            <a href="{% url 'prosoponomikon:groups-create' %}" class="btn btn-outline-dark mb-1">
-                Nowa grupa
-            </a>
-            <a href="{% url 'prosoponomikon:groups-edit' %}" class="btn btn-outline-dark mb-1">
-                Edytuj grupy
-            </a>
-            <a href="{% url 'prosoponomikon:ungrouped' %}" class="btn btn-outline-info mb-1">
-                Gracze/BN
-            </a>
+            <a href="{% url 'prosoponomikon:groups-create' %}" class="btn btn-outline-dark mb-1">Nowa grupa</a>
+            <a href="{% url 'prosoponomikon:groups-edit' %}" class="btn btn-outline-dark mb-1">Edytuj grupy</a>
+            <a href="{% url 'prosoponomikon:ungrouped' %}" class="btn btn-outline-info mb-1">Gracze/BN</a>
             {% for character_group in character_groups %}
-                <a href="{% url 'prosoponomikon:grouped' %}#group_{{ character_group.id }}" class="btn btn-dark mb-1">
-                    {{ character_group.name }}
-                </a>
+                <a href="{% url 'prosoponomikon:grouped' %}#group_{{ character_group.id }}" class="btn btn-dark mb-1">{{ character_group.name }}</a>
             {% endfor %}
             {% if ungrouped_characters %}
-                <a href="{% url 'prosoponomikon:grouped' %}#ungrouped" class="btn btn-dark mb-1">
-                    Pozostali
-                </a>
+                <a href="{% url 'prosoponomikon:grouped' %}#ungrouped" class="btn btn-dark mb-1">Pozostali</a>
             {% endif %}
         </div>
         <div class="container">
