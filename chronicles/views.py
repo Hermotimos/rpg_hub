@@ -68,6 +68,7 @@ def chronicle_game_view(request, game_id):
         'known_directly',
         'known_indirectly',
         'pictures__image',
+        'picture_sets',
         'debates__topic',
         'debates__remarks__author',
     )
@@ -96,6 +97,7 @@ def chronicle_chapter_view(request, chapter_id):
         'known_directly',
         'known_indirectly',
         'pictures__image',
+        'picture_sets',
         'debates__topic',
         'debates__remarks__author',
     )
@@ -126,6 +128,7 @@ def chronicle_all_view(request):
         'known_directly',
         'known_indirectly',
         'pictures__image',
+        'picture_sets',
         'debates__topic',
         'debates__remarks__author',
         'debates__known_directly',

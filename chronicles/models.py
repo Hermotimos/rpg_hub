@@ -19,7 +19,7 @@ from django.db.models import (
 from django.db.models.signals import post_save, m2m_changed
 
 from debates.models import Debate
-from imaginarion.models import Picture, Audio
+from imaginarion.models import Picture, Audio, PictureSet
 from rpg_project.utils import create_sorting_name
 from toponomikon.models import Location
 from users.models import Profile
@@ -265,6 +265,7 @@ class TimeUnit(Model):
         blank=True,
     )
     pictures = M2MField(to=Picture, related_name='events', blank=True)
+    picture_sets = M2MField(to=PictureSet, related_name='events', blank=True)
     debates = M2MField(to=Debate, related_name='events', blank=True)
     
     class Meta:
@@ -450,8 +451,8 @@ class HistoryEventManager(Manager):
     
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.select_related('in_timeunit', 'date_start', 'date_end',
-                               'audio')
+        qs = qs.select_related(
+            'in_timeunit', 'date_start', 'date_end', 'audio')
         qs = qs.filter(Q(game=None), timeunits=None)
         return qs
 
@@ -468,8 +469,8 @@ class GameEventManager(Manager):
     
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.select_related('game', 'in_timeunit', 'date_start', 'date_end',
-                               'audio')
+        qs = qs.select_related(
+            'game', 'in_timeunit', 'date_start', 'date_end', 'audio')
         qs = qs.filter(~Q(game=None))
         return qs
 
