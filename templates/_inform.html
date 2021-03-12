@@ -29,10 +29,7 @@
                                 {% if profile.status == 'player' %}
                                     <input class="select-profile" type="checkbox" id="id_{{ forloop.counter }}{{ id_ }}" name="{{ profile.id }}">
                                     <label for="id_{{ forloop.counter }}{{ id_ }}">
-                                        <span class="pointer mb-0" data-toggle="tooltip" data-placement="bottom" data-html="true"
-                                            title='<span class="font-italic">{{ profile }}</span>'>
-                                            <img class="article-img rounded-circle" src="{{ profile.image.url }}">
-                                        </span>
+                                        {% include '_profile_round_img.html' %}
                                     </label>
                                 {% endif %}
                             {% endfor %}
@@ -42,10 +39,7 @@
                                 {% if profile.status != 'player' %}
                                     <input class="select-profile" type="checkbox" id="id_{{ forloop.counter }}{{ id_ }}" name="{{ profile.id }}">
                                     <label for="id_{{ forloop.counter }}{{ id_ }}">
-                                        <span class="pointer mb-0" data-toggle="tooltip" data-placement="bottom" data-html="true"
-                                            title='<span class="font-italic">{{ profile }}</span>'>
-                                            <img class="article-img rounded-circle" src="{{ profile.image.url }}">
-                                        </span>
+                                        {% include '_profile_round_img.html' %}
                                     </label>
                                 {% endif %}
                             {% endfor %}
