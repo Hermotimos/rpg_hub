@@ -48,9 +48,13 @@
                                         {% include '_inform.html' %}
                                     {% endwith %}
                                 </div>
-                            <span class="btn btn-outline-dark icon-list py-2 mb-sm-1 disabled"><a href="#"></a></span>
+                            <a class="btn btn-outline-dark icon-list py-2 mb-sm-1 disabled"
+                                href="#"
+                                data-toggle="tooltip" data-placement="left" title="Notatki"></a>
                             {% if request.user.profile.status == 'gm' %}
-                                <a class="btn btn-outline-dark icon-edit-alt py-2 mb-sm-1" href="{% url 'admin:toponomikon_location_change' this_location.id %}" target="_blank"></a>
+                                <a class="btn btn-outline-dark icon-edit-alt py-2 mb-sm-1"
+                                   href="{% url 'admin:toponomikon_location_change' this_location.id %}" target="_blank"
+                                   data-toggle="tooltip" data-placement="left" title="Edytuj lokację"></a>
                             {% endif %}
                         </div>
                         <!-- DESCRIPTION -->
