@@ -1,4 +1,6 @@
+from django import forms
 from django.contrib import admin
+from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db.models import TextField, CharField
 from django.forms import Textarea, TextInput
 from django.utils.html import format_html
@@ -38,9 +40,21 @@ class FirstNameAdmin(admin.ModelAdmin):
 class FirstNameInline(admin.TabularInline):
     model = FirstName
     extra = 0
-    
+
+
+class FamilyNameAdminForm(forms.ModelForm):
+    class Meta:
+        model = FamilyName
+        fields = ['form', 'locations']
+        widgets = {
+            'locations': FilteredSelectMultiple(
+                'Locations', False, attrs={'style': 'height:400px'}
+            ),
+        }
+
 
 class FamilyNameAdmin(admin.ModelAdmin):
+    form = FamilyNameAdminForm
     list_display = ['id', 'form', 'locs']
     list_editable = ['form']
     
@@ -69,7 +83,38 @@ class AuxiliaryNameGroupAdmin(admin.ModelAdmin):
     list_editable = ['color', 'location', 'social_info']
 
 
+class CharacterAdminForm(forms.ModelForm):
+    class Meta:
+        model = Character
+        fields = [
+            'profile', 'first_name', 'family_name', 'cognomen', 'description',
+            'frequented_locations', 'pictures', 'biography_packets',
+            'dialogue_packets', 'known_directly', 'known_indirectly',
+        ]
+        widgets = {
+            'frequented_locations': FilteredSelectMultiple(
+                'Frequented_locations', False, attrs={'style': 'height:300px'}
+            ),
+            'pictures': FilteredSelectMultiple(
+                'Pictures', False, attrs={'style': 'height:300px'}
+            ),
+            'biography_packets': FilteredSelectMultiple(
+                'Biography_packets', False, attrs={'style': 'height:300px'}
+            ),
+            'dialogue_packets': FilteredSelectMultiple(
+                'Dialogue_packets', False, attrs={'style': 'height:300px'}
+            ),
+            'known_directly': FilteredSelectMultiple(
+                'Known_directly', False, attrs={'style': 'height:200px'}
+            ),
+            'known_indirectly': FilteredSelectMultiple(
+                'Known_indirectly', False, attrs={'style': 'height:200px'}
+            ),
+        }
+
+
 class CharacterAdmin(admin.ModelAdmin):
+    form = CharacterAdminForm
     list_display = [
         'get_img', 'first_name', 'family_name', 'cognomen', 'description']
     list_editable = ['first_name', 'family_name', 'cognomen', 'description']

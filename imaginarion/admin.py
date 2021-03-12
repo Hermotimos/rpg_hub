@@ -1,9 +1,12 @@
+from django import forms
 from django.contrib import admin
+from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db.models import TextField
 from django.forms import Textarea
 from django.utils.html import format_html
 
-from imaginarion.models import Picture, PictureImage, PictureSet, Audio, AudioSet
+from imaginarion.models import Picture, PictureImage, PictureSet, Audio, \
+    AudioSet
 
 
 class AudioAdmin(admin.ModelAdmin):
@@ -46,7 +49,19 @@ class PictureImageAdmin(admin.ModelAdmin):
     search_fields = ['description', 'sorting_name']
 
 
+class PictureSetAdminForm(forms.ModelForm):
+    class Meta:
+        model = PictureSet
+        fields = ['title', 'pictures']
+        widgets = {
+            'pictures': FilteredSelectMultiple(
+                'Pictures', False, attrs={'style': 'height:400px'}
+            )
+        }
+
+
 class PictureSetAdmin(admin.ModelAdmin):
+    form = PictureSetAdminForm
     list_display = ['id', 'title', 'images']
     list_editable = ['title']
     search_fields = ['title']
