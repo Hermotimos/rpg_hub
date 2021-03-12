@@ -43,11 +43,12 @@
             <!-- PICTURES -->
             {% if request.user.profile not in event.known_indirectly.all %}
                 {% if event.picture_sets.all %}
-                    <BR><BR>PICTURE SET !!!!!!
-                    {% for picture_set in picture_sets %}
-                        {% for picture in picture_set %}
-                            {% include '_pic_with_modal.html' %}
-                        {% endfor %}
+                    {% for picture_set in event.picture_sets.all %}
+                        <div class="d-flex justify-content-center mb-4">
+                            {% for picture in picture_set.pictures.all %}
+                                {% include '_pic_with_modal.html' %}
+                            {% endfor %}
+                        </div>
                     {% endfor %}
                 {% elif event.pictures.all %}
                     <div class="mb-4">
