@@ -6,7 +6,9 @@
 {% for affix_group in name_group.affix_groups.all %}
     {% if affix_group.type|lower == type|lower %}
         <div>
-            <b>*{{ affix_group.affix }}</b>
+            <a class="font-weight-bold" href="{% url 'admin:prosoponomikon_affixgroup_change' affix_group.id %}" target="_blank">
+                {{ affix_group.affix }}
+            </a>
             {% for name in affix_group.first_names.all %}
                 <div class="container">
                     <div class="row">
@@ -26,7 +28,9 @@
                                                     <br>{{ name.info|linebreaks }}
                                                 {% endif %}
                                             </span>'>
-                                        {{ name }}
+                                        <a href="{% url 'admin:prosoponomikon_firstname_change' name.id %}" target="_blank">
+                                            {{ name }}
+                                        </a>
                                     </span>
                                 </li>
                             </ul>
