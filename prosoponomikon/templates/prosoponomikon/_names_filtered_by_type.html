@@ -15,7 +15,8 @@
                         <div class="col-10">
                             <ul class="bullets-1 mb-1">
                                 <li class="pl-1">
-                                    <span style="color:{{ name.auxiliary_group.color }};"
+                                    <a href="{% url 'admin:prosoponomikon_firstname_change' name.id %}" target="_blank"
+                                       style="color:{{ name.auxiliary_group.color }};"
                                           data-toggle="tooltip" data-placement="right" data-html="true"
                                           title='
                                             <span class="font-italic">
@@ -28,10 +29,8 @@
                                                     <br>{{ name.info|linebreaks }}
                                                 {% endif %}
                                             </span>'>
-                                        <a href="{% url 'admin:prosoponomikon_firstname_change' name.id %}" target="_blank">
-                                            {{ name }}
-                                        </a>
-                                    </span>
+                                        {{ name }}
+                                    </a>
                                 </li>
                             </ul>
                         </div>
