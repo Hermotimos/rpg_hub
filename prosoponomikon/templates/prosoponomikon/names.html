@@ -7,7 +7,14 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <article class="mt-5 pt-3">
+    <article class="top-button">
+        
+        <div class="mb-5">
+            <a class="btn btn-outline-dark" href="{% url 'admin:prosoponomikon_firstname_add' %}" target="_blank">Dodaj imię</a>
+            <a class="btn btn-outline-dark" href="{% url 'admin:prosoponomikon_familyname_add' %}" target="_blank">Dodaj nazwisko</a>
+            <a class="btn btn-outline-dark" href="{% url 'admin:prosoponomikon_namegroup_add' %}" target="_blank">Dodaj grupę imion</a>
+        </div>
+    
         {% for name_group in name_groups %}
             <div class="mt-5">
                 <p class="mb-0 text-center">✧</p>
