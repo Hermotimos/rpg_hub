@@ -25,7 +25,7 @@ from users.models import Profile
 
 
 class NameGroup(Model):
-    title = CharField(max_length=250)
+    title = CharField(max_length=250, unique=True)
     description = TextField(blank=True, null=True)
 
     class Meta:
