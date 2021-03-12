@@ -123,7 +123,19 @@ class Picture(Model):
     def save(self, *args, **kwargs):
         self.sorting_name = create_sorting_name(self.description)
         super().save(*args, **kwargs)
-                
+
+
+class PictureSet(Model):
+    title = CharField(max_length=200)
+    pictures = M2MField(to=Picture, related_name='picture_sets', blank=True)
+
+    class Meta:
+        ordering = ['title']
+
+    def __str__(self):
+        return self.title
+
+
 # TODO: REPLACEMENT !!!!
 # class Picture(models.Model):
 #

@@ -1,8 +1,9 @@
 from django.contrib import admin
 from django.db.models import TextField
 from django.forms import Textarea
+from django.utils.html import format_html
 
-from imaginarion.models import Picture, PictureImage, Audio, AudioSet
+from imaginarion.models import Picture, PictureImage, PictureSet, Audio, AudioSet
 
 
 class AudioAdmin(admin.ModelAdmin):
@@ -43,9 +44,26 @@ class PictureImageAdmin(admin.ModelAdmin):
     list_display = ['id', 'description', 'image', 'sorting_name']
     list_editable = ['description', 'image']
     search_fields = ['description', 'sorting_name']
-    
+
+
+class PictureSetAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title', 'images']
+    list_editable = ['title']
+    search_fields = ['title']
+
+    def images(self, obj):
+        picture_imgs_urls = [p.image.image.url for p in obj.pictures.all()]
+        html = ''
+        if picture_imgs_urls:
+            for url in picture_imgs_urls:
+                html += f'<img height="40" src="{url}">&nbsp;'
+        else:
+            html = '<h1><font color="red">BRAK OBRAZÓW</font></h1>'
+        return format_html(html)
+
 
 admin.site.register(Audio, AudioAdmin)
 admin.site.register(AudioSet, AudioSetAdmin)
 admin.site.register(Picture, PictureAdmin)
 admin.site.register(PictureImage, PictureImageAdmin)
+admin.site.register(PictureSet, PictureSetAdmin)
