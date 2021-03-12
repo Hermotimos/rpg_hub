@@ -1,7 +1,7 @@
 {% load custom_filters %}
 
 <!-- Modal controls -->
-<figure class="modal-img figure pointer text-center mx-auto m-1" data-toggle="modal" data-target="#imgModal{{ picture.id }}">
+<figure class="modal-img figure pointer text-center mx-auto px-1" data-toggle="modal" data-target="#imgModal{{ picture.id }}">
     <img src="{{ picture.image.image.url }}">
     {% if picture.description %}
         <figcaption class="font-italic font-14 text-center pt-1">{{ picture.description|brackets_br }}</figcaption>
