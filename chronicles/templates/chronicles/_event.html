@@ -42,14 +42,13 @@
             
             <!-- PICTURES -->
             {% if request.user.profile not in event.known_indirectly.all %}
-                {% if event.picture_sets.all %}
-                    {% for picture_set in event.picture_sets.all %}
-                        <div class="d-flex justify-content-center my-2">
-                            {% for picture in picture_set|pictureset_pictures_in_custom_order %}
-                                {% include '_pic_with_modal.html' %}
-                            {% endfor %}
-                        </div>
-                    {% endfor %}
+                {% for picture_set in event.picture_sets.all %}
+                    <div class="d-flex justify-content-center my-2">
+                        {% for picture in picture_set|pictureset_pictures_in_custom_order %}
+                            {% include '_pic_with_modal.html' %}
+                        {% endfor %}
+                    </div>
+                {% endfor %}
                 {% if event.pictures.all %}
                     <div class="mb-4">
                         {% for row in event.pictures.all|columns:3 %}
