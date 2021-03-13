@@ -43,7 +43,7 @@
             <!-- PICTURES -->
             {% if request.user.profile not in event.known_indirectly.all %}
                 {% for picture_set in event.picture_sets.all %}
-                    <div class="d-flex justify-content-center my-2">
+                    <div class="d-flex justify-content-center my-3">
                         {% for picture in picture_set|pictureset_pictures_in_custom_order %}
                             {% include '_pic_with_modal.html' %}
                         {% endfor %}
