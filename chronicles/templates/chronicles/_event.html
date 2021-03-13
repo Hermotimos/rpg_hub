@@ -50,7 +50,7 @@
                             {% endfor %}
                         </div>
                     {% endfor %}
-                {% elif event.pictures.all %}
+                {% if event.pictures.all %}
                     <div class="mb-4">
                         {% for row in event.pictures.all|columns:3 %}
                            {% include '_row_of_pics_with_modals.html' %}
