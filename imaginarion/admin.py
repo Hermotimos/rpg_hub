@@ -32,7 +32,7 @@ class AudioSetAdmin(admin.ModelAdmin):
     
     
 class PictureAdmin(admin.ModelAdmin):
-    list_display = ['id', 'type', 'description', 'image']
+    list_display = ['id', 'type', 'description', 'get_image']
     list_editable = ['type', 'description']
     list_filter = ['type']
     search_fields = ['description']
@@ -42,6 +42,10 @@ class PictureAdmin(admin.ModelAdmin):
         qs = qs.select_related('image')
         return qs
     
+    def get_image(self, obj):
+        html = f'<img height="60" src="{obj.image.image.url}">&nbsp;'
+        return format_html(html)
+
     
 class PictureImageAdmin(admin.ModelAdmin):
     list_display = ['id', 'description', 'image', 'sorting_name']
