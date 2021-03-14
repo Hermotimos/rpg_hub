@@ -38,6 +38,9 @@ class FirstNameAdmin(admin.ModelAdmin):
     
     
 class FirstNameInline(admin.TabularInline):
+    formfield_overrides = {
+        TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 50})},
+    }
     model = FirstName
     extra = 0
 
@@ -73,6 +76,7 @@ class NameGroupAdmin(admin.ModelAdmin):
 
 
 class AffixGroupAdmin(admin.ModelAdmin):
+    inlines = [FirstNameInline]
     list_display = ['id', 'affix', 'type', 'name_group']
     list_editable = ['affix', 'type', 'name_group']
     list_filter = ['type']
