@@ -42,7 +42,7 @@ class FirstNameInline(admin.TabularInline):
         TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 50})},
     }
     model = FirstName
-    extra = 0
+    extra = 10
 
 
 class FamilyNameAdminForm(forms.ModelForm):
