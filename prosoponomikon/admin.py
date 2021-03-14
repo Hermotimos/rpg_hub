@@ -19,7 +19,8 @@ class FirstNameAdmin(admin.ModelAdmin):
         'form', 'is_ancient', 'info', 'affix_group', 'auxiliary_group']
     list_filter = ['auxiliary_group', 'is_ancient']
     ordering = ['form']
-    
+    search_fields = ['form']
+
     def formfield_for_dbfield(self, db_field, **kwargs):
         request = kwargs['request']
         formfield = super().formfield_for_dbfield(db_field, **kwargs)
