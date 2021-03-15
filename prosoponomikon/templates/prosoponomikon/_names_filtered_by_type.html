@@ -29,7 +29,9 @@
                                                     <br>{{ name.info|linebreaks }}
                                                 {% endif %}
                                             </span>'>
-                                        {{ name }}
+                                        <span class="{% if name.is_ancient %} font-italic {% endif %}">
+                                            {{ name }}
+                                        </span>
                                     </a>
                                 </li>
                             </ul>
