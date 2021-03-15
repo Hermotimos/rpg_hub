@@ -22,35 +22,48 @@
             <a class="btn btn-outline-secondary mb-1" href="{% url 'admin:prosoponomikon_auxiliarynamegroup_add' %}" target="_blank"><b>+</b></a>
             <a class="btn btn-outline-success mb-1" href="https://www.w3schools.com/colors/colors_picker.asp" target="_blank">ColorPicker</a>
         </div>
-    
-        {% for name_group in name_groups %}
-            <div class="mt-5">
-                <p class="mb-0 text-center">✧</p>
-                <p class="mb-0 text-center">✧ ✦ ✧</p>
-                <p class="h3 text-center mb-2 mt-1">
-                    <a href="{% url 'admin:prosoponomikon_namegroup_change' name_group.id %}" target="_blank"
-                        data-toggle="tooltip" data-placement="bottom" data-html="true"
-                        title='{% if name_group.description %}<span class="font-italic">{{ name_group.description }}</span>{% endif %}'>
+        <div>
+            {% for name_group in name_groups %}
+                <a class="smaller text-muted" href="#name_group_{{ name_group.id }}">
+                    <span class="mb-1">
                         {{ name_group.title }}
-                    </a>
-                </p>
-                <p class="mb-0 text-center">✧ ✦ ✧</p>
-                <p class="mt-0 text-center">✧</p>
-            </div>
-            <div class="container ">
-                <div class="row px-1">
-                    <div class="col-md-6 p-0 pr-md-3">
-                        {% with type='male' type_name='Mężczyźni' %}
-                            {% include 'prosoponomikon/_names_filtered_by_type.html' %}
-                        {% endwith %}
-                    </div>
-                    <div class="col-md-6 p-0 pl-md-3">
-                        {% with type='female' type_name='Kobiety' %}
-                            {% include 'prosoponomikon/_names_filtered_by_type.html' %}
-                        {% endwith %}
+                    </span>
+                </a>
+                {% if not forloop.last %} <span class="h5">❃</span> {% endif %}
+            {% endfor %}
+        </div>
+        
+        <div class="mt-5">
+            {% for name_group in name_groups %}
+                <div class="anchor mt-n5" id="name_group_{{ name_group.id }}">
+                    <p class="mb-0 text-center">✧</p>
+                    <p class="mb-0 text-center">✧ ✦ ✧</p>
+                    <p class="h3 text-center mb-2 mt-1">
+                        <a href="{% url 'admin:prosoponomikon_namegroup_change' name_group.id %}" target="_blank"
+                            data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title='{% if name_group.description %}<span class="font-italic">{{ name_group.description }}</span>{% endif %}'>
+                            {{ name_group.title }}
+                        </a>
+                    </p>
+                    <p class="mb-0 text-center">✧ ✦ ✧</p>
+                    <p class="mt-0 text-center">✧</p>
+                </div>
+                <div class="container mb-5">
+                    <div class="row px-1">
+                        <div class="col-md-6 p-0 pr-md-3">
+                            {% with type='male' type_name='Mężczyźni' %}
+                                {% include 'prosoponomikon/_names_filtered_by_type.html' %}
+                            {% endwith %}
+                        </div>
+                        <div class="col-md-6 p-0 pl-md-3">
+                            {% with type='female' type_name='Kobiety' %}
+                                {% include 'prosoponomikon/_names_filtered_by_type.html' %}
+                            {% endwith %}
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
+        
     </article>
 {% endblock content %}
