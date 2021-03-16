@@ -9,51 +9,53 @@
             <a class="font-weight-bold" href="{% url 'admin:prosoponomikon_affixgroup_change' affix_group.id %}" target="_blank">
                 {{ affix_group.affix }}
             </a>
-            {% for name in affix_group.first_names.all %}
-                <div class="container">
-                    <div class="row">
-                        <div class="col-10">
-                            <ul class="bullets-1 mb-1">
-                                <li class="pl-1">
-                                    <a href="{% url 'admin:prosoponomikon_firstname_change' name.id %}" target="_blank"
-                                       style="color:{{ name.auxiliary_group.color }};"
-                                          data-toggle="tooltip" data-placement="right" data-html="true"
-                                          title='
-                                            <span class="font-italic">
-                                                {% if name.auxiliary_group %}
-                                                    {{ name.auxiliary_group }}
-                                                {% else %}
-                                                    -
-                                                {% endif %}
-                                                {% if name.info %}
-                                                    <br>{{ name.info|linebreaks }}
-                                                {% endif %}
-                                            </span>'>
-                                        <span class="{% if name.is_ancient %} font-italic {% endif %}">
-                                            {{ name }}
-                                        </span>
+            <div class="border-top">
+                {% for name in affix_group.first_names.all %}
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-10">
+                                <ul class="bullets-1 mb-1">
+                                    <li class="pl-1">
+                                        <a href="{% url 'admin:prosoponomikon_firstname_change' name.id %}" target="_blank"
+                                           style="color:{{ name.auxiliary_group.color }};"
+                                              data-toggle="tooltip" data-placement="right" data-html="true"
+                                              title='
+                                                <span class="font-italic">
+                                                    {% if name.auxiliary_group %}
+                                                        {{ name.auxiliary_group }}
+                                                    {% else %}
+                                                        -
+                                                    {% endif %}
+                                                    {% if name.info %}
+                                                        <br>{{ name.info|linebreaks }}
+                                                    {% endif %}
+                                                </span>'>
+                                            <span class="{% if name.is_ancient %} font-italic {% endif %}">
+                                                {{ name }}
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-2 px-0">
+                                {% for character in name.characters.all %}
+                                    <a href="{% url 'prosoponomikon:character' character.id %}">
+                                        <div class="d-inline float-right ml-1" data-toggle="tooltip" data-placement="left" data-html="true"
+                                            title='
+                                                <span class="font-italic">
+                                                    <img class="article-img rounded-circle" src="{{ character.profile.image.url }}">
+                                                    <br>
+                                                    {{ character.profile }}
+                                                </span>'>
+                                           <img class="rounded-circle img-smaller" src="{{ character.profile.image.url }}">
+                                        </div>
                                     </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-2 px-0">
-                            {% for character in name.characters.all %}
-                                <a href="{% url 'prosoponomikon:character' character.id %}">
-                                    <div class="d-inline float-right ml-1" data-toggle="tooltip" data-placement="left" data-html="true"
-                                        title='
-                                            <span class="font-italic">
-                                                <img class="article-img rounded-circle" src="{{ character.profile.image.url }}">
-                                                <br>
-                                                {{ character.profile }}
-                                            </span>'>
-                                       <img class="rounded-circle img-smaller" src="{{ character.profile.image.url }}">
-                                    </div>
-                                </a>
-                            {% endfor %}
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
     {% endif %}
 {% endfor %}
