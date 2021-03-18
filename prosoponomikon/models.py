@@ -130,7 +130,7 @@ class FirstName(Model):
 
 
 class FamilyName(Model):
-    form = CharField(max_length=250)
+    form = CharField(max_length=250, unique=True)
     locations = M2M(to=Location, related_name="family_names", blank=True)
     
     class Meta:

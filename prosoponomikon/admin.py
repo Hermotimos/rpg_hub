@@ -59,8 +59,9 @@ class FamilyNameAdminForm(forms.ModelForm):
 
 class FamilyNameAdmin(admin.ModelAdmin):
     form = FamilyNameAdminForm
-    list_display = ['id', 'form', 'locs']
+    list_display = ['id', 'locs', 'form']
     list_editable = ['form']
+    ordering = ['locations', 'form']
     
     def get_queryset(self, request):
         qs = super().get_queryset(request)
