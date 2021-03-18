@@ -1,8 +1,8 @@
 
 
-<h5 class="border-bottom text-center">
+<h2 class=" text-center font-weight-bold">
     {{ type_name }}
-</h5>
+</h2>
 {% for affix_group in name_group.affix_groups.all %}
     {% if affix_group.type|lower == type|lower %}
         <div>

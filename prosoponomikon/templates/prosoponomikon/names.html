@@ -9,7 +9,7 @@
 {% block content %}
     <article class="top-button">
         
-        <div class="mb-5">
+        <div class="mb-2">
             <a class="btn btn-outline-dark mb-1" href="{% url 'admin:prosoponomikon_firstname_changelist' %}" target="_blank">Imiona</a>
             <a class="btn btn-outline-dark mb-1" href="{% url 'admin:prosoponomikon_firstname_add' %}" target="_blank"><b>+</b></a>
             <a class="btn btn-outline-dark mb-1" href="{% url 'admin:prosoponomikon_familyname_changelist' %}" target="_blank">Nazwiska</a>
@@ -51,12 +51,12 @@
                 <div class="container mb-5">
                     <div class="row px-1">
                         <div class="col-md-6 p-0 pr-md-3">
-                            {% with type='male' type_name='Mężczyźni' %}
+                            {% with type='male' type_name='♂' %}
                                 {% include 'prosoponomikon/_names_filtered_by_type.html' %}
                             {% endwith %}
                         </div>
                         <div class="col-md-6 p-0 pl-md-3">
-                            {% with type='female' type_name='Kobiety' %}
+                            {% with type='female' type_name='♀' %}
                                 {% include 'prosoponomikon/_names_filtered_by_type.html' %}
                             {% endwith %}
                         </div>
