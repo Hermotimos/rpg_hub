@@ -5,11 +5,13 @@
 </h2>
 {% for affix_group in name_group.affix_groups.all %}
     {% if affix_group.type|lower == type|lower %}
-        <div>
+        <div class="container">
+            <div class="row border-bottom">
             <a class="font-weight-bold" href="{% url 'admin:prosoponomikon_affixgroup_change' affix_group.id %}" target="_blank">
-                {{ affix_group.affix }}
+               {{ affix_group.affix }}
             </a>
-            <div class="border-top">
+                </div>
+            <div class="row mt-1 mb-2">
                 {% for name in affix_group.first_names.all %}
                     <div class="container">
                         <div class="row">
