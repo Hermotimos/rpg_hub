@@ -22,30 +22,20 @@
             <a class="btn btn-outline-secondary mb-1" href="{% url 'admin:prosoponomikon_auxiliarynamegroup_add' %}" target="_blank"><b>+</b></a>
             <a class="btn btn-outline-success mb-1" href="https://www.w3schools.com/colors/colors_picker.asp" target="_blank">ColorPicker</a>
         </div>
-        <div class="mb-2">
-            {% for name_group in name_groups %}
-                {% if name_group.type == 'local' %}
+        
+        {% regroup name_groups|dictsort:"type" by type as type_list %}
+        {% for type in type_list %}
+            <div class="text-center mb-2">
+                 {% for name_group in type.list %}
                     <a class="smaller text-muted" href="#name_group_{{ name_group.id }}">
                         <span class="mb-1">
                             {{ name_group.title }}
                         </span>
                     </a>
                     {% if not forloop.last %} <span class="h5">❃</span> {% endif %}
-                {% endif %}
-            {% endfor %}
-        </div>
-        <div>
-            {% for name_group in name_groups %}
-                {% if name_group.type == 'social' %}
-                    <a class="smaller text-muted" href="#name_group_{{ name_group.id }}">
-                        <span class="mb-1">
-                            {{ name_group.title }}
-                        </span>
-                    </a>
-                    {% if not forloop.last %} <span class="h5">❃</span> {% endif %}
-                {% endif %}
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
         
         <div class="mt-5">
             {% for name_group in name_groups %}
