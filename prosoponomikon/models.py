@@ -25,7 +25,13 @@ from users.models import Profile
 
 
 class NameGroup(Model):
+    NAME_GROUP_TYPES = (
+        ('local', 'local'),
+        ('racial', 'racial'),
+        ('social', 'social'),
+    )
     title = CharField(max_length=250, unique=True)
+    type = CharField(max_length=50, choices=NAME_GROUP_TYPES)
     description = TextField(blank=True, null=True)
 
     class Meta:
@@ -111,6 +117,7 @@ class FirstName(Model):
     objects = FirstNameManager()
     
     form = CharField(max_length=250, unique=True)
+    form_2 = CharField(max_length=250, blank=True, null=True)
     info = TextField(blank=True, null=True)
     is_ancient = BooleanField(default=False)
     # FK fields nullable to allow creation of Character via registration form

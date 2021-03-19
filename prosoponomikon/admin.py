@@ -6,20 +6,24 @@ from django.forms import Textarea, TextInput
 from django.utils.html import format_html
 
 from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, \
-    CharacterGroup, FirstName, NameGroup, FamilyName, AffixGroup, AuxiliaryNameGroup
+    CharacterGroup, FirstName, NameGroup, FamilyName, AffixGroup, \
+    AuxiliaryNameGroup
 
 
 class FirstNameAdmin(admin.ModelAdmin):
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 40})},
+        CharField: {'widget': TextInput(attrs={'size': 20})},
     }
     list_display = [
-        'id', 'form', 'is_ancient', 'info', 'affix_group', 'auxiliary_group']
+        'id', 'form', 'form_2', 'is_ancient', 'info', 'affix_group',
+        'auxiliary_group']
     list_editable = [
-        'form', 'is_ancient', 'info', 'affix_group', 'auxiliary_group']
+        'form', 'form_2', 'is_ancient', 'info', 'affix_group',
+        'auxiliary_group']
     list_filter = ['auxiliary_group', 'is_ancient']
     ordering = ['form']
-    search_fields = ['form']
+    search_fields = ['form', 'form_2']
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         request = kwargs['request']
@@ -73,8 +77,8 @@ class FamilyNameAdmin(admin.ModelAdmin):
 
 
 class NameGroupAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'description']
-    list_editable = ['title', 'description']
+    list_display = ['id', 'title', 'type', 'description']
+    list_editable = ['title', 'type', 'description']
 
 
 class AffixGroupAdmin(admin.ModelAdmin):
