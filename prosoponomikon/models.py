@@ -140,8 +140,6 @@ class FirstName(Model):
 class FamilyName(Model):
     form = CharField(max_length=250, unique=True)
     locations = M2M(to=Location, related_name="family_names", blank=True)
-    auxiliary_group = FK(
-        to=AuxiliaryNameGroup, on_delete=PROTECT, blank=True, null=True)
 
     class Meta:
         ordering = ['form']
