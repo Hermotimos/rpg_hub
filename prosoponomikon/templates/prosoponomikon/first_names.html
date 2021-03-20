@@ -23,8 +23,8 @@
             <a class="btn btn-outline-success mb-1" href="https://www.w3schools.com/colors/colors_picker.asp" target="_blank">ColorPicker</a>
         </div>
         
-        {% regroup family_names|dictsort:"auxiliary_group" by auxiliary_group as auxiliary_group_list %}
-        {% for type in auxiliary_group_list %}
+        {% regroup name_groups|dictsort:"type" by type as type_list %}
+        {% for type in type_list %}
             <div class="text-center mb-2">
                  {% for name_group in type.list %}
                     <a class="smaller text-muted" href="#name_group_{{ name_group.id }}">
