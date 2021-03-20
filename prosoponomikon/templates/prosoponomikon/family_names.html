@@ -31,6 +31,7 @@
    
         <div class="mt-5">
             {% for group in group_list %}
+            
                 <div class="anchor mt-n5" id="family_name_group_{{ group.grouper.id }}">
                     <p class="mb-0 text-center">✧</p>
                     <p class="mb-0 text-center">✧ ✦ ✧</p>
@@ -42,13 +43,14 @@
                     <p class="mb-0 text-center">✧ ✦ ✧</p>
                     <p class="mt-0 text-center">✧</p>
                 </div>
+            
                 <div class="container mb-5">
                     <div class="row px-1">
+                        
                         {% for family_name in group.list %}
                             <div class="col-md-6 p-0 {% if forloop.counter|divisibleby:'2' %} pl-md-3 {% else %} pr-md-3 {% endif %}">
                                 <div class="container">
                                     <div class="row">
-                                        
                                         <div class="col-10">
                                             <ul class="bullets-1 mb-1">
                                                 <li class="pl-1">
@@ -58,12 +60,10 @@
                                                     {% with locations=family_name.locations.all %}
                                                         <div class="font-12 text-muted">{{ locations|join:' | ' }}</div>
                                                     {% endwith %}
-
                                                 </li>
                                             </ul>
                                         </div>
-                                         
-                                         <div class="col-2 px-0">
+                                        <div class="col-2 px-0">
                                             {% for character in family_name.characters.all %}
                                                 <a href="{% url 'prosoponomikon:character' character.id %}">
                                                     <div class="d-inline float-right ml-1" data-toggle="tooltip" data-placement="left" data-html="true"
@@ -78,13 +78,14 @@
                                                 </a>
                                             {% endfor %}
                                         </div>
-                                        
                                     </div>
                                 </div>
                             </div>
                         {% endfor %}
+                        
                     </div>
                 </div>
+            
             {% endfor %}
         </div>
 
