@@ -44,6 +44,7 @@ class NameGroup(Model):
 NAME_TYPES = (
     ('MALE', 'MALE'),
     ('FEMALE', 'FEMALE'),
+    ('UNISEX', 'UNISEX'),
 )
 
 
