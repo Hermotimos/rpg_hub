@@ -262,8 +262,9 @@ def prosoponomikon_first_names_view(request):
 @login_required
 def prosoponomikon_family_names_view(request):
     profile = request.user.profile
-    family_names = FamilyName.objects.select_related(
-        'auxiliary_group__location')
+    family_names = FamilyName.objects.select_related('group')
+    family_names = family_names.prefetch_related(
+        'characters__profile', 'locations')
 
     context = {
         'page_title': "Nazwiska",

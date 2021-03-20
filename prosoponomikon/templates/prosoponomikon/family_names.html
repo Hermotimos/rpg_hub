@@ -17,60 +17,78 @@
             <a class="btn btn-outline-success mb-1" href="https://www.w3schools.com/colors/colors_picker.asp" target="_blank">ColorPicker</a>
         </div>
         
-        {% regroup name_groups|dictsort:"type" by type as type_list %}
-        {% for type in type_list %}
-            <div class="text-center mb-2">
-                 {% for name_group in type.list %}
-                    <a class="smaller text-muted" href="#name_group_{{ name_group.id }}">
-                        <span class="mb-1">
-                            {{ name_group.title }}
-                        </span>
-                    </a>
-                    {% if not forloop.last %} <span class="h5">❃</span> {% endif %}
-                {% endfor %}
-            </div>
-        {% endfor %}
-        
-        <div class="mt-5">
-            {% for type in type_list %}
-                {% for name_group in type.list %}
-                    <div class="anchor mt-n5" id="name_group_{{ name_group.id }}">
-                        <p class="mb-0 text-center">✧</p>
-                        <p class="mb-0 text-center">✧ ✦ ✧</p>
-                        <p class="h3 text-center mb-2 mt-1">
-                            <a href="{% url 'admin:prosoponomikon_namegroup_change' name_group.id %}" target="_blank"
-                                data-toggle="tooltip" data-placement="bottom" data-html="true"
-                                title='{% if name_group.description %}<span class="font-italic">{{ name_group.description }}</span>{% endif %}'>
-                                {{ name_group.title }}
-                            </a>
-                        </p>
-                        <p class="mb-0 text-center">✧ ✦ ✧</p>
-                        <p class="mt-0 text-center">✧</p>
-                    </div>
-                    <div class="container mb-5">
-                        <div class="row px-1">
-                            {% with affix_groups=name_group.affix_groups.all %}
-                                {% regroup affix_groups|dictsortreversed:"type" by type as type_list %}
-                                {% for type in type_list %}
-                                    <div class="col-md-6 p-0 {% if forloop.counter|divisibleby:'2' %} pl-md-3 {% else %} pr-md-3 {% endif %}">
-                                        <h2 class="text-center font-weight-bold">
-                                            {% if type.grouper|lower == 'male' %}
-                                                ♂
-                                            {% elif type.grouper|lower == 'female' %}
-                                                ♀
-                                            {% else %}
-                                                ⚥
-                                            {% endif %}
-                                        </h2>
-                                        {% include 'prosoponomikon/_names_filtered_by_type.html' %}
-                                    </div>
-                                {% endfor %}
-                            {% endwith %}
-                        </div>
-                    </div>
-                {% endfor %}
+        {% regroup family_names by group as group_list %}
+        <div class="text-center mb-2">
+             {% for group in group_list %}
+                <a class="smaller text-muted" href="#family_name_group_{{ group.grouper.id }}">
+                    <span class="mb-1">
+                        {{ group.grouper.title }}
+                    </span>
+                </a>
+                {% if not forloop.last %} <span class="h5">❃</span> {% endif %}
             {% endfor %}
         </div>
+   
+        <div class="mt-5">
+            {% for group in group_list %}
+                <div class="anchor mt-n5" id="family_name_group_{{ group.grouper.id }}">
+                    <p class="mb-0 text-center">✧</p>
+                    <p class="mb-0 text-center">✧ ✦ ✧</p>
+                    <p class="h3 text-center mb-2 mt-1">
+                        <a href="{% url 'admin:prosoponomikon_familynamegroup_change' group.grouper.id %}" target="_blank">
+                            {{ group.grouper.title }}
+                        </a>
+                    </p>
+                    <p class="mb-0 text-center">✧ ✦ ✧</p>
+                    <p class="mt-0 text-center">✧</p>
+                </div>
+                <div class="container mb-5">
+                    <div class="row px-1">
+                        {% for family_name in group.list %}
+                            <div class="col-md-6 p-0 {% if forloop.counter|divisibleby:'2' %} pl-md-3 {% else %} pr-md-3 {% endif %}">
+                                <div class="container">
+                                    <div class="row">
+                                        
+                                        <div class="col-10">
+                                            <ul class="bullets-1 mb-1">
+                                                <li class="pl-1">
+                                                    <a href="{% url 'admin:prosoponomikon_familyname_change' family_name.id %}" target="_blank">
+                                                        <span>{{ family_name }}</span>
+                                                    </a>
+                                                    {% with locations=family_name.locations.all %}
+                                                        <div class="font-12 text-muted">{{ locations|join:' | ' }}</div>
+                                                    {% endwith %}
+
+                                                </li>
+                                            </ul>
+                                        </div>
+                                         
+                                         <div class="col-2 px-0">
+                                            {% for character in family_name.characters.all %}
+                                                <a href="{% url 'prosoponomikon:character' character.id %}">
+                                                    <div class="d-inline float-right ml-1" data-toggle="tooltip" data-placement="left" data-html="true"
+                                                        title='
+                                                            <span class="font-italic">
+                                                                <img class="article-img rounded-circle" src="{{ character.profile.image.url }}">
+                                                                <br>
+                                                                {{ character.profile }}
+                                                            </span>'>
+                                                       <img class="rounded-circle img-smaller" src="{{ character.profile.image.url }}">
+                                                    </div>
+                                                </a>
+                                            {% endfor %}
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        
         
     </article>
 {% endblock content %}
