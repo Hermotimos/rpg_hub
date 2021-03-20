@@ -54,16 +54,21 @@
                 </div>
                 <div class="container mb-5">
                     <div class="row px-1">
-                        <div class="col-md-6 p-0 pr-md-3">
-                            {% with type='male' type_name='♂' %}
-                                {% include 'prosoponomikon/_names_filtered_by_type.html' %}
-                            {% endwith %}
-                        </div>
-                        <div class="col-md-6 p-0 pl-md-3">
-                            {% with type='female' type_name='♀' %}
-                                {% include 'prosoponomikon/_names_filtered_by_type.html' %}
-                            {% endwith %}
-                        </div>
+                        {% with affix_groups=name_group.affix_groups.all %}
+                            {% regroup affix_groups|dictsortreversed:"type" by type as type_list %}
+                            {% for type in type_list %}
+                                <div class="col-md-6 p-0 {% if forloop.counter|divisibleby:'2' %} pl-md-3 {% else %} pr-md-3 {% endif %}">
+                                    <h2 class="text-center font-weight-bold">
+                                        {% if type.grouper|lower == 'male' %}
+                                            ♂
+                                        {% elif type.grouper|lower == 'female' %}
+                                            ♀
+                                        {% endif %}
+                                    </h2>
+                                    {% include 'prosoponomikon/_names_filtered_by_type.html' %}
+                                </div>
+                            {% endfor %}
+                        {% endwith %}
                     </div>
                 </div>
             {% endfor %}
