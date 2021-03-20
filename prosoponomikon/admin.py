@@ -7,7 +7,7 @@ from django.utils.html import format_html
 
 from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, \
     CharacterGroup, FirstName, NameGroup, FamilyName, AffixGroup, \
-    AuxiliaryNameGroup
+    AuxiliaryNameGroup, FamilyNameGroup
 
 
 class FirstNameAdmin(admin.ModelAdmin):
@@ -53,7 +53,7 @@ class FirstNameInline(admin.TabularInline):
 class FamilyNameAdminForm(forms.ModelForm):
     class Meta:
         model = FamilyName
-        fields = ['form', 'locations']
+        fields = ['form', 'locations', 'group']
         widgets = {
             'locations': FilteredSelectMultiple(
                 'Locations', False, attrs={'style': 'height:400px'}
@@ -63,10 +63,25 @@ class FamilyNameAdminForm(forms.ModelForm):
 
 class FamilyNameAdmin(admin.ModelAdmin):
     form = FamilyNameAdminForm
-    list_display = ['id', 'locs', 'form']
-    list_editable = ['form']
-    ordering = ['locations', 'form']
+    list_display = ['id', 'group', 'form', 'locs']
+    list_editable = ['group', 'form']
+    ordering = ['group', 'form']
     
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        request = kwargs['request']
+        formfield = super().formfield_for_dbfield(db_field, **kwargs)
+        fields = [
+            'group',
+        ]
+        for field in fields:
+            if db_field.name == field:
+                choices = getattr(request, f'_{field}_choices_cache', None)
+                if choices is None:
+                    choices = list(formfield.choices)
+                    setattr(request, f'_{field}_choices_cache', choices)
+                formfield.choices = choices
+        return formfield
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         qs = qs.prefetch_related('locations')
@@ -79,6 +94,11 @@ class FamilyNameAdmin(admin.ModelAdmin):
 class NameGroupAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'type', 'description']
     list_editable = ['title', 'type', 'description']
+
+
+class FamilyNameGroupAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title', 'description']
+    list_editable = ['title', 'description']
 
 
 class AffixGroupAdmin(admin.ModelAdmin):
@@ -168,6 +188,7 @@ admin.site.register(NameGroup, NameGroupAdmin)
 admin.site.register(AffixGroup, AffixGroupAdmin)
 admin.site.register(AuxiliaryNameGroup, AuxiliaryNameGroupAdmin)
 admin.site.register(FirstName, FirstNameAdmin)
+admin.site.register(FamilyNameGroup, FamilyNameGroupAdmin)
 admin.site.register(FamilyName, FamilyNameAdmin)
 admin.site.register(CharacterGroup)
 admin.site.register(Character, CharacterAdmin)
