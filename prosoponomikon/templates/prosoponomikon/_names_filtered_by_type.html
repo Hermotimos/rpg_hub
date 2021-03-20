@@ -34,8 +34,12 @@
                                                 </span>'>
                                             <span class="{% if name.is_ancient %} font-italic small-caps {% endif %}">
                                                 {{ name }}
-                                                {% if name.form_2 %}({{ name.form_2 }}){% endif %}
                                             </span>
+                                            {% if name.form_2 %}
+                                                <span class="text-muted-more">
+                                                    ({{ name.form_2 }})
+                                                </span>
+                                            {% endif %}
                                             
                                         </a>
                                     </li>

@@ -160,18 +160,11 @@ small.smaller {font-size: 12px;}
     .sm-nowrap {white-space: nowrap;}
 }
 
+.text-muted-more {color: #bfbfbf;}
 
 
-/* This is for {{ some_text|linebreaksbr }} where <br><br> is rendered because
-in the text I use empty line for visual separations of paragraphs, and these is
-rendered as <br><br> making too much of a gap on page.
 
-br + br {
-  display: block;
-  margin-top: 0.4rem;
-}
 
-*/
 
 /*****************************************************************************/
 /********************************* IMAGES ***********************************/
