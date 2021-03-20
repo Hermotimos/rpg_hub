@@ -19,7 +19,10 @@ urlpatterns = [
     path('character/<int:character_id>/bio-packet-form/<int:bio_packet_id>/',
          views.prosoponomikon_bio_packet_form_view, name='bio-packet-form'),
     
-    path('names/', views.prosoponomikon_names_view, name='names'),
+    path('first-names/', views.prosoponomikon_first_names_view,
+         name='first-names'),
+    path('family-names/', views.prosoponomikon_family_names_view,
+         name='family-names'),
     path('character-create/',  views.prosoponomikon_character_create_form_view,
          name='character-create'),
 

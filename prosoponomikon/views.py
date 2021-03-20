@@ -8,12 +8,13 @@ from imaginarion.models import Picture, PictureImage
 from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
 from prosoponomikon.forms import CharacterManyGroupsEditFormSet, \
-    CharacterGroupsEditFormSetHelper, CharacterGroupCreateForm, CharacterCreateForm
-from prosoponomikon.models import Character, CharacterGroup, NameGroup
-from rpg_project.utils import handle_inform_form
-from toponomikon.models import Location
-from users.models import Profile, User
+    CharacterGroupsEditFormSetHelper, CharacterGroupCreateForm, \
+    CharacterCreateForm
+from prosoponomikon.models import Character, CharacterGroup, NameGroup, \
+    FamilyName
 from rpg_project.settings import get_secret
+from rpg_project.utils import handle_inform_form
+from users.models import Profile, User
 
 
 @login_required
@@ -241,8 +242,7 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
 
 
 @login_required
-def prosoponomikon_names_view(request):
-    """Collect all locations used as name-areas."""
+def prosoponomikon_first_names_view(request):
     profile = request.user.profile
     name_groups = NameGroup.objects.prefetch_related(
         'affix_groups__first_names__characters__profile',
@@ -254,7 +254,23 @@ def prosoponomikon_names_view(request):
         'name_groups': name_groups,
     }
     if profile.status == 'gm':
-        return render(request, 'prosoponomikon/names.html', context)
+        return render(request, 'prosoponomikon/first_names.html', context)
+    else:
+        return redirect('home:dupa')
+
+
+@login_required
+def prosoponomikon_family_names_view(request):
+    profile = request.user.profile
+    family_names = FamilyName.objects.select_related(
+        'auxiliary_group__location')
+
+    context = {
+        'page_title': "Nazwiska",
+        'family_names': family_names,
+    }
+    if profile.status == 'gm':
+        return render(request, 'prosoponomikon/family_names.html', context)
     else:
         return redirect('home:dupa')
 

@@ -31,11 +31,14 @@
                 <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#world"><h6 class="mb-0">Świat</h6></li>
                 <li id="world" class="list-group collapse">
                     <div>
-                        <a class="list-group-item list-group-item-light mb-0" href="{% url 'prosoponomikon:names' %}" target="_blank" rel="noopener noreferrer">
+                        <a class="list-group-item list-group-item-light mb-0" href="{% url 'prosoponomikon:first-names' %}" target="_blank" rel="noopener noreferrer">
                             <small>Imiona</small>
                         </a>
+                        <a class="list-group-item list-group-item-light mb-0" href="{% url 'prosoponomikon:family-names' %}" target="_blank" rel="noopener noreferrer">
+                            <small>Nazwiska</small>
+                        </a>
                         <a class="list-group-item list-group-item-light mb-0" href="{% url 'prosoponomikon:character-create' %}" target="_blank" rel="noopener noreferrer">
-                            <small>+Postać</small>
+                            <small>+ Postać</small>
                         </a>
                     </div>
                 </li>
