@@ -3,7 +3,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Div, Field, Submit
 from django import forms
 
-from prosoponomikon.models import CharacterGroup, Character
+from prosoponomikon.models import CharacterGroup, Character, FirstName
 
 CharacterManyGroupsEditFormSet = forms.modelformset_factory(
     model=CharacterGroup,
@@ -129,6 +129,7 @@ class CharacterCreateForm(forms.ModelForm):
         self.fields = {
             f_name: self.fields[f_name] for f_name in custom_order
         }
+        self.fields['first_name'].queryset = FirstName.objects.order_by('form')
         self.fields['frequented_locations'].widget.attrs['size'] = 12
         self.fields['known_directly'].widget.attrs['size'] = 10
         self.fields['known_indirectly'].widget.attrs['size'] = 10
