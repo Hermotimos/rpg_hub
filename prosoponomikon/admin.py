@@ -148,7 +148,8 @@ class CharacterAdmin(admin.ModelAdmin):
     list_display = [
         'get_img', 'first_name', 'family_name', 'cognomen', 'description']
     list_editable = ['first_name', 'family_name', 'cognomen', 'description']
-    search_fields = ['first_name', 'family_name', 'cognomen', 'description']
+    search_fields = [
+        'first_name__form', 'family_name__form', 'cognomen', 'description']
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 4, 'cols': 50})},
         CharField: {'widget': TextInput(attrs={'size': 25})},
