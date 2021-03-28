@@ -12,6 +12,31 @@ from rules.models import Skill
 from toponomikon.models import Location
 
 
+class BiographyPacketAdminForm(forms.ModelForm):
+    class Meta:
+        model = BiographyPacket
+        fields = [
+            'title', 'text', 'author', 'acquired_by', 'pictures', 'order_no']
+        widgets = {
+            'acquired_by': FilteredSelectMultiple('Acquired by', False),
+            'pictures': FilteredSelectMultiple('Pictures', False),
+        }
+
+
+class BiographyPacketAdmin(admin.ModelAdmin):
+    form = BiographyPacketAdminForm
+    list_display = ['id', 'title', 'text', 'author']
+    list_editable = ['title', 'text']
+    search_fields = ['title', 'text']
+    list_select_related = ['author']
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.select_related('author')
+        qs = qs.prefetch_related('acquired_by__user', 'pictures')
+        return qs
+
+
 class KnowledgePacketAdminForm(forms.ModelForm):
     pictures = forms.ModelMultipleChoiceField(
         queryset=Picture.objects.all(),
@@ -197,6 +222,6 @@ class MapPacketAdmin(admin.ModelAdmin):
 
 
 admin.site.register(DialoguePacket)
-admin.site.register(BiographyPacket)
+admin.site.register(BiographyPacket, BiographyPacketAdmin)
 admin.site.register(KnowledgePacket, KnowledgePacketAdmin)
 admin.site.register(MapPacket, MapPacketAdmin)
