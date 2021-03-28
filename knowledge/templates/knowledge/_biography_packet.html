@@ -39,11 +39,15 @@
             </div>
             
             <!-- TEXT -->
-            <div class="col-12 col-sm-11 mt-2 p-0 pl-sm-3 pl-lg-0">
-                <p class="font-italic text-justify linebreaks-style font-18">
-                    {{ biography_packet.text|custom_linebreaksbr:2 }}
-                </p>
-            </div>
+            <!-- If not text, Pictures should be dragged into the same row as buttons -->
+            {% if biography_packet.text %}
+                <div class="col-12 col-sm-11 mt-2 p-0 pl-sm-3 pl-lg-0">
+                    <p class="font-italic text-justify linebreaks-style font-18">
+                        {{ biography_packet.text|custom_linebreaksbr:2 }}
+                    </p>
+                </div>
+                <div class="col-12 col-sm-1 p-0"></div>
+            {% endif %}
             
             <!-- Pictures in BiographyPacket should be visible to the author and GM exclusively -->
             {% if request.user.profile.status == 'gm' or request.user.profile == biography_packet.author %}
