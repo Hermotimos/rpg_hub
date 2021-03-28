@@ -50,7 +50,7 @@
             {% endif %}
             
             <!-- Pictures in BiographyPacket should be visible to the author and GM exclusively -->
-            {% if request.user.profile.status == 'gm' or request.user.profile == biography_packet.author %}
+            {% if request.user.profile.status == 'gm' or request.user.profile == biography_packet.author or request.user.profile in biography_packet.acquired_by.all %}
                 <div class="col-12 col-sm-11 p-0 mt-n4 pl-sm-3 pl-lg-0">
                     {% for row in biography_packet.pictures.all|columns:3 %}
                         {% include '_row_of_pics_with_modals.html' %}
