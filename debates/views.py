@@ -155,11 +155,15 @@ def debate_view(request, debate_id):
                                 authenticated_user=request.user,
                                 debate_id=debate_id)
 
+    informables = debate.informables().filter(
+        character__in=profile.characters_known_directly.all())
+    
     context = {
         'page_title': debate.name,
         'topic': topic,
         'debate': debate,
         'debate_known_directly': debate_known_directly,
         'form': form,
+        'informables': informables,
     }
     return render(request, 'debates/debate.html', context)
