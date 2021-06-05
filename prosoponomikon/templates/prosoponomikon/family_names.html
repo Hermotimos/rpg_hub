@@ -51,7 +51,7 @@
                             <div class="col-md-6 p-0 {% if forloop.counter|divisibleby:'2' %} pl-md-3 {% else %} pr-md-3 {% endif %}">
                                 <div class="container">
                                     <div class="row">
-                                        <div class="col-10">
+                                        <div class="col">
                                             <ul class="bullets-1 mb-1">
                                                 <li class="pl-1">
                                                     <a href="{% url 'admin:prosoponomikon_familyname_change' family_name.id %}" target="_blank">
@@ -63,7 +63,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="col-2 px-0">
+                                        <div class="col px-0">
                                             {% for character in family_name.characters.all %}
                                                 <a href="{% url 'prosoponomikon:character' character.id %}">
                                                     <div class="d-inline float-right ml-1" data-toggle="tooltip" data-placement="left" data-html="true"
