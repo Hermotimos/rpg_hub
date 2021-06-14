@@ -14,6 +14,7 @@ from toponomikon.models import Location
 
 class DialoguePacketAdmin(admin.ModelAdmin):
     formfield_overrides = {
+        CharField: {'widget': TextInput(attrs={'size': 50})},
         TextField: {'widget': Textarea(attrs={'rows': 5, 'cols': 100})},
     }
     list_display = ['id', 'title', 'text']
