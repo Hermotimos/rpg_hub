@@ -12,6 +12,12 @@ from rules.models import Skill
 from toponomikon.models import Location
 
 
+class DialoguePacketAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title', 'text']
+    list_editable = ['title', 'text']
+    search_fields = ['title']
+
+
 class BiographyPacketAdminForm(forms.ModelForm):
     class Meta:
         model = BiographyPacket
@@ -221,7 +227,7 @@ class MapPacketAdmin(admin.ModelAdmin):
         return qs
 
 
-admin.site.register(DialoguePacket)
+admin.site.register(DialoguePacket, DialoguePacketAdmin)
 admin.site.register(BiographyPacket, BiographyPacketAdmin)
 admin.site.register(KnowledgePacket, KnowledgePacketAdmin)
 admin.site.register(MapPacket, MapPacketAdmin)
