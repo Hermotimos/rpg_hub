@@ -1,8 +1,8 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.db.models import Q, CharField
-from django.forms.widgets import TextInput
+from django.db.models import Q, CharField, TextField
+from django.forms.widgets import TextInput, Textarea
 from django.utils.html import format_html
 
 from imaginarion.models import Picture
@@ -13,6 +13,9 @@ from toponomikon.models import Location
 
 
 class DialoguePacketAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        TextField: {'widget': Textarea(attrs={'rows': 5, 'cols': 100})},
+    }
     list_display = ['id', 'title', 'text']
     list_editable = ['title', 'text']
     search_fields = ['title']
