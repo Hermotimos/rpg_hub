@@ -26,6 +26,10 @@ class InfoPacket(Model):
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        self.sorting_name = create_sorting_name(self.__str__())
+        super().save(*args, **kwargs)
+        
 
 class DialoguePacket(InfoPacket):
     """A class for per-Persona dialogue notes for Game Master."""
@@ -47,9 +51,9 @@ class BiographyPacket(InfoPacket):
     class Meta:
         ordering = ['order_no', 'sorting_name']
 
-    def save(self, *args, **kwargs):
-        self.sorting_name = create_sorting_name(self.__str__())
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     self.sorting_name = create_sorting_name(self.__str__())
+    #     super().save(*args, **kwargs)
     
     def informables(self):
         qs = Profile.active_players.all()
@@ -80,9 +84,9 @@ class KnowledgePacket(InfoPacket):
         verbose_name='Umiejętności powiązane',
     )
 
-    def save(self, *args, **kwargs):
-        self.sorting_name = create_sorting_name(self.__str__())
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     self.sorting_name = create_sorting_name(self.__str__())
+    #     super().save(*args, **kwargs)
     
     def informables(self):
         qs = Profile.active_players.all()
@@ -98,7 +102,7 @@ class MapPacket(InfoPacket):
         verbose_name='Obrazy',
     )
 
-    def save(self, *args, **kwargs):
-        self.sorting_name = create_sorting_name(self.__str__())
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     self.sorting_name = create_sorting_name(self.__str__())
+    #     super().save(*args, **kwargs)
 
