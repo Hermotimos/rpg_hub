@@ -213,6 +213,9 @@ def pictureset_pictures_in_custom_order(picture_set):
     pics_sorted = sorted(pics, key=lambda pic: get_dimensions_ratio(pic.image.image))
     
     # sort pictures according to custom cases considering WIDTH:HEIGHT ratio:
+    if len(pics) == 2:
+        # Put the wider pic on the left
+        return [pics_sorted[1], pics_sorted[0]]
     if len(pics) == 3:
         # Put the widest pic in the middle
         return [pics_sorted[0], pics_sorted[2], pics_sorted[1]]
