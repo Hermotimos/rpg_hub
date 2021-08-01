@@ -53,7 +53,7 @@ class FirstNameInline(admin.TabularInline):
 class FamilyNameAdminForm(forms.ModelForm):
     class Meta:
         model = FamilyName
-        fields = ['form', 'locations', 'group']
+        fields = ['form', 'info', 'locations', 'group']
         widgets = {
             'locations': FilteredSelectMultiple(
                 'Locations', False, attrs={'style': 'height:400px'}

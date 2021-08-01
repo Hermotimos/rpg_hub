@@ -54,7 +54,9 @@
                                         <div class="col">
                                             <ul class="bullets-1 mb-1">
                                                 <li class="pl-1">
-                                                    <a href="{% url 'admin:prosoponomikon_familyname_change' family_name.id %}" target="_blank">
+                                                    <a href="{% url 'admin:prosoponomikon_familyname_change' family_name.id %}" target="_blank"
+                                                        data-toggle="tooltip" data-placement="right" data-html="true"
+                                                        title='{% if family_name.info %} {{ family_name.info }} {% endif %}'>
                                                         <span>{{ family_name }}</span>
                                                     </a>
                                                     {% with locations=family_name.locations.all %}
