@@ -54,10 +54,16 @@
                                         <div class="col">
                                             <ul class="bullets-1 mb-1">
                                                 <li class="pl-1">
-                                                    <a href="{% url 'admin:prosoponomikon_familyname_change' family_name.id %}" target="_blank"
-                                                        data-toggle="tooltip" data-placement="right" data-html="true"
-                                                        title='{% if family_name.info %} {{ family_name.info }} {% endif %}'>
-                                                        <span>{{ family_name }}</span>
+                                                    <a href="{% url 'admin:prosoponomikon_familyname_change' family_name.id %}" target="_blank">
+                                                        <span>
+                                                            {{ family_name }}
+                                                            {% if family_name.info %}
+                                                                <span data-toggle="tooltip" data-placement="top" data-html="true"
+                                                                      title='<span class="font-italic">{{ family_name.info }}</span>'>
+                                                                    &#9432;
+                                                                </span>
+                                                            {% endif %}
+                                                        </span>
                                                     </a>
                                                     {% with locations=family_name.locations.all %}
                                                         <div class="font-12 text-muted">{{ locations|join:' | ' }}</div>

@@ -63,8 +63,8 @@ class FamilyNameAdminForm(forms.ModelForm):
 
 class FamilyNameAdmin(admin.ModelAdmin):
     form = FamilyNameAdminForm
-    list_display = ['id', 'group', 'form', 'locs']
-    list_editable = ['group', 'form']
+    list_display = ['id', 'group', 'form', 'info', 'locs']
+    list_editable = ['group', 'form', 'info']
     ordering = ['group', 'form']
     
     def formfield_for_dbfield(self, db_field, **kwargs):
@@ -84,7 +84,7 @@ class FamilyNameAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        qs = qs.prefetch_related('locations')
+        qs = qs.prefetch_related('locations', 'group')
         return qs
 
     def locs(self, obj):
