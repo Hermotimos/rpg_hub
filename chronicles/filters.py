@@ -32,10 +32,9 @@ def locations(request):
 
 def participants(request):
     profile = request.user.profile
-    # objects = Profile.objects.filter(status__icontains='player')
-    objects = Profile.players.all()
+    objects = Profile.non_gm.all()
     if profile.status != 'gm':
-        # Get profiles that know directly the event that profile knows directly
+        # Get profiles that know directly the same events as the profile
         objects = objects.filter(
             events_known_directly__in=profile.events_known_directly.all()
         )

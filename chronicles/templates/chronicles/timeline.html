@@ -110,6 +110,9 @@
                             <div class="row" data-toggle="tooltip" data-placement="top" data-html="true"
                                  title='<span class="font-italic">Wciśnij CTRL, aby zaznaczyć wiele albo odznaczyć wybór.</span>'>
                                 {{ events_filter.form.participants }}
+                               
+                                
+                                
                             </div>
                         </div>
                     </div>
@@ -219,21 +222,21 @@
                     <!-- KNOWN DIRECTLY AND INDIRECTLY -->
                     <td class="font-13 align-center align-top">
                         {% for profile in event.known_directly.all %}
-                            <!-- {% url 'prosoponomikon:character' profile.character.id %} -->
-                            <a href="#"
-                               data-toggle="tooltip" data-placement="top" data-html="true"
-                               title='<span class="font-italic">(W budowie)<br>Prosoponomikon:<br>"{{ profile }}"</span>'>
-                                <div class="d-inline">
-                                   <img class="rounded-circle img-smaller" src="{{ profile.image.url }}">
-                                </div>
-                            </a>
+                            {% if profile.status == 'player' %}
+                                <a href="{% url 'prosoponomikon:character' profile.character.id %}"
+                                   data-toggle="tooltip" data-placement="top" data-html="true"
+                                   title='<span class="font-italic">(W budowie)<br>Prosoponomikon:<br>"{{ profile }}"</span>'>
+                                    <div class="d-inline">
+                                       <img class="rounded-circle img-smaller" src="{{ profile.image.url }}">
+                                    </div>
+                                </a>
+                            {% endif %}
                             {% if forloop.counter|divisibleby:2 and not forloop.last %}<br>{% endif %}
                         {% endfor %}
                         {% if event.known_directly.all %}<br>{% endif %}
                         {% if event.known_indirectly.all %}-✧-<br>{% endif %}
                         {% for profile in event.known_indirectly.all %}
-                            <!-- {% url 'prosoponomikon:character' profile.character.id %} -->
-                            <a href="#"
+                            <a href="{% url 'prosoponomikon:character' profile.character.id %}"
                                data-toggle="tooltip" data-placement="top" data-html="true"
                                title='<span class="font-italic">(W budowie)<br>Prosoponomikon:<br>"{{ profile }}"</span>'>
                                 <div class="d-inline">
