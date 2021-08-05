@@ -222,7 +222,7 @@
                             {% if profile.status == 'player' %}
                                 <a href="{% url 'prosoponomikon:character' profile.character.id %}"
                                    data-toggle="tooltip" data-placement="top" data-html="true"
-                                   title='<span class="font-italic">(W budowie)<br>Prosoponomikon:<br>"{{ profile }}"</span>'>
+                                   title='<span class="font-italic">Prosoponomikon:<br>"{{ profile }}"</span>'>
                                     <div class="d-inline">
                                        <img class="rounded-circle img-smaller" src="{{ profile.image.url }}">
                                     </div>
