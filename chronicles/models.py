@@ -497,13 +497,38 @@ def update_known_locations(sender, instance, **kwargs):
         location.known_indirectly.add(*known_indirectly)
 
 
-post_save.connect(update_known_locations, sender=GameEvent)
+post_save.connect(
+    receiver=update_known_locations,
+    sender=GameEvent)
 
 # Run by each change of 'known_directly', 'known_indirectly' or 'locations':
-m2m_changed.connect(update_known_locations,
-                    sender=GameEvent.known_directly.through)
-m2m_changed.connect(update_known_locations,
-                    sender=GameEvent.known_indirectly.through)
-m2m_changed.connect(update_known_locations,
-                    sender=GameEvent.locations.through)
+m2m_changed.connect(
+    receiver=update_known_locations,
+    sender=GameEvent.known_directly.through)
 
+m2m_changed.connect(
+    receiver=update_known_locations,
+    sender=GameEvent.known_indirectly.through)
+
+m2m_changed.connect(
+    receiver=update_known_locations,
+    sender=GameEvent.locations.through)
+
+
+def update_known_characters(sender, instance, **kwargs):
+    """Whenever the signal is called, for each player in known_directly update
+    their known_directly characters with all other "direct" event participants.
+    """
+    known_directly = instance.known_directly.all()
+    for npc in known_directly.filter(status="npc"):
+        npc.character.known_directly.add(
+            *known_directly.filter(status__icontains="player"))
+
+
+post_save.connect(
+    receiver=update_known_characters,
+    sender=GameEvent)
+
+m2m_changed.connect(
+    receiver=update_known_characters,
+    sender=GameEvent.known_directly.through)
