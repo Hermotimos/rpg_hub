@@ -10,141 +10,159 @@
     <br>
     <p class="font-18 font-italic text-justify">{{ header }}</p>
     <br><br>
+    
+    <div class="text-center mt-5 mb-3">
+        <input class="btn btn-dark" type="submit" value="Filtruj Kalendarium" data-toggle="modal" data-target="#filterModal">
+    </div>
 
-    <form method="get">
-        <div class="container">
-            
-            <div class="row pl-0 pl-sm-2">
-                <!-- Description short -->
-                <div class="col-12 col-lg-6 my-3 container px-0">
-                    <div class="row">
-                        <div class="col-2 px-2 d-none d-sm-block">
-                            <div class="d-flex">
-                                <img class="img-timeline-filter" src="{% static 'img/timeline_descr_short.png' %}">
-                            </div>
-                        </div>
-                        <div class="col-10 container">
-                            <div class="row">
-                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.description_short.label }}</p>
-                            </div>
-                            <div class="row input-18">
-                                {{ events_filter.form.description_short }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Description long -->
-                <div class="col-12 col-lg-6 my-3 container px-0">
-                    <div class="row">
-                        <div class="col-2 px-2 d-none d-sm-block">
-                            <div class="d-flex">
-                                <img class="img-timeline-filter" src="{% static 'img/timeline_descr_long.png' %}">
-                            </div>
-                        </div>
-                        <div class="col-10 container pr-0">
-                            <div class="row">
-                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.description_long.label }}</p>
-                            </div>
-                            <div class="row input-18">
-                                {{ events_filter.form.description_long }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="row pl-0 pl-sm-2">
-                <!-- Threads -->
-                <div class="col-12 col-lg-6 my-3 container px-0">
-                    <div class="row">
-                        <div class="col-2 px-2 d-none d-sm-block">
-                            <div class="d-flex">
-                                <img class="img-timeline-filter" src="{% static 'img/timeline_threads.png' %}">
+    
+    <div class="modal fade filters-modal" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="get">
+                    
+                    <div class="modal-body font-15 mb-3 ml-5">
+                    
+                        <div class="container m-auto">
+                            
+                            <div class="row pl-0 pl-sm-2">
+                                <!-- Description short -->
+                                <div class="col-12 col-lg-6 my-3 container px-0">
+                                    <div class="row">
+                                        <div class="col-2 px-2 d-none d-sm-block">
+                                            <div class="d-flex">
+                                                <img class="img-timeline-filter" src="{% static 'img/timeline_descr_short.png' %}">
+                                            </div>
+                                        </div>
+                                        <div class="col-10 container">
+                                            <div class="row">
+                                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.description_short.label }}</p>
+                                            </div>
+                                            <div class="row input-18">
+                                                {{ events_filter.form.description_short }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Description long -->
+                                <div class="col-12 col-lg-6 my-3 container px-0">
+                                    <div class="row">
+                                        <div class="col-2 px-2 d-none d-sm-block">
+                                            <div class="d-flex">
+                                                <img class="img-timeline-filter" src="{% static 'img/timeline_descr_long.png' %}">
+                                            </div>
+                                        </div>
+                                        <div class="col-10 container pr-0">
+                                            <div class="row">
+                                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.description_long.label }}</p>
+                                            </div>
+                                            <div class="row input-18">
+                                                {{ events_filter.form.description_long }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                
+                            <div class="row pl-0 pl-sm-2">
+                                <!-- Threads -->
+                                <div class="col-12 col-lg-6 my-3 container px-0">
+                                    <div class="row">
+                                        <div class="col-2 px-2 d-none d-sm-block">
+                                            <div class="d-flex">
+                                                <img class="img-timeline-filter" src="{% static 'img/timeline_threads.png' %}">
+                                            </div>
+                                        </div>
+                                        <div class="col-10 container">
+                                            <div class="row">
+                                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.threads.label }}</p>
+                                            </div>
+                                            <div class="row" data-toggle="tooltip" data-placement="top" data-html="true"
+                                                 title='<span class="font-italic">Wciśnij CTRL, aby zaznaczyć wiele albo odznaczyć wybór.</span>'>
+                                                {{ events_filter.form.threads }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Locations -->
+                                <div class="col-12 col-lg-6 my-3 container px-0">
+                                    <div class="row">
+                                        <div class="col-2 px-2 d-none d-sm-block">
+                                            <div class="d-flex">
+                                                <img class="img-timeline-filter" src="{% static 'img/timeline_locations.png' %}">
+                                            </div>
+                                        </div>
+                                        <div class="col-10 container pr-0">
+                                            <div class="row">
+                                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.locations.label }}</p>
+                                            </div>
+                                            <div class="row" data-toggle="tooltip" data-placement="top" data-html="true"
+                                                 title='<span class="font-italic">Wciśnij CTRL, aby zaznaczyć wiele albo odznaczyć wybór.</span>'>
+                                                {{ events_filter.form.locations }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row pl-0 pl-sm-2">
+                                <!-- Participants = event.known_directly -->
+                                <div class="col-12 col-lg-6 my-3 container px-0">
+                                    <div class="row">
+                                        <div class="col-2 px-2 d-none d-sm-block">
+                                            <div class="d-flex">
+                                                <img class="img-timeline-filter" src="{% static 'img/timeline_participants.png' %}">
+                                            </div>
+                                        </div>
+                                        <div class="col-10 container">
+                                            <div class="row">
+                                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.participants.label }}</p>
+                                            </div>
+                                            <div class="row" data-toggle="tooltip" data-placement="top" data-html="true"
+                                                 title='<span class="font-italic">Wciśnij CTRL, aby zaznaczyć wiele albo odznaczyć wybór.</span>'>
+                                                {{ events_filter.form.participants }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Games -->
+                                <div class="col-12 col-lg-6 my-3 container px-0">
+                                    <div class="row">
+                                        <div class="col-2 px-2 d-none d-sm-block">
+                                            <div class="d-flex">
+                                                <img class="img-timeline-filter" src="{% static 'img/timeline_games.png' %}">
+                                            </div>
+                                        </div>
+                                        <div class="col-10 container pr-0">
+                                            <div class="row">
+                                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.games.label }}</p>
+                                            </div>
+                                            <div class="row" data-toggle="tooltip" data-placement="top" data-html="true"
+                                                 title='<span class="font-italic">Wciśnij CTRL, aby zaznaczyć wiele albo odznaczyć wybór.</span>'>
+                                                {{ events_filter.form.games }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                         </div>
-                        <div class="col-10 container">
-                            <div class="row">
-                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.threads.label }}</p>
-                            </div>
-                            <div class="row" data-toggle="tooltip" data-placement="top" data-html="true"
-                                 title='<span class="font-italic">Wciśnij CTRL, aby zaznaczyć wiele albo odznaczyć wybór.</span>'>
-                                {{ events_filter.form.threads }}
-                            </div>
-                        </div>
+                        
                     </div>
-                </div>
-                <!-- Locations -->
-                <div class="col-12 col-lg-6 my-3 container px-0">
-                    <div class="row">
-                        <div class="col-2 px-2 d-none d-sm-block">
-                            <div class="d-flex">
-                                <img class="img-timeline-filter" src="{% static 'img/timeline_locations.png' %}">
-                            </div>
-                        </div>
-                        <div class="col-10 container pr-0">
-                            <div class="row">
-                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.locations.label }}</p>
-                            </div>
-                            <div class="row" data-toggle="tooltip" data-placement="top" data-html="true"
-                                 title='<span class="font-italic">Wciśnij CTRL, aby zaznaczyć wiele albo odznaczyć wybór.</span>'>
-                                {{ events_filter.form.locations }}
-                            </div>
-                        </div>
+                
+                    <div class="modal-footer">
+                        <input class="btn btn-dark mx-auto" type="submit" value="Zastosuj" onclick="window.close()">
                     </div>
-                </div>
+                
+                </form>
+                
             </div>
-            
-            <div class="row pl-0 pl-sm-2">
-                <!-- Participants = event.known_directly -->
-                <div class="col-12 col-lg-6 my-3 container px-0">
-                    <div class="row">
-                        <div class="col-2 px-2 d-none d-sm-block">
-                            <div class="d-flex">
-                                <img class="img-timeline-filter" src="{% static 'img/timeline_participants.png' %}">
-                            </div>
-                        </div>
-                        <div class="col-10 container">
-                            <div class="row">
-                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.participants.label }}</p>
-                            </div>
-                            <div class="row" data-toggle="tooltip" data-placement="top" data-html="true"
-                                 title='<span class="font-italic">Wciśnij CTRL, aby zaznaczyć wiele albo odznaczyć wybór.</span>'>
-                                {{ events_filter.form.participants }}
-                               
-                                
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Games -->
-                <div class="col-12 col-lg-6 my-3 container px-0">
-                    <div class="row">
-                        <div class="col-2 px-2 d-none d-sm-block">
-                            <div class="d-flex">
-                                <img class="img-timeline-filter" src="{% static 'img/timeline_games.png' %}">
-                            </div>
-                        </div>
-                        <div class="col-10 container pr-0">
-                            <div class="row">
-                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.games.label }}</p>
-                            </div>
-                            <div class="row" data-toggle="tooltip" data-placement="top" data-html="true"
-                                 title='<span class="font-italic">Wciśnij CTRL, aby zaznaczyć wiele albo odznaczyć wybór.</span>'>
-                                {{ events_filter.form.games }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
         </div>
-        
-        <div class="text-center mt-5">
-            <input class="btn btn-dark" type="submit" value="Filtruj Kalendarium">
-        </div>
-        
-    </form>
+    </div>
+
+    
+    
 
     <br>
     {% if not events_filter.qs %}
