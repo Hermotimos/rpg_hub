@@ -11,12 +11,11 @@
     <p class="font-18 font-italic text-justify">{{ header }}</p>
     <br><br>
     
-    <div class="text-center mt-5 mb-3">
+    <div class="text-center my-5">
         <input class="btn btn-dark" type="submit" value="Filtruj Kalendarium" data-toggle="modal" data-target="#filterModal">
     </div>
-
-
     
+    <!-- Filters Modal-->
     <div class="modal fade filters-modal" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -149,6 +148,15 @@
                             
                         </div>
                         
+                        <h5 class="text-center text-danger">
+                            <small class="smaller">
+                                1. Wybór wielu opcji w ramach jednego filtru - pokazuje wszystkie wyniki należące do którejś z opcji.<br>
+                                2. Wybór opcji należących do różnych filtrów - pokazuje tylko wyniki spełniające oba kryteria.<br>
+                                (W ramach 1 filtru "OR", a między filtrami "AND" a przy połączeniu filtrów... fuckinshit...)<br>
+                                Uczestnicy(Gracz1 + Gracz2) + Lokacje(Lokacja1) ==> (Gracz1 AND Lokacja1) OR (Gracz2 AND Lokacja1)
+                            </small>
+                        </h5>
+                        
                     </div>
                 
                     <div class="modal-footer">
@@ -160,11 +168,9 @@
             </div>
         </div>
     </div>
-
+    <!-- Filters Modal End -->
     
-    
 
-    <br>
     {% if not events_filter.qs %}
         <div class="font-italic text-center h4 mt-4">Brak wydarzeń spełniających podane kryteria.</div>
     {% else %}
