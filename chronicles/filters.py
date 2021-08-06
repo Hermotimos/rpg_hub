@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.forms.widgets import TextInput
 from django_filters import (
     CharFilter,
     FilterSet,
@@ -34,7 +35,7 @@ def participants(request):
     profile = request.user.profile
     objects = Profile.non_gm.all()
     if profile.status != 'gm':
-        # Get profiles that know directly the same events as the profile
+        # Get profiles that know directly the same events as the current one
         objects = objects.filter(
             events_known_directly__in=profile.events_known_directly.all()
         )
@@ -56,10 +57,12 @@ class GameEventFilter(FilterSet):
     description_short = CharFilter(
         lookup_expr='icontains',
         label="Wydarzenie w Kalendarium:",
+        widget=TextInput(attrs={'placeholder': 'Szukaj w tekście Wydarzenia'})
     )
     description_long = CharFilter(
         lookup_expr='icontains',
         label="Wydarzenie w Kronice:",
+        widget=TextInput(attrs={'placeholder': 'Szukaj w tekście Wydarzenia'})
     )
     threads = ModelMultipleChoiceFilter(queryset=threads, label="Wątki:")
     locations = ModelMultipleChoiceFilter(queryset=locations, label="Lokacje:")
