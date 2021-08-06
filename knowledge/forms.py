@@ -14,7 +14,12 @@ from toponomikon.models import Location
 
 class KnPacketForm(ModelForm):
     """Form to create KnowledgePackets by 'gm' status profiles."""
-    
+    locations = ModelMultipleChoiceField(
+        queryset=Location.objects.all(),
+        required=False,
+        label='Lokacje powiązane (niewymagane)',
+    )
+
     class Meta:
         model = KnowledgePacket
         fields = ['title', 'text', 'skills', 'pictures']
@@ -22,12 +27,6 @@ class KnPacketForm(ModelForm):
             'pictures': SelectMultiple(attrs={'size': 15}),
         }
         
-    locations = ModelMultipleChoiceField(
-        queryset=Location.objects.all(),
-        required=False,
-        label='Lokacje powiązane (niewymagane)',
-    )
-    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['locations'].widget.attrs['size'] = 10
