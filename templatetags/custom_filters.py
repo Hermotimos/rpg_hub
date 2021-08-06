@@ -201,7 +201,8 @@ def game_participants(obj):
     participants = set()
     for event in game_events_qs:
         for profile in event.known_directly.all():
-            participants.add(profile)
+            if profile.status == 'player':
+                participants.add(profile)
     return participants
 
 
