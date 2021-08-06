@@ -5,6 +5,8 @@ from django.template.defaultfilters import linebreaksbr
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
+from users.models import Profile
+
 register = template.Library()
 
 
@@ -225,3 +227,14 @@ def pictureset_pictures_in_custom_order(picture_set):
     # default
     else:
         return list(pics)
+
+
+@register.filter
+def players_names_bold(django_filter_html):
+    html = str(django_filter_html)
+    for pid in Profile.players.values_list('id', flat=True):
+        html = html.replace(
+            f'option value="{pid}"',
+            f'option value="{pid}" style="font-weight: 600;"')
+    return mark_safe(html)
+    
