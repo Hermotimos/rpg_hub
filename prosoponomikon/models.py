@@ -11,14 +11,14 @@ from django.db.models import (
     Q,
     SET_NULL,
     SmallIntegerField,
-    TextField, IntegerField
+    TextField,
 )
 from django.db.models.signals import post_save
-from rpg_project.utils import create_sorting_name
 
 from imaginarion.models import Picture
 from knowledge.models import BiographyPacket, DialoguePacket
 from knowledge.models import KnowledgePacket
+from rpg_project.utils import create_sorting_name
 from rules.models import Skill
 from toponomikon.models import Location
 from users.models import Profile
@@ -59,7 +59,7 @@ class AffixGroup(Model):
     objects = AffixGroupManager()
     
     affix = CharField(max_length=100)
-    type = CharField(max_length=20, choices=NAME_TYPES, default='male')
+    type = CharField(max_length=20, choices=NAME_TYPES, default='MALE')
     name_group = FK(
         to=NameGroup, related_name='affix_groups', on_delete=PROTECT)
     
