@@ -269,6 +269,22 @@ class NPCCharacter(Character):
         verbose_name_plural = '--- NPCs'
 
 
+class NonGMCharacterManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.exclude(profile__status='gm')
+        return qs
+
+
+class NonGMCharacter(Character):
+    objects = NonGMCharacterManager()
+    
+    class Meta:
+        proxy = True
+        verbose_name = '--- Player or NPC'
+        verbose_name_plural = '--- Players and NPCs'
+
+
 class CharacterGroup(Model):
     """A mnodel for storing default knowledge packet sets for groups of
      characters. These should be automatically added to the knowlege packets of
