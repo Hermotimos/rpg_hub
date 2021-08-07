@@ -96,11 +96,6 @@ class GameEventInline(admin.TabularInline):
     }
     
     def formfield_for_dbfield(self, db_field, **kwargs):
-        # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
-        # Reduces greatly queries in main view, doubles in detail view
-        # The trade-off is still very good
-        request = kwargs['request']
-        formfield = super().formfield_for_dbfield(db_field, **kwargs)
         fields = [
             'date_start',
             'date_end',
@@ -110,17 +105,11 @@ class GameEventInline(admin.TabularInline):
             'locations',
             'threads',    # To allow for filtering in GameEventAdminForm
             'pictures',
+            'picture_sets',
             'audio',
             'debates',
         ]
-        for field in fields:
-            if db_field.name == field:
-                choices = getattr(request, f'_{field}_choices_cache', None)
-                if choices is None:
-                    choices = list(formfield.choices)
-                    setattr(request, f'_{field}_choices_cache', choices)
-                formfield.choices = choices
-        return formfield
+        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
     
     
 class HistoryEventAdminForm(forms.ModelForm):
@@ -180,23 +169,11 @@ class GameSessionAdmin(admin.ModelAdmin):
     search_fields = ['title']
     
     def formfield_for_dbfield(self, db_field, **kwargs):
-        # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
-        # Reduces greatly queries in main view, doubles in detail view
-        # The trade-off is still very good
-        request = kwargs['request']
-        formfield = super().formfield_for_dbfield(db_field, **kwargs)
         fields = [
             'chapter',
         ]
-        for field in fields:
-            if db_field.name == field:
-                choices = getattr(request, f'_{field}_choices_cache', None)
-                if choices is None:
-                    choices = list(formfield.choices)
-                    setattr(request, f'_{field}_choices_cache', choices)
-                formfield.choices = choices
-        return formfield
-    
+        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+
     
 class ChapterAdmin(admin.ModelAdmin):
     list_display = ['chapter_no', 'title', 'image']
@@ -283,15 +260,16 @@ class EraAdmin(admin.ModelAdmin):
                      'in_timeunit', 'description_short', 'description_long']
     search_fields = ['name', 'name_genetive', 'description_short',
                      'description_long']
-    # Now that 1 obj exists, no visible effect of select_related, check later
-    # select_related = ['date_start', 'date_end', 'in_timeunit']
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        fields = [
+            'date_start',
+            'date_end',
+            'in_timeunit',
+        ]
+        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
     
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        qs = qs.select_related('date_start', 'date_end', 'in_timeunit')
-        return qs
-
-
+    
 class PeriodAdminForm(TimeSpanForm):
     in_timeunit = forms.ModelChoiceField(queryset=Era.objects.all())
     locations = forms.ModelMultipleChoiceField(
@@ -302,8 +280,27 @@ class PeriodAdminForm(TimeSpanForm):
     )
 
 
-class PeriodAdmin(admin.ModelAdmin):
+class PeriodAdmin(EraAdmin):
     form = PeriodAdminForm
+    formfield_overrides = {
+        TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 40})},
+        CharField: {'widget': TextInput(attrs={'size': 12})},
+        ForeignKey: {'widget': Select(attrs={'style': 'width:180px'})},
+    }
+    list_display = ['id', 'name', 'name_genetive', 'date_start', 'date_end',
+                    'in_timeunit', 'description_short', 'description_long']
+    list_editable = ['name', 'name_genetive', 'date_start', 'date_end',
+                     'in_timeunit', 'description_short', 'description_long']
+    search_fields = ['name', 'name_genetive', 'description_short',
+                     'description_long']
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        fields = [
+            'date_start',
+            'date_end',
+            'in_timeunit',
+        ]
+        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
 
 
 # Chronicle models

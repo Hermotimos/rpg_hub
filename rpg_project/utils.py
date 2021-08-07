@@ -327,6 +327,7 @@ def formfield_for_dbfield_cached(cls, db_field, fields, **kwargs):
                 formfield.choices = choices
         return formfield
 
+    Greatly reduces queries in main view, doubles in detail view: trade-off ok.
     """
     request = kwargs['request']
     formfield = super(type(cls), cls).formfield_for_dbfield(db_field, **kwargs)
@@ -338,4 +339,3 @@ def formfield_for_dbfield_cached(cls, db_field, fields, **kwargs):
                 setattr(request, f'_{f}_choices_cache', choices)
             formfield.choices = choices
     return formfield
-
