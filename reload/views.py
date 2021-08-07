@@ -37,12 +37,9 @@ def reload_main_view(request):
 @login_required
 def reload_chronicles(request):
     if request.user.profile.status == 'gm':
-        # for obj in Thread.objects.all():
-        #     obj.save()
-        for obj in GameEvent.objects.filter(game__game_no__lte=13):
-            print(obj)
+        for obj in GameEvent.objects.all():
             obj.save()
-        messages.info(request, f'Przeładowano "Thread" i "GameEvent"!')
+        messages.info(request, f'Przeładowano "GameEvent"!')
         return redirect('reload:reload-main')
     else:
         return redirect('home:dupa')
