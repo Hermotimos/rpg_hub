@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <br><br><br>
+    
+    <section class="my-5">
+        <h3 class="mb-4">Prosoponomikon:</h3>
+    
+        {% if characters_no_frequented_location.exists %}
+            <div class="my-3 ml-4">
+                <h5>Postacie bez lokacji:</h5>
+                <div class="ml-4">
+                    {% for character in characters_no_frequented_location.all %}
+                        <a class="small" href="{% url 'admin:prosoponomikon_character_change' character.id %}" target="_blank">
+                            {{ character }}
+                        </a>
+                        <br>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    
+        {% if characters_no_description.exists %}
+            <div class="my-3 ml-4">
+                <h5>Postacie bez opisu:</h5>
+                <div class="ml-4">
+                    {% for character in characters_no_description.all %}
+                        <a class="small" href="{% url 'admin:prosoponomikon_character_change' character.id %}" target="_blank">
+                            {{ character }}
+                        </a>
+                        <br>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+    </section>
+    
+
+    <section class="my-5">
+        <h3 class="mb-4">Profile:</h3>
+        
+        {% if profiles_no_image.exists %}
+            <div class="my-3 ml-4">
+                <h5>Profile bez obrazka:</h5>
+                <div class="ml-4">
+                    {% for profile in profiles_no_image.all %}
+                        <a class="small" href="{% url 'admin:users_profile_change' profile.id %}" target="_blank">
+                            {{ profile }}
+                        </a>
+                        <br>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+    </section>
+
+
+    <section class="my-5">
+        <h3 class="mb-4">Wydarzenia:</h3>
+        
+        {% if game_event_no_known.exists %}
+            <div class="my-3 ml-4">
+                <h5>Profile bez obrazka:</h5>
+                <div class="ml-4">
+                    {% for game_event in game_event_no_known.all %}
+                        <a class="small" href="{% url 'admin:chronicles_gameevent_change' game_event.id %}" target="_blank">
+                            {{ game_event.game }}: {{ game_event.short_descr }}
+                        </a>
+                        <br>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+    </section>
+
+
+    <section class="my-5">
+        <h3 class="mb-4">Toponomikon:</h3>
+        
+        {% if locations_no_image.exists %}
+            <div class="my-3 ml-4">
+                <h5>Lokacje bez obrazka:</h5>
+                <div class="ml-4">
+                    {% for location in locations_no_image.all %}
+                        <a class="small" href="{% url 'admin:toponomikon_location_change' location.id %}" target="_blank">
+                            {{ location }}
+                        </a>
+                        <br>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+        {% if locations_no_description.exists %}
+            <div class="my-3 ml-4">
+                <h5>Lokacje bez opisu:</h5>
+                <div class="ml-4">
+                    {% for location in locations_no_description.all %}
+                        <a class="small" href="{% url 'admin:toponomikon_location_change' location.id %}" target="_blank">
+                            {{ location }}
+                        </a>
+                        <br>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+    </section>
+
+{% endblock content %}

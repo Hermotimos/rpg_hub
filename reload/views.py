@@ -1,11 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
 from django.shortcuts import render, redirect
 
-from chronicles.models import Thread, GameEvent
-from imaginarion.models import Picture, PictureImage
-from prosoponomikon.models import Character, FirstName
+from chronicles.models import GameEvent
+from chronicles.models import Thread
+from imaginarion.models import PictureImage
+from prosoponomikon.models import Character
+from prosoponomikon.models import NonGMCharacter
 from rules.models import (
     Skill, SkillLevel,
     Synergy, SynergyLevel,
@@ -17,6 +20,7 @@ from rules.models import (
     Weapon,
 )
 from toponomikon.models import Location
+from users.models import Profile
 
 
 @login_required
@@ -136,7 +140,41 @@ def refresh_content_types(request):
         return redirect('reload:reload-main')
     else:
         return redirect('home:dupa')
+
+
+#  ---------------------------------------------------------------------
+
+
+@login_required
+def todos_view(request):
+    profile = request.user.profile
+    characters = NonGMCharacter.objects.all()
     
+    characters_no_frequented_location = characters.filter(frequented_locations=None)
+    characters_no_description = characters.filter(description__exact="")
     
+    profiles_no_image = Profile.objects.filter(
+        Q(image__icontains="square") | Q(image__exact=""))
+    
+    locations_no_image = Location.objects.filter(main_image=None)
+    locations_no_description = Location.objects.filter(description__exact="")
+    
+    game_event_no_known = GameEvent.objects.filter(
+        known_directly=None).filter(known_indirectly=None)
+   
+    context = {
+        'page_title': 'TODOs',
+        'characters_no_frequented_location': characters_no_frequented_location,
+        'characters_no_description': characters_no_description,
+        'profiles_no_image': profiles_no_image,
+        'locations_no_image': locations_no_image,
+        'locations_no_description': locations_no_description,
+        'game_event_no_known': game_event_no_known,
+    }
+    
+    if profile.status == 'gm':
+        return render(request, 'reload/todos.html', context)
+    else:
+        return redirect('home:dupa')
 
 
