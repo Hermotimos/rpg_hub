@@ -66,7 +66,7 @@
                 <div class="ml-4">
                     {% for game_event in game_event_no_known.all %}
                         <a class="small" href="{% url 'admin:chronicles_gameevent_change' game_event.id %}" target="_blank">
-                            {{ game_event.game }}: {{ game_event.short_descr }}
+                            {{ game_event.game }}:<br><span class="ml-5">{{ game_event.description_short|truncatechars:100 }}</span>
                         </a>
                         <br>
                     {% endfor %}
