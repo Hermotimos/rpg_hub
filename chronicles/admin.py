@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db.models import TextField, CharField, ForeignKey, OneToOneField
 from django.forms import Textarea, TextInput, Select
-
+from rpg_project.utils import formfield_for_dbfield_cached
 from chronicles.models import (
     Thread, ThreadActive, ThreadEnded,
     Date,
@@ -73,20 +73,11 @@ class GameEventAdmin(admin.ModelAdmin):
     search_fields = ['description_short', 'description_long']
     
     def formfield_for_dbfield(self, db_field, **kwargs):
-        request = kwargs['request']
-        formfield = super().formfield_for_dbfield(db_field, **kwargs)
         fields = [
             # Tested that here only audio optimizes queries
             'audio',
         ]
-        for field in fields:
-            if db_field.name == field:
-                choices = getattr(request, f'_{field}_choices_cache', None)
-                if choices is None:
-                    choices = list(formfield.choices)
-                    setattr(request, f'_{field}_choices_cache', choices)
-                formfield.choices = choices
-        return formfield
+        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
     
     
 class GameEventInlineForm(GameEventAdminForm):

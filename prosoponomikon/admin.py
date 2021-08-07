@@ -4,11 +4,11 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db.models import TextField, CharField
 from django.forms import Textarea, TextInput
 from django.utils.html import format_html
-from rpg_project.utils import formfield_for_dbfield_cached
 
 from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, \
     CharacterGroup, FirstName, NameGroup, FamilyName, AffixGroup, \
     AuxiliaryNameGroup, FamilyNameGroup
+from rpg_project.utils import formfield_for_dbfield_cached
 
 
 class FirstNameAdmin(admin.ModelAdmin):
@@ -40,6 +40,12 @@ class FirstNameInline(admin.TabularInline):
     }
     model = FirstName
     extra = 10
+    
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        fields = [
+            'auxiliary_group',
+        ]
+        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
 
 
 class FamilyNameAdminForm(forms.ModelForm):

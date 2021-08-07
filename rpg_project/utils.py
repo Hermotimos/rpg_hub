@@ -302,9 +302,14 @@ def send_emails(request, profile_ids=None, **kwargs):
     send_mail(subject, message, sender, receivers)
 
 
-def formfield_for_dbfield_cached(admin_cls, db_field, flds, **kwargs):
-    """This is an DRY override used in admin.py to minimize SQL queries.
-    The original function taken from StackOverflow and looked similar to this:
+def formfield_for_dbfield_cached(cls, db_field, fields, **kwargs):
+    """An abstraction to override formfield_for_dbfield inside any
+    admin.ModelAdmin or admin.TabularInline subclass (others not tested yet).
+    The original post has a different trick for inlines, but this works better.
+    
+    https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
+    If you have foreign keys in list_editable django will make 1 database query
+    for each item in the changelist.
     
     def formfield_for_dbfield(self, db_field, **kwargs):
         request = kwargs['request']
@@ -322,13 +327,10 @@ def formfield_for_dbfield_cached(admin_cls, db_field, flds, **kwargs):
                 formfield.choices = choices
         return formfield
 
-    This method could be placed directly in any admin.ModelAdmin subclass.
     """
-    formfield = super(admin.ModelAdmin, admin_cls).formfield_for_dbfield(
-        db_field, **kwargs)
-    
     request = kwargs['request']
-    for f in flds:
+    formfield = super(type(cls), cls).formfield_for_dbfield(db_field, **kwargs)
+    for f in fields:
         if db_field.name == f:
             choices = getattr(request, f'_{f}_choices_cache', None)
             if choices is None:
@@ -336,5 +338,4 @@ def formfield_for_dbfield_cached(admin_cls, db_field, flds, **kwargs):
                 setattr(request, f'_{f}_choices_cache', choices)
             formfield.choices = choices
     return formfield
-
 
