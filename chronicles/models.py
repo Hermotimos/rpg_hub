@@ -516,15 +516,15 @@ m2m_changed.connect(
 
 
 def update_known_characters(sender, instance, **kwargs):
-    """Whenever the signal is called, for each player in known_directly update
+    """Whenever the signal is called, for each profile in known_directly update
     their known_directly characters with all other "direct" event participants.
+    This works between NPCs, too. This is for future...
     """
     known_directly = instance.known_directly.all()
-    for npc in known_directly.filter(status="npc"):
-        npc.character.known_directly.add(
-            *known_directly.filter(status__icontains="player"))
-
-
+    for profile in known_directly.all():
+        profile.character.known_directly.add(*known_directly)
+        
+        
 post_save.connect(
     receiver=update_known_characters,
     sender=GameEvent)

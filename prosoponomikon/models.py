@@ -203,12 +203,10 @@ class Character(Model):
     known_directly = M2M(
         to=Profile,
         related_name='characters_known_directly',
-        limit_choices_to=Q(status='player'),
         blank=True)
     known_indirectly = M2M(
         to=Profile,
         related_name='characters_known_indirectly',
-        limit_choices_to=Q(status='player'),
         blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
     
