@@ -1,8 +1,10 @@
 import os
-from random import sample
 import re
+from random import sample
+
 from django.apps import apps
 from django.conf import settings
+from django.contrib import admin
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import send_mail
@@ -298,3 +300,41 @@ def send_emails(request, profile_ids=None, **kwargs):
                   f"kwargs: {kwargs}"
     
     send_mail(subject, message, sender, receivers)
+
+
+def formfield_for_dbfield_cached(admin_cls, db_field, flds, **kwargs):
+    """This is an DRY override used in admin.py to minimize SQL queries.
+    The original function taken from StackOverflow and looked similar to this:
+    
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        request = kwargs['request']
+        formfield = super().formfield_for_dbfield(db_field, **kwargs)
+        fields = [
+            'affix_group',
+            'auxiliary_group',
+        ]
+        for field in fields:
+            if db_field.name == field:
+                choices = getattr(request, f'_{field}_choices_cache', None)
+                if choices is None:
+                    choices = list(formfield.choices)
+                    setattr(request, f'_{field}_choices_cache', choices)
+                formfield.choices = choices
+        return formfield
+
+    This method could be placed directly in any admin.ModelAdmin subclass.
+    """
+    formfield = super(admin.ModelAdmin, admin_cls).formfield_for_dbfield(
+        db_field, **kwargs)
+    
+    request = kwargs['request']
+    for f in flds:
+        if db_field.name == f:
+            choices = getattr(request, f'_{f}_choices_cache', None)
+            if choices is None:
+                choices = list(formfield.choices)
+                setattr(request, f'_{f}_choices_cache', choices)
+            formfield.choices = choices
+    return formfield
+
+
