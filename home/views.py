@@ -10,8 +10,9 @@ from toponomikon.models import Location
 @login_required
 def home_view(request):
     profile = request.user.profile
-    
-    known_characters = Character.objects.exclude(profile=profile)
+
+    known_characters = profile.characters_all_known_annotated_if_indirectly()
+    known_characters = known_characters.exclude(profile=profile)
     known_characters = known_characters.select_related('profile')
     known_characters = known_characters.prefetch_related(
         'known_directly', 'known_indirectly', 'first_name')

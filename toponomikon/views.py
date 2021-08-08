@@ -89,8 +89,9 @@ def toponomikon_location_view(request, loc_name):
         page_title += ' (znasz z opowieści)'
         
     # CHARACTERS TAB
-    # Collect all characters in this location and its sub-locations:
-    characters = Character.objects.filter(
+    # Characters in this location and its sub-locations if known to profile:
+    characters = profile.characters_all_known_annotated_if_indirectly()
+    characters = characters.filter(
         frequented_locations__in=this_location.with_sublocations())
     characters = characters.select_related('profile')
     characters = characters.prefetch_related('known_directly')
