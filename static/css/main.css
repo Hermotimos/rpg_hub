@@ -467,6 +467,9 @@ li a {
 }
 
 /* Tab Styling */
+
+.tabset > input:checked + label {border-color: #ccc;}
+.tabset > label:hover {color: #06c;}
 .tabset > label {
   position: relative;
   display: inline-block;
@@ -475,19 +478,11 @@ li a {
   border-bottom: 0;
   cursor: pointer;
   font-weight: 600;
-
 }
 
-.tabset > label:hover {color: #06c;}
-
-.tabset > label:hover::after,
-.tabset > input:focus + label::after,
-.tabset > input:checked + label::after {background: #06c;}
-
-.tabset > input:checked + label {
-  border-color: #ccc;
-  /* border-bottom: 1px solid #fff; */
-  margin-bottom: -1px;
+/* Adds bottom border to tabs with multiline headers*/
+.tabset.multiline-header > label {
+  border-bottom: 1px solid transparent;
 }
 
 .tab-panel {
@@ -496,10 +491,25 @@ li a {
 }
 
 
-
 @media only screen and (max-width: 600px) {
     .tabset label {font-size: 1.1rem;}
 }
+
+
+/* old
+.tabset > label:hover {color: #06c;}
+.tabset > label:hover::after,
+.tabset > input:focus + label::after,
+.tabset > input:checked + label::after {background: #06c;}
+.tabset > input:checked + label {
+  border-color: #ccc;
+  margin-bottom: -1px;
+}
+.tab-panel {
+  padding: 3rem 0rem;
+  border-top: 1px solid #ccc;
+}
+*/
 
 
 

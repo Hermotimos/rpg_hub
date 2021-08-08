@@ -10,61 +10,68 @@
     <article class="top-button">
         
         <header class="mb-5">
-            <div class="container">
-                <div class="mb-5">
-                    <a href="{% url 'prosoponomikon:groups-create' %}" class="btn btn-outline-dark mb-1">Nowa grupa</a>
-                    <a href="{% url 'prosoponomikon:groups-edit' %}" class="btn btn-outline-dark mb-1">Edytuj grupy</a>
-                    <a href="{% url 'prosoponomikon:ungrouped' %}" class="btn btn-outline-info mb-1">Gracze/BN</a>
-                </div>
-            </div>
+            <a href="{% url 'prosoponomikon:groups-create' %}" class="btn btn-outline-dark mb-1">Nowa grupa</a>
+            <a href="{% url 'prosoponomikon:groups-edit' %}" class="btn btn-outline-dark mb-1">Edytuj grupy</a>
+            <a href="{% url 'prosoponomikon:ungrouped' %}" class="btn btn-outline-info mb-1">Gracze/BN</a>
         </header>
         
-        
-        <div class="container pt-5">
-            <article class="tabset">
+        <article class="tabset multiline-header">
+            
+            <!-- TAB HEADERS -->
+            
+            <!-- GROUPED -->
+            {% for character_group in character_groups %}
+                {% if forloop.counter == 1 %}
+                    <input type="radio" name="tabset" id="tab_{{ forloop.counter }}" aria-controls="group_{{ forloop.counter }}" checked>
+                {% else %}
+                    <input type="radio" name="tabset" id="tab_{{ forloop.counter }}" aria-controls="group_{{ forloop.counter }}">
+                {% endif %}
+                <label class="h4 mb-0" for="tab_{{ forloop.counter }}">{{ character_group.name }}</label>
+            {% endfor %}
+            
+            <!-- UNGROUPED -->
+            {% if ungrouped_characters %}
+                <input type="radio" name="tabset" id="tab_last" aria-controls="ungrouped">
+                <label class="h4 mb-0" for="tab_last">Pozostali</label>
+            {% endif %}
+            
+            <!-- TABS -->
+            <div class="tab-panels">
                 
-                <!-- TAB HEADERS FOR CHARACTER GROUPS -->
+                <!-- GROUPED -->
                 {% for character_group in character_groups %}
-                    {% if forloop.counter.first %}
-                        <input type="radio" name="tabset" id="tab_{{ forloop.counter }}" aria-controls="group_{{ forloop.counter }}" checked>
-                    {% else %}
-                        <input type="radio" name="tabset" id="tab_{{ forloop.counter }}" aria-controls="group_{{ forloop.counter }}">
-                    {% endif %}
-                    <label class="h3" for="tab_{{ forloop.counter }}">{{ character_group.name }}</label>
+                    <section id="group_{{ forloop.counter }}" class="tab-panel">
+                        <p class="mb-0 text-center">✧</p>
+                        <p class="mb-0 text-center">✧ ✦ ✧</p>
+                        <p class="h3 text-center mb-2 mt-1">{{ character_group.name }}</p>
+                        <p class="mb-0 text-center">✧ ✦ ✧</p>
+                        <p class="mb-5 mt-0 text-center">✧</p>
+                        <div class="container">
+                            {% for character in character_group.characters.all %}
+                                {% include 'prosoponomikon/_character_info.html' %}
+                            {% endfor %}
+                        </div>
+                    </section>
                 {% endfor %}
                 
-                <!-- TAB HEADER FOR UNGROUPED -->
+                <!-- UNGROUPED -->
                 {% if ungrouped_characters %}
-                    <input type="radio" name="tabset" id="tab_last" aria-controls="ungrouped">
-                    <label class="h3" for="tab_last">W pozostałych rolach...</label>
+                    <section id="ungrouped" class="tab-panel">
+                        <p class="mb-0 text-center">✧</p>
+                        <p class="mb-0 text-center">✧ ✦ ✧</p>
+                        <p class="h3 text-center mb-2 mt-1">W pozostałych rolach...</p>
+                        <p class="mb-0 text-center">✧ ✦ ✧</p>
+                        <p class="mb-5 mt-0 text-center">✧</p>
+                        <div class="container">
+                            {% for character in ungrouped_characters %}
+                                {% include 'prosoponomikon/_character_info.html' %}
+                            {% endfor %}
+                        </div>
+                    </section>
                 {% endif %}
-                
-                <!-- TABS -->
-                <div class="tab-panels">
-                    <!-- GROUPED -->
-                    {% for character_group in character_groups %}
-                        <section id="group_{{ forloop.counter }}" class="tab-panel">
-                            <div class="container">
-                                {% for character in character_group.characters.all %}
-                                    {% include 'prosoponomikon/_character_info.html' %}
-                                {% endfor %}
-                            </div>
-                        </section>
-                    {% endfor %}
-                    <!-- UNGROUPED -->
-                    {% if ungrouped_characters %}
-                        <section id="ungrouped" class="tab-panel">
-                            <div class="container">
-                                {% for character in ungrouped_characters %}
-                                    {% include 'prosoponomikon/_character_info.html' %}
-                                {% endfor %}
-                            </div>
-                        </section>
-                    {% endif %}
-                </div>
-                
-            </article>
-        </div>
+            </div>
+            
+        </article>
         
     </article>
 {% endblock content %}

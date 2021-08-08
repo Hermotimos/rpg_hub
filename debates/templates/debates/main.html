@@ -10,11 +10,11 @@
 {% block content %}
     <article class="top-button">
         
-        <div class="mb-5">
+        <header class="mb-5">
             <a class="btn btn-outline-dark" href="{% url 'debates:create-topic' %}">Nowy temat narad</a>
-        </div>
+        </header>
     
-        <div class="pt-5">
+        <article class="pt-5">
             {% for topic in topics %}
                 <div id="topic_{{ topic.id }}">
                     <h3 class="small-caps">
@@ -54,7 +54,7 @@
                     <br>
                 </div>
             {% endfor %}
-        </div>
+        </article>
         
     </article>
 {% endblock content %}
