@@ -14,6 +14,7 @@ from prosoponomikon.models import Character, CharacterGroup, NameGroup, \
     FamilyName
 from rpg_project.settings import get_secret
 from rpg_project.utils import handle_inform_form
+from rules.models import Skill, SkillLevel
 from users.models import Profile, User
 
 
@@ -62,16 +63,27 @@ def prosoponomikon_character_view(request, character_id):
             Prefetch('biography_packets', queryset=known_bio_packets))
 
     character = characters.filter(id=character_id).first()
+    skills = []
+    knowledge_packets = []
     
-    default_skills = []
-    default_knowledge_packets = []
-    if profile.status == 'gm':
+    if profile.status == 'gm' and character.profile.status == 'npc':
+        # Default skills and kn_packets etc. as per CharacterGroup
         for character_group in character.character_groups.all():
             for skill in character_group.default_skills.all():
-                default_skills.append(skill)
+                skills.append(skill)
             for kn_packet in character_group.default_knowledge_packets.all():
-                default_knowledge_packets.append(kn_packet)
-    
+                knowledge_packets.append(kn_packet)
+                
+    elif profile.status == 'gm' or character_id == profile.character.id:
+        # Own skills and kn_packets etc.
+        skills = Skill.objects.filter(skill_levels__acquired_by=character.profile)
+        skill_levels = SkillLevel.objects.filter(acquired_by=character.profile)
+        skills = skills.prefetch_related(
+            Prefetch('skill_levels', queryset=skill_levels))
+        skills = skills.distinct()
+ 
+        knowledge_packets = character.profile.knowledge_packets.order_by('title')
+
     # INFORM FORM
     if request.method == 'POST':
         handle_inform_form(request)
@@ -79,8 +91,8 @@ def prosoponomikon_character_view(request, character_id):
     context = {
         'page_title': character,
         'character': character,
-        'default_skills': default_skills,
-        'default_knowledge_packets': default_knowledge_packets,
+        'skills': skills,
+        'knowledge_packets': knowledge_packets,
     }
     if (profile in character.all_known() or profile.character == character
             or profile.status == 'gm'):

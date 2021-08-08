@@ -82,41 +82,42 @@
                 <label class="h4 mb-0" for="tab1">Biografia</label>
             {% endif %}
             
-            <!-- TAB HEADERS FOR 'GM' ONLY -->
-            {% if request.user.profile.status == 'gm' %}
-            
-                <!-- Dialogue packets -->
-                {% if character.dialogue_packets.all %}
-                    {% if character.biography_packets.all %}
-                        <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets">
-                    {% else %}
-                        <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets" checked>
-                    {% endif %}
-                    <label class="h4 mb-0" for="tab2">Dialogi</label>
+            <!-- Dialogue packets -->
+            {% if request.user.profile.status == 'gm' and character.dialogue_packets.all %}
+                {% if character.biography_packets.all %}
+                    <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets">
+                {% else %}
+                    <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets" checked>
                 {% endif %}
-            
-                
-                {% if default_skills %}
-                    <!-- Skills -->
-                    {% if character.biography_packets.all or character.dialogue_packets.all %}
-                        <input type="radio" name="tabset" id="tab3" aria-controls="skills">
-                    {% else %}
-                        <input type="radio" name="tabset" id="tab3" aria-controls="skills" checked>
-                    {% endif %}
-                    <label class="h4 mb-0" for="tab3">~Umiejętności</label>
-                {% endif %}
-        
-                {% if default_knowledge_packets %}
-                    <!-- Knowledge packets -->
-                    {% if character.biography_packets.all or character.dialogue_packets.all %}
-                        <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets">
-                    {% else %}
-                        <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets">
-                    {% endif %}
-                    <label class="h4 mb-0" for="tab4">~Wiedza</label>
-                {% endif %}
-            
+                <label class="h4 mb-0" for="tab2">Dialogi</label>
             {% endif %}
+            
+            {% if skills %}
+                <!-- Skills -->
+                {% if character.biography_packets.all or character.dialogue_packets.all %}
+                    <input type="radio" name="tabset" id="tab3" aria-controls="skills">
+                {% else %}
+                    <input type="radio" name="tabset" id="tab3" aria-controls="skills" checked>
+                {% endif %}
+                <label class="h4 mb-0" for="tab3">
+                    {% if character.profile != request.user.profile %} ~ {% endif %}
+                    Umiejętności
+                </label>
+            {% endif %}
+    
+            {% if knowledge_packets %}
+                <!-- Knowledge packets -->
+                {% if character.biography_packets.all or character.dialogue_packets.all %}
+                    <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets">
+                {% else %}
+                    <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets">
+                {% endif %}
+                <label class="h4 mb-0" for="tab4">
+                    {% if character.profile != request.user.profile %} ~ {% endif %}
+                    Wiedza
+                </label>
+            {% endif %}
+            
             
             <!-- TABS -->
             <div class="tab-panels">
@@ -131,36 +132,31 @@
                     </section>
                 {% endif %}
                 
-                <!-- TABS FOR 'GM' ONLY -->
-                {% if request.user.profile.status == 'gm' %}
-                
-                    <!-- Dialogue packets -->
-                    {% if character.dialogue_packets.all %}
-                        <section id="dialogue_packets" class="tab-panel">
-                            {% for dialogue_packet in character.dialogue_packets.all %}
-                                {% include 'knowledge/_dialogue_packet.html' %}
-                            {% endfor %}
-                        </section>
-                    {% endif %}
-                
-                    <!-- Skills -->
-                    {% if default_skills %}
-                        <section id="skills" class="tab-panel">
-                            {% for skill in default_skills %}
-                                {% include 'rules/_skill.html' %}
-                            {% endfor %}
-                        </section>
-                    {% endif %}
+                <!-- Dialogue packets -->
+                {% if request.user.profile.status == 'gm' and character.dialogue_packets.all %}
+                    <section id="dialogue_packets" class="tab-panel">
+                        {% for dialogue_packet in character.dialogue_packets.all %}
+                            {% include 'knowledge/_dialogue_packet.html' %}
+                        {% endfor %}
+                    </section>
+                {% endif %}
+            
+                <!-- Skills -->
+                {% if skills %}
+                    <section id="skills" class="tab-panel">
+                        {% for skill in skills %}
+                            {% include 'rules/_skill.html' %}
+                        {% endfor %}
+                    </section>
+                {% endif %}
 
-                    <!-- Knowledge packets -->
-                    {% if default_knowledge_packets %}
-                        <section id="knowledge_packets" class="tab-panel">
-                            {% for kn_packet in default_knowledge_packets %}
-                                {% include 'knowledge/_knowledge_packet.html' %}
-                            {% endfor %}
-                        </section>
-                    {% endif %}
-                
+                <!-- Knowledge packets -->
+                {% if knowledge_packets %}
+                    <section id="knowledge_packets" class="tab-panel">
+                        {% for kn_packet in knowledge_packets %}
+                            {% include 'knowledge/_knowledge_packet.html' %}
+                        {% endfor %}
+                    </section>
                 {% endif %}
                 
             </div>
