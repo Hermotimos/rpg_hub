@@ -77,7 +77,6 @@
                     <label class="h3" for="tab1">Lokacje</label>
                 {% endif %}
 
-        {% if request.user.profile.status == 'gm' %}
                 <!-- TAB HEADER: Characters (Prosoponomikon) -->
                 {% if characters %}
                     {% if location_types %}
@@ -87,7 +86,7 @@
                     {% endif %}
                     <label class="h3" for="tab2">Postacie</label>
                 {% endif %}
-        {% endif %}
+
                 <!-- TAB HEADER: Knowledge packets -->
                 {% if this_location.knowledge_packets.all %}
                     {% if location_types or characters %}
@@ -152,7 +151,6 @@
                     {% endif %}
 
                     <!-- TAB CONTENT: Characters (Prosoponomikon) -->
-            {% if request.user.profile.status == 'gm' %}
                     {% if characters %}
                         <section id="characters" class="tab-panel">
                             <div class="container">
@@ -171,7 +169,6 @@
                             </div>
                         </section>
                     {% endif %}
-            {% endif %}
                     
                     <!-- TAB CONTENT: Knowledge packets -->
                     {% if this_location.knowledge_packets.all %}
