@@ -77,6 +77,7 @@ class TheologySkillManager(Manager):
                        | Q(name__icontains='Kult')
                        | Q(name__icontains='Mister')
                        | Q(name__icontains='Wierzenia')
+                       | Q(name__icontains='Wiar')
                        | Q(name__icontains='Teolog'))
         return qs
     

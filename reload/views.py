@@ -5,7 +5,6 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 
 from chronicles.models import GameEvent
-from chronicles.models import Thread
 from imaginarion.models import PictureImage
 from prosoponomikon.models import Character
 from prosoponomikon.models import NonGMCharacter
