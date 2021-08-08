@@ -62,7 +62,16 @@ def prosoponomikon_character_view(request, character_id):
             Prefetch('biography_packets', queryset=known_bio_packets))
 
     character = characters.filter(id=character_id).first()
-
+    
+    default_skills = []
+    default_knowledge_packets = []
+    if profile.status == 'gm':
+        for character_group in character.character_groups.all():
+            for skill in character_group.default_skills.all():
+                default_skills.append(skill)
+            for kn_packet in character_group.default_knowledge_packets.all():
+                default_knowledge_packets.append(kn_packet)
+    
     # INFORM FORM
     if request.method == 'POST':
         handle_inform_form(request)
@@ -70,6 +79,8 @@ def prosoponomikon_character_view(request, character_id):
     context = {
         'page_title': character,
         'character': character,
+        'default_skills': default_skills,
+        'default_knowledge_packets': default_knowledge_packets,
     }
     if (profile in character.all_known() or profile.character == character
             or profile.status == 'gm'):

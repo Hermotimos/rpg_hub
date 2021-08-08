@@ -23,13 +23,13 @@
                                     {% else %}
                                          /media/profile_pics/profile_known_only_indirectly.jpg
                                     {% endif %}"
-                                >
+                            >
                         </div>
                         
                         <!-- BUTTONS -->
                         <div class="row mt-1">
                             <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Przejdź do Prosoponomikonu">
-                                <a class="btn btn-outline-dark icon-cursor py-2" href="{% url 'prosoponomikon:ungrouped' %}#character_{{ character.id }}"></a>
+                                <a class="btn btn-outline-dark icon-cursor py-2" href="{% url 'prosoponomikon:grouped' %}#character_{{ character.id }}"></a>
                             </div>
                             <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Przekaż wiedzę o postaci">
                                 <!-- Modal -->
@@ -69,111 +69,103 @@
                 </div>
             </div>
             
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 col-sm-6 border-left border-right mb-5 mb-sm-0">
-                        {% for biography_packet in character.biography_packets.all %}
-                            <ul class="bullets-1 bullets-big mb-2 pl-4 small text-muted">
-                                <li class="pl-1">
-                                    <a class="text-muted" href="#bio_packet_{{ biography_packet.id }}">
-                                        <span class="mb-1">{{ biography_packet.title }}</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        {% endfor %}
-                    </div>
-                    {% if request.user.profile.status == 'gm' %}
-                        <div class="col-12 col-sm-6 border-left border-right">
-                            {% for dialogue_packet in character.dialogue_packets.all %}
-                                <ul class="bullets-1 bullets-big mb-2 pl-4 small text-muted">
-                                    <li class="pl-1">
-                                        <a class="text-muted" href="#dialogue_packet_{{ dialogue_packet.id }}">
-                                            <span class="mb-1">{{ dialogue_packet.title }}</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-                
-                {% if request.user.profile.status == 'gm' %}
-                    <div class="row mt-4">
-                        <div class="col-12 col-sm-6 border-left border-right mb-5 mb-sm-0">
-                            <ul class="bullets-1 bullets-big mb-2 pl-4 small text-muted">
-                                {% for character_group in character.character_groups.all %}
-                                    {% for kn_packet in character_group.default_knowledge_packets.all %}
-                                        <li class="pl-1">
-                                            <a class="text-muted" href="#kn_packets">
-                                                <span class="mb-1">{{ kn_packet.title }}</span>
-                                            </a>
-                                        </li>
-                                    {% endfor %}
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <div class="col-12 col-sm-6 border-left border-right">
-                            <ul class="bullets-1 bullets-big mb-2 pl-4 small text-muted">
-                                {% for character_group in character.character_groups.all %}
-                                    {% for skill in character_group.default_skills.all %}
-                                        <li class="pl-1">
-                                            <a class="text-muted" href="#skills">
-                                                <span class="mb-1">{{ skill.name }}</span>
-                                            </a>
-                                        </li>
-                                    {% endfor %}
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                {% endif %}
-            </div>
-            
         </header>
         
-        <article>
-            {% for biography_packet in character.biography_packets.all %}
-                {% include 'knowledge/_biography_packet.html' %}
-            {% endfor %}
-        </article>
         
-        <article>
+        <article class="tabset multiline-header pt-5">
+            
+            <!-- TAB HEADERS -->
+            
+            <!-- Biography packets -->
+            {% if character.biography_packets.all %}
+                <input type="radio" name="tabset" id="tab1" aria-controls="biography_packets" checked>
+                <label class="h4 mb-0" for="tab1">Biografia</label>
+            {% endif %}
+            
+            <!-- TAB HEADERS FOR 'GM' ONLY -->
             {% if request.user.profile.status == 'gm' %}
-                {% for dialogue_packet in character.dialogue_packets.all %}
-                    {% include 'knowledge/_dialogue_packet.html' %}
-                {% endfor %}
+            
+                <!-- Dialogue packets -->
+                {% if character.dialogue_packets.all %}
+                    {% if character.biography_packets.all %}
+                        <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets">
+                    {% else %}
+                        <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets" checked>
+                    {% endif %}
+                    <label class="h4 mb-0" for="tab2">Dialogi</label>
+                {% endif %}
+            
+                
+                {% if default_skills %}
+                    <!-- Skills -->
+                    {% if character.biography_packets.all or character.dialogue_packets.all %}
+                        <input type="radio" name="tabset" id="tab3" aria-controls="skills">
+                    {% else %}
+                        <input type="radio" name="tabset" id="tab3" aria-controls="skills" checked>
+                    {% endif %}
+                    <label class="h4 mb-0" for="tab3">~Umiejętności</label>
+                {% endif %}
+        
+                {% if default_knowledge_packets %}
+                    <!-- Knowledge packets -->
+                    {% if character.biography_packets.all or character.dialogue_packets.all %}
+                        <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets">
+                    {% else %}
+                        <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets">
+                    {% endif %}
+                    <label class="h4 mb-0" for="tab4">~Wiedza</label>
+                {% endif %}
+            
             {% endif %}
+            
+            <!-- TABS -->
+            <div class="tab-panels">
+                
+                <!-- Biography packets -->
+                {% if character.biography_packets.all %}
+                    <section id="biography_packets" class="tab-panel">
+                        <!-- Biography packets are filtered in the view for the requesting profile -->
+                        {% for biography_packet in character.biography_packets.all %}
+                            {% include 'knowledge/_biography_packet.html' %}
+                        {% endfor %}
+                    </section>
+                {% endif %}
+                
+                <!-- TABS FOR 'GM' ONLY -->
+                {% if request.user.profile.status == 'gm' %}
+                
+                    <!-- Dialogue packets -->
+                    {% if character.dialogue_packets.all %}
+                        <section id="dialogue_packets" class="tab-panel">
+                            {% for dialogue_packet in character.dialogue_packets.all %}
+                                {% include 'knowledge/_dialogue_packet.html' %}
+                            {% endfor %}
+                        </section>
+                    {% endif %}
+                
+                    <!-- Skills -->
+                    {% if default_skills %}
+                        <section id="skills" class="tab-panel">
+                            {% for skill in default_skills %}
+                                {% include 'rules/_skill.html' %}
+                            {% endfor %}
+                        </section>
+                    {% endif %}
+
+                    <!-- Knowledge packets -->
+                    {% if default_knowledge_packets %}
+                        <section id="knowledge_packets" class="tab-panel">
+                            {% for kn_packet in default_knowledge_packets %}
+                                {% include 'knowledge/_knowledge_packet.html' %}
+                            {% endfor %}
+                        </section>
+                    {% endif %}
+                
+                {% endif %}
+                
+            </div>
+            
         </article>
-        
-        {% if request.user.profile.status == 'gm' %}
-            {% if character.character_groups.all %}
-        
-                <!-- DEFAULT KNOWLEDGE PACKETS -->
-                <div class="anchor mt-n5 mb-5" id="kn_packets">
-                    <h3 class="mb-3">
-                        <span class="border-bottom-dark">Domyślne pakiety wiedzy</span>
-                    </h3>
-                    {% for character_group in character.character_groups.all %}
-                        {% for kn_packet in character_group.default_knowledge_packets.all %}
-                            {% include 'knowledge/_knowledge_packet.html' %}
-                        {% endfor %}
-                    {% endfor %}
-                </div>
-        
-                <!-- DEFAULT SKILLS -->
-                <div class="anchor mt-n5 mb-5" id="skills">
-                    <h3 class="mb-3">
-                        <span class="border-bottom-dark">Domyślne umiejętności</span>
-                    </h3>
-                    {% for character_group in character.character_groups.all %}
-                        {% for skill in character_group.default_skills.all %}
-                            {% include 'rules/_skill.html' %}
-                        {% endfor %}
-                    {% endfor %}
-                </div>
-        
-            {% endif %}
-        {% endif %}
         
     </article>
 {% endblock content %}
