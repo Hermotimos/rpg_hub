@@ -100,7 +100,7 @@
                     <input type="radio" name="tabset" id="tab3" aria-controls="skills" checked>
                 {% endif %}
                 <label class="h4 mb-0" for="tab3">
-                    {% if character.profile != request.user.profile %} ~ {% endif %}
+                    {% if character.profile != request.user.profile and character.profile.status != 'player' %} ~ {% endif %}
                     Umiejętności
                 </label>
             {% endif %}
@@ -113,7 +113,7 @@
                     <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets">
                 {% endif %}
                 <label class="h4 mb-0" for="tab4">
-                    {% if character.profile != request.user.profile %} ~ {% endif %}
+                    {% if character.profile != request.user.profile and character.profile.status != 'player' %} ~ {% endif %}
                     Wiedza
                 </label>
             {% endif %}
@@ -126,7 +126,7 @@
                     <input type="radio" name="tabset" id="tab5" aria-controls="known_characters">
                 {% endif %}
                 <label class="h4 mb-0" for="tab5">
-                    {% if character.profile != request.user.profile %} ~ {% endif %}
+                    {% if character.profile != request.user.profile and character.profile.status != 'player' %} ~ {% endif %}
                     Znajomości
                 </label>
             {% endif %}
