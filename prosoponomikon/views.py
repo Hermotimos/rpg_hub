@@ -139,7 +139,7 @@ def prosoponomikon_character_groups_edit_view(request):
                 form.fields['characters'].queryset = characters
     
     context = {
-        'page_title': "Dodaj/Edytuj grupy postaci",
+        'page_title': "Edytuj grupy postaci",
         'formset': formset,
         'formset_helper': CharacterGroupsEditFormSetHelper(status=profile.status),
     }

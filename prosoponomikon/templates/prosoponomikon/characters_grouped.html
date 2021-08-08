@@ -22,9 +22,8 @@
             <!-- PLAYERS -->
             {% if player_characters %}
                 <input type="radio" name="tabset" id="tab_players" aria-controls="players" checked>
-                <label class="h4 mb-0" for="tab_players">Gracze</label>
+                <label class="h4 mb-0" for="tab_players">*Gracze</label>
             {% endif %}
-
             
             <!-- GROUPED -->
             {% for character_group in character_groups %}
@@ -39,7 +38,7 @@
             <!-- UNGROUPED -->
             {% if ungrouped_characters %}
                 <input type="radio" name="tabset" id="tab_last" aria-controls="ungrouped">
-                <label class="h4 mb-0" for="tab_last">Pozostali</label>
+                <label class="h4 mb-0" for="tab_last">*Pozostali</label>
             {% endif %}
             
             <!-- TABS -->

@@ -10,9 +10,7 @@
     <article class="top-button">
         
         <header class="mb-5">
-            {% if request.user.profile.character_groups_authored.all %}
-                <a href="{% url 'prosoponomikon:grouped' %}" class="btn btn-outline-info mb-1">Grupy/Wszyscy</a>
-            {% endif %}
+            <a href="{% url 'prosoponomikon:grouped' %}" class="btn btn-outline-info mb-1">Grupy/Wszyscy</a>
         </header>
         
         <article class="pt-5">
