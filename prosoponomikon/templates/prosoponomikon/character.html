@@ -92,8 +92,8 @@
                 <label class="h4 mb-0" for="tab2">Dialogi</label>
             {% endif %}
             
+            <!-- Skills -->
             {% if skills %}
-                <!-- Skills -->
                 {% if character.biography_packets.all or character.dialogue_packets.all %}
                     <input type="radio" name="tabset" id="tab3" aria-controls="skills">
                 {% else %}
@@ -105,8 +105,8 @@
                 </label>
             {% endif %}
     
+            <!-- Knowledge packets -->
             {% if knowledge_packets %}
-                <!-- Knowledge packets -->
                 {% if character.biography_packets.all or character.dialogue_packets.all %}
                     <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets">
                 {% else %}
@@ -115,6 +115,19 @@
                 <label class="h4 mb-0" for="tab4">
                     {% if character.profile != request.user.profile %} ~ {% endif %}
                     Wiedza
+                </label>
+            {% endif %}
+            
+            <!-- Known characters -->
+            {% if known_characters %}
+                {% if character.biography_packets.all or character.dialogue_packets.all %}
+                    <input type="radio" name="tabset" id="tab5" aria-controls="known_characters">
+                {% else %}
+                    <input type="radio" name="tabset" id="tab5" aria-controls="known_characters">
+                {% endif %}
+                <label class="h4 mb-0" for="tab5">
+                    {% if character.profile != request.user.profile %} ~ {% endif %}
+                    Znajomości
                 </label>
             {% endif %}
             
@@ -156,6 +169,19 @@
                         {% for kn_packet in knowledge_packets %}
                             {% include 'knowledge/_knowledge_packet.html' %}
                         {% endfor %}
+                    </section>
+                {% endif %}
+                
+                <!-- Known characters -->
+                {% if known_characters %}
+                    <section id="known_characters" class="tab-panel">
+                        <div class="container">
+                            <div class="row">
+                                {% for character in known_characters %}
+                                    {% include 'prosoponomikon/_char_img.html' %}
+                                {% endfor %}
+                            </div>
+                        </div>
                     </section>
                 {% endif %}
                 

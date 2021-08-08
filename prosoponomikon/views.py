@@ -65,6 +65,7 @@ def prosoponomikon_character_view(request, character_id):
     character = characters.filter(id=character_id).first()
     skills = []
     knowledge_packets = []
+    known_characters = []
     
     if profile.status == 'gm' and character.profile.status == 'npc':
         # Default skills and kn_packets etc. as per CharacterGroup
@@ -73,16 +74,32 @@ def prosoponomikon_character_view(request, character_id):
                 skills.append(skill)
             for kn_packet in character_group.default_knowledge_packets.all():
                 knowledge_packets.append(kn_packet)
-                
-    elif profile.status == 'gm' or character_id == profile.character.id:
-        # Own skills and kn_packets etc.
+  
+    elif profile.status == 'gm' or profile.character.id == character_id:
+        # Own skills and kn_packets etc. of a Player
         skills = Skill.objects.filter(skill_levels__acquired_by=character.profile)
         skill_levels = SkillLevel.objects.filter(acquired_by=character.profile)
         skills = skills.prefetch_related(
             Prefetch('skill_levels', queryset=skill_levels))
         skills = skills.distinct()
- 
-        knowledge_packets = character.profile.knowledge_packets.order_by('title')
+
+    # if profile.status == 'gm' or profile.character.id == character_id:
+        knowledge_packets = character.profile.knowledge_packets.all()
+        knowledge_packets = knowledge_packets.order_by('title')
+        knowledge_packets = knowledge_packets.prefetch_related('pictures')
+
+        if (profile.status == 'gm' and character.profile.status == 'player')\
+                or profile.status == 'player':
+            known_characters = character.profile.characters_all_known_annotated_if_indirectly()
+            print(known_characters)
+        else:
+            known_characters = character.profile.characters_known_directly.all()
+            
+        known_characters = known_characters.exclude(id=character.id)
+        known_characters = known_characters.select_related('profile__user')
+        known_characters = known_characters.prefetch_related('known_directly')
+
+        
 
     # INFORM FORM
     if request.method == 'POST':
@@ -93,6 +110,7 @@ def prosoponomikon_character_view(request, character_id):
         'character': character,
         'skills': skills,
         'knowledge_packets': knowledge_packets,
+        'known_characters': known_characters,
     }
     if (profile in character.all_known() or profile.character == character
             or profile.status == 'gm'):
