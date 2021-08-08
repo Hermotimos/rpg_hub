@@ -4,7 +4,6 @@ from prosoponomikon import views
 
 app_name = 'prosoponomikon'
 urlpatterns = [
-    path('_hidden', views.prosoponomikon_main_view, name='main'),
     path('ungrouped/', views.prosoponomikon_ungrouped_view, name='ungrouped'),
     path('grouped/', views.prosoponomikon_grouped_view, name='grouped'),
     

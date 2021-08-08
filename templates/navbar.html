@@ -40,7 +40,7 @@
                             <li><a class="font-14 nav-link small-caps" href="{% url 'chronicles:timeline' %}">Kalendarium</a></li>
                             <li><a class="font-14 nav-link small-caps" href="{% url 'chronicles:chronicle-main' %}">Kronika</a></li>
                             <li><a class="font-14 nav-link small-caps" href="{% url 'debates:main' %}">Narady</a></li>
-                            <li><a class="font-14 nav-link small-caps {% if request.user.profile.status != 'gm' %} disabled {% endif %}" href="{% url 'prosoponomikon:main' %}">Prosoponomikon</a></li>
+                            <li><a class="font-14 nav-link small-caps {% if request.user.profile.status != 'gm' %} disabled {% endif %}" href="{% url 'prosoponomikon:grouped' %}">Prosoponomikon</a></li>
                             <li><a class="font-14 nav-link small-caps" href="{% url 'toponomikon:main' %}">Toponomikon</a></li>
                         </ul>
                     </div>
@@ -55,7 +55,7 @@
                             <li><a class="font-14 nav-link small-caps" href="{% url 'knowledge:knowledge-packets-in-skills' 'HistorySkill' %}">Historia</a></li>
                             <li><a class="font-14 nav-link small-caps" href="{% url 'knowledge:knowledge-packets-in-skills' 'TheologySkill' %}">Teologia</a></li>
                             
-        <!--  SHOULDN'T THESE BE LEFT OUT? THEY'RE ALREADY PRESENT IN PROSOPONOMIKON                      -->
+        <!--  THESE ARE ALREADY PRESENT IN PROSOPONOMIKON  But they can be presented with new features, not just grouping by Location  -->
         <!--                    <li><a class="font-14 nav-link small-caps" href="#">Arkana</a></li>-->
     <!--                        SEPARATE MONSTERS:-->
         <!--                    <li><a class="font-14 nav-link small-caps" href="#">Bestiariusz/Therarion</a></li>-->

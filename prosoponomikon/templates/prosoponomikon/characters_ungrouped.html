@@ -8,44 +8,29 @@
 
 {% block content %}
     <article class="top-button">
-        <div class="mb-5">
-            <a href="{% url 'prosoponomikon:groups-create' %}" class="btn btn-outline-dark mb-1">
-                Nowa grupa
-            </a>
-            <a href="{% url 'prosoponomikon:groups-edit' %}" class="btn btn-outline-dark mb-1">
-                Edytuj grupy
-            </a>
+        
+        <header class="mb-5">
             {% if request.user.profile.character_groups_authored.all %}
-                <a href="{% url 'prosoponomikon:grouped' %}" class="btn btn-outline-info mb-1">
-                    Grupy
-                </a>
+                <a href="{% url 'prosoponomikon:grouped' %}" class="btn btn-outline-info mb-1">Grupy/Wszyscy</a>
             {% endif %}
-        </div>
-        <div class="container">
-            {% if players %}
+        </header>
+        
+        <article class="pt-5">
+            {% if all_characters %}
                 <section class="py-5">
                     <p class="mb-0 text-center">✧</p>
                     <p class="mb-0 text-center">✧ ✦ ✧</p>
-                    <p class="h3 text-center mb-2 mt-1">Bohaterowie graczy</p>
+                    <p class="h3 text-center mb-2 mt-1">Wszystkie Postacie</p>
                     <p class="mb-0 text-center">✧ ✦ ✧</p>
                     <p class="mb-5 mt-0 text-center">✧</p>
-                    {% for character in players %}
-                       {% include 'prosoponomikon/_character_info.html' %}
-                    {% endfor %}
+                    <div class="container">
+                        {% for character in all_characters %}
+                           {% include 'prosoponomikon/_character_info.html' %}
+                        {% endfor %}
+                    </div>
                 </section>
             {% endif %}
-            {% if npcs %}
-                <section class="py-5">
-                    <p class="mb-0 text-center">✧</p>
-                    <p class="mb-0 text-center">✧ ✦ ✧</p>
-                    <p class="h3 text-center mb-2 mt-1">Bohaterowie niezależni</p>
-                    <p class="mb-0 text-center">✧ ✦ ✧</p>
-                    <p class="mb-5 mt-0 text-center">✧</p>
-                    {% for character in npcs %}
-                        {% include 'prosoponomikon/_character_info.html' %}
-                    {% endfor %}
-                </section>
-            {% endif %}
-        </div>
+        </article>
+        
     </article>
 {% endblock content %}

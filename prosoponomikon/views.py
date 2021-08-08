@@ -18,25 +18,12 @@ from users.models import Profile, User
 
 
 @login_required
-def prosoponomikon_main_view(request):
-    profile = request.user.profile
-    if profile.character_groups_authored.all():
-        return redirect('prosoponomikon:grouped')
-    else:
-        return redirect('prosoponomikon:ungrouped')
-
-
-@login_required
 def prosoponomikon_ungrouped_view(request):
     profile = request.user.profile
     all_characters = profile.characters_all_known_annotated_if_indirectly()
-    players = all_characters.filter(profile__in=Profile.players.all())
-    npcs = all_characters.filter(profile__in=Profile.npcs.all())
-    
     context = {
         'page_title': 'Prosoponomikon',
-        'players': players,
-        'npcs': npcs,
+        'all_characters': all_characters,
     }
     return render(request, 'prosoponomikon/characters_ungrouped.html', context)
 
@@ -44,20 +31,20 @@ def prosoponomikon_ungrouped_view(request):
 @login_required
 def prosoponomikon_grouped_view(request):
     profile = request.user.profile
-    all_characters = profile.characters_all_known_annotated_if_indirectly()
+    
     character_groups = profile.characters_groups_authored_with_characters()
+    all_characters = profile.characters_all_known_annotated_if_indirectly()
+    player_characters = all_characters.filter(profile__status="player")
     ungrouped_characters = all_characters.exclude(
-        character_groups__in=character_groups)
+        character_groups__in=character_groups).exclude(id__in=player_characters)
     
     context = {
         'page_title': 'Prosoponomikon',
+        'player_characters': player_characters,
         'character_groups': character_groups,
         'ungrouped_characters': ungrouped_characters,
     }
-    if character_groups:
-        return render(request, 'prosoponomikon/characters_grouped.html', context)
-    else:
-        return redirect('prosoponomikon:ungrouped')
+    return render(request, 'prosoponomikon/characters_grouped.html', context)
 
 
 @login_required
