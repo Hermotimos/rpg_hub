@@ -185,13 +185,13 @@ class CharacterGroupAdminForm(forms.ModelForm):
             'default_skills']
         widgets = {
             'characters': FilteredSelectMultiple(
-                'Locations', False, attrs={'style': 'height:200px'}
+                'Characters', False, attrs={'style': 'height:200px'}
             ),
             'default_knowledge_packets': FilteredSelectMultiple(
-                'Locations', False, attrs={'style': 'height:200px'}
+                'Pakiety wiedzy', False, attrs={'style': 'height:200px'}
             ),
             'default_skills': FilteredSelectMultiple(
-                'Locations', False, attrs={'style': 'height:200px'}
+                'Umiejetności', False, attrs={'style': 'height:200px'}
             ),
         }
 
