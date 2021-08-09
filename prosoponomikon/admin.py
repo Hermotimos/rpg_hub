@@ -177,13 +177,36 @@ class CharacterAdmin(admin.ModelAdmin):
         return qs
 
 
+class CharacterGroupAdminForm(forms.ModelForm):
+    class Meta:
+        model = CharacterGroup
+        fields = [
+            'name', 'author', 'characters', 'default_knowledge_packets',
+            'default_skills']
+        widgets = {
+            'characters': FilteredSelectMultiple(
+                'Locations', False, attrs={'style': 'height:200px'}
+            ),
+            'default_knowledge_packets': FilteredSelectMultiple(
+                'Locations', False, attrs={'style': 'height:200px'}
+            ),
+            'default_skills': FilteredSelectMultiple(
+                'Locations', False, attrs={'style': 'height:200px'}
+            ),
+        }
+
+
+class CharacterGroupAdmin(admin.ModelAdmin):
+    form = CharacterGroupAdminForm
+    
+
 admin.site.register(NameGroup, NameGroupAdmin)
 admin.site.register(AffixGroup, AffixGroupAdmin)
 admin.site.register(AuxiliaryNameGroup, AuxiliaryNameGroupAdmin)
 admin.site.register(FirstName, FirstNameAdmin)
 admin.site.register(FamilyNameGroup, FamilyNameGroupAdmin)
 admin.site.register(FamilyName, FamilyNameAdmin)
-admin.site.register(CharacterGroup)
+admin.site.register(CharacterGroup, CharacterGroupAdmin)
 admin.site.register(Character, CharacterAdmin)
 admin.site.register(PlayerCharacter, CharacterAdmin)
 admin.site.register(NPCCharacter, CharacterAdmin)
