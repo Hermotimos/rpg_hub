@@ -185,3 +185,11 @@ class Profile(Model):
             'characters__known_indirectly',
             'characters__first_name')
         return character_groups
+
+    def skills_acquired_with_skill_levels(self):
+        from rules.models import Skill, SkillLevel
+        skills = Skill.objects.filter(skill_levels__acquired_by=self)
+        skill_levels = SkillLevel.objects.filter(acquired_by=self)
+        skills = skills.prefetch_related(
+            Prefetch('skill_levels', queryset=skill_levels))
+        return skills.distinct()

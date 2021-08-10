@@ -51,55 +51,79 @@ def prosoponomikon_grouped_view(request):
 @login_required
 def prosoponomikon_character_view(request, character_id):
     profile = request.user.profile
+    if profile.status == 'gm':
+        return redirect(
+            'prosoponomikon:character-for-gm', character_id)
+    else:
+        return redirect(
+            'prosoponomikon:character-for-player', character_id=character_id)
+
+
+@login_required
+def prosoponomikon_character_for_gm_view(request, character_id):
+    profile = request.user.profile
     
     characters = Character.objects.select_related('first_name')
-    if profile.status == 'gm':
-        characters = characters.prefetch_related(
-            'biography_packets', 'dialogue_packets')
-    else:
-        known_bio_packets = (profile.biography_packets.all()
-                             | profile.authored_bio_packets.all())
-        characters = characters.prefetch_related(
-            Prefetch('biography_packets', queryset=known_bio_packets))
-
+    characters = characters.prefetch_related(
+        'biography_packets', 'dialogue_packets')
     character = characters.filter(id=character_id).first()
-    skills = []
-    knowledge_packets = []
-    known_characters = []
+    known_characters = character.profile.characters_all_known_annotated_if_indirectly()
     
-    if profile.status == 'gm' and character.profile.status == 'npc':
-        # Default skills and kn_packets etc. as per CharacterGroup
+    # NPCs: Default skills and kn_packets etc. as per CharacterGroup
+    if character.profile.status == 'npc':
+        skills = []
+        knowledge_packets = []
         for character_group in character.character_groups.all():
             for skill in character_group.default_skills.all():
                 skills.append(skill)
             for kn_packet in character_group.default_knowledge_packets.all():
                 knowledge_packets.append(kn_packet)
-  
-    elif profile.status == 'gm' or profile.character.id == character_id:
-        # Own skills and kn_packets etc. of a Player
-        skills = Skill.objects.filter(skill_levels__acquired_by=character.profile)
-        skill_levels = SkillLevel.objects.filter(acquired_by=character.profile)
-        skills = skills.prefetch_related(
-            Prefetch('skill_levels', queryset=skill_levels))
-        skills = skills.distinct()
-
-    # if profile.status == 'gm' or profile.character.id == character_id:
-        knowledge_packets = character.profile.knowledge_packets.all()
-        knowledge_packets = knowledge_packets.order_by('title')
+                
+    # Players: Own skills and kn_packets etc. of a Player
+    else:
+        skills = character.profile.skills_acquired_with_skill_levels()
+        knowledge_packets = character.profile.knowledge_packets.order_by('title')
         knowledge_packets = knowledge_packets.prefetch_related('pictures')
+ 
+    # INFORM FORM
+    if request.method == 'POST':
+        handle_inform_form(request)
+    
+    context = {
+        'page_title': character,
+        'character': character,
+        'skills': skills,
+        'knowledge_packets': knowledge_packets,
+        'known_characters': known_characters,
+    }
+    if profile.status == 'gm':
+        return render(request, 'prosoponomikon/character.html', context)
+    else:
+        return redirect('home:dupa')
 
-        if (profile.status == 'gm' and character.profile.status == 'player')\
-                or profile.status == 'player':
-            known_characters = character.profile.characters_all_known_annotated_if_indirectly()
-            print(known_characters)
-        else:
-            known_characters = character.profile.characters_known_directly.all()
-            
-        known_characters = known_characters.exclude(id=character.id)
-        known_characters = known_characters.select_related('profile__user')
-        known_characters = known_characters.prefetch_related('known_directly')
 
-        
+@login_required
+def prosoponomikon_character_for_player_view(request, character_id):
+    profile = request.user.profile
+    
+    known_bio_packets = (
+        profile.biography_packets.all() | profile.authored_bio_packets.all())
+    characters = Character.objects.select_related('first_name')
+    characters = characters.prefetch_related(
+        Prefetch('biography_packets', queryset=known_bio_packets))
+    
+    character = characters.filter(id=character_id).first()
+    
+    # Player viewing own Character
+    if profile.character.id == character_id:
+        skills = profile.skills_acquired_with_skill_levels()
+        knowledge_packets = profile.knowledge_packets.order_by('title')
+        knowledge_packets = knowledge_packets.prefetch_related('pictures')
+        known_characters = character.profile.characters_all_known_annotated_if_indirectly()
+    
+    # Player viewing other Characters
+    else:
+        skills, knowledge_packets, known_characters = [], [], []
 
     # INFORM FORM
     if request.method == 'POST':

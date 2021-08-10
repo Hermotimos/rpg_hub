@@ -14,6 +14,13 @@ urlpatterns = [
     
     path('character/<int:character_id>/', views.prosoponomikon_character_view,
          name='character'),
+    path('character-for-gm/<int:character_id>/',
+         views.prosoponomikon_character_for_gm_view,
+         name='character-for-gm'),
+    path('character-for-player/<int:character_id>/',
+         views.prosoponomikon_character_for_player_view,
+         name='character-for-player'),
+    
     
     path('character/<int:character_id>/bio-packet-form/<int:bio_packet_id>/',
          views.prosoponomikon_bio_packet_form_view, name='bio-packet-form'),
