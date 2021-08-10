@@ -107,10 +107,10 @@
     
             <!-- Knowledge packets -->
             {% if knowledge_packets %}
-                {% if character.biography_packets.all or character.dialogue_packets.all %}
+                {% if character.biography_packets.all or character.dialogue_packets.all or skills %}
                     <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets">
                 {% else %}
-                    <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets">
+                    <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets" checked>
                 {% endif %}
                 <label class="h4 mb-0" for="tab4">
                     {% if character.profile != request.user.profile and character.profile.status != 'player' %} ~ {% endif %}
@@ -120,10 +120,10 @@
             
             <!-- Known characters -->
             {% if known_characters %}
-                {% if character.biography_packets.all or character.dialogue_packets.all %}
+                {% if character.biography_packets.all or character.dialogue_packets.all or skills or knowledge_packets %}
                     <input type="radio" name="tabset" id="tab5" aria-controls="known_characters">
                 {% else %}
-                    <input type="radio" name="tabset" id="tab5" aria-controls="known_characters">
+                    <input type="radio" name="tabset" id="tab5" aria-controls="known_characters" checked>
                 {% endif %}
                 <label class="h4 mb-0" for="tab5">
                     {% if character.profile != request.user.profile and character.profile.status != 'player' %} ~ {% endif %}
