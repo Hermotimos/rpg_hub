@@ -210,6 +210,7 @@ div.pointer {cursor: pointer;}
     width: auto;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 0.2rem;
     border: solid 1px black;
 }
 .img-season {
