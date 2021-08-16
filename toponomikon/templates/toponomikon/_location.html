@@ -4,7 +4,8 @@
 <div class="row mb-5 mb-md-4">
     <div class="col-md-4 px-0 py-1">
         <a href="{% url 'toponomikon:location' location.name %}">
-            <div class="img-hover-zoom">
+            <div class="img-hover-zoom" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                title='<span class="font-italic">{% if location.only_indirectly %} {{ location }}<br>(Lokacja znana ze słyszenia) {% else %} {{ location }} {% endif %}</span>'>
                 <img class="img-fluid {% if location.only_indirectly %} img-grayscale {% endif %}"
                      src="{% if location.main_image %} {{ location.main_image.image.image.url }} {% else %} {{ location.location_type.default_img.image.url }} {% endif %}">
             </div>
@@ -14,7 +15,6 @@
         <h2 class="border-bottom-dark">
             <small class="pr-5 {% if location.only_indirectly %} text-muted {% endif %}">
                 {{ location.name }}
-                {% if location.only_indirectly  %} (znasz z opowieści) {% endif %}
             </small>
         </h2>
         <h6 class="font-italic linebreaks-style text-justify

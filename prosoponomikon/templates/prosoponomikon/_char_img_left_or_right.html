@@ -2,7 +2,8 @@
 <div class="col-3 px-0 pt-1">
     <div class="{% if side == 'left' %} float-left pr-3 {% else %} float-right pl-3 {% endif %}">
         <a href="{% url 'prosoponomikon:character' character.id %}">
-            <div class="img-hover-zoom m-0">
+            <div class="img-hover-zoom m-0" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                 title='<span class="font-italic">{% if character.only_indirectly %} {{ character }}<br>(Postać znana ze słyszenia) {% else %} {{ character }} {% endif %}</span>'>
                 <img class="character {% if not character.profile.is_alive %} img-grayscale {% endif %}"
                      src="
                         {% if request.user.profile in character.known_directly.all or request.user.profile.status == 'gm' %}

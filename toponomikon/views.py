@@ -85,9 +85,7 @@ def toponomikon_location_view(request, loc_name):
         
     this_location = prep.get(name=loc_name)
     page_title = this_location.name
-    if this_location in known_only_indir:
-        page_title += ' (znasz z opowieści)'
-        
+    
     # CHARACTERS TAB
     # Characters in this location and its sub-locations if known to profile:
     characters = profile.characters_all_known_annotated_if_indirectly()
