@@ -515,20 +515,25 @@ m2m_changed.connect(
     sender=GameEvent.locations.through)
 
 
-def update_known_characters(sender, instance, **kwargs):
-    """Whenever the signal is called, for each profile in known_directly update
-    their known_directly characters with all other "direct" event participants.
-    This works between NPCs, too. This is for future...
-    """
-    known_directly = instance.known_directly.all()
-    for profile in known_directly.all():
-        profile.character.known_directly.add(*known_directly)
-        
-        
-post_save.connect(
-    receiver=update_known_characters,
-    sender=GameEvent)
+# DEACTIVATED
+# The signal was used while entering NPCs as participants in GameEvents.
+# It's unsafe to use as participation not always implies "known_direclty" !!!
 
-m2m_changed.connect(
-    receiver=update_known_characters,
-    sender=GameEvent.known_directly.through)
+# def update_known_characters(sender, instance, **kwargs):
+#     """Whenever the signal is called, for each profile in known_directly
+#     update their known_directly characters with all other "direct" event
+#     participants.
+#     This works between NPCs, too. This is for future...
+#     """
+#     known_directly = instance.known_directly.all()
+#     for profile in known_directly.all():
+#         profile.character.known_directly.add(*known_directly)
+#
+#
+# post_save.connect(
+#     receiver=update_known_characters,
+#     sender=GameEvent)
+#
+# m2m_changed.connect(
+#     receiver=update_known_characters,
+#     sender=GameEvent.known_directly.through)
