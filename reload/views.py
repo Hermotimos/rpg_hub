@@ -158,7 +158,7 @@ def todos_view(request):
     
     game_event_no_known = GameEvent.objects.filter(
         known_directly=None).filter(known_indirectly=None)
-   
+    
     context = {
         'page_title': 'TODOs',
         'characters_no_frequented_location': characters_no_frequented_location,

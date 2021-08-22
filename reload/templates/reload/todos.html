@@ -8,7 +8,7 @@
     
         {% if characters_no_frequented_location.exists %}
             <div class="my-3 ml-4">
-                <h5>Postacie bez lokacji:</h5>
+                <h5>Postacie bez lokacji [{{ characters_no_frequented_location.count }}]</h5>
                 <div class="ml-4">
                     {% for character in characters_no_frequented_location.all %}
                         <a class="small" href="{% url 'admin:prosoponomikon_character_change' character.id %}" target="_blank">
@@ -22,7 +22,7 @@
     
         {% if characters_no_description.exists %}
             <div class="my-3 ml-4">
-                <h5>Postacie bez opisu:</h5>
+                <h5>Postacie bez opisu [{{ characters_no_description.count }}]</h5>
                 <div class="ml-4">
                     {% for character in characters_no_description.all %}
                         <a class="small" href="{% url 'admin:prosoponomikon_character_change' character.id %}" target="_blank">
@@ -42,7 +42,7 @@
         
         {% if profiles_no_image.exists %}
             <div class="my-3 ml-4">
-                <h5>Profile bez obrazka:</h5>
+                <h5>Profile bez obrazka [{{ profiles_no_image.count }}]</h5>
                 <div class="ml-4">
                     {% for profile in profiles_no_image.all %}
                         <a class="small" href="{% url 'admin:users_profile_change' profile.id %}" target="_blank">
@@ -62,7 +62,7 @@
         
         {% if game_event_no_known.exists %}
             <div class="my-3 ml-4">
-                <h5>Profile bez obrazka:</h5>
+                <h5>Wydarzenia bez uczestników [{{ game_event_no_known.count }}]</h5>
                 <div class="ml-4">
                     {% for game_event in game_event_no_known.all %}
                         <a class="small" href="{% url 'admin:chronicles_gameevent_change' game_event.id %}" target="_blank">
@@ -82,7 +82,7 @@
         
         {% if locations_no_image.exists %}
             <div class="my-3 ml-4">
-                <h5>Lokacje bez obrazka:</h5>
+                <h5>Lokacje bez obrazka [{{ locations_no_image.count }}]</h5>
                 <div class="ml-4">
                     {% for location in locations_no_image.all %}
                         <a class="small" href="{% url 'admin:toponomikon_location_change' location.id %}" target="_blank">
@@ -96,7 +96,7 @@
         
         {% if locations_no_description.exists %}
             <div class="my-3 ml-4">
-                <h5>Lokacje bez opisu:</h5>
+                <h5>Lokacje bez opisu [{{ locations_no_description.count }}]</h5>
                 <div class="ml-4">
                     {% for location in locations_no_description.all %}
                         <a class="small" href="{% url 'admin:toponomikon_location_change' location.id %}" target="_blank">
