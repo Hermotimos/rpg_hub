@@ -242,30 +242,37 @@
                     </td>
                     <!-- KNOWN DIRECTLY AND INDIRECTLY -->
                     <td class="font-13 align-center align-top">
-                        {% for profile in event.known_directly.all %}
-                            {% if profile.status == 'player' %}
-                                <a href="{% url 'prosoponomikon:character' profile.character.id %}"
-                                   data-toggle="tooltip" data-placement="top" data-html="true"
-                                   title='<span class="font-italic">Prosoponomikon:<br>"{{ profile }}"</span>'>
-                                    <div class="d-inline">
-                                       <img class="rounded-circle img-smaller" src="{{ profile.image.url }}">
-                                    </div>
-                                </a>
-                            {% endif %}
-                            {% if forloop.counter|divisibleby:2 and not forloop.last %}<br>{% endif %}
-                        {% endfor %}
-                        {% if event.known_directly.all %}<br>{% endif %}
-                        {% if event.known_indirectly.all %}-✧-<br>{% endif %}
-                        {% for profile in event.known_indirectly.all %}
-                            <a href="{% url 'prosoponomikon:character' profile.character.id %}"
-                               data-toggle="tooltip" data-placement="top" data-html="true"
-                               title='<span class="font-italic">Prosoponomikon:<br>"{{ profile }}"</span>'>
-                                <div class="d-inline">
-                                   <img class="rounded-circle img-grayscale img-smaller" src="{{ profile.image.url }}">
-                                </div>
-                            </a>
-                            {% if forloop.counter|divisibleby:2 and not forloop.last %}<br>{% endif %}
-                        {% endfor %}
+                        {% if event.known_directly.all %}
+                            <div class="pb-1">
+                                {% for profile in event.known_directly.all %}
+                                    {% if profile.status == 'player' %}
+                                        <a href="{% url 'prosoponomikon:character' profile.character.id %}"
+                                           data-toggle="tooltip" data-placement="top" data-html="true"
+                                           title='<span class="font-italic">Prosoponomikon:<br>"{{ profile }}"</span>'>
+                                            <div class="d-inline">
+                                               <img class="rounded-circle img-smaller" src="{{ profile.image.url }}">
+                                            </div>
+                                        </a>
+                                    {% endif %}
+                                    {% if forloop.counter|divisibleby:2 and not forloop.last and profile.status == 'player' %}<br>{% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        {% if event.known_indirectly.all %}
+                            -✧-
+                            <div>
+                                {% for profile in event.known_indirectly.all %}
+                                    <a href="{% url 'prosoponomikon:character' profile.character.id %}"
+                                       data-toggle="tooltip" data-placement="top" data-html="true"
+                                       title='<span class="font-italic">Prosoponomikon:<br>"{{ profile }}"</span>'>
+                                        <div class="d-inline">
+                                           <img class="rounded-circle img-grayscale img-smaller" src="{{ profile.image.url }}">
+                                        </div>
+                                    </a>
+                                    {% if forloop.counter|divisibleby:2 and not forloop.last and profile.status == 'player' %}<br>{% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </td>
                     <!-- SECONDARY LOCATIONS -->
                     <td class="font-13 align-top unblue-black">
