@@ -79,24 +79,23 @@ def create_news_view(request):
 
             subject = f"[RPG] Nowe ogłoszenie: '{news.title[:30]}...'"
             message = f"{profile} przybił/a coś do słupa ogłoszeń.\n" \
-                      f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/news-detail:{news.id}/\n\n" \
-                      f"Ogłoszenie:\n{news.text}"
+                      f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/news-detail:{news.id}/\n\n"
             sender = settings.EMAIL_HOST_USER
             receivers = []
             for profile in news.allowed_profiles.all():
                 if profile.user != request.user:
                     receivers.append(profile.user.email)
             if profile.status != 'gm':
-                receivers.append('lukas.kozicki@gmail.com')
+                receivers.append("lukas.kozicki@gmail.com")
             send_mail(subject, message, sender, receivers)
 
-            messages.info(request, f'Utworzono nowe ogłoszenie!')
+            messages.info(request, f"Utworzono nowe ogłoszenie!")
             return redirect('news:detail', news_id=news.id)
     else:
         form = CreateNewsForm(authenticated_user=request.user)
 
     context = {
-        'page_title': 'Nowe ogłoszenie',
+        'page_title': "Nowe ogłoszenie",
         'form': form
     }
     return render(request, 'news/news_create.html', context)
