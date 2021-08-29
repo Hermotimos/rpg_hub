@@ -9,7 +9,7 @@
     <aside>
         <img class="account-img-sidebar mt-50" onload="showTime()" src="{{ user.profile.image.url }}">
         <h3>
-            <a href="{% url 'users:profile' %}">{{ user.profile.character }}</a>
+            <a href="{% url 'prosoponomikon:character' user.profile.character.id %}">{{ user.profile.character }}</a>
         </h3>
         
         <!-- For game master -->
