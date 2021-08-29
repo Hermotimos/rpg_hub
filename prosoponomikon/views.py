@@ -14,7 +14,6 @@ from prosoponomikon.models import Character, CharacterGroup, NameGroup, \
     FamilyName
 from rpg_project.settings import get_secret
 from rpg_project.utils import handle_inform_form
-from rules.models import Skill, SkillLevel
 from users.models import Profile, User
 
 
@@ -214,13 +213,12 @@ def prosoponomikon_character_groups_edit_view(request):
 @login_required
 def prosoponomikon_character_group_create_view(request):
     profile = request.user.profile
-    form = CharacterGroupCreateForm(
-        data=request.POST or None, status=profile.status)
+    form = CharacterGroupCreateForm(data=request.POST or None, profile=profile)
+    
     if form.is_valid():
         character_group = form.save()
         character_group.author = profile
         character_group.save()
-
         messages.success(
             request, f'Utworzono grupę postaci "{character_group.name}"!')
         return redirect('prosoponomikon:grouped')

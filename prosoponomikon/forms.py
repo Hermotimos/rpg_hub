@@ -66,16 +66,19 @@ class CharacterGroupCreateForm(forms.ModelForm):
             'default_skills',
         ]
 
-    def __init__(self, status=None, *args, **kwargs):
+    def __init__(self, profile, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['name'].label = "Nazwa nowej grupy"
         self.fields['order_no'].label = "Nr porządkowy (równe numery " \
                                         "są sortowane alfabetycznie)"
         self.fields['characters'].widget.attrs['size'] = 15
+        
         self.fields['default_knowledge_packets'].widget.attrs['size'] = 15
         self.fields['default_skills'].widget.attrs['size'] = 15
 
-        if status != 'gm':
+        if profile.status != 'gm':
+            self.fields['characters'].queryset = \
+                profile.characters_all_known_annotated_if_indirectly()
             self.fields['default_knowledge_packets'].widget = forms.HiddenInput()
             self.fields['default_skills'].widget = forms.HiddenInput()
             
