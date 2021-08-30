@@ -31,9 +31,9 @@
                             <a class="btn btn-outline-dark icon-cursor py-2 mb-sm-1"
                                href="
                                    {% if this_location.in_location %}
-                                       {% url 'toponomikon:location' this_location.in_location.name %}
+                                       {% url 'toponomikon:location' this_location.in_location.name %}#location_{{ this_location.id }}
                                    {% else %}
-                                       {% url 'toponomikon:main' %}
+                                       {% url 'toponomikon:main' %}#location_{{ this_location.id }}
                                    {% endif %}"
                                data-toggle="tooltip" data-placement="left" title="Przejdź do lokacji nadrzędnej">
                             </a>
