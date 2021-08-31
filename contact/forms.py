@@ -5,7 +5,7 @@ from django import forms
 from contact.models import Demand, DemandAnswer, Plan
 from users.models import Profile
 
-
+from django.db.models.query_utils import Q
 # ------------------- DEMANDS -------------------
 
 
@@ -17,12 +17,19 @@ class DemandsCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
+        profile = authenticated_user.profile
         super().__init__(*args, **kwargs)
-        if authenticated_user.profile.status in ['player', 'gm']:
-            self.fields['addressee'].queryset = Profile.contactables.exclude(
-                id=authenticated_user.profile.id)
-        else:
-            self.fields['addressee'].queryset = Profile.objects.filter(status='gm')
+        
+        addressees = Profile.contactables.exclude(id=profile.id)
+        if authenticated_user.profile.status == 'player':
+            gms = addressees.filter(status='gm')
+            addressees = addressees.filter(id__in=profile.characters_known_directly.all())
+            addressees = (addressees | gms)
+        elif authenticated_user.profile.status == 'npc':
+            addressees = addressees.filter(status='gm')
+            
+        self.fields['addressee'].queryset = addressees
+        
         self.helper = FormHelper()
         self.helper.add_input(
             Submit('submit', 'Wyślij dezyderat', css_class='btn-dark'))
