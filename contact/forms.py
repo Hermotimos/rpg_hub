@@ -18,7 +18,7 @@ class DemandsCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
         super().__init__(*args, **kwargs)
-        if authenticated_user.profile.status == 'player':
+        if authenticated_user.profile.status in ['player', 'gm']:
             self.fields['addressee'].queryset = Profile.contactables.exclude(
                 id=authenticated_user.profile.id)
         else:
