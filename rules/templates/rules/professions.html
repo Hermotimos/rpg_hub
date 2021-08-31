@@ -49,7 +49,7 @@
             {% for profession in professions %}
 
                 <h4><b>{{ profession.name }}</b></h4>
-                <p>{{ profession.description|linebreaksbr }}</p>
+                <p>{{ profession.description|custom_linebreaksbr:2 }}</p>
             
                 <ul class="bullets-1 bullets-big ml-4">
                     {% for klass in profession.klasses.all %}
@@ -58,7 +58,7 @@
                                 <b class="hover-blue">{{ klass.name }}</b>
                             </h5>
                             <div id="{{ klass.short_name }}" class="collapse">
-                                <p>{{ klass.description|linebreaksbr }}</p>
+                                <p>{{ klass.description|custom_linebreaksbr:2 }}</p>
                                 <p>{{ klass.start_perks|linebreaksbr }}</p>
                                 <br>
         
@@ -203,19 +203,19 @@
                 <h4><b>{{ elite_profession.name }}</b>
                 </h4>
                 <div>
-                    <p>{{ elite_profession.description|linebreaksbr }}</p>
+                    <p>{{ elite_profession.description|custom_linebreaksbr:2 }}</p>
                     <ul class="bullets-1 ml-4">
                         {% for elite_klass in elite_profession.elite_klasses.all %}
                         <li class="pl-1">
-                            <h5 data-toggle="collapse" data-target="#{{ elite_profession.short_name }}">
+                            <h5 data-toggle="collapse" data-target="#{{ elite_klass.short_name }}">
                                 <b class="hover-blue">{{ elite_klass.name }}</b>
                             </h5>
-                            <div id="{{ elite_profession.short_name }}" class="collapse">
-                                <p>{{ elite_klass.description|linebreaksbr }}</p>
+                            <div id="{{ elite_klass.short_name }}" class="collapse">
+                                <p>{{ elite_klass.description|custom_linebreaksbr:2 }}</p>
                                 <p>{{ elite_klass.start_perks|linebreaksbr }}</p>
                                 <br>
                             </div>
-                        </>
+                        </li>
                         {% endfor %}
                     </ul>
                 </div>
