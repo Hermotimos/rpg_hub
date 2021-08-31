@@ -8,8 +8,9 @@ from django.utils.html import format_html
 from imaginarion.models import Picture
 from knowledge.models import KnowledgePacket, MapPacket, BiographyPacket, \
     DialoguePacket
+from rpg_project.utils import update_rel_objs
 from rules.models import Skill
-from toponomikon.models import Location
+from toponomikon.models import Location, PrimaryLocation, SecondaryLocation
 
 
 class DialoguePacketAdmin(admin.ModelAdmin):
@@ -48,6 +49,13 @@ class BiographyPacketAdmin(admin.ModelAdmin):
 
 
 class KnowledgePacketAdminForm(forms.ModelForm):
+    warning = """
+    <b style="color:red">
+        PRZY TWORZENIU NOWEGO PAKIETU ZAPIS LOKACJI JEST NIEMOŻLIWY
+        <br><br>
+        PODAJ LOKACJĘ W DRUGIEJ TURZE :)
+    </b>
+    """
     pictures = forms.ModelMultipleChoiceField(
         queryset=Picture.objects.all(),
         required=False,
@@ -58,67 +66,52 @@ class KnowledgePacketAdminForm(forms.ModelForm):
         required=False,
         widget=FilteredSelectMultiple('Skills', False),
     )
-    gen_locations = forms.ModelMultipleChoiceField(
-        queryset=Location.objects.filter(in_location=None),
+    primary_locs = forms.ModelMultipleChoiceField(
+        queryset=PrimaryLocation.objects.all(),
         required=False,
-        widget=FilteredSelectMultiple('General locations', False),
-        label=format_html('<b style="color:red">'
-                          'PRZY TWORZENIU NOWEJ ZAPIS LOKACJI JEST NIEMOŻLIWY'
-                          '<br><br>'
-                          'PODAJ LOKACJĘ W DRUGIEJ TURZE :)'
-                          '</b>'),
+        widget=FilteredSelectMultiple('Primary locations', False),
+        label=format_html(warning),
     )
-    spec_locations = forms.ModelMultipleChoiceField(
-        queryset=Location.objects.filter(~Q(in_location=None)),
+    secondary_locs = forms.ModelMultipleChoiceField(
+        queryset=SecondaryLocation.objects.all(),
         required=False,
-        widget=FilteredSelectMultiple('Specific locations', False),
-        label=format_html('<b style="color:red">'
-                          'PRZY TWORZENIU NOWEJ ZAPIS LOKACJI JEST NIEMOŻLIWY'
-                          '<br><br>'
-                          'PODAJ LOKACJĘ W DRUGIEJ TURZE :)'
-                          '</b>'),
+        widget=FilteredSelectMultiple('Secondary locations', False),
+        label=format_html(warning),
     )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         id_ = self.instance.id
         if id_ is None:
-            # trick to avoid new forms being populated with previous data
-            # I don't understand why that happens, but this works...
-            # TODO research this
+            # If this is "New" form, avoid filling "virtual" field with data.
             return
         try:
-            gen_locs = Location.objects.filter(in_location=None).filter(knowledge_packets=id_)
-            self.__dict__['initial'].update({'gen_locations': gen_locs})
-        except AttributeError:
-            pass
-        try:
-            spec_locs = Location.objects.filter(~Q(in_location=None)).filter(knowledge_packets=id_)
-            self.__dict__['initial'].update({'spec_locations': spec_locs})
+            self.__dict__['initial'].update(
+                {'primary_locs': PrimaryLocation.objects.filter(knowledge_packets=id_)})
+            self.__dict__['initial'].update(
+                {'secondary_locs': SecondaryLocation.objects.filter(knowledge_packets=id_)})
         except AttributeError:
             pass
 
     def save(self, *args, **kwargs):
         instance = super().save(*args, **kwargs)
-        gen_loc_ids = self.cleaned_data['gen_locations']
-        spec_loc_ids = self.cleaned_data['spec_locations']
         try:
-            for gen_loc in Location.objects.filter(in_location=None).filter(id__in=gen_loc_ids):
-                gen_loc.knowledge_packets.add(instance)
-                gen_loc.save()
-            for spec_loc in Location.objects.filter(~Q(in_location=None)).filter(id__in=spec_loc_ids):
-                spec_loc.knowledge_packets.add(instance)
-                spec_loc.save()
+            update_rel_objs(
+                instance, PrimaryLocation,
+                self.cleaned_data['primary_locs'], "knowledge_packets")
+            update_rel_objs(
+                instance, SecondaryLocation,
+                self.cleaned_data['secondary_locs'], "knowledge_packets")
         except ValueError:
             text = self.cleaned_data['text']
             raise ValueError(
-                'Przy tworzeniu nowej paczki nie da się zapisać lokacji - '
+                'Przy tworzeniu nowego pakietu nie da się zapisać lokacji - '
                 'podaj je jeszcze raz.\n'
                 f'SKOPIUJ TREŚC PACZKI, INACZEJ PRACA BĘDZIE UTRACONA:'
                 f'\n\n{text}\n\n'
             )
         return instance
-
+    
 
 class KnowledgePacketAdmin(admin.ModelAdmin):
     form = KnowledgePacketAdminForm

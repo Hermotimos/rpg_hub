@@ -339,3 +339,14 @@ def formfield_for_dbfield_cached(cls, db_field, fields, **kwargs):
                 setattr(request, f'_{f}_choices_cache', choices)
             formfield.choices = choices
     return formfield
+
+
+def update_rel_objs(instance, RelModel, rel_queryset, rel_name: str):
+    """A helper function to use in AdminForm's, where related objects are
+    presented as a virtual field, in order to facilitate updates.
+    """
+    for obj in RelModel.objects.all():
+        if obj.id in [obj.id for obj in rel_queryset]:
+            exec(f"obj.{rel_name}.add(instance)")
+        else:
+            exec(f"obj.{rel_name}.remove(instance)")
