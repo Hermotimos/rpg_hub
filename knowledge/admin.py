@@ -83,7 +83,7 @@ class KnowledgePacketAdminForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         id_ = self.instance.id
         if id_ is None:
-            # If this is "New" form, avoid filling "virtual" field with data.
+            # If this is "New" form, avoid filling "virtual" field with data
             return
         try:
             self.__dict__['initial'].update(
