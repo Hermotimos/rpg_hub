@@ -18,9 +18,11 @@ class DemandsCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
         super().__init__(*args, **kwargs)
-        self.fields['addressee'].queryset = Profile.contactables.exclude(
-            id=authenticated_user.profile.id)
-        
+        if authenticated_user.profile.status == 'player':
+            self.fields['addressee'].queryset = Profile.contactables.exclude(
+                id=authenticated_user.profile.id)
+        else:
+            self.fields['addressee'].queryset = Profile.objects.filter(status='gm')
         self.helper = FormHelper()
         self.helper.add_input(
             Submit('submit', 'Wyślij dezyderat', css_class='btn-dark'))

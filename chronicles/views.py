@@ -262,9 +262,6 @@ def timeline_view(request):
 
     context = {
         'page_title': 'Pełne Kalendarium',
-        'header': """Opisane tu wydarzenia rozpoczęły swój bieg 20. roku
-            Archonatu Nemetha Samatiana w Ebbonie, choć zarodki wielu z nich
-            sięgają znacznie odleglejszych czasów...""",
        
         # TODO the use of filter rises query cnt from 8 to 13, somehow causing
         # TODO 2x queries for certain fields. Try to resolve it in the future.

@@ -38,13 +38,15 @@
                         {% endif %}
                         <br><br><br>
                         
-                        <h3 class="border-top pt-4 pb-5">ARCHIWUM:</h3>
-                        {% for demand in received_done %}
-                            {% with is_done='True' %}
-                                {% include 'contact/_demand.html' %}
-                            {% endwith %}
-                        {% endfor %}
-                        <br><br>
+                        {% if received_done %}
+                            <h3 class="border-top pt-4 pb-5">ARCHIWUM:</h3>
+                            {% for demand in received_done %}
+                                {% with is_done='True' %}
+                                    {% include 'contact/_demand.html' %}
+                                {% endwith %}
+                            {% endfor %}
+                            <br><br>
+                        {% endif %}
                     </div>
                 </section>
                 
@@ -61,13 +63,15 @@
                         {% endif %}
                         <br><br><br>
                         
-                        <h3 class="border-top pt-4 pb-5">ARCHIWUM:</h3>
-                        {% for demand in sent_done %}
-                            {% with is_done='True' %}
-                                {% include 'contact/_demand.html' %}
-                            {% endwith %}
-                        {% endfor %}
-                        <br><br>
+                        {% if sent_done %}
+                            <h3 class="border-top pt-4 pb-5">ARCHIWUM:</h3>
+                            {% for demand in sent_done %}
+                                {% with is_done='True' %}
+                                    {% include 'contact/_demand.html' %}
+                                {% endwith %}
+                            {% endfor %}
+                            <br><br>
+                        {% endif %}
                     </div>
                 </section>
                 

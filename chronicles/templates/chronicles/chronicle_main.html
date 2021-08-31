@@ -7,79 +7,85 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <section class="mt-5 pt-4">
-        <div class="container mb-5">
-            <div class="row">
-                <div class="col-1 p-0 img-div">
-                    <a href="{% url 'chronicles:chronicle-all' %}">
-                        <figure class="figure" data-toggle="tooltip" data-placement="right" title="Pełna Kronika">
-                            <img class="img-chapter" src="{% static 'img/chronicle_all.png' %}">
-                        </figure>
-                    </a>
-                </div>
-                <div class="col-10 mb-2 col-11 pl-4 pl-xs-3 pl-sm-3 pl-lg-2 ml-lg-n2 ml-xl-n3">
-                    <a href="{% url 'chronicles:chronicle-all' %}" class="h2 font-weight-bold">
-                        <div class="mt-1">
-                            <span class="border-bottom small-caps">
-                                Pełna Kronika
-                            </span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            {% for chapter in chapters %}
-                <div class="row mb-n1">
+    {% if not chapters and not games %}
+        <section class="mt-5">
+            <h4 class="font-italic text-center mt-4">Brak wydarzeń do wyświetlenia!</h4>
+        </section>
+    {% else %}
+        <section class="mt-5 pt-4">
+            <div class="container mb-5">
+                <div class="row">
                     <div class="col-1 p-0 img-div">
-                        <figure class="figure mb-0" data-toggle="tooltip" data-placement="right" title="{{ chapter.title }}">
-                            <img class="img-chapter" src="{{ chapter.image.url }}">
-                        </figure>
+                        <a href="{% url 'chronicles:chronicle-all' %}">
+                            <figure class="figure" data-toggle="tooltip" data-placement="right" title="Pełna Kronika">
+                                <img class="img-chapter" src="{% static 'img/chronicle_all.png' %}">
+                            </figure>
+                        </a>
                     </div>
-                    <div class="col-11 pl-4 pl-xs-3 pl-sm-3 pl-lg-2 ml-lg-n2 ml-xl-n3">
-                        <h3 class=" mt-1">
-                            <a href="{% url 'chronicles:chronicle-chapter' chapter.id %}"
-                               class="header-title small-caps border-bottom font-weight-bold">
-                                {{ chapter.title }}
-                            </a>
-                        </h3>
+                    <div class="col-10 mb-2 col-11 pl-4 pl-xs-3 pl-sm-3 pl-lg-2 ml-lg-n2 ml-xl-n3">
+                        <a href="{% url 'chronicles:chronicle-all' %}" class="h2 font-weight-bold">
+                            <div class="mt-1">
+                                <span class="border-bottom small-caps">
+                                    Pełna Kronika
+                                </span>
+                            </div>
+                        </a>
                     </div>
                 </div>
-            {% endfor %}
-        </div>
-    </section>
-
-    <section class="border-top">
-        <div class="container mt-4 px-1 ml-lg-n4 ml-xl-n5">
-            {% for game in games %}
-                {% if game.chapter %}
+                {% for chapter in chapters %}
                     <div class="row mb-n1">
-                        <div class="col-1 p-0 pt-1 text-right">
-                             {{ forloop.counter }}.
-                        </div>
-                        <div class="col-1 p-0 pl-1">
-                            <figure class="figure mb-0" data-toggle="tooltip" data-placement="right" title="{{ game.title }}">
-                                <img class="img-game" src="{{ game.chapter.image.url }}">
+                        <div class="col-1 p-0 img-div">
+                            <figure class="figure mb-0" data-toggle="tooltip" data-placement="right" title="{{ chapter.title }}">
+                                <img class="img-chapter" src="{{ chapter.image.url }}">
                             </figure>
                         </div>
-                        <div class="col-10 mb-2 ml-n0 pl-2 ml-sm-n2 ml-md-n3 ml-lg-n4 ml-xl-n5 pl-xl-3">
-                            <div class="mt-1 font-italic ">
-                                <a href="{% url 'chronicles:chronicle-game' game.id %}"
-                                   class="mr-2 {% if game.any_known_directly == 0 and request.user.profile.status != 'gm' %} text-muted {% endif %}">
-                                    {{ game.title }}
+                        <div class="col-11 pl-4 pl-xs-3 pl-sm-3 pl-lg-2 ml-lg-n2 ml-xl-n3">
+                            <h3 class=" mt-1">
+                                <a href="{% url 'chronicles:chronicle-chapter' chapter.id %}"
+                                   class="header-title small-caps border-bottom font-weight-bold">
+                                    {{ chapter.title }}
                                 </a>
-                                {% for profile in game|game_participants %}
-                                    <a href="{% url 'prosoponomikon:character' profile.character.id %}"
-                                       data-toggle="tooltip" data-placement="top" data-html="true"
-                                       title='<span class="font-italic">Prosoponomikon:<br>"{{ profile }}"</span>'>
-                                        <div class="d-inline">
-                                           <img class="rounded-circle img-smaller" src="{{ profile.image.url }}">
-                                        </div>
-                                    </a>
-                                {% endfor %}
-                            </div>
+                            </h3>
                         </div>
                     </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-    </section>
+                {% endfor %}
+            </div>
+        </section>
+    
+        <section class="border-top">
+            <div class="container mt-4 px-1 ml-lg-n4 ml-xl-n5">
+                {% for game in games %}
+                    {% if game.chapter %}
+                        <div class="row mb-n1">
+                            <div class="col-1 p-0 pt-1 text-right">
+                                 {{ forloop.counter }}.
+                            </div>
+                            <div class="col-1 p-0 pl-1">
+                                <figure class="figure mb-0" data-toggle="tooltip" data-placement="right" title="{{ game.title }}">
+                                    <img class="img-game" src="{{ game.chapter.image.url }}">
+                                </figure>
+                            </div>
+                            <div class="col-10 mb-2 ml-n0 pl-2 ml-sm-n2 ml-md-n3 ml-lg-n4 ml-xl-n5 pl-xl-3">
+                                <div class="mt-1 font-italic ">
+                                    <a href="{% url 'chronicles:chronicle-game' game.id %}"
+                                       class="mr-2 {% if game.any_known_directly == 0 and request.user.profile.status != 'gm' %} text-muted {% endif %}">
+                                        {{ game.title }}
+                                    </a>
+                                    {% for profile in game|game_participants %}
+                                        <a href="{% url 'prosoponomikon:character' profile.character.id %}"
+                                           data-toggle="tooltip" data-placement="top" data-html="true"
+                                           title='<span class="font-italic">Prosoponomikon:<br>"{{ profile }}"</span>'>
+                                            <div class="d-inline">
+                                               <img class="rounded-circle img-smaller" src="{{ profile.image.url }}">
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
 {% endblock content %}
