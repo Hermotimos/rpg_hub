@@ -65,7 +65,10 @@ class GameEventFilter(FilterSet):
         widget=TextInput(attrs={'placeholder': 'Szukaj w tekście Wydarzenia'})
     )
     threads = ModelMultipleChoiceFilter(queryset=threads, label="Wątki:")
-    locations = ModelMultipleChoiceFilter(queryset=locations, label="Lokacje:")
+    locations = ModelMultipleChoiceFilter(
+        queryset=locations, label="Lokacje:",
+    )
+    # TODO filter out locations with no direct GameEvents
     participants = ModelMultipleChoiceFilter(
         field_name='known_directly',
         queryset=participants,
