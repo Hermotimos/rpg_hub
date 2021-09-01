@@ -28,7 +28,7 @@
                     <div class="row mt-0 mt-2 mt-md-3 pr-1 pr-lg-0 mr-lg-n4">
                         <!-- BUTTONS -->
                         <div class="col-12 col-md-1 p-0 mb-1 mt-md-1 ml-lg-1">
-                            <a class="btn btn-outline-dark icon-cursor py-2 mb-sm-1"
+                            <a class="btn btn-outline-dark icon-parent-obj py-2 mb-sm-1"
                                href="
                                    {% if this_location.in_location %}
                                        {% url 'toponomikon:location' this_location.in_location.name %}#location_{{ this_location.id }}
@@ -38,7 +38,7 @@
                                data-toggle="tooltip" data-placement="left" title="Przejdź do lokacji nadrzędnej">
                             </a>
                             <span data-toggle="modal" data-target="#infoLocationModal">
-                                <span class="btn btn-outline-dark icon-user-add py-2 mb-sm-1"
+                                <span class="btn btn-outline-dark icon-inform py-2 mb-sm-1"
                                     data-toggle="tooltip" data-placement="left" title="Przekaż wiedzę o lokacji">
                                 </span>
                             </span>
@@ -48,11 +48,11 @@
                                         {% include '_inform.html' %}
                                     {% endwith %}
                                 </div>
-                            <a class="btn btn-outline-dark icon-list py-2 mb-sm-1 disabled"
+                            <a class="btn btn-outline-dark icon-note py-2 mb-sm-1 disabled"
                                 href="#"
                                 data-toggle="tooltip" data-placement="left" title="Notatki"></a>
                             {% if request.user.profile.status == 'gm' %}
-                                <a class="btn btn-outline-dark icon-edit-alt py-2 mb-sm-1"
+                                <a class="btn btn-outline-dark icon-edit py-2 mb-sm-1"
                                    href="{% url 'admin:toponomikon_location_change' this_location.id %}" target="_blank"
                                    data-toggle="tooltip" data-placement="left" title="Edytuj lokację"></a>
                             {% endif %}

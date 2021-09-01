@@ -21,7 +21,7 @@
     <div class="row pl-2">
         <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Przekaż wiedzę">
             <!-- Modal -->
-            <p class="btn btn-outline-dark icon-user-add py-2" data-toggle="modal" data-target="#infoKnPacketModal_{{ kn_packet.id }}"></p>
+            <p class="btn btn-outline-dark icon-inform py-2" data-toggle="modal" data-target="#infoKnPacketModal_{{ kn_packet.id }}"></p>
             <div class="modal fade" id="infoKnPacketModal_{{ kn_packet.id }}" tabindex="-1" role="dialog" aria-hidden="true">
                 {% with informables=kn_packet.informables inform_type=kn_packet|get_model_name id_=kn_packet.id %}
                     {% include '_inform.html' %}
@@ -29,11 +29,11 @@
             </div>
         </div>
         <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">
-            <a class="btn btn-outline-dark icon-list py-2 disabled" href="#"></a>
+            <a class="btn btn-outline-dark icon-note py-2 disabled" href="#"></a>
         </div>
         {% if request.user.profile == kn_packet.author or request.user.profile.status == 'gm' and not kn_packet.author %}
             <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj pakiet wiedzy">
-                <a class="btn btn-outline-dark icon-edit-alt py-2" href="{% url 'knowledge:kn-packet-form' kn_packet.id %}"></a>
+                <a class="btn btn-outline-dark icon-edit py-2" href="{% url 'knowledge:kn-packet-form' kn_packet.id %}"></a>
             </div>
         {% endif %}
     </div>

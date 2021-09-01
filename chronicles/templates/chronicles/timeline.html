@@ -229,7 +229,7 @@
                                         <h5 class="modal-title" id="exampleModalLabel">
                                             <a class="btn btn-outline-dark btn-sm mt-1 py-1" href="{% url 'chronicles:game-event-inform' event.id %}" target="_blank"
                                                 data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic">Poinformuj o wydarzeniu</span>'>
-                                                <i class="icon-user-add-medium"></i>
+                                                <i class="icon-inform icon-medium"></i>
                                             </a>
                                         </h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -307,16 +307,16 @@
                             </a>
                         {% endif %}
                         <div data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">
-                            <a class="btn btn-outline-dark btn-sm icon-list-small mt-1 py-1 disabled"
+                            <a class="btn btn-outline-dark btn-sm icon-note icon-small mt-1 py-1 disabled"
                                href="#"></a>
                         </div>
                         {% if request.user.profile.status == 'gm' %}
                             <div class="mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj wydarzenie">
-                                <a class="btn btn-outline-dark btn-sm icon-edit-alt-small py-1"
+                                <a class="btn btn-outline-dark btn-sm icon-edit icon-small py-1"
                                    href="{% url 'admin:chronicles_gameevent_change' event.id %}" target="_blank"></a>
                             </div>
                             <div class="mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Sesję">
-                                <a class="btn btn-outline-dark btn-sm icon-edit-alt-small py-1"
+                                <a class="btn btn-outline-dark btn-sm icon-edit icon-small py-1"
                                    href="{% url 'admin:chronicles_gamesession_change' event.game.id %}" target="_blank"></a>
                             </div>
                         {% endif %}

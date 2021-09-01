@@ -163,7 +163,9 @@ small.smaller {font-size: 12px;}
 .text-muted-more {color: #bfbfbf;}
 
 
-
+/* Classes for Fontello font-icons */
+.icon-medium {font-size: 0.8rem;}
+.icon-small {font-size: 0.6rem;}
 
 
 /*****************************************************************************/
