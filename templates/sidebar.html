@@ -8,10 +8,17 @@
 <div class="content-section-sidebar">
     <aside>
         <img class="account-img-sidebar mt-50" onload="showTime()" src="{{ user.profile.image.url }}">
-        <h3>
-            <a href="{% url 'prosoponomikon:character' user.profile.character.id %}">{{ user.profile.character }}</a>
-        </h3>
-        
+        {% if user.profile.status == 'gm' %}
+            <div class="ml-1">
+                <a class="btn btn-outline-warning icon-indent-right py-2" href="{% url 'reload:backup-db' %}"
+                    data-toggle="tooltip" data-placement="bottom" title="Backup bazy na serwerze">
+                </a>
+            </div>
+        {% else %}
+            <h3>
+                <a href="{% url 'prosoponomikon:character' user.profile.character.id %}">{{ user.profile.character }}</a>
+            </h3>
+        {% endif %}
         <!-- For game master -->
         {% if user.profile.status == 'gm' %}
             <h5 id="time"></h5>

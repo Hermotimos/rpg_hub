@@ -13,4 +13,5 @@ urlpatterns = [
     path('refresh-contenttypes/', views.refresh_content_types, name='refresh-contenttypes'),
     
     path('todos/', views.todos_view, name='todos'),
+    path('backup-db/', views.backup_db_view, name='backup-db'),
 ]

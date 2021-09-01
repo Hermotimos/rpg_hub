@@ -2,12 +2,14 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 from chronicles.models import GameEvent
 from imaginarion.models import PictureImage
 from prosoponomikon.models import Character
 from prosoponomikon.models import NonGMCharacter
+from rpg_project.utils import backup_db
 from rules.models import (
     Skill, SkillLevel,
     Synergy, SynergyLevel,
@@ -175,3 +177,8 @@ def todos_view(request):
         return redirect('home:dupa')
 
 
+@login_required
+def backup_db_view(request):
+    backup_db(reason="manual")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    

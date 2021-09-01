@@ -1,10 +1,11 @@
 import os
 import re
+import shutil
+import time
 from random import sample
 
 from django.apps import apps
 from django.conf import settings
-from django.contrib import admin
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import send_mail
@@ -350,3 +351,10 @@ def update_rel_objs(instance, RelModel, rel_queryset, rel_name: str):
             exec(f"obj.{rel_name}.add(instance)")
         else:
             exec(f"obj.{rel_name}.remove(instance)")
+
+
+def backup_db(reason=""):
+    cwd = os.getcwd()
+    date = time.strftime("%Y-%m-%d_%H.%M")
+    reason = f"_{reason}"
+    shutil.copy2(f"{cwd}/db.sqlite3", f"{cwd}/db_copy_{date}{reason}.sqlite3")
