@@ -14,4 +14,5 @@ urlpatterns = [
     
     path('todos/', views.todos_view, name='todos'),
     path('backup-db/', views.backup_db_view, name='backup-db'),
+    path('download-db/', views.download_db, name='download-db'),
 ]

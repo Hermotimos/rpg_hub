@@ -8,14 +8,15 @@
 <div class="content-section-sidebar">
     <aside>
         <img class="account-img-sidebar mt-50" src="{{ user.profile.image.url }}">
-        <h3>
+        <h3 class="mb-5">
             <a href="{% url 'prosoponomikon:character' user.profile.character.id %}">{{ user.profile.character }}</a>
+            {% if user.profile.status == 'gm' %}
+                <span class="h3 ml-3" id="time"></span>
+            {% endif %}
         </h3>
 
         <!-- For game master -->
         {% if user.profile.status == 'gm' %}
-            <h5 id="time"></h5>
-            <br>
             <ul class="list-group hover-pointer">
                 <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#technical"><h6 class="mb-0">Techniczne</h6></li>
                 <li id="technical" class="list-group collapse">
@@ -49,12 +50,10 @@
                 <a class="btn btn-outline-warning icon-database-backup py-2" href="{% url 'reload:backup-db' %}"
                     data-toggle="tooltip" data-placement="bottom" title="Backup bazy na serwerze">
                 </a>
-                <a class="btn btn-outline-warning icon-download py-2" href="#"
+                <a class="btn btn-outline-warning icon-download py-2" href="{% url 'reload:download-db' %}"
                     data-toggle="tooltip" data-placement="bottom" title="Pobierz bazę">
                 </a>
             </div>
-
-
         
         {% endif %}
         <br>

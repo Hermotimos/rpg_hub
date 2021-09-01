@@ -1,8 +1,10 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
+from django.core.files import File
 from django.db.models import Q
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 
 from chronicles.models import GameEvent
@@ -181,4 +183,13 @@ def todos_view(request):
 def backup_db_view(request):
     backup_db(reason="manual")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-    
+
+
+@login_required
+def download_db(request):
+    db_path = settings.DATABASES['default']['NAME']
+    db_file = File(open(db_path, "rb"))
+    response = HttpResponse(db_file, content_type='application/x-sqlite3')
+    response['Content-Disposition'] = 'attachment; filename=db.sqlite3'
+    response['Content-Length'] = db_file.size
+    return response
