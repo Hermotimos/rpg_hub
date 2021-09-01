@@ -28,9 +28,9 @@
                 {% endwith %}
             </div>
         </div>
-        <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">
-            <a class="btn btn-outline-dark icon-note py-2 disabled" href="#"></a>
-        </div>
+<!--        <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">-->
+<!--            <a class="btn btn-outline-dark icon-note py-2 disabled" href="#"></a>-->
+<!--        </div>-->
         {% if request.user.profile == kn_packet.author or request.user.profile.status == 'gm' and not kn_packet.author %}
             <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj pakiet wiedzy">
                 <a class="btn btn-outline-dark icon-edit py-2" href="{% url 'knowledge:kn-packet-form' kn_packet.id %}"></a>
