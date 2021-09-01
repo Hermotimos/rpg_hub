@@ -200,6 +200,9 @@ class Character(Model):
         to=DialoguePacket,
         related_name='characters',
         blank=True)
+    
+    # USE: profile.characters_known_directly.all()
+    # for characters that the profile knows directly
     known_directly = M2M(
         to=Profile,
         related_name='characters_known_directly',

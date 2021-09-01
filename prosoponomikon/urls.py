@@ -31,5 +31,9 @@ urlpatterns = [
          name='family-names'),
     path('character-create/',  views.prosoponomikon_character_create_form_view,
          name='character-create'),
+    
+    path('acquaintances/<int:location_id>/',
+         views.prosoponomikon_acquaintances_view,
+         name='acquaintances'),
 
 ]

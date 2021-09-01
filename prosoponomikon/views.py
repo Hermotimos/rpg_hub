@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.db.models import Prefetch, Q
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 from imaginarion.models import Picture, PictureImage
@@ -13,7 +14,8 @@ from prosoponomikon.forms import CharacterManyGroupsEditFormSet, \
 from prosoponomikon.models import Character, CharacterGroup, NameGroup, \
     FamilyName
 from rpg_project.settings import get_secret
-from rpg_project.utils import handle_inform_form
+from rpg_project.utils import handle_inform_form, backup_db
+from toponomikon.models import Location
 from users.models import Profile, User
 
 
@@ -359,3 +361,23 @@ def prosoponomikon_character_create_form_view(request):
         return render(request, '_form.html', context)
     else:
         return redirect('home:dupa')
+
+
+@login_required
+def prosoponomikon_acquaintances_view(request, location_id):
+    """Make everybody know directly everybody in a given Location."""
+    location = Location.objects.get(id=location_id)
+    backup_db(reason=f"acquaintances_{location.name}")
+    
+    inhabitants = Character.objects.filter(
+        frequented_locations__in=location.with_sublocations()).distinct()
+
+    for character in inhabitants:
+        [character.known_directly.add(i.profile) for i in inhabitants]
+
+    msg = f"""
+        {location.name}:
+        zapoznano ze sobą wszystkie postacie [{len(inhabitants)}]!
+    """
+    messages.success(request, msg)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

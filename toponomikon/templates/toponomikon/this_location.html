@@ -54,7 +54,12 @@
                             {% if request.user.profile.status == 'gm' %}
                                 <a class="btn btn-outline-secondary icon-edit py-2 mb-sm-1"
                                    href="{% url 'admin:toponomikon_location_change' this_location.id %}" target="_blank"
-                                   data-toggle="tooltip" data-placement="left" title="Edytuj lokację"></a>
+                                   data-toggle="tooltip" data-placement="left" title="Edytuj lokację">
+                                </a>
+                                <a class="btn btn-outline-danger icon-handshake-o py-2 mb-sm-1"
+                                   href="{% url 'prosoponomikon:acquaintances' this_location.id %}"
+                                   data-toggle="tooltip" data-placement="left" title="Zapoznaj ze sobą wszystkich mieszkańców">
+                                </a>
                             {% endif %}
                         </div>
                         <!-- DESCRIPTION -->
