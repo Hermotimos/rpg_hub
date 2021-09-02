@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.forms import Select
 
 from debates.models import Topic, Debate, Remark
+from rpg_project.utils import formfield_for_dbfield_cached
 from users.models import Profile
 
 
@@ -39,50 +40,29 @@ class DebateAdmin(admin.ModelAdmin):
     search_fields = ['name']
     
     def formfield_for_dbfield(self, db_field, **kwargs):
-        # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
-        request = kwargs['request']
-        formfield = super().formfield_for_dbfield(db_field, **kwargs)
         fields = [
             'topic',
         ]
-        for field in fields:
-            if db_field.name == field:
-                choices = getattr(request, f'_{field}_choices_cache', None)
-                if choices is None:
-                    choices = list(formfield.choices)
-                    setattr(request, f'_{field}_choices_cache', choices)
-                formfield.choices = choices
-        return formfield
-
+        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+    
 
 class RemarkAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        models.ForeignKey: {'widget': Select(attrs={'style': 'width:350px'})},
+    }
     list_display = ['__str__', 'debate', 'created_at', 'author', 'image']
     list_editable = ['debate', 'author', 'image']
     list_filter = ['debate']
     search_fields = ['text']
     
-    formfield_overrides = {
-        models.ForeignKey: {'widget': Select(attrs={'style': 'width:350px'})},
-    }
-
     def formfield_for_dbfield(self, db_field, **kwargs):
-        # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
-        request = kwargs['request']
-        formfield = super().formfield_for_dbfield(db_field, **kwargs)
         fields = [
             'debate',
             'author',
         ]
-        for field in fields:
-            if db_field.name == field:
-                choices = getattr(request, f'_{field}_choices_cache', None)
-                if choices is None:
-                    choices = list(formfield.choices)
-                    setattr(request, f'_{field}_choices_cache', choices)
-                formfield.choices = choices
-        return formfield
-        
-    
+        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+
+
 admin.site.register(Topic, TopicAdmin)
 admin.site.register(Debate, DebateAdmin)
 admin.site.register(Remark, RemarkAdmin)
