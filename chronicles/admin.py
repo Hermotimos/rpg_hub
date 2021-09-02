@@ -55,7 +55,6 @@ class GameEventAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['threads'].label = 'Active Threads'
-        # self.fields['threads'].queryset = ThreadActive.objects.all()
         self.fields['known_directly'].queryset = Profile.non_gm.all()
         self.fields['known_indirectly'].queryset = Profile.non_gm.all()
 
@@ -74,8 +73,7 @@ class GameEventAdmin(admin.ModelAdmin):
     
     def formfield_for_dbfield(self, db_field, **kwargs):
         fields = [
-            # Tested that here only audio optimizes queries
-            'audio',
+            'audio',    # Tested that here only audio optimizes queries
         ]
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
     
@@ -139,7 +137,6 @@ class HistoryEventAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['threads'].label = 'Active Threads'
-        # self.fields['threads'].queryset = ThreadActive.objects.all()
         self.fields['known_short_desc'].queryset = Profile.non_gm.all()
         self.fields['known_long_desc'].queryset = Profile.non_gm.all()
         
