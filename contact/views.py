@@ -17,7 +17,7 @@ from rules.models import Skill, Synergy, Weapon, Plate
 def demands_main_view(request):
     profile = request.user.profile
     ds = Demand.objects.all().\
-        select_related('author', 'addressee').\
+        select_related('author__user', 'addressee__user').\
         prefetch_related('demand_answers__author')
     
     # excludes necessery to filter out plans (Demands sent to oneself)
