@@ -8,7 +8,7 @@ from django.utils.html import format_html
 from imaginarion.models import Picture
 from knowledge.models import KnowledgePacket, MapPacket, BiographyPacket, \
     DialoguePacket
-from rpg_project.utils import update_rel_objs
+from rpg_project.utils import update_rel_objs, formfield_for_dbfield_cached
 from rules.models import Skill
 from toponomikon.models import Location, PrimaryLocation, SecondaryLocation
 
@@ -43,7 +43,6 @@ class BiographyPacketAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        qs = qs.select_related('author')
         qs = qs.prefetch_related('acquired_by__user', 'pictures')
         return qs
 
@@ -137,7 +136,7 @@ class KnowledgePacketAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         qs = qs.prefetch_related('acquired_by')
         return qs
-        
+    
         
 class MapPacketAdminForm(forms.ModelForm):
     pictures = forms.ModelMultipleChoiceField(
@@ -220,7 +219,7 @@ class MapPacketAdmin(admin.ModelAdmin):
     
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        qs = qs.prefetch_related('acquired_by')
+        qs = qs.prefetch_related('acquired_by', 'pictures')
         return qs
 
 
