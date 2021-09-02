@@ -8,7 +8,7 @@ from django.utils.html import format_html
 from imaginarion.models import Picture
 from knowledge.models import KnowledgePacket, MapPacket, BiographyPacket, \
     DialoguePacket
-from rpg_project.utils import update_rel_objs, formfield_for_dbfield_cached
+from rpg_project.utils import update_rel_objs
 from rules.models import Skill
 from toponomikon.models import Location, PrimaryLocation, SecondaryLocation
 

@@ -1,26 +1,20 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.db.models import Q
 
 from news.models import News, NewsAnswer, Survey, SurveyOption, SurveyAnswer
+from rpg_project.utils import formfield_for_dbfield_cached
 from users.models import Profile
 
 
 class NewsAdminForm(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(
-        # queryset=Profile.objects.exclude(Q(status='dead_player')
-        #                                  | Q(status='dead_npc')
-        #                                  | Q(status='gm')),
         queryset=Profile.contactables.all(),
         required=False,
         widget=FilteredSelectMultiple('Allowed profiles', False),
     )
 
     followers = forms.ModelMultipleChoiceField(
-        # queryset=Profile.objects.exclude(Q(status='dead_player')
-        #                                  | Q(status='dead_npc')
-        #                                  | Q(status='gm')),
         queryset=Profile.contactables.all(),
         required=False,
         widget=FilteredSelectMultiple('Followers', False),
@@ -29,9 +23,6 @@ class NewsAdminForm(forms.ModelForm):
 
 class SurveyAdminForm(forms.ModelForm):
     addressees = forms.ModelMultipleChoiceField(
-        # queryset=Profile.objects.exclude(Q(status='dead_player')
-        #                                  | Q(status='dead_npc')
-        #                                  | Q(status='gm')),
         queryset=Profile.contactables.all(),
         required=False,
         widget=FilteredSelectMultiple('Addressees', False),
@@ -64,6 +55,12 @@ class SurveyOptionInline(admin.TabularInline):
     model = SurveyOption
     extra = 4
     readonly_fields = ['yes_voters', 'no_voters']
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        fields = [
+            'author',
+        ]
+        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
 
 
 class SurveyAdmin(admin.ModelAdmin):
