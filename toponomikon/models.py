@@ -41,7 +41,7 @@ class LocationType(Model):
 class LocationManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.select_related('main_image__image')
+        # No select_related, as it greatly increases queries in LocationAdmin
         return qs
 
 
