@@ -4,6 +4,7 @@ from django.db.models import (
     CharField,
     ForeignKey as FK,
     ImageField,
+    Manager,
     ManyToManyField as M2MField,
     Model,
     PROTECT,
@@ -125,7 +126,16 @@ class Picture(Model):
         super().save(*args, **kwargs)
 
 
+class PictureSetManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.prefetch_related('pictures__image')
+        return qs
+
+
 class PictureSet(Model):
+    objects = PictureSetManager()
+    
     title = CharField(max_length=200)
     pictures = M2MField(to=Picture, related_name='picture_sets', blank=True)
 

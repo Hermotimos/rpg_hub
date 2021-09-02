@@ -7,6 +7,7 @@ from django.utils.html import format_html
 
 from imaginarion.models import Picture, PictureImage, PictureSet, Audio, \
     AudioSet
+from rpg_project.utils import formfield_for_dbfield_cached
 
 
 class AudioAdmin(admin.ModelAdmin):
@@ -29,6 +30,12 @@ class AudioSetAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'description', 'main_audio']
     list_editable = ['title', 'description', 'main_audio']
     search_fields = ['title', 'description', 'main_audio']
+    
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        fields = [
+            'main_audio',
+        ]
+        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
     
     
 class PictureAdmin(admin.ModelAdmin):
