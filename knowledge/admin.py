@@ -77,6 +77,11 @@ class KnowledgePacketAdminForm(forms.ModelForm):
         widget=FilteredSelectMultiple('Secondary locations', False),
         label=format_html(warning),
     )
+    
+    fields_and_models = {
+        'primary_locs': PrimaryLocation,
+        'secondary_locs': SecondaryLocation,
+    }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -85,22 +90,19 @@ class KnowledgePacketAdminForm(forms.ModelForm):
             # If this is "New" form, avoid filling "virtual" field with data
             return
         try:
-            self.__dict__['initial'].update(
-                {'primary_locs': PrimaryLocation.objects.filter(knowledge_packets=id_)})
-            self.__dict__['initial'].update(
-                {'secondary_locs': SecondaryLocation.objects.filter(knowledge_packets=id_)})
+            for field, Model in self.fields_and_models.items():
+                self.__dict__['initial'].update(
+                    {field: Model.objects.filter(knowledge_packets=id_)})
         except AttributeError:
             pass
 
     def save(self, *args, **kwargs):
         instance = super().save(*args, **kwargs)
         try:
-            update_rel_objs(
-                instance, PrimaryLocation,
-                self.cleaned_data['primary_locs'], "knowledge_packets")
-            update_rel_objs(
-                instance, SecondaryLocation,
-                self.cleaned_data['secondary_locs'], "knowledge_packets")
+            for field, Model in self.fields_and_models.items():
+                update_rel_objs(
+                    instance, Model, self.cleaned_data[field],
+                    "knowledge_packets")
         except ValueError:
             text = self.cleaned_data['text']
             raise ValueError(
