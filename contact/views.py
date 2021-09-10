@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from contact.forms import (DemandsCreateForm, DemandAnswerForm, PlanForm)
 from contact.models import Demand, DemandAnswer, Plan
-from rpg_project.utils import send_emails
+from rpg_project.utils import only_game_masters, send_emails
 from rules.models import Skill, Synergy, Weapon, Plate
 
 
@@ -200,16 +200,13 @@ def plans_main_view(request):
 
 
 @login_required
+@only_game_masters
 def plans_for_gm_view(request):
-    profile = request.user.profile
     context = {
         'page_title': 'Plany graczy',
         'plans': Plan.objects.filter(inform_gm=True).select_related('author'),
     }
-    if profile.status == 'gm':
-        return render(request, 'contact/plans_for_gm.html', context)
-    else:
-        return redirect('home:dupa')
+    return render(request, 'contact/plans_for_gm.html', context)
 
 
 @login_required

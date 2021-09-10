@@ -6,12 +6,13 @@ from django.core.files import File
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
+from django.utils.safestring import mark_safe
 
 from chronicles.models import GameEvent
 from imaginarion.models import PictureImage
 from prosoponomikon.models import Character
 from prosoponomikon.models import NonGMCharacter
-from rpg_project.utils import backup_db
+from rpg_project.utils import backup_db, only_game_masters
 from rules.models import (
     Skill, SkillLevel,
     Synergy, SynergyLevel,
@@ -27,128 +28,104 @@ from users.models import Profile
 
 
 @login_required
+@only_game_masters
 def reload_main_view(request):
     context = {
         'page_title': 'Przeładowanie sorting_name'
     }
-    if request.user.profile.status == 'gm':
-        return render(request, 'reload/reload_main.html', context)
-    else:
-        return redirect('home:dupa')
+    return render(request, 'reload/reload_main.html', context)
 
 
 @login_required
+@only_game_masters
 def reload_chronicles(request):
-    if request.user.profile.status == 'gm':
-        for obj in GameEvent.objects.all():
-            obj.save()
-        messages.info(request, f'Przeładowano "GameEvent"!')
-        return redirect('reload:reload-main')
-    else:
-        return redirect('home:dupa')
+    for obj in GameEvent.objects.all():
+        obj.save()
+    messages.info(request, 'Przeładowano "GameEvent"!')
+    return redirect('reload:reload-main')
 
 
 @login_required
+@only_game_masters
 def reload_imaginarion(request):
-    if request.user.profile.status == 'gm':
-        for obj in PictureImage.objects.all():
-            print(obj.used_in_pics.first().description)
-            obj.description = obj.used_in_pics.first().description
-            obj.save()
-        messages.info(request, f'Przeładowano "PictureImage" dla "imaginarion"!')
-        return redirect('reload:reload-main')
-    else:
-        return redirect('home:dupa')
+    for obj in PictureImage.objects.all():
+        print(obj.used_in_pics.first().description)
+        obj.description = obj.used_in_pics.first().description
+        obj.save()
+    messages.info(request, f'Przeładowano "PictureImage" dla "imaginarion"!')
+    return redirect('reload:reload-main')
 
 
 @login_required
+@only_game_masters
 def reload_prosoponomikon(request):
-    if request.user.profile.status == 'gm':
-        for obj in Character.objects.all():
-            
-            # TODO REMOVE WHEN DONE
-            # if "z" in obj.name:
-            #     indx = obj.name.index("z")
-            #     obj.cognomen = obj.name[indx:]
-            
-            # if obj.name:
-            #     FirstName.objects.create(form=obj.name)
-            
-            obj.save()
-        messages.info(request,
-                      f'Przeładowano "Character" dla "prosoponomikon"!')
-        return redirect('reload:reload-main')
-    else:
-        return redirect('home:dupa')
+    for obj in Character.objects.all():
+        obj.save()
+    messages.info(request, 'Przeładowano "Characters" w "prosoponomikon"!')
+    return redirect('reload:reload-main')
 
 
 @login_required
+@only_game_masters
 def reload_rules(request):
-    if request.user.profile.status == 'gm':
+    for obj in Skill.objects.all():
+        obj.save()
+    for obj in SkillLevel.objects.all():
+        obj.save()
 
-        for obj in Skill.objects.all():
-            obj.save()
-        for obj in SkillLevel.objects.all():
-            obj.save()
+    for obj in Synergy.objects.all():
+        obj.save()
+    for obj in SynergyLevel.objects.all():
+        obj.save()
 
-        for obj in Synergy.objects.all():
-            obj.save()
-        for obj in SynergyLevel.objects.all():
-            obj.save()
+    for obj in Profession.objects.all():
+        obj.save()
+    for obj in Klass.objects.all():
+        obj.save()
 
-        for obj in Profession.objects.all():
-            obj.save()
-        for obj in Klass.objects.all():
-            obj.save()
+    for obj in EliteProfession.objects.all():
+        obj.save()
+    for obj in EliteKlass.objects.all():
+        obj.save()
 
-        for obj in EliteProfession.objects.all():
-            obj.save()
-        for obj in EliteKlass.objects.all():
-            obj.save()
+    for obj in WeaponType.objects.all():
+        obj.save()
+    for obj in Weapon.objects.all():
+        obj.save()
 
-        for obj in WeaponType.objects.all():
-            obj.save()
-        for obj in Weapon.objects.all():
-            obj.save()
+    messages.info(request, 'Przeładowano "sorting_name" dla "rules"!')
+    return redirect('reload:reload-main')
 
-        messages.info(request, f'Przeładowano "sorting_name" dla aplikacji "rules"!')
-        return redirect('reload:reload-main')
-    else:
-        return redirect('home:dupa')
-    
 
 @login_required
+@only_game_masters
 def reload_toponomikon(request):
-    if request.user.profile.status == 'gm':
-        for obj in Location.objects.all():
-            obj.save()
-        messages.info(request, f'Przeładowano "Location" dla "toponomikon"!')
-        return redirect('reload:reload-main')
-    else:
-        return redirect('home:dupa')
-    
+    for obj in Location.objects.all():
+        obj.save()
+    messages.info(request, 'Przeładowano "Location" dla "toponomikon"!')
+    return redirect('reload:reload-main')
+
     
 @login_required
+@only_game_masters
 def refresh_content_types(request):
     """Remove stale content types."""
-    if request.user.profile.status == 'gm':
-        deleted = []
-        for c in ContentType.objects.all():
-            if not c.model_class():
-                deleted.append(c.__dict__)
-                c.delete()
-        messages.info(request, f"Usunięto content types: {deleted or 0}")
-        return redirect('reload:reload-main')
-    else:
-        return redirect('home:dupa')
+    deleted = []
+    for c in ContentType.objects.all():
+        if not c.model_class():
+            deleted.append(c.__dict__)
+            c.delete()
+    deleted = "<br>".join([str(dict_) for dict_ in deleted]) if deleted else 0
+    messages.info(request, mark_safe(f"Usunięto content types:\n{deleted}"))
+    return redirect('reload:reload-main')
 
 
 #  ---------------------------------------------------------------------
 
 
 @login_required
+@only_game_masters
 def todos_view(request):
-    profile = request.user.profile
     characters = NonGMCharacter.objects.all()
     
     characters_no_frequented_location = characters.filter(frequented_locations=None)
@@ -172,20 +149,19 @@ def todos_view(request):
         'locations_no_description': locations_no_description,
         'game_event_no_known': game_event_no_known,
     }
-    
-    if profile.status == 'gm':
-        return render(request, 'reload/todos.html', context)
-    else:
-        return redirect('home:dupa')
+    return render(request, 'reload/todos.html', context)
 
 
 @login_required
+@only_game_masters
 def backup_db_view(request):
     backup_db(reason="manual")
+    messages.info(request, 'Wykonano backup bazy na serwerze!')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
+@only_game_masters
 def download_db(request):
     db_path = settings.DATABASES['default']['NAME']
     db_file = File(open(db_path, "rb"))

@@ -3,12 +3,14 @@ import re
 import shutil
 import time
 from random import sample
+from functools import wraps
 
 from django.apps import apps
 from django.conf import settings
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import send_mail
+from django.shortcuts import redirect
 
 from rpg_project.settings import EMAIL_HOST_USER
 from users.models import Profile
@@ -358,3 +360,14 @@ def backup_db(reason=""):
     date = time.strftime("%Y-%m-%d_%H.%M")
     reason = f"_{reason}"
     shutil.copy2(f"{cwd}/db.sqlite3", f"{cwd}/db_copy_{date}{reason}.sqlite3")
+
+
+def only_game_masters(function):
+    @wraps(function)
+    def wrap(request, *args, **kwargs):
+        if request.user.profile.status == 'gm':
+            return function(request, *args, **kwargs)
+        else:
+            return redirect('home:dupa')
+        
+    return wrap

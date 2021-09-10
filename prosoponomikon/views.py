@@ -14,7 +14,7 @@ from prosoponomikon.forms import CharacterManyGroupsEditFormSet, \
 from prosoponomikon.models import Character, CharacterGroup, NameGroup, \
     FamilyName
 from rpg_project.settings import get_secret
-from rpg_project.utils import handle_inform_form, backup_db
+from rpg_project.utils import handle_inform_form, backup_db, only_game_masters
 from toponomikon.models import Location
 from users.models import Profile, User
 
@@ -61,9 +61,8 @@ def prosoponomikon_character_view(request, character_id):
 
 
 @login_required
+@only_game_masters
 def prosoponomikon_character_for_gm_view(request, character_id):
-    profile = request.user.profile
-    
     characters = Character.objects.select_related('first_name')
     characters = characters.prefetch_related(
         'biography_packets', 'dialogue_packets')
@@ -97,10 +96,7 @@ def prosoponomikon_character_for_gm_view(request, character_id):
         'knowledge_packets': knowledge_packets,
         'known_characters': known_characters,
     }
-    if profile.status == 'gm':
-        return render(request, 'prosoponomikon/character.html', context)
-    else:
-        return redirect('home:dupa')
+    return render(request, 'prosoponomikon/character.html', context)
 
 
 @login_required
@@ -294,26 +290,22 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
 
 
 @login_required
+@only_game_masters
 def prosoponomikon_first_names_view(request):
-    profile = request.user.profile
     name_groups = NameGroup.objects.prefetch_related(
         'affix_groups__first_names__characters__profile',
         'affix_groups__first_names__auxiliary_group__location',
     )
-
     context = {
         'page_title': "Imiona",
         'name_groups': name_groups,
     }
-    if profile.status == 'gm':
-        return render(request, 'prosoponomikon/first_names.html', context)
-    else:
-        return redirect('home:dupa')
+    return render(request, 'prosoponomikon/first_names.html', context)
 
 
 @login_required
+@only_game_masters
 def prosoponomikon_family_names_view(request):
-    profile = request.user.profile
     family_names = FamilyName.objects.select_related('group')
     family_names = family_names.prefetch_related(
         'characters__profile', 'locations')
@@ -322,16 +314,13 @@ def prosoponomikon_family_names_view(request):
         'page_title': "Nazwiska",
         'family_names': family_names,
     }
-    if profile.status == 'gm':
-        return render(request, 'prosoponomikon/family_names.html', context)
-    else:
-        return redirect('home:dupa')
+    return render(request, 'prosoponomikon/family_names.html', context)
 
 
 @login_required
+@only_game_masters
 def prosoponomikon_character_create_form_view(request):
     """Handle CharacterCreateForm intended for GM."""
-    profile = request.user.profile
     form = CharacterCreateForm(
         data=request.POST or None, files=request.FILES or None)
     
@@ -357,13 +346,11 @@ def prosoponomikon_character_create_form_view(request):
         'page_title': "Nowa postać",
         'form': form,
     }
-    if profile.status == 'gm':
-        return render(request, '_form.html', context)
-    else:
-        return redirect('home:dupa')
+    return render(request, '_form.html', context)
 
 
 @login_required
+@only_game_masters
 def prosoponomikon_acquaintances_view(request, location_id):
     """Make everybody know directly everybody in a given Location."""
     location = Location.objects.get(id=location_id)
