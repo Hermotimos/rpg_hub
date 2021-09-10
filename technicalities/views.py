@@ -33,7 +33,7 @@ def reload_main_view(request):
     context = {
         'page_title': 'Przeładowanie sorting_name'
     }
-    return render(request, 'reload/reload_main.html', context)
+    return render(request, 'technicalities/reload_main.html', context)
 
 
 @login_required
@@ -42,7 +42,7 @@ def reload_chronicles(request):
     for obj in GameEvent.objects.all():
         obj.save()
     messages.info(request, 'Przeładowano "GameEvent"!')
-    return redirect('reload:reload-main')
+    return redirect('technicalities:reload-main')
 
 
 @login_required
@@ -53,7 +53,7 @@ def reload_imaginarion(request):
         obj.description = obj.used_in_pics.first().description
         obj.save()
     messages.info(request, f'Przeładowano "PictureImage" dla "imaginarion"!')
-    return redirect('reload:reload-main')
+    return redirect('technicalities:reload-main')
 
 
 @login_required
@@ -62,7 +62,7 @@ def reload_prosoponomikon(request):
     for obj in Character.objects.all():
         obj.save()
     messages.info(request, 'Przeładowano "Characters" w "prosoponomikon"!')
-    return redirect('reload:reload-main')
+    return redirect('technicalities:reload-main')
 
 
 @login_required
@@ -94,7 +94,7 @@ def reload_rules(request):
         obj.save()
 
     messages.info(request, 'Przeładowano "sorting_name" dla "rules"!')
-    return redirect('reload:reload-main')
+    return redirect('technicalities:reload-main')
 
 
 @login_required
@@ -103,7 +103,7 @@ def reload_toponomikon(request):
     for obj in Location.objects.all():
         obj.save()
     messages.info(request, 'Przeładowano "Location" dla "toponomikon"!')
-    return redirect('reload:reload-main')
+    return redirect('technicalities:reload-main')
 
     
 @login_required
@@ -117,7 +117,7 @@ def refresh_content_types(request):
             c.delete()
     deleted = "<br>".join([str(dict_) for dict_ in deleted]) if deleted else 0
     messages.info(request, mark_safe(f"Usunięto content types:\n{deleted}"))
-    return redirect('reload:reload-main')
+    return redirect('technicalities:reload-main')
 
 
 #  ---------------------------------------------------------------------
@@ -149,7 +149,7 @@ def todos_view(request):
         'locations_no_description': locations_no_description,
         'game_event_no_known': game_event_no_known,
     }
-    return render(request, 'reload/todos.html', context)
+    return render(request, 'technicalities/todos.html', context)
 
 
 @login_required

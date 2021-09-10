@@ -1,8 +1,8 @@
 from django.urls import path
-from reload import views
+from technicalities import views
 
 
-app_name = 'reload'
+app_name = 'technicalities'
 urlpatterns = [
     path('', views.reload_main_view, name='reload-main'),
     path('reload-chronicles/', views.reload_chronicles, name='reload-chronicles'),

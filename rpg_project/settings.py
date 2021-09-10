@@ -58,10 +58,10 @@ INSTALLED_APPS = [
     'home',
     'imaginarion',
     'knowledge',
-    'reload',
     'rules',
     'news',
     'prosoponomikon',
+    'technicalities',
     'toponomikon',
     'users.apps.UsersConfig',  # just another way of doing this
 ]

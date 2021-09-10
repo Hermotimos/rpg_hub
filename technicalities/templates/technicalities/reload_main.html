@@ -6,37 +6,37 @@
     <h4>Kronika i Kalendarium:</h4>
     <small>Przeładowuje modele: GameEvent (signal 'update_known_locations', 'update_known_characters') </small>
     <br>
-    <a href="{% url 'reload:reload-chronicles' %}">PRZEŁADUJ</a><br>
+    <a href="{% url 'technicalities:reload-chronicles' %}">PRZEŁADUJ</a><br>
     <br><br>
 
     <h4>Imaginarion:</h4>
     <small>Przeładowuje modele: PictureImage</small>
     <br>
-    <a href="{% url 'reload:reload-imaginarion' %}">PRZEŁADUJ</a><br>
+    <a href="{% url 'technicalities:reload-imaginarion' %}">PRZEŁADUJ</a><br>
     <br><br>
 
     <h4>Prosoponomikon:</h4>
     <small>Przeładowuje modele: Character</small>
     <br>
-    <a href="{% url 'reload:reload-prosoponomikon' %}">PRZEŁADUJ</a><br>
+    <a href="{% url 'technicalities:reload-prosoponomikon' %}">PRZEŁADUJ</a><br>
     <br><br>
 
     <h4>Zasady:</h4>
     <small>Przeładowuje modele: Skill, Synergy, Profession, Klass, EliteClass, EliteProfession, WeaponClass, WeaponType</small>
     <br>
-    <a href="{% url 'reload:reload-rules' %}">PRZEŁADUJ</a><br>
+    <a href="{% url 'technicalities:reload-rules' %}">PRZEŁADUJ</a><br>
     <br><br>
 
     <h4>Toponomikon:</h4>
     <small>Przeładowuje modele: GeneralLocation, SpecificLocation</small>
     <br>
-    <a href="{% url 'reload:reload-toponomikon' %}">PRZEŁADUJ</a><br>
+    <a href="{% url 'technicalities:reload-toponomikon' %}">PRZEŁADUJ</a><br>
     <br><br>
 
     <h4>Content Types:</h4>
     <small>Usuwa obiekty modelu ContentType, które nie posiadają atrybutu model_class()</small>
     <br>
-    <a href="{% url 'reload:refresh-contenttypes' %}">PRZEŁADUJ</a><br>
+    <a href="{% url 'technicalities:refresh-contenttypes' %}">PRZEŁADUJ</a><br>
     <br><br>
 
 {% endblock content %}

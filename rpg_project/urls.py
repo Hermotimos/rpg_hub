@@ -29,7 +29,7 @@ urlpatterns = [
     path('development/', include('development.urls')),
     path('knowledge/', include('knowledge.urls')),
     path('news/', include('news.urls')),
-    path('reload/', include('reload.urls')),
+    path('technicalities/', include('technicalities.urls')),
     path('rules/', include('rules.urls')),
     path('toponomikon/', include('toponomikon.urls')),
     path('prosoponomikon/', include('prosoponomikon.urls')),

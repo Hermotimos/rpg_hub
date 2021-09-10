@@ -21,8 +21,8 @@
                     <div>
                         <a class="list-group-item list-group-item-light" href="{% url 'admin:index' %}" target="_blank" rel="noopener noreferrer"><small>ADMIN</small></a>
                         <a class="list-group-item list-group-item-light" href="{% url 'contact:plans-main' %}"><small>Plany MG</small></a>
-                        <a class="list-group-item list-group-item-light" href="{% url 'reload:todos' %}"><small>TODOs</small></a>
-                        <a class="list-group-item list-group-item-light" href="{% url 'reload:reload-main' %}"><small>Przeładowanie modeli w aplikacjach</small></a>
+                        <a class="list-group-item list-group-item-light" href="{% url 'technicalities:todos' %}"><small>TODOs</small></a>
+                        <a class="list-group-item list-group-item-light" href="{% url 'technicalities:reload-main' %}"><small>Przeładowanie modeli w aplikacjach</small></a>
                     </div>
                 </li>
             </ul>
@@ -45,10 +45,10 @@
             </ul>
 
             <div class="mt-2">
-                <a class="btn btn-outline-secondary icon-database-backup py-2" href="{% url 'reload:backup-db' %}"
+                <a class="btn btn-outline-secondary icon-database-backup py-2" href="{% url 'technicalities:backup-db' %}"
                     data-toggle="tooltip" data-placement="bottom" title="Backup bazy na serwerze">
                 </a>
-                <a class="btn btn-outline-secondary icon-download py-2" href="{% url 'reload:download-db' %}"
+                <a class="btn btn-outline-secondary icon-download py-2" href="{% url 'technicalities:download-db' %}"
                     data-toggle="tooltip" data-placement="bottom" title="Pobierz bazę">
                 </a>
             </div>
