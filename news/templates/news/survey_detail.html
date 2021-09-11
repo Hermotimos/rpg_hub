@@ -11,7 +11,7 @@
     <br><br><br><br>
 
 <!-- SURVEY MESSAGE -->
-    <div>
+    <div class="mb-5">
         <p class="font-18 font-italic text-justify">{{ survey.text|capfirst|linebreaksbr }}</p>
         {% if survey.image %}
             <p><img class="img-fluid mx-auto d-block" src="{{ survey.image.url }}"></p>
@@ -20,75 +20,71 @@
             <img class="rounded-circle img-small" src="{{ profile.image.url }}">
         {% endfor %}
     </div>
-    <br><br><br>
 
 <!-- SURVEY -->
-    <table class="survey">
-        <colgroup>
-            <col class="negative">
-            <col class="text">
-            <col class="positive">
-        </colgroup>
-        {% for option in options %}
-            <tr>
-                <td class="align-middle align-right text-nowrap">
-                    {% for profile in option.no_voters.all %}
-                        {% if profile == request.user.profile %}
-                            <a href="{% url 'news:survey-unvote' survey.id option.id %}">
+    <div class="mb-3 table-responsive">
+        <table class="survey mx-auto w-auto">
+            <colgroup>
+                <col class="negative">
+                <col class="text">
+                <col class="positive">
+            </colgroup>
+            {% for option in options %}
+                <tr>
+                    <td class="text-nowrap pr-2">
+                        {% for profile in option.no_voters.all %}
+                            {% if profile == request.user.profile %}
+                                <a href="{% url 'news:survey-unvote' survey.id option.id %}">
+                                    <img class="rounded-circle img-small border-2 border-danger" src="{{ profile.image.url }}">
+                                </a>
+                            {% else %}
                                 <img class="rounded-circle img-small border-2 border-danger" src="{{ profile.image.url }}">
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td class="align-middle">
+                        <a href="{% url 'news:survey-no' survey.id option.id %}" class="btn btn-dark">-</a>
+                    </td>
+                    <td class="px-2 text-center">
+                        {{ option.option_text }}
+                        {% if request.user.profile == option.author and not option.yes_voters.all and not option.no_voters.all %}
+                            <a href="{% url 'news:survey-option-modify' survey.id option.id %}">
+                                &nbsp;<img src="{% static 'img/edit.png' %}" class="img-edit">
                             </a>
-                        {% else %}
-                            <img class="rounded-circle img-small border-2 border-danger" src="{{ profile.image.url }}">
+                            <a href="{% url 'news:survey-option-delete' survey.id option.id %}" class="btn">
+                                &#10008;
+                            </a>
                         {% endif %}
-                    {% endfor %}
-                </td>
-                <td class="align-middle">
-                    <a href="{% url 'news:survey-no' survey.id option.id %}" class="btn btn-dark">-</a>
-                </td>
-                <td>
-                    &ensp;&ensp;{{ option.option_text }}
-                    {% if request.user.profile == option.author and not option.yes_voters.all and not option.no_voters.all %}
-                        <a href="{% url 'news:survey-option-modify' survey.id option.id %}">
-                            &nbsp;<img src="{% static 'img/edit.png' %}" class="img-edit">
-                        </a>
-                        <a href="{% url 'news:survey-option-delete' survey.id option.id %}" class="btn">
-                            &#10008;
-                        </a>
-                    {% endif %}
-                    &ensp;&ensp;
-                    <br>
-                </td>
-                <td class="align-middle">
-                    <a href="{% url 'news:survey-yes' survey.id option.id %}" class="btn btn-dark">+</a>
-                </td>
-                <td class="text-nowrap">
-                    &ensp;&ensp;
-                    {% for profile in option.yes_voters.all %}
-                        {% if profile == request.user.profile %}
-                            <a href="{% url 'news:survey-unvote' survey.id option.id %}">
+                        <br>
+                    </td>
+                    <td class="align-middle">
+                        <a href="{% url 'news:survey-yes' survey.id option.id %}" class="btn btn-dark">+</a>
+                    </td>
+                    <td class="text-nowrap pl-2">
+                        {% for profile in option.yes_voters.all %}
+                            {% if profile == request.user.profile %}
+                                <a href="{% url 'news:survey-unvote' survey.id option.id %}">
+                                    <img class="rounded-circle img-small border-2 border-success" src="{{ profile.image.url }}">
+                                </a>
+                            {% else %}
                                 <img class="rounded-circle img-small border-2 border-success" src="{{ profile.image.url }}">
-                            </a>
-                        {% else %}
-                            <img class="rounded-circle img-small border-2 border-success" src="{{ profile.image.url }}">
-                        {% endif %}
-                    {% endfor %}
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-    <br><br>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 
 
 <!-- NEW SURVEY OPTION -->
-    <form method="POST" enctype="multipart/form-data">
+    <form class="mb-2" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="col-md-6 inline">
             {{ option_form.option_text|as_crispy_field }}
         </div>
-        &nbsp;<input class="btn btn-dark" type="submit" value="+">
+        <input class="btn btn-dark ml-1" type="submit" value="+">
     </form>
-    <br>
-
 
 <!-- ANSWERS -->
     <div class="border-top">
