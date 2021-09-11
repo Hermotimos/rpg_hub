@@ -203,7 +203,7 @@ class Profile(Model):
     @property
     def unseen_news(self):
         from news.models import NewsAnswer
-        allowed_news = self.allowed_news.all()
+        allowed_news = self.allowed_news.exclude(author=self)
         news_unseen = allowed_news.exclude(seen_by=self)
         
         allowed_news_annotated = allowed_news.annotate(
@@ -224,7 +224,7 @@ class Profile(Model):
     @property
     def unseen_surveys(self):
         from news.models import SurveyAnswer
-        surveys_received = self.surveys_received.all()
+        surveys_received = self.surveys_received.exclude(author=self)
         surveys_unseen = surveys_received.exclude(seen_by=self)
         
         surveys_received_annotated = surveys_received.annotate(
