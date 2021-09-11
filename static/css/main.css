@@ -556,9 +556,11 @@ div.anchor:before {
 
 /* Info bubbles */
 .bg-blue {background: #006699;}
-.bg-grayish {background: #476b6b;}
-.bg-green {background: #008000;}
+.bg-bluish {background: #c6dfec;}
+.bg-greengrayish {background: #c2d6d6;}
+.bg-greengray {background: #476b6b;}
 .bg-red {background: #e60000;}
+.bg-inner {background: #f2f2f2;}
 
 div.info-row  {
     margin-top: -2.4rem;

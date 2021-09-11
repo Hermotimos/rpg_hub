@@ -44,7 +44,7 @@
                                     <a class="font-14 nav-link small-caps" href="{% url 'news:main' %}">Ogłoszenia</a>
                                     <div class="row info-row-sub float-right">
                                         {% if unread_surveys_cnt %}
-                                            <div class="number-circle-sub bg-grayish d-flex align-items-center">
+                                            <div class="number-circle-sub bg-greengray d-flex align-items-center">
                                                 <span class="mx-auto number-circle-main-inner">{{ unread_surveys_cnt }}</span>
                                             </div>
                                         {% endif %}
@@ -65,7 +65,7 @@
                                 </div>
                             {% endif %}
                             {% if unread_surveys_cnt %}
-                                <div class="number-circle-main bg-grayish d-flex align-items-center">
+                                <div class="number-circle-main bg-greengray d-flex align-items-center">
                                     <span class="mx-auto number-circle-main-inner">{{ unread_surveys_cnt }}</span>
                                 </div>
                             {% endif %}
