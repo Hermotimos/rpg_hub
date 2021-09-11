@@ -219,7 +219,7 @@ class Profile(Model):
         news_with_unseen_last_answer = allowed_news.filter(
             news_answers__in=last_news_answers_unseen)
             
-        return news_unseen | news_with_unseen_last_answer
+        return (news_unseen | news_with_unseen_last_answer).distinct()
     
     @property
     def unseen_surveys(self):
@@ -240,4 +240,4 @@ class Profile(Model):
         surveys_with_unseen_last_answer = surveys_received.filter(
             survey_answers__in=last_survey_answers_unseen)
             
-        return surveys_unseen | surveys_with_unseen_last_answer
+        return (surveys_unseen | surveys_with_unseen_last_answer).distinct()
