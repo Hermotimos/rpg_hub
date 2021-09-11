@@ -17,21 +17,66 @@
             <span class="navbar-toggler-icon"></span>
         </button>
     
-        <div class="collapse navbar-collapse" id="mainmenu">
+        <div class="collapse navbar-collapse float-left" id="mainmenu">
     
             <!-- Navbar Left Side -->
             <ul class="navbar-nav mr-auto">
     
-                <li class="dropdown pr-4">
-                    <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Organizacyjne</button>
-                    <div class="dropdown-content">
-                        <ul class="bullets-1 pl-4">
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'contact:demands-main' %}">Dezyderaty</a></li>
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'news:main' %}">Ogłoszenia</a></li>
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'rules:main' %}">Zasady</a></li>
-                        </ul>
-                    </div>
-                </li>
+                {% with undone_demands_cnt=request.user.profile.undone_demands_cnt unread_news_cnt=request.user.profile.unread_news_cnt unread_surveys_cnt=request.user.profile.unread_surveys_cnt %}
+                    <li class="dropdown pr-4 mr-auto">
+                        <div class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
+                            Organizacyjne
+                        </div>
+                        <div class="dropdown-content">
+                            <ul class="bullets-1 pl-4">
+                                <li>
+                                    <a class="font-14 nav-link small-caps" href="{% url 'contact:demands-main' %}">Dezyderaty</a>
+                                    {% if undone_demands_cnt %}
+                                        <div class="info-row-sub float-right">
+                                            <div class="number-circle-sub bg-red d-flex align-items-center">
+                                                <span class="mx-auto number-circle-main-inner">{{ undone_demands_cnt }}</span>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </li>
+                                
+                                <li>
+                                    <a class="font-14 nav-link small-caps" href="{% url 'news:main' %}">Ogłoszenia</a>
+                                    <div class="row info-row-sub float-right">
+                                        {% if unread_surveys_cnt %}
+                                            <div class="number-circle-sub bg-grayish d-flex align-items-center">
+                                                <span class="mx-auto number-circle-main-inner">{{ unread_surveys_cnt }}</span>
+                                            </div>
+                                        {% endif %}
+                                        {% if unread_news_cnt %}
+                                            <div class="number-circle-sub bg-blue d-flex align-items-center">
+                                                <span class="mx-auto number-circle-main-inner">{{ unread_news_cnt }}</span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </li>
+                                <li><a class="font-14 nav-link small-caps" href="{% url 'rules:main' %}">Zasady</a></li>
+                            </ul>
+                        </div>
+                        <div class="row info-row float-right mr-n2">
+                            {% if undone_demands_cnt %}
+                                <div class="number-circle-main bg-red d-flex align-items-center">
+                                    <span class="mx-auto number-circle-main-inner">{{ undone_demands_cnt }}</span>
+                                </div>
+                            {% endif %}
+                            {% if unread_surveys_cnt %}
+                                <div class="number-circle-main bg-grayish d-flex align-items-center">
+                                    <span class="mx-auto number-circle-main-inner">{{ unread_surveys_cnt }}</span>
+                                </div>
+                            {% endif %}
+                            {% if unread_news_cnt %}
+                                <div class="number-circle-main bg-blue d-flex align-items-center">
+                                    <span class="mx-auto number-circle-main-inner">{{ unread_news_cnt }}</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endwith %}
     
                 <li class="dropdown pr-4">
                     <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Przygody</button>

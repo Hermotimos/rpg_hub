@@ -193,3 +193,21 @@ class Profile(Model):
         skills = skills.prefetch_related(
             Prefetch('skill_levels', queryset=skill_levels))
         return skills.distinct()
+
+    @property
+    def undone_demands_cnt(self):
+        demands = self.received_demands.exclude(author=self)
+        undone_demands = demands.exclude(is_done=True)
+        return undone_demands.count()
+    
+    @property
+    def unread_surveys_cnt(self):
+        surveys = self.surveys_received.exclude(author=self)
+        unread_surveys = surveys.exclude(seen_by=self)
+        return unread_surveys.count()
+    
+    @property
+    def unread_news_cnt(self):
+        news = self.allowed_news.exclude(author=self)
+        unread_news = news.exclude(seen_by=self)
+        return unread_news.count()

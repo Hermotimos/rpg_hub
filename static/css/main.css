@@ -552,3 +552,40 @@ div.anchor:before {
     content: "";
     display:block;
 }
+
+
+/* Info bubbles */
+.bg-blue {background: #006699;}
+.bg-grayish {background: #476b6b;}
+.bg-green {background: #008000;}
+.bg-red {background: #e60000;}
+
+div.info-row  {
+    margin-top: -2.4rem;
+    margin-left: auto;
+    margin-right: -1.5rem;
+}
+.number-circle-main {
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    margin-left: -0.3rem;
+}
+
+div.info-row-sub  {
+    margin-top: -2rem;
+    margin-left: auto;
+    margin-right: 2.4rem;
+}
+.number-circle-sub {
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    margin-left: -0.3rem;
+}
+
+.number-circle-main-inner {
+    margin-bottom: 0.1rem;
+    font-size: 0.7rem;
+    color: #cbd5db;
+}
