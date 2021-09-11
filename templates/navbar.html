@@ -22,7 +22,7 @@
             <!-- Navbar Left Side -->
             <ul class="navbar-nav mr-auto">
     
-                {% with undone_demands_cnt=request.user.profile.undone_demands_cnt unread_news_cnt=request.user.profile.unread_news_cnt unread_surveys_cnt=request.user.profile.unread_surveys_cnt %}
+                {% with undone_demands=request.user.profile.undone_demands unseen_news=request.user.profile.unseen_news unseen_surveys=request.user.profile.unseen_surveys %}
                     <li class="dropdown pr-4 mr-auto">
                         <div class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
                             Organizacyjne
@@ -31,10 +31,10 @@
                             <ul class="bullets-1 pl-4">
                                 <li>
                                     <a class="font-14 nav-link small-caps" href="{% url 'contact:demands-main' %}">Dezyderaty</a>
-                                    {% if undone_demands_cnt %}
+                                    {% if undone_demands %}
                                         <div class="info-row-sub float-right">
                                             <div class="number-circle-sub bg-red d-flex align-items-center">
-                                                <span class="mx-auto number-circle-main-inner">{{ undone_demands_cnt }}</span>
+                                                <span class="mx-auto number-circle-main-inner">{{ undone_demands.count }}</span>
                                             </div>
                                         </div>
                                     {% endif %}
@@ -43,14 +43,14 @@
                                 <li>
                                     <a class="font-14 nav-link small-caps" href="{% url 'news:main' %}">Ogłoszenia</a>
                                     <div class="row info-row-sub float-right">
-                                        {% if unread_surveys_cnt %}
+                                        {% if unseen_surveys %}
                                             <div class="number-circle-sub bg-greengray d-flex align-items-center">
-                                                <span class="mx-auto number-circle-main-inner">{{ unread_surveys_cnt }}</span>
+                                                <span class="mx-auto number-circle-main-inner">{{ unseen_surveys.count }}</span>
                                             </div>
                                         {% endif %}
-                                        {% if unread_news_cnt %}
+                                        {% if unseen_news %}
                                             <div class="number-circle-sub bg-blue d-flex align-items-center">
-                                                <span class="mx-auto number-circle-main-inner">{{ unread_news_cnt }}</span>
+                                                <span class="mx-auto number-circle-main-inner">{{ unseen_news.count }}</span>
                                             </div>
                                         {% endif %}
                                     </div>
@@ -59,19 +59,19 @@
                             </ul>
                         </div>
                         <div class="row info-row float-right mr-n2">
-                            {% if undone_demands_cnt %}
+                            {% if undone_demands %}
                                 <div class="number-circle-main bg-red d-flex align-items-center">
-                                    <span class="mx-auto number-circle-main-inner">{{ undone_demands_cnt }}</span>
+                                    <span class="mx-auto number-circle-main-inner">{{ undone_demands.count }}</span>
                                 </div>
                             {% endif %}
-                            {% if unread_surveys_cnt %}
+                            {% if unseen_surveys %}
                                 <div class="number-circle-main bg-greengray d-flex align-items-center">
-                                    <span class="mx-auto number-circle-main-inner">{{ unread_surveys_cnt }}</span>
+                                    <span class="mx-auto number-circle-main-inner">{{ unseen_surveys.count }}</span>
                                 </div>
                             {% endif %}
-                            {% if unread_news_cnt %}
+                            {% if unseen_news %}
                                 <div class="number-circle-main bg-blue d-flex align-items-center">
-                                    <span class="mx-auto number-circle-main-inner">{{ unread_news_cnt }}</span>
+                                    <span class="mx-auto number-circle-main-inner">{{ unseen_news.count }}</span>
                                 </div>
                             {% endif %}
                         </div>

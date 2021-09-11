@@ -21,7 +21,7 @@
 
     <!-- SURVEYS -->
     {% for survey in surveys %}
-        <div class="my-1 border rounded {% if request.user.profile in survey.seen_by.all %} bg-inner {% else %} bg-greengrayish {% endif %}">
+        <div class="my-1 border rounded {% if survey not in unseen_surveys %} bg-inner {% else %} bg-greengrayish {% endif %}">
             <table class="ml-2 mr-2 mb-3 mt-1">
                 <tbody>
                     <tr>
@@ -49,7 +49,7 @@
 
     <!-- NEWS -->
     {% for news in newss %}
-        <div class="my-1 border rounded {% if request.user.profile in news.seen_by.all %} bg-inner {% else %} bg-bluish {% endif %}">
+        <div class="my-1 border rounded {% if news not in unseen_news %} bg-inner {% else %} bg-bluish {% endif %}">
             <table class="ml-2 mr-2 mb-3 mt-1">
                 <tbody>
                     <tr>

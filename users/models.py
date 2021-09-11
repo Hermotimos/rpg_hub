@@ -13,6 +13,7 @@ from django.db.models import (
     ImageField,
     IntegerField,
     Manager,
+    F, Max, Q,
     Model,
     OneToOneField,
     Prefetch,
@@ -195,19 +196,48 @@ class Profile(Model):
         return skills.distinct()
 
     @property
-    def undone_demands_cnt(self):
+    def undone_demands(self):
         demands = self.received_demands.exclude(author=self)
-        undone_demands = demands.exclude(is_done=True)
-        return undone_demands.count()
+        return demands.exclude(is_done=True)
     
     @property
-    def unread_surveys_cnt(self):
-        surveys = self.surveys_received.exclude(author=self)
-        unread_surveys = surveys.exclude(seen_by=self)
-        return unread_surveys.count()
+    def unseen_news(self):
+        from news.models import NewsAnswer
+        allowed_news = self.allowed_news.all()
+        news_unseen = allowed_news.exclude(seen_by=self)
+        
+        allowed_news_annotated = allowed_news.annotate(
+            last_answer_id=Max('news_answers__id')
+        ).filter(news_answers__id=F('last_answer_id'))
+        
+        last_news_answers_ids = [
+            news.last_answer_id for news in allowed_news_annotated
+        ]
+        last_news_answers_unseen = NewsAnswer.objects.filter(
+            id__in=last_news_answers_ids).filter(~Q(seen_by=self))
+        
+        news_with_unseen_last_answer = allowed_news.filter(
+            news_answers__in=last_news_answers_unseen)
+            
+        return news_unseen | news_with_unseen_last_answer
     
     @property
-    def unread_news_cnt(self):
-        news = self.allowed_news.exclude(author=self)
-        unread_news = news.exclude(seen_by=self)
-        return unread_news.count()
+    def unseen_surveys(self):
+        from news.models import SurveyAnswer
+        surveys_received = self.surveys_received.all()
+        surveys_unseen = surveys_received.exclude(seen_by=self)
+        
+        surveys_received_annotated = surveys_received.annotate(
+            last_answer_id=Max('survey_answers__id')
+        ).filter(survey_answers__id=F('last_answer_id'))
+        
+        last_survey_answers_ids = [
+            survey.last_answer_id for survey in surveys_received_annotated
+        ]
+        last_survey_answers_unseen = SurveyAnswer.objects.filter(
+            id__in=last_survey_answers_ids).filter(~Q(seen_by=self))
+        
+        surveys_with_unseen_last_answer = surveys_received.filter(
+            survey_answers__in=last_survey_answers_unseen)
+            
+        return surveys_unseen | surveys_with_unseen_last_answer

@@ -2,63 +2,42 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.db.models import Max
 from django.shortcuts import render, redirect, get_object_or_404
 
 from news.forms import (CreateNewsForm, CreateNewsAnswerForm, CreateSurveyForm,
                         CreateSurveyOptionForm, CreateSurveyAnswerForm,
                         ModifySurveyOptionForm)
 from news.models import News, Survey, SurveyOption
-from users.models import Profile, User
+from users.models import Profile
 
 
 @login_required
 def main_view(request):
-    
-    # from news.models import NewsAnswer, SurveyAnswer, SurveyOption
-    # for o in News.objects.all():
-    #     o.author2 = o.author.profile
-    #     o.save()
-    #
-    # for o in NewsAnswer.objects.all():
-    #     o.author2 = o.author.profile
-    #     o.save()
-    #
-    # for o in Survey.objects.all():
-    #     o.author2 = o.author.profile
-    #     o.save()
-    #
-    # for o in SurveyAnswer.objects.all():
-    #     o.author2 = o.author.profile
-    #     o.save()
-    #
-    # for o in SurveyOption.objects.all():
-    #     o.author2 = o.author.profile
-    #     o.save()
-
     profile = request.user.profile
+    
     if profile.status == 'gm':
         newss = News.objects.all()
         surveys = Survey.objects.all()
     else:
         newss = profile.allowed_news.all()
-        surveys = profile.surveys_received.all()\
+        surveys = profile.surveys_received.all()
 
-    newss = (newss
-             .annotate(last_news_answer=Max('news_answers__created_at'))
-             .select_related('author')
-             .prefetch_related('news_answers__author')
-             .order_by('-created_at'))
+    newss = newss.select_related('author')
+    newss = newss.prefetch_related(
+        'seen_by', 'news_answers__author', 'news_answers__seen_by')
+    newss = newss.order_by('-id')
     
-    surveys = (surveys
-               .select_related('author')
-               .prefetch_related('survey_answers__author')
-               .order_by('-created_at'))
-
+    surveys = surveys.select_related('author')
+    surveys = surveys.prefetch_related(
+        'seen_by', 'survey_answers__author', 'survey_answers__seen_by')
+    surveys = surveys.order_by('-id')
+    
     context = {
         'page_title': 'Ogłoszenia',
         'newss': newss,
+        'unseen_news': profile.unseen_news,
         'surveys': surveys,
+        'unseen_surveys': profile.unseen_surveys,
     }
     return render(request, 'news/main.html', context)
 
@@ -67,7 +46,10 @@ def main_view(request):
 def create_news_view(request):
     profile = request.user.profile
     if request.method == 'POST':
-        form = CreateNewsForm(authenticated_user=request.user, data=request.POST, files=request.FILES)
+        form = CreateNewsForm(
+            authenticated_user=request.user, data=request.POST,
+            files=request.FILES)
+        
         if form.is_valid():
             news = form.save(commit=False)
             news.author = request.user.profile
