@@ -13,11 +13,10 @@ from django.core.mail import send_mail
 from django.shortcuts import redirect
 
 from rpg_project.settings import EMAIL_HOST_USER
-from users.models import Profile
 
 
 class ReplaceFileStorage(FileSystemStorage):
-
+    
     def get_available_name(self, name, max_length=None):
         """
         Returns a filename that's free on the target storage system, and
@@ -29,7 +28,7 @@ class ReplaceFileStorage(FileSystemStorage):
         if self.exists(name):
             os.remove(os.path.join(settings.MEDIA_ROOT, name))
         return name
-
+    
     def get_valid_name(self, name):
         """Overrides method which would normally replace whitespaces with
         underscores and remove special characters.
@@ -141,6 +140,7 @@ def handle_inform_form(request):
 
 
 def send_emails(request, profile_ids=None, **kwargs):
+    from users.models import Profile
     profile = request.user.profile
     sender = EMAIL_HOST_USER
     receivers = [

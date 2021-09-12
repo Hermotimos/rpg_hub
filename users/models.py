@@ -1,10 +1,5 @@
-import os
-import re
-
 from PIL import Image
-from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.files.storage import FileSystemStorage
 from django.db.models import (
     BooleanField,
     CASCADE,
@@ -21,78 +16,16 @@ from django.db.models import (
     When,
 )
 
+from rpg_project.utils import ReplaceFileStorage
+from users.managers import ActivePlayerProfileManager, NonGMProfileManager, \
+    ContactableProfileManager, LivingProfileManager, NPCProfileManager, \
+    PlayerProfileManager
 
-class ReplaceFileStorage(FileSystemStorage):
-
-    def get_available_name(self, name, max_length=None):
-        """
-        Returns a filename that's free on the target storage system, and
-        available for new content to be written to.
-        Found at http://djangosnippets.org/snippets/976/
-        This file storage solves overwrite on upload problem.
-        """
-        # If the filename already exists, remove it
-        if self.exists(name):
-            os.remove(os.path.join(settings.MEDIA_ROOT, name))
-        return name
-
-    def get_valid_name(self, name):
-        """Overrides method which would normally replace whitespaces with
-        underscores and remove special characters.
-            s = str(s).strip().replace(' ', '_')
-            return re.sub(r'(?u)[^-\w.]', '', s)
-        Modified to leave whitespace and to accept it in regular expressions.
-        """
-        name = str(name).strip()
-        return re.sub(r'(?u)[^-\w.\s]', '', name)
-    
-    
 STATUS = [
     ('gm', 'MG'),
     ('npc', 'BN'),
     ('player', 'GRACZ'),
 ]
-
-
-class NonGMProfileManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(status__in=['player', 'npc'])
-        return qs
-
-
-class PlayerProfileManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        return qs.filter(status__icontains='player')
-
-
-class ActivePlayerProfileManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        return qs.filter(status__icontains='player', is_active=True)
-
-
-class NPCProfileManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        return qs.filter(status__icontains='npc')
-
-
-class LivingProfileManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(status__in=['player', 'npc'])
-        qs = qs.filter(is_alive=True)
-        return qs
-
-
-class ContactableProfileManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(status__in=['gm', 'player'])
-        qs = qs.filter(is_active=True)
-        return qs
 
 
 class Profile(Model):
