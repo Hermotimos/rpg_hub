@@ -13,7 +13,7 @@ from users.models import Profile
 def debates_main_view(request):
     profile = request.user.profile
     debates = Debate.objects.all().prefetch_related('known_directly')
-    if profile.status == 'gm':
+    if profile.can_view_all:
         debates = debates.prefetch_related('events__game')
     else:
         debates = debates.filter(known_directly=profile)
@@ -166,4 +166,7 @@ def debate_view(request, debate_id):
         'form': form,
         'informables': informables,
     }
-    return render(request, 'debates/debate.html', context)
+    if profile.can_view_all or profile in debate.known_directly.all():
+        return render(request, 'debates/debate.html', context)
+    else:
+        return redirect('home:dupa')
