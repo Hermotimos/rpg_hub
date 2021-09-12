@@ -21,7 +21,7 @@ from rpg_project.utils import send_emails
 def chronicle_main_view(request):
     profile = request.user.profile
     
-    if profile.status == 'gm':
+    if profile.can_view_all:
         chapters = Chapter.objects.prefetch_related('game_sessions')
         games = GameSession.objects.select_related('chapter')
         games = games.prefetch_related('game_events__known_directly__character')
@@ -72,10 +72,9 @@ def chronicle_game_view(request, game_id):
         'debates__topic',
         'debates__remarks__author',
     )
-    if not profile.status == 'gm':
+    if not profile.can_view_all:
         events = events.filter(
-            Q(known_directly=profile) | Q(known_indirectly=profile)
-        )
+            Q(known_directly=profile) | Q(known_indirectly=profile))
         events = events.distinct()
 
     context = {
@@ -101,10 +100,9 @@ def chronicle_chapter_view(request, chapter_id):
         'debates__topic',
         'debates__remarks__author',
     )
-    if not profile.status == 'gm':
+    if not profile.can_view_all:
         events = events.filter(
-            Q(known_directly=profile) | Q(known_indirectly=profile)
-        )
+            Q(known_directly=profile) | Q(known_indirectly=profile))
         events = events.distinct()
         
     games = GameSession.objects.filter(game_events__in=events)
@@ -133,10 +131,9 @@ def chronicle_all_view(request):
         'debates__remarks__author',
         'debates__known_directly',
     )
-    if not profile.status == 'gm':
+    if not profile.can_view_all:
         events = events.filter(
-            Q(known_directly=profile) | Q(known_indirectly=profile)
-        )
+            Q(known_directly=profile) | Q(known_indirectly=profile))
         events = events.distinct()
     
     games = GameSession.objects.filter(game_events__in=events)
@@ -228,7 +225,7 @@ def timeline_view(request):
     profile = request.user.profile
 
     events = GameEvent.objects.all()
-    if not profile.status == 'gm':
+    if not profile.can_view_all:
         events = events.filter(
             Q(id__in=profile.events_known_directly.all())
             | Q(id__in=profile.events_known_indirectly.all())

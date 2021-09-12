@@ -175,3 +175,11 @@ class Profile(Model):
             survey_answers__in=last_survey_answers_unseen)
             
         return (surveys_unseen | surveys_with_unseen_last_answer).distinct()
+
+    @property
+    def can_view_all(self):
+        return self.status in ['gm', 'spectator']
+    
+    @property
+    def can_action(self):
+        return self.status in ['gm', 'player']
