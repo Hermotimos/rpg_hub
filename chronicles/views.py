@@ -12,6 +12,7 @@ from chronicles.models import (
     Chronology,
 )
 from rpg_project.utils import send_emails
+from toponomikon.models import Location
 
 
 # #################### CHRONICLE ####################
@@ -254,9 +255,12 @@ def timeline_view(request):
         'game',     # No -game: later game's events are usually later
         'event_no_in_game',
     )
+    
+    # Modify locations filter to include sublocations
+    request = add_sublocations(request)
     events_filter = GameEventFilter(
         request.GET, queryset=events, request=request)
-
+   
     context = {
         'page_title': 'Pełne Kalendarium',
        
@@ -265,3 +269,14 @@ def timeline_view(request):
         'events_filter': events_filter,
     }
     return render(request, 'chronicles/timeline.html', context)
+
+
+def add_sublocations(request):
+    all_locs_ids = []
+    for loc_id in request.GET.getlist('locations'):
+        sublocations = Location.objects.get(id=loc_id).with_sublocations()
+        all_locs_ids.extend([s.id for s in sublocations])
+        
+    request.GET = request.GET.copy()
+    request.GET.setlist('locations', all_locs_ids)
+    return request
