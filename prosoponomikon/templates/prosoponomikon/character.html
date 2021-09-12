@@ -18,7 +18,7 @@
                         <div class="float-left mr-3 img-hover-zoom">
                             <img class="character-detail {% if not character.profile.is_alive %} img-grayscale {% endif %}"
                                  src="
-                                    {% if request.user.profile.character == character or request.user.profile in character.known_directly.all or request.user.profile.status == 'gm' %}
+                                    {% if request.user.profile.character == character or request.user.profile in character.known_directly.all or request.user.profile.can_view_all %}
                                         {{ character.profile.image.url }}
                                     {% else %}
                                          /media/profile_pics/profile_known_only_indirectly.jpg
@@ -31,18 +31,20 @@
                             <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Przejdź do Prosoponomikonu">
                                 <a class="btn btn-outline-dark icon-parent-obj py-2" href="{% url 'prosoponomikon:ungrouped' %}#character_{{ character.id }}"></a>
                             </div>
-                            <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Przekaż wiedzę o postaci">
-                                <!-- Modal -->
-                                <span class="btn btn-outline-dark icon-inform py-2" data-toggle="modal" data-target="#infoCharacterModal_{{ character.id }}"></span>
-                                <div class="modal fade" id="infoCharacterModal_{{ character.id }}" tabindex="-1" role="dialog" aria-hidden="true">
-                                    {% with informables=character.informables inform_type=character|get_model_name id_=character.id %}
-                                        {% include '_inform.html' %}
-                                    {% endwith %}
+                            {% if request.user.profile.can_action %}
+                                <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Przekaż wiedzę o postaci">
+                                    <!-- Modal -->
+                                    <span class="btn btn-outline-dark icon-inform py-2" data-toggle="modal" data-target="#infoCharacterModal_{{ character.id }}"></span>
+                                    <div class="modal fade" id="infoCharacterModal_{{ character.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                        {% with informables=character.informables inform_type=character|get_model_name id_=character.id %}
+                                            {% include '_inform.html' %}
+                                        {% endwith %}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Nowy pakiet biograficzny">
-                                <a class="btn btn-outline-dark icon-biography-packet py-2" href="{% url 'prosoponomikon:bio-packet-form' character.id 0 %}"></a>
-                            </div>
+                                <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Nowy pakiet biograficzny">
+                                    <a class="btn btn-outline-dark icon-biography-packet py-2" href="{% url 'prosoponomikon:bio-packet-form' character.id 0 %}"></a>
+                                </div>
+                            {% endif %}
 <!--                            <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">-->
 <!--                                <a class="btn btn-outline-dark icon-note py-2 disabled" href="#"></a>-->
 <!--                            </div>-->

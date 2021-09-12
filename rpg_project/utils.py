@@ -371,3 +371,14 @@ def only_game_masters(function):
             return redirect('home:dupa')
         
     return wrap
+
+
+def only_game_masters_and_spectators(function):
+    @wraps(function)
+    def wrap(request, *args, **kwargs):
+        if request.user.profile.status in ['gm', 'spectator']:
+            return function(request, *args, **kwargs)
+        else:
+            return redirect('home:dupa')
+        
+    return wrap

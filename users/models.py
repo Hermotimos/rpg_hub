@@ -75,7 +75,8 @@ class Profile(Model):
         return qs
 
     def characters_all_known(self):
-        if self.status == 'gm':
+        if self.can_view_all:
+            print('characters_all_known')
             from prosoponomikon.models import Character
             qs = Character.objects.all()
         else:
@@ -85,7 +86,8 @@ class Profile(Model):
         return self._characters_all_related(qs).exclude(id=self.character.id)
     
     def characters_known_only_indirectly(self):
-        if self.status == 'gm':
+        if self.can_view_all:
+            print('characters_known_only_indirectly')
             from prosoponomikon.models import Character
             qs = Character.objects.none()
         else:
@@ -96,7 +98,8 @@ class Profile(Model):
 
     def characters_all_known_annotated_if_indirectly(self):
         from prosoponomikon.models import Character
-        if self.status == 'gm':
+        if self.can_view_all:
+            print('characters_all_known_annotated_if_indirectly')
             qs = Character.objects.all()
         else:
             known_only_indir = self.characters_known_only_indirectly()

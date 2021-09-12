@@ -14,7 +14,8 @@ from prosoponomikon.forms import CharacterManyGroupsEditFormSet, \
 from prosoponomikon.models import Character, CharacterGroup, NameGroup, \
     FamilyName
 from rpg_project.settings import get_secret
-from rpg_project.utils import handle_inform_form, backup_db, only_game_masters
+from rpg_project.utils import handle_inform_form, backup_db, only_game_masters, \
+    only_game_masters_and_spectators
 from toponomikon.models import Location
 from users.models import Profile, User
 
@@ -52,16 +53,14 @@ def prosoponomikon_grouped_view(request):
 @login_required
 def prosoponomikon_character_view(request, character_id):
     profile = request.user.profile
-    if profile.status == 'gm':
-        return redirect(
-            'prosoponomikon:character-for-gm', character_id)
+    if profile.can_view_all:
+        return redirect('prosoponomikon:character-for-gm', character_id)
     else:
-        return redirect(
-            'prosoponomikon:character-for-player', character_id=character_id)
+        return redirect('prosoponomikon:character-for-player', character_id)
 
 
 @login_required
-@only_game_masters
+@only_game_masters_and_spectators
 def prosoponomikon_character_for_gm_view(request, character_id):
     characters = Character.objects.select_related('first_name')
     characters = characters.prefetch_related(
@@ -134,7 +133,7 @@ def prosoponomikon_character_for_player_view(request, character_id):
         'known_characters': known_characters,
     }
     if (profile in character.all_known() or profile.character == character
-            or profile.status == 'gm'):
+            or profile.can_view_all):
         return render(request, 'prosoponomikon/character.html', context)
     else:
         return redirect('home:dupa')
