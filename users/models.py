@@ -25,6 +25,7 @@ STATUS = [
     ('gm', 'MG'),
     ('npc', 'BN'),
     ('player', 'GRACZ'),
+    ('spectator', 'WIDZ'),
 ]
 
 
@@ -42,7 +43,7 @@ class Profile(Model):
     )
     # Character name copied from Character (by signal) to avoid queries
     copied_character_name = CharField(max_length=100, blank=True, null=True)
-    
+
     objects = Manager()
     non_gm = NonGMProfileManager()
     players = PlayerProfileManager()
@@ -66,7 +67,7 @@ class Profile(Model):
                 output_size = (300, 300)
                 img.thumbnail(output_size)
                 img.save(self.image.path)
-
+       
     @staticmethod
     def _characters_all_related(qs):
         qs = qs.prefetch_related('known_directly', 'known_indirectly')

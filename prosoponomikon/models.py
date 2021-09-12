@@ -165,6 +165,7 @@ class FamilyName(Model):
 class CharacterManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
+        qs = qs.exclude(profile__status='spectator')
         qs = qs.select_related('first_name', 'family_name')
         return qs
     
