@@ -62,10 +62,12 @@ def prosoponomikon_character_view(request, character_id):
 @login_required
 @only_game_masters_and_spectators
 def prosoponomikon_character_for_gm_view(request, character_id):
-    characters = Character.objects.select_related('first_name')
-    characters = characters.prefetch_related(
-        'biography_packets', 'dialogue_packets')
-    character = characters.filter(id=character_id).first()
+    profile = request.user.profile
+    if profile.character.id == character_id:
+        character = profile.character
+    else:
+        character = Character.objects.get(id=character_id)
+
     known_characters = character.profile.characters_all_known_annotated_if_indirectly()
     
     # NPCs: Default skills and kn_packets etc. as per CharacterGroup
@@ -92,8 +94,8 @@ def prosoponomikon_character_for_gm_view(request, character_id):
         'page_title': character,
         'character': character,
         'skills': skills,
-        'knowledge_packets': knowledge_packets,
         'known_characters': known_characters,
+        'knowledge_packets': knowledge_packets,
     }
     return render(request, 'prosoponomikon/character.html', context)
 

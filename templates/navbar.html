@@ -24,9 +24,9 @@
     
                 {% with undone_demands=request.user.profile.undone_demands unseen_news=request.user.profile.unseen_news unseen_surveys=request.user.profile.unseen_surveys %}
                     <li class="dropdown pr-4 mr-auto">
-                        <div class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
+                        <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
                             Organizacyjne
-                        </div>
+                        </button>
                         <div class="dropdown-content">
                             <ul class="bullets-1 pl-4">
                                 <li>
@@ -39,22 +39,23 @@
                                         </div>
                                     {% endif %}
                                 </li>
-                                
-                                <li>
-                                    <a class="font-14 nav-link small-caps" href="{% url 'news:main' %}">Ogłoszenia</a>
-                                    <div class="row info-row-sub float-right">
-                                        {% if unseen_surveys %}
-                                            <div class="number-circle-sub bg-greengray d-flex align-items-center">
-                                                <span class="mx-auto number-circle-main-inner">{{ unseen_surveys.count }}</span>
-                                            </div>
-                                        {% endif %}
-                                        {% if unseen_news %}
-                                            <div class="number-circle-sub bg-blue d-flex align-items-center">
-                                                <span class="mx-auto number-circle-main-inner">{{ unseen_news.count }}</span>
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                </li>
+                                {% if user.profile.status != 'spectator' %}
+                                    <li>
+                                        <a class="font-14 nav-link small-caps" href="{% url 'news:main' %}">Ogłoszenia</a>
+                                        <div class="row info-row-sub float-right">
+                                            {% if unseen_surveys %}
+                                                <div class="number-circle-sub bg-greengray d-flex align-items-center">
+                                                    <span class="mx-auto number-circle-main-inner">{{ unseen_surveys.count }}</span>
+                                                </div>
+                                            {% endif %}
+                                            {% if unseen_news %}
+                                                <div class="number-circle-sub bg-blue d-flex align-items-center">
+                                                    <span class="mx-auto number-circle-main-inner">{{ unseen_news.count }}</span>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </li>
+                                {% endif %}
                                 <li><a class="font-14 nav-link small-caps" href="{% url 'rules:main' %}">Zasady</a></li>
                             </ul>
                         </div>
@@ -111,38 +112,40 @@
                     </div>
                 </li>
     
-                {% if user.profile.status != 'gm' %}
-                <li class="dropdown pr-4">
-                    <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Postać</button>
-                    <div class="dropdown-content">
-                        <ul class="bullets-1 pl-4">
-        <!--                            <li><a class="font-14 nav-link small-caps" href="#">Cechy i walka</a></li>-->
-        <!--                            <li><a class="font-14 nav-link small-caps" href="#">Doświadczenie | Tabela awansów</a></li>-->
-        <!--                            <li><a class="font-14 nav-link small-caps" href="#">Ekwipunek | Skrytki</a></li>-->
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'prosoponomikon:character' user.profile.character.id %}">Postać</a></li>
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'development:skills' '0' %}">Umiejętności</a></li>
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'development:tricks' %}">Podstępy</a></li>
-        <!--                            <li><a class="font-14 nav-link small-caps" href="#">Moce</a></li>-->
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'contact:plans-main' %}">Plany</a></li>
-        <!--                            <li><a class="font-14 nav-link small-caps" href="#">Przemyślenia</a></li>-->
-                        </ul>
-                    </div>
-                </li>
+                {% if user.profile.status == 'gm' %}
+                    <li class="dropdown pr-4">
+                        <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Postacie</button>
+                        <div class="dropdown-content">
+                            <ul class="bullets-1 pl-4">
+            <!--                            <li><a class="font-14 nav-link small-caps" href="#">Cechy i walka</a></li>-->
+            <!--                            <li><a class="font-14 nav-link small-caps" href="#">Doświadczenie | Tabela awansów</a></li>-->
+            <!--                            <li><a class="font-14 nav-link small-caps" href="#">Ekwipunek | Skrytki</a></li>-->
+                                <li><a class="font-14 nav-link small-caps" href="{% url 'development:skills-for-gm' %}">Umiejętności graczy</a></li>
+                                <li><a class="font-14 nav-link small-caps" href="{% url 'development:tricks' %}">Podstępy graczy</a></li>
+                                <li><a class="font-14 nav-link small-caps" href="{% url 'contact:plans-for-gm' %}">Plany graczy</a></li>
+            <!--                            <li><a class="font-14 nav-link small-caps" href="#">Moce</a></li>-->
+                            </ul>
+                        </div>
+                    </li>
+                {% elif user.profile.status == 'spectator' %}
+                    <!-- Nothing -->
                 {% else %}
-                <li class="dropdown pr-4">
-                    <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Postacie</button>
-                    <div class="dropdown-content">
-                        <ul class="bullets-1 pl-4">
-        <!--                            <li><a class="font-14 nav-link small-caps" href="#">Cechy i walka</a></li>-->
-        <!--                            <li><a class="font-14 nav-link small-caps" href="#">Doświadczenie | Tabela awansów</a></li>-->
-        <!--                            <li><a class="font-14 nav-link small-caps" href="#">Ekwipunek | Skrytki</a></li>-->
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'development:skills-for-gm' %}">Umiejętności graczy</a></li>
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'development:tricks' %}">Podstępy graczy</a></li>
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'contact:plans-for-gm' %}">Plany graczy</a></li>
-        <!--                            <li><a class="font-14 nav-link small-caps" href="#">Moce</a></li>-->
-                        </ul>
-                    </div>
-                </li>
+                    <li class="dropdown pr-4">
+                        <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Postać</button>
+                        <div class="dropdown-content">
+                            <ul class="bullets-1 pl-4">
+            <!--                            <li><a class="font-14 nav-link small-caps" href="#">Cechy i walka</a></li>-->
+            <!--                            <li><a class="font-14 nav-link small-caps" href="#">Doświadczenie | Tabela awansów</a></li>-->
+            <!--                            <li><a class="font-14 nav-link small-caps" href="#">Ekwipunek | Skrytki</a></li>-->
+                                <li><a class="font-14 nav-link small-caps" href="{% url 'prosoponomikon:character' user.profile.character.id %}">Postać</a></li>
+                                <li><a class="font-14 nav-link small-caps" href="{% url 'development:skills' '0' %}">Umiejętności</a></li>
+                                <li><a class="font-14 nav-link small-caps" href="{% url 'development:tricks' %}">Podstępy</a></li>
+            <!--                            <li><a class="font-14 nav-link small-caps" href="#">Moce</a></li>-->
+                                <li><a class="font-14 nav-link small-caps" href="{% url 'contact:plans-main' %}">Plany</a></li>
+            <!--                            <li><a class="font-14 nav-link small-caps" href="#">Przemyślenia</a></li>-->
+                            </ul>
+                        </div>
+                    </li>
                 {% endif %}
     
             </ul>
