@@ -12,7 +12,7 @@ from chronicles.models import GameEvent, Thread, Location, GameSession, Profile
 def threads(request):
     profile = request.user.profile
     objects = Thread.objects.all()
-    if profile.status != 'gm':
+    if not profile.can_view_all:
         objects = objects.filter(
             Q(events__known_directly=profile)
             | Q(events__known_indirectly=profile)
@@ -23,7 +23,7 @@ def threads(request):
 def locations(request):
     profile = request.user.profile
     objects = Location.objects.all()
-    if profile.status != 'gm':
+    if not profile.can_view_all:
         objects = objects.filter(
             Q(events__known_directly=profile)
             | Q(events__known_indirectly=profile)
@@ -34,7 +34,7 @@ def locations(request):
 def participants(request):
     profile = request.user.profile
     objects = Profile.non_gm.all()
-    if profile.status != 'gm':
+    if not profile.can_view_all:
         # Get profiles that know directly the same events as the current one
         objects = objects.filter(
             events_known_directly__in=profile.events_known_directly.all()
@@ -45,7 +45,7 @@ def participants(request):
 def games(request):
     profile = request.user.profile
     objects = GameSession.objects.all()
-    if profile.status != 'gm':
+    if not profile.can_view_all:
         objects = objects.filter(
             Q(game_events__known_directly=profile)
             | Q(game_events__known_indirectly=profile)
@@ -68,7 +68,7 @@ class GameEventFilter(FilterSet):
     locations = ModelMultipleChoiceFilter(
         queryset=locations, label="Lokacje:",
     )
-    # TODO filter out locations with no direct GameEvents
+    # TODO filter out locations with no direct GameEvents (they obscure filter)
     participants = ModelMultipleChoiceFilter(
         field_name='known_directly',
         queryset=participants,
