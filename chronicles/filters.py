@@ -68,7 +68,6 @@ class GameEventFilter(FilterSet):
     locations = ModelMultipleChoiceFilter(
         queryset=locations, label="Lokacje:",
     )
-    # TODO filter out locations with no direct GameEvents (they obscure filter)
     participants = ModelMultipleChoiceFilter(
         field_name='known_directly',
         queryset=participants,
