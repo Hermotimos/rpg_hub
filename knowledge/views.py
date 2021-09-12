@@ -44,7 +44,7 @@ def knowledge_packets_in_skills_view(request, model_name):
     # Filter skills queryset according to profile's permissions
     kn_packets = KnowledgePacket.objects.all()
     skill_levels = SkillLevel.objects.all()
-    if profile.status != 'gm':
+    if not profile.can_view_all:
         kn_packets = kn_packets.filter(acquired_by=profile)
         skill_levels = skill_levels.filter(acquired_by=profile)
     
