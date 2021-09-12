@@ -94,4 +94,3 @@ def profile_view(request):
         'character_form': character_form,
     }
     return render(request, 'users/profile.html', context)
-
