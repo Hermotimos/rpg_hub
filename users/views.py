@@ -69,16 +69,12 @@ def change_password_view(request):
 
 @login_required
 def profile_view(request):
-    profile = request.user.profile
-    character_form = None
-    
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(
             request.POST, request.FILES, instance=request.user.profile)
-        if profile.has_character:
-            character_form = CharacterForm(
-                request.POST, instance=request.user.profile.character)
+        character_form = CharacterForm(
+            request.POST, instance=request.user.profile.character)
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
@@ -89,9 +85,7 @@ def profile_view(request):
     else:
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
-        if profile.has_character:
-            character_form = CharacterForm(
-                instance=request.user.profile.character)
+        character_form = CharacterForm(instance=request.user.profile.character)
 
     context = {
         'page_title': 'Profil',
