@@ -37,11 +37,12 @@
                                    {% endif %}"
                                data-toggle="tooltip" data-placement="left" title="Przejdź do lokacji nadrzędnej">
                             </a>
-                            <span data-toggle="modal" data-target="#infoLocationModal">
-                                <span class="btn btn-outline-dark icon-inform py-2 mb-sm-1"
-                                    data-toggle="tooltip" data-placement="left" title="Przekaż wiedzę o lokacji">
+                            {% if request.user.profile.can_action %}
+                                <span data-toggle="modal" data-target="#infoLocationModal">
+                                    <span class="btn btn-outline-dark icon-inform py-2 mb-sm-1"
+                                        data-toggle="tooltip" data-placement="left" title="Przekaż wiedzę o lokacji">
+                                    </span>
                                 </span>
-                            </span>
                                 <!-- The Modal -->
                                 <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
                                     {% with informables=this_location.informables inform_type=this_location|get_model_name id_=this_location.id %}
@@ -51,6 +52,7 @@
 <!--                            <a class="btn btn-outline-dark icon-note py-2 mb-sm-1 disabled"-->
 <!--                                href="#"-->
 <!--                                data-toggle="tooltip" data-placement="left" title="Notatki"></a>-->
+                            {% endif %}
                             {% if request.user.profile.status == 'gm' %}
                                 <a class="btn btn-outline-secondary icon-edit py-2 mb-sm-1"
                                    href="{% url 'admin:toponomikon_location_change' this_location.id %}" target="_blank"

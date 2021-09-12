@@ -11,7 +11,7 @@ from toponomikon.models import Location, LocationType, PrimaryLocation, \
 @login_required
 def toponomikon_main_view(request):
     profile = request.user.profile
-    if profile.status == 'gm':
+    if profile.can_view_all:
         primary_locs = PrimaryLocation.objects.prefetch_related('locations')
         all_locs = Location.objects.values('name')
         all_maps = MapPacket.objects.all()
@@ -59,7 +59,7 @@ def toponomikon_location_view(request, loc_name):
     prep = Location.objects.select_related(
         'main_image', 'audio_set', 'in_location__in_location__in_location')
     
-    if profile.status == 'gm':
+    if profile.can_view_all:
         prep = prep.prefetch_related(
             'knowledge_packets__pictures',
             'map_packets__pictures',
@@ -94,7 +94,7 @@ def toponomikon_location_view(request, loc_name):
     characters = characters.prefetch_related('known_directly')
     
     # LOCATIONS TAB
-    if profile.status == 'gm':
+    if profile.can_view_all:
         locations = this_location.locations.prefetch_related('locations')
     else:
         locations = this_location.locations.filter(id__in=known_all)
@@ -126,7 +126,7 @@ def toponomikon_location_view(request, loc_name):
         'location_types': location_types,
         'characters': characters.distinct(),
     }
-    if this_location in known_all or profile.status == 'gm':
+    if this_location in known_all or profile.can_view_all:
         return render(request, 'toponomikon/this_location.html', context)
     else:
         return redirect('home:dupa')
