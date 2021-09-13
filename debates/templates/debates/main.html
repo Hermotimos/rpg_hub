@@ -16,15 +16,14 @@
     
         <article class="pt-5">
             {% for topic in topics %}
-                <div id="topic_{{ topic.id }}">
+                <div id="topic_{{ topic.id }}" class="mb-5">
                     <h3 class="small-caps">
                         <b class="border-bottom-dark">{{ topic.title }}</b>
                     </h3>
-                    <a href="{% url 'debates:create-debate' topic.id %}" class="btn btn-outline-dark">Nowa narada</a>
-                    <br><br>
-                    
-                    <ul class="bullets-3 pl-3">
-                        {% for debate in topic.debates.all %}
+                    <a href="{% url 'debates:create-debate' topic.id %}" class="btn btn-outline-dark mb-3">Nowa narada</a>
+                    {% for debate in topic.debates.all %}
+                        <span class="pt-5" id="debate_{{ debate.id }}"></span>
+                        <ul class="bullets-3 pl-3 mb-0">
                             <li class="pl-1 pb-2 {% if not debate.is_ended %} bullet-ongoing {% endif %} {% if debate.events.count == 0 %} mb-3 {% endif %}">
                                 <div class="d-md-inline">
                                     <h5 class="d-inline font-18">
@@ -49,9 +48,8 @@
                                     </small>
                                 </div>
                             </li>
-                        {% endfor %}
-                    </ul>
-                    <br>
+                        </ul>
+                    {% endfor %}
                 </div>
             {% endfor %}
         </article>

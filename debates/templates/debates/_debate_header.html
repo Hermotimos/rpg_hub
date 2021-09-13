@@ -3,7 +3,7 @@
 <!-- BUTTONS -->
 <div class="row">
     <div data-toggle="tooltip" data-placement="bottom" title="Narady">
-        <a class="btn btn-outline-dark icon-parent-obj py-2 mt-1" href="{% url 'debates:main' %}"></a>
+        <a class="btn btn-outline-dark icon-parent-obj py-2 mt-1" href="{% url 'debates:main' %}#debate_{{ debate.id }}"></a>
     </div>
     {% if not debate.is_ended %}
         <div data-toggle="tooltip" data-placement="bottom" title="Dołącz nowych uczestników do narady">
