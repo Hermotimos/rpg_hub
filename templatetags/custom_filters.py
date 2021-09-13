@@ -110,15 +110,9 @@ def add_season_img(text):
             'Zimy': '<br><img class="img-season" src="/static/img/seasons_winter.png"><br>',
         }
         cnt = 0
-        previous = ''
         for k, v in replacements.items():
             cnt += 1 if k in text else 0
             text = text.replace(k, v)
-            if cnt > 1:
-                text = text.replace(previous, '')
-                text = text.replace(v, (previous[:-4] + v[4:]))
-                break
-            previous = v
     return mark_safe(text)
 
 
