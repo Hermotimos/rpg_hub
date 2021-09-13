@@ -12,6 +12,8 @@ urlpatterns = [
     path('reload-prosoponomikon/', views.reload_prosoponomikon, name='reload-prosoponomikon'),
     path('refresh-contenttypes/', views.refresh_content_types, name='refresh-contenttypes'),
     
+    # path('copy-pics-to-picsets/', views.copy_pictures_to_picturesets, name='copy-pics-to-picset'),
+
     path('todos/', views.todos_view, name='todos'),
     path('backup-db/', views.backup_db_view, name='backup-db'),
     path('download-db/', views.download_db, name='download-db'),

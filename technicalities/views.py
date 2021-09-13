@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect
 from django.utils.safestring import mark_safe
 
 from chronicles.models import GameEvent
-from imaginarion.models import PictureImage
+from imaginarion.models import PictureImage, Picture, PictureSet
 from prosoponomikon.models import Character
 from prosoponomikon.models import NonGMCharacter
 from rpg_project.utils import backup_db, only_game_masters
@@ -118,6 +118,19 @@ def refresh_content_types(request):
     deleted = "<br>".join([str(dict_) for dict_ in deleted]) if deleted else 0
     messages.info(request, mark_safe(f"Usunięto content types:\n{deleted}"))
     return redirect('technicalities:reload-main')
+
+
+# @login_required
+# @only_game_masters
+# def copy_pictures_to_picturesets(request):
+#     for picture in Picture.objects.all():
+#         if picture.type != 'realia':
+#             new_pictureset = PictureSet.objects.create(
+#                 title=picture.description or 'TODO')
+#             new_pictureset.pictures.set([picture])
+#             print(picture.description)
+#     messages.info(request, 'Skopiowano "Pictures" do "PictureSets"!')
+#     return redirect('technicalities:reload-main')
 
 
 #  ---------------------------------------------------------------------
