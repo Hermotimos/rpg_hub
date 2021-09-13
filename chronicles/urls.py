@@ -1,12 +1,9 @@
 from django.urls import path
-from chronicles import views_recreate
 from chronicles import views
+
 
 app_name = 'chronicles'
 urlpatterns = [
-    # path('', views_recreate.recreate, name='recreate'),
-    # path('mig/', views_recreate.migrate_debates, name='migrate-debates'),
-    
     # chronicle
     path('chronicle/main/', views.chronicle_main_view, name='chronicle-main'),
     path('chronicle/all/', views.chronicle_all_view, name='chronicle-all'),
@@ -20,5 +17,4 @@ urlpatterns = [
     # timeline
     path('timeline/', views.timeline_view, name='timeline'),
     path('chronologies/', views.chronologies_view, name='chronologies'),
-
 ]
