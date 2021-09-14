@@ -9,7 +9,7 @@ from django.db.models import (
     ImageField,
     IntegerField,
     Manager,
-    ManyToManyField as M2MField,
+    ManyToManyField as M2M,
     Model,
     PositiveSmallIntegerField,
     PROTECT,
@@ -207,14 +207,14 @@ class TimeUnit(Model):
     description_long = TextField(blank=True, null=True)
     
     # Fields for TimeSpan & HistoryEvent proxies
-    known_short_desc = M2MField(
+    known_short_desc = M2M(
         to=Profile,
         related_name='timeunits_known_short_desc',
         # limit_choices_to=PLAYERS,
         limit_choices_to=Q(status='player'),
         blank=True,
     )
-    known_long_desc = M2MField(
+    known_long_desc = M2M(
         to=Profile,
         related_name='timeunits_long_desc',
         # limit_choices_to=PLAYERS,
@@ -227,8 +227,8 @@ class TimeUnit(Model):
     name_genetive = CharField(max_length=256, blank=True, null=True)
 
     # Fields for HistoryEvent & GameEvent proxies
-    threads = M2MField(to=Thread, related_name='events', blank=True)
-    locations = M2MField(to=Location, related_name='events', blank=True)
+    threads = M2M(to=Thread, related_name='events', blank=True)
+    locations = M2M(to=Location, related_name='events', blank=True)
     audio = FK(
         to=Audio,
         related_name='events',
@@ -250,23 +250,23 @@ class TimeUnit(Model):
         blank=True,
         null=True,
     )
-    known_directly = M2MField(
+    known_directly = M2M(
         to=Profile,
         related_name='events_known_directly',
         # limit_choices_to=PLAYERS,
         limit_choices_to=Q(status='player'),
         blank=True,
     )
-    known_indirectly = M2MField(
+    known_indirectly = M2M(
         to=Profile,
         related_name='events_known_indirectly',
         # limit_choices_to=PLAYERS,
         limit_choices_to=Q(status='player'),
         blank=True,
     )
-    pictures = M2MField(to=Picture, related_name='events', blank=True)
-    picture_sets = M2MField(to=PictureSet, related_name='events', blank=True)
-    debates = M2MField(to=Debate, related_name='events', blank=True)
+    pictures = M2M(to=Picture, related_name='events', blank=True)
+    picture_sets = M2M(to=PictureSet, related_name='events', blank=True)
+    debates = M2M(to=Debate, related_name='events', blank=True)
     
     class Meta:
         ordering = ['date_start']

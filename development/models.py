@@ -2,7 +2,7 @@ from django.db.models import (
     CharField,
     CASCADE,
     ForeignKey as FK,
-    ManyToManyField as M2MField,
+    ManyToManyField as M2M,
     Model,
     PositiveSmallIntegerField,
     PROTECT,
@@ -39,7 +39,7 @@ class ProfileKlass(Model):
 
 class Level(Model):
     profile_klass = FK(to=ProfileKlass, related_name='levels', on_delete=CASCADE)
-    achievements = M2MField(to=Achievement, related_name='levels', blank=True)
+    achievements = M2M(to=Achievement, related_name='levels', blank=True)
     level_number = PositiveSmallIntegerField()
     level_mods = TextField()
 

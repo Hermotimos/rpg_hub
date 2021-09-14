@@ -8,7 +8,7 @@ from django.db.models import (
     ForeignKey as FK,
     ImageField,
     Manager,
-    ManyToManyField as M2MField,
+    ManyToManyField as M2M,
     Model,
     TextField,
 )
@@ -23,10 +23,10 @@ class News(Model):
     text = TextField(max_length=4000)
     created_at = DateTimeField(auto_now_add=True)
     author = FK(to=Profile, related_name='news_authored', on_delete=CASCADE)
-    allowed_profiles = M2MField(to=Profile, related_name='allowed_news')
-    followers = M2MField(to=Profile, related_name='followed_news', blank=True)
+    allowed_profiles = M2M(to=Profile, related_name='allowed_news')
+    followers = M2M(to=Profile, related_name='followed_news', blank=True)
     image = ImageField(blank=True, null=True, upload_to='news_pics')
-    seen_by = M2MField(to=Profile, related_name='news_seen', blank=True)
+    seen_by = M2M(to=Profile, related_name='news_seen', blank=True)
 
     def __str__(self):
         return self.title[:50] + '...' if len(str(self.title)) > 100 else self.title
@@ -52,7 +52,7 @@ class NewsAnswer(Model):
     text = TextField(max_length=4000)
     created_at = DateTimeField(auto_now_add=True)
     image = ImageField(blank=True, null=True, upload_to='news_pics')
-    seen_by = M2MField(to=Profile, related_name='news_answers_seen', blank=True)
+    seen_by = M2M(to=Profile, related_name='news_answers_seen', blank=True)
 
     class Meta:
         ordering = ['created_at']
@@ -77,8 +77,8 @@ class Survey(Model):
     text = TextField(max_length=4000)
     image = ImageField(blank=True, null=True, upload_to='news_pics')
     created_at = DateTimeField(auto_now_add=True)
-    addressees = M2MField(to=Profile, related_name='surveys_received')
-    seen_by = M2MField(to=Profile, related_name='surveys_seen', blank=True)
+    addressees = M2M(to=Profile, related_name='surveys_received')
+    seen_by = M2M(to=Profile, related_name='surveys_seen', blank=True)
 
     def __str__(self):
         return self.title[:50] + '...' if len(str(self.title)) > 50 else self.title
@@ -107,8 +107,8 @@ class SurveyOption(Model):
     survey = FK(to=Survey, related_name='survey_options', on_delete=CASCADE)
     author = FK(to=Profile, related_name='survey_options_authored', on_delete=CASCADE)
     option_text = CharField(max_length=50)
-    yes_voters = M2MField(to=Profile, related_name='survey_yes_votes', blank=True)
-    no_voters = M2MField(to=Profile, related_name='survey_no_votes', blank=True)
+    yes_voters = M2M(to=Profile, related_name='survey_yes_votes', blank=True)
+    no_voters = M2M(to=Profile, related_name='survey_no_votes', blank=True)
 
     class Meta:
         ordering = ['option_text']
@@ -123,7 +123,7 @@ class SurveyAnswer(Model):
     text = TextField(max_length=4000)
     created_at = DateTimeField(auto_now_add=True)
     image = ImageField(blank=True, null=True, upload_to='news_pics')
-    seen_by = M2MField(to=Profile, related_name='survey_answers_seen', blank=True)
+    seen_by = M2M(to=Profile, related_name='survey_answers_seen', blank=True)
 
     class Meta:
         ordering = ['created_at']

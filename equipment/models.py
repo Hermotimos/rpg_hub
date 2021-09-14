@@ -3,7 +3,7 @@ from django.db.models import (
     CASCADE,
     DecimalField,
     ForeignKey as FK,
-    ManyToManyField as M2MField,
+    ManyToManyField as M2M,
     Model,
     PositiveSmallIntegerField,
     PROTECT,
@@ -17,7 +17,7 @@ from users.models import Profile
 class ItemStorage(Model):
     name = CharField(max_length=250)
     description = TextField()
-    owners = M2MField(to=Profile, related_name='item_storages')
+    owners = M2M(to=Profile, related_name='item_storages')
     location = FK(
         to=SecondaryLocation,
         related_name='item_storages',

@@ -4,7 +4,7 @@ from django.db.models import (
     ForeignKey as FK,
     ImageField,
     Manager,
-    ManyToManyField as M2MField,
+    ManyToManyField as M2M,
     Model,
     PositiveSmallIntegerField,
     PROTECT,
@@ -21,7 +21,7 @@ class Skill(Model):
     name = CharField('Umiejętność', max_length=100, unique=True)
     tested_trait = CharField('Cecha/Cechy', max_length=50, blank=True, null=True)
     image = ImageField(upload_to='site_features_pics', blank=True, null=True)
-    allowed_profiles = M2MField(
+    allowed_profiles = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_skills',
@@ -56,7 +56,7 @@ class SkillLevel(Model):
     skill = FK(to=Skill, related_name='skill_levels', on_delete=PROTECT)
     level = CharField(max_length=10, choices=S_LEVELS)
     description = TextField(max_length=4000, blank=True, null=True)
-    acquired_by = M2MField(to=Profile, related_name='skill_levels', blank=True)
+    acquired_by = M2M(to=Profile, related_name='skill_levels', blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
@@ -125,8 +125,8 @@ class HistorySkill(Skill):
 
 class Synergy(Model):
     name = CharField(max_length=100, verbose_name='Synergia')
-    skills = M2MField(to=Skill, related_name='skills')
-    allowed_profiles = M2MField(
+    skills = M2M(to=Skill, related_name='skills')
+    allowed_profiles = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_synergies',
@@ -155,11 +155,7 @@ class SynergyLevel(Model):
     synergy = FK(to=Synergy, related_name='synergy_levels', on_delete=PROTECT)
     level = CharField(max_length=10, choices=S_LEVELS[1:])
     description = TextField(max_length=4000, blank=True, null=True)
-    acquired_by = M2MField(
-        to=Profile,
-        related_name='synergy_levels',
-        blank=True,
-    )
+    acquired_by = M2M(to=Profile, related_name='synergy_levels', blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):
@@ -227,7 +223,7 @@ class Klass(Model):
     lvl_18 = CharField(max_length=500, blank=True, null=True)
     lvl_19 = CharField(max_length=500, blank=True, null=True)
     lvl_20 = CharField(max_length=500, blank=True, null=True)
-    allowed_profiles = M2MField(
+    allowed_profiles = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_klasses',
@@ -255,7 +251,7 @@ class Klass(Model):
 class EliteProfession(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
-    allowed_profiles = M2MField(
+    allowed_profiles = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_elite_classes',
@@ -289,7 +285,7 @@ class EliteKlass(Model):
     )
     description = TextField(max_length=4000, blank=True, null=True)
     start_perks = TextField(max_length=4000, blank=True, null=True)
-    allowed_profiles = M2MField(
+    allowed_profiles = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_elite_klasses',
@@ -367,7 +363,7 @@ class Weapon(Model):
     weapon_type = FK(to=WeaponType, related_name='weapons', on_delete=PROTECT)
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
-    pictures = M2MField(to=Picture, related_name='weapon_pics', blank=True)
+    pictures = M2M(to=Picture, related_name='weapon_pics', blank=True)
     delay = PositiveSmallIntegerField()
     damage_small_dices = CharField(max_length=10, blank=True, null=True)
     damage_small_add = PositiveSmallIntegerField(blank=True, null=True)
@@ -381,8 +377,7 @@ class Weapon(Model):
     avg_price_value = PositiveSmallIntegerField(blank=True, null=True)
     avg_price_currency = CharField(max_length=5, choices=CURRENCIES, blank=True, null=True)
     avg_weight = DecimalField(max_digits=10, decimal_places=1)
-
-    allowed_profiles = M2MField(
+    allowed_profiles = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_weapons',
@@ -417,7 +412,7 @@ class Weapon(Model):
 class Plate(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
-    pictures = M2MField(to=Picture, related_name='plate_pics', blank=True)
+    pictures = M2M(to=Picture, related_name='plate_pics', blank=True)
     armor_class_bonus = PositiveSmallIntegerField(blank=True, null=True)
     parrying = PositiveSmallIntegerField(blank=True, null=True)
     endurance = PositiveSmallIntegerField()
@@ -434,8 +429,7 @@ class Plate(Model):
     mod_hiding_wilderness = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
     mod_climbing = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
     mod_traps = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-
-    allowed_profiles = M2MField(
+    allowed_profiles = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_plates',
@@ -456,7 +450,7 @@ class Plate(Model):
 class Shield(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
-    pictures = M2MField(to=Picture, related_name='shield_pics', blank=True)
+    pictures = M2M(to=Picture, related_name='shield_pics', blank=True)
     enemies_no = PositiveSmallIntegerField()
     armor_class_bonus_close_combat = PositiveSmallIntegerField(
         blank=True,
@@ -468,7 +462,7 @@ class Shield(Model):
     )
     weight = DecimalField(max_digits=10, decimal_places=1)
 
-    allowed_profiles = M2MField(
+    allowed_profiles = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_shields',

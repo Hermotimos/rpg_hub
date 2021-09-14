@@ -8,7 +8,7 @@ from django.db.models import (
     DateTimeField,
     ForeignKey as FK,
     ImageField,
-    ManyToManyField as M2MField,
+    ManyToManyField as M2M,
     Model,
     PROTECT,
     TextField,
@@ -32,7 +32,7 @@ class Topic(Model):
 class Debate(Model):
     name = CharField(max_length=77, unique=True, verbose_name='Tytuł narady')
     topic = FK(to=Topic, related_name='debates', on_delete=CASCADE)
-    known_directly = M2MField(
+    known_directly = M2M(
         to=Profile,
         related_name='debates_known_directly',
         verbose_name='Uczestnicy',
@@ -76,7 +76,7 @@ class Remark(Model):
         null=True,
         verbose_name='Obraz',
     )
-    seen_by = M2MField(to=Profile, related_name='remarks_seen', blank=True)
+    seen_by = M2M(to=Profile, related_name='remarks_seen', blank=True)
     created_at = DateTimeField(auto_now_add=True)
 
     def __str__(self):

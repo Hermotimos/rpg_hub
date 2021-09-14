@@ -5,7 +5,7 @@ from django.db.models import (
     ForeignKey as FK,
     ImageField,
     Manager,
-    ManyToManyField as M2MField,
+    ManyToManyField as M2M,
     Model,
     PROTECT,
     TextField,
@@ -57,7 +57,7 @@ class AudioSet(Model):
     title = CharField(max_length=200)
     description = TextField(max_length=500, blank=True, null=True)
     main_audio = FK(to=Audio, on_delete=PROTECT)
-    audios = M2MField(to=Audio, related_name='audio_sets', blank=True)
+    audios = M2M(to=Audio, related_name='audio_sets', blank=True)
     
     class Meta:
         ordering = ['title']
@@ -137,7 +137,7 @@ class PictureSet(Model):
     objects = PictureSetManager()
     
     title = CharField(max_length=200)
-    pictures = M2MField(to=Picture, related_name='picture_sets', blank=True)
+    pictures = M2M(to=Picture, related_name='picture_sets', blank=True)
 
     class Meta:
         ordering = ['title']
