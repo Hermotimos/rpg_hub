@@ -211,7 +211,10 @@ def pictureset_pictures_in_custom_order(picture_set):
     
     # sort pictures according to custom cases considering WIDTH:HEIGHT ratio:
     if len(pics) == 2:
-        # Put the wider pic on the left
+        # Put the wider pic on the left / but keep order if width is equal
+        # This enables order control by picture names
+        if pics_sorted[0].image.image.width == pics_sorted[1].image.image.width:
+            return pics_sorted
         return [pics_sorted[1], pics_sorted[0]]
     if len(pics) == 3:
         # Put the widest pic in the middle
