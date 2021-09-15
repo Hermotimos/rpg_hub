@@ -27,7 +27,7 @@ class GameEventAdminForm(forms.ModelForm):
         fields = ['game', 'event_no_in_game', 'date_start', 'date_end',
                   'in_timeunit', 'description_short', 'description_long',
                   'threads', 'locations', 'known_directly', 'known_indirectly',
-                  'pictures', 'picture_sets', 'debates', 'audio']
+                  'picture_sets', 'debates', 'audio']
         widgets = {
             'known_directly': FilteredSelectMultiple(
                 'Known directly', False, attrs={'style': 'height:100px'}
@@ -37,9 +37,6 @@ class GameEventAdminForm(forms.ModelForm):
             ),
             'locations': FilteredSelectMultiple(
                 'Locations', False, attrs={'style': 'height:100px'}
-            ),
-            'pictures': FilteredSelectMultiple(
-                'Pictures', False, attrs={'style': 'height:100px'}
             ),
             'picture_sets': FilteredSelectMultiple(
                 'PictureSets', False, attrs={'style': 'height:100px'}
@@ -102,7 +99,6 @@ class GameEventInline(admin.TabularInline):
             'known_indirectly',
             'locations',
             'threads',    # To allow for filtering in GameEventAdminForm
-            'pictures',
             'picture_sets',
             'audio',
             'debates',
@@ -115,7 +111,7 @@ class HistoryEventAdminForm(forms.ModelForm):
         model = GameEvent
         fields = ['date_start', 'date_end', 'in_timeunit', 'description_short',
                   'description_long', 'threads', 'locations',
-                  'known_short_desc', 'known_long_desc', 'pictures']
+                  'known_short_desc', 'known_long_desc']
         widgets = {
             'known_short_desc': FilteredSelectMultiple(
                 'Known directly', False, attrs={'style': 'height:100px'}
@@ -126,8 +122,8 @@ class HistoryEventAdminForm(forms.ModelForm):
             'locations': FilteredSelectMultiple(
                 'Locations', False, attrs={'style': 'height:100px'}
             ),
-            'pictures': FilteredSelectMultiple(
-                'Pictures', False, attrs={'style': 'height:100px'}
+            'picture_sets': FilteredSelectMultiple(
+                'PictureSets', False, attrs={'style': 'height:100px'}
             ),
             'threads': FilteredSelectMultiple(
                 'Threads', False, attrs={'style': 'height:100px'}

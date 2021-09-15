@@ -68,7 +68,6 @@ def chronicle_game_view(request, game_id):
     events = events.prefetch_related(
         'known_directly',
         'known_indirectly',
-        'pictures__image',
         'picture_sets',
         'debates__topic',
         'debates__remarks__author',
@@ -96,7 +95,6 @@ def chronicle_chapter_view(request, chapter_id):
     events = events.prefetch_related(
         'known_directly',
         'known_indirectly',
-        'pictures__image',
         'picture_sets',
         'debates__topic',
         'debates__remarks__author',
@@ -126,7 +124,6 @@ def chronicle_all_view(request):
     events = GameEvent.objects.prefetch_related(
         'known_directly',
         'known_indirectly',
-        'pictures__image',
         'picture_sets',
         'debates__topic',
         'debates__remarks__author',

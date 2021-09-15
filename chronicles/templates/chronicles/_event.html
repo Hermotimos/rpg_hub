@@ -42,7 +42,7 @@
                 {% endif %}
             </p>
             
-            <!-- PICTURES -->
+            <!-- PICTURE SETS -->
             {% if request.user.profile not in event.known_indirectly.all %}
                 {% for picture_set in event.picture_sets.all %}
                     <div class="d-flex justify-content-center my-3">
@@ -51,13 +51,6 @@
                         {% endfor %}
                     </div>
                 {% endfor %}
-                {% if event.pictures.all %}
-                    <div class="mb-4">
-                        {% for row in event.pictures.all|columns:3 %}
-                           {% include '_row_of_pics_with_modals.html' %}
-                        {% endfor %}
-                    </div>
-                {% endif %}
             {% endif %}
             
             <!-- DEBATES -->

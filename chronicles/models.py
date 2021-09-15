@@ -19,7 +19,7 @@ from django.db.models import (
 from django.db.models.signals import post_save, m2m_changed
 
 from debates.models import Debate
-from imaginarion.models import Picture, Audio, PictureSet
+from imaginarion.models import Audio, PictureSet
 from rpg_project.utils import create_sorting_name
 from toponomikon.models import Location
 from users.models import Profile
@@ -264,7 +264,6 @@ class TimeUnit(Model):
         limit_choices_to=Q(status='player'),
         blank=True,
     )
-    pictures = M2M(to=Picture, related_name='events', blank=True)
     picture_sets = M2M(to=PictureSet, related_name='events', blank=True)
     debates = M2M(to=Debate, related_name='events', blank=True)
     
