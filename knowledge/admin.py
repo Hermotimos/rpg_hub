@@ -27,10 +27,11 @@ class BiographyPacketAdminForm(forms.ModelForm):
     class Meta:
         model = BiographyPacket
         fields = [
-            'title', 'text', 'author', 'acquired_by', 'pictures', 'order_no']
+            'title', 'text', 'author', 'acquired_by', 'picture_sets', 'pictures', 'order_no']
         widgets = {
             'acquired_by': FilteredSelectMultiple('Acquired by', False),
             'pictures': FilteredSelectMultiple('Pictures', False),
+            'picture_sets': FilteredSelectMultiple('Pictures', False),
         }
 
 
@@ -54,15 +55,9 @@ class KnowledgePacketAdminForm(forms.ModelForm):
         fields = [
             'title', 'text', 'author', 'acquired_by', 'skills', 'picture_sets']
         widgets = {
-            'acquired_by': FilteredSelectMultiple(
-                'Acquired by', False, attrs={'style': 'height:100px'}
-            ),
-            'skills': FilteredSelectMultiple(
-                'Skills', False, attrs={'style': 'height:100px'}
-            ),
-            'picture_sets': FilteredSelectMultiple(
-                'Picture Sets', False, attrs={'style': 'height:100px'}
-            ),
+            'acquired_by': FilteredSelectMultiple('Acquired by', False),
+            'skills': FilteredSelectMultiple('Skills', False),
+            'picture_sets': FilteredSelectMultiple('Picture Sets', False),
         }
     
     warning = """
@@ -153,9 +148,7 @@ class MapPacketAdminForm(forms.ModelForm):
         model = MapPacket
         fields = ['picture_sets']
         widgets = {
-            'picture_sets': FilteredSelectMultiple(
-                'Picture Sets', False, attrs={'style': 'height:100px'}
-            ),
+            'picture_sets': FilteredSelectMultiple('Picture Sets', False),
         }
 
     gen_locations = forms.ModelMultipleChoiceField(

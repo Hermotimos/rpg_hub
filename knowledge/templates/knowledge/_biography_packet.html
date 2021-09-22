@@ -53,6 +53,14 @@
             
             <!-- Pictures in BiographyPacket should be visible to the author and GM exclusively -->
             {% if request.user.profile.status == 'gm' or request.user.profile == biography_packet.author or request.user.profile in biography_packet.acquired_by.all %}
+                {% for picture_set in biography_packet.picture_sets.all %}
+                    <div class="d-flex justify-content-center my-3">
+                        {% for picture in picture_set|pictureset_pictures_in_custom_order %}
+                            {% include '_pic_with_modal.html' %}
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
                 <div class="col-12 col-sm-11 p-0 mt-n4 pl-sm-3 pl-lg-0">
                     {% for row in biography_packet.pictures.all|columns:3 %}
                         {% include '_row_of_pics_with_modals.html' %}
