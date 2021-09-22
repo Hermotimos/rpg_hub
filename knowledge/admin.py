@@ -48,6 +48,22 @@ class BiographyPacketAdmin(admin.ModelAdmin):
 
 
 class KnowledgePacketAdminForm(forms.ModelForm):
+    
+    class Meta:
+        model = KnowledgePacket
+        fields = ['acquired_by', 'skills', 'picture_sets']
+        widgets = {
+            'acquired_by': FilteredSelectMultiple(
+                'Acquired by', False, attrs={'style': 'height:100px'}
+            ),
+            'skills': FilteredSelectMultiple(
+                'Skills', False, attrs={'style': 'height:100px'}
+            ),
+            'picture_sets': FilteredSelectMultiple(
+                'Picture Sets', False, attrs={'style': 'height:100px'}
+            ),
+        }
+    
     warning = """
     <b style="color:red">
         PRZY TWORZENIU NOWEGO PAKIETU ZAPIS LOKACJI JEST NIEMOŻLIWY
@@ -59,11 +75,6 @@ class KnowledgePacketAdminForm(forms.ModelForm):
         queryset=Picture.objects.all(),
         required=False,
         widget=FilteredSelectMultiple('Pictures', False),
-    )
-    skills = forms.ModelMultipleChoiceField(
-        queryset=Skill.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Skills', False),
     )
     primary_locs = forms.ModelMultipleChoiceField(
         queryset=PrimaryLocation.objects.all(),

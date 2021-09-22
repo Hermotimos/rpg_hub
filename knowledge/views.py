@@ -52,7 +52,7 @@ def knowledge_packets_in_skills_view(request, model_name):
     skills = skills.prefetch_related(
         Prefetch('knowledge_packets', queryset=kn_packets),
         Prefetch('skill_levels', queryset=skill_levels),
-        'knowledge_packets__pictures',
+        'knowledge_packets__picture_sets__pictures',
     )
     skills = skills.distinct()
     if page_title != 'Almanach':

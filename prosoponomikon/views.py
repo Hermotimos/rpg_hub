@@ -84,7 +84,7 @@ def prosoponomikon_character_for_gm_view(request, character_id):
     else:
         skills = character.profile.skills_acquired_with_skill_levels()
         knowledge_packets = character.profile.knowledge_packets.order_by('title')
-        knowledge_packets = knowledge_packets.prefetch_related('pictures')
+        knowledge_packets = knowledge_packets.prefetch_related('picture_sets__pictures')
  
     # INFORM FORM
     if request.method == 'POST':
@@ -116,7 +116,7 @@ def prosoponomikon_character_for_player_view(request, character_id):
     if profile.character.id == character_id:
         skills = profile.skills_acquired_with_skill_levels()
         knowledge_packets = profile.knowledge_packets.order_by('title')
-        knowledge_packets = knowledge_packets.prefetch_related('pictures')
+        knowledge_packets = knowledge_packets.prefetch_related('picture_sets__pictures')
         known_characters = character.profile.characters_all_known_annotated_if_indirectly()
     
     # Player viewing other Characters

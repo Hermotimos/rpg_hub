@@ -61,7 +61,7 @@ def toponomikon_location_view(request, loc_name):
     
     if profile.can_view_all:
         locs = locs.prefetch_related(
-            'knowledge_packets__pictures',
+            'knowledge_packets__picture_sets__pictures',
             'map_packets__picture_sets__pictures',
             'picture_sets__pictures',
             'frequented_by_characters__profile',
@@ -70,7 +70,7 @@ def toponomikon_location_view(request, loc_name):
         locs = locs.prefetch_related(
             Prefetch('knowledge_packets', profile.knowledge_packets.all()),
             Prefetch('map_packets', profile.map_packets.all()),
-            'knowledge_packets__pictures',
+            'knowledge_packets__picture_sets__pictures',
             'map_packets__picture_sets__pictures',
             'picture_sets__pictures',
         )

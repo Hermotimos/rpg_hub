@@ -58,6 +58,15 @@
         {% include '_row_of_pics_with_modals.html' %}
     {% endfor %}
     
+    {% for picture_set in kn_packet.picture_sets.all %}
+        <div class="d-flex justify-content-center my-3">
+            {% for picture in picture_set|pictureset_pictures_in_custom_order %}
+                {% include '_pic_with_modal.html' %}
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    
     <!-- Collapse button -->
     <button class="btn btn-outline-secondary float-right"
             data-toggle="collapse" data-target="#kn_packet{{ kn_packet.id }}_in_{{ skill.id }}">

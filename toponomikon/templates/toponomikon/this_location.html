@@ -215,15 +215,6 @@
                             {% endfor %}
                         </section>
                     {% endif %}
-
-                    
-<!--                    {% if this_location.pictures.all %}-->
-<!--                        <section id="picture_sets" class="tab-panel">-->
-<!--                            {% for picture in this_location.pictures.all %}-->
-<!--                                {{ picture }}-->
-<!--                            {% endfor %}-->
-<!--                        </section>-->
-<!--                    {% endif %}-->
                     
                     <!-- TAB CONTENT: Audio -->
                     {% if request.user.profile.status == 'gm' and audio_set %}

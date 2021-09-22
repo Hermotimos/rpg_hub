@@ -79,6 +79,8 @@ class KnowledgePacket(InfoPacket):
         related_name='knowledge_packets',
         verbose_name='Umiejętności powiązane',
     )
+    picture_sets = M2M(
+        to=PictureSet, related_name='knowledge_packets', blank=True)
     
     def informables(self):
         qs = Profile.active_players.all()
