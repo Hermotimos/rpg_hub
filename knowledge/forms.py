@@ -24,7 +24,7 @@ class KnPacketForm(ModelForm):
         model = KnowledgePacket
         fields = ['title', 'text', 'skills', 'picture_sets']
         widgets = {
-            'pictures': SelectMultiple(attrs={'size': 15}),
+            'picture_sets': SelectMultiple(attrs={'size': 15}),
         }
         
     def __init__(self, *args, **kwargs):
