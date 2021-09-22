@@ -51,7 +51,8 @@ class KnowledgePacketAdminForm(forms.ModelForm):
     
     class Meta:
         model = KnowledgePacket
-        fields = ['acquired_by', 'skills', 'picture_sets']
+        fields = [
+            'title', 'text', 'author', 'acquired_by', 'skills', 'picture_sets']
         widgets = {
             'acquired_by': FilteredSelectMultiple(
                 'Acquired by', False, attrs={'style': 'height:100px'}
