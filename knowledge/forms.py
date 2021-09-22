@@ -22,7 +22,7 @@ class KnPacketForm(ModelForm):
 
     class Meta:
         model = KnowledgePacket
-        fields = ['title', 'text', 'skills', 'pictures']
+        fields = ['title', 'text', 'skills', 'picture_sets']
         widgets = {
             'pictures': SelectMultiple(attrs={'size': 15}),
         }
@@ -50,7 +50,7 @@ class PlayerKnPacketForm(KnPacketForm):
     
     class Meta:
         model = KnowledgePacket
-        exclude = ['acquired_by', 'pictures', 'sorting_name', 'author']
+        exclude = ['acquired_by', 'sorting_name', 'author']
     
     picture_1 = FileField(required=False, label='')
     descr_1 = CharField(required=False, label='')
