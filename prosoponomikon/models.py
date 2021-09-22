@@ -192,7 +192,6 @@ class Character(Model):
         to=Location,
         related_name='frequented_by_characters',
         blank=True)
-    pictures = M2M(to=Picture, related_name='characters', blank=True)
     biography_packets = M2M(
         to=BiographyPacket,
         related_name='characters',

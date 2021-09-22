@@ -119,15 +119,12 @@ class CharacterAdminForm(forms.ModelForm):
         model = Character
         fields = [
             'profile', 'first_name', 'family_name', 'cognomen', 'description',
-            'frequented_locations', 'pictures', 'biography_packets',
-            'dialogue_packets', 'known_directly', 'known_indirectly',
+            'frequented_locations', 'biography_packets', 'dialogue_packets',
+            'known_directly', 'known_indirectly',
         ]
         widgets = {
             'frequented_locations': FilteredSelectMultiple(
                 'Frequented_locations', False, attrs={'style': 'height:300px'}
-            ),
-            'pictures': FilteredSelectMultiple(
-                'Pictures', False, attrs={'style': 'height:300px'}
             ),
             'biography_packets': FilteredSelectMultiple(
                 'Biography_packets', False, attrs={'style': 'height:300px'}
