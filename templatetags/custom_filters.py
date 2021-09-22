@@ -205,26 +205,30 @@ def pictureset_pictures_in_custom_order(picture_set):
 
     def get_dimensions_ratio(img):
         return img.width / img.height
-    
+
     pics = [pic for pic in picture_set.pictures.all()]
-    pics_sorted = sorted(pics, key=lambda pic: get_dimensions_ratio(pic.image.image))
-    
-    # sort pictures according to custom cases considering WIDTH:HEIGHT ratio:
-    if len(pics) == 2:
-        # Put the wider pic on the left / but keep order if width is equal
-        # This enables order control by picture names
-        if pics_sorted[0].image.image.width == pics_sorted[1].image.image.width:
+    try:
+        pics_sorted = sorted(pics, key=lambda pic: get_dimensions_ratio(pic.image.image))
+        
+        # sort pictures according to custom cases considering WIDTH:HEIGHT ratio:
+        if len(pics) == 2:
+            # Put the wider pic on the left / but keep order if width is equal
+            # This enables order control by picture names
+            if pics_sorted[0].image.image.width == pics_sorted[1].image.image.width:
+                return pics_sorted
+            return [pics_sorted[1], pics_sorted[0]]
+        if len(pics) == 3:
+            # Put the widest pic in the middle
+            return [pics_sorted[0], pics_sorted[2], pics_sorted[1]]
+        # case N
+        elif len(pics) == 4:
+            return [pics_sorted[0], pics_sorted[2], pics_sorted[3], pics_sorted[1]]
+        # default
+        else:
             return pics_sorted
-        return [pics_sorted[1], pics_sorted[0]]
-    if len(pics) == 3:
-        # Put the widest pic in the middle
-        return [pics_sorted[0], pics_sorted[2], pics_sorted[1]]
-    # case N
-    elif len(pics) == 4:
-        return [pics_sorted[0], pics_sorted[2], pics_sorted[3], pics_sorted[1]]
-    # default
-    else:
-        return list(pics)
+
+    except FileNotFoundError:
+        return pics
 
 
 @register.filter
