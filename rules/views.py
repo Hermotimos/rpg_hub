@@ -12,6 +12,7 @@ from rules.models import (
     Skill,
     Synergy,
     WeaponType,
+    Weapon,
 )
 
 
@@ -35,8 +36,8 @@ def rules_armor_view(request):
 
     context = {
         'page_title': 'Pancerz',
-        'plates': plates.prefetch_related('pictures'),
-        'shields': shields.prefetch_related('pictures'),
+        'plates': plates.prefetch_related('picture_sets__pictures'),
+        'shields': shields.prefetch_related('picture_sets__pictures'),
     }
     return render(request, 'rules/armor.html', context)
 
@@ -135,15 +136,19 @@ def rules_tricks_view(request):
 @login_required
 def rules_weapons_view(request):
     profile = request.user.profile
+    
     if profile.can_view_all:
-        weapon_types = WeaponType.objects.all().prefetch_related('weapons__pictures')
+        weapon_types = WeaponType.objects.all()
+        weapons = Weapon.objects.all()
     else:
-        weapons = profile.allowed_weapons.prefetch_related('pictures')
-        weapon_types = WeaponType.objects\
-            .filter(weapons__allowed_profiles=profile)\
-            .distinct()\
-            .prefetch_related(Prefetch('weapons', queryset=weapons))
-
+        weapons = profile.allowed_weapons.all()
+        weapon_types = WeaponType.objects.filter(
+            weapons__allowed_profiles=profile).distinct()
+    
+    weapons = weapons.prefetch_related('picture_sets__pictures')
+    weapon_types = weapon_types.prefetch_related(
+        Prefetch('weapons', queryset=weapons))
+    
     context = {
         'page_title': 'Broń',
         'weapon_types': weapon_types,

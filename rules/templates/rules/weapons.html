@@ -79,17 +79,15 @@
                                 <br>
                                 {{ weapon.description|linebreaksbr }}
                                 <br><br>
-                                <div>
-                                {% for p in weapon.pictures.all %}
-                                    <div class="d-inline-block">
-                                        <img src="{{ p.image.image.url }}">
-                                        {% if p.description %}
-                                            <small>{{ p.description }}</small>
-                                        {% endif %}
-                                    </div>
-                                {% endfor %}
+                                <div class="mb-1">
+                                    {% for picture_set in weapon.picture_sets.all %}
+                                        <div class="d-flex justify-content-center my-3">
+                                            {% for picture in picture_set|pictureset_pictures_in_custom_order %}
+                                                {% include '_pic_with_modal.html' %}
+                                            {% endfor %}
+                                        </div>
+                                    {% endfor %}
                                 </div>
-                                <br><br>
                             </td>
                         </tr>
                     {% endif %}

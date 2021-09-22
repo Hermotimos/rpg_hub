@@ -9,9 +9,9 @@ from django.shortcuts import render, redirect
 from django.utils.safestring import mark_safe
 
 from chronicles.models import GameEvent
-from imaginarion.models import PictureImage, Picture, PictureSet
-from prosoponomikon.models import Character
-from prosoponomikon.models import NonGMCharacter
+from imaginarion.models import PictureImage, PictureSet
+from knowledge.models import MapPacket, KnowledgePacket, BiographyPacket
+from prosoponomikon.models import Character, NonGMCharacter
 from rpg_project.utils import backup_db, only_game_masters
 from rules.models import (
     Skill, SkillLevel,
@@ -22,6 +22,7 @@ from rules.models import (
     EliteKlass,
     WeaponType,
     Weapon,
+    Plate, Shield,
 )
 from toponomikon.models import Location
 from users.models import Profile
@@ -103,6 +104,38 @@ def reload_toponomikon(request):
     for obj in Location.objects.all():
         obj.save()
     messages.info(request, 'Przeładowano "Location" dla "toponomikon"!')
+    return redirect('technicalities:reload-main')
+
+
+@login_required
+@only_game_masters
+def reload_packets(request):
+
+    for obj in Weapon.objects.all():
+        ids = [tup[0] for tup in list(obj.pictures.values_list('id'))]
+        if ids:
+            print(obj.name, ids)
+
+            picture_set = PictureSet.objects.create(title=obj.name.capitalize())
+            picture_set.pictures.set(obj.pictures.all())
+            obj.picture_sets.add(picture_set)
+            
+    for obj in Plate.objects.all():
+        ids = [tup[0] for tup in list(obj.pictures.values_list('id'))]
+        if ids:
+            print(obj.name, ids)
+
+            picture_set = PictureSet.objects.create(title=obj.name.capitalize())
+            picture_set.pictures.set(obj.pictures.all())
+            obj.picture_sets.add(picture_set)
+            
+            print(obj.name, obj.picture_sets.all())
+            print()
+
+
+
+
+    messages.info(request, 'Przeładowano to coś!')
     return redirect('technicalities:reload-main')
 
     
