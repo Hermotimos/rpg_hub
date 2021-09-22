@@ -50,7 +50,7 @@ class PlayerKnPacketForm(KnPacketForm):
     
     class Meta:
         model = KnowledgePacket
-        exclude = ['acquired_by', 'sorting_name', 'author']
+        exclude = ['acquired_by', 'picture_sets', 'sorting_name', 'author']
     
     picture_1 = FileField(required=False, label='')
     descr_1 = CharField(required=False, label='')

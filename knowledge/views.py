@@ -1,10 +1,12 @@
+from datetime import datetime
+
 from django.apps import apps
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch, Q, ExpressionWrapper, BooleanField
 from django.shortcuts import render, redirect
 
-from imaginarion.models import Picture, PictureImage
+from imaginarion.models import Picture, PictureImage, PictureSet
 from knowledge.forms import KnPacketForm, PlayerKnPacketForm
 from knowledge.models import KnowledgePacket
 from rpg_project.utils import handle_inform_form
@@ -95,6 +97,8 @@ def kn_packet_form_view(request, kn_packet_id):
 
             pictures = [v for k, v in form.cleaned_data.items()
                         if 'picture' in k and v is not None]
+            
+            new_pictures = []
             for cnt, picture in enumerate(pictures, 1):
                 description = (form.cleaned_data[f'descr_{cnt}']
                                or f"{kn_packet.title}")
@@ -105,7 +109,17 @@ def kn_packet_form_view(request, kn_packet_id):
                     image=pic_img,
                     type='players-notes',
                     description=description)
-                kn_packet.pictures.add(pic)
+                new_pictures.append(pic)
+            
+            if new_pictures:
+                now = datetime.now().strftime("%Y-%d-%m %H:%M:%S")
+                title = f"""
+                    KnowledgePacket: '{kn_packet.title}'
+                    [Autor: {profile.character.first_name} - {now}]
+                """
+                new_picture_set = PictureSet.objects.create(title=title)
+                new_picture_set.pictures.set(new_pictures)
+                kn_packet.picture_sets.add(new_picture_set)
             
         for location in form.cleaned_data['locations']:
             location.knowledge_packets.add(kn_packet)

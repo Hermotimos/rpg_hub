@@ -106,35 +106,6 @@ def reload_toponomikon(request):
     messages.info(request, 'Przeładowano "Location" dla "toponomikon"!')
     return redirect('technicalities:reload-main')
 
-
-# @login_required
-# @only_game_masters
-# def reload_packets(request):
-#
-#     for obj in Weapon.objects.all():
-#         ids = [tup[0] for tup in list(obj.pictures.values_list('id'))]
-#         if ids:
-#             print(obj.name, ids)
-#
-#             picture_set = PictureSet.objects.create(title=obj.name.capitalize())
-#             picture_set.pictures.set(obj.pictures.all())
-#             obj.picture_sets.add(picture_set)
-#
-#     for obj in Plate.objects.all():
-#         ids = [tup[0] for tup in list(obj.pictures.values_list('id'))]
-#         if ids:
-#             print(obj.name, ids)
-#
-#             picture_set = PictureSet.objects.create(title=obj.name.capitalize())
-#             picture_set.pictures.set(obj.pictures.all())
-#             obj.picture_sets.add(picture_set)
-#
-#             print(obj.name, obj.picture_sets.all())
-#             print()
-#
-#     messages.info(request, 'Przeładowano to coś!')
-#     return redirect('technicalities:reload-main')
-
     
 @login_required
 @only_game_masters

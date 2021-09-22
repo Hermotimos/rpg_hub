@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -5,7 +7,7 @@ from django.db.models import Prefetch, Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
-from imaginarion.models import Picture, PictureImage
+from imaginarion.models import Picture, PictureImage, PictureSet
 from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
 from prosoponomikon.forms import CharacterManyGroupsEditFormSet, \
@@ -258,6 +260,8 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
             
             pictures = [v for k, v in form.cleaned_data.items()
                         if 'picture' in k and v is not None]
+
+            new_pictures = []
             for cnt, picture in enumerate(pictures, 1):
                 description = (form.cleaned_data[f'descr_{cnt}']
                                or f"{bio_packet.title}")
@@ -268,7 +272,17 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
                     image=pic_img,
                     type='players-notes',
                     description=description)
-                bio_packet.pictures.add(pic)
+                new_pictures.append(pic)
+
+            if new_pictures:
+                now = datetime.now().strftime("%Y-%d-%m %H:%M:%S")
+                title = f"""
+                    BiographyPacket: '{bio_packet.title}'
+                    [Autor: {profile.character.first_name} - {now}]
+                """
+                new_picture_set = PictureSet.objects.create(title=title)
+                new_picture_set.pictures.set(new_pictures)
+                bio_packet.picture_sets.add(new_picture_set)
 
         character.biography_packets.add(bio_packet)
         
