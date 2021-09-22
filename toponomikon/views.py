@@ -56,25 +56,25 @@ def toponomikon_location_view(request, loc_name):
     known_all = (known_dir | known_indir).distinct()
     
     # THIS LOCATION
-    prep = Location.objects.select_related(
+    locs = Location.objects.select_related(
         'main_image', 'audio_set', 'in_location__in_location__in_location')
     
     if profile.can_view_all:
-        prep = prep.prefetch_related(
+        locs = locs.prefetch_related(
             'knowledge_packets__pictures',
             'map_packets__pictures',
-            'pictures',
+            'picture_sets__pictures',
             'frequented_by_characters__profile',
         )
     else:
-        prep = prep.prefetch_related(
+        locs = locs.prefetch_related(
             Prefetch('knowledge_packets', profile.knowledge_packets.all()),
             Prefetch('map_packets', profile.map_packets.all()),
             'knowledge_packets__pictures',
             'map_packets__pictures',
-            'pictures',
+            'picture_sets__pictures',
         )
-        prep = prep.annotate(
+        locs = locs.annotate(
             only_indirectly=Case(
                 When(id__in=known_only_indir, then=Value(1)),
                 default=Value(0),
@@ -82,7 +82,7 @@ def toponomikon_location_view(request, loc_name):
             )
         )
         
-    this_location = prep.get(name=loc_name)
+    this_location = locs.get(name=loc_name)
     page_title = this_location.name
     
     # CHARACTERS TAB

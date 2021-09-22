@@ -115,19 +115,19 @@
                     <label class="h3" for="tab4">Mapy</label>
                 {% endif %}
                 
-                <!-- TAB HEADER: Pictures -->
-                {% if this_location.pictures.all %}
+                <!-- TAB HEADER: Picture Sets -->
+                {% if this_location.picture_sets.all %}
                     {% if location_types or characters or this_location.knowledge_packets.all or this_location.map_packets.all %}
-                        <input type="radio" name="tabset" id="tab5" aria-controls="pictures">
+                        <input type="radio" name="tabset" id="tab5" aria-controls="picture_sets">
                     {% else %}
-                        <input type="radio" name="tabset" id="tab5" aria-controls="pictures" checked>
+                        <input type="radio" name="tabset" id="tab5" aria-controls="picture_sets" checked>
                     {% endif %}
                     <label class="h3" for="tab5">Obrazy</label>
                 {% endif %}
 
                 <!-- TAB HEADER: Audio -->
                 {% if request.user.profile.status == 'gm' and audio_set %}
-                    {% if location_types or characters or this_location.knowledge_packets.all or this_location.map_packets.all or this_location.pictures.all %}
+                    {% if location_types or characters or this_location.knowledge_packets.all or this_location.map_packets.all or this_location.picture_sets.all %}
                         <input type="radio" name="tabset" id="tab6" aria-controls="audios">
                     {% else %}
                         <input type="radio" name="tabset" id="tab6" aria-controls="audios" checked>
@@ -203,14 +203,27 @@
                         </section>
                     {% endif %}
                     
-                    <!-- TAB CONTENT: Pictures -->
-                    {% if this_location.pictures.all %}
-                        <section id="pictures" class="tab-panel">
-                            {% for picture in this_location.pictures.all %}
-                                {{ picture }}
+                    <!-- TAB CONTENT: Picture Sets -->
+                    {% if this_location.picture_sets.all %}
+                        <section id="picture_sets" class="tab-panel">
+                            {% for picture_set in this_location.picture_sets.all %}
+                                <div class="d-flex justify-content-center my-3">
+                                    {% for picture in picture_set|pictureset_pictures_in_custom_order %}
+                                        {% include '_pic_with_modal.html' %}
+                                    {% endfor %}
+                                </div>
                             {% endfor %}
                         </section>
                     {% endif %}
+
+                    
+<!--                    {% if this_location.pictures.all %}-->
+<!--                        <section id="picture_sets" class="tab-panel">-->
+<!--                            {% for picture in this_location.pictures.all %}-->
+<!--                                {{ picture }}-->
+<!--                            {% endfor %}-->
+<!--                        </section>-->
+<!--                    {% endif %}-->
                     
                     <!-- TAB CONTENT: Audio -->
                     {% if request.user.profile.status == 'gm' and audio_set %}

@@ -4,7 +4,7 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
 from django.forms import Textarea, TextInput, Select
 
-from imaginarion.models import Picture
+from imaginarion.models import PictureSet
 from knowledge.models import KnowledgePacket, MapPacket
 from toponomikon.models import LocationType, Location, PrimaryLocation, \
     SecondaryLocation
@@ -33,9 +33,9 @@ class ToponomikonForm(forms.ModelForm):
         widget=FilteredSelectMultiple('Map packets', False),
         required=False
     )
-    pictures = forms.ModelMultipleChoiceField(
-        queryset=Picture.objects.all(),
-        widget=FilteredSelectMultiple('Pictures', False),
+    picture_sets = forms.ModelMultipleChoiceField(
+        queryset=PictureSet.objects.all(),
+        widget=FilteredSelectMultiple('Picture Sets', False),
         required=False
     )
 

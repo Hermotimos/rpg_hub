@@ -12,7 +12,7 @@ from django.db.models import (
 )
 from django.db.models.signals import post_save, m2m_changed
 
-from imaginarion.models import AudioSet, Picture
+from imaginarion.models import AudioSet, Picture, PictureSet
 from knowledge.models import KnowledgePacket, MapPacket
 from rpg_project.utils import create_sorting_name
 from users.models import Profile
@@ -57,7 +57,7 @@ class Location(Model):
         blank=True,
         null=True,
     )
-    pictures = M2M(to=Picture, related_name='locations_pics', blank=True)
+    picture_sets = M2M(to=PictureSet, related_name='locations', blank=True)
     audio_set = FK(
         to=AudioSet,
         related_name='locations',
