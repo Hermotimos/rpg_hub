@@ -68,12 +68,6 @@ class KnowledgePacket(InfoPacket):
         blank=True,
     )
     acquired_by = M2M(to=Profile, related_name='knowledge_packets', blank=True)
-    pictures = M2M(
-        to=Picture,
-        related_name='knowledge_packets',
-        blank=True,
-        verbose_name='Obrazy',
-    )
     skills = M2M(
         to=Skill,
         related_name='knowledge_packets',

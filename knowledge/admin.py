@@ -72,11 +72,6 @@ class KnowledgePacketAdminForm(forms.ModelForm):
         PODAJ LOKACJĘ W DRUGIEJ TURZE :)
     </b>
     """
-    pictures = forms.ModelMultipleChoiceField(
-        queryset=Picture.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Pictures', False),
-    )
     primary_locs = forms.ModelMultipleChoiceField(
         queryset=PrimaryLocation.objects.all(),
         required=False,

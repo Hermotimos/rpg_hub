@@ -54,10 +54,6 @@
         {{ kn_packet.text|custom_linebreaksbr:2 }}
     </h6>
     
-    {% for row in kn_packet.pictures.all|columns:3 %}
-        {% include '_row_of_pics_with_modals.html' %}
-    {% endfor %}
-    
     {% for picture_set in kn_packet.picture_sets.all %}
         <div class="d-flex justify-content-center my-3">
             {% for picture in picture_set|pictureset_pictures_in_custom_order %}
