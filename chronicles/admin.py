@@ -39,7 +39,7 @@ class GameEventAdminForm(forms.ModelForm):
                 'Locations', False, attrs={'style': 'height:100px'}
             ),
             'picture_sets': FilteredSelectMultiple(
-                'PictureSets', False, attrs={'style': 'height:100px'}
+                'Picture Sets', False, attrs={'style': 'height:100px'}
             ),
             'threads': FilteredSelectMultiple(
                 'Threads', False, attrs={'style': 'height:100px'}
@@ -123,7 +123,7 @@ class HistoryEventAdminForm(forms.ModelForm):
                 'Locations', False, attrs={'style': 'height:100px'}
             ),
             'picture_sets': FilteredSelectMultiple(
-                'PictureSets', False, attrs={'style': 'height:100px'}
+                'Picture Sets', False, attrs={'style': 'height:100px'}
             ),
             'threads': FilteredSelectMultiple(
                 'Threads', False, attrs={'style': 'height:100px'}

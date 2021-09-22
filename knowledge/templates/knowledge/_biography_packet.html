@@ -60,12 +60,6 @@
                         {% endfor %}
                     </div>
                 {% endfor %}
-
-                <div class="col-12 col-sm-11 p-0 mt-n4 pl-sm-3 pl-lg-0">
-                    {% for row in biography_packet.pictures.all|columns:3 %}
-                        {% include '_row_of_pics_with_modals.html' %}
-                    {% endfor %}
-                </div>
             {% endif %}
             
         </div>
