@@ -8,7 +8,7 @@ from django.db.models import (
     TextField,
 )
 
-from imaginarion.models import Picture, PictureSet
+from imaginarion.models import PictureSet
 from rpg_project.utils import create_sorting_name
 from rules.models import Skill
 from users.models import Profile
@@ -45,7 +45,6 @@ class BiographyPacket(InfoPacket):
         null=True,
         blank=True)
     acquired_by = M2M(to=Profile, related_name='biography_packets', blank=True)
-    pictures = M2M(to=Picture, related_name='biography_packets', blank=True)
     picture_sets = M2M(
         to=PictureSet, related_name='biography_packets', blank=True)
     order_no = SmallIntegerField(default=1)

@@ -27,11 +27,10 @@ class BiographyPacketAdminForm(forms.ModelForm):
     class Meta:
         model = BiographyPacket
         fields = [
-            'title', 'text', 'author', 'acquired_by', 'picture_sets', 'pictures', 'order_no']
+            'title', 'text', 'author', 'acquired_by', 'picture_sets', 'order_no']
         widgets = {
             'acquired_by': FilteredSelectMultiple('Acquired by', False),
-            'pictures': FilteredSelectMultiple('Pictures', False),
-            'picture_sets': FilteredSelectMultiple('Pictures', False),
+            'picture_sets': FilteredSelectMultiple('Picture Sets', False),
         }
 
 
@@ -44,7 +43,7 @@ class BiographyPacketAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        qs = qs.prefetch_related('acquired_by__user', 'pictures')
+        qs = qs.prefetch_related('acquired_by__user', 'picture_sets__pictures')
         return qs
 
 

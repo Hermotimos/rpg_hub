@@ -85,9 +85,9 @@ class BioPacketForm(ModelForm):
     
     class Meta:
         model = BiographyPacket
-        fields = ['title', 'text', 'pictures', 'order_no']
+        fields = ['title', 'text', 'picture_sets', 'order_no']
         widgets = {
-            'pictures': SelectMultiple(attrs={'size': 15}),
+            'picture_sets': SelectMultiple(attrs={'size': 15}),
         }
     
     def __init__(self, *args, **kwargs):
@@ -109,7 +109,7 @@ class PlayerBioPacketForm(BioPacketForm):
     
     class Meta:
         model = BiographyPacket
-        exclude = ['acquired_by', 'pictures', 'sorting_name', 'author']
+        exclude = ['acquired_by', 'picture_sets', 'sorting_name', 'author']
     
     picture_1 = FileField(required=False, label='')
     descr_1 = CharField(required=False, label='')
