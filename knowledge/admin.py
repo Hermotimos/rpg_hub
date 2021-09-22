@@ -141,11 +141,16 @@ class KnowledgePacketAdmin(admin.ModelAdmin):
     
         
 class MapPacketAdminForm(forms.ModelForm):
-    pictures = forms.ModelMultipleChoiceField(
-        queryset=Picture.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Pictures', False),
-    )
+    
+    class Meta:
+        model = MapPacket
+        fields = ['picture_sets']
+        widgets = {
+            'picture_sets': FilteredSelectMultiple(
+                'Picture Sets', False, attrs={'style': 'height:100px'}
+            ),
+        }
+
     gen_locations = forms.ModelMultipleChoiceField(
         queryset=Location.objects.filter(in_location=None),
         required=False,
@@ -221,7 +226,7 @@ class MapPacketAdmin(admin.ModelAdmin):
     
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        qs = qs.prefetch_related('acquired_by', 'pictures')
+        qs = qs.prefetch_related('acquired_by', 'picture_sets')
         return qs
 
 

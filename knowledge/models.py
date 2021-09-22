@@ -8,7 +8,7 @@ from django.db.models import (
     TextField,
 )
 
-from imaginarion.models import Picture
+from imaginarion.models import Picture, PictureSet
 from rpg_project.utils import create_sorting_name
 from rules.models import Skill
 from users.models import Profile
@@ -50,11 +50,7 @@ class BiographyPacket(InfoPacket):
 
     class Meta:
         ordering = ['order_no', 'sorting_name']
-
-    # def save(self, *args, **kwargs):
-    #     self.sorting_name = create_sorting_name(self.__str__())
-    #     super().save(*args, **kwargs)
-    
+   
     def informables(self):
         qs = Profile.active_players.all()
         qs = qs.exclude(id__in=self.acquired_by.all())
@@ -83,10 +79,6 @@ class KnowledgePacket(InfoPacket):
         related_name='knowledge_packets',
         verbose_name='Umiejętności powiązane',
     )
-
-    # def save(self, *args, **kwargs):
-    #     self.sorting_name = create_sorting_name(self.__str__())
-    #     super().save(*args, **kwargs)
     
     def informables(self):
         qs = Profile.active_players.all()
@@ -96,13 +88,4 @@ class KnowledgePacket(InfoPacket):
 
 class MapPacket(InfoPacket):
     acquired_by = M2M(to=Profile, related_name='map_packets', blank=True)
-    pictures = M2M(
-        to=Picture,
-        related_name='map_packets',
-        verbose_name='Obrazy',
-    )
-
-    # def save(self, *args, **kwargs):
-    #     self.sorting_name = create_sorting_name(self.__str__())
-    #     super().save(*args, **kwargs)
-
+    picture_sets = M2M(to=PictureSet, related_name='map_packets')

@@ -42,7 +42,7 @@ def toponomikon_main_view(request):
         'page_title': 'Toponomikon',
         'primary_locs': primary_locs.select_related('main_image'),
         'all_locs': all_locs,
-        'all_maps': all_maps.prefetch_related('pictures'),
+        'all_maps': all_maps.prefetch_related('picture_sets__pictures'),
     }
     return render(request, 'toponomikon/main.html', context)
 
@@ -62,7 +62,7 @@ def toponomikon_location_view(request, loc_name):
     if profile.can_view_all:
         locs = locs.prefetch_related(
             'knowledge_packets__pictures',
-            'map_packets__pictures',
+            'map_packets__picture_sets__pictures',
             'picture_sets__pictures',
             'frequented_by_characters__profile',
         )
@@ -71,7 +71,7 @@ def toponomikon_location_view(request, loc_name):
             Prefetch('knowledge_packets', profile.knowledge_packets.all()),
             Prefetch('map_packets', profile.map_packets.all()),
             'knowledge_packets__pictures',
-            'map_packets__pictures',
+            'map_packets__picture_sets__pictures',
             'picture_sets__pictures',
         )
         locs = locs.annotate(

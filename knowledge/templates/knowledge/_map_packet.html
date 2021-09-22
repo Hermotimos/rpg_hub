@@ -12,7 +12,15 @@
 <p class="mb-4 mt-0 text-center">✧</p>
 
 <div id="map_packet{{ map_packet.id }}" class="bg-light border mb-5 px-5 py-3">
-    {% for row in map_packet.pictures.all|columns:3 %}
-        {% include '_row_of_pics_with_modals.html' %}
+    {% for picture_set in map_packet.picture_sets.all %}
+        <div class="d-flex justify-content-center my-3">
+            {% for picture in picture_set|pictureset_pictures_in_custom_order %}
+                {% include '_pic_with_modal.html' %}
+            {% endfor %}
+        </div>
     {% endfor %}
+
+
 </div>
+
+
