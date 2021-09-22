@@ -2,8 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch, When, Case, Value, IntegerField
 from django.shortcuts import render, redirect
 
-from rpg_project.utils import handle_inform_form
 from knowledge.models import MapPacket
+from rpg_project.utils import handle_inform_form
 from toponomikon.models import Location, LocationType, PrimaryLocation, \
     SecondaryLocation
 
