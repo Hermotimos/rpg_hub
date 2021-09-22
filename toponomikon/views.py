@@ -40,7 +40,7 @@ def toponomikon_main_view(request):
     
     context = {
         'page_title': 'Toponomikon',
-        'primary_locs': primary_locs.select_related('main_image'),
+        'primary_locs': primary_locs.select_related('main_image__image'),
         'all_locs': all_locs,
         'all_maps': all_maps.prefetch_related('picture_sets__pictures'),
     }
