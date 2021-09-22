@@ -107,36 +107,33 @@ def reload_toponomikon(request):
     return redirect('technicalities:reload-main')
 
 
-@login_required
-@only_game_masters
-def reload_packets(request):
-
-    for obj in Weapon.objects.all():
-        ids = [tup[0] for tup in list(obj.pictures.values_list('id'))]
-        if ids:
-            print(obj.name, ids)
-
-            picture_set = PictureSet.objects.create(title=obj.name.capitalize())
-            picture_set.pictures.set(obj.pictures.all())
-            obj.picture_sets.add(picture_set)
-            
-    for obj in Plate.objects.all():
-        ids = [tup[0] for tup in list(obj.pictures.values_list('id'))]
-        if ids:
-            print(obj.name, ids)
-
-            picture_set = PictureSet.objects.create(title=obj.name.capitalize())
-            picture_set.pictures.set(obj.pictures.all())
-            obj.picture_sets.add(picture_set)
-            
-            print(obj.name, obj.picture_sets.all())
-            print()
-
-
-
-
-    messages.info(request, 'Przeładowano to coś!')
-    return redirect('technicalities:reload-main')
+# @login_required
+# @only_game_masters
+# def reload_packets(request):
+#
+#     for obj in Weapon.objects.all():
+#         ids = [tup[0] for tup in list(obj.pictures.values_list('id'))]
+#         if ids:
+#             print(obj.name, ids)
+#
+#             picture_set = PictureSet.objects.create(title=obj.name.capitalize())
+#             picture_set.pictures.set(obj.pictures.all())
+#             obj.picture_sets.add(picture_set)
+#
+#     for obj in Plate.objects.all():
+#         ids = [tup[0] for tup in list(obj.pictures.values_list('id'))]
+#         if ids:
+#             print(obj.name, ids)
+#
+#             picture_set = PictureSet.objects.create(title=obj.name.capitalize())
+#             picture_set.pictures.set(obj.pictures.all())
+#             obj.picture_sets.add(picture_set)
+#
+#             print(obj.name, obj.picture_sets.all())
+#             print()
+#
+#     messages.info(request, 'Przeładowano to coś!')
+#     return redirect('technicalities:reload-main')
 
     
 @login_required
@@ -151,19 +148,6 @@ def refresh_content_types(request):
     deleted = "<br>".join([str(dict_) for dict_ in deleted]) if deleted else 0
     messages.info(request, mark_safe(f"Usunięto content types:\n{deleted}"))
     return redirect('technicalities:reload-main')
-
-
-# @login_required
-# @only_game_masters
-# def copy_pictures_to_picturesets(request):
-#     for picture in Picture.objects.all():
-#         if picture.type != 'realia':
-#             new_pictureset = PictureSet.objects.create(
-#                 title=picture.description or 'TODO')
-#             new_pictureset.pictures.set([picture])
-#             print(picture.description)
-#     messages.info(request, 'Skopiowano "Pictures" do "PictureSets"!')
-#     return redirect('technicalities:reload-main')
 
 
 #  ---------------------------------------------------------------------

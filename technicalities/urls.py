@@ -10,11 +10,9 @@ urlpatterns = [
     path('reload-rules/', views.reload_rules, name='reload-rules'),
     path('reload-toponomikon/', views.reload_toponomikon, name='reload-toponomikon'),
     path('reload-prosoponomikon/', views.reload_prosoponomikon, name='reload-prosoponomikon'),
-    path('reload-packets/', views.reload_packets, name='reload-packets'),
+    # path('reload-packets/', views.reload_packets, name='reload-packets'),
     path('refresh-contenttypes/', views.refresh_content_types, name='refresh-contenttypes'),
     
-    # path('copy-pics-to-picsets/', views.copy_pictures_to_picturesets, name='copy-pics-to-picset'),
-
     path('todos/', views.todos_view, name='todos'),
     path('backup-db/', views.backup_db_view, name='backup-db'),
     path('download-db/', views.download_db, name='download-db'),

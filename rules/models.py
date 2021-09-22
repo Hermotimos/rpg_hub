@@ -12,7 +12,7 @@ from django.db.models import (
 )
 from django.db.models import Q
 
-from imaginarion.models import Picture, PictureSet
+from imaginarion.models import PictureSet
 from rpg_project.utils import create_sorting_name, rid_of_special_chars
 from users.models import Profile
 
@@ -363,7 +363,6 @@ class Weapon(Model):
     weapon_type = FK(to=WeaponType, related_name='weapons', on_delete=PROTECT)
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
-    pictures = M2M(to=Picture, related_name='weapon_pics', blank=True)
     picture_sets = M2M(to=PictureSet, related_name='weapons', blank=True)
     delay = PositiveSmallIntegerField()
     damage_small_dices = CharField(max_length=10, blank=True, null=True)
@@ -413,7 +412,6 @@ class Weapon(Model):
 class Plate(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
-    pictures = M2M(to=Picture, related_name='plate_pics', blank=True)
     picture_sets = M2M(to=PictureSet, related_name='plates', blank=True)
     armor_class_bonus = PositiveSmallIntegerField(blank=True, null=True)
     parrying = PositiveSmallIntegerField(blank=True, null=True)
@@ -452,7 +450,6 @@ class Plate(Model):
 class Shield(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
-    pictures = M2M(to=Picture, related_name='shield_pics', blank=True)
     picture_sets = M2M(to=PictureSet, related_name='shields', blank=True)
     enemies_no = PositiveSmallIntegerField()
     armor_class_bonus_close_combat = PositiveSmallIntegerField(

@@ -2,11 +2,10 @@ from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
-from django.db.models import Q
 from django.forms import Textarea
 from django.utils.translation import ugettext_lazy
 
-from imaginarion.models import Picture
+from imaginarion.models import PictureSet
 from knowledge.models import KnowledgePacket
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, \
     Profession, Klass, EliteProfession, BooksSkill, TheologySkill, \
@@ -16,10 +15,6 @@ from users.models import Profile
 
 class Form1(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(
-        # queryset=Profile.objects.exclude(Q(status='dead_player')
-        #                                  | Q(status='dead_npc')
-        #                                  | Q(status='gm')
-        #                                  | Q(status='living_npc')),
         queryset=Profile.players.filter(is_alive=True),
         required=False,
         widget=FilteredSelectMultiple('Allowed profiles', False),
@@ -28,27 +23,19 @@ class Form1(forms.ModelForm):
 
 class Form2(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(
-        # queryset=Profile.objects.exclude(Q(status='dead_player')
-        #                                  | Q(status='dead_npc')
-        #                                  | Q(status='gm')
-        #                                  | Q(status='living_npc')),
         queryset=Profile.players.filter(is_alive=True),
         required=False,
         widget=FilteredSelectMultiple('Allowed profiles', False),
     )
-    pictures = forms.ModelMultipleChoiceField(
-        queryset=Picture.objects.all(),
+    picture_sets = forms.ModelMultipleChoiceField(
+        queryset=PictureSet.objects.all(),
         required=False,
-        widget=FilteredSelectMultiple('Pictures', False),
+        widget=FilteredSelectMultiple('Picture Sets', False),
     )
 
 
 class Form3(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(
-        # queryset=Profile.objects.exclude(Q(status='dead_player')
-        #                                  | Q(status='dead_npc')
-        #                                  | Q(status='gm')
-        #                                  | Q(status='living_npc')),
         queryset=Profile.players.filter(is_alive=True),
         required=False,
         widget=FilteredSelectMultiple('Allowed profiles', False)
