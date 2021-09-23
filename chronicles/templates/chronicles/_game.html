@@ -1,4 +1,16 @@
 
-{% for event in events %}
-    {% include 'chronicles/_event.html' %}
-{% endfor %}
+<div class="text-center h5 mt-5 pt-5 pb-2">
+    <p class="mb-0 text-center">✧</p>
+    <p class="mb-0 text-center">✧ ✦ ✧</p>
+    <p class="h2 font-weight-bold py-1">
+        {% if forloop.counter %}{{ forloop.counter }}. {% endif %}
+        {{ game.title }}
+    </p>
+    <p class="mb-0 text-center">✧ ✦ ✧</p>
+    <p class="mb-0 text-center">✧</p>
+</div>
+<div class="mt-2">
+    {% for event in game.game_events.all %}
+        {% include 'chronicles/_event.html' %}
+    {% endfor %}
+</div>

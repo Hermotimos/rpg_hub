@@ -7,14 +7,5 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <br><br><br>
-    {% for game in games %}
-        <h2 class="text-center my-5">
-            <strong>{{ forloop.counter }}. {{ game.title }}</strong>
-        </h2>
-        {% with events=game.game_events.all %}
-            {% include 'chronicles/_game.html' %}
-        {% endwith %}
-        <p class="my-5 text-center">✧ ✦ ✧</p>
-    {% endfor %}
+    {% include 'chronicles/_chapter.html' %}
 {% endblock content %}

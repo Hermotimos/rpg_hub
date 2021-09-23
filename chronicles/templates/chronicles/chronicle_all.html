@@ -20,22 +20,21 @@
     <br><br>
  
     {% for chapter in chapters %}
-        <div id="{{chapter.id}}" class="py-5">
-            <br><br>
-            {% if chapter.image %}
-                <img class="img-chapter-header" src="{{ chapter.image.url }}">
-            {% endif %}
-            <h1 class="mt-3 ml-2">
-                <b>
-                    <a class="align-middle pt-2 small-caps border-bottom-dark">
+        <div class="container">
+            <div id="{{chapter.id}}" class="pt-5 row">
+                <div>
+                    <img class="img-chapter-header" src="{{ chapter.image.url }}">
+                </div>
+                <div class="ml-2 ml-lg-3 mt-1 mt-sm-2 mt-lg-3">
+                    <span class="chapter-title align-middle font-weight-bold small-caps border-bottom-dark">
                         {{ chapter.title }}
-                    </a>
-                </b>
-            </h1>
+                    </span>
+                </div>
+            </div>
+            {% with games=chapter.game_sessions.all %}
+                {% include 'chronicles/_chapter.html' %}
+            {% endwith %}
         </div>
-        {% with games=chapter.game_sessions.all %}
-            {% include 'chronicles/_chapter.html' %}
-        {% endwith %}
     {% endfor %}
 
 {% endblock content %}

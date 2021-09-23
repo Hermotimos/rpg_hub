@@ -1,10 +1,11 @@
 
 {% for game in games %}
-    <h2 class="text-center my-5">
-        <strong>{{ forloop.counter }}. {{ game.title }}</strong>
-    </h2>
     {% with events=game.game_events.all %}
         {% include 'chronicles/_game.html' %}
     {% endwith %}
-    <p class="my-5 text-center">✧ ✦ ✧</p>
 {% endfor %}
+<div class="text-center mt-5">
+    <p class="mb-0 text-center">✧</p>
+    <p class="mb-0 text-center">✧ ✦ ✧</p>
+    <p class="mb-0 text-center">✧</p>
+</div>
