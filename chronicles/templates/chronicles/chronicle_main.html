@@ -39,7 +39,7 @@
         </section>
     
         <section class="border-top">
-            <div class="container mt-4 px-1 ml-lg-n4 ml-xl-n5">
+            <div class="container mt-4 p-0 ml-lg-n4 ml-xl-n5">
                 {% for game in games %}
                     {% if game.chapter %}
                         <div class="row mb-n1">
@@ -51,21 +51,23 @@
                                     <img class="img-game" src="{{ game.chapter.image.url }}">
                                 </figure>
                             </div>
-                            <div class="col-10 mb-2 ml-n0 pl-2 ml-sm-n2 ml-md-n3 ml-lg-n4 ml-xl-n5 pl-xl-3">
-                                <div class="mt-1 font-italic ">
+                            <div class="col-10 mb-2 ml-n1 ml-sm-n3 ml-lg-n4 ml-xl-n5 pl-2 pl-xl-3">
+                                <div class="mt-1 font-italic">
                                     <a href="{% url 'chronicles:chronicle-game' game.id %}"
                                        class="mr-2 {% if game.any_known_directly == 0 and request.user.profile.status != 'gm' %} text-muted {% endif %}">
                                         {{ game.title }}
                                     </a>
+                                    <div class="d-inline-flex">
                                     {% for profile in game|game_participants %}
                                         <a href="{% url 'prosoponomikon:character' profile.character.id %}"
                                            data-toggle="tooltip" data-placement="top" data-html="true"
                                            title='<span class="font-italic">Prosoponomikon:<br>"{{ profile }}"</span>'>
-                                            <div class="d-inline">
+                                            <div class="d-inline ml-1">
                                                <img class="rounded-circle img-smaller" src="{{ profile.image.url }}">
                                             </div>
                                         </a>
                                     {% endfor %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
