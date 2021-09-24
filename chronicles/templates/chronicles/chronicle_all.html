@@ -7,17 +7,11 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <br><br><br>
-    {% for chapter in chapters %}
-        <h3 class="mb-0">
-            {% if chapter.image %}
-                <img class="img-chapter mr-2" src="{{ chapter.image.url }}">
-            {% endif %}
-            <a href="#{{ chapter.id }}" class="align-middle pt-2 small-caps border-bottom-dark">{{ chapter.title }}</a>
-        </h3>
-        <br>
-    {% endfor %}
-    <br><br>
+    <section class="mt-5 pt-4">
+        <div class="container mb-5">
+            {% include 'chronicles/_chapters_list.html' %}
+        </div>
+    </section>
  
     {% for chapter in chapters %}
         <div class="container">
