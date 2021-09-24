@@ -51,7 +51,7 @@
                                     <img class="img-game" src="{{ game.chapter.image.url }}">
                                 </figure>
                             </div>
-                            <div class="col-10 mb-2 ml-n1 ml-sm-n3 ml-lg-n4 ml-xl-n5 pl-2 pl-xl-3">
+                            <div class="col-10 mb-2 ml-n1 ml-sm-n3 ml-lg-n4 ml-xl-n4 pl-2 pl-lg-0">
                                 <div class="mt-1 font-italic">
                                     <a href="{% url 'chronicles:chronicle-game' game.id %}"
                                        class="mr-2 {% if game.any_known_directly == 0 and request.user.profile.status != 'gm' %} text-muted {% endif %}">
