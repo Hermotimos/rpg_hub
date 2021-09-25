@@ -19,13 +19,13 @@ class CreateTopicForm(forms.ModelForm):
 class CreateDebateForm(forms.ModelForm):
     class Meta:
         model = Debate
-        fields = ['title', 'known_directly', 'is_individual']
+        fields = ['title', 'known_directly', 'is_exclusive']
 
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
         super().__init__(*args, **kwargs)
         if authenticated_user.profile.status != 'gm':
-            self.fields['is_individual'].widget = HiddenInput()
+            self.fields['is_exclusive'].widget = HiddenInput()
         if authenticated_user.profile.status == 'gm':
             self.fields['known_directly'].queryset = Profile.living.all()
         else:

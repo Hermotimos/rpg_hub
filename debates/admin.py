@@ -34,8 +34,8 @@ class TopicAdmin(admin.ModelAdmin):
 
 class DebateAdmin(admin.ModelAdmin):
     form = DebateAdminForm
-    list_display = ['title', 'topic', 'is_ended', 'is_individual']
-    list_editable = ['topic', 'is_ended', 'is_individual']
+    list_display = ['title', 'topic', 'is_ended', 'is_exclusive']
+    list_editable = ['topic', 'is_ended', 'is_exclusive']
     list_filter = ['topic']
     search_fields = ['title']
     

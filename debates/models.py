@@ -46,7 +46,7 @@ class Debate(Model):
         """
     )
     is_ended = BooleanField(default=False)
-    is_individual = BooleanField(verbose_name='Narada indywidualna?')
+    is_exclusive = BooleanField(verbose_name='Narada zamknięta?')
     created_at = DateTimeField(auto_now_add=True)
 
     class Meta:
