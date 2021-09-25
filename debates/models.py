@@ -35,16 +35,7 @@ class Debate(Model):
     known_directly = M2M(
         to=Profile,
         related_name='debates_known_directly',
-        verbose_name='Uczestnicy',
-        help_text="""
-            ***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.<br><br>
-            1) Włączaj tylko postacie znajdujące się w pobliżu w chwili
-                zakończenia ostatniej sesji.<br>
-            2) Postacie w pobliżu niewłączone do narady mogą to zauważyć.<br>
-            3) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.<br>
-            4) Jeśli na liście brakuje postaci, powiadom MG.<br><br>
-        """
-    )
+        verbose_name='Uczestnicy')
     is_ended = BooleanField(default=False)
     is_exclusive = BooleanField(verbose_name='Narada zamknięta?')
     created_at = DateTimeField(auto_now_add=True)
@@ -58,6 +49,7 @@ class Debate(Model):
     def informables(self):
         qs = Profile.living.all()
         qs = qs.exclude(id__in=self.known_directly.all())
+        print(qs)
         return qs
 
 

@@ -153,7 +153,6 @@ def send_emails(request, profile_ids=None, **kwargs):
         receivers.extend(gms)
 
     # DEBATES
-    
     if 'remark' in kwargs:
         remark = kwargs['remark']
         debate = remark.debate
