@@ -9,8 +9,7 @@ from django.shortcuts import render, redirect
 from django.utils.safestring import mark_safe
 
 from chronicles.models import GameEvent
-from imaginarion.models import PictureImage, PictureSet
-from knowledge.models import MapPacket, KnowledgePacket, BiographyPacket
+from imaginarion.models import PictureImage
 from prosoponomikon.models import Character, NonGMCharacter
 from rpg_project.utils import backup_db, only_game_masters
 from rules.models import (
@@ -22,11 +21,10 @@ from rules.models import (
     EliteKlass,
     WeaponType,
     Weapon,
-    Plate, Shield,
 )
 from toponomikon.models import Location
 from users.models import Profile
-
+from news.models import News, NewsAnswer, SurveyAnswer, Survey, SurveyOption
 
 @login_required
 @only_game_masters
@@ -105,6 +103,32 @@ def reload_toponomikon(request):
         obj.save()
     messages.info(request, 'Przeładowano "Location" dla "toponomikon"!')
     return redirect('technicalities:reload-main')
+
+
+# @login_required
+# @only_game_masters
+# def reload_news(request):
+#     for obj in News.objects.all():
+#         new = NewsAnswer.objects.create(
+#             news=obj,
+#             text=obj.text,
+#             author=obj.author,
+#             image=obj.image,
+#         )
+#         if obj.seen_by.all():
+#             new.seen_by.set(obj.seen_by.all())
+#
+#         from django.db import connection
+#         with connection.cursor() as cursor:
+#             query = f"""
+#                 UPDATE news_newsanswer
+#                     SET created_at = '{obj.created_at}'
+#                     WHERE id = {new.id}
+#             """
+#             cursor.execute(query)
+#
+#     messages.info(request, 'Przeładowano news!')
+#     return redirect('technicalities:reload-main')
 
     
 @login_required
