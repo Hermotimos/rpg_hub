@@ -143,7 +143,7 @@ class Profile(Model):
         allowed_news = self.allowed_news.all()
         
         allowed_news_annotated = allowed_news.annotate(
-            last_answer_id=Max('news_answers__id')
+            last_answer_id=Max('news_answers__created_at')
         ).filter(news_answers__id=F('last_answer_id'))
         
         last_news_answers_ids = [
