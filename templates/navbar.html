@@ -8,7 +8,7 @@
 
 <nav class="navbar navbar-expand-md navbar-dark {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} bg-navbar-dev {% else %} bg-navbar {% endif %} fixed-top">
 <!--    -->
-    <div class="container px-2">
+    <div class="container px-sm-0">
         <span class="navbar-brand navbar-nav mr-5">
             <a class="nav-link" href="{% url 'home:home' %}">Hyllemath</a>
         </span>
