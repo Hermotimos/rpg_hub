@@ -1,13 +1,23 @@
 from django import forms
-from news.models import News, NewsAnswer, Survey, SurveyOption, SurveyAnswer
+from news.models import Topic, News, NewsAnswer, Survey, SurveyOption, SurveyAnswer
 from users.models import Profile
 
 
+class CreateTopicForm(forms.ModelForm):
+    
+    class Meta:
+        model = Topic
+        fields = ['title']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        
 class CreateNewsForm(forms.ModelForm):
     
     class Meta:
         model = News
-        fields = ['title', 'allowed_profiles']
+        fields = ['topic', 'title', 'allowed_profiles']
         help_texts = {
             'allowed_profiles': """
                 ***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.<br><br>
@@ -28,6 +38,7 @@ class CreateNewsForm(forms.ModelForm):
 
        
 class CreateNewsAnswerForm(forms.ModelForm):
+    
     class Meta:
         model = NewsAnswer
         fields = ['text', 'image']
@@ -45,6 +56,7 @@ class CreateNewsAnswerForm(forms.ModelForm):
 
 
 class CreateSurveyForm(forms.ModelForm):
+    
     class Meta:
         model = Survey
         fields = ['addressees', 'image', 'text', 'title']
@@ -72,6 +84,7 @@ class CreateSurveyForm(forms.ModelForm):
 
 
 class CreateSurveyOptionForm(forms.ModelForm):
+    
     class Meta:
         model = SurveyOption
         fields = ['option_text']
@@ -84,6 +97,7 @@ class CreateSurveyOptionForm(forms.ModelForm):
 
 
 class ModifySurveyOptionForm(forms.ModelForm):
+    
     class Meta:
         model = SurveyOption
         fields = ['option_text']
@@ -96,6 +110,7 @@ class ModifySurveyOptionForm(forms.ModelForm):
 
 
 class CreateSurveyAnswerForm(forms.ModelForm):
+    
     class Meta:
         model = SurveyAnswer
         fields = ['image', 'text']

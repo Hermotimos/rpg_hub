@@ -4,9 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 
-from news.forms import (CreateNewsForm, CreateNewsAnswerForm, CreateSurveyForm,
-                        CreateSurveyOptionForm, CreateSurveyAnswerForm,
-                        ModifySurveyOptionForm)
+from news.forms import (CreateNewsForm, CreateTopicForm, CreateNewsAnswerForm,
+                        CreateSurveyForm, CreateSurveyOptionForm,
+                        CreateSurveyAnswerForm, ModifySurveyOptionForm)
 from news.models import News, Survey, SurveyOption
 from users.models import Profile
 
@@ -42,48 +42,60 @@ def main_view(request):
 
 
 @login_required
+def create_topic_view(request):
+    form = CreateTopicForm(request.POST or None)
+    if form.is_valid():
+        topic = form.save()
+        messages.info(
+            request, f"Utworzono nowy temat ogłoszeń: '{topic.title}'!")
+        return redirect('news:main')
+
+    context = {
+        'page_title': "Nowy temat ogłoszeń",
+        'form_1': form,
+    }
+    return render(request, '_create_form.html', context)
+
+
+@login_required
 def create_news_view(request):
     profile = request.user.profile
+    
+    news_form = CreateNewsForm(data=request.POST or None,
+                               files=request.FILES or None,
+                               authenticated_user=request.user)
+    news_answer_form = CreateNewsAnswerForm(
+        data=request.POST or None, files=request.FILES or None)
 
-    if request.method == 'POST':
-        news_form = CreateNewsForm(
-            authenticated_user=request.user, data=request.POST,
-            files=request.FILES)
-        news_answer_form = CreateNewsAnswerForm(request.POST, request.FILES)
+    if news_form.is_valid() and news_answer_form.is_valid():
+        news = news_form.save(commit=False)
+        news.author = request.user.profile
+        news.save()
+        allowed_profiles = news_form.cleaned_data['allowed_profiles']
+        allowed_profiles |= Profile.objects.filter(id=request.user.id)
+        news.allowed_profiles.set(allowed_profiles)
+        news.followers.set(allowed_profiles)
+
+        answer = news_answer_form.save(commit=False)
+        answer.news = news
+        answer.author = request.user.profile
+        news_answer_form.save()
         
-        if news_form.is_valid() and news_answer_form.is_valid():
-            
-            news = news_form.save(commit=False)
-            news.author = request.user.profile
-            news.save()
-            allowed_profiles = news_form.cleaned_data['allowed_profiles']
-            allowed_profiles |= Profile.objects.filter(id=request.user.id)
-            news.allowed_profiles.set(allowed_profiles)
-            news.followers.set(allowed_profiles)
+        subject = f"[RPG] Nowe ogłoszenie: '{news.title[:30]}...'"
+        message = f"{profile} przybił/a coś do słupa ogłoszeń.\n" \
+                  f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/news-detail:{news.id}/\n\n"
+        sender = settings.EMAIL_HOST_USER
+        receivers = []
+        for profile in news.allowed_profiles.all():
+            if profile.user != request.user:
+                receivers.append(profile.user.email)
+        if profile.status != 'gm':
+            receivers.append("lukas.kozicki@gmail.com")
+        send_mail(subject, message, sender, receivers)
 
-            answer = news_answer_form.save(commit=False)
-            answer.news = news
-            answer.author = request.user.profile
-            news_answer_form.save()
-            
-            subject = f"[RPG] Nowe ogłoszenie: '{news.title[:30]}...'"
-            message = f"{profile} przybił/a coś do słupa ogłoszeń.\n" \
-                      f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/news-detail:{news.id}/\n\n"
-            sender = settings.EMAIL_HOST_USER
-            receivers = []
-            for profile in news.allowed_profiles.all():
-                if profile.user != request.user:
-                    receivers.append(profile.user.email)
-            if profile.status != 'gm':
-                receivers.append("lukas.kozicki@gmail.com")
-            send_mail(subject, message, sender, receivers)
+        messages.info(request, f"Utworzono nowe ogłoszenie!")
+        return redirect('news:detail', news_id=news.id)
 
-            messages.info(request, f"Utworzono nowe ogłoszenie!")
-            return redirect('news:detail', news_id=news.id)
-
-    else:
-        news_form = CreateNewsForm(authenticated_user=request.user)
-        news_answer_form = CreateNewsAnswerForm()
 
     context = {
         'page_title': "Nowe ogłoszenie",

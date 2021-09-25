@@ -6,7 +6,8 @@ app_name = 'news'
 urlpatterns = [
     path('', views.main_view, name='main'),
     # news
-    path('news-create/', views.create_news_view, name='create'),
+    path('news-topic-create/', views.create_topic_view, name='topic-create'),
+    path('news-news-create/', views.create_news_view, name='news-create'),
     path('news-detail:<int:news_id>/', views.news_detail_view, name='detail'),
     path('news-detail:<int:news_id>/unfollow', views.unfollow_news_view, name='unfollow'),
     path('news-detail:<int:news_id>/follow', views.follow_news_view, name='follow'),

@@ -11,7 +11,8 @@
 
     <!-- NEW NEWS & NEW SURVEY BUTTONS-->
     <div class="mt-2 mb-5">
-        <a href="{% url 'news:create' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
+        <a href="{% url 'news:topic-create' %}" class="btn btn-outline-dark">Nowy temat</a>
+        <a href="{% url 'news:news-create' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
         {% if request.user.profile.status == 'gm' %}
             <a href="{% url 'admin:news_survey_add' %}" class="btn btn-outline-dark">Nowa ankieta</a>
         {% else %}
