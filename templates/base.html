@@ -21,12 +21,10 @@
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
         <link rel="icon" href="{% static 'img/favicon.ico' %}" />
         
-        {% if page_title %}
-            <title>RPG - {{ page_title }}</title>
-        {% else %}
-            <title> RPG ?|?|?|?|?|?|</title>
-        {% endif %}
-
+        <title>
+            {% firstof page_title 'Hyllemath' %}
+        </title>
+        
         {% block head_extra %}
         {% endblock head_extra %}
     </head>
