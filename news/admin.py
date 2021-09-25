@@ -2,7 +2,7 @@ from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 
-from news.models import News, NewsAnswer, Survey, SurveyOption, SurveyAnswer
+from news.models import Topic, News, NewsAnswer, Survey, SurveyOption, SurveyAnswer
 from rpg_project.utils import formfield_for_dbfield_cached
 from users.models import Profile
 
@@ -29,12 +29,23 @@ class SurveyAdminForm(forms.ModelForm):
     )
 
 
+class TopicAdmin(admin.ModelAdmin):
+    list_display = ['title', 'created_at']
+    search_fields = ['title']
+    
+    
 class NewsAdmin(admin.ModelAdmin):
     form = NewsAdminForm
-    list_display = ['id', 'title', 'created_at']
-    list_editable = ['title']
+    list_display = ['title', 'topic', 'created_at']
+    list_editable = ['topic']
     ordering = ['-created_at']
     search_fields = ['title']
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        fields = [
+            'topic',
+        ]
+        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
 
 
 class NewsAnswerAdmin(admin.ModelAdmin):
@@ -81,6 +92,7 @@ class SurveyOptionAdmin(admin.ModelAdmin):
     search_fields = ['option_text']
 
 
+admin.site.register(Topic, TopicAdmin)
 admin.site.register(News, NewsAdmin)
 admin.site.register(NewsAnswer, NewsAnswerAdmin)
 admin.site.register(Survey, SurveyAdmin)
