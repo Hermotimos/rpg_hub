@@ -37,9 +37,9 @@ class News(Model):
     created_at = DateTimeField(auto_now_add=True)
     followers = M2M(to=Profile, related_name='followed_news', blank=True)
 
-    text = TextField(max_length=4000)
-    author = FK(to=Profile, related_name='news_authored', on_delete=CASCADE)
-    image = ImageField(blank=True, null=True, upload_to='news_pics')
+    # text = TextField(max_length=4000)
+    # author = FK(to=Profile, related_name='news_authored', on_delete=CASCADE)
+    # image = ImageField(blank=True, null=True, upload_to='news_pics')
 
     def __str__(self):
         return self.title[:50] + '...' if len(str(self.title)) > 100 else self.title
