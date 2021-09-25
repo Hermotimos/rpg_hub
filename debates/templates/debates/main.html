@@ -18,7 +18,7 @@
         <article class="pt-5">
             {% for topic in topics %}
                 <div id="topic_{{ topic.id }}" class="mb-5">
-                    <h3 class="small-caps">
+                    <h3 class="small-caps mb-3">
                         <b class="border-bottom-dark">{{ topic.title }}</b>
                     </h3>
                     {% for debate in topic.debates.all %}
@@ -32,10 +32,10 @@
                                         </a>
                                     </h5>
                                 </div>
-                                <div class="d-lg-inline">
+                                <div class="d-lg-inline align-middle">
                                     {% for profile in debate.known_directly.all %}
                                         {% if profile.status != 'gm' %}
-                                            <img class="rounded-circle img-smaller mt-n1 mb-lg-1" src="{{ profile.image.url }}">
+                                            <img class="rounded-circle img-smaller mb-1 mb-lg-2" src="{{ profile.image.url }}">
                                         {% endif %}
                                     {% endfor %}
                                 </div>
