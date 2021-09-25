@@ -6,7 +6,7 @@
         
         <!--   Random pictures from Prosoponomikon    -->
         <section>
-            <div class="container">
+            <div class="container px-2">
                 <div class="row">
                     {% for character in rand_characters %}
                         {% include 'prosoponomikon/_char_img.html' %}
@@ -17,17 +17,11 @@
         
         <!--   Random pictures from Toponomikon    -->
         <section>
-            <div class="container">
+            <div class="container px-2">
                 <div class="row">
                     {% for location in rand_locations %}
                         <div class="col-sm-12 col-lg-6 px-2">
-                            <a class="img-link" href="{% url 'toponomikon:location' location.name %}">
-                                <div class="img-hover-zoom m-0" data-toggle="tooltip" data-placement="bottom" title="{{ location.name }}">
-                                    <img class="img-fluid mx-auto d-block
-                                         {% if not request.user.profile in location.known_directly.all and not request.user.profile.status == 'gm' %} img-grayscale {% endif %}"
-                                         src="{{ location.main_image.image.image.url }}">
-                                </div>
-                            </a>
+                            {% include 'toponomikon/_loc_img.html' %}
                             <p class="pt-1 font-italic font-14 text-center">{{ location.name }}</p>
                         </div>
                     {% endfor %}
@@ -37,7 +31,7 @@
         
         <!--   Random pictures from Therarion    -->
         <section>
-            <div class="container">
+            <div class="container px-2">
                 <div class="row">
                 
                 </div>
