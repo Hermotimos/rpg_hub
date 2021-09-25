@@ -3,7 +3,7 @@
 
 <!-- REMARKS -->
 {% for remark in debate.remarks.all %}
-    <div id="remark-{{ remark.id }}" class="container anchor mt-n5">
+    <div id="remark-{{ remark.id }}" class="container anchor px-0 mt-n5">
         <div class="row">
             {% if remark.author.status == 'gm' %}
                 <div class="col-12">
