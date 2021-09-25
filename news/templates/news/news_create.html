@@ -10,20 +10,20 @@
     <br><br><br><br>
     <form method="POST" enctype="multipart/form-data" class="allowed-profiles-form-news">
         {% csrf_token %}
-
-        {{ form.title|as_crispy_field }}
-        {{ form.title.errors }}<br>
+        
+        {{ news_form.title|as_crispy_field }}
+        {{ news_form.title.errors }}<br>
 
         <h5>Wybierz adresatów ogłoszenia:</h5>
         <small>1) Ogłoszenie zobaczą tylko wybrani adresaci (oraz automatycznie MG).</small><br>
         <small>2) Późniejsze dodanie adresatów możliwe tylko dla MG, wyślij dezyderat.</small><br>
         <br>
-        {{ form.allowed_profiles|as_crispy_field }}
+        {{ news_form.allowed_profiles|as_crispy_field }}
         <small>***Aby zaznaczyć wielu adresatów - użyj CTRL albo SHIFT.</small><br><br>
-        <div class="col-md-12">
-            {{ form.text|as_crispy_field }}
-        </div>
-        {{ form.image|as_crispy_field }}
+        
+        {{ news_answer_form.text|as_crispy_field }}
+        {{ news_answer_form.image|as_crispy_field }}
+        
         <input class="btn btn-dark" type="submit" value="Utwórz ogłoszenie"/>
     </form>
 {% endblock content %}

@@ -37,22 +37,8 @@ class News(Model):
     created_at = DateTimeField(auto_now_add=True)
     followers = M2M(to=Profile, related_name='followed_news', blank=True)
 
-    # text = TextField(max_length=4000)
-    # author = FK(to=Profile, related_name='news_authored', on_delete=CASCADE)
-    # image = ImageField(blank=True, null=True, upload_to='news_pics')
-
     def __str__(self):
         return self.title[:50] + '...' if len(str(self.title)) > 100 else self.title
-
-    def save(self, *args, **kwargs):
-        first_save = True if not self.pk else False
-        super().save(*args, **kwargs)
-        if first_save and self.image:
-            img = Image.open(self.image.path)
-            if img.height > 700 or img.width > 700:
-                output_size = (700, 700)
-                img.thumbnail(output_size)
-                img.save(self.image.path)
 
     class Meta:
         verbose_name = 'News'
