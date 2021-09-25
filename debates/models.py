@@ -36,9 +36,9 @@ class Debate(Model):
         to=Profile,
         related_name='debates_known_directly',
         verbose_name='Uczestnicy')
+    created_at = DateTimeField(auto_now_add=True)
     is_ended = BooleanField(default=False)
     is_exclusive = BooleanField(verbose_name='Narada zamknięta?')
-    created_at = DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['created_at']
