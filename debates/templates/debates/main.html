@@ -28,7 +28,7 @@
                                 <div class="d-md-inline">
                                     <h5 class="d-inline font-18">
                                         <a class="pr-1" href="{% url 'debates:debate' debate.id %}">
-                                            {{ debate.name }}
+                                            {{ debate.title }}
                                         </a>
                                     </h5>
                                 </div>
@@ -39,8 +39,8 @@
                                         {% endif %}
                                     {% endfor %}
                                 </div>
-                                <div class="d-inline d-sm-block mt-n1 mt-lg-n2">
-                                    <small class="font-11 font-italic text-muted">
+                                <div class="d-inline d-sm-block">
+                                    <small class="align-top font-11 font-italic text-muted">
                                         {% for event in debate.events.all %}
                                             {% if forloop.counter > 1 %} | {% endif %}
                                             {{ event.game.title }}
