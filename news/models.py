@@ -18,15 +18,28 @@ from django.dispatch import receiver
 from users.models import Profile
 
 
+class Topic(Model):
+    title = CharField(max_length=77, verbose_name='Temat ogłoszenia')
+    created_at = DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['title']
+
+    def __str__(self):
+        return self.title
+    
+
 class News(Model):
     title = CharField(max_length=100, unique=True)
-    text = TextField(max_length=4000)
-    created_at = DateTimeField(auto_now_add=True)
-    author = FK(to=Profile, related_name='news_authored', on_delete=CASCADE)
+    topic = FK(to=Topic, related_name='news', on_delete=CASCADE, null=True, blank=True)     # TODO mandatory after changes
     allowed_profiles = M2M(to=Profile, related_name='allowed_news')
-    followers = M2M(to=Profile, related_name='followed_news', blank=True)
-    image = ImageField(blank=True, null=True, upload_to='news_pics')
     seen_by = M2M(to=Profile, related_name='news_seen', blank=True)
+    created_at = DateTimeField(auto_now_add=True)
+    followers = M2M(to=Profile, related_name='followed_news', blank=True)
+
+    text = TextField(max_length=4000)
+    author = FK(to=Profile, related_name='news_authored', on_delete=CASCADE)
+    image = ImageField(blank=True, null=True, upload_to='news_pics')
 
     def __str__(self):
         return self.title[:50] + '...' if len(str(self.title)) > 100 else self.title
@@ -47,12 +60,12 @@ class News(Model):
 
 
 class NewsAnswer(Model):
+    text = TextField(max_length=4000)
     news = FK(to=News, related_name='news_answers', on_delete=CASCADE)
     author = FK(to=Profile, related_name='news_answers', on_delete=CASCADE)
-    text = TextField(max_length=4000)
-    created_at = DateTimeField(auto_now_add=True)
     image = ImageField(blank=True, null=True, upload_to='news_pics')
     seen_by = M2M(to=Profile, related_name='news_answers_seen', blank=True)
+    created_at = DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['created_at']
