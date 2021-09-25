@@ -1,28 +1,27 @@
 from django import forms
 from news.models import News, NewsAnswer, Survey, SurveyOption, SurveyAnswer
 from users.models import Profile
-from django.db.models import Q
 
 
 class CreateNewsForm(forms.ModelForm):
     class Meta:
         model = News
-        fields = ['allowed_profiles', 'image', 'text', 'title']
+        fields = ['allowed_profiles', 'title']
 
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
         super().__init__(*args, **kwargs)
         self.fields['allowed_profiles'].label = ''
         self.fields['allowed_profiles'].queryset = Profile.active_players.exclude(user=authenticated_user)
-        self.fields['image'].label = 'Załącz obraz:'
-        self.fields['image'].required = False
-        self.fields['text'].label = ''
-        self.fields['text'].max_length = 4000
-        self.fields['text'].widget.attrs = {
-            'cols': 60,
-            'rows': 10,
-            'placeholder': 'Twoje ogłoszenie (max. 4000 znaków)*'
-        }
+        # self.fields['image'].label = 'Załącz obraz:'
+        # self.fields['image'].required = False
+        # self.fields['text'].label = ''
+        # self.fields['text'].max_length = 4000
+        # self.fields['text'].widget.attrs = {
+        #     'cols': 60,
+        #     'rows': 10,
+        #     'placeholder': 'Twoje ogłoszenie (max. 4000 znaków)*'
+        # }
         self.fields['title'].label = ''
         self.fields['title'].max_length = 100
         self.fields['title'].widget.attrs = {

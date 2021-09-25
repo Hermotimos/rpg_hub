@@ -31,10 +31,9 @@ class SurveyAdminForm(forms.ModelForm):
 
 class NewsAdmin(admin.ModelAdmin):
     form = NewsAdminForm
-    list_display = ['id', 'author', 'title', 'created_at', 'image']
-    list_editable = ['title', 'image']
+    list_display = ['id', 'title', 'created_at']
+    list_editable = ['title']
     ordering = ['-created_at']
-    readonly_fields = ['seen_by']
     search_fields = ['title']
 
 

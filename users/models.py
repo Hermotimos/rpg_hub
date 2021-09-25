@@ -140,8 +140,7 @@ class Profile(Model):
     @property
     def unseen_news(self):
         from news.models import NewsAnswer
-        allowed_news = self.allowed_news.exclude(author=self)
-        news_unseen = allowed_news.exclude(seen_by=self)
+        allowed_news = self.allowed_news.all()
         
         allowed_news_annotated = allowed_news.annotate(
             last_answer_id=Max('news_answers__id')
@@ -156,7 +155,7 @@ class Profile(Model):
         news_with_unseen_last_answer = allowed_news.filter(
             news_answers__in=last_news_answers_unseen)
             
-        return (news_unseen | news_with_unseen_last_answer).distinct()
+        return news_with_unseen_last_answer
     
     @property
     def unseen_surveys(self):

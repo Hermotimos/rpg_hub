@@ -8,7 +8,7 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <br><br><br><br>
+    <br>
 
     <!-- NEWS META INFO-->
     <header>
@@ -18,7 +18,7 @@
                     <h5 class="mb-0 mr-2 mr-sm-3">Autor:</h5>
                 </td>
                 <td>
-                    <img class="rounded-circle img-small" src="{{ news.author.image.url }}">
+                    <img class="rounded-circle img-small" src="{{ news.news_answers.first.author.image.url }}">
                 </td>
             </tr>
             <tr>
@@ -57,21 +57,6 @@
 
 
     <article id="news">
-        
-        <!-- NEWS TEXT -->
-        <section id="news-text">
-            <br>
-            <div>
-                <p class="font-18 font-italic text-justify">{{ news.text|capfirst|linebreaksbr }}</p>
-                {% if news.image %}
-                    <p><img class="img-fluid mx-auto d-block" src="{{ news.image.url }}"></p>
-                {% endif %}
-                {% for profile in news_seen_by %}
-                    <img class="img-small rounded-circle" src="{{ profile.image.url }}">
-                {% endfor %}
-                <br><br>
-            </div>
-        </section>
         
         <!-- NEWS ANSWERS -->
         <section id="news-answers">

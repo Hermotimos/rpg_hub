@@ -22,9 +22,8 @@ def main_view(request):
         newss = profile.allowed_news.all()
         surveys = profile.surveys_received.all()
 
-    newss = newss.select_related('author')
     newss = newss.prefetch_related(
-        'seen_by', 'news_answers__author', 'news_answers__seen_by')
+        'news_answers__author', 'news_answers__seen_by')
     newss = newss.order_by('-id')
     
     surveys = surveys.select_related('author')
@@ -98,7 +97,7 @@ def news_detail_view(request, news_id):
     answers = []
     last_answer_seen_by_imgs = []
     if news.news_answers.all():
-        answers = news.news_answers.all().select_related('author')
+        answers = news.news_answers.select_related('author')
         last_answer = news.news_answers.order_by('-created_at')[0]
         if profile not in last_answer.seen_by.all():
             last_answer.seen_by.add(profile)
