@@ -87,10 +87,10 @@ def create_news_view(request):
 
     context = {
         'page_title': "Nowe ogłoszenie",
-        'news_form': news_form,
-        'news_answer_form': news_answer_form,
+        'form_1': news_form,
+        'form_2': news_answer_form,
     }
-    return render(request, 'news/news_create.html', context)
+    return render(request, '_create_form.html', context)
 
 
 @login_required

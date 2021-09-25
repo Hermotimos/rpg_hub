@@ -30,11 +30,14 @@ class Topic(Model):
     
 
 class News(Model):
-    title = CharField(max_length=100, unique=True)
+    title = CharField(max_length=100, verbose_name="Tytuł ogłoszenia")
     topic = FK(to=Topic, related_name='news', on_delete=CASCADE, null=True, blank=True)     # TODO mandatory after changes
-    allowed_profiles = M2M(to=Profile, related_name='allowed_news')
-    seen_by = M2M(to=Profile, related_name='news_seen', blank=True)
+    allowed_profiles = M2M(
+        to=Profile,
+        related_name='allowed_news',
+        verbose_name="Adresaci ogłoszenia")
     created_at = DateTimeField(auto_now_add=True)
+    seen_by = M2M(to=Profile, related_name='news_seen', blank=True)
     followers = M2M(to=Profile, related_name='followed_news', blank=True)
 
     def __str__(self):
@@ -46,7 +49,7 @@ class News(Model):
 
 
 class NewsAnswer(Model):
-    text = TextField(max_length=4000)
+    text = TextField()
     news = FK(to=News, related_name='news_answers', on_delete=CASCADE)
     author = FK(to=Profile, related_name='news_answers', on_delete=CASCADE)
     image = ImageField(blank=True, null=True, upload_to='news_pics')

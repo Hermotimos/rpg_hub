@@ -16,6 +16,7 @@ class CreateTopicForm(forms.ModelForm):
 
 
 class CreateDebateForm(forms.ModelForm):
+    
     class Meta:
         model = Debate
         fields = ['title', 'known_directly', 'is_exclusive']
@@ -36,13 +37,16 @@ class CreateDebateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if authenticated_user.profile.status != 'gm':
             self.fields['is_exclusive'].widget = HiddenInput()
-        if authenticated_user.profile.status == 'gm':
-            self.fields['known_directly'].queryset = Profile.living.all()
-        else:
-            self.fields['known_directly'].queryset = Profile.living.filter(
+
+        known_directly = Profile.living.all()
+        if authenticated_user.profile.status != 'gm':
+            known_directly = known_directly.filter(
                 character__in=authenticated_user.profile.characters_known_directly.all()
             ).exclude(user=authenticated_user).select_related()
-        self.fields['known_directly'].widget.attrs['size'] = 10
+            
+        self.fields['known_directly'].queryset = known_directly
+        self.fields['known_directly'].widget.attrs['size'] = min(
+            len(known_directly), 10)
 
 
 class CreateRemarkForm(forms.ModelForm):
@@ -69,6 +73,7 @@ class CreateRemarkForm(forms.ModelForm):
             
         self.fields['text'].label = ''
         self.fields['text'].widget.attrs = {
-            'cols': 60,
-            'rows': 10,
+            'cols': 60, 'rows': 10,
+            'placeholder': 'Twoja wypowiedź (max. 4000 znaków)*'
         }
+        
