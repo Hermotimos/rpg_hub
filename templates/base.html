@@ -38,23 +38,19 @@
             </header>
         {% endif %}
         
-        <main class="container px-sm-2">
-            
+        <main class="container px-sm-2 pt-2">
             <div class="row">
-                
                 <div class="col-md-9">
-
+                    
                     <header>
                         <div class="d-flex text-break border-bottom-dark">
                             <img class="header-img" src="{% static 'img/skadia.png' %}">
-                            <p class="my-1 mt-auto pl-2 pr-4">
-                                <strong class="small-caps page-title">
-                                    {{ page_title }}
-                                </strong>
+                            <p class="small-caps font-weight-bold page-title my-1 mt-auto pl-2 pr-4">
+                                {{ page_title }}
                             </p>
                         </div>
                     </header>
-                    
+
                     {% if messages %}
                         {% for message in messages %}
                             <div class="alert alert-{{ message.tags }}">
