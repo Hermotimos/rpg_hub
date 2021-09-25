@@ -263,7 +263,7 @@ def send_emails(request, profile_ids=None, **kwargs):
     elif 'debate' in kwargs:
         debate = kwargs['debate']
         subject = '[RPG] Dołączenie do narady!'
-        message = f"{profile} dołączył/a Cię do narady '{debate.name}' " \
+        message = f"{profile} dołączył/a Cię do narady '{debate.title}' " \
                   f"w temacie '{debate.topic}'." \
                   f"\nWeź udział w naradzie:" \
                   f"\n{request.build_absolute_uri()}\n"

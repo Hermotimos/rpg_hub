@@ -159,7 +159,7 @@ def debate_view(request, debate_id):
         character__in=profile.characters_known_directly.all())
     
     context = {
-        'page_title': debate.name,
+        'page_title': debate.title,
         'topic': topic,
         'debate': debate,
         'debate_known_directly': debate_known_directly,

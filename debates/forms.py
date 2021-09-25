@@ -19,7 +19,7 @@ class CreateTopicForm(forms.ModelForm):
 class CreateDebateForm(forms.ModelForm):
     class Meta:
         model = Debate
-        fields = ['name', 'known_directly', 'is_individual']
+        fields = ['title', 'known_directly', 'is_individual']
 
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')

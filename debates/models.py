@@ -30,7 +30,7 @@ class Topic(Model):
 
 
 class Debate(Model):
-    name = CharField(max_length=77, unique=True, verbose_name='Tytuł narady')
+    title = CharField(max_length=77, unique=True, verbose_name='Tytuł narady')
     topic = FK(to=Topic, related_name='debates', on_delete=CASCADE)
     known_directly = M2M(
         to=Profile,
@@ -53,7 +53,7 @@ class Debate(Model):
         ordering = ['created_at']
 
     def __str__(self):
-        return self.name
+        return self.title
     
     def informables(self):
         qs = Profile.living.all()

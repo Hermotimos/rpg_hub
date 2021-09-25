@@ -34,10 +34,10 @@ class TopicAdmin(admin.ModelAdmin):
 
 class DebateAdmin(admin.ModelAdmin):
     form = DebateAdminForm
-    list_display = ['name', 'topic', 'is_ended', 'is_individual']
+    list_display = ['title', 'topic', 'is_ended', 'is_individual']
     list_editable = ['topic', 'is_ended', 'is_individual']
     list_filter = ['topic']
-    search_fields = ['name']
+    search_fields = ['title']
     
     def formfield_for_dbfield(self, db_field, **kwargs):
         fields = [
