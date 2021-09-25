@@ -4,7 +4,6 @@ from django.db.models import Q
 
 from debates.models import Remark, Debate, Topic
 from users.models import Profile
-from users.models import User
 
 
 class CreateTopicForm(forms.ModelForm):
@@ -20,6 +19,17 @@ class CreateDebateForm(forms.ModelForm):
     class Meta:
         model = Debate
         fields = ['title', 'known_directly', 'is_exclusive']
+        help_texts = {
+            'known_directly': """
+                ***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.<br><br>
+                1) Włączaj tylko postacie znajdujące się w pobliżu w chwili
+                    zakończenia ostatniej sesji.<br>
+                2) Postacie w pobliżu niewłączone do narady mogą to zauważyć.<br>
+                3) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.<br>
+                4) Jeśli na liście brakuje postaci, powiadom MG.<br><br>
+            """,
+            'is_exclusive': 'Wykluczyć możliwość dodawania uczestników?',
+        }
 
     def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
