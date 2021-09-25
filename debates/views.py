@@ -35,49 +35,63 @@ def debates_main_view(request):
 
 @login_required
 def create_topic_view(request):
-    profile = request.user.profile
-    topic_form = CreateTopicForm(request.POST or None)
-    debate_form = CreateDebateForm(data=request.POST or None,
-                                   authenticated_user=request.user)
-    remark_form = CreateRemarkForm(data=request.POST or None,
-                                   files=request.FILES or None,
-                                   initial={'author': request.user},
-                                   authenticated_user=request.user,
-                                   debate_id=0)
-    
-    if (topic_form.is_valid() and debate_form.is_valid()
-            and remark_form.is_valid()):
-        topic = topic_form.save()
-
-        debate = debate_form.save(commit=False)
-        debate.topic = topic
-        debate.save()
-        new_known_directly = debate_form.cleaned_data['known_directly']
-        new_known_directly |= Profile.objects.filter(id=profile.id)
-        debate.known_directly.add(*list(new_known_directly))
-
-        remark = remark_form.save(commit=False)
-        remark.debate = debate
-        remark.save()
-        
-        informed_ids = [p.id for p in new_known_directly if p != profile]
-        send_emails(request, informed_ids, new='topic', remark=remark)
-        messages.info(request, f'Utworzono nową naradę w nowym temacie!')
-        return redirect('debates:debate', debate_id=debate.id)
+    form = CreateTopicForm(request.POST or None)
+    if form.is_valid():
+        topic = form.save()
+        messages.info(
+            request, f"Utworzono nowy temat narad: '{topic.title}'!")
+        return redirect('debates:main')
 
     context = {
-        'page_title': 'Nowa narada w nowym temacie',
-        'form_1': topic_form,
-        'form_2': debate_form,
-        'form_3': remark_form,
+        'page_title': "Nowy temat narad",
+        'form_1': form,
     }
     return render(request, '_create_form.html', context)
 
 
+# @login_required
+# def create_topic_view(request):
+#     profile = request.user.profile
+#     topic_form = CreateTopicForm(request.POST or None)
+#     debate_form = CreateDebateForm(data=request.POST or None,
+#                                    authenticated_user=request.user)
+#     remark_form = CreateRemarkForm(data=request.POST or None,
+#                                    files=request.FILES or None,
+#                                    initial={'author': request.user},
+#                                    authenticated_user=request.user,
+#                                    debate_id=0)
+#
+#     if all([f.is_valid() for f in [topic_form, debate_form, remark_form]]):
+#         topic = topic_form.save()
+#
+#         debate = debate_form.save(commit=False)
+#         debate.topic = topic
+#         debate.save()
+#         new_known_directly = debate_form.cleaned_data['known_directly']
+#         new_known_directly |= Profile.objects.filter(id=profile.id)
+#         debate.known_directly.add(*list(new_known_directly))
+#
+#         remark = remark_form.save(commit=False)
+#         remark.debate = debate
+#         remark.save()
+#
+#         informed_ids = [p.id for p in new_known_directly if p != profile]
+#         send_emails(request, informed_ids, new='topic', remark=remark)
+#         messages.info(request, f'Utworzono nową naradę w nowym temacie!')
+#         return redirect('debates:debate', debate_id=debate.id)
+#
+#     context = {
+#         'page_title': 'Nowa narada w nowym temacie',
+#         'form_1': topic_form,
+#         'form_2': debate_form,
+#         'form_3': remark_form,
+#     }
+#     return render(request, '_create_form.html', context)
+
+
 @login_required
-def create_debate_view(request, topic_id):
+def create_debate_view(request):
     profile = request.user.profile
-    topic = get_object_or_404(Topic, id=topic_id)
 
     debate_form = CreateDebateForm(data=request.POST or None,
                                    authenticated_user=request.user)
@@ -89,7 +103,6 @@ def create_debate_view(request, topic_id):
     
     if debate_form.is_valid() and remark_form.is_valid():
         debate = debate_form.save(commit=False)
-        debate.topic = Topic.objects.get(id=topic_id)
         debate.save()
         new_known_directly = debate_form.cleaned_data['known_directly']
         new_known_directly |= Profile.objects.filter(id=profile.id)
@@ -108,7 +121,6 @@ def create_debate_view(request, topic_id):
         'page_title': 'Nowa narada',
         'form_1': debate_form,
         'form_2': remark_form,
-        'topic': topic
     }
     return render(request, '_create_form.html', context)
 

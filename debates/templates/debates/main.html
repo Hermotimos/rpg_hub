@@ -11,7 +11,8 @@
     <article class="top-button">
         
         <header class="mb-5">
-            <a class="btn btn-outline-dark" href="{% url 'debates:create-topic' %}">Nowy temat narad</a>
+            <a class="btn btn-outline-dark" href="{% url 'debates:create-topic' %}">Nowy temat</a>
+            <a class="btn btn-outline-dark" href="{% url 'debates:create-debate' %}">Nowa narada</a>
         </header>
     
         <article class="pt-5">
@@ -20,7 +21,6 @@
                     <h3 class="small-caps">
                         <b class="border-bottom-dark">{{ topic.title }}</b>
                     </h3>
-                    <a href="{% url 'debates:create-debate' topic.id %}" class="btn btn-outline-dark mb-3">Nowa narada</a>
                     {% for debate in topic.debates.all %}
                         <span class="pt-5" id="debate_{{ debate.id }}"></span>
                         <ul class="bullets-3 pl-3 mb-0">

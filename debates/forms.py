@@ -7,6 +7,7 @@ from users.models import Profile
 
 
 class CreateTopicForm(forms.ModelForm):
+    
     class Meta:
         model = Topic
         fields = ['title']
@@ -19,7 +20,7 @@ class CreateDebateForm(forms.ModelForm):
     
     class Meta:
         model = Debate
-        fields = ['title', 'known_directly', 'is_exclusive']
+        fields = ['topic', 'title', 'known_directly', 'is_exclusive']
         help_texts = {
             'known_directly': """
                 ***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.<br><br>
@@ -50,6 +51,7 @@ class CreateDebateForm(forms.ModelForm):
 
 
 class CreateRemarkForm(forms.ModelForm):
+    
     class Meta:
         model = Remark
         fields = ['author', 'text', 'image']
