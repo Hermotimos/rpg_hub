@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 
 from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm
 from debates.models import Topic, Debate
