@@ -31,7 +31,7 @@
                                         </a>
                                     </h5>
                                 </div>
-                                <div class="d-lg-inline ">
+                                <div class="d-lg-inline">
                                     {% for profile in debate.known_directly.all %}
                                         {% if profile.status != 'gm' %}
                                             <img class="rounded-circle img-smaller mb-1 mb-lg-2" src="{{ profile.image.url }}">

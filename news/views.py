@@ -2,12 +2,13 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.db.models import Prefetch
 from django.shortcuts import render, redirect, get_object_or_404
 
 from news.forms import (CreateNewsForm, CreateTopicForm, CreateNewsAnswerForm,
                         CreateSurveyForm, CreateSurveyOptionForm,
                         CreateSurveyAnswerForm, ModifySurveyOptionForm)
-from news.models import News, Survey, SurveyOption
+from news.models import Topic, News, Survey, SurveyOption
 from users.models import Profile
 
 
@@ -31,9 +32,13 @@ def main_view(request):
         'seen_by', 'survey_answers__author', 'survey_answers__seen_by')
     surveys = surveys.order_by('-id')
     
+    topics = Topic.objects.filter(news__in=newss)
+    topics = topics.prefetch_related(Prefetch('news', queryset=newss))
+    topics = topics.distinct()
+
     context = {
         'page_title': 'Ogłoszenia',
-        'newss': newss,
+        'topics': topics,
         'unseen_news': profile.unseen_news,
         'surveys': surveys,
         'unseen_surveys': profile.unseen_surveys,

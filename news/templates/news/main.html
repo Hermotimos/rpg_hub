@@ -8,17 +8,61 @@
 {% endblock head_extra %}
 
 {% block content %}
+    <article class="top-button">
+        
+        <header class="mb-5">
+            <a href="{% url 'news:topic-create' %}" class="btn btn-outline-dark">Nowy temat</a>
+            <a href="{% url 'news:news-create' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
+        </header>
+    
+        <article class="pt-5">
+            {% for topic in topics %}
+                <div id="topic_{{ topic.id }}" class="mb-5">
+                    <h3 class="small-caps mb-3">
+                        <b class="border-bottom-dark">{{ topic.title }}</b>
+                    </h3>
+                    {% for news in topic.news.all %}
+                    
+                        <div class="container my-1 border rounded {% if news not in unseen_news %} bg-inner {% else %} bg-bluish {% endif %}">
+                            <span class="pt-5" id="news_{{ news.id }}"></span>
+                            <div class="row my-2">
+                                
+                                <div class="inline ml-2 mr-4">
+                                    <img class="rounded-circle article-img" src="{{ news.news_answers.first.author.image.url }}">
+                                </div>
+                                
+                                <div class="inline">
+                                    <div class="row">
+                                        <small class="font-italic text-nowrap text-muted">{{ news.created_at|date:'d-M-Y | H:i' }}</small>
+                                    </div>
+                                    <div class="row">
+                                        <a class="pr-1 h3 border-bottom" href="{% url 'news:detail' news.id %}">{{ news.title }}</a>
+                                    </div>
+                                    <div class="row">
+                                        <div class="float-left">
+                                            {% for answer in news.news_answers.all %}
+                                                <img class="rounded-circle img-small mb-1" src="{{ answer.author.image.url }}">
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <small class="font-italic text-muted">
+                                            Ostatnia aktywność: {{ news.news_answers.last.created_at|date:'d-M-Y | H:i' }}
+                                        </small>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </article>
+        
+    </article>
 
-    <!-- NEW NEWS & NEW SURVEY BUTTONS-->
-    <div class="mt-2 mb-5">
-        <a href="{% url 'news:topic-create' %}" class="btn btn-outline-dark">Nowy temat</a>
-        <a href="{% url 'news:news-create' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
-        {% if request.user.profile.status == 'gm' %}
-            <a href="{% url 'admin:news_survey_add' %}" class="btn btn-outline-dark">Nowa ankieta</a>
-        {% else %}
-            <a href="{% url 'news:survey-create' %}" class="btn btn-outline-dark">Nowa ankieta</a>
-        {% endif %}
-    </div>
+<br><br><br><br><br>
 
     <!-- SURVEYS -->
     {% for survey in surveys %}
@@ -48,39 +92,34 @@
     {% endfor %}
     <br><br>
 
-    <!-- NEWS -->
-    {% for news in newss %}
-        <div class="my-1 border rounded {% if news not in unseen_news %} bg-inner {% else %} bg-bluish {% endif %}">
-            <table class="ml-2 mr-2 mb-3 mt-1">
-                <tbody>
-                    <tr>
-                        <td class="align-top pt-2 pr-2">
-                            <img class="rounded-circle article-img" src="{{ news.news_answers.first.author.image.url }}">
-                            <br>
-                        </td>
-                        <td>
-                            <small class="font-italic text-nowrap text-muted">{{ news.created_at|date:'d-M-Y | H:i' }}</small>
-                            <h3><a href="{% url 'news:detail' news.id %}" class="border-bottom">{{ news.title }}</a></h3>
-                            {% if news.news_answers.all %}
-                                {% for answer in news.news_answers.all %}
-                                    <img class="rounded-circle img-small" src="{{ answer.author.image.url }}">
-                                {% endfor %}
-                                <br>
-                            {% endif %}
-                            <!--  following methods cost ca. 20 queries: -->
-                            <small class="font-italic text-muted">
-                                Ostatnia aktywność:
-                                {% if news.last_news_answer %}
-                                    {{ news.last_news_answer|date:'d-M-Y | H:i' }}<br>
-                                {% else %}
-                                    {{ news.created_at|date:'d-M-Y | H:i' }}<br>
-                                {% endif %}
-                            </small>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    {% endfor %}
+<!--    &lt;!&ndash; NEWS &ndash;&gt;-->
+<!--    {% for news in newss %}-->
+<!--        <div class="my-1 border rounded {% if news not in unseen_news %} bg-inner {% else %} bg-bluish {% endif %}">-->
+<!--            <table class="ml-2 mr-2 mb-3 mt-1">-->
+<!--                <tbody>-->
+<!--                    <tr>-->
+<!--                        <td class="align-top pt-2 pr-2">-->
+<!--                            <img class="rounded-circle article-img" src="{{ news.news_answers.first.author.image.url }}">-->
+<!--                            <br>-->
+<!--                        </td>-->
+<!--                        <td>-->
+<!--                            <small class="font-italic text-nowrap text-muted">{{ news.created_at|date:'d-M-Y | H:i' }}</small>-->
+<!--                            <h3><a href="{% url 'news:detail' news.id %}" class="border-bottom">{{ news.title }}</a></h3>-->
+<!--                            {% if news.news_answers.all %}-->
+<!--                                {% for answer in news.news_answers.all %}-->
+<!--                                    <img class="rounded-circle img-small" src="{{ answer.author.image.url }}">-->
+<!--                                {% endfor %}-->
+<!--                                <br>-->
+<!--                            {% endif %}-->
+<!--                            &lt;!&ndash;  following methods cost ca. 20 queries: &ndash;&gt;-->
+<!--                            <small class="font-italic text-muted">-->
+<!--                                Ostatnia aktywność: {{ news.news_answers.last.created_at|date:'d-M-Y | H:i' }}-->
+<!--                            </small>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+<!--    {% endfor %}-->
 
 {% endblock content %}
