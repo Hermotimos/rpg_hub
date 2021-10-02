@@ -79,7 +79,6 @@ def chronicle_game_view(request, game_id):
 
     context = {
         'page_title': game.title,
-        'game': game,
         'events': events,
     }
     if events:

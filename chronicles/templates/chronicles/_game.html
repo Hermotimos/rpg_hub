@@ -4,13 +4,13 @@
     <p class="mb-0 text-center">✧ ✦ ✧</p>
     <p class="h2 font-weight-bold py-1">
         {% if forloop.counter %}{{ forloop.counter }}. {% endif %}
-        {{ game.title }}
+        {{ page_title }}
     </p>
     <p class="mb-0 text-center">✧ ✦ ✧</p>
     <p class="mb-0 text-center">✧</p>
 </div>
 <div class="mt-2">
-    {% for event in game.game_events.all %}
+    {% for event in events %}
         {% include 'chronicles/_event.html' %}
     {% endfor %}
 </div>
