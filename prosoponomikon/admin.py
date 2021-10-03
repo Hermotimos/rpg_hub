@@ -124,20 +124,15 @@ class CharacterAdminForm(forms.ModelForm):
         ]
         widgets = {
             'frequented_locations': FilteredSelectMultiple(
-                'Frequented_locations', False, attrs={'style': 'height:300px'}
-            ),
+                'Frequented_locations', False),
             'biography_packets': FilteredSelectMultiple(
-                'Biography_packets', False, attrs={'style': 'height:300px'}
-            ),
+                'Biography_packets', False),
             'dialogue_packets': FilteredSelectMultiple(
-                'Dialogue_packets', False, attrs={'style': 'height:300px'}
-            ),
+                'Dialogue_packets', False),
             'known_directly': FilteredSelectMultiple(
-                'Known_directly', False, attrs={'style': 'height:200px'}
-            ),
+                'Known_directly', False),
             'known_indirectly': FilteredSelectMultiple(
-                'Known_indirectly', False, attrs={'style': 'height:200px'}
-            ),
+                'Known_indirectly', False),
         }
 
 
@@ -148,10 +143,6 @@ class CharacterAdmin(admin.ModelAdmin):
     list_editable = ['first_name', 'family_name', 'cognomen', 'description']
     search_fields = [
         'first_name__form', 'family_name__form', 'cognomen', 'description']
-    formfield_overrides = {
-        TextField: {'widget': Textarea(attrs={'rows': 4, 'cols': 50})},
-        CharField: {'widget': TextInput(attrs={'size': 25})},
-    }
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         fields = [
@@ -181,15 +172,10 @@ class CharacterGroupAdminForm(forms.ModelForm):
             'name', 'author', 'characters', 'default_knowledge_packets',
             'default_skills']
         widgets = {
-            'characters': FilteredSelectMultiple(
-                'Characters', False, attrs={'style': 'height:200px'}
-            ),
+            'characters': FilteredSelectMultiple('Characters', False),
             'default_knowledge_packets': FilteredSelectMultiple(
-                'Pakiety wiedzy', False, attrs={'style': 'height:200px'}
-            ),
-            'default_skills': FilteredSelectMultiple(
-                'Umiejetności', False, attrs={'style': 'height:200px'}
-            ),
+                'Pakiety wiedzy', False),
+            'default_skills': FilteredSelectMultiple('Umiejetności', False),
         }
 
 

@@ -4,7 +4,8 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.html import format_html
 
 from rpg_project.utils import update_rel_objs
-from rules.models import EliteProfession, EliteKlass, Profession, Klass, Plate, Shield, Weapon, Skill, Synergy
+from rules.models import EliteProfession, EliteKlass, Klass, Plate, Shield, \
+    Weapon, Skill, Synergy
 from users.models import Profile
 
 
