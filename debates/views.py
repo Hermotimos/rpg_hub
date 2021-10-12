@@ -135,7 +135,7 @@ def debate_view(request, debate_id):
 
     debate_known_directly = debate.known_directly.exclude(status='gm')
 
-    if debate.remarks.exclude(author__status='gm'):
+    if debate.remarks.exists:
         last_remark = debate.remarks.order_by('-created_at')[0]
         if not debate.is_ended:
             seen_by = last_remark.seen_by.all()
