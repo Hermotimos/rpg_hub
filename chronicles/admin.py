@@ -154,13 +154,16 @@ class HistoryEventAdmin(admin.ModelAdmin):
 
 
 class GameSessionAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        CharField: {'widget': TextInput(attrs={'size': 70})},
+    }
     inlines = [GameEventInline]
     list_display = ['game_no', 'title', 'chapter', 'date']
     list_editable = ['title', 'chapter', 'date']
     list_select_related = ['chapter']
     ordering = ['-game_no']
     search_fields = ['title']
-    
+
     def formfield_for_dbfield(self, db_field, **kwargs):
         fields = [
             'chapter',
