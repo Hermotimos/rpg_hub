@@ -136,12 +136,10 @@ def debate_view(request, debate_id):
     debate_known_directly = debate.known_directly.exclude(status='gm')
 
     if debate.remarks.exists:
-        last_remark = debate.remarks.order_by('-created_at')[0]
-        if not debate.is_ended:
-            seen_by = last_remark.seen_by.all()
-            if profile not in seen_by:
-                last_remark.seen_by.add(profile)
-
+        remarks = debate.remarks.all()
+        for remark in remarks:
+            remark.seen_by.add(profile)
+        
     # INFORM FORM
     if request.method == 'POST' and 'Debate' in request.POST:
         form = CreateRemarkForm(authenticated_user=request.user, debate_id=debate_id)
