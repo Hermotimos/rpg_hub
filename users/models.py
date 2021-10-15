@@ -140,19 +140,18 @@ class Profile(Model):
     @property
     def unseen_news(self):
         from news.models import NewsAnswer
-        allowed_news = self.allowed_news.all()
+        allowed = self.allowed_news.all()
         
-        allowed_news_annotated = allowed_news.annotate(
-            last_answer_id=Max('news_answers__id')
+        allowed_annotated = allowed.annotate(
+            last_answer_id=Max('news_answers')
         ).filter(news_answers__id=F('last_answer_id'))
-
-        last_news_answers_ids = [
-            news.last_answer_id for news in allowed_news_annotated
-        ]
+        
+        last_news_answers_ids = [news.last_answer_id for news in allowed_annotated]
         last_news_answers_unseen = NewsAnswer.objects.filter(
             id__in=last_news_answers_ids).filter(~Q(seen_by=self))
+        print(last_news_answers_unseen)
         
-        news_with_unseen_last_answer = allowed_news.filter(
+        news_with_unseen_last_answer = allowed.filter(
             news_answers__in=last_news_answers_unseen)
 
         return news_with_unseen_last_answer
@@ -160,23 +159,42 @@ class Profile(Model):
     @property
     def unseen_surveys(self):
         from news.models import SurveyAnswer
-        surveys_received = self.surveys_received.exclude(author=self)
-        surveys_unseen = surveys_received.exclude(seen_by=self)
+        allowed = self.surveys_received.exclude(author=self)
+        surveys_unseen = allowed.exclude(seen_by=self)
         
-        surveys_received_annotated = surveys_received.annotate(
+        allowed_annotated = allowed.annotate(
             last_answer_id=Max('survey_answers__id')
         ).filter(survey_answers__id=F('last_answer_id'))
         
-        last_survey_answers_ids = [
-            survey.last_answer_id for survey in surveys_received_annotated
-        ]
+        last_survey_answers_ids = [survey.last_answer_id for survey in allowed_annotated]
         last_survey_answers_unseen = SurveyAnswer.objects.filter(
             id__in=last_survey_answers_ids).filter(~Q(seen_by=self))
         
-        surveys_with_unseen_last_answer = surveys_received.filter(
+        surveys_with_unseen_last_answer = allowed.filter(
             survey_answers__in=last_survey_answers_unseen)
             
         return (surveys_unseen | surveys_with_unseen_last_answer).distinct()
+
+    @property
+    def unseen_debates(self):
+        from debates.models import Remark, Debate
+        if self.status == 'gm':
+            allowed = Debate.objects.all()
+        else:
+            allowed = self.debates_known_directly.all()
+        
+        allowed_annotated = allowed.annotate(
+            last_remark_id=Max('remarks__id')
+        ).filter(remarks__id=F('last_remark_id'))
+        
+        last_remarks_ids = [debate.last_remark_id for debate in allowed_annotated]
+        last_remarks_unseen = Remark.objects.filter(
+            id__in=last_remarks_ids).filter(~Q(seen_by=self))
+
+        debates_with_unseen_last_remark = allowed.filter(
+            remarks__in=last_remarks_unseen)
+
+        return debates_with_unseen_last_remark
 
     @property
     def can_view_all(self):

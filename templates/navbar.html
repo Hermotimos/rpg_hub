@@ -21,7 +21,7 @@
     
             <!-- Navbar Left Side -->
             <ul class="navbar-nav mr-auto">
-    
+                
                 {% with undone_demands=request.user.profile.undone_demands unseen_news=request.user.profile.unseen_news unseen_surveys=request.user.profile.unseen_surveys %}
                     <li class="dropdown pr-4 mr-auto">
                         <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
@@ -32,7 +32,7 @@
                                 <li>
                                     <a class="font-14 nav-link small-caps" href="{% url 'contact:demands-main' %}">Dezyderaty</a>
                                     {% if undone_demands %}
-                                        <div class="info-row-sub float-right">
+                                        <div class="info-row-sub demands-bubble float-right">
                                             <div class="number-circle-sub bg-red d-flex align-items-center">
                                                 <span class="mx-auto number-circle-main-inner">{{ undone_demands.count }}</span>
                                             </div>
@@ -42,7 +42,7 @@
                                 {% if user.profile.status != 'spectator' %}
                                     <li>
                                         <a class="font-14 nav-link small-caps" href="{% url 'news:main' %}">Ogłoszenia</a>
-                                        <div class="row info-row-sub float-right">
+                                        <div class="row info-row-sub news-bubble float-right">
                                             {% if unseen_surveys %}
                                                 <div class="number-circle-sub bg-greengray d-flex align-items-center">
                                                     <span class="mx-auto number-circle-main-inner">{{ unseen_surveys.count }}</span>
@@ -78,19 +78,39 @@
                         </div>
                     </li>
                 {% endwith %}
-    
-                <li class="dropdown pr-4">
-                    <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Przygody</button>
-                    <div class="dropdown-content">
-                        <ul class="bullets-1 pl-4">
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'chronicles:timeline' %}">Kalendarium</a></li>
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'chronicles:chronicle-main' %}">Kronika</a></li>
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'debates:main' %}">Narady</a></li>
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'prosoponomikon:ungrouped' %}">Prosoponomikon</a></li>
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'toponomikon:main' %}">Toponomikon</a></li>
-                        </ul>
-                    </div>
-                </li>
+                
+                {% with unseen_debates=request.user.profile.unseen_debates %}
+                    <li class="dropdown pr-4 mr-auto">
+                        <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
+                            Przygody
+                        </button>
+                        <div class="dropdown-content">
+                            <ul class="bullets-1 pl-4">
+                                <li><a class="font-14 nav-link small-caps" href="{% url 'chronicles:timeline' %}">Kalendarium</a></li>
+                                <li><a class="font-14 nav-link small-caps" href="{% url 'chronicles:chronicle-main' %}">Kronika</a></li>
+                                <li>
+                                    <a class="font-14 nav-link small-caps" href="{% url 'debates:main' %}">Narady</a>
+                                    <div class="row info-row-sub debates-bubble float-right">
+                                        {% if unseen_debates %}
+                                            <div class="number-circle-sub bg-greengray d-flex align-items-center">
+                                                <span class="mx-auto number-circle-main-inner">{{ unseen_debates.count }}</span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </li>
+                                <li><a class="font-14 nav-link small-caps" href="{% url 'prosoponomikon:ungrouped' %}">Prosoponomikon</a></li>
+                                <li><a class="font-14 nav-link small-caps" href="{% url 'toponomikon:main' %}">Toponomikon</a></li>
+                            </ul>
+                        </div>
+                        <div class="row info-row float-right mr-n2">
+                            {% if unseen_debates %}
+                                <div class="number-circle-main bg-greengray d-flex align-items-center">
+                                    <span class="mx-auto number-circle-main-inner">{{ unseen_debates.count }}</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endwith %}
     
                 <li class="dropdown pr-4">
                     <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Wiedza</button>

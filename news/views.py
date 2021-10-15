@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from news.forms import (CreateNewsForm, CreateTopicForm, CreateNewsAnswerForm,
                         CreateSurveyForm, CreateSurveyOptionForm,
                         CreateSurveyAnswerForm, ModifySurveyOptionForm)
-from news.models import Topic, News, Survey, SurveyOption
+from news.models import Topic, News, Survey, SurveyOption, NewsAnswer
 from users.models import Profile
 
 
@@ -112,24 +112,18 @@ def create_news_view(request):
 @login_required
 def news_detail_view(request, news_id):
     profile = request.user.profile
-    news = get_object_or_404(News, id=news_id)
+    news = News.objects.prefetch_related(
+        'news_answers__seen_by', 'news_answers__author', 'followers',
+        'allowed_profiles')
+    news = news.get(id=news_id)
 
-    news_allowed_profiles = news.allowed_profiles.all()
-    news_followers = news.followers.all()
-
-    news_seen_by = news.seen_by.all()
-    if profile not in news_seen_by:
-        news.seen_by.add(profile)
-
-    answers = []
-    last_answer_seen_by_imgs = []
-    if news.news_answers.all():
-        answers = news.news_answers.select_related('author')
-        last_answer = news.news_answers.order_by('-created_at')[0]
-        if profile not in last_answer.seen_by.all():
-            last_answer.seen_by.add(profile)
-            
-        last_answer_seen_by_imgs = (p.image for p in last_answer.seen_by.all())
+    # Update all news_answers to be seen by the profile
+    SeenBy = NewsAnswer.seen_by.through
+    relations = []
+    for news_answer in news.news_answers.all():
+        relations.append(
+            SeenBy(newsanswer_id=news_answer.id, profile_id=profile.id))
+    SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
 
     if request.method == 'POST':
         form = CreateNewsAnswerForm(request.POST, request.FILES)
@@ -145,7 +139,7 @@ def news_detail_view(request, news_id):
                       f"Odpowiedź:\n{answer.text}"
             sender = settings.EMAIL_HOST_USER
             receivers = []
-            for p in news_followers:
+            for p in news.followers.all():
                 if p.user != request.user:
                     receivers.append(p.user.email)
             if profile.status != 'gm':
@@ -160,12 +154,7 @@ def news_detail_view(request, news_id):
     context = {
         'page_title': news.title,
         'news': news,
-        'answers': answers,
-        'news_seen_by': news_seen_by,
-        'last_answer_seen_by_imgs': last_answer_seen_by_imgs,
         'form': form,
-        'news_allowed_profiles': news_allowed_profiles,
-        'news_followers': news_followers,
     }
     if profile in news.allowed_profiles.all() or profile.status == 'gm':
         return render(request, 'news/news_detail.html', context)
