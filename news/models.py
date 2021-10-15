@@ -5,10 +5,12 @@ from django.db.models import (
     CASCADE,
     CharField,
     DateTimeField,
+    F,
     ForeignKey as FK,
     ImageField,
     Manager,
     ManyToManyField as M2M,
+    Max,
     Model,
     TextField,
 )
@@ -27,9 +29,18 @@ class Topic(Model):
 
     def __str__(self):
         return self.title
-    
+
+
+class NewsManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.annotate(last_activity_date=Max(F('news_answers__created_at')))
+        return qs
+
 
 class News(Model):
+    objects = NewsManager()
+    
     title = CharField(max_length=100, unique=True)
     topic = FK(to=Topic, related_name='news', on_delete=CASCADE)
     allowed_profiles = M2M(to=Profile, related_name='allowed_news')
