@@ -19,7 +19,7 @@ from users.models import Profile
 
 
 class Topic(Model):
-    title = CharField(max_length=77, unique=True)
+    title = CharField(max_length=100, unique=True)
     created_at = DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -30,7 +30,7 @@ class Topic(Model):
 
 
 class Debate(Model):
-    title = CharField(max_length=77, unique=True)
+    title = CharField(max_length=100, unique=True)
     topic = FK(to=Topic, related_name='debates', on_delete=CASCADE)
     known_directly = M2M(
         to=Profile,
