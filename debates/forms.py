@@ -56,9 +56,11 @@ class CreateRemarkForm(forms.ModelForm):
         model = Remark
         fields = ['author', 'text', 'image']
 
-    def __init__(self, known_directly, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
+        known_directly = kwargs.pop('known_directly')
         super().__init__(*args, **kwargs)
+        
         if authenticated_user.profile.status != 'gm':
             self.fields['author'].widget = HiddenInput()
         else:
