@@ -143,9 +143,9 @@ class Profile(Model):
         allowed_news = self.allowed_news.all()
         
         allowed_news_annotated = allowed_news.annotate(
-            last_answer_id=Max('news_answers__created_at')
+            last_answer_id=Max('news_answers__id')
         ).filter(news_answers__id=F('last_answer_id'))
-        
+
         last_news_answers_ids = [
             news.last_answer_id for news in allowed_news_annotated
         ]
@@ -154,7 +154,7 @@ class Profile(Model):
         
         news_with_unseen_last_answer = allowed_news.filter(
             news_answers__in=last_news_answers_unseen)
-            
+
         return news_with_unseen_last_answer
     
     @property
