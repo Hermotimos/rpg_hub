@@ -101,7 +101,6 @@ def create_news_view(request):
         messages.info(request, f"Utworzono nowe ogłoszenie!")
         return redirect('news:detail', news_id=news.id)
 
-
     context = {
         'page_title': "Nowe ogłoszenie",
         'form_1': news_form,
@@ -129,6 +128,7 @@ def news_detail_view(request, news_id):
         last_answer = news.news_answers.order_by('-created_at')[0]
         if profile not in last_answer.seen_by.all():
             last_answer.seen_by.add(profile)
+            
         last_answer_seen_by_imgs = (p.image for p in last_answer.seen_by.all())
 
     if request.method == 'POST':

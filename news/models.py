@@ -19,7 +19,7 @@ from users.models import Profile
 
 
 class Topic(Model):
-    title = CharField(max_length=77, verbose_name='Temat')
+    title = CharField(max_length=100, unique=True)
     created_at = DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -30,10 +30,9 @@ class Topic(Model):
     
 
 class News(Model):
-    title = CharField(max_length=100, verbose_name="Tytuł")
-    topic = FK(to=Topic, related_name='news', on_delete=CASCADE, null=True, blank=True, verbose_name="Temat ogłoszenia")     # TODO mandatory after changes
-    allowed_profiles = M2M(
-        to=Profile, related_name='allowed_news', verbose_name="Adresaci")
+    title = CharField(max_length=100, unique=True)
+    topic = FK(to=Topic, related_name='news', on_delete=CASCADE)
+    allowed_profiles = M2M(to=Profile, related_name='allowed_news')
     created_at = DateTimeField(auto_now_add=True)
     seen_by = M2M(to=Profile, related_name='news_seen', blank=True)
     followers = M2M(to=Profile, related_name='followed_news', blank=True)

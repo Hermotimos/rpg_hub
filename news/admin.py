@@ -30,7 +30,8 @@ class SurveyAdminForm(forms.ModelForm):
 
 
 class TopicAdmin(admin.ModelAdmin):
-    list_display = ['title', 'created_at']
+    list_display = ['id', 'title', 'created_at']
+    list_editable = ['title']
     search_fields = ['title']
     
     
