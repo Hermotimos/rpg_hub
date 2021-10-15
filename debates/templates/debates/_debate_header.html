@@ -11,7 +11,7 @@
         </div>
         <!-- The Modal -->
         <div class="modal fade img-modal" id="infoDebateModal" tabindex="-1" role="dialog" aria-hidden="true">
-            {% with informables=debate.informables inform_type=debate|get_model_name id_=debate.id %}
+            {% with informables=informables inform_type=debate|get_model_name id_=debate.id %}
                 {% include '_inform.html' %}
             {% endwith %}
         </div>
