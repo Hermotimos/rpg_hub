@@ -12,6 +12,8 @@ class CreateTopicForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
+        self.fields['title'].label = "Tytuł nowego tematu"
+
         
 class CreateNewsForm(forms.ModelForm):
     
@@ -32,9 +34,14 @@ class CreateNewsForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         allowed_profiles = Profile.active_players.exclude(
             user=authenticated_user)
+        
         self.fields['allowed_profiles'].queryset = allowed_profiles
         self.fields['allowed_profiles'].widget.attrs['size'] = min(
             len(allowed_profiles), 10)
+        
+        self.fields['allowed_profiles'].label = "Adresaci"
+        self.fields['title'].label = "Tytuł"
+        self.fields['topic'].label = "Temat"
 
        
 class CreateNewsAnswerForm(forms.ModelForm):
@@ -45,9 +52,11 @@ class CreateNewsAnswerForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['image'].label = 'Załącz obraz:'
-        self.fields['image'].required = False
+        
+        self.fields['image'].label = 'Załącz obraz'
         self.fields['text'].label = ''
+
+        self.fields['image'].required = False
         self.fields['text'].max_length = 4000
         self.fields['text'].widget.attrs = {
             'cols': 60, 'rows': 10,

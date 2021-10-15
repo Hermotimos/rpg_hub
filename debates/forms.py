@@ -84,7 +84,7 @@ class CreateRemarkForm(forms.ModelForm):
             )
         
         self.fields['author'].label = "Autor"
-        self.fields['image'].label = "Obraz"
+        self.fields['image'].label = "Załącz obraz"
         self.fields['text'].label = ''
 
         self.fields['text'].widget.attrs = {
