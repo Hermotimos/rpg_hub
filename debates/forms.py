@@ -56,21 +56,14 @@ class CreateRemarkForm(forms.ModelForm):
         model = Remark
         fields = ['author', 'text', 'image']
 
-    def __init__(self, *args, **kwargs):
-        debate_id = kwargs.pop('debate_id', None)
-        if debate_id:
-            debate = Debate.objects.get(id=debate_id)
-            debate_known_directly = debate.known_directly.all()
-        else:
-            debate_known_directly = Profile.living.all()
-            
+    def __init__(self, known_directly, *args, **kwargs):
         authenticated_user = kwargs.pop('authenticated_user')
         super().__init__(*args, **kwargs)
         if authenticated_user.profile.status != 'gm':
             self.fields['author'].widget = HiddenInput()
         else:
             self.fields['author'].queryset = Profile.objects.filter(
-                Q(status='gm') | Q(id__in=debate_known_directly)
+                Q(status='gm') | Q(id__in=known_directly)
             )
             
         self.fields['text'].label = ''

@@ -99,7 +99,7 @@ def create_debate_view(request):
                                    files=request.FILES or None,
                                    authenticated_user=request.user,
                                    initial={'author': request.user},
-                                   debate_id=0)
+                                   known_directly=Profile.living.all())
     
     if debate_form.is_valid() and remark_form.is_valid():
         debate = debate_form.save(commit=False)
@@ -144,14 +144,19 @@ def debate_view(request, debate_id):
     
     # INFORM FORM
     if request.method == 'POST' and 'Debate' in request.POST:
-        form = CreateRemarkForm(authenticated_user=request.user, debate_id=debate_id)
+        form = CreateRemarkForm(
+            authenticated_user=request.user,
+            known_directly=debate_known_directly)
         handle_inform_form(request)
 
     # REMARK FORM
     elif request.method == 'POST' and 'author' in request.POST:
-        form = CreateRemarkForm(request.POST, request.FILES,
-                                authenticated_user=request.user,
-                                debate_id=debate_id)
+        form = CreateRemarkForm(
+            request.POST,
+            request.FILES,
+            authenticated_user=request.user,
+            known_directly=debate_known_directly)
+        
         if form.is_valid():
             remark = form.save(commit=False)
             remark.debate = debate
@@ -163,9 +168,10 @@ def debate_view(request, debate_id):
                 messages.info(request, f'Twój głos zabrzmiał w naradzie!')
             return redirect('debates:debate', debate_id=debate_id)
     else:
-        form = CreateRemarkForm(initial={'author': request.user},
-                                authenticated_user=request.user,
-                                debate_id=debate_id)
+        form = CreateRemarkForm(
+            initial={'author': request.user},
+            authenticated_user=request.user,
+            known_directly=debate_known_directly)
 
     informables = debate.informables().filter(
         character__in=profile.characters_known_directly.all())
