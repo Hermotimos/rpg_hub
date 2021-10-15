@@ -28,7 +28,8 @@ class DebateAdminForm(forms.ModelForm):
     
     
 class TopicAdmin(admin.ModelAdmin):
-    list_display = ['title', 'created_at']
+    list_display = ['id', 'title', 'order_no', 'created_at']
+    list_editable = ['title',  'order_no']
     search_fields = ['title']
 
 

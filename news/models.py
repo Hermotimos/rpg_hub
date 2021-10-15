@@ -12,6 +12,7 @@ from django.db.models import (
     ManyToManyField as M2M,
     Max,
     Model,
+    SmallIntegerField,
     TextField,
 )
 from django.db.models.signals import post_save
@@ -22,10 +23,11 @@ from users.models import Profile
 
 class Topic(Model):
     title = CharField(max_length=100, unique=True)
+    order_no = SmallIntegerField(default=100)
     created_at = DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['title']
+        ordering = ['order_no', 'title']
 
     def __str__(self):
         return self.title
