@@ -19,7 +19,7 @@ from users.models import Profile
 
 
 class Topic(Model):
-    title = CharField(max_length=77, unique=True, verbose_name='Temat narady')
+    title = CharField(max_length=77, unique=True)
     created_at = DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -30,15 +30,14 @@ class Topic(Model):
 
 
 class Debate(Model):
-    title = CharField(max_length=77, unique=True, verbose_name='Tytuł narady')
+    title = CharField(max_length=77, unique=True)
     topic = FK(to=Topic, related_name='debates', on_delete=CASCADE)
     known_directly = M2M(
         to=Profile,
-        related_name='debates_known_directly',
-        verbose_name='Uczestnicy')
+        related_name='debates_known_directly')
     created_at = DateTimeField(auto_now_add=True)
     is_ended = BooleanField(default=False)
-    is_exclusive = BooleanField(verbose_name='Narada zamknięta?')
+    is_exclusive = BooleanField()
 
     class Meta:
         ordering = ['created_at']
@@ -55,18 +54,8 @@ class Debate(Model):
 class Remark(Model):
     text = TextField()
     debate = FK(to=Debate, related_name='remarks', on_delete=CASCADE)
-    author = FK(
-        to=Profile,
-        related_name='remarks',
-        on_delete=PROTECT,
-        verbose_name='Autor',
-    )
-    image = ImageField(
-        upload_to='post_pics',
-        blank=True,
-        null=True,
-        verbose_name='Obraz',
-    )
+    author = FK(to=Profile, related_name='remarks', on_delete=PROTECT)
+    image = ImageField(upload_to='post_pics', blank=True, null=True)
     seen_by = M2M(to=Profile, related_name='remarks_seen', blank=True)
     created_at = DateTimeField(auto_now_add=True)
 

@@ -39,8 +39,8 @@ def create_topic_view(request):
     if form.is_valid():
         topic = form.save()
         messages.info(
-            request, f"Utworzono nowy temat narad: '{topic.title}'!")
-        return redirect('debates:main')
+            request,  f"Utworzono nowy temat: '{topic.title}'! Utwórz naradę!")
+        return redirect('debates:create-debate', topic_id=topic.id)
 
     context = {
         'page_title': "Nowy temat narad",
@@ -90,11 +90,14 @@ def create_topic_view(request):
 
 
 @login_required
-def create_debate_view(request):
+def create_debate_view(request, topic_id=0):
     profile = request.user.profile
+    topic = Topic.objects.get(pk=topic_id) if topic_id else Topic.objects.none()
 
     debate_form = CreateDebateForm(data=request.POST or None,
-                                   authenticated_user=request.user)
+                                   authenticated_user=request.user,
+                                   initial={'topic': topic})
+    
     remark_form = CreateRemarkForm(data=request.POST or None,
                                    files=request.FILES or None,
                                    authenticated_user=request.user,
