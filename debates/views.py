@@ -4,7 +4,7 @@ from django.db.models import Prefetch
 from django.shortcuts import render, redirect
 
 from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm
-from debates.models import Topic, Debate
+from debates.models import Topic, Debate, Remark
 from rpg_project.utils import send_emails, handle_inform_form
 from users.models import Profile
 
@@ -135,11 +135,13 @@ def debate_view(request, debate_id):
 
     debate_known_directly = debate.known_directly.exclude(status='gm')
 
-    if debate.remarks.exists:
-        remarks = debate.remarks.all()
-        for remark in remarks:
-            remark.seen_by.add(profile)
-        
+    # Update all remarks to be seen by the profile
+    SeenBy = Remark.seen_by.through
+    relations = []
+    for remark in debate.remarks.all():
+        relations.append(SeenBy(remark_id=remark.id, profile_id=profile.id))
+    SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
+    
     # INFORM FORM
     if request.method == 'POST' and 'Debate' in request.POST:
         form = CreateRemarkForm(authenticated_user=request.user, debate_id=debate_id)
