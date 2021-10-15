@@ -49,7 +49,6 @@ class Debate(Model):
     def informables(self):
         qs = Profile.living.all()
         qs = qs.exclude(id__in=self.known_directly.all())
-        print(qs)
         return qs
 
 
