@@ -74,60 +74,7 @@ class GameSession(Model):
     
     def __str__(self):
         return self.title
-
-
-class Thread(Model):
-    name = CharField(max_length=100, unique=True)
-    is_ended = BooleanField(default=False)
-    sorting_name = CharField(max_length=250, blank=True, null=True)
     
-    def __str__(self):
-        return self.name
-    
-    def save(self, *args, **kwargs):
-        if self.name:
-            self.sorting_name = create_sorting_name(self.name)
-        super().save(*args, **kwargs)
-    
-    class Meta:
-        ordering = ['sorting_name']
-        verbose_name = '- Thread'
-
-
-class ThreadActiveManager(Manager):
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(is_ended=False)
-        return qs
-
-#
-# class ThreadActive(Thread):
-#     objects = ThreadActiveManager()
-#
-#     class Meta:
-#         proxy = True
-#         verbose_name = '- Active Thread'
-#         verbose_name_plural = '- Threads Active'
-#
-#
-
-class ThreadEndedManager(Manager):
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(is_ended=True)
-        return qs
-
-#
-# class ThreadEnded(Thread):
-#     objects = ThreadEndedManager()
-#
-#     class Meta:
-#         proxy = True
-#         verbose_name = '- Ended Thread'
-#         verbose_name_plural = '- Threads Ended'
-
 
 class PlotThreadManager(Manager):
     pass
@@ -168,20 +115,7 @@ class PlotThread(Model):
     
     class Meta:
         ordering = ['sorting_name']
-        verbose_name = '- Thread'
-
-
-#
-# class ThreadActive(Thread):
-#     objects = ThreadActiveManager()
-#
-#     class Meta:
-#         proxy = True
-#         verbose_name = '- Active Thread'
-#         verbose_name_plural = '- Threads Active'
-#
-#
-
+        verbose_name = '- PlotThread'
 
 
 class Date(Model):
@@ -283,7 +217,6 @@ class TimeUnit(Model):
     name_genetive = CharField(max_length=256, blank=True, null=True)
 
     # Fields for HistoryEvent & GameEvent proxies
-    threads = M2M(to=Thread, related_name='events', blank=True)
     plot_threads = M2M(to=PlotThread, related_name='events', blank=True)
     locations = M2M(to=Location, related_name='events', blank=True)
     audio = FK(

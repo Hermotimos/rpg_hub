@@ -6,12 +6,13 @@ from django_filters import (
     ModelMultipleChoiceFilter,
 )
 
-from chronicles.models import GameEvent, Thread, Location, GameSession, Profile
+from chronicles.models import GameEvent, PlotThread, Location, GameSession, \
+    Profile
 
 
-def threads(request):
+def plot_threads(request):
     profile = request.user.profile
-    objects = Thread.objects.all()
+    objects = PlotThread.objects.all()
     if not profile.can_view_all:
         objects = objects.filter(
             Q(events__known_directly=profile)
@@ -64,7 +65,8 @@ class GameEventFilter(FilterSet):
         label="Wydarzenie w Kronice:",
         widget=TextInput(attrs={'placeholder': 'Szukaj w tekście Wydarzenia'})
     )
-    threads = ModelMultipleChoiceFilter(queryset=threads, label="Wątki:")
+    plot_threads = ModelMultipleChoiceFilter(
+        queryset=plot_threads, label="Wątki:")
     locations = ModelMultipleChoiceFilter(
         queryset=locations, label="Lokacje:",
     )

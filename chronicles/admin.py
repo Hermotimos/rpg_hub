@@ -5,7 +5,7 @@ from django.db.models import TextField, CharField, ForeignKey, OneToOneField
 from django.forms import Textarea, TextInput, Select
 from rpg_project.utils import formfield_for_dbfield_cached
 from chronicles.models import (
-    Thread, # ThreadActive, ThreadEnded,
+    PlotThread,
     Date,
     TimeUnit, Chronology, Era, Period, HistoryEvent, GameEvent,
     Chapter,
@@ -26,8 +26,8 @@ class GameEventAdminForm(forms.ModelForm):
         model = GameEvent
         fields = ['game', 'event_no_in_game', 'date_start', 'date_end',
                   'in_timeunit', 'description_short', 'description_long',
-                  'threads', 'locations', 'known_directly', 'known_indirectly',
-                  'picture_sets', 'debates', 'audio']
+                  'plot_threads', 'locations', 'known_directly',
+                  'known_indirectly', 'picture_sets', 'debates', 'audio']
         widgets = {
             'known_directly': FilteredSelectMultiple(
                 'Known directly', False, attrs={'style': 'height:100px'}
@@ -41,8 +41,8 @@ class GameEventAdminForm(forms.ModelForm):
             'picture_sets': FilteredSelectMultiple(
                 'Picture Sets', False, attrs={'style': 'height:100px'}
             ),
-            'threads': FilteredSelectMultiple(
-                'Threads', False, attrs={'style': 'height:100px'}
+            'plot_threads': FilteredSelectMultiple(
+                'PlotThreads', False, attrs={'style': 'height:100px'}
             ),
             'debates': FilteredSelectMultiple(
                 'Debates', False, attrs={'style': 'height:100px'}
@@ -51,7 +51,7 @@ class GameEventAdminForm(forms.ModelForm):
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['threads'].label = 'Active Threads'
+        self.fields['plot_threads'].label = 'Active PlotThreads'
         self.fields['known_directly'].queryset = Profile.non_gm.all()
         self.fields['known_indirectly'].queryset = Profile.non_gm.all()
 
@@ -98,7 +98,7 @@ class GameEventInline(admin.TabularInline):
             'known_directly',
             'known_indirectly',
             'locations',
-            'threads',    # To allow for filtering in GameEventAdminForm
+            'plot_threads',    # To allow for filtering in GameEventAdminForm
             'picture_sets',
             'audio',
             'debates',
@@ -110,7 +110,7 @@ class HistoryEventAdminForm(forms.ModelForm):
     class Meta:
         model = GameEvent
         fields = ['date_start', 'date_end', 'in_timeunit', 'description_short',
-                  'description_long', 'threads', 'locations',
+                  'description_long', 'plot_threads', 'locations',
                   'known_short_desc', 'known_long_desc']
         widgets = {
             'known_short_desc': FilteredSelectMultiple(
@@ -125,14 +125,14 @@ class HistoryEventAdminForm(forms.ModelForm):
             'picture_sets': FilteredSelectMultiple(
                 'Picture Sets', False, attrs={'style': 'height:100px'}
             ),
-            'threads': FilteredSelectMultiple(
-                'Threads', False, attrs={'style': 'height:100px'}
+            'plot_threads': FilteredSelectMultiple(
+                'PlotThreads', False, attrs={'style': 'height:100px'}
             ),
         }
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['threads'].label = 'Active Threads'
+        self.fields['plot_threads'].label = 'Active PlotThreads'
         self.fields['known_short_desc'].queryset = Profile.non_gm.all()
         self.fields['known_long_desc'].queryset = Profile.non_gm.all()
         
@@ -148,7 +148,7 @@ class HistoryEventAdmin(admin.ModelAdmin):
     
 # ----------------------------------------------
 # ----------------------------------------------
-# -------- GameSession, Chapter & Thread -------
+# ------ GameSession, Chapter & PlotThread -----
 # ----------------------------------------------
 # ----------------------------------------------
 
@@ -178,18 +178,11 @@ class ChapterAdmin(admin.ModelAdmin):
     select_related = ['image']
 
 
-class ThreadAdmin(admin.ModelAdmin):
+class PlotThreadAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'is_ended']
     list_editable = ['name', 'is_ended']
+    list_filter = ['is_ended']
     search_fields = ['name']
-
-
-class ThreadActiveAdmin(ThreadAdmin):
-    pass
-
-
-class ThreadEndedAdmin(ThreadAdmin):
-    pass
 
 
 # ----------------------------------------------
@@ -300,9 +293,7 @@ class PeriodAdmin(EraAdmin):
 
 
 # Chronicle models
-admin.site.register(Thread, ThreadAdmin)
-# admin.site.register(ThreadActive, ThreadActiveAdmin)
-# admin.site.register(ThreadEnded, ThreadEndedAdmin)
+admin.site.register(PlotThread, PlotThreadAdmin)
 admin.site.register(Date)
 admin.site.register(Chapter, ChapterAdmin)
 admin.site.register(GameSession, GameSessionAdmin)

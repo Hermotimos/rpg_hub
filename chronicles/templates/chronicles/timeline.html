@@ -68,7 +68,7 @@
                             </div>
                 
                             <div class="row pl-0 pl-sm-2">
-                                <!-- Threads -->
+                                <!-- PlotThreads -->
                                 <div class="col-12 col-lg-6 my-3 container px-0">
                                     <div class="row">
                                         <div class="col-2 px-2 d-none d-sm-block">
@@ -78,11 +78,11 @@
                                         </div>
                                         <div class="col-10 container">
                                             <div class="row">
-                                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.threads.label }}</p>
+                                                <p class="h4 font-weight-bold border-bottom">{{ events_filter.form.plot_threads.label }}</p>
                                             </div>
                                             <div class="row" data-toggle="tooltip" data-placement="top" data-html="true"
                                                  title='<span class="font-italic">Wciśnij CTRL, aby zaznaczyć wiele albo odznaczyć wybór.</span>'>
-                                                {{ events_filter.form.threads }}
+                                                {{ events_filter.form.plot_threads }}
                                             </div>
                                         </div>
                                     </div>
@@ -180,7 +180,7 @@
         <table class="timeline">
             <colgroup>
                 <col class="date">
-                <col class="thread">
+                <col class="plot_thread">
                 <col class="description">
                 <col class="participants">
                 <col class="locations">
@@ -204,17 +204,12 @@
                     <td class="font-13 align-center align-top" data-toggle="collapse" data-target="#event_{{ event.id }}">
                         <b>{{ event.date_in_period|add_season_img }}</b>
                     </td>
-                    <!-- THREADS -->
+                    <!-- PLOT THREADS -->
                     <td class="font-13 align-top unblue-black pl-2">
                         <ul class="bullets-1 pl-2">
-                            {% for thread in event.threads.all %}
-                                <li class="pl-0-15 {% if thread.is_ended %} text-muted {% endif %}">
-                                    {{ thread }}
-                                </li>
-                            {% endfor %}
-                            {% for thread in event.plot_threads.all %}
-                                <li class="pl-0-15 {% if thread.is_ended %} text-muted {% endif %}">
-                                    {{ thread }}
+                            {% for plot_thread in event.plot_threads.all %}
+                                <li class="pl-0-15 {% if plot_thread.is_ended %} text-muted {% endif %}">
+                                    {{ plot_thread }}
                                 </li>
                             {% endfor %}
                         </ul>
