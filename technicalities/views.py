@@ -105,6 +105,27 @@ def reload_toponomikon(request):
     return redirect('technicalities:reload-main')
 
 
+@login_required
+@only_game_masters
+def reload_threads_to_plotthreads(request):
+    from chronicles.models import PlotThread, TimeUnit
+    
+    for time_unit in TimeUnit.objects.all():
+        threads = time_unit.threads.all()
+        plot_threads = []
+        
+        for thread in threads:
+            plot_thread, _ = PlotThread.objects.get_or_create(
+                name=thread.name, is_ended=thread.is_ended)
+            plot_threads.append(plot_thread)
+        
+        time_unit.plot_threads.set(plot_threads)
+        print(time_unit)
+        
+    messages.info(request, 'Przeładowano "Threads" !')
+    return redirect('technicalities:reload-main')
+
+
 # @login_required
 # @only_game_masters
 # def reload_news(request):

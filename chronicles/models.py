@@ -95,23 +95,45 @@ class Thread(Model):
 
 
 class ThreadActiveManager(Manager):
-    
+
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(is_ended=False)
         return qs
 
-
-class ThreadActive(Thread):
-    objects = ThreadActiveManager()
-    
-    class Meta:
-        proxy = True
-        verbose_name = '- Active Thread'
-        verbose_name_plural = '- Threads Active'
-
+#
+# class ThreadActive(Thread):
+#     objects = ThreadActiveManager()
+#
+#     class Meta:
+#         proxy = True
+#         verbose_name = '- Active Thread'
+#         verbose_name_plural = '- Threads Active'
+#
+#
 
 class ThreadEndedManager(Manager):
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(is_ended=True)
+        return qs
+
+#
+# class ThreadEnded(Thread):
+#     objects = ThreadEndedManager()
+#
+#     class Meta:
+#         proxy = True
+#         verbose_name = '- Ended Thread'
+#         verbose_name_plural = '- Threads Ended'
+
+
+class PlotThreadManager(Manager):
+    pass
+
+
+class PlotThreadEndedManager(Manager):
     
     def get_queryset(self):
         qs = super().get_queryset()
@@ -119,13 +141,47 @@ class ThreadEndedManager(Manager):
         return qs
 
 
-class ThreadEnded(Thread):
-    objects = ThreadEndedManager()
+class PlotThreadActiveManager(Manager):
+    
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(is_ended=False)
+        return qs
+
+
+class PlotThread(Model):
+    name = CharField(max_length=100, unique=True)
+    is_ended = BooleanField(default=False)
+    sorting_name = CharField(max_length=250, blank=True, null=True)
+    
+    objects = PlotThreadManager()
+    plot_threads_ended = PlotThreadEndedManager()
+    plot_threads_active = PlotThreadActiveManager()
+    
+    def __str__(self):
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.sorting_name = create_sorting_name(self.name)
+        super().save(*args, **kwargs)
     
     class Meta:
-        proxy = True
-        verbose_name = '- Ended Thread'
-        verbose_name_plural = '- Threads Ended'
+        ordering = ['sorting_name']
+        verbose_name = '- Thread'
+
+
+#
+# class ThreadActive(Thread):
+#     objects = ThreadActiveManager()
+#
+#     class Meta:
+#         proxy = True
+#         verbose_name = '- Active Thread'
+#         verbose_name_plural = '- Threads Active'
+#
+#
+
 
 
 class Date(Model):
@@ -228,6 +284,7 @@ class TimeUnit(Model):
 
     # Fields for HistoryEvent & GameEvent proxies
     threads = M2M(to=Thread, related_name='events', blank=True)
+    plot_threads = M2M(to=PlotThread, related_name='events', blank=True)
     locations = M2M(to=Location, related_name='events', blank=True)
     audio = FK(
         to=Audio,

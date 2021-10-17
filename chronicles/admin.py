@@ -5,7 +5,7 @@ from django.db.models import TextField, CharField, ForeignKey, OneToOneField
 from django.forms import Textarea, TextInput, Select
 from rpg_project.utils import formfield_for_dbfield_cached
 from chronicles.models import (
-    Thread, ThreadActive, ThreadEnded,
+    Thread, # ThreadActive, ThreadEnded,
     Date,
     TimeUnit, Chronology, Era, Period, HistoryEvent, GameEvent,
     Chapter,
@@ -301,8 +301,8 @@ class PeriodAdmin(EraAdmin):
 
 # Chronicle models
 admin.site.register(Thread, ThreadAdmin)
-admin.site.register(ThreadActive, ThreadActiveAdmin)
-admin.site.register(ThreadEnded, ThreadEndedAdmin)
+# admin.site.register(ThreadActive, ThreadActiveAdmin)
+# admin.site.register(ThreadEnded, ThreadEndedAdmin)
 admin.site.register(Date)
 admin.site.register(Chapter, ChapterAdmin)
 admin.site.register(GameSession, GameSessionAdmin)
