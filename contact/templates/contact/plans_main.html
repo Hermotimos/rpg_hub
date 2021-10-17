@@ -21,7 +21,8 @@
                 </td>
                 <td class="font-18 font-italic px-2 py-2 text-justify">{{ plan.text|capfirst|linebreaks }}</td>
                 <td class="align-top"><a href="{% url 'contact:plans-modify' plan.id %}" class="btn btn-dark">&#9998;</a></td>
-                <td class="align-top"><a href="{% url 'contact:plans-delete' plan.id %}" class="btn btn-danger">&#10008;</a></td>
+                <td class="align-top"><a href="{% url 'contact:plans-delete' plan.id %}" class="btn btn-danger"
+                    onclick="return confirm('Potwierdź usunięcie Planu');">&#10008;</a></td>
             </tr>
             <tr>
                 <td></td>
