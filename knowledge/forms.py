@@ -17,7 +17,7 @@ class KnPacketForm(ModelForm):
     locations = ModelMultipleChoiceField(
         queryset=Location.objects.all(),
         required=False,
-        label='Lokacje powiązane (niewymagane)',
+        label='Lokacje powiązane',
     )
 
     class Meta:
@@ -29,17 +29,23 @@ class KnPacketForm(ModelForm):
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        
+        instance = kwargs.pop('instance')
+        if instance:
+            self.fields['locations'].initial = Location.objects.filter(
+                knowledge_packets=instance)
+
+        self.fields['text'].label = "Tekst"
+        self.fields['title'].label = "Tytuł"
+        self.fields['skills'].label = "Umiejętności powiązane"
+
         self.fields['locations'].widget.attrs['size'] = 10
         self.fields['skills'].widget.attrs['size'] = 10
         self.fields['text'].widget.attrs = {
             'cols': 60,
             'rows': 10,
         }
-        instance = kwargs.pop('instance')
-        if instance:
-            self.fields['locations'].initial = Location.objects.filter(
-                knowledge_packets=instance)
-            
+        
         self.helper = FormHelper()
         self.helper.add_input(
             Submit('submit', 'Zapisz pakiet wiedzy', css_class='btn-dark'))
@@ -64,6 +70,16 @@ class PlayerKnPacketForm(KnPacketForm):
     def __init__(self, *args, **kwargs):
         profile = kwargs.pop('profile')
         super().__init__(*args, **kwargs)
+        
+        self.fields['text'].label = "Tekst"
+        self.fields['title'].label = "Tytuł"
+
+        self.fields['locations'].queryset = (
+                profile.locs_known_directly.all()
+                | profile.locs_known_indirectly.all()
+        ).distinct()
+        self.fields['skills'].queryset = profile.allowed_skills.all()
+
         self.fields['descr_1'].widget.attrs = {
             'placeholder': 'Podpis grafiki nr 1',
         }
@@ -73,11 +89,6 @@ class PlayerKnPacketForm(KnPacketForm):
         self.fields['descr_3'].widget.attrs = {
             'placeholder': 'Podpis grafiki nr 3',
         }
-        self.fields['locations'].queryset = (
-                profile.locs_known_directly.all()
-                | profile.locs_known_indirectly.all()
-        ).distinct()
-        self.fields['skills'].queryset = profile.allowed_skills.all()
 
 
 class BioPacketForm(ModelForm):
@@ -92,8 +103,10 @@ class BioPacketForm(ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['order_no'].label = "Nr porządkowy (równe numery są " \
-                                        "sortowane alfabetycznie)"
+        
+        self.fields['order_no'].label = """
+            Nr porządkowy (równe numery są sortowane alfabetycznie)"""
+        
         self.fields['text'].widget.attrs = {
             'cols': 60,
             'rows': 10,
@@ -122,6 +135,7 @@ class PlayerBioPacketForm(BioPacketForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        
         self.fields['descr_1'].widget.attrs = {
             'placeholder': 'Podpis grafiki nr 1',
         }

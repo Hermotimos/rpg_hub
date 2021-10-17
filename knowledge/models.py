@@ -15,8 +15,8 @@ from users.models import Profile
 
 
 class InfoPacket(Model):
-    title = CharField(max_length=100, unique=True, verbose_name='Tytuł')
-    text = TextField(blank=True, null=True, verbose_name='Treść')
+    title = CharField(max_length=100, unique=True)
+    text = TextField(blank=True, null=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
@@ -69,11 +69,7 @@ class KnowledgePacket(InfoPacket):
         blank=True,
     )
     acquired_by = M2M(to=Profile, related_name='knowledge_packets', blank=True)
-    skills = M2M(
-        to=Skill,
-        related_name='knowledge_packets',
-        verbose_name='Umiejętności powiązane',
-    )
+    skills = M2M(to=Skill, related_name='knowledge_packets')
     picture_sets = M2M(
         to=PictureSet, related_name='knowledge_packets', blank=True)
     
