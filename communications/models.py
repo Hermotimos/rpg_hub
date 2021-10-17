@@ -32,6 +32,20 @@ class Topic(Model):
         return self.title
 
 
+class SurveyOption(Model):
+    author = FK(to=Profile, related_name='survey_options', on_delete=CASCADE)
+    text = CharField(max_length=50)
+    voters_yes = M2M(to=Profile, related_name='survey_options_yes', blank=True)
+    voters_no = M2M(to=Profile, related_name='survey_options_no', blank=True)
+    
+    class Meta:
+        ordering = ['text']
+    
+    def __str__(self):
+        text = self.text
+        return f'{text[:100]}...' if len(str(text)) > 100 else text
+
+
 class Thread(Model):
     THREAD_KINDS = (
         ('Debate', 'Debate'),
@@ -101,7 +115,9 @@ class Statement(Model):
     image = ImageField(upload_to='post_pics', blank=True, null=True)
     seen_by = M2M(to=Profile, related_name='statements_seen', blank=True)
     created_at = DateTimeField(auto_now_add=True)
-    
+    # Discussions
+    survey_options = M2M(to=SurveyOption, related_name='threads', blank=True)
+
     class Meta:
         ordering = ['created_at']
 
