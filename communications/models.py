@@ -8,6 +8,7 @@ from django.db.models import (
     DateTimeField,
     ForeignKey as FK,
     ImageField,
+    Manager,
     ManyToManyField as M2M,
     Model,
     PROTECT,
@@ -35,20 +36,18 @@ class Thread(Model):
     THREAD_KINDS = (
         ('Debate', 'Debate'),
         ('Demand', 'Demand'),
-        ('Discussion', 'Discussion'),
+        ('Announcement', 'Announcement'),
     )
     
     title = CharField(max_length=100, unique=True)
     topic = FK(to=Topic, related_name='threads', on_delete=CASCADE)
-    kind = CharField(max_length=10, choices=THREAD_KINDS
+    kind = CharField(max_length=15, choices=THREAD_KINDS
                      # , blank=True, null=True
                      )
-    known_directly = M2M(
-        to=Profile,
-        related_name='threads_known_directly')
+    known_directly = M2M(to=Profile, related_name='threads_known_directly')
     created_at = DateTimeField(auto_now_add=True)
 
-    # Discussion
+    # Announcement
     followers = M2M(to=Profile, related_name='threads_followed', blank=True)
     # Debate
     is_ended = BooleanField(default=False)
@@ -65,6 +64,34 @@ class Thread(Model):
         qs = Profile.living.all()
         qs = qs.exclude(id__in=self.known_directly.all())
         return qs
+
+
+class DebateManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(kind='Debate')
+        return qs
+
+
+class Debate(Thread):
+    objects = DebateManager()
+    
+    class Meta:
+        proxy = True
+
+
+class AnnouncementManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(kind='Announcement')
+        return qs
+
+
+class Announcement(Thread):
+    objects = AnnouncementManager()
+    
+    class Meta:
+        proxy = True
 
 
 class Statement(Model):

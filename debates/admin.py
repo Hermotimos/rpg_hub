@@ -18,13 +18,6 @@ class DebateAdminForm(forms.ModelForm):
         required=False,
         widget=FilteredSelectMultiple('Known directly', False),
     )
-    followers = forms.ModelMultipleChoiceField(
-        queryset=Profile.objects.exclude(
-            Q(status='dead_player') | Q(status='dead_npc') | Q(status='gm')
-        ),
-        required=False,
-        widget=FilteredSelectMultiple('Followers', False),
-    )
     
     
 class TopicAdmin(admin.ModelAdmin):
