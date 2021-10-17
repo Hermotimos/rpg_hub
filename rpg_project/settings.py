@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
     # own
     'chronicles',
+    'communications',
     'contact',
     'debates',
     'development',
