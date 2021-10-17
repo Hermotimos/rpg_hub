@@ -124,7 +124,7 @@ class HistorySkill(Skill):
 
 
 class Synergy(Model):
-    name = CharField(max_length=100, verbose_name='Synergia')
+    name = CharField(max_length=100)
     skills = M2M(to=Skill, related_name='skills')
     allowed_profiles = M2M(
         to=Profile,
@@ -147,8 +147,8 @@ class Synergy(Model):
 
     class Meta:
         ordering = ['sorting_name']
-        verbose_name = 'synergy'
-        verbose_name_plural = 'synergies'
+        verbose_name = 'Synergy'
+        verbose_name_plural = 'Synergies'
 
 
 class SynergyLevel(Model):
