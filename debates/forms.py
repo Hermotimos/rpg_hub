@@ -39,10 +39,14 @@ class CreateDebateForm(forms.ModelForm):
         authenticated_user = kwargs.pop('authenticated_user')
         profile = authenticated_user.profile
         super().__init__(*args, **kwargs)
-        
+
+        self.fields['is_exclusive'].label = "Narada zamknięta?"
+        self.fields['known_directly'].label = "Uczestnicy"
+        self.fields['title'].label = "Tytuł"
+        self.fields['topic'].label = "Temat"
+
         topic = Topic.objects.all()
         known_directly = Profile.living.all()
-        
         if profile.status != 'gm':
             self.fields['is_exclusive'].widget = HiddenInput()
             
@@ -55,11 +59,6 @@ class CreateDebateForm(forms.ModelForm):
             
         self.fields['topic'].queryset = topic
         self.fields['known_directly'].queryset = known_directly
-        
-        self.fields['is_exclusive'].label = "Narada zamknięta?"
-        self.fields['known_directly'].label = "Uczestnicy"
-        self.fields['title'].label = "Tytuł"
-        self.fields['topic'].label = "Temat"
         
         self.fields['known_directly'].widget.attrs['size'] = min(
             len(known_directly), 10)
@@ -75,17 +74,17 @@ class CreateRemarkForm(forms.ModelForm):
         authenticated_user = kwargs.pop('authenticated_user')
         known_directly = kwargs.pop('known_directly')
         super().__init__(*args, **kwargs)
-        
+
+        self.fields['author'].label = "Autor"
+        self.fields['image'].label = "Załącz obraz"
+        self.fields['text'].label = ''
+
         if authenticated_user.profile.status != 'gm':
             self.fields['author'].widget = HiddenInput()
         else:
             self.fields['author'].queryset = Profile.objects.filter(
                 Q(status='gm') | Q(id__in=known_directly)
             )
-        
-        self.fields['author'].label = "Autor"
-        self.fields['image'].label = "Załącz obraz"
-        self.fields['text'].label = ''
 
         self.fields['text'].widget.attrs = {
             'cols': 60, 'rows': 10,

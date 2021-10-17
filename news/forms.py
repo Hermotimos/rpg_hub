@@ -34,15 +34,14 @@ class CreateNewsForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         allowed_profiles = Profile.active_players.exclude(
             user=authenticated_user)
-        
-        self.fields['allowed_profiles'].queryset = allowed_profiles
-        self.fields['allowed_profiles'].widget.attrs['size'] = min(
-            len(allowed_profiles), 10)
-        
+
         self.fields['allowed_profiles'].label = "Adresaci"
         self.fields['title'].label = "Tytuł"
         self.fields['topic'].label = "Temat"
 
+        self.fields['allowed_profiles'].queryset = allowed_profiles
+        self.fields['allowed_profiles'].widget.attrs['size'] = min(
+            len(allowed_profiles), 10)
        
 class CreateNewsAnswerForm(forms.ModelForm):
     

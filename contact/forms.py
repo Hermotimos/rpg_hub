@@ -19,7 +19,11 @@ class DemandsCreateForm(forms.ModelForm):
         authenticated_user = kwargs.pop('authenticated_user')
         profile = authenticated_user.profile
         super().__init__(*args, **kwargs)
-        
+
+        self.fields['addressee'].label = "Adresat"
+        self.fields['image'].label = "Załącz obraz"
+        self.fields['text'].label = "Tekst"
+
         addressees = Profile.contactables.exclude(id=profile.id)
         if authenticated_user.profile.status == 'player':
             gms = addressees.filter(status='gm')
@@ -65,6 +69,11 @@ class PlanForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        
+        self.fields['image'].label = "Załącz obraz"
+        self.fields['inform_gm'].label = "Poinformuj MG?"
+        self.fields['text'].label = "Tekst"
+
         self.helper = FormHelper()
         self.helper.add_input(
             Submit('submit', 'Zapisz plan', css_class='btn-dark'))

@@ -18,19 +18,10 @@ from users.models import Profile
 class Demand(Model):
     author = FK(to=Profile, related_name='authored_demands', on_delete=CASCADE)
     addressee = FK(
-        to=Profile,
-        related_name='received_demands',
-        on_delete=CASCADE,
-        verbose_name='Adresat',
-    )
-    text = TextField(verbose_name='Treść')
+        to=Profile, related_name='received_demands', on_delete=CASCADE)
+    text = TextField()
     date_created = DateTimeField(auto_now_add=True)
-    image = ImageField(
-        upload_to='contact_pics',
-        blank=True,
-        null=True,
-        verbose_name='Obraz',
-    )
+    image = ImageField(upload_to='contact_pics', blank=True, null=True)
     is_done = BooleanField(default=False)
 
     class Meta:
@@ -55,14 +46,9 @@ class Demand(Model):
 class DemandAnswer(Model):
     demand = FK(to=Demand, related_name='demand_answers', on_delete=CASCADE)
     author = FK(to=Profile, related_name='demand_answers', on_delete=CASCADE)
-    text = TextField(verbose_name='Odpowiedź')
+    text = TextField()
     date_posted = DateTimeField(auto_now_add=True)
-    image = ImageField(
-        upload_to='contact_pics',
-        blank=True,
-        null=True,
-        verbose_name='Obraz',
-    )
+    image = ImageField(upload_to='contact_pics', blank=True, null=True)
 
     class Meta:
         ordering = ['date_posted']
@@ -85,15 +71,10 @@ class DemandAnswer(Model):
 
 class Plan(Model):
     author = FK(to=Profile, related_name='plans', on_delete=CASCADE)
-    text = TextField(verbose_name='Treść')
-    inform_gm = BooleanField(default=False, verbose_name='Poinformuj MG')
+    text = TextField()
+    inform_gm = BooleanField(default=False)
     date_created = DateTimeField(auto_now_add=True)
-    image = ImageField(
-        upload_to='contact_pics',
-        blank=True,
-        null=True,
-        verbose_name='Obraz',
-    )
+    image = ImageField(upload_to='contact_pics', blank=True, null=True)
     
     class Meta:
         ordering = ['-date_created']
