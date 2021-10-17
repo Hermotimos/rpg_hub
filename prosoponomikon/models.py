@@ -291,7 +291,7 @@ class CharacterGroup(Model):
      characters. These should be automatically added to the knowlege packets of
      a newly created Character that belongs to a CharacterGroup (by signals).
     """
-    name = CharField(max_length=250, verbose_name='Nazwa grupy')
+    name = CharField(max_length=250)
     author = FK(
         to=Profile,
         related_name='character_groups_authored',
@@ -299,24 +299,15 @@ class CharacterGroup(Model):
         blank=True,
         null=True,
     )
-    characters = M2M(
-        to=Character,
-        related_name='character_groups',
-        verbose_name='Zgrupowane postacie'
-    )
+    characters = M2M(to=Character, related_name='character_groups')
     default_knowledge_packets = M2M(
         to=KnowledgePacket,
         related_name='character_group_defaults',
         blank=True,
-        verbose_name='Domyślne pakiety wiedzy NPC w grupie',
     )
     default_skills = M2M(
-        to=Skill,
-        related_name='character_group_defaults',
-        blank=True,
-        verbose_name='Domyślne umiejętności NPC w grupie',
-    )
-    order_no = SmallIntegerField(default=1, verbose_name='Nr porządkowy')
+        to=Skill, related_name='character_group_defaults', blank=True)
+    order_no = SmallIntegerField(default=1)
     
     class Meta:
         ordering = ['order_no', 'name']

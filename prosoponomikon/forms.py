@@ -68,20 +68,29 @@ class CharacterGroupCreateForm(forms.ModelForm):
 
     def __init__(self, profile, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['name'].label = "Nazwa nowej grupy"
-        self.fields['order_no'].label = "Nr porządkowy (równe numery " \
-                                        "są sortowane alfabetycznie)"
-        self.fields['characters'].widget.attrs['size'] = 15
         
-        self.fields['default_knowledge_packets'].widget.attrs['size'] = 15
-        self.fields['default_skills'].widget.attrs['size'] = 15
-
+        self.fields['characters'].label = "Postacie"
+        self.fields['default_knowledge_packets'].label = """
+            Domyślne pakiety wiedzy NPC w grupie
+        """
+        self.fields['default_skills'].label = """
+            Domyślne umiejętności NPC w grupie
+        """
+        self.fields['name'].label = "Nazwa nowej grupy"
+        self.fields['order_no'].label = """
+            Nr porządkowy (równe numery są sortowane alfabetycznie)
+        """
+        
         if profile.status != 'gm':
             self.fields['characters'].queryset = \
                 profile.characters_all_known_annotated_if_indirectly()
             self.fields['default_knowledge_packets'].widget = forms.HiddenInput()
             self.fields['default_skills'].widget = forms.HiddenInput()
             
+        self.fields['characters'].widget.attrs['size'] = 15
+        self.fields['default_knowledge_packets'].widget.attrs['size'] = 15
+        self.fields['default_skills'].widget.attrs['size'] = 15
+
         self.helper = FormHelper()
         self.helper.add_input(
             Submit('submit', 'Zapisz grupę postaci', css_class='btn-dark'))
