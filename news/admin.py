@@ -21,14 +21,6 @@ class NewsAdminForm(forms.ModelForm):
     )
 
 
-class SurveyAdminForm(forms.ModelForm):
-    addressees = forms.ModelMultipleChoiceField(
-        queryset=Profile.contactables.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Addressees', False),
-    )
-
-
 class TopicAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'order_no', 'created_at']
     list_editable = ['title', 'order_no']
@@ -49,6 +41,18 @@ class NewsAdmin(admin.ModelAdmin):
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
 
 
+# class SurveyOptionInline(admin.TabularInline):
+#     model = SurveyOption
+#     extra = 4
+#     readonly_fields = ['yes_voters', 'no_voters']
+#
+#     def formfield_for_dbfield(self, db_field, **kwargs):
+#         fields = [
+#             'author',
+#         ]
+#         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+
+
 class NewsAnswerAdmin(admin.ModelAdmin):
     list_display = ['id', 'news_title', 'author', 'get_caption', 'created_at']
     ordering = ['-created_at']
@@ -62,30 +66,6 @@ class NewsAnswerAdmin(admin.ModelAdmin):
         return obj.text[:100] + '...' if len(str(obj.text)) > 100 else obj.text
 
 
-class SurveyOptionInline(admin.TabularInline):
-    model = SurveyOption
-    extra = 4
-    readonly_fields = ['yes_voters', 'no_voters']
-
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        fields = [
-            'author',
-        ]
-        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-
-
-class SurveyAdmin(admin.ModelAdmin):
-    form = SurveyAdminForm
-    inlines = [SurveyOptionInline, ]
-    list_display = ['title', 'author', 'text', 'image']
-    readonly_fields = ['seen_by']
-    search_fields = ['title', 'text']
-
-
-class SurveyAnswerAdmin(admin.ModelAdmin):
-    readonly_fields = ['seen_by']
-
-
 class SurveyOptionAdmin(admin.ModelAdmin):
     list_display = ['survey', 'author', 'option_text']
     list_editable = ['option_text']
@@ -96,6 +76,5 @@ class SurveyOptionAdmin(admin.ModelAdmin):
 admin.site.register(Topic, TopicAdmin)
 admin.site.register(News, NewsAdmin)
 admin.site.register(NewsAnswer, NewsAnswerAdmin)
-admin.site.register(Survey, SurveyAdmin)
 admin.site.register(SurveyOption, SurveyOptionAdmin)
-admin.site.register(SurveyAnswer, SurveyAnswerAdmin)
+
