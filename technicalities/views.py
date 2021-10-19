@@ -48,7 +48,7 @@ def reload_chronicles(request):
 @only_game_masters
 def reload_imaginarion(request):
     for obj in PictureImage.objects.all():
-        print(obj.used_in_pics.first().description)
+        # print(obj.used_in_pics.first().description)
         obj.description = obj.used_in_pics.first().description
         obj.save()
     messages.info(request, f'Przeładowano "PictureImage" dla "imaginarion"!')
@@ -107,23 +107,58 @@ def reload_toponomikon(request):
 
 @login_required
 @only_game_masters
-def reload_threads_to_plotthreads(request):
-    from chronicles.models import PlotThread, TimeUnit
-    
-    for time_unit in TimeUnit.objects.all():
-        threads = time_unit.threads.all()
-        plot_threads = []
+def reload_survey_to_news(request):
+    for survey in Survey.objects.all():
+        news = News.objects.create(
+            title=survey.title, topic_id=1)
         
-        for thread in threads:
-            plot_thread, _ = PlotThread.objects.get_or_create(
-                name=thread.name, is_ended=thread.is_ended)
-            plot_threads.append(plot_thread)
-        
-        time_unit.plot_threads.set(plot_threads)
-        print(time_unit)
-        
-    messages.info(request, 'Przeładowano "Threads" !')
+        news.save()
+        news.allowed_profiles.set(survey.addressees.all())
+        news.followers.set(survey.addressees.all())
+
+        # First answer from Survey
+        first_answer = NewsAnswer.objects.create(
+            news=news, text=survey.text, author=survey.author,
+            image=survey.image)
+
+        first_answer.save()
+        first_answer.seen_by.set(survey.seen_by.all())
+        first_answer.survey_options.set(survey.survey_options.all())
+
+        # Remaining answers
+        for survey_answer in survey.survey_answers.all():
+            news_answer = NewsAnswer.objects.create(
+                author=survey_answer.author, news=news,
+                text=survey_answer.text, image=survey_answer.image)
+            
+            news_answer.save()
+            # print(news_answer)
+            news_answer.seen_by.set(survey_answer.seen_by.all())
+            
+    messages.info(request, 'Przeładowano "Survey" do "News"!')
     return redirect('technicalities:reload-main')
+
+
+
+# @login_required
+# @only_game_masters
+# def reload_threads_to_plotthreads(request):
+#     from chronicles.models import PlotThread, TimeUnit
+#
+#     for time_unit in TimeUnit.objects.all():
+#         threads = time_unit.threads.all()
+#         plot_threads = []
+#
+#         for thread in threads:
+#             plot_thread, _ = PlotThread.objects.get_or_create(
+#                 name=thread.name, is_ended=thread.is_ended)
+#             plot_threads.append(plot_thread)
+#
+#         time_unit.plot_threads.set(plot_threads)
+#         print(time_unit)
+#
+#     messages.info(request, 'Przeładowano "Threads" !')
+#     return redirect('technicalities:reload-main')
 
 
 # @login_required

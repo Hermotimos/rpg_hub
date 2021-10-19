@@ -57,31 +57,6 @@ class News(Model):
         verbose_name_plural = 'News'
 
 
-class NewsAnswer(Model):
-    text = TextField()
-    news = FK(to=News, related_name='news_answers', on_delete=CASCADE)
-    author = FK(to=Profile, related_name='news_answers', on_delete=CASCADE)
-    image = ImageField(blank=True, null=True, upload_to='news_pics')
-    seen_by = M2M(to=Profile, related_name='news_answers_seen', blank=True)
-    created_at = DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['created_at']
-
-    def __str__(self):
-        return self.text[:100] + '...' if len(str(self.text)) > 100 else self.text
-
-    def save(self, *args, **kwargs):
-        first_save = True if not self.pk else False
-        super().save(*args, **kwargs)
-        if first_save and self.image:
-            img = Image.open(self.image.path)
-            if img.height > 700 or img.width > 700:
-                output_size = (700, 700)
-                img.thumbnail(output_size)
-                img.save(self.image.path)
-
-
 class Survey(Model):
     title = CharField(max_length=100, unique=True)
     author = FK(to=Profile, related_name='surveys_authored', on_delete=CASCADE)
@@ -110,22 +85,51 @@ class SurveyOptionManager(Manager):
         qs = super().get_queryset()
         qs = qs.prefetch_related('no_voters', 'yes_voters')
         return qs
-    
-    
+
+
 class SurveyOption(Model):
     objects = SurveyOptionManager()
     
     survey = FK(to=Survey, related_name='survey_options', on_delete=CASCADE)
-    author = FK(to=Profile, related_name='survey_options_authored', on_delete=CASCADE)
+    author = FK(to=Profile, related_name='survey_options_authored',
+                on_delete=CASCADE)
     option_text = CharField(max_length=50)
     yes_voters = M2M(to=Profile, related_name='survey_yes_votes', blank=True)
     no_voters = M2M(to=Profile, related_name='survey_no_votes', blank=True)
-
+    
     class Meta:
         ordering = ['option_text']
+    
+    def __str__(self):
+        return self.option_text[:100] + '...' if len(
+            str(self.option_text)) > 100 else self.option_text
+
+
+class NewsAnswer(Model):
+    text = TextField()
+    news = FK(to=News, related_name='news_answers', on_delete=CASCADE)
+    author = FK(to=Profile, related_name='news_answers', on_delete=CASCADE)
+    image = ImageField(blank=True, null=True, upload_to='news_pics')
+    seen_by = M2M(to=Profile, related_name='news_answers_seen', blank=True)
+    created_at = DateTimeField(auto_now_add=True)
+
+    survey_options = M2M(to=SurveyOption, related_name='threads', blank=True)
+
+    class Meta:
+        ordering = ['created_at']
 
     def __str__(self):
-        return self.option_text[:100] + '...' if len(str(self.option_text)) > 100 else self.option_text
+        return self.text[:100] + '...' if len(str(self.text)) > 100 else self.text
+
+    def save(self, *args, **kwargs):
+        first_save = True if not self.pk else False
+        super().save(*args, **kwargs)
+        if first_save and self.image:
+            img = Image.open(self.image.path)
+            if img.height > 700 or img.width > 700:
+                output_size = (700, 700)
+                img.thumbnail(output_size)
+                img.save(self.image.path)
 
 
 class SurveyAnswer(Model):
