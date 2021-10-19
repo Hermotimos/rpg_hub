@@ -12,7 +12,7 @@ urlpatterns = [
     path('news-detail:<int:news_id>/unfollow', views.unfollow_news_view, name='unfollow'),
     path('news-detail:<int:news_id>/follow', views.follow_news_view, name='follow'),
     # survey
-    path('survey-create/', views.survey_create_view, name='survey-create'),
+    # path('survey-create/', views.survey_create_view, name='survey-create'),
     # path('survey-detail:<int:survey_id>/', views.survey_detail_view, name='survey-detail'),
     path('survey-detail:<int:survey_id>/survey-option:<int:option_id>/yes', views.vote_yes_view, name='survey-yes'),
     path('survey-detail:<int:survey_id>/survey-option:<int:option_id>/no', views.vote_no_view, name='survey-no'),

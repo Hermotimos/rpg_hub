@@ -2,7 +2,7 @@ from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 
-from news.models import Topic, News, NewsAnswer, Survey, SurveyOption, SurveyAnswer
+from news.models import Topic, News, NewsAnswer, SurveyOption
 from rpg_project.utils import formfield_for_dbfield_cached
 from users.models import Profile
 
@@ -67,7 +67,7 @@ class NewsAnswerAdmin(admin.ModelAdmin):
 
 
 class SurveyOptionAdmin(admin.ModelAdmin):
-    list_display = ['survey', 'author', 'option_text']
+    list_display = ['author', 'option_text']
     list_editable = ['option_text']
     readonly_fields = ['yes_voters', 'no_voters']
     search_fields = ['option_text']

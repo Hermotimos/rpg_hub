@@ -6,9 +6,8 @@ from django.db.models import Prefetch
 from django.shortcuts import render, redirect, get_object_or_404
 
 from news.forms import (CreateNewsForm, CreateTopicForm, CreateNewsAnswerForm,
-                        CreateSurveyForm, CreateSurveyOptionForm,
-                        CreateSurveyAnswerForm, ModifySurveyOptionForm)
-from news.models import Topic, News, Survey, SurveyOption, NewsAnswer
+                        CreateSurveyOptionForm, ModifySurveyOptionForm)
+from news.models import Topic, News, SurveyOption, NewsAnswer
 from users.models import Profile
 
 
@@ -307,44 +306,44 @@ def unvote_view(request, survey_id, option_id):
         return redirect('home:dupa')
 
 
-
-@login_required
-def survey_create_view(request):
-    profile = request.user.profile
-    if request.method == 'POST':
-        form = CreateSurveyForm(authenticated_user=request.user, data=request.POST, files=request.FILES)
-
-        if form.is_valid():
-            survey = form.save(commit=False)
-            survey.author = request.user.profile
-            survey.save()
-            addressees = form.cleaned_data['addressees']
-            addressees |= Profile.objects.filter(id=request.user.id)
-            survey.addressees.set(addressees)
-
-            subject = f"[RPG] Nowa ankieta: '{survey.title[:30]}...'"
-            message = f"{profile} przybił/a coś do słupa ogłoszeń.\n" \
-                      f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/survey-detail:{survey.id}/\n\n" \
-                      f"Ogłoszenie: {survey.text}"
-            sender = settings.EMAIL_HOST_USER
-            receivers = []
-            for p in survey.addressees.all():
-                if p.user != request.user:
-                    receivers.append(p.user.email)
-            if profile.status != 'gm':
-                receivers.append('lukas.kozicki@gmail.com')
-            send_mail(subject, message, sender, receivers)
-
-            messages.info(request, f'Utworzono nową ankietę!')
-            return redirect('news:survey-detail', survey_id=survey.id)
-    else:
-        form = CreateSurveyForm(authenticated_user=request.user)
-
-    context = {
-        'page_title': 'Nowa ankieta',
-        'form': form,
-    }
-    return render(request, 'news/survey_create.html', context)
+#
+# @login_required
+# def survey_create_view(request):
+#     profile = request.user.profile
+#     if request.method == 'POST':
+#         form = CreateSurveyForm(authenticated_user=request.user, data=request.POST, files=request.FILES)
+#
+#         if form.is_valid():
+#             survey = form.save(commit=False)
+#             survey.author = request.user.profile
+#             survey.save()
+#             addressees = form.cleaned_data['addressees']
+#             addressees |= Profile.objects.filter(id=request.user.id)
+#             survey.addressees.set(addressees)
+#
+#             subject = f"[RPG] Nowa ankieta: '{survey.title[:30]}...'"
+#             message = f"{profile} przybił/a coś do słupa ogłoszeń.\n" \
+#                       f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/survey-detail:{survey.id}/\n\n" \
+#                       f"Ogłoszenie: {survey.text}"
+#             sender = settings.EMAIL_HOST_USER
+#             receivers = []
+#             for p in survey.addressees.all():
+#                 if p.user != request.user:
+#                     receivers.append(p.user.email)
+#             if profile.status != 'gm':
+#                 receivers.append('lukas.kozicki@gmail.com')
+#             send_mail(subject, message, sender, receivers)
+#
+#             messages.info(request, f'Utworzono nową ankietę!')
+#             return redirect('news:survey-detail', survey_id=survey.id)
+#     else:
+#         form = CreateSurveyForm(authenticated_user=request.user)
+#
+#     context = {
+#         'page_title': 'Nowa ankieta',
+#         'form': form,
+#     }
+#     return render(request, 'news/survey_create.html', context)
 
 
 

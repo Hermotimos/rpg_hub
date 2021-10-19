@@ -24,7 +24,7 @@ from rules.models import (
 )
 from toponomikon.models import Location
 from users.models import Profile
-from news.models import News, NewsAnswer, SurveyAnswer, Survey, SurveyOption
+from news.models import News, NewsAnswer
 
 @login_required
 @only_game_masters
@@ -103,41 +103,6 @@ def reload_toponomikon(request):
         obj.save()
     messages.info(request, 'Przeładowano "Location" dla "toponomikon"!')
     return redirect('technicalities:reload-main')
-
-
-@login_required
-@only_game_masters
-def reload_survey_to_news(request):
-    for survey in Survey.objects.all():
-        news = News.objects.create(
-            title=survey.title, topic_id=1)
-        
-        news.save()
-        news.allowed_profiles.set(survey.addressees.all())
-        news.followers.set(survey.addressees.all())
-
-        # First answer from Survey
-        first_answer = NewsAnswer.objects.create(
-            news=news, text=survey.text, author=survey.author,
-            image=survey.image)
-
-        first_answer.save()
-        first_answer.seen_by.set(survey.seen_by.all())
-        first_answer.survey_options.set(survey.survey_options.all())
-
-        # Remaining answers
-        for survey_answer in survey.survey_answers.all():
-            news_answer = NewsAnswer.objects.create(
-                author=survey_answer.author, news=news,
-                text=survey_answer.text, image=survey_answer.image)
-            
-            news_answer.save()
-            # print(news_answer)
-            news_answer.seen_by.set(survey_answer.seen_by.all())
-            
-    messages.info(request, 'Przeładowano "Survey" do "News"!')
-    return redirect('technicalities:reload-main')
-
 
 
 # @login_required
