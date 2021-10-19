@@ -151,25 +151,6 @@ class Profile(Model):
             news_answers__in=last_news_answers_unseen)
 
         return news_with_unseen_last_answer
-    
-    @property
-    def unseen_surveys(self):
-        from news.models import SurveyAnswer
-        allowed = self.surveys_received.exclude(author=self)
-        surveys_unseen = allowed.exclude(seen_by=self)
-        
-        allowed_annotated = allowed.annotate(
-            last_answer_id=Max('survey_answers__id')
-        ).filter(survey_answers__id=F('last_answer_id'))
-        
-        last_survey_answers_ids = [survey.last_answer_id for survey in allowed_annotated]
-        last_survey_answers_unseen = SurveyAnswer.objects.filter(
-            id__in=last_survey_answers_ids).filter(~Q(seen_by=self))
-        
-        surveys_with_unseen_last_answer = allowed.filter(
-            survey_answers__in=last_survey_answers_unseen)
-            
-        return (surveys_unseen | surveys_with_unseen_last_answer).distinct()
 
     @property
     def unseen_debates(self):
