@@ -76,7 +76,6 @@ class Profile(Model):
 
     def characters_all_known(self):
         if self.can_view_all:
-            print('characters_all_known')
             from prosoponomikon.models import Character
             qs = Character.objects.all()
         else:
@@ -87,7 +86,6 @@ class Profile(Model):
     
     def characters_known_only_indirectly(self):
         if self.can_view_all:
-            print('characters_known_only_indirectly')
             from prosoponomikon.models import Character
             qs = Character.objects.none()
         else:
@@ -99,7 +97,6 @@ class Profile(Model):
     def characters_all_known_annotated_if_indirectly(self):
         from prosoponomikon.models import Character
         if self.can_view_all:
-            print('characters_all_known_annotated_if_indirectly')
             qs = Character.objects.all()
         else:
             known_only_indir = self.characters_known_only_indirectly()
@@ -149,7 +146,6 @@ class Profile(Model):
         last_news_answers_ids = [news.last_answer_id for news in allowed_annotated]
         last_news_answers_unseen = NewsAnswer.objects.filter(
             id__in=last_news_answers_ids).filter(~Q(seen_by=self))
-        print(last_news_answers_unseen)
         
         news_with_unseen_last_answer = allowed.filter(
             news_answers__in=last_news_answers_unseen)

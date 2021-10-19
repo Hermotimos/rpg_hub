@@ -84,7 +84,7 @@ def handle_inform_form(request):
     #     '2': ['on'],
     #     'Location': ['77']
     # } >
-    print(request.POST)
+    # print(request.POST)
     post_data = dict(request.POST)
     all_models = {model.__name__: model for model in apps.get_models()}
     
