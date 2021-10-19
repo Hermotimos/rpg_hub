@@ -14,33 +14,6 @@
             <a href="{% url 'news:topic-create' %}" class="btn btn-outline-dark">Nowy temat</a>
             <a href="{% url 'news:news-create' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
         </header>
-    
-        <!-- SURVEYS -->
-        {% for survey in surveys %}
-            <div class="my-1 border rounded {% if survey not in unseen_surveys %} bg-inner {% else %} bg-greengrayish {% endif %}">
-                <table class="ml-2 mr-2 mb-3 mt-1">
-                    <tbody>
-                        <tr>
-                            <td class="align-top pt-2 pr-2">
-                                <img class="rounded-circle article-img" src="{{ survey.author.image.url }}">
-                                <br>
-                            </td>
-                            <td>
-                                <small class="font-italic text-muted">{{ survey.created_at|date:'d-M-Y | H:i' }}</small>
-                                <h3><a href="{% url 'news:survey-detail' survey.id %}" class="border-bottom">ANKIETA: {{ survey.title }}</a></h3>
-                                {% if survey.survey_answers.all %}
-                                <h5>
-                                    {% for answer in survey.survey_answers.all %}
-                                        <img class="rounded-circle img-small" src="{{ answer.author.image.url }}">
-                                    {% endfor %}
-                                </h5>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        {% endfor %}
         
         <article class="pt-5">
             {% for topic in topics %}

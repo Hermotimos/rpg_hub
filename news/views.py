@@ -18,19 +18,12 @@ def main_view(request):
     
     if profile.status == 'gm':
         newss = News.objects.all()
-        surveys = Survey.objects.all()
     else:
         newss = profile.allowed_news.all()
-        surveys = profile.surveys_received.all()
 
     newss = newss.prefetch_related(
         'news_answers__author', 'news_answers__seen_by')
     newss = newss.order_by('-id')
-    
-    surveys = surveys.select_related('author')
-    surveys = surveys.prefetch_related(
-        'seen_by', 'survey_answers__author', 'survey_answers__seen_by')
-    surveys = surveys.order_by('-id')
     
     topics = Topic.objects.filter(news__in=newss)
     topics = topics.prefetch_related(Prefetch('news', queryset=newss))
@@ -40,8 +33,6 @@ def main_view(request):
         'page_title': 'Ogłoszenia',
         'topics': topics,
         'unseen_news': profile.unseen_news,
-        'surveys': surveys,
-        'unseen_surveys': profile.unseen_surveys,
     }
     return render(request, 'news/main.html', context)
 
@@ -188,80 +179,80 @@ def follow_news_view(request, news_id):
         return redirect('home:dupa')
 
 
-
-@login_required
-def survey_detail_view(request, survey_id):
-    profile = request.user.profile
-    survey = get_object_or_404(Survey, id=survey_id)
-
-    survey_seen_by = survey.seen_by.all()
-    if profile not in survey_seen_by:
-        survey.seen_by.add(profile)
-
-    options = survey.survey_options.all()\
-        .prefetch_related('yes_voters', 'no_voters')\
-        .select_related('author')
-    answers = survey.survey_answers.all().select_related('author')
-
-    last_answer_seen_by_imgs = []
-    if answers:
-        last_answer = answers.order_by('-created_at')[0]
-        if profile not in last_answer.seen_by.all():
-            last_answer.seen_by.add(profile)
-        last_answer_seen_by_imgs = (p.image for p in last_answer.seen_by.all())
-
-    if request.method == 'POST':
-        answer_form = CreateSurveyAnswerForm(request.POST, request.FILES)
-        option_form = CreateSurveyOptionForm(request.POST)
-
-        if answer_form.is_valid():
-            answer = answer_form.save(commit=False)
-            answer.survey = survey
-            answer.author = request.user.profile
-            answer_form.save()
-
-            subject = f"[RPG] Wypowiedż do ankiety: '{survey.title[:30]}...'"
-            message = f"{profile} wypowiedział się co do ankiety '{survey.title}':\n" \
-                      f"Ankieta: {request.get_host()}/news/survey-detail:{survey.id}/\n\n" \
-                      f"Wypowiedź: {answer.text}"
-            sender = settings.EMAIL_HOST_USER
-            receivers = []
-            for p in survey.addressees.all():
-                if p.user != request.user:
-                    receivers.append(p.user.email)
-            if profile.status != 'gm':
-                receivers.append('lukas.kozicki@gmail.com')
-            send_mail(subject, message, sender, receivers)
-
-            messages.info(request, f'Twoja odpowiedź została zapisana!')
-            return redirect('news:survey-detail', survey_id=survey_id)
-
-        elif option_form.is_valid():
-            option = option_form.save(commit=False)
-            option.survey = survey
-            option.author = request.user.profile
-            option_form.save()
-
-            messages.info(request, f'Powiadom uczestników o nowej opcji!')
-            return redirect('news:survey-detail', survey_id=survey_id)
-    else:
-        answer_form = CreateSurveyAnswerForm()
-        option_form = CreateSurveyOptionForm()
-
-    context = {
-        'page_title': survey.title,
-        'survey': survey,
-        'options': options,
-        'answers': answers,
-        'survey_seen_by': survey_seen_by,
-        'last_answer_seen_by_imgs': last_answer_seen_by_imgs,
-        'answer_form': answer_form,
-        'option_form': option_form
-    }
-    if profile in survey.addressees.all() or profile.status == 'gm':
-        return render(request, 'news/survey_detail.html', context)
-    else:
-        return redirect('home:dupa')
+#
+# @login_required
+# def survey_detail_view(request, survey_id):
+#     profile = request.user.profile
+#     survey = get_object_or_404(Survey, id=survey_id)
+#
+#     survey_seen_by = survey.seen_by.all()
+#     if profile not in survey_seen_by:
+#         survey.seen_by.add(profile)
+#
+#     options = survey.survey_options.all()\
+#         .prefetch_related('yes_voters', 'no_voters')\
+#         .select_related('author')
+#     answers = survey.survey_answers.all().select_related('author')
+#
+#     last_answer_seen_by_imgs = []
+#     if answers:
+#         last_answer = answers.order_by('-created_at')[0]
+#         if profile not in last_answer.seen_by.all():
+#             last_answer.seen_by.add(profile)
+#         last_answer_seen_by_imgs = (p.image for p in last_answer.seen_by.all())
+#
+#     if request.method == 'POST':
+#         answer_form = CreateSurveyAnswerForm(request.POST, request.FILES)
+#         option_form = CreateSurveyOptionForm(request.POST)
+#
+#         if answer_form.is_valid():
+#             answer = answer_form.save(commit=False)
+#             answer.survey = survey
+#             answer.author = request.user.profile
+#             answer_form.save()
+#
+#             subject = f"[RPG] Wypowiedż do ankiety: '{survey.title[:30]}...'"
+#             message = f"{profile} wypowiedział się co do ankiety '{survey.title}':\n" \
+#                       f"Ankieta: {request.get_host()}/news/survey-detail:{survey.id}/\n\n" \
+#                       f"Wypowiedź: {answer.text}"
+#             sender = settings.EMAIL_HOST_USER
+#             receivers = []
+#             for p in survey.addressees.all():
+#                 if p.user != request.user:
+#                     receivers.append(p.user.email)
+#             if profile.status != 'gm':
+#                 receivers.append('lukas.kozicki@gmail.com')
+#             send_mail(subject, message, sender, receivers)
+#
+#             messages.info(request, f'Twoja odpowiedź została zapisana!')
+#             return redirect('news:survey-detail', survey_id=survey_id)
+#
+#         elif option_form.is_valid():
+#             option = option_form.save(commit=False)
+#             option.survey = survey
+#             option.author = request.user.profile
+#             option_form.save()
+#
+#             messages.info(request, f'Powiadom uczestników o nowej opcji!')
+#             return redirect('news:survey-detail', survey_id=survey_id)
+#     else:
+#         answer_form = CreateSurveyAnswerForm()
+#         option_form = CreateSurveyOptionForm()
+#
+#     context = {
+#         'page_title': survey.title,
+#         'survey': survey,
+#         'options': options,
+#         'answers': answers,
+#         'survey_seen_by': survey_seen_by,
+#         'last_answer_seen_by_imgs': last_answer_seen_by_imgs,
+#         'answer_form': answer_form,
+#         'option_form': option_form
+#     }
+#     if profile in survey.addressees.all() or profile.status == 'gm':
+#         return render(request, 'news/survey_detail.html', context)
+#     else:
+#         return redirect('home:dupa')
 
 
 
