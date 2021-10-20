@@ -145,7 +145,7 @@ def send_emails(request, profile_ids=None, **kwargs):
     sender = EMAIL_HOST_USER
     receivers = [
         p.user.email
-        for p in Profile.objects.filter(id__in=profile_ids or []).select_related()]
+        for p in Profile.active_players.filter(id__in=profile_ids or []).select_related()]
     if profile.status != 'gm':
         gms = [
             p.user.email
