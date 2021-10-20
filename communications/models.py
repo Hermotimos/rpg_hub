@@ -91,11 +91,11 @@ class Announcement(Thread):
         proxy = True
 
 
-class SurveyOption(Model):
-    author = FK(to=Profile, related_name='survey_options', on_delete=CASCADE)
+class Option(Model):
+    author = FK(to=Profile, related_name='options', on_delete=CASCADE)
     text = CharField(max_length=50)
-    voters_yes = M2M(to=Profile, related_name='survey_options_yes', blank=True)
-    voters_no = M2M(to=Profile, related_name='survey_options_no', blank=True)
+    voters_yes = M2M(to=Profile, related_name='options_votes_yes', blank=True)
+    voters_no = M2M(to=Profile, related_name='options_votes_no', blank=True)
     
     class Meta:
         ordering = ['text']
@@ -113,7 +113,7 @@ class Statement(Model):
     seen_by = M2M(to=Profile, related_name='statements_seen', blank=True)
     created_at = DateTimeField(auto_now_add=True)
     # Announcement
-    survey_options = M2M(to=SurveyOption, related_name='threads', blank=True)
+    options = M2M(to=Option, related_name='threads', blank=True)
 
     class Meta:
         ordering = ['created_at']
