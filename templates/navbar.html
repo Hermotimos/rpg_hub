@@ -22,7 +22,7 @@
             <!-- Navbar Left Side -->
             <ul class="navbar-nav mr-auto">
                 
-                {% with undone_demands=request.user.profile.undone_demands unseen_news=request.user.profile.unseen_news %}
+                {% with undone_demands=request.user.profile.undone_demands unseen_news=request.user.profile.unseen_news unseen_announcements=request.user.profile.unseen_announcements %}
                     <li class="dropdown pr-4 mr-auto">
                         <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
                             Organizacyjne
@@ -50,6 +50,16 @@
                                             {% endif %}
                                         </div>
                                     </li>
+                                    <li>
+                                        <a class="font-14 nav-link small-caps" href="{% url 'communications:announcements' %}">Ogłoszenia [2]</a>
+                                        <div class="row info-row-sub news-bubble float-right">
+                                            {% if unseen_announcements %}
+                                                <div class="number-circle-sub bg-blue d-flex align-items-center">
+                                                    <span class="mx-auto number-circle-main-inner">{{ unseen_announcements.count }}</span>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </li>
                                 {% endif %}
                                 <li><a class="font-14 nav-link small-caps" href="{% url 'rules:main' %}">Zasady</a></li>
                             </ul>
@@ -63,6 +73,11 @@
                             {% if unseen_news %}
                                 <div class="number-circle-main bg-blue d-flex align-items-center">
                                     <span class="mx-auto number-circle-main-inner">{{ unseen_news.count }}</span>
+                                </div>
+                            {% endif %}
+                            {% if unseen_announcements %}
+                                <div class="number-circle-main bg-blue d-flex align-items-center">
+                                    <span class="mx-auto number-circle-main-inner">{{ unseen_announcements.count }}</span>
                                 </div>
                             {% endif %}
                         </div>
