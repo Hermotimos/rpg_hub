@@ -11,6 +11,10 @@ from communications.models import Topic, Thread, Debate, Announcement, Statement
 from users.models import Profile
 
 
+# TODO
+#  1) main views separate? or separate templates based on 'thread_kind' param?
+#  2) detail views - one for all, steer it with parameters; separate templates
+
 @login_required
 def announcements_view(request):
     profile = request.user.profile
@@ -21,18 +25,18 @@ def announcements_view(request):
         announcements = Announcement.objects.filter(known_directly=profile)
 
     announcements = announcements.prefetch_related(
-        'statements__author', 'statements__seen_by')
-    announcements = announcements.order_by('-created_at')
+        'statements__author', 'statements__seen_by'
+    ).order_by('-created_at')
     
     topics = Topic.objects.filter(threads__in=announcements)
     topics = topics.prefetch_related(
-        Prefetch('threads', queryset=announcements))
-    topics = topics.distinct()
+        Prefetch('threads', queryset=announcements)
+    ).distinct()
 
     context = {
         'page_title': 'Ogłoszenia',
         'topics': topics,
-        # 'unseen_news': profile.unseen_news,
+        'unseen_announcements': profile.unseen_announcements,
     }
     return render(request, 'communications/announcements.html', context)
 
@@ -117,6 +121,7 @@ def announcement_view(request, announcement_id):
     for statement in announcement.statements.all():
         relations.append(
             SeenBy(statement_id=statement.id, profile_id=profile.id))
+        print(relations)
     SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
 
     # if request.method == 'POST':

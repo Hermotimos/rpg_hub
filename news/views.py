@@ -113,6 +113,7 @@ def news_detail_view(request, news_id):
     for news_answer in news.news_answers.all():
         relations.append(
             SeenBy(newsanswer_id=news_answer.id, profile_id=profile.id))
+        print(relations)
     SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
 
     if request.method == 'POST':

@@ -75,7 +75,7 @@ class StatementAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.ForeignKey: {'widget': Select(attrs={'style': 'width:250px'})},
     }
-    list_display = ['__str__', 'author', 'thread', 'created_at']
+    list_display = ['id', '__str__', 'author', 'thread', 'created_at']
     list_editable = ['thread', 'author']
     list_filter = ['thread__kind', 'thread']
     search_fields = ['text']

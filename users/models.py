@@ -154,22 +154,10 @@ class Profile(Model):
 
     @property
     def unseen_announcements(self):
-        from communications.models import Statement
-        allowed = self.threads_followed.filter(kind='Announcement')
+        from communications.models import Announcement, Statement
+        unseen_statements = Statement.objects.exclude(seen_by=self)
+        return Announcement.objects.filter(statements__in=unseen_statements)
         
-        allowed_annotated = allowed.annotate(
-            last_statement_id=Max('statements')
-        ).filter(statements__id=F('last_statement_id'))
-        
-        last_statements_ids = [a.last_statement_id for a in allowed_annotated]
-        last_statements_unseen = Statement.objects.filter(
-            id__in=last_statements_ids).filter(~Q(seen_by=self))
-        
-        announcements_with_unseen_last_statement = allowed.filter(
-            statements__in=last_statements_unseen)
-        print(announcements_with_unseen_last_statement)
-        return announcements_with_unseen_last_statement
-
     @property
     def unseen_debates(self):
         from debates.models import Remark, Debate
