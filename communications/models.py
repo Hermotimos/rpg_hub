@@ -23,7 +23,9 @@ from users.models import Profile
 class Topic(Model):
     title = CharField(max_length=100, unique=True)
     order_no = SmallIntegerField(default=100)
-    created_at = DateTimeField(auto_now_add=True)
+    created_at = DateTimeField(
+        # auto_now_add=True
+    )
     
     class Meta:
         ordering = ['title']
@@ -43,12 +45,14 @@ class Thread(Model):
     topic = FK(to=Topic, related_name='threads', on_delete=CASCADE)
     kind = CharField(max_length=15, choices=THREAD_KINDS)
     known_directly = M2M(to=Profile, related_name='threads_known_directly')
-    created_at = DateTimeField(auto_now_add=True)
+    created_at = DateTimeField(
+        # auto_now_add=True
+    )
     # Announcement
     followers = M2M(to=Profile, related_name='threads_followed', blank=True)
     # Debate
     is_ended = BooleanField(default=False)
-    is_exclusive = BooleanField()
+    is_exclusive = BooleanField(default=False)
     
     class Meta:
         ordering = ['created_at']
@@ -111,7 +115,9 @@ class Statement(Model):
     author = FK(to=Profile, related_name='statements', on_delete=PROTECT)
     image = ImageField(upload_to='post_pics', blank=True, null=True)
     seen_by = M2M(to=Profile, related_name='statements_seen', blank=True)
-    created_at = DateTimeField(auto_now_add=True)
+    created_at = DateTimeField(
+        # auto_now_add=True
+    )
     # Announcement
     options = M2M(to=Option, related_name='threads', blank=True)
 

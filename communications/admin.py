@@ -45,7 +45,7 @@ class AnnouncementAdminForm(forms.ModelForm):
 
 class DebateAdmin(admin.ModelAdmin):
     form = DebateAdminForm
-    list_display = ['title', 'topic', 'is_ended', 'is_exclusive']
+    list_display = ['title', 'topic', 'is_ended', 'is_exclusive', 'created_at']
     list_editable = ['topic', 'is_ended', 'is_exclusive']
     list_filter = ['topic']
     search_fields = ['title']
@@ -59,8 +59,8 @@ class DebateAdmin(admin.ModelAdmin):
 
 class AnnouncementAdmin(admin.ModelAdmin):
     form = AnnouncementAdminForm
-    list_display = ['title', 'topic', 'is_ended', 'is_exclusive']
-    list_editable = ['topic', 'is_ended', 'is_exclusive']
+    list_display = ['title', 'topic', 'created_at']
+    list_editable = ['topic', ]
     list_filter = ['topic']
     search_fields = ['title']
     

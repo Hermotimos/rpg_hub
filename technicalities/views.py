@@ -105,6 +105,40 @@ def reload_toponomikon(request):
     return redirect('technicalities:reload-main')
 
 
+@login_required
+@only_game_masters
+def reload_news(request):
+    from news.models import Topic as NewsTopic, News, NewsAnswer
+    from communications.models import Option, Announcement, Topic, Statement
+    from django.db import transaction
+
+    with transaction.atomic():
+        for news_topic in NewsTopic.objects.all():
+            topic = Topic.objects.create(
+                title=news_topic.title, order_no=news_topic.order_no,
+                created_at=news_topic.created_at)
+            
+            for news in news_topic.news.all():
+                announcement = Announcement.objects.create(
+                    topic=topic, title=news.title, kind='Announcement',
+                    created_at=news.created_at)
+                announcement.save()
+                announcement.followers.set(news.followers.all())
+                print(announcement.title)
+                
+                for answer in news.news_answers.all():
+                    statement = Statement.objects.create(
+                        text=answer.text, thread=announcement, author=answer.author,
+                        created_at=answer.created_at, image=answer.image,
+                    )
+                    statement.save()
+                    print(statement.text[:20], statement.id)
+                    statement.seen_by.set(answer.seen_by.all())
+            
+    messages.info(request, 'Przeładowano NEWS->COMMUNICATIONS!')
+    return redirect('technicalities:reload-main')
+
+
 # @login_required
 # @only_game_masters
 # def reload_threads_to_plotthreads(request):
