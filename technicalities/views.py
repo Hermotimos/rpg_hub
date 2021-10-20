@@ -123,6 +123,7 @@ def reload_news(request):
                     topic=topic, title=news.title, kind='Announcement',
                     created_at=news.created_at)
                 announcement.save()
+                announcement.known_directly.set(news.allowed_profiles.all())
                 announcement.followers.set(news.followers.all())
                 print(announcement.title)
                 
