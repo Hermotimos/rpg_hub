@@ -73,11 +73,11 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
 class StatementAdmin(admin.ModelAdmin):
     formfield_overrides = {
-        models.ForeignKey: {'widget': Select(attrs={'style': 'width:350px'})},
+        models.ForeignKey: {'widget': Select(attrs={'style': 'width:250px'})},
     }
-    list_display = ['__str__', 'thread', 'created_at', 'author', 'image']
-    list_editable = ['thread', 'author', 'image']
-    list_filter = ['thread']
+    list_display = ['__str__', 'author', 'thread', 'created_at']
+    list_editable = ['thread', 'author']
+    list_filter = ['thread__kind', 'thread']
     search_fields = ['text']
     
     def formfield_for_dbfield(self, db_field, **kwargs):
@@ -86,8 +86,8 @@ class StatementAdmin(admin.ModelAdmin):
             'author',
         ]
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-
-
+    
+    
 admin.site.register(Topic, TopicAdmin)
 admin.site.register(Debate, DebateAdmin)
 admin.site.register(Announcement, AnnouncementAdmin)
