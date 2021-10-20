@@ -6,10 +6,12 @@ from django.db.models import (
     CharField,
     CASCADE,
     DateTimeField,
+    F,
     ForeignKey as FK,
     ImageField,
     Manager,
     ManyToManyField as M2M,
+    Max,
     Model,
     PROTECT,
     SmallIntegerField,
@@ -85,6 +87,7 @@ class AnnouncementManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(kind='Announcement')
+        qs = qs.annotate(last_activity=Max(F('statements__created_at')))
         return qs
 
 
