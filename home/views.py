@@ -2,14 +2,14 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render
 
-from prosoponomikon.models import Character
 from rpg_project.utils import sample_from_qs
 from toponomikon.models import Location
+from users.models import Profile
 
 
 @login_required
 def home_view(request):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
 
     known_characters = profile.characters_all_known_annotated_if_indirectly()
     known_characters = known_characters.exclude(profile=profile)
@@ -32,6 +32,7 @@ def home_view(request):
     rand_locations = sample_from_qs(qs=known_locations, max_size=4)
 
     context = {
+        'profile': profile,
         'page_title': 'Hyllemath',
         'rand_characters': rand_characters,
         'rand_locations': rand_locations,

@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
 
 from prosoponomikon.forms import CharacterForm
 from prosoponomikon.models import Character
@@ -11,10 +12,22 @@ from users.forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
 from users.models import Profile
 from prosoponomikon.models import FirstName
 
+from django.contrib.auth import login
+
 
 class CustomLoginView(LoginView):
     template_name = 'users/login.html'
+    # settings.py
+    # LOGIN_REDIRECT_URL = 'home:home'
+    # LOGIN_URL = 'users:login'
     
+    def form_valid(self, form):
+        user = form.get_user()
+        login(self.request, user)
+        # Use as default profile the one created most recently
+        self.request.session['profile_id'] = user.profiles.latest('id').id
+        return HttpResponseRedirect(self.get_success_url())
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['page_title'] = 'Logowanie'
@@ -22,6 +35,8 @@ class CustomLoginView(LoginView):
 
 
 class CustomLogoutView(LogoutView):
+    # settings.py
+    # LOGOUT_REDIRECT_URL = 'users:login'
     pass
 
 
@@ -94,3 +109,12 @@ def profile_view(request):
         'character_form': character_form,
     }
     return render(request, 'users/profile.html', context)
+
+
+@login_required()
+def switch_profile(request, profile_id):
+    request.session['profile_id'] = profile_id
+    profile = Profile.objects.get(id=profile_id)
+    messages.info(
+        request, f'Zmieniono Postać na {profile.copied_character_name}!')
+    return redirect('home:home')

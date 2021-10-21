@@ -7,14 +7,30 @@
 
 <div class="content-section-sidebar">
     <aside>
-        <img class="account-img-sidebar mt-50" onload="showTime()" src="{{ user.profile.image.url }}">
+        <img class="account-img-sidebar mt-50" onload="showTime()" src="{{ profile.image.url }}">
         <h3 class="mb-1">
-            <a href="{% url 'prosoponomikon:character' user.profile.character.id %}">{{ user.profile.character }}</a>
+            <a href="{% url 'prosoponomikon:character' profile.character.id %}">{{ profile.character }}</a>
         </h3>
+        
+        {% if profile.status == 'gm' %}
+            <div class="h5" id="time"></div>
+        {% endif %}
+        
+        <ul class="list-group hover-pointer mt-5">
+            <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#profiles"><h6 class="mb-0">Postacie</h6></li>
+            <li id="profiles" class="list-group collapse">
+                <div>
+                    {% for profile in user.profiles.all %}
+                        <a class="list-group-item list-group-item-light" href="{% url 'users:switch-profile' profile.id %}">
+                            <small>{{ profile.copied_character_name }}</small>
+                        </a>
+                    {% endfor %}
+                </div>
+            </li>
+        </ul>
 
         <!-- For game master -->
-        {% if user.profile.status == 'gm' %}
-            <div class="h5 mb-5" id="time"></div>
+        {% if profile.status == 'gm' %}
             <ul class="list-group hover-pointer">
                 <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#technical"><h6 class="mb-0">Techniczne</h6></li>
                 <li id="technical" class="list-group collapse">
@@ -43,7 +59,7 @@
                     </div>
                 </li>
             </ul>
-
+        
             <div class="mt-2">
                 <a class="btn btn-outline-secondary icon-database-backup py-2" href="{% url 'technicalities:backup-db' %}"
                     data-toggle="tooltip" data-placement="bottom" title="Backup bazy na serwerze">
