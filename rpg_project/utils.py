@@ -141,7 +141,7 @@ def handle_inform_form(request):
 
 def send_emails(request, profile_ids=None, **kwargs):
     from users.models import Profile
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     sender = EMAIL_HOST_USER
     receivers = [
         p.user.email

@@ -22,7 +22,7 @@
             <!-- Navbar Left Side -->
             <ul class="navbar-nav mr-auto">
                 
-                {% with undone_demands=request.user.profile.undone_demands unseen_news=request.user.profile.unseen_news unseen_announcements=request.user.profile.unseen_announcements %}
+                {% with undone_demands=current_profile.undone_demands unseen_news=current_profile.unseen_news unseen_announcements=current_profile.unseen_announcements %}
                     <li class="dropdown pr-4 mr-auto">
                         <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
                             Organizacyjne
@@ -84,7 +84,7 @@
                     </li>
                 {% endwith %}
                 
-                {% with unseen_debates=request.user.profile.unseen_debates %}
+                {% with unseen_debates=current_profile.unseen_debates %}
                     <li class="dropdown pr-4 mr-auto">
                         <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
                             Przygody

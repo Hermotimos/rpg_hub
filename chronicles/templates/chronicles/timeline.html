@@ -217,7 +217,7 @@
                     <!-- DESCRIPTION SHORT -->
                     <td class="font-14 text-justify align-top font-italic hover-pointer pl-2 pr-2 pb-3"
                         data-toggle="modal" data-target="#event_{{ event.id }}">
-                        <span class="{% if request.user.profile not in event.known_directly.all and request.user.profile.status != 'gm' %} text-muted {% endif %}"
+                        <span class="{% if current_profile not in event.known_directly.all and current_profile.status != 'gm' %} text-muted {% endif %}"
                               data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic">Pokaż Kronikę wydarzenia</span>'>
                             {{ event.description_short|custom_linebreaksbr:1 }}
                         </span>
@@ -310,7 +310,7 @@
                             <a class="btn btn-outline-dark btn-sm icon-note icon-small mt-1 py-1 disabled"
                                href="#"></a>
                         </div>
-                        {% if request.user.profile.status == 'gm' %}
+                        {% if current_profile.status == 'gm' %}
                             <div class="mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj wydarzenie">
                                 <a class="btn btn-outline-dark btn-sm icon-edit icon-small py-1"
                                    href="{% url 'admin:chronicles_gameevent_change' event.id %}" target="_blank"></a>

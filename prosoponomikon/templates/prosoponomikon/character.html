@@ -18,7 +18,7 @@
                         <div class="float-left mr-3 img-hover-zoom">
                             <img class="character-detail {% if not character.profile.is_alive %} img-grayscale {% endif %}"
                                  src="
-                                    {% if request.user.profile.character == character or request.user.profile in character.known_directly.all or request.user.profile.can_view_all %}
+                                    {% if current_profile.character == character or current_profile in character.known_directly.all or current_profile.can_view_all %}
                                         {{ character.profile.image.url }}
                                     {% else %}
                                          /media/profile_pics/profile_known_only_indirectly.jpg
@@ -31,7 +31,7 @@
                             <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Przejdź do Prosoponomikonu">
                                 <a class="btn btn-outline-dark icon-parent-obj py-2" href="{% url 'prosoponomikon:ungrouped' %}#character_{{ character.id }}"></a>
                             </div>
-                            {% if request.user.profile.can_action %}
+                            {% if current_profile.can_action %}
                                 <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Przekaż wiedzę o postaci">
                                     <!-- Modal -->
                                     <span class="btn btn-outline-dark icon-inform py-2" data-toggle="modal" data-target="#infoCharacterModal_{{ character.id }}"></span>
@@ -48,12 +48,12 @@
 <!--                            <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">-->
 <!--                                <a class="btn btn-outline-dark icon-note py-2 disabled" href="#"></a>-->
 <!--                            </div>-->
-                            {% if request.user.profile.status == 'player' and request.user.profile.character == character %}
+                            {% if current_profile.status == 'player' and current_profile.character == character %}
                                 <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj postać">
                                     <a class="btn btn-outline-dark icon-edit py-2" href="{% url 'users:profile' %}"></a>
                                 </div>
                             {% endif %}
-                            {% if request.user.profile.status == 'gm' %}
+                            {% if current_profile.status == 'gm' %}
                                 <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj postać">
                                     <a class="btn btn-outline-secondary icon-edit py-2" href="{% url 'admin:prosoponomikon_character_change' character.id %}" target="_blank"></a>
                                 </div>
@@ -85,7 +85,7 @@
             {% endif %}
             
             <!-- Dialogue packets -->
-            {% if request.user.profile.status == 'gm' and character.dialogue_packets.all %}
+            {% if current_profile.status == 'gm' and character.dialogue_packets.all %}
                 {% if character.biography_packets.all %}
                     <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets">
                 {% else %}
@@ -102,7 +102,7 @@
                     <input type="radio" name="tabset" id="tab3" aria-controls="skills" checked>
                 {% endif %}
                 <label class="h4 mb-0" for="tab3">
-                    {% if character.profile != request.user.profile and character.profile.status != 'player' %} ~ {% endif %}
+                    {% if character.profile != current_profile and character.profile.status != 'player' %} ~ {% endif %}
                     Umiejętności
                 </label>
             {% endif %}
@@ -115,7 +115,7 @@
                     <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets" checked>
                 {% endif %}
                 <label class="h4 mb-0" for="tab4">
-                    {% if character.profile != request.user.profile and character.profile.status != 'player' %} ~ {% endif %}
+                    {% if character.profile != current_profile and character.profile.status != 'player' %} ~ {% endif %}
                     Wiedza
                 </label>
             {% endif %}
@@ -128,7 +128,7 @@
                     <input type="radio" name="tabset" id="tab5" aria-controls="known_characters" checked>
                 {% endif %}
                 <label class="h4 mb-0" for="tab5">
-                    {% if character.profile != request.user.profile and character.profile.status != 'player' %} ~ {% endif %}
+                    {% if character.profile != current_profile and character.profile.status != 'player' %} ~ {% endif %}
                     Znajomości
                 </label>
             {% endif %}
@@ -148,7 +148,7 @@
                 {% endif %}
                 
                 <!-- Dialogue packets -->
-                {% if request.user.profile.status == 'gm' and character.dialogue_packets.all %}
+                {% if current_profile.status == 'gm' and character.dialogue_packets.all %}
                     <section id="dialogue_packets" class="tab-panel">
                         {% for dialogue_packet in character.dialogue_packets.all %}
                             {% include 'knowledge/_dialogue_packet.html' %}

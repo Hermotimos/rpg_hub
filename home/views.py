@@ -32,7 +32,7 @@ def home_view(request):
     rand_locations = sample_from_qs(qs=known_locations, max_size=4)
 
     context = {
-        'profile': profile,
+        'current_profile': profile,
         'page_title': 'Hyllemath',
         'rand_characters': rand_characters,
         'rand_locations': rand_locations,
@@ -42,6 +42,11 @@ def home_view(request):
 
 @login_required
 def dupa_view(request):
-    return render(request, 'home/dupa.html', {'page_title': 'Dupa!'})
+    profile = Profile.objects.get(id=request.session['profile_id'])
+    context = {
+        'current_profile': profile,
+        'page_title': 'Dupa',
+    }
+    return render(request, 'home/dupa.html', context)
 
 

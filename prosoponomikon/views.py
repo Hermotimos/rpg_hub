@@ -24,9 +24,10 @@ from users.models import Profile, User
 
 @login_required
 def prosoponomikon_ungrouped_view(request):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     all_characters = profile.characters_all_known_annotated_if_indirectly()
     context = {
+        'current_profile': profile,
         'page_title': 'Prosoponomikon',
         'all_characters': all_characters,
     }
@@ -35,7 +36,7 @@ def prosoponomikon_ungrouped_view(request):
 
 @login_required
 def prosoponomikon_grouped_view(request):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     
     character_groups = profile.characters_groups_authored_with_characters()
     all_characters = profile.characters_all_known_annotated_if_indirectly()
@@ -44,6 +45,7 @@ def prosoponomikon_grouped_view(request):
         character_groups__in=character_groups).exclude(id__in=player_characters)
     
     context = {
+        'current_profile': profile,
         'page_title': 'Prosoponomikon',
         'player_characters': player_characters,
         'character_groups': character_groups,
@@ -54,7 +56,7 @@ def prosoponomikon_grouped_view(request):
 
 @login_required
 def prosoponomikon_character_view(request, character_id):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     if profile.can_view_all:
         return redirect('prosoponomikon:character-for-gm', character_id)
     else:
@@ -64,7 +66,7 @@ def prosoponomikon_character_view(request, character_id):
 @login_required
 @only_game_masters_and_spectators
 def prosoponomikon_character_for_gm_view(request, character_id):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     if profile.character.id == character_id:
         character = profile.character
     else:
@@ -93,6 +95,7 @@ def prosoponomikon_character_for_gm_view(request, character_id):
         handle_inform_form(request)
     
     context = {
+        'current_profile': profile,
         'page_title': character,
         'character': character,
         'skills': skills,
@@ -104,7 +107,7 @@ def prosoponomikon_character_for_gm_view(request, character_id):
 
 @login_required
 def prosoponomikon_character_for_player_view(request, character_id):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     
     known_bio_packets = (
         profile.biography_packets.all() | profile.authored_bio_packets.all())
@@ -130,6 +133,7 @@ def prosoponomikon_character_for_player_view(request, character_id):
         handle_inform_form(request)
     
     context = {
+        'current_profile': profile,
         'page_title': character,
         'character': character,
         'skills': skills,
@@ -145,7 +149,7 @@ def prosoponomikon_character_for_player_view(request, character_id):
 
 @login_required
 def prosoponomikon_character_groups_edit_view(request):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     characters = Character.objects.prefetch_related()
     char_groups = CharacterGroup.objects.filter(author=profile)
     char_groups = char_groups.prefetch_related(
@@ -204,6 +208,7 @@ def prosoponomikon_character_groups_edit_view(request):
                 form.fields['characters'].queryset = characters
     
     context = {
+        'current_profile': profile,
         'page_title': "Edytuj grupy postaci",
         'formset': formset,
         'formset_helper': CharacterGroupsEditFormSetHelper(status=profile.status),
@@ -213,7 +218,7 @@ def prosoponomikon_character_groups_edit_view(request):
 
 @login_required
 def prosoponomikon_character_group_create_view(request):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     form = CharacterGroupCreateForm(data=request.POST or None, profile=profile)
     
     if form.is_valid():
@@ -227,6 +232,7 @@ def prosoponomikon_character_group_create_view(request):
         messages.warning(request, form.errors)
         
     context = {
+        'current_profile': profile,
         'page_title': "Nowa grupa postaci",
         'form': form,
     }
@@ -235,7 +241,7 @@ def prosoponomikon_character_group_create_view(request):
     
 @login_required
 def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
 
     bio_packet = BiographyPacket.objects.filter(id=bio_packet_id).first()
     character = Character.objects.filter(id=character_id).first()
@@ -293,6 +299,7 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
         messages.warning(request, form.errors)
 
     context = {
+        'current_profile': profile,
         'page_title': f"{character}: " + (
             bio_packet.title if bio_packet else 'Nowy pakiet wiedzy'),
         'form': form,
@@ -312,6 +319,7 @@ def prosoponomikon_first_names_view(request):
         'affix_groups__first_names__auxiliary_group__location',
     )
     context = {
+        'current_profile': profile,
         'page_title': "Imiona",
         'name_groups': name_groups,
     }
@@ -321,11 +329,14 @@ def prosoponomikon_first_names_view(request):
 @login_required
 @only_game_masters
 def prosoponomikon_family_names_view(request):
+    profile = Profile.objects.get(id=request.session['profile_id'])
+    
     family_names = FamilyName.objects.select_related('group')
     family_names = family_names.prefetch_related(
         'characters__profile', 'locations')
 
     context = {
+        'current_profile': profile,
         'page_title': "Nazwiska",
         'family_names': family_names,
     }
@@ -336,6 +347,8 @@ def prosoponomikon_family_names_view(request):
 @only_game_masters
 def prosoponomikon_character_create_form_view(request):
     """Handle CharacterCreateForm intended for GM."""
+    profile = Profile.objects.get(id=request.session['profile_id'])
+    
     form = CharacterCreateForm(
         data=request.POST or None, files=request.FILES or None)
     
@@ -358,6 +371,7 @@ def prosoponomikon_character_create_form_view(request):
         return redirect('prosoponomikon:character-create')
         
     context = {
+        'current_profile': profile,
         'page_title': "Nowa postać",
         'form': form,
     }

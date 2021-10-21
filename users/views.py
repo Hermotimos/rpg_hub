@@ -63,6 +63,8 @@ def register_view(request):
 
 @login_required()
 def change_password_view(request):
+    profile = Profile.objects.get(id=request.session['profile_id'])
+
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
@@ -76,6 +78,7 @@ def change_password_view(request):
         form = PasswordChangeForm(request.user)
 
     context = {
+        'current_profile': profile,
         'page_title': 'Zmiana hasła',
         'form': form
     }
@@ -84,6 +87,7 @@ def change_password_view(request):
 
 @login_required
 def profile_view(request):
+    profile = Profile.objects.get(id=request.session['profile_id'])
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(
@@ -103,6 +107,7 @@ def profile_view(request):
         character_form = CharacterForm(instance=request.user.profile.character)
 
     context = {
+        'current_profile': profile,
         'page_title': 'Profil',
         'user_form': user_form,
         'profile_form': profile_form,

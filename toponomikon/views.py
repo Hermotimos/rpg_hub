@@ -6,11 +6,12 @@ from knowledge.models import MapPacket
 from rpg_project.utils import handle_inform_form
 from toponomikon.models import Location, LocationType, PrimaryLocation, \
     SecondaryLocation
+from users.models import Profile
 
 
 @login_required
 def toponomikon_main_view(request):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     if profile.can_view_all:
         primary_locs = PrimaryLocation.objects.prefetch_related('locations')
         all_locs = Location.objects.values('name')
@@ -39,6 +40,7 @@ def toponomikon_main_view(request):
         all_maps = profile.map_packets.all()
     
     context = {
+        'current_profile': profile,
         'page_title': 'Toponomikon',
         'primary_locs': primary_locs.select_related('main_image__image'),
         'all_locs': all_locs,
@@ -49,7 +51,7 @@ def toponomikon_main_view(request):
     
 @login_required
 def toponomikon_location_view(request, loc_name):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     known_dir = profile.locs_known_directly.all()
     known_indir = profile.locs_known_indirectly.all()
     known_only_indir = known_indir.exclude(id__in=known_dir)
@@ -121,6 +123,7 @@ def toponomikon_location_view(request, loc_name):
         handle_inform_form(request)
         
     context = {
+        'current_profile': profile,
         'page_title': page_title,
         'this_location': this_location,
         'location_types': location_types,

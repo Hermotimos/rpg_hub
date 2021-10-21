@@ -46,7 +46,7 @@
 
         <!-- FOLLOW/UNFOLLOW BUTTON -->
         <div class="mb-4">
-            {% if request.user.profile in news_followers %}
+            {% if current_profile in news_followers %}
                 <a href="{% url 'news:unfollow' news.id %}" class="btn btn-dark">Nie obserwuj</a>
             {% else %}
                 <a href="{% url 'news:follow' news.id %}" class="btn btn-dark">Obserwuj</a>

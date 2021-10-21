@@ -11,7 +11,7 @@ from users.models import Profile
 
 @login_required
 def debates_main_view(request):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     debates = Debate.objects.all().prefetch_related('known_directly')
     if profile.can_view_all:
         debates = debates.prefetch_related('events__game')
@@ -27,6 +27,7 @@ def debates_main_view(request):
     topics = topics.distinct()
 
     context = {
+        'current_profile': profile,
         'page_title': 'Narady',
         'topics': topics,
     }
@@ -35,6 +36,8 @@ def debates_main_view(request):
 
 @login_required
 def create_topic_view(request):
+    profile = Profile.objects.get(id=request.session['profile_id'])
+    
     form = CreateTopicForm(request.POST or None)
     if form.is_valid():
         topic = form.save()
@@ -43,6 +46,7 @@ def create_topic_view(request):
         return redirect('debates:create-debate', topic_id=topic.id)
 
     context = {
+        'current_profile': profile,
         'page_title': "Nowy temat narad",
         'form_1': form,
     }
@@ -51,7 +55,7 @@ def create_topic_view(request):
 
 # @login_required
 # def create_topic_view(request):
-#     profile = request.user.profile
+#     profile = Profile.objects.get(id=request.session['profile_id'])
 #     topic_form = CreateTopicForm(request.POST or None)
 #     debate_form = CreateDebateForm(data=request.POST or None,
 #                                    authenticated_user=request.user)
@@ -91,7 +95,7 @@ def create_topic_view(request):
 
 @login_required
 def create_debate_view(request, topic_id=0):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     topic = Topic.objects.get(pk=topic_id) if topic_id else Topic.objects.none()
 
     debate_form = CreateDebateForm(data=request.POST or None,
@@ -121,6 +125,7 @@ def create_debate_view(request, topic_id=0):
         return redirect('debates:debate', debate_id=debate.id)
 
     context = {
+        'current_profile': profile,
         'page_title': 'Nowa narada',
         'form_1': debate_form,
         'form_2': remark_form,
@@ -130,7 +135,7 @@ def create_debate_view(request, topic_id=0):
 
 @login_required
 def debate_view(request, debate_id):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     debates = Debate.objects.select_related()
     debates = debates.prefetch_related('remarks__author')
     debate = debates.get(id=debate_id)
@@ -181,6 +186,7 @@ def debate_view(request, debate_id):
         character__in=profile.characters_known_directly.all())
     
     context = {
+        'current_profile': profile,
         'page_title': debate.title,
         'topic': topic,
         'debate': debate,

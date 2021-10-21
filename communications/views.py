@@ -17,7 +17,7 @@ from users.models import Profile
 
 @login_required
 def announcements_view(request):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     
     if profile.status == 'gm':
         announcements = Announcement.objects.all()
@@ -34,6 +34,7 @@ def announcements_view(request):
     ).distinct()
 
     context = {
+        'current_profile': profile,
         'page_title': 'Ogłoszenia',
         'topics': topics,
         'unseen_announcements': profile.unseen_announcements,
@@ -62,7 +63,7 @@ def announcements_view(request):
 #
 # @login_required
 # def create_news_view(request):
-#     profile = request.user.profile
+#     profile = Profile.objects.get(id=request.session['profile_id'])
 #
 #     news_form = CreateNewsForm(data=request.POST or None,
 #                                files=request.FILES or None,
@@ -109,7 +110,7 @@ def announcements_view(request):
 
 @login_required
 def announcement_view(request, announcement_id):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     announcement = Announcement.objects.prefetch_related(
         'statements__seen_by', 'statements__author', 'followers',
         'known_directly')
@@ -151,6 +152,7 @@ def announcement_view(request, announcement_id):
     #     form = CreateNewsAnswerForm()
 
     context = {
+        'current_profile': profile,
         'page_title': announcement.title,
         'announcement': announcement,
         # 'form': form,
@@ -163,7 +165,7 @@ def announcement_view(request, announcement_id):
 #
 # @login_required
 # def unfollow_news_view(request, news_id):
-#     profile = request.user.profile
+#     profile = Profile.objects.get(id=request.session['profile_id'])
 #     news = get_object_or_404(News, id=news_id)
 #
 #     if profile in news.allowed_profiles.all() or profile.status == 'gm':
@@ -176,7 +178,7 @@ def announcement_view(request, announcement_id):
 #
 # @login_required
 # def follow_news_view(request, news_id):
-#     profile = request.user.profile
+#     profile = Profile.objects.get(id=request.session['profile_id'])
 #     news = get_object_or_404(News, id=news_id)
 #
 #     if profile in news.allowed_profiles.all() or profile.status == 'gm':
@@ -190,7 +192,7 @@ def announcement_view(request, announcement_id):
 # #
 # # @login_required
 # # def survey_detail_view(request, survey_id):
-# #     profile = request.user.profile
+# #     profile = Profile.objects.get(id=request.session['profile_id'])
 # #     survey = get_object_or_404(Survey, id=survey_id)
 # #
 # #     survey_seen_by = survey.seen_by.all()
@@ -266,7 +268,7 @@ def announcement_view(request, announcement_id):
 #
 # @login_required
 # def vote_yes_view(request, survey_id, option_id):
-#     profile = request.user.profile
+#     profile = Profile.objects.get(id=request.session['profile_id'])
 #     option = get_object_or_404(SurveyOption, id=option_id)
 #
 #     if profile in option.survey.addressees.all() or profile.status == 'gm':
@@ -283,7 +285,7 @@ def announcement_view(request, announcement_id):
 #
 # @login_required
 # def vote_no_view(request, survey_id, option_id):
-#     profile = request.user.profile
+#     profile = Profile.objects.get(id=request.session['profile_id'])
 #     option = get_object_or_404(SurveyOption, id=option_id)
 #
 #     if profile in option.survey.addressees.all() or profile.status == 'gm':
@@ -300,7 +302,7 @@ def announcement_view(request, announcement_id):
 #
 # @login_required
 # def unvote_view(request, survey_id, option_id):
-#     profile = request.user.profile
+#     profile = Profile.objects.get(id=request.session['profile_id'])
 #     option = get_object_or_404(SurveyOption, id=option_id)
 #
 #     if profile in option.survey.addressees.all() or profile.status == 'gm':
@@ -318,7 +320,7 @@ def announcement_view(request, announcement_id):
 # #
 # # @login_required
 # # def survey_create_view(request):
-# #     profile = request.user.profile
+# #     profile = Profile.objects.get(id=request.session['profile_id'])
 # #     if request.method == 'POST':
 # #         form = CreateSurveyForm(authenticated_user=request.user, data=request.POST, files=request.FILES)
 # #

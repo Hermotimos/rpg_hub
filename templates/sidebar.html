@@ -7,12 +7,12 @@
 
 <div class="content-section-sidebar">
     <aside>
-        <img class="account-img-sidebar mt-50" onload="showTime()" src="{{ profile.image.url }}">
+        <img class="account-img-sidebar mt-50" onload="showTime()" src="{{ current_profile.image.url }}">
         <h3 class="mb-1">
-            <a href="{% url 'prosoponomikon:character' profile.character.id %}">{{ profile.character }}</a>
+            <a href="{% url 'prosoponomikon:character' current_profile.character.id %}">{{ current_profile.character }}</a>
         </h3>
         
-        {% if profile.status == 'gm' %}
+        {% if current_profile.status == 'gm' %}
             <div class="h5" id="time"></div>
         {% endif %}
         
@@ -30,7 +30,7 @@
         </ul>
 
         <!-- For game master -->
-        {% if profile.status == 'gm' %}
+        {% if current_profile.status == 'gm' %}
             <ul class="list-group hover-pointer">
                 <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#technical"><h6 class="mb-0">Techniczne</h6></li>
                 <li id="technical" class="list-group collapse">

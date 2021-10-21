@@ -11,7 +11,7 @@ from chronicles.models import GameEvent, PlotThread, Location, GameSession, \
 
 
 def plot_threads(request):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     objects = PlotThread.objects.all()
     if not profile.can_view_all:
         objects = objects.filter(
@@ -22,7 +22,7 @@ def plot_threads(request):
 
 
 def locations(request):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     objects = Location.objects.all()
     if not profile.can_view_all:
         objects = objects.filter(
@@ -33,7 +33,7 @@ def locations(request):
 
 
 def participants(request):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     objects = Profile.non_gm.all()
     if not profile.can_view_all:
         # Get profiles that know directly the same events as the current one
@@ -44,7 +44,7 @@ def participants(request):
 
 
 def games(request):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     objects = GameSession.objects.all()
     if not profile.can_view_all:
         objects = objects.filter(

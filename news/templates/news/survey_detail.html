@@ -33,7 +33,7 @@
                 <tr>
                     <td class="text-nowrap pr-2">
                         {% for profile in option.no_voters.all %}
-                            {% if profile == request.user.profile %}
+                            {% if profile == current_profile %}
                                 <a href="{% url 'news:survey-unvote' survey.id option.id %}">
                                     <img class="rounded-circle img-small border-2 border-danger" src="{{ profile.image.url }}">
                                 </a>
@@ -47,7 +47,7 @@
                     </td>
                     <td class="px-2 text-center">
                         {{ option.option_text }}
-                        {% if request.user.profile == option.author and not option.yes_voters.all and not option.no_voters.all %}
+                        {% if current_profile == option.author and not option.yes_voters.all and not option.no_voters.all %}
                             <a href="{% url 'news:survey-option-modify' survey.id option.id %}">
                                 &nbsp;<img src="{% static 'img/edit.png' %}" class="img-edit">
                             </a>
@@ -62,7 +62,7 @@
                     </td>
                     <td class="text-nowrap pl-2">
                         {% for profile in option.yes_voters.all %}
-                            {% if profile == request.user.profile %}
+                            {% if profile == current_profile %}
                                 <a href="{% url 'news:survey-unvote' survey.id option.id %}">
                                     <img class="rounded-circle img-small border-2 border-success" src="{{ profile.image.url }}">
                                 </a>

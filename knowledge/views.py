@@ -11,6 +11,7 @@ from knowledge.forms import KnPacketForm, PlayerKnPacketForm
 from knowledge.models import KnowledgePacket
 from rpg_project.utils import handle_inform_form
 from rules.models import SkillLevel, Skill
+from users.models import Profile
 
 
 def custom_sort(skills_qs):
@@ -33,7 +34,7 @@ def custom_sort(skills_qs):
 
 @login_required
 def knowledge_packets_in_skills_view(request, model_name):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     skill_model = apps.get_app_config('rules').get_model(model_name)
     skills = skill_model.objects.all()
     
@@ -64,6 +65,7 @@ def knowledge_packets_in_skills_view(request, model_name):
         handle_inform_form(request)
     
     context = {
+        'current_profile': profile,
         'page_title': page_title,
         'skills': skills,
     }
@@ -72,7 +74,7 @@ def knowledge_packets_in_skills_view(request, model_name):
 
 @login_required
 def kn_packet_form_view(request, kn_packet_id):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     kn_packet = KnowledgePacket.objects.filter(id=kn_packet_id).first()
         
     if profile.status == 'gm':
@@ -131,6 +133,7 @@ def kn_packet_form_view(request, kn_packet_id):
         messages.warning(request, form.errors)
         
     context = {
+        'current_profile': profile,
         'page_title': kn_packet.title if kn_packet else 'Nowy pakiet wiedzy',
         'form': form,
     }

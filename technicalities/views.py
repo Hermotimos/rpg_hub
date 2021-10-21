@@ -26,10 +26,13 @@ from toponomikon.models import Location
 from users.models import Profile
 from news.models import News, NewsAnswer
 
+
 @login_required
 @only_game_masters
 def reload_main_view(request):
+    profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
+        'current_profile': profile,
         'page_title': 'Przeładowanie sorting_name'
     }
     return render(request, 'technicalities/reload_main.html', context)
@@ -217,6 +220,8 @@ def refresh_content_types(request):
 @login_required
 @only_game_masters
 def todos_view(request):
+    profile = Profile.objects.get(id=request.session['profile_id'])
+
     characters = NonGMCharacter.objects.all()
     
     characters_no_frequented_location = characters.filter(frequented_locations=None)
@@ -232,6 +237,7 @@ def todos_view(request):
         known_directly=None).filter(known_indirectly=None)
     
     context = {
+        'current_profile': profile,
         'page_title': 'TODOs',
         'characters_no_frequented_location': characters_no_frequented_location,
         'characters_no_description': characters_no_description,

@@ -66,7 +66,7 @@ class ToponomikonGeneralLocationTest(TestCase):
         self.assertEquals(response.status_code, 404)
 
     def test_get(self):
-        # request.user.profile in gen_loc1.known_directly.all()
+        # current_profile in gen_loc1.known_directly.all()
         self.client.force_login(self.user1)
         response = self.client.get(self.url)
         self.assertEquals(response.status_code, 200)

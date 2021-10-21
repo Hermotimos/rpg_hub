@@ -13,7 +13,7 @@ from users.models import Profile
 
 @login_required
 def main_view(request):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     
     if profile.status == 'gm':
         newss = News.objects.all()
@@ -29,6 +29,7 @@ def main_view(request):
     topics = topics.distinct()
 
     context = {
+        'current_profile': profile,
         'page_title': 'Ogłoszenia',
         'topics': topics,
         'unseen_news': profile.unseen_news,
@@ -38,6 +39,8 @@ def main_view(request):
 
 @login_required
 def create_topic_view(request):
+    profile = Profile.objects.get(id=request.session['profile_id'])
+    
     form = CreateTopicForm(request.POST or None)
     if form.is_valid():
         topic = form.save()
@@ -46,6 +49,7 @@ def create_topic_view(request):
         return redirect('news:main')
 
     context = {
+        'current_profile': profile,
         'page_title': "Nowy temat ogłoszeń",
         'form_1': form,
     }
@@ -54,7 +58,7 @@ def create_topic_view(request):
 
 @login_required
 def create_news_view(request):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     
     news_form = CreateNewsForm(data=request.POST or None,
                                files=request.FILES or None,
@@ -92,6 +96,7 @@ def create_news_view(request):
         return redirect('news:detail', news_id=news.id)
 
     context = {
+        'current_profile': profile,
         'page_title': "Nowe ogłoszenie",
         'form_1': news_form,
         'form_2': news_answer_form,
@@ -101,7 +106,7 @@ def create_news_view(request):
 
 @login_required
 def news_detail_view(request, news_id):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     news = News.objects.prefetch_related(
         'news_answers__seen_by', 'news_answers__author', 'followers',
         'allowed_profiles')
@@ -143,6 +148,7 @@ def news_detail_view(request, news_id):
         form = CreateNewsAnswerForm()
 
     context = {
+        'current_profile': profile,
         'page_title': news.title,
         'news': news,
         'form': form,
@@ -155,7 +161,7 @@ def news_detail_view(request, news_id):
 
 @login_required
 def unfollow_news_view(request, news_id):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     news = get_object_or_404(News, id=news_id)
 
     if profile in news.allowed_profiles.all() or profile.status == 'gm':
@@ -168,7 +174,7 @@ def unfollow_news_view(request, news_id):
 
 @login_required
 def follow_news_view(request, news_id):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     news = get_object_or_404(News, id=news_id)
 
     if profile in news.allowed_profiles.all() or profile.status == 'gm':
@@ -182,7 +188,7 @@ def follow_news_view(request, news_id):
 #
 # @login_required
 # def survey_detail_view(request, survey_id):
-#     profile = request.user.profile
+#     profile = Profile.objects.get(id=request.session['profile_id'])
 #     survey = get_object_or_404(Survey, id=survey_id)
 #
 #     survey_seen_by = survey.seen_by.all()
@@ -258,7 +264,7 @@ def follow_news_view(request, news_id):
 
 @login_required
 def vote_yes_view(request, survey_id, option_id):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     option = get_object_or_404(SurveyOption, id=option_id)
 
     if profile in option.survey.addressees.all() or profile.status == 'gm':
@@ -275,7 +281,7 @@ def vote_yes_view(request, survey_id, option_id):
 
 @login_required
 def vote_no_view(request, survey_id, option_id):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     option = get_object_or_404(SurveyOption, id=option_id)
 
     if profile in option.survey.addressees.all() or profile.status == 'gm':
@@ -292,7 +298,7 @@ def vote_no_view(request, survey_id, option_id):
 
 @login_required
 def unvote_view(request, survey_id, option_id):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     option = get_object_or_404(SurveyOption, id=option_id)
 
     if profile in option.survey.addressees.all() or profile.status == 'gm':
@@ -310,7 +316,7 @@ def unvote_view(request, survey_id, option_id):
 #
 # @login_required
 # def survey_create_view(request):
-#     profile = request.user.profile
+#     profile = Profile.objects.get(id=request.session['profile_id'])
 #     if request.method == 'POST':
 #         form = CreateSurveyForm(authenticated_user=request.user, data=request.POST, files=request.FILES)
 #
@@ -347,9 +353,10 @@ def unvote_view(request, survey_id, option_id):
 #     return render(request, 'news/survey_create.html', context)
 
 
-
 @login_required
 def survey_option_modify_view(request, survey_id, option_id):
+    profile = Profile.objects.get(id=request.session['profile_id'])
+    
     option = get_object_or_404(SurveyOption, id=option_id)
 
     if request.method == 'POST':
@@ -363,6 +370,7 @@ def survey_option_modify_view(request, survey_id, option_id):
         form = ModifySurveyOptionForm(instance=option)
 
     context = {
+        'current_profile': profile,
         'page_title': 'Zmiana opcji ankiety',
         'form': form,
     }
@@ -370,7 +378,6 @@ def survey_option_modify_view(request, survey_id, option_id):
         return render(request, 'news/survey_option_modify.html', context)
     else:
         return redirect('home:dupa')
-
 
 
 @login_required

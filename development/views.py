@@ -14,7 +14,7 @@ def profile_sheet_view(request, profile_id='0'):
     try:
         profile = Profile.objects.get(id=profile_id)
     except Profile.DoesNotExist:
-        profile = request.user.profile
+        profile = Profile.objects.get(id=request.session['profile_id'])
     try:
         pass
         # This won't work porperly untli Date model is ordered properly.
@@ -58,8 +58,8 @@ def profile_sheet_view(request, profile_id='0'):
     # print(profile_klasses)
    
     context = {
+        'current_profile': profile,
         'page_title': f'Karta postaci',
-        'profile': profile,
         # 'birthplace': birthplace,
         # 'birthtime': birthtime,
         'professions': professions,
@@ -78,7 +78,7 @@ def character_skills_view(request, profile_id='0'):
     try:
         profile = Profile.objects.get(id=profile_id)
     except Profile.DoesNotExist:
-        profile = request.user.profile
+        profile = Profile.objects.get(id=request.session['profile_id'])
     
     skills = Skill.objects \
         .filter(skill_levels__acquired_by=profile) \
@@ -97,6 +97,7 @@ def character_skills_view(request, profile_id='0'):
         .distinct()
     
     context = {
+        'current_profile': profile,
         'page_title': f'Umiejętności - {profile.character}',
         'skills': skills,
         'synergies': synergies,
@@ -109,10 +110,11 @@ def character_skills_view(request, profile_id='0'):
 
 @login_required
 def character_skills_for_gm_view(request):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     profiles = Profile.players.all()
     
     context = {
+        'current_profile': profile,
         'page_title': 'Umiejętności graczy',
         'profiles': profiles,
     }
@@ -125,7 +127,7 @@ def character_skills_for_gm_view(request):
 
 @login_required
 def character_tricks_view(request):
-    profile = request.user.profile
+    profile = Profile.objects.get(id=request.session['profile_id'])
     
     if profile.status == 'gm':
         players_profiles = Profile.players.filter(is_alive=True)
@@ -133,6 +135,7 @@ def character_tricks_view(request):
         players_profiles = [profile]
     
     context = {
+        'current_profile': profile,
         'page_title': f'Podstępy - {profile.character}',
         'players_profiles': players_profiles
     }

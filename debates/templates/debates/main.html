@@ -15,7 +15,7 @@
         </header>
 
         <article class="pt-5">
-            {% with unseen_debates=request.user.profile.unseen_debates %}
+            {% with unseen_debates=current_profile.unseen_debates %}
                 {% for topic in topics %}
                     <div id="topic_{{ topic.id }}" class="mb-5">
                         <h3 class="small-caps mb-3">

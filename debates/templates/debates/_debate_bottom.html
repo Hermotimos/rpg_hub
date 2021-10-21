@@ -15,7 +15,7 @@
         <div class="col-12">
             <form method="POST" action=".#page-bottom" enctype="multipart/form-data">
                 {% csrf_token %}
-                {% if request.user.profile.status == 'gm' %}
+                {% if current_profile.status == 'gm' %}
                     <div class="col-md-3">
                         {{ form.author|as_crispy_field }}
                     </div>
