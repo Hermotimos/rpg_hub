@@ -3,6 +3,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import LoginView, LogoutView
+from django.db.models import F, Max
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 
@@ -24,8 +25,14 @@ class CustomLoginView(LoginView):
     def form_valid(self, form):
         user = form.get_user()
         login(self.request, user)
-        # Use as default profile the one created most recently
-        self.request.session['profile_id'] = user.profiles.latest('id').id
+        # Determine user's default profile to present opon logon
+        try:
+            default_profile = user.profiles.get(status='player', is_alive=True)
+        except (Profile.DoesNotExist, Profile.MultipleObjectsReturned):
+            default_profile = user.profiles.annotate(
+                latest_gameevent_id=Max('events_known_directly__id')
+            ).latest('latest_gameevent_id')
+        self.request.session['profile_id'] = default_profile.id
         return HttpResponseRedirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):
