@@ -107,6 +107,16 @@ def reload_toponomikon(request):
 
 @login_required
 @only_game_masters
+def reload_reload_user1to1_to_userFK(request):
+    for obj in Profile.objects.all():
+        obj.user_fk = obj.user
+        obj.save()
+    messages.info(request, 'Przeładowano dane o profilach do USER FK!')
+    return redirect('technicalities:reload-main')
+
+
+@login_required
+@only_game_masters
 def reload_news(request):
     from news.models import Topic as NewsTopic, News, NewsAnswer
     from communications.models import Option, Announcement, Topic, Statement

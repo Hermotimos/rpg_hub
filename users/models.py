@@ -5,6 +5,7 @@ from django.db.models import (
     CASCADE,
     Case,
     CharField,
+    ForeignKey as FK,
     ImageField,
     IntegerField,
     Manager,
@@ -31,6 +32,7 @@ STATUS = [
 
 class Profile(Model):
     user = OneToOneField(to=User, on_delete=CASCADE)
+    user_fk = FK(to=User, related_name='profiles', on_delete=CASCADE, default=1)
     status = CharField(max_length=50, choices=STATUS, default='npc')
     is_alive = BooleanField(default=True)
     is_active = BooleanField(default=True)

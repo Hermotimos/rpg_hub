@@ -11,6 +11,7 @@ urlpatterns = [
     path('reload-toponomikon/', views.reload_toponomikon, name='reload-toponomikon'),
     path('reload-prosoponomikon/', views.reload_prosoponomikon, name='reload-prosoponomikon'),
     # path('reload-threads/', views.reload_threads_to_plotthreads, name='reload-threads'),
+    path('reload-users/', views.reload_reload_user1to1_to_userFK, name='reload-users'),
     path('reload-news/', views.reload_news, name='reload-news'),
     path('refresh-contenttypes/', views.refresh_content_types, name='refresh-contenttypes'),
     
