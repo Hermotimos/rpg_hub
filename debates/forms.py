@@ -45,19 +45,22 @@ class CreateDebateForm(forms.ModelForm):
         self.fields['title'].label = "Tytuł"
         self.fields['topic'].label = "Temat"
 
-        topic = Topic.objects.all()
+        topic_qs = Topic.objects.all()
         known_directly = Profile.living.all()
+        
         if profile.status != 'gm':
             self.fields['is_exclusive'].widget = HiddenInput()
             
-            topic = Topic.objects.filter(
-                debates__known_directly=profile).distinct()
+            topic_qs = topic_qs.objects.filter(
+                Q(debates__known_directly=profile)
+                | Q(id=kwargs['initial']['topic'].id)
+            ).distinct()
             
             known_directly = known_directly.filter(
                 character__in=profile.characters_known_directly.all()
             ).exclude(user=authenticated_user).select_related()
             
-        self.fields['topic'].queryset = topic
+        self.fields['topic'].queryset = topic_qs
         self.fields['known_directly'].queryset = known_directly
         
         self.fields['known_directly'].widget.attrs['size'] = min(

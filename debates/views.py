@@ -96,6 +96,7 @@ def create_topic_view(request):
 @login_required
 def create_debate_view(request, topic_id=0):
     profile = Profile.objects.get(id=request.session['profile_id'])
+
     topic = Topic.objects.get(pk=topic_id) if topic_id else Topic.objects.none()
 
     debate_form = CreateDebateForm(data=request.POST or None,
