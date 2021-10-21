@@ -26,7 +26,7 @@ class Topic(Model):
     title = CharField(max_length=100, unique=True)
     order_no = SmallIntegerField(default=100)
     created_at = DateTimeField(
-        # auto_now_add=True
+        # auto_now_add=True TODO restore after data migration
     )
     
     class Meta:
@@ -48,7 +48,7 @@ class Thread(Model):
     kind = CharField(max_length=15, choices=THREAD_KINDS)
     known_directly = M2M(to=Profile, related_name='threads_known_directly')
     created_at = DateTimeField(
-        # auto_now_add=True
+        # auto_now_add=True TODO restore after data migration
     )
     # Announcement
     followers = M2M(to=Profile, related_name='threads_followed', blank=True)
@@ -119,7 +119,7 @@ class Statement(Model):
     image = ImageField(upload_to='post_pics', blank=True, null=True)
     seen_by = M2M(to=Profile, related_name='statements_seen', blank=True)
     created_at = DateTimeField(
-        # auto_now_add=True
+        # auto_now_add=True TODO restore after data migration
     )
     # Announcement
     options = M2M(to=Option, related_name='threads', blank=True)
