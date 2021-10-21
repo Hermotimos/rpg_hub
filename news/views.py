@@ -68,7 +68,7 @@ def create_news_view(request):
 
     if news_form.is_valid() and news_answer_form.is_valid():
         news = news_form.save(commit=False)
-        news.author = request.user.profile
+        news.author = profile
         news.save()
         allowed_profiles = news_form.cleaned_data['allowed_profiles']
         allowed_profiles |= Profile.objects.filter(id=request.user.id)
@@ -77,7 +77,7 @@ def create_news_view(request):
 
         answer = news_answer_form.save(commit=False)
         answer.news = news
-        answer.author = request.user.profile
+        answer.author = profile
         news_answer_form.save()
         
         subject = f"[RPG] Nowe ogłoszenie: '{news.title[:30]}...'"
@@ -126,7 +126,7 @@ def news_detail_view(request, news_id):
         if form.is_valid():
             answer = form.save(commit=False)
             answer.news = news
-            answer.author = request.user.profile
+            answer.author = profile
             form.save()
 
             subject = f"[RPG] Odpowiedź na ogłoszenie: '{news.title[:30]}...'"
@@ -214,7 +214,7 @@ def follow_news_view(request, news_id):
 #         if answer_form.is_valid():
 #             answer = answer_form.save(commit=False)
 #             answer.survey = survey
-#             answer.author = request.user.profile
+#             answer.author = profile
 #             answer_form.save()
 #
 #             subject = f"[RPG] Wypowiedż do ankiety: '{survey.title[:30]}...'"
@@ -236,7 +236,7 @@ def follow_news_view(request, news_id):
 #         elif option_form.is_valid():
 #             option = option_form.save(commit=False)
 #             option.survey = survey
-#             option.author = request.user.profile
+#             option.author = profile
 #             option_form.save()
 #
 #             messages.info(request, f'Powiadom uczestników o nowej opcji!')
@@ -322,7 +322,7 @@ def unvote_view(request, survey_id, option_id):
 #
 #         if form.is_valid():
 #             survey = form.save(commit=False)
-#             survey.author = request.user.profile
+#             survey.author = profile
 #             survey.save()
 #             addressees = form.cleaned_data['addressees']
 #             addressees |= Profile.objects.filter(id=request.user.id)
@@ -374,7 +374,7 @@ def survey_option_modify_view(request, survey_id, option_id):
         'page_title': 'Zmiana opcji ankiety',
         'form': form,
     }
-    if request.user.profile == option.author:
+    if profile == option.author:
         return render(request, 'news/survey_option_modify.html', context)
     else:
         return redirect('home:dupa')
@@ -382,8 +382,10 @@ def survey_option_modify_view(request, survey_id, option_id):
 
 @login_required
 def survey_option_delete_view(request, survey_id, option_id):
+    profile = Profile.objects.get(id=request.session['profile_id'])
+    
     option = get_object_or_404(SurveyOption, id=option_id)
-    if request.user.profile == option.author:
+    if profile == option.author:
         option.delete()
         return redirect('news:survey-detail', survey_id=survey_id)
     else:

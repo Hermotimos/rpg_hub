@@ -52,7 +52,7 @@
             {% endif %}
             
             <!-- Pictures in BiographyPacket should be visible to the author and GM exclusively -->
-            {% current_profile.status == 'gm' or request.user.profile == biography_packet.author or request.user.profile in biography_packet.acquired_by.all %}
+            {% current_profile.status == 'gm' or current_profile == biography_packet.author or current_profile in biography_packet.acquired_by.all %}
                 {% for picture_set in biography_packet.picture_sets.all %}
                     <div class="d-flex justify-content-center my-3">
                         {% for picture in picture_set|pictureset_pictures_in_custom_order %}

@@ -67,7 +67,7 @@ def profile_sheet_view(request, profile_id='0'):
         'skills': skills,
         'synergies': synergies,
     }
-    if request.user.profile.status != 'gm' and profile_id == 0:
+    if profile.status != 'gm' and profile_id == 0:
         return redirect('home:dupa')
     else:
         return render(request, 'development/profile_sheet.html', context)
@@ -102,7 +102,7 @@ def character_skills_view(request, profile_id='0'):
         'skills': skills,
         'synergies': synergies,
     }
-    if request.user.profile.status != 'gm' and profile_id != 0:
+    if profile.status != 'gm' and profile_id != 0:
         return redirect('home:dupa')
     else:
         return render(request, 'development/character_skills.html', context)
