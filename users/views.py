@@ -27,12 +27,15 @@ class CustomLoginView(LoginView):
         login(self.request, user)
         # Determine user's default profile to present opon logon
         try:
-            default_profile = user.profiles.get(status='player', is_alive=True)
+            profile = user.profiles.get(status='gm')
         except (Profile.DoesNotExist, Profile.MultipleObjectsReturned):
-            default_profile = user.profiles.annotate(
-                latest_gameevent_id=Max('events_known_directly__id')
-            ).latest('latest_gameevent_id')
-        self.request.session['profile_id'] = default_profile.id
+            try:
+                profile = user.profiles.get(status='player', is_alive=True)
+            except (Profile.DoesNotExist, Profile.MultipleObjectsReturned):
+                profile = user.profiles.annotate(
+                    latest_gameevent_id=Max('events_known_directly__id')
+                ).latest('latest_gameevent_id')
+        self.request.session['profile_id'] = profile.id
         return HttpResponseRedirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):
