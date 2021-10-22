@@ -207,6 +207,7 @@ def plans_main_view(request):
 @login_required
 @only_game_masters
 def plans_for_gm_view(request):
+    profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
         'current_profile': profile,
         'page_title': 'Plany graczy',
