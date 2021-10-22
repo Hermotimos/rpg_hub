@@ -70,47 +70,43 @@ class Profile(Model):
                 img.thumbnail(output_size)
                 img.save(self.image.path)
        
-    @staticmethod
-    def _characters_all_related(qs):
-        qs = qs.prefetch_related('known_directly', 'known_indirectly')
-        qs = qs.select_related('profile')
-        return qs
-
-    def characters_all_known(self):
-        if self.can_view_all:
-            from prosoponomikon.models import Character
-            qs = Character.objects.all()
-        else:
-            known_dir = self.characters_known_directly.all()
-            known_indir = self.characters_known_indirectly.all()
-            qs = (known_dir | known_indir).distinct()
-        return self._characters_all_related(qs).exclude(id=self.character.id)
-    
-    def characters_known_only_indirectly(self):
-        if self.can_view_all:
-            from prosoponomikon.models import Character
-            qs = Character.objects.none()
-        else:
-            known_dir = self.characters_known_directly.all()
-            known_indir = self.characters_known_indirectly.all()
-            qs = known_indir.exclude(id__in=known_dir)
-        return self._characters_all_related(qs).exclude(id=self.character.id)
-
     def characters_all_known_annotated_if_indirectly(self):
         from prosoponomikon.models import Character
         if self.can_view_all:
             qs = Character.objects.all()
         else:
-            known_only_indir = self.characters_known_only_indirectly()
-            all_known = self.characters_all_known()
+            known_dir = self.characters_known_directly.all()
+            known_indir = self.characters_known_indirectly.all()
+            known_only_indir = known_indir.exclude(id__in=known_dir)
+            all_known = (known_dir | known_indir).distinct()
             qs = all_known.annotate(
                 only_indirectly=Case(
                     When(id__in=known_only_indir, then=Value(1)),
                     default=Value(0),
                     output_field=IntegerField(),
-                ),
-            )
-        return self._characters_all_related(qs).exclude(id=self.character.id)
+                ))
+        qs = qs.prefetch_related('known_directly', 'known_indirectly')
+        qs = qs.select_related('profile')
+        return qs
+    
+    def locations_all_known_annotated_if_indirectly(self):
+        if self.can_view_all:
+            from toponomikon.models import Location
+            qs = Location.objects.all()
+        else:
+            known_dir = self.locs_known_directly.all()
+            known_indir = self.locs_known_indirectly.all()
+            known_only_indir = known_indir.exclude(id__in=known_dir)
+            all_known = (known_dir | known_indir).distinct()
+            qs = all_known.annotate(
+                only_indirectly=Case(
+                    When(id__in=known_only_indir, then=Value(1)),
+                    default=Value(0),
+                    output_field=IntegerField(),
+                ))
+        qs = qs.prefetch_related('known_directly', 'known_indirectly')
+        qs = qs.select_related('main_image__image')
+        return qs
 
     def characters_groups_authored_with_characters(self):
         characters = self.characters_all_known_annotated_if_indirectly()
