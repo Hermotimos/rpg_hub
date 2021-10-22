@@ -51,7 +51,7 @@ class CreateDebateForm(forms.ModelForm):
         if profile.status != 'gm':
             self.fields['is_exclusive'].widget = HiddenInput()
             
-            topic_qs = topic_qs.objects.filter(
+            topic_qs = topic_qs.filter(
                 Q(debates__known_directly=profile)
                 | Q(id=kwargs['initial']['topic'].id)
             ).distinct()
