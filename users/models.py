@@ -113,7 +113,7 @@ class Profile(Model):
         character_groups = self.character_groups_authored.all()
         character_groups = character_groups.prefetch_related(
             Prefetch('characters', queryset=characters),
-            'characters__profile__user',
+            'characters__profile__user_fk',
             'characters__known_directly',
             'characters__known_indirectly',
             'characters__first_name')
