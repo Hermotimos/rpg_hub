@@ -29,6 +29,61 @@ from news.models import News, NewsAnswer
 
 @login_required
 @only_game_masters
+def todos_view(request):
+    profile = Profile.objects.get(id=request.session['profile_id'])
+    
+    characters = NonGMCharacter.objects.all()
+    
+    characters_no_frequented_location = characters.filter(
+        frequented_locations=None)
+    characters_no_description = characters.filter(description__exact="")
+    
+    profiles_no_image = Profile.objects.filter(
+        Q(image__icontains="square") | Q(image__exact=""))
+    
+    locations_no_image = Location.objects.filter(main_image=None)
+    locations_no_description = Location.objects.filter(description__exact="")
+    
+    game_event_no_known = GameEvent.objects.filter(
+        known_directly=None).filter(known_indirectly=None)
+    
+    context = {
+        'current_profile': profile,
+        'page_title': 'TODOs',
+        'characters_no_frequented_location': characters_no_frequented_location,
+        'characters_no_description': characters_no_description,
+        'profiles_no_image': profiles_no_image,
+        'locations_no_image': locations_no_image,
+        'locations_no_description': locations_no_description,
+        'game_event_no_known': game_event_no_known,
+    }
+    return render(request, 'technicalities/todos.html', context)
+
+
+@login_required
+@only_game_masters
+def backup_db_view(request):
+    backup_db(reason="manual")
+    messages.info(request, 'Wykonano backup bazy na serwerze!')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+@only_game_masters
+def download_db(request):
+    db_path = settings.DATABASES['default']['NAME']
+    db_file = File(open(db_path, "rb"))
+    response = HttpResponse(db_file, content_type='application/x-sqlite3')
+    response['Content-Disposition'] = 'attachment; filename=db.sqlite3'
+    response['Content-Length'] = db_file.size
+    return response
+
+
+# ============================================================================
+
+
+@login_required
+@only_game_masters
 def reload_main_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
@@ -110,16 +165,6 @@ def reload_toponomikon(request):
 
 @login_required
 @only_game_masters
-def reload_reload_user1to1_to_userFK(request):
-    for obj in Profile.objects.all():
-        obj.user_fk = obj.user
-        obj.save()
-    messages.info(request, 'Przeładowano dane o profilach do USER FK!')
-    return redirect('technicalities:reload-main')
-
-
-@login_required
-@only_game_masters
 def reload_news(request):
     from news.models import Topic as NewsTopic, News, NewsAnswer
     from communications.models import Option, Announcement, Topic, Statement
@@ -152,53 +197,6 @@ def reload_news(request):
     messages.info(request, 'Przeładowano NEWS->COMMUNICATIONS!')
     return redirect('technicalities:reload-main')
 
-
-# @login_required
-# @only_game_masters
-# def reload_threads_to_plotthreads(request):
-#     from chronicles.models import PlotThread, TimeUnit
-#
-#     for time_unit in TimeUnit.objects.all():
-#         threads = time_unit.threads.all()
-#         plot_threads = []
-#
-#         for thread in threads:
-#             plot_thread, _ = PlotThread.objects.get_or_create(
-#                 name=thread.name, is_ended=thread.is_ended)
-#             plot_threads.append(plot_thread)
-#
-#         time_unit.plot_threads.set(plot_threads)
-#         print(time_unit)
-#
-#     messages.info(request, 'Przeładowano "Threads" !')
-#     return redirect('technicalities:reload-main')
-
-
-# @login_required
-# @only_game_masters
-# def reload_news(request):
-#     for obj in News.objects.all():
-#         new = NewsAnswer.objects.create(
-#             news=obj,
-#             text=obj.text,
-#             author=obj.author,
-#             image=obj.image,
-#         )
-#         if obj.seen_by.all():
-#             new.seen_by.set(obj.seen_by.all())
-#
-#         from django.db import connection
-#         with connection.cursor() as cursor:
-#             query = f"""
-#                 UPDATE news_newsanswer
-#                     SET created_at = '{obj.created_at}'
-#                     WHERE id = {new.id}
-#             """
-#             cursor.execute(query)
-#
-#     messages.info(request, 'Przeładowano news!')
-#     return redirect('technicalities:reload-main')
-
     
 @login_required
 @only_game_masters
@@ -217,52 +215,3 @@ def refresh_content_types(request):
 #  ---------------------------------------------------------------------
 
 
-@login_required
-@only_game_masters
-def todos_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
-
-    characters = NonGMCharacter.objects.all()
-    
-    characters_no_frequented_location = characters.filter(frequented_locations=None)
-    characters_no_description = characters.filter(description__exact="")
-    
-    profiles_no_image = Profile.objects.filter(
-        Q(image__icontains="square") | Q(image__exact=""))
-    
-    locations_no_image = Location.objects.filter(main_image=None)
-    locations_no_description = Location.objects.filter(description__exact="")
-    
-    game_event_no_known = GameEvent.objects.filter(
-        known_directly=None).filter(known_indirectly=None)
-    
-    context = {
-        'current_profile': profile,
-        'page_title': 'TODOs',
-        'characters_no_frequented_location': characters_no_frequented_location,
-        'characters_no_description': characters_no_description,
-        'profiles_no_image': profiles_no_image,
-        'locations_no_image': locations_no_image,
-        'locations_no_description': locations_no_description,
-        'game_event_no_known': game_event_no_known,
-    }
-    return render(request, 'technicalities/todos.html', context)
-
-
-@login_required
-@only_game_masters
-def backup_db_view(request):
-    backup_db(reason="manual")
-    messages.info(request, 'Wykonano backup bazy na serwerze!')
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-
-@login_required
-@only_game_masters
-def download_db(request):
-    db_path = settings.DATABASES['default']['NAME']
-    db_file = File(open(db_path, "rb"))
-    response = HttpResponse(db_file, content_type='application/x-sqlite3')
-    response['Content-Disposition'] = 'attachment; filename=db.sqlite3'
-    response['Content-Length'] = db_file.size
-    return response
