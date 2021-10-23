@@ -321,7 +321,7 @@ class CharacterGroup(Model):
 
 def copy_name_from_character_to_profile(sender, instance, **kwargs):
     profile = instance.profile
-    profile.copied_character_name = str(instance)
+    profile.character_name_copy = str(instance)
     profile.save()
 
 

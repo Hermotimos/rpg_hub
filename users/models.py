@@ -44,7 +44,7 @@ class Profile(Model):
         storage=ReplaceFileStorage(),
     )
     # Character name copied from Character (by signal) to avoid queries
-    copied_character_name = CharField(max_length=100, blank=True, null=True)
+    character_name_copy = CharField(max_length=100, blank=True, null=True)
 
     objects = Manager()
     non_gm = NonGMProfileManager()
@@ -58,7 +58,7 @@ class Profile(Model):
         ordering = ['-status', '-is_active', 'user__username']
     
     def __str__(self):
-        return self.copied_character_name or self.user.username
+        return self.character_name_copy or self.user.username
 
     def save(self, *args, **kwargs):
         first_save = True if not self.pk else False

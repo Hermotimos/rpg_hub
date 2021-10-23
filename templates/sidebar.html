@@ -52,7 +52,7 @@
                 <div>
                     {% for profile in user.profiles.all %}
                         <a class="list-group-item list-group-item-light" href="{% url 'users:switch-profile' profile.id %}">
-                            <small>{{ profile.copied_character_name }}</small>
+                            <small>{{ profile.character_name_copy }}</small>
                         </a>
                     {% endfor %}
                 </div>

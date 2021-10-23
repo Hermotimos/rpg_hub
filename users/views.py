@@ -131,5 +131,5 @@ def switch_profile(request, profile_id):
     request.session['profile_id'] = profile_id
     profile = Profile.objects.get(id=profile_id)
     messages.info(
-        request, f'Zmieniono Postać na {profile.copied_character_name}!')
+        request, f'Zmieniono Postać na {profile.character_name_copy}!')
     return redirect('home:home')

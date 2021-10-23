@@ -114,7 +114,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ['get_img', 'id', 'user', 'status', 'is_alive', 'is_active', 'image']
     list_editable = ['status', 'is_alive', 'is_active', 'image']
     list_filter = ['status', 'is_alive', 'is_active']
-    search_fields = ['user__username', 'copied_character_name']
+    search_fields = ['user__username', 'character_name_copy']
 
     def get_img(self, obj):
         if obj.image:
