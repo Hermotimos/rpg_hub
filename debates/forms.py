@@ -50,14 +50,15 @@ class CreateDebateForm(forms.ModelForm):
         if profile.status != 'gm':
             self.fields['is_exclusive'].widget = HiddenInput()
             
+            topic_id = kwargs['initial']['topic'].id \
+                if kwargs['initial']['topic'] else None
             topic_qs = topic_qs.filter(
-                Q(debates__known_directly=profile)
-                | Q(id=kwargs['initial']['topic'].id)
+                Q(debates__known_directly=profile) | Q(id=topic_id)
             ).distinct()
             
             known_directly = known_directly.filter(
                 character__in=profile.characters_known_directly.all()
-            ).exclude(user_fk=profile.user_fk).select_related()
+            ).exclude(id=profile.id).select_related()
             
         self.fields['topic'].queryset = topic_qs
         self.fields['known_directly'].queryset = known_directly
