@@ -87,6 +87,7 @@ class Profile(Model):
                 ))
         qs = qs.prefetch_related('known_directly', 'known_indirectly')
         qs = qs.select_related('profile')
+        qs = qs.exclude(id=self.character.id)
         return qs
     
     def locations_all_known_annotated_if_indirectly(self):

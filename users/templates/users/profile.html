@@ -18,7 +18,7 @@
                         <small class="text-secondary d-block smaller">{{ user.email }}</small>
                     </div>
                     <div class="float-right">
-                        <a href="{% url 'prosoponomikon:character' user.profile.character.id %}" class="btn btn-outline-dark float-right mb-1 mr-1">Prosoponomikon</a>
+                        <a href="{% url 'prosoponomikon:character' current_profile.character.id %}" class="btn btn-outline-dark float-right mb-1 mr-1">Prosoponomikon</a>
                         <a href="{% url 'users:change-password' %}" class="btn btn-outline-dark float-right mb-1 mr-1">Zmiana hasła</a>
                     </div>
                 </div>
