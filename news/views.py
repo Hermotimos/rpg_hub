@@ -136,7 +136,7 @@ def news_detail_view(request, news_id):
             sender = settings.EMAIL_HOST_USER
             receivers = []
             for p in news.followers.all():
-                if p.user != request.user:
+                if p.user_fk != request.user:
                     receivers.append(p.user.email)
             if profile.status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
