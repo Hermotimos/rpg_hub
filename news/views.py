@@ -62,7 +62,7 @@ def create_news_view(request):
     
     news_form = CreateNewsForm(data=request.POST or None,
                                files=request.FILES or None,
-                               authenticated_user=request.user)
+                               profile=profile)
     news_answer_form = CreateNewsAnswerForm(
         data=request.POST or None, files=request.FILES or None)
 

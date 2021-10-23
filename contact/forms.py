@@ -16,8 +16,7 @@ class DemandsCreateForm(forms.ModelForm):
         fields = ['addressee', 'text', 'image']
 
     def __init__(self, *args, **kwargs):
-        authenticated_user = kwargs.pop('authenticated_user')
-        profile = authenticated_user.profile
+        profile = kwargs.pop('profile')
         super().__init__(*args, **kwargs)
 
         self.fields['addressee'].label = "Adresat"
@@ -25,11 +24,11 @@ class DemandsCreateForm(forms.ModelForm):
         self.fields['text'].label = "Tekst"
 
         addressees = Profile.contactables.exclude(id=profile.id)
-        if authenticated_user.profile.status == 'player':
+        if profile.status == 'player':
             gms = addressees.filter(status='gm')
             addressees = addressees.filter(id__in=profile.characters_known_directly.all())
             addressees = (addressees | gms)
-        elif authenticated_user.profile.status == 'npc':
+        elif profile.status == 'npc':
             addressees = addressees.filter(status='gm')
             
         self.fields['addressee'].queryset = addressees

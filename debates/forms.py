@@ -36,8 +36,7 @@ class CreateDebateForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        authenticated_user = kwargs.pop('authenticated_user')
-        profile = authenticated_user.profile
+        profile = kwargs.pop('profile')
         super().__init__(*args, **kwargs)
 
         self.fields['is_exclusive'].label = "Narada zamknięta?"
@@ -58,7 +57,7 @@ class CreateDebateForm(forms.ModelForm):
             
             known_directly = known_directly.filter(
                 character__in=profile.characters_known_directly.all()
-            ).exclude(user=authenticated_user).select_related()
+            ).exclude(user=profile.user_fk).select_related()
             
         self.fields['topic'].queryset = topic_qs
         self.fields['known_directly'].queryset = known_directly
@@ -74,7 +73,7 @@ class CreateRemarkForm(forms.ModelForm):
         fields = ['author', 'text', 'image']
 
     def __init__(self, *args, **kwargs):
-        authenticated_user = kwargs.pop('authenticated_user')
+        profile = kwargs.pop('profile')
         known_directly = kwargs.pop('known_directly')
         super().__init__(*args, **kwargs)
 
@@ -82,7 +81,7 @@ class CreateRemarkForm(forms.ModelForm):
         self.fields['image'].label = "Załącz obraz"
         self.fields['text'].label = ''
 
-        if authenticated_user.profile.status != 'gm':
+        if profile.status != 'gm':
             self.fields['author'].widget = HiddenInput()
         else:
             self.fields['author'].queryset = Profile.objects.filter(

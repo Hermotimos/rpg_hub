@@ -2,8 +2,8 @@ import os
 import re
 import shutil
 import time
-from random import sample
 from functools import wraps
+from random import sample
 
 from django.apps import apps
 from django.conf import settings
@@ -364,7 +364,9 @@ def backup_db(reason=""):
 def only_game_masters(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):
-        if request.user.profile.status == 'gm':
+        from users.models import Profile
+        profile = Profile.objects.get(id=request.session['profile_id'])
+        if profile.status == 'gm':
             return function(request, *args, **kwargs)
         else:
             return redirect('home:dupa')
@@ -375,7 +377,9 @@ def only_game_masters(function):
 def only_game_masters_and_spectators(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):
-        if request.user.profile.status in ['gm', 'spectator']:
+        from users.models import Profile
+        profile = Profile.objects.get(id=request.session['profile_id'])
+        if profile.status in ['gm', 'spectator']:
             return function(request, *args, **kwargs)
         else:
             return redirect('home:dupa')

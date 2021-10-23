@@ -100,12 +100,12 @@ def create_debate_view(request, topic_id=0):
     topic = Topic.objects.get(pk=topic_id) if topic_id else Topic.objects.none()
 
     debate_form = CreateDebateForm(data=request.POST or None,
-                                   authenticated_user=request.user,
+                                   profile=profile,
                                    initial={'topic': topic})
     
     remark_form = CreateRemarkForm(data=request.POST or None,
                                    files=request.FILES or None,
-                                   authenticated_user=request.user,
+                                   profile=profile,
                                    initial={'author': request.user},
                                    known_directly=Profile.living.all())
     
@@ -155,7 +155,7 @@ def debate_view(request, debate_id):
     if request.method == 'POST' and 'Debate' in request.POST:
         form = CreateRemarkForm(
             initial={'author': request.user},
-            authenticated_user=request.user,
+            profile=profile,
             known_directly=debate_known_directly)
         handle_inform_form(request)
 
@@ -164,7 +164,7 @@ def debate_view(request, debate_id):
         form = CreateRemarkForm(
             request.POST,
             request.FILES,
-            authenticated_user=request.user,
+            profile=profile,
             known_directly=debate_known_directly)
         
         if form.is_valid():
@@ -180,7 +180,7 @@ def debate_view(request, debate_id):
     else:
         form = CreateRemarkForm(
             initial={'author': request.user},
-            authenticated_user=request.user,
+            profile=profile,
             known_directly=debate_known_directly)
 
     informables = debate.informables().filter(

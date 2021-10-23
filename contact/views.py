@@ -63,8 +63,8 @@ def demands_create_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     
     if request.method == 'POST':
-        form = DemandsCreateForm(authenticated_user=request.user,
-                                 data=request.POST, files=request.FILES)
+        form = DemandsCreateForm(
+            profile=profile, data=request.POST, files=request.FILES)
         
         if form.is_valid():
             demand = form.save(commit=False)
@@ -75,7 +75,7 @@ def demands_create_view(request):
             send_emails(request, informed_ids, demand=demand)
             return redirect('contact:demands-main')
     else:
-        form = DemandsCreateForm(authenticated_user=request.user)
+        form = DemandsCreateForm(profile=profile)
 
     context = {
         'current_profile': profile,

@@ -31,7 +31,7 @@ STATUS = [
 
 
 class Profile(Model):
-    user = OneToOneField(to=User, on_delete=CASCADE)
+    # user = OneToOneField(to=User, on_delete=CASCADE)
     user_fk = FK(to=User, related_name='profiles', on_delete=CASCADE, default=1)
     status = CharField(max_length=50, choices=STATUS, default='npc')
     is_alive = BooleanField(default=True)
@@ -55,7 +55,7 @@ class Profile(Model):
     contactables = ContactableProfileManager()
 
     class Meta:
-        ordering = ['-status', '-is_active', 'user__username']
+        ordering = ['-status', '-is_active', 'user_fk__username']
     
     def __str__(self):
         return self.character_name_copy or self.user.username
