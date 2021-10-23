@@ -58,7 +58,7 @@ class Profile(Model):
         ordering = ['-status', '-is_active', 'user_fk__username']
     
     def __str__(self):
-        return self.character_name_copy or self.user.username
+        return self.character_name_copy or self.user_fk.username
 
     def save(self, *args, **kwargs):
         first_save = True if not self.pk else False
