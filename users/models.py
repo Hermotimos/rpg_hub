@@ -32,7 +32,7 @@ STATUS = [
 
 class Profile(Model):
     # user = OneToOneField(to=User, on_delete=CASCADE)
-    user_fk = FK(to=User, related_name='profiles', on_delete=CASCADE, default=1)
+    user = FK(to=User, related_name='profiles', on_delete=CASCADE, default=1)
     status = CharField(max_length=50, choices=STATUS, default='npc')
     is_alive = BooleanField(default=True)
     is_active = BooleanField(default=True)
@@ -55,10 +55,10 @@ class Profile(Model):
     contactables = ContactableProfileManager()
 
     class Meta:
-        ordering = ['-status', '-is_active', 'user_fk__username']
+        ordering = ['-status', '-is_active', 'user__username']
     
     def __str__(self):
-        return self.character_name_copy or self.user_fk.username
+        return self.character_name_copy or self.user.username
 
     def save(self, *args, **kwargs):
         first_save = True if not self.pk else False
@@ -114,7 +114,7 @@ class Profile(Model):
         character_groups = self.character_groups_authored.all()
         character_groups = character_groups.prefetch_related(
             Prefetch('characters', queryset=characters),
-            'characters__profile__user_fk',
+            'characters__profile__user',
             'characters__known_directly',
             'characters__known_indirectly',
             'characters__first_name')

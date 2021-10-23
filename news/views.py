@@ -86,8 +86,8 @@ def create_news_view(request):
         sender = settings.EMAIL_HOST_USER
         receivers = []
         for profile in news.allowed_profiles.all():
-            if profile.user_fk != request.user:
-                receivers.append(profile.user_fk.email)
+            if profile.user != request.user:
+                receivers.append(profile.user.email)
         if profile.status != 'gm':
             receivers.append("lukas.kozicki@gmail.com")
         send_mail(subject, message, sender, receivers)
@@ -136,8 +136,8 @@ def news_detail_view(request, news_id):
             sender = settings.EMAIL_HOST_USER
             receivers = []
             for p in news.followers.all():
-                if p.user_fk != request.user:
-                    receivers.append(p.user_fk.email)
+                if p.user != request.user:
+                    receivers.append(p.user.email)
             if profile.status != 'gm':
                 receivers.append('lukas.kozicki@gmail.com')
             send_mail(subject, message, sender, receivers)

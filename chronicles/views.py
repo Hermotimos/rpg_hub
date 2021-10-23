@@ -241,8 +241,8 @@ def timeline_view(request):
         
     events = events.prefetch_related(
         'plot_threads',
-        'known_directly__user_fk',
-        'known_indirectly__user_fk',
+        'known_directly__user',
+        'known_indirectly__user',
         'known_directly__character',
         'known_indirectly__character',
         'locations',

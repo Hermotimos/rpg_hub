@@ -18,7 +18,7 @@ from users.models import Profile
 def demands_main_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     ds = Demand.objects.all().\
-        select_related('author__user_fk', 'addressee__user_fk').\
+        select_related('author__user', 'addressee__user').\
         prefetch_related('demand_answers__author')
     
     # excludes necessery to filter out plans (Demands sent to oneself)

@@ -43,7 +43,7 @@ class BiographyPacketAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        qs = qs.prefetch_related('acquired_by__user_fk', 'picture_sets__pictures')
+        qs = qs.prefetch_related('acquired_by__user', 'picture_sets__pictures')
         return qs
 
 
