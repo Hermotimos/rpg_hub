@@ -112,8 +112,8 @@ class ProfileAdminForm(forms.ModelForm):
 class ProfileAdmin(admin.ModelAdmin):
     form = ProfileAdminForm
     list_display = [
-        'get_img', 'id', 'character_name_copy', 'user', 'status',  'is_alive',
-        'is_active', 'image']
+        'get_img', 'id', 'character_name_copy', 'user_fk', 'status',
+        'is_alive', 'is_active', 'image']
     list_editable = ['status', 'is_alive', 'is_active', 'image']
     list_filter = ['user', 'status', 'is_alive', 'is_active']
     search_fields = ['user__username', 'character_name_copy']
