@@ -57,7 +57,7 @@ class CreateDebateForm(forms.ModelForm):
             
             known_directly = known_directly.filter(
                 character__in=profile.characters_known_directly.all()
-            ).exclude(user=profile.user_fk).select_related()
+            ).exclude(user_fk=profile.user_fk).select_related()
             
         self.fields['topic'].queryset = topic_qs
         self.fields['known_directly'].queryset = known_directly

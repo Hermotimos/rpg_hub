@@ -32,7 +32,7 @@ class CreateNewsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         profile = kwargs.pop('profile')
         super().__init__(*args, **kwargs)
-        allowed_profiles = Profile.active_players.exclude(user=profile.user_fk)
+        allowed_profiles = Profile.active_players.exclude(user_fk=profile.user_fk)
 
         self.fields['allowed_profiles'].label = "Adresaci"
         self.fields['title'].label = "Tytuł"

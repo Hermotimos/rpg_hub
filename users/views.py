@@ -54,7 +54,7 @@ def register_view(request):
     form = UserRegistrationForm(request.POST or None)
     if form.is_valid():
         user = form.save()
-        profile = Profile.objects.create(user=user)
+        profile = Profile.objects.create(user_fk=user)
         Character.objects.create(
             profile=profile,
             first_name=FirstName.objects.create(

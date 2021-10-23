@@ -362,7 +362,7 @@ def prosoponomikon_character_create_form_view(request):
             password=get_secret('DEFAULT_PASS'))
         
         profile = Profile.objects.create(
-            user=user,
+            user_fk=user,
             is_alive=form.cleaned_data['is_alive'],
             image=form.cleaned_data['image'])
         
