@@ -20,7 +20,7 @@
             <ul class="list-group hover-pointer">
                 <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#technical"><h6 class="mb-0">Techniczne</h6></li>
                 <li id="technical" class="list-group collapse">
-                    <div>
+                    <div class="overflow-auto border" style="max-height: 15rem;">
                         <a class="list-group-item list-group-item-light" href="{% url 'admin:index' %}" target="_blank" rel="noopener noreferrer"><small>ADMIN</small></a>
                         <a class="list-group-item list-group-item-light" href="{% url 'contact:plans-main' %}"><small>Plany MG</small></a>
                         <a class="list-group-item list-group-item-light" href="{% url 'technicalities:todos' %}"><small>TODOs</small></a>
@@ -31,8 +31,10 @@
             <ul class="list-group hover-pointer">
                 <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#world"><h6 class="mb-0">Świat</h6></li>
                 <li id="world" class="list-group collapse">
-                    <div>
-                        <a class="list-group-item list-group-item-light" href="{% url 'chronicles:chronologies' %}"><small>Chronologie</small></a>
+                    <div class="overflow-auto border" style="max-height: 15rem;">
+                        <a class="list-group-item list-group-item-light" href="{% url 'chronicles:chronologies' %}">
+                            <small>Chronologie</small>
+                        </a>
                         <a class="list-group-item list-group-item-light" href="{% url 'prosoponomikon:first-names' %}" target="_blank" rel="noopener noreferrer">
                             <small>Imiona</small>
                         </a>
@@ -50,7 +52,7 @@
         <ul class="list-group hover-pointer">
             <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#profiles"><h6 class="mb-0">Postacie</h6></li>
             <li id="profiles" class="list-group collapse">
-                <div class="overflow-auto border" style="height: 15rem;">
+                <div class="overflow-auto border" style="max-height: 15rem;">
                     {% for profile in user.profiles.all|dictsort:"character_name_copy" %}
                         <a class="list-group-item list-group-item-light" href="{% url 'users:switch-profile' profile.id %}">
                             <small>{{ profile.character_name_copy }}</small>
@@ -59,7 +61,6 @@
                 </div>
             </li>
         </ul>
-
         
         {% if current_profile.status == 'gm' %}
             <div class="mt-2">
