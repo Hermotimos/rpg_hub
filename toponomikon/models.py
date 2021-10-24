@@ -164,7 +164,7 @@ class SecondaryLocation(Location):
         verbose_name_plural = '--- Secondary Locations'
 
 
-def update_known_gen_locations(sender, instance, **kwargs):
+def update_known_locations(sender, instance, **kwargs):
     """Whenever a location becomes 'known_directly' or 'known_indirectly' to
     a profile, add this location's 'in_location' (i.e. more general location)
     to profile's 'known_directly' or 'known_indirectly', respectively.
@@ -177,8 +177,8 @@ def update_known_gen_locations(sender, instance, **kwargs):
         in_location.known_indirectly.add(*known_indirectly)
 
 
-post_save.connect(update_known_gen_locations, sender=Location)
-m2m_changed.connect(update_known_gen_locations,
+post_save.connect(update_known_locations, sender=Location)
+m2m_changed.connect(update_known_locations,
                     sender=Location.known_directly.through)
-m2m_changed.connect(update_known_gen_locations,
+m2m_changed.connect(update_known_locations,
                     sender=Location.known_indirectly.through)

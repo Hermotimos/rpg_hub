@@ -11,7 +11,6 @@ from django.db.models import (
     Manager,
     F, Max, Q,
     Model,
-    OneToOneField,
     Prefetch,
     Value,
     When,
@@ -31,7 +30,6 @@ STATUS = [
 
 
 class Profile(Model):
-    # user = OneToOneField(to=User, on_delete=CASCADE)
     user = FK(to=User, related_name='profiles', on_delete=CASCADE, default=1)
     status = CharField(max_length=50, choices=STATUS, default='npc')
     is_alive = BooleanField(default=True)
