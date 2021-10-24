@@ -1,0 +1,56 @@
+Within dir where db.sqlite lives (with sqlite db still as default in settings.py DATABASES):
+
+	python manage.py dumpdata > dumped.json
+
+
+That may fail due to encoding errors:
+	CommandError: Unable to serialize database: 'charmap' codec can't encode character '\u01fd' in position 49: character maps to <undefined>
+	Exception ignored in: <generator object cursor_iter at 0x00000000051532E0>
+	Traceback (most recent call last):
+  		File "C:\Users\Lukasz\PycharmProjects\rpg_hub\myenv\lib\site-packages\django\db\models\sql\compiler.py", line 1649, in cursor_iter
+    			cursor.close()
+	sqlite3.ProgrammingError: Cannot operate on a closed database.
+
+If so:
+
+	python -Xutf8 manage.py dumpdata > dumped.json
+
+
+
+Create Postgres database with name and password matching those given in settings.py DATABASES.
+Change default db to 
+Sync the new database structure with the migrations:
+
+	python manage.py migrate --run-syncdb
+
+
+
+Run this on Django shell to exclude contentype data
+
+	python3 manage.py shell
+	>>> from django.contrib.contenttypes.models import ContentType
+	>>> ContentType.objects.all().delete()
+	>>> quit()
+
+
+
+
+Load data:
+	python manage.py loaddata dumped.json
+
+
+That may fail due to ContentType related stuff  (previous shell script may be not enough) or active signals...
+For ContentType modify dump command:
+	
+	python -Xutf8 manage.py dumpdata --natural-foreign --natural-primary -e contenttypes -e auth.Permission -e sessions -e admin --indent 4 > dumped.json
+
+
+
+Active signals will cause XXXXX.models.DoesNotExist: COMMENT OUT ALL SIGNALS
+
+
+
+
+Helpful sites:
+https://stackoverflow.com/questions/34822002/django-backup-strategy-with-dumpdata-and-migrations
+

@@ -119,6 +119,15 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': get_secret('POSTGRES_DBNAME'),
+    #     'USER': get_secret('POSTGRES_USER'),
+    #     'PASSWORD': get_secret('POSTGRES_PASSWORD'),
+    #     'HOST': get_secret('POSTGRES_HOST'),
+    #     'PORT': get_secret('POSTGRES_PORT'),
+    #
+    # }
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
