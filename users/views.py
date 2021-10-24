@@ -129,7 +129,18 @@ def profile_view(request):
 @login_required()
 def switch_profile(request, profile_id):
     request.session['profile_id'] = profile_id
-    profile = Profile.objects.get(id=profile_id)
-    messages.info(
-        request, f'Zmieniono Postać na {profile.character_name_copy}!')
-    return redirect('home:home')
+    chosen_profile = Profile.objects.get(id=profile_id)
+    
+    msg = f"Zmieniono Postać na {chosen_profile.character_name_copy}!"
+    messages.info(request, msg)
+    
+    response = redirect(request.META.get('HTTP_REFERER'))
+    if '/dupa/' in response['Location']:
+        msg = """
+            Przekierowano do strony startowej!
+            (Wybrana Postać nie ma dostępu do poprzedniej treści)"""
+        messages.warning(request, msg)
+        return redirect('home:home')
+
+    return response
+    
