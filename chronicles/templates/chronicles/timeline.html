@@ -248,7 +248,7 @@
                         {% if event.known_directly.all %}
                             <div class="pb-1">
                                 {% for profile in event.known_directly.all %}
-                                    {% if profile.status == 'player' %}
+                                    {% if profile.status == 'player' or profile == current_profile %}
                                         <a href="{% url 'prosoponomikon:character' profile.character.id %}"
                                            data-toggle="tooltip" data-placement="top" data-html="true"
                                            title='<span class="font-italic">Prosoponomikon:<br>"{{ profile }}"</span>'>
@@ -265,13 +265,15 @@
                             -✧-
                             <div>
                                 {% for profile in event.known_indirectly.all %}
-                                    <a href="{% url 'prosoponomikon:character' profile.character.id %}"
-                                       data-toggle="tooltip" data-placement="top" data-html="true"
-                                       title='<span class="font-italic">Prosoponomikon:<br>"{{ profile }}"</span>'>
-                                        <div class="d-inline">
-                                           <img class="rounded-circle img-grayscale img-smaller" src="{{ profile.image.url }}">
-                                        </div>
-                                    </a>
+                                    {% if profile.status == 'player' or profile == current_profile %}
+                                        <a href="{% url 'prosoponomikon:character' profile.character.id %}"
+                                           data-toggle="tooltip" data-placement="top" data-html="true"
+                                           title='<span class="font-italic">Prosoponomikon:<br>"{{ profile }}"</span>'>
+                                            <div class="d-inline">
+                                               <img class="rounded-circle img-grayscale img-smaller" src="{{ profile.image.url }}">
+                                            </div>
+                                        </a>
+                                    {% endif %}
                                     {% if forloop.counter|divisibleby:2 and not forloop.last and profile.status == 'player' %}<br>{% endif %}
                                 {% endfor %}
                             </div>
