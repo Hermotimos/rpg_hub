@@ -13,10 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
+import debug_toolbar
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import path, include
 
 admin.site.enable_nav_sidebar = False
 
@@ -36,13 +37,10 @@ urlpatterns = [
     path('prosoponomikon/', include('prosoponomikon.urls')),
     path('users/', include('users.urls')),
 
-
+    path('__debug__/', include(debug_toolbar.urls))
 ]
 
 
 if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
-    urlpatterns += [path(r'__debug__/', include(debug_toolbar.urls)), ]
-    SHOW_TOOLBAR_CALLBACK = True
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
     # imported
     'crispy_forms',
+    'debug_toolbar',
     'django_filters',
 
     # own
@@ -72,6 +73,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -80,10 +82,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-if not get_secret('IS_PRODUCTION'):
-    INSTALLED_APPS.append('debug_toolbar')
-    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
-    
+
     
 ROOT_URLCONF = 'rpg_project.urls'
 
@@ -196,3 +195,7 @@ EMAIL_HOST_PASSWORD = get_secret('EMAIL_HOST_PASSWORD_TWO_STEP')
 
 # For debug-toolbar
 INTERNAL_IPS = ['127.0.0.1', ]
+# debug-toolbar not rendering problem:
+# https://www.taricorp.net/2020/windows-mime-pitfalls/
+# https://stackoverflow.com/questions/16303098/django-development-server-and-mime-types/64055514#64055514
+# After editing registry - restart local server for changes to take effect
