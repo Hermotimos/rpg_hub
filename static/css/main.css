@@ -119,8 +119,9 @@ td.align-right {text-align: right;}
 
 @font-face {
     font-family: 'IM Fell Great Primer';
-    src: url("../font/IMFeGPrm29P.ttf");
+    src: url("../font/IMFellGreatPrimer-Regular.ttf");
 }
+
 
 * {font-family: 'IM Fell Great Primer';}
 
