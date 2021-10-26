@@ -9,10 +9,10 @@
 
 {% block content %}
     <article class="top-button">
-        
+        TODO reload ze starych Ogłoszeń
         <header class="mb-5">
-            <a href="#" class="btn btn-outline-dark">Nowy temat</a>
-            <a href="#" class="btn btn-outline-dark">Nowe ogłoszenie</a>
+            <a href="{% url 'communications:create-topic' 'Announcement' %}" class="btn btn-outline-dark">Nowy temat</a>
+            <a href="{% url 'communications:create-thread' 'Announcement' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
         </header>
         
         <article class="pt-5">

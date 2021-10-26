@@ -6,12 +6,12 @@ app_name = 'communications'
 urlpatterns = [
     # announcements
     path('announcements/', views.announcements_view, name='announcements'),
-    path('announcement:<int:announcement_id>/', views.announcement_view,
-         name='announcement'),
+    path('announcement:<int:thread_id>/', views.announcement_view, name='announcement'),
+    
+    path('create-topic:<str:thread_kind>/', views.create_topic_view, name='create-topic'),
+    path('create-thread:<str:thread_kind>/', views.create_thread_view, name='create-thread'),
     
     # news
-    # path('news-topic-create/', views.create_topic_view, name='topic-create'),
-    # path('news-news-create/', views.create_news_view, name='news-create'),
     
     # path('news-detail:<int:news_id>/unfollow', views.unfollow_news_view, name='unfollow'),
     # path('news-detail:<int:news_id>/follow', views.follow_news_view, name='follow'),

@@ -3,10 +3,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db.models import Prefetch
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 
-from news.forms import (CreateNewsForm, CreateTopicForm, CreateNewsAnswerForm,
-                        CreateSurveyOptionForm, ModifySurveyOptionForm)
+from communications.forms import (CreateTopicForm, AnnouncementCreateForm, DebateCreateForm, StatementCreateForm)
 from communications.models import Topic, Thread, Debate, Announcement, Statement
 from users.models import Profile
 
@@ -14,6 +13,7 @@ from users.models import Profile
 # TODO
 #  1) main views separate? or separate templates based on 'thread_kind' param?
 #  2) detail views - one for all, steer it with parameters; separate templates
+
 
 @login_required
 def announcements_view(request):
@@ -42,79 +42,14 @@ def announcements_view(request):
     return render(request, 'communications/announcements.html', context)
 
 
-# TODO 1 create topic form and view with parameter for Thread kind,
-#     to then redirect to the proper Thread kind create form
-
-# @login_required
-# def create_topic_view(request):
-#     form = CreateTopicForm(request.POST or None)
-#     if form.is_valid():
-#         topic = form.save()
-#         messages.info(
-#             request, f"Utworzono nowy temat ogłoszeń: '{topic.title}'!")
-#         return redirect('news:main')
-#
-#     context = {
-#         'page_title': "Nowy temat ogłoszeń",
-#         'form_1': form,
-#     }
-#     return render(request, '_create_form.html', context)
-#
-#
-# @login_required
-# def create_news_view(request):
-#     profile = Profile.objects.get(id=request.session['profile_id'])
-#
-#     news_form = CreateNewsForm(data=request.POST or None,
-#                                files=request.FILES or None,
-#                                authenticated_user=request.user)
-#     news_answer_form = CreateNewsAnswerForm(
-#         data=request.POST or None, files=request.FILES or None)
-#
-#     if news_form.is_valid() and news_answer_form.is_valid():
-#         news = news_form.save(commit=False)
-#         news.author = request.user.profile
-#         news.save()
-#         allowed_profiles = news_form.cleaned_data['allowed_profiles']
-#         allowed_profiles |= Profile.objects.filter(id=request.user.id)
-#         news.allowed_profiles.set(allowed_profiles)
-#         news.followers.set(allowed_profiles)
-#
-#         answer = news_answer_form.save(commit=False)
-#         answer.news = news
-#         answer.author = request.user.profile
-#         news_answer_form.save()
-#
-#         subject = f"[RPG] Nowe ogłoszenie: '{news.title[:30]}...'"
-#         message = f"{profile} przybił/a coś do słupa ogłoszeń.\n" \
-#                   f"Podejdź bliżej, aby się przyjrzeć: {request.get_host()}/news/news-detail:{news.id}/\n\n"
-#         sender = settings.EMAIL_HOST_USER
-#         receivers = []
-#         for profile in news.allowed_profiles.all():
-#             if profile.user != request.user:
-#                 receivers.append(profile.user.email)
-#         if profile.status != 'gm':
-#             receivers.append("lukas.kozicki@gmail.com")
-#         send_mail(subject, message, sender, receivers)
-#
-#         messages.info(request, f"Utworzono nowe ogłoszenie!")
-#         return redirect('news:detail', news_id=news.id)
-#
-#     context = {
-#         'page_title': "Nowe ogłoszenie",
-#         'form_1': news_form,
-#         'form_2': news_answer_form,
-#     }
-#     return render(request, '_create_form.html', context)
-
-
 @login_required
-def announcement_view(request, announcement_id):
+def announcement_view(request, thread_id):
     profile = Profile.objects.get(id=request.session['profile_id'])
-    announcement = Announcement.objects.prefetch_related(
+    
+    announcements = Announcement.objects.prefetch_related(
         'statements__seen_by', 'statements__author', 'followers',
         'known_directly')
-    announcement = announcement.get(id=announcement_id)
+    announcement = announcements.get(id=thread_id)
 
     # Update all statements to be seen by the profile
     SeenBy = Statement.seen_by.through
@@ -122,7 +57,7 @@ def announcement_view(request, announcement_id):
     for statement in announcement.statements.all():
         relations.append(
             SeenBy(statement_id=statement.id, profile_id=profile.id))
-        print(relations)
+        # print(relations)
     SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
 
     # if request.method == 'POST':
@@ -130,7 +65,7 @@ def announcement_view(request, announcement_id):
     #     if form.is_valid():
     #         answer = form.save(commit=False)
     #         answer.news = news
-    #         answer.author = request.user.profile
+    #         answer.author = profile
     #         form.save()
     #
     #         subject = f"[RPG] Odpowiedź na ogłoszenie: '{news.title[:30]}...'"
@@ -161,6 +96,96 @@ def announcement_view(request, announcement_id):
         return render(request, 'communications/announcement.html', context)
     else:
         return redirect('home:dupa')
+    
+
+@login_required
+def create_topic_view(request, thread_kind: str):
+    profile = Profile.objects.get(id=request.session['profile_id'])
+    
+    form = CreateTopicForm(request.POST or None)
+    if form.is_valid():
+        topic = form.save()
+        messages.info(
+            request, f"Utworzono nowy temat: '{topic.title}'!")
+        return redirect('communications:create-thread', thread_kind=thread_kind)
+
+    context = {
+        'current_profile': profile,
+        'page_title': "Nowy temat",
+        'form_1': form,
+    }
+    return render(request, '_create_form.html', context)
+
+
+@login_required
+def create_thread_view(request, thread_kind):
+    profile = Profile.objects.get(id=request.session['profile_id'])
+
+    thread_map = {
+        'Announcement': [AnnouncementCreateForm, "Ogłoszenie"],
+        'Debate': [DebateCreateForm, "Narada"],
+    }
+
+    thread_form = thread_map[thread_kind][0](
+        data=request.POST or None,
+        files=request.FILES or None,
+        profile=profile)
+    
+    statement_form = StatementCreateForm(
+        data=request.POST or None,
+        files=request.FILES or None,
+        profile=profile,
+        thread_kind=thread_kind,
+        known_directly=[],
+        initial={'author': profile})
+    
+    if thread_form.is_valid() and statement_form.is_valid():
+        thread = thread_form.save(commit=False)
+        thread.kind = thread_kind
+        thread.author = profile   # TODO user in Announcement after shift
+        thread.save()
+        
+        known_directly = thread_form.cleaned_data['known_directly']
+        known_directly |= Profile.objects.filter(id=request.user.id)
+        thread.known_directly.set(known_directly)
+        thread.followers.set(known_directly)
+
+        statement = statement_form.save(commit=False)
+        statement.thread = thread
+        statement.author = profile
+        statement.save()
+
+        # TODO USE send_emails - REWORK send_emails so that it is provied with data?
+        # if profile == demand.author:
+        #     informed_ids = [demand.addressee.id]
+        # else:
+        #     informed_ids = [demand.author.id]
+        # send_emails(request, informed_ids, demand_answer=answer)
+        
+        subject = f"[RPG] Nowe ogłoszenie: '{thread.title[:30]}...'"
+        message = f"{profile}: {request.get_host()}/{thread.get_absolute_url()}/\n\n"
+        sender = settings.EMAIL_HOST_USER
+        receivers = []
+        for profile in thread.followers.all():
+            if profile.user != request.user:
+                receivers.append(profile.user.email)
+        if profile.status != 'gm':
+            receivers.append("lukas.kozicki@gmail.com")
+        send_mail(subject, message, sender, receivers)
+
+        messages.info(request, f"Utworzono {thread_map[thread_kind][1]}!")
+        return redirect(
+            f'communications:{thread_kind.lower()}', thread_id=thread.id)
+
+    context = {
+        'current_profile': profile,
+        'page_title': f"Nowe {thread_map[thread_kind][1]}",
+        'form_1': thread_form,
+        'form_2': statement_form,
+    }
+    return render(request, '_create_form.html', context)
+
+
 #
 #
 # @login_required
@@ -190,80 +215,6 @@ def announcement_view(request, announcement_id):
 #
 #
 # #
-# # @login_required
-# # def survey_detail_view(request, survey_id):
-# #     profile = Profile.objects.get(id=request.session['profile_id'])
-# #     survey = get_object_or_404(Survey, id=survey_id)
-# #
-# #     survey_seen_by = survey.seen_by.all()
-# #     if profile not in survey_seen_by:
-# #         survey.seen_by.add(profile)
-# #
-# #     options = survey.survey_options.all()\
-# #         .prefetch_related('yes_voters', 'no_voters')\
-# #         .select_related('author')
-# #     answers = survey.survey_answers.all().select_related('author')
-# #
-# #     last_answer_seen_by_imgs = []
-# #     if answers:
-# #         last_answer = answers.order_by('-created_at')[0]
-# #         if profile not in last_answer.seen_by.all():
-# #             last_answer.seen_by.add(profile)
-# #         last_answer_seen_by_imgs = (p.image for p in last_answer.seen_by.all())
-# #
-# #     if request.method == 'POST':
-# #         answer_form = CreateSurveyAnswerForm(request.POST, request.FILES)
-# #         option_form = CreateSurveyOptionForm(request.POST)
-# #
-# #         if answer_form.is_valid():
-# #             answer = answer_form.save(commit=False)
-# #             answer.survey = survey
-# #             answer.author = request.user.profile
-# #             answer_form.save()
-# #
-# #             subject = f"[RPG] Wypowiedż do ankiety: '{survey.title[:30]}...'"
-# #             message = f"{profile} wypowiedział się co do ankiety '{survey.title}':\n" \
-# #                       f"Ankieta: {request.get_host()}/news/survey-detail:{survey.id}/\n\n" \
-# #                       f"Wypowiedź: {answer.text}"
-# #             sender = settings.EMAIL_HOST_USER
-# #             receivers = []
-# #             for p in survey.addressees.all():
-# #                 if p.user != request.user:
-# #                     receivers.append(p.user.email)
-# #             if profile.status != 'gm':
-# #                 receivers.append('lukas.kozicki@gmail.com')
-# #             send_mail(subject, message, sender, receivers)
-# #
-# #             messages.info(request, f'Twoja odpowiedź została zapisana!')
-# #             return redirect('news:survey-detail', survey_id=survey_id)
-# #
-# #         elif option_form.is_valid():
-# #             option = option_form.save(commit=False)
-# #             option.survey = survey
-# #             option.author = request.user.profile
-# #             option_form.save()
-# #
-# #             messages.info(request, f'Powiadom uczestników o nowej opcji!')
-# #             return redirect('news:survey-detail', survey_id=survey_id)
-# #     else:
-# #         answer_form = CreateSurveyAnswerForm()
-# #         option_form = CreateSurveyOptionForm()
-# #
-# #     context = {
-# #         'page_title': survey.title,
-# #         'survey': survey,
-# #         'options': options,
-# #         'answers': answers,
-# #         'survey_seen_by': survey_seen_by,
-# #         'last_answer_seen_by_imgs': last_answer_seen_by_imgs,
-# #         'answer_form': answer_form,
-# #         'option_form': option_form
-# #     }
-# #     if profile in survey.addressees.all() or profile.status == 'gm':
-# #         return render(request, 'news/survey_detail.html', context)
-# #     else:
-# #         return redirect('home:dupa')
-#
 #
 #
 # @login_required
@@ -322,11 +273,11 @@ def announcement_view(request, announcement_id):
 # # def survey_create_view(request):
 # #     profile = Profile.objects.get(id=request.session['profile_id'])
 # #     if request.method == 'POST':
-# #         form = CreateSurveyForm(authenticated_user=request.user, data=request.POST, files=request.FILES)
+# #         form = CreateSurveyForm(profile=profile, data=request.POST, files=request.FILES)
 # #
 # #         if form.is_valid():
 # #             survey = form.save(commit=False)
-# #             survey.author = request.user.profile
+# #             survey.author = profile
 # #             survey.save()
 # #             addressees = form.cleaned_data['addressees']
 # #             addressees |= Profile.objects.filter(id=request.user.id)
@@ -348,7 +299,7 @@ def announcement_view(request, announcement_id):
 # #             messages.info(request, f'Utworzono nową ankietę!')
 # #             return redirect('news:survey-detail', survey_id=survey.id)
 # #     else:
-# #         form = CreateSurveyForm(authenticated_user=request.user)
+# #         form = CreateSurveyForm(profile=profile)
 # #
 # #     context = {
 # #         'page_title': 'Nowa ankieta',
@@ -360,6 +311,8 @@ def announcement_view(request, announcement_id):
 #
 # @login_required
 # def survey_option_modify_view(request, survey_id, option_id):
+#     profile = Profile.objects.get(id=request.session['profile_id'])
+#
 #     option = get_object_or_404(SurveyOption, id=option_id)
 #
 #     if request.method == 'POST':
@@ -376,7 +329,7 @@ def announcement_view(request, announcement_id):
 #         'page_title': 'Zmiana opcji ankiety',
 #         'form': form,
 #     }
-#     if request.user.profile == option.author:
+#     if profile == option.author:
 #         return render(request, 'news/survey_option_modify.html', context)
 #     else:
 #         return redirect('home:dupa')
@@ -385,8 +338,10 @@ def announcement_view(request, announcement_id):
 #
 # @login_required
 # def survey_option_delete_view(request, survey_id, option_id):
+#     profile = Profile.objects.get(id=request.session['profile_id'])
+#
 #     option = get_object_or_404(SurveyOption, id=option_id)
-#     if request.user.profile == option.author:
+#     if profile == option.author:
 #         option.delete()
 #         return redirect('news:survey-detail', survey_id=survey_id)
 #     else:

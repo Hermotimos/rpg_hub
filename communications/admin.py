@@ -4,7 +4,7 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
 from django.forms import Select
 
-from communications.models import Topic, Statement, Debate, Announcement
+from communications.models import Topic, Statement, Debate, Announcement, Thread
 from rpg_project.utils import formfield_for_dbfield_cached
 from users.models import Profile
 
@@ -13,6 +13,10 @@ class TopicAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'order_no', 'created_at']
     list_editable = ['title', 'order_no']
     search_fields = ['title']
+
+
+class ThreadAdmin(admin.ModelAdmin):
+    pass
 
 
 class DebateAdminForm(forms.ModelForm):
@@ -89,6 +93,7 @@ class StatementAdmin(admin.ModelAdmin):
     
     
 admin.site.register(Topic, TopicAdmin)
+admin.site.register(Thread, ThreadAdmin)
 admin.site.register(Debate, DebateAdmin)
 admin.site.register(Announcement, AnnouncementAdmin)
 admin.site.register(Statement, StatementAdmin)

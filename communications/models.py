@@ -26,6 +26,7 @@ class Topic(Model):
     title = CharField(max_length=100, unique=True)
     order_no = SmallIntegerField(default=100)
     created_at = DateTimeField(
+        null=True,
         # auto_now_add=True TODO restore after data migration
     )
     
@@ -48,6 +49,7 @@ class Thread(Model):
     kind = CharField(max_length=15, choices=THREAD_KINDS)
     known_directly = M2M(to=Profile, related_name='threads_known_directly')
     created_at = DateTimeField(
+        null=True,
         # auto_now_add=True TODO restore after data migration
     )
     # Announcement
@@ -67,6 +69,9 @@ class Thread(Model):
         qs = Profile.living.all()
         qs = qs.exclude(id__in=self.known_directly.all())
         return qs
+
+    def get_absolute_url(self):
+        return f'/communications/{str(self.kind).lower()}:{self.pk}'
 
 
 class DebateManager(Manager):
@@ -119,6 +124,7 @@ class Statement(Model):
     image = ImageField(upload_to='post_pics', blank=True, null=True)
     seen_by = M2M(to=Profile, related_name='statements_seen', blank=True)
     created_at = DateTimeField(
+        null=True,
         # auto_now_add=True TODO restore after data migration
     )
     # Announcement
@@ -146,18 +152,18 @@ class Statement(Model):
 # ---------------------------------------- SIGNALS ----------------------------
 # -----------------------------------------------------------------------------
 
-
-def delete_if_doubled(sender, instance, **kwargs):
-    start = instance.created_at - datetime.timedelta(minutes=2)
-    end = instance.created_at
-    identical = Statement.objects.filter(
-        thread=instance.thread,
-        text=instance.text,
-        author=instance.author,
-        created_at__range=[start, end],
-    )
-    if identical.count() > 1:
-        instance.delete()
-
-
-post_save.connect(delete_if_doubled, sender=Statement)
+# TODO restore when create_at is auto field again
+# def delete_if_doubled(sender, instance, **kwargs):
+#     start = instance.created_at - datetime.timedelta(minutes=2)
+#     end = instance.created_at
+#     identical = Statement.objects.filter(
+#         thread=instance.thread,
+#         text=instance.text,
+#         author=instance.author,
+#         created_at__range=[start, end],
+#     )
+#     if identical.count() > 1:
+#         instance.delete()
+#
+#
+# post_save.connect(delete_if_doubled, sender=Statement)
