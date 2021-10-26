@@ -28,7 +28,7 @@ class AnnouncementCreateForm(forms.ModelForm):
         profile = kwargs.pop('profile')
         super().__init__(*args, **kwargs)
 
-        self.fields['known_directly'].help_texts = """
+        self.fields['known_directly'].help_text = """
             ***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.<br><br>
             1) Ogłoszenie zobaczą tylko wybrani adresaci (i zawsze MG).<br>
             2) Późniejsze dodanie adresatów - wyślij MG Dezyderat.<br><br>
@@ -54,9 +54,9 @@ class DebateCreateForm(forms.ModelForm):
         profile = kwargs.pop('profile')
         super().__init__(*args, **kwargs)
 
-        self.fields['is_exclusive'].help_texts = """
+        self.fields['is_exclusive'].help_text = """
             Wykluczyć możliwość dodawania uczestników?'"""
-        self.fields['known_directly'].help_texts = """
+        self.fields['known_directly'].help_text = """
             ***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.<br><br>
             1) Włączaj tylko postacie znajdujące się w pobliżu w chwili
                 zakończenia ostatniej sesji.<br>
@@ -106,7 +106,7 @@ class StatementCreateForm(forms.ModelForm):
         
         self.fields['author'].label = "Autor"
         self.fields['image'].label = "Załącz obraz"
-        self.fields['text'].label = ''
+        self.fields['text'].label = ""
         
         if profile.status != 'gm':
             self.fields['author'].widget = HiddenInput()
@@ -130,7 +130,7 @@ class OptionCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-        self.fields['text'].label = ''
+        self.fields['text'].label = ""
         self.fields['text'].max_length = 50
         self.fields['text'].widget.attrs = {
             'placeholder': 'Opcja w ankiecie (max. 50 znaków)*'}
