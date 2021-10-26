@@ -14,6 +14,16 @@ from users.models import Profile
 #  1) main views separate? or separate templates based on 'thread_kind' param?
 #  2) detail views - one for all, steer it with parameters; separate templates
 
+#  TODO maybe make thread_map into file level constant; nested dicts:
+#     thread_map = {
+#         'Announcement': {
+#           'form': AnnouncementCreateForm,
+#           'verbose_name': "Ogłoszenie"},
+#         'Debate': {
+#           'form': DebateCreateForm,
+#           'verbose_name': "Narada"},
+#     }
+
 
 @login_required
 def announcements_view(request):
@@ -25,13 +35,11 @@ def announcements_view(request):
         announcements = Announcement.objects.filter(known_directly=profile)
 
     announcements = announcements.prefetch_related(
-        'statements__author', 'statements__seen_by'
-    ).order_by('-created_at')
+        'statements__author', 'statements__seen_by').order_by('-created_at')
     
     topics = Topic.objects.filter(threads__in=announcements)
     topics = topics.prefetch_related(
-        Prefetch('threads', queryset=announcements)
-    ).distinct()
+        Prefetch('threads', queryset=announcements)).distinct()
 
     context = {
         'current_profile': profile,
@@ -60,37 +68,39 @@ def announcement_view(request, thread_id):
         # print(relations)
     SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
 
-    # if request.method == 'POST':
-    #     form = CreateNewsAnswerForm(request.POST, request.FILES)
-    #     if form.is_valid():
-    #         answer = form.save(commit=False)
-    #         answer.news = news
-    #         answer.author = profile
-    #         form.save()
-    #
-    #         subject = f"[RPG] Odpowiedź na ogłoszenie: '{news.title[:30]}...'"
-    #         message = f"{profile} odpowiedział/a na ogłoszenie '{news.title}':\n" \
-    #                   f"Ogłoszenie: {request.get_host()}/news/news-detail:{news.id}/\n\n" \
-    #                   f"Odpowiedź:\n{answer.text}"
-    #         sender = settings.EMAIL_HOST_USER
-    #         receivers = []
-    #         for p in news.followers.all():
-    #             if p.user != request.user:
-    #                 receivers.append(p.user.email)
-    #         if profile.status != 'gm':
-    #             receivers.append('lukas.kozicki@gmail.com')
-    #         send_mail(subject, message, sender, receivers)
-    #
-    #         messages.info(request, f'Twoja odpowiedź została zapisana!')
-    #         return redirect('news:detail', news_id=news_id)
-    # else:
-    #     form = CreateNewsAnswerForm()
+    statement_form = StatementCreateForm(
+        data=request.POST or None,
+        files=request.FILES or None,
+        profile=profile,
+        thread_kind='Announcement',
+        known_directly=[],
+        initial={'author': profile})
+    
+    if statement_form.is_valid():
+        statement = statement_form.save(commit=False)
+        statement.thread = announcement
+        statement.save()
+
+        subject = f"[RPG] Odpowiedź na Ogłoszenie: '{announcement.title[:30]}...'"
+        message = f"{profile}:\n{request.get_host()}{announcement.get_absolute_url()}/\n\n"
+        sender = settings.EMAIL_HOST_USER
+        receivers = []
+        for profile in announcement.followers.all():
+            if profile.user != request.user:
+                receivers.append(profile.user.email)
+        if profile.status != 'gm':
+            receivers.append('lukas.kozicki@gmail.com')
+        send_mail(subject, message, sender, receivers)
+
+        messages.info(request, f'Dodano wypowiedź!')
+        return redirect(
+            f'communications:announcement', thread_id=announcement.id)
 
     context = {
         'current_profile': profile,
         'page_title': announcement.title,
         'announcement': announcement,
-        # 'form': form,
+        'form': statement_form,
     }
     if profile in announcement.known_directly.all() or profile.status == 'gm':
         return render(request, 'communications/announcement.html', context)
@@ -137,12 +147,11 @@ def create_thread_view(request, thread_kind):
         profile=profile,
         thread_kind=thread_kind,
         known_directly=[],
-        initial={'author': profile})
-    
+        initial={'author': profile.id})
+
     if thread_form.is_valid() and statement_form.is_valid():
         thread = thread_form.save(commit=False)
         thread.kind = thread_kind
-        thread.author = profile   # TODO user in Announcement after shift
         thread.save()
         
         known_directly = thread_form.cleaned_data['known_directly']
@@ -162,8 +171,8 @@ def create_thread_view(request, thread_kind):
         #     informed_ids = [demand.author.id]
         # send_emails(request, informed_ids, demand_answer=answer)
         
-        subject = f"[RPG] Nowe ogłoszenie: '{thread.title[:30]}...'"
-        message = f"{profile}: {request.get_host()}/{thread.get_absolute_url()}/\n\n"
+        subject = f"[RPG] Nowość: {thread_map[thread_kind][1]} '{thread.title[:30]}...'"
+        message = f"{profile}:\n{request.get_host()}{thread.get_absolute_url()}/\n\n"
         sender = settings.EMAIL_HOST_USER
         receivers = []
         for profile in thread.followers.all():
