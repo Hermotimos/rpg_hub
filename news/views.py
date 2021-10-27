@@ -53,7 +53,7 @@ def create_topic_view(request):
         'page_title': "Nowy temat ogłoszeń",
         'form_1': form,
     }
-    return render(request, '_create_form.html', context)
+    return render(request, 'create_form.html', context)
 
 
 @login_required
@@ -101,7 +101,7 @@ def create_news_view(request):
         'form_1': news_form,
         'form_2': news_answer_form,
     }
-    return render(request, '_create_form.html', context)
+    return render(request, 'create_form.html', context)
 
 
 @login_required

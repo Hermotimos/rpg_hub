@@ -1,0 +1,64 @@
+{% load custom_filters %}
+
+<!-- BUTTONS -->
+<div class="row">
+    <div data-toggle="tooltip" data-placement="bottom" title="Ogłoszenia">
+        <a class="btn btn-outline-dark icon-parent-obj py-2 mt-1" href="{% url 'communications:announcements' %}#announcement_{{ thread.id }}"></a>
+    </div>
+    {% if not thread.is_ended %}
+        <div data-toggle="tooltip" data-placement="bottom" title="Udostępnij Ogłoszenie">
+            <p class="btn btn-outline-dark icon-inform py-2 ml-1 mt-1" data-toggle="modal" data-target="#infoThreadModal"></p>
+        </div>
+        <!-- The Modal -->
+        <div class="modal fade img-modal" id="infoThreadModal" tabindex="-1" role="dialog" aria-hidden="true">
+            
+            <!-- TODO informables and inform_type logic -->
+            
+            {% with informables=informables inform_type=thread|get_model_name id_=thread.id %}
+                {% include '_inform.html' %}
+            {% endwith %}
+        </div>
+    {% endif %}
+    <div class="mb-4">
+        
+        <!-- TODO change icon to eye or eye crossed out -->
+        
+        {% if current_profile in thread.followers.all %}
+           <a class="btn btn-outline-dark py-2 ml-1 mt-1" href="{% url 'communications:unfollow' thread.id %}">Nie obserwuj</a>
+        {% else %}
+            <a class="btn btn-outline-dark py-2 ml-1 mt-1" href="{% url 'communications:follow' thread.id %}">Obserwuj</a>
+        {% endif %}
+    </div>
+    <div data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">
+        <a class="btn btn-outline-dark icon-note py-2 ml-1 mt-1 disabled" href="#"></a>
+    </div>
+</div>
+
+
+<!-- INFO -->
+<div class="col">
+    <div class="row mt-3">
+        <div class="col-2 pl-0 h5">Temat:</div>
+        <div class="col-10 col-sm-10 pl-5 pl-lg-0">
+            <h5 class="mr-2 mr-sm-3">
+                <a  class="font-italic" href="{% url 'communications:announcements' %}#topic_{{ thread.topic.id }}">{{ thread.topic.title }}</a>
+            </h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2 pl-0 h5">Uczestnicy:</div>
+        <div class="col-10 pl-5 pl-lg-0">
+            {% for profile in thread.known_directly.all %}
+                <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2 pl-0 h5">Obserwują:</div>
+        <div class="col-10 pl-5 pl-lg-0">
+            {% for profile in thread.followers.all %}
+                <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+            {% endfor %}
+        </div>
+    </div>
+</div>

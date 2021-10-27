@@ -36,7 +36,7 @@
                                         <small class="font-italic text-nowrap text-muted">{{ announcement.created_at|date:'d-M-Y | H:i' }}</small>
                                     </div>
                                     <div class="row">
-                                        <a class="pr-1 h3 border-bottom" href="{% url 'communications:announcement' announcement.id %}">{{ announcement.title }}</a>
+                                        <a class="pr-1 h3 border-bottom" href="{% url 'communications:thread' announcement.id %}">{{ announcement.title }}</a>
                                     </div>
                                     <div class="row">
                                         <div class="float-left">

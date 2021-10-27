@@ -1,0 +1,50 @@
+{% load crispy_forms_tags %}
+
+
+{% for statement in thread.statements.all %}
+    <div id="statement-{{ statement.id }}" class="container anchor px-0 mt-n5">
+        <div class="row">
+            {% if statement.author.status == 'gm' and statement.thread.kind == 'Debate' %}
+                <div class="col-12">
+                    <span class="font-18 font-italic text-justify">{{ statement.text|capfirst|linebreaks }}</span>
+                    {% if statement.image %}
+                        <p><img class="img-fluid mx-auto d-block" src="{{ statement.image.url }}"></p>
+                        <br>
+                    {% endif %}
+                </div>
+            {% else %}
+                <div class="col-2 pr-0">
+                    <figure class="figure align-top mx-auto mb-0 px-lg-3 pt-1">
+                        <img class="rounded-circle img-fluid" src="{{ statement.author.image.url }}">
+                        <figcaption class="font-12 font-italic text-center pt-1">{{ statement.author.character_name_copy }}</figcaption>
+                    </figure>
+                </div>
+                <div class="col-10 font-18 font-italic text-justify ">
+                    <small class="text-muted">{{ statement.created_at|date:'d-M-Y | H:i' }} Placeholder for created_at info</small><br>
+                    <p class="">{{ statement.text|capfirst|linebreaksbr }}</p>
+                    {% if statement.image %}
+                        <p><img class="img-fluid mx-auto d-block" src="{{ statement.image.url }}"></p>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        {% if forloop.last and not thread.is_ended %}
+            <div class="row mt-n3" id="page-bottom">
+                {% if statement.author.status == 'gm' and statement.thread.kind == 'Debate' %}
+                    <div class="col-12 mt-2">
+                        {% for profile in statement.seen_by.all %}
+                            <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="col-2"></div>
+                    <div class="col-10 mt-2">
+                        {% for profile in statement.seen_by.all %}
+                            <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+{% endfor %}

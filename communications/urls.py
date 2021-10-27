@@ -6,14 +6,17 @@ app_name = 'communications'
 urlpatterns = [
     # announcements
     path('announcements/', views.announcements_view, name='announcements'),
-    path('announcement:<int:thread_id>/', views.announcement_view, name='announcement'),
+    path('thread:<int:thread_id>/', views.thread_view, name='thread'),
+    path('thread:<int:thread_id>/unfollow', views.unfollow_thread_view,
+         name='unfollow'),
+    path('thread:<int:thread_id>/follow', views.follow_thread_view,
+         name='follow'),
     
     path('create-topic:<str:thread_kind>/', views.create_topic_view, name='create-topic'),
     path('create-thread:<str:thread_kind>/', views.create_thread_view, name='create-thread'),
     
     # news
     
-    # path('news-detail:<int:news_id>/unfollow', views.unfollow_news_view, name='unfollow'),
     # path('news-detail:<int:news_id>/follow', views.follow_news_view, name='follow'),
     
     # survey

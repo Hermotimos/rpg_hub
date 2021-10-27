@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db.models import Prefetch
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from communications.forms import (CreateTopicForm, AnnouncementCreateForm, DebateCreateForm, StatementCreateForm)
 from communications.models import Topic, Thread, Debate, Announcement, Statement
@@ -14,15 +14,17 @@ from users.models import Profile
 #  1) main views separate? or separate templates based on 'thread_kind' param?
 #  2) detail views - one for all, steer it with parameters; separate templates
 
-#  TODO maybe make thread_map into file level constant; nested dicts:
-#     thread_map = {
-#         'Announcement': {
-#           'form': AnnouncementCreateForm,
-#           'verbose_name': "Ogłoszenie"},
-#         'Debate': {
-#           'form': DebateCreateForm,
-#           'verbose_name': "Narada"},
-#     }
+
+THREAD_MAP = {
+    'Announcement': {
+      'verbose_name': "Ogłoszenie",
+      'form': AnnouncementCreateForm,
+    },
+    'Debate': {
+      'verbose_name': "Narada",
+      'form': DebateCreateForm,
+    },
+}
 
 
 @login_required
@@ -51,18 +53,18 @@ def announcements_view(request):
 
 
 @login_required
-def announcement_view(request, thread_id):
+def thread_view(request, thread_id):
     profile = Profile.objects.get(id=request.session['profile_id'])
     
-    announcements = Announcement.objects.prefetch_related(
+    threads = Thread.objects.prefetch_related(
         'statements__seen_by', 'statements__author', 'followers',
         'known_directly')
-    announcement = announcements.get(id=thread_id)
+    thread = threads.get(id=thread_id)
 
     # Update all statements to be seen by the profile
     SeenBy = Statement.seen_by.through
     relations = []
-    for statement in announcement.statements.all():
+    for statement in thread.statements.all():
         relations.append(
             SeenBy(statement_id=statement.id, profile_id=profile.id))
         # print(relations)
@@ -78,14 +80,21 @@ def announcement_view(request, thread_id):
     
     if statement_form.is_valid():
         statement = statement_form.save(commit=False)
-        statement.thread = announcement
+        statement.thread = thread
         statement.save()
 
-        subject = f"[RPG] Odpowiedź na Ogłoszenie: '{announcement.title[:30]}...'"
-        message = f"{profile}:\n{request.get_host()}{announcement.get_absolute_url()}/\n\n"
+        # TODO USE send_emails utils.py - REWORK it so that it is provided with data
+        # if profile == demand.author:
+        #     informed_ids = [demand.addressee.id]
+        # else:
+        #     informed_ids = [demand.author.id]
+        # send_emails(request, informed_ids, demand_answer=answer)
+        
+        subject = f"[RPG] Odpowiedź na Ogłoszenie: '{thread.title[:30]}...'"
+        message = f"{profile}:\n{request.get_host()}{thread.get_absolute_url()}/\n\n"
         sender = settings.EMAIL_HOST_USER
         receivers = []
-        for profile in announcement.followers.all():
+        for profile in thread.followers.all():
             if profile.user != request.user:
                 receivers.append(profile.user.email)
         if profile.status != 'gm':
@@ -93,17 +102,16 @@ def announcement_view(request, thread_id):
         send_mail(subject, message, sender, receivers)
 
         messages.info(request, f'Dodano wypowiedź!')
-        return redirect(
-            f'communications:announcement', thread_id=announcement.id)
+        return redirect(f'communications:thread', thread_id=thread.id)
 
     context = {
         'current_profile': profile,
-        'page_title': announcement.title,
-        'announcement': announcement,
-        'form': statement_form,
+        'page_title': thread.title,
+        'thread': thread,
+        'form_1': statement_form,
     }
-    if profile in announcement.known_directly.all() or profile.status == 'gm':
-        return render(request, 'communications/announcement.html', context)
+    if profile in thread.known_directly.all() or profile.status == 'gm':
+        return render(request, 'communications/thread.html', context)
     else:
         return redirect('home:dupa')
     
@@ -124,19 +132,14 @@ def create_topic_view(request, thread_kind: str):
         'page_title': "Nowy temat",
         'form_1': form,
     }
-    return render(request, '_create_form.html', context)
+    return render(request, 'create_form.html', context)
 
 
 @login_required
 def create_thread_view(request, thread_kind):
     profile = Profile.objects.get(id=request.session['profile_id'])
 
-    thread_map = {
-        'Announcement': [AnnouncementCreateForm, "Ogłoszenie"],
-        'Debate': [DebateCreateForm, "Narada"],
-    }
-
-    thread_form = thread_map[thread_kind][0](
+    thread_form = THREAD_MAP[thread_kind]['form'](
         data=request.POST or None,
         files=request.FILES or None,
         profile=profile)
@@ -156,6 +159,7 @@ def create_thread_view(request, thread_kind):
         
         known_directly = thread_form.cleaned_data['known_directly']
         known_directly |= Profile.objects.filter(id=request.user.id)
+        known_directly |= Profile.objects.filter(status='gm')
         thread.known_directly.set(known_directly)
         thread.followers.set(known_directly)
 
@@ -171,7 +175,7 @@ def create_thread_view(request, thread_kind):
         #     informed_ids = [demand.author.id]
         # send_emails(request, informed_ids, demand_answer=answer)
         
-        subject = f"[RPG] Nowość: {thread_map[thread_kind][1]} '{thread.title[:30]}...'"
+        subject = f"[RPG] Nowość: {THREAD_MAP[thread_kind]['verbose_name']} '{thread.title[:30]}...'"
         message = f"{profile}:\n{request.get_host()}{thread.get_absolute_url()}/\n\n"
         sender = settings.EMAIL_HOST_USER
         receivers = []
@@ -182,49 +186,47 @@ def create_thread_view(request, thread_kind):
             receivers.append("lukas.kozicki@gmail.com")
         send_mail(subject, message, sender, receivers)
 
-        messages.info(request, f"Utworzono {thread_map[thread_kind][1]}!")
+        messages.info(
+            request, f"Utworzono {THREAD_MAP[thread_kind]['verbose_name']}!")
         return redirect(
             f'communications:{thread_kind.lower()}', thread_id=thread.id)
 
     context = {
         'current_profile': profile,
-        'page_title': f"Nowe {thread_map[thread_kind][1]}",
+        'page_title': f"Nowe {THREAD_MAP[thread_kind]['verbose_name']}",
         'form_1': thread_form,
         'form_2': statement_form,
     }
-    return render(request, '_create_form.html', context)
+    return render(request, 'create_form.html', context)
 
 
-#
-#
-# @login_required
-# def unfollow_news_view(request, news_id):
-#     profile = Profile.objects.get(id=request.session['profile_id'])
-#     news = get_object_or_404(News, id=news_id)
-#
-#     if profile in news.allowed_profiles.all() or profile.status == 'gm':
-#         news.followers.remove(profile)
-#         messages.info(request, 'Przestałeś obserwować ogłoszenie!')
-#         return redirect('news:detail', news_id=news_id)
-#     else:
-#         return redirect('home:dupa')
-#
-#
-# @login_required
-# def follow_news_view(request, news_id):
-#     profile = Profile.objects.get(id=request.session['profile_id'])
-#     news = get_object_or_404(News, id=news_id)
-#
-#     if profile in news.allowed_profiles.all() or profile.status == 'gm':
-#         news.followers.add(profile)
-#         messages.info(request, 'Obserwujesz ogłoszenie!')
-#         return redirect('news:detail', news_id=news_id)
-#     else:
-#         return redirect('home:dupa')
-#
-#
-# #
-#
+@login_required
+def unfollow_thread_view(request, thread_id):
+    profile = Profile.objects.get(id=request.session['profile_id'])
+    
+    thread = get_object_or_404(Thread, id=thread_id)
+    if profile in thread.known_directly.all():
+        thread.followers.remove(profile)
+        messages.info(request, 'Przestałeś obserwować!')
+        return redirect('communications:thread', thread_id=thread.id)
+    else:
+        return redirect('home:dupa')
+
+
+@login_required
+def follow_thread_view(request, thread_id):
+    profile = Profile.objects.get(id=request.session['profile_id'])
+    
+    thread = get_object_or_404(Thread, id=thread_id)
+    if profile in thread.known_directly.all():
+        thread.followers.add(profile)
+        messages.info(request, 'Zacząłeś obserwować!')
+        return redirect('communications:thread', thread_id=thread.id)
+    else:
+        return redirect('home:dupa')
+
+
+
 #
 # @login_required
 # def vote_yes_view(request, survey_id, option_id):

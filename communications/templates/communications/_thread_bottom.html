@@ -1,0 +1,15 @@
+{% load crispy_forms_tags %}
+
+<!-- Show text editor or "closed mark" depending on is_ended status  -->
+{% if thread.is_ended %}
+    <div class="row">
+        <div class="col-12">
+            <p class="mt-5 mb-0 text-center">✧</p>
+            <p class="mb-0 text-center">✧ ✦ ✧</p>
+            <p class="mb-5 mt-0 text-center">✧</p>
+        </div>
+    </div>
+{% else %}
+    {% include '_create_form.html' %}
+{% endif %}
+

@@ -50,7 +50,7 @@ def create_topic_view(request):
         'page_title': "Nowy temat narad",
         'form_1': form,
     }
-    return render(request, '_create_form.html', context)
+    return render(request, 'create_form.html', context)
 
 
 # @login_required
@@ -90,7 +90,7 @@ def create_topic_view(request):
 #         'form_2': debate_form,
 #         'form_3': remark_form,
 #     }
-#     return render(request, '_create_form.html', context)
+#     return render(request, 'create_form.html', context)
 
 
 @login_required
@@ -131,7 +131,7 @@ def create_debate_view(request, topic_id=0):
         'form_1': debate_form,
         'form_2': remark_form,
     }
-    return render(request, '_create_form.html', context)
+    return render(request, 'create_form.html', context)
 
 
 @login_required
