@@ -9,13 +9,14 @@
 
 {% block content %}
     <div class="container">
-        {% include 'communications/_announcement_header.html' %}
+        {% if thread.kind == 'Announcement' %}
+            {% include 'communications/_announcement_header.html' %}
+        {% elif thread.kind == 'Debate' %}
+            {% include 'communications/_announcement_header.html' %}
+        {% endif %}
     </div>
     <div class="container mt-5 pt-5 pl-0">
         {% include 'communications/_thread_body.html' %}
-    </div>
-    <div class="container mt-5 pl-0">
-        {% include 'communications/_thread_bottom.html' %}
     </div>
 {% endblock content %}
 
