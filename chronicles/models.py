@@ -137,6 +137,7 @@ class Date(Model):
     class Meta:
         unique_together = ['year', 'season', 'day']
         verbose_name = '- Date'
+        ordering = ['year', 'day']
     
     def __str__(self):
         if self.season and self.day:
