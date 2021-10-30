@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from communications.forms import (CreateTopicForm, AnnouncementCreateForm,
                                   DebateCreateForm, StatementCreateForm)
 from communications.models import Topic, Thread, Announcement, Statement
+from rpg_project.utils import handle_inform_form
 from users.models import Profile
 
 # TODO
@@ -27,6 +28,22 @@ THREAD_MAP = {
       'form': DebateCreateForm,
     },
 }
+
+
+def thread_inform(request, thread):
+    informed_ids = [
+        k for k, v_list in request.POST.items() if 'on' in v_list]
+    thread.known_directly.add(*informed_ids)
+    thread.followers.add(*informed_ids)
+    send_mail(
+        subject=f"[RPG] Udostępnienie Ogłoszenia: '{thread.title}'",
+        message=f"{request.get_host()}{thread.get_absolute_url()}/",
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[
+            p.user.email for p in Profile.objects.filter(
+                id__in=informed_ids)])
+    messages.info(request, f'Poinformowano wybranych Graczy!')
+    return redirect(f'communications:thread', thread_id=thread.id)
 
 
 @login_required
@@ -69,29 +86,37 @@ def thread_view(request, thread_id):
             SeenBy(statement_id=statement.id, profile_id=current_profile.id))
     SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
 
-    statement_form = StatementCreateForm(
-        data=request.POST or None,
-        files=request.FILES or None,
-        profile=current_profile,
-        thread_kind=thread.kind,
-        known_directly=[],
-        initial={'author': current_profile})
-    
+    if request.method == 'POST' and 'Announcement' in request.POST:
+        statement_form = StatementCreateForm(
+            profile=current_profile,
+            thread_kind=thread.kind,
+            known_directly=[],
+            initial={'author': current_profile})
+        thread_inform(request, thread)
+
+    else:
+        statement_form = StatementCreateForm(
+            data=request.POST or None,
+            files=request.FILES or None,
+            profile=current_profile,
+            thread_kind=thread.kind,
+            known_directly=[],
+            initial={'author': current_profile})
+
     if statement_form.is_valid():
         statement = statement_form.save(commit=False)
         statement.thread = thread
         statement.save()
-
         send_mail(
             subject=f"[RPG] Nowa wypowiedź: '{thread.title}'",
             message=f"{request.get_host()}{thread.get_absolute_url()}/",
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[
-                p.user.email for p in known_directly if p != current_profile])
-
+                p.user.email for p in known_directly if p != current_profile]
+        )
         messages.info(request, f'Dodano wypowiedź!')
         return redirect(f'communications:thread', thread_id=thread.id)
-
+        
     context = {
         'current_profile': current_profile,
         'page_title': thread.title,

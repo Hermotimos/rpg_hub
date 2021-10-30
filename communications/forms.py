@@ -102,7 +102,6 @@ class StatementCreateForm(forms.ModelForm):
         profile = kwargs.pop('profile')
         thread_kind = kwargs.pop('thread_kind')
         known_directly = kwargs.pop('known_directly')
-        print(kwargs.get('initial'))
         super().__init__(*args, **kwargs)
         
         self.fields['author'].label = "Autor"
