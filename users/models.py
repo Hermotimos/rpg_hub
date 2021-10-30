@@ -153,7 +153,9 @@ class Profile(Model):
     def unseen_announcements(self):
         from communications.models import Announcement, Statement
         unseen_statements = Statement.objects.exclude(seen_by=self)
-        return Announcement.objects.filter(statements__in=unseen_statements)
+        return Announcement.objects.filter(
+            known_directly=self,
+            statements__in=unseen_statements)
         
     @property
     def unseen_debates(self):

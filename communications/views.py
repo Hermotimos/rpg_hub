@@ -5,10 +5,10 @@ from django.core.mail import send_mail
 from django.db.models import Prefetch
 from django.shortcuts import render, redirect, get_object_or_404
 
-from communications.forms import (CreateTopicForm, AnnouncementCreateForm, DebateCreateForm, StatementCreateForm)
-from communications.models import Topic, Thread, Debate, Announcement, Statement
+from communications.forms import (CreateTopicForm, AnnouncementCreateForm,
+                                  DebateCreateForm, StatementCreateForm)
+from communications.models import Topic, Thread, Announcement, Statement
 from users.models import Profile
-
 
 # TODO
 #  1) main views separate? or separate templates based on 'thread_kind' param?
@@ -33,14 +33,11 @@ THREAD_MAP = {
 def announcements_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     
-    if profile.status == 'gm':
-        announcements = Announcement.objects.all()
-    else:
-        announcements = Announcement.objects.filter(known_directly=profile)
-
-    announcements = announcements.prefetch_related(
+    announcements = Announcement.objects.prefetch_related(
         'statements__author', 'statements__seen_by').order_by('-created_at')
-    
+    if profile.status != 'gm':
+        announcements = announcements.filter(known_directly=profile)
+        
     topics = Topic.objects.filter(threads__in=announcements)
     topics = topics.prefetch_related(
         Prefetch('threads', queryset=announcements)).distinct()
