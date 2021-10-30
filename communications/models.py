@@ -65,10 +65,13 @@ class Thread(Model):
         return self.title
     
     def informables(self):
-        # TODO separate informables function for each thread kind
-        qs = Profile.living.all()
-        qs = qs.exclude(id__in=self.known_directly.all())
-        return qs
+        if self.kind == 'Announcement':
+            qs = Profile.active_players.all()
+        elif self.kind == 'Debate':
+            qs = Profile.living.all()
+        else:
+            qs = Profile.objects.none()
+        return qs.exclude(id__in=self.known_directly.all())
 
     def get_absolute_url(self):
         return f'/communications/thread:{self.pk}'

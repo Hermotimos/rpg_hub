@@ -13,11 +13,13 @@
             <form method="POST" action="." name="{{ inform_type }}_form{{ id_ }}">
                 {% csrf_token %}
                 <div class="modal-body">
-                    <h5 class="text-center text-danger">
-                        {% if inform_type  != 'Debate' %}
-                            Informuj bohaterów, którym przekazałeś wiedzę w grze.
+                    <h5 class="text-center text-danger mx-3">
+                        {% if inform_type == 'Debate' %}
+                            Dołączaj do Narad tylko Postacie znajdujące się w pobliżu.
+                        {% elif inform_type == 'Announcement' %}
+                            Udostępniaj Ogłoszenia tylko osobom zainteresowanym.
                         {% else %}
-                            Dołączaj do narad tylko bohaterów znajdujących się w pobliżu.*
+                            Informuj Postacie, którym przekazałeś już wiedzę w grze.
                         {% endif %}
                         <br>
                         W razie wątpliwości skonsultuj się z MG.
@@ -46,10 +48,10 @@
                         </div>
                     </div>
                     <h5 class="text-center text-danger">
-                        {% if inform_type  == 'Debate' %}
-                            <small class="smaller">*Nowi uczestnicy są automatycznie wtajemniczani w całość narady.</small>
-                            <br>
-                            <small class="smaller">*Aby włączyć do narady BNa, wyślij dezyderat.</small>
+                        {% if inform_type == 'Debate' %}
+                            <small class="smaller">*Nowi uczestnicy są automatycznie wtajemniczani w całość Narady.</small>
+                        {% elif inform_type == 'Announcement' %}
+                            <small class="smaller">*Nowi uczestnicy zyskują dostęp do całości Ogłoszenia.</small>
                         {% else %}
                             <!-- Fill in if applicable  -->
                         {% endif %}

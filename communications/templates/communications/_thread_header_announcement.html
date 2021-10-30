@@ -11,10 +11,7 @@
         </div>
         <!-- The Modal -->
         <div class="modal fade img-modal" id="infoThreadModal" tabindex="-1" role="dialog" aria-hidden="true">
-            
-            <!-- TODO informables and inform_type logic -->
-            
-            {% with informables=informables inform_type=thread|get_model_name id_=thread.id %}
+            {% with informables=thread.informables inform_type=thread.kind id_=thread.id %}
                 {% include '_inform.html' %}
             {% endwith %}
         </div>
