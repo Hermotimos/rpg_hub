@@ -71,7 +71,7 @@ class Thread(Model):
         return qs
 
     def get_absolute_url(self):
-        return f'/communications/{str(self.kind).lower()}:{self.pk}'
+        return f'/communications/thread:{self.pk}'
 
 
 class DebateManager(Manager):

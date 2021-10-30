@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.shortcuts import render, redirect, get_object_or_404
 
 from communications.forms import (CreateTopicForm, AnnouncementCreateForm,
@@ -31,85 +31,74 @@ THREAD_MAP = {
 
 @login_required
 def announcements_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     announcements = Announcement.objects.prefetch_related(
         'statements__author', 'statements__seen_by').order_by('-created_at')
-    if profile.status != 'gm':
-        announcements = announcements.filter(known_directly=profile)
+    if current_profile.status != 'gm':
+        announcements = announcements.filter(known_directly=current_profile)
         
     topics = Topic.objects.filter(threads__in=announcements)
     topics = topics.prefetch_related(
         Prefetch('threads', queryset=announcements)).distinct()
 
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Ogłoszenia',
         'topics': topics,
-        'unseen_announcements': profile.unseen_announcements,
+        'unseen_announcements': current_profile.unseen_announcements,
     }
     return render(request, 'communications/announcements.html', context)
 
 
 @login_required
 def thread_view(request, thread_id):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     threads = Thread.objects.prefetch_related(
         'statements__seen_by', 'statements__author', 'followers',
         'known_directly')
     thread = threads.get(id=thread_id)
+    known_directly = thread.known_directly.all()
 
     # Update all statements to be seen by the profile
     SeenBy = Statement.seen_by.through
     relations = []
     for statement in thread.statements.all():
         relations.append(
-            SeenBy(statement_id=statement.id, profile_id=profile.id))
-        # print(relations)
+            SeenBy(statement_id=statement.id, profile_id=current_profile.id))
     SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
 
     statement_form = StatementCreateForm(
         data=request.POST or None,
         files=request.FILES or None,
-        profile=profile,
+        profile=current_profile,
         thread_kind=thread.kind,
         known_directly=[],
-        initial={'author': profile})
+        initial={'author': current_profile})
     
     if statement_form.is_valid():
         statement = statement_form.save(commit=False)
         statement.thread = thread
         statement.save()
 
-        # TODO USE send_emails utils.py - REWORK it so that it is provided with data
-        # if profile == demand.author:
-        #     informed_ids = [demand.addressee.id]
-        # else:
-        #     informed_ids = [demand.author.id]
-        # send_emails(request, informed_ids, demand_answer=answer)
-        
-        subject = f"[RPG] Nowa wypowiedź: '{thread.title[:30]}...'"
-        message = f"\n{request.get_host()}{thread.get_absolute_url()}/\n"
-        sender = settings.EMAIL_HOST_USER
-        receivers = []
-        for profile in thread.followers.all():
-            if profile.user != request.user:
-                receivers.append(profile.user.email)
-        if profile.status != 'gm':
-            receivers.append('lukas.kozicki@gmail.com')
-        send_mail(subject, message, sender, receivers)
+        send_mail(
+            subject=f"[RPG] Nowa wypowiedź: '{thread.title}'",
+            message=f"{request.get_host()}{thread.get_absolute_url()}/",
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[
+                p.user.email for p in known_directly if p != current_profile])
 
         messages.info(request, f'Dodano wypowiedź!')
         return redirect(f'communications:thread', thread_id=thread.id)
 
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': thread.title,
         'thread': thread,
         'form_1': statement_form,
     }
-    if profile in thread.known_directly.all() or profile.status == 'gm':
+    if current_profile in known_directly or current_profile.status == 'gm':
         return render(request, 'communications/thread.html', context)
     else:
         return redirect('home:dupa')
@@ -117,7 +106,7 @@ def thread_view(request, thread_id):
 
 @login_required
 def create_topic_view(request, thread_kind: str):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     form = CreateTopicForm(request.POST or None)
     if form.is_valid():
@@ -127,7 +116,7 @@ def create_topic_view(request, thread_kind: str):
         return redirect('communications:create-thread', thread_kind=thread_kind)
 
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': "Nowy temat",
         'form_1': form,
     }
@@ -136,20 +125,20 @@ def create_topic_view(request, thread_kind: str):
 
 @login_required
 def create_thread_view(request, thread_kind):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
 
     thread_form = THREAD_MAP[thread_kind]['form'](
         data=request.POST or None,
         files=request.FILES or None,
-        profile=profile)
+        profile=current_profile)
     
     statement_form = StatementCreateForm(
         data=request.POST or None,
         files=request.FILES or None,
-        profile=profile,
+        profile=current_profile,
         thread_kind=thread_kind,
         known_directly=[],
-        initial={'author': profile.id})
+        initial={'author': current_profile.id})
 
     if thread_form.is_valid() and statement_form.is_valid():
         thread = thread_form.save(commit=False)
@@ -157,40 +146,28 @@ def create_thread_view(request, thread_kind):
         thread.save()
         
         known_directly = thread_form.cleaned_data['known_directly']
-        known_directly |= Profile.objects.filter(id=request.user.id)
-        known_directly |= Profile.objects.filter(status='gm')
+        known_directly |= Profile.objects.filter(
+            Q(id=current_profile.id) | Q(status='gm'))
         thread.known_directly.set(known_directly)
         thread.followers.set(known_directly)
 
         statement = statement_form.save(commit=False)
         statement.thread = thread
-        statement.author = profile
+        statement.author = current_profile
         statement.save()
 
-        # TODO USE send_emails - REWORK send_emails so that it is provied with data?
-        # if profile == demand.author:
-        #     informed_ids = [demand.addressee.id]
-        # else:
-        #     informed_ids = [demand.author.id]
-        # send_emails(request, informed_ids, demand_answer=answer)
-        
-        subject = f"[RPG] {THREAD_MAP[thread_kind]['text']}: '{thread.title}...'"
-        message = f"\n{request.get_host()}{thread.get_absolute_url()}/\n"
-        sender = settings.EMAIL_HOST_USER
-        receivers = []
-        for profile in thread.followers.all():
-            if profile.user != request.user:
-                receivers.append(profile.user.email)
-        if profile.status != 'gm':
-            receivers.append("lukas.kozicki@gmail.com")
-        send_mail(subject, message, sender, receivers)
+        send_mail(
+            subject=f"[RPG] {THREAD_MAP[thread_kind]['text']}: '{thread}'",
+            message=f"{request.get_host()}{thread.get_absolute_url()}/",
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[
+                p.user.email for p in known_directly if p != current_profile])
 
-        messages.info(
-            request, f"Utworzono {THREAD_MAP[thread_kind]['name']}!")
+        messages.info(request, f"Utworzono {THREAD_MAP[thread_kind]['name']}!")
         return redirect(f'communications:thread', thread_id=thread.id)
 
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': f"{THREAD_MAP[thread_kind]['text']}",
         'form_1': thread_form,
         'form_2': statement_form,
@@ -200,11 +177,11 @@ def create_thread_view(request, thread_kind):
 
 @login_required
 def unfollow_thread_view(request, thread_id):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     thread = get_object_or_404(Thread, id=thread_id)
-    if profile in thread.known_directly.all():
-        thread.followers.remove(profile)
+    if current_profile in thread.known_directly.all():
+        thread.followers.remove(current_profile)
         messages.info(request, 'Przestałeś obserwować!')
         return redirect('communications:thread', thread_id=thread.id)
     else:
@@ -213,11 +190,11 @@ def unfollow_thread_view(request, thread_id):
 
 @login_required
 def follow_thread_view(request, thread_id):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     thread = get_object_or_404(Thread, id=thread_id)
-    if profile in thread.known_directly.all():
-        thread.followers.add(profile)
+    if current_profile in thread.known_directly.all():
+        thread.followers.add(current_profile)
         messages.info(request, 'Zacząłeś obserwować!')
         return redirect('communications:thread', thread_id=thread.id)
     else:
