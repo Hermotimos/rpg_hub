@@ -17,11 +17,13 @@ from users.models import Profile
 
 THREAD_MAP = {
     'Announcement': {
-      'verbose_name': "Ogłoszenie",
+      'name': "Ogłoszenie",
+      'text': "Nowe Ogłoszenie",
       'form': AnnouncementCreateForm,
     },
     'Debate': {
-      'verbose_name': "Narada",
+      'name': "Narada",
+      'text': "Nowa Narada",
       'form': DebateCreateForm,
     },
 }
@@ -74,7 +76,7 @@ def thread_view(request, thread_id):
         data=request.POST or None,
         files=request.FILES or None,
         profile=profile,
-        thread_kind='Announcement',
+        thread_kind=thread.kind,
         known_directly=[],
         initial={'author': profile})
     
@@ -90,8 +92,8 @@ def thread_view(request, thread_id):
         #     informed_ids = [demand.author.id]
         # send_emails(request, informed_ids, demand_answer=answer)
         
-        subject = f"[RPG] Odpowiedź na Ogłoszenie: '{thread.title[:30]}...'"
-        message = f"{profile}:\n{request.get_host()}{thread.get_absolute_url()}/\n\n"
+        subject = f"[RPG] Nowa wypowiedź: '{thread.title[:30]}...'"
+        message = f"\n{request.get_host()}{thread.get_absolute_url()}/\n"
         sender = settings.EMAIL_HOST_USER
         receivers = []
         for profile in thread.followers.all():
@@ -175,8 +177,8 @@ def create_thread_view(request, thread_kind):
         #     informed_ids = [demand.author.id]
         # send_emails(request, informed_ids, demand_answer=answer)
         
-        subject = f"[RPG] Nowość: {THREAD_MAP[thread_kind]['verbose_name']} '{thread.title[:30]}...'"
-        message = f"{profile}:\n{request.get_host()}{thread.get_absolute_url()}/\n\n"
+        subject = f"[RPG] {THREAD_MAP[thread_kind]['text']}: '{thread.title}...'"
+        message = f"\n{request.get_host()}{thread.get_absolute_url()}/\n"
         sender = settings.EMAIL_HOST_USER
         receivers = []
         for profile in thread.followers.all():
@@ -187,13 +189,12 @@ def create_thread_view(request, thread_kind):
         send_mail(subject, message, sender, receivers)
 
         messages.info(
-            request, f"Utworzono {THREAD_MAP[thread_kind]['verbose_name']}!")
-        return redirect(
-            f'communications:{thread_kind.lower()}', thread_id=thread.id)
+            request, f"Utworzono {THREAD_MAP[thread_kind]['name']}!")
+        return redirect(f'communications:thread', thread_id=thread.id)
 
     context = {
         'current_profile': profile,
-        'page_title': f"Nowe {THREAD_MAP[thread_kind]['verbose_name']}",
+        'page_title': f"{THREAD_MAP[thread_kind]['text']}",
         'form_1': thread_form,
         'form_2': statement_form,
     }
