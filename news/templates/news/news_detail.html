@@ -18,7 +18,7 @@
                     <h5 class="mb-0 mr-2 mr-sm-3">Autor:</h5>
                 </td>
                 <td>
-                    <img class="rounded-circle img-small" src="{{ news.news_answers.first.author.image.url }}">
+                    <img class="rounded-circle potrait-img-sm" src="{{ news.news_answers.first.author.image.url }}">
                 </td>
             </tr>
             <tr>
@@ -27,7 +27,7 @@
                 </td>
                 <td>
                     {% for profile in news.allowed_profiles.all %}
-                        <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                        <img class="rounded-circle potrait-img-sm" src="{{ profile.image.url }}">
                     {% endfor %}
                 </td>
             </tr>
@@ -37,7 +37,7 @@
                 </td>
                 <td>
                     {% for profile in news.followers.all %}
-                        <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                        <img class="rounded-circle potrait-img-sm" src="{{ profile.image.url }}">
                     {% endfor %}
                 </td>
             </tr>
@@ -73,7 +73,7 @@
                                     <td></td>
                                     <td>
                                         {% for profile in answer.seen_by.all %}
-                                            <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+                                            <img class="rounded-circle potrait-img-sm" src="{{ profile.image.url }}">
                                         {% endfor %}
                                     </td>
                                 </tr>

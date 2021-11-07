@@ -9,7 +9,7 @@
         <div class="row">
             <h3 class="mb-3">
                 {% if biography_packet.author and biography_packet.author.status != 'gm' %}
-                    <img class="rounded-circle img-small mr-1 mt-1" src="{{ biography_packet.author.image.url }}">
+                    <img class="rounded-circle potrait-img-sm mr-1 mt-1" src="{{ biography_packet.author.image.url }}">
                 {% endif %}
                 <span class="border-bottom-dark">
                     {{ biography_packet.title }}

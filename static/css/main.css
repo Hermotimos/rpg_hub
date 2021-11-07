@@ -189,33 +189,39 @@ img {pointer-events: none;}
 figure.pointer,
 div.pointer {cursor: pointer;}
 
-.article-img {
+.portrait-img-xl {
     height: 5rem;
     width: auto;
     margin-left: auto;
     margin-right: auto;
 }
-
-@media only screen and (max-width: 600px) {
-    .article-img {height: 4rem;}
+.portrait-img-md {
+    height: 4rem;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
-
-.img-small {
-    height: 30px;
+.potrait-img-sm {
+    height: 1.875rem;
     width: auto;
     margin-left: auto;
     margin-right: auto;
     border: solid 1px black;
 }
 
-.img-smaller {
-    height: 20px;
+.potrait-img-xs {
+    height: 1.25rem;
     width: auto;
     margin-left: auto;
     margin-right: auto;
     margin-top: 0.2rem;
     border: solid 1px black;
 }
+
+@media only screen and (max-width: 600px) {
+    .portrait-img-xl {height: 4rem;}
+}
+
 .img-season {
     height: 25px;
     width: auto;

@@ -17,7 +17,7 @@
             <p><img class="img-fluid mx-auto d-block" src="{{ survey.image.url }}"></p>
         {% endif %}
         {% for profile in survey_seen_by %}
-            <img class="rounded-circle img-small" src="{{ profile.image.url }}">
+            <img class="rounded-circle potrait-img-sm" src="{{ profile.image.url }}">
         {% endfor %}
     </div>
 
@@ -35,10 +35,10 @@
                         {% for profile in option.no_voters.all %}
                             {% if profile == current_profile %}
                                 <a href="{% url 'news:survey-unvote' survey.id option.id %}">
-                                    <img class="rounded-circle img-small border-2 border-danger" src="{{ profile.image.url }}">
+                                    <img class="rounded-circle potrait-img-sm border-2 border-danger" src="{{ profile.image.url }}">
                                 </a>
                             {% else %}
-                                <img class="rounded-circle img-small border-2 border-danger" src="{{ profile.image.url }}">
+                                <img class="rounded-circle potrait-img-sm border-2 border-danger" src="{{ profile.image.url }}">
                             {% endif %}
                         {% endfor %}
                     </td>
@@ -64,10 +64,10 @@
                         {% for profile in option.yes_voters.all %}
                             {% if profile == current_profile %}
                                 <a href="{% url 'news:survey-unvote' survey.id option.id %}">
-                                    <img class="rounded-circle img-small border-2 border-success" src="{{ profile.image.url }}">
+                                    <img class="rounded-circle potrait-img-sm border-2 border-success" src="{{ profile.image.url }}">
                                 </a>
                             {% else %}
-                                <img class="rounded-circle img-small border-2 border-success" src="{{ profile.image.url }}">
+                                <img class="rounded-circle potrait-img-sm border-2 border-success" src="{{ profile.image.url }}">
                             {% endif %}
                         {% endfor %}
                     </td>
@@ -100,7 +100,7 @@
                     <td></td>
                     <td>
                         {% for image in last_answer_seen_by_imgs %}
-                            <img class="rounded-circle img-small" src="{{ image.url }}">
+                            <img class="rounded-circle potrait-img-sm" src="{{ image.url }}">
                         {% endfor %}
                     </td>
                 </tr>
