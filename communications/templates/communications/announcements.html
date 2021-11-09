@@ -22,39 +22,34 @@
                         <b class="border-bottom-dark">{{ topic.title }}</b>
                     </h3>
                     {% for announcement in topic.threads.all %}
-                    
                         <div class="container my-1 border rounded {% if announcement in unseen_announcements %} bg-bluish {% else %} bg-inner {% endif %}">
                             <span class="pt-5" id="announcement_{{ announcement.id }}"></span>
-                            <div class="row my-2">
-                                
-                                <div class="col-2 p-0 pl-2">
-                                    <img class="rounded-circle article-img" src="{{ announcement.statements.first.author.image.url }}">
+                            <div class="row p-1">
+                                <div class="col-auto px-0 mr-n3">
+                                    <img class="portrait-img-md" src="{{ announcement.statements.first.author.image.url }}">
                                 </div>
-                                
-                                <div class="col-10 pl-5 pl-sm-4 pl-lg-0 ml-lg-n2 ml-xl-n4">
-                                    <div class="row">
-                                        <small class="font-italic text-nowrap text-muted">{{ announcement.created_at|date:'d-M-Y | H:i' }}</small>
-                                    </div>
-                                    <div class="row">
-                                        <a class="pr-1 h3 border-bottom" href="{% url 'communications:thread' announcement.id %}">{{ announcement.title }}</a>
-                                    </div>
-                                    <div class="row">
-                                        <div class="float-left">
-                                            {% for answer in announcement.statements.all %}
-                                                <img class="rounded-circle img-small mb-1" src="{{ answer.author.image.url }}">
-                                            {% endfor %}
+                                <div class="col pr-0 ml-n1">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="font-11 font-italic text-muted align-top">
+                                                    {{ announcement.created_at|date:'d-M-Y | H:i' }}
+                                                </div>
+                                                <a class="font-16 border-bottom align-top" href="{% url 'communications:thread' announcement.id %}">
+                                                    {{ announcement.title|capfirst }}
+                                                </a>
+                                                <div class="font-11 font-italic text-muted text-bottom">
+                                                    Placeholder until TAGS
+                                                </div>
+                                            </div>
+                                            <div class="col-auto p-0 ml-auto mt-auto mb-n1">
+                                                <a class="btn btn-outline-dark btn-sm icon-edit icon-small py-1" href="#"></a>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <small class="font-italic text-muted">
-                                            Ostatnia aktywność: {{ announcement.last_activity|date:'d-M-Y | H:i' }}
-                                        </small>
-                                    </div>
                                 </div>
-                                
                             </div>
                         </div>
-                    
                     {% endfor %}
                 </div>
             {% endfor %}

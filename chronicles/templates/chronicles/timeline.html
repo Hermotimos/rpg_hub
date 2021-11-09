@@ -310,16 +310,19 @@
                         {% endif %}
                         <div data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">
                             <a class="btn btn-outline-dark btn-sm icon-note icon-small mt-1 py-1 disabled"
-                               href="#"></a>
+                               href="#">
+                            </a>
                         </div>
                         {% if current_profile.status == 'gm' %}
                             <div class="mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj wydarzenie">
                                 <a class="btn btn-outline-dark btn-sm icon-edit icon-small py-1"
-                                   href="{% url 'admin:chronicles_gameevent_change' event.id %}" target="_blank"></a>
+                                   href="{% url 'admin:chronicles_gameevent_change' event.id %}" target="_blank">
+                                </a>
                             </div>
                             <div class="mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Sesję">
                                 <a class="btn btn-outline-dark btn-sm icon-edit icon-small py-1"
-                                   href="{% url 'admin:chronicles_gamesession_change' event.game.id %}" target="_blank"></a>
+                                   href="{% url 'admin:chronicles_gamesession_change' event.game.id %}" target="_blank">
+                                </a>
                             </div>
                         {% endif %}
                     </td>
