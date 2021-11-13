@@ -218,9 +218,8 @@ def unfollow_thread_view(request, thread_id, tag_title):
     thread = get_object_or_404(Thread, id=thread_id)
     if current_profile in thread.known_directly.all():
         thread.followers.remove(current_profile)
-        messages.info(request, 'Przestałeś obserwować!')
-        return redirect(
-            'communications:thread', thread_id=thread.id, tag_title=tag_title)
+        messages.info(request, f"Przestałeś obserwować \"{thread}\"!")
+        return redirect(request.META.get('HTTP_REFERER', '/'))
     else:
         return redirect('home:dupa')
 
@@ -232,9 +231,8 @@ def follow_thread_view(request, thread_id, tag_title):
     thread = get_object_or_404(Thread, id=thread_id)
     if current_profile in thread.known_directly.all():
         thread.followers.add(current_profile)
-        messages.info(request, 'Zacząłeś obserwować!')
-        return redirect(
-            'communications:thread', thread_id=thread.id, tag_title=tag_title)
+        messages.info(request, f"Zacząłeś obserwować \"{thread}\"!")
+        return redirect(request.META.get('HTTP_REFERER', '/'))
     else:
         return redirect('home:dupa')
 

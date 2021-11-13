@@ -14,9 +14,9 @@
             <a href="{% url 'communications:create-thread' 'Announcement' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
         </header>
         
-        <article class="pt-5">
-                    TODO reload ze starych Ogłoszeń
-            
+        TODO reload ze starych Ogłoszeń
+
+        <div class="pt-5">
             {% if unseen_announcements %}
                 <div id="topic_unseen_announcements" class="mb-5">
                     <h3 class="small-caps mb-3">
@@ -29,7 +29,6 @@
                     {% endfor %}
                 </div>
             {% endif %}
-            
             {% for topic in topics %}
                 <div id="topic_{{ topic.id }}" class="mb-5">
                     <h3 class="small-caps mb-3">
@@ -40,7 +39,7 @@
                     {% endfor %}
                 </div>
             {% endfor %}
-        </article>
+        </div>
         
     </article>
 

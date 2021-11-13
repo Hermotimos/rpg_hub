@@ -21,7 +21,7 @@
         <!-- TODO change icon to eye or eye crossed out -->
         
         {% if current_profile in thread.followers.all %}
-           <a class="btn btn-outline-dark py-2 ml-1 mt-1" href="{% url 'communications:unfollow' thread.id tag_title %}">Nie obserwuj</a>
+            <a class="btn btn-outline-dark py-2 ml-1 mt-1" href="{% url 'communications:unfollow' thread.id tag_title %}">Nie obserwuj</a>
         {% else %}
             <a class="btn btn-outline-dark py-2 ml-1 mt-1" href="{% url 'communications:follow' thread.id tag_title %}">Obserwuj</a>
         {% endif %}
