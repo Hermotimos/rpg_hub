@@ -47,14 +47,17 @@ def thread_inform(request, thread):
 
 
 @login_required
-def announcements_view(request):
+def announcements_view(request, tag_title):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     announcements = Announcement.objects.prefetch_related(
-        'statements__author', 'statements__seen_by', 'tags__author')
+        'statements__author', 'statements__seen_by', 'tags__author', 'topic')
     announcements = announcements.order_by('-created_at')
+    
     if current_profile.status != 'gm':
         announcements = announcements.filter(known_directly=current_profile)
+    if tag_title != 'None':
+        announcements = announcements.filter(tags__title=tag_title)
         
     unseen_announcements = announcements.filter(
         id__in=current_profile.unseen_announcements)
@@ -69,12 +72,13 @@ def announcements_view(request):
         'page_title': 'Ogłoszenia',
         'topics': topics,
         'unseen_announcements': unseen_announcements,
+        'tag_title': tag_title,
     }
     return render(request, 'communications/announcements.html', context)
 
 
 @login_required
-def thread_view(request, thread_id):
+def thread_view(request, thread_id, tag_title):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     threads = Thread.objects.prefetch_related(
@@ -126,6 +130,7 @@ def thread_view(request, thread_id):
         'current_profile': current_profile,
         'page_title': thread.title,
         'thread': thread,
+        'tag_title': tag_title,
         'form_1': statement_form,
     }
     if current_profile in known_directly or current_profile.status == 'gm':

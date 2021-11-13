@@ -23,7 +23,9 @@
                         <b class="border-bottom-dark">Nieprzeczytane</b>
                     </h3>
                     {% for announcement in unseen_announcements %}
-                        {% include 'communications/_announcement.html' %}
+                        {% with show_topic=True %}
+                            {% include 'communications/_announcement.html' %}
+                        {% endwith %}
                     {% endfor %}
                 </div>
             {% endif %}

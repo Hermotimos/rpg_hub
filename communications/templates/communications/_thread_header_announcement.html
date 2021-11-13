@@ -3,7 +3,7 @@
 <!-- BUTTONS -->
 <div class="row">
     <div data-toggle="tooltip" data-placement="bottom" title="Ogłoszenia">
-        <a class="btn btn-outline-dark icon-parent-obj py-2 mt-1" href="{% url 'communications:announcements' %}#announcement_{{ thread.id }}"></a>
+        <a class="btn btn-outline-dark icon-parent-obj py-2 mt-1" href="{% url 'communications:announcements' tag_title %}#announcement_{{ thread.id }}"></a>
     </div>
     {% if not thread.is_ended %}
         <div data-toggle="tooltip" data-placement="bottom" title="Udostępnij Ogłoszenie">
@@ -38,7 +38,7 @@
         <div class="col-2 pl-0 h5">Temat:</div>
         <div class="col-10 col-sm-10 pl-5 pl-lg-0">
             <h5 class="mr-2 mr-sm-3">
-                <a  class="font-italic" href="{% url 'communications:announcements' %}#topic_{{ thread.topic.id }}">{{ thread.topic.title }}</a>
+                <a  class="font-italic" href="{% url 'communications:announcements' None %}#topic_{{ thread.topic.id }}">{{ thread.topic.title }}</a>
             </h5>
         </div>
     </div>

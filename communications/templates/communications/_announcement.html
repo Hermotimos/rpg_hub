@@ -13,13 +13,16 @@
                         <div class="font-11 font-italic text-muted align-top">
                             {{ announcement.created_at|date:'d-M-Y | H:i' }}
                         </div>
-                        <a class="font-16 border-bottom align-top" href="{% url 'communications:thread' announcement.id %}">
+                        <a class="font-16 border-bottom align-top" href="{% url 'communications:thread' announcement.id tag_title %}">
                             {{ announcement.title|capfirst }}
                         </a>
+                        {% if show_topic %}
+                            <small class="text-muted font-italic ml-2">[{{ announcement.topic.title }}]</small>
+                        {% endif %}
                         <div class="font-11 font-italic text-muted text-bottom">
                             {% for tag in announcement.tags.all %}
                                 {% if tag.author == current_profile %}
-                                    <span class="mr-1" style="color: {{ tag.color }};">#{{ tag }}</span>
+                                    <a class="mr-1" style="color: {{ tag.color }};" href="{% url 'communications:announcements' tag.title %}">#{{ tag }}</a>
                                 {% endif %}
                             {% endfor %}
                         </div>
