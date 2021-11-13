@@ -51,7 +51,8 @@ def announcements_view(request, tag_title):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     announcements = Announcement.objects.prefetch_related(
-        'statements__author', 'statements__seen_by', 'tags__author', 'topic')
+        'statements__author', 'statements__seen_by', 'tags__author', 'topic',
+        'followers')
     announcements = announcements.order_by('-created_at')
     
     if current_profile.status != 'gm':
@@ -211,27 +212,29 @@ def create_thread_view(request, thread_kind):
 
 
 @login_required
-def unfollow_thread_view(request, thread_id):
+def unfollow_thread_view(request, thread_id, tag_title):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     thread = get_object_or_404(Thread, id=thread_id)
     if current_profile in thread.known_directly.all():
         thread.followers.remove(current_profile)
         messages.info(request, 'Przestałeś obserwować!')
-        return redirect('communications:thread', thread_id=thread.id)
+        return redirect(
+            'communications:thread', thread_id=thread.id, tag_title=tag_title)
     else:
         return redirect('home:dupa')
 
 
 @login_required
-def follow_thread_view(request, thread_id):
+def follow_thread_view(request, thread_id, tag_title):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     thread = get_object_or_404(Thread, id=thread_id)
     if current_profile in thread.known_directly.all():
         thread.followers.add(current_profile)
         messages.info(request, 'Zacząłeś obserwować!')
-        return redirect('communications:thread', thread_id=thread.id)
+        return redirect(
+            'communications:thread', thread_id=thread.id, tag_title=tag_title)
     else:
         return redirect('home:dupa')
 

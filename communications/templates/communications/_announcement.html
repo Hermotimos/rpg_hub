@@ -27,14 +27,32 @@
                             {% endfor %}
                         </div>
                     </div>
-                    <div class="col-auto p-0 ml-auto mt-auto mb-n1 align-bottom">
-                        {% with statements=announcement.statements.all|dictsort:"author.id" %}
-                            {% regroup statements by author as author_list %}
-                            {% for author in author_list %}
-                                <img class="rounded potrait-img-xs mb-1" src="{{ author.grouper.image.url }}">
-                                <span class="font-13 pr-1">{{ author.list|length }}</span>
-                            {% endfor %}
-                        {% endwith %}
+                    <div class="col-auto p-0 ml-auto  align-top">
+                        <div class="dropdown">
+                            <div class="three-dots float-right"
+                                 id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            </div>
+                            <div class="dropdown-menu dropdown-menu-right m-0" aria-labelledby="dropdownMenuButton">
+                                <div><a class="px-2" href="#">Tagi</a></div>
+                                <div><a class="px-2" href="#">
+                                    {% if current_profile in announcement.followers.all %}
+                                        Nie obserwuj
+                                    {% else %}
+                                        Obserwuj
+                                    {% endif %}
+                                </a></div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="float-right mt-2 mb-n1">
+                            {% with statements=announcement.statements.all|dictsort:"author.id" %}
+                                {% regroup statements by author as author_list %}
+                                {% for author in author_list %}
+                                    <img class="rounded potrait-img-xs mb-1" src="{{ author.grouper.image.url }}">
+                                    <span class="font-13 pr-1">{{ author.list|length }}</span>
+                                {% endfor %}
+                            {% endwith %}
+                        </div>
                     </div>
                 </div>
             </div>
