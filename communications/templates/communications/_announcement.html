@@ -1,0 +1,40 @@
+
+
+<div class="container my-1 border rounded {% if announcement in unseen_announcements %} bg-bluish {% else %} bg-inner {% endif %}">
+    <span class="pt-5" id="announcement_{{ announcement.id }}"></span>
+    <div class="row p-1">
+        <div class="col-auto px-0 mr-n3">
+            <img class="rounded portrait-img-md" src="{{ announcement.statements.first.author.image.url }}">
+        </div>
+        <div class="col pr-0 ml-n1">
+            <div class="container h-100">
+                <div class="row h-100">
+                    <div class="col">
+                        <div class="font-11 font-italic text-muted align-top">
+                            {{ announcement.created_at|date:'d-M-Y | H:i' }}
+                        </div>
+                        <a class="font-16 border-bottom align-top" href="{% url 'communications:thread' announcement.id %}">
+                            {{ announcement.title|capfirst }}
+                        </a>
+                        <div class="font-11 font-italic text-muted text-bottom">
+                            {% for tag in announcement.tags.all %}
+                                {% if tag.author == current_profile %}
+                                    <span class="mr-1" style="color: {{ tag.color }};">#{{ tag }}</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-auto p-0 ml-auto mt-auto mb-n1 align-bottom">
+                        {% with statements=announcement.statements.all|dictsort:"author.id" %}
+                            {% regroup statements by author as author_list %}
+                            {% for author in author_list %}
+                                <img class="rounded potrait-img-xs mb-1" src="{{ author.grouper.image.url }}">
+                                <span class="font-13 pr-1">{{ author.list|length }}</span>
+                            {% endfor %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

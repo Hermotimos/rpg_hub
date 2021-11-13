@@ -51,10 +51,15 @@ def announcements_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     announcements = Announcement.objects.prefetch_related(
-        'statements__author', 'statements__seen_by').order_by('-created_at')
+        'statements__author', 'statements__seen_by', 'tags__author')
+    announcements = announcements.order_by('-created_at')
     if current_profile.status != 'gm':
         announcements = announcements.filter(known_directly=current_profile)
         
+    unseen_announcements = announcements.filter(
+        id__in=current_profile.unseen_announcements)
+    announcements = announcements.exclude(id__in=unseen_announcements)
+
     topics = Topic.objects.filter(threads__in=announcements)
     topics = topics.prefetch_related(
         Prefetch('threads', queryset=announcements)).distinct()
@@ -63,7 +68,7 @@ def announcements_view(request):
         'current_profile': current_profile,
         'page_title': 'Ogłoszenia',
         'topics': topics,
-        'unseen_announcements': current_profile.unseen_announcements,
+        'unseen_announcements': unseen_announcements,
     }
     return render(request, 'communications/announcements.html', context)
 

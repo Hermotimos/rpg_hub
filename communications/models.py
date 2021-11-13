@@ -31,12 +31,24 @@ class Topic(Model):
     )
     
     class Meta:
-        ordering = ['title']
+        ordering = ['order_no', 'title']
     
     def __str__(self):
         return self.title
 
 
+class ThreadTag(Model):
+    title = CharField(max_length=30)
+    author = FK(to=Profile, related_name='thread_tags', on_delete=CASCADE)
+    color = CharField(max_length=7, default="#FFFFFF")
+
+    class Meta:
+        ordering = ['title']
+
+    def __str__(self):
+        return self.title
+    
+    
 class Thread(Model):
     THREAD_KINDS = (
         ('Debate', 'Debate'),
@@ -54,6 +66,7 @@ class Thread(Model):
     )
     # Announcement
     followers = M2M(to=Profile, related_name='threads_followed', blank=True)
+    tags = M2M(to=ThreadTag, related_name='threads', blank=True)
     # Debate
     is_ended = BooleanField(default=False)
     is_exclusive = BooleanField(default=False)

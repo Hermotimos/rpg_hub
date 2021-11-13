@@ -4,7 +4,7 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
 from django.forms import Select
 
-from communications.models import Topic, Statement, Debate, Announcement, Thread
+from communications.models import Topic, Statement, Debate, Announcement, Thread, ThreadTag
 from rpg_project.utils import formfield_for_dbfield_cached
 from users.models import Profile
 
@@ -37,14 +37,21 @@ class DebateAdminForm(forms.ModelForm):
 class AnnouncementAdminForm(forms.ModelForm):
     class Meta:
         model = Announcement
-        fields = ['title', 'topic', 'kind', 'known_directly', 'followers']
-        widgets = {}
+        fields = ['title', 'topic', 'kind', 'known_directly', 'followers', 'tags']
+        widgets = {
+            'followers': FilteredSelectMultiple('Followers', False),
+            'tags': FilteredSelectMultiple('Tags', False),
+        }
     
     known_directly = forms.ModelMultipleChoiceField(
         queryset=Profile.active_players.all(),
         required=False,
         widget=FilteredSelectMultiple('Known directly', False),
     )
+
+
+class ThreadTagAdmin(admin.ModelAdmin):
+    pass
 
 
 class DebateAdmin(admin.ModelAdmin):
@@ -94,6 +101,7 @@ class StatementAdmin(admin.ModelAdmin):
     
 admin.site.register(Topic, TopicAdmin)
 admin.site.register(Thread, ThreadAdmin)
+admin.site.register(ThreadTag, ThreadTagAdmin)
 admin.site.register(Debate, DebateAdmin)
 admin.site.register(Announcement, AnnouncementAdmin)
 admin.site.register(Statement, StatementAdmin)
