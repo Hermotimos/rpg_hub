@@ -12,13 +12,24 @@
                     <div class="col pr-0">
                         <div class="font-11 font-italic text-muted align-top">
                             {{ announcement.created_at|date:'d-M-Y | H:i' }}
+                            {% if current_profile in announcement.followers.all %}
+                                <a class="icon-unfollow ml-1" href="{% url 'communications:unfollow' announcement.id tag_title %}"
+                                   data-toggle="tooltip" data-placement="bottom" title="Nie obserwuj">
+                                </a>
+                            {% else %}
+                                <a class="icon-follow ml-1" href="{% url 'communications:follow' announcement.id tag_title %}"
+                                    data-toggle="tooltip" data-placement="bottom" title="Obserwuj">
+                                </a>
+                            {% endif %}
                         </div>
-                        <a class="font-16 border-bottom align-top" href="{% url 'communications:thread' announcement.id tag_title %}">
-                            {{ announcement.title|capfirst }}
-                        </a>
-                        {% if show_topic %}
-                            <small class="text-muted font-italic ml-2">[{{ announcement.topic.title }}]</small>
-                        {% endif %}
+                        <div class="font-16 ">
+                            <a class="border-bottom align-top" href="{% url 'communications:thread' announcement.id tag_title %}">
+                                {{ announcement.title|capfirst }}
+                            </a>
+                            {% if show_topic %}
+                                <small class="text-muted font-italic ml-2">[{{ announcement.topic.title }}]</small>
+                            {% endif %}
+                        </div>
                         <div class="font-11 font-italic text-muted text-bottom">
                             {% for tag in announcement.tags.all %}
                                 {% if tag.author == current_profile %}
@@ -27,30 +38,13 @@
                             {% endfor %}
                         </div>
                     </div>
-                    <div class="col-auto p-0 ml-auto">
-                        <div class="float-right mr-2 font-bold">
-                            {% if current_profile in announcement.followers.all %}
-                                <a class="icon-unfollow" href="{% url 'communications:unfollow' announcement.id tag_title %}"
-                                   data-toggle="tooltip" data-placement="bottom" title="Nie obserwuj">
-                                </a>
-                            {% else %}
-                                <a class="icon-follow" href="{% url 'communications:follow' announcement.id tag_title %}"
-                                    data-toggle="tooltip" data-placement="bottom" title="Obserwuj">
-                                </a>
-                            {% endif %}
-                        </div>
-                        <div class="float-right font-bold" data-toggle="tooltip" data-placement="bottom" title="Tagi">
-                            <span class="icon-hash font-14 pointer px-1" data-toggle="modal" data-target="#imgModal{{ picture.id }}">
-                            </span>
-                        </div>
-                        
-                        <div class="clearfix"></div>
-                        <div class="float-right mr-2 mt-3">
+                    <div class="col-auto p-0 ml-auto mt-auto">
+                        <div class="mr-2">
                             {% with statements=announcement.statements.all|dictsort:"author.id" %}
                                 {% regroup statements by author as author_list %}
                                 {% for author in author_list %}
-                                    <img class="potrait-img-xs rounded mb-1" src="{{ author.grouper.image.url }}">
-                                    <span class="font-13 pr-1">{{ author.list|length }}</span>
+                                    <img class="potrait-img-xs rounded mb-1 ml-1" src="{{ author.grouper.image.url }}">
+                                    <span class="font-13">{{ author.list|length }}</span>
                                 {% endfor %}
                             {% endwith %}
                         </div>
