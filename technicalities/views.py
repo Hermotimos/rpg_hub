@@ -182,6 +182,7 @@ def reload_news(request):
                     created_at=news.created_at)
                 announcement.save()
                 announcement.known_directly.set(news.allowed_profiles.all())
+                announcement.known_directly.add(Profile.objects.get(status='gm'))
                 announcement.followers.set(news.followers.all())
                 print(announcement.title)
                 
@@ -191,7 +192,7 @@ def reload_news(request):
                         created_at=answer.created_at, image=answer.image,
                     )
                     statement.save()
-                    print(statement.text[:20], statement.id)
+                    # print(statement.text[:20], statement.id)
                     statement.seen_by.set(answer.seen_by.all())
             
     messages.info(request, 'Przeładowano NEWS->COMMUNICATIONS!')

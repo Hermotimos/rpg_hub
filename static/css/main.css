@@ -187,7 +187,8 @@ img {pointer-events: none;}
     over img tags (that have pointer-events: none).
 */
 figure.pointer,
-div.pointer {cursor: pointer;}
+div.pointer,
+span.pointer {cursor: pointer;}
 
 .portrait-img-xl {
     height: 5rem;

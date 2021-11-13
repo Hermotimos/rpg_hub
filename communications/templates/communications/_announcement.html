@@ -9,7 +9,7 @@
         <div class="col pr-0 ml-n1">
             <div class="container h-100">
                 <div class="row h-100">
-                    <div class="col">
+                    <div class="col pr-0">
                         <div class="font-11 font-italic text-muted align-top">
                             {{ announcement.created_at|date:'d-M-Y | H:i' }}
                         </div>
@@ -27,26 +27,25 @@
                             {% endfor %}
                         </div>
                     </div>
-                    <div class="col-auto p-0 ml-auto align-top">
-                        <div class="float-right mr-3 font-bold" >
+                    <div class="col-auto p-0 ml-auto">
+                        <div class="float-right mr-2 font-bold">
                             {% if current_profile in announcement.followers.all %}
-                                <a href="{% url 'communications:unfollow' announcement.id tag_title %}"
+                                <a class="icon-unfollow" href="{% url 'communications:unfollow' announcement.id tag_title %}"
                                    data-toggle="tooltip" data-placement="bottom" title="Nie obserwuj">
-                                    &#128065;
                                 </a>
                             {% else %}
-                                <a href="{% url 'communications:follow' announcement.id tag_title %}"
+                                <a class="icon-follow" href="{% url 'communications:follow' announcement.id tag_title %}"
                                     data-toggle="tooltip" data-placement="bottom" title="Obserwuj">
-                                    Obserwuj
                                 </a>
                             {% endif %}
                         </div>
-                        <div class="float-right mr-2 font-bold">
-                            #
+                        <div class="float-right font-bold" data-toggle="tooltip" data-placement="bottom" title="Tagi">
+                            <span class="icon-hash font-14 pointer px-1" data-toggle="modal" data-target="#imgModal{{ picture.id }}">
+                            </span>
                         </div>
                         
                         <div class="clearfix"></div>
-                        <div class="float-right mt-2 mb-n1 mr-2">
+                        <div class="float-right mr-2 mt-3">
                             {% with statements=announcement.statements.all|dictsort:"author.id" %}
                                 {% regroup statements by author as author_list %}
                                 {% for author in author_list %}
