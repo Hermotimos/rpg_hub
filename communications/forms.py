@@ -6,7 +6,7 @@ from communications.models import Topic, Thread, Statement, Option, Announcement
 from users.models import Profile
 
 
-class CreateTopicForm(forms.ModelForm):
+class TopicCreateForm(forms.ModelForm):
     
     class Meta:
         model = Topic

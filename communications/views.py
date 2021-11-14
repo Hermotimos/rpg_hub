@@ -5,8 +5,8 @@ from django.core.mail import send_mail
 from django.db.models import Prefetch, Q
 from django.shortcuts import render, redirect, get_object_or_404
 
-from communications.forms import (CreateTopicForm, AnnouncementCreateForm,
-                                  DebateCreateForm, StatementCreateForm)
+from communications.forms import (TopicCreateForm, AnnouncementCreateForm,
+                                  DebateCreateForm, StatementCreateForm, ThreadTagForm)
 from communications.models import Topic, Thread, Announcement, Statement
 from rpg_project.utils import handle_inform_form
 from users.models import Profile
@@ -97,6 +97,7 @@ def thread_view(request, thread_id, tag_title):
     SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
 
     if request.method == 'POST' and 'Announcement' in request.POST:
+        tag_form = ThreadTagForm(data=request.POST or None)
         statement_form = StatementCreateForm(
             profile=current_profile,
             thread_kind=thread.kind,
@@ -105,6 +106,7 @@ def thread_view(request, thread_id, tag_title):
         thread_inform(request, thread)
 
     else:
+        tag_form = ThreadTagForm(data=request.POST or None)
         statement_form = StatementCreateForm(
             data=request.POST or None,
             files=request.FILES or None,
@@ -133,6 +135,7 @@ def thread_view(request, thread_id, tag_title):
         'thread': thread,
         'tag_title': tag_title,
         'form_1': statement_form,
+        'tag_form': tag_form,
     }
     if current_profile in known_directly or current_profile.status == 'gm':
         return render(request, 'communications/thread.html', context)
@@ -144,7 +147,7 @@ def thread_view(request, thread_id, tag_title):
 def create_topic_view(request, thread_kind: str):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
-    form = CreateTopicForm(request.POST or None)
+    form = TopicCreateForm(request.POST or None)
     if form.is_valid():
         topic = form.save()
         messages.info(

@@ -1,13 +1,21 @@
+{% load crispy_forms_tags %}
 {% load custom_filters %}
 
 <!-- BUTTONS -->
 <div class="row">
-    <div data-toggle="tooltip" data-placement="bottom" title="Ogłoszenia">
-        <a class="btn btn-outline-dark icon-parent-obj py-2 mt-1" href="{% url 'communications:announcements' tag_title %}#announcement_{{ thread.id }}"></a>
+    
+    <div>
+        <a class="btn btn-outline-dark icon-parent-obj py-2 mt-1" href="{% url 'communications:announcements' tag_title %}#announcement_{{ thread.id }}"
+            data-toggle="tooltip" data-placement="bottom" title="Ogłoszenia">
+        </a>
     </div>
+    
+    
     {% if not thread.is_ended %}
-        <div data-toggle="tooltip" data-placement="bottom" title="Udostępnij Ogłoszenie">
-            <p class="btn btn-outline-dark icon-inform py-2 ml-1 mt-1" data-toggle="modal" data-target="#infoThreadModal"></p>
+        <div>
+            <p data-toggle="tooltip" data-placement="bottom" title="Udostępnij Ogłoszenie">
+                <span class="btn btn-outline-dark icon-inform py-2 ml-1 mt-1" data-toggle="modal" data-target="#infoThreadModal"></span>
+            </p>
         </div>
         <!-- The Modal -->
         <div class="modal fade img-modal" id="infoThreadModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -16,19 +24,49 @@
             {% endwith %}
         </div>
     {% endif %}
-    <div class="mb-4">
-        
-        <!-- TODO change icon to eye or eye crossed out -->
-        
+    
+    
+    <div>
         {% if current_profile in thread.followers.all %}
-            <a class="btn btn-outline-dark py-2 ml-1 mt-1" href="{% url 'communications:unfollow' thread.id tag_title %}">Nie obserwuj</a>
+            <a class="btn btn-outline-dark icon-unfollow py-2 ml-1 mt-1" href="{% url 'communications:unfollow' thread.id tag_title %}"
+               data-toggle="tooltip" data-placement="bottom" title="Nie obserwuj">
+            </a>
         {% else %}
-            <a class="btn btn-outline-dark py-2 ml-1 mt-1" href="{% url 'communications:follow' thread.id tag_title %}">Obserwuj</a>
+            <a class="btn btn-outline-dark icon-follow py-2 ml-1 mt-1" href="{% url 'communications:follow' thread.id tag_title %}"
+                data-toggle="tooltip" data-placement="bottom" title="Obserwuj">
+            </a>
         {% endif %}
     </div>
+    
+    
+    <div>
+        <p data-toggle="tooltip" data-placement="bottom" title="Edytuj tagi">
+            <span class="btn btn-outline-dark icon-hash py-2 ml-1 mt-1" data-toggle="modal" data-target="#tagsModal{{ announcement.id }}"></span>
+        </p>
+        <!-- Modal -->
+        <div class="modal fade" id="tagsModal{{ announcement.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        {% with tags=announcement.tags.all %}
+                            {% with tag_form=tag_form|color_options_colored %}
+                                    <form method="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        {% crispy tag_form tag_form.helper %}
+                                    </form>
+                            {% endwith %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
     <div data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">
         <a class="btn btn-outline-dark icon-note py-2 ml-1 mt-1 disabled" href="#"></a>
     </div>
+    
 </div>
 
 
@@ -55,6 +93,14 @@
         <div class="col-10 pl-5 pl-lg-0">
             {% for profile in thread.followers.all %}
                 <img class="rounded-circle potrait-img-sm" src="{{ profile.image.url }}">
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2 pl-0 h5">Tagi:</div>
+        <div class="col-10 pl-5 pl-lg-0">
+            {% for tag in thread.tags.all %}
+                {{ tag }}
             {% endfor %}
         </div>
     </div>

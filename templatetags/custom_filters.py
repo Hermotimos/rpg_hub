@@ -239,4 +239,3 @@ def players_names_bold(django_filter_html):
             f'option value="{pid}"',
             f'option value="{pid}" style="font-weight: 600;"')
     return mark_safe(html)
-    

@@ -20,6 +20,7 @@ class ThreadAdmin(admin.ModelAdmin):
 
 
 class DebateAdminForm(forms.ModelForm):
+    
     class Meta:
         model = Debate
         fields = [
@@ -35,9 +36,11 @@ class DebateAdminForm(forms.ModelForm):
 
 
 class AnnouncementAdminForm(forms.ModelForm):
+    
     class Meta:
         model = Announcement
-        fields = ['title', 'topic', 'kind', 'known_directly', 'followers', 'tags']
+        fields = [
+            'title', 'topic', 'kind', 'known_directly', 'followers', 'tags']
         widgets = {
             'followers': FilteredSelectMultiple('Followers', False),
             'tags': FilteredSelectMultiple('Tags', False),
