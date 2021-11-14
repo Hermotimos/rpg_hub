@@ -21,6 +21,9 @@ class TopicCreateForm(forms.ModelForm):
         self.fields['title'].label = "Tytuł nowego tematu"
 
 
+# ===========================================================================
+
+
 class ThreadTagEditForm(forms.ModelForm):
     
     class Meta:
@@ -30,44 +33,38 @@ class ThreadTagEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['color'].label = "Kolor"
-        self.fields['title'].label = ""
-
         self.fields['author'].widget = forms.HiddenInput()
         self.fields['kind'].widget = forms.HiddenInput()
-        self.fields['title'].widget.attrs = {'placeholder': 'Tag*'}
         
 
-ThreadTagEditFormSet = forms.modelformset_factory(
-    model=ThreadTag,
-    form=ThreadTagEditForm,
-    fields=['title', 'color', 'kind', 'author'],
-    extra=2,
-    can_delete=True)
-
-
 class ThreadTagEditFormSetHelper(FormHelper):
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.add_input(
             Submit('submit', 'Zapisz', css_class='btn-dark d-block mx-auto'))
         self.form_show_labels = False
-        self.layout = Layout(Row(
-            Column(
-                'title', '', placeholder="Nowy tag*",
-                css_class='form-group col-sm-7 mb-0'),
-            Column(
-                'color', '', css_class='form-group col-sm-3 mb-0',
-                title="Podaj kod koloru"),
-            # Column(
-            #     'author', '', css_class='form-group col-sm-3 mb-0',
-            #     title="Podaj kod koloru"),
-            Column(
-                'DELETE', css_class='form-group col-sm-1 mb-0 mt-2',
-                title="Usunąć tag?"),
-        ))
+        self.layout = Layout(
+            Row(
+                Column(
+                    'title', '', css_class='form-group col-sm-7 mb-0',
+                    title="Nowy tag"),
+                Column(
+                    'color', '', css_class='form-group col-sm-3 mb-0',
+                    title="Podaj kod koloru"),
+                Column(
+                    'DELETE', css_class='form-group col-sm-1 mb-0 mt-2',
+                    title="Usunąć tag?"),
+            ))
         
-        
+
+ThreadTagEditFormSet = forms.modelformset_factory(
+    model=ThreadTag, form=ThreadTagEditForm, exclude=[], can_delete=True)
+
+
+# ===========================================================================
+
+
 class AnnouncementCreateForm(forms.ModelForm):
     
     class Meta:
