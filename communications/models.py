@@ -18,8 +18,9 @@ from django.db.models import (
     TextField,
 )
 from django.db.models.signals import post_save
-
+from django.utils.safestring import mark_safe
 from users.models import Profile
+from rpg_project.utils import COLORS_CHOICES
 
 
 class Topic(Model):
@@ -40,15 +41,21 @@ class Topic(Model):
 class ThreadTag(Model):
     title = CharField(max_length=30)
     author = FK(to=Profile, related_name='thread_tags', on_delete=CASCADE)
-    color = CharField(max_length=7, default="#FFFFFF")
+    color = CharField(max_length=7, choices=COLORS_CHOICES, default="#FF0000")
 
     class Meta:
         ordering = ['title']
 
     def __str__(self):
         return self.title
-    
-    
+
+    def _color(self):
+        return mark_safe(
+            f'<span style="color: {self.color};">{self.color}</span>')
+
+    _color.admin_order_field = 'color'
+
+
 class Thread(Model):
     THREAD_KINDS = (
         ('Debate', 'Debate'),

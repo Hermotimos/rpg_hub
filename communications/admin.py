@@ -51,7 +51,7 @@ class AnnouncementAdminForm(forms.ModelForm):
 
 
 class ThreadTagAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['id', 'title', '_color']
 
 
 class DebateAdmin(admin.ModelAdmin):
