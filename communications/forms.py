@@ -1,8 +1,11 @@
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 from django import forms
 from django.db.models import Q
 from django.forms.widgets import HiddenInput
 
-from communications.models import Topic, Thread, Statement, Option, Announcement, Debate
+from communications.models import Topic, ThreadTag, Statement, Option, \
+    Announcement, Debate
 from users.models import Profile
 
 
@@ -17,6 +20,28 @@ class TopicCreateForm(forms.ModelForm):
         
         self.fields['title'].label = "Tytuł nowego tematu"
 
+
+class ThreadTagForm(forms.ModelForm):
+    
+    class Meta:
+        model = ThreadTag
+        fields = ['title', 'color']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # self.fields['color'].help_text = """
+        #     ***Użyj kodu koloru z
+        #     <a href="https://www.w3schools.com/colors/colors_picker.asp"></a>
+        # """
+
+        self.fields['color'].label = "Kolor"
+        self.fields['title'].label = ""
+        
+        self.helper = FormHelper()
+        self.helper.add_input(
+            Submit('submit', 'Zapisz tag', css_class='btn-dark'))
+        
 
 class AnnouncementCreateForm(forms.ModelForm):
     
