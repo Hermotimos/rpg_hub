@@ -2,7 +2,7 @@ from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
-from django.forms import Select
+from django.forms import Select, TextInput
 
 from communications.models import Topic, Statement, Debate, Announcement, Thread, ThreadTag
 from rpg_project.utils import formfield_for_dbfield_cached
@@ -53,8 +53,19 @@ class AnnouncementAdminForm(forms.ModelForm):
     )
 
 
+class ThreadTagAdminForm(forms.ModelForm):
+    
+    class Meta:
+        model = ThreadTag
+        fields = ['kind', 'author', 'title', 'color']
+        widgets = {
+            'color': TextInput(attrs={'type': 'color'}),
+        }
+
+
 class ThreadTagAdmin(admin.ModelAdmin):
-    list_display = ['id', 'kind', 'title', 'color']
+    form = ThreadTagAdminForm
+    list_display = ['id', 'kind', 'author', 'title', 'color']
 
 
 class DebateAdmin(admin.ModelAdmin):

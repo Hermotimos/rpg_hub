@@ -2,7 +2,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit
 from django import forms
 from django.db.models import Q
-from django.forms.widgets import HiddenInput
+from django.forms.widgets import HiddenInput, TextInput
 
 from communications.models import Topic, ThreadTag, Statement, Option, \
     Announcement, Debate, Thread
@@ -29,7 +29,10 @@ class ThreadTagEditForm(forms.ModelForm):
     class Meta:
         model = ThreadTag
         fields = ['title', 'color', 'author', 'kind']
-    
+        widgets = {
+            'color': TextInput(attrs={'type': 'color'}),
+        }
+        
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -104,6 +107,7 @@ class ThreadEditTagsForm(forms.ModelForm):
         
         tags = ThreadTag.objects.filter(
             author=current_profile, kind=thread_kind)
+        
         self.fields['tags'].label = ""
         self.fields['tags'].queryset = tags
         self.fields['tags'].widget.attrs['size'] = \

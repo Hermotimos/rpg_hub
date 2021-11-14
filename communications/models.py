@@ -51,11 +51,11 @@ THREAD_KINDS = (
 class ThreadTag(Model):
     title = CharField(max_length=30)
     author = FK(to=Profile, related_name='thread_tags', on_delete=CASCADE)
-    color = CharField(max_length=7, choices=COLORS_CHOICES, verbose_name="Kolor")
+    color = CharField(max_length=7, default='#000000')
     kind = CharField(max_length=15, choices=THREAD_KINDS)
 
     class Meta:
-        ordering = ['kind', 'title', 'author']
+        ordering = ['kind', 'author', 'title']
         unique_together = ['title', 'author']
 
     def __str__(self):
