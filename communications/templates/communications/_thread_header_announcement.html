@@ -48,14 +48,10 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
-                        {% with tags=announcement.tags.all %}
-                            {% with tag_form=tag_form|color_options_colored %}
-                                    <form method="POST" enctype="multipart/form-data">
-                                        {% csrf_token %}
-                                        {% crispy tag_form tag_form.helper %}
-                                    </form>
-                            {% endwith %}
-                        {% endwith %}
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <!-- TODO add thread_form with editable tags M2M only; use crispy -->
+                        </form>
                     </div>
                 </div>
             </div>
