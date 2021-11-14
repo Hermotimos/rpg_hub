@@ -32,7 +32,7 @@ class ThreadTagEditForm(forms.ModelForm):
         widgets = {
             'color': TextInput(attrs={'type': 'color'}),
         }
-        
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -99,7 +99,7 @@ class ThreadEditTagsForm(forms.ModelForm):
     class Meta:
         model = Thread
         fields = ['tags']
-    
+
     def __init__(self, *args, **kwargs):
         current_profile = kwargs.pop('current_profile')
         thread_kind = kwargs.pop('thread_kind')
