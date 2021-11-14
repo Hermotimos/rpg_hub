@@ -12,6 +12,21 @@
         <header class="mb-5">
             <a href="{% url 'communications:create-topic' 'Announcement' %}" class="btn btn-outline-dark">Nowy temat</a>
             <a href="{% url 'communications:create-thread' 'Announcement' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
+            <a data-toggle="tooltip" data-placement="bottom" title="Edytuj tagi">
+                <span class="btn btn-outline-dark" data-toggle="modal" data-target="#tagsModal{{ announcement.id }}">#Tagi</span>
+            </a>
+            <div class="modal fade" id="tagsModal{{ announcement.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {% crispy formset formset_helper %}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </header>
         
         TODO reload ze starych Ogłoszeń

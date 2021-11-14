@@ -3,12 +3,12 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db.models import Prefetch, Q
+from django.db import IntegrityError
 from django.shortcuts import render, redirect, get_object_or_404
 
 from communications.forms import (TopicCreateForm, AnnouncementCreateForm,
-                                  DebateCreateForm, StatementCreateForm, ThreadTagForm)
-from communications.models import Topic, Thread, Announcement, Statement
-from rpg_project.utils import handle_inform_form
+                                  DebateCreateForm, StatementCreateForm, ThreadTagEditForm, ThreadTagEditFormSet, ThreadTagEditFormSetHelper)
+from communications.models import Topic, Thread, Announcement, Statement, ThreadTag
 from users.models import Profile
 
 # TODO
@@ -67,6 +67,55 @@ def announcements_view(request, tag_title):
     topics = Topic.objects.filter(threads__in=announcements)
     topics = topics.prefetch_related(
         Prefetch('threads', queryset=announcements)).distinct()
+    
+    tags = ThreadTag.objects.filter(author=current_profile, kind='Announcement')
+
+    formset = ThreadTagEditFormSet(request.POST or None, queryset=tags)
+    for form in formset:
+        form.initial['kind'] = 'Announcement'
+        form.initial['author'] = current_profile
+    
+    if request.method == 'POST':
+        if not formset.is_valid():
+            messages.warning(
+                request, "Aby zapisać zmiany, uzupełnij brakujące pola!")
+        else:
+            try:
+                # formset.save()
+                any_changed = False
+        
+                for form in formset:
+                    if not form.is_valid():
+                        messages.warning(request, form.errors)
+                    else:
+                        # ignore empty forms without cleaned_data
+                        if not form.cleaned_data:
+                            continue
+                        
+                        # Deletion
+                        if form.cleaned_data.get('DELETE'):
+                            tag = form.cleaned_data.get('id')
+                            tag.delete()
+                            any_changed = True
+                            messages.success(request, f"Usunięto tag '{tag}'!")
+                            
+                        # Creation / Modification
+                        else:
+                            tag = form.save(commit=False)
+                            tag.author = form.cleaned_data['author']
+                            tag.save()
+                            if form.has_changed():
+                                any_changed = True
+                                messages.success(request, f"Zapisano zmiany: {tag}!")
+                                
+                if not any_changed:
+                    messages.warning(request, "Nie dokonano żadnych zmian!")
+        
+            except IntegrityError as exc:
+                print(exc)
+                messages.warning(request, "Tagi muszą być unikalne!")
+    
+        return redirect(f'communications:announcements', tag_title=tag_title)
 
     context = {
         'current_profile': current_profile,
@@ -74,6 +123,8 @@ def announcements_view(request, tag_title):
         'topics': topics,
         'unseen_announcements': unseen_announcements,
         'tag_title': tag_title,
+        'formset': formset,
+        'formset_helper': ThreadTagEditFormSetHelper()
     }
     return render(request, 'communications/announcements.html', context)
 
@@ -97,7 +148,6 @@ def thread_view(request, thread_id, tag_title):
     SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
 
     if request.method == 'POST' and 'Announcement' in request.POST:
-        tag_form = ThreadTagForm(data=request.POST or None)
         statement_form = StatementCreateForm(
             profile=current_profile,
             thread_kind=thread.kind,
@@ -106,7 +156,6 @@ def thread_view(request, thread_id, tag_title):
         thread_inform(request, thread)
 
     else:
-        tag_form = ThreadTagForm(data=request.POST or None)
         statement_form = StatementCreateForm(
             data=request.POST or None,
             files=request.FILES or None,
@@ -135,7 +184,6 @@ def thread_view(request, thread_id, tag_title):
         'thread': thread,
         'tag_title': tag_title,
         'form_1': statement_form,
-        'tag_form': tag_form,
     }
     if current_profile in known_directly or current_profile.status == 'gm':
         return render(request, 'communications/thread.html', context)
