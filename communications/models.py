@@ -38,31 +38,30 @@ class Topic(Model):
         return self.title
 
 
+#  ==========================================================================
+
+
+THREAD_KINDS = (
+    ('Announcement', 'Announcement'),
+    ('Debate', 'Debate'),
+    ('Demand', 'Demand'),
+)
+
+
 class ThreadTag(Model):
     title = CharField(max_length=30)
     author = FK(to=Profile, related_name='thread_tags', on_delete=CASCADE)
     color = CharField(max_length=7, choices=COLORS_CHOICES, default="#FF0000")
+    kind = CharField(max_length=15, choices=THREAD_KINDS)
 
     class Meta:
-        ordering = ['title']
+        ordering = ['kind', 'title', 'author']
 
     def __str__(self):
         return self.title
 
-    def _color(self):
-        return mark_safe(
-            f'<span style="color: {self.color};">{self.color}</span>')
-
-    _color.admin_order_field = 'color'
-
 
 class Thread(Model):
-    THREAD_KINDS = (
-        ('Debate', 'Debate'),
-        ('Demand', 'Demand'),
-        ('Announcement', 'Announcement'),
-    )
-    
     title = CharField(max_length=100, unique=True)
     topic = FK(to=Topic, related_name='threads', on_delete=CASCADE)
     kind = CharField(max_length=15, choices=THREAD_KINDS)
@@ -126,6 +125,9 @@ class Announcement(Thread):
         proxy = True
 
 
+#  ==========================================================================
+
+
 class Option(Model):
     author = FK(to=Profile, related_name='options', on_delete=CASCADE)
     text = CharField(max_length=50)
@@ -140,6 +142,9 @@ class Option(Model):
         return f'{text[:100]}...' if len(str(text)) > 100 else text
     
     
+#  ==========================================================================
+
+
 class Statement(Model):
     text = TextField()
     thread = FK(to=Thread, related_name='statements', on_delete=CASCADE)

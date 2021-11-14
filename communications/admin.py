@@ -54,7 +54,7 @@ class AnnouncementAdminForm(forms.ModelForm):
 
 
 class ThreadTagAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', '_color']
+    list_display = ['id', 'kind', 'title', 'color']
 
 
 class DebateAdmin(admin.ModelAdmin):
