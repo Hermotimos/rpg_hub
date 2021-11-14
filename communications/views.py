@@ -148,7 +148,7 @@ def thread_view(request, thread_id, tag_title):
 
     if request.method == 'POST' and 'Announcement' in request.POST:
         statement_form = StatementCreateForm(
-            profile=current_profile,
+            current_profile=current_profile,
             thread_kind=thread.kind,
             known_directly=[],
             initial={'author': current_profile})
@@ -158,7 +158,7 @@ def thread_view(request, thread_id, tag_title):
         statement_form = StatementCreateForm(
             data=request.POST or None,
             files=request.FILES or None,
-            profile=current_profile,
+            current_profile=current_profile,
             thread_kind=thread.kind,
             known_directly=[],
             initial={'author': current_profile})
@@ -216,12 +216,12 @@ def create_thread_view(request, thread_kind):
     thread_form = THREAD_MAP[thread_kind]['form'](
         data=request.POST or None,
         files=request.FILES or None,
-        profile=current_profile)
+        current_profile=current_profile)
     
     statement_form = StatementCreateForm(
         data=request.POST or None,
         files=request.FILES or None,
-        profile=current_profile,
+        current_profile=current_profile,
         thread_kind=thread_kind,
         known_directly=[],
         initial={'author': current_profile.id})

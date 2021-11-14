@@ -72,7 +72,7 @@ class AnnouncementCreateForm(forms.ModelForm):
         fields = ['topic', 'title', 'known_directly']
         
     def __init__(self, *args, **kwargs):
-        profile = kwargs.pop('profile')
+        current_profile = kwargs.pop('current_profile')
         super().__init__(*args, **kwargs)
 
         self.fields['known_directly'].help_text = """
@@ -85,7 +85,7 @@ class AnnouncementCreateForm(forms.ModelForm):
         self.fields['title'].label = "Tytuł"
         self.fields['topic'].label = "Temat"
 
-        known_directly = Profile.active_players.exclude(id=profile.id)
+        known_directly = Profile.active_players.exclude(id=current_profile.id)
         self.fields['known_directly'].queryset = known_directly
         self.fields['known_directly'].widget.attrs['size'] = min(
             len(known_directly), 10)
@@ -98,7 +98,7 @@ class DebateCreateForm(forms.ModelForm):
         fields = ['topic', 'title', 'known_directly', 'is_exclusive']
         
     def __init__(self, *args, **kwargs):
-        profile = kwargs.pop('profile')
+        current_profile = kwargs.pop('current_profile')
         super().__init__(*args, **kwargs)
 
         self.fields['is_exclusive'].help_text = """
@@ -119,18 +119,18 @@ class DebateCreateForm(forms.ModelForm):
         topic_qs = Topic.objects.all()
         known_directly = Profile.living.all()
 
-        if profile.status != 'gm':
+        if current_profile.status != 'gm':
             self.fields['is_exclusive'].widget = HiddenInput()
     
             topic_id = kwargs['initial']['topic'].id \
                 if kwargs['initial']['topic'] else None
             topic_qs = topic_qs.filter(
-                Q(debates__known_directly=profile) | Q(id=topic_id)
+                Q(debates__known_directly=current_profile) | Q(id=topic_id)
             ).distinct()
     
             known_directly = known_directly.filter(
-                character__in=profile.characters_known_directly.all()
-            ).exclude(id=profile.id).select_related()
+                character__in=current_profile.characters_known_directly.all()
+            ).exclude(id=current_profile.id).select_related()
 
         self.fields['topic'].queryset = topic_qs
         self.fields['known_directly'].queryset = known_directly
@@ -146,7 +146,7 @@ class StatementCreateForm(forms.ModelForm):
         fields = ['author', 'text', 'image']
     
     def __init__(self, *args, **kwargs):
-        profile = kwargs.pop('profile')
+        current_profile = kwargs.pop('current_profile')
         thread_kind = kwargs.pop('thread_kind')
         known_directly = kwargs.pop('known_directly')
         super().__init__(*args, **kwargs)
@@ -155,7 +155,7 @@ class StatementCreateForm(forms.ModelForm):
         self.fields['image'].label = "Załącz obraz"
         self.fields['text'].label = ""
         
-        if profile.status != 'gm':
+        if current_profile.status != 'gm':
             self.fields['author'].widget = HiddenInput()
         else:
             self.fields['author'].queryset = Profile.objects.filter(
