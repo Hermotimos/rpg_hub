@@ -8,12 +8,19 @@
             </button>
         </div>
         
-        {% if informables %}
-        
-            <form method="POST" action="." name="{{ inform_type }}_form{{ id_ }}">
-                {% csrf_token %}
+        <form method="POST" action="." name="{{ inform_type }}_form{{ id_ }}">
+            {% csrf_token %}
+            
+            {% if not informables %}
+            
+                <h5 class="text-center text-danger m-3">
+                    Wszyscy obecni człokowie drużyny dobrze już o tym wiedzą.
+                </h5>
+            
+            {% else %}
+
                 <div class="modal-body">
-                    <h5 class="text-center text-danger mx-3">
+                    <h5 class="text-center text-danger m-3">
                         {% if inform_type == 'Debate' %}
                             Dołączaj do Narad tylko Postacie znajdujące się w pobliżu.
                         {% elif inform_type == 'Announcement' %}
@@ -24,9 +31,8 @@
                         <br>
                         W razie wątpliwości skonsultuj się z MG.
                     </h5>
-                    <br>
-                    <div class="text-center mx-2">
-                        <div class="mb-3">
+                    <div class="text-center m-3">
+                        <div>
                             {% for profile in informables %}
                                 {% if profile.status == 'player' %}
                                     <input class="select-profile" type="checkbox" id="id_{{ forloop.counter }}{{ id_ }}" name="{{ profile.id }}">
@@ -66,17 +72,9 @@
                         {% endif %}
                     </button>
                 </div>
-            </form>
+            {% endif %}
+            
+        </form>
         
-        {% else %}
-        
-            <div class="modal-body mb-1">
-                <h5 class="text-center text-danger">
-                    Wszyscy obecni człokowie drużyny dobrze już o tym wiedzą.
-                </h5>
-            </div>
-        
-        {% endif %}
-
     </div>
 </div>
