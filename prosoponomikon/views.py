@@ -149,12 +149,11 @@ def prosoponomikon_character_for_player_view(request, character_id):
 
 @login_required
 def prosoponomikon_character_groups_edit_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     characters = Character.objects.prefetch_related()
-    char_groups = CharacterGroup.objects.filter(author=profile)
+    char_groups = CharacterGroup.objects.filter(author=current_profile)
     char_groups = char_groups.prefetch_related(
-        'characters',
-        'default_knowledge_packets')
+        'characters', 'default_knowledge_packets')
         
     if request.method == 'POST':
         formset = CharacterManyGroupsEditFormSet(request.POST)
@@ -170,16 +169,14 @@ def prosoponomikon_character_groups_edit_view(request):
                             obj = form.cleaned_data.get('id')
                             obj.delete()
                             any_changed = True
-                            messages.success(
-                                request, f"Usunięto grupę '{obj.name}'!")
+                            messages.success(request, f"Usunięto grupę '{obj.name}'!")
                         # Modification
                         else:
                             obj = form.save()
                             obj.save()
                             if form.has_changed():
                                 any_changed = True
-                                messages.success(
-                                    request,  f"Zmodyfikowano grupę '{obj.name}'!")
+                                messages.success(request, f"Zmodyfikowano grupę '{obj.name}'!")
                     # form invalid
                     else:
                         messages.warning(request, form.errors)
@@ -200,18 +197,20 @@ def prosoponomikon_character_groups_edit_view(request):
             
     else:
         formset = CharacterManyGroupsEditFormSet(queryset=char_groups)
-        if profile.status != 'gm':
+        if current_profile.status != 'gm':
             characters = characters.filter(
-                Q(known_directly=profile) | Q(known_indirectly=profile)
+                Q(known_directly=current_profile)
+                | Q(known_indirectly=current_profile)
             ).distinct()
             for form in formset:
                 form.fields['characters'].queryset = characters
     
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': "Edytuj grupy postaci",
         'formset': formset,
-        'formset_helper': CharacterGroupsEditFormSetHelper(status=profile.status),
+        'formset_helper': CharacterGroupsEditFormSetHelper(
+            status=current_profile.status),
     }
     return render(request, '_formset.html', context)
 
