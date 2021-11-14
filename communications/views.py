@@ -68,54 +68,53 @@ def announcements_view(request, tag_title):
     topics = topics.prefetch_related(
         Prefetch('threads', queryset=announcements)).distinct()
     
-    tags = ThreadTag.objects.filter(author=current_profile, kind='Announcement')
-
-    formset = ThreadTagEditFormSet(request.POST or None, queryset=tags)
+    formset = ThreadTagEditFormSet(
+        data=request.POST or None,
+        queryset=ThreadTag.objects.filter(
+            author=current_profile, kind='Announcement'))
+    
     for form in formset:
         form.initial['kind'] = 'Announcement'
         form.initial['author'] = current_profile
     
     if request.method == 'POST':
         if not formset.is_valid():
-            messages.warning(
-                request, "Aby zapisać zmiany, uzupełnij brakujące pola!")
+            if "Thread tag z tymi Title i Author" in str(formset.errors):
+                messages.warning(request, "Zduplikowany tag!")
+            messages.warning(request, "Popraw wskazane pola!")
         else:
-            try:
-                # formset.save()
-                any_changed = False
-        
-                for form in formset:
-                    if not form.is_valid():
-                        messages.warning(request, form.errors)
-                    else:
-                        # ignore empty forms without cleaned_data
-                        if not form.cleaned_data:
-                            continue
+            changed = False
+            for form in formset:
+                if not form.is_valid():
+                    messages.warning(request, form.errors)
+                else:
+                    # Ignore empty extra forms
+                    if not form.cleaned_data:
+                        continue
                         
-                        # Deletion
-                        if form.cleaned_data.get('DELETE'):
-                            tag = form.cleaned_data.get('id')
+                    # Deletion
+                    elif form.cleaned_data.get('DELETE'):
+                        tag = form.cleaned_data.get('id')
+                        if tag:
                             tag.delete()
-                            any_changed = True
+                            changed = True
                             messages.success(request, f"Usunięto tag '{tag}'!")
-                            
-                        # Creation / Modification
                         else:
-                            tag = form.save(commit=False)
-                            tag.author = form.cleaned_data['author']
-                            tag.save()
-                            if form.has_changed():
-                                any_changed = True
-                                messages.success(request, f"Zapisano zmiany: {tag}!")
-                                
-                if not any_changed:
-                    messages.warning(request, "Nie dokonano żadnych zmian!")
-        
-            except IntegrityError as exc:
-                print(exc)
-                messages.warning(request, "Tagi muszą być unikalne!")
-    
-        return redirect(f'communications:announcements', tag_title=tag_title)
+                            messages.warning(
+                                request, "Nowy tag zaznaczony do usunięcia!")
+
+                    # Creation / Modification
+                    else:
+                        tag = form.save(commit=False)
+                        tag.author = form.cleaned_data['author']
+                        tag.save()
+                        if form.has_changed():
+                            changed = True
+                            messages.success(request, f"Zmieniono: {tag}!")
+            if changed:
+                return redirect('communications:announcements', tag_title=tag_title)
+            else:
+                messages.warning(request, "Nie dokonano żadnych zmian!")
 
     context = {
         'current_profile': current_profile,

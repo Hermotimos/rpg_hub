@@ -51,7 +51,7 @@ THREAD_KINDS = (
 class ThreadTag(Model):
     title = CharField(max_length=30)
     author = FK(to=Profile, related_name='thread_tags', on_delete=CASCADE)
-    color = CharField(max_length=7, choices=COLORS_CHOICES)
+    color = CharField(max_length=7, choices=COLORS_CHOICES, verbose_name="Kolor")
     kind = CharField(max_length=15, choices=THREAD_KINDS)
 
     class Meta:
