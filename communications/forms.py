@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.forms.widgets import HiddenInput
 
 from communications.models import Topic, ThreadTag, Statement, Option, \
-    Announcement, Debate
+    Announcement, Debate, Thread
 from users.models import Profile
 
 
@@ -85,12 +85,37 @@ class AnnouncementCreateForm(forms.ModelForm):
         self.fields['title'].label = "Tytuł"
         self.fields['topic'].label = "Temat"
 
-        known_directly = Profile.active_players.exclude(id=current_profile.id)
+        known_directly = Profile.contactables.exclude(id=current_profile.id)
         self.fields['known_directly'].queryset = known_directly
         self.fields['known_directly'].widget.attrs['size'] = min(
             len(known_directly), 10)
 
+
+class ThreadEditTagsForm(forms.ModelForm):
     
+    class Meta:
+        model = Thread
+        fields = ['tags']
+    
+    def __init__(self, *args, **kwargs):
+        current_profile = kwargs.pop('current_profile')
+        thread_kind = kwargs.pop('thread_kind')
+        super().__init__(*args, **kwargs)
+        
+        tags = ThreadTag.objects.filter(
+            author=current_profile, kind=thread_kind)
+        self.fields['tags'].label = ""
+        self.fields['tags'].queryset = tags
+        self.fields['tags'].widget.attrs['size'] = \
+            len(tags) if len(tags) < 15 else 15
+
+        self.helper = FormHelper()
+        self.helper.add_input(
+            Submit(
+                'submit', 'Zapisz',
+                css_class='btn-dark d-block mx-auto mt-3 mb-n3'))
+
+
 class DebateCreateForm(forms.ModelForm):
     
     class Meta:

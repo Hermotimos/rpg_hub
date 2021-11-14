@@ -3,12 +3,24 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db.models import Prefetch, Q
-from django.db import IntegrityError
 from django.shortcuts import render, redirect, get_object_or_404
 
-from communications.forms import (TopicCreateForm, AnnouncementCreateForm,
-                                  DebateCreateForm, StatementCreateForm, ThreadTagEditForm, ThreadTagEditFormSet, ThreadTagEditFormSetHelper)
-from communications.models import Topic, Thread, Announcement, Statement, ThreadTag
+from communications.forms import (
+    AnnouncementCreateForm,
+    DebateCreateForm,
+    StatementCreateForm,
+    ThreadEditTagsForm,
+    ThreadTagEditFormSet,
+    ThreadTagEditFormSetHelper,
+    TopicCreateForm,
+)
+from communications.models import (
+    Announcement,
+    Statement,
+    Thread,
+    ThreadTag,
+    Topic,
+)
 from users.models import Profile
 
 # TODO
@@ -30,7 +42,7 @@ THREAD_MAP = {
 }
 
 
-def thread_inform(request, thread):
+def thread_inform(request, thread, tag_title):
     informed_ids = [
         k for k, v_list in request.POST.items() if 'on' in v_list]
     thread.known_directly.add(*informed_ids)
@@ -43,7 +55,8 @@ def thread_inform(request, thread):
             p.user.email for p in Profile.objects.filter(
                 id__in=informed_ids)])
     messages.info(request, f'Poinformowano wybranych Graczy!')
-    return redirect(f'communications:thread', thread_id=thread.id)
+    return redirect(
+        'communications:thread', thread_id=thread.id, tag_title=tag_title)
 
 
 @login_required
@@ -131,7 +144,7 @@ def announcements_view(request, tag_title):
 @login_required
 def thread_view(request, thread_id, tag_title):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
-    
+    print(request.POST)
     threads = Thread.objects.prefetch_related(
         'statements__seen_by', 'statements__author', 'followers',
         'known_directly')
@@ -146,22 +159,25 @@ def thread_view(request, thread_id, tag_title):
             SeenBy(statement_id=statement.id, profile_id=current_profile.id))
     SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
 
-    if request.method == 'POST' and 'Announcement' in request.POST:
-        statement_form = StatementCreateForm(
-            current_profile=current_profile,
-            thread_kind=thread.kind,
-            known_directly=[],
-            initial={'author': current_profile})
-        thread_inform(request, thread)
+    # Create ThreadEditTagsForm and StatementCreateForm
+    # Check if custom inform form activated, if not then StatementCreateForm,
+    # if not then ThreadEditTagsForm: this order ensures correct handling, as
+    # each form redirects if valid (and ThreadEditTagsForm is always invalid).
+    thread_tags_form = ThreadEditTagsForm(
+        data=request.POST or None,
+        current_profile=current_profile,
+        thread_kind=thread.kind,
+        instance=thread)
+    statement_form = StatementCreateForm(
+        data=request.POST or None,
+        files=request.FILES or None,
+        current_profile=current_profile,
+        thread_kind=thread.kind,
+        known_directly=[],
+        initial={'author': current_profile})
 
-    else:
-        statement_form = StatementCreateForm(
-            data=request.POST or None,
-            files=request.FILES or None,
-            current_profile=current_profile,
-            thread_kind=thread.kind,
-            known_directly=[],
-            initial={'author': current_profile})
+    if request.method == 'POST' and 'Announcement' in request.POST:
+        thread_inform(request, thread, tag_title)
 
     if statement_form.is_valid():
         statement = statement_form.save(commit=False)
@@ -175,14 +191,21 @@ def thread_view(request, thread_id, tag_title):
                 p.user.email for p in known_directly if p != current_profile]
         )
         messages.info(request, f'Dodano wypowiedź!')
-        return redirect(f'communications:thread', thread_id=thread.id)
-        
+        return redirect(
+            'communications:thread', thread_id=thread.id, tag_title=tag_title)
+    
+    if thread_tags_form.is_valid():
+        thread_tags_form.save()
+        return redirect(
+            'communications:thread', thread_id=thread.id, tag_title=tag_title)
+
     context = {
         'current_profile': current_profile,
         'page_title': thread.title,
         'thread': thread,
         'tag_title': tag_title,
         'form_1': statement_form,
+        'thread_tags_form': thread_tags_form,
     }
     if current_profile in known_directly or current_profile.status == 'gm':
         return render(request, 'communications/thread.html', context)
@@ -234,6 +257,7 @@ def create_thread_view(request, thread_kind):
         known_directly = thread_form.cleaned_data['known_directly']
         known_directly |= Profile.objects.filter(
             Q(id=current_profile.id) | Q(status='gm'))
+        print(known_directly)
         thread.known_directly.set(known_directly)
         thread.followers.set(known_directly)
 
@@ -250,7 +274,8 @@ def create_thread_view(request, thread_kind):
                 p.user.email for p in known_directly if p != current_profile])
 
         messages.info(request, f"Utworzono {THREAD_MAP[thread_kind]['name']}!")
-        return redirect(f'communications:thread', thread_id=thread.id)
+        return redirect(
+            'communications:thread', thread_id=thread.id, tag_title=None)
 
     context = {
         'current_profile': current_profile,

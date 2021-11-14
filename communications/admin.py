@@ -47,7 +47,7 @@ class AnnouncementAdminForm(forms.ModelForm):
         }
     
     known_directly = forms.ModelMultipleChoiceField(
-        queryset=Profile.active_players.all(),
+        queryset=Profile.contactables.all(),
         required=False,
         widget=FilteredSelectMultiple('Known directly', False),
     )
