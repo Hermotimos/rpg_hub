@@ -27,6 +27,18 @@
                     </div>
                 </div>
             </div>
+            {% if tag_title == 'None' %}
+                <a class="btn btn-outline-dark icon-filter "
+                   data-toggle="tooltip" data-placement="bottom" title="Filtruj po tagach"
+                   href="{% url 'communications:announcements' None %}">
+                </a>
+            {% else %}
+                <a class="btn btn-warning icon-filter border border-dark text-dark"
+                   data-toggle="tooltip" data-placement="bottom" title="Wyczyść filtrowanie po tagach"
+                   href="{% url 'communications:announcements' None %}">
+                </a>
+            {% endif %}
+
         </header>
         
         TODO reload ze starych Ogłoszeń
