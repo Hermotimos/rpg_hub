@@ -131,6 +131,8 @@ def announcements_view(request, tag_title):
                     'communications:announcements', tag_title=tag_title)
             else:
                 messages.warning(request, "Nie dokonano żadnych zmian!")
+                return redirect(
+                    'communications:announcements', tag_title=tag_title)
 
     context = {
         'current_profile': current_profile,
