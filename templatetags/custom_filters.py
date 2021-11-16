@@ -5,6 +5,7 @@ from django.template.defaultfilters import linebreaksbr
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
+from communications.models import ThreadTag
 from users.models import Profile
 
 register = template.Library()
@@ -239,3 +240,26 @@ def players_names_bold(django_filter_html):
             f'option value="{pid}"',
             f'option value="{pid}" style="font-weight: 600;"')
     return mark_safe(html)
+
+
+@register.filter
+def get_selected(bound_field):
+    return bound_field.initial
+
+
+@register.filter
+def render_option(field_choice, selected_objs):
+    value_obj, label = field_choice
+    value = f'value="{value_obj.value}"'
+    style = f'style="color: {ThreadTag.objects.get(id=value_obj.value).color};"'
+    selected = ''
+    if selected_objs:
+        selected_ids = [obj.id for obj in selected_objs]
+        selected = 'selected=""' if value_obj.value in selected_ids else ''
+    return mark_safe(f"<option {value} {style} {selected}>{label}</option>")
+
+
+@register.filter
+def dissect(sth):
+    print(type(sth))
+    print(sth.__dict__)

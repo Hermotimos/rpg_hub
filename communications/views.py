@@ -81,10 +81,12 @@ def announcements_view(request, tag_title):
     topics = topics.prefetch_related(
         Prefetch('threads', queryset=announcements)).distinct()
     
+    tags = ThreadTag.objects.filter(author=current_profile, kind='Announcement')
+    # TODO query optimization
+    # tags = tags.prefetch_related('author')
     formset = ThreadTagEditFormSet(
         data=request.POST or None,
-        queryset=ThreadTag.objects.filter(
-            author=current_profile, kind='Announcement'))
+        queryset=tags)
     
     for form in formset:
         form.initial['kind'] = 'Announcement'
@@ -125,7 +127,8 @@ def announcements_view(request, tag_title):
                             changed = True
                             messages.success(request, f"Zmieniono: {tag}!")
             if changed:
-                return redirect('communications:announcements', tag_title=tag_title)
+                return redirect(
+                    'communications:announcements', tag_title=tag_title)
             else:
                 messages.warning(request, "Nie dokonano żadnych zmian!")
 
@@ -144,7 +147,7 @@ def announcements_view(request, tag_title):
 @login_required
 def thread_view(request, thread_id, tag_title):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
-    print(request.POST)
+
     threads = Thread.objects.prefetch_related(
         'statements__seen_by', 'statements__author', 'followers',
         'known_directly')
@@ -178,6 +181,8 @@ def thread_view(request, thread_id, tag_title):
 
     if request.method == 'POST' and 'Announcement' in request.POST:
         thread_inform(request, thread, tag_title)
+        return redirect(
+            'communications:thread', thread_id=thread.id, tag_title=tag_title)
 
     if statement_form.is_valid():
         statement = statement_form.save(commit=False)
@@ -190,12 +195,13 @@ def thread_view(request, thread_id, tag_title):
             recipient_list=[
                 p.user.email for p in known_directly if p != current_profile]
         )
-        messages.info(request, f'Dodano wypowiedź!')
+        messages.info(request, f"Dodano wypowiedź!")
         return redirect(
             'communications:thread', thread_id=thread.id, tag_title=tag_title)
     
     if thread_tags_form.is_valid():
         thread_tags_form.save()
+        messages.info(request, f"Zapisano zmiany!")
         return redirect(
             'communications:thread', thread_id=thread.id, tag_title=tag_title)
 

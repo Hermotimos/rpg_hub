@@ -48,9 +48,23 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
+                        <!-- Form rendered "manually" to achieve colored options-->
                         <form method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
-                            {% crispy thread_tags_form thread_tags_form.helper %}
+                            <div id="div_id_tags" class="form-group">
+                                <div class="">
+                                    <select name="tags" size="8" class="selectmultiple form-control custom-select" id="id_tags" multiple="">
+                                        {% with selected_objs=thread_tags_form.tags|get_selected %}
+                                            {% for choice in thread_tags_form.tags.field.choices %}
+                                                {{ choice|render_option:selected_objs }}
+                                            {% endfor %}
+                                        {% endwith %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" name="submit" value="Zapisz" class="btn btn-primary btn-dark d-block mx-auto mt-3 mb-n3" id="submit-id-submit">
+                            </div>
                         </form>
                     </div>
                 </div>
