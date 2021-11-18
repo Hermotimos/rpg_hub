@@ -141,7 +141,7 @@ def announcements_view(request, tag_title):
         'unseen_announcements': unseen_announcements,
         'tag_title': tag_title,
         'formset': formset,
-        'formset_helper': ThreadTagEditFormSetHelper()
+        'formset_helper': ThreadTagEditFormSetHelper(),
     }
     return render(request, 'communications/announcements.html', context)
 
