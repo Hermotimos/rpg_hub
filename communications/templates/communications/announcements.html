@@ -34,8 +34,9 @@
                 </a>
             {% else %}
                 <a class="btn btn-warning icon-filter border border-dark text-dark"
-                   data-toggle="tooltip" data-placement="bottom" title="Wyczyść filtrowanie po tagach"
+                   data-toggle="tooltip" data-placement="bottom" title="Wyczyść filtr"
                    href="{% url 'communications:announcements' None %}">
+                    <span class="font-italic">#{{ tag_title }}</span>
                 </a>
             {% endif %}
 
