@@ -6,8 +6,8 @@ from django_filters import (
     ModelMultipleChoiceFilter,
 )
 
-from chronicles.models import GameEvent, PlotThread, Location, GameSession, \
-    Profile
+from chronicles.models import GameEvent, PlotThread, Location, GameSession
+from users.models import Profile
 
 
 def plot_threads(request):
@@ -58,28 +58,25 @@ class GameEventFilter(FilterSet):
     description_short = CharFilter(
         lookup_expr='icontains',
         label="Wydarzenie w Kalendarium:",
-        widget=TextInput(attrs={'placeholder': 'Szukaj w tekście Wydarzenia'})
-    )
+        widget=TextInput(attrs={'placeholder': 'Szukaj w tekście Wydarzenia'}))
     description_long = CharFilter(
         lookup_expr='icontains',
         label="Wydarzenie w Kronice:",
-        widget=TextInput(attrs={'placeholder': 'Szukaj w tekście Wydarzenia'})
-    )
+        widget=TextInput(attrs={'placeholder': 'Szukaj w tekście Wydarzenia'}))
     plot_threads = ModelMultipleChoiceFilter(
-        queryset=plot_threads, label="Wątki:")
+        queryset=plot_threads,
+        label="Wątki:")
     locations = ModelMultipleChoiceFilter(
-        queryset=locations, label="Lokacje:",
-    )
+        queryset=locations,
+        label="Lokacje:")
     participants = ModelMultipleChoiceFilter(
         field_name='known_directly',
         queryset=participants,
-        label="Uczestnicy:",
-    )
+        label="Uczestnicy:")
     games = ModelMultipleChoiceFilter(
         field_name='game',
         queryset=games,
-        label="Sesje:",
-    )
+        label="Sesje:")
 
     class Meta:
         model = GameEvent

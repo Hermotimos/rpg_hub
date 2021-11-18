@@ -272,7 +272,7 @@ def timeline_view(request):
         'page_title': 'Pełne Kalendarium',
        
         # TODO the use of filter rises query cnt from 8 to 13, somehow causing
-        # TODO 2x queries for certain fields. Try to resolve it in the future.
+        #  2x queries for certain fields. Try to resolve it in the future.
         'events_filter': events_filter,
     }
     return render(request, 'chronicles/timeline.html', context)
