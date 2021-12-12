@@ -20,7 +20,7 @@
         <div class="row">
         
             <!-- BUTTONS -->
-            {% current_profile.can_action %}
+            {% if current_profile.can_action %}
                 <div class="col-12 col-sm-1 p-0">
                     <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Przekaż wiedzę o biografii">
                         <!-- Modal -->
