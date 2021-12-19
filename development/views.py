@@ -28,7 +28,7 @@ def character_skills_view(request, profile_id='0'):
             queryset=SynergyLevel.objects.filter(acquired_by=profile)))
         
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': f'Umiejętności - {profile.character}',
         'skills': skills.distinct(),
         'synergies': synergies.distinct(),
