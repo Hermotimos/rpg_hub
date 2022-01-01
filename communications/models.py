@@ -18,9 +18,7 @@ from django.db.models import (
     TextField,
 )
 from django.db.models.signals import post_save
-from django.utils.safestring import mark_safe
 from users.models import Profile
-from rpg_project.utils import COLORS_CHOICES
 
 
 class Topic(Model):
@@ -49,7 +47,7 @@ THREAD_KINDS = (
 
 
 class ThreadTag(Model):
-    title = CharField(max_length=30)
+    title = CharField(max_length=20)
     author = FK(to=Profile, related_name='thread_tags', on_delete=CASCADE)
     color = CharField(max_length=7, default='#000000')
     kind = CharField(max_length=15, choices=THREAD_KINDS)
