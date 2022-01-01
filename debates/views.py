@@ -183,8 +183,10 @@ def debate_view(request, debate_id):
             profile=profile,
             known_directly=debate_known_directly)
 
-    informables = debate.informables().filter(
-        character__in=profile.characters_known_directly.all())
+    informables = debate.informables()
+    if profile.status != 'gm':
+        informables = informables.filter(
+            character__in=profile.characters_known_directly.all())
     
     context = {
         'current_profile': profile,

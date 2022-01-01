@@ -1,16 +1,4 @@
 
-.allowed-profiles-form-debate select {
-    max-height: 300px;
-    max-width: 400px;
-}
 
-li.bullet-ongoing {
-    list-style-type: "☞" !important;
-    color: red;
-    font-weight: bold;
-    font-size: 1.2rem;
-}
 
-ul.bullets-1 {padding-left: 2rem;}
 
-ul.bullets-1 li > h6 {padding-left: 0.2rem;}

@@ -24,7 +24,7 @@
                         {% for debate in topic.debates.all %}
                             <span class="pt-5" id="debate_{{ debate.id }}"></span>
                             <ul class="bullets-3 pl-3 mb-0 {% if debate in unseen_debates %} border rounded bg-greengrayish {% endif %}">
-                                <li class="pl-1 pb-2 {% if not debate.is_ended %} bullet-ongoing {% endif %} {% if debate.events.count == 0 %} mb-3 {% endif %}">
+                                <li class="pl-1 pb-2 {% if not debate.is_ended %} text-danger {% endif %} {% if debate.events.count == 0 %} mb-3 {% endif %}">
                                     <div class="d-md-inline">
                                         <h5 class="d-inline font-18">
                                             <a class="pr-1" href="{% url 'debates:debate' debate.id %}">
