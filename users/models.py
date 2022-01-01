@@ -53,7 +53,7 @@ class Profile(Model):
     contactables = ContactableProfileManager()
 
     class Meta:
-        ordering = ['-status', '-is_active', 'user__username']
+        ordering = ['-status', '-is_active', 'character_name_copy']
     
     def __str__(self):
         return self.character_name_copy or self.user.username
