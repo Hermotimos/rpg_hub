@@ -1,5 +1,3 @@
-import datetime
-
 from PIL import Image
 from django.db.models import (
     BooleanField,
@@ -24,10 +22,7 @@ from users.models import Profile
 class Topic(Model):
     title = CharField(max_length=100, unique=True)
     order_no = SmallIntegerField(default=100)
-    created_at = DateTimeField(
-        null=True,
-        # auto_now_add=True TODO restore after data migration
-    )
+    created_at = DateTimeField(null=True)                                       # auto_now_add=True TODO restore after data migration
     
     class Meta:
         ordering = ['order_no', 'title']
@@ -40,9 +35,11 @@ class Topic(Model):
 
 
 THREAD_KINDS = (
-    ('Announcement', 'Announcement'),
-    ('Debate', 'Debate'),
-    ('Demand', 'Demand'),
+    ('Announcement', 'Announcement'),   # User
+    ('Debate', 'Debate'),               # Profile
+    ('Demand', 'Demand'),               # Profile
+    # ('Plan', 'Plan'),                   # Profile
+    # ('Report', 'Report'),               # User
 )
 
 
@@ -54,7 +51,7 @@ class ThreadTag(Model):
 
     class Meta:
         ordering = ['kind', 'author', 'title']
-        unique_together = ['title', 'author']
+        unique_together = ['title', 'author', 'kind']
 
     def __str__(self):
         return f"#{self.title}"
@@ -62,18 +59,15 @@ class ThreadTag(Model):
 
 class Thread(Model):
     title = CharField(max_length=100, unique=True)
-    topic = FK(to=Topic, related_name='threads', on_delete=CASCADE)
+    topic = FK(to=Topic, related_name='threads', on_delete=CASCADE)             # TODO maybe blank=True, null=True for demands, plans
     kind = CharField(max_length=15, choices=THREAD_KINDS)
-    known_directly = M2M(to=Profile, related_name='threads_known_directly')
-    created_at = DateTimeField(
-        null=True,
-        # auto_now_add=True TODO restore after data migration
-    )
+    known_directly = M2M(to=Profile, related_name='threads_known_directly')     # known_directly also use instead of inform_gm in Plans
+    created_at = DateTimeField(null=True)                                       # auto_now_add=True TODO restore after data migration
     # Announcement
     followers = M2M(to=Profile, related_name='threads_followed', blank=True)
     tags = M2M(to=ThreadTag, related_name='threads', blank=True)
     # Debate
-    is_ended = BooleanField(default=False)
+    is_ended = BooleanField(default=False)                                      # also Demands instead of is_done
     is_exclusive = BooleanField(default=False)
     
     class Meta:
@@ -150,10 +144,7 @@ class Statement(Model):
     author = FK(to=Profile, related_name='statements', on_delete=PROTECT)
     image = ImageField(upload_to='post_pics', blank=True, null=True)
     seen_by = M2M(to=Profile, related_name='statements_seen', blank=True)
-    created_at = DateTimeField(
-        null=True,
-        # auto_now_add=True TODO restore after data migration
-    )
+    created_at = DateTimeField(null=True)                                       # auto_now_add=True TODO restore after data migration
     # Announcement
     options = M2M(to=Option, related_name='threads', blank=True)
 
