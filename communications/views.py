@@ -67,7 +67,6 @@ def announcements_view(request, tag_title):
         'statements__author', 'statements__seen_by', 'tags__author', 'topic',
         'followers')
     announcements = announcements.order_by('-created_at')
-    
     if current_profile.status != 'gm':
         announcements = announcements.filter(known_directly=current_profile)
     if tag_title != 'None':
@@ -75,15 +74,12 @@ def announcements_view(request, tag_title):
         
     unseen_announcements = announcements.filter(
         id__in=current_profile.unseen_announcements)
-    announcements = announcements.exclude(id__in=unseen_announcements)
 
     topics = Topic.objects.filter(threads__in=announcements)
     topics = topics.prefetch_related(
         Prefetch('threads', queryset=announcements)).distinct()
     
     tags = ThreadTag.objects.filter(author=current_profile, kind='Announcement')
-    # TODO query optimization
-    # tags = tags.prefetch_related('author')
     formset = ThreadTagEditFormSet(
         data=request.POST or None,
         queryset=tags)
@@ -91,8 +87,13 @@ def announcements_view(request, tag_title):
     for form in formset:
         form.initial['kind'] = 'Announcement'
         form.initial['author'] = current_profile
-    
-    if request.method == 'POST':
+        
+    if request.method == 'GET':
+        if tag_id := request.GET.get('tag', []):
+            tag = ThreadTag.objects.get(id=tag_id)
+            return redirect('communications:announcements', tag_title=tag.title)
+
+    elif request.method == 'POST':
         if not formset.is_valid():
             if "Thread tag z tymi Title i Author" in str(formset.errors):
                 messages.warning(request, "Zduplikowany tag!")
@@ -140,6 +141,7 @@ def announcements_view(request, tag_title):
         'topics': topics,
         'unseen_announcements': unseen_announcements,
         'tag_title': tag_title,
+        'tags': tags,
         'formset': formset,
         'formset_helper': ThreadTagEditFormSetHelper(),
     }

@@ -13,12 +13,19 @@
             <a href="{% url 'communications:create-topic' 'Announcement' %}" class="btn btn-outline-dark">Nowy temat</a>
             <a href="{% url 'communications:create-thread' 'Announcement' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
             <a data-toggle="tooltip" data-placement="bottom" title="Edytuj tagi">
-                <span class="btn btn-outline-dark" data-toggle="modal" data-target="#tagsModal{{ announcement.id }}">#Tagi</span>
+                <span class="btn btn-outline-dark" data-toggle="modal" data-target="#tagsModal">Edytuj Tagi</span>
             </a>
-            <div class="modal fade" id="tagsModal{{ announcement.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal fade" id="tagsModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
+                            <div class="container px-0 pb-2">
+                                <div class="row text-center">
+                                    <div class="col-7">Tag</div>
+                                    <div class="col-3">Kolor</div>
+                                    <div class="col-1 pl-2">Usuń?</div>
+                                </div>
+                            </div>
                             <form method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 {% crispy formset formset_helper %}
@@ -28,10 +35,14 @@
                 </div>
             </div>
             {% if tag_title == 'None' %}
-                <a class="btn btn-outline-dark icon-filter "
-                   data-toggle="tooltip" data-placement="bottom" title="Filtruj po tagu"
-                   href="{% url 'communications:announcements' None %}">
-                </a>
+                <span data-toggle="tooltip" data-placement="bottom" title="Filtruj po tagu">
+                    <span class="btn btn-outline-dark icon-filter" data-toggle="modal" data-target="#tagFilterModal">
+                    </span>
+                </span>
+                <div class="modal fade tags-modal" id="tagFilterModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    {% include 'communications/_tag_filter_modal.html' %}
+                </div>
+
             {% else %}
                 <a class="btn btn-warning icon-filter border border-dark text-dark"
                    data-toggle="tooltip" data-placement="bottom" title="Wyczyść filtr"
@@ -39,17 +50,12 @@
                     <span class="font-italic">#{{ tag_title }}</span>
                 </a>
             {% endif %}
-
+            
         </header>
         
-        TODO reload ze starych Ogłoszeń
-
-        <div class="pt-5">
+        <div>
             {% if unseen_announcements %}
                 <div id="topic_unseen_announcements" class="mb-5">
-                    <h3 class="small-caps mb-3">
-                        <b class="border-bottom-dark">Nieprzeczytane</b>
-                    </h3>
                     {% for announcement in unseen_announcements %}
                         {% with show_topic=True %}
                             {% include 'communications/_announcement.html' %}

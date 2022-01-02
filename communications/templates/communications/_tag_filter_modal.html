@@ -1,0 +1,33 @@
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        
+        <!-- The form encloses modal-body and modal-footer in order to enclose submit button -->
+        <form method="GET" action="." class="ml-2">
+            <div class="modal-body">
+                {% csrf_token %}
+                {% for tag in tags %}
+                    <div>
+                        <input class="" type="radio" id="{{ tag.id }}" name="tag" value="{{ tag.id }}">
+                        <label for="{{ tag.id }}">
+                            <span style="color: {{ tag.color }};">{{ tag }}</span>
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-dark mx-auto" type="submit" name="tags_filter" value="{{ id_ }}" data-dismiss="tagFilterModal">
+                    Filtruj
+                </button>
+            </div>
+        </form>
+        
+    </div>
+</div>

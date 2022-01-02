@@ -374,6 +374,12 @@ div.img-hover-zoom {
     margin: 1rem auto auto auto
 }
 
+/* Modal for Thread tag */
+.tags-modal .modal-dialog {
+    max-width: 15rem;       /* provided that ThreadTag.title max_lenght=20 */
+    margin: 1rem auto auto auto
+}
+
 
 
 /* Image in modal */
