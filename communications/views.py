@@ -297,7 +297,7 @@ def create_thread_view(request, thread_kind):
 
 
 @login_required
-def unfollow_thread_view(request, thread_id, tag_title):
+def unfollow_thread_view(request, thread_id):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     thread = get_object_or_404(Thread, id=thread_id)
@@ -310,7 +310,7 @@ def unfollow_thread_view(request, thread_id, tag_title):
 
 
 @login_required
-def follow_thread_view(request, thread_id, tag_title):
+def follow_thread_view(request, thread_id):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     thread = get_object_or_404(Thread, id=thread_id)
