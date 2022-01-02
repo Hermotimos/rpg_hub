@@ -117,9 +117,9 @@ ol.rules li, ul.rules li {
 .weapons .special {width: 25%;}
 .weapons .range {width: 12%;}
 .weapons .size {width: 5%;}
-.weapons .trait {width: 6%;}
-.weapons .price {width: 6%;}
-.weapons .weight {width: 6%;}
+.weapons .trait {width: 7%;}
+.weapons .price {width: 7%;}
+.weapons .weight {width: 7%;}
 
 
 .key .point {width: 25%;}

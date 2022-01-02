@@ -364,7 +364,7 @@ class Weapon(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
     picture_sets = M2M(to=PictureSet, related_name='weapons', blank=True)
-    delay = PositiveSmallIntegerField()
+    delay = PositiveSmallIntegerField()    # TODO marked for removal [in 2023]
     damage_small_dices = CharField(max_length=10, blank=True, null=True)
     damage_small_add = PositiveSmallIntegerField(blank=True, null=True)
     damage_big_dices = CharField(max_length=10, blank=True, null=True)
@@ -398,12 +398,15 @@ class Weapon(Model):
 
     def damage_summary(self):
         damage_small = str(self.damage_small_dices)
+        # if self.damage_small_add:
+        #     damage_small += ('+' + str(self.damage_small_add))
+        # damage_big = str(self.damage_big_dices)
+        # if self.damage_big_add:
+        #     damage_big += ('+' + str(self.damage_big_add))
+        damage_small_add = ""
         if self.damage_small_add:
-            damage_small += ('+' + str(self.damage_small_add))
-        damage_big = str(self.damage_big_dices)
-        if self.damage_big_add:
-            damage_big += ('+' + str(self.damage_big_add))
-        return f'{damage_small}/{damage_big}'
+            damage_small_add += ("+" + str(self.damage_small_add))
+        return f"{self.damage_small_dices}{damage_small_add}"
 
     class Meta:
         ordering = ['sorting_name']
