@@ -15,7 +15,11 @@
             {% if not informables %}
             
                 <h5 class="text-center text-danger m-3">
-                    Wszyscy obecni człokowie drużyny dobrze już o tym wiedzą.
+                    {% if inform_type == 'Announcement' %}
+                        Wszyscy aktywni Gracze widzą to Ogłoszenie.
+                    {% else %}
+                        Wszyscy obecni członkowie drużyny dobrze już o tym wiedzą.
+                    {% endif %}
                 </h5>
             
             {% else %}
