@@ -1,41 +1,49 @@
 {% load crispy_forms_tags %}
-
+{% load custom_filters %}
 
 <!-- REMARKS -->
-{% for remark in debate.remarks.all %}
-    <div id="remark-{{ remark.id }}" class="container anchor px-0 mt-n5">
-        <div class="row">
-            {% if remark.author.status == 'gm' %}
-                <div class="col-12">
-                    <span class="font-18 font-italic text-justify">{{ remark.text|capfirst|linebreaks }}</span>
-                    {% if remark.image %}
-                        <p><img class="img-fluid mx-auto d-block" src="{{ remark.image.url }}"></p>
-                        <br>
-                    {% endif %}
-                </div>
-            {% else %}
-                {% with post=remark %}
-                    {% include '_post_divs.html' %}
-                {% endwith %}
-            {% endif %}
-        </div>
-        {% if forloop.last and not debate.is_ended %}
-            <div class="row mt-n3" id="page-bottom">
+
+{% with remarks=debate.remarks.all %}
+    {% for remark in debate.remarks.all %}
+        <div id="remark-{{ remark.id }}" class="container anchor px-0 mt-n5">
+            <div class="row">
                 {% if remark.author.status == 'gm' %}
-                    <div class="col-12 mt-2">
-                        {% for profile in remark.seen_by.all %}
-                            <img class="rounded-circle potrait-img-sm" src="{{ profile.image.url }}">
-                        {% endfor %}
+                    <div class="col-12">
+                        <span class="font-18 font-italic text-justify">{{ remark.text|capfirst|linebreaks }}</span>
+                        {% if remark.image %}
+                            <p><img class="img-fluid mx-auto d-block" src="{{ remark.image.url }}"></p>
+                            <br>
+                        {% endif %}
                     </div>
                 {% else %}
+                    {% with post=remark %}
+                        {% include '_post_divs.html' %}
+                    {% endwith %}
+                {% endif %}
+            </div>
+            
+            <div class="row mt-n3" id="{% if forloop.last and not debate.is_ended %} page-bottom {% endif %}">
+                {% if remark.author.status != 'gm' %}
                     <div class="col-2"></div>
-                    <div class="col-10 mt-2">
+                {% endif %}
+                <div class="{% if remark.author.status != 'gm' %} col-10 mt-3 {% else %} col-12 mt-2 {% endif %}">
+                    {% with next_remark=remarks|next_elem:forloop.counter0 %}
+                        {% for profile in debate_known_directly %}
+                            {% if profile not in next_remark.seen_by.all and profile != remark.author %}
+                                {% if profile.status != 'npc' and profile.is_active %}
+                                    <img class="rounded-circle potrait-img-sm" src="{{ profile.image.url }}">
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endwith %}
+                    {% if forloop.last %}
                         {% for profile in remark.seen_by.all %}
                             <img class="rounded-circle potrait-img-sm" src="{{ profile.image.url }}">
                         {% endfor %}
-                    </div>
-                {% endif %}
+                    {% endif %}
+                </div>
             </div>
-        {% endif %}
-    </div>
-{% endfor %}
+            
+        </div>
+    {% endfor %}
+{% endwith %}

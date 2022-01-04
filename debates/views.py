@@ -138,7 +138,7 @@ def create_debate_view(request, topic_id=0):
 def debate_view(request, debate_id):
     profile = Profile.objects.get(id=request.session['profile_id'])
     debates = Debate.objects.select_related()
-    debates = debates.prefetch_related('remarks__author')
+    debates = debates.prefetch_related('remarks__author', 'remarks__seen_by')
     debate = debates.get(id=debate_id)
     topic = debate.topic
 

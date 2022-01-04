@@ -263,3 +263,12 @@ def render_option(field_choice, selected_objs):
 def dissect(sth):
     print(type(sth))
     print(sth.__dict__)
+
+
+@register.filter
+def next_elem(list_, current_index):
+    """Returns the next element of the list or empty string if there's none."""
+    try:
+        return list_[int(current_index) + 1]
+    except IndexError:
+        return ''
