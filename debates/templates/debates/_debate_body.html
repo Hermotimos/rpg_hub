@@ -36,7 +36,7 @@
                             {% endif %}
                         {% endfor %}
                     {% endwith %}
-                    {% if forloop.last %}
+                    {% if forloop.last and not debate.is_ended %}
                         {% for profile in remark.seen_by.all %}
                             <img class="rounded-circle potrait-img-sm" src="{{ profile.image.url }}">
                         {% endfor %}
