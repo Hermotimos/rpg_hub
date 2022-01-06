@@ -241,6 +241,7 @@ class WeaponAdmin(admin.ModelAdmin):
     }
     list_display = ['name', 'description']
     list_editable = ['description']
+    list_filter = ['weapon_type']
     search_fields = ['name', 'description']
 
 
