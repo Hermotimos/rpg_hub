@@ -10,7 +10,6 @@
 {% block content %}
     <article class="top-button">
         <header class="mb-5">
-            <a href="{% url 'communications:create-topic' 'Announcement' %}" class="btn btn-outline-dark">Nowy temat</a>
             <a href="{% url 'communications:create-thread' 'Announcement' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
             <a data-toggle="tooltip" data-placement="bottom" title="Edytuj tagi">
                 <span class="btn btn-outline-dark" data-toggle="modal" data-target="#tagsModal">Edytuj Tagi</span>
