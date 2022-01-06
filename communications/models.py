@@ -89,7 +89,7 @@ class Thread(Model):
         return qs.exclude(id__in=self.known_directly.all())
 
     def get_absolute_url(self):
-        return f'/communications/thread:{self.pk}'
+        return f'/communications/thread:{self.pk}/None/#page-bottom'
 
 
 class DebateManager(Manager):

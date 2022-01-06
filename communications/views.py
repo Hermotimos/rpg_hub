@@ -157,7 +157,7 @@ def thread_view(request, thread_id, tag_title):
         'statements__seen_by', 'statements__author', 'followers',
         'known_directly')
     thread = threads.get(id=thread_id)
-    known_directly = thread.known_directly.all()
+    followers = thread.followers.all()
 
     # Update all statements to be seen by the profile
     SeenBy = Statement.seen_by.through
@@ -198,7 +198,7 @@ def thread_view(request, thread_id, tag_title):
             message=f"{request.get_host()}{thread.get_absolute_url()}/",
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[
-                p.user.email for p in known_directly if p != current_profile]
+                p.user.email for p in followers if p != current_profile]
         )
         messages.info(request, f"Dodano wypowiedź!")
         return redirect(
@@ -218,7 +218,7 @@ def thread_view(request, thread_id, tag_title):
         'form_1': statement_form,
         'thread_tags_form': thread_tags_form,
     }
-    if current_profile in known_directly or current_profile.status == 'gm':
+    if current_profile in thread.known_directly.all() or current_profile.status == 'gm':
         return render(request, 'communications/thread.html', context)
     else:
         return redirect('home:dupa')
