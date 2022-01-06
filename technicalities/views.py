@@ -198,7 +198,47 @@ def reload_news(request):
     messages.info(request, 'Przeładowano NEWS->COMMUNICATIONS!')
     return redirect('technicalities:reload-main')
 
-    
+
+@login_required
+@only_game_masters
+def reorder_news(request):
+    from news.models import Topic, News, NewsAnswer
+    for topic in Topic.objects.filter(title__in=['Sesje', 'Stronka', 'Zasady']):
+        existing_news = topic.news.all()
+        
+        allowed_profiles = set()
+        created_at = min([news.created_at for news in existing_news])
+        for news in existing_news:
+            allowed_profiles.update([p for p in news.allowed_profiles.all()])
+        # print(topic.title)
+        # print(created_at)
+        # print(allowed_profiles)
+        new_big_news = News.objects.create(
+            topic=topic,
+            title=topic.title,
+            created_at=created_at,
+        )
+        new_big_news.allowed_profiles.set(allowed_profiles)
+        new_big_news.followers.set([p for p in allowed_profiles if p.is_active])
+        
+        import datetime
+        NewsAnswer.objects.create(
+            news=new_big_news,
+            author=Profile.objects.get(status='gm'),
+            text='[Konwersacja o charakterze ciągłym - swobodnie piszcie w temacie]',
+            created_at=(created_at - datetime.timedelta(days=1))
+        )
+        
+        for news in existing_news.exclude(title__icontains='In memoriam').exclude(title__icontains='EXP:'):
+            print(news.title)
+            for news_answer in news.news_answers.all():
+                news_answer.news_id = new_big_news.id
+                news_answer.save()
+
+    messages.info(request, 'Zagregowano NEWS!')
+    return redirect('technicalities:reload-main')
+
+
 @login_required
 @only_game_masters
 def refresh_content_types(request):

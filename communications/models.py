@@ -22,7 +22,7 @@ from users.models import Profile
 class Topic(Model):
     title = CharField(max_length=100, unique=True)
     order_no = SmallIntegerField(default=100)
-    created_at = DateTimeField(null=True)                                       # auto_now_add=True TODO restore after data migration
+    created_at = DateTimeField(null=True)  # TODO delete, this is store in Thread
     
     class Meta:
         ordering = ['order_no', 'title']

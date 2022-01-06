@@ -11,6 +11,7 @@ urlpatterns = [
     path('reload-toponomikon/', views.reload_toponomikon, name='reload-toponomikon'),
     path('reload-prosoponomikon/', views.reload_prosoponomikon, name='reload-prosoponomikon'),
     path('reload-news/', views.reload_news, name='reload-news'),
+    path('reorder-news/', views.reorder_news, name='reorder-news'),
     path('refresh-contenttypes/', views.refresh_content_types, name='refresh-contenttypes'),
     
     path('todos/', views.todos_view, name='todos'),

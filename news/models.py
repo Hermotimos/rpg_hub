@@ -87,7 +87,9 @@ class NewsAnswer(Model):
     author = FK(to=Profile, related_name='news_answers', on_delete=CASCADE)
     image = ImageField(blank=True, null=True, upload_to='news_pics')
     seen_by = M2M(to=Profile, related_name='news_answers_seen', blank=True)
-    created_at = DateTimeField(auto_now_add=True)
+    created_at = DateTimeField(
+        # auto_now_add=True
+    )
 
     survey_options = M2M(to=SurveyOption, related_name='threads', blank=True)
 
