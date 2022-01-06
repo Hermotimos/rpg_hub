@@ -9,7 +9,7 @@ h6.rules {font-weight: bold;}
 .rules-styling p {
     font-size: 18px;
     font-style: italic;
-    padding: 5px;
+    margin-bottom: 0.5rem;
     text-align: justify;
 }
 
