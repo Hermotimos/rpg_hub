@@ -23,7 +23,7 @@
                             {% endif %}
                         </div>
                         <div class="font-16 ">
-                            <a class="border-bottom align-top" href="{% url 'communications:thread' announcement.id tag_title %}">
+                            <a class="border-bottom align-top" href="{% url 'communications:thread' announcement.id tag_title %}#page-bottom">
                                 {{ announcement.title|capfirst }}
                             </a>
                             {% if show_topic %}
