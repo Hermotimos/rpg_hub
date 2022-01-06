@@ -46,9 +46,7 @@ class News(Model):
     title = CharField(max_length=100, unique=True)
     topic = FK(to=Topic, related_name='news', on_delete=CASCADE)
     allowed_profiles = M2M(to=Profile, related_name='allowed_news')
-    created_at = DateTimeField(
-        # auto_now_add=True
-    )
+    created_at = DateTimeField(auto_now_add=True)
     followers = M2M(to=Profile, related_name='followed_news', blank=True)
 
     def __str__(self):
