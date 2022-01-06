@@ -86,6 +86,12 @@ def download_db(request):
 @only_game_masters
 def reload_main_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
+    for news in News.objects.all():
+        if not news.news_answers.all():
+            print(news.title)
+            news.delete()
+        else:
+            print('>>>>>>>>>>>>>>>>', news.title)
     context = {
         'current_profile': profile,
         'page_title': 'Przeładowanie sorting_name'
