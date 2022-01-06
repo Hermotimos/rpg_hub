@@ -2,7 +2,6 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.db.models import Prefetch
 from django.shortcuts import render, redirect, get_object_or_404
 
 from news.forms import (CreateNewsForm, CreateTopicForm, CreateNewsAnswerForm,
@@ -21,17 +20,13 @@ def main_view(request):
         newss = profile.allowed_news.all()
 
     newss = newss.prefetch_related(
-        'news_answers__author', 'news_answers__seen_by')
-    newss = newss.order_by('-id')
+        'news_answers__author',
+        'news_answers__seen_by')
     
-    topics = Topic.objects.filter(news__in=newss)
-    topics = topics.prefetch_related(Prefetch('news', queryset=newss))
-    topics = topics.distinct()
-
     context = {
         'current_profile': profile,
         'page_title': 'Ogłoszenia',
-        'topics': topics,
+        'newss': newss.order_by('created_at'),
         'unseen_news': profile.unseen_news,
     }
     return render(request, 'news/main.html', context)

@@ -30,8 +30,7 @@ class TopicAdmin(admin.ModelAdmin):
 class NewsAdmin(admin.ModelAdmin):
     form = NewsAdminForm
     list_display = ['title', 'topic', 'created_at']
-    list_editable = ['topic']
-    ordering = ['-created_at']
+    list_editable = ['topic', 'created_at']
     search_fields = ['title']
 
     def formfield_for_dbfield(self, db_field, **kwargs):
