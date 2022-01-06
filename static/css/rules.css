@@ -110,33 +110,62 @@ ol.rules li, ul.rules li {
 .agility-and-tricks .climbing {width: 100px;}
 .agility-and-tricks .traps {width: 100px;}
 
-.weapons .class {width: 22%;}
-.weapons .delay {width: 3%;}
-.weapons .damage {width: 10%;}
-.weapons .damage-type {width: 5%;}
-.weapons .special {width: 25%;}
-.weapons .range {width: 12%;}
-.weapons .size {width: 5%;}
-.weapons .trait {width: 7%;}
-.weapons .price {width: 7%;}
-.weapons .weight {width: 7%;}
 
+table.weapons-table {border: double;}
+
+.weapons-table .class {width: 22%;}
+.weapons-table .delay {width: 3%;}
+.weapons-table .damage {width: 10%;}
+.weapons-table .damage-type {width: 5%;}
+.weapons-table .special {width: 25%;}
+.weapons-table .range {width: 12%;}
+.weapons-table .size {width: 5%;}
+.weapons-table .trait {width: 7%;}
+.weapons-table .price {width: 7%;}
+.weapons-table .weight {width: 7%;}
+
+@media only screen and (max-width: 600px) {
+    .weapons-table {font-size: 0.7rem;}
+}
+@media only screen and (min-width: 601px) {
+    .weapons-table {font-size: 0.8rem;}
+}
+@media only screen and (min-width: 1001px) {
+    .weapons-table {font-size: 0.9rem;}
+}
+@media only screen and (min-width: 1201px) {
+    .weapons-table {font-size: 1rem;}
+}
+
+.weapons-table th {
+    font-weight: normal;
+    padding: 0.4rem 0rem 0.4rem 0rem;
+}
+.weapons-table thead {
+    background-color: #363636;
+    color: #ffffff;
+}
+.weapons-table tbody tr:nth-child(4n-1),
+.weapons-table tbody tr:nth-child(4n) {background-color: #f2f2f2;}
+
+.weapons-img img {
+    display: block;
+    max-width: 100%;
+    max-height: 300px;
+    height: auto;
+}
 
 .key .point {width: 25%;}
 .key .explanation {width: %;}
 
-table.weapons {border: double;}
+
 
 table.key td {padding: 5px 0px 5px 0px;}
 
 td .nowrap { white-space: nowrap;}
 
-.weapons thead {
-    background-color: #363636;
-    color: #ffffff;
-}
 
-.weapons th {font-weight: normal;}
+
 
 .key tr:nth-child(even),
 .professions tr:nth-child(even),
@@ -146,16 +175,7 @@ td .nowrap { white-space: nowrap;}
 
 .plates tr:nth-child(4n-1),
 .plates tr:nth-child(4n),
-.weapons tbody tr:nth-child(4n-1),
-.weapons tbody tr:nth-child(4n) {background-color: #f2f2f2;}
 
-
-.weapons-img img {
-    display: block;
-    max-width: 100%;
-    max-height: 300px;
-    height: auto;
-}
 
 .rules-red {color: #993300;}
 

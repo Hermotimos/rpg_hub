@@ -12,7 +12,7 @@
 
         <h2 class="rules">Klasa broni</h2>
         <br>
-        <p>
+        <p class="mb-4">
             Podział broni na Klasy jest związany przede wszystkim z zasadami dotyczącymi Biegłości w broni.
             Spośród 4 poziomów Biegłości (Brak zdolności [0], Zdolność [1], Biegłość [2], Specjalizacja [3]) pierwsze trzy dotyczą całej Klasy broni.
             Oznacza to, że postać mająca Biegłość w Broniach drzewcowych równie sprawnie włada włócznią co halabardą.
@@ -20,60 +20,57 @@
             Najlepszym przykładem jest Broń zamachowa, do której należą zarówno proca czy bolas, jak i korbacz czy kiścień,
             ponieważ wszystkimi z nich operuje się poprzez wyrzucenie przed siebie rozbujaneego obciążenia.
         </p>
-        <br>
 
-        <table class="weapons">
-            {% for weapon_type in weapon_types %}
-            <colgroup>
-                <col class="class">
-<!--                <col class="delay">-->
-                <col class="damage">
-                <col class="damage-type">
-                <col class="special">
-                <col class="range">
-                <col class="size">
-                <col class="trait">
-                <col class="price">
-                <col class="weight">
-            </colgroup>
-            <thead class="align-center">
-                <tr>
-                    <th class="small-caps align-left {% if weapon_type.description %} hover-blue {% endif %}" data-toggle="collapse" data-target="#{{ weapon_type.name }}">&nbsp;{{ weapon_type.name }}</th>
-<!--                    <th>Opóźń</th>-->
-                    <th>Obrażenia</th>
-                    <th>Obrażenia<br>Typ</th>
-                    <th>Specjalne</th>
-                    <th>Zasięg</th>
-                    <th>Rozm</th>
-                    <th>Cecha</th>
-                    <th>Cena</th>
-                    <th>Waga</th>
-                </tr>
-                {% if weapon_type.description %}
-                    <tr id="{{ weapon_type.name }}" class="collapse">
-                        <td colspan="10" class="weapons-img px-2">
-                            <br>
-                            {{ weapon_type.description|linebreaksbr }}
-                            <br><br>
-                        </td>
-                    </tr>
-                {% endif %}
-            </thead>
-            <tbody>
-                {% for weapon in weapon_type.weapons.all %}
+        
+        {% for weapon_type in weapon_types %}
+            <table class="weapons-table my-2">
+                <colgroup>
+                    <col class="class">
+    <!--                <col class="delay">-->
+                    <col class="damage">
+                    <col class="damage-type">
+                    <col class="special">
+                    <col class="range">
+                    <col class="size">
+                    <col class="trait">
+                    <col class="price">
+                    <col class="weight">
+                </colgroup>
+                <thead class="align-center">
                     <tr>
-                        <td class="{% if weapon.description %} hover-blue {% endif %}" data-toggle="collapse" data-target="#{{ weapon.short_name }}">&nbsp;{{ weapon.name }}</td>
-<!--                        <td class="align-center">{{ weapon.delay }}</td>-->
-                        <td class="align-center">{{ weapon.damage_summary }}</td>
-                        <td class="align-center">{{ weapon.damage_type }}</td>
-                        <td class="align-center"><small>{{ weapon.special|linebreaksbr }}</small></td>
-                        <td class="align-center nowrap">{% if weapon.range %}{{ weapon.range }}{% endif %}</td>
-                        <td class="align-center">{{ weapon.size }}</td>
-                        <td class="align-center">{{ weapon.trait }}</td>
-                        <td class="align-center">{{ weapon.avg_price_value }} {{ weapon.avg_price_currency }}</td>
-                        <td class="align-center">{{ weapon.avg_weight.normalize }}</td>
+                        <th class="small-caps align-left {% if weapon_type.description %} hover-blue {% endif %}" data-toggle="collapse" data-target="#{{ weapon_type.name }}">&nbsp;{{ weapon_type.name }}</th>
+    <!--                    <th>Opóźń</th>-->
+                        <th>Obrażenia</th>
+                        <th>Typ</th>
+                        <th>Specjalne</th>
+                        <th>Zasięg</th>
+                        <th>Rozm</th>
+                        <th>Cecha</th>
+                        <th>Cena</th>
+                        <th>Waga</th>
                     </tr>
-                    {% if weapon.description %}
+                    {% if weapon_type.description %}
+                        <tr id="{{ weapon_type.name }}" class="collapse">
+                            <td colspan="10" class="weapons-img px-2">
+                                {{ weapon_type.description|linebreaksbr }}
+                            </td>
+                        </tr>
+                    {% endif %}
+                </thead>
+                <tbody>
+                    {% for weapon in weapon_type.weapons.all %}
+                        <tr>
+                            <td class="hover-blue" data-toggle="collapse" data-target="#{{ weapon.short_name }}">&nbsp;{{ weapon.name }}</td>
+    <!--                        <td class="align-center">{{ weapon.delay }}</td>-->
+                            <td class="align-center">{{ weapon.damage_summary }}</td>
+                            <td class="align-center">{{ weapon.damage_type }}</td>
+                            <td class="align-center"><small>{{ weapon.special|linebreaksbr }}</small></td>
+                            <td class="align-center nowrap">{% if weapon.range %}{{ weapon.range }}{% endif %}</td>
+                            <td class="align-center">{{ weapon.size }}</td>
+                            <td class="align-center">{{ weapon.trait }}</td>
+                            <td class="align-center">{{ weapon.avg_price_value }} {{ weapon.avg_price_currency }}</td>
+                            <td class="align-center">{{ weapon.avg_weight.normalize }}</td>
+                        </tr>
                         <tr id="{{ weapon.short_name }}" class="collapse">
                             <td colspan="10" class="weapons-img px-2">
                                 <br>
@@ -90,14 +87,12 @@
                                 </div>
                             </td>
                         </tr>
-                    {% endif %}
-                {% endfor %}
-            </tbody>
-            {% endfor %}
-        </table>
-        <br><br><br>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
 
-        <h5><b>Legenda</b></h5>
+        <h5 class="mt-5"><b>Legenda</b></h5>
         <br>
         <table class="key">
             <colgroup>
