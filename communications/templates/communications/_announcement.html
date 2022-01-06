@@ -30,12 +30,15 @@
                                 <small class="text-muted font-italic ml-2">[{{ announcement.topic.title }}]</small>
                             {% endif %}
                         </div>
-                        <div class="font-11 font-italic text-muted text-bottom">
+                        <div class="font-11 font-italic text-muted pt-1">
                             {% for tag in announcement.tags.all %}
                                 {% if tag.author == current_profile %}
                                     <a class="mr-1" style="color: {{ tag.color }};" href="{% url 'communications:announcements' tag.title %}">#{{ tag }}</a>
                                 {% endif %}
                             {% endfor %}
+                        </div>
+                        <div class="font-11 font-italic text-muted align-top">
+                            Ostatnia aktywność: {{ announcement.last_activity|date:'d-M-Y' }}
                         </div>
                     </div>
                     <div class="col-auto p-0 ml-auto mt-auto">

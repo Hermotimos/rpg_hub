@@ -59,7 +59,7 @@ class ThreadTag(Model):
     def __str__(self):
         return f"#{self.title}"
 
-    
+
 class Thread(Model):
     title = CharField(max_length=100, unique=True)
     topic = FK(to=Topic, related_name='threads', on_delete=CASCADE)             # TODO maybe blank=True, null=True for demands, plans
