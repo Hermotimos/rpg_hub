@@ -364,11 +364,15 @@ class Weapon(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
     picture_sets = M2M(to=PictureSet, related_name='weapons', blank=True)
-    delay = PositiveSmallIntegerField()    # TODO marked for removal [in 2023]
-    damage_small_dices = CharField(max_length=10, blank=True, null=True)
-    damage_small_add = PositiveSmallIntegerField(blank=True, null=True)
+    
+    # -------------------# TODO marked for removal [in 2023]-------------------
+    delay = PositiveSmallIntegerField()
     damage_big_dices = CharField(max_length=10, blank=True, null=True)
     damage_big_add = PositiveSmallIntegerField(blank=True, null=True)
+    # -------------------------------------------------------------------------
+    
+    damage_small_dices = CharField(max_length=10, blank=True, null=True)
+    damage_small_add = PositiveSmallIntegerField(blank=True, null=True)
     damage_type = CharField(max_length=10, choices=DAMAGE_TYPES)
     special = TextField(max_length=4000, blank=True, null=True)
     range = CharField(max_length=100, blank=True, null=True)
