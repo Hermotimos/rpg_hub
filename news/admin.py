@@ -55,7 +55,7 @@ class NewsAdmin(admin.ModelAdmin):
 
 class NewsAnswerAdmin(admin.ModelAdmin):
     list_display = ['id', 'news', 'author', 'get_caption', 'created_at']
-    list_editable = ['news']
+    list_editable = ['news', 'created_at']
     list_filter = ['news']
     ordering = ['-created_at']
     readonly_fields = ['seen_by']
