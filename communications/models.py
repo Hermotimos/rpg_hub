@@ -1,3 +1,5 @@
+import datetime
+
 from PIL import Image
 from django.db.models import (
     BooleanField,
@@ -16,13 +18,14 @@ from django.db.models import (
     TextField,
 )
 from django.db.models.signals import post_save
+
 from users.models import Profile
 
 
 class Topic(Model):
     title = CharField(max_length=100, unique=True)
     order_no = SmallIntegerField(default=100)
-    created_at = DateTimeField(null=True)  # TODO delete, this is store in Thread
+    created_at = DateTimeField(auto_now_add=True)
     
     class Meta:
         ordering = ['order_no', 'title']
@@ -62,7 +65,7 @@ class Thread(Model):
     topic = FK(to=Topic, related_name='threads', on_delete=CASCADE)             # TODO maybe blank=True, null=True for demands, plans
     kind = CharField(max_length=15, choices=THREAD_KINDS)
     known_directly = M2M(to=Profile, related_name='threads_known_directly')     # known_directly also use instead of inform_gm in Plans
-    created_at = DateTimeField(null=True)                                       # auto_now_add=True TODO restore after data migration
+    created_at = DateTimeField(auto_now_add=True)
     # Announcement
     followers = M2M(to=Profile, related_name='threads_followed', blank=True)
     tags = M2M(to=ThreadTag, related_name='threads', blank=True)
@@ -144,7 +147,7 @@ class Statement(Model):
     author = FK(to=Profile, related_name='statements', on_delete=PROTECT)
     image = ImageField(upload_to='post_pics', blank=True, null=True)
     seen_by = M2M(to=Profile, related_name='statements_seen', blank=True)
-    created_at = DateTimeField(null=True)                                       # auto_now_add=True TODO restore after data migration
+    created_at = DateTimeField(auto_now_add=True)
     # Announcement
     options = M2M(to=Option, related_name='threads', blank=True)
 
@@ -170,18 +173,18 @@ class Statement(Model):
 # ---------------------------------------- SIGNALS ----------------------------
 # -----------------------------------------------------------------------------
 
-# TODO restore when create_at is auto field again
-# def delete_if_doubled(sender, instance, **kwargs):
-#     start = instance.created_at - datetime.timedelta(minutes=2)
-#     end = instance.created_at
-#     identical = Statement.objects.filter(
-#         thread=instance.thread,
-#         text=instance.text,
-#         author=instance.author,
-#         created_at__range=[start, end],
-#     )
-#     if identical.count() > 1:
-#         instance.delete()
-#
-#
-# post_save.connect(delete_if_doubled, sender=Statement)
+
+def delete_if_doubled(sender, instance, **kwargs):
+    start = instance.created_at - datetime.timedelta(minutes=2)
+    end = instance.created_at
+    identical = Statement.objects.filter(
+        thread=instance.thread,
+        text__iexact=instance.text,
+        author=instance.author,
+        created_at__range=[start, end],
+    )
+    if identical.count() > 1:
+        instance.delete()
+
+
+post_save.connect(delete_if_doubled, sender=Statement)
