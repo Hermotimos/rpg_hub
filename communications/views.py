@@ -157,7 +157,7 @@ def thread_view(request, thread_id, tag_title):
         'statements__seen_by', 'statements__author', 'followers',
         'known_directly')
     thread = threads.get(id=thread_id)
-    followers = thread.followers.all()
+    followers = thread.followers.filter(is_active=True)
 
     # Update all statements to be seen by the profile
     SeenBy = Statement.seen_by.through
