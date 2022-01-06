@@ -66,7 +66,7 @@ def announcements_view(request, tag_title):
     announcements = Announcement.objects.prefetch_related(
         'statements__author', 'statements__seen_by', 'tags__author', 'topic',
         'followers')
-    announcements = announcements.order_by('-created_at')
+    announcements = announcements.order_by('-last_activity')
     if current_profile.status != 'gm':
         announcements = announcements.filter(known_directly=current_profile)
     if tag_title != 'None':
@@ -74,10 +74,11 @@ def announcements_view(request, tag_title):
         
     unseen_announcements = announcements.filter(
         id__in=current_profile.unseen_announcements)
+    announcements = announcements.exclude(id__in=unseen_announcements)
 
-    topics = Topic.objects.filter(threads__in=announcements)
-    topics = topics.prefetch_related(
-        Prefetch('threads', queryset=announcements)).distinct()
+    # topics = Topic.objects.filter(threads__in=announcements)
+    # topics = topics.prefetch_related(
+    #     Prefetch('threads', queryset=announcements)).distinct()
     
     tags = ThreadTag.objects.filter(author=current_profile, kind='Announcement')
     formset = ThreadTagEditFormSet(
@@ -138,7 +139,7 @@ def announcements_view(request, tag_title):
     context = {
         'current_profile': current_profile,
         'page_title': 'Ogłoszenia',
-        'topics': topics,
+        'announcements': announcements,
         'unseen_announcements': unseen_announcements,
         'tag_title': tag_title,
         'tags': tags,

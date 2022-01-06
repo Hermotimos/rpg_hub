@@ -61,18 +61,17 @@
                             {% include 'communications/_announcement.html' %}
                         {% endwith %}
                     {% endfor %}
-                </div>
+            </div>
             {% endif %}
-            {% for topic in topics %}
-                <div id="topic_{{ topic.id }}" class="mb-5">
+                <div class="mb-5">
                     <h3 class="small-caps mb-3">
                         <b class="border-bottom-dark">{{ topic.title }}</b>
                     </h3>
-                    {% for announcement in topic.threads.all %}
+                    {% for announcement in announcements %}
                         {% include 'communications/_announcement.html' %}
                     {% endfor %}
                 </div>
-            {% endfor %}
+
         </div>
         
     </article>
