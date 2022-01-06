@@ -145,6 +145,9 @@ table.weapons-table {border: double;}
     background-color: #363636;
     color: #ffffff;
 }
+
+.plates tr:nth-child(4n-1),
+.plates tr:nth-child(4n),
 .weapons-table tbody tr:nth-child(4n-1),
 .weapons-table tbody tr:nth-child(4n) {background-color: #f2f2f2;}
 
@@ -173,8 +176,7 @@ td .nowrap { white-space: nowrap;}
 .plate-and-tricks tr:nth-child(2n+3),
 .protection tr:nth-child(even) {background-color: #f2f2f2;}
 
-.plates tr:nth-child(4n-1),
-.plates tr:nth-child(4n),
+
 
 
 .rules-red {color: #993300;}
