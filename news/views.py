@@ -5,8 +5,8 @@ from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 
 from news.forms import (CreateNewsForm, CreateTopicForm, CreateNewsAnswerForm,
-                        CreateSurveyOptionForm, ModifySurveyOptionForm)
-from news.models import Topic, News, SurveyOption, NewsAnswer
+                        ModifySurveyOptionForm)
+from news.models import News, SurveyOption, NewsAnswer
 from users.models import Profile
 
 
@@ -26,7 +26,7 @@ def main_view(request):
     context = {
         'current_profile': profile,
         'page_title': 'Ogłoszenia',
-        'newss': newss.order_by('created_at'),
+        'newss': newss.order_by('-last_activity_date'),
         'unseen_news': profile.unseen_news,
     }
     return render(request, 'news/main.html', context)
