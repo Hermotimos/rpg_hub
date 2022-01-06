@@ -217,21 +217,21 @@ def reorder_news(request):
     # print(allowed_profiles)
     new_big_news = News.objects.create(
         topic=topic,
-        title='Narady',
+        title='Zasady prowadzenia Narad',
         created_at=created_at,
     )
     new_big_news.allowed_profiles.set(allowed_profiles)
     new_big_news.followers.set([p for p in allowed_profiles if p.is_active])
     #
     import datetime
-    NewsAnswer.objects.create(
-        news=new_big_news,
-        author=Profile.objects.get(status='gm'),
-        text='[Konwersacja o charakterze ciągłym - swobodnie piszcie w temacie]',
-        created_at=(created_at - datetime.timedelta(days=1))
-    )
+    # NewsAnswer.objects.create(
+    #     news=new_big_news,
+    #     author=Profile.objects.get(status='gm'),
+    #     text='[Konwersacja o charakterze ciągłym - swobodnie piszcie w temacie]',
+    #     created_at=(created_at - datetime.timedelta(days=1))
+    # )
         
-    for news in existing_news.filter(title__icontains='narad'):
+    for news in existing_news.filter(title__icontains='narady'):
         print(news.title)
         for news_answer in news.news_answers.all():
             news_answer.news_id = new_big_news.id
