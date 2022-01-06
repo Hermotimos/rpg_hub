@@ -84,9 +84,7 @@ class DebateAdmin(admin.ModelAdmin):
 
 class AnnouncementAdmin(admin.ModelAdmin):
     form = AnnouncementAdminForm
-    list_display = ['title', 'topic', 'created_at']
-    list_editable = ['topic', ]
-    list_filter = ['topic']
+    list_display = ['title', 'created_at']
     search_fields = ['title']
     
     def formfield_for_dbfield(self, db_field, **kwargs):
