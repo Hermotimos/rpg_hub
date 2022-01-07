@@ -7,11 +7,9 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <div class="rules-styling">
-        <br><br><br>
+    <div class="rules-styling pt-3">
 
-        <h2 class="rules">Obrażenia i Progi ran</h2>
-        <br>
+        <h2 class="rules mt-5 mb-3">Obrażenia i Progi ran</h2>
         <p>
             Progi ran określają, jak postać reaguje na obrażenia mieszczące się w różnych przedziałach liczbowych.
             Opisują zarówno skutki ran w trakcie walki i po niej, jak i czas ich gojenia.
@@ -19,11 +17,8 @@
             Oprócz tego, każda postać posiada Próg przytomności, który określa, ile obrażeń jest w stanie znieść zanim omdleje z bólu i upływu krwi.
             Progi ran oraz Próg przytomności zależną od Kondycji postaci, mogą być również modyfikowane przez Umiejętności.
         </p>
-        <br><br><br>
 
-
-        <h2 class="rules">Skutki ran w walce i po niej</h2>
-        <br>
+        <h2 class="rules mt-5 mb-3">Skutki ran w walce i po niej</h2>
         <p>
             Obicia i zadrapania oraz Rany Lekkie nie powodują żadnych negatywnych skutków dla postaci, ani w trakcie walki, ani po niej.
             Jednak mimo wszystko obciążają żywotność postaci. Obicia i zadrapania mogą prowadzić do utraty przytomności, choć zazwyczaj nie do śmierci.
@@ -35,44 +30,39 @@
             Jest to uzasadnione tym, że nawet stare rany potrafią szarpać bólem albo ograniczać elastyczność tkanki.
         </p>
         <ul class="rules ml-4">
-            <li>
+            <li class="pb-2">
                 <b>Obicia i zadrapania: </b>bez skutku dla sprawności.
                 <br>
                 Skutki w walce: -
                 <br>
                 Skutki po walce: -
-                <br><br>
             </li>
-
-            <li>
+            <li class="pb-2">
                 <b>Lekkie: </b>bez skutku dla sprawności.
                 <br>
                 Skutki w walce: -
                 <br>
                 Skutki po walce: -
-                <br><br>
             </li>
-            <li>
+            <li class="pb-2">
                 <b>Średnie: </b>ograniczają sprawność jedynie po walce, gdy rany zaczną krzepnąć.
                 <br>
                 Skutki w walce: -
                 <br>
                 Skutki po walce: -1 TRAF / -1 OBR / -1 KP / -1 Refleks
-                <br><br>
             </li>
-            <li>
+            <li class="pb-2">
                 <b>Ciężkie: </b>ograniczają sprawność w bieżącej walce, a efekt podwaja się, kiedy rany zaczną krzepnąć.
                 <br>
                 Skutki w walce: -1 TRAF / -1 OBR / -1 KP / -1 Refleks
                 <br>
                 Skutki po walce: *2
-                <br><br>
             </li>
             <li>
-                <b>Śmiertelne: </b>przed utratą przytomności na ich skutek możliwa jest ostatnia akcja ze znacząco ograniczoną sprawnością;
+                <b>Śmiertelne: </b>przed utratą przytomności następującą w ich wyniku możliwa jest ostatnia akcja ze znacząco ograniczoną sprawnością;
                 jednak w przypadku rany znacznie przewyższającej próg Ran Śmiertelnych (o 5 OBR) postać ginie natychmiast, nieświadoma nawet tego, że umiera.
-                <br><br>
-                Skutki w walce: kumulatywnie -5 TRAF, -5 OBR, -5 KP, +5 Refleks; następnie odpadnięcie z walki
+                <br>
+                Skutki w walce: kumulatywnie -5 TRAF, -5 OBR, -5 KP, +5 Refleks przy ostatniej Akcji, następnie odpadnięcie z walki
                 <br>
                 Skutki po walce: w razie przeżycia - trwałe okaleczenie
             </li>
@@ -84,7 +74,9 @@
             Jeśli cios pozbawił postać oka/oczu, ręki albo nogi, albo chociaż palców (tak może być w przypadku Krytyka), nie wykonuje się tego rzutu.
             W takich przypadkach trwałe okaleczenie sprowadza się do wszelkich skutków niemożności posługiwania się utraconą kończyną lub organem.
         </p>
-        <h6><b>Rzut za trwałe okalecznie:</b></h6>
+        <h6 class="font-weight-bold font-italic">
+            Rzut za trwałe okalecznie:
+        </h6>
         <ul class="rules ml-4">
             <li>1-20: -1 SIŁ</li>
             <li>21-40: -1 ZRC</li>
@@ -95,11 +87,8 @@
             <li>91-99: -1 SIŁ, -1 ZRC, -1 KON</li>
             <li>100: -2 SIŁ, -2 ZRC, -2 KON</li>
         </ul>
-        <br><br><br>
 
-
-        <h2 class="rules">Gojenie ran</h2>
-        <br>
+        <h2 class="rules mt-5 mb-3">Gojenie ran</h2>
         <p>
             Notując obrażenia należy zapisywać każdą ranę z osobna i przypisywać do odpowiedniej części ciała wraz z hasłowym opisem.
             Tempo gojenia ran określone przez odpowiedni Próg ran stosuje się do każdej rany z osobna.
@@ -107,35 +96,27 @@
             W przypadku poważniejszych ran do ich zagojenia wymagana jest opieka, a przynajmniej odpoczynek.
             W skrajnych przypadkach brak odpoczynku i długotrwałe ignorowanie ran może skutkować zapaścią.
         </p>
-        <br>
         <ul class="rules ml-4">
-            <li>
+            <li class="pb-2">
                 <b>Obicia i zadrapania: </b>goją się w ciągu kilku godzin,
                 natomiast nawet one mogą powodować utratę przytomności w przypadku przekroczenia Progu przytomności.
-                <br><br>
             </li>
-            <li>
+            <li class="pb-2">
                 <b>Lekkie: </b>goją się z dnia na dzień, choćby było ich wiele; nie wymagają nawet opatrywania.
-                <br><br>
             </li>
-            <li>
+            <li class="pb-2">
                 <b>Średnie: </b>goją się w tempie 1 pkt/dzień, o ile zostaną opatrzone (przemyte, obwiązane), a postać będzie odpoczywać.
-                <br><br>
             </li>
-            <li>
+            <li class="pb-2">
                 <b>Ciężkie: </b>goją się w tempie 1 pkt/dzień pod warunkiem opieki specjalisty i odpoczynku, inaczej goją się tygodniami.
-                <br><br>
             </li>
-            <li>
+            <li class="pb-2">
                 <b>Śmiertelne: </b>są to rany zagrażające życiu, które w braku natychmiastowego opatrzenia skutkują śmiercią;
                 zapoczątkowanie procesu gojenia wymaga otrzymania specjalistycznej pomocy, inaczej - nawet opatrzone - rany takie skutkują długą i bolesną agonią.
             </li>
         </ul>
-        <br><br><br>
 
-
-        <h2 class="rules">Próg przytomności</h2>
-        <br>
+        <h2 class="rules mt-5 mb-3">Próg przytomności</h2>
         <p>
             Próg przytomności charakteryzuje zdolność postaci do ignorowania bólu, upływu krwi i strachu wynikających z otrzymanych ran.
             Utrata pktów życia równa lub wyższa niż Próg przytomności skutkuje natychmiastową utratą świadomości niezależnie od rodzaju otrzymanych ran - mogą to być nawet Obicia i zadrapania.
@@ -146,5 +127,6 @@
             Postulat ten jest trudny do realizacji ze względu na emocje, jednak korzyścią z niego jest wyższy poziom napięcia i realizmu,
             a także tragizmu, jeśli kolejna postać polegnie próbując ratować martwego już towarzysza.
         </p>
+        
     </div>
 {% endblock content %}

@@ -3,14 +3,13 @@
 {% load custom_filters %}
 
 {% block head_extra %}
-<link rel="stylesheet" href="{% static 'css/rules.css' %}"
-      xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+    <link rel="stylesheet" href="{% static 'css/rules.css' %}">
 {% endblock head_extra %}
 
 {% block content %}
-    <div class="rules-styling mt-5 pt-3">
+    <div class="rules-styling pt-3">
 
-        <h2 class="rules mb-3">Przebieg rundy walki</h2>
+        <h2 class="rules mt-5 mb-3">Przebieg rundy walki</h2>
         <p>
             Każda sytuacja konfliktowa, w której uczestnicy starają się wykonać jakieś działanie przed innymi, jest rozbita na około 10-sekundowe rundy.
             Każda runda składa się z kolejki Deklaracji i Akcji (np. Ataków) przebiegającej wedle wartości Inicjatywy
@@ -21,9 +20,9 @@
             Najbardziej doświadczeni wojownicy są zdolni do wykonania więcej niż jednej Akcji/Ataku w trakcie rundy.
             W takim przypadku należy zastosować schemat rundy do dodatkowych Akcji/Ataków, pomijając tych uczestników starcia, którzy już nimi nie dysponują.
         </p>
-        <p>
-            Najprostszy schemat rundy walki przedstawia się następująco:
-        </p>
+        <h6 class="font-weight-bold font-italic">
+            Schemat rundy walki:
+        </h6>
         <ol class="rules ml-4 mt-2">
             <li>Deklaracje Graczy.</li>
             <li>[ew.] Ustalenie Inicjatywy.</li>
@@ -63,7 +62,7 @@
             przy czym jedna ze stron zadaje cios pierwsza (rzut za TRAF i OBR), a druga stara się go uniknąć albo sparować
             (zastosowanie jej parametru KP), po czym kontratakuje – sytuacja odrwaca się.
             Każdy z przeciwników stara się przejąć/utrzymać Inicjatywę, aby jako pierwszy zadać cios kończący walkę – jest to najprostsza taktyka walki.
-            Jednak możliwa jest inna, kiedy jedna ze stron poświęca Inicjatywę, aby lepiej przygotować się na przyjęcie ataku lub wyprowadzić własny.✵
+            Jednak możliwa jest inna, kiedy jedna ze stron poświęca Inicjatywę, aby lepiej przygotować się na przyjęcie ataku lub wyprowadzić własny.<sup>✵</sup>
         </p>
         <ul class="rules bullets-2 ml-4 mt-2">
             <li>
@@ -76,9 +75,9 @@
             Jednak Inicjatywa pozostaje ważna również w dłuższych starciach, kiedy decyduje o możliwości wykorzystania niektórych Umiejętności.
             Wreszcie, w przypadku, gdy na końcu starcia obaj przeciwnicy są ciężko ranni, Inicjatywa decyduje o tym, czyj cios zakończy walkę.
         </p>
-        <p class="font-weight-bold">
+        <h6 class="font-weight-bold font-italic">
             Wartość Inicjatywy oblicza się sumując:
-        </p>
+        </h6>
         <ol class="rules ml-4 mt-2">
             <li>Wynik rzutu za Inicjatywę (k6).</li>
             <li>Modyfikatory Refleksu zależne od ZRC, Umiejętności i ew. właściwości broni.</li>
@@ -102,9 +101,9 @@
             W rzadkich przypadkach, mowa o przejęciu Inicjatywy; jest to zazwyczaj w kontekście opisu sytuacji w walce,
             a jeśli pod przejęciem rozumiane są reguły zmiany kolejności akcji, to Zasady wyjaśniają każdy taki przypadek z osobna.
         </p>
-        <p class="font-weight-bold">
+        <h6 class="font-weight-bold font-italic">
             Zdarzenia powodujące automatyczną utratę Inicjatywy:
-        </p>
+        </h6>
         <ul class="rules ml-4 mt-2">
             <li>Wyrzucenie na k20 Krytycznego Pudła/Fiaska.</li>
             <li>Otrzymanie Krytycznego Trafienia lub poniesienie skutków Krytycznego Powodzenie.</li>
@@ -112,9 +111,9 @@
             <li>Zmiana Teatru Zdarzeń przy krótkim dystansie.</li>
             <li>Zbyt długie wahanie się Gracza z Deklaracją działania albo próba jej zmiany.</li>
             <li>
-                Opuszczenie 1 AT/R (przy większej ilości AT/R – ostatniego) -> pozwala przejąć✵ Inicjatywę od wszystkich przeciwników w ramach Teatru Zdarzeń na początku następnej rundy.
+                Opuszczenie 1 AT/R (przy większej ilości AT/R – ostatniego) -> pozwala przejąć<sup>✵</sup> Inicjatywę od wszystkich przeciwników w ramach Teatru Zdarzeń na początku następnej rundy.
             </li>
-            <li>Różne podstępy i sztuczki mogą dawać szanse na przejęcie✵ Inicjatywy.</li>
+            <li>Różne podstępy i sztuczki mogą dawać szanse na przejęcie<sup>✵</sup> Inicjatywy.</li>
         </ul>
         <ul class="rules bullets-2 ml-4 mt-2">
             <li>
@@ -125,9 +124,9 @@
             </li>
         </ul>
 
-        <p class="font-weight-bold">
+        <h6 class="font-weight-bold font-italic">
             Zdarzenia wymagające rewizji Inicjatywy:
-        </p>
+        </h6>
         <ul class="rules ml-4 mt-2">
             <li>
                 Powrót do walki po chwili odstąpienia od niej dla złapania tchu (sytuacja poświęcenia 1 AT/R przez wszystkich uczestników Teatru Zdarzeń)
@@ -140,19 +139,40 @@
                 to rewizja Inicjatywy obejmuje wszystkich uczestników – w świecie gry odpowiada to sytuacji, gdy nadejście nowego uczestnika wprowadza poważne zamieszanie.
             </li>
         </ul>
-        <p class="font-weight-bold">
-            Szczególne sytuacje dot. Inicjatywy:
+        <p>
+            Oto kilka szczególnych sytuacji dotyczących zastosowania Zasad dotyczących Inicjatywy:
         </p>
         <p>
-            <b>§ Szarża.</b> W sytuacji szarży ataki następują jednocześnie, więc pomija się rzut za Inicjatywę. Wyjątek to sytuacja, gdy szarżujący i/lub przyjmujący szarżę dysponuje Bronią Drzewcową – kolejność ataków rozstrzyga się wówczas zgodnie z zasadą „kto ma większego”, tzn. pierwszy atakuje posiadacz dłuższej Broni Drzewcowej, a jeśli jedna ze stron nie dysponuje Bronią Drzewcową, to oczywiście jej pech. Jednak, w przypadku, gdy zarówno szarżujący, jak i aktywnie (!) przyjmujący szarżę dysponują Bronią Drzewcową – oba ataki siłą rzeczy i siłą rozpędu dochodzą do skutku. W nierzadkich przypadkach późniejszy z ataków może ugodzić przeciwnika już niejako zza grobu... Jednak zachowanie tej zasady ma znaczenie honorowe, ponieważ oprócz kwestii "kto ma większego" liczy się również "kto kogo pierwszy".
+            <b>§ Szarża.</b> W sytuacji szarży ataki następują jednocześnie, więc pomija się rzut za Inicjatywę.
+            Wyjątek to sytuacja, gdy szarżujący i/lub przyjmujący szarżę dysponuje Bronią Drzewcową –
+            kolejność ataków rozstrzyga się wówczas zgodnie z zasadą „kto ma większego”, tzn. pierwszy atakuje posiadacz dłuższej Broni Drzewcowej,
+            a jeśli jedna ze stron nie dysponuje Bronią Drzewcową, to oczywiście jej pech. Jednak, w przypadku, gdy zarówno szarżujący,
+            jak i aktywnie (!) przyjmujący szarżę dysponują Bronią Drzewcową – oba ataki siłą rzeczy i siłą rozpędu dochodzą do skutku.
+            W nierzadkich przypadkach późniejszy z ataków może ugodzić przeciwnika już niejako zza grobu...
+            Jednak zachowanie tej zasady ma znaczenie honorowe, ponieważ oprócz kwestii "kto ma większego" liczy się również "kto kogo pierwszy".
         </p>
         <p>
-            <b>§ Broń zasięgowa.</b> Wprawdzie użycie broni zasięgowej sytuuje Postać na uboczu Teatru Zdarzeń, ale jednak nie poza nim; nadal reaguje na jego zdarzenia, a wszelkie zmiany Inicjatywy jego uczestników mają wpływ również na nią – jeśli nie przez konieczność dostosowania celu, aby nie zranić sojusznika – to przez wprowadzenie chaosu, za którym nawet oko wytrawnego drapieżnika podąża z pewnym wysiłkiem.
+            <b>§ Broń zasięgowa.</b> Wprawdzie użycie broni zasięgowej sytuuje Postać na uboczu Teatru Zdarzeń, ale jednak nie poza nim;
+            nadal reaguje na jego zdarzenia, a wszelkie zmiany Inicjatywy jego uczestników mają wpływ również na nią – jeśli nie przez konieczność dostosowania celu,
+            aby nie zranić sojusznika – to przez wprowadzenie chaosu, za którym nawet oko wytrawnego drapieżnika podąża z pewnym wysiłkiem.
         </p>
         <p>
-            <b>§ Umiejętności wymagające poświęcenia Inicjatywy.</b> Poświęcenie Inicjatywy skutkuje jej utratą, czyli spadnięciem na koniec kolejki działań. Jednak aby móc coś poświęcić, trzeba to najpierw zdobyć. Poświęcenie jest możliwe tylko w wypadku, gdy Postać ma Inicjatywę względem przeciwnika. W przypadku starcia z wieloma przeciwnikami, poświęcenie Inicjatywy uprawnia do wykorzystania Umiejętności wobec tych przeciwników, nad którymi Postać miała przewagę Inicjatywy, a więc mogła ją wobec nich poświęcić. Nie da się poświęcić Inicjatywy w stosunku do przeciwnika, wobec którego się jej nie ma. Jeśli dwóch lub więcej uczestników Teatru Zdarzeń poświęci Inicjatywę na wykorzystanie Umiejętności - spadają na koniec kolejki w aktualnej kolejności względem siebie (odpowiada to kolejności poświęcania Inicjatywy i spadania na koniec kolejki).* Przejęcie Inicjatywy i pilnowanie jej może być sposobem na to, żeby nie dopuścić przeciwnika do wykorzystania jego Umiejętności. Z drugiej strony odstąpienie od walki może mieć na celu próbę przejęcia Inicjatywy podczas jej rewizji i w ten sposób uzyskania możliwości wykorzystania Umiejętności.
-            *Może się zdarzyć, że drugi z dziesięciu walczących spadnie na koniec kolejki, a zaraz po nim znajdzie się dziewiąty z nich, który poświęcił swoją Inicjatywę względem dziesiątego (np. aby go trafić), przez co stosunek poniesionej ceny wydaje się niewspółmierny… no cóż, im więcej uczestników Teatru Zdarzeń, tym większy burdel, a jak wiadomo burdel nie ma nic wspólnego ze sprawiedliwością.
+            <b>§ Umiejętności wymagające poświęcenia Inicjatywy.</b> Poświęcenie Inicjatywy skutkuje jej utratą, czyli spadnięciem na koniec kolejki działań.
+            Jednak aby móc coś poświęcić, trzeba to najpierw zdobyć. Poświęcenie jest możliwe tylko w wypadku, gdy Postać ma Inicjatywę względem przeciwnika.
+            W przypadku starcia z wieloma przeciwnikami, poświęcenie Inicjatywy uprawnia do wykorzystania Umiejętności wobec tych przeciwników,
+            nad którymi Postać miała przewagę Inicjatywy, a więc mogła ją wobec nich poświęcić. Nie da się poświęcić Inicjatywy w stosunku do przeciwnika, wobec którego się jej nie ma.
+            Jeśli dwóch lub więcej uczestników Teatru Zdarzeń poświęci Inicjatywę na wykorzystanie Umiejętności
+            - spadają na koniec kolejki w aktualnej kolejności względem siebie (odpowiada to kolejności poświęcania Inicjatywy i spadania na koniec kolejki).<sup>✵</sup>
+            Przejęcie Inicjatywy i pilnowanie jej może być sposobem na to, żeby nie dopuścić przeciwnika do wykorzystania jego Umiejętności.
+            Z drugiej strony odstąpienie od walki może mieć na celu próbę przejęcia Inicjatywy podczas jej rewizji i w ten sposób uzyskania możliwości wykorzystania Umiejętności.
         </p>
+        <ul class="rules bullets-2 ml-4 mt-2">
+            <li>
+                Może się zdarzyć, że drugi z dziesięciu walczących spadnie na koniec kolejki, a zaraz po nim znajdzie się dziewiąty z nich,
+                który poświęcił swoją Inicjatywę względem dziesiątego (np. aby go trafić), przez co stosunek poniesionej ceny wydaje się niewspółmierny…
+                no cóż, im więcej uczestników Teatru Zdarzeń, tym większy burdel, a jak wiadomo burdel nie ma nic wspólnego ze sprawiedliwością.
+            </li>
+        </ul>
 
 
         <h5 class="rules mt-4">Rzut za Trafienie/Cechę</h5>
@@ -166,9 +186,9 @@
             Natomiast wynik 1 oznacza Krytyczne Pudło, które w zależności od sytuacji może skutkować wypuszczeniem broni albo zranieniem innego uczestnika walki niż zamierzony,
             a nawet zranieniem się własną bronią (np. przy miotaniu miksturą albo walce korbaczem czy cepem).
         </p>
-        <p class="font-weight-bold">
+        <h6 class="font-weight-bold font-italic">
             Trafienie oblicza się sumując:
-        </p>
+        </h6>
         <ol class="rules ml-4 mb-2">
             <li>Modyfikatory z SIŁ/ZRC, Umiejętności, właściwości broni</li>
             <li>Modyfikatory sytuacyjne od ataku z boku, od tyłu, przyjęcia szarży</li>
@@ -185,9 +205,9 @@
         <p>
             Rzut za Obrażenia decyduje o ilości pktów Życia, jakie utraci przeciwnik w wyniku trafienia, oczywiście po uwzględnieniu Wyparowań.
         </p>
-        <p class="font-weight-bold">
+        <h6 class="font-weight-bold font-italic">
             Obrażenia oblicza się sumując:
-        </p>
+        </h6>
         <ol class="rules ml-4">
             <li>Rzut za Obrażenia zadane przez broń.</li>
             <li>
