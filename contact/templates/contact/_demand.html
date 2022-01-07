@@ -6,9 +6,9 @@
         <div class="row">
             <div class="col-2 text-nowrap">
                 <div class="d-inline">
-                    <img class="rounded-circle potrait-img-sm {% if is_done %} img-grayscale {% endif %}" src="{{ demand.author.image.url }}">
+                    <img class="rounded-circle portait img-sm border border-dark {% if is_done %} img-grayscale {% endif %}" src="{{ demand.author.image.url }}">
                     ☛
-                    <img class="rounded-circle potrait-img-sm {% if is_done %} img-grayscale {% endif %}" src="{{ demand.addressee.image.url }}">
+                    <img class="rounded-circle portait img-sm border border-dark {% if is_done %} img-grayscale {% endif %}" src="{{ demand.addressee.image.url }}">
                 </div>
                 <div class="d-inline ml-3">
                     <a class="btn btn-dark px-2" href="{% url 'contact:demands-detail' demand.id %}">&nbsp;☷&nbsp;</a>
@@ -47,7 +47,7 @@
                         {% for answer in demand.demand_answers.all %}
                             <div class="row">
                                 <div class="col-1 pr-lg-0">
-                                    <img class="mt-2 potrait-img-sm rounded-circle text-right {% if is_done %} img-grayscale {% endif %}" src="{{ answer.author.image.url }}">
+                                    <img class="mt-2 portait img-sm border border-dark rounded-circle text-right {% if is_done %} img-grayscale {% endif %}" src="{{ answer.author.image.url }}">
                                 </div>
                                 <div class="col-11 pl-lg-0 font-italic text-justify">
                                     <small class="align-bottom smaller text-nowrap text-muted">{{ answer.date_posted|date:'d-M-Y | H:i' }}</small>

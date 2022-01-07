@@ -4,7 +4,7 @@
     <span class="pt-5" id="announcement_{{ announcement.id }}"></span>
     <div class="row p-1">
         <div class="col-auto px-0 mr-n3">
-            <img class="portrait-img-md rounded" src="{{ announcement.statements.first.author.image.url }}">
+            <img class="portait img-md rounded" src="{{ announcement.statements.first.author.image.url }}">
         </div>
         <div class="col pr-0 ml-n1">
             <div class="container h-100">
@@ -46,7 +46,7 @@
                             {% with statements=announcement.statements.all|dictsort:"author.id" %}
                                 {% regroup statements by author as author_list %}
                                 {% for author in author_list %}
-                                    <img class="potrait-img-xs rounded mb-1 ml-1" src="{{ author.grouper.image.url }}">
+                                    <img class="portait img-xs border border-dark rounded mb-1 ml-1" src="{{ author.grouper.image.url }}">
                                     <span class="font-13">{{ author.list|length }}</span>
                                 {% endfor %}
                             {% endwith %}

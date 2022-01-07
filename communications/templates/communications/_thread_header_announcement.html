@@ -113,7 +113,7 @@
         </div>
         <div class="col-10 pl-5 pl-lg-0">
             {% for profile in thread.known_directly.all %}
-                <img class="rounded potrait-img-sm" src="{{ profile.image.url }}">
+                <img class="rounded portait img-sm border border-dark" src="{{ profile.image.url }}">
             {% endfor %}
         </div>
     </div>
@@ -124,7 +124,7 @@
         </div>
         <div class="col-10 pl-5 pl-lg-0">
             {% for profile in thread.followers.all %}
-                <img class="rounded potrait-img-sm" src="{{ profile.image.url }}">
+                <img class="rounded portait img-sm border border-dark" src="{{ profile.image.url }}">
             {% endfor %}
         </div>
     </div>

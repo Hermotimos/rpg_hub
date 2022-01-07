@@ -8,7 +8,7 @@
         <!-- Skill id has to be included in the id attribute to distinguish between multiple occurences of one knowledge packets in Almanac etc. -->
         <span class="hover-blue" data-toggle="collapse" data-target="#kn_packet{{ kn_packet.id }}_in_{{ skill.id }}">
             {% if kn_packet.author %}
-                <img class="rounded-circle potrait-img-xs mr-1" src="{{ kn_packet.author.image.url }}">
+                <img class="rounded-circle portait img-xs border border-dark mr-1" src="{{ kn_packet.author.image.url }}">
             {% endif %}
             {{ kn_packet.title }}
         </span>

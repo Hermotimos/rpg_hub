@@ -35,7 +35,7 @@
                                     <div class="d-lg-inline">
                                         {% for profile in debate.known_directly.all %}
                                             {% if profile.status != 'gm' %}
-                                                <img class="rounded-circle potrait-img-xs mb-1 mb-lg-2" src="{{ profile.image.url }}">
+                                                <img class="rounded-circle portait img-xs border border-dark mb-1 mb-lg-2" src="{{ profile.image.url }}">
                                             {% endif %}
                                         {% endfor %}
                                     </div>

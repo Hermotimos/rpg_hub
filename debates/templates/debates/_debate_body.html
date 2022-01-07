@@ -32,14 +32,14 @@
                             {% for profile in debate_known_directly %}
                                 {% if profile in remark.seen_by.all and profile not in next_remark.seen_by.all  %}
                                     {% if profile != remark.author and profile.status != 'npc'  %}
-                                        <img class="rounded-circle potrait-img-sm" src="{{ profile.image.url }}">
+                                        <img class="rounded-circle portait img-sm border border-dark" src="{{ profile.image.url }}">
                                     {% endif %}
                                 {% endif %}
                             {% endfor %}
                         {% endwith %}
                         {% if forloop.last and not debate.is_ended %}
                             {% for profile in remark.seen_by.all %}
-                                <img class="rounded-circle potrait-img-sm" src="{{ profile.image.url }}">
+                                <img class="rounded-circle portait img-sm border border-dark" src="{{ profile.image.url }}">
                             {% endfor %}
                         {% endif %}
                     </div>

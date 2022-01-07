@@ -34,14 +34,14 @@
                 {% if statement.author.status == 'gm' and statement.thread.kind == 'Debate' %}
                     <div class="col-12 mt-2">
                         {% for profile in statement.seen_by.all %}
-                            <img class="potrait-img-sm {% if thread.kind == 'Announcement' %} rounded {% else %} rounded-circle {% endif %}" src="{{ profile.image.url }}">
+                            <img class="portait img-sm border border-dark {% if thread.kind == 'Announcement' %} rounded {% else %} rounded-circle {% endif %}" src="{{ profile.image.url }}">
                         {% endfor %}
                     </div>
                 {% else %}
                     <div class="col-2"></div>
                     <div class="col-10 mt-2">
                         {% for profile in statement.seen_by.all %}
-                            <img class="potrait-img-sm {% if thread.kind == 'Announcement' %} rounded {% else %} rounded-circle {% endif %}" src="{{ profile.image.url }}">
+                            <img class="portait img-sm border border-dark {% if thread.kind == 'Announcement' %} rounded {% else %} rounded-circle {% endif %}" src="{{ profile.image.url }}">
                         {% endfor %}
                     </div>
                 {% endif %}
