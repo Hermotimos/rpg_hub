@@ -67,7 +67,7 @@
                         <div class="row">
                             {% for row in all_locs|ordered_columns:3 %}
                                 <div class="col-sm-4 pr-0">
-                                    <ul class="bullets-2 bullets-vbig mb-0">
+                                    <ul class="bullets-2 bullets-xl mb-0">
                                         {% for loc in row %}
                                             <li>
                                                 <a href="{% url 'toponomikon:location' loc.name %}" >

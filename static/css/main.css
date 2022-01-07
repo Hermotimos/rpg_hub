@@ -427,8 +427,9 @@ ul.bullets-4 li {list-style: "•";}
 nav ul.bullets-1 {margin-bottom: 0.5rem;}
 nav ul.bullets-1 li {color: #cbd5db;}
 
-.bullets-big li::marker {font-size: 120%;}
-.bullets-vbig li::marker {font-size: 170%;}
+.bullets-sm li::marker {font-size: 70%;}
+.bullets-lg li::marker {font-size: 120%;}
+.bullets-xl li::marker {font-size: 170%;}
 
 .pl-0-05  {padding-left: 0.05rem;}
 .pl-0-10  {padding-left: 0.10rem;}
@@ -436,10 +437,7 @@ nav ul.bullets-1 li {color: #cbd5db;}
 .pl-0-20  {padding-left: 0.20rem;}
 
 
-li a {
-
-    vertical-align: middle;
-}
+li a {vertical-align: middle;}
 
 
 /*****************************************************************************/

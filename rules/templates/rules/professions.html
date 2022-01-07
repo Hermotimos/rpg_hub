@@ -51,7 +51,7 @@
                 <h4><b>{{ profession.name }}</b></h4>
                 <p>{{ profession.description|custom_linebreaksbr:2 }}</p>
             
-                <ul class="bullets-1 bullets-big ml-4">
+                <ul class="bullets-1 bullets-lg ml-4">
                     {% for klass in profession.klasses.all %}
                         <li class="pl-1">
                             <h5 data-toggle="collapse" data-target="#{{ klass.short_name }}">

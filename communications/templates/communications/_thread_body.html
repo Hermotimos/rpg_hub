@@ -20,7 +20,7 @@
                     </figure>
                 </div>
                 <div class="col-10 font-18 font-italic text-justify ">
-                    <small class="text-muted">{{ statement.created_at|date:'d-M-Y | H:i' }} Placeholder for created_at info</small>
+                    <small class="text-muted">{{ statement.created_at|date:'d-M-Y | H:i' }}</small>
                     <br>
                     <p>{{ statement.text|capfirst|linebreaksbr }}</p>
                     {% if statement.image %}
