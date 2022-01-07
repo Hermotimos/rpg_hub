@@ -58,15 +58,47 @@
                                         {{ game.title }}
                                     </a>
                                     <div class="d-inline-flex">
-                                    {% for profile in game|game_participants %}
-                                        <a href="{% url 'prosoponomikon:character' profile.character.id %}"
-                                           data-toggle="tooltip" data-placement="top" data-html="true"
-                                           title='<span class="font-italic">Prosoponomikon:<br>"{{ profile }}"</span>'>
-                                            <div class="d-inline ml-1">
-                                               <img class="rounded-circle potrait-img-xs" src="{{ profile.image.url }}">
-                                            </div>
-                                        </a>
-                                    {% endfor %}
+                                        {% for profile in game|game_participants %}
+                                            <a href="{% url 'prosoponomikon:character' profile.character.id %}"
+                                               data-toggle="tooltip" data-placement="top" data-html="true"
+                                               title='<span class="font-italic">Prosoponomikon:<br>"{{ profile }}"</span>'>
+                                                <div class="d-inline ml-1 align-top">
+                                                   <img class="rounded-circle portait img-xs border border-dark" src="{{ profile.image.url }}">
+                                                </div>
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                    <div>
+
+                                        {% for event in game.game_events.all %}
+                                            {% for debate in event.debates.all %}
+                                                <ul class="bullets-3 bullets-sm pl-3 mb-0">
+                                                    <li class="pl-1">
+                                                        <div class="d-md-inline">
+                                                            <span class="d-inline font-14">
+                                                                <a class="pr-1" href="{% url 'debates:debate' debate.id %}">
+                                                                    {{ debate.title }}
+                                                                </a>
+                                                            </span>
+                                                        </div>
+                                                        <div class="d-lg-inline">
+                                                            {% for profile in debate.known_directly.all %}
+                                                                {% if profile.status != 'gm' %}
+                                                                    <a href="{% url 'prosoponomikon:character' profile.character.id %}"
+                                                                       data-toggle="tooltip" data-placement="top" data-html="true"
+                                                                       title='<span class="font-italic">Prosoponomikon:<br>"{{ profile }}"</span>'>
+                                                                        <div class="d-inline align-top">
+                                                                           <img class="rounded-circle portait img-xxs border border-dark" src="{{ profile.image.url }}">
+                                                                        </div>
+                                                                    </a>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            {% endfor %}
+                                        {% endfor %}
+
                                     </div>
                                 </div>
                             </div>

@@ -199,6 +199,7 @@ span.pointer {cursor: pointer;}
 .img-md {height: 4rem;}
 .img-sm {height: 1.875rem;}
 .img-xs {height: 1.25rem;}
+.img-xxs {height: 0.9rem;}
 
 @media only screen and (max-width: 600px) {
     .img-xl {height: 4rem;}
