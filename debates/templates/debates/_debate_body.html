@@ -29,8 +29,8 @@
                 <div class="{% if remark.author.status != 'gm' %} col-10 mt-3 {% else %} col-12 mt-2 {% endif %}">
                     {% with next_remark=remarks|next_elem:forloop.counter0 %}
                         {% for profile in debate_known_directly %}
-                            {% if profile not in next_remark.seen_by.all and profile != remark.author %}
-                                {% if profile.status != 'npc' and profile.is_active %}
+                            {% if profile in remark.seen_by.all and profile not in next_remark.seen_by.all and profile != remark.author %}
+                                {% if profile.status != 'npc'  %}
                                     <img class="rounded-circle potrait-img-sm" src="{{ profile.image.url }}">
                                 {% endif %}
                             {% endif %}
