@@ -7,23 +7,18 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <div class="rules-styling">
-        <br><br><br>
+    <div class="rules-styling mt-5 pt-3">
 
-        <h2 class="rules">Klasa broni</h2>
-        <br>
-        <p class="mb-4">
-            Podział broni na Klasy jest związany przede wszystkim z zasadami dotyczącymi Biegłości w broni.
-            Spośród 4 poziomów Biegłości (Brak zdolności [0], Zdolność [1], Biegłość [2], Specjalizacja [3]) pierwsze trzy dotyczą całej Klasy broni.
-            Oznacza to, że postać mająca Biegłość w Broniach drzewcowych równie sprawnie włada włócznią co halabardą.
-            Jest to oczywiście uproszczenie, jednak zmierza o oddania tej prawidłowości, że władanie niektórymi typami broni rządzi się tymi samym zasadami.
-            Najlepszym przykładem jest Broń zamachowa, do której należą zarówno proca czy bolas, jak i korbacz czy kiścień,
-            ponieważ wszystkimi z nich operuje się poprzez wyrzucenie przed siebie rozbujaneego obciążenia.
+        <h2 class="rules mb-3">Klasa broni</h2>
+        <p>
+            Przedstawione poniżej statystyki broni określają jej przydatność w sytuacji walki.
+            Podział na Klasy jest istotny ze względu na Umiejętności podnoszące skuteczność Postaci w posługiwaniu się bronią; są to Biegłość w broni
+            (Umiejętność, która może być wybrana wielokrotnie) oraz Obycie z bronią.
+            Odpowiedni rozwój Postaci w kontekście tych Umiejętności może pozwalać jej na korzystanie w skuteczny sposób z szerokiego wyboru broni o rozmaitym charakterze.
         </p>
-
         
         {% for weapon_type in weapon_types %}
-            <table class="weapons-table my-2">
+            <table class="weapons-table mt-2">
                 <colgroup>
                     <col class="class">
     <!--                <col class="delay">-->

@@ -3,145 +3,243 @@
 {% load custom_filters %}
 
 {% block head_extra %}
-    <link rel="stylesheet" href="{% static 'css/rules.css' %}">
+<link rel="stylesheet" href="{% static 'css/rules.css' %}"
+      xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 {% endblock head_extra %}
 
 {% block content %}
-    <div class="rules-styling">
-        <br><br><br>
+    <div class="rules-styling mt-5 pt-3">
 
-        <h2 class="rules">Przebieg rundy walki</h2>
-        <br>
-        <ol class="rules ml-4">
-            <li>Deklaracje graczy na podstawie opisu sytuacji.</li>
-            <li>Rzuty za Inicjatywę (k6) i ustalenie kolejności działań.</li>
-            <li>Rzuty za Trafienie (k20).</li>
-            <li>W razie trafienia rzut za Obrażenia (zależnie od broni).</li>
-            <li>Ewentualne dalsze ataki (ataki zostawione na koniec rundy lub dodatkowe ataki).</li>
+        <h2 class="rules mb-3">Przebieg rundy walki</h2>
+        <p>
+            Każda sytuacja konfliktowa, w której uczestnicy starają się wykonać jakieś działanie przed innymi, jest rozbita na około 10-sekundowe rundy.
+            Każda runda składa się z kolejki Deklaracji i Akcji (np. Ataków) przebiegającej wedle wartości Inicjatywy
+            (która jest ustalana na początku starcia i rewidowana w razie potrzeby).
+            O ile więc Deklaracje i Akcje są nieodłącznymi elementami każdej rundy, o tyle Inicjatywa w pierwszej rundzie jest elementem koniecznym, a w dalszych - doraźnym.
+        </p>
+        <p>
+            Najbardziej doświadczeni wojownicy są zdolni do wykonania więcej niż jednej Akcji/Ataku w trakcie rundy.
+            W takim przypadku należy zastosować schemat rundy do dodatkowych Akcji/Ataków, pomijając tych uczestników starcia, którzy już nimi nie dysponują.
+        </p>
+        <p>
+            Najprostszy schemat rundy walki przedstawia się następująco:
+        </p>
+        <ol class="rules ml-4 mt-2">
+            <li>Deklaracje Graczy.</li>
+            <li>[ew.] Ustalenie Inicjatywy.</li>
+            <li>Rzut za Trafienie/Cechę</li>
+            <li>[ew.] Rzut za Obrażenia.</li>
         </ol>
-        <br>
-        <h5 class="rules">Deklaracje</h5>
+
+        <h5 class="rules mt-4">Deklaracje Graczy</h5>
         <p>
-            Gracz składa deklarację akcji, jaką podejmie w rundzie na podstawie opisów sytuacji z poprzedniej rundy;
-            może też dopytać o aktualną sytuację, jeśli MG jej nie opisał albo nie opisał jakiegoś aspektu.
-            Po złożeniu deklaracji nie ma możliwości jej zmiany w reakcji na opisane działanie przeciwnika (chyba że postać dysponuje umiejętnością Refleks w walce).
-            Wyprowadzenie ataku następuje mniej więcej jednocześnie, a rzuty za Inicjatywę określają, który atak dotrze pierwszy.
+            Gracz składa deklarację Akcji na podstawie opisu sytuacji z poprzedniej rundy;
+            może też poprosić Mistrza Gry o bardziej szczegółowy opis, kiedy jest to istotne dla jego decyzji.
+            Po złożeniu deklaracji Gracz nie powinien jej modyfikować
+            - odpowiada to realiom dynamicznej sytuacji, jaką jest walka, kiedy to uczestnicy zaskakują się nawzajem swoimi działaniami.
+            Bo jeśli na każde jednocześnie podejmowane działanie możliwa jest reakcja, to i ona jest działaniem, na które można zareagować...
         </p>
         <p>
-            Pozostawienie ataku na koniec rundy może mieć najwyżej ten skutek, że postać wyczeka aż przeciwnik się zbliży lub ustawi w konkretny sposób,
-            albo aż walczący przemieszczą się odsłaniając dostęp do konkretnego przeciwnika.
+            Jest to zasada, do której pilnowania zobowiązani są Gracze.
+            W przypadku nakrycia niedozwolonych praktyk Mistrz Gry ma zupełną swobodę działania - może przymykać oko, przepuszczać jednych, a karać innych
+            - albo karać bardzo rzadko, ale za to srogo, nawet niewspółmiernie do sytuacji, a na biadolenie, że innym kiedy indziej uszło na sucho - zgnębić jeszcze bardziej.
+            Najprostszą sankcją "na szybko" może być utrata rundy (Postać sama sabotuje własne działania próbując zrobić kilka wykluczających się rzeczy na raz).
         </p>
         <p>
-            Postać może deklarować różnego rodzaju specjalne ataki, jak próba trafienia w określoną część ciała,
-            jednoczesne sypnięcie piaskiem po oczach albo próba taranowania czy wytrącenia broni.
-            Każda taka deklaracja wymaga dodatkowego rzutu za SIŁ, ZRC albo KON zależnie od sytuacji.
-            W zależności od stopnia karkołomności zadeklarowanej akcji.
+            Gracz może deklarować różnego rodzaju specjalne ataki, jak próba trafienia w określoną część ciała,
+            jednoczesne sypnięcie piaskiem po oczach, próba taranowania czy wytrącenia broni, albo wskoczenia na stół i oddania moczu na przeciwnika w trakcje salta ponad jego głową.
+            Każda taka deklaracja wymaga dodatkowego rzutu za SIŁ, ZRC albo KON
+            - wedle sytuacji i z uwzględnieniem modyfikatorów trudności proporcjonalnych do stopnia karkołomności zadeklarowanej akcji.
         </p>
-        <br>
-        <h5 class="rules">Inicjatywa</h5>
+
+        <h5 class="rules mt-4">Ustalenie Inicjatywy</h5>
         <p>
-            Rzut za Inicjatywę określa kolejność ciosów. Jest ona szczególnie ważna, gdy postać ma szanse wyeliminować przeciwnika z walki lub w inny sposób uniknąć jego ciosu.
-            Dzieje się tak w przypadku zadania ciosu absolutnie śmiertelnego (Rany Śmiertelne +5),
-            a może się tak stać w przypadku zadania Ran Śmiertelnych, Krytyka lub pozbawienia przeciwnika Życia do poziomu Progu przytomności.
-        </p>
-        <p>
-            Rzut za Inicjatywę może być pominięty, jeśli z sytuacji wynika, że czyjś atak musi nastąpić wcześniej albo później
-            (np. postać musi dobiec, zmienia broń albo zbyt długo wahała się co do akcji), a także w przypadku Szarży, gdy ataki następują jednocześnie
-            (wyjątek to przyjęcie szarży przy pomocy broni drzewcowej, gdy automatycznie pierwszy atak należy do przyjmującego szarżę).
+            Wyniki Inicjatywy uczestników konfrontacji określają kolejność, w jakiej rozpatrywane są ich działania w sytuacji konfliktu.
+            Ustalenie Inicjatywy następuje na początku starcia, a wynikająca z niej kolejność akcji obowiązuje w kolejnych rundach,
+            chyba że nastąpi któreś ze zdarzeń uzasadniających rewizję Inicjatywy.
         </p>
         <p>
-            Inicjatywę oblicza się sumując:
+            W przypadku walki odpowiada to naturalnej dynamice polegającej na wymianie ciosów,
+            przy czym jedna ze stron zadaje cios pierwsza (rzut za TRAF i OBR), a druga stara się go uniknąć albo sparować
+            (zastosowanie jej parametru KP), po czym kontratakuje – sytuacja odrwaca się.
+            Każdy z przeciwników stara się przejąć/utrzymać Inicjatywę, aby jako pierwszy zadać cios kończący walkę – jest to najprostsza taktyka walki.
+            Jednak możliwa jest inna, kiedy jedna ze stron poświęca Inicjatywę, aby lepiej przygotować się na przyjęcie ataku lub wyprowadzić własny.✵
         </p>
-            <ol class="rules ml-4">
-                <li>Opóźnienie broni.</li>
-                <li>Wynik rzutu za Inicjatywę (k6).</li>
-                <li>Modyfikatory Refleksu zależne od ZRC oraz Umiejętności.</li>
-            </ol>
-        <br>
-        <h5 class="rules">Rzut za Trafienie</h5>
+        <ul class="rules bullets-2 ml-4 mt-2">
+            <li>
+                To uzasadnienie nie przystaje do przypadku, gdy dwóch lub więcej uczestników starcia ma jednakową Inicjatywę.
+                Powyższy opis nie rości sobie pretensji do realistycznego oddania dynamiki walki, a jedynie stanowi konceptualizację na potrzeby rozgrywki.
+            </li>
+        </ul>
         <p>
-            Rzut za Trafienie decyduje o powodzeniu ataku.
-            Wynik 20 to Krytyk, który skutkuje automatycznym trafieniem oraz podwojeniem ran obliczonych ze wszystkimi modyfikatorami dla normalnego trafienia.
-            Przed Krytykiem mogą jednak chronić  karwasze, nagolenniki i hełm. Natomiast wynik 1 to Krytyczne pudło,
-            które w zależności od sytuacji może skutkować wypuszczeniem broni albo zranieniem innego uczestnika walki niż się zamierzało, a nawet zranieniem się własną bronią
-            (np. przy miotaniu miksturą albo walce korbaczem czy cepem).
+            Inicjatywa jest szczególnie ważna, gdy Postać ma szanse jednym ciosem wyeliminować przeciwnika z walki i w ten sposób uniknąć ryzyka otrzymania ran.
+            Jednak Inicjatywa pozostaje ważna również w dłuższych starciach, kiedy decyduje o możliwości wykorzystania niektórych Umiejętności.
+            Wreszcie, w przypadku, gdy na końcu starcia obaj przeciwnicy są ciężko ranni, Inicjatywa decyduje o tym, czyj cios zakończy walkę.
+        </p>
+        <p class="font-weight-bold">
+            Wartość Inicjatywy oblicza się sumując:
+        </p>
+        <ol class="rules ml-4 mt-2">
+            <li>Wynik rzutu za Inicjatywę (k6).</li>
+            <li>Modyfikatory Refleksu zależne od ZRC, Umiejętności i ew. właściwości broni.</li>
+            <li>Modyfikatory sytuacyjne zakomunikowane przez Mistrza Gry.</li>
+        </ol>
+        <p>
+            Kolejność wynikająca z wartości Inicjatywy zostaje ustalona na stałe, na kolejne rundy – to znaczy, że nowa runda zazwyczaj nie wymaga określania na nowo Inicjatywy.
+            Raz ustalona kolejność obowiązuje przez kolejne rundy w ramach danego Teatru Zdarzeń,
+            czyli wycinka rzeczywistości obejmującego dwóch lub więcej uczestników (czy to Graczy, czy to Postaci Niezależnych),
+            których działania pozostają w bezpośrednim związku przyczynowo-skutkowym i mają charakter konfliktu.
+            Najbardziej oczywistym przykładem są grupki walczących na polu bitwy, z których każda stanowi osobny Teatr Zdarzeń.
+            Dlatego zmiana Teatru Zdarzeń jest jedną z okoliczności wymuszających rewizję Inicjatywy.
         </p>
         <p>
+            Zdarzenia powodujące zmianę Inicjatywy w starciu można podzielić na te, które powodują jej automatyczną utratę oraz takie,
+            które wymagają ponownego jej ustalenia przez rzut/rzuty. Ilekroć w Zasadach mowa o utracie Inicjatywy, oznacza to spadnięcie na koniec kolejki w ramach danego Teatru Zdarzeń.
+            Aby uniknąć nieporozumień, Zasady dotyczące zmiany kolejności akcji w starciu operują niemal wyłącznie kategorią utraty Inicjatywy,
+            czyli przyjmują perspektywę tego uczestnika starcia, który ją traci i spada na koniec kolejki.
+            W przypadku, gdy więcej niż jeden uczestnik starcia traci Inicjatywę, decyduje kolejność zdarzeń
+            – ten kto później stracił Inicjatywę, znajdzie się na samym końcu, a ten kto wcześniej – tuż przed nim.
+            W rzadkich przypadkach, mowa o przejęciu Inicjatywy; jest to zazwyczaj w kontekście opisu sytuacji w walce,
+            a jeśli pod przejęciem rozumiane są reguły zmiany kolejności akcji, to Zasady wyjaśniają każdy taki przypadek z osobna.
+        </p>
+        <p class="font-weight-bold">
+            Zdarzenia powodujące automatyczną utratę Inicjatywy:
+        </p>
+        <ul class="rules ml-4 mt-2">
+            <li>Wyrzucenie na k20 Krytycznego Pudła/Fiaska.</li>
+            <li>Otrzymanie Krytycznego Trafienia lub poniesienie skutków Krytycznego Powodzenie.</li>
+            <li>Użycie Umiejętności wymagającej poświęcenia Inicjatywy.</li>
+            <li>Zmiana Teatru Zdarzeń przy krótkim dystansie.</li>
+            <li>Zbyt długie wahanie się Gracza z Deklaracją działania albo próba jej zmiany.</li>
+            <li>
+                Opuszczenie 1 AT/R (przy większej ilości AT/R – ostatniego) -> pozwala przejąć✵ Inicjatywę od wszystkich przeciwników w ramach Teatru Zdarzeń na początku następnej rundy.
+            </li>
+            <li>Różne podstępy i sztuczki mogą dawać szanse na przejęcie✵ Inicjatywy.</li>
+        </ul>
+        <ul class="rules bullets-2 ml-4 mt-2">
+            <li>
+                Przyjmujemy tu perspektywę Postaci starającej się o polepszenie swojej Inicjatywy.
+                W przypadku poświęcenia Ataku - Postać automatycznie wskakuje na początek kolejki w następnej rundzie,
+                natomiast w przypadku podstępów dokładny skutek tych działań jest zależny od oceny MG,
+                jednak Gracz jak najbardziej powinien sugerować, o jaki efekt mu chodzi.
+            </li>
+        </ul>
+
+        <p class="font-weight-bold">
+            Zdarzenia wymagające rewizji Inicjatywy:
+        </p>
+        <ul class="rules ml-4 mt-2">
+            <li>
+                Powrót do walki po chwili odstąpienia od niej dla złapania tchu (sytuacja poświęcenia 1 AT/R przez wszystkich uczestników Teatru Zdarzeń)
+                lub na skutek przypadkowego rozdzielenia przez czynniki zewnętrzne -> rewizja Inicjatywy dla wszystkich uczestników Teatru Zdarzeń;
+            </li>
+            <li>
+                Zmiana Teatru Zdarzeń przy długim dystansie -> jeśli dochodząca Postać musi wykorzystać 1 rundę lub więcej na dołączenie,
+                to ustala ona nową wartość Inicjatywy dla określenia swojej kolejki w ramach nowego Teatru Zdarzeń;
+                a jeżeli wartości Inicjatywy uczestników tego Teatru Zdarzeń nie są znane, bo uległy zapomnieniu albo zostały ustalone ad hoc przez MG,
+                to rewizja Inicjatywy obejmuje wszystkich uczestników – w świecie gry odpowiada to sytuacji, gdy nadejście nowego uczestnika wprowadza poważne zamieszanie.
+            </li>
+        </ul>
+        <p class="font-weight-bold">
+            Szczególne sytuacje dot. Inicjatywy:
+        </p>
+        <p>
+            <b>§ Szarża.</b> W sytuacji szarży ataki następują jednocześnie, więc pomija się rzut za Inicjatywę. Wyjątek to sytuacja, gdy szarżujący i/lub przyjmujący szarżę dysponuje Bronią Drzewcową – kolejność ataków rozstrzyga się wówczas zgodnie z zasadą „kto ma większego”, tzn. pierwszy atakuje posiadacz dłuższej Broni Drzewcowej, a jeśli jedna ze stron nie dysponuje Bronią Drzewcową, to oczywiście jej pech. Jednak, w przypadku, gdy zarówno szarżujący, jak i aktywnie (!) przyjmujący szarżę dysponują Bronią Drzewcową – oba ataki siłą rzeczy i siłą rozpędu dochodzą do skutku. W nierzadkich przypadkach późniejszy z ataków może ugodzić przeciwnika już niejako zza grobu... Jednak zachowanie tej zasady ma znaczenie honorowe, ponieważ oprócz kwestii "kto ma większego" liczy się również "kto kogo pierwszy".
+        </p>
+        <p>
+            <b>§ Broń zasięgowa.</b> Wprawdzie użycie broni zasięgowej sytuuje Postać na uboczu Teatru Zdarzeń, ale jednak nie poza nim; nadal reaguje na jego zdarzenia, a wszelkie zmiany Inicjatywy jego uczestników mają wpływ również na nią – jeśli nie przez konieczność dostosowania celu, aby nie zranić sojusznika – to przez wprowadzenie chaosu, za którym nawet oko wytrawnego drapieżnika podąża z pewnym wysiłkiem.
+        </p>
+        <p>
+            <b>§ Umiejętności wymagające poświęcenia Inicjatywy.</b> Poświęcenie Inicjatywy skutkuje jej utratą, czyli spadnięciem na koniec kolejki działań. Jednak aby móc coś poświęcić, trzeba to najpierw zdobyć. Poświęcenie jest możliwe tylko w wypadku, gdy Postać ma Inicjatywę względem przeciwnika. W przypadku starcia z wieloma przeciwnikami, poświęcenie Inicjatywy uprawnia do wykorzystania Umiejętności wobec tych przeciwników, nad którymi Postać miała przewagę Inicjatywy, a więc mogła ją wobec nich poświęcić. Nie da się poświęcić Inicjatywy w stosunku do przeciwnika, wobec którego się jej nie ma. Jeśli dwóch lub więcej uczestników Teatru Zdarzeń poświęci Inicjatywę na wykorzystanie Umiejętności - spadają na koniec kolejki w aktualnej kolejności względem siebie (odpowiada to kolejności poświęcania Inicjatywy i spadania na koniec kolejki).* Przejęcie Inicjatywy i pilnowanie jej może być sposobem na to, żeby nie dopuścić przeciwnika do wykorzystania jego Umiejętności. Z drugiej strony odstąpienie od walki może mieć na celu próbę przejęcia Inicjatywy podczas jej rewizji i w ten sposób uzyskania możliwości wykorzystania Umiejętności.
+            *Może się zdarzyć, że drugi z dziesięciu walczących spadnie na koniec kolejki, a zaraz po nim znajdzie się dziewiąty z nich, który poświęcił swoją Inicjatywę względem dziesiątego (np. aby go trafić), przez co stosunek poniesionej ceny wydaje się niewspółmierny… no cóż, im więcej uczestników Teatru Zdarzeń, tym większy burdel, a jak wiadomo burdel nie ma nic wspólnego ze sprawiedliwością.
+        </p>
+
+
+        <h5 class="rules mt-4">Rzut za Trafienie/Cechę</h5>
+        <p>
+            Najczęstszą Akcją w trakcie walki jest Atak, a jego powodzenie zależy od rzutu za Trafienie.
+            Wynik 20 oznacza Krytyczne Trafienie, które skutkuje automatycznym trafieniem, niezależnie od KP przeciwnika,
+            a takżę podwojeniem ran obliczonych ze wszystkimi modyfikatorami dla normalnego trafienia.
+            Przed Krytykiem mogą jednak chronić karwasze, nagolenniki i hełm.
+        </p>
+        <p>
+            Natomiast wynik 1 oznacza Krytyczne Pudło, które w zależności od sytuacji może skutkować wypuszczeniem broni albo zranieniem innego uczestnika walki niż zamierzony,
+            a nawet zranieniem się własną bronią (np. przy miotaniu miksturą albo walce korbaczem czy cepem).
+        </p>
+        <p class="font-weight-bold">
             Trafienie oblicza się sumując:
         </p>
-            <ol class="rules ml-4">
-                <li>
-                    Modyfikatory do TRAF (zależne od SIŁ/ZRC, Poziomu, Biegłości, Umiejętności, właściwości broni,
-                    a także modyfikatory sytuacyjne od ataku z boku, od tyłu, przyjęcia szarży, oraz modyfikatory negatywne –
-                    od braku umiejętności władania bronią, otrzymanych ran, II i III progu zasięgu broni dystansowej, walki 2 broniami i inne sytuacyjne).
-                </li>
-                <li>
-                    Rzut za Trafienie (k20). Następnie sumę tę należy zestawić z sumą KP przeciwnika. Jeśli TRAF &#8805; KP &#8594; sukces ataku i zadanie obrażeń).
-                </li>
-            </ol>
-        <br>
-        <h5 class="rules">Rzut za Obrażenia</h5>
+        <ol class="rules ml-4 mb-2">
+            <li>Modyfikatory z SIŁ/ZRC, Umiejętności, właściwości broni</li>
+            <li>Modyfikatory sytuacyjne od ataku z boku, od tyłu, przyjęcia szarży</li>
+            <li>Modyfikatory negatywne z tytuły otrzymanych ran, II i III progu, a także zasięgu broni dystansowej, walki dwiema broniami itp.</li>
+            <li>Rzut za Trafienie (k20).</li>
+            <li>Następnie sumę tę należy zestawić z sumą KP przeciwnika. Jeśli TRAF &#8805; KP &#8594; sukces Ataku, przejście do Obrażeń.</li>
+        </ol>
+        <p>
+            W przypadku podejmowania Akcji innych niż Atak Mistrz Gry może zarządzić test Cechy, jeśli ich poziom trudności jest istotny.
+            W takim wypadku wynik 1 na k20 to Krytyczne Powodzenie, natomiast wynik 20 to Krytyczne Fiasko. W celu określenia ich skali należy wykonać ponowny rzut k20.
+        </p>
+
+        <h5 class="rules mt-4">Rzut za Obrażenia</h5>
         <p>
             Rzut za Obrażenia decyduje o ilości pktów Życia, jakie utraci przeciwnik w wyniku trafienia, oczywiście po uwzględnieniu Wyparowań.
         </p>
-        <p>
+        <p class="font-weight-bold">
             Obrażenia oblicza się sumując:
         </p>
-            <ol class="rules ml-4">
-                <li>Rzut za Obrażenia zadane przez broń.</li>
-                <li>
-                    Modyfikatory do OBR (zależne od SIŁ/ZRC, Poziomu, Biegłości, Umiejętności, właściwości broni,
-                    a także modyfikatory sytuacyjne od natarcia szarżą,  oraz modyfikatory negatywne – od braku umiejętności władania bronią,  otrzymanych ran i inne sytuacyjne).
-                </li>
-            </ol>
+        <ol class="rules ml-4">
+            <li>Rzut za Obrażenia zadane przez broń.</li>
+            <li>
+                Modyfikatory do OBR (zależne od SIŁ/ZRC, Poziomu, Biegłości, Umiejętności, właściwości broni,
+                a także modyfikatory sytuacyjne od natarcia szarżą,  oraz modyfikatory negatywne – od braku umiejętności władania bronią,  otrzymanych ran i inne sytuacyjne).
+            </li>
+        </ol>
 
-        <br><br><br>
-        <h2 class="rules">Modyfikatory sytuacyjne w walce</h2>
-            <br>
-            <p>
-                Pewne sytuacje podczas walki uzasadniają modyfikacje standardowych rzutów.
-                Jednak nadanie modyfikatorów jest zależne od deklaracji graczy, co odpowiada faktowi, że w ferworze walki postać nie zawsze dostrzega nadarzające się okazje.
-            </p>
 
-            <br>
-            <h5 class="rules">Szarża</h5>
-            <p>
-                Natarcie z szarżą pozwala na zadanie większych ran ze względu na impet (+2 OBR).
-                Przyjęcie szarży zwiększa szanse na trafienie przeciwnika, ponieważ jego ruch jest bardziej przewidywalny ze względu na bezwładność pędzącego ciała (+2 TRAF).
-                W sytuacji szarży ataki występują jednocześnie, więc pomija się rzut za Inicjatywę;
-                wyjątek to natarcie szarżą lub przyjęcie szarży przy pomocy broni drzewcowej nadającej się do przyjmowania szarży –
-                pierwszy atakuje posiadacz długiej broni, chyba że dotyczy to obu.
-                Wtedy o kolejności ataków decyduje długość broni drzewcowej: 3m, 2m, a dalej zwykła włócznia czy widły.
-            </p>
-            <br>
-            <h5 class="rules">Atak oburącz bronią jednoręczną</h5>
-            <p>
-                Oburęczny atak bronią jednoręczną pozwala na zadanie dodatkowych 1k2 OBR w przypadku trafienia.
-                Ataku takiego można dokonać bronią, która spełnia łącznie dwa warunki: Rozmiar Ś i możliwe jest zastosowanie do niej premii z Sił.
-                Nie jest to zatem możliwe w przypadku broni o Rozmiarze M lub D, a także broni czerpiącej premie wyłącznie ze Zrc.
-            </p>
-            <br>
-            <h5 class="rules">Atak z boku i od tyłu oraz na unieruchomionego przeciwnika</h5>
-            <p>
-                Ataki spoza zasięgu wzroku przeciwnika zwiększają szanse Trafienia: z boku +2 TRAF, od tyłu +4 TRAF.
-                Natomiast w przypadku ataku na śpiącego, nieprzytomnego albo związanego przeciwnika, oprócz modyfikatora +4 TRAF, zakłada się chęć zabicia go na miejscu.
-                Jeśli po rzucie za TRAF okaże się, że przeciwnik zostałby trafiony poza modyfikatorem +4 TRAF, to jest to Krytyk,
-                natomiast trafienie w ramach modyfikatora +4 TRAF to zwykłe trafienie.
-            </p>
-            <p>
-                Dotyczy to ataków z przymierzeniem, które pozostawiają jednak pewne pole losowości, jak cios maczugą w głowę przeciwnika przywiązanego do drzewa.
-                Natomiast, jeśli taki atak nastąpi przez staranne przyłożenie sztyletu albo grotu włóczni do gardła, to należy przyjąć mod. OBR x3.
-                W takim wypadku nie wchodzą w grę jakiekolwiek Wyparowania zbroi ani ochrona przed Krytykiem od hełmu, karwaszy i nagolenników.
-            </p>
-            <br>
-            <h5 class="rules">Defensywa</h5>
-            <p>
-                Defensywa polega na rezygnacji z ataku i skupieniu się na odpieraniu albo unikaniu ciosów przeciwnika.
-                Pozwala to podwoić premię KP z KON albo ze ZRC.
-                Jako defensywę należy również rozumieć sytuację zbliżania się do strzelca zygzakiem w tempie co najmniej x3 (w przypadku premii do uników)
-                albo zbliżanie się w tempie maksymalnie x2 pod osłoną tarczy (w przypadku zastosowania premii do parowania).
-                W przypadku zbliżania się pod osłoną tarczy premia z Defensywy polega na podwojeniu premii do KP z tarczy.
-                W przypadku uników Defensywa przestaje być skuteczna po zbliżeniu się na odległość 20-30 metrów, czyli zwykle w ostatniej rundzie przed zwarciem.
-            </p>
+        <h2 class="rules mt-5 mb-3">Modyfikatory sytuacyjne w walce</h2>
+        <p>
+            Pewne sytuacje podczas walki uzasadniają modyfikacje standardowych rzutów.
+            Jednak nadanie modyfikatorów jest zależne od deklaracji graczy, co odpowiada faktowi, że w ferworze walki postać nie zawsze dostrzega nadarzające się okazje.
+        </p>
+
+        <h5 class="rules mt-4">Atak oburącz bronią jednoręczną</h5>
+        <p>
+            Oburęczny atak bronią jednoręczną pozwala na zadanie dodatkowych 1k2 OBR w przypadku trafienia.
+            Ataku takiego można dokonać bronią, która spełnia łącznie dwa warunki: Rozmiar Ś i możliwe jest zastosowanie do niej premii z Sił.
+            Nie jest to zatem możliwe w przypadku broni o Rozmiarze M lub D, a także broni czerpiącej premie wyłącznie ze Zrc.
+        </p>
+
+        <h5 class="rules mt-4">Atak z boku i od tyłu oraz na unieruchomionego przeciwnika</h5>
+        <p>
+            Ataki spoza zasięgu wzroku przeciwnika zwiększają szanse Trafienia: z boku +2 TRAF, od tyłu +4 TRAF.
+            Natomiast w przypadku ataku na śpiącego, nieprzytomnego albo związanego przeciwnika, oprócz modyfikatora +4 TRAF, zakłada się chęć zabicia go na miejscu.
+            Jeśli po rzucie za TRAF okaże się, że przeciwnik zostałby trafiony poza modyfikatorem +4 TRAF, to jest to Krytyk,
+            natomiast trafienie w ramach modyfikatora +4 TRAF to zwykłe trafienie.
+        </p>
+        <p>
+            Dotyczy to ataków z przymierzeniem, które pozostawiają pewne pole losowości, jak cios maczugą w głowę przeciwnika przywiązanego do drzewa.
+            Natomiast, jeśli taki atak nastąpi przez staranne przyłożenie sztyletu albo grotu włóczni do gardła spiącego albo nieprzytomnego przeciwnika, to należy przyjąć mod. OBR x3.
+            W takim wypadku nie wchodzą w grę jakiekolwiek Wyparowania zbroi ani ochrona przed Krytykiem od hełmu, karwaszy i nagolenników.
+            Uniknięcie śmierci w takiej sytuacji jest niezwykle mało prawdopodobne i zazwyczaj sprowadza się do bardzo ciężkiego kalectwa lub śpiączki.
+        </p>
+
+        <h5 class="rules mt-4">Defensywa</h5>
+        <p>
+            Defensywa polega na rezygnacji z ataku i skupieniu się na odpieraniu albo unikaniu ciosów przeciwnika.
+            Pozwala to podwoić premię KP z KON albo ze ZRC.
+            Jako defensywę należy również rozumieć sytuację zbliżania się do strzelca zygzakiem w tempie co najmniej x3 (w przypadku premii do uników)
+            albo zbliżanie się w tempie maksymalnie x2 pod osłoną tarczy (w przypadku zastosowania premii do parowania).
+            W przypadku zbliżania się pod osłoną tarczy premia z Defensywy polega na podwojeniu premii do KP z tarczy.
+            W przypadku uników Defensywa przestaje być skuteczna po zbliżeniu się na odległość 20-30 metrów, czyli zwykle w ostatniej rundzie przed zwarciem.
+        </p>
+    
+        <h5 class="rules mt-4">Szarża</h5>
+        <p>
+            Natarcie z szarżą pozwala na zadanie większych ran ze względu na impet (+2 OBR).
+            Przyjęcie szarży zwiększa szanse na trafienie przeciwnika, ponieważ jego ruch jest bardziej przewidywalny ze względu na bezwładność pędzącego ciała (+2 TRAF).
+            Szczególne zasady dotyczące rozpatrywania Inicjatywy przy Szarży zostały opisane wcześniej.
+        </p>
+
     </div>
 {% endblock content %}
