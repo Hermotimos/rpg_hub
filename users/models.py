@@ -160,23 +160,29 @@ class Profile(Model):
     @property
     def unseen_debates(self):
         from debates.models import Remark, Debate
-        if self.status == 'gm':
-            allowed = Debate.objects.all()
-        else:
-            allowed = self.debates_known_directly.all()
+        # if self.status == 'gm':
+        #     allowed = Debate.objects.all()
+        # else:
+        #     allowed = self.debates_known_directly.all()
         
-        allowed_annotated = allowed.annotate(
-            last_remark_id=Max('remarks__id')
-        ).filter(remarks__id=F('last_remark_id'))
+        unseen_remarks = Remark.objects.exclude(seen_by=self)
+
+        return Debate.objects.filter(
+            known_directly=self,
+            remarks__in=unseen_remarks).distinct()
         
-        last_remarks_ids = [debate.last_remark_id for debate in allowed_annotated]
-        last_remarks_unseen = Remark.objects.filter(
-            id__in=last_remarks_ids).filter(~Q(seen_by=self))
-
-        debates_with_unseen_last_remark = allowed.filter(
-            remarks__in=last_remarks_unseen)
-
-        return debates_with_unseen_last_remark
+        # allowed_annotated = allowed.annotate(
+        #     last_remark_id=Max('remarks__id')
+        # ).filter(remarks__id=F('last_remark_id'))
+        #
+        # last_remarks_ids = [debate.last_remark_id for debate in allowed_annotated]
+        # last_remarks_unseen = Remark.objects.filter(
+        #     id__in=last_remarks_ids).filter(~Q(seen_by=self))
+        #
+        # debates_with_unseen_last_remark = allowed.filter(
+        #     remarks__in=last_remarks_unseen)
+        #
+        # return debates_with_unseen_last_remark
 
     @property
     def can_view_all(self):

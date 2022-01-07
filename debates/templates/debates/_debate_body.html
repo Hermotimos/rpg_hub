@@ -22,27 +22,29 @@
                 {% endif %}
             </div>
             
-            <div class="row mt-n3" id="{% if forloop.last and not debate.is_ended %} page-bottom {% endif %}">
-                {% if remark.author.status != 'gm' %}
-                    <div class="col-2"></div>
-                {% endif %}
-                <div class="{% if remark.author.status != 'gm' %} col-10 mt-3 {% else %} col-12 mt-2 {% endif %}">
-                    {% with next_remark=remarks|next_elem:forloop.counter0 %}
-                        {% for profile in debate_known_directly %}
-                            {% if profile in remark.seen_by.all and profile not in next_remark.seen_by.all and profile != remark.author %}
-                                {% if profile.status != 'npc'  %}
-                                    <img class="rounded-circle potrait-img-sm" src="{{ profile.image.url }}">
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endwith %}
-                    {% if forloop.last and not debate.is_ended %}
-                        {% for profile in remark.seen_by.all %}
-                            <img class="rounded-circle potrait-img-sm" src="{{ profile.image.url }}">
-                        {% endfor %}
+            {% if not debate.is_ended %}
+                <div class="row mt-n3" id="{% if forloop.last and not debate.is_ended %} page-bottom {% endif %}">
+                    {% if remark.author.status != 'gm' %}
+                        <div class="col-2"></div>
                     {% endif %}
+                    <div class="{% if remark.author.status != 'gm' %} col-10 mt-3 {% else %} col-12 mt-2 {% endif %}">
+                        {% with next_remark=remarks|next_elem:forloop.counter0 %}
+                            {% for profile in debate_known_directly %}
+                                {% if profile in remark.seen_by.all and profile not in next_remark.seen_by.all  %}
+                                    {% if profile != remark.author and profile.status != 'npc'  %}
+                                        <img class="rounded-circle potrait-img-sm" src="{{ profile.image.url }}">
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endwith %}
+                        {% if forloop.last and not debate.is_ended %}
+                            {% for profile in remark.seen_by.all %}
+                                <img class="rounded-circle potrait-img-sm" src="{{ profile.image.url }}">
+                            {% endfor %}
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
             
         </div>
     {% endfor %}
