@@ -1,10 +1,6 @@
 
-h1.rules,
-h2.rules,
-h3.rules,
-h4.rules,
-h5.rules,
-h6.rules {font-weight: bold;}
+
+.rules-styling h6, h5, h4, h3, h2, h1 {font-weight: bold;}
 
 .rules-styling p {
     font-size: 18px;
@@ -12,10 +8,7 @@ h6.rules {font-weight: bold;}
     margin-bottom: 0.5rem;
     text-align: justify;
 }
-
-ol.content-table {padding-left: 4rem;}
-
-ol.rules li, ul.rules li {
+.rules-styling li {
     font-style: italic;
     font-size: 14px;
 }
@@ -114,10 +107,10 @@ ol.rules li, ul.rules li {
 table.weapons-table {border: double;}
 
 .weapons-table .class {width: 22%;}
-.weapons-table .delay {width: 3%;}
+/*.weapons-table .delay {width: 3%;}*/
 .weapons-table .damage {width: 10%;}
 .weapons-table .damage-type {width: 5%;}
-.weapons-table .special {width: 25%;}
+.weapons-table .special {width: 30%;}
 .weapons-table .range {width: 12%;}
 .weapons-table .size {width: 5%;}
 .weapons-table .trait {width: 7%;}
