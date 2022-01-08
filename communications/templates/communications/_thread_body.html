@@ -30,24 +30,34 @@
                 </div>
             {% endif %}
         </div>
-        {% if forloop.last and not thread.is_ended %}
-            <div class="row mt-n3" id="page-bottom">
-                {% if statement.author.status == 'gm' and statement.thread.kind == 'Debate' %}
-                    <div class="col-12 mt-2">
-                        {% for profile in statement.seen_by.all %}
-                            <img class="portait img-sm border border-dark {% if thread.kind == 'Announcement' %} rounded {% else %} rounded-circle {% endif %}" src="{{ profile.image.url }}">
-                        {% endfor %}
-                    </div>
+        
+        
+        {% if not thread.is_ended %}
+            <div class="row mt-n3" id="{% if forloop.last and not thread.is_ended %} page-bottom {% endif %}">
+                {% if thread.kind != 'Debate' and statement.author.status == 'gm' %}
+                    <div></div>
                 {% else %}
                     <div class="col-2"></div>
-                    <div class="col-10 mt-2">
-                        {% for profile in statement.seen_by.all %}
-                            <img class="portait img-sm border border-dark {% if thread.kind == 'Announcement' %} rounded {% else %} rounded-circle {% endif %}" src="{{ profile.image.url }}">
-                        {% endfor %}
-                    </div>
                 {% endif %}
+                <div class="{% if thread.kind != 'Debate' and statement.author.status == 'gm' %} col-12 mt-2 {% else %} col-10 mt-3 {% endif %}">
+                    {% with next_statement=thread.statements.all|next_elem:forloop.counter0 %}
+                        {% for profile in thread.known_directly.all %}
+                            {% if profile in statement.seen_by.all and profile not in next_statement.seen_by.all  %}
+                                {% if profile != statement.author and profile.status != 'npc'  %}
+                                    <img class="rounded-circle portait img-sm border border-dark" src="{{ profile.image.url }}">
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endwith %}
+                    {% if forloop.last and not thread.is_ended %}
+                        {% for profile in statement.seen_by.all %}
+                            <img class="rounded-circle portait img-sm border border-dark" src="{{ profile.image.url }}">
+                        {% endfor %}
+                    {% endif %}
+                </div>
             </div>
         {% endif %}
+
     </div>
 {% endfor %}
 
