@@ -33,7 +33,7 @@
                 </colgroup>
                 <thead class="align-center">
                     <tr>
-                        <th class="small-caps align-left {% if weapon_type.description %} hover-blue {% endif %}" data-toggle="collapse" data-target="#{{ weapon_type.name }}">&nbsp;{{ weapon_type.name }}</th>
+                        <th class="small-caps align-left pl-2 font-17" >{{ weapon_type.name }}</th>
     <!--                    <th>Opóźń</th>-->
                         <th>Obrażenia</th>
                         <th>Typ</th>
@@ -44,13 +44,6 @@
                         <th>Cena</th>
                         <th>Waga</th>
                     </tr>
-                    {% if weapon_type.description %}
-                        <tr id="{{ weapon_type.name }}" class="collapse">
-                            <td colspan="10" class="weapons-img px-2">
-                                {{ weapon_type.description|linebreaksbr }}
-                            </td>
-                        </tr>
-                    {% endif %}
                 </thead>
                 <tbody>
                     {% for weapon in weapon_type.weapons.all %}

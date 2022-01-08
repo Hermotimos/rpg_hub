@@ -312,7 +312,6 @@ class EliteKlass(Model):
 
 class WeaponType(Model):
     name = CharField(max_length=100, unique=True)
-    description = TextField(max_length=4000, blank=True, null=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
     def __str__(self):

@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy
 
 from imaginarion.models import PictureSet
 from knowledge.models import KnowledgePacket
+from rpg_project.utils import formfield_for_dbfield_cached
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, \
     Profession, Klass, EliteProfession, BooksSkill, TheologySkill, \
     EliteKlass, WeaponType, Weapon, Plate, Shield
@@ -213,7 +214,7 @@ class EliteProfessionAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description']
 
 
-class WeaponTypeInline(admin.TabularInline):
+class WeaponInline(admin.TabularInline):
     model = Weapon
     extra = 2
 
@@ -225,13 +226,8 @@ class WeaponTypeInline(admin.TabularInline):
 
 
 class WeaponTypeAdmin(admin.ModelAdmin):
-    formfield_overrides = {
-        models.TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
-    }
-    inlines = [WeaponTypeInline, ]
-    list_display = ['name', 'description']
-    list_editable = ['description']
-    search_fields = ['name', 'description']
+    inlines = [WeaponInline]
+    list_display = ['name']
 
 
 class WeaponAdmin(admin.ModelAdmin):
@@ -243,6 +239,13 @@ class WeaponAdmin(admin.ModelAdmin):
     list_editable = ['description']
     list_filter = ['weapon_type']
     search_fields = ['name', 'description']
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        fields = [
+            'allowed_profiles',
+            'pictures',
+        ]
+        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
 
 
 class PlateAdmin(admin.ModelAdmin):
