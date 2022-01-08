@@ -22,7 +22,7 @@
             <!-- Navbar Left Side -->
             <ul class="navbar-nav mr-auto">
                 
-                {% with undone_demands=current_profile.undone_demands unseen_news=current_profile.unseen_news unseen_announcements=current_profile.unseen_announcements %}
+                {% with undone_demands=current_profile.undone_demands unseen_announcements=current_profile.unseen_announcements %}
                     <li class="dropdown pr-4 mr-auto">
                         <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
                             Organizacyjne
@@ -41,16 +41,9 @@
                                 </li>
                                 {% if current_profile.status != 'spectator' %}
                                     {% if current_profile.status == 'gm' %}
-                                    <li>
-                                        <a class="font-14 nav-link small-caps" href="{% url 'news:main' %}">Ogłoszenia [old]</a>
-                                        <div class="row info-row-sub news-bubble float-right">
-                                            {% if unseen_news %}
-                                                <div class="number-circle-sub bg-blue d-flex align-items-center">
-                                                    <span class="mx-auto number-circle-main-inner">{{ unseen_news.count }}</span>
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    </li>
+                                        <li>
+                                            <a class="font-14 nav-link small-caps" href="{% url 'news:main' %}">Ogłoszenia [old]</a>
+                                        </li>
                                     {% endif %}
                                     <li>
                                         <a class="font-14 nav-link small-caps" href="{% url 'communications:announcements' None %}">Ogłoszenia</a>
@@ -70,11 +63,6 @@
                             {% if undone_demands %}
                                 <div class="number-circle-main bg-red d-flex align-items-center">
                                     <span class="mx-auto number-circle-main-inner">{{ undone_demands.count }}</span>
-                                </div>
-                            {% endif %}
-                            {% if unseen_news %}
-                                <div class="number-circle-main bg-blue d-flex align-items-center">
-                                    <span class="mx-auto number-circle-main-inner">{{ unseen_news.count }}</span>
                                 </div>
                             {% endif %}
                             {% if unseen_announcements %}
