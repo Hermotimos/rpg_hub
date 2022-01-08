@@ -84,16 +84,18 @@
                             <ul class="bullets-1 pl-4">
                                 <li><a class="font-14 nav-link small-caps" href="{% url 'chronicles:timeline' %}">Kalendarium</a></li>
                                 <li><a class="font-14 nav-link small-caps" href="{% url 'chronicles:chronicle-main' %}">Kronika</a></li>
-                                <li>
-                                    <a class="font-14 nav-link small-caps" href="{% url 'debates:main' %}">Narady</a>
-                                    <div class="row info-row-sub debates-bubble float-right">
-                                        {% if unseen_debates %}
-                                            <div class="number-circle-sub bg-greengray d-flex align-items-center">
-                                                <span class="mx-auto number-circle-main-inner">{{ unseen_debates.count }}</span>
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                </li>
+                                {% if current_profile.status == 'gm' %}
+                                    <li>
+                                        <a class="font-14 nav-link small-caps" href="{% url 'debates:main' %}">Narady [OLD]</a>
+                                        <div class="row info-row-sub debates-bubble float-right">
+                                            {% if unseen_debates %}
+                                                <div class="number-circle-sub bg-greengray d-flex align-items-center">
+                                                    <span class="mx-auto number-circle-main-inner">{{ unseen_debates.count }}</span>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </li>
+                                {% endif %}
                                 <li>
                                     <a class="font-14 nav-link small-caps" href="{% url 'communications:threads' 'Debate' None %}">Narady</a>
                                     <div class="row info-row-sub debates-bubble float-right">
