@@ -75,10 +75,6 @@ def announcements_view(request, tag_title):
     unseen_announcements = announcements.filter(
         id__in=current_profile.unseen_announcements)
     announcements = announcements.exclude(id__in=unseen_announcements)
-
-    # topics = Topic.objects.filter(threads__in=announcements)
-    # topics = topics.prefetch_related(
-    #     Prefetch('threads', queryset=announcements)).distinct()
     
     tags = ThreadTag.objects.filter(author=current_profile, kind='Announcement')
     formset = ThreadTagEditFormSet(
