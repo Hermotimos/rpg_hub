@@ -14,52 +14,44 @@ from chronicles.models import (
 from rpg_project.utils import send_emails
 from toponomikon.models import Location
 from users.models import Profile
-from debates.models import Debate
+
 
 # #################### CHRONICLE ####################
 
 
 @login_required
 def chronicle_main_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     
-    debates = Debate.objects.all().prefetch_related('known_directly')
-
-    if profile.can_view_all:
-        chapters = Chapter.objects.prefetch_related('game_sessions')
+    if current_profile.can_view_all:
+        chapters = Chapter.objects.all()
         games = GameSession.objects.select_related('chapter')
         games = games.prefetch_related(
             'game_events__known_directly__character',
             'game_events__debates__known_directly__character')
     else:
-        debates = debates.filter(known_directly=profile)
-        debates = debates.prefetch_related('known_directly__character')
+        debates = current_profile.debates_known_directly.prefetch_related(
+            'known_directly__character')
         
         events = GameEvent.objects.filter(
-            Q(id__in=profile.events_known_directly.all())
-            | Q(id__in=profile.events_known_indirectly.all())
-        )
+            Q(id__in=current_profile.events_known_directly.all())
+            | Q(id__in=current_profile.events_known_indirectly.all()))
         events = events.prefetch_related(
             Prefetch('debates', queryset=debates),
             'known_directly__character')
-
-        events_known_directly = GameEvent.objects.filter(
-            id__in=profile.events_known_directly.all())
         
         games = GameSession.objects.filter(game_events__in=events)
         games = games.prefetch_related(Prefetch('game_events', queryset=events))
         games = games.annotate(
             any_known_directly=Count(
-                'game_events', filter=Q(game_events__in=events_known_directly))
-        )
+                'game_events',
+                filter=Q(game_events__in=current_profile.events_known_directly.all())))
         games = games.order_by('game_no').select_related('chapter')
         
-        chapters = Chapter.objects.filter(game_sessions__in=games)
-        chapters = chapters.prefetch_related(Prefetch('game_sessions', queryset=games))
-        chapters = chapters.distinct()
+        chapters = Chapter.objects.filter(game_sessions__in=games).distinct()
         
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Kronika',
         'chapters': chapters,
         'games': games,

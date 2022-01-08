@@ -34,9 +34,7 @@ class Topic(Model):
 class Debate(Model):
     title = CharField(max_length=100, unique=True)
     topic = FK(to=Topic, related_name='debates', on_delete=CASCADE)
-    known_directly = M2M(
-        to=Profile,
-        related_name='debates_known_directly')
+    known_directly = M2M(to=Profile, related_name='debates_known_directly')
     created_at = DateTimeField(auto_now_add=True)
     is_ended = BooleanField(default=False)
     is_exclusive = BooleanField()
