@@ -64,9 +64,11 @@ def announcements_view(request, tag_title):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     announcements = Announcement.objects.prefetch_related(
-        'statements__author', 'statements__seen_by', 'tags__author', 'topic',
+        'statements__author',
+        'statements__seen_by',
+        'tags__author',
+        'topic',
         'followers')
-    announcements = announcements.order_by('-last_activity')
     if current_profile.status != 'gm':
         announcements = announcements.filter(known_directly=current_profile)
     if tag_title != 'None':

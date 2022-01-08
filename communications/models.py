@@ -94,6 +94,7 @@ class Thread(Model):
 
 
 class DebateManager(Manager):
+    
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(kind='Debate')
@@ -108,10 +109,12 @@ class Debate(Thread):
 
 
 class AnnouncementManager(Manager):
+    
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(kind='Announcement')
         qs = qs.annotate(last_activity=Max(F('statements__created_at')))
+        qs = qs.order_by('-last_activity')
         return qs
 
 
