@@ -27,7 +27,7 @@ class GameEventAdminForm(forms.ModelForm):
         fields = ['game', 'event_no_in_game', 'date_start', 'date_end',
                   'in_timeunit', 'description_short', 'description_long',
                   'plot_threads', 'locations', 'known_directly',
-                  'known_indirectly', 'picture_sets', 'debates', 'audio']
+                  'known_indirectly', 'picture_sets', 'debates', 'new_debates', 'audio']
         widgets = {
             'known_directly': FilteredSelectMultiple(
                 'Known directly', False, attrs={'style': 'height:100px'}
@@ -46,6 +46,9 @@ class GameEventAdminForm(forms.ModelForm):
             ),
             'debates': FilteredSelectMultiple(
                 'Debates', False, attrs={'style': 'height:100px'}
+            ),
+            'new_debates': FilteredSelectMultiple(
+                'NewDebates', False, attrs={'style': 'height:100px'}
             ),
         }
         

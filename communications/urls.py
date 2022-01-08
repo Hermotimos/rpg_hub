@@ -5,7 +5,7 @@ from communications import views
 app_name = 'communications'
 urlpatterns = [
     # announcements
-    path('announcements:<str:tag_title>/', views.announcements_view, name='announcements'),
+    # path('announcements:<str:tag_title>/', views.announcements_view, name='announcements'),
     path('threads:<str:thread_kind>/<str:tag_title>/', views.threads_view, name='threads'),
     
     path('thread:<int:thread_id>/<str:tag_title>/', views.thread_view, name='thread'),

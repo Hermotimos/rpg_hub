@@ -45,24 +45,15 @@
                                             <a class="font-14 nav-link small-caps" href="{% url 'news:main' %}">Ogłoszenia [old]</a>
                                         </li>
                                     {% endif %}
+
                                     <li>
-                                        <a class="font-14 nav-link small-caps" href="{% url 'communications:announcements' None %}">Ogłoszenia</a>
+                                        <a class="font-14 nav-link small-caps" href="{% url 'communications:threads' 'Announcement' None %}">Ogłoszenia</a>
                                         <div class="row info-row-sub news-bubble float-right">
                                             {% if unseen_announcements %}
                                                 <div class="number-circle-sub bg-blue d-flex align-items-center">
                                                     <span class="mx-auto number-circle-main-inner">{{ unseen_announcements.count }}</span>
                                                 </div>
                                             {% endif %}
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a class="font-14 nav-link small-caps" href="{% url 'communications:threads' 'Announcement' None %}">Ogłoszenia</a>
-                                        <div class="row info-row-sub news-bubble float-right">
-<!--                                            {% if unseen_announcements %}-->
-<!--                                                <div class="number-circle-sub bg-blue d-flex align-items-center">-->
-<!--                                                    <span class="mx-auto number-circle-main-inner">{{ unseen_announcements.count }}</span>-->
-<!--                                                </div>-->
-<!--                                            {% endif %}-->
                                         </div>
                                     </li>
                                 {% endif %}

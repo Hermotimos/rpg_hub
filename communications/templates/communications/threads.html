@@ -47,11 +47,10 @@
                 <div class="modal fade tags-modal" id="tagFilterModal" tabindex="-1" role="dialog" aria-hidden="true">
                     {% include 'communications/_tag_filter_modal.html' %}
                 </div>
-
             {% else %}
                 <a class="btn btn-warning icon-filter border border-dark text-dark"
                    data-toggle="tooltip" data-placement="bottom" title="Wyczyść filtr"
-                   href="{% url 'communications:threads' None %}">
+                   href="{% url 'communications:threads' thread_kind None %}">
                     <span class="font-italic">#{{ tag_title }}</span>
                 </a>
             {% endif %}

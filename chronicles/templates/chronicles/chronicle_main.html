@@ -70,12 +70,12 @@
                                     </div>
                                     <div>
                                         {% for event in game.game_events.all %}
-                                            {% for debate in event.debates.all %}
+                                            {% for debate in event.new_debates.all %}
                                                 <ul class="bullets-3 bullets-sm pl-3 mb-0">
                                                     <li class="pl-1">
                                                         <div class="d-md-inline">
                                                             <span class="d-inline font-14">
-                                                                <a class="pr-1" href="{% url 'debates:debate' debate.id %}">
+                                                                <a class="pr-1" href="{% url 'communications:thread' debate.id None %}">
                                                                     {{ debate.title }}
                                                                 </a>
                                                             </span>

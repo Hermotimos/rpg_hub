@@ -28,16 +28,20 @@ def chronicle_main_view(request):
         games = GameSession.objects.select_related('chapter')
         games = games.prefetch_related(
             'game_events__known_directly__character',
-            'game_events__debates__known_directly__character')
+            # 'game_events__debates__known_directly__character',
+            'game_events__new_debates__known_directly__character',
+        )
     else:
-        debates = current_profile.debates_known_directly.prefetch_related(
-            'known_directly__character')
+        # debates = current_profile.debates_known_directly.prefetch_related(
+        #     'known_directly__character')
+        debates = current_profile.threads_known_directly.filter(kind='Debate')
+        debates = debates.prefetch_related('known_directly__character')
         
         events = GameEvent.objects.filter(
             Q(id__in=current_profile.events_known_directly.all())
             | Q(id__in=current_profile.events_known_indirectly.all()))
         events = events.prefetch_related(
-            Prefetch('debates', queryset=debates),
+            Prefetch('new_debates', queryset=debates),
             'known_directly__character')
         
         games = GameSession.objects.filter(game_events__in=events)

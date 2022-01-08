@@ -19,6 +19,7 @@ from django.db.models import (
 from django.db.models.signals import post_save, m2m_changed
 
 from debates.models import Debate
+from communications.models import Thread as NewDebate
 from imaginarion.models import Audio, PictureSet
 from rpg_project.utils import create_sorting_name
 from toponomikon.models import Location
@@ -257,6 +258,7 @@ class TimeUnit(Model):
     )
     picture_sets = M2M(to=PictureSet, related_name='events', blank=True)
     debates = M2M(to=Debate, related_name='events', blank=True)
+    new_debates = M2M(to=NewDebate, related_name='eventss', blank=True)
     
     class Meta:
         ordering = ['date_start']

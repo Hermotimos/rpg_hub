@@ -229,10 +229,10 @@ def reload_debates(request):
                 new_debate.followers.add(Profile.objects.get(status='gm'))
                 
                 # TODO attach events to new debates
-                # events = debate.events.all()
-                # new_debate.eventss.set(events)
-                # # new_debate.save()
-                # print(new_debate.title)
+                events = debate.events.all()
+                new_debate.eventss.set(events)
+                # new_debate.save()
+                print(new_debate.title)
                 
                 for remark in debate.remarks.all():
                     statement = Statement.objects.create(

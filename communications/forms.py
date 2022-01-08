@@ -64,7 +64,7 @@ class ThreadTagEditFormSetHelper(FormHelper):
         
 
 ThreadTagEditFormSet = forms.modelformset_factory(
-    model=ThreadTag, form=ThreadTagEditForm, exclude=[], can_delete=True)
+    model=ThreadTag, form=ThreadTagEditForm, exclude=[], extra=2, can_delete=True)
 
 
 # ===========================================================================
@@ -152,12 +152,8 @@ class ThreadEditTagsForm(forms.ModelForm):
         fields = ['tags']
     
     def __init__(self, *args, **kwargs):
-        current_profile = kwargs.pop('current_profile')
-        thread_kind = kwargs.pop('thread_kind')
+        tags = kwargs.pop('tags')
         super().__init__(*args, **kwargs)
-        
-        tags = ThreadTag.objects.filter(
-            author=current_profile, kind=thread_kind)
         
         self.fields['tags'].label = ""
         self.fields['tags'].queryset = tags

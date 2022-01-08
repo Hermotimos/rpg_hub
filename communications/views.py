@@ -58,104 +58,103 @@ def thread_inform(request, thread, tag_title):
     return redirect(
         'communications:thread', thread_id=thread.id, tag_title=tag_title)
 
-
-@login_required
-def announcements_view(request, tag_title):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
-    
-    announcements = Announcement.objects.filter(known_directly=current_profile)
-    announcements = announcements.prefetch_related(
-        'statements__author',
-        'statements__seen_by',
-        'tags__author',
-        'topic',
-        'followers')
-    if tag_title != 'None':
-        announcements = announcements.filter(tags__title=tag_title)
-        
-    unseen_announcements = announcements.filter(
-        id__in=current_profile.unseen_announcements)
-    announcements = announcements.exclude(id__in=unseen_announcements)
-    
-    tags = ThreadTag.objects.filter(author=current_profile, kind='Announcement')
-    formset = ThreadTagEditFormSet(
-        data=request.POST or None,
-        queryset=tags)
-    
-    for form in formset:
-        form.initial['kind'] = 'Announcement'
-        form.initial['author'] = current_profile
-        
-    if request.method == 'GET':
-        if tag_id := request.GET.get('tag', []):
-            tag = ThreadTag.objects.get(id=tag_id)
-            return redirect('communications:announcements', tag_title=tag.title)
-
-    elif request.method == 'POST':
-        if not formset.is_valid():
-            if "Thread tag z tymi Title i Author" in str(formset.errors):
-                messages.warning(request, "Zduplikowany tag!")
-            messages.warning(request, "Popraw wskazane pola!")
-        else:
-            changed = False
-            for form in formset:
-                if not form.is_valid():
-                    messages.warning(request, form.errors)
-                else:
-                    # Ignore empty extra forms
-                    if not form.cleaned_data:
-                        continue
-                        
-                    # Deletion
-                    elif form.cleaned_data.get('DELETE'):
-                        tag = form.cleaned_data.get('id')
-                        if tag:
-                            tag.delete()
-                            changed = True
-                            messages.success(request, f"Usunięto tag '{tag}'!")
-                        else:
-                            messages.warning(
-                                request, "Nowy tag zaznaczony do usunięcia!")
-
-                    # Creation / Modification
-                    else:
-                        tag = form.save(commit=False)
-                        tag.author = form.cleaned_data['author']
-                        tag.save()
-                        if form.has_changed():
-                            changed = True
-                            messages.success(request, f"Zmieniono: {tag}!")
-            if changed:
-                return redirect(
-                    'communications:announcements', tag_title=tag_title)
-            else:
-                messages.warning(request, "Nie dokonano żadnych zmian!")
-                return redirect(
-                    'communications:announcements', tag_title=tag_title)
-
-    context = {
-        'current_profile': current_profile,
-        'page_title': 'Ogłoszenia',
-        'announcements': announcements,
-        'unseen_announcements': unseen_announcements,
-        'tag_title': tag_title,
-        'tags': tags,
-        'formset': formset,
-        'formset_helper': ThreadTagEditFormSetHelper(),
-    }
-    return render(request, 'communications/____announcements.html', context)
+#
+# @login_required
+# def announcements_view(request, tag_title):
+#     current_profile = Profile.objects.get(id=request.session['profile_id'])
+#
+#     announcements = Announcement.objects.filter(known_directly=current_profile)
+#     announcements = announcements.prefetch_related(
+#         'statements__author',
+#         'statements__seen_by',
+#         'tags__author',
+#         'topic',
+#         'followers')
+#     if tag_title != 'None':
+#         announcements = announcements.filter(tags__title=tag_title)
+#
+#     unseen_announcements = announcements.filter(
+#         id__in=current_profile.unseen_announcements)
+#     announcements = announcements.exclude(id__in=unseen_announcements)
+#
+#     tags = ThreadTag.objects.filter(author=current_profile, kind='Announcement')
+#     formset = ThreadTagEditFormSet(
+#         data=request.POST or None,
+#         queryset=tags)
+#
+#     for form in formset:
+#         form.initial['kind'] = 'Announcement'
+#         form.initial['author'] = current_profile
+#
+#     if request.method == 'GET':
+#         if tag_id := request.GET.get('tag', []):
+#             tag = ThreadTag.objects.get(id=tag_id)
+#             return redirect('communications:announcements', tag_title=tag.title)
+#
+#     elif request.method == 'POST':
+#         if not formset.is_valid():
+#             if "Thread tag z tymi Title i Author" in str(formset.errors):
+#                 messages.warning(request, "Zduplikowany tag!")
+#             messages.warning(request, "Popraw wskazane pola!")
+#         else:
+#             changed = False
+#             for form in formset:
+#                 if not form.is_valid():
+#                     messages.warning(request, form.errors)
+#                 else:
+#                     # Ignore empty extra forms
+#                     if not form.cleaned_data:
+#                         continue
+#
+#                     # Deletion
+#                     elif form.cleaned_data.get('DELETE'):
+#                         tag = form.cleaned_data.get('id')
+#                         if tag:
+#                             tag.delete()
+#                             changed = True
+#                             messages.success(request, f"Usunięto tag '{tag}'!")
+#                         else:
+#                             messages.warning(request, "Nowy tag zaznaczony do usunięcia!")
+#
+#                     # Creation / Modification
+#                     else:
+#                         tag = form.save(commit=False)
+#                         tag.author = form.cleaned_data['author']
+#                         tag.save()
+#                         if form.has_changed():
+#                             changed = True
+#                             messages.success(request, f"Zmieniono: {tag}!")
+#             if changed:
+#                 return redirect(
+#                     'communications:announcements', tag_title=tag_title)
+#             else:
+#                 messages.warning(request, "Nie dokonano żadnych zmian!")
+#                 return redirect(
+#                     'communications:announcements', tag_title=tag_title)
+#
+#     context = {
+#         'current_profile': current_profile,
+#         'page_title': 'Ogłoszenia',
+#         'announcements': announcements,
+#         'unseen_announcements': unseen_announcements,
+#         'tag_title': tag_title,
+#         'tags': tags,
+#         'formset': formset,
+#         'formset_helper': ThreadTagEditFormSetHelper(),
+#     }
+#     return render(request, 'communications/____announcements.html', context)
 
 
 @login_required
 def threads_view(request, thread_kind, tag_title):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
 
-    threads = Thread.objects.filter(known_directly=current_profile, kind=thread_kind)       # TODO ???
+    threads = Thread.objects.filter(known_directly=current_profile, kind=thread_kind)
     threads = threads.prefetch_related(
         'statements__author',
-        'statements__seen_by',
         'tags__author',
-        'topic',
+        # 'topic',
+        'eventss__game',
         'followers')
     if tag_title != 'None':
         threads = threads.filter(tags__title=tag_title)
@@ -227,7 +226,7 @@ def threads_view(request, thread_kind, tag_title):
 
     context = {
         'current_profile': current_profile,
-        'page_title': 'Ogłoszenia',
+        'page_title': page_title,
         'threads': threads,
         'unseen': unseen,
         'thread_kind': thread_kind,
@@ -243,11 +242,19 @@ def threads_view(request, thread_kind, tag_title):
 def thread_view(request, thread_id, tag_title):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
 
+    tags = ThreadTag.objects.filter(
+        author=current_profile, kind=Thread.objects.get(id=thread_id).kind).select_related('author')
     threads = Thread.objects.prefetch_related(
+        Prefetch('tags', queryset=tags),
         'statements__seen_by', 'statements__author', 'followers',
         'known_directly')
     thread = threads.get(id=thread_id)
     followers = thread.followers.filter(is_active=True)
+    
+    informables = thread.informables()
+    if current_profile.status != 'gm':
+        informables = informables.filter(character__in=current_profile.characters_known_directly.all())
+
 
     # Update all statements to be seen by the profile
     SeenBy = Statement.seen_by.through
@@ -263,9 +270,8 @@ def thread_view(request, thread_id, tag_title):
     # each form redirects if valid (and ThreadEditTagsForm is always invalid).
     thread_tags_form = ThreadEditTagsForm(
         data=request.POST or None,
-        current_profile=current_profile,
-        thread_kind=thread.kind,
-        instance=thread)
+        instance=thread,
+        tags=tags)
     statement_form = StatementCreateForm(
         data=request.POST or None,
         files=request.FILES or None,
@@ -287,9 +293,7 @@ def thread_view(request, thread_id, tag_title):
             subject=f"[RPG] Nowa wypowiedź: '{thread.title}'",
             message=f"{request.get_host()}{thread.get_absolute_url()}/",
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[
-                p.user.email for p in followers if p != current_profile]
-        )
+            recipient_list=[p.user.email for p in followers if p != current_profile])
         messages.info(request, f"Dodano wypowiedź!")
         return redirect(
             'communications:thread', thread_id=thread.id, tag_title=tag_title)
@@ -305,6 +309,7 @@ def thread_view(request, thread_id, tag_title):
         'page_title': thread.title,
         'thread': thread,
         'tag_title': tag_title,
+        'informables': informables,
         'form_1': statement_form,
         'thread_tags_form': thread_tags_form,
     }

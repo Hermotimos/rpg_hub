@@ -11,6 +11,7 @@
     {% else %}
         bg-inner
     {% endif %}">
+    
     <span class="pt-5" id="thread_{{ thread.id }}"></span>
     <div class="row p-1">
         <div class="col-auto px-0 mr-n3">
@@ -24,10 +25,21 @@
         </div>
         <div class="col pr-0 ml-n1">
             <div class="container h-100">
-                <div class="row h-100">
+                <div class="row">
                     <div class="col pr-0">
                         <div class="font-11 font-italic text-muted align-top">
-                            {{ thread.created_at|date:'d-M-Y | H:i' }}
+                            {% if thread_kind == 'Announcement' %}
+                                {{ thread.created_at|date:'d-M-Y' }} | {{ thread.last_activity|date:'d-M-Y' }}
+                            {% elif thread_kind == 'Debate' %}
+                                {% for event in thread.eventss.all %}
+                                    {% if forloop.counter > 1 %} | {% endif %}
+                                    {{ event.game.title }}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col pr-0">
+                        <div class="float-right font-12 mr-1">
                             {% if current_profile in thread.followers.all %}
                                 <a class="icon-unfollow ml-1" href="{% url 'communications:unfollow' thread.id %}"
                                    data-toggle="tooltip" data-placement="bottom" title="Nie obserwuj">
@@ -38,20 +50,25 @@
                                 </a>
                             {% endif %}
                         </div>
+                    </div>
+                </div>
+                <div class="row mt-auto">
+                    <div class="col pr-0">
                         <div class="font-16 ">
-                            <a class="border-bottom align-top" href="{% url 'communications:thread' thread.id tag_title %}#page-bottom">
+                            <a class="border-bottom align-top font-17" href="{% url 'communications:thread' thread.id tag_title %}#page-bottom">
                                 {{ thread.title|capfirst }}
                             </a>
                         </div>
-                        <div class="font-11 font-italic text-muted pt-1">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-auto pr-0">
+                        <div class="font-11 mt-1">
                             {% for tag in thread.tags.all %}
                                 {% if tag.author == current_profile %}
-                                    <a class="mr-1" style="color: {{ tag.color }};" href="{% url 'communications:threads' thread_kind tag.title %}">#{{ tag }}</a>
+                                    <a class="mr-2" style="color: {{ tag.color }};" href="{% url 'communications:threads' thread_kind tag.title %}">{{ tag }}</a>
                                 {% endif %}
                             {% endfor %}
-                        </div>
-                        <div class="font-11 font-italic text-muted align-top">
-                            Ostatnia aktywność: {{ thread.last_activity|date:'d-M-Y' }}
                         </div>
                     </div>
                     <div class="col-auto p-0 ml-auto mt-auto">

@@ -54,9 +54,9 @@
             {% endif %}
             
             <!-- DEBATES -->
-            {% if event.debates and current_profile not in event.known_indirectly.all %}
+            {% if event.new_debates and current_profile not in event.known_indirectly.all %}
                 <div>
-                    {% for debate in event.debates.all %}
+                    {% for debate in event.new_debates.all %}
                         {% if current_profile in debate.known_directly.all or current_profile.can_view_all %}
                             <ul class="bullets-3 mt-5 pl-3">
                                 <li class="align-middle">
@@ -66,11 +66,13 @@
         
                                     <div id="debate_{{ debate.id }}" class="collapse show">
                                         <div class="mt-2">
-                                            <a href="{% url 'debates:debate' debate.id %}" class="btn btn-outline-dark">Idź do narady</a>
+                                            <a href="{% url 'communications:threads' debate.id None %}" class="btn btn-outline-dark">Idź do narady</a>
                                             <a class="btn btn-outline-secondary" href="#"  data-toggle="collapse" data-target="#debate_{{ debate.id }}">Zwiń naradę</a>
                                         </div>
                                         <div class="mt-5">
-                                            {% include 'debates/_debate_body.html' %}
+                                            {% with thread=debate %}
+                                                {% include 'communications/_thread_body.html' %}
+                                            {% endwith %}
                                         </div>
                                         <div class="text-right">
                                             <p class="btn btn-outline-secondary" data-toggle="collapse" data-target="#debate_{{ debate.id }}">Zwiń naradę</p>
