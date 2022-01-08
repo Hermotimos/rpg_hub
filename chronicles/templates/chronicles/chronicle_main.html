@@ -42,7 +42,7 @@
             <div class="container mt-4 p-0 ml-lg-n4 ml-xl-n5">
                 {% for game in games %}
                     {% if game.chapter %}
-                        <div class="row mb-n1">
+                        <div class="row ">
                             <div class="col-1 p-0 pt-1 text-right">
                                  {{ forloop.counter }}.
                             </div>
@@ -69,7 +69,6 @@
                                         {% endfor %}
                                     </div>
                                     <div>
-
                                         {% for event in game.game_events.all %}
                                             {% for debate in event.debates.all %}
                                                 <ul class="bullets-3 bullets-sm pl-3 mb-0">
@@ -98,7 +97,6 @@
                                                 </ul>
                                             {% endfor %}
                                         {% endfor %}
-
                                     </div>
                                 </div>
                             </div>
