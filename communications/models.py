@@ -60,7 +60,18 @@ class ThreadTag(Model):
         return f"#{self.title}"
 
 
+class ThreadManager(Manager):
+    
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.annotate(last_activity=Max(F('statements__created_at')))
+        qs = qs.order_by('-last_activity')
+        return qs
+
+
 class Thread(Model):
+    objects = ThreadManager()
+    
     title = CharField(max_length=100, unique=True)
     topic = FK(to=Topic, related_name='threads', on_delete=CASCADE, blank=True,
                null=True)

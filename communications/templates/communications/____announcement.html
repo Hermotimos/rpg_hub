@@ -26,9 +26,6 @@
                             <a class="border-bottom align-top" href="{% url 'communications:thread' announcement.id tag_title %}#page-bottom">
                                 {{ announcement.title|capfirst }}
                             </a>
-                            {% if show_topic %}
-                                <small class="text-muted font-italic ml-2">[{{ announcement.topic.title }}]</small>
-                            {% endif %}
                         </div>
                         <div class="font-11 font-italic text-muted pt-1">
                             {% for tag in announcement.tags.all %}
@@ -47,7 +44,7 @@
                                 {% regroup statements by author as author_list %}
                                 {% for author in author_list %}
                                     <img class="portait img-xs border border-dark rounded mb-1 ml-1" src="{{ author.grouper.image.url }}">
-                                    <span class="font-13">{{ author.list|length }}</span>
+                                    <span class="font-13 mb-1">{{ author.list|length }}.</span>
                                 {% endfor %}
                             {% endwith %}
                         </div>

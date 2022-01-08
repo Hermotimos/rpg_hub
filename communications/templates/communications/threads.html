@@ -10,7 +10,13 @@
 {% block content %}
     <article class="top-button">
         <header class="mb-5">
-            <a href="{% url 'communications:create-thread' 'Announcement' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
+            <a href="{% url 'communications:create-thread' thread_kind %}" class="btn btn-outline-dark">
+                {% if thread_kind == 'Announcement' %}
+                    Nowe Ogłoszenie
+                {% elif thread_kind == 'Debate' %}
+                    Nowa Narada
+                {% endif %}
+            </a>
             <a data-toggle="tooltip" data-placement="bottom" title="Edytuj tagi">
                 <span class="btn btn-outline-dark" data-toggle="modal" data-target="#tagsModal">Edytuj Tagi</span>
             </a>
@@ -45,7 +51,7 @@
             {% else %}
                 <a class="btn btn-warning icon-filter border border-dark text-dark"
                    data-toggle="tooltip" data-placement="bottom" title="Wyczyść filtr"
-                   href="{% url 'communications:announcements' None %}">
+                   href="{% url 'communications:threads' None %}">
                     <span class="font-italic">#{{ tag_title }}</span>
                 </a>
             {% endif %}
@@ -53,23 +59,21 @@
         </header>
         
         <div>
-            {% if unseen_announcements %}
-                <div id="topic_unseen_announcements" class="mb-5">
-                    {% for announcement in unseen_announcements %}
-                        {% with show_topic=True %}
-                            {% include 'communications/_announcement.html' %}
-                        {% endwith %}
-                    {% endfor %}
-            </div>
-            {% endif %}
-                <div class="mb-5">
-                    <h3 class="small-caps mb-3">
-                        <b class="border-bottom-dark">{{ topic.title }}</b>
-                    </h3>
-                    {% for announcement in announcements %}
-                        {% include 'communications/_announcement.html' %}
+            {% if unseen %}
+                <div id="unseen" class="mb-5">
+                    {% for thread in unseen %}
+                        {% include 'communications/_thread.html' %}
                     {% endfor %}
                 </div>
+            {% endif %}
+            <div class="mb-5">
+                <h3 class="small-caps mb-3">
+                    <b class="border-bottom-dark">{{ topic.title }}</b>
+                </h3>
+                {% for thread in threads %}
+                    {% include 'communications/_thread.html' %}
+                {% endfor %}
+            </div>
 
         </div>
         

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/communications.css' %}">
+{% endblock head_extra %}
+
+{% block content %}
+    <article class="top-button">
+        <header class="mb-5">
+            <a href="{% url 'communications:create-thread' 'Announcement' %}" class="btn btn-outline-dark">Nowe ogłoszenie</a>
+            <a data-toggle="tooltip" data-placement="bottom" title="Edytuj tagi">
+                <span class="btn btn-outline-dark" data-toggle="modal" data-target="#tagsModal">Edytuj Tagi</span>
+            </a>
+            <div class="modal fade" id="tagsModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="container px-0 pb-2">
+                                <div class="row text-center">
+                                    <div class="col-7">Tag</div>
+                                    <div class="col-3">Kolor</div>
+                                    <div class="col-1 pl-2">Usuń?</div>
+                                </div>
+                            </div>
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {% crispy formset formset_helper %}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if tag_title == 'None' %}
+                <span data-toggle="tooltip" data-placement="bottom" title="Filtruj po tagu">
+                    <span class="btn btn-outline-dark icon-filter" data-toggle="modal" data-target="#tagFilterModal">
+                    </span>
+                </span>
+                <div class="modal fade tags-modal" id="tagFilterModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    {% include 'communications/_tag_filter_modal.html' %}
+                </div>
+
+            {% else %}
+                <a class="btn btn-warning icon-filter border border-dark text-dark"
+                   data-toggle="tooltip" data-placement="bottom" title="Wyczyść filtr"
+                   href="{% url 'communications:announcements' None %}">
+                    <span class="font-italic">#{{ tag_title }}</span>
+                </a>
+            {% endif %}
+            
+        </header>
+        
+        <div>
+            {% if unseen_announcements %}
+                <div id="topic_unseen_announcements" class="mb-5">
+                    {% for announcement in unseen_announcements %}
+                        {% include 'communications/_announcement.html' %}
+                    {% endfor %}
+            </div>
+            {% endif %}
+                <div class="mb-5">
+                    <h3 class="small-caps mb-3">
+                        <b class="border-bottom-dark">{{ topic.title }}</b>
+                    </h3>
+                    {% for announcement in announcements %}
+                        {% include 'communications/_announcement.html' %}
+                    {% endfor %}
+                </div>
+
+        </div>
+        
+    </article>
+
+{% endblock content %}

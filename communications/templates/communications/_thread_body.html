@@ -1,4 +1,5 @@
 {% load crispy_forms_tags %}
+{% load custom_filters %}
 
 
 {% for statement in thread.statements.all %}
@@ -22,7 +23,7 @@
                 <div class="col-10 font-18 font-italic text-justify ">
                     <small class="text-muted">{{ statement.created_at|date:'d-M-Y | H:i' }}</small>
                     <br>
-                    <p>{{ statement.text|capfirst|linebreaksbr }}</p>
+                    <p>{{ statement.text|capfirst|custom_linebreaksbr:2 }}</p>
                     {% if statement.image %}
                         <p><img class="img-fluid mx-auto d-block" src="{{ statement.image.url }}"></p>
                     {% endif %}

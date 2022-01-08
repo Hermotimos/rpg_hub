@@ -9,11 +9,7 @@
 
 {% block content %}
     <div class="container">
-        {% if thread.kind == 'Announcement' %}
-            {% include 'communications/_thread_header_announcement.html' %}
-        {% elif thread.kind == 'Debate' %}
-            {% include 'communications/_thread_header_debate.html' %}
-        {% endif %}
+            {% include 'communications/_thread_header.html' %}
     </div>
     <div class="container mt-5 pt-5 pl-0">
         {% include 'communications/_thread_body.html' %}

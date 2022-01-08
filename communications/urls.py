@@ -5,15 +5,12 @@ from communications import views
 app_name = 'communications'
 urlpatterns = [
     # announcements
-    path('announcements:<str:tag_title>/', views.announcements_view,
-         name='announcements'),
+    path('announcements:<str:tag_title>/', views.announcements_view, name='announcements'),
+    path('threads:<str:thread_kind>/<str:tag_title>/', views.threads_view, name='threads'),
     
-    path('thread:<int:thread_id>/<str:tag_title>/', views.thread_view,
-         name='thread'),
-    path('thread:<int:thread_id>/<str:tag_title>/unfollow',
-         views.unfollow_thread_view, name='unfollow'),
-    path('thread:<int:thread_id>/<str:tag_title>/follow',
-         views.follow_thread_view, name='follow'),
+    path('thread:<int:thread_id>/<str:tag_title>/', views.thread_view, name='thread'),
+    path('thread:<int:thread_id>/unfollow', views.unfollow_thread_view, name='unfollow'),
+    path('thread:<int:thread_id>/follow', views.follow_thread_view, name='follow'),
     
     path('create-topic:<str:thread_kind>/', views.create_topic_view, name='create-topic'),
     path('create-thread:<str:thread_kind>/', views.create_thread_view, name='create-thread'),

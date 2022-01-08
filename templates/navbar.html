@@ -55,6 +55,16 @@
                                             {% endif %}
                                         </div>
                                     </li>
+                                    <li>
+                                        <a class="font-14 nav-link small-caps" href="{% url 'communications:threads' 'Announcement' None %}">Ogłoszenia</a>
+                                        <div class="row info-row-sub news-bubble float-right">
+<!--                                            {% if unseen_announcements %}-->
+<!--                                                <div class="number-circle-sub bg-blue d-flex align-items-center">-->
+<!--                                                    <span class="mx-auto number-circle-main-inner">{{ unseen_announcements.count }}</span>-->
+<!--                                                </div>-->
+<!--                                            {% endif %}-->
+                                        </div>
+                                    </li>
                                 {% endif %}
                                 <li><a class="font-14 nav-link small-caps" href="{% url 'rules:main' %}">Zasady</a></li>
                             </ul>
@@ -85,6 +95,16 @@
                                 <li><a class="font-14 nav-link small-caps" href="{% url 'chronicles:chronicle-main' %}">Kronika</a></li>
                                 <li>
                                     <a class="font-14 nav-link small-caps" href="{% url 'debates:main' %}">Narady</a>
+                                    <div class="row info-row-sub debates-bubble float-right">
+                                        {% if unseen_debates %}
+                                            <div class="number-circle-sub bg-greengray d-flex align-items-center">
+                                                <span class="mx-auto number-circle-main-inner">{{ unseen_debates.count }}</span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </li>
+                                <li>
+                                    <a class="font-14 nav-link small-caps" href="{% url 'communications:threads' 'Debate' None %}">Narady</a>
                                     <div class="row info-row-sub debates-bubble float-right">
                                         {% if unseen_debates %}
                                             <div class="number-circle-sub bg-greengray d-flex align-items-center">
