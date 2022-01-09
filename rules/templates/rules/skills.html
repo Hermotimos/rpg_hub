@@ -7,40 +7,88 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <div class="rules-styling">
-        <br><br><br>
+    <div class="rules-styling pt-3">
 
         <!-- SKILLS RULES  -->
-        <h2 class="rules">Umiejętności początkowe i rozwój</h2>
-        <br>
+        <h2 class="rules mt-5 mb-3">Rozwój Postaci</h2>
         <p>
-            Każda postać rozpoczyna grę z pewnym zakresem Umiejętności, zależnym od jej biografii oraz Profesji.
-            Początkowa ilość punktów Umiejętności do rozdysponowania różni się w zależności od Klasy i Profesji:
-            Wojownik - 3, Awanturnik, Bard, Czarodziej, Kapłan i Łotrzyk  - 4.
-            Szczegółowe opisy Profesji mogą zawierać modyfikacje (np. Syssition dysponuje aż 4 pkt Umiejętności w zamian za jedynie 3 pkt Biegłości).
-            Niektóre Profesje dysponują Umiejętnościami startowymi, które zostały wskazane w ich opisach.
-            Wszystkie Klasy dysponują pełnym dostępem do wszelkich znanych im Umiejętności, który jest ograniczony jedynie realiami świata i ramami fabuły.
+            Podstawowe zasady dotyczące rozwoju Postaci sprowadzają się do nabywania Umiejętności w zamian za Punkty Doświadczenia,
+            otrzymywanym w następstwie doświadczeń w świecie gry.
+            Ponadto możliwe jest nabycie Umiejętności lub Atutu „fabularnie”, czyli na podstawie długotrwałych działań Postaci.
+            Atut to kategoria o płynnym charakterze, która pozostaje do dyspozycji Mistrza Gry jako uzupełnienie systemu rozwoju Postaci opartego o zakup Umiejętności.
+            Zasady nie przewidują takich kategorii jak Poziom Postaci czy Awans z poziomu na poziom.
+        </p>
+
+        <h2 class="rules mt-5 mb-3">Umiejętności</h2>
+        <p>
+            Każdy poziom Umiejętności ma określoną cenę wyrażoną w Punktach Doświadczenia, które trzeba przeznaczyć na jej zdobycie.
+            Wydane w ten sposób Punkty Doświadczenia zostają odjęte od aktualnej sumy Doświadczenia Postaci.
+            Innymi słowy, Doświadczenie to waluta, a każda Umiejętność ma swoją cenę.
+            Nabywanie w ten sposób Umiejętności stanowi istotę rozwoju Postaci.
         </p>
         <p>
-            Podczas tworzenia postaci Gracz może przeznaczyć początkowe punkty Umiejętności na wykupienie nowych Umiejętności lub rozwinięcie posiadanych do poziomu [2].
-            W takim przypadku nie obowiązuje zasada, iż poziom [2] wymaga wydania 200 doświadczenia poza 1 punktem Umiejętności.
-            Postać rozpoczynająca grę nie może jednak posiadać Umiejętności na poziomie [3].
+            Sam termin "Umiejętności" używany jest w specyficznym znaczeniu, pod którym kryją się różnorodne zdolności
+            – z jednej strony takie, które bez wahania określilibyśmy mianem umiejętności (np. Czytanie i pisanie, Wspinaczka),
+            jak i różnorodne właściwości fizyczne i psychiczne (np. Wytrzymałość, Wola życia, Spostrzegawczość, Zwiększona Siła)
+            czy wiedza (Doktryna bóstwa, Historia, Księgi.
+            Poniżej sekcji dotyczącej Paska Postępu znajduje się lista dostępnych Umiejętności.
+        </p>
+
+        <h2 class="rules mt-5 mb-3">Pasek Postępu</h2>
+        <p>
+            Oprócz Punktów Doświadczenia nabycie Umiejętności wymaga także szkolenia u nauczyciela albo pewnego czasu przeznaczonego na jej opanowanie.
+            Miernikiem spełnienia tego rodzaju przesłanki fabularnej jest Pasek Postępu.
+            Wprowadza on pewne, choć nie absolutne, zobiektywizowanie zasad dotyczących przesłanek fabularnych nabycia nowych Umiejętności oraz umożliwia Graczowi orientację,
+            na jakim etapie nauki znajduje się jego Postać.
         </p>
         <p>
-            Punkty Umiejętności, podobnie jak Punkty Biegłości można wydawać w chwili awansu i tylko wtedy.
-            Oznacza to, że aby uzyskać nową Umiejętność wraz z awansem, należy ją rozwijać już wcześniej.
-            Jeśli gracz tego nie robił bądź robił niemrawo, to dany awans nie przynosi punktu Umiejętności albo Biegłości,
-            tak samo jak nie da +1 cechy, jeśli cały poziom został nabyty na stanowisku urzędnika portowego albo celnika na mało ruchliwym brodzie.
-            W przypadku 2 i 3 poziomu Umiejętności, które wymagają odpowiednio 200 dośw. i 500 dośw., punkty te trzeba przeznaczyć na umiejętność w trakcie nauki,
-            czyli w trakcie nabijania danego poziomu - co de facto opóźnia awans.
-            Tylko pod tym warunkiem w chwili awansu jest się gotowym do wejścia na wyższy poziom danej Umiejętności (przez wydanie Punktu Umiejętności).
-            Deklarację o wydaniu 200/500 dośw. można złożyć w dowolnym momencie w trakcie zdobywania nowego poziomu, ale najlepiej po uzyskaniu od Mistrza Gry potwierdzenia, że nauka przynosi pierwsze efekty.
+            Zapełnienie Paska Postępu jest warunkiem koniecznym do nabycia Umiejętności za Doświadczenie,
+            ale z drugiej strony nie zobowiązuje do niego, tzn. nie „więzi” Doświadczenia.
+            Pula Doświadczenia jest jedna i niepodzielna, a decyzja, żeby rozwijać jakąś Umiejętność nie zobowiązuje do tego,
+            żeby przeznaczyć na nią choćby 1 punkt doświadczenia.
+            Oznacza to, że Postać może zapełnić Paski Postępu dla kilku Umiejętności, których wcale nie ma zamiaru wykupić w najbliższym czasie<sup>✵</sup>,
+            a być może w ogóle, ponieważ rozwijała je wyłącznie z braku dostępu do doświadczeń pozwalających na rozwijanie o wiele bardziej pożądanych Umiejętności.
+            Odpowiada to nauce różnych głupot z nudów, która prowadzi do sytuacji bliskiej nabyciu nowych kompetencji przy odrobinie dalszego wysiłku.
+            Jedyne ograniczenie jest tu takie, że aby rozwijać w ramach Paska Postępu Umiejętność wyższego poziomu, trzeba już posiadać jej niższy poziom
+            (wybrany na początku gry, uzyskany fabularnie lub wykupiony za Doświadczenie).
         </p>
-        <br><br><br>
+        <ul class="rules bullets-2 ml-4 mt-2">
+            <li>
+                Jednakże, w przypadku, gdyby po zapełnieniu Paska Postępu Postać na długi czas całkowicie zaprzestała działań związanych z daną Umiejętnością,
+                które odświeżałyby jej obycie w danej materii, Mistrz Gry może zdecydować o przedłużeniu Paska Postępu dla danego poziomu Umiejętności u tej Postaci o kilka kratek.
+            </li>
+        </ul>
+        <p>
+            Każdy Poziom Umiejętności ma osobny Pasek Postępu, o pewnej liczbie kratek.
+            Każda z kratek odpowiada jednemu doświadczeniu w życiu Postaci o wystarczającym stopniu złożoności, aby przyczynić się do rozwoju danej Umiejętności.
+            Ilość kratek oraz wymagania dotyczące ich zapełnienia oddają prawidłowość dotyczącą nauki nowych Umiejętności znaną z życia:
+            trudne początki z koniecznością sporej inwestycji czasu, następnie stosunkowo prędki postęp, aż wreszcie sufit,
+            który przebiją tylko najbardziej zdeterminowani i wytrwali.
+            Odpowiada to następującemu schematowi Pasków Postępu dla poziomów Umiejętności, gdzie poszczególne „kratki" odpowiadają jednemu doświadczeniu:
+      
+        </p>
+        <ol class="rules  ml-4 mt-2">
+            <li>
+                20 niewymagających: bardzo niskie wymaganie, ale przez ilość wymaga pewnego czasu
+            </li>
+            <li>
+                5 wymagających: wystarczy niewielka liczba, ale za to „jakościowych” doświadczeń
+            </li>
+            <li>
+                15 trudnych: tylko nieliczni i naprawdę zdeterminowani są w stanie wspiąć się na ten pułap
+            </li>
+        </ol>
+        <p>
+            Uzupełnianie kratek Paska Postępu następuje przy okazji przydzielenia Doświadczenia po zakończeniu Sesji.
+            Gracz wskazuje doświadczenie, które jego zdaniem przyczynia się do zapełnienia kratki Paska Postępu, a Mistrz Gry ustosunkowuje się do tego.
+            W przypadku doświadzeń o wyższym stopniu trudności niż wymagany do zapełnienia jednej kratki na aktualnym Pasku Postępu,
+            Mistrz Gry może dopuścić na zapełnienie większej ich liczby.
+            Rozwiązania typu zapełnienie pół kratki czy kropka w kratce są również dopuszczalne, kiedy danemu doświadczeniu ciężko przyporządkować poziom trudności.
+        </p>
+        
         
         <!-- SKILLS LEVELS  -->
-        <h2 class="rules">Poziomy umiejętności</h2>
-        <br>
+        <h2 class="rules mt-5 mb-3">Poziomy umiejętności</h2>
         <table>
             <tr>
                 <td class="align-top">
@@ -52,7 +100,6 @@
                     Ewentualnie postaci może się zdawać, że coś na dany temat wie albo umie. Oczywiście mało komu przeszkadza to, żeby się wymądrzać.
                     <br>
                     Jeśli postać spróbuje użyć danej Umiejętności, to istnieje oczywiście szansa na to, że próba się powiedzie, jednak jest to szansa niezwykle mała...
-                    <br><br>
                 </td>
             </tr>
             <tr>
@@ -60,10 +107,8 @@
                     <img class="img-numeral" src="{% static 'img/1.png' %}">
                 </td>
                 <td class="align-bottom pl-1 justify">
-                    <b>Sprawność</b><br>
+                    <b>Poziom kompetentny</b><br>
                     Pozwala na wykonywanie standardowych testów za powodzenie zastosowania danej Umiejętności z modyfikatorami zależnymi od sytuacji.
-                    Taką Umiejętność można nabyć za 1 pkt Umiejętności otrzymany przy awansie.
-                    <br><br>
                 </td>
             </tr>
             <tr>
@@ -73,8 +118,6 @@
                 <td class="align-bottom pl-1 justify">
                     <b>Poziom ekspercki</b><br>
                     Pozwala na pełne wykorzystanie danej Umiejętności oraz eksperymentowanie poza jej zakresem standardowego zastosowania.
-                    Działania standardowe: mod. +3.<br>
-                    Oprócz punktu Umiejętności wymaga również zużycia 200 dośw.  + ew. nauki u mistrza.<br><br>
                 </td>
             </tr>
             <tr>
@@ -83,22 +126,17 @@
                 </td>
                 <td class="align-bottom pl-1 justify">
                     <b>Poziom legendarny</b><br>
-                    Pozwala na działania wykraczające poza zdolności pojmowania przeciętnego człowieka i przesuwające granicę między rzeczywistością a eposem…<br>
-                    Działania standardowe: udają się bez rzutu.<br>
-                    Działania niezwykle trudne i złożone: mod. +3.<br>
-                    Działania niemożliwe są możliwe: mod. -3.<br>
-                    Oprócz punktu Umiejętności wymaga również zużycia 500 dośw. + ew. nauki u mistrza lub lat praktyki.<br>
+                    Pozwala na działania wykraczające poza zdolności pojmowania przeciętnego człowieka i naginające granicę między rzeczywistością a eposem…<br>
                 </td>
             </tr>
         </table>
-        <br><br><br>
 
         <!-- SKILLS  -->
-        <h2><b class="hover-blue" data-toggle="collapse" data-target="#skills">Lista Umiejętności</b></h2>
-        <small>
-            Lista Umiejętności jest otwarta. Jeśli jesteś zainteresowany Umiejętnością z listy, która nie ma jeszcze opisu albo
-            taką, której nie ma na liście (a realnie istnieje), to wyślij Dezyderat do Mistrza Gry.
-        </small>
+        <h2 class="rules mt-5 mb-3 hover-blue" data-toggle="collapse" data-target="#skills">Lista Umiejętności</h2>
+        <p>
+            Lista Umiejętności jest otwarta. Gracze zainteresowani Umiejętnościami spoza listy (ale istniejącymi realnie)
+            albo znajdującymi się na liście, ale z niepełnym opisem, mogą wysłać w tej sprawie Dezyderat do Mistrza Gry.
+        </p>
         <br><br>
         <div id="skills" class="collapse show">
             {% with show_levels=False %}
