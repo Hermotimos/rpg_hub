@@ -12,14 +12,12 @@ from communications.forms import (
     ThreadEditTagsForm,
     ThreadTagEditFormSet,
     ThreadTagEditFormSetHelper,
-    TopicCreateForm,
 )
 from communications.models import (
     Announcement,
     Statement,
     Thread,
     ThreadTag,
-    Topic,
 )
 from users.models import Profile
 
@@ -224,24 +222,6 @@ def thread_view(request, thread_id, tag_title):
     else:
         return redirect('home:dupa')
     
-
-@login_required
-def create_topic_view(request, thread_kind: str):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
-    
-    form = TopicCreateForm(request.POST or None)
-    if form.is_valid():
-        topic = form.save()
-        messages.info(request, f"Utworzono nowy temat: '{topic.title}'!")
-        return redirect('communications:create-thread', thread_kind=thread_kind)
-
-    context = {
-        'current_profile': current_profile,
-        'page_title': "Nowy temat",
-        'form_1': form,
-    }
-    return render(request, 'create_form.html', context)
-
 
 @login_required
 def create_thread_view(request, thread_kind):

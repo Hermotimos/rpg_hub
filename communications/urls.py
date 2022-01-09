@@ -12,7 +12,6 @@ urlpatterns = [
     path('thread:<int:thread_id>/unfollow', views.unfollow_thread_view, name='unfollow'),
     path('thread:<int:thread_id>/follow', views.follow_thread_view, name='follow'),
     
-    path('create-topic:<str:thread_kind>/', views.create_topic_view, name='create-topic'),
     path('create-thread:<str:thread_kind>/', views.create_thread_view, name='create-thread'),
     
     # news

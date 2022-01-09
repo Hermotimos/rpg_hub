@@ -66,9 +66,6 @@
                 </div>
             {% endif %}
             <div class="mb-5">
-                <h3 class="small-caps mb-3">
-                    <b class="border-bottom-dark">{{ topic.title }}</b>
-                </h3>
                 {% for thread in threads %}
                     {% include 'communications/_thread.html' %}
                 {% endfor %}

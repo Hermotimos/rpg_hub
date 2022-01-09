@@ -94,19 +94,6 @@
 <!-- INFO -->
 <div class="col mt-3 p-0">
     
-    {% if thread.topic %}
-        <div class="row">
-            <div class="col-2 pl-0 h5">
-                Temat:
-            </div>
-            <div class="col-10 col-sm-10 pl-5 pl-lg-0">
-                <h5 class="mr-2 mr-sm-3 font-italic">
-                    {{ thread.topic.title }}
-                </h5>
-            </div>
-        </div>
-    {% endif %}
-    
     {% if thread.kind == 'Debate' %}
         <div class="row">
             <div class="col-2 pl-0 h5">

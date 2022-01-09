@@ -4,24 +4,9 @@ from django import forms
 from django.db.models import Q
 from django.forms.widgets import HiddenInput, TextInput
 
-from communications.models import Topic, ThreadTag, Statement, Option, \
+from communications.models import ThreadTag, Statement, Option, \
     Announcement, Debate, Thread
 from users.models import Profile
-
-
-class TopicCreateForm(forms.ModelForm):
-    
-    class Meta:
-        model = Topic
-        fields = ['title']
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        
-        self.fields['title'].label = "Tytuł nowego tematu"
-
-
-# ===========================================================================
 
 
 class ThreadTagEditForm(forms.ModelForm):
@@ -74,7 +59,7 @@ class AnnouncementCreateForm(forms.ModelForm):
     
     class Meta:
         model = Announcement
-        fields = ['topic', 'title', 'known_directly']
+        fields = ['title', 'known_directly']
         
     def __init__(self, *args, **kwargs):
         current_profile = kwargs.pop('current_profile')
@@ -88,21 +73,18 @@ class AnnouncementCreateForm(forms.ModelForm):
         
         self.fields['known_directly'].label = "Adresaci"
         self.fields['title'].label = "Tytuł"
-        self.fields['topic'].label = "Temat"
 
         known_directly = Profile.contactables.exclude(id=current_profile.id)
         self.fields['known_directly'].queryset = known_directly
         self.fields['known_directly'].widget.attrs['size'] = min(
             len(known_directly), 10)
         
-        self.fields['topic'].queryset = Topic.objects.filter(threads__kind='Announcement')
-
 
 class DebateCreateForm(forms.ModelForm):
     
     class Meta:
         model = Debate
-        fields = ['topic', 'title', 'known_directly', 'is_exclusive']
+        fields = ['title', 'known_directly', 'is_exclusive']
         
     def __init__(self, *args, **kwargs):
         current_profile = kwargs.pop('current_profile')
@@ -121,28 +103,15 @@ class DebateCreateForm(forms.ModelForm):
         self.fields['is_exclusive'].label = "Narada zamknięta?"
         self.fields['known_directly'].label = "Uczestnicy"
         self.fields['title'].label = "Tytuł"
-        self.fields['topic'].label = "Temat"
 
-        topic_qs = Topic.objects.all()
         known_directly = Profile.living.all()
 
         if current_profile.status != 'gm':
             self.fields['is_exclusive'].widget = HiddenInput()
-    
-            # topic_id = kwargs['initial']['topic'].id if kwargs['initial']['topic'] else None
-            # topic_qs = topic_qs.filter(
-            #     Q(debates__known_directly=current_profile) | Q(id=topic_id)
-            # ).distinct()
-            topic_qs = topic_qs.filter(
-                threads__known_directly=current_profile,
-                threads__kind='Debate',
-            )
-            
             known_directly = known_directly.filter(
                 character__in=current_profile.characters_known_directly.all()
             ).exclude(id=current_profile.id).select_related()
 
-        self.fields['topic'].queryset = topic_qs
         self.fields['known_directly'].queryset = known_directly
 
         self.fields['known_directly'].widget.attrs['size'] = min(

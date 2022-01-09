@@ -22,18 +22,6 @@ from django.db.models.signals import post_save
 from users.models import Profile
 
 
-class Topic(Model):
-    title = CharField(max_length=100, unique=True)
-    order_no = SmallIntegerField(default=100)
-    created_at = DateTimeField(auto_now_add=True)
-    
-    class Meta:
-        ordering = ['order_no', 'title']
-    
-    def __str__(self):
-        return self.title
-
-
 #  ==========================================================================
 
 
@@ -73,8 +61,6 @@ class Thread(Model):
     objects = ThreadManager()
     
     title = CharField(max_length=100, unique=True)
-    topic = FK(to=Topic, related_name='threads', on_delete=CASCADE, blank=True,
-               null=True)
     kind = CharField(max_length=15, choices=THREAD_KINDS)
     known_directly = M2M(to=Profile, related_name='threads_known_directly')     # known_directly also use instead of inform_gm in Plans
     created_at = DateTimeField(auto_now_add=True)

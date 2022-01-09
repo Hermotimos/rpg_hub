@@ -4,15 +4,9 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
 from django.forms import Select, TextInput
 
-from communications.models import Topic, Statement, Debate, Announcement, Thread, ThreadTag
+from communications.models import Statement, Debate, Announcement, Thread, ThreadTag
 from rpg_project.utils import formfield_for_dbfield_cached
 from users.models import Profile
-
-
-class TopicAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'order_no', 'created_at']
-    list_editable = ['title', 'order_no']
-    search_fields = ['title']
 
 
 class ThreadAdmin(admin.ModelAdmin):
@@ -23,9 +17,7 @@ class DebateAdminForm(forms.ModelForm):
     
     class Meta:
         model = Debate
-        fields = [
-            'title', 'topic', 'kind', 'known_directly', 'is_ended',
-            'is_exclusive']
+        fields = ['title', 'kind', 'known_directly', 'is_ended', 'is_exclusive']
         widgets = {}
         
     known_directly = forms.ModelMultipleChoiceField(
@@ -39,8 +31,7 @@ class AnnouncementAdminForm(forms.ModelForm):
     
     class Meta:
         model = Announcement
-        fields = [
-            'title', 'topic', 'kind', 'known_directly', 'followers', 'tags']
+        fields = ['title', 'kind', 'known_directly', 'followers', 'tags']
         widgets = {
             'followers': FilteredSelectMultiple('Followers', False),
             'tags': FilteredSelectMultiple('Tags', False),
@@ -70,29 +61,16 @@ class ThreadTagAdmin(admin.ModelAdmin):
 
 class DebateAdmin(admin.ModelAdmin):
     form = DebateAdminForm
-    list_display = ['title', 'topic', 'is_ended', 'is_exclusive', 'created_at']
-    list_editable = ['topic', 'is_ended', 'is_exclusive']
-    list_filter = ['topic']
+    list_display = ['title', 'is_ended', 'is_exclusive', 'created_at']
+    list_editable = ['is_ended', 'is_exclusive']
     search_fields = ['title']
     
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        fields = [
-            'topic',
-        ]
-        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-
 
 class AnnouncementAdmin(admin.ModelAdmin):
     form = AnnouncementAdminForm
     list_display = ['title', 'created_at']
     search_fields = ['title']
     
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        fields = [
-            'topic',
-        ]
-        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-
 
 class StatementAdmin(admin.ModelAdmin):
     formfield_overrides = {
@@ -111,7 +89,6 @@ class StatementAdmin(admin.ModelAdmin):
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
     
     
-admin.site.register(Topic, TopicAdmin)
 admin.site.register(Thread, ThreadAdmin)
 admin.site.register(ThreadTag, ThreadTagAdmin)
 admin.site.register(Debate, DebateAdmin)
