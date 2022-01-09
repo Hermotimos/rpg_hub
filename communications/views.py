@@ -28,7 +28,7 @@ from users.models import Profile
 #  2) detail views - one for all, steer it with parameters; separate templates
 
 
-THREAD_MAP = {
+THREADS_MAP = {
     'Announcement': {
       'name': "Ogłoszenie",
       'text': "Nowe Ogłoszenie",
@@ -43,106 +43,16 @@ THREAD_MAP = {
 
 
 def thread_inform(request, thread, tag_title):
-    informed_ids = [
-        k for k, v_list in request.POST.items() if 'on' in v_list]
+    informed_ids = [k for k, v_list in request.POST.items() if 'on' in v_list]
     thread.known_directly.add(*informed_ids)
     thread.followers.add(*informed_ids)
     send_mail(
         subject=f"[RPG] Udostępnienie Ogłoszenia: '{thread.title}'",
         message=f"{request.get_host()}{thread.get_absolute_url()}/",
         from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[
-            p.user.email for p in Profile.objects.filter(
-                id__in=informed_ids)])
+        recipient_list=[p.user.email for p in Profile.objects.filter(id__in=informed_ids)])
     messages.info(request, f'Poinformowano wybranych Graczy!')
-    return redirect(
-        'communications:thread', thread_id=thread.id, tag_title=tag_title)
-
-#
-# @login_required
-# def announcements_view(request, tag_title):
-#     current_profile = Profile.objects.get(id=request.session['profile_id'])
-#
-#     announcements = Announcement.objects.filter(known_directly=current_profile)
-#     announcements = announcements.prefetch_related(
-#         'statements__author',
-#         'statements__seen_by',
-#         'tags__author',
-#         'topic',
-#         'followers')
-#     if tag_title != 'None':
-#         announcements = announcements.filter(tags__title=tag_title)
-#
-#     unseen_announcements = announcements.filter(
-#         id__in=current_profile.unseen_announcements)
-#     announcements = announcements.exclude(id__in=unseen_announcements)
-#
-#     tags = ThreadTag.objects.filter(author=current_profile, kind='Announcement')
-#     formset = ThreadTagEditFormSet(
-#         data=request.POST or None,
-#         queryset=tags)
-#
-#     for form in formset:
-#         form.initial['kind'] = 'Announcement'
-#         form.initial['author'] = current_profile
-#
-#     if request.method == 'GET':
-#         if tag_id := request.GET.get('tag', []):
-#             tag = ThreadTag.objects.get(id=tag_id)
-#             return redirect('communications:announcements', tag_title=tag.title)
-#
-#     elif request.method == 'POST':
-#         if not formset.is_valid():
-#             if "Thread tag z tymi Title i Author" in str(formset.errors):
-#                 messages.warning(request, "Zduplikowany tag!")
-#             messages.warning(request, "Popraw wskazane pola!")
-#         else:
-#             changed = False
-#             for form in formset:
-#                 if not form.is_valid():
-#                     messages.warning(request, form.errors)
-#                 else:
-#                     # Ignore empty extra forms
-#                     if not form.cleaned_data:
-#                         continue
-#
-#                     # Deletion
-#                     elif form.cleaned_data.get('DELETE'):
-#                         tag = form.cleaned_data.get('id')
-#                         if tag:
-#                             tag.delete()
-#                             changed = True
-#                             messages.success(request, f"Usunięto tag '{tag}'!")
-#                         else:
-#                             messages.warning(request, "Nowy tag zaznaczony do usunięcia!")
-#
-#                     # Creation / Modification
-#                     else:
-#                         tag = form.save(commit=False)
-#                         tag.author = form.cleaned_data['author']
-#                         tag.save()
-#                         if form.has_changed():
-#                             changed = True
-#                             messages.success(request, f"Zmieniono: {tag}!")
-#             if changed:
-#                 return redirect(
-#                     'communications:announcements', tag_title=tag_title)
-#             else:
-#                 messages.warning(request, "Nie dokonano żadnych zmian!")
-#                 return redirect(
-#                     'communications:announcements', tag_title=tag_title)
-#
-#     context = {
-#         'current_profile': current_profile,
-#         'page_title': 'Ogłoszenia',
-#         'announcements': announcements,
-#         'unseen_announcements': unseen_announcements,
-#         'tag_title': tag_title,
-#         'tags': tags,
-#         'formset': formset,
-#         'formset_helper': ThreadTagEditFormSetHelper(),
-#     }
-#     return render(request, 'communications/____announcements.html', context)
+    return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
 
 
 @login_required
@@ -255,13 +165,11 @@ def thread_view(request, thread_id, tag_title):
     if current_profile.status != 'gm':
         informables = informables.filter(character__in=current_profile.characters_known_directly.all())
 
-
     # Update all statements to be seen by the profile
     SeenBy = Statement.seen_by.through
     relations = []
     for statement in thread.statements.all():
-        relations.append(
-            SeenBy(statement_id=statement.id, profile_id=current_profile.id))
+        relations.append(SeenBy(statement_id=statement.id, profile_id=current_profile.id))
     SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
 
     # Create ThreadEditTagsForm and StatementCreateForm
@@ -277,32 +185,30 @@ def thread_view(request, thread_id, tag_title):
         files=request.FILES or None,
         current_profile=current_profile,
         thread_kind=thread.kind,
-        known_directly=[],
+        known_directly=thread.known_directly.all(),
         initial={'author': current_profile})
 
     if request.method == 'POST' and 'Announcement' in request.POST:
         thread_inform(request, thread, tag_title)
-        return redirect(
-            'communications:thread', thread_id=thread.id, tag_title=tag_title)
+        return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
 
     if statement_form.is_valid():
         statement = statement_form.save(commit=False)
         statement.thread = thread
         statement.save()
+        statement.seen_by.add(statement.author)
         send_mail(
             subject=f"[RPG] Nowa wypowiedź: '{thread.title}'",
             message=f"{request.get_host()}{thread.get_absolute_url()}/",
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[p.user.email for p in followers if p != current_profile])
-        messages.info(request, f"Dodano wypowiedź!")
-        return redirect(
-            'communications:thread', thread_id=thread.id, tag_title=tag_title)
+        messages.info(request, "Dodano wypowiedź!")
+        return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
     
     if thread_tags_form.is_valid():
         thread_tags_form.save()
-        messages.info(request, f"Zapisano zmiany!")
-        return redirect(
-            'communications:thread', thread_id=thread.id, tag_title=tag_title)
+        messages.info(request, "Zapisano zmiany!")
+        return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
 
     context = {
         'current_profile': current_profile,
@@ -326,8 +232,7 @@ def create_topic_view(request, thread_kind: str):
     form = TopicCreateForm(request.POST or None)
     if form.is_valid():
         topic = form.save()
-        messages.info(
-            request, f"Utworzono nowy temat: '{topic.title}'!")
+        messages.info(request, f"Utworzono nowy temat: '{topic.title}'!")
         return redirect('communications:create-thread', thread_kind=thread_kind)
 
     context = {
@@ -342,7 +247,7 @@ def create_topic_view(request, thread_kind: str):
 def create_thread_view(request, thread_kind):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
 
-    thread_form = THREAD_MAP[thread_kind]['form'](
+    thread_form = THREADS_MAP[thread_kind]['form'](
         data=request.POST or None,
         files=request.FILES or None,
         current_profile=current_profile)
@@ -363,7 +268,6 @@ def create_thread_view(request, thread_kind):
         known_directly = thread_form.cleaned_data['known_directly']
         known_directly |= Profile.objects.filter(
             Q(id=current_profile.id) | Q(status='gm'))
-        print(known_directly)
         thread.known_directly.set(known_directly)
         thread.followers.set(known_directly)
 
@@ -371,21 +275,22 @@ def create_thread_view(request, thread_kind):
         statement.thread = thread
         statement.author = current_profile
         statement.save()
+        statement.seen_by.add(current_profile)
 
         send_mail(
-            subject=f"[RPG] {THREAD_MAP[thread_kind]['text']}: '{thread}'",
+            subject=f"[RPG] {THREADS_MAP[thread_kind]['text']}: '{thread}'",
             message=f"{request.get_host()}{thread.get_absolute_url()}/",
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[
                 p.user.email for p in known_directly if p != current_profile])
 
-        messages.info(request, f"Utworzono {THREAD_MAP[thread_kind]['name']}!")
+        messages.info(request, f"Utworzono {THREADS_MAP[thread_kind]['name']}!")
         return redirect(
             'communications:thread', thread_id=thread.id, tag_title=None)
 
     context = {
         'current_profile': current_profile,
-        'page_title': f"{THREAD_MAP[thread_kind]['text']}",
+        'page_title': f"{THREADS_MAP[thread_kind]['text']}",
         'form_1': thread_form,
         'form_2': statement_form,
     }

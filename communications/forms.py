@@ -94,6 +94,8 @@ class AnnouncementCreateForm(forms.ModelForm):
         self.fields['known_directly'].queryset = known_directly
         self.fields['known_directly'].widget.attrs['size'] = min(
             len(known_directly), 10)
+        
+        self.fields['topic'].queryset = Topic.objects.filter(threads__kind='Announcement')
 
 
 class DebateCreateForm(forms.ModelForm):
@@ -127,12 +129,15 @@ class DebateCreateForm(forms.ModelForm):
         if current_profile.status != 'gm':
             self.fields['is_exclusive'].widget = HiddenInput()
     
-            topic_id = kwargs['initial']['topic'].id \
-                if kwargs['initial']['topic'] else None
+            # topic_id = kwargs['initial']['topic'].id if kwargs['initial']['topic'] else None
+            # topic_qs = topic_qs.filter(
+            #     Q(debates__known_directly=current_profile) | Q(id=topic_id)
+            # ).distinct()
             topic_qs = topic_qs.filter(
-                Q(debates__known_directly=current_profile) | Q(id=topic_id)
-            ).distinct()
-    
+                threads__known_directly=current_profile,
+                threads__kind='Debate',
+            )
+            
             known_directly = known_directly.filter(
                 character__in=current_profile.characters_known_directly.all()
             ).exclude(id=current_profile.id).select_related()
