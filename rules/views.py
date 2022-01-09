@@ -97,11 +97,11 @@ def rules_professions_view(request):
 
     context = {
         'current_profile': profile,
-        'page_title': 'Klasa, Profesja i rozwój postaci',
+        'page_title': 'Tworzenie Postaci, Klasa i Profesja',
         'professions': professions,
         'elite_professions': elite_professions
     }
-    return render(request, 'rules/professions.html', context)
+    return render(request, 'rules/character_and_professions.html', context)
 
 
 @login_required
