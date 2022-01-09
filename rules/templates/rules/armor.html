@@ -120,14 +120,12 @@
         <table class="shields">
             <colgroup>
                 <col class="shield">
-                <col class="num-of-enemies">
                 <col class="armor-class">
                 <col class="weight">
             </colgroup>
             <thead class="align-center dark">
                 <tr class="border-bottom-dark">
                     <th class="small-caps align-left">TARCZA</th>
-                    <th class="small-caps">Przeciwnicy</th>
                     <th class="small-caps">KP<br>zwarcie/dystans</th>
                     <th class="small-caps">Waga</th>
                 </tr>
@@ -136,8 +134,12 @@
             <tbody class="align-center dark">
                 {% for shield in shields %}
                     <tr>
-                        <td class="{% if shield.description %} hover-blue {% endif %} align-left" data-toggle="collapse" data-target="#{{ shield.name }}">{{ shield.name }}</td>
-                        <td>{{ shield.enemies_no }}</td>
+                        <td class="{% if shield.description %} hover-blue {% endif %} align-left" data-toggle="collapse" data-target="#{{ shield.name }}">
+                            {{ shield.name }}
+                            {% if shield.name == 'Puklerz' %}
+                                <sup>✵</sup>
+                            {% endif %}
+                        </td>
                         <td>+{{ shield.armor_class_bonus_close_combat }}/+{{ shield.armor_class_bonus_distance_combat }}</td>
                         <td>{{ shield.weight.normalize }}</td>
                     </tr>
@@ -163,6 +165,16 @@
             </tbody>
 
         </table>
+        <ul class="rules bullets-2 ml-4 mt-2">
+            <li>
+                TODO - weryfikacja wagi i właściwości tarcz, usunięcie rozróżnienia KP zwarcie/strzelcy.
+               Puklerz pozwala na zastosowanie premii +4 KP oraz całości premii do KP z Parowania (KON) wobec tylko jednego przeciwnika.
+                Za to waga podbita na 8 kg, bo jest metalowy, ale Wytrzymałość 200 (inne tarcze 40 zwykłe, 100 z umbo, a pawęż 50).
+                Umbo zmienia głównie wytrzymałość (jak w zbroi dodać), a nie KP.
+                Pawęż max. +3 KP, ale specjalna właściwość - Defensywa przed ostrzałem trafiają tylko Krytyki.
+            </li>
+        </ul>
+
         <br><br><br>
 
 

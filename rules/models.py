@@ -457,6 +457,7 @@ class Shield(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
     picture_sets = M2M(to=PictureSet, related_name='shields', blank=True)
+    # enemies_no do skasowania
     enemies_no = PositiveSmallIntegerField()
     armor_class_bonus_close_combat = PositiveSmallIntegerField(
         blank=True,

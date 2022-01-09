@@ -128,7 +128,7 @@ def rules_traits_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
         'current_profile': profile,
-        'page_title': 'Cechy'
+        'page_title': 'Cechy Fizyczne'
     }
     return render(request, 'rules/traits.html', context)
 
