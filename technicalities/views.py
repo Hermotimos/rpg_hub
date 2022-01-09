@@ -202,7 +202,7 @@ def reload_news(request):
 @login_required
 @only_game_masters
 def reload_debates(request):
-    from debates.models import Debate as OldDebate, Remark, Topic as OldTopic
+    # from debates.models import Debate as OldDebate, Remark, Topic as OldTopic
     from communications.models import Option, Debate, Topic, Statement
     from django.db import transaction
 

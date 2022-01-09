@@ -1,9 +1,9 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
 
-from debates import views
-from debates.forms import CreateDebateForm, CreateRemarkForm
-from debates.models import Topic, Debate, Remark
+# from debates import views
+# from debates.forms import CreateDebateForm, CreateRemarkForm
+# from debates.models import Topic, Debate, Remark
 from users.models import User
 
 

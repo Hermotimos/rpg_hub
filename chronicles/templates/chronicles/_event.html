@@ -66,7 +66,7 @@
         
                                     <div id="debate_{{ debate.id }}" class="collapse show">
                                         <div class="mt-2">
-                                            <a href="{% url 'communications:threads' debate.id None %}" class="btn btn-outline-dark">Idź do narady</a>
+                                            <a href="{% url 'communications:thread' debate.id None %}" class="btn btn-outline-dark">Idź do narady</a>
                                             <a class="btn btn-outline-secondary" href="#"  data-toggle="collapse" data-target="#debate_{{ debate.id }}">Zwiń naradę</a>
                                         </div>
                                         <div class="mt-5">

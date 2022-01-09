@@ -1,75 +1,116 @@
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch
-from django.shortcuts import render, redirect
-
-from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm
-from debates.models import Topic, Debate, Remark
-from rpg_project.utils import send_emails, handle_inform_form
-from users.models import Profile
-
-
-@login_required
-def debates_main_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
-    debates = Debate.objects.all().prefetch_related('known_directly')
-    if profile.can_view_all:
-        debates = debates.prefetch_related('events__game')
-    else:
-        debates = debates.filter(known_directly=profile)
-        events = (profile.events_known_directly.all()
-                  | profile.events_known_indirectly.all())
-        events = events.select_related('game')
-        debates = debates.prefetch_related(Prefetch('events', queryset=events))
-
-    topics = Topic.objects.filter(debates__in=debates)
-    topics = topics.prefetch_related(Prefetch('debates', queryset=debates))
-    topics = topics.distinct()
-
-    context = {
-        'current_profile': profile,
-        'page_title': 'Narady',
-        'topics': topics,
-    }
-    return render(request, 'debates/main.html', context)
-
-
-@login_required
-def create_topic_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
-    
-    form = CreateTopicForm(request.POST or None)
-    if form.is_valid():
-        topic = form.save()
-        messages.info(
-            request,  f"Utworzono nowy temat: '{topic.title}'! Utwórz naradę!")
-        return redirect('debates:create-debate', topic_id=topic.id)
-
-    context = {
-        'current_profile': profile,
-        'page_title': "Nowy temat narad",
-        'form_1': form,
-    }
-    return render(request, 'create_form.html', context)
-
-
+# from django.contrib import messages
+# from django.contrib.auth.decorators import login_required
+# from django.db.models import Prefetch
+# from django.shortcuts import render, redirect
+#
+# from debates.forms import CreateRemarkForm, CreateDebateForm, CreateTopicForm
+# from debates.models import Topic, Debate, Remark
+# from rpg_project.utils import send_emails, handle_inform_form
+# from users.models import Profile
+#
+#
+# @login_required
+# def debates_main_view(request):
+#     profile = Profile.objects.get(id=request.session['profile_id'])
+#     debates = Debate.objects.all().prefetch_related('known_directly')
+#     if profile.can_view_all:
+#         debates = debates.prefetch_related('events__game')
+#     else:
+#         debates = debates.filter(known_directly=profile)
+#         events = (profile.events_known_directly.all()
+#                   | profile.events_known_indirectly.all())
+#         events = events.select_related('game')
+#         debates = debates.prefetch_related(Prefetch('events', queryset=events))
+#
+#     topics = Topic.objects.filter(debates__in=debates)
+#     topics = topics.prefetch_related(Prefetch('debates', queryset=debates))
+#     topics = topics.distinct()
+#
+#     context = {
+#         'current_profile': profile,
+#         'page_title': 'Narady',
+#         'topics': topics,
+#     }
+#     return render(request, 'debates/main.html', context)
+#
+#
 # @login_required
 # def create_topic_view(request):
 #     profile = Profile.objects.get(id=request.session['profile_id'])
-#     topic_form = CreateTopicForm(request.POST or None)
+#
+#     form = CreateTopicForm(request.POST or None)
+#     if form.is_valid():
+#         topic = form.save()
+#         messages.info(
+#             request,  f"Utworzono nowy temat: '{topic.title}'! Utwórz naradę!")
+#         return redirect('debates:create-debate', topic_id=topic.id)
+#
+#     context = {
+#         'current_profile': profile,
+#         'page_title': "Nowy temat narad",
+#         'form_1': form,
+#     }
+#     return render(request, 'create_form.html', context)
+#
+#
+# # @login_required
+# # def create_topic_view(request):
+# #     profile = Profile.objects.get(id=request.session['profile_id'])
+# #     topic_form = CreateTopicForm(request.POST or None)
+# #     debate_form = CreateDebateForm(data=request.POST or None,
+# #                                    authenticated_user=request.user)
+# #     remark_form = CreateRemarkForm(data=request.POST or None,
+# #                                    files=request.FILES or None,
+# #                                    initial={'author': request.user},
+# #                                    authenticated_user=request.user,
+# #                                    debate_id=0)
+# #
+# #     if all([f.is_valid() for f in [topic_form, debate_form, remark_form]]):
+# #         topic = topic_form.save()
+# #
+# #         debate = debate_form.save(commit=False)
+# #         debate.topic = topic
+# #         debate.save()
+# #         new_known_directly = debate_form.cleaned_data['known_directly']
+# #         new_known_directly |= Profile.objects.filter(id=profile.id)
+# #         debate.known_directly.add(*list(new_known_directly))
+# #
+# #         remark = remark_form.save(commit=False)
+# #         remark.debate = debate
+# #         remark.save()
+# #
+# #         informed_ids = [p.id for p in new_known_directly if p != profile]
+# #         send_emails(request, informed_ids, new='topic', remark=remark)
+# #         messages.info(request, f'Utworzono nową naradę w nowym temacie!')
+# #         return redirect('debates:debate', debate_id=debate.id)
+# #
+# #     context = {
+# #         'page_title': 'Nowa narada w nowym temacie',
+# #         'form_1': topic_form,
+# #         'form_2': debate_form,
+# #         'form_3': remark_form,
+# #     }
+# #     return render(request, 'create_form.html', context)
+#
+#
+# @login_required
+# def create_debate_view(request, topic_id=0):
+#     profile = Profile.objects.get(id=request.session['profile_id'])
+#
+#     topic = Topic.objects.get(pk=topic_id) if topic_id else Topic.objects.none()
+#
 #     debate_form = CreateDebateForm(data=request.POST or None,
-#                                    authenticated_user=request.user)
+#                                    profile=profile,
+#                                    initial={'topic': topic})
+#
 #     remark_form = CreateRemarkForm(data=request.POST or None,
 #                                    files=request.FILES or None,
+#                                    profile=profile,
 #                                    initial={'author': request.user},
-#                                    authenticated_user=request.user,
-#                                    debate_id=0)
+#                                    known_directly=Profile.living.all())
 #
-#     if all([f.is_valid() for f in [topic_form, debate_form, remark_form]]):
-#         topic = topic_form.save()
-#
+#     if debate_form.is_valid() and remark_form.is_valid():
 #         debate = debate_form.save(commit=False)
-#         debate.topic = topic
 #         debate.save()
 #         new_known_directly = debate_form.cleaned_data['known_directly']
 #         new_known_directly |= Profile.objects.filter(id=profile.id)
@@ -80,124 +121,83 @@ def create_topic_view(request):
 #         remark.save()
 #
 #         informed_ids = [p.id for p in new_known_directly if p != profile]
-#         send_emails(request, informed_ids, new='topic', remark=remark)
-#         messages.info(request, f'Utworzono nową naradę w nowym temacie!')
+#         send_emails(request, informed_ids, new='debate', remark=remark)
+#         messages.info(request, f'Utworzono nową naradę!')
 #         return redirect('debates:debate', debate_id=debate.id)
 #
 #     context = {
-#         'page_title': 'Nowa narada w nowym temacie',
-#         'form_1': topic_form,
-#         'form_2': debate_form,
-#         'form_3': remark_form,
+#         'current_profile': profile,
+#         'page_title': 'Nowa narada',
+#         'form_1': debate_form,
+#         'form_2': remark_form,
 #     }
 #     return render(request, 'create_form.html', context)
-
-
-@login_required
-def create_debate_view(request, topic_id=0):
-    profile = Profile.objects.get(id=request.session['profile_id'])
-
-    topic = Topic.objects.get(pk=topic_id) if topic_id else Topic.objects.none()
-
-    debate_form = CreateDebateForm(data=request.POST or None,
-                                   profile=profile,
-                                   initial={'topic': topic})
-    
-    remark_form = CreateRemarkForm(data=request.POST or None,
-                                   files=request.FILES or None,
-                                   profile=profile,
-                                   initial={'author': request.user},
-                                   known_directly=Profile.living.all())
-    
-    if debate_form.is_valid() and remark_form.is_valid():
-        debate = debate_form.save(commit=False)
-        debate.save()
-        new_known_directly = debate_form.cleaned_data['known_directly']
-        new_known_directly |= Profile.objects.filter(id=profile.id)
-        debate.known_directly.add(*list(new_known_directly))
-
-        remark = remark_form.save(commit=False)
-        remark.debate = debate
-        remark.save()
-        
-        informed_ids = [p.id for p in new_known_directly if p != profile]
-        send_emails(request, informed_ids, new='debate', remark=remark)
-        messages.info(request, f'Utworzono nową naradę!')
-        return redirect('debates:debate', debate_id=debate.id)
-
-    context = {
-        'current_profile': profile,
-        'page_title': 'Nowa narada',
-        'form_1': debate_form,
-        'form_2': remark_form,
-    }
-    return render(request, 'create_form.html', context)
-
-
-@login_required
-def debate_view(request, debate_id):
-    profile = Profile.objects.get(id=request.session['profile_id'])
-    debates = Debate.objects.select_related()
-    debates = debates.prefetch_related('remarks__author', 'remarks__seen_by')
-    debate = debates.get(id=debate_id)
-    topic = debate.topic
-
-    debate_known_directly = debate.known_directly.exclude(status='gm')
-
-    # Update all remarks to be seen by the profile
-    SeenBy = Remark.seen_by.through
-    relations = []
-    for remark in debate.remarks.all():
-        relations.append(SeenBy(remark_id=remark.id, profile_id=profile.id))
-    SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
-    
-    # INFORM FORM
-    if request.method == 'POST' and 'Debate' in request.POST:
-        form = CreateRemarkForm(
-            initial={'author': request.user},
-            profile=profile,
-            known_directly=debate_known_directly)
-        handle_inform_form(request)
-
-    # REMARK FORM
-    elif request.method == 'POST' and 'author' in request.POST:
-        form = CreateRemarkForm(
-            request.POST,
-            request.FILES,
-            profile=profile,
-            known_directly=debate_known_directly)
-        
-        if form.is_valid():
-            remark = form.save(commit=False)
-            remark.debate = debate
-            remark.save()
-
-            informed_ids = [p.id for p in debate_known_directly if p != profile]
-            send_emails(request, informed_ids, new='remark', remark=remark)
-            if informed_ids:
-                messages.info(request, f'Twój głos zabrzmiał w naradzie!')
-            return redirect('debates:debate', debate_id=debate_id)
-    else:
-        form = CreateRemarkForm(
-            initial={'author': request.user},
-            profile=profile,
-            known_directly=debate_known_directly)
-
-    informables = debate.informables()
-    if profile.status != 'gm':
-        informables = informables.filter(
-            character__in=profile.characters_known_directly.all())
-    
-    context = {
-        'current_profile': profile,
-        'page_title': debate.title,
-        'topic': topic,
-        'debate': debate,
-        'debate_known_directly': debate_known_directly,
-        'form': form,
-        'informables': informables,
-    }
-    if profile.can_view_all or profile in debate.known_directly.all():
-        return render(request, 'debates/debate.html', context)
-    else:
-        return redirect('home:dupa')
+#
+#
+# @login_required
+# def debate_view(request, debate_id):
+#     profile = Profile.objects.get(id=request.session['profile_id'])
+#     debates = Debate.objects.select_related()
+#     debates = debates.prefetch_related('remarks__author', 'remarks__seen_by')
+#     debate = debates.get(id=debate_id)
+#     topic = debate.topic
+#
+#     debate_known_directly = debate.known_directly.exclude(status='gm')
+#
+#     # Update all remarks to be seen by the profile
+#     SeenBy = Remark.seen_by.through
+#     relations = []
+#     for remark in debate.remarks.all():
+#         relations.append(SeenBy(remark_id=remark.id, profile_id=profile.id))
+#     SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
+#
+#     # INFORM FORM
+#     if request.method == 'POST' and 'Debate' in request.POST:
+#         form = CreateRemarkForm(
+#             initial={'author': request.user},
+#             profile=profile,
+#             known_directly=debate_known_directly)
+#         handle_inform_form(request)
+#
+#     # REMARK FORM
+#     elif request.method == 'POST' and 'author' in request.POST:
+#         form = CreateRemarkForm(
+#             request.POST,
+#             request.FILES,
+#             profile=profile,
+#             known_directly=debate_known_directly)
+#
+#         if form.is_valid():
+#             remark = form.save(commit=False)
+#             remark.debate = debate
+#             remark.save()
+#
+#             informed_ids = [p.id for p in debate_known_directly if p != profile]
+#             send_emails(request, informed_ids, new='remark', remark=remark)
+#             if informed_ids:
+#                 messages.info(request, f'Twój głos zabrzmiał w naradzie!')
+#             return redirect('debates:debate', debate_id=debate_id)
+#     else:
+#         form = CreateRemarkForm(
+#             initial={'author': request.user},
+#             profile=profile,
+#             known_directly=debate_known_directly)
+#
+#     informables = debate.informables()
+#     if profile.status != 'gm':
+#         informables = informables.filter(
+#             character__in=profile.characters_known_directly.all())
+#
+#     context = {
+#         'current_profile': profile,
+#         'page_title': debate.title,
+#         'topic': topic,
+#         'debate': debate,
+#         'debate_known_directly': debate_known_directly,
+#         'form': form,
+#         'informables': informables,
+#     }
+#     if profile.can_view_all or profile in debate.known_directly.all():
+#         return render(request, 'debates/debate.html', context)
+#     else:
+#         return redirect('home:dupa')

@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'chronicles',
     'communications',
     'contact',
+    # TODO 'debates' unused, code is commented out - cannot del before squash migrations
     'debates',
     'development',
     'equipment',

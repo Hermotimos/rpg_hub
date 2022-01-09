@@ -2,7 +2,7 @@ from django import forms
 from django.forms.widgets import HiddenInput
 from django.db.models import Q
 
-from debates.models import Remark, Debate, Topic
+# from debates.models import Remark, Debate, Topic
 from users.models import Profile
 
 
