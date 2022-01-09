@@ -61,8 +61,7 @@ def threads_view(request, thread_kind, tag_title):
     threads = threads.prefetch_related(
         'statements__author',
         'tags__author',
-        # 'topic',
-        'eventss__game',
+        'events__game',
         'followers')
     if tag_title != 'None':
         threads = threads.filter(tags__title=tag_title)

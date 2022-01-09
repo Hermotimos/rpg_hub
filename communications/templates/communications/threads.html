@@ -58,19 +58,16 @@
         </header>
         
         <div>
-            {% if unseen %}
-                <div id="unseen" class="mb-5">
-                    {% for thread in unseen %}
-                        {% include 'communications/_thread.html' %}
-                    {% endfor %}
-                </div>
-            {% endif %}
+            <div id="unseen" class="mb-5">
+                {% for thread in unseen %}
+                    {% include 'communications/_thread.html' %}
+                {% endfor %}
+            </div>
             <div class="mb-5">
                 {% for thread in threads %}
                     {% include 'communications/_thread.html' %}
                 {% endfor %}
             </div>
-
         </div>
         
     </article>

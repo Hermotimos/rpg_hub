@@ -258,7 +258,7 @@ class TimeUnit(Model):
     )
     picture_sets = M2M(to=PictureSet, related_name='events', blank=True)
     # debates = M2M(to=Debate, related_name='events', blank=True)
-    debates = M2M(to=Thread, related_name='eventss', blank=True)
+    debates = M2M(to=Thread, related_name='events', blank=True)
     
     class Meta:
         ordering = ['date_start']

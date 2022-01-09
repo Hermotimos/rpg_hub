@@ -73,7 +73,6 @@ def chronicle_game_view(request, game_id):
         'known_directly',
         'known_indirectly',
         'picture_sets',
-        'debates__topic',
         'debates__statements__author',
     )
     if not profile.can_view_all:
@@ -101,7 +100,6 @@ def chronicle_chapter_view(request, chapter_id):
         'known_directly',
         'known_indirectly',
         'picture_sets',
-        'debates__topic',
         'debates__statements__author',
     )
     if not profile.can_view_all:
@@ -131,7 +129,6 @@ def chronicle_all_view(request):
         'known_directly',
         'known_indirectly',
         'picture_sets',
-        'debates__topic',
         'debates__statements__author',
         'debates__known_directly',
     )
