@@ -79,6 +79,7 @@ class StatementAdmin(admin.ModelAdmin):
     list_display = ['id', '__str__', 'author', 'thread', 'created_at']
     list_editable = ['thread', 'author']
     list_filter = ['thread__kind', 'thread']
+    ordering = ['-created_at']
     search_fields = ['text']
     
     def formfield_for_dbfield(self, db_field, **kwargs):
