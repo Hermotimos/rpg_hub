@@ -193,7 +193,7 @@ def thread_view(request, thread_id, tag_title):
         statement = statement_form.save(commit=False)
         statement.thread = thread
         statement.save()
-        statement.seen_by.add(statement.author)
+        statement.seen_by.add(current_profile)
         send_mail(
             subject=f"[RPG] Nowa wypowiedź: '{thread.title}'",
             message=f"{request.get_host()}{thread.get_absolute_url()}/",
