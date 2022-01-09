@@ -31,7 +31,7 @@
                             {% if thread_kind == 'Announcement' %}
                                 {{ thread.created_at|date:'d-M-Y' }} | {{ thread.last_activity|date:'d-M-Y' }}
                             {% elif thread_kind == 'Debate' %}
-                                {% for event in thread.eventss.all %}
+                                {% for event in thread.events.all %}
                                     {% if forloop.counter > 1 %} | {% endif %}
                                     {{ event.game.title }}
                                 {% endfor %}
