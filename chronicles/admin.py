@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db.models import TextField, CharField, ForeignKey, OneToOneField
 from django.forms import Textarea, TextInput, Select
-from rpg_project.utils import formfield_for_dbfield_cached
+
 from chronicles.models import (
     PlotThread,
     Date,
@@ -11,6 +11,8 @@ from chronicles.models import (
     Chapter,
     GameSession,
 )
+from communications.models import Thread
+from rpg_project.utils import formfield_for_dbfield_cached
 from toponomikon.models import SecondaryLocation
 from users.models import Profile
 
@@ -27,7 +29,7 @@ class GameEventAdminForm(forms.ModelForm):
         fields = ['game', 'event_no_in_game', 'date_start', 'date_end',
                   'in_timeunit', 'description_short', 'description_long',
                   'plot_threads', 'locations', 'known_directly',
-                  'known_indirectly', 'picture_sets', 'new_debates', 'audio']
+                  'known_indirectly', 'picture_sets', 'debates', 'audio']
         widgets = {
             'known_directly': FilteredSelectMultiple(
                 'Known directly', False, attrs={'style': 'height:100px'}
@@ -44,11 +46,8 @@ class GameEventAdminForm(forms.ModelForm):
             'plot_threads': FilteredSelectMultiple(
                 'PlotThreads', False, attrs={'style': 'height:100px'}
             ),
-            # 'debates': FilteredSelectMultiple(
-            #     'Debates', False, attrs={'style': 'height:100px'}
-            # ),
-            'new_debates': FilteredSelectMultiple(
-                'NewDebates', False, attrs={'style': 'height:100px'}
+            'debates': FilteredSelectMultiple(
+                'Debates', False, attrs={'style': 'height:100px'}
             ),
         }
         
@@ -57,6 +56,7 @@ class GameEventAdminForm(forms.ModelForm):
         self.fields['plot_threads'].label = 'Active PlotThreads'
         self.fields['known_directly'].queryset = Profile.non_gm.all()
         self.fields['known_indirectly'].queryset = Profile.non_gm.all()
+        self.fields['debates'].queryset = Thread.objects.filter(kind='Debate')
 
 
 class GameEventAdmin(admin.ModelAdmin):

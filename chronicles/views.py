@@ -29,7 +29,7 @@ def chronicle_main_view(request):
         games = games.prefetch_related(
             'game_events__known_directly__character',
             # 'game_events__debates__known_directly__character',
-            'game_events__new_debates__known_directly__character',
+            'game_events__debates__known_directly__character',
         )
     else:
         # debates = current_profile.debates_known_directly.prefetch_related(
@@ -41,7 +41,7 @@ def chronicle_main_view(request):
             Q(id__in=current_profile.events_known_directly.all())
             | Q(id__in=current_profile.events_known_indirectly.all()))
         events = events.prefetch_related(
-            Prefetch('new_debates', queryset=debates),
+            Prefetch('debates', queryset=debates),
             'known_directly__character')
         
         games = GameSession.objects.filter(game_events__in=events)
@@ -73,8 +73,8 @@ def chronicle_game_view(request, game_id):
         'known_directly',
         'known_indirectly',
         'picture_sets',
-        'new_debates__topic',
-        'new_debates__statements__author',
+        'debates__topic',
+        'debates__statements__author',
     )
     if not profile.can_view_all:
         events = events.filter(
@@ -101,8 +101,8 @@ def chronicle_chapter_view(request, chapter_id):
         'known_directly',
         'known_indirectly',
         'picture_sets',
-        'new_debates__topic',
-        'new_debates__statements__author',
+        'debates__topic',
+        'debates__statements__author',
     )
     if not profile.can_view_all:
         events = events.filter(
@@ -131,9 +131,9 @@ def chronicle_all_view(request):
         'known_directly',
         'known_indirectly',
         'picture_sets',
-        'new_debates__topic',
-        'new_debates__statements__author',
-        'new_debates__known_directly',
+        'debates__topic',
+        'debates__statements__author',
+        'debates__known_directly',
     )
     if not profile.can_view_all:
         events = events.filter(
