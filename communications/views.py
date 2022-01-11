@@ -14,7 +14,6 @@ from communications.forms import (
     ThreadTagEditFormSetHelper,
 )
 from communications.models import (
-    Announcement,
     Statement,
     Thread,
     ThreadTag,
@@ -62,6 +61,7 @@ def threads_view(request, thread_kind, tag_title):
         'statements__author',
         'tags__author',
         'events__game',
+        'known_directly',
         'followers')
     if tag_title != 'None':
         threads = threads.filter(tags__title=tag_title)

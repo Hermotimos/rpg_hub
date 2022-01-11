@@ -38,7 +38,7 @@ class AnnouncementAdminForm(forms.ModelForm):
         }
     
     known_directly = forms.ModelMultipleChoiceField(
-        queryset=Profile.contactables.all(),
+        queryset=Profile.objects.exclude(status='npc'),
         required=False,
         widget=FilteredSelectMultiple('Known directly', False),
     )
