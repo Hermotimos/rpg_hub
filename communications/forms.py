@@ -160,8 +160,13 @@ class StatementCreateForm(forms.ModelForm):
         if current_profile.status != 'gm':
             self.fields['author'].widget = HiddenInput()
         else:
-            self.fields['author'].queryset = Profile.objects.filter(
-                Q(status='gm') | Q(id__in=known_directly))
+            # If Thread doesn't exist yet, meaning this form is used with
+            # thread create form, put all profiles in author choice list
+            if not known_directly:
+                self.fields['author'].queryset = Profile.gm_controlled.all()
+            else:
+                self.fields['author'].queryset = Profile.objects.filter(
+                    Q(status='gm') | Q(id__in=known_directly))
             
         if thread_kind != "Debate":
             self.fields['author'].widget = HiddenInput()

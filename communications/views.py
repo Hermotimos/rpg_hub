@@ -5,6 +5,7 @@ from django.core.mail import send_mail
 from django.db.models import Prefetch, Q
 from django.shortcuts import render, redirect, get_object_or_404
 
+import communications.models
 from communications.forms import (
     AnnouncementCreateForm,
     DebateCreateForm,
@@ -37,6 +38,16 @@ THREADS_MAP = {
       'form': DebateCreateForm,
     },
 }
+
+
+def get_recipients(statement: communications.models.Statement):
+    """Determine recipients list for emails about new statements.
+    For cases when GM 'speaks' through NPCs and ex-Players, exclude GM.
+    """
+    recipients = statement.thread.followers.exclude(id=statement.author.id)
+    if statement.author not in Profile.active_players.all():
+        recipients = recipients.exclude(status='gm')
+    return recipients
 
 
 def thread_inform(request, thread, tag_title):
@@ -156,7 +167,6 @@ def thread_view(request, thread_id, tag_title):
         'statements__seen_by', 'statements__author', 'followers',
         'known_directly')
     thread = threads.get(id=thread_id)
-    followers = thread.followers.filter(is_active=True)
     
     informables = thread.informables()
     if current_profile.status != 'gm':
@@ -194,11 +204,12 @@ def thread_view(request, thread_id, tag_title):
         statement.thread = thread
         statement.save()
         statement.seen_by.add(current_profile)
+
         send_mail(
             subject=f"[RPG] Nowa wypowiedź: '{thread.title}'",
             message=f"{request.get_host()}{thread.get_absolute_url()}/",
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[p.user.email for p in followers if p != current_profile])
+            recipient_list=[p.user.email for p in get_recipients(statement)])
         messages.info(request, "Dodano wypowiedź!")
         return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
     
@@ -260,12 +271,10 @@ def create_thread_view(request, thread_kind):
             subject=f"[RPG] {THREADS_MAP[thread_kind]['text']}: '{thread}'",
             message=f"{request.get_host()}{thread.get_absolute_url()}/",
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[
-                p.user.email for p in known_directly if p != current_profile])
+            recipient_list=[p.user.email for p in get_recipients(statement)])
 
-        messages.info(request, f"Utworzono {THREADS_MAP[thread_kind]['name']}!")
-        return redirect(
-            'communications:thread', thread_id=thread.id, tag_title=None)
+        messages.info(request, f"{THREADS_MAP[thread_kind]['text']}: '{thread}!")
+        return redirect('communications:thread', thread_id=thread.id, tag_title=None)
 
     context = {
         'current_profile': current_profile,
