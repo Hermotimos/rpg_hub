@@ -82,14 +82,16 @@
                                     {% for author in author_list %}
                                         <!-- Ensure GM picture is hidden in Debates -->
                                         {% if thread_kind != 'Debate' or author.grouper.status != 'gm' %}
-                                            <img class="portait img-xs ml-1 border border-dark
-                                                {% if thread_kind == 'Announcement' %}
-                                                     rounded
-                                                {% elif thread_kind == 'Debate' %}
-                                                     rounded-circle
-                                                {% endif %}"
-                                                 src="{{ author.grouper.image.url }}">
-                                            <span class="font-13">{{ author.list|length }}</span>
+                                            <div class="d-inline text-nowrap">
+                                                <img class="portait img-xs ml-1 border border-dark
+                                                    {% if thread_kind == 'Announcement' %}
+                                                         rounded
+                                                    {% elif thread_kind == 'Debate' %}
+                                                         rounded-circle
+                                                    {% endif %}"
+                                                     src="{{ author.grouper.image.url }}">
+                                                <span class="font-13">{{ author.list|length }}</span>
+                                            </div>
                                         {% endif %}
                                     {% endfor %}
                             
