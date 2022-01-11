@@ -16,7 +16,7 @@
     <span class="pt-5" id="thread_{{ thread.id }}"></span>
     <div class="row p-1">
         <div class="col-auto px-0 mr-n3">
-            <img class="portait img-md rounded
+            <img class="portait img-md
                 {% if thread_kind == 'Announcement' %}
                      rounded
                 {% elif thread_kind == 'Debate' %}
@@ -78,23 +78,21 @@
                                 {% regroup statements by author as author_list %}
                                 <!-- Add profiles without statements to the author_list with empty statements lists -->
                                 {% with author_list=author_list|include_silent_participants:thread %}
-                            
                                     {% for author in author_list %}
                                         <!-- Ensure GM picture is hidden in Debates -->
-                                        {% if thread_kind != 'Debate' or author.grouper.status != 'gm' %}
                                             <div class="d-inline text-nowrap">
-                                                <img class="portait img-xs ml-1 border border-dark
-                                                    {% if thread_kind == 'Announcement' %}
-                                                         rounded
-                                                    {% elif thread_kind == 'Debate' %}
-                                                         rounded-circle
-                                                    {% endif %}"
-                                                     src="{{ author.grouper.image.url }}">
-                                                <span class="font-13">{{ author.list|length }}</span>
+                                                {% if thread_kind != 'Debate' or author.grouper.status != 'gm' %}
+                                                    <img class="portait img-xs ml-1 border border-dark
+                                                        {% if thread_kind == 'Announcement' %}
+                                                             rounded
+                                                        {% elif thread_kind == 'Debate' %}
+                                                             rounded-circle
+                                                        {% endif %}"
+                                                        src="{{ author.grouper.image.url }}">
+                                                    <span class="font-13">{{ author.list|length }}</span>
+                                                {% endif %}
                                             </div>
-                                        {% endif %}
                                     {% endfor %}
-                            
                                 {% endwith %}
                             {% endwith %}
                         </div>
