@@ -50,15 +50,22 @@ def get_recipients(statement: communications.models.Statement):
     return recipients
 
 
-def thread_inform(request, thread, tag_title):
+def thread_inform(current_profile, request, thread, tag_title):
     informed_ids = [k for k, v_list in request.POST.items() if 'on' in v_list]
-    thread.known_directly.add(*informed_ids)
-    thread.followers.add(*informed_ids)
+    informed = Profile.objects.filter(id__in=informed_ids)
+    thread.known_directly.add(*informed)
+    thread.followers.add(*informed)
+    
+    recipients = Profile.objects.filter(id__in=informed_ids)
+    if current_profile.status == 'gm':
+        # Exclude via user, because all NPCs have GM's user
+        recipients = recipients.exclude(user__profiles__status='gm')
+
     send_mail(
         subject=f"[RPG] Udostępnienie Ogłoszenia: '{thread.title}'",
         message=f"{request.get_host()}{thread.get_absolute_url()}/",
         from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[p.user.email for p in Profile.objects.filter(id__in=informed_ids)])
+        recipient_list=[p.user.email for p in recipients])
     messages.info(request, f'Poinformowano wybranych Graczy!')
     return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
 
@@ -195,8 +202,8 @@ def thread_view(request, thread_id, tag_title):
         known_directly=thread.known_directly.all(),
         initial={'author': current_profile})
 
-    if request.method == 'POST' and 'Announcement' in request.POST:
-        thread_inform(request, thread, tag_title)
+    if request.method == 'POST':
+        thread_inform(current_profile, request, thread, tag_title)
         return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
 
     if statement_form.is_valid():
