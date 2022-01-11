@@ -1,0 +1,9 @@
+
+<img src="{{ profile.image.url }}"
+     class="portait img-sm border border-dark
+        {% if thread.kind == 'Announcement' %}
+             rounded
+        {% elif thread.kind == 'Debate' %}
+             rounded-circle
+        {% endif %}"
+>

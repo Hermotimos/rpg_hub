@@ -46,7 +46,7 @@
                     {% with next_statement=thread.statements.all|next_elem:forloop.counter0 %}
                         {% for profile in thread.known_directly.all %}
                             {% if profile in statement.seen_by.all and profile not in next_statement.seen_by.all and profile.status != 'npc' %}
-                                <img class="rounded-circle portait img-sm border border-dark" src="{{ profile.image.url }}">
+                                {% include '_img_sm.html' %}
                             {% endif %}
                         {% endfor %}
                     {% endwith %}
@@ -55,7 +55,7 @@
                             {% if profile.status == 'gm' and statement.author.status == 'npc' %}
                                 <div></div>
                             {% else %}
-                                <img class="rounded-circle portait img-sm border border-dark" src="{{ profile.image.url }}">
+                                {% include '_img_sm.html' %}
                             {% endif %}
                         {% endfor %}
                     {% endif %}

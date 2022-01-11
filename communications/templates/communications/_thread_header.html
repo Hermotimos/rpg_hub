@@ -129,13 +129,7 @@
         <div class="col-10 pl-5 pl-lg-0">
             {% for profile in thread.known_directly.all %}
                 {% if thread.kind != 'Debate' or profile.status != 'gm' %}
-                    <img class="portait img-sm ml-1 border border-dark
-                        {% if thread.kind == 'Announcement' %}
-                             rounded
-                        {% elif thread.kind == 'Debate' %}
-                             rounded-circle
-                        {% endif %}"
-                         src="{{ profile.image.url }}">
+                    {% include '_img_sm.html' %}
                 {% endif %}
             {% endfor %}
         </div>
@@ -148,13 +142,7 @@
         <div class="col-10 pl-5 pl-lg-0">
             {% for profile in thread.followers.all %}
                 {% if thread.kind != 'Debate' or profile.status != 'gm' %}
-                    <img class="portait img-sm ml-1 border border-dark
-                        {% if thread.kind == 'Announcement' %}
-                             rounded
-                        {% elif thread.kind == 'Debate' %}
-                             rounded-circle
-                        {% endif %}"
-                         src="{{ profile.image.url }}">
+                    {% include '_img_sm.html' %}
                 {% endif %}
             {% endfor %}
         </div>
