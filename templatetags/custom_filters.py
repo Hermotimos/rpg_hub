@@ -2,9 +2,11 @@ from typing import List
 
 from django import template
 from django.template.defaultfilters import linebreaksbr
+from django.template.defaulttags import GroupedResult
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
+import communications.models
 from communications.models import ThreadTag
 from users.models import Profile
 
@@ -272,3 +274,16 @@ def next_elem(list_, current_index):
         return list_[int(current_index) + 1]
     except IndexError:
         return ''
+
+
+@register.filter
+def include_silent_participants(results: List[GroupedResult], thread: communications.models.Thread):
+    profiles_with_statements = [gr.grouper for gr in results]
+    profiles_without_statements = [
+        p for p in thread.known_directly.all()
+        if p not in profiles_with_statements]
+    results.extend(
+        [GroupedResult(grouper=profile, list=[])
+         for profile in profiles_without_statements])
+    return sorted(results, key=lambda gr_result: gr_result.grouper.character_name_copy)
+
