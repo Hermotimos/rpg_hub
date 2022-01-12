@@ -20,6 +20,12 @@ class ActivePlayerProfileManager(Manager):
         return qs.filter(status__icontains='player', is_active=True)
 
 
+class GMControlledProfileManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.exclude(status__icontains='player', is_active=True)
+
+
 class NPCProfileManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()

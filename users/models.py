@@ -19,7 +19,7 @@ from django.db.models import (
 from rpg_project.utils import ReplaceFileStorage
 from users.managers import ActivePlayerProfileManager, NonGMProfileManager, \
     ContactableProfileManager, LivingProfileManager, NPCProfileManager, \
-    PlayerProfileManager
+    PlayerProfileManager, GMControlledProfileManager
 
 STATUS = [
     ('gm', 'MG'),
@@ -46,6 +46,7 @@ class Profile(Model):
 
     objects = Manager()
     non_gm = NonGMProfileManager()
+    gm_controlled = GMControlledProfileManager()
     players = PlayerProfileManager()
     active_players = ActivePlayerProfileManager()
     npcs = NPCProfileManager()

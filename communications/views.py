@@ -42,10 +42,12 @@ THREADS_MAP = {
 
 def get_recipients(statement: communications.models.Statement):
     """Determine recipients list for emails about new statements.
-    For cases when GM 'speaks' through NPCs and ex-Players, exclude GM.
+    For cases when GM 'speaks' through NPCs and ex-Players, exclude GMs
+    and all profiles controlled by them (other than active players).
     """
-    recipients = statement.thread.followers.exclude(id=statement.author.id)
-    if statement.author not in Profile.active_players.all():
+    # Exclude via user, because all NPCs are linked with GM via user
+    recipients = statement.thread.followers.exclude(user__profiles=statement.author)
+    if statement.author in Profile.gm_controlled.all():
         recipients = recipients.exclude(status='gm')
     return recipients
 
@@ -58,7 +60,7 @@ def thread_inform(current_profile, request, thread, tag_title):
     
     recipients = Profile.objects.filter(id__in=informed_ids)
     if current_profile.status == 'gm':
-        # Exclude via user, because all NPCs have GM's user
+        # Exclude via user, because all NPCs are linked with GM via user
         recipients = recipients.exclude(user__profiles__status='gm')
 
     send_mail(
@@ -171,7 +173,9 @@ def thread_view(request, thread_id, tag_title):
         author=current_profile, kind=Thread.objects.get(id=thread_id).kind).select_related('author')
     threads = Thread.objects.prefetch_related(
         Prefetch('tags', queryset=tags),
-        'statements__seen_by', 'statements__author', 'followers',
+        'statements__seen_by',
+        'statements__author',
+        'followers',
         'known_directly')
     thread = threads.get(id=thread_id)
     
@@ -270,7 +274,7 @@ def create_thread_view(request, thread_kind):
         known_directly |= Profile.objects.filter(
             Q(id=current_profile.id) | Q(status='gm'))
         thread.known_directly.set(known_directly)
-        thread.followers.set(known_directly)
+        thread.followers.set(known_directly.filter(id__in=Profile.active_players.all()))
 
         statement = statement_form.save(commit=False)
         statement.thread = thread
