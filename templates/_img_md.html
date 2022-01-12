@@ -1,0 +1,10 @@
+
+<img src="{{ author.grouper.image.url }}"
+     class="portait img-xs ml-1 border border-dark
+        {% if thread_kind == 'Announcement' %}
+             rounded
+        {% elif thread_kind == 'Debate' %}
+             rounded-circle
+        {% endif %}"
+>
+

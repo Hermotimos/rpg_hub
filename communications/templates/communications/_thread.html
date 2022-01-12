@@ -16,13 +16,7 @@
     <span class="pt-5" id="thread_{{ thread.id }}"></span>
     <div class="row p-1">
         <div class="col-auto px-0 mr-n3">
-            <img class="portait img-md
-                {% if thread_kind == 'Announcement' %}
-                     rounded
-                {% elif thread_kind == 'Debate' %}
-                     rounded-circle
-                {% endif %}"
-                 src="{{ thread.statements.first.author.image.url }}">
+            {% include '_img_md.html' %}
         </div>
         <div class="col pr-0 ml-n1">
             <div class="container h-100">
@@ -82,13 +76,7 @@
                                         <!-- Ensure GM picture is hidden in Debates -->
                                             <div class="d-inline text-nowrap">
                                                 {% if thread_kind != 'Debate' or author.grouper.status != 'gm' %}
-                                                    <img class="portait img-xs ml-1 border border-dark
-                                                        {% if thread_kind == 'Announcement' %}
-                                                             rounded
-                                                        {% elif thread_kind == 'Debate' %}
-                                                             rounded-circle
-                                                        {% endif %}"
-                                                        src="{{ author.grouper.image.url }}">
+                                                    {% include '_img_xs.html' %}
                                                     <span class="font-13">{{ author.list|length }}</span>
                                                 {% endif %}
                                             </div>
