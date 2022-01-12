@@ -65,7 +65,7 @@ def thread_inform(current_profile, request, thread, tag_title):
 
     send_mail(
         subject=f"[RPG] Udostępnienie Ogłoszenia: '{thread.title}'",
-        message=f"{request.get_host()}{thread.get_absolute_url()}/",
+        message=f"{request.get_host()}{thread.get_absolute_url()}",
         from_email=settings.EMAIL_HOST_USER,
         recipient_list=[p.user.email for p in recipients])
     messages.info(request, f'Poinformowano wybranych Graczy!')
@@ -222,7 +222,7 @@ def thread_view(request, thread_id, tag_title):
 
         send_mail(
             subject=f"[RPG] Nowa wypowiedź: '{thread.title}'",
-            message=f"{request.get_host()}{thread.get_absolute_url()}/",
+            message=f"{request.get_host()}{thread.get_absolute_url()}",
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[p.user.email for p in get_recipients(statement)])
         messages.info(request, "Dodano wypowiedź!")
@@ -284,7 +284,7 @@ def create_thread_view(request, thread_kind):
 
         send_mail(
             subject=f"[RPG] {THREADS_MAP[thread_kind]['text']}: '{thread}'",
-            message=f"{request.get_host()}{thread.get_absolute_url()}/",
+            message=f"{request.get_host()}{thread.get_absolute_url()}",
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[p.user.email for p in get_recipients(statement)])
 
