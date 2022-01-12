@@ -202,7 +202,11 @@ def thread_view(request, thread_id, tag_title):
         known_directly=thread.known_directly.all(),
         initial={'author': current_profile})
 
-    if request.method == 'POST':
+    if request.method == 'POST' and any(
+        [thread_kind in request.POST.keys() for thread_kind in THREADS_MAP.keys()]
+    ):
+        # Enters only when request.POST has 'Debate', 'Announcement' etc. key
+        # <QueryDict: {'csrfmiddlewaretoken': [...], '145': ['on'], 'Debate': ['56']}>
         thread_inform(current_profile, request, thread, tag_title)
         return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
 
