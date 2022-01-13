@@ -40,12 +40,6 @@
                                     {% endif %}
                                 </li>
                                 {% if current_profile.status != 'spectator' %}
-                                    {% if current_profile.status == 'gm' %}
-                                        <li>
-                                            <a class="font-14 nav-link small-caps" href="{% url 'news:main' %}">Ogłoszenia [old]</a>
-                                        </li>
-                                    {% endif %}
-
                                     <li>
                                         <a class="font-14 nav-link small-caps" href="{% url 'communications:threads' 'Announcement' None %}">Ogłoszenia</a>
                                         <div class="row info-row-sub news-bubble float-right">
