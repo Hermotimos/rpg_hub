@@ -266,7 +266,7 @@ def send_emails(request, profile_ids=None, **kwargs):
                   f"w temacie '{debate.topic}'." \
                   f"\nWeź udział w naradzie:" \
                   f"\n{request.build_absolute_uri()}\n"
-        messages.info(request, f'Dołączono wybrane postacie!')
+        messages.info(request, f'Dołączono wybrane Postacie!')
 
     # GAME EVENT
     elif 'game_event' in kwargs:
@@ -290,8 +290,8 @@ def send_emails(request, profile_ids=None, **kwargs):
     # CHARACTER
     elif 'character' in kwargs:
         character = kwargs['character']
-        subject = "[RPG] Nowa opowieść o postaci!"
-        message = f"{profile} rozprawia o postaci '{character}'.\n" \
+        subject = "[RPG] Nowa opowieść o Postaci!"
+        message = f"{profile} rozprawia o Postaci '{character}'.\n" \
                   f"Postać została dodana do Twojego Prosoponomikonu: " \
                   f"{request.get_host()}/prosoponomikon/character/{character}/\n"
         messages.info(request, f'Poinformowano wybranych bohaterów!')

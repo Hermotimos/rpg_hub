@@ -207,7 +207,7 @@ def prosoponomikon_character_groups_edit_view(request):
     
     context = {
         'current_profile': current_profile,
-        'page_title': "Edytuj grupy postaci",
+        'page_title': "Edytuj grupy Postaci",
         'formset': formset,
         'formset_helper': CharacterGroupsEditFormSetHelper(
             status=current_profile.status),
@@ -225,14 +225,14 @@ def prosoponomikon_character_group_create_view(request):
         character_group.author = profile
         character_group.save()
         messages.success(
-            request, f'Utworzono grupę postaci "{character_group.name}"!')
+            request, f'Utworzono grupę Postaci "{character_group.name}"!')
         return redirect('prosoponomikon:grouped')
     else:
         messages.warning(request, form.errors)
         
     context = {
         'current_profile': profile,
-        'page_title': "Nowa grupa postaci",
+        'page_title': "Nowa grupa Postaci",
         'form': form,
     }
     return render(request, '_form.html', context)
@@ -368,12 +368,12 @@ def prosoponomikon_character_create_form_view(request):
         character.profile = profile
         form.save()
 
-        messages.success(request, f"Utworzono postać {character}!")
+        messages.success(request, f"Utworzono Postać {character}!")
         return redirect('prosoponomikon:character-create')
         
     context = {
         'current_profile': profile,
-        'page_title': "Nowa postać",
+        'page_title': "Nowa Postać",
         'form': form,
     }
     return render(request, '_form.html', context)
@@ -394,7 +394,7 @@ def prosoponomikon_acquaintances_view(request, location_id):
 
     msg = f"""
         {location.name}:
-        zapoznano ze sobą wszystkie postacie [{len(inhabitants)}]!
+        zapoznano ze sobą wszystkie Postacie [{len(inhabitants)}]!
     """
     messages.success(request, msg)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

@@ -182,7 +182,7 @@ def game_event_inform_view(request, game_event_id):
 
         send_emails(request, informed_ids, game_event=game_event)
         if informed_ids:
-            messages.info(request, f'Poinformowano wybrane postacie!')
+            messages.info(request, f'Poinformowano wybrane Postacie!')
 
     context = {
         'current_profile': profile,

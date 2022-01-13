@@ -52,7 +52,7 @@ def rules_character_sheet_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
         'current_profile': profile,
-        'page_title': 'Karta postaci'
+        'page_title': 'Karta Postaci'
     }
     return render(request, 'rules/character_sheet.html', context)
 

@@ -22,7 +22,7 @@ class CreateNewsForm(forms.ModelForm):
         fields = ['topic', 'title', 'allowed_profiles']
         help_texts = {
             'allowed_profiles': """
-                ***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.<br><br>
+                ***Aby zaznaczyć wiele Postaci - użyj CTRL albo SHIFT.<br><br>
                 1) Ogłoszenie zobaczą tylko wybrani adresaci (i zawsze MG).<br>
                 2) Późniejsze dodanie adresatów - wyślij MG Dezyderat.<br><br>
             """,

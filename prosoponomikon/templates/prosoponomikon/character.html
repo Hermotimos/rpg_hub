@@ -32,7 +32,7 @@
                                 <a class="btn btn-outline-dark icon-parent-obj py-2" href="{% url 'prosoponomikon:ungrouped' %}#character_{{ character.id }}"></a>
                             </div>
                             {% if current_profile.can_action %}
-                                <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Przekaż wiedzę o postaci">
+                                <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Przekaż wiedzę o Postaci">
                                     <!-- Modal -->
                                     <span class="btn btn-outline-dark icon-inform py-2" data-toggle="modal" data-target="#infoCharacterModal_{{ character.id }}"></span>
                                     <div class="modal fade" id="infoCharacterModal_{{ character.id }}" tabindex="-1" role="dialog" aria-hidden="true">
@@ -49,12 +49,12 @@
 <!--                                <a class="btn btn-outline-dark icon-note py-2 disabled" href="#"></a>-->
 <!--                            </div>-->
                             {% if current_profile.status == 'player' and current_profile.character == character %}
-                                <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj postać">
+                                <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
                                     <a class="btn btn-outline-dark icon-edit py-2" href="{% url 'users:profile' %}"></a>
                                 </div>
                             {% endif %}
                             {% if current_profile.status == 'gm' %}
-                                <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj postać">
+                                <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
                                     <a class="btn btn-outline-secondary icon-edit py-2" href="{% url 'admin:prosoponomikon_character_change' character.id %}" target="_blank"></a>
                                 </div>
                             {% endif %}

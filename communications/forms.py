@@ -66,7 +66,7 @@ class AnnouncementCreateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         self.fields['known_directly'].help_text = """
-            ***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.<br><br>
+            ***Aby zaznaczyć wiele Postaci - użyj CTRL albo SHIFT.<br><br>
             1) Ogłoszenie zobaczą tylko wybrani adresaci (i zawsze MG).<br>
             2) Późniejsze dodanie adresatów - wyślij MG Dezyderat.<br><br>
         """
@@ -93,12 +93,12 @@ class DebateCreateForm(forms.ModelForm):
         self.fields['is_exclusive'].help_text = """
             Wykluczyć możliwość dodawania uczestników?'"""
         self.fields['known_directly'].help_text = """
-            ***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.<br><br>
-            1) Włączaj tylko postacie znajdujące się w pobliżu w chwili
+            ***Aby zaznaczyć wiele Postaci - użyj CTRL albo SHIFT.<br><br>
+            1) Włączaj tylko Postacie znajdujące się w pobliżu w chwili
                 zakończenia ostatniej sesji.<br>
             2) Postacie w pobliżu niewłączone do narady mogą to zauważyć.<br>
             3) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.<br>
-            4) Jeśli na liście brakuje postaci, powiadom MG.<br><br>"""
+            4) Jeśli na liście brakuje Postaci, powiadom MG.<br><br>"""
 
         self.fields['is_exclusive'].label = "Narada zamknięta?"
         self.fields['known_directly'].label = "Uczestnicy"

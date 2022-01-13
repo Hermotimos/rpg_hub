@@ -25,12 +25,12 @@ class CreateDebateForm(forms.ModelForm):
         fields = ['topic', 'title', 'known_directly', 'is_exclusive']
         help_texts = {
             'known_directly': """
-                ***Aby zaznaczyć wiele postaci - użyj CTRL albo SHIFT.<br><br>
-                1) Włączaj tylko postacie znajdujące się w pobliżu w chwili
+                ***Aby zaznaczyć wiele Postaci - użyj CTRL albo SHIFT.<br><br>
+                1) Włączaj tylko Postacie znajdujące się w pobliżu w chwili
                     zakończenia ostatniej sesji.<br>
                 2) Postacie w pobliżu niewłączone do narady mogą to zauważyć.<br>
                 3) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.<br>
-                4) Jeśli na liście brakuje postaci, powiadom MG.<br><br>
+                4) Jeśli na liście brakuje Postaci, powiadom MG.<br><br>
             """,
             'is_exclusive': 'Wykluczyć możliwość dodawania uczestników?',
         }

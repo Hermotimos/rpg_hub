@@ -93,7 +93,7 @@ class CharacterGroupCreateForm(forms.ModelForm):
 
         self.helper = FormHelper()
         self.helper.add_input(
-            Submit('submit', 'Zapisz grupę postaci', css_class='btn-dark'))
+            Submit('submit', 'Zapisz grupę Postaci', css_class='btn-dark'))
 
 
 class CharacterForm(forms.ModelForm):
@@ -108,7 +108,7 @@ class CharacterForm(forms.ModelForm):
         self.fields['description'].label = "OPIS POSTACI"
         self.fields['description'].widget.attrs[
             'placeholder'
-        ] = "Krótka charakterystyka - jak postać jawi się nowo poznanym osobom"
+        ] = "Krótka charakterystyka - jak Postać jawi się nowo poznanym osobom"
 
 
 class CharacterCreateForm(forms.ModelForm):
@@ -148,4 +148,4 @@ class CharacterCreateForm(forms.ModelForm):
     
         self.helper = FormHelper()
         self.helper.add_input(
-            Submit('submit', 'Zapisz postać', css_class='btn-dark'))
+            Submit('submit', 'Zapisz Postać', css_class='btn-dark'))

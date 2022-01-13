@@ -109,7 +109,7 @@ def profile_view(request):
             user_form.save()
             profile_form.save()
             character_form.save()
-            messages.info(request, 'Zaktualizowano profil postaci!')
+            messages.info(request, 'Zaktualizowano profil Postaci!')
             return redirect('users:profile')
     else:
         user_form = UserUpdateForm(instance=request.user)
