@@ -131,24 +131,6 @@ class Profile(Model):
     def undone_demands(self):
         demands = self.received_demands.exclude(author=self)
         return demands.exclude(is_done=True)
-    
-    @property
-    def unseen_news(self):
-        from news.models import NewsAnswer
-        allowed = self.allowed_news.all()
-        
-        allowed_annotated = allowed.annotate(
-            last_answer_id=Max('news_answers')
-        ).filter(news_answers__id=F('last_answer_id'))
-        
-        last_news_answers_ids = [news.last_answer_id for news in allowed_annotated]
-        last_news_answers_unseen = NewsAnswer.objects.filter(
-            id__in=last_news_answers_ids).filter(~Q(seen_by=self))
-        
-        news_with_unseen_last_answer = allowed.filter(
-            news_answers__in=last_news_answers_unseen)
-
-        return news_with_unseen_last_answer
 
     @property
     def unseen_announcements(self):
@@ -165,12 +147,6 @@ class Profile(Model):
         return Debate.objects.filter(
             known_directly=self,
             statements__in=unseen_remarks).distinct()
-        # from debates.models import Remark, Debate
-        # unseen_remarks = Remark.objects.exclude(seen_by=self)
-        # return Debate.objects.filter(
-        #     known_directly=self,
-        #     remarks__in=unseen_remarks).distinct()
-        
 
     @property
     def can_view_all(self):

@@ -27,7 +27,6 @@ def main_view(request):
         'current_profile': profile,
         'page_title': 'Ogłoszenia',
         'newss': newss.order_by('-last_activity_date'),
-        'unseen_news': profile.unseen_news,
     }
     return render(request, 'news/main.html', context)
 
