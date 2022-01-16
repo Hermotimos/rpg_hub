@@ -118,9 +118,9 @@ def rules_skills_view(request):
         # TODO delete when new Skills done to unhide new skills for Players
         skills = skills.filter(types__in=SkillType.objects.filter(name='Stare'))
         
-    for skill in skills:
-        skill.name = f"{skill.name} [old]"
-        skill.save()
+    # for skill in skills:
+    #     skill.name = f"{skill.name} [old]"
+    #     skill.save()
 
     skill_types = SkillType.objects.filter(kind='Powszechne')
     skill_types = skill_types.prefetch_related(Prefetch('skills', queryset=skills))
