@@ -9,7 +9,7 @@ from rules.models import (
     Plate,
     Profession,
     Shield,
-    Skill,
+    Skill, SkillType,
     Synergy,
     WeaponType,
     Weapon,
@@ -107,17 +107,31 @@ def rules_professions_view(request):
 @login_required
 def rules_skills_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
+    
     if profile.can_view_all:
-        skills = Skill.objects.all()
+        skills = Skill.objects.prefetch_related('skill_levels')
         synergies = Synergy.objects.all()
     else:
-        skills = profile.allowed_skills.all()
+        skills = profile.allowed_skills.prefetch_related('skill_levels')
         synergies = profile.allowed_synergies.all()
+        
+        
+    # # TODO del after changes
+    SkillType.objects.create(name="Rzemiosło", kind='Powszechne')
+    skilltypes = SkillType.objects.filter(name='Rzemiosło')
+    for skill in skills:
+        skill.types.set(skilltypes)
+    # # TODO del after changes
+
+
+    skill_types = SkillType.objects.filter(kind='Powszechne')
+    skill_types = skill_types.prefetch_related(Prefetch('skills', queryset=skills))
 
     context = {
         'current_profile': profile,
         'page_title': 'Umiejętności',
-        'skills': skills.prefetch_related('skill_levels'),
+        'skill_types': skill_types,
+        'skills': skills,
         'synergies': synergies.prefetch_related('skills', 'synergy_levels'),
     }
     return render(request, 'rules/skills.html', context)

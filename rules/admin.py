@@ -10,7 +10,7 @@ from knowledge.models import KnowledgePacket
 from rpg_project.utils import formfield_for_dbfield_cached
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, \
     Profession, Klass, EliteProfession, BooksSkill, TheologySkill, \
-    EliteKlass, WeaponType, Weapon, Plate, Shield
+    EliteKlass, WeaponType, Weapon, Plate, Shield, SkillType
 from users.models import Profile
 
 
@@ -22,12 +22,7 @@ class Form1(forms.ModelForm):
     )
 
 
-class Form2(forms.ModelForm):
-    allowed_profiles = forms.ModelMultipleChoiceField(
-        queryset=Profile.players.filter(is_alive=True),
-        required=False,
-        widget=FilteredSelectMultiple('Allowed profiles', False),
-    )
+class Form2(Form1):
     picture_sets = forms.ModelMultipleChoiceField(
         queryset=PictureSet.objects.all(),
         required=False,
@@ -35,12 +30,7 @@ class Form2(forms.ModelForm):
     )
 
 
-class Form3(forms.ModelForm):
-    allowed_profiles = forms.ModelMultipleChoiceField(
-        queryset=Profile.players.filter(is_alive=True),
-        required=False,
-        widget=FilteredSelectMultiple('Allowed profiles', False)
-    )
+class Form3(Form1):
     skills = forms.ModelMultipleChoiceField(
         queryset=Skill.objects.all(),
         required=False,
@@ -49,12 +39,25 @@ class Form3(forms.ModelForm):
 
 
 class Form4(forms.ModelForm):
+    acquired_by = forms.ModelMultipleChoiceField(
+        queryset=Profile.players.all(),
+        required=False,
+        widget=FilteredSelectMultiple('Acquired by', False)
+    )
     knowledge_packets = forms.ModelMultipleChoiceField(
         queryset=KnowledgePacket.objects.all(),
         required=False,
         widget=FilteredSelectMultiple('Knowledge packets', False)
     )
 
+
+class Form5(Form1):
+    types = forms.ModelMultipleChoiceField(
+        queryset=SkillType.objects.all(),
+        required=False,
+        widget=FilteredSelectMultiple('Skill Types', False),
+    )
+    
 
 class SkillLevelFilter(admin.SimpleListFilter):
     title = ugettext_lazy('skill__name')
@@ -110,7 +113,7 @@ class SkillLevelInline(admin.TabularInline):
 
 
 class SkillAdmin(admin.ModelAdmin):
-    form = Form1
+    form = Form5
     formfield_overrides = {
         models.CharField: {'widget': Textarea(attrs={'rows': 2, 'cols': 10})},
         models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 30})},
@@ -152,6 +155,14 @@ class SynergyAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
     list_editable = ['name']
     search_fields = ['name']
+
+
+class SkillTypeAdmin(admin.ModelAdmin):
+    list_display = ['id', 'kind', 'name']
+    list_editable = ['kind', 'name']
+
+
+# =============================================================================
 
 
 class KlassInline(admin.TabularInline):
@@ -274,6 +285,7 @@ admin.site.register(TheologySkill, SkillAdmin)
 admin.site.register(SkillLevel, SkillLevelAdmin)
 admin.site.register(Synergy, SynergyAdmin)
 admin.site.register(SynergyLevel, SynergyLevelAdmin)
+admin.site.register(SkillType, SkillTypeAdmin)
 admin.site.register(Profession, ProfessionAdmin)
 admin.site.register(Klass, KlassAdmin)
 admin.site.register(EliteProfession, EliteProfessionAdmin)

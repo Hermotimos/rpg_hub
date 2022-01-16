@@ -17,6 +17,25 @@ from rpg_project.utils import create_sorting_name, rid_of_special_chars
 from users.models import Profile
 
 
+SKILL_KINDS = [
+    ('Powszechne', 'Powszechne'),
+    ('Kapłańskie', 'Kapłańskie'),
+    ('Magiczne', 'Magiczne'),
+]
+        
+
+class SkillType(Model):
+    """A classification category for Skills."""
+    kind = CharField(max_length=100, choices=SKILL_KINDS, default='Powszechne')
+    name = CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return f"[{self.kind}] {self.name}"
+
+    class Meta:
+        ordering = ['kind', 'name']
+
+
 class Skill(Model):
     name = CharField('Umiejętność', max_length=100, unique=True)
     tested_trait = CharField('Cecha/Cechy', max_length=50, blank=True, null=True)
@@ -27,6 +46,7 @@ class Skill(Model):
         related_name='allowed_skills',
         blank=True,
     )
+    types = M2M(to=SkillType, related_name='skills', blank=True)
     sorting_name = CharField(max_length=101, blank=True, null=True)
 
     def __str__(self):
