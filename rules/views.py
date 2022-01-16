@@ -114,15 +114,6 @@ def rules_skills_view(request):
     else:
         skills = profile.allowed_skills.prefetch_related('skill_levels')
         synergies = profile.allowed_synergies.all()
-        
-        
-    # # TODO del after changes
-    SkillType.objects.create(name="Rzemiosło", kind='Powszechne')
-    skilltypes = SkillType.objects.filter(name='Rzemiosło')
-    for skill in skills:
-        skill.types.set(skilltypes)
-    # # TODO del after changes
-
 
     skill_types = SkillType.objects.filter(kind='Powszechne')
     skill_types = skill_types.prefetch_related(Prefetch('skills', queryset=skills))
