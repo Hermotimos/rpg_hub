@@ -10,8 +10,34 @@ from knowledge.models import KnowledgePacket
 from rpg_project.utils import formfield_for_dbfield_cached
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, \
     Profession, Klass, EliteProfession, BooksSkill, TheologySkill, \
-    EliteKlass, WeaponType, Weapon, Plate, Shield, SkillType
+    EliteKlass, WeaponType, Weapon, Plate, Shield, SkillType, Perk, Modifier, Factor
 from users.models import Profile
+
+
+class PerkAdminForm(forms.ModelForm):
+    
+    class Meta:
+        model = Perk
+        fields = ['name', 'description', 'modifiers']
+        widgets = {
+            'modifiers': FilteredSelectMultiple('Modifiers', False),
+        }
+        
+        
+class FactorAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
+    list_editable = ['name']
+
+
+class ModifierAdmin(admin.ModelAdmin):
+    list_display = ['id', 'value', 'factor', 'condition']
+    list_select_related = ['factor']
+
+
+class PerkAdmin(admin.ModelAdmin):
+    form = PerkAdminForm
+    list_display = ['id', 'name', 'description']
+    list_editable = ['name', 'description']
 
 
 class Form1(forms.ModelForm):
@@ -38,18 +64,35 @@ class Form3(Form1):
     )
 
 
-class Form4(forms.ModelForm):
-    acquired_by = forms.ModelMultipleChoiceField(
-        queryset=Profile.players.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Acquired by', False)
-    )
-    knowledge_packets = forms.ModelMultipleChoiceField(
-        queryset=KnowledgePacket.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Knowledge packets', False)
-    )
+class SkillLevelAdminForm(forms.ModelForm):
+    # knowledge_packets = forms.ModelMultipleChoiceField(
+    #     queryset=KnowledgePacket.objects.all(),
+    #     required=False,
+    #     widget=FilteredSelectMultiple('Knowledge packets', False))
 
+    class Meta:
+        model = SkillLevel
+        fields = ['skill', 'level', 'description', 'perks', 'acquired_by', 'sorting_name']
+        widgets = {
+            'acquired_by': FilteredSelectMultiple('Acquired by', False),
+            'perks': FilteredSelectMultiple('Perks', False),
+        }
+        
+
+class SynergyLevelAdminForm(forms.ModelForm):
+    # knowledge_packets = forms.ModelMultipleChoiceField(
+    #     queryset=KnowledgePacket.objects.all(),
+    #     required=False,
+    #     widget=FilteredSelectMultiple('Knowledge packets', False))
+
+    class Meta:
+        model = SynergyLevel
+        fields = ['synergy', 'level', 'description', 'perks', 'acquired_by', 'sorting_name']
+        widgets = {
+            'acquired_by': FilteredSelectMultiple('Acquired by', False),
+            'perks': FilteredSelectMultiple('Perks', False),
+        }
+        
 
 class Form5(Form1):
     types = forms.ModelMultipleChoiceField(
@@ -92,7 +135,7 @@ class SynergyLevelFilter(admin.SimpleListFilter):
 
 
 class SkillLevelAdmin(admin.ModelAdmin):
-    form = Form4
+    form = SkillLevelAdminForm
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 80})},
     }
@@ -125,7 +168,7 @@ class SkillAdmin(admin.ModelAdmin):
 
 
 class SynergyLevelAdmin(admin.ModelAdmin):
-    form = Form4
+    form = SynergyLevelAdminForm
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 80})},
     }
@@ -278,6 +321,10 @@ class ShieldTypeAdmin(admin.ModelAdmin):
     list_editable = ['description']
     search_fields = ['name', 'description']
 
+
+admin.site.register(Factor, FactorAdmin)
+admin.site.register(Modifier, ModifierAdmin)
+admin.site.register(Perk, PerkAdmin)
 
 admin.site.register(Skill, SkillAdmin)
 admin.site.register(BooksSkill, SkillAdmin)

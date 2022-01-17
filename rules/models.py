@@ -8,6 +8,7 @@ from django.db.models import (
     Model,
     PositiveSmallIntegerField,
     PROTECT,
+    SmallIntegerField,
     TextField,
 )
 from django.db.models import Q
@@ -15,6 +16,48 @@ from django.db.models import Q
 from imaginarion.models import PictureSet
 from rpg_project.utils import create_sorting_name, rid_of_special_chars
 from users.models import Profile
+
+
+class Factor(Model):
+    """Ex. KP, TRAF, OBR, IN, Życie, etc."""
+    name = CharField(max_length=15, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name']
+
+
+class Modifier(Model):
+    """Ex. factor and value combine into: +2 KP, -1 TRAF, +2 OBR, etc."""
+    value = SmallIntegerField()
+    factor = FK(to=Factor, related_name='modifiers', on_delete=PROTECT)
+    condition = CharField(max_length=200, unique=True, blank=True, null=True)   # TODO will accept nulls?
+
+    def __str__(self):
+        sign = "+" if int(self.value) >= 0 else "-"
+        condition = f" [{self.condition}]" if self.condition else ""
+        return f"{sign}{self.value} {self.factor.name}{condition}"
+
+    class Meta:
+        ordering = ['value', 'factor', 'condition']
+
+
+class Perk(Model):
+    """A class describing a special ability of an item or a skill level."""
+    name = CharField(max_length=50, unique=True, blank=True, null=True)         # TODO will accept nulls?
+    description = TextField(max_length=4000, blank=True, null=True)
+    modifiers = M2M(to=Modifier, related_name='perks', blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name', 'description']
+
+
+# =============================================================================
 
 
 SKILL_KINDS = [
@@ -76,6 +119,7 @@ class SkillLevel(Model):
     skill = FK(to=Skill, related_name='skill_levels', on_delete=PROTECT)
     level = CharField(max_length=10, choices=S_LEVELS)
     description = TextField(max_length=4000, blank=True, null=True)
+    perks = M2M(to=Perk, related_name='skill_levels', blank=True)
     acquired_by = M2M(to=Profile, related_name='skill_levels', blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
@@ -175,6 +219,7 @@ class SynergyLevel(Model):
     synergy = FK(to=Synergy, related_name='synergy_levels', on_delete=PROTECT)
     level = CharField(max_length=10, choices=S_LEVELS[1:])
     description = TextField(max_length=4000, blank=True, null=True)
+    perks = M2M(to=Perk, related_name='synergy_levels', blank=True)
     acquired_by = M2M(to=Profile, related_name='synergy_levels', blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
