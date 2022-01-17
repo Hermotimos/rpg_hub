@@ -77,6 +77,17 @@ class SkillType(Model):
 
     class Meta:
         ordering = ['kind', 'name']
+        
+        
+class SkillGroup(Model):
+    """A loose grouping category for Skills."""
+    name = CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return {self.name}
+
+    class Meta:
+        ordering = ['name']
 
 
 class Skill(Model):
@@ -89,6 +100,7 @@ class Skill(Model):
         related_name='allowed_skills',
         blank=True,
     )
+    group = FK(to=SkillGroup, related_name='skills', on_delete=PROTECT, blank=True, null=True)
     types = M2M(to=SkillType, related_name='skills', blank=True)
     sorting_name = CharField(max_length=101, blank=True, null=True)
 

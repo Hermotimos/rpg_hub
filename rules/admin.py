@@ -6,11 +6,11 @@ from django.forms import Textarea
 from django.utils.translation import ugettext_lazy
 
 from imaginarion.models import PictureSet
-from knowledge.models import KnowledgePacket
 from rpg_project.utils import formfield_for_dbfield_cached
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, \
     Profession, Klass, EliteProfession, BooksSkill, TheologySkill, \
-    EliteKlass, WeaponType, Weapon, Plate, Shield, SkillType, Perk, Modifier, Factor
+    EliteKlass, WeaponType, Weapon, Plate, Shield, SkillType, Perk, Modifier, \
+    Factor, SkillGroup
 from users.models import Profile
 
 
@@ -162,7 +162,7 @@ class SkillAdmin(admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 30})},
     }
     inlines = [SkillLevelInline]
-    list_display = ['id', 'name', 'tested_trait', 'image']
+    list_display = ['id', 'name', 'tested_trait', 'image', 'group']
     list_editable = ['name', 'tested_trait', 'image']
     search_fields = ['name']
 
@@ -203,6 +203,11 @@ class SynergyAdmin(admin.ModelAdmin):
 class SkillTypeAdmin(admin.ModelAdmin):
     list_display = ['id', 'kind', 'name']
     list_editable = ['kind', 'name']
+
+
+class SkillGroupAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
+    list_editable = ['name']
 
 
 # =============================================================================
@@ -333,6 +338,7 @@ admin.site.register(SkillLevel, SkillLevelAdmin)
 admin.site.register(Synergy, SynergyAdmin)
 admin.site.register(SynergyLevel, SynergyLevelAdmin)
 admin.site.register(SkillType, SkillTypeAdmin)
+admin.site.register(SkillGroup, SkillGroupAdmin)
 admin.site.register(Profession, ProfessionAdmin)
 admin.site.register(Klass, KlassAdmin)
 admin.site.register(EliteProfession, EliteProfessionAdmin)
