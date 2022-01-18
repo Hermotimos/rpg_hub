@@ -9,48 +9,43 @@
 {% block content %}
     <div class="rules-styling pt-3">
         
-        {% with show_levels=False %}
-    
-            <article class="tabset">
-                
-                <!-- TAB HEADER: All skills -->
-                <input type="radio" name="tabset" id="tab0" aria-controls="all" checked>
-                <label class="h5" for="tab0">Wszystkie</label>
-                
-                <!-- TAB HEADERS: Skills per SkillType -->
-                {% for skill_type in skill_types %}
-                    <input type="radio" name="tabset" id="tab{{ forloop.counter }}" aria-controls="{{ skill_type.name }}">
-                    <label class="h5" for="tab{{ forloop.counter }}">{{ skill_type.name }}</label>
-                {% endfor %}
-
-
-                <div class="tab-panels">
-                    
-                    <!-- TAB CONTENT: All skills -->
-                    <section id="all" class="tab-panel">
-                        <div class="container">
-                            {% for skill in skills %}
+        <div class="mt-5" id="accordion">
+          
+            <!-- ALL SKILLS -->
+            <div class="card">
+                <div class="card-header" id="all-skills">
+                    <label class="h4 font-weight-bold hover-blue mb-0" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Wszystkie
+                    </label>
+                </div>
+                <div id="collapseOne" class="collapse show" aria-labelledby="all-skills" data-parent="#accordion">
+                    <div class="card-body container">
+                        {% for skill in skills %}
+                            {% include 'rules/_skill.html' %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+          
+            <!-- SKILLS PER SKILL TYPES-->
+            {% for skill_type in skill_types %}
+                <div class="card">
+                    <div class="card-header" id="{{ skill_type.name }}">
+                        <label class="h4 font-weight-bold hover-blue mb-0" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter }}">
+                            {{ skill_type.name }}
+                        </label>
+                    </div>
+                    <div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="{{ skill_type.name }}" data-parent="#accordion">
+                        <div class="card-body container">
+                            {% for skill in skill_type.skills.all %}
                                 {% include 'rules/_skill.html' %}
                             {% endfor %}
                         </div>
-                    </section>
-
-    
-                    <!-- TAB CONTENT: Skills per SkillType -->
-                    {% for skill_type in skill_types %}
-                        <section id="{{ skill_type.name }}" class="tab-panel">
-                            <div class="container">
-                                {% for skill in skill_type.skills.all %}
-                                    {% include 'rules/_skill.html' %}
-                                {% endfor %}
-                            </div>
-                        </section>
-                    {% endfor %}
+                    </div>
                 </div>
-                
-            </article>
-        
-        {% endwith %}
+            {% endfor %}
+            
+        </div>
         
     </div>
 {% endblock content %}
