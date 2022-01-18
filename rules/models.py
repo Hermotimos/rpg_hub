@@ -71,7 +71,13 @@ class SkillType(Model):
     """A classification category for Skills."""
     kind = CharField(max_length=100, choices=SKILL_KINDS, default='Powszechne')
     name = CharField(max_length=100, unique=True)
+    sorting_name = CharField(max_length=101, blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.sorting_name = create_sorting_name(self.name)
+        super().save(*args, **kwargs)
+        
     def __str__(self):
         return f"[{self.kind}] {self.name}"
 
