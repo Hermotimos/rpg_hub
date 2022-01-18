@@ -157,13 +157,10 @@ class SkillLevelInline(admin.TabularInline):
 
 class SkillAdmin(admin.ModelAdmin):
     form = Form5
-    formfield_overrides = {
-        models.CharField: {'widget': Textarea(attrs={'rows': 2, 'cols': 10})},
-        models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 30})},
-    }
     inlines = [SkillLevelInline]
     list_display = ['id', 'name', 'tested_trait', 'image', 'group']
     list_editable = ['name', 'tested_trait', 'image']
+    list_filter = ['types', 'group']
     search_fields = ['name']
 
 
