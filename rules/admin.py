@@ -158,7 +158,7 @@ class SkillAdmin(admin.ModelAdmin):
     form = SkillAdminForm
     inlines = [SkillLevelInline]
     list_display = ['id', 'name', 'tested_trait', 'image', 'group']
-    list_editable = ['name', 'tested_trait', 'image']
+    list_editable = ['name', 'tested_trait', 'image', 'group']
     list_filter = ['types', 'group']
     search_fields = ['name']
 
