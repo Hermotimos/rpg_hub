@@ -90,7 +90,7 @@ class SynergyLevelAdminForm(forms.ModelForm):
         }
         
 
-class SkillAdminForm(Form1):
+class SkillAdminForm(forms.ModelForm):
     
     class Meta:
         model = Skill
