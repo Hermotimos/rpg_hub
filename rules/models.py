@@ -99,7 +99,7 @@ class SkillType(Model):
 class SkillGroup(Model):
     """A loose grouping category for Skills."""
     name = CharField(max_length=100, unique=True)
-    type = FK(to=SkillType, related_name='skill_groups', on_delete=PROTECT, blank=True, null=True)
+    type = FK(to=SkillType, related_name='skill_groups', on_delete=PROTECT)
 
     def __str__(self):
         return self.name

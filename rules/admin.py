@@ -207,8 +207,8 @@ class SkillTypeAdmin(admin.ModelAdmin):
 
 
 class SkillGroupAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name']
-    list_editable = ['name']
+    list_display = ['id', 'name', 'type']
+    list_editable = ['name', 'type']
 
 
 # =============================================================================
