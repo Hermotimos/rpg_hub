@@ -130,7 +130,7 @@ def rules_skills_list_view(request):
 
     context = {
         'current_profile': profile,
-        'page_title': 'ListaUmiejętności',
+        'page_title': 'Lista Umiejętności',
         'skill_types': skill_types,
         'skills': skills,
     }
