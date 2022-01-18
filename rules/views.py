@@ -119,11 +119,13 @@ def rules_skills_list_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     
     if profile.can_view_all:
-        skills = Skill.objects.prefetch_related('skill_levels')
+        skills = Skill.objects.filter(types__kinds__name="Powszechne")
+        
     else:
         skills = Skill.objects.none()  # TODO temp, del when new Skills done
-        # skills = profile.allowed_skills.prefetch_related('skill_levels')
-        
+        # skills = profile.allowed_skills.filter(type__kinds__name="Powszechne")
+
+    skills = skills.prefetch_related('skill_levels')
     skill_types = SkillType.objects.filter(kinds__name='Powszechne')
     skill_types = skill_types.prefetch_related(Prefetch('skills', queryset=skills))
     skill_types = skill_types.filter(skills__in=skills).distinct()
