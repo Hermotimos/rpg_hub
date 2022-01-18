@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/rules.css' %}">
+{% endblock head_extra %}
+
+{% block content %}
+    <div class="rules-styling pt-3">
+        
+        {% with show_levels=False %}
+    
+            <article class="tabset">
+                
+                <!-- TAB HEADER: All skills -->
+                <input type="radio" name="tabset" id="tab0" aria-controls="all" checked>
+                <label class="h5" for="tab0">Wszystkie</label>
+                
+                <!-- TAB HEADERS: Skills per SkillType -->
+                {% for skill_type in skill_types %}
+                    <input type="radio" name="tabset" id="tab{{ forloop.counter }}" aria-controls="{{ skill_type.name }}">
+                    <label class="h5" for="tab{{ forloop.counter }}">{{ skill_type.name }}</label>
+                {% endfor %}
+
+
+                <div class="tab-panels">
+                    
+                    <!-- TAB CONTENT: All skills -->
+                    <section id="all" class="tab-panel">
+                        <div class="container">
+                            {% for skill in skills %}
+                                {% include 'rules/_skill.html' %}
+                            {% endfor %}
+                        </div>
+                    </section>
+
+    
+                    <!-- TAB CONTENT: Skills per SkillType -->
+                    {% for skill_type in skill_types %}
+                        <section id="{{ skill_type.name }}" class="tab-panel">
+                            <div class="container">
+                                {% for skill in skill_type.skills.all %}
+                                    {% include 'rules/_skill.html' %}
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endfor %}
+                </div>
+                
+            </article>
+        
+        {% endwith %}
+        
+    </div>
+{% endblock content %}

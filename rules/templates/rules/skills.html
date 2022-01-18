@@ -129,7 +129,7 @@
         </table>
 
         <!-- SKILLS  -->
-        <h2 class="rules mt-5 mb-3 hover-blue" data-toggle="collapse" data-target="#skills">Lista Umiejętności</h2>
+        <h2 class="rules mt-5 mb-3">Lista Umiejętności</h2>
         <p>
             Nie wszystkie Umiejętności są równie atrakcyjnymi i opłacalnymi wyborami dla Postaci.
             Zależnie od charakteru rozgrywki, który może zostać zarysowany na początku rozgrywki przez Mistrza Gry, a później musi być rozpoznany przez Gracza,
@@ -142,66 +142,22 @@
             Jednak w przypadku, gdy jakaś domena aktywności leżąca w sferze zainteresowań Postaci jest poszkodowana przez niedostatek czy niedoprecyzowanie Umiejętności,
             Gracz może w każdej chwili wysłać do Mistrza Gry Dezyderat z odpowiednią propozycją lub zgłoszeniem zapotrzebowania.
         </p>
-        <br><br>
-        <div id="skills" class="collapse show">
-            {% with show_levels=False %}
+        <p>
+            <span>&#9755;</span>
+            <a href="{% url 'rules:skills-list' %}">Lista Umiejętności</a>
+        </p>
         
-                <article class="tabset">
-                    
-                    <!-- TAB HEADER: All skills -->
-                    <input type="radio" name="tabset" id="tab0" aria-controls="all" checked>
-                    <label class="h5" for="tab0">Wszystkie</label>
-                    
-                    <!-- TAB HEADERS: Skills per SkillType -->
-                    {% for skill_type in skill_types %}
-                        <input type="radio" name="tabset" id="tab{{ forloop.counter }}" aria-controls="{{ skill_type.name }}">
-                        <label class="h5" for="tab{{ forloop.counter }}">{{ skill_type.name }}</label>
-                    {% endfor %}
+        <!-- SKILLS  -->
+        <h2 class="rules mt-5 mb-3 hover-blue" data-toggle="collapse" data-target="#skills">Synergie</h2>
+        <p>
+            Synergie zestaw dwóch lub więcej Umiejętności wraz z dodatkowymi bonusami, które wypływają z takiego połączenia.
+            Nabycie Synergii następuje automatycznie w wyniku zgromadzenia wszystkich składających się na nią Umiejętności na odpowiednim poziomie.
+            Synergie są niezależne od Paska Postępu oraz nie wymagają zakupu za Punkty Doświadczenia.
+        </p>
+        <p>
+            <span>&#9755;</span>
+            <a href="{% url 'rules:synergies-list' %}">Lista Synergii</a>
+        </p>
 
-
-                    <div class="tab-panels">
-                        
-                        <!-- TAB CONTENT: All skills -->
-                        <section id="all" class="tab-panel">
-                            <div class="container">
-                                {% for skill in skills %}
-                                    {% include 'rules/_skill.html' %}
-                                {% endfor %}
-                            </div>
-                        </section>
-
-        
-                        <!-- TAB CONTENT: Skills per SkillType -->
-                        {% for skill_type in skill_types %}
-                            <section id="{{ skill_type.name }}" class="tab-panel">
-                                <div class="container">
-                                    {% for skill in skill_type.skills.all %}
-                                        {% include 'rules/_skill.html' %}
-                                    {% endfor %}
-                                </div>
-                            </section>
-                        {% endfor %}
-                    </div>
-                    
-                </article>
-            
-            {% endwith %}
-        </div>
-        <br>
-        
-        <!-- SYNERGIES  -->
-        <h2 class="border-top"><br><b class="hover-blue" data-toggle="collapse" data-target="#synergies">Synergie</b></h2>
-        <small>
-            Synergie to dodatkowe bonusy z tytułu połączenia pary lub więcej Umiejętności. Lista jest otwarta.
-        </small>
-        <br><br>
-        <div id="synergies" class="collapse show">
-            {% with show_levels=False %}
-                {% for synergy in synergies %}
-                    {% include 'rules/_synergy.html' %}
-                {% endfor %}
-            {% endwith %}
-        </div>
-        
     </div>
 {% endblock content %}
