@@ -12,7 +12,7 @@
         <div class="mt-5" id="accordion">
           
             <!-- ALL SKILLS -->
-            <div class="card">
+            <div class="card mb-2">
                 <div class="card-header" id="all-skills">
                     <label class="h4 font-weight-bold hover-blue mb-0" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                         Wszystkie
@@ -29,7 +29,7 @@
           
             <!-- SKILLS PER SKILL TYPES-->
             {% for skill_type in skill_types %}
-                <div class="card">
+                <div class="card mb-2">
                     <div class="card-header" id="{{ skill_type.name }}">
                         <label class="h4 font-weight-bold hover-blue mb-0" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter }}">
                             {{ skill_type.name }}
