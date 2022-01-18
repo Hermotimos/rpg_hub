@@ -93,7 +93,7 @@ class SkillType(Model):
         return f"[{kinds}] {self.name}"
 
     class Meta:
-        ordering = ['kinds__name', 'sorting_name']
+        ordering = ['sorting_name']
         
         
 class SkillGroup(Model):
