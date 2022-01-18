@@ -91,8 +91,8 @@ class SkillGroup(Model):
 
 
 class Skill(Model):
-    name = CharField('Umiejętność', max_length=100, unique=True)
-    tested_trait = CharField('Cecha/Cechy', max_length=50, blank=True, null=True)
+    name = CharField(max_length=100, unique=True)
+    tested_trait = CharField(max_length=50, blank=True, null=True)
     image = ImageField(upload_to='site_features_pics', blank=True, null=True)
     allowed_profiles = M2M(
         to=Profile,

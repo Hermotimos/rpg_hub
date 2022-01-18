@@ -80,10 +80,6 @@ class SkillLevelAdminForm(forms.ModelForm):
         
 
 class SynergyLevelAdminForm(forms.ModelForm):
-    # knowledge_packets = forms.ModelMultipleChoiceField(
-    #     queryset=KnowledgePacket.objects.all(),
-    #     required=False,
-    #     widget=FilteredSelectMultiple('Knowledge packets', False))
 
     class Meta:
         model = SynergyLevel
@@ -94,13 +90,16 @@ class SynergyLevelAdminForm(forms.ModelForm):
         }
         
 
-class Form5(Form1):
-    types = forms.ModelMultipleChoiceField(
-        queryset=SkillType.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Skill Types', False),
-    )
+class SkillAdminForm(Form1):
     
+    class Meta:
+        model = Skill
+        fields = ['name', 'tested_trait', 'image', 'allowed_profiles', 'group', 'types', 'sorting_name']
+        widgets = {
+            'allowed_profiles': FilteredSelectMultiple('Allowed profiles', False),
+            'types': FilteredSelectMultiple('Types', False),
+        }
+
 
 class SkillLevelFilter(admin.SimpleListFilter):
     title = ugettext_lazy('skill__name')
@@ -156,7 +155,7 @@ class SkillLevelInline(admin.TabularInline):
 
 
 class SkillAdmin(admin.ModelAdmin):
-    form = Form5
+    form = SkillAdminForm
     inlines = [SkillLevelInline]
     list_display = ['id', 'name', 'tested_trait', 'image', 'group']
     list_editable = ['name', 'tested_trait', 'image']
