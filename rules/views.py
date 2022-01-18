@@ -115,13 +115,6 @@ def rules_skills_view(request):
         skills = profile.allowed_skills.prefetch_related('skill_levels')
         synergies = profile.allowed_synergies.all()
         
-        # TODO delete when new Skills done to unhide new skills for Players
-        skills = skills.filter(types__in=SkillType.objects.filter(name='Stare'))
-        
-    for skill in skills:
-        skill.name = skill.name.replace(' [old]', '')
-        skill.save()
-
     skill_types = SkillType.objects.filter(kind='Powszechne')
     skill_types = skill_types.prefetch_related(Prefetch('skills', queryset=skills))
     skill_types = skill_types.filter(skills__in=skills).distinct()
