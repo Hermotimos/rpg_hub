@@ -110,4 +110,23 @@
         
     </section>
 
+    <section class="my-5">
+        <h3 class="mb-4">Zasady:</h3>
+        
+        {% if skills_no_skill_type.exists %}
+            <div class="my-3 ml-4">
+                <h5>Umiejętności bez Typu [{{ skills_no_skill_type.count }}]</h5>
+                <div class="ml-4">
+                    {% for skill in skills_no_skill_type.all %}
+                        <a class="small" href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank">
+                            {{ skill }}
+                        </a>
+                        <br>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+    </section>
+
 {% endblock content %}

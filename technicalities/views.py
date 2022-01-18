@@ -47,6 +47,8 @@ def todos_view(request):
     game_event_no_known = GameEvent.objects.filter(
         known_directly=None).filter(known_indirectly=None)
     
+    skills_no_skill_type = Skill.objects.filter(types=None)
+    
     context = {
         'current_profile': profile,
         'page_title': 'TODOs',
@@ -56,6 +58,7 @@ def todos_view(request):
         'locations_no_image': locations_no_image,
         'locations_no_description': locations_no_description,
         'game_event_no_known': game_event_no_known,
+        'skills_no_skill_type': skills_no_skill_type,
     }
     return render(request, 'technicalities/todos.html', context)
 
