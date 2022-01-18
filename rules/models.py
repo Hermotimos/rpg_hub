@@ -77,16 +77,8 @@ class SkillKind(Model):
         ordering = ['sorting_name']
         
         
-SKILL_KINDS = [
-    ('Powszechne', 'Powszechne'),
-    ('Kapłańskie', 'Kapłańskie'),
-    ('Magiczne', 'Magiczne'),
-]
-        
-
 class SkillType(Model):
     """A classification category for Skills."""
-    kind = CharField(max_length=100, choices=SKILL_KINDS, default='Powszechne')
     kinds = M2M(to=SkillKind, related_name='skill_types', blank=True)
     name = CharField(max_length=100, unique=True)
     sorting_name = CharField(max_length=101, blank=True, null=True)
@@ -97,10 +89,11 @@ class SkillType(Model):
         super().save(*args, **kwargs)
         
     def __str__(self):
-        return f"[{self.kind}] {self.name}"
+        kinds = "|".join([str(kind) for kind in self.kinds.all()])
+        return f"[{kinds}] {self.name}"
 
     class Meta:
-        ordering = ['kind', 'sorting_name']
+        ordering = ['sorting_name']
         
         
 class SkillGroup(Model):
