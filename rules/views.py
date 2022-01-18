@@ -107,6 +107,12 @@ def rules_professions_view(request):
 @login_required
 def rules_skills_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
+    from rules.models import SkillKind
+    regular = SkillKind.objects.create(name="Powszechne")
+    SkillKind.objects.create(name="Kapłańskie")
+    SkillKind.objects.create(name="Magiczne")
+    for skilltype in SkillType.objects.all():
+        skilltype.kinds.add(regular)
     context = {
         'current_profile': profile,
         'page_title': 'Umiejętności',

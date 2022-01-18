@@ -60,6 +60,23 @@ class Perk(Model):
 # =============================================================================
 
 
+class SkillKind(Model):
+    """A classification category for Skills."""
+    name = CharField(max_length=100, unique=True)
+    sorting_name = CharField(max_length=101, blank=True, null=True)
+    
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.sorting_name = create_sorting_name(self.name)
+        super().save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        ordering = ['sorting_name']
+        
+        
 SKILL_KINDS = [
     ('Powszechne', 'Powszechne'),
     ('Kapłańskie', 'Kapłańskie'),
@@ -70,6 +87,7 @@ SKILL_KINDS = [
 class SkillType(Model):
     """A classification category for Skills."""
     kind = CharField(max_length=100, choices=SKILL_KINDS, default='Powszechne')
+    kinds = M2M(to=SkillKind, related_name='skill_types', blank=True)
     name = CharField(max_length=100, unique=True)
     sorting_name = CharField(max_length=101, blank=True, null=True)
 
@@ -90,7 +108,7 @@ class SkillGroup(Model):
     name = CharField(max_length=100, unique=True)
 
     def __str__(self):
-        return {self.name}
+        return self.name
 
     class Meta:
         ordering = ['name']

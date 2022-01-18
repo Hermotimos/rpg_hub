@@ -10,7 +10,7 @@ from rpg_project.utils import formfield_for_dbfield_cached
 from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, \
     Profession, Klass, EliteProfession, BooksSkill, TheologySkill, \
     EliteKlass, WeaponType, Weapon, Plate, Shield, SkillType, Perk, Modifier, \
-    Factor, SkillGroup
+    Factor, SkillGroup, SkillKind
 from users.models import Profile
 
 
@@ -196,6 +196,11 @@ class SynergyAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
+class SkillKindAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
+    list_editable = ['name']
+
+
 class SkillTypeAdmin(admin.ModelAdmin):
     list_display = ['id', 'kind', 'name']
     list_editable = ['kind', 'name']
@@ -334,6 +339,7 @@ admin.site.register(SkillLevel, SkillLevelAdmin)
 admin.site.register(Synergy, SynergyAdmin)
 admin.site.register(SynergyLevel, SynergyLevelAdmin)
 admin.site.register(SkillType, SkillTypeAdmin)
+admin.site.register(SkillKind, SkillKindAdmin)
 admin.site.register(SkillGroup, SkillGroupAdmin)
 admin.site.register(Profession, ProfessionAdmin)
 admin.site.register(Klass, KlassAdmin)
