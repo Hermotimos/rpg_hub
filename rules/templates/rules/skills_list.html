@@ -13,8 +13,9 @@
           
             <!-- ALL SKILLS -->
             <div class="card mb-2">
-                <div class="card-header" id="all-skills">
-                    <label class="h4 font-weight-bold hover-blue mb-0 small-caps" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <div class="card-header hover-blue" id="all-skills"
+                     data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <label class="h4 font-weight-bold mb-0 small-caps">
                         Wszystkie
                     </label>
                 </div>
@@ -30,8 +31,9 @@
             <!-- SKILLS PER SKILL TYPES-->
             {% for skill_type in skill_types %}
                 <div class="card mb-2">
-                    <div class="card-header" id="{{ skill_type.name }}">
-                        <label class="h4 font-weight-bold hover-blue mb-0" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter }}">
+                    <div class="card-header hover-blue" id="{{ skill_type.name }}"
+                         data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter }}">
+                        <label class="h4 font-weight-bold mb-0">
                             {{ skill_type.name }}
                         </label>
                     </div>
