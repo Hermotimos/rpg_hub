@@ -112,7 +112,8 @@ def rules_skills_view(request):
         skills = Skill.objects.prefetch_related('skill_levels')
         synergies = Synergy.objects.all()
     else:
-        skills = profile.allowed_skills.prefetch_related('skill_levels')
+        skills = Skill.objects.none()  # TODO temp, del when new Skills done
+        # skills = profile.allowed_skills.prefetch_related('skill_levels')
         synergies = profile.allowed_synergies.all()
         
     skill_types = SkillType.objects.filter(kind='Powszechne')
