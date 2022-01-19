@@ -13,7 +13,7 @@
                 {% endif %}
             </th>
             <th colspan="11">
-                <h2 class="pt-3" data-toggle="collapse" data-target="#{{ skill.short_name }}">
+                <h2 class="pt-3" data-toggle="collapse" data-target="#{{ skill.short_name }}{{ collapse_id_suffix }}">
                     <b class="hover-blue">
                         &nbsp;{{ skill.name }}
                         {% if show_levels %}
@@ -36,7 +36,7 @@
             </th>
         </tr>
     </thead>
-    <tbody id="{{ skill.short_name }}" class="collapse">
+    <tbody id="{{ skill.short_name }}{{ collapse_id_suffix }}" class="collapse">
             {% for skill_level in skill.skill_levels.all %}
                 {% with level_img='img/'|add:skill_level.level|add:'.png' %}
                     <tr>
@@ -44,16 +44,16 @@
                         <td class="align-top pl-1 pt-2">
                             <img class="img-numeral" src="{% static level_img %}">
                         </td>
-                        <td class="align-top pl-1 py-2 text-justify font-14">
+                        <td class="align-top pl-1 pr-4 py-2 text-justify font-14">
                             {% if skill_level.description %}
                                 {{ skill_level.description|custom_linebreaksbr:2 }}
                             {% endif %}
                             {% for perk in skill_level.perks.all %}
                                 <div class="mt-1">
-                                    <div class="font-weight-bold">{{ perk.name|trim_nums }}</div>
+                                    <div class="font-weight-bold">✧ {{ perk.name|trim_nums }}</div>
                                     <div class="">{{ perk.description }}</div>
                                     {% for modifier in perk.modifiers.all %}
-                                        <div class="ml-2">{{ modifier }}</div>
+                                        <div class="ml-3">{{ modifier }}</div>
                                     {% endfor %}
                                 </div>
                             {% endfor %}
