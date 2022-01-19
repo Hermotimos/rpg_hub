@@ -31,7 +31,14 @@ class FactorAdmin(admin.ModelAdmin):
 
 class ModifierAdmin(admin.ModelAdmin):
     list_display = ['id', 'sign', 'value_number', 'value_percent', 'factor', 'condition']
+    list_editable = ['sign', 'value_number', 'value_percent', 'factor', 'condition']
     list_select_related = ['factor']
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        fields = [
+            'factor',
+        ]
+        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
 
 
 class PerkAdmin(admin.ModelAdmin):
