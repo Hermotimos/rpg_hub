@@ -20,7 +20,7 @@ from users.models import Profile
 
 class Factor(Model):
     """Ex. KP, TRAF, OBR, IN, Życie, etc."""
-    name = CharField(max_length=15, unique=True)
+    name = CharField(max_length=30, unique=True)
 
     def __str__(self):
         return self.name
