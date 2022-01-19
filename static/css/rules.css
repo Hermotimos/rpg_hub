@@ -24,13 +24,6 @@
 
 .no-bullets {list-style: none;}
 
-.img-numeral {
-    float: left;
-    height: 30px;
-    width: auto;
-    margin-right: 5px;
-}
-
 .resp-container {
     position: relative;
     overflow: hidden;

@@ -287,3 +287,10 @@ def include_silent_participants(results: List[GroupedResult], thread: communicat
          for profile in profiles_without_statements])
     return sorted(results, key=lambda gr_result: gr_result.grouper.character_name_copy)
 
+
+@register.filter
+def trim_nums(text: str):
+    """Remove level numbers in perks' names (ex. 'Uniki 2' -> 'Uniki')."""
+    if text[-1:] in [str(num) for num in range(1, 10)]:
+        return text[:-2]
+    return text

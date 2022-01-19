@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
     CharField,
     DecimalField,
@@ -8,7 +9,6 @@ from django.db.models import (
     Model,
     PositiveSmallIntegerField,
     PROTECT,
-    SmallIntegerField,
     TextField,
 )
 from django.db.models import Q
@@ -29,24 +29,40 @@ class Factor(Model):
         ordering = ['name']
 
 
+PERCENTAGE_VALIDATOR = [MinValueValidator(0.01), MaxValueValidator(1.00)]
+SIGN_CHOICES = [
+    ('minus', 'minus'),
+    ('plus', 'plus'),
+]
+
+
 class Modifier(Model):
     """Ex. factor and value combine into: +2 KP, -1 TRAF, +2 OBR, etc."""
-    value = SmallIntegerField()
+    sign = CharField(max_length=5, choices=SIGN_CHOICES, blank=True, null=True)
+    value_number = DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    value_percent = DecimalField(
+        max_digits=3, decimal_places=2, validators=PERCENTAGE_VALIDATOR, blank=True, null=True)
     factor = FK(to=Factor, related_name='modifiers', on_delete=PROTECT)
-    condition = CharField(max_length=200, unique=True, blank=True, null=True)   # TODO will accept nulls?
+    condition = CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
-        sign = "+" if int(self.value) >= 0 else "-"
+        sign = ""
+        if self.sign:
+            sign = "+" if self.sign == "plus" else "-"
+        if self.value_number:
+            value = str(self.value_number).rstrip('0').rstrip('.')
+        else:
+            value = str(float(self.value_percent) * 100).rstrip('0').rstrip('.') + "%"
         condition = f" [{self.condition}]" if self.condition else ""
-        return f"{sign}{self.value} {self.factor.name}{condition}"
+        return f"{sign}{value} {self.factor.name}{condition}"
 
     class Meta:
-        ordering = ['value', 'factor', 'condition']
+        ordering = ['factor', 'sign', 'value_number', 'value_percent', 'condition']
 
 
 class Perk(Model):
     """A class describing a special ability of an item or a skill level."""
-    name = CharField(max_length=50, unique=True, blank=True, null=True)         # TODO will accept nulls?
+    name = CharField(max_length=50, unique=True, blank=True, null=True)
     description = TextField(max_length=4000, blank=True, null=True)
     modifiers = M2M(to=Modifier, related_name='perks', blank=True)
 

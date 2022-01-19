@@ -30,7 +30,7 @@ class FactorAdmin(admin.ModelAdmin):
 
 
 class ModifierAdmin(admin.ModelAdmin):
-    list_display = ['id', 'value', 'factor', 'condition']
+    list_display = ['id', 'sign', 'value_number', 'value_percent', 'factor', 'condition']
     list_select_related = ['factor']
 
 
