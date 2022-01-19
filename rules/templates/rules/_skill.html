@@ -12,7 +12,7 @@
                     <img class="img-skill" src="{% static 'img/skill-default.png' %}">
                 {% endif %}
             </th>
-            <th colspan="2">
+            <th colspan="11">
                 <h2 class="pt-3" data-toggle="collapse" data-target="#{{ skill.short_name }}">
                     <b class="hover-blue">
                         &nbsp;{{ skill.name }}
@@ -20,11 +20,18 @@
                             [{{ skill.skill_levels.all|get_max_skill_level }}]
                         {% endif %}
                     </b>
+                    {% if current_profile.status == 'gm' %}
+                        <a class="btn btn-outline-secondary icon-edit icon-small py-2 mb-sm-1"
+                           href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank"
+                           data-toggle="tooltip" data-placement="top" title="Edytuj Umiejętność">
+                        </a>
+                    {% endif %}
                     <small class="text-muted smaller">
                         {% if skill.tested_trait %}
                             [{{ skill.tested_trait }}]
                         {% endif %}
                     </small>
+
                 </h2>
             </th>
         </tr>
@@ -56,3 +63,5 @@
             {% endfor %}
     </tbody>
 </table>
+
+

@@ -106,9 +106,9 @@ def rules_professions_view(request):
 
 @login_required
 def rules_skills_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Umiejętności',
     }
     return render(request, 'rules/skills.html', context)
@@ -116,9 +116,9 @@ def rules_skills_view(request):
 
 @login_required
 def rules_skills_list_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     
-    if profile.can_view_all:
+    if current_profile.can_view_all:
         skills = Skill.objects.filter(types__kinds__name="Powszechne")
         
     else:
@@ -136,7 +136,7 @@ def rules_skills_list_view(request):
     skill_types = skill_types.filter(skills__in=skills).distinct()
 
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Lista Umiejętności',
         'skill_types': skill_types,
         'skills': skills,
@@ -146,15 +146,15 @@ def rules_skills_list_view(request):
 
 @login_required
 def rules_synergies_list_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     
-    if profile.can_view_all:
+    if current_profile.can_view_all:
         synergies = Synergy.objects.prefetch_related('skills', 'synergy_levels')
     else:
-        synergies = profile.allowed_synergies.prefetch_related('skills', 'synergy_levels')
+        synergies = current_profile.allowed_synergies.prefetch_related('skills', 'synergy_levels')
         
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Lista Synergii',
         'synergies': synergies,
     }
