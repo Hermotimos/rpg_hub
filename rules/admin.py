@@ -160,9 +160,16 @@ class SkillAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'tested_trait', 'image', 'group']
     list_editable = ['name', 'tested_trait', 'image', 'group']
     list_filter = ['types', 'group']
+    list_select_related = ['group__type']
     search_fields = ['name']
+    
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        fields = [
+            'group',
+        ]
+        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
 
-
+    
 class SynergyLevelAdmin(admin.ModelAdmin):
     form = SynergyLevelAdminForm
     formfield_overrides = {
