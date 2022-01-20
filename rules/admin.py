@@ -158,7 +158,7 @@ class SkillLevelAdmin(admin.ModelAdmin):
 
 class SkillLevelInline(admin.TabularInline):
     model = SkillLevel
-    extra = 1
+    extra = 4
 
 
 class SkillAdmin(admin.ModelAdmin):
