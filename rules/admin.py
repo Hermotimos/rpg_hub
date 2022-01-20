@@ -49,7 +49,7 @@ class PerkAdmin(admin.ModelAdmin):
 
 class Form1(forms.ModelForm):
     allowed_profiles = forms.ModelMultipleChoiceField(
-        queryset=Profile.players.filter(is_alive=True),
+        queryset=Profile.objects.all(),
         required=False,
         widget=FilteredSelectMultiple('Allowed profiles', False),
     )
@@ -72,10 +72,6 @@ class Form3(Form1):
 
 
 class SkillLevelAdminForm(forms.ModelForm):
-    # knowledge_packets = forms.ModelMultipleChoiceField(
-    #     queryset=KnowledgePacket.objects.all(),
-    #     required=False,
-    #     widget=FilteredSelectMultiple('Knowledge packets', False))
 
     class Meta:
         model = SkillLevel
