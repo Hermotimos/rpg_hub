@@ -127,6 +127,20 @@
             </div>
         {% endif %}
         
+        {% if skills_no_allowed_profile.exists %}
+            <div class="my-3 ml-4">
+                <h5>Umiejętności bez Allowed Profiles [{{ skills_no_allowed_profile.count }}]</h5>
+                <div class="ml-4">
+                    {% for skill in skills_no_allowed_profile.all %}
+                        <a class="small" href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank">
+                            {{ skill }}
+                        </a>
+                        <br>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
     </section>
 
 {% endblock content %}

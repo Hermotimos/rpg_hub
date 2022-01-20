@@ -48,6 +48,7 @@ def todos_view(request):
         known_directly=None).filter(known_indirectly=None)
     
     skills_no_skill_type = Skill.objects.filter(types=None)
+    skills_no_allowed_profile = Skill.objects.filter(allowed_profiles=None)
     
     context = {
         'current_profile': profile,
@@ -59,6 +60,7 @@ def todos_view(request):
         'locations_no_description': locations_no_description,
         'game_event_no_known': game_event_no_known,
         'skills_no_skill_type': skills_no_skill_type,
+        'skills_no_allowed_profile': skills_no_allowed_profile,
     }
     return render(request, 'technicalities/todos.html', context)
 
