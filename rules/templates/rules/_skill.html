@@ -41,17 +41,17 @@
                 {% with level_img='img/'|add:skill_level.level|add:'.png' %}
                     <tr>
                         <td class="align-top"></td>
-                        <td class="align-top pl-1 pt-2">
+                        <td class="align-top pl-1 pt-1">
                             <img class="img-numeral" src="{% static level_img %}">
                         </td>
-                        <td class="align-top pl-1 pr-4 py-2 text-justify font-14">
+                        <td class="align-top pl-1 pr-4 py-1 text-justify font-14">
                             {% if skill_level.description %}
                                 <span class="mt-1">
                                     {{ skill_level.description|custom_linebreaksbr:2 }}
                                 </span>
                             {% endif %}
                             {% for perk in skill_level.perks.all %}
-                                <div>
+                                <div class="mb-1 {% if skill_level.description %} mt-1 {% endif %}">
                                     <div class="font-weight-bold">
                                         ✧ {{ perk.name|trim_nums }}
                                         {% if perk.cost %}
