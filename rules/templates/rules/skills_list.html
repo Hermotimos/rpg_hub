@@ -45,7 +45,7 @@
                                 In some cases it would result in leaving most of the skills ungrouped while some of them grouped. -->
                             {% if skill_type.skill_groups.exists %}
                                 {% with skills=skill_type.skills.all %}
-                                    {% regroup skills by group as skillgroup_list %}
+                                    {% regroup skills|dictsort:"group.name" by group as skillgroup_list %}
                                     {% for skillgroup in skillgroup_list %}
                                         {% if skillgroup.grouper.name %}
                                             <h4 class="mt-4 mb-2 border-bottom text-center">
