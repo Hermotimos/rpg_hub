@@ -57,7 +57,7 @@ class Modifier(Model):
         return f"{sign}{value} {self.factor.name}{condition}"
 
     class Meta:
-        ordering = ['factor', 'sign', 'value_number', 'value_percent', 'condition']
+        ordering = ['sign', 'value_number', 'value_percent', 'factor', 'condition']
 
 
 class Perk(Model):
