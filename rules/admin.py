@@ -18,7 +18,7 @@ class PerkAdminForm(forms.ModelForm):
     
     class Meta:
         model = Perk
-        fields = ['name', 'description', 'modifiers']
+        fields = ['name', 'description', 'modifiers', 'cost']
         widgets = {
             'modifiers': FilteredSelectMultiple('Modifiers', False),
         }
@@ -43,8 +43,8 @@ class ModifierAdmin(admin.ModelAdmin):
 
 class PerkAdmin(admin.ModelAdmin):
     form = PerkAdminForm
-    list_display = ['id', 'name', 'description']
-    list_editable = ['name', 'description']
+    list_display = ['id', 'name', 'description', 'cost']
+    list_editable = ['name', 'description', 'cost']
 
 
 class Form1(forms.ModelForm):
@@ -75,7 +75,7 @@ class SkillLevelAdminForm(forms.ModelForm):
 
     class Meta:
         model = SkillLevel
-        fields = ['skill', 'level', 'description', 'perks', 'acquired_by', 'sorting_name']
+        fields = ['skill', 'level', 'description', 'perks', 'acquired_by']
         widgets = {
             'acquired_by': FilteredSelectMultiple('Acquired by', False),
             'perks': FilteredSelectMultiple('Perks', False),

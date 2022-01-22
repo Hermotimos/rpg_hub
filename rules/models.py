@@ -65,6 +65,7 @@ class Perk(Model):
     name = CharField(max_length=50, unique=True, blank=True, null=True)
     description = TextField(max_length=4000, blank=True, null=True)
     modifiers = M2M(to=Modifier, related_name='perks', blank=True)
+    cost = TextField(max_length=1000, blank=True, null=True)
 
     def __str__(self):
         return self.name
