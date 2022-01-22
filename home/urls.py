@@ -8,7 +8,7 @@ def get_profile(view):
     @wraps(view)
     def wrap(request, *args, **kwargs):
         from users.models import Profile
-        print(view.context)
+        # print(view.context)
         # TODO how to extend context dict in a decorator
         # context['profile'] = Profile.objects.get(id=request.session['profile_id'])
         return view(request,  *args, **kwargs)
