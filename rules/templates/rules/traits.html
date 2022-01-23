@@ -85,10 +85,9 @@
                         <td>800</td>
                         <td>600</td>
                         <td>400</td>
-                        <td>200</td>
-                        <td>100</td>
-                        <td>200</td>
-                        <td>200</td>
+                        <td>300</td>
+                        <td>300</td>
+                        <td>300</td>
                         <td>400</td>
                         <td>600</td>
                         <td>800</td>
@@ -338,7 +337,7 @@
             <thead class="thead-dark">
                 <tr>
                     <th>Poziom trudności</th>
-                    <th>Malus </th>
+                    <th>Malus</th>
                 </tr>
             </thead>
             <tbody>
@@ -378,9 +377,11 @@
         </table>
         
         <p>
-            Powyższa skala ma charakter orientacyjny. Podczas określania poziomu trudności Mistrz Gry może używać sformułowań,
-            które nie wskazują wprost na dany modyfikator, np. „niewymagający”, „absurdalnie trudny”, „dla ciebie - dosyć prosty”,
-            albo „bardzo trudny, ale nie niemożliwy” itp.
+            Powyższa pozwala zorientować się, że w przypadku najtrudniejszych wyczynów Postać ma nikłe szanse na Sukces,
+            o ile nie dysponuje rozwiniętymi Umiejętnościami, które dostarczyłyby Bonusu do Testu Cechy.
+            Poziom trudności nie zawsze jest dokładnie znany Postaci; podczas jego określania Mistrz Gry może używać sformułowań,
+            które nie wskazują wprost na konkretną wartość modyfikatora, np. „niewymagający”, „absurdalnie trudny”, „dla ciebie - dosyć prosty”,
+            albo „bardzo trudny, ale nie niemożliwy” itp. Są to sformułowania pozwalające Graczowi na przybliżone oszacowanie Malusa.
         </p>
         <p>
             W zależności od kontekstu sytuacyjnego, a dokładniej od tego, czy pozwala on Postaci na monitorowanie poziomu powodzenia wykonania czynności,
@@ -410,6 +411,126 @@
             a jeżeli ktoś dostrzega tu niesprawiedliwość, to wzruszają tylko ramionami i odsyłają go z powrotem do mamusi.
         </p>
         
+        
+        <h2 class="rules mt-5 mb-3">
+            Wydolność
+        </h2>
+        <p>
+            Wydolność określa zdolność Postaci do długotrwałego wykonywania intensywnych fizycznie czynności,
+            co można wyrazić przez przypisanie tego rodzaju czynnościom kosztu Wydolności.
+            Po jej wyczerpaniu Postać nie jest w stanie kontynuować danej czynności na aktualnym pułapie intensywności.
+            Poniższa tabela przedstawia
+        </p>
+        <p>
+            Początkowa Wydolność jest równa KON, jednak może ulegać podwyższeniu za sprawą Umiejętności takich jak Wytrzymałość,
+            a także zmianom na skutek działania eliksirów i magii oraz wydarzeń fabularnych (np. choroby, ciężkich ran, łaski od bogów lub klątwy).
+        </p>
+        <p>
+            Ścisłe kontrolowanie Wydolności jest konieczne w walce oraz w sytuacjach konfliktowych,
+            kiedy liczy się każda sekunda i każda ze stron próbuje uprzedzić drugą w jakiejś czynności.
+            W sytuacjach innych niż konfliktowe wystarczy ustalić przybliżony czas wykonania czynności.
+        </p>
+        <table class="table table-hover table-bordered mt-3">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Czynność</th>
+                    <th>Koszt Wydolności</th>
+                    <th>Skutki wyczerpania Wydolności</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Bieg x4</td>
+                    <td>1 / 1 rundę</td>
+                    <td>Postać zwalnia do tempa wolniejszego niż Marsz (poniżej 1x)</td>
+                </tr>
+                <tr>
+                    <td>Walka w zwarciu</td>
+                    <td>1 / 1 rundę</td>
+                    <td>Niezdolność do Ataku, Defensywy czy Biegu x2 (pozostają Uniki i Parowanie)</td>
+                </tr>
+                <tr>
+                    <td>Walka dystansowa</td>
+                    <td>1 / 3 rundy</td>
+                    <td>Niezdolność do Ataku, Defensywy czy Biegu x2 (pozostają Uniki i Parowanie)</td>
+                </tr>
+                <tr>
+                    <td>Wspinaczka</td>
+                    <td>1 / 1 rundę</td>
+                    <td>Niezdolność do dalszej Wspinaczki, konieczność odpoczynku w dogodnym miejscu (półka skalna, wąska szczelina)</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>
+            Tempo regeneracji Wydolności zależy od jakości odpoczynku.
+            Pełny odpoczynek polegający na przyjęciu wygodnej postawy siedzącej lub leżącej pozwala na regenerację 1 punktu Wydolności na 2 rundy.
+            Jeśli zaś Postać odpoczywa "aktywnie" (w trakcie walki, wmarszu, w szczelinie skalnej), to regeneracja zachodzi w tempie 1 punktu Wydolności na 4 rundy.
+        </p>
+        
+        
+        <h2 class="rules mt-5 mb-3">
+            Ruch
+        </h2>
+        <p>
+            Zasady dotyczące Ruchu służą określeniu czasu pokonania danego dystansu,
+            co znajduje zastosowanie głównie przy podróży oraz w sytuacjach konfliktowych,
+            np. próba dobiegnięcia do wrogiego łucznika, wyścig krótko- albo długodystansowy,
+            przemieszczenia oddziałów podczas bitwy czy też armii ścigających się do strategicznego punktu.
+            W innych przypadkach wystarczy określenie przybliżonego czasu pokonania danego dystansu.
+        </p>
+        <p>
+            Próby Przyspieszenia można podejmować co rundę, jednak każde Fiasko skutkuje Malusem -1 do kolejnych prób.
+            Malus kasuje się dopiero po pełnej regeneracji Wydolności.
+            Automatyczne Fiasko oznacza, że Postaci kończy się oddech i jej prędkość spada o 1 próg Przyspieszenia, zamiast wzrosnąć,
+            a przy Krytycznym Fiasku Postać zasrywa się z wyczerpania, po czym mdleje, jeśli nie dostaje ataku serca...
+        </p>
+        <p>
+            Poniższa tabela przedstawia dokładniej koszt Wydolności przy różnym tempie Ruchu.
+        </p>
+        <table class="table table-hover table-bordered mt-3">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Czynność</th>
+                    <th>Koszt Wydolności</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Marsz (1x)</td>
+                    <td>1 / 1.5 godziny</td>
+                </tr>
+                <tr>
+                    <td>Trucht (2x)</td>
+                    <td>1 / 20 rund (2 min)</td>
+                </tr>
+                <tr>
+                    <td>Bieg (3x)</td>
+                    <td>1 / 4 rundy</td>
+                </tr>
+                <tr>
+                    <td>Szybki Bieg</td>
+                    <td>1 / 1 rundę</td>
+                </tr>
+                <tr>
+                    <td>Sprint</td>
+                    <td>2 / 1 rundę</td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <h2 class="rules mt-5 mb-3">
+            Upadek
+        </h2>
+        <p>
+            Upadek powoduje Obrażenia zależne od wysokości: 1k4 za każde rozpoczęte 2 metry.
+            Obrażenia te mogą podlegać Wyparowaniom, np. dzięki zbroi.
+            Ponadto, jeżeli upadek z wysokości odbywa się w sposób kontrolowany (np. Postać sama wykonała skok) lub przynajmniej nogami w dół,
+            to udany test ZRC pozwala zredukować OBR o 4.
+        </p>
+        
+
+
     </div>
 
 

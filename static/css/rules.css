@@ -21,6 +21,8 @@
     margin-right: 5px;
 }
 
+.table td {color: #444444 !important;}
+
 
 .no-bullets {list-style: none;}
 
@@ -94,7 +96,6 @@
 .agility-and-tricks .hiding-wilderness {width: 100px;}
 .agility-and-tricks .climbing {width: 100px;}
 .agility-and-tricks .traps {width: 100px;}
-
 
 table.weapons-table {border: double;}
 
