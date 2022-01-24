@@ -23,9 +23,10 @@
         </p>
         <p>
             Test Cechy może podlegać różnorakim Modyfikatorom wynikającym z kontekstu sytuacyjnego. Modyfikatory korzystne/dodatnie to Bonusy, a niekorzystne to Malusy.
-            Przykładem Bonusu jest premia +2 do testu SIŁ w przypadku, gdy Postać starająca się przesunąć wielki głaz zawalający wejście do jaskini użyje grubego kija i zastosuje dźwignię.
-            Przykładem Malusa jest premia -2 do testu ZRC dla Postaci, która próbuje złapać rzuconą w jej stronę butelkę z miksturą, jednak jej łydkę właśnie szarpie wściekły pies.
-            Tego rodzaju Bonusy i Malusy mogą wystąpić w również kontekście wszelkich innych rzutów, o których mowa w dalszej części Zasad.
+            Przykładem Bonusu jest modyfikator +2 do testu SIŁ w przypadku, gdy Postać starająca się przesunąć wielki głaz zawalający wejście do jaskini użyje grubego kija i zastosuje dźwignię.
+            Przykładem Malusa jest modyfikator -2 do testu ZRC dla Postaci, która próbuje złapać rzuconą w jej stronę butelkę z miksturą, jednak jej łydkę właśnie szarpie wściekły pies.
+            Tego rodzaju Bonusy i Malusy mogą wystąpić w również kontekście wszelkich innych współczynników, o których mowa w dalszej części Zasad.
+            Malus może mieć również formę "dodatnią", bo w przypadku niektórych współczynników korzystna jest niższa wartość.
         </p>
         <p>
             Wartości Cech mogą ulegać zmianie ze względów fabularnych (choroba, kalectwo, wpływ magii itp.) oraz w następstwie rozwoju Postaci.
@@ -167,7 +168,7 @@
             W zależności od Siły oraz aktualnego obciążenia, zdolność do prędkiego poruszania się Postaci może być ograniczona.
             Im większą Siłą Postać dysponuje, tym więcej może unieść zanim ciężar ekwipunku zacznie spowalniać jej marsz i ograniczać możliwość szybkiego biegu.
             Oczywiście, ekwipunek zawsze można odrzucić, aby uwolnić się od tego ograniczenia - tak czynią choćby wojowie, którzy odrzucają tarczę w panicznej ucieczce.
-            Ponadto, w miarę wzrostu Obciążenia Postaci, maleje jej zdolność do korzystania z wysokiej Zręczności i wzrasta ociężałość ruchowa (malus do Inicjatywy).
+            Ponadto, w miarę wzrostu Obciążenia Postaci, maleje jej zdolność do korzystania z wysokiej Zręczności i wzrasta ociężałość ruchowa (Malus do Inicjatywy).
             Udźwig maksymalny wskazuje najwyższy ciężar, jaki Postać jest w stanie unieść z ziemi, by wykonać z nim kilka kroków.
             Wpływ Obciążenia przy poszczególnych wartościach Siły opisuje poniższa tabela.
         </p>
@@ -332,11 +333,23 @@
             Wszystkie Testy Cech, czy to wynikająca z bezpośredniego zastosowania danej Cechy
             (np. siłowanie na rękę, wypatrywanie zwierzyny w lesie, próba marszu czwarty dzień z rzędu bez pożywienia),
             czy to z użycia Umiejętności (np. Bieganie, Pływanie, Spostrzegawczość, Skradanie, Tropienie) mają określony poziom trudności, z którego wynika odpowiedni Malus.
+            Malus ten stosuje się przez obniżenie testowanej wartości Cechy.
+            
         </p>
+        <ol class="rules ml-4">
+            <li>
+                Np. Postać o Sile 12 podejmuje próbę wykonania czynności o Poziomie Trudności "Banalny" z zerowym Malusem;
+                testowana wartość Cechy to 12, a zatem czynność powiedzie się, jeśli na k20 wyrzuci 1-12.
+            </li>
+            <li>
+                Np. Postać o Sile 12 podejmuje próbę wykonania czynności o Poziomie Trudności "Trudny" z Malusem -8;
+                testowana wartość Cechy to 4 (12 - 8), a zatem czynność powiedzie się, jeśli na k20 wyrzuci 1-2.
+            </li>
+        </ol>
         <table class="table table-hover table-bordered mt-3">
             <thead class="thead-dark">
                 <tr>
-                    <th>Poziom trudności</th>
+                    <th>Poziom Trudności</th>
                     <th>Malus</th>
                 </tr>
             </thead>
@@ -359,6 +372,10 @@
                 </tr>
                 <tr>
                     <td>Trudny</td>
+                    <th>-8</th>
+                </tr>
+                <tr>
+                    <td>Bardzo Trudny</td>
                     <th>-10</th>
                 </tr>
                 <tr>
@@ -391,19 +408,21 @@
             Zarazem, w przypadku rażącego niepowodzenia czynności MG może komunikować pewne wskazówki na temat poziomu jej powodzenia
             – a zwłaszcza, gdy Gracz sensownie deklaruje sposób, w jaki jego Postać monitoruje wykonanie czynności.
         </p>
-        <p>
-            Np. Postać podkrada się przez las do grupki podróżnych zasiadających wokół ogniska;
-            potajemny rzut wykonany przez MG kończy się kompletnym fiaskiem;
-            MG opisuje jak gałązka trzasnęła pod niezdarnym krokiem Postaci.
-        </p>
-        <p>
-            Np. Postać podkrada się do strażnika na warcie; potajemny rzut wykonany przez MG kończy się Fiaskiem,
-            ale wynik rzutu był bliski Sukcesu – dlatego Postać nie ma możliwości natychmiastowego uświadomienia sobie własnej porażki.
-            Może się okazać, że strażnik zauważył kątem oka poruszenie; ale nie dał po sobie poznać, bo chce zaskoczyć rzezimieszka.
-            Jednak, jeśli Gracz zadeklaruje, że uważnie obserwuje strażnika, zwracając uwagę na tempo jego kroku i postawę ciała
-            (nadal swobodna czy się zmieniła?), i jeśli ani na chwilę nie spuszcza go z oczu, wówczas Mistrz Gry (ew. wykonując dodatkowy test ZRC)
-            może opisać jak wartownik drgnął lekko, choć nie wstrzymał kroku…
-        </p>
+        <ol class="rules ml-4">
+            <li>
+                Np. Postać podkrada się przez las do grupki podróżnych zasiadających wokół ogniska;
+                potajemny rzut wykonany przez MG kończy się kompletnym fiaskiem;
+                MG opisuje jak gałązka trzasnęła pod niezdarnym krokiem Postaci.
+            </li>
+            <li>
+                Np. Postać podkrada się do strażnika na warcie; potajemny rzut wykonany przez MG kończy się Fiaskiem,
+                ale wynik rzutu był bliski Sukcesu – dlatego Postać nie ma możliwości natychmiastowego uświadomienia sobie własnej porażki.
+                Może się okazać, że strażnik zauważył kątem oka poruszenie; ale nie dał po sobie poznać, bo chce zaskoczyć rzezimieszka.
+                Jednak, jeśli Gracz zadeklaruje, że uważnie obserwuje strażnika, zwracając uwagę na tempo jego kroku i postawę ciała
+                (nadal swobodna czy się zmieniła?), i jeśli ani na chwilę nie spuszcza go z oczu, wówczas Mistrz Gry (ew. wykonując dodatkowy test ZRC)
+                może opisać jak wartownik drgnął lekko, choć nie wstrzymał kroku…
+            </li>
+        </ol>
         <p>
             W tym kontekście Fiasko ocierające się o sukces to sytuacja szczególne ryzykowna dla wszelkich łotrzyków,
             ponieważ brak jest ewidentnego potwierdzenia porażki, który pozwoliłby w porę szukać ratunku w ucieczce.
