@@ -52,6 +52,18 @@ def get_recipients(statement: communications.models.Statement):
     return recipients
 
 
+def get_initiator_image_url(thread: Thread):
+    """Get URL of the Profile who "initiated" the Thread.
+    Take the author of first Statement as the initiator; only in Announcements
+    take the first player's or NPC's Profile as initiator.
+    """
+    if thread.kind == "Debate":
+        for statement in thread.statements.all():
+            if statement.author.status != 'gm':
+                return statement.author.image.url
+    return thread.statements.first().author.image.url
+
+
 def thread_inform(current_profile, request, thread, tag_title):
     informed_ids = [k for k, v_list in request.POST.items() if 'on' in v_list]
     informed = Profile.objects.filter(id__in=informed_ids)
@@ -97,7 +109,9 @@ def threads_view(request, thread_kind, tag_title):
         unseen = Thread.objects.none()
 
     threads = threads.exclude(id__in=unseen)
-    
+    for thread in threads:
+        thread.initiator_image_url = get_initiator_image_url(thread)
+
     tags = ThreadTag.objects.filter(author=current_profile, kind=thread_kind)
     formset = ThreadTagEditFormSet(
         data=request.POST or None,
