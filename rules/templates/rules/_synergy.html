@@ -13,8 +13,11 @@
             <th class="m-0 p-0">
                 <div class="m-0 p-0">
                     {% for skill in synergy.skills.all %}
+                    
                         {% if skill.image %}
                             <img class="img-skill" src="{{ skill.image.url }}">
+                        {% else %}
+                            <img class="img-skill" src="{% static 'img/skill-default.png' %}">
                         {% endif %}
                     {% endfor %}
                 </div>
