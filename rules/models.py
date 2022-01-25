@@ -193,7 +193,7 @@ class SkillLevel(Model):
         super().save(*args, **kwargs)
 
     class Meta:
-        ordering = ['sorting_name']
+        ordering = ['sorting_name', 'id']
 
 
 class TheologySkillManager(Manager):
