@@ -2,15 +2,19 @@ from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 
 from imaginarion.models import PictureSet
-from rules.models import Skill, SkillType, Perk, Modifier
+from rules.models import Skill, Perk
 from users.models import Profile
 
 
 class PerkAdminForm(forms.ModelForm):
-    modifiers = forms.ModelMultipleChoiceField(
-        queryset=Modifier.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Modifiers', False))
+    """An AdminForm with Meta to provide + (add) feature."""
+    
+    class Meta:
+        model = Perk
+        fields = ['name', 'description', 'modifiers', 'cost']
+        widgets = {
+            'modifiers': FilteredSelectMultiple('Modifiers', False),
+        }
         
 
 class Form1(forms.ModelForm):
@@ -20,11 +24,17 @@ class Form1(forms.ModelForm):
         widget=FilteredSelectMultiple('Allowed profiles', False))
 
 
-class SkillAdminForm(Form1):
-    types = forms.ModelMultipleChoiceField(
-        queryset=SkillType.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Types', False))
+class SkillAdminForm(forms.ModelForm):
+    """An AdminForm with Meta to provide + (add) feature."""
+    
+    class Meta:
+        model = Skill
+        fields = ['name', 'tested_trait', 'image', 'allowed_profiles', 'group',
+                  'types', 'sorting_name']
+        widgets = {
+            'allowed_profiles': FilteredSelectMultiple('Allowed profiles', False),
+            'types': FilteredSelectMultiple('Types', False),
+        }
 
 
 class SynergyAdminForm(Form1):
