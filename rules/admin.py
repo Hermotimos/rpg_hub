@@ -1,29 +1,27 @@
-from django import forms
 from django.contrib import admin
-from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
 from django.forms import Textarea
-from django.utils.translation import ugettext_lazy
 
-from imaginarion.models import PictureSet
 from rpg_project.utils import formfield_for_dbfield_cached
-from rules.models import Skill, SkillLevel, Synergy, SynergyLevel, \
-    Profession, Klass, EliteProfession, BooksSkill, TheologySkill, \
-    EliteKlass, WeaponType, Weapon, Plate, Shield, SkillType, Perk, Modifier, \
-    Factor, SkillGroup, SkillKind
-from users.models import Profile
+from rules.admin_filters import SkillLevelFilter, SynergyLevelFilter
+from rules.admin_forms import (
+    Form1, Form2,
+    PerkAdminForm,
+    SkillAdminForm, SkillLevelAdminForm,
+    SynergyAdminForm, SynergyLevelAdminForm
+)
+from rules.models import (
+    SkillGroup, SkillKind, SkillType,
+    Skill, SkillLevel, Synergy, SynergyLevel, BooksSkill, TheologySkill,
+    Perk, Modifier, Factor,
+    Profession, EliteProfession, Klass, EliteKlass,
+    WeaponType, Weapon, Plate, Shield,
+)
 
 
-class PerkAdminForm(forms.ModelForm):
-    
-    class Meta:
-        model = Perk
-        fields = ['name', 'description', 'modifiers', 'cost']
-        widgets = {
-            'modifiers': FilteredSelectMultiple('Modifiers', False),
-        }
-        
-        
+# =============================================================================
+
+
 class FactorAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
     list_editable = ['name']
@@ -46,94 +44,63 @@ class PerkAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'description', 'cost']
     list_editable = ['name', 'description', 'cost']
 
-
-class Form1(forms.ModelForm):
-    allowed_profiles = forms.ModelMultipleChoiceField(
-        queryset=Profile.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Allowed profiles', False),
-    )
-
-
-class Form2(Form1):
-    picture_sets = forms.ModelMultipleChoiceField(
-        queryset=PictureSet.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Picture Sets', False),
-    )
-
-
-class Form3(Form1):
-    skills = forms.ModelMultipleChoiceField(
-        queryset=Skill.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Skills', False)
-    )
-
-
-class SkillLevelAdminForm(forms.ModelForm):
-
-    class Meta:
-        model = SkillLevel
-        fields = ['skill', 'level', 'description', 'perks', 'acquired_by']
-        widgets = {
-            'acquired_by': FilteredSelectMultiple('Acquired by', False),
-            'perks': FilteredSelectMultiple('Perks', False),
-        }
-        
-
-class SynergyLevelAdminForm(forms.ModelForm):
-
-    class Meta:
-        model = SynergyLevel
-        fields = ['synergy', 'level', 'description', 'perks', 'acquired_by', 'sorting_name']
-        widgets = {
-            'acquired_by': FilteredSelectMultiple('Acquired by', False),
-            'perks': FilteredSelectMultiple('Perks', False),
-        }
-        
-
-class SkillAdminForm(forms.ModelForm):
     
-    class Meta:
-        model = Skill
-        fields = ['name', 'tested_trait', 'image', 'allowed_profiles', 'group', 'types', 'sorting_name']
-        widgets = {
-            'allowed_profiles': FilteredSelectMultiple('Allowed profiles', False),
-            'types': FilteredSelectMultiple('Types', False),
-        }
+# =============================================================================
 
 
-class SkillLevelFilter(admin.SimpleListFilter):
-    title = ugettext_lazy('skill__name')
-    parameter_name = 'skill__name'
-
-    def lookups(self, request, model_admin):
-        qs = model_admin.get_queryset(request)
-        qs.distinct()
-        list_with_duplicates = [(i, i) for i in qs.values_list('skill__name', flat=True).distinct()]
-        list_without_duplicates = list(dict.fromkeys(list_with_duplicates))
-        return list_without_duplicates
-
-    def queryset(self, request, queryset):
-        if self.value():
-            return queryset.filter(skill__name__exact=self.value())
+class SkillKindAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
+    list_editable = ['name']
 
 
-class SynergyLevelFilter(admin.SimpleListFilter):
-    title = ugettext_lazy('synergy__name')
-    parameter_name = 'synergy__name'
+class SkillTypeAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
+    list_editable = ['name']
 
-    def lookups(self, request, model_admin):
-        qs = model_admin.get_queryset(request)
-        qs.distinct()
-        list_with_duplicates = [(i, i) for i in qs.values_list('synergy__name', flat=True).distinct()]
-        list_without_duplicates = list(dict.fromkeys(list_with_duplicates))
-        return list_without_duplicates
 
-    def queryset(self, request, queryset):
-        if self.value():
-            return queryset.filter(synergy__name__exact=self.value())
+class SkillGroupAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'type']
+    list_editable = ['name', 'type']
+
+
+class SkillLevelInline(admin.TabularInline):
+    model = SkillLevel
+    extra = 4
+
+
+class SynergyLevelInline(admin.TabularInline):
+    model = SynergyLevel
+    extra = 1
+    
+    
+class SkillAdmin(admin.ModelAdmin):
+    form = SkillAdminForm
+    inlines = [SkillLevelInline]
+    list_display = ['id', 'name', 'tested_trait', 'image', 'group']
+    list_editable = ['name', 'tested_trait', 'image', 'group']
+    list_filter = ['types', 'group']
+    list_select_related = ['group__type']
+    search_fields = ['name']
+    
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        fields = [
+            'group',
+        ]
+        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+
+
+class SynergyAdmin(admin.ModelAdmin):
+    form = SynergyAdminForm
+    formfield_overrides = {
+        models.CharField: {
+            'widget': Textarea(attrs={'rows': 3, 'cols': 10})},
+        models.TextField: {
+            'widget': Textarea(attrs={'rows': 10, 'cols': 30})},
+    }
+    inlines = [SynergyLevelInline]
+    list_display = ['id', 'name']
+    list_editable = ['name']
+    search_fields = ['name']
 
 
 class SkillLevelAdmin(admin.ModelAdmin):
@@ -152,27 +119,6 @@ class SkillLevelAdmin(admin.ModelAdmin):
         return f'{str(obj.skill.name)} [{obj.level}]'
 
 
-class SkillLevelInline(admin.TabularInline):
-    model = SkillLevel
-    extra = 4
-
-
-class SkillAdmin(admin.ModelAdmin):
-    form = SkillAdminForm
-    inlines = [SkillLevelInline]
-    list_display = ['id', 'name', 'tested_trait', 'image', 'group']
-    list_editable = ['name', 'tested_trait', 'image', 'group']
-    list_filter = ['types', 'group']
-    list_select_related = ['group__type']
-    search_fields = ['name']
-    
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        fields = [
-            'group',
-        ]
-        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-
-    
 class SynergyLevelAdmin(admin.ModelAdmin):
     form = SynergyLevelAdminForm
     formfield_overrides = {
@@ -187,38 +133,6 @@ class SynergyLevelAdmin(admin.ModelAdmin):
 
     def name(self, obj):
         return f'{str(obj.synergy.name)} [{obj.level}]'
-
-
-class SynergyLevelInline(admin.TabularInline):
-    model = SynergyLevel
-    extra = 1
-
-
-class SynergyAdmin(admin.ModelAdmin):
-    form = Form3
-    formfield_overrides = {
-        models.CharField: {'widget': Textarea(attrs={'rows': 3, 'cols': 10})},
-        models.TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 30})},
-    }
-    inlines = [SynergyLevelInline]
-    list_display = ['id', 'name']
-    list_editable = ['name']
-    search_fields = ['name']
-
-
-class SkillKindAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name']
-    list_editable = ['name']
-
-
-class SkillTypeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name']
-    list_editable = ['name']
-
-
-class SkillGroupAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'type']
-    list_editable = ['name', 'type']
 
 
 # =============================================================================
@@ -284,6 +198,9 @@ class EliteProfessionAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description']
 
 
+# =============================================================================
+
+
 class WeaponInline(admin.TabularInline):
     model = Weapon
     extra = 2
@@ -338,23 +255,27 @@ class ShieldTypeAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description']
 
 
+# =============================================================================
+
 admin.site.register(Factor, FactorAdmin)
 admin.site.register(Modifier, ModifierAdmin)
 admin.site.register(Perk, PerkAdmin)
 
+admin.site.register(SkillType, SkillTypeAdmin)
+admin.site.register(SkillKind, SkillKindAdmin)
+admin.site.register(SkillGroup, SkillGroupAdmin)
 admin.site.register(Skill, SkillAdmin)
 admin.site.register(BooksSkill, SkillAdmin)
 admin.site.register(TheologySkill, SkillAdmin)
 admin.site.register(SkillLevel, SkillLevelAdmin)
 admin.site.register(Synergy, SynergyAdmin)
 admin.site.register(SynergyLevel, SynergyLevelAdmin)
-admin.site.register(SkillType, SkillTypeAdmin)
-admin.site.register(SkillKind, SkillKindAdmin)
-admin.site.register(SkillGroup, SkillGroupAdmin)
+
 admin.site.register(Profession, ProfessionAdmin)
 admin.site.register(Klass, KlassAdmin)
 admin.site.register(EliteProfession, EliteProfessionAdmin)
 admin.site.register(EliteKlass, EliteKlassAdmin)
+
 admin.site.register(WeaponType, WeaponTypeAdmin)
 admin.site.register(Weapon, WeaponAdmin)
 admin.site.register(Plate, PlateAdmin)

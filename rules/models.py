@@ -18,6 +18,9 @@ from rpg_project.utils import create_sorting_name, rid_of_special_chars
 from users.models import Profile
 
 
+# =============================================================================
+
+
 class Factor(Model):
     """Ex. KP, TRAF, OBR, IN, Życie, etc."""
     name = CharField(max_length=100, unique=True)
@@ -281,6 +284,9 @@ class SynergyLevel(Model):
         ordering = ['sorting_name']
 
 
+# =============================================================================
+
+
 class Profession(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
@@ -422,6 +428,9 @@ class EliteKlass(Model):
         verbose_name_plural = 'Elite klasses'
 
 
+# =============================================================================
+
+
 class WeaponType(Model):
     name = CharField(max_length=100, unique=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
@@ -525,6 +534,9 @@ class Weapon(Model):
 
     class Meta:
         ordering = ['sorting_name']
+
+
+# =============================================================================
 
 
 class Plate(Model):
