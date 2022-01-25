@@ -61,12 +61,16 @@
                                         {% endif %}
                                     </div>
                                     <div class="ml-3">{{ perk.description|custom_linebreaksbr:1 }}</div>
-                                    {% for modifier in perk.modifiers.all %}
-                                        <div class="ml-3">✰ {{ modifier }}</div>
-                                    {% endfor %}
-                                    {% for comment in perk.comments.all %}
-                                        <div class="ml-3">✵ {{ comment }}</div>
-                                    {% endfor %}
+                                    <ul class="ml-3 bullets-5">
+                                        {% for modifier in perk.modifiers.all %}
+                                            <li class="pl-1">{{ modifier }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                    <ul class="ml-3 bullets-2">
+                                        {% for comment in perk.comments.all %}
+                                            <li class="pl-1">{{ comment }}</li>
+                                        {% endfor %}
+                                    </ul>
                                 </div>
                             {% endfor %}
                         </td>
