@@ -52,9 +52,10 @@ class Modifier(Model):
         sign = ""
         if self.sign:
             sign = "+" if self.sign == "plus" else "-"
+        value = ""
         if self.value_number:
             value = str(self.value_number).rstrip('0').rstrip('.')
-        else:
+        elif self.value_percent:
             value = str(float(self.value_percent) * 100).rstrip('0').rstrip('.') + "%"
         condition = f" [{self.condition}]" if self.condition else ""
         return f"{sign}{value} {self.factor.name}{condition}"
