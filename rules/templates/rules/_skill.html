@@ -64,6 +64,9 @@
                                     {% for modifier in perk.modifiers.all %}
                                         <div class="ml-3">✰ {{ modifier }}</div>
                                     {% endfor %}
+                                    {% for comment in perk.comments.all %}
+                                        <div class="ml-3">✵ {{ comment }}</div>
+                                    {% endfor %}
                                 </div>
                             {% endfor %}
                         </td>

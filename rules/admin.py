@@ -13,7 +13,7 @@ from rules.admin_forms import (
 from rules.models import (
     SkillGroup, SkillKind, SkillType,
     Skill, SkillLevel, Synergy, SynergyLevel, BooksSkill, TheologySkill,
-    Perk, Modifier, Factor,
+    Perk, Modifier, Factor, RulesComment,
     Profession, EliteProfession, Klass, EliteKlass,
     WeaponType, Weapon, Plate, Shield,
 )
@@ -37,6 +37,11 @@ class ModifierAdmin(admin.ModelAdmin):
             'factor',
         ]
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+
+
+class RulesCommentAdmin(admin.ModelAdmin):
+    list_display = ['id', 'text']
+    list_editable = ['text']
 
 
 class PerkAdmin(admin.ModelAdmin):
@@ -260,6 +265,7 @@ class ShieldTypeAdmin(admin.ModelAdmin):
 admin.site.register(Factor, FactorAdmin)
 admin.site.register(Modifier, ModifierAdmin)
 admin.site.register(Perk, PerkAdmin)
+admin.site.register(RulesComment, RulesCommentAdmin)
 
 admin.site.register(SkillType, SkillTypeAdmin)
 admin.site.register(SkillKind, SkillKindAdmin)
