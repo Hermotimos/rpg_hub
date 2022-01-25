@@ -127,6 +127,7 @@ def rules_skills_list_view(request):
 
     skills = skills.select_related('group__type')
     skills = skills.prefetch_related('skill_levels__perks__modifiers__factor')
+    skills = skills.prefetch_related('skill_levels__perks__comments')
     skills = skills.distinct()
     
     skill_types = SkillType.objects.filter(kinds__name='Powszechne')
