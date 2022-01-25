@@ -2,13 +2,13 @@ from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 
 from imaginarion.models import PictureSet
-from rules.models import Skill, SkillType, Perk
+from rules.models import Skill, SkillType, Perk, Modifier
 from users.models import Profile
 
 
 class PerkAdminForm(forms.ModelForm):
     modifiers = forms.ModelMultipleChoiceField(
-        queryset=SkillType.objects.all(),
+        queryset=Modifier.objects.all(),
         required=False,
         widget=FilteredSelectMultiple('Modifiers', False))
         
