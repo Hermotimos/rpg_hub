@@ -76,7 +76,7 @@ class RulesComment(Model):
         
 class Perk(Model):
     """A class describing a special ability of an item or a skill level."""
-    name = CharField(max_length=50, unique=True, blank=True, null=True)
+    name = CharField(max_length=50, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
     modifiers = M2M(to=Modifier, related_name='perks', blank=True)
     cost = TextField(max_length=1000, blank=True, null=True)
