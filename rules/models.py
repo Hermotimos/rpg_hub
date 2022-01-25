@@ -64,12 +64,23 @@ class Modifier(Model):
         ordering = ['sign', 'value_number', 'value_percent', 'factor', 'condition']
 
 
+class RulesComment(Model):
+    text = TextField()
+    
+    def __str__(self):
+        return self.text
+    
+    class Meta:
+        ordering = ['text']
+        
+        
 class Perk(Model):
     """A class describing a special ability of an item or a skill level."""
     name = CharField(max_length=50, unique=True, blank=True, null=True)
     description = TextField(max_length=4000, blank=True, null=True)
     modifiers = M2M(to=Modifier, related_name='perks', blank=True)
     cost = TextField(max_length=1000, blank=True, null=True)
+    comments = M2M(to=RulesComment, related_name='perks', blank=True)
 
     def __str__(self):
         return self.name
