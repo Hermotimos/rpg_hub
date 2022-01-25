@@ -61,7 +61,7 @@ class Modifier(Model):
         return f"{sign}{value} {self.factor.name}{condition}"
 
     class Meta:
-        ordering = ['sign', 'value_number', 'value_percent', 'factor', 'condition']
+        ordering = ['sign', 'factor',  'value_number', 'value_percent', 'condition']
 
 
 class RulesComment(Model):
