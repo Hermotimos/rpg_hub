@@ -7,6 +7,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 import communications.models
+import rules.models
 from communications.models import ThreadTag
 from users.models import Profile
 
@@ -294,3 +295,12 @@ def trim_nums(text: str):
     if text[-1:] in [str(num) for num in range(1, 10)]:
         return text[:-2]
     return text
+
+
+@register.filter
+def color_brackets(modifier: rules.models.Modifier, color_class: str):
+    text = str(modifier)
+    if "[" in text:
+        before, brackets = text.split(sep='[')
+        return mark_safe(before + f'<span class="{color_class}">[{brackets}</span>')
+    return modifier

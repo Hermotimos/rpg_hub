@@ -55,7 +55,7 @@
                                     <div class="font-weight-bold">
                                         ✧ {{ perk.name|trim_nums }}
                                         {% if perk.cost %}
-                                            <span class="small text-muted border-top-dotted">
+                                            <span class="small text-warning border-top-dotted">
                                                 [{{ perk.cost }}]
                                             </span>
                                         {% endif %}
@@ -63,7 +63,7 @@
                                     <div class="ml-3">{{ perk.description|custom_linebreaksbr:1 }}</div>
                                     <ul class="ml-4 pl-1 bullets-5 mb-1">
                                         {% for modifier in perk.modifiers.all %}
-                                            <li class="pl-1">{{ modifier }}</li>
+                                            <li class="pl-1">{{ modifier|color_brackets:"text-info" }}</li>
                                         {% endfor %}
                                     </ul>
                                     <ul class="ml-4 pl-1 bullets-2 mb-1">
