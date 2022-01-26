@@ -45,6 +45,7 @@ class Modifier(Model):
     value_number = DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     value_percent = DecimalField(
         max_digits=3, decimal_places=2, validators=PERCENTAGE_VALIDATOR, blank=True, null=True)
+    value_text = CharField(max_length=30, blank=True, null=True)
     factor = FK(to=Factor, related_name='modifiers', on_delete=PROTECT)
     condition = CharField(max_length=200, blank=True, null=True)
 
@@ -57,6 +58,8 @@ class Modifier(Model):
             value = str(self.value_number).rstrip('0').rstrip('.')
         elif self.value_percent:
             value = str(float(self.value_percent) * 100).rstrip('0').rstrip('.') + "%"
+        elif self.value_text:
+            value = self.value_text
         condition = f" [{self.condition}]" if self.condition else ""
         return f"{sign}{value} {self.factor.name}{condition}"
 
