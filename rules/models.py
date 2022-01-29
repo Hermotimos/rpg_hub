@@ -82,7 +82,8 @@ class Perk(Model):
     """A class describing a special ability of an item or a skill level."""
     name = CharField(max_length=50, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
-    modifiers = M2M(to=Modifier, related_name='perks', blank=True)
+    modifiers_old = M2M(to=Modifier, related_name='perks', blank=True)
+    modifiers = M2M(to=Modifier, through="ConditionalModifier", related_name='perks_new', blank=True)
     cost = TextField(max_length=1000, blank=True, null=True)
     comments = M2M(to=RulesComment, related_name='perks', blank=True)
 
@@ -91,6 +92,45 @@ class Perk(Model):
 
     class Meta:
         ordering = ['name', 'description']
+
+
+class Condition(Model):
+    """A model for specifying Modifier usage conditions."""
+    text = TextField(max_length=4000)
+
+    def __str__(self):
+        return self.text
+
+    class Meta:
+        ordering = ['text']
+
+
+class CombatType(Model):
+    """A model to store info about the kind of combat a Modifier applies to."""
+    name = CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name']
+
+
+class ConditionalModifier(Model):
+    """An intermediary model to store info when a Perk's Modifier applies."""
+    perk = FK(to=Perk, related_name="conditional_modifiers", on_delete=CASCADE)
+    modifier = FK(to=Modifier, related_name="conditional_modifiers", on_delete=CASCADE)
+    conditions = M2M(to=Condition, related_name="conditional_modifiers", blank=True)
+    combat_types = M2M(to=CombatType, related_name="conditional_modifiers", blank=True)
+
+    def __str__(self):
+        conditions = ""
+        if self.conditions.exists():
+            conditions = f" [{' | '.join([str(condition) for condition in self.conditions.all()])}]"
+        return f"{self.modifier}{conditions}"
+
+    class Meta:
+        ordering = ['modifier']
 
 
 # =============================================================================

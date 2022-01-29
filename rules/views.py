@@ -126,7 +126,10 @@ def rules_skills_list_view(request):
         # skills = profile.allowed_skills.filter(type__kinds__name="Powszechne")
 
     skills = skills.select_related('group__type')
-    skills = skills.prefetch_related('skill_levels__perks__modifiers__factor')
+    skills = skills.prefetch_related('skill_levels__perks__modifiers__factor')      # TODO del after changes?
+    skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__conditions')
+    skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__combat_types')
+    skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__modifier__factor')
     skills = skills.prefetch_related('skill_levels__perks__comments')
     skills = skills.distinct()
     

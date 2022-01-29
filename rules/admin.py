@@ -13,7 +13,7 @@ from rules.admin_forms import (
 from rules.models import (
     SkillGroup, SkillKind, SkillType,
     Skill, SkillLevel, Synergy, SynergyLevel, BooksSkill, TheologySkill,
-    Perk, Modifier, Factor, RulesComment,
+    Perk, Modifier, Factor, RulesComment, Condition, ConditionalModifier, CombatType,
     Profession, EliteProfession, Klass, EliteKlass,
     WeaponType, Weapon, Plate, Shield,
 )
@@ -27,8 +27,13 @@ class FactorAdmin(admin.ModelAdmin):
     list_editable = ['name']
 
 
+class ConditionalModifierInline(admin.TabularInline):
+    model = ConditionalModifier
+    extra = 3
+    
+    
 class ModifierAdmin(admin.ModelAdmin):
-    # inlines = [ConditionalModifierInline]
+    inlines = [ConditionalModifierInline]
     list_display = ['id', 'sign', 'value_number', 'value_percent', 'value_text', 'factor', 'condition']
     list_editable = ['sign', 'value_number', 'value_percent', 'value_text', 'factor', 'condition']
     list_select_related = ['factor']
@@ -47,8 +52,24 @@ class RulesCommentAdmin(admin.ModelAdmin):
 
 class PerkAdmin(admin.ModelAdmin):
     form = PerkAdminForm
+    inlines = [ConditionalModifierInline]
     list_display = ['id', 'name', 'description', 'cost']
     list_editable = ['name', 'description', 'cost']
+
+
+class ConditionAdmin(admin.ModelAdmin):
+    list_display = ['id', 'text']
+    list_editable = ['text']
+
+
+class ConditionalModifierAdmin(admin.ModelAdmin):
+    list_display = ['id', 'perk', 'modifier']
+    list_editable = ['perk', 'modifier']
+
+
+class CombatTypeAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
+    list_editable = ['name']
 
     
 # =============================================================================
@@ -267,6 +288,9 @@ admin.site.register(Factor, FactorAdmin)
 admin.site.register(Modifier, ModifierAdmin)
 admin.site.register(Perk, PerkAdmin)
 admin.site.register(RulesComment, RulesCommentAdmin)
+admin.site.register(Condition, ConditionAdmin)
+admin.site.register(ConditionalModifier, ConditionalModifierAdmin)
+admin.site.register(CombatType, CombatTypeAdmin)
 
 admin.site.register(SkillType, SkillTypeAdmin)
 admin.site.register(SkillKind, SkillKindAdmin)
