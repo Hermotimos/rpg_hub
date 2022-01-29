@@ -126,7 +126,6 @@ def rules_skills_list_view(request):
         # skills = profile.allowed_skills.filter(type__kinds__name="Powszechne")
 
     skills = skills.select_related('group__type')
-    skills = skills.prefetch_related('skill_levels__perks__modifiers_old__factor')      # TODO del after changes?
     skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__conditions')
     skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__combat_types')
     skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__modifier__factor')
@@ -137,18 +136,6 @@ def rules_skills_list_view(request):
     skill_types = skill_types.prefetch_related(Prefetch('skills', queryset=skills), 'skill_groups')
     skill_types = skill_types.filter(skills__in=skills).distinct()
     
-    from rules.models import Modifier, Condition
-    for m in Modifier.objects.all():
-        if not m.perks.exists() and not m.perks_new.exists():
-            print(m)
-            m.delete()
-    
-    for m in Condition.objects.all():
-        if not m.conditional_modifiers.exists():
-            print(m)
-            m.delete()
-    
-
     context = {
         'current_profile': current_profile,
         'page_title': 'Lista Umiejętności',

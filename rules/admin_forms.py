@@ -11,10 +11,9 @@ class PerkAdminForm(forms.ModelForm):
     
     class Meta:
         model = Perk
-        fields = ['name', 'description', 'modifiers', 'modifiers_old', 'cost', 'comments']
+        fields = ['name', 'description', 'modifiers', 'cost', 'comments']
         widgets = {
             'modifiers': FilteredSelectMultiple('Modifiers', False),
-            'modifiers_old': FilteredSelectMultiple('modifiers_old', False),
             'comments': FilteredSelectMultiple('Comments', False),
         }
         
