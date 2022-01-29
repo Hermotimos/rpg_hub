@@ -1,5 +1,6 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
+    CASCADE,
     CharField,
     DecimalField,
     ForeignKey as FK,
@@ -181,7 +182,7 @@ S_LEVELS = [
 
 
 class SkillLevel(Model):
-    skill = FK(to=Skill, related_name='skill_levels', on_delete=PROTECT)
+    skill = FK(to=Skill, related_name='skill_levels', on_delete=CASCADE)
     level = CharField(max_length=10, choices=S_LEVELS)
     description = TextField(max_length=4000, blank=True, null=True)
     perks = M2M(to=Perk, related_name='skill_levels', blank=True)
@@ -281,7 +282,7 @@ class Synergy(Model):
 
 
 class SynergyLevel(Model):
-    synergy = FK(to=Synergy, related_name='synergy_levels', on_delete=PROTECT)
+    synergy = FK(to=Synergy, related_name='synergy_levels', on_delete=CASCADE)
     level = CharField(max_length=10, choices=S_LEVELS[1:])
     description = TextField(max_length=4000, blank=True, null=True)
     perks = M2M(to=Perk, related_name='synergy_levels', blank=True)
