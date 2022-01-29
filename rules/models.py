@@ -96,7 +96,7 @@ class Perk(Model):
 
 class Condition(Model):
     """A model for specifying Modifier usage conditions."""
-    text = CharField(max_length=200)
+    text = CharField(max_length=200, unique=True)
 
     def __str__(self):
         return self.text
@@ -107,7 +107,7 @@ class Condition(Model):
 
 class CombatType(Model):
     """A model to store info about the kind of combat a Modifier applies to."""
-    name = CharField(max_length=100)
+    name = CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
