@@ -136,6 +136,18 @@ def rules_skills_list_view(request):
     skill_types = SkillType.objects.filter(kinds__name='Powszechne')
     skill_types = skill_types.prefetch_related(Prefetch('skills', queryset=skills), 'skill_groups')
     skill_types = skill_types.filter(skills__in=skills).distinct()
+    
+    from rules.models import Modifier, Condition
+    for m in Modifier.objects.all():
+        if not m.perks.exists() and not m.perks_new.exists():
+            print(m)
+            m.delete()
+    
+    for m in Condition.objects.all():
+        if not m.conditional_modifiers.exists():
+            print(m)
+            m.delete()
+    
 
     context = {
         'current_profile': current_profile,
