@@ -111,6 +111,8 @@ def threads_view(request, thread_kind, tag_title):
     threads = threads.exclude(id__in=unseen)
     for thread in threads:
         thread.initiator_image_url = get_initiator_image_url(thread)
+    for thread_unseen in unseen:
+        thread_unseen.initiator_image_url = get_initiator_image_url(thread_unseen)
 
     tags = ThreadTag.objects.filter(author=current_profile, kind=thread_kind)
     formset = ThreadTagEditFormSet(
