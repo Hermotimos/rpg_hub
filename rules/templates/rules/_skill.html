@@ -73,7 +73,7 @@
                                     </ul>
                                     -----------------------------------
                                     <ul class="ml-4 pl-1 bullets-5 mb-1">
-                                        {% for modifier in perk.modifiers.all %}
+                                        {% for modifier in perk.modifiers_old.all %}
                                             <li class="pl-1">{{ modifier|color_brackets:"text-info" }}</li>
                                         {% endfor %}
                                     </ul>
