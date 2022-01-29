@@ -96,7 +96,7 @@ class Perk(Model):
 
 class Condition(Model):
     """A model for specifying Modifier usage conditions."""
-    text = TextField(max_length=4000)
+    text = CharField(max_length=200)
 
     def __str__(self):
         return self.text
