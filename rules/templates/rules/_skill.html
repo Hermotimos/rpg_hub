@@ -67,9 +67,9 @@
                                                 {{ modifier|color_brackets:"text-info" }}
                                                 {% for combat_type in modifier.combat_types.all %}
                                                     {% if combat_type.name == 'Walka w zwarciu' %}
-                                                        <i class="ra ra-crossed-axes "></i>
+                                                        <i class="ra ra-crossed-axes"></i>
                                                     {% elif combat_type.name == 'Walka dystansowa' %}
-                                                        <i class="ra ra-archer "></i>
+                                                        <i class="ra ra-archery-target"></i>
                                                     {% elif combat_type.name == 'Walka wręcz' %}
                                                         <i class="ra ra-hand"></i>
                                                     {% else %}
