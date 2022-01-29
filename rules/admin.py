@@ -34,8 +34,8 @@ class ConditionalModifierInline(admin.TabularInline):
     
 class ModifierAdmin(admin.ModelAdmin):
     inlines = [ConditionalModifierInline]
-    list_display = ['id', 'sign', 'value_number', 'value_percent', 'value_text', 'factor', 'condition']
-    list_editable = ['sign', 'value_number', 'value_percent', 'value_text', 'factor', 'condition']
+    list_display = ['id', 'sign', 'value_number', 'value_percent', 'value_text', 'factor']
+    list_editable = ['sign', 'value_number', 'value_percent', 'value_text', 'factor']
     list_select_related = ['factor']
 
     def formfield_for_dbfield(self, db_field, **kwargs):
