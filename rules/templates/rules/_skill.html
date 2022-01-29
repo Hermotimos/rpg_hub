@@ -66,7 +66,15 @@
                                             <li class="pl-1">
                                                 {{ modifier|color_brackets:"text-info" }}
                                                 {% for combat_type in modifier.combat_types.all %}
-                                                    TODO {{ combat_type }}
+                                                    {% if combat_type.name == 'Walka w zwarciu' %}
+                                                        <i class="ra ra-crossed-axes "></i>
+                                                    {% elif combat_type.name == 'Walka dystansowa' %}
+                                                        <i class="ra ra-archer "></i>
+                                                    {% elif combat_type.name == 'Walka wręcz' %}
+                                                        <i class="ra ra-hand"></i>
+                                                    {% else %}
+                                                        TODO Niech MG doda ikonę dla nowego typu walki
+                                                    {% endif %}
                                                 {% endfor %}
                                             </li>
                                         {% endfor %}
