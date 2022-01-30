@@ -42,7 +42,7 @@ def rules_armor_view(request):
         'current_profile': profile,
         'page_title': 'Pancerz',
         'plates': plates.prefetch_related('picture_sets__pictures'),
-        'shields': shields.prefetch_related('picture_sets__pictures'),
+        'shields': shields.prefetch_related('picture_set__pictures'),
     }
     return render(request, 'rules/armor.html', context)
 
