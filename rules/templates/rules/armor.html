@@ -122,26 +122,19 @@
             Postać nie jest w stanie parować ciosów większej liczby przeciwników niż wynika to z opisu danego typu tarczy.
             Tarcza dostarcza także osłony przeciwko atakom dystansowym; wyjątkiem jest puklerz, który nie chroni przed atakami strzeleckimi.
         </p>
-        <br>
-        <table class="shields">
-            <colgroup>
-                <col class="shield">
-                <col class="armor-class">
-                <col class="weight">
-                <col class="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
-            </colgroup>
-            <thead class="align-center dark">
+
+        <table class="table table-sm mt-3 shields-table">
+            <thead class="align-center">
                 <tr class="border-bottom-dark">
                     <th class="small-caps align-left">Rodzaj Tarczy</th>
                     <th class="small-caps">Bonus KP</th>
-                    <th class="small-caps">Waga</th>
-                    <th class="small-caps">Specjalne</th>
+                    <th class="small-caps ">Waga</th>
+                    <th class="small-caps ">Specjalne</th>
                 </tr>
             </thead>
-
-            <tbody class="align-center dark">
+            <tbody class="align-center">
                 {% for shield in shields %}
-                    <tr>
+                    <tr class="">
                         <td class="{% if shield.description %} hover-blue {% endif %} align-left" data-toggle="collapse" data-target="#{{ shield.name }}">
                             {{ shield.name }}
                         </td>
@@ -169,17 +162,7 @@
                     {% endif %}
                 {% endfor %}
             </tbody>
-
         </table>
-        <ul class="rules bullets-2 ml-4 mt-2">
-            <li>
-                TODO - weryfikacja wagi i właściwości tarcz, usunięcie rozróżnienia KP zwarcie/strzelcy.
-               Puklerz pozwala na zastosowanie premii +4 KP oraz całości premii do KP z Parowania (KON) wobec tylko jednego przeciwnika.
-                Za to waga podbita na 8 kg, bo jest metalowy, ale Wytrzymałość 200 (inne tarcze 40 zwykłe, 100 z umbo, a pawęż 50).
-                Umbo zmienia głównie wytrzymałość (jak w zbroi dodać), a nie KP.
-                Pawęż max. +3 KP, ale specjalna właściwość - Defensywa przed ostrzałem, trafiają tylko Automatyczne Trafienia.
-            </li>
-        </ul>
 
         <br><br><br>
 
