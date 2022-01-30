@@ -147,7 +147,8 @@ table.weapons-table {border: double;}
 }
 
 
-.shields-table th, td {
+.shields-table th,
+.shields-table td {
     border-style: none !important;
     padding: 0.25rem 0rem 0rem 0rem !important;
 }
@@ -168,7 +169,7 @@ td .nowrap { white-space: nowrap;}
 
 .rules-red {color: #993300;}
 
-.rules-green {color: #008000;}
+.rules-green {color: #008000 !important;}
 
 .back-gray {background-color: #f2f2f2;}
 
