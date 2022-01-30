@@ -504,35 +504,69 @@
             a przy Krytycznym Fiasku Postać zasrywa się z wyczerpania, po czym mdleje, jeśli nie dostaje ataku serca...
         </p>
         <p>
-            Poniższa tabela przedstawia dokładniej koszt Wydolności przy różnym tempie Ruchu.
+            Poniższa tabela przedstawia dokładniej koszty Wydolności oraz Malusy do testu SIŁ za Przyspieszenie przy różnym tempie Ruchu.
         </p>
         <table class="table table-hover table-bordered table-sm mt-3">
+            <colgroup span="1"></colgroup>
+            <colgroup span="1"></colgroup>
+            <colgroup span="2"></colgroup>
+            <colgroup span="2"></colgroup>
+            <colgroup span="2"></colgroup>
+            <colgroup span="2"></colgroup>
             <thead class="thead-dark">
                 <tr>
-                    <th>Czynność</th>
-                    <th>Koszt Wydolności</th>
+                    <th rowspan="2">Czynność</th>
+                    <th rowspan="2" scope="colgroup">Poziom Trudności (Malus)</th>
+                    <th colspan="4" scope="colgroup">Koszt Wydolności</th>
+                </tr>
+                <tr>
+                    <th scope="col">Bieganie 0</th>
+                    <th scope="col">Bieganie 1</th>
+                    <th scope="col">Bieganie 2</th>
+                    <th scope="col">Bieganie 3</th>
+
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Marsz (1x)</td>
-                    <td>1 / 1.5 godziny</td>
+                    <th>Marsz (1x)</th>
+                    <td>bez rzutu</td>
+                    <td>1/1.5h</td>
+                    <td>1/1.5h</td>
+                    <td>1/1.5h</td>
+                    <td>1/1.5h</td>
                 </tr>
                 <tr>
-                    <td>Trucht (2x)</td>
-                    <td>1 / 20 rund (2 min)</td>
+                    <th>Trucht (2x)</th>
+                    <td>bez rzutu</td>
+                    <td>1/12r</td>
+                    <td>1/24r</td>
+                    <td>1/48r</td>
+                    <td>1/96r</td>
                 </tr>
                 <tr>
-                    <td>Bieg (3x)</td>
-                    <td>1 / 4 rundy</td>
+                    <th>Bieg (3x)</th>
+                    <td>Banalny (0)</td>
+                    <td>1/6r</td>
+                    <td>1/12r</td>
+                    <td>1/24r</td>
+                    <td>1/48r</td>
                 </tr>
                 <tr>
-                    <td>Szybki Bieg (x4)</td>
-                    <td>1 / 1 rundę</td>
+                    <th>Szybki Bieg (x4)</th>
+                    <td>Umiarkowany (-4)</td>
+                    <td>1/1r</td>
+                    <td>1/2r</td>
+                    <td>1/6r</td>
+                    <td>1/12r</td>
                 </tr>
                 <tr>
-                    <td>Sprint (x5)</td>
-                    <td>2 / 1 rundę</td>
+                    <th>Sprint (x5)</th>
+                    <td>Trudny (-8)</td>
+                    <td>3/1r</td>
+                    <td>2/1r</td>
+                    <td>1/1r</td>
+                    <td>1/2r</td>
                 </tr>
             </tbody>
         </table>
