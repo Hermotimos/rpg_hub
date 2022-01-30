@@ -128,12 +128,14 @@
                 <col class="shield">
                 <col class="armor-class">
                 <col class="weight">
+                <col class="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
             </colgroup>
             <thead class="align-center dark">
                 <tr class="border-bottom-dark">
-                    <th class="small-caps align-left">TARCZA</th>
-                    <th class="small-caps">KP<br>zwarcie/dystans</th>
+                    <th class="small-caps align-left">Rodzaj Tarczy</th>
+                    <th class="small-caps">Bonus KP</th>
                     <th class="small-caps">Waga</th>
+                    <th class="small-caps">Specjalne</th>
                 </tr>
             </thead>
 
@@ -142,12 +144,15 @@
                     <tr>
                         <td class="{% if shield.description %} hover-blue {% endif %} align-left" data-toggle="collapse" data-target="#{{ shield.name }}">
                             {{ shield.name }}
+                            
                             {% if shield.name == 'Puklerz' %}
                                 <sup>✵</sup>
                             {% endif %}
+                            
                         </td>
-                        <td>+{{ shield.armor_class_bonus_close_combat }}/+{{ shield.armor_class_bonus_distance_combat }}</td>
+                        <td>+{{ shield.armor_class_bonus }}</td>
                         <td>{{ shield.weight.normalize }}</td>
+                        <td>{{ shield.comment }}</td>
                     </tr>
                     {% if shield.description %}
                         <tr id="{{ shield.name }}" class="collapse">

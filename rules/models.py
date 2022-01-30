@@ -633,19 +633,15 @@ class Plate(Model):
 class Shield(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
-    picture_sets = M2M(to=PictureSet, related_name='shields', blank=True)
-    # enemies_no do skasowania
-    enemies_no = PositiveSmallIntegerField()
-    armor_class_bonus_close_combat = PositiveSmallIntegerField(
-        blank=True,
-        null=True,
-    )
-    armor_class_bonus_distance_combat = PositiveSmallIntegerField(
-        blank=True,
-        null=True,
-    )
+    armor_class_bonus = PositiveSmallIntegerField()
     weight = DecimalField(max_digits=10, decimal_places=1)
-
+    comment = TextField(max_length=200, blank=True, null=True)
+    picture_set = FK(
+        to=PictureSet,
+        related_name='shields',
+        blank=True,
+        null=True,
+        on_delete=PROTECT)
     allowed_profiles = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
