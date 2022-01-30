@@ -144,11 +144,6 @@
                     <tr>
                         <td class="{% if shield.description %} hover-blue {% endif %} align-left" data-toggle="collapse" data-target="#{{ shield.name }}">
                             {{ shield.name }}
-                            
-                            {% if shield.name == 'Puklerz' %}
-                                <sup>✵</sup>
-                            {% endif %}
-                            
                         </td>
                         <td>+{{ shield.armor_class_bonus }}</td>
                         <td>{{ shield.weight.normalize }}</td>
@@ -161,9 +156,9 @@
                                 {{ shield.description|linebreaksbr }}
                                 <br><br>
                                 <div class="mb-1">
-                                    {% for picture_set in shield.picture_sets.all %}
+                                    {% if shield.picture_set %}
                                         <div class="d-flex justify-content-center my-3">
-                                            {% for picture in picture_set|pictureset_pictures_in_custom_order %}
+                                            {% for picture in shield.picture_set|pictureset_pictures_in_custom_order %}
                                                 {% include '_pic_with_modal.html' %}
                                             {% endfor %}
                                         </div>
