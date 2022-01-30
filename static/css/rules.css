@@ -149,7 +149,7 @@ table.weapons-table {border: double;}
 
 .shields-table th, td {
     border-style: none !important;
-    padding: 0rem !important;
+    padding: 0.25rem 0rem 0rem 0rem !important;
 }
 
 .key .point {width: 25%;}
