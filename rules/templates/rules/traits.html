@@ -449,7 +449,7 @@
             kiedy liczy się każda sekunda i każda ze stron próbuje uprzedzić drugą w jakiejś czynności.
             W sytuacjach innych niż konfliktowe wystarczy ustalić przybliżony czas wykonania czynności.
         </p>
-        <table class="table table-hover table-bordered table-sm mt-3">
+        <table class="table table-hover table-bordered table-sm rules-table mt-3">
             <thead class="thead-dark">
                 <tr>
                     <th>Czynność</th>
@@ -527,11 +527,11 @@
                     <td>1 / 4 rundy</td>
                 </tr>
                 <tr>
-                    <td>Szybki Bieg</td>
+                    <td>Szybki Bieg (x4)</td>
                     <td>1 / 1 rundę</td>
                 </tr>
                 <tr>
-                    <td>Sprint</td>
+                    <td>Sprint (x5)</td>
                     <td>2 / 1 rundę</td>
                 </tr>
             </tbody>
@@ -548,9 +548,68 @@
             to udany test ZRC pozwala zredukować OBR o 4.
         </p>
         
+        <h2 class="rules mt-5 mb-3">
+            Wspinaczka
+        </h2>
+        <p>
+            Każda runda aktywnej Wspinaczki (kiedy Postać podejmuje próbę podciągnięcia się wyżej i wykonuje test Cechy) zużywa 1 Wydolności.
+            Sukces oznacza, że Postać pokonała 1 metr w pionie, natomiast Fiasko oznacza,
+            że Postać nie jest w stanie znaleźć odpowiedniego oparcia lub uchwytu, aby poruszyć się z miejsca.
+        </p>
+        <p>
+            Dwukrotne Fiasko z rzędu oznacza, że Postać zaczyna ześlizgiwać się ze ściany doznając przy tym obrażeń
+            – czy z tytułu wysokości, czy to obtłuczeń i ran zadanych przez chropowatą skałę.
+        </p>
+        <p>
+            Jeśli przy Wspinaczce lub ześlizgiwaniu się Postaci zabraknie Wydolności, to odpada od ściany i doznaje obrażeń według zasad Upadku,
+            chyba że znajdzie się akurat w miejscu dogodnym do odpoczynku. Wówczas może zaczekać w nim na odzyskanie części Wydolności.
+        </p>
+        <p>
+            Podstawowe zasady Wspinaczki mogą podlegać modyfikatorom z Umiejętności lub sytuacyjnym.
+        </p>
+        <table class="table table-hover table-bordered table-sm rules-table mt-3">
+            <thead class="thead-dark">
+                <tr>
+                    <th></th>
+                    <th>Wspinaczka 0</th>
+                    <th>Wspinaczka 1</th>
+                    <th>Wspinaczka 2</th>
+                    <th>Wspinaczka 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Wspinaczka Sukces</th>
+                    <td>1m/1r</td>
+                    <td>1m/1r</td>
+                    <td>2m/1r</td>
+                    <td>3m/1r</td>
+                </tr>
+                <tr>
+                    <th>Wspinaczka Fiasko</th>
+                    <td>0m/1r</td>
+                    <td>0m/1r</td>
+                    <td>0m/1r</td>
+                    <td>0m/1r</td>
+                </tr>
+                <tr>
+                    <th>Ześlizgnięcie</th>
+                    <td>2xFiasko (1k4 OBR/5m)</td>
+                    <td>3xFiasko (1k3 OBR/5m)</td>
+                    <td>4xFiasko (1k2 OBR/5m)</td>
+                    <td>Utrata Wydolności</td>
+                </tr>
+                <tr>
+                    <th>Utrata Wydolności</th>
+                    <td>Odpoczynek lub Upadek</td>
+                    <td>Odpoczynek lub Upadek</td>
+                    <td>Odpoczynek lub Upadek</td>
+                    <td>Odpoczynek lub Upadek</td>
+                </tr>
 
-
+            </tbody>
+        </table>
+        
     </div>
-
 
 {% endblock content %}
