@@ -122,8 +122,7 @@ def rules_skills_list_view(request):
         skills = Skill.objects.filter(types__kinds__name="Powszechne")
         
     else:
-        skills = Skill.objects.none()  # TODO temp, del when new Skills done
-        # skills = profile.allowed_skills.filter(type__kinds__name="Powszechne")
+        skills = current_profile.allowed_skills.filter(types__kinds__name="Powszechne")
 
     skills = skills.select_related('group__type')
     skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__conditions')
