@@ -64,6 +64,11 @@ class Modifier(Model):
 
     class Meta:
         ordering = ['factor', 'sign', 'value_number', 'value_percent', 'value_text']
+        unique_together = [
+            ('factor', 'sign', 'value_number'),
+            ('factor', 'sign', 'value_percent'),
+            ('factor', 'sign', 'value_text'),
+        ]
 
 
 class RulesComment(Model):
