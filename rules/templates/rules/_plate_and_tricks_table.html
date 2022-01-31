@@ -16,12 +16,12 @@
         {% for plate in plates %}
             <tr>
                 <td class="align-left">{{ plate.name }}</td>
-                <td class="rules-red">{% if plate.mod_pickpocketing %} {{ plate.mod_pickpocketing|percentage }} {% endif %}</td>
-                <td class="rules-red">{% if plate.mod_lockpicking %} {{ plate.mod_lockpicking|percentage }} {% endif %}</td>
-                <td class="rules-red">{% if plate.mod_sneaking %} {{ plate.mod_sneaking|percentage }} {% endif %}</td>
-                <td class="rules-red">{% if plate.mod_hiding %} {{ plate.mod_hiding|percentage }} {% endif %}</td>
-                <td class="rules-red">{% if plate.mod_climbing %} {{ plate.mod_climbing|percentage }} {% endif %}</td>
-                <td class="rules-red">{% if plate.mod_traps %} {{ plate.mod_traps|percentage }} {% endif %}</td>
+                <td class="rules-red">{% if plate.mod_pickpocketing %} {{ plate.mod_pickpocketing }} {% endif %}</td>
+                <td class="rules-red">{% if plate.mod_lockpicking %} {{ plate.mod_lockpicking }} {% endif %}</td>
+                <td class="rules-red">{% if plate.mod_sneaking %} {{ plate.mod_sneaking }} {% endif %}</td>
+                <td class="rules-red">{% if plate.mod_hiding %} {{ plate.mod_hiding }} {% endif %}</td>
+                <td class="rules-red">{% if plate.mod_climbing %} {{ plate.mod_climbing }} {% endif %}</td>
+                <td class="rules-red">{% if plate.mod_traps %} {{ plate.mod_traps }} {% endif %}</td>
             </tr>
         {% endfor %}
     </tbody>

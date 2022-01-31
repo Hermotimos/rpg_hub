@@ -10,6 +10,7 @@ from django.db.models import (
     Model,
     PositiveSmallIntegerField,
     PROTECT,
+    SmallIntegerField,
     TextField,
 )
 from django.db.models import Q
@@ -609,12 +610,12 @@ class Plate(Model):
     mod_max_agility = PositiveSmallIntegerField(blank=True, null=True)
     mod_max_movement = CharField(max_length=2, blank=True, null=True)
 
-    mod_pickpocketing = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    mod_lockpicking = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    mod_climbing = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    mod_sneaking = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    mod_hiding = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    mod_traps = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
+    mod_pickpocketing = SmallIntegerField(blank=True, null=True)
+    mod_lockpicking = SmallIntegerField(blank=True, null=True)
+    mod_climbing = SmallIntegerField(blank=True, null=True)
+    mod_sneaking = SmallIntegerField(blank=True, null=True)
+    mod_hiding = SmallIntegerField(blank=True, null=True)
+    mod_traps = SmallIntegerField(blank=True, null=True)
     allowed_profiles = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
