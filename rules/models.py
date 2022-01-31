@@ -611,11 +611,9 @@ class Plate(Model):
 
     mod_pickpocketing = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
     mod_lockpicking = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    mod_sneaking_towns = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    mod_sneaking_wilderness = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    mod_hiding_towns = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    mod_hiding_wilderness = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
     mod_climbing = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
+    mod_sneaking = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
+    mod_hiding = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
     mod_traps = DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
     allowed_profiles = M2M(
         to=Profile,

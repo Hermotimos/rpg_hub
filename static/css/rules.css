@@ -16,7 +16,7 @@
     margin-right: 5px;
 }
 
-.table td {color: #444444 !important;}
+
 
 
 .no-bullets {list-style: none;}
@@ -66,7 +66,7 @@
 .protection .protection-type {width: 400px;}
 .protection .protection-desc {width: 600px;}
 .protection .weight {width: 40px;}
-
+/*
 .plate-and-tricks .plate {width: 450px;}
 .plate-and-tricks .pickpocketing {width: 80px;}
 .plate-and-tricks .lockpicking {width: 80px;}
@@ -76,7 +76,7 @@
 .plate-and-tricks .hiding-wilderness {width: 80px;}
 .plate-and-tricks .climbing {width: 80px;}
 .plate-and-tricks .traps {width: 120px;}
-
+*/
 .agility-and-tricks .plate {width: 80px;}
 .agility-and-tricks .pickpocketing {width: 100px;}
 .agility-and-tricks .lockpicking {width: 100px;}
@@ -123,16 +123,17 @@ table.weapons-table {border: double;}
     color: #ffffff;
 }
 
-.plates tr:nth-child(4n-1),
-.plates tr:nth-child(4n),
+.plates              tr:nth-child(4n-1),
+.plates              tr:nth-child(4n),
 .weapons-table tbody tr:nth-child(4n-1),
 .weapons-table tbody tr:nth-child(4n) {background-color: #f2f2f2;}
 
-.key tr:nth-child(even),
-.professions tr:nth-child(even),
-.shields-table tr:nth-child(even),
-.plate-and-tricks tr:nth-child(2n+3),
-.protection tr:nth-child(even) {background-color: #f2f2f2;}
+
+.key                tr:nth-child(even),
+.professions        tr:nth-child(even),
+.shields-table      tr:nth-child(even),
+.plate-tricks-table tr:nth-child(even),
+.protection         tr:nth-child(even) {background-color: #f2f2f2;}
 
 
 .weapons-img img {
@@ -142,7 +143,8 @@ table.weapons-table {border: double;}
     height: auto;
 }
 
-
+.plate-tricks-table th,
+.plate-tricks-table td,
 .shields-table th,
 .shields-table td {
     border-style: none !important;
@@ -161,10 +163,10 @@ td .nowrap { white-space: nowrap;}
 
 
 
+.table th,
+.table td {color: #444444;}
 
-
-.rules-red {color: #993300;}
-
+.rules-red {color: #993300 !important;}
 .rules-green {color: #008000 !important;}
 
 .back-gray {background-color: #f2f2f2;}
