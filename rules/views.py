@@ -19,10 +19,10 @@ from users.models import Profile
 
 @login_required
 def rules_main_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Zasady'
     }
     return render(request, 'rules/main.html', context)
@@ -30,16 +30,16 @@ def rules_main_view(request):
 
 @login_required
 def rules_armor_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
-    if profile.can_view_all:
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    if current_profile.can_view_all:
         plates = Plate.objects.all()
         shields = Shield.objects.all()
     else:
-        plates = profile.allowed_plates.all()
-        shields = profile.allowed_shields.all()
+        plates = current_profile.allowed_plates.all()
+        shields = current_profile.allowed_shields.all()
 
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Pancerz',
         'plates': plates.prefetch_related('picture_sets__pictures'),
         'shields': shields.prefetch_related('picture_set__pictures'),
@@ -49,9 +49,9 @@ def rules_armor_view(request):
 
 @login_required
 def rules_character_sheet_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Karta Postaci'
     }
     return render(request, 'rules/character_sheet.html', context)
@@ -59,9 +59,9 @@ def rules_character_sheet_view(request):
 
 @login_required
 def rules_combat_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Przebieg walki'
     }
     return render(request, 'rules/combat.html', context)
@@ -69,9 +69,9 @@ def rules_combat_view(request):
 
 @login_required
 def rules_masteries_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Biegłości i inne zdolności bojowe'
     }
     return render(request, 'rules/masteries.html', context)
@@ -79,24 +79,24 @@ def rules_masteries_view(request):
 
 @login_required
 def rules_professions_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
-    if profile.can_view_all:
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    if current_profile.can_view_all:
         professions = Profession.objects.all().prefetch_related('klasses')
         elite_professions = EliteProfession.objects.all().prefetch_related('elite_klasses')
     else:
-        klasses = Klass.objects.filter(allowed_profiles=profile)
+        klasses = Klass.objects.filter(allowed_profiles=current_profile)
         professions = Profession.objects\
-            .filter(klasses__allowed_profiles=profile)\
+            .filter(klasses__allowed_profiles=current_profile)\
             .distinct()\
             .prefetch_related(Prefetch('klasses', queryset=klasses))
 
-        elite_klasses = EliteKlass.objects.filter(allowed_profiles=profile)
+        elite_klasses = EliteKlass.objects.filter(allowed_profiles=current_profile)
         elite_professions = EliteProfession.objects\
-            .filter(allowed_profiles=profile)\
+            .filter(allowed_profiles=current_profile)\
             .prefetch_related(Prefetch('elite_klasses', queryset=elite_klasses))
 
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Tworzenie Postaci, Klasa i Profesja',
         'professions': professions,
         'elite_professions': elite_professions
@@ -183,14 +183,14 @@ def rules_tests_view(request):
 
 @login_required
 def rules_tricks_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
-    if profile.can_view_all:
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    if current_profile.can_view_all:
         plates = Plate.objects.all()
     else:
-        plates = profile.allowed_plates.all()
+        plates = current_profile.allowed_plates.all()
 
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Podstępy',
         'plates': plates,
     }
@@ -199,22 +199,22 @@ def rules_tricks_view(request):
 
 @login_required
 def rules_weapons_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     
-    if profile.can_view_all:
+    if current_profile.can_view_all:
         weapon_types = WeaponType.objects.all()
         weapons = Weapon.objects.all()
     else:
-        weapons = profile.allowed_weapons.all()
+        weapons = current_profile.allowed_weapons.all()
         weapon_types = WeaponType.objects.filter(
-            weapons__allowed_profiles=profile).distinct()
+            weapons__allowed_profiles=current_profile).distinct()
     
     weapons = weapons.prefetch_related('picture_sets__pictures')
     weapon_types = weapon_types.prefetch_related(
         Prefetch('weapons', queryset=weapons))
     
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Broń',
         'weapon_types': weapon_types,
     }
@@ -223,9 +223,9 @@ def rules_weapons_view(request):
 
 @login_required
 def rules_wounds_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Progi i skutki ran'
     }
     return render(request, 'rules/wounds.html', context)
