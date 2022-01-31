@@ -1,0 +1,342 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/rules.css' %}">
+{% endblock head_extra %}
+
+{% block content %}
+    <div class="rules-styling pt-3">
+
+        <h2 class="rules mt-5 mb-3">
+            Testy Cech
+        </h2>
+        <p>
+            Wszystkie Testy Cech, czy to wynikająca z bezpośredniego zastosowania danej Cechy
+            (np. siłowanie na rękę, wypatrywanie zwierzyny w lesie, próba marszu czwarty dzień z rzędu bez pożywienia),
+            czy to z użycia Umiejętności (np. Bieganie, Pływanie, Spostrzegawczość, Skradanie, Tropienie) mają określony Poziom Trudności, z którego wynika odpowiedni Malus.
+            Malus ten stosuje się przez obniżenie testowanej wartości Cechy.
+            
+        </p>
+        <ol class="rules ml-4 font-italic">
+            <li>
+                Np. Postać o Sile 12 podejmuje próbę wykonania czynności o Poziomie Trudności "Banalny" z zerowym Malusem;
+                testowana wartość Cechy to 12, a zatem czynność powiedzie się, jeśli na k20 wyrzuci 1-12.
+            </li>
+            <li>
+                Np. Postać o Sile 12 podejmuje próbę wykonania czynności o Poziomie Trudności "Trudny" z Malusem -8;
+                testowana wartość Cechy to 4 (12 - 8), a zatem czynność powiedzie się, jeśli na k20 wyrzuci 1-4.
+            </li>
+        </ol>
+        <table class="table table-hover table-bordered table-sm mt-3">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Poziom Trudności</th>
+                    <th>Malus</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Banalny</td>
+                    <th>-</th>
+                </tr>
+                <tr>
+                    <td>Łatwy</td>
+                    <th>-2</th>
+                </tr>
+                <tr>
+                    <td>Umiarkowany</td>
+                    <th>-4</th>
+                </tr>
+                <tr>
+                    <td>Wymagający</td>
+                    <th>-6</th>
+                </tr>
+                <tr>
+                    <td>Trudny</td>
+                    <th>-8</th>
+                </tr>
+                <tr>
+                    <td>Bardzo Trudny</td>
+                    <th>-10</th>
+                </tr>
+                <tr>
+                    <td>Odstręczający</td>
+                    <th>-14</th>
+                </tr>
+                <tr>
+                    <td>Heroiczny</td>
+                    <th>-16</th>
+                </tr>
+                <tr>
+                    <td>Niemożliwy</td>
+                    <th>-20</th>
+                </tr>
+            </tbody>
+        </table>
+        
+        <p>
+            Powyższa pozwala zorientować się, że w przypadku najtrudniejszych wyczynów Postać ma nikłe szanse na Sukces,
+            o ile nie dysponuje rozwiniętymi Umiejętnościami, które dostarczyłyby Bonusu do Testu Cechy.
+            Poziom Trudności nie zawsze jest dokładnie znany Postaci; podczas jego określania Mistrz Gry może używać sformułowań,
+            które nie wskazują wprost na konkretną wartość modyfikatora, np. „niewymagający”, „absurdalnie trudny”, „dla ciebie - dosyć prosty”,
+            albo „bardzo trudny, ale nie niemożliwy” itp. Są to sformułowania pozwalające Graczowi na przybliżone oszacowanie Malusa.
+        </p>
+        <p>
+            W zależności od kontekstu sytuacyjnego, a dokładniej od tego, czy pozwala on Postaci na monitorowanie poziomu powodzenia wykonania czynności,
+            czy też nie – test Cechy może być wykonywany przez Gracza albo potajemnie przez MG.
+            Pierwsza okoliczność zachodzi np. przy Wspinaczce - kiedy to Sukces albo Fiasko są natychmiast odczuwalne dla Postaci,
+            natomiast druga może zachodzić przy Skradaniu – kiedy to Postać nie ma pewności czy pozostaje niezauważona.
+            Zarazem, w przypadku rażącego niepowodzenia czynności MG może komunikować pewne wskazówki na temat poziomu jej powodzenia
+            – a zwłaszcza, gdy Gracz sensownie deklaruje sposób, w jaki jego Postać monitoruje wykonanie czynności.
+        </p>
+        <ol class="rules ml-4 font-italic">
+            <li>
+                Np. Postać podkrada się przez las do grupki podróżnych zasiadających wokół ogniska;
+                potajemny rzut wykonany przez MG kończy się kompletnym fiaskiem;
+                MG opisuje jak gałązka trzasnęła pod niezdarnym krokiem Postaci.
+            </li>
+            <li>
+                Np. Postać podkrada się do strażnika na warcie; potajemny rzut wykonany przez MG kończy się Fiaskiem,
+                ale wynik rzutu był bliski Sukcesu – dlatego Postać nie ma możliwości natychmiastowego uświadomienia sobie własnej porażki.
+                Może się okazać, że strażnik zauważył kątem oka poruszenie; ale nie dał po sobie poznać, bo chce zaskoczyć rzezimieszka.
+                Jednak, jeśli Gracz zadeklaruje, że uważnie obserwuje strażnika, zwracając uwagę na tempo jego kroku i postawę ciała
+                (nadal swobodna czy się zmieniła?), i jeśli ani na chwilę nie spuszcza go z oczu, wówczas Mistrz Gry (ew. wykonując dodatkowy test ZRC)
+                może opisać jak wartownik drgnął lekko, choć nie wstrzymał kroku…
+            </li>
+        </ol>
+        <p>
+            W tym kontekście Fiasko ocierające się o sukces to sytuacja szczególne ryzykowna dla wszelkich łotrzyków,
+            ponieważ brak jest ewidentnego potwierdzenia porażki, który pozwoliłby w porę szukać ratunku w ucieczce.
+            Jednak prawdziwi łotrzykowie i awanturnicy nie skarżą się na ten los, bo życie na krawędzi to ich chleb powszedni,
+            a jeżeli ktoś dostrzega tu niesprawiedliwość, to wzruszają tylko ramionami i odsyłają go z powrotem do mamusi.
+        </p>
+        
+        
+        <h2 class="rules mt-5 mb-3">
+            Wydolność
+        </h2>
+        <p>
+            Wydolność określa zdolność Postaci do długotrwałego wykonywania intensywnych fizycznie czynności,
+            co można wyrazić przez przypisanie tego rodzaju czynnościom kosztu Wydolności.
+            Po jej wyczerpaniu Postać nie jest w stanie kontynuować danej czynności na aktualnym pułapie intensywności.
+            Poniższa tabela przedstawia
+        </p>
+        <p>
+            Początkowa Wydolność jest równa KON, jednak może ulegać podwyższeniu za sprawą Umiejętności takich jak Wytrzymałość,
+            a także zmianom na skutek działania eliksirów i magii oraz wydarzeń fabularnych (np. choroby, ciężkich ran, łaski od bogów lub klątwy).
+        </p>
+        <p>
+            Ścisłe kontrolowanie Wydolności jest konieczne w walce oraz w sytuacjach konfliktowych,
+            kiedy liczy się każda sekunda i każda ze stron próbuje uprzedzić drugą w jakiejś czynności.
+            W sytuacjach innych niż konfliktowe wystarczy ustalić przybliżony czas wykonania czynności.
+        </p>
+        <table class="table table-hover table-bordered table-sm rules-table mt-3">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Czynność</th>
+                    <th>Koszt Wydolności</th>
+                    <th>Skutki utraty Wydolności</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Bieg x4</td>
+                    <td>1 / 1 rundę</td>
+                    <td>Postać zwalnia do tempa wolniejszego niż Marsz (poniżej 1x)</td>
+                </tr>
+                <tr>
+                    <td>Walka w zwarciu</td>
+                    <td>1 / 1 rundę</td>
+                    <td>Niezdolność do Ataku, Defensywy czy Biegu x2 (pozostają Uniki i Parowanie)</td>
+                </tr>
+                <tr>
+                    <td>Walka dystansowa</td>
+                    <td>1 / 3 rundy</td>
+                    <td>Niezdolność do Ataku, Defensywy czy Biegu x2 (pozostają Uniki i Parowanie)</td>
+                </tr>
+                <tr>
+                    <td>Wspinaczka</td>
+                    <td>1 / 1 rundę</td>
+                    <td>Niezdolność do dalszej Wspinaczki: konieczność odpoczynku w dogodnym miejscu (półka skalna, wąska szczelina) albo Upadek</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>
+            Tempo regeneracji Wydolności zależy od jakości odpoczynku.
+            Pełny odpoczynek polegający na przyjęciu wygodnej postawy siedzącej lub leżącej pozwala na regenerację 1 punktu Wydolności na 2 rundy.
+            Jeśli zaś Postać odpoczywa "aktywnie" (w trakcie walki, wmarszu, w szczelinie skalnej), to regeneracja zachodzi w tempie 1 punktu Wydolności na 4 rundy.
+        </p>
+        
+        
+        <h2 class="rules mt-5 mb-3">
+            Ruch
+        </h2>
+        <p>
+            Zasady dotyczące Ruchu służą określeniu czasu pokonania danego dystansu,
+            co znajduje zastosowanie głównie przy podróży oraz w sytuacjach konfliktowych,
+            np. próba dobiegnięcia do wrogiego łucznika, wyścig krótko- albo długodystansowy,
+            przemieszczenia oddziałów podczas bitwy czy też armii ścigających się do strategicznego punktu.
+            W innych przypadkach wystarczy określenie przybliżonego czasu pokonania danego dystansu.
+        </p>
+        <p>
+            Próby Przyspieszenia można podejmować co rundę, jednak każde Fiasko skutkuje Malusem -1 do kolejnych prób.
+            Malus kasuje się dopiero po pełnej regeneracji Wydolności.
+            Automatyczne Fiasko oznacza, że Postaci kończy się oddech i jej prędkość spada o 1 próg Przyspieszenia, zamiast wzrosnąć,
+            a przy Krytycznym Fiasku Postać zasrywa się z wyczerpania, po czym mdleje, jeśli nie dostaje ataku serca...
+        </p>
+        <p>
+            Poniższa tabela przedstawia dokładniej koszty Wydolności oraz Malusy do testu SIŁ za Przyspieszenie przy różnym tempie Ruchu.
+        </p>
+        <table class="table table-hover table-bordered table-sm mt-3">
+            <colgroup span="1"></colgroup>
+            <colgroup span="1"></colgroup>
+            <colgroup span="2"></colgroup>
+            <colgroup span="2"></colgroup>
+            <colgroup span="2"></colgroup>
+            <colgroup span="2"></colgroup>
+            <thead class="thead-dark">
+                <tr>
+                    <th rowspan="2">Czynność</th>
+                    <th colspan="2" rowspan="2" scope="colgroup">Prędkość</th>
+                    <th rowspan="2" scope="colgroup">Poziom Trudności (Malus)</th>
+                    <th colspan="4" scope="colgroup">Koszt Wydolności</th>
+                </tr>
+                <tr>
+                    <th scope="col">Bieganie 0</th>
+                    <th scope="col">Bieganie 1</th>
+                    <th scope="col">Bieganie 2</th>
+                    <th scope="col">Bieganie 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Marsz (1x)</th>
+                    <td>5 km/h</td>
+                    <td>≈1.5 m/s</td>
+                    <td>bez rzutu</td>
+                    <td>1/1.5h</td>
+                    <td>1/1.5h</td>
+                    <td>1/1.5h</td>
+                    <td>1/1.5h</td>
+                </tr>
+                <tr>
+                    <th>Trucht (2x)</th>
+                    <td>10 km/h</td>
+                    <td>≈3 m/s</td>
+                    <td>bez rzutu</td>
+                    <td>1/12r</td>
+                    <td>1/24r</td>
+                    <td>1/48r</td>
+                    <td>1/96r</td>
+                </tr>
+                <tr>
+                    <th>Bieg (3x)</th>
+                    <td>15 km/h</td>
+                    <td>≈4.5 m/s</td>
+                    <td>Banalny (0)</td>
+                    <td>1/6r</td>
+                    <td>1/12r</td>
+                    <td>1/24r</td>
+                    <td>1/48r</td>
+                </tr>
+                <tr>
+                    <th>Szybki Bieg (x4)</th>
+                    <td>20 km/h</td>
+                    <td>≈5.5 m/s</td>
+                    <td>Umiarkowany (-4)</td>
+                    <td>1/1r</td>
+                    <td>1/2r</td>
+                    <td>1/6r</td>
+                    <td>1/12r</td>
+                </tr>
+                <tr>
+                    <th>Sprint (x5)</th>
+                    <td>25 km/h</td>
+                    <td>≈7 m/s</td>
+                    <td>Trudny (-8)</td>
+                    <td>3/1r</td>
+                    <td>2/1r</td>
+                    <td>1/1r</td>
+                    <td>1/2r</td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <h2 class="rules mt-5 mb-3">
+            Upadek
+        </h2>
+        <p>
+            Upadek powoduje Obrażenia zależne od wysokości: 1k4 za każde rozpoczęte 2 metry.
+            Obrażenia te mogą podlegać Wyparowaniom, np. dzięki zbroi.
+            Ponadto, jeżeli upadek z wysokości odbywa się w sposób kontrolowany (np. Postać sama wykonała skok) lub przynajmniej nogami w dół,
+            to udany test ZRC pozwala zredukować OBR o 4.
+        </p>
+        
+        <h2 class="rules mt-5 mb-3">
+            Wspinaczka
+        </h2>
+        <p>
+            Każda runda aktywnej Wspinaczki (kiedy Postać podejmuje próbę podciągnięcia się wyżej i wykonuje test Cechy) zużywa 1 Wydolności.
+            Sukces oznacza, że Postać pokonała 1 metr w pionie, natomiast Fiasko oznacza,
+            że Postać nie jest w stanie znaleźć odpowiedniego oparcia lub uchwytu, aby poruszyć się z miejsca.
+        </p>
+        <p>
+            Dwukrotne Fiasko z rzędu oznacza, że Postać zaczyna ześlizgiwać się ze ściany doznając przy tym obrażeń
+            – czy z tytułu wysokości, czy to obtłuczeń i ran zadanych przez chropowatą skałę.
+        </p>
+        <p>
+            Jeśli przy Wspinaczce lub ześlizgiwaniu się Postaci zabraknie Wydolności, to odpada od ściany i doznaje obrażeń według zasad Upadku,
+            chyba że znajdzie się akurat w miejscu dogodnym do odpoczynku. Wówczas może zaczekać w nim na odzyskanie części Wydolności.
+        </p>
+        <p>
+            Podstawowe zasady Wspinaczki mogą podlegać modyfikatorom z Umiejętności lub sytuacyjnym.
+        </p>
+        <table class="table table-hover table-bordered table-sm rules-table mt-3">
+            <thead class="thead-dark">
+                <tr>
+                    <th></th>
+                    <th>Wspinaczka 0</th>
+                    <th>Wspinaczka 1</th>
+                    <th>Wspinaczka 2</th>
+                    <th>Wspinaczka 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Wspinaczka Sukces</th>
+                    <td>1m/1r</td>
+                    <td>1m/1r</td>
+                    <td>2m/1r</td>
+                    <td>3m/1r</td>
+                </tr>
+                <tr>
+                    <th>Wspinaczka Fiasko</th>
+                    <td>0m/1r</td>
+                    <td>0m/1r</td>
+                    <td>0m/1r</td>
+                    <td>0m/1r</td>
+                </tr>
+                <tr>
+                    <th>Ześlizgnięcie</th>
+                    <td>2xFiasko (1k4 OBR/5m)</td>
+                    <td>3xFiasko (1k3 OBR/5m)</td>
+                    <td>4xFiasko (1k2 OBR/5m)</td>
+                    <td>Utrata Wydolności</td>
+                </tr>
+                <tr>
+                    <th>Utrata Wydolności</th>
+                    <td>Odpoczynek lub Upadek</td>
+                    <td>Odpoczynek lub Upadek</td>
+                    <td>Odpoczynek lub Upadek</td>
+                    <td>Odpoczynek lub Upadek</td>
+                </tr>
+
+            </tbody>
+        </table>
+        
+    </div>
+
+{% endblock content %}

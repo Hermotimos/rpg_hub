@@ -13,6 +13,7 @@ urlpatterns = [
     path('skills-and-synergies/', views.rules_skills_view, name='skills-and-synergies'),
     path('skills-list/', views.rules_skills_list_view, name='skills-list'),
     path('synergies-list/', views.rules_synergies_list_view, name='synergies-list'),
+    path('tests/', views.rules_tests_view, name='tests'),
     path('traits/', views.rules_traits_view, name='traits'),
     path('tricks/', views.rules_tricks_view, name='tricks'),
     path('weapons/', views.rules_weapons_view, name='weapons'),

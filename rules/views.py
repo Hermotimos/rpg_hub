@@ -163,12 +163,22 @@ def rules_synergies_list_view(request):
 
 @login_required
 def rules_traits_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Cechy Fizyczne'
     }
     return render(request, 'rules/traits.html', context)
+
+
+@login_required
+def rules_tests_view(request):
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    context = {
+        'current_profile': current_profile,
+        'page_title': 'Testy Cech'
+    }
+    return render(request, 'rules/tests.html', context)
 
 
 @login_required
