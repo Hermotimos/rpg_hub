@@ -60,7 +60,7 @@
                                             </span>
                                         {% endif %}
                                     </div>
-                                    <div class="ml-3">{{ perk.description|custom_linebreaksbr:1 }}</div>
+                                    <div class="ml-3">{{ perk.description|linebreaksbr }}</div>
                                     <ul class="ml-4 pl-1 bullets-5 mb-1">
                                         {% for modifier in perk.conditional_modifiers.all %}
                                             <li class="pl-1">
