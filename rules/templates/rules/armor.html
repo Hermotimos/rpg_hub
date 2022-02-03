@@ -7,17 +7,13 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <div class="rules-styling">
-        <br><br><br>
+    <div class="rules-styling pt-3">
 
-        <h2 class="rules">Zbroja</h2>
-        <br>
+        <h2 class="rules mt-5 mb-3">Zbroja</h2>
         <p>
             Zbroje chronią ciało wojownika przed skutkami trafienia, jednak ze względu na swoją sztywność oraz wagę ograniczają jego ruchy i pole widzenia.
             Cięższe zbroje sprawdzają się w przypadku Postaci, które nie wykorzystują w walce szybkości i zwinności.
         </p>
-
-        <br>
         <table class="plates">
             <colgroup>
                 <col class="plate">
@@ -106,15 +102,35 @@
             W związku z tym każda zbroja powoduje malusy do Podstępów.
             Są one ujęte w osobnej tabeli, dlatego nie należy uwzględniać w tym przypadku ograniczeń premii ze ZRC. Byłby to podwójny malus.
         </p>
-        <br><br>
+        <table class="table table-sm mt-3 plate-tricks-table rules-table">
+            <thead class="align-center">
+                <tr class="border-bottom-dark">
+                    <th class="align-left">ZBROJA</th>
+                    <th>Kradzież<br>kieszonkowa</th>
+                    <th>Otwieranie<br>zamków</th>
+                    <th>Skradanie</th>
+                    <th>Ukrycie</th>
+                    <th>Wspinaczka</th>
+                    <th>Wykrywanie i<br>rozbrajanie<br>pułapek</th>
+                </tr>
+            </thead>
+            <tbody class="align-center">
+                {% for plate in plates %}
+                    <tr>
+                        <td class="align-left">{{ plate.name }}</td>
+                        <td class="rules-red">{% if plate.mod_pickpocketing %} {{ plate.mod_pickpocketing }} {% endif %}</td>
+                        <td class="rules-red">{% if plate.mod_lockpicking %} {{ plate.mod_lockpicking }} {% endif %}</td>
+                        <td class="rules-red">{% if plate.mod_sneaking %} {{ plate.mod_sneaking }} {% endif %}</td>
+                        <td class="rules-red">{% if plate.mod_hiding %} {{ plate.mod_hiding }} {% endif %}</td>
+                        <td class="rules-red">{% if plate.mod_climbing %} {{ plate.mod_climbing }} {% endif %}</td>
+                        <td class="rules-red">{% if plate.mod_traps %} {{ plate.mod_traps }} {% endif %}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-        {% include 'rules/_plate_and_tricks_table.html' %}
-        
-        <br><br><br>
 
-
-        <h2 class="rules">Tarcza</h2>
-        <br>
+        <h2 class="rules mt-5 mb-3">Tarcza</h2>
         <p>
             Poprzez przyjęcie ciosu na tarczę wojownik może uniknąć trafienia przez przeciwnika.
             Liczba przeciwników, przeciwko którym można użyć tarczy jest zależna od jej rodzaju i waha się między 1 a 3.
@@ -122,7 +138,6 @@
             Postać nie jest w stanie parować ciosów większej liczby przeciwników niż wynika to z opisu danego typu tarczy.
             Tarcza dostarcza także osłony przeciwko atakom dystansowym; wyjątkiem jest puklerz, który nie chroni przed atakami strzeleckimi.
         </p>
-
         <table class="table table-sm mt-3 shields-table rules-table">
             <thead class="align-center">
                 <tr class="border-bottom-dark">
@@ -163,17 +178,13 @@
                 {% endfor %}
             </tbody>
         </table>
+        
 
-        <br><br><br>
-
-
-        <h2 class="rules">Hełm i nagolenniki</h2>
-        <br>
+        <h2 class="rules mt-5 mb-3">Hełm i nagolenniki</h2>
         <p>
             Hełm i nagolenniki (nagolenice) dostarczają dodatkowej ochrony przeciwko Trafieniu przez przeciwnika.
             Zakres ochrony zależy od tego, czy Postać dysponuje kompletem (hełm + nagolenniki), czy tylko jednym z dwojga.
         </p>
-        <br>
         <table class="table table-sm mt-3 shields-table rules-table">
             <thead class="align-center">
                 <tr class="border-bottom-dark small-caps">
@@ -184,12 +195,12 @@
                     <th>Brak Kompletu<br>Waga</th>
                 </tr>
             </thead>
-
             <tbody class="align-center">
                 <tr><td class="align-left">Skóra</td>               <td class="rules-green">+1</td>    <td>-</td>                         <td class="align-center">2</td>  <td class="align-center">1</td></tr>
                 <tr><td class="align-left">Metal</td>               <td class="rules-green">+2</td>    <td class="rules-green">+1</td>    <td class="align-center">4</td>  <td class="align-center">2</td></tr>
                 <tr><td class="align-left">Krasnoludzka stal</td>   <td class="rules-green">+3</td>    <td class="rules-green">+2</td>    <td class="align-center">6</td>  <td class="align-center">3</td></tr>
             </tbody>
         </table>
+        
     </div>
 {% endblock content %}
