@@ -126,16 +126,16 @@
         <table class="table table-sm mt-3 shields-table rules-table">
             <thead class="align-center">
                 <tr class="border-bottom-dark">
-                    <th class="small-caps align-left">Rodzaj Tarczy</th>
+                    <th class="small-caps align-left">Rodzaj</th>
                     <th class="small-caps">KP</th>
-                    <th class="small-caps ">Waga</th>
-                    <th class="small-caps ">Specjalne</th>
+                    <th class="small-caps">Waga</th>
+                    <th class="small-caps">Specjalne</th>
                 </tr>
             </thead>
             <tbody class="align-center">
                 {% for shield in shields %}
                     <tr class="">
-                        <td class="{% if shield.description %} hover-blue {% endif %} align-left" data-toggle="collapse" data-target="#{{ shield.name }}">
+                        <td class="align-left {% if shield.description %} hover-blue {% endif %}" data-toggle="collapse" data-target="#{{ shield.name }}">
                             {{ shield.name }}
                         </td>
                         <td class="rules-green">+{{ shield.armor_class_bonus }}</td>
@@ -167,34 +167,28 @@
         <br><br><br>
 
 
-        <h2 class="rules">Hełm, karwasze i nagolenice</h2>
+        <h2 class="rules">Hełm i nagolenniki</h2>
         <br>
         <p>
-            Nagolenniki, karwasze i hełm dostarczają ochrony przeciwko natychmiastowemu wyeliminowaniu z walki przez Krytyczne Trafienie.
-            Tego rodzaju Trafienie w nieosłoniętą głowę z dużym prawdopodobieństwem zakończy się penetracją czaszki,
-            natomiast w przypadku kończyn może skutkować ich odcięciem lub nieodwracalnym zdewastowaniem kości i stawów.
-            Nagolenice, karwasze oraz hełm dostarczają ochrony przeciwko niszczycielskim skutkom Krytycznego Trafienia.
-            Jeśli Postać posiada jedynie część takiego kompletu, istnieje 33% szans na trafienie odpowiednio w głowę, jedną z rąk albo jedną z nóg.
+            Hełm i nagolenniki (nagolenice) dostarczają dodatkowej ochrony przeciwko Trafieniu przez przeciwnika.
+            Zakres ochrony zależy od tego, czy Postać dysponuje kompletem (hełm + nagolenniki), czy tylko jednym z dwojga.
         </p>
         <br>
-        <table class="protection">
-            <colgroup>
-                <col class="protection-type">
-                <col class="protection-desc">
-                <col class="weight">
-            </colgroup>
-            <thead>
+        <table class="table table-sm mt-3 shields-table rules-table">
+            <thead class="align-center">
                 <tr class="border-bottom-dark small-caps">
-                    <th>HEŁM, KARWASZE, NAGOLENICE</th>
-                    <th>Zakres ochrony przed Trafieniem</th>
-                    <th>Waga</th>
+                    <th class="align-left">Rodzaj</th>
+                    <th>Komplet<br>KP</th>
+                    <th>Brak Kompletu<br>KP</th>
+                    <th>Komplet<br>Waga</th>
+                    <th>Brak Kompletu<br>Waga</th>
                 </tr>
             </thead>
 
-            <tbody>
-                <tr><td>Skóra</td>               <td>Ochrona przed kalectwem w razie przeżycia, także od Ran Śmiertelnych </td>        <td class="align-center">2</td></tr>
-                <tr><td>Metal</td>               <td>Ochrona przed mnożnikiem OBR *2 przy Krytycznym Trafieniu</td>                    <td class="align-center">4</td></tr>
-                <tr><td>Krasnoludzka stal</td>   <td>Ochrona przed Automatycznym Trafieniem</td>                                       <td class="align-center">6</td></tr>
+            <tbody class="align-center">
+                <tr><td class="align-left">Skóra</td>               <td class="rules-green">+1</td>    <td class="rules-green">+0</td>    <td class="align-center">2</td>  <td class="align-center">1</td></tr>
+                <tr><td class="align-left">Metal</td>               <td class="rules-green">+2</td>    <td class="rules-green">+1</td>    <td class="align-center">4</td>  <td class="align-center">2</td></tr>
+                <tr><td class="align-left">Krasnoludzka stal</td>   <td class="rules-green">+3</td>    <td class="rules-green">+2</td>    <td class="align-center">6</td>  <td class="align-center">3</td></tr>
             </tbody>
         </table>
     </div>
