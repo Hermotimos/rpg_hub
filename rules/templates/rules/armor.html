@@ -14,16 +14,7 @@
             Zbroje chronią ciało wojownika przed skutkami trafienia, jednak ze względu na swoją sztywność oraz wagę ograniczają jego ruchy i pole widzenia.
             Cięższe zbroje sprawdzają się w przypadku Postaci, które nie wykorzystują w walce szybkości i zwinności.
         </p>
-        <table class="plates">
-            <colgroup>
-                <col class="plate">
-                <col class="armor-class">
-                <col class="parrying">
-                <col class="endurance">
-                <col class="weight">
-                <col class="agility-penalty">
-                <col class="movement-penalty">
-            </colgroup>
+        <table class="table table-sm mt-3 rules-table striped-4n-1 armor-table">
             <thead class="align-center dark">
                 <tr class="border-bottom-dark">
                     <th class="small-caps align-left">ZBROJA</th>
@@ -31,8 +22,6 @@
                     <th class="small-caps">Wyparowania</th>
                     <th class="small-caps">Wytrzymałość</th>
                     <th class="small-caps">Waga</th>
-                    <th class="small-caps">Max premia<br>ze ZRC</th>
-                    <th class="small-caps">Max<br>przyspieszenie</th>
                 </tr>
             </thead>
             <tbody class="align-center dark">
@@ -43,8 +32,6 @@
                         <td class="rules-green">{{ plate.parrying }}</td>
                         <td>{{ plate.endurance }}</td>
                         <td>{{ plate.weight.normalize }}</td>
-                        <td class="rules-red">{% if plate.mod_max_agility %} {{ plate.mod_max_agility }} {% endif %}</td>
-                        <td class="rules-red">{% if plate.mod_max_movement %} {{ plate.mod_max_movement }} {% endif %}</td>
                     </tr>
                     {% if plate.description %}
                         <tr id="{{ plate.short_name }}" class="collapse">

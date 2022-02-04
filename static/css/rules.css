@@ -57,25 +57,6 @@
 .professions .level {width: 100px;}
 .professions .level-desc {width: 350px;}
 
-.plates .plate {width: 320px;}
-.plates .armor-class {width: 70px;}
-.plates .parrying {width: 120px;}
-.plates .endurance {width: 120px;}
-.plates .weight {width: 100px;}
-.plates .agility-penalty {width: 150px;}
-.plates .movement-penalty {width: 150px;}
-
-/*
-.plate-and-tricks .plate {width: 450px;}
-.plate-and-tricks .pickpocketing {width: 80px;}
-.plate-and-tricks .lockpicking {width: 80px;}
-.plate-and-tricks .sneaking-towns {width: 80px;}
-.plate-and-tricks .sneaking-wilderness {width: 80px;}
-.plate-and-tricks .hiding-towns {width: 80px;}
-.plate-and-tricks .hiding-wilderness {width: 80px;}
-.plate-and-tricks .climbing {width: 80px;}
-.plate-and-tricks .traps {width: 120px;}
-*/
 .agility-and-tricks .plate {width: 80px;}
 .agility-and-tricks .pickpocketing {width: 100px;}
 .agility-and-tricks .lockpicking {width: 100px;}
@@ -122,13 +103,13 @@ table.weapons-table {border: double;}
     color: #ffffff;
 }
 
-.plates              tr:nth-child(4n-1),
-.plates              tr:nth-child(4n),
 .weapons-table tbody tr:nth-child(4n-1),
 .weapons-table tbody tr:nth-child(4n) {background-color: #f2f2f2;}
 
 
 .striped-2n tr:nth-child(2n) {background-color: #f2f2f2;}
+.striped-4n-1 tr:nth-child(4n-1) {background-color: #f2f2f2;}
+
 
 .weapons-img img {
     display: block;
@@ -137,11 +118,16 @@ table.weapons-table {border: double;}
     height: auto;
 }
 
+.rules-table th,
+.rules-table td {border-style: none !important;}
+
+
+.armor-table th,
+.armor-table td,
 .plate-tricks-table th,
 .plate-tricks-table td,
 .shields-table th,
 .shields-table td {
-    border-style: none !important;
     padding: 0.25rem 0rem 0rem 0rem !important;
 }
 
