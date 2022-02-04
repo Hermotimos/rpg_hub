@@ -12,151 +12,269 @@
         <h2 class="rules mt-5 mb-3">
             Testy Cech
         </h2>
-        
-                                <!-- Incorporate this section -->
-                                <p>
-                                    <b>Test</b>
-                                    Cechę testuje się poprzez rzut k20, przy czym wynik mniejszy lub równy niż wartość Cechy
-                                    (z uwzględnieniem ewentualnych modyfikatorów sytuacyjnych) oznacza sukces, natomiast wynik wyższy oznacza porażkę.
-                                    TODO - rozpisać się bardziej nowe zasady !!!!!!!!!!!!!!!!!!!!!!!!
-                                </p>
-                                <p>
-                                    <b>Automatyczny i krytyczny wynik testu.</b>
-                                    Oba skrajne wyniki, czyli 1 i 20, oznaczają odpowiednio Automatyczny Sukces i Automatyczne Fiasko (Automatyczną Porażkę).
-                                    W celu określenia skali zdarzenia (Sukcesu lub Fiaska), Gracz wykonuje kolejny rzut k20.
-                                    W skrajnej sytuacji, gdy wyniki obu rzutów są identyczne (1 - 1 lub 20 - 20) mamy do czynienia z sytuacją Krytycznego Sukcesu lub Krytycznego Fiaska,
-                                    która obfituje w nieprzewidziane i zaskakujące skutki.
-                                    Natomiast w przypadku sytuacji ocierających się o Krytyczny Sukces i Krytyczne Fiasko, Mistrz Gry może wprowadzić pewne dodatkowe, jednak nie nadmierne konsekwencje.
-                                </p>
-                                <p>
-                                    <b>Bonus i Malus.</b>
-                                    Test Cechy może podlegać różnorakim Modyfikatorom wynikającym z kontekstu sytuacyjnego. Modyfikatory korzystne/dodatnie to Bonusy, a niekorzystne to Malusy.
-                                    Przykładem Bonusu jest modyfikator +2 do testu SIŁ w przypadku, gdy Postać starająca się przesunąć wielki głaz zawalający wejście do jaskini użyje grubego kija i zastosuje dźwignię.
-                                    Przykładem Malusa jest modyfikator -2 do testu ZRC dla Postaci, która próbuje złapać rzuconą w jej stronę butelkę z miksturą, jednak jej łydkę właśnie szarpie wściekły pies.
-                                    Tego rodzaju Bonusy i Malusy mogą wystąpić w również kontekście wszelkich innych współczynników, o których mowa w dalszej części Zasad.
-                                    Malus może mieć również formę "dodatnią", bo w przypadku niektórych współczynników korzystna jest niższa wartość.
-                                </p>
-
-        
         <p>
-            Wszystkie Testy Cech, czy to wynikająca z bezpośredniego zastosowania danej Cechy
-            (np. siłowanie na rękę, wypatrywanie zwierzyny w lesie, próba marszu czwarty dzień z rzędu bez pożywienia),
-            czy to z użycia Umiejętności (np. Bieganie, Pływanie, Spostrzegawczość, Skradanie, Tropienie) mają określony Poziom Trudności, z którego wynika odpowiedni Malus.
-            Malus ten stosuje się przez obniżenie testowanej wartości Cechy.
-            
+            Test Cechy polega na dodaniu wartości Cechy, wyniku rzutu k20 oraz ewentualnych modyfikatorów wynikających z Umiejętności, przedmiotów, magii itp.,
+            a następnie porównaniu tej sumy z Poziomem Trudności danej akcji. Wynik równy lub wyższy Poziomowi Trudności oznacza Sukces, a wynik niższy - Fiasko.
+            Poziom Trudności może być wyrażony liczbowo lub słownie.
+            Dokładna wartość liczbowa może być znana Graczowi (tak jest w przypadku niektórych czynności opisanych dokładniej w Zasadach)
+            albo znana jedynie Mistrzowi Gry (w przypadku pozostałych akcji nieujętych szczegółowo w Zasadach).
+            Jednak w drugim przypadku Mistrz Gry określa Poziom Trudności słownie, przez co Gracz może oszacować jego wartość liczbową.
         </p>
-        <ol class="rules ml-4 font-italic">
-            <li>
-                Np. Postać o Sile 12 podejmuje próbę wykonania czynności o Poziomie Trudności "Banalny" z zerowym Malusem;
-                testowana wartość Cechy to 12, a zatem czynność powiedzie się, jeśli na k20 wyrzuci 1-12.
-            </li>
-            <li>
-                Np. Postać o Sile 12 podejmuje próbę wykonania czynności o Poziomie Trudności "Trudny" z Malusem -8;
-                testowana wartość Cechy to 4 (12 - 8), a zatem czynność powiedzie się, jeśli na k20 wyrzuci 1-4.
-            </li>
-        </ol>
+        <p>
+            Kiedy Poziom Trudności nie jest dokładnie znany Postaci, Mistrz Gry może go określić używając sformułowań,
+            które nie wskazują precyzyjnie na konkretną wartośc liczbową, ale pozwalają ją oszacować, np. „bułka z masłem”, „absurdalnie trudny”, „dla ciebie - dosyć prosty”,
+            „bardzo trudny, ale nie niemożliwy” albo "chyba żartujesz..." itp.
+            Oczywiście może tu wchodzić w grę czynnik psychologiczny,
+            na przykład Postaci pijanej, nastawionej pozytywnie do swoich możliwości albo wręcz cechującej się przerostem ego
+            Mistrz Gry może dostarczyć opisu deprecjonującego faktyczny Poziom Trudności.
+            Analogicznie, Postać stłamszona, wycieńczona, poraniona czy też pijana na smutno może przecenić Poziom Trudności.
+        </p>
+        <p>
+           Poniższa tabela określa Poziomy Trudności na potrzeby dalszych Zasad, a także stanowi punkt odniesienia w przypadku ich słownego opisu przez Mistrza Gry.
+        </p>
         <table class="table table-hover table-bordered table-sm mt-3">
             <thead class="thead-dark">
                 <tr>
                     <th>Poziom Trudności</th>
-                    <th>Malus</th>
+                    <th>Test Cechy</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
+                    <td>Niepoważny</td>
+                    <td>12</td>
+                </tr>
+                <tr>
                     <td>Banalny</td>
-                    <th>-</th>
+                    <td>16</td>
+                </tr>
+                <tr>
+                    <td>Prozaiczny</td>
+                    <td>20</td>
                 </tr>
                 <tr>
                     <td>Łatwy</td>
-                    <th>-2</th>
+                    <td>22</td>
                 </tr>
                 <tr>
                     <td>Umiarkowany</td>
-                    <th>-4</th>
+                    <td>24</td>
                 </tr>
                 <tr>
                     <td>Wymagający</td>
-                    <th>-6</th>
+                    <td>26</td>
                 </tr>
                 <tr>
                     <td>Trudny</td>
-                    <th>-8</th>
+                    <td>28</td>
                 </tr>
                 <tr>
                     <td>Bardzo Trudny</td>
-                    <th>-10</th>
+                    <td>30</td>
                 </tr>
                 <tr>
                     <td>Odstręczający</td>
-                    <th>-14</th>
+                    <td>32</td>
                 </tr>
                 <tr>
                     <td>Heroiczny</td>
-                    <th>-16</th>
+                    <td>36</td>
                 </tr>
                 <tr>
                     <td>Niemożliwy</td>
-                    <th>-20</th>
+                    <td>40</td>
                 </tr>
             </tbody>
         </table>
         
+<!--        <table class="table table-hover table-bordered table-sm mt-3">-->
+<!--            <thead class="thead-dark">-->
+<!--                <tr>-->
+<!--                    <th>Poziom Trudności</th>-->
+<!--                    <th>Malus</th>-->
+<!--                </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--                <tr>-->
+<!--                    <td>Banalny</td>-->
+<!--                    <th>-</th>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Łatwy</td>-->
+<!--                    <th>-2</th>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Umiarkowany</td>-->
+<!--                    <th>-4</th>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Wymagający</td>-->
+<!--                    <th>-6</th>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Trudny</td>-->
+<!--                    <th>-8</th>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Bardzo Trudny</td>-->
+<!--                    <th>-10</th>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Odstręczający</td>-->
+<!--                    <th>-14</th>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Heroiczny</td>-->
+<!--                    <th>-16</th>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>Niemożliwy</td>-->
+<!--                    <th>-20</th>-->
+<!--                </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--        -->
+        
         <p>
-            Powyższa pozwala zorientować się, że w przypadku najtrudniejszych wyczynów Postać ma nikłe szanse na Sukces,
+            Jak widać, w przypadku najtrudniejszych wyczynów Postać ma nikłe szanse na Sukces,
             o ile nie dysponuje rozwiniętymi Umiejętnościami, które dostarczyłyby Bonusu do Testu Cechy.
-            Poziom Trudności nie zawsze jest dokładnie znany Postaci; podczas jego określania Mistrz Gry może używać sformułowań,
-            które nie wskazują wprost na konkretną wartość modyfikatora, np. „niewymagający”, „absurdalnie trudny”, „dla ciebie - dosyć prosty”,
-            albo „bardzo trudny, ale nie niemożliwy” itp. Są to sformułowania pozwalające Graczowi na przybliżone oszacowanie Malusa.
         </p>
+        
+        <ol class="rules ml-4 font-italic">
+            <li>
+                Np. Postać o Sile 12 podejmuje próbę wykonania czynności o Poziomie Trudności "Prozaiczny" (20);
+                czynność powiedzie się, jeśli na k20 wyrzuci 8 lub więcej (12 + 8 = 20).
+            </li>
+            <li>
+                Np. Postać o Sile 12 podejmuje próbę wykonania czynności o Poziomie Trudności "Bardzo Trudny" (30);
+                czynność powiedzie się, jeśli na k20 wyrzuci 18 lub więcej (12 + 18 = 30).
+            </li>
+            <li>
+                Np. Postać o Sile 12 podejmuje próbę wykonania czynności o Poziomie Trudności "Heroiczny" (36);
+                teoretycznie takie działanie nie ma szans powodzenia, ponieważ nawet przy maksymalnym wyniku rzutu k20 łączna wartość Cechy i wyniku rzutu to 32;
+                jednak czynność powiedzie się w przypadku wyrzucenia 20 na k20 ze względu na zasady Automatycznego Sukcesu omówione w dalszej części.
+            </li>
+        </ol>
         <p>
-            W zależności od kontekstu sytuacyjnego, a dokładniej od tego, czy pozwala on Postaci na monitorowanie poziomu powodzenia wykonania czynności,
-            czy też nie – test Cechy może być wykonywany przez Gracza albo potajemnie przez MG.
-            Pierwsza okoliczność zachodzi np. przy Wspinaczce - kiedy to Sukces albo Fiasko są natychmiast odczuwalne dla Postaci,
-            natomiast druga może zachodzić przy Skradaniu – kiedy to Postać nie ma pewności czy pozostaje niezauważona.
-            Zarazem, w przypadku rażącego niepowodzenia czynności MG może komunikować pewne wskazówki na temat poziomu jej powodzenia
-            – a zwłaszcza, gdy Gracz sensownie deklaruje sposób, w jaki jego Postać monitoruje wykonanie czynności.
+            W zależności od kontekstu sytuacyjnego, a dokładniej od tego, czy pozwala on Postaci na monitorowanie powodzenia czynności,
+            Test Cechy może być wykonywany jawnie przez Gracza albo potajemnie przez Mistrza Gry.
+            Pierwsza sytuacja zachodzi np. przy Wspinaczce, kiedy to Sukces i Fiasko są natychmiast odczuwalne dla Postaci,
+            natomiast druga przy Skradaniu, kiedy to Postać nie ma pewności czy pozostaje niedostrzeżona.
+            Zarazem, w przypadku rażącego niepowodzenia Mistrz Gry dostarczyć opisu pozwalającego na zorientowanie się co do porażki
+            – zwłaszcza, gdy Gracz sensownie deklaruje sposób, w jaki jego Postać monitoruje wykonanie czynności.
         </p>
         <ol class="rules ml-4 font-italic">
             <li>
                 Np. Postać podkrada się przez las do grupki podróżnych zasiadających wokół ogniska;
-                potajemny rzut wykonany przez MG kończy się kompletnym fiaskiem;
+                potajemny rzut wykonany przez Mistrza Gry kończy się kompletnym Fiaskiem;
                 MG opisuje jak gałązka trzasnęła pod niezdarnym krokiem Postaci.
             </li>
             <li>
-                Np. Postać podkrada się do strażnika na warcie; potajemny rzut wykonany przez MG kończy się Fiaskiem,
-                ale wynik rzutu był bliski Sukcesu – dlatego Postać nie ma możliwości natychmiastowego uświadomienia sobie własnej porażki.
-                Może się okazać, że strażnik zauważył kątem oka poruszenie; ale nie dał po sobie poznać, bo chce zaskoczyć rzezimieszka.
+                Np. Postać podkrada się do strażnika na warcie; potajemny rzut wykonany przez Mistrza Gry kończy się Fiaskiem,
+                ale wynik rzutu był bliski Sukcesu – dlatego, paradoksalnie, Postać nie ma możliwości natychmiastowego uświadomienia sobie własnej porażki;
+                żadna gałązka nie trzasnęła, żaden ptak nie zerwał się z krzykiem.
+                A mimo to może się okazać, że strażnik zauważył kątem oka poruszenie, jednak nie dał tego po sobie poznać, ponieważ chce zaskoczyć rzezimieszka.
                 Jednak, jeśli Gracz zadeklaruje, że uważnie obserwuje strażnika, zwracając uwagę na tempo jego kroku i postawę ciała
-                (nadal swobodna czy się zmieniła?), i jeśli ani na chwilę nie spuszcza go z oczu, wówczas Mistrz Gry (ew. wykonując dodatkowy test ZRC)
-                może opisać jak wartownik drgnął lekko, choć nie wstrzymał kroku…
+                (czy pozostaje swobodna, czy się zmieniła?), i jeśli ani na chwilę nie spuszcza go z oczu, wówczas Mistrz Gry (ew. wykonując dodatkowy Test ZRC)
+                może opisać jak wartownik drgnął lekko i zesztywniał na ułamek chwili, choć nie wstrzymał kroku…
             </li>
         </ol>
         <p>
-            W tym kontekście Fiasko ocierające się o sukces to sytuacja szczególne ryzykowna dla wszelkich łotrzyków,
-            ponieważ brak jest ewidentnego potwierdzenia porażki, który pozwoliłby w porę szukać ratunku w ucieczce.
+            W tym kontekście Fiasko ocierające się o Sukces to sytuacja szczególne ryzykowna dla wszelkich łotrzyków,
+            ponieważ jest ewidentnego potwierdzenia porażki, który pozwoliłby w porę szukać ratunku w ucieczce.
             Jednak prawdziwi łotrzykowie i awanturnicy nie skarżą się na ten los, bo życie na krawędzi to ich chleb powszedni,
             a jeżeli ktoś dostrzega tu niesprawiedliwość, to wzruszają tylko ramionami i odsyłają go z powrotem do mamusi.
         </p>
+        
+        
+        
+        <h2 class="rules mt-5 mb-3">
+            Automatyczny/Krytyczny Sukces/Fiasko
+        </h2>
+        <p>
+            <b>Automatyczny Sukces i Automatyczne Fiasko.</b>
+            Oba skrajne wyniki na k20, czyli 1 i 20, wskazują odpowiednio na Automatyczne Fiasko (Porażkę) albo na Automatyczny Sukces (Powodzenie).
+            Automatyczny Sukces oznacza całkowite powodzenie akcji w ramach możliwego, normalnego powodzenia.
+            W ten sposób nawet efekty teoretycznie pozostające poza zasięgiem danej Postaci, mogą okazać się osiągalne...
+            Jednak w przypadku działań, których powodzenie jest obiektywnie niemożliwe, Postać może co najwyżej osiągnąć zaskakująco wiele w ramach niepowodzenia.
+            Np. próba przeskoczenia pięciometrowego drzewa w przypadku Automatycznego Sukcesu zakończy się fenomenalnym skokiem prosto na gałąź znajdującą się na wysokości dwóch metrów.
+        </p>
+        <p>
+            <b>Krytyczny Sukces i Krytyczne Fiasko.</b>
+            W celu określenia skali Automatycznego Sukcesu lub Fiaska Gracz wykonuje kolejny rzut k20.
+            W skrajnej sytuacji, gdy wyniki obu rzutów są identyczne (1 i 1 albo 20 i 20) zachodzi sytuacja Krytycznego Fiaska albo Krytycznego Sukcesu,
+            która obfituje w nieprzewidziane i zaskakujące skutki, włącznie z interwencją sił wyższych.
+            Kwestia ta pozostanie bez przykładu. Prędzej czy później dostarczy go Gra...
+            Również w przypadku sytuacji ocierających się o Krytyczny Sukces/Fiasko Mistrz Gry może wprowadzić dodatkowe, jednak w jego ocenie nie nadmierne konsekwencje.
+        </p>
+        <p>
+            Powyższa prezentacja Automatycznego/Krytycznego Sukcesu/Fiaska służy zrozumieniu każdego z nich z osobna.
+            Jednak w praktyce w przypadku Automatycznego Sukcesu (20 na k20) lub Fiaska (1 na k20) Postać natychmiast wykonuje kolejny rzut w celu określenia ich dalszych skutków,
+            które w przypadku powtórzenia się wyniku rzutu osiągają skalę Krytycznego Sukcesu (2x20 na k20) albo Krytycznego Fiaska (2x1 na k20).
+            Nie ma możliwości rezygnacji z drugiego rzutu.
+        </p>
+        
+        
+        
+        <h2 class="rules mt-5 mb-3">
+            Bonus, Malus i Falus
+        </h2>
+        <p>
+            Test Cechy może podlegać różnorakim modyfikatorom wynikającym z Umiejętności, właściwości użytych przedmiotów, magii lub kontekstu sytuacyjnego.
+            Modyfikatory korzystne/dodatnie to Bonusy, a niekorzystne/ujemne to Malusy.
+            Przykładem Bonusu sytuacyjnego jest modyfikator +2 do Testu Siły,
+            gdy Postać starająca się przesunąć wielki głaz zawalający wejście do jaskini użyje grubego, twardego drąga i zastosuje dźwignię,
+            natomiast przykładem Bonusu z Umiejętności jest modyfikator +1 do powyższego Testu, gdy Postać wykorzysta Umiejętność "Mobilizacja" na 1 poziomie.
+            Z kolei przykładem Malusa sytuacyjnego jest modyfikator -6 do Testu Zręczności dla Postaci, która próbuje złapać rzuconą w jej stronę butelkę z gorzałą,
+            jednak jej łydkę właśnie szarpie pijana dziwka;
+            wprawdzie Postać jako wytrawny pijak posiada wybitne zdolności w zakresie łapania nadlatujących butelek (jest to dla niej Test o poziomie Prozaicznym),
+            jednak tym razem doznaje istotnego dyskomfortu polegającego na zaburzeniu równowagi.
+            Tego rodzaju Bonusy i Malusy mogą wystąpić w również kontekście każdej z Cech oraz pochodzących od nich współczynników
+            (Klasa Pancera, Trafienie, Inicjatywa, Zaskoczenie, Wypatrywanie, Tropienie itd.).
+        </p>
+        <p>
+            <b>Bonus i Malus Generalny.</b>
+            Pewne niekorzystne dla Postaci sytuacje, do których należą przeciążenie ekwipunkiem, poważne rany, wycieńczenie lub klątwy i magia,
+            mogą skutkować Malusem Generalnym, który stanowi w istocie "pakiet" pomniejszych Malusów.
+            Ze względu na zwyczajowy tryb życia Postaci, który wynika stąd, że Gracze zazwyczaj nic sobie nie robią z ich wycieńczenia podróżą, ranami, walką czy zwyczajnym niedożywieniem,
+            Malus Generalny jest o wiele częstszą bestią niż jego przeciwieństwo - Bonus Generalny.
+            Ów rzadki, niemalże egzotyczny modyfikator pochodzi zazwyczaj z błogosławieństw od kapłanów i kapłanek,
+            którzy ze względu na zobowiązującą ich doktrynę dostarczają opieki i schronienia osobnikom znajdującym się na skraju wydolności ludzkiego organizmu.
+            Jednak, abstrahując od zgryźliwości, Bonus i Malus Generalny rządzą się tymi samymi prawami, które ilustruje poniższa tabela
+            (wartość Bonusu/Malusa może się wahać między 1 a 5, przy czym w przypadku Malusa wartość 5 występuje np. w kontekście otrzymania Rany Śmiertelnej
+            i wskazuje na utrudnienie w wykonaniu jakiejkolwiek akcji związane z faktem umierania).
+        </p>
+        <p>
+            Natomiast falus (łac. fallus) to inaczej kutas i został powyżej wyczerpująco opisany w kontekście Bonusu.
+        </p>
+        <p>
+            Wartość Bonusu lub Malusa (1-5) należy zastosować do następujących Testów i Współczynników:
+        </p>
+        <ol class="rules bullets-2 ml-4 mt-2 font-italic">
+            <li>Testy Cech i wszystkie pochodne.</li>
+            <li>Rzut za Trafienie.</li>
+            <li>Rzut za Obrażenia.</li>
+            <li>Rzut za Inicjatywę.</li>
+            <li>Klasa Pancerza.</li>
+            <li>Koszt Wydolności / 1R dla wszystkich czynności zużywających Wydolność w skali rund.</li>
+        </ol>
+        
         
         
         <h2 class="rules mt-5 mb-3">
             Wydolność
         </h2>
         <p>
-            Wydolność określa zdolność Postaci do długotrwałego wykonywania intensywnych fizycznie czynności,
-            co można wyrazić przez przypisanie tego rodzaju czynnościom kosztu Wydolności.
-            Po jej wyczerpaniu Postać nie jest w stanie kontynuować danej czynności na aktualnym pułapie intensywności.
-            Poniższa tabela przedstawia
-        </p>
-        <p>
+            Wydolność określa zdolność Postaci do długotrwałego wykonywania czynności o wysokiej intensywności fizycznej.
+            Czynności tego rodzaju konsumują punkty Wydolności Postaci, a ich wyczerpanie skutkuje niezdolnością do dalszego wysiłku.
             Początkowa Wydolność jest równa KON, jednak może ulegać podwyższeniu za sprawą Umiejętności takich jak Wytrzymałość,
-            a także zmianom na skutek działania eliksirów i magii oraz wydarzeń fabularnych (np. choroby, ciężkich ran, łaski od bogów lub klątwy).
+            a także zmianom na skutek działania eliksirów i magii oraz wydarzeń fabularnych (np. choroby, ciężkich ran, łaski bogów lub klątwy).
         </p>
         <p>
             Ścisłe kontrolowanie Wydolności jest konieczne w walce oraz w sytuacjach konfliktowych,
-            kiedy liczy się każda sekunda i każda ze stron próbuje uprzedzić drugą w jakiejś czynności.
-            W sytuacjach innych niż konfliktowe wystarczy ustalić przybliżony czas wykonania czynności.
+            kiedy liczy się każda sekunda i każda ze stron próbuje uprzedzić drugą w działaniu.
+            W sytuacjach innych niż konfliktowe wystarczy ustalić przybliżony czas wykonania czynności
+            uwzględniając okresy odpoczynku pozwalającego na regenerację Wydolności.
         </p>
         <table class="table table-hover table-bordered table-sm rules-table mt-3">
             <thead class="thead-dark">
@@ -197,14 +315,14 @@
         
         
         <h2 class="rules mt-5 mb-3">
-            Ruch
+            Ruch - Marsz i Bieg
         </h2>
         <p>
             Zasady dotyczące Ruchu służą określeniu czasu pokonania danego dystansu,
             co znajduje zastosowanie głównie przy podróży oraz w sytuacjach konfliktowych,
             np. próba dobiegnięcia do wrogiego łucznika, wyścig krótko- albo długodystansowy,
-            przemieszczenia oddziałów podczas bitwy czy też armii ścigających się do strategicznego punktu.
-            W innych przypadkach wystarczy określenie przybliżonego czasu pokonania danego dystansu.
+            przemieszczenia oddziałów podczas bitwy czy też armii ścigających się do strategicznie położonej przełęczy albo brodu.
+            W innych przypadkach wystarczy określenie przybliżonego czasu pokonania danego dystansu z uwzględnieniem okresów regeneracji.
         </p>
         <p>
             Próby Przyspieszenia można podejmować co rundę, jednak każde Fiasko skutkuje Malusem -1 do kolejnych prób.
@@ -213,7 +331,7 @@
             a przy Krytycznym Fiasku Postać zasrywa się z wyczerpania, po czym mdleje, jeśli nie dostaje ataku serca...
         </p>
         <p>
-            Poniższa tabela przedstawia dokładniej koszty Wydolności oraz Malusy do testu SIŁ za Przyspieszenie przy różnym tempie Ruchu.
+            Poniższa tabela przedstawia dokładniej koszty Wydolności oraz Malusy do testu Siły za Przyspieszenie przy różnym tempie Ruchu.
         </p>
         <table class="table table-hover table-bordered table-sm mt-3">
             <colgroup span="1"></colgroup>
@@ -261,7 +379,8 @@
                     <th>Bieg (3x)</th>
                     <td>15 km/h</td>
                     <td>≈4.5 m/s</td>
-                    <td>Banalny (0)</td>
+                    <td>Prozaiczny (20)</td>
+<!--                    <td>Banalny (0)</td>-->
                     <td>1/6r</td>
                     <td>1/12r</td>
                     <td>1/24r</td>
@@ -271,7 +390,8 @@
                     <th>Szybki Bieg (x4)</th>
                     <td>20 km/h</td>
                     <td>≈5.5 m/s</td>
-                    <td>Umiarkowany (-4)</td>
+                    <td>Umiarkowany (24)</td>
+<!--                    <td>Umiarkowany (-4)</td>-->
                     <td>1/1r</td>
                     <td>1/2r</td>
                     <td>1/6r</td>
@@ -281,7 +401,8 @@
                     <th>Sprint (x5)</th>
                     <td>25 km/h</td>
                     <td>≈7 m/s</td>
-                    <td>Trudny (-8)</td>
+                    <td>Trudny (28)</td>
+<!--                    <td>Trudny (-8)</td>-->
                     <td>3/1r</td>
                     <td>2/1r</td>
                     <td>1/1r</td>
