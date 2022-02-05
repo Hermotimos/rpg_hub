@@ -9,10 +9,12 @@
 {% block content %}
     <div class="rules-styling pt-3">
 
-        <h2 class="rules mt-5 mb-3">Zbroja</h2>
+        <h2 class="rules mt-5 mb-3">
+            Zbroja
+        </h2>
         <p>
-            Zbroje chronią ciało wojownika przed skutkami trafienia, jednak ze względu na swoją sztywność oraz wagę ograniczają jego ruchy i pole widzenia.
-            Cięższe zbroje sprawdzają się w przypadku Postaci, które nie wykorzystują w walce szybkości i zwinności.
+            Zbroje chronią ciało wojownika przed skutkami Trafienia, jednak ze względu na swoją sztywność oraz wagę ograniczają jego ruchy i pole widzenia.
+            Ta prawidłowośc ujęta jest w ramach zasad dotyczących Progów Przeciążenia. .
         </p>
         <table class="table table-sm mt-3 rules-table striped-4n-1 armor-table">
             <thead class="align-center dark">
@@ -117,7 +119,9 @@
         </table>
 
 
-        <h2 class="rules mt-5 mb-3">Tarcza</h2>
+        <h2 class="rules mt-5 mb-3">
+            Tarcza
+        </h2>
         <p>
             Poprzez przyjęcie ciosu na tarczę wojownik może uniknąć trafienia przez przeciwnika.
             Liczba przeciwników, przeciwko którym można użyć tarczy jest zależna od jej rodzaju i waha się między 1 a 3.
@@ -167,10 +171,15 @@
         </table>
         
 
-        <h2 class="rules mt-5 mb-3">Hełm i nagolenniki</h2>
+        <h2 class="rules mt-5 mb-3">
+            Hełm i nagolenniki
+        </h2>
         <p>
             Hełm i nagolenniki (nagolenice) dostarczają dodatkowej ochrony przeciwko Trafieniu przez przeciwnika.
             Zakres ochrony zależy od tego, czy Postać dysponuje kompletem (hełm + nagolenniki), czy tylko jednym z dwojga.
+            Jednakże skutkiem noszenia hełmu jest ograniczenie zdolności percepcyjnych Postaci takich jak Nasłuchiwanie czy Wypatrywanie;
+            wszelkie Testy Zręczności związane ze zmysłami wzroku i słuchu, a także z refleksem (np. Zaskoczenie) otrzymują odpowiedni Malus zgodnie z poniższą tabelą.
+            Oczywiście Malus ten nie występuje w sytuacji, gdy Postać używa jedynie nagolenników.
         </p>
         <table class="table table-sm mt-3 striped-even rules-table striped-2n">
             <thead class="align-center">
@@ -180,12 +189,13 @@
                     <th>Brak Kompletu<br>KP</th>
                     <th>Komplet<br>Waga</th>
                     <th>Brak Kompletu<br>Waga</th>
+                    <th>Malus Percepcyjny</th>
                 </tr>
             </thead>
             <tbody class="align-center">
-                <tr><td class="align-left">Skóra</td>               <td class="rules-green">+1</td>    <td>-</td>                         <td class="align-center">2</td>  <td class="align-center">1</td></tr>
-                <tr><td class="align-left">Metal</td>               <td class="rules-green">+2</td>    <td class="rules-green">+1</td>    <td class="align-center">4</td>  <td class="align-center">2</td></tr>
-                <tr><td class="align-left">Krasnoludzka stal</td>   <td class="rules-green">+3</td>    <td class="rules-green">+2</td>    <td class="align-center">6</td>  <td class="align-center">3</td></tr>
+                <tr><td class="align-left">Skóra</td>               <td class="rules-green">+1</td>    <td>-</td>                         <td>2</td>  <td>1</td>    <td class="rules-red">-1</td>   </tr>
+                <tr><td class="align-left">Metal</td>               <td class="rules-green">+2</td>    <td class="rules-green">+1</td>    <td>4</td>  <td>2</td>    <td class="rules-red">-2</td>   </tr>
+                <tr><td class="align-left">Krasnoludzka stal</td>   <td class="rules-green">+3</td>    <td class="rules-green">+2</td>    <td>6</td>  <td>3</td>    <td class="rules-red">-2</td>   </tr>
             </tbody>
         </table>
         
