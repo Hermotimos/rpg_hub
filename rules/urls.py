@@ -8,6 +8,7 @@ urlpatterns = [
     path('armor/', views.rules_armor_view, name='armor'),
     path('character-sheet/', views.rules_character_sheet_view, name='character-sheet'),
     path('combat/', views.rules_combat_view, name='combat'),
+    path('movement/', views.rules_movement_view, name='movement'),
     path('professions/', views.rules_professions_view, name='professions'),
     path('skills-and-synergies/', views.rules_skills_view, name='skills-and-synergies'),
     path('skills-list/', views.rules_skills_list_view, name='skills-list'),

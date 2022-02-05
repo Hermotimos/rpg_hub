@@ -172,6 +172,16 @@ def rules_tests_view(request):
 
 
 @login_required
+def rules_movement_view(request):
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    context = {
+        'current_profile': current_profile,
+        'page_title': 'Przeciążenie, Wydolność i Ruch'
+    }
+    return render(request, 'rules/movement.html', context)
+
+
+@login_required
 def rules_tricks_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     if current_profile.can_view_all:

@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/rules.css' %}">
+{% endblock head_extra %}
+
+{% block content %}
+    <div class="rules-styling pt-3">
+
+        
+        <h2 class="rules mt-5 mb-3">
+            Przeciążenie
+        </h2>
+        <p>
+            Sytuacja, w której Postać nosi na swoich plecach ekwipunek na tyle ciężki, aby jego waga wkraczała poza I Próg Przeciążenia,
+            stanowi przykład zastosowania zasad Malusa Generalnego.
+            Każdy z Progów Przeciążenia (I-II-III) wprowadza Malus Generalny o wartości odpowiednio -1, -2 oraz -4.
+            Oznacza to, że Postać taszcząca ze sobą kilkadziesiąt kilogramów dobytku i wkraczająca w III Próg Przeciążenia otrzymuje Malus Generalny -4,
+            co skutkuje zastosowaniem modyfikatora -4 do wszystkich Testów i Współczynników występujących na liście Bonusu/Malusa Generalnego.
+            Postać skrajnie przeciążona jest zatem nieruchawa, ociężała i niezdolna do pełnego wykorzystania swoich atutów fizycznych.
+            Czyli bardzo, bardzo źle...
+        </p>
+        
+        
+        
+        <h2 class="rules mt-5 mb-3">
+            Wydolność
+        </h2>
+        <p>
+            Wydolność określa zdolność Postaci do długotrwałego wykonywania czynności o wysokiej intensywności fizycznej.
+            Czynności tego rodzaju konsumują punkty Wydolności Postaci, a ich wyczerpanie skutkuje niezdolnością do dalszego wysiłku.
+            Próba kontynuowania wysiłku pomimo utraty Wydolności to kolejna sytuacja, w której znajduje zastosowanie Malus Generalny.
+            W zależności od sytuacji może to być np. Malus Generalny -1 w pierwszej rundzie działania po utracie Wydolności, pogłębiający się z każdą kolejną.
+        </p>
+        <p>
+            Początkowa Wydolność jest równa KON, jednak może ulegać podwyższeniu za sprawą Umiejętności takich jak Wytrzymałość,
+            a także zmianom na skutek działania eliksirów i magii oraz wydarzeń fabularnych (np. choroby, ciężkich ran, łaski bogów lub klątwy).
+        </p>
+        <p>
+            Ścisłe kontrolowanie Wydolności jest konieczne w walce oraz w sytuacjach konfliktowych,
+            kiedy liczy się każda sekunda i każda ze stron próbuje uprzedzić drugą w działaniu.
+            W sytuacjach innych niż konfliktowe wystarczy ustalić przybliżony czas wykonania czynności
+            uwzględniając okresy odpoczynku pozwalającego na regenerację Wydolności.
+        </p>
+        <table class="table table-hover table-bordered table-sm rules-table mt-3">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Czynność</th>
+                    <th>Koszt Wydolności</th>
+                    <th>Skutki utraty Wydolności</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Bieg x4</td>
+                    <td>1 / 1 rundę</td>
+                    <td>Postać zwalnia do tempa wolniejszego niż Marsz (poniżej 1x)</td>
+                </tr>
+                <tr>
+                    <td>Walka w zwarciu</td>
+                    <td>1 / 1 rundę</td>
+                    <td>Niezdolność do Ataku, Defensywy czy Biegu x2 (pozostają Uniki i Parowanie)</td>
+                </tr>
+                <tr>
+                    <td>Walka dystansowa</td>
+                    <td>1 / 3 rundy</td>
+                    <td>Niezdolność do Ataku, Defensywy czy Biegu x2 (pozostają Uniki i Parowanie)</td>
+                </tr>
+                <tr>
+                    <td>Wspinaczka</td>
+                    <td>1 / 1 rundę</td>
+                    <td>Niezdolność do dalszej Wspinaczki: konieczność odpoczynku w dogodnym miejscu (półka skalna, wąska szczelina) albo Upadek</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>
+            Tempo regeneracji Wydolności zależy od jakości odpoczynku.
+            Pełny odpoczynek polegający na przyjęciu wygodnej postawy siedzącej lub leżącej pozwala na regenerację 1 punktu Wydolności na 2 rundy.
+            Jeśli zaś Postać odpoczywa "aktywnie" (w trakcie walki, wmarszu, w szczelinie skalnej), to regeneracja zachodzi w tempie 1 punktu Wydolności na 4 rundy.
+        </p>
+        
+        
+        
+        <h2 class="rules mt-5 mb-3">
+            Ruch - Marsz i Bieg
+        </h2>
+        <p>
+            Zasady dotyczące Ruchu służą określeniu czasu pokonania danego dystansu,
+            co znajduje zastosowanie głównie przy podróży oraz w sytuacjach konfliktowych,
+            np. próba dobiegnięcia do wrogiego łucznika, wyścig krótko- albo długodystansowy,
+            przemieszczenia oddziałów podczas bitwy czy też armii ścigających się do strategicznie położonej przełęczy albo brodu.
+            W innych przypadkach wystarczy określenie przybliżonego czasu pokonania danego dystansu z uwzględnieniem okresów regeneracji.
+        </p>
+        <p>
+            Próby Przyspieszenia można podejmować co rundę, jednak każde Fiasko skutkuje Malusem -1 do kolejnych prób.
+            Malus kasuje się dopiero po pełnej regeneracji Wydolności.
+            Automatyczne Fiasko oznacza, że Postaci kończy się oddech i jej prędkość spada o 1 Próg Przyspieszenia, zamiast wzrosnąć,
+            a przy Krytycznym Fiasku Postać zasrywa się z wyczerpania, przewraca, rozbija głowę i mdlej... jeśli nie doznaje ataku serca...
+        </p>
+        <p>
+            Poniższa tabela przedstawia dokładniej koszty Wydolności oraz Malusy do testu Siły za Przyspieszenie przy różnym tempie Ruchu.
+        </p>
+        <table class="table table-hover table-bordered table-sm mt-3">
+            <colgroup span="1"></colgroup>
+            <colgroup span="1"></colgroup>
+            <colgroup span="2"></colgroup>
+            <colgroup span="2"></colgroup>
+            <colgroup span="2"></colgroup>
+            <colgroup span="2"></colgroup>
+            <thead class="thead-dark">
+                <tr>
+                    <th rowspan="2">Czynność</th>
+                    <th colspan="2" rowspan="2" scope="colgroup">Prędkość</th>
+                    <th rowspan="2" scope="colgroup">Poziom Trudności (Malus)</th>
+                    <th colspan="4" scope="colgroup">Koszt Wydolności</th>
+                </tr>
+                <tr>
+                    <th scope="col">Bieganie 0</th>
+                    <th scope="col">Bieganie 1</th>
+                    <th scope="col">Bieganie 2</th>
+                    <th scope="col">Bieganie 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Marsz (1x)</th>
+                    <td>5 km/h</td>
+                    <td>≈1.5 m/s</td>
+                    <td>bez rzutu</td>
+                    <td>1/1.5h</td>
+                    <td>1/1.5h</td>
+                    <td>1/1.5h</td>
+                    <td>1/1.5h</td>
+                </tr>
+                <tr>
+                    <th>Trucht (2x)</th>
+                    <td>10 km/h</td>
+                    <td>≈3 m/s</td>
+                    <td>bez rzutu</td>
+                    <td>1/12r</td>
+                    <td>1/24r</td>
+                    <td>1/48r</td>
+                    <td>1/96r</td>
+                </tr>
+                <tr>
+                    <th>Bieg (3x)</th>
+                    <td>15 km/h</td>
+                    <td>≈4.5 m/s</td>
+                    <td>Prozaiczny (20)</td>
+<!--                    <td>Banalny (0)</td>-->
+                    <td>1/6r</td>
+                    <td>1/12r</td>
+                    <td>1/24r</td>
+                    <td>1/48r</td>
+                </tr>
+                <tr>
+                    <th>Szybki Bieg (x4)</th>
+                    <td>20 km/h</td>
+                    <td>≈5.5 m/s</td>
+                    <td>Umiarkowany (24)</td>
+<!--                    <td>Umiarkowany (-4)</td>-->
+                    <td>1/1r</td>
+                    <td>1/2r</td>
+                    <td>1/6r</td>
+                    <td>1/12r</td>
+                </tr>
+                <tr>
+                    <th>Sprint (x5)</th>
+                    <td>25 km/h</td>
+                    <td>≈7 m/s</td>
+                    <td>Trudny (28)</td>
+<!--                    <td>Trudny (-8)</td>-->
+                    <td>3/1r</td>
+                    <td>2/1r</td>
+                    <td>1/1r</td>
+                    <td>1/2r</td>
+                </tr>
+            </tbody>
+        </table>
+
+        
+
+        <h2 class="rules mt-5 mb-3">
+            Upadek
+        </h2>
+        <p>
+            Upadek powoduje Obrażenia zależne od wysokości: 1k4 za każde rozpoczęte 2 metry.
+            Obrażenia te mogą podlegać Wyparowaniom, np. dzięki zbroi.
+            Ponadto, jeżeli upadek z wysokości odbywa się w sposób kontrolowany (np. Postać sama wykonała skok) lub przynajmniej nogami w dół,
+            to udany test ZRC pozwala zredukować OBR o 4.
+        </p>
+        
+        <h2 class="rules mt-5 mb-3">
+            Ruch - Wspinaczka
+        </h2>
+        <p>
+            Każda runda aktywnej Wspinaczki (kiedy Postać podejmuje próbę podciągnięcia się wyżej i wykonuje test Cechy) zużywa 1 Wydolności.
+            Sukces oznacza, że Postać pokonała 1 metr w pionie, natomiast Fiasko oznacza,
+            że Postać nie jest w stanie znaleźć odpowiedniego oparcia lub uchwytu, aby poruszyć się z miejsca.
+        </p>
+        <p>
+            Dwukrotne Fiasko z rzędu oznacza, że Postać zaczyna ześlizgiwać się ze ściany doznając przy tym obrażeń
+            – czy z tytułu wysokości, czy to obtłuczeń i ran zadanych przez chropowatą skałę.
+        </p>
+        <p>
+            Jeśli przy Wspinaczce lub ześlizgiwaniu się Postaci zabraknie Wydolności, to odpada od ściany i doznaje obrażeń według zasad Upadku,
+            chyba że znajdzie się akurat w miejscu dogodnym do odpoczynku. Wówczas może zaczekać w nim na odzyskanie części Wydolności.
+        </p>
+        <p>
+            Podstawowe zasady Wspinaczki mogą podlegać modyfikatorom z Umiejętności lub sytuacyjnym.
+        </p>
+        <table class="table table-hover table-bordered table-sm rules-table mt-3">
+            <thead class="thead-dark">
+                <tr>
+                    <th></th>
+                    <th>Wspinaczka 0</th>
+                    <th>Wspinaczka 1</th>
+                    <th>Wspinaczka 2</th>
+                    <th>Wspinaczka 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Wspinaczka Sukces</th>
+                    <td>1m/1r</td>
+                    <td>1m/1r</td>
+                    <td>2m/1r</td>
+                    <td>3m/1r</td>
+                </tr>
+                <tr>
+                    <th>Wspinaczka Fiasko</th>
+                    <td>0m/1r</td>
+                    <td>0m/1r</td>
+                    <td>0m/1r</td>
+                    <td>0m/1r</td>
+                </tr>
+                <tr>
+                    <th>Ześlizgnięcie</th>
+                    <td>2xFiasko (1k4 OBR/5m)</td>
+                    <td>3xFiasko (1k3 OBR/5m)</td>
+                    <td>4xFiasko (1k2 OBR/5m)</td>
+                    <td>Utrata Wydolności</td>
+                </tr>
+                <tr>
+                    <th>Utrata Wydolności</th>
+                    <td>Odpoczynek lub Upadek</td>
+                    <td>Odpoczynek lub Upadek</td>
+                    <td>Odpoczynek lub Upadek</td>
+                    <td>Odpoczynek lub Upadek</td>
+                </tr>
+
+            </tbody>
+        </table>
+        
+    </div>
+
+{% endblock content %}
