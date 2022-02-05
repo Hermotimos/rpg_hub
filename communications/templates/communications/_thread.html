@@ -33,19 +33,21 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="col pr-0">
-                        <div class="float-right font-15 mr-1">
-                            {% if current_profile in thread.followers.all %}
-                                <a class="icon-unfollow ml-1" href="{% url 'communications:unfollow' thread.id %}"
-                                   data-toggle="tooltip" data-placement="bottom" title="Nie obserwuj">
-                                </a>
-                            {% else %}
-                                <a class="icon-follow ml-1" href="{% url 'communications:follow' thread.id %}"
-                                    data-toggle="tooltip" data-placement="bottom" title="Obserwuj">
-                                </a>
-                            {% endif %}
+                    {% if not thread.is_ended %}
+                        <div class="col pr-0">
+                            <div class="float-right font-15 mr-1">
+                                {% if current_profile in thread.followers.all %}
+                                    <a class="icon-unfollow ml-1" href="{% url 'communications:unfollow' thread.id %}"
+                                       data-toggle="tooltip" data-placement="bottom" title="Nie obserwuj">
+                                    </a>
+                                {% else %}
+                                    <a class="icon-follow ml-1" href="{% url 'communications:follow' thread.id %}"
+                                        data-toggle="tooltip" data-placement="bottom" title="Obserwuj">
+                                    </a>
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                 </div>
                 <div class="row mt-n1">
                     <div class="col pr-0">

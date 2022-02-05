@@ -35,19 +35,19 @@
         </div>
     {% endif %}
     
-    
-    <div>
-        {% if current_profile in thread.followers.all %}
-            <a class="btn btn-outline-dark icon-unfollow py-2 ml-1 mt-1" href="{% url 'communications:unfollow' thread.id %}"
-               data-toggle="tooltip" data-placement="bottom" title="Nie obserwuj">
-            </a>
-        {% else %}
-            <a class="btn btn-outline-dark icon-follow py-2 ml-1 mt-1" href="{% url 'communications:follow' thread.id %}"
-                data-toggle="tooltip" data-placement="bottom" title="Obserwuj">
-            </a>
-        {% endif %}
-    </div>
-    
+    {% if not thread.is_ended %}
+        <div>
+            {% if current_profile in thread.followers.all %}
+                <a class="btn btn-outline-dark icon-unfollow py-2 ml-1 mt-1" href="{% url 'communications:unfollow' thread.id %}"
+                   data-toggle="tooltip" data-placement="bottom" title="Nie obserwuj">
+                </a>
+            {% else %}
+                <a class="btn btn-outline-dark icon-follow py-2 ml-1 mt-1" href="{% url 'communications:follow' thread.id %}"
+                    data-toggle="tooltip" data-placement="bottom" title="Obserwuj">
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
     
     <div>
         <p data-toggle="tooltip" data-placement="bottom" title="Edytuj tagi Ogłoszenia">
