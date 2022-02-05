@@ -68,16 +68,6 @@ def rules_combat_view(request):
 
 
 @login_required
-def rules_masteries_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
-    context = {
-        'current_profile': current_profile,
-        'page_title': 'Biegłości i inne zdolności bojowe'
-    }
-    return render(request, 'rules/masteries.html', context)
-
-
-@login_required
 def rules_professions_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     if current_profile.can_view_all:
