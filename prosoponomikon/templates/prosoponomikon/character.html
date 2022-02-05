@@ -94,7 +94,7 @@
                 <label class="h4 mb-0" for="tab2">Dialogi</label>
             {% endif %}
             
-            <!-- Skills -->
+            <!-- Skills and synergies-->
             {% if skills %}
                 {% if character.biography_packets.all or character.dialogue_packets.all %}
                     <input type="radio" name="tabset" id="tab3" aria-controls="skills">
@@ -156,11 +156,18 @@
                     </section>
                 {% endif %}
             
-                <!-- Skills -->
+                <!-- Skills and synergies-->
                 {% if skills %}
                     <section id="skills" class="tab-panel">
                         {% for skill in skills %}
-                            {% include 'rules/_skill.html' %}
+                            {% with max_level_only=True %}
+                                {% include 'rules/_skill.html' %}
+                            {% endwith %}
+                        {% endfor %}
+                        {% for synergy in synergies %}
+                            {% with max_level_only=True %}
+                                {% include 'rules/_synergy.html' %}
+                            {% endwith %}
                         {% endfor %}
                     </section>
                 {% endif %}

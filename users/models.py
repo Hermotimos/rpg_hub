@@ -127,6 +127,14 @@ class Profile(Model):
             Prefetch('skill_levels', queryset=skill_levels))
         return skills.distinct()
 
+    def synergies_acquired_with_synergies_levels(self):
+        from rules.models import Synergy, SynergyLevel
+        synergies = Synergy.objects.filter(synergy_levels__acquired_by=self)
+        synergy_levels = SynergyLevel.objects.filter(acquired_by=self)
+        synergies = synergies.prefetch_related(
+            Prefetch('synergy_levels', queryset=synergy_levels))
+        return synergies.distinct()
+
     @property
     def undone_demands(self):
         demands = self.received_demands.exclude(author=self)

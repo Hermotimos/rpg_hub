@@ -98,9 +98,15 @@ def percentage(value):
 
 
 @register.filter
-def get_max_skill_level(skill_levels_list):
+def get_max_skill_level_no(skill_levels_list):
     levels = [skill_lvl.level for skill_lvl in skill_levels_list]
     return max(levels)
+
+
+@register.filter
+def get_max_skill_level(skill_levels_list):
+    levels = [skill_lvl for skill_lvl in skill_levels_list]
+    return max(levels, key=lambda l: l.level)
 
 
 @register.filter
