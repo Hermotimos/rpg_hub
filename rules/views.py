@@ -24,7 +24,6 @@ from users.models import Profile
 @login_required
 def rules_main_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
-    
     context = {
         'current_profile': current_profile,
         'page_title': 'Zasady'
@@ -114,7 +113,6 @@ def rules_skills_list_view(request):
     
     if current_profile.can_view_all:
         skills = Skill.objects.filter(types__kinds__name="Powszechne")
-        
     else:
         skills = current_profile.allowed_skills.filter(types__kinds__name="Powszechne")
 
