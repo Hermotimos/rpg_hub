@@ -24,6 +24,7 @@
                     <th class="small-caps">Wyparowania</th>
                     <th class="small-caps">Wytrzymałość</th>
                     <th class="small-caps">Waga</th>
+                    <th class="small-caps">Specjalne</th>
                 </tr>
             </thead>
             <tbody class="align-center dark">
@@ -34,6 +35,7 @@
                         <td class="rules-green">{{ plate.parrying }}</td>
                         <td>{{ plate.endurance }}</td>
                         <td>{{ plate.weight.normalize }}</td>
+                        <td>{% if plate.comment %} {{ plate.comment }} {% endif %}</td>
                     </tr>
                     {% if plate.description %}
                         <tr id="{{ plate.short_name }}" class="collapse">

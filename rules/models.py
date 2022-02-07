@@ -606,10 +606,7 @@ class Plate(Model):
     parrying = PositiveSmallIntegerField(blank=True, null=True)
     endurance = PositiveSmallIntegerField()
     weight = DecimalField(max_digits=10, decimal_places=1)
-
-    # mod_max_agility = PositiveSmallIntegerField(blank=True, null=True)
-    # mod_max_movement = CharField(max_length=2, blank=True, null=True)
-
+    comment = TextField(max_length=200, blank=True, null=True)
     mod_pickpocketing = SmallIntegerField(blank=True, null=True)
     mod_lockpicking = SmallIntegerField(blank=True, null=True)
     mod_climbing = SmallIntegerField(blank=True, null=True)

@@ -265,9 +265,9 @@ class PlateAdmin(admin.ModelAdmin):
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
     }
-    list_display = ['name', 'description']
-    list_editable = ['description']
-    search_fields = ['name', 'description']
+    list_display = ['name', 'description', 'comment']
+    list_editable = ['description', 'comment']
+    search_fields = ['name', 'description', 'comment']
 
 
 class ShieldTypeAdmin(admin.ModelAdmin):
