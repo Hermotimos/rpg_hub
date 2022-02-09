@@ -210,15 +210,15 @@ def get_overload_ranges(vals: Tuple[int, int]) -> namedtuple:
     
 
 @login_required
-def rules_movement_view(request):
+def rules_fitness_and_tricks_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     load_infos = [get_overload_ranges(v) for v in LOAD_LIMITS]
     context = {
         'current_profile': current_profile,
-        'page_title': 'Przeciążenie, Wydolność i Ruch',
+        'page_title': 'Wydolność, Sprawności i Podstępy',
         'load_infos': load_infos,
     }
-    return render(request, 'rules/movement.html', context)
+    return render(request, 'rules/fitness_and_tricks.html', context)
 
 
 @login_required
