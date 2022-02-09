@@ -61,10 +61,14 @@
                 <!-- Pływanie -->
                 <tr>
                     <th  class="align-middle" nowrap="nowrap">
-                        <div class="my-1">Pływanie</div>
+                        <div class="my-1">Pływanie (x1)</div>
+                        <div class="my-1">Pływanie (x2)</div>
+                        <div class="my-1">Pływanie (x3)</div>
                     </th>
                     <td class="align-middle">
+                        <div class="my-1">1/6r</div>
                         <div class="my-1">1/1r</div>
+                        <div class="my-1">3/1r</div>
                     </td>
                     <td class="align-middle">
                         <div class="my-1">Niezdolność do dalszego Płynięcia - konieczność odpoczynku np. na plecach</div>
@@ -110,7 +114,7 @@
             Sprawności i Podstępy
         </h2>
         <p>
-            Pod pojęciem Sprawności i Podstępów należy rozumieć zdolności związane z ruchem (Bieganie, Pływanie i Wspinaczka), percepcją (Nasłuchiwanie i Wypatrywanie)
+            Pod pojęciem Sprawności i Podstępów należy rozumieć zdolności związane z ruchem (Bieganie, Pływanie, Bezdech i Wspinaczka), percepcją (Nasłuchiwanie i Wypatrywanie)
             oraz szereg zdolności typowych dla myśliwych, zwiadowców i różnej maści łotrów
             (Tropienie, Zacieranie śladów, Ukrycie, Skradanie, Mechanika pułapek, Otwieranie zamków, Kradzież kieszonkowa i Szulerka).
             Jest to kategoria niejednorodna pod względem rodzaju aktywności, jednak podlegająca tym samym zasadom testowania, Bonusów i Malusów.
@@ -120,7 +124,7 @@
             (np. Bieganie - SIŁ za Przyspieszenie, ale KON za bieg długodystansowy lub ZRC w przypadku zabawy w łapanego).
             Z tego względu przy opisie Malusów i Bonusów Zasady operują jedynie nazwami Sprawności, a nie konkretnymi Cechami.
             Rozmaite Umiejętności dostarczają Bonusów typu +2 Bieganie, +4 Wspinaczka, natomiast poszczególne typy zbroi wywołują Malusy, np. -20 Skradanie;
-            wszystkie tego rodzaju Modyfikatory mają charakter ogólny i stosują się przy każdym Teście, niezależnie od Cechy.
+            wszystkie tego rodzaju Modyfikatory mają charakter ogólny i stosują się przy każdym Teście Sprawności niezależnie od Cechy będącej jego podstawą w konkretnym przypadku.
         </p>
         <p>
             Omówienie poszczególnych Sprawności i Podstępów zawiera w niektórych przypadkach zasady, które mają zastosowanie również poza ich kontekstem,
@@ -209,12 +213,43 @@
 
         
         <h5 class="rules mt-4">
-            Pływanie, Bezdech i Nurkowanie
+            Pływanie, Nurkowanie i Bezdech
         </h5>
         <p>
-            ....
+            Postać, która umie pływać (Umiejętność "Pływanie") posiada również zdolność Nurkowania oraz Bezdechu,
+            przy czym ta druga może być wykorzystywana również w innych sytuacjach (np. wstrzymanie oddechu w chmurze trującego dymu).
+            Postacie niedysponujące Umiejętnością "Pływanie" mają zdolność Bezdechu o długości 10xKON sekund,
+            natomiast nie posiadają w ogóle możliwości Nurkowania; topią się w wodzie sięgającej powyżej ich głowy.
+            Głębokość Nurkowania oraz długość Bezdechu są określone szczegółowo w ramach Umiejętności "Pływanie",
+            natomiast ogólne zasady dotyczące ich testowania przedstawione są poniżej.
         </p>
-        
+        <p>
+            <b>Nurkowanie.</b>
+            Udany Test Pływania (KON) przy Nurkowaniu pozwala na osiągnięcie danej głębokości i przebywanie na niej w ramach zasad Bezdechu.
+            Nurkowanie na głębokość 10 metrów wiąże się z Testem o Poziomie Trudności Banalnym (16).
+            Każde kolejne 10 metrów wiąże się ze wzrostem Poziomu Trudności o 2.
+            Fiasko przy Nurkowaniu powoduje konieczność natychmiastowego wypłynięcia w pobliże powierzchni wody
+            (bez konieczności wynurzenia, jeśli nie wymagają tego zasady Bezdechu).
+        </p>
+        <p>
+            <b>Bezdech.</b>
+            Ze względu na to, że Bezdech może być używany poza kontekstem Pływania, stanowi on osobną Sprawność.
+            Podstawowa długość Bezdechu to 10xKON sekund.
+            Powyżej tego limitu każde dodatkowe 10 sekund wymaga Testu KON z kumulatywnym Malusem -3.
+            Fiasko Bezdechu powoduje konieczność zaczerpnięcia oddechu w ciągu 20 sekund, a po tym czasie - jego odruchowe, mimowolne zaczerpnięcie.
+            Jeśli Postać znajduje się nadal pod wodą albo w przestrzeni pozbawionej powietrza - po kolejnych 20 sekundach traci przytomność i umiera,
+            chyba że zostanie natychmiast wyciągnięta przez towarzysza na powierzchnię i umiejętnie reanimowana.
+        </p>
+        <p>
+            Pływanie posiada trzy tempa określone przez mnożniki x1, x2 i x3.
+        </p>
+        <p>
+            <mark>
+                TODO określić ile to.
+                Przykładowy wyczyn: 100km - 28h Kołobrzeg - Bornholm (to daje tempo 3,5 km/h ale bardzo długi dystans)
+                Przyjąć coś około Max tempo pływania 5 km/h przy dystansie max 40km
+            </mark>
+        </p>
         
         <h5 class="rules mt-4">
             Wspinaczka i Upadek
@@ -278,6 +313,7 @@
             </tbody>
         </table>
         <p>
+            <b>Upadek.</b>
             Upadek powoduje Obrażenia zależne od wysokości: 1k4 za każde rozpoczęte 2 metry.
             Obrażenia te mogą podlegać Wyparowaniom, np. dzięki zbroi.
             Ponadto, jeżeli upadek z wysokości odbywa się w sposób kontrolowany (np. Postać sama wykonała skok) lub przynajmniej nogami w dół,
