@@ -607,12 +607,18 @@ class Plate(Model):
     endurance = PositiveSmallIntegerField()
     weight = DecimalField(max_digits=10, decimal_places=1)
     comment = TextField(max_length=200, blank=True, null=True)
-    mod_pickpocketing = SmallIntegerField(blank=True, null=True)
-    mod_lockpicking = SmallIntegerField(blank=True, null=True)
+    mod_running = SmallIntegerField(blank=True, null=True)
+    mod_swimming = SmallIntegerField(blank=True, null=True)
     mod_climbing = SmallIntegerField(blank=True, null=True)
+    mod_listening = SmallIntegerField(blank=True, null=True)
+    mod_lookout = SmallIntegerField(blank=True, null=True)
+    mod_trailing = SmallIntegerField(blank=True, null=True)
     mod_sneaking = SmallIntegerField(blank=True, null=True)
     mod_hiding = SmallIntegerField(blank=True, null=True)
     mod_traps = SmallIntegerField(blank=True, null=True)
+    mod_lockpicking = SmallIntegerField(blank=True, null=True)
+    mod_pickpocketing = SmallIntegerField(blank=True, null=True)
+    mod_conning = SmallIntegerField(blank=True, null=True)
     allowed_profiles = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),

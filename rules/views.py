@@ -222,22 +222,6 @@ def rules_fitness_and_tricks_view(request):
 
 
 @login_required
-def rules_tricks_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
-    if current_profile.can_view_all:
-        plates = Plate.objects.all()
-    else:
-        plates = current_profile.allowed_plates.all()
-
-    context = {
-        'current_profile': current_profile,
-        'page_title': 'Podstępy',
-        'plates': plates,
-    }
-    return render(request, 'rules/tricks.html', context)
-
-
-@login_required
 def rules_weapons_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     

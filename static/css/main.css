@@ -169,6 +169,13 @@ small.smaller {font-size: 12px;}
 .icon-small {font-size: 0.6rem;}
 
 
+th.orientation-rl-tb {
+    writing-mode: vertical-rl;
+    transform:scale(-1);
+    vertical-align: top !important;
+}
+
+
 /*****************************************************************************/
 /********************************* IMAGES ***********************************/
 /*****************************************************************************/

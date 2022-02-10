@@ -59,8 +59,9 @@
             </tbody>
         </table>
 
-        <br><br>
-        <h5><b>Wyparowania i Wytrzymałość zbroi</b></h5>
+        <h5 class="rules mt-4">
+            Wyparowania i Wytrzymałość zbroi
+        </h5>
         <p>
             Oprócz poprawy Klasy Pancerza (KP) każda zbroja posiada współczynnik Wyparowań, który decyduje o tym, ile Obrażeń ulegnie wyhamowaniu i zamiast zranić Postać - uszkodzi jej pancerz.
             Pozwala to na uchronienie się przed częścią, a czasem nawet całością Obrażeń.
@@ -80,8 +81,9 @@
             ostatecznie więc Kolczuga pozwala na wyparowanie 3 – 2 = 1 OBR; w efekcie Kolczuga otrzymuje -1 Wytrzymałości, a Postać -9 Życia.
         </p>
         
-        <br>
-        <h5><b>Ograniczenia wynikające z noszenia zbroi</b></h5>
+        <h5 class="rules mt-4">
+            Ograniczenia wynikające z noszenia zbroi
+        </h5>
         <p>
             Zbroja w znaczący sposób zmniejsza płynność ruchów Postaci,
             co w przypadku cięższych typów zbroi powoduje ograniczenie premii czerpanych ze ZRC oraz możliwości prędkiego poruszania.
@@ -95,26 +97,38 @@
         </p>
         <table class="table table-sm mt-3 plate-tricks-table rules-table striped-2n">
             <thead class="align-center">
-                <tr class="border-bottom-dark">
+                <tr class="border-bottom-dark orientation-rl-tb">
                     <th class="align-left">ZBROJA</th>
-                    <th>Kradzież<br>kieszonkowa</th>
-                    <th>Otwieranie<br>zamków</th>
-                    <th>Skradanie</th>
-                    <th>Ukrycie</th>
-                    <th>Wspinaczka</th>
-                    <th>Wykrywanie i<br>rozbrajanie<br>pułapek</th>
+                    <th class="orientation-rl-tb">Bieganie</th>
+                    <th class="orientation-rl-tb">Pływanie</th>
+                    <th class="orientation-rl-tb">Wspinaczka</th>
+                    <th class="orientation-rl-tb">Nasłuchiwanie</th>
+                    <th class="orientation-rl-tb">Wypatrywanie</th>
+                    <th class="orientation-rl-tb">Tropienie/zacieranie śladów</th>
+                    <th class="orientation-rl-tb">Skradanie</th>
+                    <th class="orientation-rl-tb">Ukrywanie</th>
+                    <th class="orientation-rl-tb">Pułapki</th>
+                    <th class="orientation-rl-tb">Otwieranie zamków</th>
+                    <th class="orientation-rl-tb">Kradzież kieszonkowa</th>
+                    <th class="orientation-rl-tb">Szulerka</th>
                 </tr>
             </thead>
             <tbody class="align-center">
                 {% for plate in plates %}
                     <tr>
                         <td class="align-left">{{ plate.name }}</td>
-                        <td class="rules-red">{% if plate.mod_pickpocketing %} {{ plate.mod_pickpocketing }} {% endif %}</td>
-                        <td class="rules-red">{% if plate.mod_lockpicking %} {{ plate.mod_lockpicking }} {% endif %}</td>
+                        <td class="rules-red">{% if plate.mod_running %} {{ plate.mod_running }} {% endif %}</td>
+                        <td class="rules-red">{% if plate.mod_swimming %} {{ plate.mod_swimming }} {% endif %}</td>
+                        <td class="rules-red">{% if plate.mod_climbing %} {{ plate.mod_climbing }} {% endif %}</td>
+                        <td class="rules-red">{% if plate.mod_listening %} {{ plate.mod_listening }} {% endif %}</td>
+                        <td class="rules-red">{% if plate.mod_lookout %} {{ plate.mod_lookout }} {% endif %}</td>
+                        <td class="rules-red">{% if plate.mod_trailing %} {{ plate.mod_trailing }} {% endif %}</td>
                         <td class="rules-red">{% if plate.mod_sneaking %} {{ plate.mod_sneaking }} {% endif %}</td>
                         <td class="rules-red">{% if plate.mod_hiding %} {{ plate.mod_hiding }} {% endif %}</td>
-                        <td class="rules-red">{% if plate.mod_climbing %} {{ plate.mod_climbing }} {% endif %}</td>
                         <td class="rules-red">{% if plate.mod_traps %} {{ plate.mod_traps }} {% endif %}</td>
+                        <td class="rules-red">{% if plate.mod_lockpicking %} {{ plate.mod_lockpicking }} {% endif %}</td>
+                        <td class="rules-red">{% if plate.mod_pickpocketing %} {{ plate.mod_pickpocketing }} {% endif %}</td>
+                        <td class="rules-red">{% if plate.mod_conning %} {{ plate.mod_conning }} {% endif %}</td>
                     </tr>
                 {% endfor %}
             </tbody>
