@@ -163,16 +163,6 @@ def rules_traits_view(request):
     return render(request, 'rules/traits.html', context)
 
 
-@login_required
-def rules_tests_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
-    context = {
-        'current_profile': current_profile,
-        'page_title': 'Testy Cech',
-    }
-    return render(request, 'rules/tests.html', context)
-
-
 LOAD_LIMITS = [
     [0, 3],
     [2, 6],
@@ -207,16 +197,26 @@ def get_overload_ranges(vals: Tuple[int, int]) -> namedtuple:
         'LoadInfo',
         ['load_regular', 'load_max', 'overload_1', 'overload_2', 'overload_3'])
     return LoadInfo(load_regular, load_max, overload_1, overload_2, overload_3)
-    
+
 
 @login_required
-def rules_fitness_and_tricks_view(request):
+def rules_tests_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     load_infos = [get_overload_ranges(v) for v in LOAD_LIMITS]
     context = {
         'current_profile': current_profile,
-        'page_title': 'Wydolność, Sprawności i Podstępy',
+        'page_title': 'Testy Cech',
         'load_infos': load_infos,
+    }
+    return render(request, 'rules/tests.html', context)
+
+
+@login_required
+def rules_fitness_and_tricks_view(request):
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    context = {
+        'current_profile': current_profile,
+        'page_title': 'Wydolność, Sprawności i Podstępy',
     }
     return render(request, 'rules/fitness_and_tricks.html', context)
 
