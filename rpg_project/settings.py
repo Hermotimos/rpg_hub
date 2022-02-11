@@ -58,9 +58,11 @@ INSTALLED_APPS = [
     'chronicles',
     'communications',
     'contact',
-    # TODO 'debates' unused, code is commented out - cannot del before squash migrations
+    
+    # TODO 'debates' unused, code is commented out - cannot del before squash migrations (at least 0001_initial is referrenced)
     'debates',
-    'development',
+    # 'development',
+    
     'equipment',
     'home',
     'imaginarion',
