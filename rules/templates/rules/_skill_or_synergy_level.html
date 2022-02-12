@@ -17,7 +17,14 @@
         {% for perk in skill_or_synergy_level.perks.all %}
             <div class="mb-1 {% if skill_or_synergy_level.description %} mt-1 {% endif %}">
                 <div class="font-weight-bold">
-                    ✧ {{ perk.name|trim_nums }}
+                    {% if current_profile.status == 'gm' %}
+                        <a class="" href="{% url 'admin:rules_perk_change' perk.id %}" target="_blank"
+                           data-toggle="tooltip" data-placement="right" title="Edytuj Atut">
+                            ✧ {{ perk.name|trim_nums }}
+                        </a>
+                    {% else %}
+                        ✧ {{ perk.name|trim_nums }}
+                    {% endif %}
                     {% if perk.cost %}
                         <span class="small text-danger border-top-dotted">
                             [{{ perk.cost }}]
