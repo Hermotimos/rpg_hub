@@ -76,6 +76,7 @@ def prosoponomikon_character_for_gm_view(request, character_id):
     
     # NPCs: Default skills and kn_packets etc. as per CharacterGroup
     if character.profile.status == 'npc':
+        synergies = []
         skills = []
         knowledge_packets = []
         for character_group in character.character_groups.all():
@@ -87,6 +88,19 @@ def prosoponomikon_character_for_gm_view(request, character_id):
     # Players: Own skills and kn_packets etc. of a Player
     else:
         skills = character.profile.skills_acquired_with_skill_levels()
+        skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__conditions')
+        skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__combat_types')
+        skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__modifier__factor')
+        skills = skills.prefetch_related('skill_levels__perks__comments')
+        skills = skills.distinct()
+        
+        synergies = character.profile.synergies_acquired_with_synergies_levels()
+        synergies = synergies.prefetch_related('synergy_levels__perks__conditional_modifiers__conditions')
+        synergies = synergies.prefetch_related('synergy_levels__perks__conditional_modifiers__combat_types')
+        synergies = synergies.prefetch_related('synergy_levels__perks__conditional_modifiers__modifier__factor')
+        synergies = synergies.prefetch_related('synergy_levels__perks__comments')
+        synergies = synergies.distinct()
+        
         knowledge_packets = character.profile.knowledge_packets.order_by('title')
         knowledge_packets = knowledge_packets.prefetch_related('picture_sets__pictures')
  
@@ -99,6 +113,7 @@ def prosoponomikon_character_for_gm_view(request, character_id):
         'page_title': character,
         'character': character,
         'skills': skills,
+        'synergies': synergies,
         'known_characters': known_characters,
         'knowledge_packets': knowledge_packets,
     }
@@ -139,7 +154,7 @@ def prosoponomikon_character_for_player_view(request, character_id):
     
     # Player viewing other Characters
     else:
-        skills, knowledge_packets, known_characters = [], [], []
+        skills, knowledge_packets, known_characters, synergies = [], [], [], []
 
     # INFORM FORM
     if request.method == 'POST':
