@@ -15,4 +15,5 @@ urlpatterns = [
     path('todos/', views.todos_view, name='todos'),
     path('backup-db/', views.backup_db_view, name='backup-db'),
     path('download-db/', views.download_db, name='download-db'),
+    path('allow-game-masters-to-all/', views.allow_game_masters_to_all, name='allow-game-masters-to-all'),
 ]

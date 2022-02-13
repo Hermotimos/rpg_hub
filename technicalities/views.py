@@ -21,6 +21,8 @@ from rules.models import (
     EliteKlass,
     WeaponType,
     Weapon,
+    Plate,
+    Shield,
 )
 from toponomikon.models import Location
 from users.models import Profile
@@ -82,6 +84,25 @@ def download_db(request):
     response['Content-Disposition'] = 'attachment; filename=db.sqlite3'
     response['Content-Length'] = db_file.size
     return response
+
+
+@login_required
+@only_game_masters
+def allow_game_masters_to_all(request):
+    models = [
+        Skill, Synergy, Klass, EliteProfession, EliteKlass, Weapon, Plate,
+        Shield,
+    ]
+    for Model in models:
+        print(f"Processing Model: {Model}")
+        for obj in Model.objects.all():
+            obj.allowed_profiles.add(*Profile.objects.filter(status="gm"))
+            obj.save()
+
+    messages.info(
+        request,
+        f"Udostępniono Mistrzom Gry obiekty z następujących Modeli: {models}")
+    return redirect('technicalities:reload-main')
 
 
 # ============================================================================
