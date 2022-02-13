@@ -1,5 +1,4 @@
 from collections import namedtuple
-from math import floor
 from typing import Tuple
 
 from django.shortcuts import render
@@ -34,13 +33,11 @@ def rules_main_view(request):
 @login_required
 def rules_armor_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
-    if current_profile.can_view_all:
-        plates = Plate.objects.all()
-        shields = Shield.objects.all()
-    else:
-        plates = current_profile.allowed_plates.all()
-        shields = current_profile.allowed_shields.all()
-
+    user_profiles = current_profile.user.profiles.all()
+    
+    plates = Plate.objects.filter(allowed_profiles__in=user_profiles)
+    shields = Shield.objects.filter(allowed_profiles__in=user_profiles)
+    
     context = {
         'current_profile': current_profile,
         'page_title': 'Pancerz',
@@ -73,20 +70,15 @@ def rules_combat_view(request):
 @login_required
 def rules_professions_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
-    if current_profile.can_view_all:
-        professions = Profession.objects.all().prefetch_related('klasses')
-        elite_professions = EliteProfession.objects.all().prefetch_related('elite_klasses')
-    else:
-        klasses = Klass.objects.filter(allowed_profiles=current_profile)
-        professions = Profession.objects\
-            .filter(klasses__allowed_profiles=current_profile)\
-            .distinct()\
-            .prefetch_related(Prefetch('klasses', queryset=klasses))
+    user_profiles = current_profile.user.profiles.all()
 
-        elite_klasses = EliteKlass.objects.filter(allowed_profiles=current_profile)
-        elite_professions = EliteProfession.objects\
-            .filter(allowed_profiles=current_profile)\
-            .prefetch_related(Prefetch('elite_klasses', queryset=elite_klasses))
+    klasses = Klass.objects.filter(allowed_profiles__in=user_profiles).distinct()
+    professions = Profession.objects.filter(klasses__allowed_profiles__in=user_profiles)
+    professions = professions.prefetch_related(Prefetch('klasses', queryset=klasses)).distinct()
+
+    elite_klasses = EliteKlass.objects.filter(allowed_profiles__in=user_profiles).distinct()
+    elite_professions = EliteProfession.objects.filter(allowed_profiles__in=user_profiles)
+    elite_professions = elite_professions.prefetch_related(Prefetch('elite_klasses', queryset=elite_klasses)).distinct()
 
     context = {
         'current_profile': current_profile,
@@ -110,18 +102,16 @@ def rules_skills_view(request):
 @login_required
 def rules_skills_list_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
-    
-    if current_profile.can_view_all:
-        skills = Skill.objects.filter(types__kinds__name="Powszechne")
-    else:
-        skills = current_profile.allowed_skills.filter(types__kinds__name="Powszechne")
+    user_profiles = current_profile.user.profiles.all()
 
-    skills = skills.select_related('group__type')
-    skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__conditions')
-    skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__combat_types')
-    skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__modifier__factor')
-    skills = skills.prefetch_related('skill_levels__perks__comments')
-    skills = skills.distinct()
+    skills = Skill.objects.filter(allowed_profiles__in=user_profiles, types__kinds__name="Powszechne")
+    skills = skills.select_related('group__type').distinct()
+    skills = skills.prefetch_related(
+        'skill_levels__perks__conditional_modifiers__conditions',
+        'skill_levels__perks__conditional_modifiers__combat_types',
+        'skill_levels__perks__conditional_modifiers__modifier__factor',
+        'skill_levels__perks__comments',
+    )
     
     skill_types = SkillType.objects.filter(kinds__name='Powszechne')
     skill_types = skill_types.prefetch_related(Prefetch('skills', queryset=skills), 'skill_groups')
@@ -139,12 +129,17 @@ def rules_skills_list_view(request):
 @login_required
 def rules_synergies_list_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
-    
-    if current_profile.can_view_all:
-        synergies = Synergy.objects.prefetch_related('skills', 'synergy_levels')
-    else:
-        synergies = current_profile.allowed_synergies.prefetch_related('skills', 'synergy_levels')
-        
+    user_profiles = current_profile.user.profiles.all()
+
+    synergies = Synergy.objects.filter(allowed_profiles__in=user_profiles)
+    synergies = synergies.prefetch_related(
+        'skills',
+        'synergy_levels__perks__conditional_modifiers__conditions',
+        'synergy_levels__perks__conditional_modifiers__combat_types',
+        'synergy_levels__perks__conditional_modifiers__modifier__factor',
+        'synergy_levels__perks__comments',
+    )
+
     context = {
         'current_profile': current_profile,
         'page_title': 'Lista Synergii',
@@ -224,18 +219,12 @@ def rules_fitness_and_tricks_view(request):
 @login_required
 def rules_weapons_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
+    user_profiles = current_profile.user.profiles.all()
     
-    if current_profile.can_view_all:
-        weapon_types = WeaponType.objects.all()
-        weapons = Weapon.objects.all()
-    else:
-        weapons = current_profile.allowed_weapons.all()
-        weapon_types = WeaponType.objects.filter(
-            weapons__allowed_profiles=current_profile).distinct()
-    
+    weapons = Weapon.objects.filter(allowed_profiles__in=user_profiles).distinct()
     weapons = weapons.prefetch_related('picture_sets__pictures')
-    weapon_types = weapon_types.prefetch_related(
-        Prefetch('weapons', queryset=weapons))
+    weapon_types = WeaponType.objects.filter(weapons__allowed_profiles__in=user_profiles).distinct()
+    weapon_types = weapon_types.prefetch_related(Prefetch('weapons', queryset=weapons))
     
     context = {
         'current_profile': current_profile,
