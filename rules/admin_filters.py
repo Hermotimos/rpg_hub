@@ -1,9 +1,9 @@
 from django.contrib import admin
-from django.utils.translation import ugettext_lazy
+from django.utils.translation import gettext_lazy
 
 
 class SkillLevelFilter(admin.SimpleListFilter):
-    title = ugettext_lazy('skill__name')
+    title = gettext_lazy('skill__name')
     parameter_name = 'skill__name'
 
     def lookups(self, request, model_admin):
@@ -19,7 +19,7 @@ class SkillLevelFilter(admin.SimpleListFilter):
 
 
 class SynergyLevelFilter(admin.SimpleListFilter):
-    title = ugettext_lazy('synergy__name')
+    title = gettext_lazy('synergy__name')
     parameter_name = 'synergy__name'
 
     def lookups(self, request, model_admin):
