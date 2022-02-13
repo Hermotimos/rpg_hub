@@ -211,23 +211,22 @@ def reload_perks(request):
     for perk in Perk.objects.all():
         conditional_modifiers = perk.conditional_modifiers.all()
         bonuses = []
-        
-        print(conditional_modifiers, '|||', perk.bonuses.all())
-        # for conditional_modifier in conditional_modifiers:
-        #     modifier = conditional_modifier.modifier
-        #     conditions = conditional_modifier.conditions.all()
-        #     combat_types = conditional_modifier.combat_types.all()
-        #
-        #     # print(conditional_modifier._meta.fields)
-        #     bonus, created = Bonus.objects.get_or_create(modifier=modifier)
-        #     if created:
-        #         bonus.conditions.set(conditions)
-        #         bonus.combat_types.set(combat_types)
-        #         bonus.save()
-        #     bonuses.append(bonus)
-        #
-        # perk.bonuses.set(bonuses)
-        # perk.save()
+        # print(conditional_modifiers, '|||', perk.bonuses.all())
+        for conditional_modifier in conditional_modifiers:
+            modifier = conditional_modifier.modifier
+            conditions = conditional_modifier.conditions.all()
+            combat_types = conditional_modifier.combat_types.all()
+            
+            # print(conditional_modifier._meta.fields)
+            bonus, created = Bonus.objects.get_or_create(modifier=modifier)
+            if created:
+                bonus.conditions.set(conditions)
+                bonus.combat_types.set(combat_types)
+                bonus.save()
+            bonuses.append(bonus)
+
+        perk.bonuses.set(bonuses)
+        perk.save()
         
     messages.info(request, 'DONE!')
     return redirect('technicalities:reload-main')
