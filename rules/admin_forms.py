@@ -13,11 +13,11 @@ class PerkAdminForm(forms.ModelForm):
         model = Perk
         fields = ['name', 'description',
                   # 'modifiers',
-                  'bonuses', 'cost', 'comments']
+                  'conditional_modifiers', 'cost', 'comments']
         widgets = {
             # 'modifiers': FilteredSelectMultiple('Modifiers', False),
             'comments': FilteredSelectMultiple('Comments', False),
-            'bonuses': FilteredSelectMultiple('Bonuses', False),
+            'conditional_modifiers': FilteredSelectMultiple('Conditional Modifiers', False),
         }
         
 

@@ -13,7 +13,7 @@ from rules.admin_forms import (
 from rules.models import (
     SkillGroup, SkillKind, SkillType,
     Skill, SkillLevel, Synergy, SynergyLevel, BooksSkill, TheologySkill,
-    Perk, Modifier, Factor, RulesComment, Condition, ConditionalModifier, CombatType, Bonus,
+    Perk, Modifier, Factor, RulesComment, Condition, CombatType, ConditionalModifier,
     Profession, EliteProfession, Klass, EliteKlass,
     WeaponType, Weapon, Plate, Shield,
 )
@@ -31,14 +31,8 @@ class ConditionalModifierInline(admin.TabularInline):
     model = ConditionalModifier
     extra = 3
     
-
-class BonusInline(admin.TabularInline):
-    model = Bonus
-    extra = 3
-    
     
 class ModifierAdmin(admin.ModelAdmin):
-    inlines = [ConditionalModifierInline]
     list_display = ['id', 'sign', 'value_number', 'value_percent', 'value_text', 'factor']
     list_editable = ['sign', 'value_number', 'value_percent', 'value_text', 'factor']
     list_select_related = ['factor']
@@ -50,21 +44,21 @@ class ModifierAdmin(admin.ModelAdmin):
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
 
 
-class BonusAdmin(admin.ModelAdmin):
-    list_display = ['modifier']
-    list_select_related = ['modifier__factor']
-
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        fields = [
-            'conditions',
-            'combat_types',
-        ]
-        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        qs = qs.prefetch_related('conditions', 'combat_types')
-        return qs
+# class BonusAdmin(admin.ModelAdmin):
+#     list_display = ['modifier']
+#     list_select_related = ['modifier__factor']
+#
+#     def formfield_for_dbfield(self, db_field, **kwargs):
+#         fields = [
+#             'conditions',
+#             'combat_types',
+#         ]
+#         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+#
+#     def get_queryset(self, request):
+#         qs = super().get_queryset(request)
+#         qs = qs.prefetch_related('conditions', 'combat_types')
+#         return qs
 
 
 class RulesCommentAdmin(admin.ModelAdmin):
@@ -79,8 +73,8 @@ class PerkAdmin(admin.ModelAdmin):
     
     def formfield_for_dbfield(self, db_field, **kwargs):
         fields = [
-            # 'bonuses__conditions',
-            # 'bonuses__combat_types',
+            # 'conditional_modifiers__conditions',
+            # 'conditional_modifiers__combat_types',
             'comments',
             # 'modifiers',
         ]
@@ -93,8 +87,7 @@ class ConditionAdmin(admin.ModelAdmin):
 
 
 class ConditionalModifierAdmin(admin.ModelAdmin):
-    list_display = ['id', 'perk', 'modifier']
-    list_editable = ['perk', 'modifier']
+    list_display = ['id', 'modifier']
 
 
 class CombatTypeAdmin(admin.ModelAdmin):
@@ -320,7 +313,6 @@ admin.site.register(Perk, PerkAdmin)
 admin.site.register(RulesComment, RulesCommentAdmin)
 admin.site.register(Condition, ConditionAdmin)
 admin.site.register(ConditionalModifier, ConditionalModifierAdmin)
-admin.site.register(Bonus, BonusAdmin)
 admin.site.register(CombatType, CombatTypeAdmin)
 
 admin.site.register(SkillType, SkillTypeAdmin)

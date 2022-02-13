@@ -38,10 +38,10 @@
                 {% endif %}
                 <ul class="ml-4 mb-0 pl-1 bullets-5">
                     
-                    {% for bonus in perk.bonuses.all %}
+                    {% for conditional_modifier in perk.conditional_modifiers.all %}
                         <li class="pl-1">
-                            {{ bonus|color_brackets:"text-info" }}
-                            {% for combat_type in bonus.combat_types.all %}
+                            {{ conditional_modifier|color_brackets:"text-info" }}
+                            {% for combat_type in conditional_modifiers.combat_types.all %}
                                 {% if combat_type.name == 'Walka w zwarciu' %}
                                     <i class="ra ra-crossed-axes"></i>
                                 {% elif combat_type.name == 'Walka dystansowa' %}
