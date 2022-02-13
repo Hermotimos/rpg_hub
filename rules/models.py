@@ -81,22 +81,6 @@ class RulesComment(Model):
     class Meta:
         ordering = ['text']
         
-        
-class Perk(Model):
-    """A class describing a special ability of an item or a skill level."""
-    name = CharField(max_length=50, unique=True)
-    description = TextField(max_length=4000, blank=True, null=True)
-    modifiers = M2M(to=Modifier, through="ConditionalModifier", related_name='perks', blank=True)
-    cost = TextField(max_length=1000, blank=True, null=True)
-    comments = M2M(to=RulesComment, related_name='perks', blank=True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        ordering = ['name', 'description']
-
-
 class Condition(Model):
     """A model for specifying Modifier usage conditions."""
     text = CharField(max_length=200, unique=True)
@@ -117,6 +101,38 @@ class CombatType(Model):
 
     class Meta:
         ordering = ['name']
+
+
+class Bonus(Model):
+    """An intermediary model to store info when a Perk's Modifier applies."""
+    modifier = FK(to=Modifier, related_name="bonuses", on_delete=CASCADE)
+    conditions = M2M(to=Condition, related_name="bonuses", blank=True)
+    combat_types = M2M(to=CombatType, related_name="bonuses", blank=True)
+
+    def __str__(self):
+        conditions = ""
+        if self.conditions.exists():
+            conditions = f" [{' | '.join([str(condition) for condition in self.conditions.all()])}]"
+        return f"{self.modifier}{conditions}"
+
+    class Meta:
+        ordering = ['modifier']
+
+
+class Perk(Model):
+    """A class describing a special ability of an item or a skill level."""
+    name = CharField(max_length=50, unique=True)
+    description = TextField(max_length=4000, blank=True, null=True)
+    modifiers = M2M(to=Modifier, through="ConditionalModifier", related_name='perks', blank=True)
+    bonuses = M2M(to=Bonus, related_name='perks', blank=True)
+    cost = TextField(max_length=1000, blank=True, null=True)
+    comments = M2M(to=RulesComment, related_name='perks', blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name', 'description']
 
 
 class ConditionalModifier(Model):
@@ -542,6 +558,7 @@ class Weapon(Model):
     weapon_type = FK(to=WeaponType, related_name='weapons', on_delete=PROTECT)
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
+    # modifiers = M2M(to=Modifier, through="ConditionalModifier", related_name='weapons', blank=True)
     picture_sets = M2M(to=PictureSet, related_name='weapons', blank=True)
     
     # -------------------# TODO marked for removal [in 2023]-------------------

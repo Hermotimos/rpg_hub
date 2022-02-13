@@ -3,13 +3,20 @@
 {% block content %}
 <br><br><br>
 
-    <h4>Kronika i Kalendarium:</h4>
+    <h4>WYPOSAŻENIE MG:</h4>
     <small>
         Udostępnia MG wszystkie obiekty z modeli: Skill, Synergy, Klass, EliteProfession, EliteKlass, Weapon, Plate, Shield
     </small>
     <br>
     <a href="{% url 'technicalities:allow-game-masters-to-all' %}">Udostępnij wszystkie obiekty z Zasad wszystkim Mistrzom Gry</a><br>
     <br><br>
+
+    <h4>Content Types:</h4>
+    <small>Usuwa obiekty modelu ContentType, które nie posiadają atrybutu model_class()</small>
+    <br>
+    <a href="{% url 'technicalities:refresh-contenttypes' %}">PRZEŁADUJ</a><br>
+    <br><br>
+
 
     <p>----------------------------------------------------------------------</p>
 
@@ -44,10 +51,10 @@
     <a href="{% url 'technicalities:reload-toponomikon' %}">PRZEŁADUJ</a><br>
     <br><br>
 
-    <h4>Content Types:</h4>
-    <small>Usuwa obiekty modelu ContentType, które nie posiadają atrybutu model_class()</small>
+    <h4>Perks:</h4>
+    <small>XXXXXXXXXXXXXXXX</small>
     <br>
-    <a href="{% url 'technicalities:refresh-contenttypes' %}">PRZEŁADUJ</a><br>
+    <a href="{% url 'technicalities:reload-perks' %}">PRZEŁADUJ</a><br>
     <br><br>
 
 {% endblock content %}

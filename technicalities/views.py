@@ -105,6 +105,21 @@ def allow_game_masters_to_all(request):
     return redirect('technicalities:reload-main')
 
 
+@login_required
+@only_game_masters
+def refresh_content_types(request):
+    """Remove stale content types."""
+    deleted = []
+    for c in ContentType.objects.all():
+        if not c.model_class():
+            deleted.append(c.__dict__)
+            c.delete()
+    deleted = "<br>".join([str(dict_) for dict_ in deleted]) if deleted else 0
+    messages.info(request, mark_safe(f"Usunięto content types:\n{deleted}"))
+    return redirect('technicalities:reload-main')
+
+
+
 # ============================================================================
 
 
@@ -191,15 +206,30 @@ def reload_toponomikon(request):
 
 @login_required
 @only_game_masters
-def refresh_content_types(request):
-    """Remove stale content types."""
-    deleted = []
-    for c in ContentType.objects.all():
-        if not c.model_class():
-            deleted.append(c.__dict__)
-            c.delete()
-    deleted = "<br>".join([str(dict_) for dict_ in deleted]) if deleted else 0
-    messages.info(request, mark_safe(f"Usunięto content types:\n{deleted}"))
+def reload_perks(request):
+    from rules.models import Perk, Bonus, Modifier
+    for perk in Perk.objects.all():
+        conditional_modifiers = perk.conditional_modifiers.all()
+        bonuses = []
+        
+        print(conditional_modifiers, '|||', perk.bonuses.all())
+        # for conditional_modifier in conditional_modifiers:
+        #     modifier = conditional_modifier.modifier
+        #     conditions = conditional_modifier.conditions.all()
+        #     combat_types = conditional_modifier.combat_types.all()
+        #
+        #     # print(conditional_modifier._meta.fields)
+        #     bonus, created = Bonus.objects.get_or_create(modifier=modifier)
+        #     if created:
+        #         bonus.conditions.set(conditions)
+        #         bonus.combat_types.set(combat_types)
+        #         bonus.save()
+        #     bonuses.append(bonus)
+        #
+        # perk.bonuses.set(bonuses)
+        # perk.save()
+        
+    messages.info(request, 'DONE!')
     return redirect('technicalities:reload-main')
 
 
