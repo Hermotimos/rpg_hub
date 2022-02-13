@@ -44,23 +44,6 @@ class ModifierAdmin(admin.ModelAdmin):
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
 
 
-# class BonusAdmin(admin.ModelAdmin):
-#     list_display = ['modifier']
-#     list_select_related = ['modifier__factor']
-#
-#     def formfield_for_dbfield(self, db_field, **kwargs):
-#         fields = [
-#             'conditions',
-#             'combat_types',
-#         ]
-#         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-#
-#     def get_queryset(self, request):
-#         qs = super().get_queryset(request)
-#         qs = qs.prefetch_related('conditions', 'combat_types')
-#         return qs
-
-
 class RulesCommentAdmin(admin.ModelAdmin):
     list_display = ['id', 'text']
     list_editable = ['text']
@@ -71,15 +54,8 @@ class PerkAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'description', 'cost']
     list_editable = ['name', 'description', 'cost']
     
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        fields = [
-            # 'conditional_modifiers__conditions',
-            # 'conditional_modifiers__combat_types',
-            'comments',
-            # 'modifiers',
-        ]
-        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-
+    # TODO optimize this admin
+    
 
 class ConditionAdmin(admin.ModelAdmin):
     list_display = ['id', 'text']
@@ -139,6 +115,12 @@ class SkillAdmin(admin.ModelAdmin):
     list_select_related = ['group__type']
     search_fields = ['name']
     
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        fields = [
+            'group',
+        ]
+        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+
 
 class SynergyAdmin(admin.ModelAdmin):
     form = SynergyAdminForm

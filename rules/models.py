@@ -105,7 +105,6 @@ class CombatType(Model):
 
 
 class ConditionalModifier(Model):
-    """An intermediary model to store info when a Perk's Modifier applies."""
     modifier = FK(to=Modifier, related_name="conditional_modifiers", on_delete=CASCADE)
     conditions = M2M(to=Condition, related_name="conditional_modifiers", blank=True)
     combat_types = M2M(to=CombatType, related_name="conditional_modifiers", blank=True)
@@ -133,23 +132,6 @@ class Perk(Model):
 
     class Meta:
         ordering = ['name', 'description']
-
-#
-# class ConditionalModifier(Model):
-#     """An intermediary model to store info when a Perk's Modifier applies."""
-#     perk = FK(to=Perk, related_name="conditional_modifiers", on_delete=CASCADE)
-#     modifier = FK(to=Modifier, related_name="conditional_modifiers", on_delete=CASCADE)
-#     conditions = M2M(to=Condition, related_name="conditional_modifiers", blank=True)
-#     combat_types = M2M(to=CombatType, related_name="conditional_modifiers", blank=True)
-#
-#     def __str__(self):
-#         conditions = ""
-#         if self.conditions.exists():
-#             conditions = f" [{' | '.join([str(condition) for condition in self.conditions.all()])}]"
-#         return f"{self.modifier}{conditions}"
-#
-#     class Meta:
-#         ordering = ['modifier']
 
 
 # =============================================================================
