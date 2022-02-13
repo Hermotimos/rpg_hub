@@ -84,17 +84,34 @@ def thread_inform(current_profile, request, thread, tag_title):
     return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
 
 
-@login_required
-def threads_view(request, thread_kind, tag_title):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
-
-    threads = Thread.objects.filter(known_directly=current_profile, kind=thread_kind)
+def get_threads(current_profile, thread_kind):
+    """Get threads with prefetched related objects. Filter threads depending
+    whether it's a per-profile or per-user ThreadKind.
+    """
+    per_profile = ["Debate", "Plan"]
+    per_user = ["Announcement", "Demand"]
+    if thread_kind in per_profile:
+        threads = Thread.objects.filter(known_directly=current_profile, kind=thread_kind)
+    elif thread_kind in per_user:
+        threads = Thread.objects.filter(known_directly__in=current_profile.user.profiles.all(), kind=thread_kind)
+    else:
+        raise ValueError("Podany thread_kind nie występuje!")
+    
     threads = threads.prefetch_related(
         'statements__author',
         'tags__author',
         'events__game',
         'known_directly',
-        'followers')
+        'followers',
+    )
+    return threads
+
+
+@login_required
+def threads_view(request, thread_kind, tag_title):
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+
+    threads = get_threads(current_profile, thread_kind)
     if tag_title != 'None':
         threads = threads.filter(tags__title=tag_title)
         
@@ -108,6 +125,7 @@ def threads_view(request, thread_kind, tag_title):
         page_title = "TODO"
         unseen = Thread.objects.none()
 
+    # Annotate threads with attribute 'initiator_image_url'
     threads = threads.exclude(id__in=unseen)
     for thread in threads:
         thread.initiator_image_url = get_initiator_image_url(thread)

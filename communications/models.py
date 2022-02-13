@@ -63,14 +63,12 @@ class Thread(Model):
     title = CharField(max_length=100, unique=True)
     kind = CharField(max_length=15, choices=THREAD_KINDS)
     known_directly = M2M(to=Profile, related_name='threads_known_directly')     # known_directly also use instead of inform_gm in Plans
-    created_at = DateTimeField(auto_now_add=True)
-    # Announcement
     followers = M2M(to=Profile, related_name='threads_followed', blank=True)
     tags = M2M(to=ThreadTag, related_name='threads', blank=True)
-    # Debate
     is_ended = BooleanField(default=False)                                      # also Demands instead of is_done
     is_exclusive = BooleanField(default=False)
-    
+    created_at = DateTimeField(auto_now_add=True)
+
     class Meta:
         ordering = ['created_at']
     
