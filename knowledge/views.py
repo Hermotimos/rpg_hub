@@ -34,7 +34,7 @@ def custom_sort(skills_qs):
 
 @login_required
 def knowledge_packets_in_skills_view(request, model_name):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     skill_model = apps.get_app_config('rules').get_model(model_name)
     skills = skill_model.objects.all()
     
@@ -44,12 +44,12 @@ def knowledge_packets_in_skills_view(request, model_name):
     elif skill_model == Skill:
         page_title = 'Almanach'
     
-    # Filter skills queryset according to profile's permissions
+    # Filter skills queryset according to current_profile's permissions
     kn_packets = KnowledgePacket.objects.all()
     skill_levels = SkillLevel.objects.all()
-    if not profile.can_view_all:
-        kn_packets = kn_packets.filter(acquired_by=profile)
-        skill_levels = skill_levels.filter(acquired_by=profile)
+    if not current_profile.can_view_all:
+        kn_packets = kn_packets.filter(acquired_by=current_profile)
+        skill_levels = skill_levels.filter(acquired_by=current_profile)
     
     skills = skills.filter(knowledge_packets__in=kn_packets)
     skills = skills.prefetch_related(
@@ -65,7 +65,7 @@ def knowledge_packets_in_skills_view(request, model_name):
         handle_inform_form(request)
     
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': page_title,
         'skills': skills,
     }
@@ -74,10 +74,10 @@ def knowledge_packets_in_skills_view(request, model_name):
 
 @login_required
 def kn_packet_form_view(request, kn_packet_id):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     kn_packet = KnowledgePacket.objects.filter(id=kn_packet_id).first()
         
-    if profile.status == 'gm':
+    if current_profile.status == 'gm':
         form = KnPacketForm(data=request.POST or None,
                             files=request.FILES or None,
                             instance=kn_packet)
@@ -85,16 +85,16 @@ def kn_packet_form_view(request, kn_packet_id):
         form = PlayerKnPacketForm(data=request.POST or None,
                                   files=request.FILES or None,
                                   instance=kn_packet,
-                                  profile=profile)
+                                  current_profile=current_profile)
     
     if form.is_valid():
-        if profile.status == 'gm':
+        if current_profile.status == 'gm':
             kn_packet = form.save()
         else:
             kn_packet = form.save(commit=False)
-            kn_packet.author = profile
+            kn_packet.author = current_profile
             kn_packet.save()
-            kn_packet.acquired_by.add(profile)
+            kn_packet.acquired_by.add(current_profile)
             kn_packet.skills.set(form.cleaned_data['skills'])
 
             pictures = [v for k, v in form.cleaned_data.items()
@@ -117,7 +117,7 @@ def kn_packet_form_view(request, kn_packet_id):
                 now = datetime.now().strftime("%Y-%d-%m %H:%M:%S")
                 title = f"""
                     KnowledgePacket: '{kn_packet.title}'
-                    [Autor: {profile.character.first_name} - {now}]
+                    [Autor: {current_profile.character.first_name} - {now}]
                 """
                 new_picture_set = PictureSet.objects.create(title=title)
                 new_picture_set.pictures.set(new_pictures)
@@ -133,12 +133,12 @@ def kn_packet_form_view(request, kn_packet_id):
         messages.warning(request, form.errors)
         
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': kn_packet.title if kn_packet else 'Nowy pakiet wiedzy',
         'form': form,
     }
-    if not kn_packet_id or profile.status == 'gm' \
-            or profile.knowledge_packets.filter(id=kn_packet_id):
+    if not kn_packet_id or current_profile.status == 'gm' \
+            or current_profile.knowledge_packets.filter(id=kn_packet_id):
         return render(request, '_form.html', context)
     else:
         return redirect('home:dupa')

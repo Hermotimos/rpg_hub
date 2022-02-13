@@ -68,17 +68,17 @@ class PlayerKnPacketForm(KnPacketForm):
     descr_3 = CharField(required=False, label='')
 
     def __init__(self, *args, **kwargs):
-        profile = kwargs.pop('profile')
+        current_profile = kwargs.pop('current_profile')
         super().__init__(*args, **kwargs)
         
         self.fields['text'].label = "Tekst"
         self.fields['title'].label = "Tytuł"
 
         self.fields['locations'].queryset = (
-                profile.locs_known_directly.all()
-                | profile.locs_known_indirectly.all()
+                current_profile.locs_known_directly.all()
+                | current_profile.locs_known_indirectly.all()
         ).distinct()
-        self.fields['skills'].queryset = profile.allowed_skills.all()
+        self.fields['skills'].queryset = current_profile.allowed_skills.all()
 
         self.fields['descr_1'].widget.attrs = {
             'placeholder': 'Podpis grafiki nr 1',
