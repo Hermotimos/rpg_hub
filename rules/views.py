@@ -35,8 +35,8 @@ def rules_armor_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
     
-    plates = Plate.objects.filter(allowed_profiles__in=user_profiles)
-    shields = Shield.objects.filter(allowed_profiles__in=user_profiles)
+    plates = Plate.objects.filter(allowed_profiles__in=user_profiles).distinct()
+    shields = Shield.objects.filter(allowed_profiles__in=user_profiles).distinct()
     
     context = {
         'current_profile': current_profile,
@@ -139,6 +139,7 @@ def rules_synergies_list_view(request):
         'synergy_levels__perks__conditional_modifiers__modifier__factor',
         'synergy_levels__perks__comments',
     )
+    synergies = synergies.distinct()
 
     context = {
         'current_profile': current_profile,
