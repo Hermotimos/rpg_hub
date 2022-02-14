@@ -406,3 +406,15 @@ COLORS_LIST = [
 ]
 COLORS_DICT = {c: c for c in COLORS_LIST}
 COLORS_CHOICES = [(c, c) for c in COLORS_LIST]
+
+
+def get_profile(user):
+    """Get User's Profile by the following priority:
+        - status ('gm', 'player', 'npc')
+        - is_active (True, False)
+        - is_alive (True, False)
+        - character_name_copy (alphabetically)
+    """
+    profiles = user.profiles.order_by('status', '-is_alive', '-is_active', 'character_name_copy')
+    print(profiles)
+    return profiles.first()

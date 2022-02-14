@@ -1,19 +1,16 @@
 from django.contrib import messages
-from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import LoginView, LogoutView
-from django.db.models import F, Max
-from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
 
 from prosoponomikon.forms import CharacterForm
-from prosoponomikon.models import Character
+from prosoponomikon.models import Character, FirstName
+from rpg_project.utils import get_profile
 from users.forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
 from users.models import Profile
-from prosoponomikon.models import FirstName
-
-from django.contrib.auth import login
 
 
 class CustomLoginView(LoginView):
@@ -25,17 +22,7 @@ class CustomLoginView(LoginView):
     def form_valid(self, form):
         user = form.get_user()
         login(self.request, user)
-        # Determine user's default profile to present opon logon
-        try:
-            profile = user.profiles.get(status='gm')
-        except (Profile.DoesNotExist, Profile.MultipleObjectsReturned):
-            try:
-                profile = user.profiles.get(status='player', is_alive=True)
-            except (Profile.DoesNotExist, Profile.MultipleObjectsReturned):
-                profile = user.profiles.annotate(
-                    latest_gameevent_id=Max('events_known_directly__id')
-                ).latest('latest_gameevent_id')
-        self.request.session['profile_id'] = profile.id
+        self.request.session['profile_id'] = get_profile(user).id
         return HttpResponseRedirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):
