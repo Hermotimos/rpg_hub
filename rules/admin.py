@@ -4,16 +4,11 @@ from django.forms import Textarea, Select
 
 from rpg_project.utils import formfield_for_dbfield_cached
 from rules.admin_filters import SkillLevelFilter, SynergyLevelFilter
-from rules.admin_forms import (
-    Form1, Form2,
-    PerkAdminForm,
-    SkillAdminForm, SkillLevelAdminForm,
-    SynergyAdminForm, SynergyLevelAdminForm
-)
 from rules.models import (
     SkillGroup, SkillKind, SkillType,
     Skill, SkillLevel, Synergy, SynergyLevel, BooksSkill, TheologySkill,
-    Perk, Modifier, Factor, RulesComment, Condition, CombatType, ConditionalModifier,
+    Perk, Modifier, Factor, RulesComment, Condition, CombatType,
+    ConditionalModifier,
     Profession, EliteProfession, Klass, EliteKlass,
     WeaponType, Weapon, Plate, Shield,
 )
@@ -22,20 +17,19 @@ from rules.models import (
 # =============================================================================
 
 
+@admin.register(Factor)
 class FactorAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
     list_editable = ['name']
 
-
-class ConditionalModifierInline(admin.TabularInline):
-    model = ConditionalModifier
-    extra = 3
-    
-    
+   
+@admin.register(Modifier)
 class ModifierAdmin(admin.ModelAdmin):
+    empty_value_display = ''
     list_display = ['id', 'sign', 'value_number', 'value_percent', 'value_text', 'factor']
     list_editable = ['sign', 'value_number', 'value_percent', 'value_text', 'factor']
     list_select_related = ['factor']
+    radio_fields = {"sign": admin.VERTICAL}
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         fields = [
@@ -44,28 +38,48 @@ class ModifierAdmin(admin.ModelAdmin):
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
 
 
+@admin.register(RulesComment)
 class RulesCommentAdmin(admin.ModelAdmin):
     list_display = ['id', 'text']
     list_editable = ['text']
 
 
+@admin.register(Perk)
 class PerkAdmin(admin.ModelAdmin):
-    form = PerkAdminForm
+    filter_horizontal = ['conditional_modifiers', 'comments']
     list_display = ['id', 'name', 'description', 'cost']
     list_editable = ['name', 'description', 'cost']
-    
-    # TODO optimize this admin
-    
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.prefetch_related(
+            'conditional_modifiers__modifier__factor',
+            'conditional_modifiers__combat_types',
+            'conditional_modifiers__conditions',
+            'comments')
+        return qs
+
+    
+@admin.register(Condition)
 class ConditionAdmin(admin.ModelAdmin):
     list_display = ['id', 'text']
     list_editable = ['text']
 
 
+@admin.register(ConditionalModifier)
 class ConditionalModifierAdmin(admin.ModelAdmin):
+    filter_horizontal = ['combat_types', 'conditions']
     list_display = ['id', 'modifier']
+    raw_id_fields = ['modifier']
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.select_related('modifier__factor')
+        qs = qs.prefetch_related('combat_types', 'conditions')
+        return qs
 
 
+@admin.register(CombatType)
 class CombatTypeAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
     list_editable = ['name']
@@ -74,16 +88,19 @@ class CombatTypeAdmin(admin.ModelAdmin):
 # =============================================================================
 
 
+@admin.register(SkillKind)
 class SkillKindAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
     list_editable = ['name']
 
 
+@admin.register(SkillType)
 class SkillTypeAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
     list_editable = ['name']
 
 
+@admin.register(SkillGroup)
 class SkillGroupAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'type']
     list_editable = ['name', 'type']
@@ -99,15 +116,12 @@ class SkillLevelInline(admin.TabularInline):
             'acquired_by',
         ]
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-
-
-class SynergyLevelInline(admin.TabularInline):
-    model = SynergyLevel
-    extra = 1
     
     
+@admin.register(Skill, BooksSkill, TheologySkill)
 class SkillAdmin(admin.ModelAdmin):
-    form = SkillAdminForm
+    fields = ['name', 'tested_trait', 'image', 'group', 'types', 'allowed_profiles']
+    filter_horizontal = ['allowed_profiles', 'types']
     inlines = [SkillLevelInline]
     list_display = ['id', 'name', 'tested_trait', 'image', 'group']
     list_editable = ['name', 'tested_trait', 'image', 'group']
@@ -122,8 +136,14 @@ class SkillAdmin(admin.ModelAdmin):
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
 
 
+class SynergyLevelInline(admin.TabularInline):
+    model = SynergyLevel
+    extra = 1
+    
+
+@admin.register(Synergy)
 class SynergyAdmin(admin.ModelAdmin):
-    form = SynergyAdminForm
+    filter_horizontal = ['skills', 'allowed_profiles']
     formfield_overrides = {
         CharField: {'widget': Textarea(attrs={'rows': 3, 'cols': 10})},
         TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 30})},
@@ -134,12 +154,12 @@ class SynergyAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
+@admin.register(SkillLevel)
 class SkillLevelAdmin(admin.ModelAdmin):
-    form = SkillLevelAdminForm
+    filter_horizontal = ['acquired_by', 'perks']
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 80})},
     }
-
     list_display = ['name', 'description']
     list_editable = ['description']
     list_filter = [SkillLevelFilter]
@@ -150,12 +170,12 @@ class SkillLevelAdmin(admin.ModelAdmin):
         return f'{str(obj.skill.name)} [{obj.level}]'
 
 
+@admin.register(SynergyLevel)
 class SynergyLevelAdmin(admin.ModelAdmin):
-    form = SynergyLevelAdminForm
+    filter_horizontal = ['acquired_by', 'perks']
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 80})},
     }
-
     list_display = ['name', 'description']
     list_editable = ['description']
     list_filter = [SynergyLevelFilter]
@@ -172,17 +192,17 @@ class SynergyLevelAdmin(admin.ModelAdmin):
 class KlassInline(admin.TabularInline):
     model = Klass
     extra = 2
-
     fields = ['name', 'description', 'start_perks', 'allowed_profiles']
-    form = Form1
+    filter_horizontal = ['allowed_profiles']
     formfield_overrides = {
         CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
         TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 40})},
     }
 
 
+@admin.register(Klass)
 class KlassAdmin(admin.ModelAdmin):
-    form = Form1
+    filter_horizontal = ['allowed_profiles']
     formfield_overrides = {
         CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
         TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 60})},
@@ -192,6 +212,7 @@ class KlassAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description', 'start_perks']
 
 
+@admin.register(Profession)
 class ProfessionAdmin(admin.ModelAdmin):
     inlines = [KlassInline]
     list_display = ['name', 'description']
@@ -202,16 +223,16 @@ class ProfessionAdmin(admin.ModelAdmin):
 class EliteKlassInline(admin.TabularInline):
     model = EliteKlass
     extra = 2
-
-    form = Form1
+    filter_horizontal = ['allowed_profiles']
     formfield_overrides = {
         CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
         TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 40})},
     }
 
 
+@admin.register(EliteKlass)
 class EliteKlassAdmin(admin.ModelAdmin):
-    form = Form1
+    filter_horizontal = ['allowed_profiles']
     formfield_overrides = {
         CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
         TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 60})},
@@ -221,8 +242,9 @@ class EliteKlassAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description', 'start_perks']
 
 
+@admin.register(EliteProfession)
 class EliteProfessionAdmin(admin.ModelAdmin):
-    form = Form1
+    filter_horizontal = ['allowed_profiles']
     inlines = [EliteKlassInline]
     list_display = ['name', 'description']
     list_editable = ['description']
@@ -235,21 +257,22 @@ class EliteProfessionAdmin(admin.ModelAdmin):
 class WeaponInline(admin.TabularInline):
     model = Weapon
     extra = 2
-
-    form = Form2
+    filter_horizontal = ['picture_sets']
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 1, 'cols': 25})},
         CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 5})},
     }
 
 
+@admin.register(WeaponType)
 class WeaponTypeAdmin(admin.ModelAdmin):
     inlines = [WeaponInline]
     list_display = ['name']
 
 
+@admin.register(Weapon)
 class WeaponAdmin(admin.ModelAdmin):
-    form = Form2
+    filter_horizontal = ['allowed_profiles', 'picture_sets']
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
     }
@@ -266,8 +289,9 @@ class WeaponAdmin(admin.ModelAdmin):
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
 
 
+@admin.register(Plate)
 class PlateAdmin(admin.ModelAdmin):
-    form = Form2
+    filter_horizontal = ['allowed_profiles', 'picture_sets']
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
     }
@@ -276,44 +300,15 @@ class PlateAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description', 'comment']
 
 
-class ShieldTypeAdmin(admin.ModelAdmin):
-    form = Form2
+@admin.register(Shield)
+class ShieldAdmin(admin.ModelAdmin):
+    filter_horizontal = ['allowed_profiles']
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 50})},
         ForeignKey: {'widget': Select(attrs={'style': 'width:180px'})},
-    
     }
     list_display = ['id', 'name', 'armor_class_bonus', 'weight', 'description', 'picture_set', 'comment']
     list_editable = ['name', 'armor_class_bonus', 'weight', 'description', 'picture_set', 'comment']
     search_fields = ['name', 'description', 'comment']
+    list_select_related = True
 
-
-# =============================================================================
-
-admin.site.register(Factor, FactorAdmin)
-admin.site.register(Modifier, ModifierAdmin)
-admin.site.register(Perk, PerkAdmin)
-admin.site.register(RulesComment, RulesCommentAdmin)
-admin.site.register(Condition, ConditionAdmin)
-admin.site.register(ConditionalModifier, ConditionalModifierAdmin)
-admin.site.register(CombatType, CombatTypeAdmin)
-
-admin.site.register(SkillType, SkillTypeAdmin)
-admin.site.register(SkillKind, SkillKindAdmin)
-admin.site.register(SkillGroup, SkillGroupAdmin)
-admin.site.register(Skill, SkillAdmin)
-admin.site.register(BooksSkill, SkillAdmin)
-admin.site.register(TheologySkill, SkillAdmin)
-admin.site.register(SkillLevel, SkillLevelAdmin)
-admin.site.register(Synergy, SynergyAdmin)
-admin.site.register(SynergyLevel, SynergyLevelAdmin)
-
-admin.site.register(Profession, ProfessionAdmin)
-admin.site.register(Klass, KlassAdmin)
-admin.site.register(EliteProfession, EliteProfessionAdmin)
-admin.site.register(EliteKlass, EliteKlassAdmin)
-
-admin.site.register(WeaponType, WeaponTypeAdmin)
-admin.site.register(Weapon, WeaponAdmin)
-admin.site.register(Plate, PlateAdmin)
-admin.site.register(Shield, ShieldTypeAdmin)

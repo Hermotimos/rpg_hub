@@ -49,6 +49,15 @@ class Modifier(Model):
         max_digits=3, decimal_places=2, validators=PERCENTAGE_VALIDATOR, blank=True, null=True)
     value_text = CharField(max_length=30, blank=True, null=True)
     factor = FK(to=Factor, related_name='modifiers', on_delete=PROTECT)
+    _full = CharField(max_length=100)
+
+    class Meta:
+        ordering = ['factor', 'sign', 'value_number', 'value_percent', 'value_text']
+        unique_together = [
+            ('factor', 'sign', 'value_number'),
+            ('factor', 'sign', 'value_percent'),
+            ('factor', 'sign', 'value_text'),
+        ]
 
     def __str__(self):
         sign = ""
@@ -63,13 +72,9 @@ class Modifier(Model):
             value = self.value_text
         return f"{sign}{value} {self.factor.name}"
 
-    class Meta:
-        ordering = ['factor', 'sign', 'value_number', 'value_percent', 'value_text']
-        unique_together = [
-            ('factor', 'sign', 'value_number'),
-            ('factor', 'sign', 'value_percent'),
-            ('factor', 'sign', 'value_text'),
-        ]
+    def save(self, *args, **kwargs):
+        self._full = self.__str__()
+        super().save(*args, **kwargs)
 
 
 class RulesComment(Model):
@@ -189,14 +194,14 @@ class Skill(Model):
     name = CharField(max_length=100, unique=True)
     tested_trait = CharField(max_length=50, blank=True, null=True)
     image = ImageField(upload_to='site_features_pics', blank=True, null=True)
+    group = FK(to=SkillGroup, related_name='skills', on_delete=PROTECT, blank=True, null=True)
+    types = M2M(to=SkillType, related_name='skills', blank=True)
     allowed_profiles = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_skills',
         blank=True,
     )
-    group = FK(to=SkillGroup, related_name='skills', on_delete=PROTECT, blank=True, null=True)
-    types = M2M(to=SkillType, related_name='skills', blank=True)
     sorting_name = CharField(max_length=101, blank=True, null=True)
 
     def __str__(self):
@@ -601,6 +606,7 @@ class Plate(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
     picture_sets = M2M(to=PictureSet, related_name='plates', blank=True)
+    
     armor_class_bonus = PositiveSmallIntegerField(blank=True, null=True)
     parrying = PositiveSmallIntegerField(blank=True, null=True)
     endurance = PositiveSmallIntegerField()
@@ -618,6 +624,7 @@ class Plate(Model):
     mod_lockpicking = SmallIntegerField(blank=True, null=True)
     mod_pickpocketing = SmallIntegerField(blank=True, null=True)
     mod_conning = SmallIntegerField(blank=True, null=True)
+    
     allowed_profiles = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
