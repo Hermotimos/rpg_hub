@@ -285,14 +285,14 @@ class WeaponAdmin(admin.ModelAdmin):
     def formfield_for_dbfield(self, db_field, **kwargs):
         fields = [
             'allowees',
-            # 'pictures',
+            'picture_set',
         ]
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
 
 
 @admin.register(Plate)
 class PlateAdmin(admin.ModelAdmin):
-    filter_horizontal = ['allowees', 'picture_sets']
+    filter_horizontal = ['allowees']
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
     }
@@ -313,3 +313,10 @@ class ShieldAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description', 'comment']
     list_select_related = True
 
+    # def formfield_for_dbfield(self, db_field, **kwargs):
+    #     fields = [
+    #         'allowees',
+    #         'picture_set',
+    #     ]
+    #     return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+    #

@@ -42,17 +42,17 @@
                         <tr id="{{ plate.short_name }}" class="collapse">
                             <td colspan="10" class="weapons-img px-2 align-left">
                                 <br>
-                                {{ plate.description|linebreaksbr }}
-                                <br><br>
-                                <div class="mb-1">
-                                    {% for picture_set in plate.picture_sets.all %}
+                                    {{ plate.description|linebreaksbr }}
+                                <br>
+                                {% if plate.picture_set %}
+                                    <div class="mb-1">
                                         <div class="d-flex justify-content-center my-3">
-                                            {% for picture in picture_set|pictureset_pictures_in_custom_order %}
+                                            {% for picture in plate.picture_set|pictureset_pictures_in_custom_order %}
                                                 {% include '_pic_with_modal.html' %}
                                             {% endfor %}
                                         </div>
-                                    {% endfor %}
-                                </div>
+                                    </div>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endif %}

@@ -64,15 +64,15 @@
                                 <br>
                                 {{ weapon.description|linebreaksbr }}
                                 <br><br>
-                                <div class="mb-1">
-                                    {% for picture_set in weapon.picture_sets.all %}
+                                {% if weapon.picture_set %}
+                                    <div class="mb-1">
                                         <div class="d-flex justify-content-center my-3">
-                                            {% for picture in picture_set|pictureset_pictures_in_custom_order %}
+                                            {% for picture in weapon.picture_set|pictureset_pictures_in_custom_order %}
                                                 {% include '_pic_with_modal.html' %}
                                             {% endfor %}
                                         </div>
-                                    {% endfor %}
-                                </div>
+                                    </div>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

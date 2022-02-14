@@ -19,17 +19,17 @@ from rules.models import (
 )
 from users.models import Profile
 
-for w in Weapon.objects.all():
-    picture_sets = w.picture_sets.all()
-    w.picture_set = picture_sets.first()
-    w.save()
-    print(w.picture_set)
-    
-for w in Plate.objects.all():
-    picture_sets = w.picture_sets.all()
-    w.picture_set = picture_sets.first()
-    w.save()
-    print(w.picture_set)
+# for w in Weapon.objects.all():
+#     picture_sets = w.picture_sets.all()
+#     w.picture_set = picture_sets.first()
+#     w.save()
+#     print(w.picture_set)
+#
+# for w in Plate.objects.all():
+#     picture_sets = w.picture_sets.all()
+#     w.picture_set = picture_sets.first()
+#     w.save()
+#     print(w.picture_set)
     
     
 @login_required
@@ -53,7 +53,7 @@ def rules_armor_view(request):
     context = {
         'current_profile': current_profile,
         'page_title': 'Pancerz',
-        'plates': plates.prefetch_related('picture_sets__pictures'),
+        'plates': plates.prefetch_related('picture_set__pictures'),
         'shields': shields.prefetch_related('picture_set__pictures'),
     }
     return render(request, 'rules/armor.html', context)
@@ -235,7 +235,7 @@ def rules_weapons_view(request):
     user_profiles = current_profile.user.profiles.all()
     
     weapons = Weapon.objects.filter(allowees__in=user_profiles).distinct()
-    weapons = weapons.prefetch_related('picture_sets__pictures')
+    weapons = weapons.prefetch_related('picture_set__pictures')
     weapon_types = WeaponType.objects.filter(weapons__allowees__in=user_profiles).distinct()
     weapon_types = weapon_types.prefetch_related(Prefetch('weapons', queryset=weapons))
     
