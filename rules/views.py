@@ -15,15 +15,11 @@ from rules.models import (
     Skill, SkillType,
     Synergy,
     WeaponType,
-    Weapon, Modifier
+    Weapon,
 )
 from users.models import Profile
 
-for o in Modifier.objects.all():
-    if o.sign != '-':
-        o.sign = '+'
-        o.save()
-    
+
 @login_required
 def rules_main_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])

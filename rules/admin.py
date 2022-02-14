@@ -28,10 +28,12 @@ class ModifierAdmin(admin.ModelAdmin):
     empty_value_display = ''
     list_display = ['id', 'sign', 'value_number', 'value_percent', 'value_text', 'factor']
     list_editable = ['sign', 'value_number', 'value_percent', 'value_text', 'factor']
+    list_filter = ['factor', 'sign']
     list_select_related = ['factor']
     radio_fields = {"sign": admin.VERTICAL}
     readonly_fields = ['overview']
-    
+    search_fields = ['value_number', 'value_percent', 'value_text', 'factor']
+
     def formfield_for_dbfield(self, db_field, **kwargs):
         fields = [
             'factor',
