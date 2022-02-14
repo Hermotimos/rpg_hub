@@ -36,14 +36,14 @@ class Factor(Model):
 
 PERCENTAGE_VALIDATOR = [MinValueValidator(0.01), MaxValueValidator(1.00)]
 SIGN_CHOICES = [
-    ('minus', 'minus'),
-    ('plus', 'plus'),
+    ('-', '-'),
+    ('+', '+'),
 ]
 
 
 class Modifier(Model):
     """Ex. factor and value combine into: +2 KP, -1 TRAF, +2 OBR, etc."""
-    sign = CharField(max_length=5, choices=SIGN_CHOICES, blank=True, null=True)
+    sign = CharField(max_length=1, choices=SIGN_CHOICES, default="+", blank=True, null=True)
     value_number = DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     value_percent = DecimalField(
         max_digits=3, decimal_places=2, validators=PERCENTAGE_VALIDATOR, blank=True, null=True)
