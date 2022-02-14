@@ -4,11 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
+from django.shortcuts import render
 
 from prosoponomikon.forms import CharacterForm
 from prosoponomikon.models import Character, FirstName
-from rpg_project.utils import get_profile
+from rpg_project.utils import sample_from_qs
 from users.forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
 from users.models import Profile
 
@@ -16,7 +17,7 @@ from users.models import Profile
 class CustomLoginView(LoginView):
     template_name = 'users/login.html'
     # settings.py
-    # LOGIN_REDIRECT_URL = 'home:home'
+    # LOGIN_REDIRECT_URL = 'users:home'
     # LOGIN_URL = 'users:login'
     
     def form_valid(self, form):
@@ -113,7 +114,7 @@ def profile_view(request):
     return render(request, 'users/profile.html', context)
 
 
-@login_required()
+@login_required
 def switch_profile(request, profile_id):
     request.session['profile_id'] = profile_id
     chosen_profile = Profile.objects.get(id=profile_id)
@@ -127,7 +128,49 @@ def switch_profile(request, profile_id):
             Przekierowano do strony startowej!
             (Wybrana Postać nie ma dostępu do poprzedniej treści)"""
         messages.warning(request, msg)
-        return redirect('home:home')
+        return redirect('users:home')
 
     return response
+
+
+# =============================================================================
+
+
+def get_profile(user):
+    """Get User's Profile by the priority of 'status' and probable recent use."""
+    profiles = user.profiles.order_by('status', '-is_alive', '-is_active', 'character_name_copy')
+    return profiles.first()
+
+
+@login_required
+def home_view(request):
+    try:
+        current_profile = Profile.objects.get(id=request.session['profile_id'])
+    except KeyError:
+        current_profile = get_profile(request.user)
+        request.session['profile_id'] = current_profile.id
     
+    known_characters = current_profile.characters_all_known_annotated_if_indirectly()
+    known_locations = current_profile.locations_all_known_annotated_if_indirectly()
+    
+    # set() ensures that if len(known) < k, than duplicates will be removed
+    rand_characters = sample_from_qs(qs=known_characters, max_size=4)
+    rand_locations = sample_from_qs(qs=known_locations, max_size=4)
+    
+    context = {
+        'current_profile': current_profile,
+        'page_title': 'Hyllemath',
+        'rand_characters': rand_characters,
+        'rand_locations': rand_locations,
+    }
+    return render(request, 'users/home.html', context)
+
+
+@login_required
+def dupa_view(request):
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    context = {
+        'current_profile': current_profile,
+        'page_title': 'Dupa',
+    }
+    return render(request, 'users/dupa.html', context)

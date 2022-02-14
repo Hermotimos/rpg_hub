@@ -23,7 +23,7 @@ admin.site.enable_nav_sidebar = False
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('home.urls')),
+    path('', include('users.urls')),
     path('chronicles/', include('chronicles.urls')),
     path('communications/', include('communications.urls')),
     path('contact/', include('contact.urls')),
@@ -32,8 +32,7 @@ urlpatterns = [
     path('rules/', include('rules.urls')),
     path('toponomikon/', include('toponomikon.urls')),
     path('prosoponomikon/', include('prosoponomikon.urls')),
-    path('users/', include('users.urls')),
-
+    
     path('__debug__/', include(debug_toolbar.urls))
 ]
 
