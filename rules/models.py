@@ -555,7 +555,7 @@ class Weapon(Model):
     description = TextField(max_length=4000, blank=True, null=True)
     picture_set = FK(
         to=PictureSet,
-        # related_name='weapons',
+        related_name='weapons',
         blank=True,
         null=True,
         on_delete=PROTECT)
@@ -565,7 +565,6 @@ class Weapon(Model):
         related_name='allowed_weapons',
         blank=True)
     # modifiers = M2M(to=ConditionalModifier, related_name='weapons', blank=True)
-    picture_sets = M2M(to=PictureSet, related_name='weapons', blank=True)
     # -------------------# TODO marked for removal [in 2023]-------------------
     delay = PositiveSmallIntegerField()
     damage_big_dices = CharField(max_length=10, blank=True, null=True)
@@ -620,7 +619,7 @@ class Plate(Model):
     description = TextField(max_length=4000, blank=True, null=True)
     picture_set = FK(
         to=PictureSet,
-        # related_name='plates',
+        related_name='plates',
         blank=True,
         null=True,
         on_delete=PROTECT)
@@ -629,7 +628,6 @@ class Plate(Model):
         limit_choices_to=Q(status='player'),
         related_name='allowed_plates',
         blank=True)
-    picture_sets = M2M(to=PictureSet, related_name='plates', blank=True)
     
     armor_class_bonus = PositiveSmallIntegerField(blank=True, null=True)
     parrying = PositiveSmallIntegerField(blank=True, null=True)
