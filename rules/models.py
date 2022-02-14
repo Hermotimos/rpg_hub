@@ -27,11 +27,11 @@ class Factor(Model):
     """Ex. KP, TRAF, OBR, IN, Życie, etc."""
     name = CharField(max_length=100, unique=True)
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         ordering = ['name']
+
+    def __str__(self):
+        return self.name
 
 
 PERCENTAGE_VALIDATOR = [MinValueValidator(0.01), MaxValueValidator(1.00)]
@@ -49,7 +49,7 @@ class Modifier(Model):
         max_digits=3, decimal_places=2, validators=PERCENTAGE_VALIDATOR, blank=True, null=True)
     value_text = CharField(max_length=30, blank=True, null=True)
     factor = FK(to=Factor, related_name='modifiers', on_delete=PROTECT)
-    _full = CharField(max_length=100)
+    overview = CharField(max_length=100)
 
     class Meta:
         ordering = ['factor', 'sign', 'value_number', 'value_percent', 'value_text']
@@ -60,6 +60,9 @@ class Modifier(Model):
         ]
 
     def __str__(self):
+        return str(self.overview)
+
+    def create_overview(self):
         sign = ""
         if self.sign:
             sign = "+" if self.sign == "plus" else "-"
@@ -71,57 +74,65 @@ class Modifier(Model):
         elif self.value_text:
             value = self.value_text
         return f"{sign}{value} {self.factor.name}"
-
+        
     def save(self, *args, **kwargs):
-        self._full = self.__str__()
+        self.overview = self.create_overview()
         super().save(*args, **kwargs)
 
 
 class RulesComment(Model):
     text = TextField()
-    
-    def __str__(self):
-        return self.text
-    
+
     class Meta:
         ordering = ['text']
+
+    def __str__(self):
+        return self.text
         
         
 class Condition(Model):
     """A model for specifying Modifier usage conditions."""
     text = CharField(max_length=200, unique=True)
 
-    def __str__(self):
-        return self.text
-
     class Meta:
         ordering = ['text']
+
+    def __str__(self):
+        return self.text
 
 
 class CombatType(Model):
     """A model to store info about the kind of combat a Modifier applies to."""
     name = CharField(max_length=100, unique=True)
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         ordering = ['name']
+
+    def __str__(self):
+        return self.name
 
 
 class ConditionalModifier(Model):
     modifier = FK(to=Modifier, related_name="conditional_modifiers", on_delete=CASCADE)
     conditions = M2M(to=Condition, related_name="conditional_modifiers", blank=True)
     combat_types = M2M(to=CombatType, related_name="conditional_modifiers", blank=True)
+    overview = CharField(max_length=100)
+
+    class Meta:
+        ordering = ['modifier']
 
     def __str__(self):
+        return str(self.overview)
+
+    def create_overview(self):
         conditions = ""
         if self.conditions.exists():
             conditions = f" [{' | '.join([str(condition) for condition in self.conditions.all()])}]"
         return f"{self.modifier}{conditions}"
 
-    class Meta:
-        ordering = ['modifier']
+    def save(self, *args, **kwargs):
+        self.overview = self.create_overview()
+        super().save(*args, **kwargs)
 
 
 class Perk(Model):
@@ -132,11 +143,11 @@ class Perk(Model):
     cost = TextField(max_length=1000, blank=True, null=True)
     comments = M2M(to=RulesComment, related_name='perks', blank=True)
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         ordering = ['name', 'description']
+
+    def __str__(self):
+        return self.name
 
 
 # =============================================================================
@@ -146,7 +157,10 @@ class SkillKind(Model):
     """A classification category for Skills."""
     name = CharField(max_length=100, unique=True)
     sorting_name = CharField(max_length=101, blank=True, null=True)
-    
+
+    class Meta:
+        ordering = ['sorting_name']
+
     def save(self, *args, **kwargs):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
@@ -155,15 +169,15 @@ class SkillKind(Model):
     def __str__(self):
         return self.name
     
-    class Meta:
-        ordering = ['sorting_name']
-        
         
 class SkillType(Model):
     """A classification category for Skills."""
     kinds = M2M(to=SkillKind, related_name='skill_types', blank=True)
     name = CharField(max_length=100, unique=True)
     sorting_name = CharField(max_length=101, blank=True, null=True)
+
+    class Meta:
+        ordering = ['sorting_name']
 
     def save(self, *args, **kwargs):
         if self.name:
@@ -173,21 +187,18 @@ class SkillType(Model):
     def __str__(self):
         kinds = "|".join([str(kind) for kind in self.kinds.all()])
         return f"[{kinds}] {self.name}"
-
-    class Meta:
-        ordering = ['sorting_name']
-        
+      
         
 class SkillGroup(Model):
     """A loose grouping category for Skills."""
     name = CharField(max_length=100, unique=True)
     type = FK(to=SkillType, related_name='skill_groups', on_delete=PROTECT)
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         ordering = ['name']
+
+    def __str__(self):
+        return self.name
 
 
 class Skill(Model):
@@ -204,6 +215,9 @@ class Skill(Model):
     )
     sorting_name = CharField(max_length=101, blank=True, null=True)
 
+    class Meta:
+        ordering = ['sorting_name']
+
     def __str__(self):
         return str(self.name)
 
@@ -214,9 +228,6 @@ class Skill(Model):
 
     def short_name(self):
         return rid_of_special_chars(self.name)
-
-    class Meta:
-        ordering = ['sorting_name']
 
 
 S_LEVELS = [
@@ -235,15 +246,15 @@ class SkillLevel(Model):
     acquired_by = M2M(to=Profile, related_name='skill_levels', blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
+    class Meta:
+        ordering = ['sorting_name', 'id']
+
     def __str__(self):
         return f'{str(self.skill.name)} [{self.level}]'
 
     def save(self, *args, **kwargs):
         self.sorting_name = create_sorting_name(self.__str__())
         super().save(*args, **kwargs)
-
-    class Meta:
-        ordering = ['sorting_name', 'id']
 
 
 class TheologySkillManager(Manager):
@@ -310,6 +321,11 @@ class Synergy(Model):
     )
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
+    class Meta:
+        ordering = ['sorting_name']
+        verbose_name = 'Synergy'
+        verbose_name_plural = 'Synergies'
+
     def __str__(self):
         return self.name
 
@@ -321,11 +337,6 @@ class Synergy(Model):
     def short_name(self):
         return rid_of_special_chars(self.name)
 
-    class Meta:
-        ordering = ['sorting_name']
-        verbose_name = 'Synergy'
-        verbose_name_plural = 'Synergies'
-
 
 class SynergyLevel(Model):
     synergy = FK(to=Synergy, related_name='synergy_levels', on_delete=CASCADE)
@@ -335,15 +346,15 @@ class SynergyLevel(Model):
     acquired_by = M2M(to=Profile, related_name='synergy_levels', blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
+    class Meta:
+        ordering = ['sorting_name']
+        
     def __str__(self):
         return f'{str(self.synergy.name)} [{self.level}]'
 
     def save(self, *args, **kwargs):
         self.sorting_name = create_sorting_name(self.__str__())
         super().save(*args, **kwargs)
-
-    class Meta:
-        ordering = ['sorting_name']
 
 
 # =============================================================================
@@ -353,6 +364,11 @@ class Profession(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
+
+    class Meta:
+        ordering = ['sorting_name']
+        verbose_name = 'Profession'
+        verbose_name_plural = 'Professions'
 
     def __str__(self):
         return self.name
@@ -371,11 +387,6 @@ class Profession(Model):
             for profile in klass.allowed_profiles.all():
                 allowed_profiles.append(profile)
         return allowed_profiles
-
-    class Meta:
-        ordering = ['sorting_name']
-        verbose_name = 'Profession'
-        verbose_name_plural = 'Professions'
 
 
 class Klass(Model):
@@ -411,6 +422,11 @@ class Klass(Model):
     )
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
+    class Meta:
+        ordering = ['sorting_name']
+        verbose_name = 'Klass'
+        verbose_name_plural = 'Klasses'
+
     def __str__(self):
         return self.name
 
@@ -421,11 +437,6 @@ class Klass(Model):
 
     def short_name(self):
         return rid_of_special_chars(self.name)
-
-    class Meta:
-        ordering = ['sorting_name']
-        verbose_name = 'Klass'
-        verbose_name_plural = 'Klasses'
 
 
 class EliteProfession(Model):
@@ -439,6 +450,11 @@ class EliteProfession(Model):
     )
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
+    class Meta:
+        ordering = ['sorting_name']
+        verbose_name = 'Elite profession'
+        verbose_name_plural = 'Elite professions'
+
     def __str__(self):
         return self.name
 
@@ -449,11 +465,6 @@ class EliteProfession(Model):
 
     def short_name(self):
         return rid_of_special_chars(self.name)
-
-    class Meta:
-        ordering = ['sorting_name']
-        verbose_name = 'Elite profession'
-        verbose_name_plural = 'Elite professions'
 
 
 class EliteKlass(Model):
@@ -473,6 +484,11 @@ class EliteKlass(Model):
     )
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
+    class Meta:
+        ordering = ['sorting_name']
+        verbose_name = 'Elite klass'
+        verbose_name_plural = 'Elite klasses'
+
     def __str__(self):
         return self.name
 
@@ -483,11 +499,6 @@ class EliteKlass(Model):
 
     def short_name(self):
         return rid_of_special_chars(self.name)
-
-    class Meta:
-        ordering = ['sorting_name']
-        verbose_name = 'Elite klass'
-        verbose_name_plural = 'Elite klasses'
 
 
 # =============================================================================
@@ -497,6 +508,11 @@ class WeaponType(Model):
     name = CharField(max_length=100, unique=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
+    class Meta:
+        ordering = ['sorting_name']
+        verbose_name = 'Weapon type'
+        verbose_name_plural = 'Weapon types'
+
     def __str__(self):
         return self.name
 
@@ -507,11 +523,6 @@ class WeaponType(Model):
 
     def short_name(self):
         return rid_of_special_chars(self.name)
-
-    class Meta:
-        ordering = ['sorting_name']
-        verbose_name = 'Weapon type'
-        verbose_name_plural = 'Weapon types'
 
 
 DAMAGE_TYPES = [
@@ -545,7 +556,7 @@ class Weapon(Model):
     weapon_type = FK(to=WeaponType, related_name='weapons', on_delete=PROTECT)
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
-    # modifiers = M2M(to=Modifier, through="ConditionalModifier", related_name='weapons', blank=True)
+    # modifiers = M2M(to=ConditionalModifier, related_name='weapons', blank=True)
     picture_sets = M2M(to=PictureSet, related_name='weapons', blank=True)
     
     # -------------------# TODO marked for removal [in 2023]-------------------
@@ -572,6 +583,9 @@ class Weapon(Model):
     )
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
+    class Meta:
+        ordering = ['sorting_name']
+
     def __str__(self):
         return self.name
 
@@ -594,9 +608,6 @@ class Weapon(Model):
         if self.damage_small_add:
             damage_small_add += ("+" + str(self.damage_small_add))
         return f"{self.damage_small_dices}{damage_small_add}"
-
-    class Meta:
-        ordering = ['sorting_name']
 
 
 # =============================================================================
@@ -633,14 +644,14 @@ class Plate(Model):
     )
     sorting_number = DecimalField(max_digits=3, decimal_places=2)
 
+    class Meta:
+        ordering = ['sorting_number']
+
     def __str__(self):
         return self.name
 
     def short_name(self):
         return rid_of_special_chars(self.name)
-
-    class Meta:
-        ordering = ['sorting_number']
 
 
 class Shield(Model):
@@ -663,8 +674,8 @@ class Shield(Model):
     )
     sorting_number = DecimalField(max_digits=3, decimal_places=2)
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         ordering = ['sorting_number']
+        
+    def __str__(self):
+        return self.name

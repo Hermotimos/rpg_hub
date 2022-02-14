@@ -15,11 +15,16 @@ from rules.models import (
     Skill, SkillType,
     Synergy,
     WeaponType,
-    Weapon,
+    Weapon, Modifier, ConditionalModifier
 )
 from users.models import Profile
 
-
+# for m in Modifier.objects.all():
+#     m.save()
+#
+# for m in ConditionalModifier.objects.all():
+#     m.save()
+    
 @login_required
 def rules_main_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
