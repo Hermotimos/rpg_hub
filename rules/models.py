@@ -63,9 +63,6 @@ class Modifier(Model):
         return str(self.overview)
 
     def create_overview(self):
-        sign = ""
-        if self.sign:
-            sign = "+" if self.sign == "plus" else "-"
         value = ""
         if self.value_number:
             value = str(self.value_number).rstrip('0').rstrip('.')
@@ -73,7 +70,7 @@ class Modifier(Model):
             value = str(float(self.value_percent) * 100).rstrip('0').rstrip('.') + "%"
         elif self.value_text:
             value = self.value_text
-        return f"{sign}{value} {self.factor.name}"
+        return f"{self.sign}{value} {self.factor.name}"
         
     def save(self, *args, **kwargs):
         self.overview = self.create_overview()
