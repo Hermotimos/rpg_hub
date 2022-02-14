@@ -49,7 +49,7 @@ class Modifier(Model):
         max_digits=3, decimal_places=2, validators=PERCENTAGE_VALIDATOR, blank=True, null=True)
     value_text = CharField(max_length=30, blank=True, null=True)
     factor = FK(to=Factor, related_name='modifiers', on_delete=PROTECT)
-    overview = CharField(max_length=100)
+    overview = CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         ordering = ['factor', 'sign', 'value_number', 'value_percent', 'value_text']
@@ -113,7 +113,7 @@ class ConditionalModifier(Model):
     modifier = FK(to=Modifier, related_name="conditional_modifiers", on_delete=CASCADE)
     conditions = M2M(to=Condition, related_name="conditional_modifiers", blank=True)
     combat_types = M2M(to=CombatType, related_name="conditional_modifiers", blank=True)
-    overview = CharField(max_length=100)
+    overview = CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         ordering = ['modifier']
