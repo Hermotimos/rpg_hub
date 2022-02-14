@@ -137,7 +137,7 @@ class Perk(Model):
     name = CharField(max_length=50, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
     conditional_modifiers = M2M(to=ConditionalModifier, related_name='perks', blank=True)
-    cost = TextField(max_length=1000, blank=True, null=True)
+    cost = CharField(max_length=200, blank=True, null=True)
     comments = M2M(to=RulesComment, related_name='perks', blank=True)
 
     class Meta:
