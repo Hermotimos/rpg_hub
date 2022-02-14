@@ -26,7 +26,6 @@ from rules.models import (
 )
 from toponomikon.models import Location
 from users.models import Profile
-from news.models import News, NewsAnswer
 
 
 @login_required
