@@ -71,7 +71,6 @@ class ConditionAdmin(admin.ModelAdmin):
 class ConditionalModifierAdmin(admin.ModelAdmin):
     filter_horizontal = ['combat_types', 'conditions']
     list_display = ['id', 'modifier']
-    raw_id_fields = ['modifier']
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
