@@ -81,8 +81,15 @@ table.weapons-table {border: double;}
 .weapons-table .price {width: 7%;}
 .weapons-table .weight {width: 7%;}
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 400px) {
+    .rules-table {font-size: 0.6rem;}
+    .rules-table td {padding: 0.1rem !important;}
+    .rules-table th {padding: 0.1rem !important;}
+}
+@media only screen and (min-width: 401px) {
     .rules-table {font-size: 0.7rem;}
+    .rules-table td {padding: 0.1rem !important;}
+    .rules-table th {padding: 0.1rem !important;}
 }
 @media only screen and (min-width: 601px) {
     .rules-table {font-size: 0.8rem;}
@@ -117,10 +124,10 @@ table.weapons-table {border: double;}
     max-height: 300px;
     height: auto;
 }
-
+/*
 .rules-table th,
 .rules-table td {border-style: none !important;}
-
+*/
 
 .armor-table th,
 .armor-table td,
@@ -146,8 +153,9 @@ td .nowrap { white-space: nowrap;}
 
 .border-custom-right {border-right: 1px solid #363636;}
 
-thead.align-center th {text-align: center;}
-tbody.align-center td {text-align: center;}
+thead.align-center th,
+tbody.align-center td,
+tbody.align-center th {text-align: center;}
 
 tbody.align-center td.align-right {text-align: right;}
 tbody.align-center td.align-left {text-align: left;}
