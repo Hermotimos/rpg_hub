@@ -565,14 +565,9 @@ class Weapon(Model):
         related_name='allowed_weapons',
         blank=True)
     # modifiers = M2M(to=ConditionalModifier, related_name='weapons', blank=True)
-    # -------------------# TODO marked for removal [in 2023]-------------------
-    delay = PositiveSmallIntegerField()
-    damage_big_dices = CharField(max_length=10, blank=True, null=True)
-    damage_big_add = PositiveSmallIntegerField(blank=True, null=True)
     # -------------------------------------------------------------------------
-    
-    damage_small_dices = CharField(max_length=10, blank=True, null=True)
-    damage_small_add = PositiveSmallIntegerField(blank=True, null=True)
+    damage_dices = CharField(max_length=10, blank=True, null=True)
+    damage_bonus = PositiveSmallIntegerField(blank=True, null=True)
     damage_type = CharField(max_length=10, choices=DAMAGE_TYPES)
     special = TextField(max_length=4000, blank=True, null=True)
     range = CharField(max_length=100, blank=True, null=True)
@@ -599,16 +594,9 @@ class Weapon(Model):
         return rid_of_special_chars(self.name)
 
     def damage_summary(self):
-        damage_small = str(self.damage_small_dices)
-        # if self.damage_small_add:
-        #     damage_small += ('+' + str(self.damage_small_add))
-        # damage_big = str(self.damage_big_dices)
-        # if self.damage_big_add:
-        #     damage_big += ('+' + str(self.damage_big_add))
-        damage_small_add = ""
-        if self.damage_small_add:
-            damage_small_add += ("+" + str(self.damage_small_add))
-        return f"{self.damage_small_dices}{damage_small_add}"
+        if self.damage_bonus:
+            return f"{self.damage_dices}+{self.damage_bonus}"
+        return f"{self.damage_dices}"
 
 
 # =============================================================================
