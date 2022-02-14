@@ -122,8 +122,8 @@ class SkillLevelInline(admin.TabularInline):
     
 @admin.register(Skill, BooksSkill, TheologySkill)
 class SkillAdmin(admin.ModelAdmin):
-    fields = ['name', 'tested_trait', 'image', 'group', 'types', 'allowed_profiles']
-    filter_horizontal = ['allowed_profiles', 'types']
+    fields = ['name', 'tested_trait', 'image', 'group', 'types', 'allowees']
+    filter_horizontal = ['allowees', 'types']
     inlines = [SkillLevelInline]
     list_display = ['id', 'name', 'tested_trait', 'image', 'group']
     list_editable = ['name', 'tested_trait', 'image', 'group']
@@ -145,7 +145,7 @@ class SynergyLevelInline(admin.TabularInline):
 
 @admin.register(Synergy)
 class SynergyAdmin(admin.ModelAdmin):
-    filter_horizontal = ['skills', 'allowed_profiles']
+    filter_horizontal = ['skills', 'allowees']
     formfield_overrides = {
         CharField: {'widget': Textarea(attrs={'rows': 3, 'cols': 10})},
         TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 30})},
@@ -194,8 +194,8 @@ class SynergyLevelAdmin(admin.ModelAdmin):
 class KlassInline(admin.TabularInline):
     model = Klass
     extra = 2
-    fields = ['name', 'description', 'start_perks', 'allowed_profiles']
-    filter_horizontal = ['allowed_profiles']
+    fields = ['name', 'description', 'start_perks', 'allowees']
+    filter_horizontal = ['allowees']
     formfield_overrides = {
         CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
         TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 40})},
@@ -204,7 +204,7 @@ class KlassInline(admin.TabularInline):
 
 @admin.register(Klass)
 class KlassAdmin(admin.ModelAdmin):
-    filter_horizontal = ['allowed_profiles']
+    filter_horizontal = ['allowees']
     formfield_overrides = {
         CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
         TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 60})},
@@ -225,7 +225,7 @@ class ProfessionAdmin(admin.ModelAdmin):
 class EliteKlassInline(admin.TabularInline):
     model = EliteKlass
     extra = 2
-    filter_horizontal = ['allowed_profiles']
+    filter_horizontal = ['allowees']
     formfield_overrides = {
         CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
         TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 40})},
@@ -234,7 +234,7 @@ class EliteKlassInline(admin.TabularInline):
 
 @admin.register(EliteKlass)
 class EliteKlassAdmin(admin.ModelAdmin):
-    filter_horizontal = ['allowed_profiles']
+    filter_horizontal = ['allowees']
     formfield_overrides = {
         CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
         TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 60})},
@@ -246,7 +246,7 @@ class EliteKlassAdmin(admin.ModelAdmin):
 
 @admin.register(EliteProfession)
 class EliteProfessionAdmin(admin.ModelAdmin):
-    filter_horizontal = ['allowed_profiles']
+    filter_horizontal = ['allowees']
     inlines = [EliteKlassInline]
     list_display = ['name', 'description']
     list_editable = ['description']
@@ -274,7 +274,7 @@ class WeaponTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Weapon)
 class WeaponAdmin(admin.ModelAdmin):
-    filter_horizontal = ['allowed_profiles', 'picture_sets']
+    filter_horizontal = ['allowees', 'picture_sets']
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
     }
@@ -285,7 +285,7 @@ class WeaponAdmin(admin.ModelAdmin):
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         fields = [
-            'allowed_profiles',
+            'allowees',
             'pictures',
         ]
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
@@ -293,7 +293,7 @@ class WeaponAdmin(admin.ModelAdmin):
 
 @admin.register(Plate)
 class PlateAdmin(admin.ModelAdmin):
-    filter_horizontal = ['allowed_profiles', 'picture_sets']
+    filter_horizontal = ['allowees', 'picture_sets']
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
     }
@@ -304,7 +304,7 @@ class PlateAdmin(admin.ModelAdmin):
 
 @admin.register(Shield)
 class ShieldAdmin(admin.ModelAdmin):
-    filter_horizontal = ['allowed_profiles']
+    filter_horizontal = ['allowees']
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 50})},
         ForeignKey: {'widget': Select(attrs={'style': 'width:180px'})},

@@ -175,12 +175,12 @@ def plans_main_view(request):
         todos = {}
         for m in models:
             todos[f'{m._meta.verbose_name_plural}'] = \
-                m.objects.annotate(cnt=Count('allowed_profiles')).filter(cnt=0)
+                m.objects.annotate(cnt=Count('allowees')).filter(cnt=0)
     
         text = '=>Do uzupełnienia:\n\n '
         create_todo = False
         for cnt, (model_name, objs) in enumerate(todos.items()):
-            text += f'{cnt}) {model_name} z 0 allowed_profiles:\n' \
+            text += f'{cnt}) {model_name} z 0 allowees:\n' \
                     f'{[str(o) for o in objs] if objs else ""}\n\n'
             if objs:
                 create_todo = True

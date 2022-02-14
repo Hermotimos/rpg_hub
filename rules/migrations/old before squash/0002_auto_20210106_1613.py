@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterField(
             model_name='eliteklass',
-            name='allowed_profiles',
+            name='allowees',
             field=models.ManyToManyField(blank=True, limit_choices_to=models.Q(status='player'), related_name='allowed_elite_klasses', to='users.Profile'),
         ),
         migrations.AlterField(

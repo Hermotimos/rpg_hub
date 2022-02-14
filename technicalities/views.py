@@ -49,7 +49,7 @@ def todos_view(request):
         known_directly=None).filter(known_indirectly=None)
     
     skills_no_skill_type = Skill.objects.filter(types=None)
-    skills_no_allowed_profile = Skill.objects.filter(allowed_profiles=None)
+    skills_no_allowed_profile = Skill.objects.filter(allowees=None)
     
     context = {
         'current_profile': profile,
@@ -95,7 +95,7 @@ def allow_game_masters_to_all(request):
     for Model in models:
         print(f"Processing Model: {Model}")
         for obj in Model.objects.all():
-            obj.allowed_profiles.add(*Profile.objects.filter(status="gm"))
+            obj.allowees.add(*Profile.objects.filter(status="gm"))
             obj.save()
 
     messages.info(

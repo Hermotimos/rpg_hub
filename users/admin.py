@@ -87,7 +87,7 @@ class ProfileAdminForm(forms.ModelForm):
         try:
             for field, Model in self.fields_and_models.items():
                 self.__dict__['initial'].update(
-                    {field: Model.objects.filter(allowed_profiles=id_)})
+                    {field: Model.objects.filter(allowees=id_)})
         except AttributeError:
             pass
 
@@ -97,7 +97,7 @@ class ProfileAdminForm(forms.ModelForm):
             for field, Model in self.fields_and_models.items():
                 update_rel_objs(
                     instance, Model, self.cleaned_data[field],
-                    "allowed_profiles")
+                    "allowees")
         except ValueError:
             text = self.cleaned_data['text']
             raise ValueError(

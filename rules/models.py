@@ -204,7 +204,7 @@ class Skill(Model):
     image = ImageField(upload_to='site_features_pics', blank=True, null=True)
     group = FK(to=SkillGroup, related_name='skills', on_delete=PROTECT, blank=True, null=True)
     types = M2M(to=SkillType, related_name='skills', blank=True)
-    allowed_profiles = M2M(
+    allowees = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_skills',
@@ -310,7 +310,7 @@ class HistorySkill(Skill):
 class Synergy(Model):
     name = CharField(max_length=100)
     skills = M2M(to=Skill, related_name='skills')
-    allowed_profiles = M2M(
+    allowees = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_synergies',
@@ -379,11 +379,11 @@ class Profession(Model):
         return rid_of_special_chars(self.name)
 
     def allowed_list(self):
-        allowed_profiles = []
+        allowees = []
         for klass in self.klasses.all():
-            for profile in klass.allowed_profiles.all():
-                allowed_profiles.append(profile)
-        return allowed_profiles
+            for profile in klass.allowees.all():
+                allowees.append(profile)
+        return allowees
 
 
 class Klass(Model):
@@ -411,7 +411,7 @@ class Klass(Model):
     lvl_18 = CharField(max_length=500, blank=True, null=True)
     lvl_19 = CharField(max_length=500, blank=True, null=True)
     lvl_20 = CharField(max_length=500, blank=True, null=True)
-    allowed_profiles = M2M(
+    allowees = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_klasses',
@@ -439,7 +439,7 @@ class Klass(Model):
 class EliteProfession(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
-    allowed_profiles = M2M(
+    allowees = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_elite_classes',
@@ -473,7 +473,7 @@ class EliteKlass(Model):
     )
     description = TextField(max_length=4000, blank=True, null=True)
     start_perks = TextField(max_length=4000, blank=True, null=True)
-    allowed_profiles = M2M(
+    allowees = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_elite_klasses',
@@ -572,7 +572,7 @@ class Weapon(Model):
     avg_price_value = PositiveSmallIntegerField(blank=True, null=True)
     avg_price_currency = CharField(max_length=5, choices=CURRENCIES, blank=True, null=True)
     avg_weight = DecimalField(max_digits=10, decimal_places=1)
-    allowed_profiles = M2M(
+    allowees = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_weapons',
@@ -633,7 +633,7 @@ class Plate(Model):
     mod_pickpocketing = SmallIntegerField(blank=True, null=True)
     mod_conning = SmallIntegerField(blank=True, null=True)
     
-    allowed_profiles = M2M(
+    allowees = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_plates',
@@ -663,7 +663,7 @@ class Shield(Model):
         blank=True,
         null=True,
         on_delete=PROTECT)
-    allowed_profiles = M2M(
+    allowees = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_shields',

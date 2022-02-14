@@ -35,8 +35,8 @@ def rules_armor_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
     
-    plates = Plate.objects.filter(allowed_profiles__in=user_profiles).distinct()
-    shields = Shield.objects.filter(allowed_profiles__in=user_profiles).distinct()
+    plates = Plate.objects.filter(allowees__in=user_profiles).distinct()
+    shields = Shield.objects.filter(allowees__in=user_profiles).distinct()
     
     context = {
         'current_profile': current_profile,
@@ -72,12 +72,12 @@ def rules_professions_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
 
-    klasses = Klass.objects.filter(allowed_profiles__in=user_profiles).distinct()
-    professions = Profession.objects.filter(klasses__allowed_profiles__in=user_profiles)
+    klasses = Klass.objects.filter(allowees__in=user_profiles).distinct()
+    professions = Profession.objects.filter(klasses__allowees__in=user_profiles)
     professions = professions.prefetch_related(Prefetch('klasses', queryset=klasses)).distinct()
 
-    elite_klasses = EliteKlass.objects.filter(allowed_profiles__in=user_profiles).distinct()
-    elite_professions = EliteProfession.objects.filter(allowed_profiles__in=user_profiles)
+    elite_klasses = EliteKlass.objects.filter(allowees__in=user_profiles).distinct()
+    elite_professions = EliteProfession.objects.filter(allowees__in=user_profiles)
     elite_professions = elite_professions.prefetch_related(Prefetch('elite_klasses', queryset=elite_klasses)).distinct()
 
     context = {
@@ -104,7 +104,7 @@ def rules_skills_list_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
 
-    skills = Skill.objects.filter(allowed_profiles__in=user_profiles, types__kinds__name="Powszechne")
+    skills = Skill.objects.filter(allowees__in=user_profiles, types__kinds__name="Powszechne")
     skills = skills.select_related('group__type').distinct()
     skills = skills.prefetch_related(
         'skill_levels__perks__conditional_modifiers__conditions',
@@ -131,7 +131,7 @@ def rules_synergies_list_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
 
-    synergies = Synergy.objects.filter(allowed_profiles__in=user_profiles)
+    synergies = Synergy.objects.filter(allowees__in=user_profiles)
     synergies = synergies.prefetch_related(
         'skills',
         'synergy_levels__perks__conditional_modifiers__conditions',
@@ -222,9 +222,9 @@ def rules_weapons_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
     
-    weapons = Weapon.objects.filter(allowed_profiles__in=user_profiles).distinct()
+    weapons = Weapon.objects.filter(allowees__in=user_profiles).distinct()
     weapons = weapons.prefetch_related('picture_sets__pictures')
-    weapon_types = WeaponType.objects.filter(weapons__allowed_profiles__in=user_profiles).distinct()
+    weapon_types = WeaponType.objects.filter(weapons__allowees__in=user_profiles).distinct()
     weapon_types = weapon_types.prefetch_related(Prefetch('weapons', queryset=weapons))
     
     context = {
