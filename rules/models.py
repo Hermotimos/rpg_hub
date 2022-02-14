@@ -555,7 +555,6 @@ class Weapon(Model):
     description = TextField(max_length=4000, blank=True, null=True)
     # modifiers = M2M(to=ConditionalModifier, related_name='weapons', blank=True)
     picture_sets = M2M(to=PictureSet, related_name='weapons', blank=True)
-    
     # -------------------# TODO marked for removal [in 2023]-------------------
     delay = PositiveSmallIntegerField()
     damage_big_dices = CharField(max_length=10, blank=True, null=True)
@@ -572,12 +571,18 @@ class Weapon(Model):
     avg_price_value = PositiveSmallIntegerField(blank=True, null=True)
     avg_price_currency = CharField(max_length=5, choices=CURRENCIES, blank=True, null=True)
     avg_weight = DecimalField(max_digits=10, decimal_places=1)
+    
+    picture_set = FK(
+        to=PictureSet,
+        # related_name='weapons',
+        blank=True,
+        null=True,
+        on_delete=PROTECT)
     allowees = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_weapons',
-        blank=True,
-    )
+        blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
@@ -633,6 +638,12 @@ class Plate(Model):
     mod_pickpocketing = SmallIntegerField(blank=True, null=True)
     mod_conning = SmallIntegerField(blank=True, null=True)
     
+    picture_set = FK(
+        to=PictureSet,
+        # related_name='plates',
+        blank=True,
+        null=True,
+        on_delete=PROTECT)
     allowees = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
@@ -667,8 +678,7 @@ class Shield(Model):
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_shields',
-        blank=True,
-    )
+        blank=True)
     sorting_number = DecimalField(max_digits=3, decimal_places=2)
 
     class Meta:

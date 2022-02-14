@@ -19,7 +19,19 @@ from rules.models import (
 )
 from users.models import Profile
 
-
+# for w in Weapon.objects.all():
+#     picture_sets = w.picture_sets.all()
+#     w.picture_set = picture_sets.first()
+#     w.save()
+#     print(w.picture_set)
+    
+# for w in Plate.objects.all():
+#     picture_sets = w.picture_sets.all()
+#     w.picture_set = picture_sets.first()
+#     w.save()
+#     print(w.picture_set)
+    
+    
 @login_required
 def rules_main_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])

@@ -259,7 +259,6 @@ class EliteProfessionAdmin(admin.ModelAdmin):
 class WeaponInline(admin.TabularInline):
     model = Weapon
     extra = 2
-    filter_horizontal = ['picture_sets']
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 1, 'cols': 25})},
         CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 5})},
@@ -274,7 +273,7 @@ class WeaponTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Weapon)
 class WeaponAdmin(admin.ModelAdmin):
-    filter_horizontal = ['allowees', 'picture_sets']
+    filter_horizontal = ['allowees']
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
     }
@@ -286,7 +285,7 @@ class WeaponAdmin(admin.ModelAdmin):
     def formfield_for_dbfield(self, db_field, **kwargs):
         fields = [
             'allowees',
-            'pictures',
+            # 'pictures',
         ]
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
 
