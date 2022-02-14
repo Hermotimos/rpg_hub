@@ -15,15 +15,10 @@ from rules.models import (
     Skill, SkillType,
     Synergy,
     WeaponType,
-    Weapon, Modifier, ConditionalModifier
+    Weapon,
 )
 from users.models import Profile
 
-for m in Modifier.objects.all():
-    m.save()
-
-for m in ConditionalModifier.objects.all():
-    m.save()
     
 @login_required
 def rules_main_view(request):
