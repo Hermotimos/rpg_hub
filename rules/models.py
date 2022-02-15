@@ -129,6 +129,7 @@ class ConditionalModifier(Model):
         return f"{self.modifier}{conditions}"
 
     def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
         self.overview = self.update_overview()
         super().save(*args, **kwargs)
         
