@@ -72,7 +72,7 @@ class ConditionAdmin(admin.ModelAdmin):
 @admin.register(ConditionalModifier)
 class ConditionalModifierAdmin(admin.ModelAdmin):
     filter_horizontal = ['combat_types', 'conditions']
-    list_display = ['id', 'modifier']
+    list_display = ['__str__']
     readonly_fields = ['overview']
 
     def get_queryset(self, request):

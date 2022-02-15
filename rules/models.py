@@ -14,6 +14,7 @@ from django.db.models import (
     TextField,
 )
 from django.db.models import Q
+from django.db.models.signals import post_save, m2m_changed
 
 from imaginarion.models import PictureSet
 from rpg_project.utils import create_sorting_name, rid_of_special_chars
@@ -120,17 +121,17 @@ class ConditionalModifier(Model):
 
     def __str__(self):
         return str(self.overview)
-
-    def create_overview(self):
+    
+    def update_overview(self):
         conditions = ""
         if self.conditions.exists():
             conditions = f" [{' | '.join([str(condition) for condition in self.conditions.all()])}]"
         return f"{self.modifier}{conditions}"
 
     def save(self, *args, **kwargs):
-        self.overview = self.create_overview()
+        self.overview = self.update_overview()
         super().save(*args, **kwargs)
-
+        
 
 class Perk(Model):
     """A class describing a special ability of an item or a skill level."""
@@ -671,3 +672,35 @@ class Shield(Model):
         
     def __str__(self):
         return self.name
+
+
+# =============================================================================
+
+
+def update_conditional_modifier_overview(sender, instance, **kwargs):
+    """Update ConditionalModifier.overview when 'conditions' is changed."""
+    conditions = ""
+    if instance.conditions.exists():
+        conditions = f" [{' | '.join([str(condition) for condition in instance.conditions.all()])}]"
+    instance.overview = f"{instance.modifier}{conditions}"
+    instance.save()
+
+
+m2m_changed.connect(
+    sender=ConditionalModifier.conditions.through,
+    receiver=update_conditional_modifier_overview)
+
+
+def update_conditional_modifiers_overview(sender, instance, **kwargs):
+    """Update referencing ConditionalModifier.overview when Modifier is changed.
+    Do this by calling ConditionalModifier's save() method, which will call
+    'update_overview' and update the 'overview' field.
+    """
+    conditional_modifiers = instance.conditional_modifiers.all()
+    for conditional_modifier in conditional_modifiers:
+        conditional_modifier.save()
+
+
+post_save.connect(
+    sender=Modifier,
+    receiver=update_conditional_modifiers_overview)
