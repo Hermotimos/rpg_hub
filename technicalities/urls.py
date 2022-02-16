@@ -10,6 +10,7 @@ urlpatterns = [
     path('download-db/', views.download_db, name='download-db'),
     path('allow-game-masters-to-all/', views.allow_game_masters_to_all, name='allow-game-masters-to-all'),
     path('refresh-contenttypes/', views.refresh_content_types, name='refresh-contenttypes'),
+    path('cleanup-rules-objects/', views.cleanup_rules_objects, name='cleanup-rules-objects'),
 
     path('reload-chronicles/', views.reload_chronicles, name='reload-chronicles'),
     path('reload-imaginarion/', views.reload_imaginarion, name='reload-imaginarion'),

@@ -106,6 +106,30 @@ def allow_game_masters_to_all(request):
 
 @login_required
 @only_game_masters
+def cleanup_rules_objects(request):
+    from rules.models import Factor, Modifier, ConditionalModifier
+    
+    for factor in Factor.objects.all():
+        if not factor.modifiers.exists():
+            print(factor)
+            factor.delete()
+            
+    for modifier in Modifier.objects.all():
+        if not modifier.conditional_modifiers.exists():
+            print(modifier)
+            modifier.delete()
+
+    for conditional_modifier in ConditionalModifier.objects.all():
+        if not conditional_modifier.perks.exists():
+            print(conditional_modifier)
+            conditional_modifier.delete()
+
+    messages.info(request, f"Usunięto obiekty nieposiadające obiektów powiązanych - zobacz printy w logu.")
+    return redirect('technicalities:reload-main')
+
+
+@login_required
+@only_game_masters
 def refresh_content_types(request):
     """Remove stale content types."""
     deleted = []
@@ -116,7 +140,6 @@ def refresh_content_types(request):
     deleted = "<br>".join([str(dict_) for dict_ in deleted]) if deleted else 0
     messages.info(request, mark_safe(f"Usunięto content types:\n{deleted}"))
     return redirect('technicalities:reload-main')
-
 
 
 # ============================================================================
