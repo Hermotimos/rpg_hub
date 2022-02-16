@@ -304,9 +304,22 @@ def trim_nums(text: str):
 
 
 @register.filter
-def color_brackets(modifier: rules.models.Modifier, color_class: str):
-    text = str(modifier)
+def format_conditional_modifier(conditional_modifier: rules.models.ConditionalModifier, color_class: str):
+    text = str(conditional_modifier)
     if "[" in text:
         before, brackets = text.split(sep='[')
-        return mark_safe(before + f'<span class="{color_class}">[{brackets}</span>')
-    return modifier
+        text = before + f'<span class="{color_class}">[{brackets}</span>'
+
+    combat_types_icons = {
+        '/zwar': '<i class="ra ra-crossed-axes pr-1"></i>',
+        '/dyst': '<i class="ra ra-archery-target pr-1"></i>',
+        '/wręc': '<i class="ra ra-hand pr-1"></i>',
+    }
+    if any(k in text for k in combat_types_icons.keys()):
+        for abbr, icon in combat_types_icons.items():
+            if abbr in text:
+                text = icon + text.replace(abbr, "")
+    else:
+        text = '<i class="ra ra-perspective-dice-two pr-1"></i>' + text
+
+    return mark_safe(text)

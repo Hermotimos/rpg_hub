@@ -120,7 +120,9 @@ class ConditionalModifier(Model):
         ordering = ['modifier']
 
     def __str__(self):
-        return str(self.overview)
+        combat_types = [str(ct).split()[-1][:4] for ct in self.combat_types.all()]
+        combat_types = "".join(["/" + str(ct) for ct in combat_types])
+        return f"{self.overview} {combat_types}"
     
     def update_overview(self):
         conditions = ""

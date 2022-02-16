@@ -36,26 +36,11 @@
                         {{ perk.description|custom_linebreaksbr:1 }}
                     </div>
                 {% endif %}
-                <ul class="ml-4 mb-0 pl-1 bullets-5">
-                    {% for conditional_modifier in perk.conditional_modifiers.all %}
-                        <li class="pl-1">
-                            {% for combat_type in conditional_modifier.combat_types.all %}
-                                {% if combat_type.name == 'Walka w zwarciu' %}
-                                    <i class="ra ra-crossed-axes"></i>
-                                {% elif combat_type.name == 'Walka dystansowa' %}
-                                    <i class="ra ra-archery-target"></i>
-                                {% elif combat_type.name == 'Walka wręcz' %}
-                                    <i class="ra ra-hand"></i>
-                                {% elif combat_type.name == 'Walka tarczą' %}
-                                    <i class="ra ra-shield "></i>
-                                {% else %}
-                                    TODO Niech MG doda ikonę dla nowego typu walki
-                                {% endif %}
-                            {% endfor %}
-                            {{ conditional_modifier|color_brackets:"text-info" }}
-                        </li>
-                    {% endfor %}
-                </ul>
+                {% for conditional_modifier in perk.conditional_modifiers.all %}
+                    <div class="ml-3">
+                        {{ conditional_modifier|format_conditional_modifier:"text-info" }}
+                    </div>
+                {% endfor %}
                 <ul class="ml-4 pl-1 bullets-2 mb-1">
                     {% for comment in perk.comments.all %}
                         <li class="pl-1">{{ comment }}</li>
