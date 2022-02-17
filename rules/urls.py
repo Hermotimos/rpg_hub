@@ -15,6 +15,7 @@ urlpatterns = [
     path('synergies-list/', views.rules_synergies_list_view, name='synergies-list'),
     path('tests/', views.rules_tests_view, name='tests'),
     path('traits/', views.rules_traits_view, name='traits'),
+    path('traits-magic/', views.rules_traits_magic_view, name='traits-magic'),
     path('weapons/', views.rules_weapons_view, name='weapons'),
     path('wounds/', views.rules_wounds_view, name='wounds'),
     # path('combat/pdf/', html2pdf_views.yet_another, name='combat-pdf'),

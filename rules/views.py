@@ -1,10 +1,11 @@
 from collections import namedtuple
 from typing import Tuple
 
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
+from django.shortcuts import render
 
+from rpg_project.utils import only_game_masters
 from rules.models import (
     EliteKlass,
     EliteProfession,
@@ -19,7 +20,7 @@ from rules.models import (
 )
 from users.models import Profile
 
-    
+
 @login_required
 def rules_main_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
@@ -160,6 +161,17 @@ def rules_traits_view(request):
         'page_title': 'Cechy Fizyczne'
     }
     return render(request, 'rules/traits.html', context)
+
+
+@only_game_masters
+@login_required
+def rules_traits_magic_view(request):
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    context = {
+        'current_profile': current_profile,
+        'page_title': 'Moc'
+    }
+    return render(request, 'rules/traits_magic.html', context)
 
 
 LOAD_LIMITS = [

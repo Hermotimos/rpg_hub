@@ -37,23 +37,6 @@
 }
 
 
-.traits .strength-value {width: 80px;}
-.traits .strength-hit {width: 100px;}
-.traits .strength-damage {width: 100px;}
-.traits .load {width: 100px;}
-.traits .max-load {width: 125px;}
-
-.traits .agility-value {width: 80px;}
-.traits .agility-hit {width: 100px;}
-.traits .agility-damage {width: 100px;}
-.traits .ac-dodge {width: 100px;}
-
-.traits .endurance-value {width: 80px;}
-.traits .life {width: 100px;}
-.traits .consciousness-threshold {width: 100px;}
-.traits .damage-thresholds {width: 180px;}
-.traits .ac-parrying {width: 140px;}
-
 .professions .level {width: 100px;}
 .professions .level-desc {width: 350px;}
 
