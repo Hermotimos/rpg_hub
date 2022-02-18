@@ -210,7 +210,7 @@ class Skill(Model):
     types = M2M(to=SkillType, related_name='skills', blank=True)
     allowees = M2M(
         to=Profile,
-        limit_choices_to=Q(status='player'),
+        limit_choices_to=Q(status__in=['player', 'gm']),
         related_name='allowed_skills',
         blank=True,
     )
@@ -417,7 +417,7 @@ class Klass(Model):
     lvl_20 = CharField(max_length=500, blank=True, null=True)
     allowees = M2M(
         to=Profile,
-        limit_choices_to=Q(status='player'),
+        limit_choices_to=Q(status__in=['player', 'gm']),
         related_name='allowed_klasses',
         blank=True,
     )
@@ -445,7 +445,7 @@ class EliteProfession(Model):
     description = TextField(max_length=4000, blank=True, null=True)
     allowees = M2M(
         to=Profile,
-        limit_choices_to=Q(status='player'),
+        limit_choices_to=Q(status__in=['player', 'gm']),
         related_name='allowed_elite_classes',
         blank=True,
     )
@@ -479,7 +479,7 @@ class EliteKlass(Model):
     start_perks = TextField(max_length=4000, blank=True, null=True)
     allowees = M2M(
         to=Profile,
-        limit_choices_to=Q(status='player'),
+        limit_choices_to=Q(status__in=['player', 'gm']),
         related_name='allowed_elite_klasses',
         blank=True,
     )
@@ -565,7 +565,7 @@ class Weapon(Model):
         on_delete=PROTECT)
     allowees = M2M(
         to=Profile,
-        limit_choices_to=Q(status='player'),
+        limit_choices_to=Q(status__in=['player', 'gm']),
         related_name='allowed_weapons',
         blank=True)
     # modifiers = M2M(to=ConditionalModifier, related_name='weapons', blank=True)
@@ -617,7 +617,7 @@ class Plate(Model):
         on_delete=PROTECT)
     allowees = M2M(
         to=Profile,
-        limit_choices_to=Q(status='player'),
+        limit_choices_to=Q(status__in=['player', 'gm']),
         related_name='allowed_plates',
         blank=True)
     
@@ -662,7 +662,7 @@ class Shield(Model):
         on_delete=PROTECT)
     allowees = M2M(
         to=Profile,
-        limit_choices_to=Q(status='player'),
+        limit_choices_to=Q(status__in=['player', 'gm']),
         related_name='allowed_shields',
         blank=True)
     armor_class_bonus = PositiveSmallIntegerField()

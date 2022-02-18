@@ -1,6 +1,3 @@
-from collections import namedtuple
-from typing import Tuple
-
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
 from django.shortcuts import render
@@ -18,6 +15,7 @@ from rules.models import (
     WeaponType,
     Weapon,
 )
+from rules.utils import get_overload_ranges, LOAD_LIMITS, get_synergies_allowed
 from users.models import Profile
 
 
@@ -134,21 +132,10 @@ def rules_skills_list_view(request):
 def rules_synergies_list_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
-
-    synergies = Synergy.objects.filter(allowees__in=user_profiles)
-    synergies = synergies.prefetch_related(
-        'skills',
-        'synergy_levels__perks__conditional_modifiers__conditions',
-        'synergy_levels__perks__conditional_modifiers__combat_types',
-        'synergy_levels__perks__conditional_modifiers__modifier__factor',
-        'synergy_levels__perks__comments',
-    )
-    synergies = synergies.distinct()
-
     context = {
         'current_profile': current_profile,
         'page_title': 'Lista Synergii',
-        'synergies': synergies,
+        'synergies': get_synergies_allowed(user_profiles),
     }
     return render(request, 'rules/synergies_list.html', context)
 
@@ -174,40 +161,6 @@ def rules_traits_magic_view(request):
     return render(request, 'rules/traits_magic.html', context)
 
 
-LOAD_LIMITS = [
-    [0, 3],
-    [2, 6],
-    [3, 10],
-    [6, 15],
-    [9, 22],
-    [12, 25],
-    [15, 28],
-    [18, 35],
-    [20, 45],
-    [20, 57],
-    [20, 62],
-    [23, 70],
-    [24, 75],
-    [27, 85],
-    [30, 90],
-    [35, 98],
-    [40, 110],
-    [55, 128],
-    [68, 140],
-    [80, 153]
-]
-
-
-def get_overload_ranges(vals: Tuple[int, int]) -> namedtuple:
-    load_regular, load_max = vals
-    third = (load_max - load_regular) // 3
-    overload_1 = f"{load_regular+1} - {load_regular+third}"
-    overload_2 = f"{load_regular+1+third} - {load_regular+third*2}"
-    overload_3 = f"{min(load_regular+1+third*2, load_max-1)} - {load_max-1}"
-    LoadInfo = namedtuple(
-        'LoadInfo',
-        ['load_regular', 'load_max', 'overload_1', 'overload_2', 'overload_3'])
-    return LoadInfo(load_regular, load_max, overload_1, overload_2, overload_3)
 
 
 @login_required
