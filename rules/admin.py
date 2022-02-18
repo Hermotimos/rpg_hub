@@ -142,11 +142,21 @@ class SkillAdmin(admin.ModelAdmin):
 class SynergyLevelInline(admin.TabularInline):
     model = SynergyLevel
     extra = 1
+    filter_horizontal = ['skill_levels', 'perks']
+    formfield_overrides = {
+        TextField: {'widget': Textarea(attrs={'rows': 20, 'cols': 30})},
+    }
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        fields = [
+            'skill_levels',
+        ]
+        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
     
 
 @admin.register(Synergy)
 class SynergyAdmin(admin.ModelAdmin):
-    filter_horizontal = ['skills', 'allowees']
+    filter_horizontal = ['skills']
     formfield_overrides = {
         CharField: {'widget': Textarea(attrs={'rows': 3, 'cols': 10})},
         TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 30})},

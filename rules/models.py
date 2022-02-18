@@ -314,12 +314,6 @@ class HistorySkill(Skill):
 class Synergy(Model):
     name = CharField(max_length=100)
     skills = M2M(to=Skill, related_name='skills')
-    allowees = M2M(
-        to=Profile,
-        limit_choices_to=Q(status='player'),
-        related_name='allowed_synergies',
-        blank=True,
-    )
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
@@ -344,6 +338,7 @@ class SynergyLevel(Model):
     level = CharField(max_length=10, choices=S_LEVELS[1:])
     description = TextField(max_length=4000, blank=True, null=True)
     perks = M2M(to=Perk, related_name='synergy_levels', blank=True)
+    skill_levels = M2M(to=SkillLevel, related_name='synergy_levels')
     acquired_by = M2M(to=Profile, related_name='synergy_levels', blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
