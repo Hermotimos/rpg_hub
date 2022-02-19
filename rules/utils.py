@@ -53,6 +53,7 @@ def get_synergies_allowed(user_profiles):
     skills = Skill.objects.filter(allowees__in=user_profiles)
     synergies = Synergy.objects.prefetch_related(
         'skills',
+        'synergy_levels__skill_levels__skill',
         'synergy_levels__perks__conditional_modifiers__conditions',
         'synergy_levels__perks__conditional_modifiers__combat_types',
         'synergy_levels__perks__conditional_modifiers__modifier__factor',

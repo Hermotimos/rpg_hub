@@ -24,12 +24,6 @@ class ProfileAdminForm(forms.ModelForm):
         widget=FilteredSelectMultiple('Skills', False),
         label=format_html(warning),
     )
-    synergies = forms.ModelMultipleChoiceField(
-        queryset=Synergy.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Synergies', False),
-        label=format_html(warning),
-    )
     klasses = forms.ModelMultipleChoiceField(
         queryset=Klass.objects.all(),
         required=False,
@@ -69,7 +63,6 @@ class ProfileAdminForm(forms.ModelForm):
 
     fields_and_models = {
         'skills': Skill,
-        'synergies': Synergy,
         'klasses': Klass,
         'elite_professions': EliteProfession,
         'elite_klasses': EliteKlass,
