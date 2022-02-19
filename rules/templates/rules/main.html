@@ -26,7 +26,7 @@
                 <li><h6><a href="{% url 'rules:synergies-list' %}">Lista Synergii</a></h6></li>
             </ul>
         </li>
-        {% if current_profile.status == 'gm' %}
+        {% if can_view_enchanting_rules %}
             <li><h6><a href="{% url 'rules:traits-magic' %}">Moc</a></h6></li>
         {% endif %}
     </ol>

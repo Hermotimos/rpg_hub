@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.shortcuts import render
 
 from rpg_project.utils import only_game_masters
@@ -11,7 +11,6 @@ from rules.models import (
     Profession,
     Shield,
     Skill, SkillType,
-    Synergy,
     WeaponType,
     Weapon,
 )
@@ -22,9 +21,16 @@ from users.models import Profile
 @login_required
 def rules_main_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
+    user_profiles = current_profile.user.profiles.all()
+    
+    can_view_enchanting_rules = user_profiles.filter(
+        Q(status='gm') | Q(is_enchanter=True)
+    ).exists()
+    
     context = {
         'current_profile': current_profile,
-        'page_title': 'Zasady'
+        'page_title': 'Zasady',
+        'can_view_enchanting_rules': can_view_enchanting_rules,
     }
     return render(request, 'rules/main.html', context)
 
