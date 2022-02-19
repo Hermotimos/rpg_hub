@@ -1,7 +1,15 @@
 from collections import namedtuple
 from typing import Tuple
+
+from django.db.models import Prefetch, Q
+
 import users
-from rules.models import Synergy, Skill
+from rules.models import Synergy, Skill, SkillLevel, SynergyLevel
+
+
+def can_view_enchanting_rules(user_profiles):
+    allowed_profiles = user_profiles.filter(Q(status='gm') | Q(is_enchanter=True))
+    return allowed_profiles.exists()
 
 
 LOAD_LIMITS = [
@@ -57,8 +65,27 @@ def get_synergies_allowed(user_profiles):
 
 
 def get_synergies_acquired(profile: users.models.Profile):
-    pass
+    skill_levels = SkillLevel.objects.filter(acquired_by=profile)
 
+    synergy_levels_ids = [
+        synergy_lvl.id for synergy_lvl in SynergyLevel.objects.all()
+        if all([(skill_lvl in skill_levels) for skill_lvl in synergy_lvl.skill_levels.all()])
+    ]
+    
+    synergy_levels = SynergyLevel.objects.filter(id__in=synergy_levels_ids)
+    synergy_levels = synergy_levels.prefetch_related(
+        'synergy__skills',
+        'perks__conditional_modifiers__conditions',
+        'perks__conditional_modifiers__combat_types',
+        'perks__conditional_modifiers__modifier__factor',
+        'perks__comments',
+        'skill_levels__skill',
+    )
 
+    synergies = Synergy.objects.filter(synergy_levels__in=synergy_levels)
+    synergies = synergies.prefetch_related(Prefetch('synergy_levels', queryset=synergy_levels))
+    return synergies
+
+    # TODO optimizations - 104 queries (should be around 60 for Mamert)
     # TODO delete allowees field on Synergy
     # TODO after depoying to production reload GM allowed (after migration)

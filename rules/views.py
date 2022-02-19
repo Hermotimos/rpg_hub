@@ -1,8 +1,7 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch, Q
-from django.shortcuts import render
+from django.db.models import Prefetch
+from django.shortcuts import render, redirect
 
-from rpg_project.utils import only_game_masters
 from rules.models import (
     EliteKlass,
     EliteProfession,
@@ -14,7 +13,8 @@ from rules.models import (
     WeaponType,
     Weapon,
 )
-from rules.utils import get_overload_ranges, LOAD_LIMITS, get_synergies_allowed
+from rules.utils import get_overload_ranges, LOAD_LIMITS, \
+    get_synergies_allowed, can_view_enchanting_rules
 from users.models import Profile
 
 
@@ -22,15 +22,10 @@ from users.models import Profile
 def rules_main_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
-    
-    can_view_enchanting_rules = user_profiles.filter(
-        Q(status='gm') | Q(is_enchanter=True)
-    ).exists()
-    
     context = {
         'current_profile': current_profile,
         'page_title': 'Zasady',
-        'can_view_enchanting_rules': can_view_enchanting_rules,
+        'can_view_enchanting_rules': can_view_enchanting_rules(user_profiles),
     }
     return render(request, 'rules/main.html', context)
 
@@ -156,18 +151,19 @@ def rules_traits_view(request):
     return render(request, 'rules/traits.html', context)
 
 
-@only_game_masters
 @login_required
 def rules_traits_magic_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
+    user_profiles = current_profile.user.profiles.all()
     context = {
         'current_profile': current_profile,
         'page_title': 'Moc'
     }
-    return render(request, 'rules/traits_magic.html', context)
-
-
-
+    if can_view_enchanting_rules(user_profiles):
+        return render(request, 'rules/traits_magic.html', context)
+    else:
+        return redirect('users:dupa')
+    
 
 @login_required
 def rules_tests_view(request):
