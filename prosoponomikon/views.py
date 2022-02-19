@@ -173,7 +173,7 @@ def prosoponomikon_character_for_player_view(request, character_id):
             or profile.can_view_all):
         return render(request, 'prosoponomikon/character.html', context)
     else:
-        return redirect('home:dupa')
+        return redirect('users:dupa')
 
 
 @login_required
@@ -336,7 +336,7 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
             or profile.biography_packets.filter(id=bio_packet_id):
         return render(request, '_form.html', context)
     else:
-        return redirect('home:dupa')
+        return redirect('users:dupa')
 
 
 @login_required

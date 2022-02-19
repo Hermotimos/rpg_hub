@@ -95,7 +95,7 @@ def demands_delete_view(request, demand_id):
         messages.info(request, 'Usunięto dezyderat!')
         return redirect('contact:demands-main')
     else:
-        return redirect('home:dupa')
+        return redirect('users:dupa')
 
 
 @login_required
@@ -132,7 +132,7 @@ def demands_detail_view(request, demand_id):
     if profile in [demand.author, demand.addressee]:
         return render(request, 'contact/demands_detail.html', context)
     else:
-        return redirect('home:dupa')
+        return redirect('users:dupa')
 
 
 @login_required
@@ -158,7 +158,7 @@ def demand_done_undone_view(request, demand_id, is_done):
         return redirect('contact:demands-main')
 
     else:
-        return redirect('home:dupa')
+        return redirect('users:dupa')
 
 
 # ----------------------------- PLANS -----------------------------
@@ -254,7 +254,7 @@ def plans_delete_view(request, plan_id):
         messages.info(request, 'Usunięto plan!')
         return redirect('contact:plans-main')
     else:
-        return redirect('home:dupa')
+        return redirect('users:dupa')
 
 
 @login_required
@@ -281,4 +281,4 @@ def plans_modify_view(request, plan_id):
     if profile == plan.author:
         return render(request, '_form.html', context)
     else:
-        return redirect('home:dupa')
+        return redirect('users:dupa')

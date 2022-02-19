@@ -88,7 +88,7 @@ def chronicle_game_view(request, game_id):
     if events:
         return render(request, 'chronicles/chronicle_game.html', context)
     else:
-        return redirect('home:dupa')
+        return redirect('users:dupa')
 
 
 @login_required
@@ -119,7 +119,7 @@ def chronicle_chapter_view(request, chapter_id):
     if games:
         return render(request, 'chronicles/chronicle_chapter.html', context)
     else:
-        return redirect('home:dupa')
+        return redirect('users:dupa')
 
 
 @login_required
@@ -155,7 +155,7 @@ def chronicle_all_view(request):
     if chapters:
         return render(request, 'chronicles/chronicle_all.html', context)
     else:
-        return redirect('home:dupa')
+        return redirect('users:dupa')
     
 
 #  TODO another view for HistoryEvent ?
@@ -193,7 +193,7 @@ def game_event_inform_view(request, game_event_id):
     if profile in allowed or profile.status == 'gm':
         return render(request, 'chronicles/_event_inform.html', context)
     else:
-        return redirect('home:dupa')
+        return redirect('users:dupa')
 
 
 def chronologies_view(request):

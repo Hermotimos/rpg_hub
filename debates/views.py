@@ -200,4 +200,4 @@
 #     if profile.can_view_all or profile in debate.known_directly.all():
 #         return render(request, 'debates/debate.html', context)
 #     else:
-#         return redirect('home:dupa')
+#         return redirect('users:dupa')

@@ -279,7 +279,7 @@ def thread_view(request, thread_id, tag_title):
     if current_profile in thread.known_directly.all() or current_profile.status == 'gm':
         return render(request, 'communications/thread.html', context)
     else:
-        return redirect('home:dupa')
+        return redirect('users:dupa')
     
 
 @login_required
@@ -344,7 +344,7 @@ def unfollow_thread_view(request, thread_id):
         messages.info(request, f"Przestałeś obserwować \"{thread}\"!")
         return redirect(request.META.get('HTTP_REFERER', '/'))
     else:
-        return redirect('home:dupa')
+        return redirect('users:dupa')
 
 
 @login_required
@@ -357,7 +357,7 @@ def follow_thread_view(request, thread_id):
         messages.info(request, f"Zacząłeś obserwować \"{thread}\"!")
         return redirect(request.META.get('HTTP_REFERER', '/'))
     else:
-        return redirect('home:dupa')
+        return redirect('users:dupa')
 
 
 
@@ -375,7 +375,7 @@ def follow_thread_view(request, thread_id):
 #         messages.info(request, 'Twój głos został dodany!')
 #         return redirect('news:survey-detail', survey_id=survey_id)
 #     else:
-#         return redirect('home:dupa')
+#         return redirect('users:dupa')
 #
 #
 #
@@ -392,7 +392,7 @@ def follow_thread_view(request, thread_id):
 #         messages.info(request, 'Twój głos został dodany!')
 #         return redirect('news:survey-detail', survey_id=survey_id)
 #     else:
-#         return redirect('home:dupa')
+#         return redirect('users:dupa')
 #
 #
 #
@@ -410,7 +410,7 @@ def follow_thread_view(request, thread_id):
 #         messages.info(request, 'Twój głos został skasowany!')
 #         return redirect('news:survey-detail', survey_id=survey_id)
 #     else:
-#         return redirect('home:dupa')
+#         return redirect('users:dupa')
 #
 #
 # #
@@ -477,7 +477,7 @@ def follow_thread_view(request, thread_id):
 #     if profile == option.author:
 #         return render(request, 'news/survey_option_modify.html', context)
 #     else:
-#         return redirect('home:dupa')
+#         return redirect('users:dupa')
 #
 #
 #
@@ -490,4 +490,4 @@ def follow_thread_view(request, thread_id):
 #         option.delete()
 #         return redirect('news:survey-detail', survey_id=survey_id)
 #     else:
-#         return redirect('home:dupa')
+#         return redirect('users:dupa')

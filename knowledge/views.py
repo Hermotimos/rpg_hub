@@ -141,4 +141,4 @@ def kn_packet_form_view(request, kn_packet_id):
             or current_profile.knowledge_packets.filter(id=kn_packet_id):
         return render(request, '_form.html', context)
     else:
-        return redirect('home:dupa')
+        return redirect('users:dupa')

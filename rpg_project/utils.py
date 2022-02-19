@@ -369,7 +369,7 @@ def only_game_masters(function):
         if profile.status == 'gm':
             return function(request, *args, **kwargs)
         else:
-            return redirect('home:dupa')
+            return redirect('users:dupa')
         
     return wrap
 
@@ -382,7 +382,7 @@ def only_game_masters_and_spectators(function):
         if profile.status in ['gm', 'spectator']:
             return function(request, *args, **kwargs)
         else:
-            return redirect('home:dupa')
+            return redirect('users:dupa')
         
     return wrap
 

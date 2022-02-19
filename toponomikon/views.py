@@ -63,7 +63,7 @@ def toponomikon_location_view(request, loc_name):
     try:
         this_location = locs.get(name=loc_name)
     except Location.DoesNotExist:
-        return redirect('home:dupa')
+        return redirect('users:dupa')
     
     # LOCATIONS TAB
     locations = known_locations.filter(in_location=this_location)
@@ -93,4 +93,4 @@ def toponomikon_location_view(request, loc_name):
     if this_location in known_locations or profile.can_view_all:
         return render(request, 'toponomikon/this_location.html', context)
     else:
-        return redirect('home:dupa')
+        return redirect('users:dupa')
