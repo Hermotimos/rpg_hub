@@ -73,17 +73,7 @@
                                         </div>
                                         <div class="col px-0">
                                             {% for character in family_name.characters.all %}
-                                                <a href="{% url 'prosoponomikon:character' character.id %}">
-                                                    <div class="d-inline float-right ml-1" data-toggle="tooltip" data-placement="left" data-html="true"
-                                                        title='
-                                                            <span class="font-italic">
-                                                                <img class="portait img-xl rounded-circle" src="{{ character.profile.image.url }}">
-                                                                <br>
-                                                                {{ character.profile }}
-                                                            </span>'>
-                                                       <img class="rounded-circle portait img-xs border border-dark" src="{{ character.profile.image.url }}">
-                                                    </div>
-                                                </a>
+                                                {% include 'imaginarion/_profile_img_with_tooltip.html' %}
                                             {% endfor %}
                                         </div>
                                     </div>
