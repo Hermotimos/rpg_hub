@@ -52,6 +52,7 @@ class PerkAdmin(admin.ModelAdmin):
     filter_horizontal = ['conditional_modifiers', 'comments']
     list_display = ['id', 'name', 'description', 'cost']
     list_editable = ['name', 'description', 'cost']
+    list_filter = ['skill_levels__skill']
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
