@@ -66,9 +66,10 @@ def get_synergies_allowed(user_profiles):
 
 def get_synergies_acquired(profile: users.models.Profile):
     skill_levels = SkillLevel.objects.filter(acquired_by=profile)
-
+    
+    synergy_levels = SynergyLevel.objects.prefetch_related('skill_levels')
     synergy_levels_ids = [
-        synergy_lvl.id for synergy_lvl in SynergyLevel.objects.all()
+        synergy_lvl.id for synergy_lvl in synergy_levels
         if all([(skill_lvl in skill_levels) for skill_lvl in synergy_lvl.skill_levels.all()])
     ]
     
