@@ -203,7 +203,8 @@ span.pointer {cursor: pointer;}
     margin-right: auto;
 }
 .img-xl {height: 5rem;}
-.img-md {height: 4.2rem;}
+.img-lg {height: 4.2rem;}
+.img-md {height: 2.5rem;}
 .img-sm {height: 1.875rem;}
 .img-xs {height: 1.25rem;}
 .img-xxs {height: 0.9rem;}
