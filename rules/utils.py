@@ -82,11 +82,6 @@ def get_synergies_acquired(profile: users.models.Profile):
         'perks__comments',
         'skill_levels__skill',
     )
-
     synergies = Synergy.objects.filter(synergy_levels__in=synergy_levels)
     synergies = synergies.prefetch_related(Prefetch('synergy_levels', queryset=synergy_levels))
     return synergies
-
-    # TODO optimizations - 104 queries (should be around 60 for Mamert)
-    # TODO delete allowees field on Synergy
-    # TODO after depoying to production reload GM allowed (after migration)
