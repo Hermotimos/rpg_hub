@@ -85,4 +85,4 @@ def get_synergies_acquired(profile: users.models.Profile):
     )
     synergies = Synergy.objects.filter(synergy_levels__in=synergy_levels)
     synergies = synergies.prefetch_related(Prefetch('synergy_levels', queryset=synergy_levels))
-    return synergies
+    return synergies.distinct()

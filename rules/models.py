@@ -117,7 +117,7 @@ class ConditionalModifier(Model):
     overview = CharField(max_length=100, blank=True, null=True)
 
     class Meta:
-        ordering = ['overview']
+        ordering = ['modifier']
 
     def __str__(self):
         combat_types = [str(ct).split()[-1][:4] for ct in self.combat_types.all()]
