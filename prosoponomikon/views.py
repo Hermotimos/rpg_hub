@@ -75,8 +75,8 @@ def prosoponomikon_character_for_gm_view(request, character_id):
 
     known_characters = character.profile.characters_all_known_annotated_if_indirectly()
     
-    # NPCs: Default skills and kn_packets etc. as per CharacterGroup
-    if character.profile.status == 'npc':
+    # NPCs: Default skills and kn_packets if Character in a CharacterGroup
+    if character.profile.status == 'npc' and character.character_groups.exists():
         synergies = []
         skills = []
         knowledge_packets = []
