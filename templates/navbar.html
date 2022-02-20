@@ -164,6 +164,10 @@
                         data-toggle="tooltip" data-placement="bottom" title="Dezyderat">
                         <i class="icon-demand"></i>
                     </a>
+                    <a class="btn btn-outline-light btn-space" href="{% url 'users:edit-user' %}"
+                        data-toggle="tooltip" data-placement="bottom" title="Konto Użytkownika">
+                        <i class="icon-user"></i>
+                    </a>
                     <a class="btn btn-outline-light btn-space" href="{% url 'users:logout' %}">Wyloguj</a>
                 {% else %}
                     <a class="btn btn-outline-light btn-space" href="{% url 'users:register' %}">Nowa Postać</a>

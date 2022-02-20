@@ -14,7 +14,6 @@ class UserRegistrationForm(UserCreationForm):
 
 
 class UserUpdateForm(forms.ModelForm):
-    email = forms.EmailField(required=False)
 
     class Meta:
         model = User
@@ -22,9 +21,16 @@ class UserUpdateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['email'].label = "EMAIL (niewymagany, ale potrzebny do " \
-                                     "informowania o wydarzeniach itp.)"
+        self.fields['email'].label = "EMAIL"
         self.fields['username'].label = "LOGIN"
+
+
+class UserImageUpdateForm(forms.Form):
+    user_image = forms.ImageField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['user_image'].label = "AWATAR UŻYTKOWNIKA (wymiary kwadratu!)"
 
 
 class ProfileUpdateForm(forms.ModelForm):
@@ -35,4 +41,4 @@ class ProfileUpdateForm(forms.ModelForm):
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['image'].label = "AWATAR (wymiary kwadratu!)"
+        self.fields['image'].label = "AWATAR POSTACI (wymiary kwadratu!)"

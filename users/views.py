@@ -10,7 +10,7 @@ from django.shortcuts import render
 from prosoponomikon.forms import CharacterForm
 from prosoponomikon.models import Character, FirstName
 from rpg_project.utils import sample_from_qs
-from users.forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
+from users.forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm, UserImageUpdateForm
 from users.models import Profile
 
 
@@ -61,7 +61,7 @@ def register_view(request):
 
 @login_required()
 def change_password_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
 
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
@@ -76,7 +76,7 @@ def change_password_view(request):
         form = PasswordChangeForm(request.user)
 
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Zmiana hasła',
         'form': form
     }
@@ -84,34 +84,35 @@ def change_password_view(request):
 
 
 @login_required
-def profile_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+def edit_user_view(request):
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    user_profiles = current_profile.user.profiles.all()
+    
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(
-            request.POST, request.FILES, instance=profile)
-        character_form = CharacterForm(
-            request.POST, instance=profile.character)
-
-        if user_form.is_valid() and profile_form.is_valid():
+        user_image_form = UserImageUpdateForm(request.POST, request.FILES)
+        
+        if user_form.is_valid() and user_image_form.is_valid():
             user_form.save()
-            profile_form.save()
-            character_form.save()
-            messages.info(request, 'Zaktualizowano profil Postaci!')
-            return redirect('users:profile')
+            user_image = user_image_form.cleaned_data.get('user_image')
+            if user_image:
+                for profile in user_profiles:
+                    profile.user_image = user_image
+                    profile.save()
+
+            messages.info(request, 'Zaktualizowano Użytkownika!')
+            return redirect('users:edit-user')
     else:
         user_form = UserUpdateForm(instance=request.user)
-        profile_form = ProfileUpdateForm(instance=profile)
-        character_form = CharacterForm(instance=profile.character)
+        user_image_form = UserImageUpdateForm()
 
     context = {
-        'current_profile': profile,
-        'page_title': 'Profil',
+        'current_profile': current_profile,
+        'page_title': 'Konto Użytkownika',
         'user_form': user_form,
-        'profile_form': profile_form,
-        'character_form': character_form,
+        'user_image_form': user_image_form,
     }
-    return render(request, 'users/edit_profile.html', context)
+    return render(request, 'users/user_edit.html', context)
 
 
 @login_required
@@ -121,11 +122,10 @@ def edit_profile_view(request):
     if request.method == 'POST':
         profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=current_profile)
         character_form = CharacterForm(request.POST, instance=current_profile.character)
-
-        if profile_form.is_valid():
+        if profile_form.is_valid() and character_form.is_valid():
             profile_form.save()
             character_form.save()
-            messages.info(request, 'Zaktualizowano profil Postaci!')
+            messages.info(request, 'Zaktualizowano Postać!')
             return redirect('users:edit-profile')
     else:
         profile_form = ProfileUpdateForm(instance=current_profile)
