@@ -2,11 +2,12 @@
 {% load custom_filters %}
 
 
-
 <tr>
     <td class="align-top"></td>
-    <td class="align-top pl-1 pt-1">
-        <img class="img-numeral" src="{% static level_img %}">
+    <td class="align-top pl-1">
+        <a href="{% url 'admin:rules_skilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+            <img class="img-xs" src="{% static level_img %}">
+        </a>
     </td>
     <td class="align-top pl-1 pr-4 py-1 text-justify font-14">
         
@@ -25,7 +26,7 @@
             <div class="mb-1 {% if skill_or_synergy_level.description %} mt-1 {% endif %}">
                 <div class="font-weight-bold">
                     {% if current_profile.status == 'gm' %}
-                        <a class="" href="{% url 'admin:rules_perk_change' perk.id %}" target="_blank"
+                        <a href="{% url 'admin:rules_perk_change' perk.id %}" target="_blank"
                            data-toggle="tooltip" data-placement="right" title="Edytuj Atut">
                             ✧ {{ perk.name|trim_nums }}
                         </a>
