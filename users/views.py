@@ -69,7 +69,7 @@ def change_password_view(request):
             user = form.save()
             update_session_auth_hash(request, user)
             messages.info(request, 'Hasło zostało zaktualizowane!')
-            return redirect('users:profile')
+            return redirect('users:edit-profile')
         else:
             messages.warning(request, 'Popraw poniższy błąd!')
     else:
@@ -111,7 +111,33 @@ def profile_view(request):
         'profile_form': profile_form,
         'character_form': character_form,
     }
-    return render(request, 'users/profile.html', context)
+    return render(request, 'users/edit_profile.html', context)
+
+
+@login_required
+def edit_profile_view(request):
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    
+    if request.method == 'POST':
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=current_profile)
+        character_form = CharacterForm(request.POST, instance=current_profile.character)
+
+        if profile_form.is_valid():
+            profile_form.save()
+            character_form.save()
+            messages.info(request, 'Zaktualizowano profil Postaci!')
+            return redirect('users:edit-profile')
+    else:
+        profile_form = ProfileUpdateForm(instance=current_profile)
+        character_form = CharacterForm(instance=current_profile.character)
+
+    context = {
+        'current_profile': current_profile,
+        'page_title': 'Edycja Postaci',
+        'profile_form': profile_form,
+        'character_form': character_form,
+    }
+    return render(request, 'users/edit_profile.html', context)
 
 
 @login_required

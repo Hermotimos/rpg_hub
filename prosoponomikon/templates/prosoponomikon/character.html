@@ -50,7 +50,7 @@
 <!--                            </div>-->
                             {% if current_profile.status == 'player' and current_profile.character == character %}
                                 <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
-                                    <a class="btn btn-outline-dark icon-edit py-2" href="{% url 'users:profile' %}"></a>
+                                    <a class="btn btn-outline-dark icon-edit py-2" href="{% url 'users:edit-profile' %}"></a>
                                 </div>
                             {% endif %}
                             {% if current_profile.status == 'gm' %}

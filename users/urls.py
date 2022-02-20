@@ -10,6 +10,6 @@ urlpatterns = [
     path('login/', views.CustomLoginView.as_view(), name='login'),
     path('logout/', views.CustomLogoutView.as_view(), name='logout'),
     path('change_password/', views.change_password_view, name='change-password'),
-    path('profile/', views.profile_view, name='profile'),
+    path('edit-profile/', views.edit_profile_view, name='edit-profile'),
     path('switch-profile:<int:profile_id>/', views.switch_profile, name='switch-profile'),
 ]
