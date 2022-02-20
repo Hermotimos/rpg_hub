@@ -9,7 +9,6 @@ from django.db.models import (
     ImageField,
     IntegerField,
     Manager,
-    F, Max, Q,
     Model,
     Prefetch,
     Value,
@@ -38,6 +37,13 @@ class Profile(Model):
     image = ImageField(
         default='profile_pics/profile_default.jpg',
         upload_to='profile_pics',
+        blank=True,
+        null=True,
+        storage=ReplaceFileStorage(),
+    )
+    user_image = ImageField(
+        default='profile_pics/profile_default.jpg',
+        upload_to='user_pics',
         blank=True,
         null=True,
         storage=ReplaceFileStorage(),

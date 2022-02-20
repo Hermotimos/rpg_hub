@@ -35,5 +35,4 @@ class ProfileUpdateForm(forms.ModelForm):
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['image'].label = "AWATAR (Grafika o wymiarach kwadratu, " \
-                                     "aby ładnie prezentowała się na stronie)"
+        self.fields['image'].label = "AWATAR POSTACI (kwadrat!)"

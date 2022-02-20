@@ -1,10 +1,7 @@
 
-<img src="{{ thread.initiator_image_url }}"
-     class="portait img-lg
-        {% if thread_kind == 'Announcement' %}
-             rounded
-        {% elif thread_kind == 'Debate' %}
-             rounded-circle
-        {% endif %}"
->
 
+{% if thread_kind == 'Announcement' %}
+     <img class="portait img-lg rounded" src="{{ profile.user_image.url }}">
+{% elif thread_kind == 'Debate' %}
+     <img class="portait img-lg rounded-circle" src="{{ profile.image.url }}">
+{% endif %}

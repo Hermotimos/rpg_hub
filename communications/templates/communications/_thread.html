@@ -16,7 +16,9 @@
     <span class="pt-5" id="thread_{{ thread.id }}"></span>
     <div class="row p-1">
         <div class="col-auto px-0 mr-n3">
-            {% include '_img_md.html' %}
+            {% with profile=thread.initiator %}
+                {% include '_img_md.html' %}
+            {% endwith %}
         </div>
         <div class="col pr-0 ml-n1">
             <div class="container h-100">
@@ -78,7 +80,9 @@
                                         <!-- Ensure GM picture is hidden in Debates -->
                                             <div class="d-inline text-nowrap">
                                                 {% if thread_kind != 'Debate' or author.grouper.status != 'gm' %}
-                                                    {% include '_img_xs.html' %}
+                                                    {% with profile=author.grouper %}
+                                                        {% include '_img_xs.html' %}
+                                                    {% endwith %}
                                                     <span class="font-13">{{ author.list|length }}</span>
                                                 {% endif %}
                                             </div>

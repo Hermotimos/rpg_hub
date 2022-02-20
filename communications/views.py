@@ -52,7 +52,7 @@ def get_recipients(statement: communications.models.Statement):
     return recipients
 
 
-def get_initiator_image_url(thread: Thread):
+def get_initiator(thread: Thread):
     """Get URL of the Profile who "initiated" the Thread.
     Take the author of first Statement as the initiator; only in Announcements
     take the first player's or NPC's Profile as initiator.
@@ -60,8 +60,8 @@ def get_initiator_image_url(thread: Thread):
     if thread.kind == "Debate":
         for statement in thread.statements.all():
             if statement.author.status != 'gm':
-                return statement.author.image.url
-    return thread.statements.first().author.image.url
+                return statement.author
+    return thread.statements.first().author
 
 
 def thread_inform(current_profile, request, thread, tag_title):
@@ -125,12 +125,12 @@ def threads_view(request, thread_kind, tag_title):
         page_title = "TODO"
         unseen = Thread.objects.none()
 
-    # Annotate threads with attribute 'initiator_image_url'
+    # Annotate threads with attribute 'initiator'
     threads = threads.exclude(id__in=unseen)
     for thread in threads:
-        thread.initiator_image_url = get_initiator_image_url(thread)
+        thread.initiator = get_initiator(thread)
     for thread_unseen in unseen:
-        thread_unseen.initiator_image_url = get_initiator_image_url(thread_unseen)
+        thread_unseen.initiator = get_initiator(thread_unseen)
 
     tags = ThreadTag.objects.filter(author=current_profile, kind=thread_kind)
     formset = ThreadTagEditFormSet(
