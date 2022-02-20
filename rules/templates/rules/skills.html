@@ -45,57 +45,55 @@
         </p>
         <table class="mt-3 mx-3 font-italic">
             <tr>
-                <td class="align-top pt-1">
-                    <img class="img-numeral" src="{% static 'img/0.png' %}">
+                <td class="align-top">
+                    <img class="img-xs" src="{% static 'img/0.png' %}">
                 </td>
                 <td class="align-bottom pl-1 text-justify">
                     <p class="font-weight-bold m-0">
                         Brak umiejętności
                     </p>
-                    <p class="m-0">
+                    <p class="m-0 ml-1">
                         Postać nie posiada jakiejkolwiek sprawności w danym zakresie, która wykraczałaby ponad przeciętne rozeznanie w świecie i rozgarnięcie życiowe.
                         Ewentualnie Postaci może się zdawać, że coś na dany temat wie albo umie. Oczywiście mało komu przeszkadza to, żeby się wymądrzać.
-                    </p>
-                    <p class="m-0">
                         Jeśli Postać spróbuje użyć danej Umiejętności, to istnieje oczywiście szansa na to, że próba się powiedzie, jednak jest to szansa niezwykle mała...
                     </p>
                 </td>
             </tr>
             <tr>
-                <td class="align-top pt-1">
-                    <img class="img-numeral" src="{% static 'img/1.png' %}">
+                <td class="align-top">
+                    <img class="img-xs" src="{% static 'img/1.png' %}">
                 </td>
                 <td class="align-bottom pl-1 text-justify">
                     <p class="font-weight-bold m-0">
                         Poziom kompetentny
                     </p>
-                    <p class="m-0">
+                    <p class="m-0 ml-1">
                         Pozwala na wykonywanie standardowych testów za powodzenie zastosowania danej Umiejętności z modyfikatorami zależnymi od sytuacji.
                     </p>
                 </td>
             </tr>
             <tr>
                 <td class="align-top">
-                    <img class="img-numeral" src="{% static 'img/2.png' %}">
+                    <img class="img-xs" src="{% static 'img/2.png' %}">
                 </td>
                 <td class="align-bottom pl-1 text-justify">
                     <p class="font-weight-bold m-0">
                         Poziom ekspercki
                     </p>
-                    <p class="m-0">
+                    <p class="m-0 ml-1">
                         Pozwala na pełne wykorzystanie danej Umiejętności oraz eksperymentowanie poza jej zakresem standardowego zastosowania.
                     </p>
                 </td>
             </tr>
             <tr>
                 <td class="align-top">
-                    <img class="img-numeral" src="{% static 'img/3.png' %}">
+                    <img class="img-xs" src="{% static 'img/3.png' %}">
                 </td>
                 <td class="align-bottom pl-1 text-justify">
                     <p class="font-weight-bold m-0">
                         Poziom legendarny
                     </p>
-                    <p class="m-0">
+                    <p class="m-0 ml-1">
                         Pozwala na działania wykraczające poza zdolności pojmowania przeciętnego człowieka i naginające granicę między rzeczywistością a eposem…
                     </p>
                 </td>
@@ -146,17 +144,23 @@
             który przebiją tylko najbardziej zdeterminowani i wytrwali.
             Odpowiada to następującemu schematowi Pasków Postępu dla poziomów Umiejętności, gdzie poszczególne „kratki" odpowiadają jednemu doświadczeniu:
         </p>
-        <ol class="rules  ml-4 mt-2 font-italic">
-            <li>
-                20 niewymagających: bardzo niskie wymaganie, ale przez ilość wymaga pewnego czasu
-            </li>
-            <li>
-                5 wymagających: wystarczy niewielka liczba, ale za to „jakościowych” doświadczeń
-            </li>
-            <li>
-                15 trudnych: tylko nieliczni i naprawdę zdeterminowani są w stanie wspiąć się na ten pułap
-            </li>
-        </ol>
+        
+        <div class="ml-3 mb-3">
+            <p>
+                <img class="img-xs" src="{% static 'img/1.png' %}">
+                <b>20 niewymagających:</b> bardzo niskie wymaganie, ale przez ilość wymaga pewnego czasu.
+            </p>
+            <p>
+                <img class="img-xs" src="{% static 'img/2.png' %}">
+                <b>5 wymagających:</b> wystarczy niewielka liczba, ale za to „jakościowych” doświadczeń.
+            </p>
+            <p>
+                <img class="img-xs" src="{% static 'img/3.png' %}">
+                <b>15 trudnych:</b> tylko nieliczni i naprawdę zdeterminowani są w stanie wspiąć się na ten pułap.
+            </p>
+        </div>
+        
+
         <p>
             Uzupełnianie kratek Paska Postępu następuje przy okazji przydzielenia Doświadczenia po zakończeniu Sesji.
             Gracz wskazuje doświadczenie, które jego zdaniem przyczynia się do zapełnienia kratki Paska Postępu, a Mistrz Gry ustosunkowuje się do tego.
@@ -172,17 +176,15 @@
             Na tej zasadzie odbywa się nabywanie Atutów, czyli pomniejszych, zindywidualizowanych zdolności i sprawności (bądź ułomności).
         </p>
 
-        <h2 class="rules mt-5 mb-3">Domyślny Tryb Umiejętności</h2>
+        <h2 class="rules mt-5 mb-3">Domyślny tryb użycia Umiejętności</h2>
         <p>
             Niektóre Umiejętności zawierają zobowiązanie Gracza do wyboru domyślnego trybu ich użycia, co zmierza do tego,
             aby w każdym momencie gry możliwe było ustalenie, czy Postać zastosowała daną Umiejętność, czy nie - niezależnie od Deklaracji Gracza.
             Jeśli opis Umiejętności nie stwierdza inaczej, to Gracz zobowiązany jest do wpisania Domyślnego Trybu na swojej Karcie Postaci przy danej Umiejętności.
             Domyślny tryb można zmienić w każdej chwili, jednak absolutnie i nieodwołalnie obowiązujący jest tryb wpisany na najnowszej Karcie Postaci, jaką dysponuje Gracz
             (choćby tak nowej, że nie w pełni uzupełnionej).
-            W razie niejasności obowiązuje zasada "Ich dubio FUCK reo".
             Wszystkie inne wpisy trybu muszą być wymazane lub przekreślone na śmierć,
-            a przy najmniejszej niejasności/nieczytelności decyzja należy do MG, który ma obowiązek zdecydować na niekorzyść,
-            na ile tylko jest w stanie domyślić się, co bardziej zaboli - już nawet nie Postać, a Gracza... Tak.
+            a przy najmniejszej niejasności/nieczytelności decyzja należy do MG, który oczywiście zdecyduje na niekorzyść.
         </p>
 
     </div>
