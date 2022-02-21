@@ -21,7 +21,7 @@
                 </div>
                 <div id="collapseOne" class="collapse show" aria-labelledby="all-skills" data-parent="#accordion">
                     <div class="card-body container">
-                        {% with collapse_id_suffix="skills-all" %}
+                        {% with id_suffix="skills-all" %}
                             {% for skill in skills %}
                                 {% include 'rules/_skill.html' %}
                             {% endfor %}
@@ -59,7 +59,9 @@
                                 {% endwith %}
                             {% else %}
                                 {% for skill in skill_type.skills.all %}
-                                    {% include 'rules/_skill.html' %}
+                                    {% with id_suffix=skill_type.name %}
+                                        {% include 'rules/_skill.html' %}
+                                    {% endwith %}
                                 {% endfor %}
                             {% endif %}
                         </div>

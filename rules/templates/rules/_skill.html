@@ -13,7 +13,7 @@
                 {% endif %}
             </th>
             <th colspan="11">
-                <h2 class="pt-3" data-toggle="collapse" data-target="#{{ skill.short_name }}{{ collapse_id_suffix }}">
+                <h2 class="pt-3" data-toggle="collapse" data-target="#{{ skill.short_name }}{{ id_suffix }}">
                     <b class="hover-blue ml-1">
                         {{ skill.name }}
                         <!-- Used when template is called from prosoponomikon_character_for_player_view -->
@@ -36,7 +36,7 @@
             </th>
         </tr>
     </thead>
-    <tbody id="{{ skill.short_name }}{{ collapse_id_suffix }}" class="collapse">
+    <tbody id="{{ skill.short_name }}{{ id_suffix }}" class="collapse">
             {% for skill_level in skill.skill_levels.all %}
                 {% if not forloop.last and max_level_only %}
                     <!-- When called from prosoponomikon_character_for_player_view skill all levels but the highest -->
