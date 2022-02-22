@@ -5,15 +5,18 @@
 <table class="mt-2">
     <thead>
         <tr>
-            <th>
-                {% if skill.image %}
-                    <img class="img-skill" src="{{ skill.image.url }}">
-                {% else %}
-                    <img class="img-skill" src="{% static 'img/skill-default.png' %}">
-                {% endif %}
-            </th>
+            <td>
+                <!-- TODO why not working-->
+                <a href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                    {% if skill.image %}
+                        <img class="img-skill" src="{{ skill.image.url }}">
+                    {% else %}
+                        <img class="img-skill" src="{% static 'img/skill-default.png' %}">
+                    {% endif %}
+                </a>
+            </td>
             <th colspan="11">
-                <h2 class="pt-3" data-toggle="collapse" data-target="#{{ skill.short_name }}{{ id_suffix }}">
+                <h2 class="pt-3 ml-1" data-toggle="collapse" data-target="#{{ skill.short_name }}{{ id_suffix }}">
                     <b class="hover-blue ml-1">
                         {{ skill.name }}
                         <!-- Used when template is called from prosoponomikon_character_for_player_view -->
