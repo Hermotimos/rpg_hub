@@ -160,7 +160,7 @@ def rules_traits_magic_view(request):
         'page_title': 'Moc'
     }
     if can_view_enchanting_rules(user_profiles):
-        return render(request, 'rules/traits_magic.html', context)
+        return render(request, 'rules/power.html', context)
     else:
         return redirect('users:dupa')
     
