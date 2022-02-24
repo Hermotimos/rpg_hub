@@ -173,8 +173,8 @@ class SkillKind(Model):
         
 class SkillType(Model):
     """A classification category for Skills."""
-    kinds = M2M(to=SkillKind, related_name='skill_types', blank=True)
     name = CharField(max_length=100, unique=True)
+    kinds = M2M(to=SkillKind, related_name='skill_types', blank=True)
     sorting_name = CharField(max_length=101, blank=True, null=True)
 
     class Meta:

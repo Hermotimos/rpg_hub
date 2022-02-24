@@ -103,11 +103,11 @@ def rules_skills_view(request):
 
 
 @login_required
-def rules_skills_list_view(request):
+def rules_skills_list_view(request, skilltype_kind):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
 
-    skills = Skill.objects.filter(allowees__in=user_profiles, types__kinds__name="Powszechne")
+    skills = Skill.objects.filter(allowees__in=user_profiles, types__kinds__name=skilltype_kind)
     skills = skills.select_related('group__type').distinct()
     skills = skills.prefetch_related(
         'skill_levels__perks__conditional_modifiers__conditions',
@@ -116,7 +116,7 @@ def rules_skills_list_view(request):
         'skill_levels__perks__comments',
     )
     
-    skill_types = SkillType.objects.filter(kinds__name='Powszechne')
+    skill_types = SkillType.objects.filter(kinds__name=skilltype_kind)
     skill_types = skill_types.prefetch_related(Prefetch('skills', queryset=skills), 'skill_groups')
     skill_types = skill_types.filter(skills__in=skills).distinct()
     
@@ -205,7 +205,7 @@ def rules_power_theurgists_view(request):
         return render(request, 'rules/power_theurgists.html', context)
     else:
         return redirect('users:dupa')
-    
+
 
 @login_required
 def rules_tests_view(request):
