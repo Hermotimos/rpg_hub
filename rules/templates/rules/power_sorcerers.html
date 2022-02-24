@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/rules.css' %}">
+{% endblock head_extra %}
+
+{% block content %}
+    <div class="rules-styling pt-3">
+
+        <h2 class="rules mt-5 mb-3">
+            Zaklęcia
+        </h2>
+        <p>
+            Każde Zaklęcie należy do jednego z trzech Kręgów. W zależności od Kręgu koszt nauki Zaklęcia to 400, 800 lub 2000.
+            Koszt Energii przy rzucaniu Zaklęcia to kwadrat jego Kręgu, czyli 1, 4 lub 9.
+            Krąg Zaklęcia decyduje również o jego czasochłonności, która wynosi dokładnie tyle rund co Krąg (1, 2, 3);
+            w tym czasie Koncentracja Maga może zostać przerwana, skutkiem czego Zaklęcie nie dochodzi do skutku, a Energia Maga zostaje uszczuplona.
+        </p>
+
+
+        <h2 class="rules mt-5 mb-3">
+            Rzucanie Zaklęć
+        </h2>
+        <p>
+            Rzucenie Zaklęcia wymaga dwóch elementów – Formuły (słów, gestów lub komponentów) oraz Energii.
+            W ramach Formuły słowa, gesty i komponenty mogą być wymienne; Zaklęcia oparte wyłącznie na komponentach występują w Alchemii,
+            a Zaklęcia oparte wyłącznie na słowach lub gestach mogą stanowić prawdziwy skarb dla Magów wyspecjalizowanych w jednym, bądź drugim.
+        </p>
+        <p>
+            Ilość Energii pozostającej do dyspozycji Maga wynosi tyle, ile jego Próg Energii.
+            Ta Energia ulega pełnej regeneracji poprzez zwyczajny, całonocny odpoczynek,
+            a w przypadku słabego lub skróconego snu – jedynie częściowej regeneracji.
+            Jest to ilość raczej skromna, dlatego nic dziwnego, że Magowie polegają na rozmaitych dodatkowych źródłach Energii,
+            do których należą kryształy, talizmany i chowańce. Mogą one działać na zasadzie wyczerpywalych rezerwuarów lub stałych amplifikatorów Energii Maga.
+        </p>
+        
+        
+        <h2 class="rules mt-5 mb-3">
+            Nauka Zaklęć
+        </h2>
+        <p>
+            Nauka Zaklęcia polega na zapoznaniu z jego Formułą za pośrednictwem przekazu ustnego lub pisemnego (nie stosują się tu zasady Paska Postępu).
+            W nauce Zaklęć Mag jest ograniczony jedynie dostępnością treści i zwyczajną pojemnością ludzkiego umysłu.
+            Oznacza to, że nauka Zaklęcia zajmuje dokładnie tyle, ile Gracz potrzebuje na zapoznanie się z jego Formułą.
+            Oczywiście Gracz może próbować rzucić Zaklęcie nawet po dwusekundowym ogarnięciu spojrzeniem jego Formuły,
+            jednak ryzykuje wtedy Zepsucie Zaklęcia, co może mieć katastrofalne skutki…
+        </p>
+
+        <h2 class="rules mt-5 mb-3">
+            Zepsucie Zaklęcia
+        </h2>
+        <p>
+            Mag, który zepsuł Zaklęcie przez pomyłkę w jego Formule, ryzykuje dużo… TODO
+        </p>
+
+        
+        
+    </div>
+
+{% endblock content %}

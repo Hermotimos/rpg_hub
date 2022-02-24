@@ -26,12 +26,23 @@
                 <li><h6><a href="{% url 'rules:synergies-list' %}">Lista Synergii</a></h6></li>
             </ul>
         </li>
-        {% if can_view_enchanting_rules %}
-            <li><h6><a href="{% url 'rules:traits-magic' %}">Moc</a></h6></li>
-        {% endif %}
     </ol>
     <br>
     
+    {% if can_view_enchanting_rules %}
+    <h2>
+        <img class="img-rules" src="{% static 'img/WALKA.png' %}">
+        <strong class="align-middle small-caps border-bottom-dark">Moc</strong>
+    </h2>
+    <br>
+    <ol class="ml-3 pl-5">
+        <li><h6><a href="{% url 'rules:power-trait' %}">Cecha Mentalna "Moc"</a></h6></li>
+        <li><h6><a href="{% url 'rules:power-priests' %}">Moce Kapłańskie</a></h6></li>
+        <li><h6><a href="{% url 'rules:power-sorcerers' %}">Magia</a></h6></li>
+        <li><h6><a href="{% url 'rules:power-theurgists' %}">Teurgia</a></h6></li>
+    </ol>
+    <br>
+    {% endif %}
     <h2>
         <img class="img-rules" src="{% static 'img/WALKA.png' %}">
         <strong class="align-middle small-caps border-bottom-dark">Walka i obrażenia</strong>
@@ -51,7 +62,7 @@
     </h2>
     <br>
     <ol class="ml-3 pl-5">
-        <li><h6><a href="{% url 'rules:character-sheet' %}">Szablony</a></h6></li>
+        <li><h6><a href="{% url 'rules:character-sheet' %}">Szablony [nieaktualne]</a></h6></li>
     </ol>
 
 

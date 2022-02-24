@@ -152,7 +152,7 @@ def rules_traits_view(request):
 
 
 @login_required
-def rules_traits_magic_view(request):
+def rules_power_trait_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
     context = {
@@ -160,7 +160,49 @@ def rules_traits_magic_view(request):
         'page_title': 'Moc'
     }
     if can_view_enchanting_rules(user_profiles):
-        return render(request, 'rules/power.html', context)
+        return render(request, 'rules/power_trait.html', context)
+    else:
+        return redirect('users:dupa')
+    
+    
+@login_required
+def rules_power_priests_view(request):
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    user_profiles = current_profile.user.profiles.all()
+    context = {
+        'current_profile': current_profile,
+        'page_title': 'Moce Kapłańskie'
+    }
+    if can_view_enchanting_rules(user_profiles):
+        return render(request, 'rules/power_priests.html', context)
+    else:
+        return redirect('users:dupa')
+     
+     
+@login_required
+def rules_power_sorcerers_view(request):
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    user_profiles = current_profile.user.profiles.all()
+    context = {
+        'current_profile': current_profile,
+        'page_title': 'Magia'
+    }
+    if can_view_enchanting_rules(user_profiles):
+        return render(request, 'rules/power_sorcerers.html', context)
+    else:
+        return redirect('users:dupa')
+    
+     
+@login_required
+def rules_power_theurgists_view(request):
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    user_profiles = current_profile.user.profiles.all()
+    context = {
+        'current_profile': current_profile,
+        'page_title': 'Teurgia'
+    }
+    if can_view_enchanting_rules(user_profiles):
+        return render(request, 'rules/power_theurgists.html', context)
     else:
         return redirect('users:dupa')
     

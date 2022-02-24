@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/rules.css' %}">
+{% endblock head_extra %}
+
+{% block content %}
+    <div class="rules-styling pt-3">
+
+        <h2 class="rules mt-5 mb-3">
+            Moce Kapłańskie
+        </h2>
+        <p>
+            Każda Moc Kapłańska należy do jednego z Poziomów Sfragis. W zależności od Poziomu koszt nabycia Mocy to 400, 800 lub 2000.
+            Koszt Energii przy wykorzystaniu Mocy to kwadrat Poziomu Sfragis, czyli 1, 4 lub 9.
+            Poziom decyduje również o jej czasochłonności, która wynosi dokładnie tyle rund co Poziom (1, 2, 3);
+            w tym czasie Koncentracja Kapłana może zostać przerwana, skutkiem czego przerwaniu ulega również przepływ Mocy pochodzącej od bóstwa.
+            Przerwanie użycia Mocy nie uszczupla ani Progu Energii Kapłana, ani Energii pozostającej do jego dyspozycji.
+        </p>
+
+
+        <h2 class="rules mt-5 mb-3">
+            Korzystanie z Mocy
+        </h2>
+        <p>
+            Wykorzystanie Mocy Kapłańskiej nie wymaga żadnych komponentów, ponieważ pochodzi ona od bóstwa.
+            Natomiast, aby otrzymać możliwość korzystania z niej, kapłan albo musi przebywać w domenie danego bóstwa
+            (wówczas ilość Energii pozostającej do jego dyspozycji jest nieograniczona), albo musi dokonać rytuału ofiarnego,
+            który oddaje do jego dyspozycji ilość Energii zależną od wielkości ofiary.
+        </p>
+        <p>
+            Dla przykładu ofiara dla Neghara, oczywiście złożona z zachowaniem wszystkich jej reguł,
+            to około 4 Energii w przypadku drobiu czy zającowatych, około 10 dla kozy czy owcy, 30 dla byka czy jałówki,
+            a 500 i więcej w przypadku hekatomby z czarnych byków.
+        </p>
+        <p>
+            Energia pozostająca do dyspozycji kapłana na skutek rytuału ofiarnego ulega redukcji o połowę z każdym wschodem słońca, jaki upływa od ofiary.
+            Mimo to ewidentnie Kapłan bez wielkiego trudu może uzyskać do dyspozycji ilość Energii znacznie przekraczającą jego własną Energię.
+        </p>
+        
+        
+        <h2 class="rules mt-5 mb-3">
+            Nabywanie Mocy (Teoremat Sfragionu)
+        </h2>
+        <p>
+            Nabycie nowych Mocy przez Kapłana polega na otrzymaniu ich sfragionu (nie stosują się tu zasady Paska Postępu).
+            Podobnie jak w przypadku Sfragis bóstwa jest to przeżycie wycieńczające fizycznie,
+            gdyż odbywa się poprzez odciśnięcie pieczęci Mocy (sfragion) bezpośrednio na pieczęci bóstwa (Sfragis).
+            Kapłan zazwyczaj doświadcza osłabienia, a w przypadku osób starszych i schorowanych – nawet zapaści.
+        </p>
+        <p>
+            Za bezpieczny odstęp pomiędzy udzieleniem kolejnych sfragionów uznaje się zwykle tydzień,
+            choć i to może nie wystarczyć w przypadku słabowitych starców.
+            Jednak w przypadku osób w sile wieku i w pełni zdrowia, tydzień wystarczy w zupełności, aby uniknąć ryzyka zapaści.
+            W przypadku udzielenia sfragionu w mniejszym odstępie czasu istnieje ryzyko trwałego uszczerbku na zdrowiu.
+            Za każdy sfragion powyżej jednego na tydzień kapłan wykonuje Test KON Prozaiczny z kumulatywnym Malusem -2 x liczba brakujących dni.
+            Fiasko oznacza trwałą utratę 1 KON (wraz ze skutkami dla Życia, Progów Ran itd.).
+        </p>
+        
+    </div>
+
+{% endblock content %}

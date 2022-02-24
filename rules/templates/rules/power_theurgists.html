@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/rules.css' %}">
+{% endblock head_extra %}
+
+{% block content %}
+    <div class="rules-styling pt-3">
+
+        <h2 class="rules mt-5 mb-3">
+            Moce Teurgów
+        </h2>
+        <p>
+            Każda Moc Teurgiczna należy do jednego z trzech Kręgów. W zależności od Kręgu koszt nabycia Mocy to 400, 800 lub 2000.
+            Koszt Energii przy wykorzystaniu Mocy to kwadrat jego Kręgu, czyli 1, 4 lub 9.
+            Krąg Mocy decyduje również o jej czasochłonności, która wynosi dokładnie tyle rund co Krąg (1, 2, 3);
+            w tym czasie Koncentracja Teurga może zostać przerwana, skutkiem czego przerwaniu ulega również przepływ Mocy.
+            Przerwanie użycia Mocy nie uszczupla ani Progu Energii Kapłana, ani Energii pozostającej do jego dyspozycji.
+        </p>
+
+
+        <h2 class="rules mt-5 mb-3">
+            Korzystanie z Mocy
+        </h2>
+        <p>
+            Wykorzystanie Mocy Teurgicznej wymaga zarówno znajomości Formuły (głównie gestów, rzadziej komponentów), jak i dostępu do Energii.
+            Formuła Mocy Teurgicznej wymaga natomiast nieodmiennie określonych komponentów, co często uzupełnione jest gestem.
+            Teurg pozostaje w zażyłym związku z domeną (lub przecięciem paru domen), najczęściej dlatego, że w niej przyszedł na świat i się wychował,
+            zazwyczaj wykazując już w młodości spontaniczny dar do czerpania z niej, który następnie opanował dzięki naukom ze strony starszego Teurga.
+            To własnie dlatego Słowa nie należą do Formuły Mocy Teurgicznej; w ich miejsce wchodzi wrodzona (rzadziej nabyta) zdolność kształtowania Energii podług swojej woli.
+            Natomiast niejednokrotnie miejscowy zwyczaj nakazuje wypowiedzenie takiej czy innej frazy podczas użycia Mocy, ale ma to znaczenie jedynie rytualne.
+        </p>
+        <p>
+            Dopóki Teurg przebywa w domenie, z której się wywodzi, korzysta z nieograniczonego dostępu do Energii.
+            Ponieważ istotą Teurgii jest "zaklinanie" bóstw, a więc korzystanie z Mocy i Energii należących do bogów w sposób podporządkowany własnej ocenie,
+            dostęp do Energii nie wymaga dokonania rytuału ofiarnego.
+            Zarazem, balansując na krawędzi obrażenia bóstwa, Teurg musi oddawać mu pewną przysługę, która uzasadni tolerowanie go przez wyższe byty.
+            Zazwyczaj staje się strażnikiem owej domeny i obowiązujących w niej prawideł, a w szczególności zakazu mieszania sfery życia ze sferą śmierci.
+            Zasada ta jest ujmowana przez oficjalne kulty w ramach odpowiednich doktryn, jednak tylko uczeni Teurgowie dysponują tak precyzyjnym aparatem pojęciowym,
+            podczas gdy większość z nich posiada jedynie rozeznanie w tym, co "wolno" i czego "nie wolno", w tym, co bóstwu "obojętne" i w tym, bo mu "obmierzłe" - a przez to grozi jego gniewem.
+        </p>
+        <p>
+            Z drugiej strony, Teurg wyjęty z domeny, którą zna i w której potrafi się poruszać, jest dosyć bezradny.
+            Pozostaje bowiem zobowiązany do przestrzegania zasady rozdzielności sfer życia i śmierci,
+            a także wyczuwa konieczność zachowania wielu innych, nieznanych mu prawideł,
+            co może silnie ograniczać jego możliwości działania, jeśli nie chce sprowadzić na siebie gniewu bóstwa.
+            Ponadto Energia, jaka pozostaje do jego dyspozycji poza rodzimą domeną jest bardzo ograniczona - równa jego Mocy,
+            przez co musi polegać na jej rezerwuarach w postaci amuletów i chowańców.
+        </p>
+
+        
+        
+        <h2 class="rules mt-5 mb-3">
+            Nabywanie Mocy
+        </h2>
+        <p>
+            Nauka Mocy polega na zapoznaniu z jej Formułą za pośrednictwem przekazu ustnego lub pisemnego (nie stosują się tu zasady Paska Postępu).
+        </p>
+        
+        <h2 class="rules mt-5 mb-3">
+            Spalenie Mocy
+        </h2>
+        <p>
+            Teurg, który spalił Moc przez pomyłkę w jej Formule, ryzykuje doprawdy wiele.
+            Z jednej strony Energia, jaka przez niego przepłynęła, może wyzwolić niezamierzony i szkodliwy dla niego efekt,
+            który dodatkowo może skutkować naruszeniem prawideł domeny bóstwa i przez to ściągnąć na Teurga jego gniew.
+        </p>
+        
+    </div>
+
+{% endblock content %}
