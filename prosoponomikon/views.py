@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.db.models import Prefetch, Q
+from django.db.models.functions import Substr, Lower
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
@@ -26,7 +27,10 @@ from users.models import Profile, User
 @login_required
 def prosoponomikon_ungrouped_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
+    
     all_characters = profile.characters_known_annotated()
+    all_characters = all_characters.annotate(initial=Lower(Substr('profile__character_name_copy', 1, 1)))
+    
     context = {
         'current_profile': profile,
         'page_title': 'Prosoponomikon',
@@ -34,25 +38,25 @@ def prosoponomikon_ungrouped_view(request):
     }
     return render(request, 'prosoponomikon/characters_ungrouped.html', context)
 
-
-@login_required
-def prosoponomikon_grouped_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
-    
-    character_groups = profile.characters_groups_authored_with_characters()
-    all_characters = profile.characters_known_annotated()
-    player_characters = all_characters.filter(profile__status="player")
-    ungrouped_characters = all_characters.exclude(
-        character_groups__in=character_groups).exclude(id__in=player_characters)
-    
-    context = {
-        'current_profile': profile,
-        'page_title': 'Prosoponomikon',
-        'player_characters': player_characters,
-        'character_groups': character_groups,
-        'ungrouped_characters': ungrouped_characters,
-    }
-    return render(request, 'prosoponomikon/characters_grouped.html', context)
+#
+# @login_required
+# def prosoponomikon_grouped_view(request):
+#     profile = Profile.objects.get(id=request.session['profile_id'])
+#
+#     character_groups = profile.characters_groups_authored_with_characters()
+#     all_characters = profile.characters_known_annotated()
+#     player_characters = all_characters.filter(profile__status="player")
+#     ungrouped_characters = all_characters.exclude(
+#         character_groups__in=character_groups).exclude(id__in=player_characters)
+#
+#     context = {
+#         'current_profile': profile,
+#         'page_title': 'Prosoponomikon',
+#         'player_characters': player_characters,
+#         'character_groups': character_groups,
+#         'ungrouped_characters': ungrouped_characters,
+#     }
+#     return render(request, 'prosoponomikon/characters_grouped.html', context)
 
 
 @login_required
@@ -167,95 +171,95 @@ def prosoponomikon_character_for_player_view(request, character_id):
         return redirect('users:dupa')
 
 
-@login_required
-def prosoponomikon_character_groups_edit_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
-    characters = Character.objects.prefetch_related()
-    char_groups = CharacterGroup.objects.filter(author=current_profile)
-    char_groups = char_groups.prefetch_related(
-        'characters', 'default_knowledge_packets')
-        
-    if request.method == 'POST':
-        formset = CharacterManyGroupsEditFormSet(request.POST)
-        if formset.is_valid():
-            try:
-                formset.save()
-                any_changed = False
-                
-                for form in formset:
-                    if form.is_valid():
-                        # Deletion
-                        if form.cleaned_data.get('DELETE'):
-                            obj = form.cleaned_data.get('id')
-                            obj.delete()
-                            any_changed = True
-                            messages.success(request, f"Usunięto grupę '{obj.name}'!")
-                        # Modification
-                        else:
-                            obj = form.save()
-                            obj.save()
-                            if form.has_changed():
-                                any_changed = True
-                                messages.success(request, f"Zmodyfikowano grupę '{obj.name}'!")
-                    # form invalid
-                    else:
-                        messages.warning(request, form.errors)
-                        return redirect('prosoponomikon:groups-edit')
-                
-                if not any_changed:
-                    messages.warning(request, "Nie dokonano żadnych zmian!")
-                    
-                return redirect('prosoponomikon:grouped')
-
-            except IntegrityError:
-                messages.warning(request, "Nazwy grup muszą być unikalne!")
-                return redirect('prosoponomikon:groups-edit')
-            
-        # formset invalid
-        else:
-            messages.warning(request, formset.errors)
-            
-    else:
-        formset = CharacterManyGroupsEditFormSet(queryset=char_groups)
-        if current_profile.status != 'gm':
-            characters = characters.filter(
-                Q(known_directly=current_profile)
-                | Q(known_indirectly=current_profile)
-            ).distinct()
-            for form in formset:
-                form.fields['characters'].queryset = characters
-    
-    context = {
-        'current_profile': current_profile,
-        'page_title': "Edytuj grupy Postaci",
-        'formset': formset,
-        'formset_helper': CharacterGroupsEditFormSetHelper(
-            status=current_profile.status),
-    }
-    return render(request, '_formset.html', context)
-
-
-@login_required
-def prosoponomikon_character_group_create_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
-    form = CharacterGroupCreateForm(data=request.POST or None, profile=profile)
-    
-    if form.is_valid():
-        character_group = form.save()
-        character_group.author = profile
-        character_group.save()
-        messages.success(
-            request, f'Utworzono grupę Postaci "{character_group.name}"!')
-        return redirect('prosoponomikon:grouped')
-    else:
-        messages.warning(request, form.errors)
-        
-    context = {
-        'current_profile': profile,
-        'page_title': "Nowa grupa Postaci",
-        'form': form,
-    }
-    return render(request, '_form.html', context)
+# @login_required
+# def prosoponomikon_character_groups_edit_view(request):
+#     current_profile = Profile.objects.get(id=request.session['profile_id'])
+#     characters = Character.objects.prefetch_related()
+#     char_groups = CharacterGroup.objects.filter(author=current_profile)
+#     char_groups = char_groups.prefetch_related(
+#         'characters', 'default_knowledge_packets')
+#
+#     if request.method == 'POST':
+#         formset = CharacterManyGroupsEditFormSet(request.POST)
+#         if formset.is_valid():
+#             try:
+#                 formset.save()
+#                 any_changed = False
+#
+#                 for form in formset:
+#                     if form.is_valid():
+#                         # Deletion
+#                         if form.cleaned_data.get('DELETE'):
+#                             obj = form.cleaned_data.get('id')
+#                             obj.delete()
+#                             any_changed = True
+#                             messages.success(request, f"Usunięto grupę '{obj.name}'!")
+#                         # Modification
+#                         else:
+#                             obj = form.save()
+#                             obj.save()
+#                             if form.has_changed():
+#                                 any_changed = True
+#                                 messages.success(request, f"Zmodyfikowano grupę '{obj.name}'!")
+#                     # form invalid
+#                     else:
+#                         messages.warning(request, form.errors)
+#                         return redirect('prosoponomikon:groups-edit')
+#
+#                 if not any_changed:
+#                     messages.warning(request, "Nie dokonano żadnych zmian!")
+#
+#                 return redirect('prosoponomikon:grouped')
+#
+#             except IntegrityError:
+#                 messages.warning(request, "Nazwy grup muszą być unikalne!")
+#                 return redirect('prosoponomikon:groups-edit')
+#
+#         # formset invalid
+#         else:
+#             messages.warning(request, formset.errors)
+#
+#     else:
+#         formset = CharacterManyGroupsEditFormSet(queryset=char_groups)
+#         if current_profile.status != 'gm':
+#             characters = characters.filter(
+#                 Q(known_directly=current_profile)
+#                 | Q(known_indirectly=current_profile)
+#             ).distinct()
+#             for form in formset:
+#                 form.fields['characters'].queryset = characters
+#
+#     context = {
+#         'current_profile': current_profile,
+#         'page_title': "Edytuj grupy Postaci",
+#         'formset': formset,
+#         'formset_helper': CharacterGroupsEditFormSetHelper(
+#             status=current_profile.status),
+#     }
+#     return render(request, '_formset.html', context)
+#
+#
+# @login_required
+# def prosoponomikon_character_group_create_view(request):
+#     profile = Profile.objects.get(id=request.session['profile_id'])
+#     form = CharacterGroupCreateForm(data=request.POST or None, profile=profile)
+#
+#     if form.is_valid():
+#         character_group = form.save()
+#         character_group.author = profile
+#         character_group.save()
+#         messages.success(
+#             request, f'Utworzono grupę Postaci "{character_group.name}"!')
+#         return redirect('prosoponomikon:grouped')
+#     else:
+#         messages.warning(request, form.errors)
+#
+#     context = {
+#         'current_profile': profile,
+#         'page_title': "Nowa grupa Postaci",
+#         'form': form,
+#     }
+#     return render(request, '_form.html', context)
 
     
 @login_required

@@ -5,12 +5,12 @@ from prosoponomikon import views
 app_name = 'prosoponomikon'
 urlpatterns = [
     path('ungrouped/', views.prosoponomikon_ungrouped_view, name='ungrouped'),
-    path('grouped/', views.prosoponomikon_grouped_view, name='grouped'),
     
-    path('groups-create/', views.prosoponomikon_character_group_create_view,
-         name='groups-create'),
-    path('groups-edit/', views.prosoponomikon_character_groups_edit_view,
-         name='groups-edit'),
+    # path('grouped/', views.prosoponomikon_grouped_view, name='grouped'),
+    # path('groups-create/', views.prosoponomikon_character_group_create_view,
+    #      name='groups-create'),
+    # path('groups-edit/', views.prosoponomikon_character_groups_edit_view,
+    #      name='groups-edit'),
     
     path('character/<int:character_id>/', views.prosoponomikon_character_view,
          name='character'),

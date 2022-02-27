@@ -6,29 +6,37 @@
     <link rel="stylesheet" href="{% static 'css/prosoponomikon.css' %}">
 {% endblock head_extra %}
 
+
 {% block content %}
-    <article class="top-button">
-        
-        <header class="mb-5">
-            <a href="{% url 'prosoponomikon:grouped' %}" class="btn btn-outline-info mb-1">Grupy/Wszyscy</a>
-        </header>
-        
-        <article class="pt-5">
-            {% if all_characters %}
-                <section class="py-5">
-                    <p class="mb-0 text-center">✧</p>
-                    <p class="mb-0 text-center">✧ ✦ ✧</p>
-                    <p class="h3 text-center mb-2 mt-1">Wszystkie Postacie</p>
-                    <p class="mb-0 text-center">✧ ✦ ✧</p>
-                    <p class="mb-5 mt-0 text-center">✧</p>
-                    <div class="container">
-                        {% for character in all_characters %}
-                           {% include 'prosoponomikon/_character_info.html' %}
-                        {% endfor %}
-                    </div>
-                </section>
-            {% endif %}
-        </article>
-        
+
+    {% regroup all_characters by initial as character_list %}
+
+    <div class="container text-center">
+        <div class="text-center row mb-5">
+            {% for character_group in character_list %}
+                <a class="col font-12 border-double p-2 mt-2 mx-1" style="max-width:2rem;min-width:2rem;"
+                    href="{{ request.path }}#letter-{{ character_group.grouper }}">
+                    {{ character_group.grouper|capfirst }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <article>
+        {% if all_characters %}
+            {% for character_group in character_list %}
+                <div class="anchor" id="letter-{{ character_group.grouper }}">
+                    <p class="mb-5 text-center">
+                        <span class="font-50 border-double p-3">
+                            {{ character_group.grouper|capfirst }}
+                        </span>
+                    </p>
+                    {% for character in character_group.list %}
+                        {% include 'prosoponomikon/_character_info.html' %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        {% endif %}
     </article>
+
 {% endblock content %}

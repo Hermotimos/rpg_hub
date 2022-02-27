@@ -138,9 +138,11 @@ td.align-right {text-align: right;}
 .font-18 {font-size: 1.125rem;}
 
 .font-24 {font-size: 1.5rem;}
-.font-25 {font-size: 1.5625rem;}
+.font-25 {font-size: 1.562rem;}
+.font-30 {font-size: 1.875rem;}
+.font-40 {font-size: 2.5rem;}
+.font-50 {font-size: 3.125rem;}
 /*
-
 19px 	1.1875rem
 20px 	1.25rem
 21px 	1.3125rem
