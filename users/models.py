@@ -76,7 +76,10 @@ class Profile(Model):
                 img.thumbnail(output_size)
                 img.save(self.image.path)
        
-    def characters_all_known_annotated_if_indirectly(self):
+    def characters_known_annotated(self):
+        """Get all Characters known to this one, annotate if another character
+        is known only indirectly.
+        """
         from prosoponomikon.models import Character
         if self.can_view_all:
             qs = Character.objects.all()
@@ -96,7 +99,7 @@ class Profile(Model):
         qs = qs.exclude(id=self.character.id)
         return qs
     
-    def locations_all_known_annotated_if_indirectly(self):
+    def locations_known_annotated(self):
         if self.can_view_all:
             from toponomikon.models import Location
             qs = Location.objects.all()
@@ -116,7 +119,7 @@ class Profile(Model):
         return qs
 
     def characters_groups_authored_with_characters(self):
-        characters = self.characters_all_known_annotated_if_indirectly()
+        characters = self.characters_known_annotated()
         character_groups = self.character_groups_authored.all()
         character_groups = character_groups.prefetch_related(
             Prefetch('characters', queryset=characters),

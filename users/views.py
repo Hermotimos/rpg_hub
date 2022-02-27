@@ -176,8 +176,8 @@ def home_view(request):
         current_profile = get_profile(request.user)
         request.session['profile_id'] = current_profile.id
     
-    known_characters = current_profile.characters_all_known_annotated_if_indirectly()
-    known_locations = current_profile.locations_all_known_annotated_if_indirectly()
+    known_characters = current_profile.characters_known_annotated()
+    known_locations = current_profile.locations_known_annotated()
     
     # set() ensures that if len(known) < k, than duplicates will be removed
     rand_characters = sample_from_qs(qs=known_characters, max_size=4)

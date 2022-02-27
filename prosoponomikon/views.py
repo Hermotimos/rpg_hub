@@ -26,7 +26,7 @@ from users.models import Profile, User
 @login_required
 def prosoponomikon_ungrouped_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
-    all_characters = profile.characters_all_known_annotated_if_indirectly()
+    all_characters = profile.characters_known_annotated()
     context = {
         'current_profile': profile,
         'page_title': 'Prosoponomikon',
@@ -40,7 +40,7 @@ def prosoponomikon_grouped_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     
     character_groups = profile.characters_groups_authored_with_characters()
-    all_characters = profile.characters_all_known_annotated_if_indirectly()
+    all_characters = profile.characters_known_annotated()
     player_characters = all_characters.filter(profile__status="player")
     ungrouped_characters = all_characters.exclude(
         character_groups__in=character_groups).exclude(id__in=player_characters)
@@ -73,7 +73,7 @@ def prosoponomikon_character_for_gm_view(request, character_id):
     else:
         character = Character.objects.get(id=character_id)
 
-    known_characters = character.profile.characters_all_known_annotated_if_indirectly()
+    known_characters = character.profile.characters_known_annotated()
     
     # NPCs: Default skills and kn_packets if Character in a CharacterGroup
     if character.profile.status == 'npc' and character.character_groups.exists():
@@ -141,7 +141,7 @@ def prosoponomikon_character_for_player_view(request, character_id):
 
         knowledge_packets = profile.knowledge_packets.order_by('title')
         knowledge_packets = knowledge_packets.prefetch_related('picture_sets__pictures')
-        known_characters = character.profile.characters_all_known_annotated_if_indirectly()
+        known_characters = character.profile.characters_known_annotated()
     
     # Player viewing other Characters
     else:

@@ -13,7 +13,7 @@ from users.models import Profile
 def toponomikon_main_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
 
-    known_locations = profile.locations_all_known_annotated_if_indirectly()
+    known_locations = profile.locations_known_annotated()
     all_locs = Location.objects.values('name').filter(id__in=known_locations)
 
     secondary_locs = SecondaryLocation.objects.filter(id__in=known_locations)
@@ -40,7 +40,7 @@ def toponomikon_main_view(request):
 def toponomikon_location_view(request, loc_name):
     profile = Profile.objects.get(id=request.session['profile_id'])
 
-    known_locations = profile.locations_all_known_annotated_if_indirectly()
+    known_locations = profile.locations_known_annotated()
     
     # THIS LOCATION
     if profile.can_view_all:
@@ -76,7 +76,7 @@ def toponomikon_location_view(request, loc_name):
 
     # CHARACTERS TAB
     # Characters in this location and its sub-locations if known to profile:
-    characters = profile.characters_all_known_annotated_if_indirectly()
+    characters = profile.characters_known_annotated()
     characters = characters.filter(
         frequented_locations__in=this_location.with_sublocations())
 

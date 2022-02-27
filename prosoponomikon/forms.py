@@ -83,7 +83,7 @@ class CharacterGroupCreateForm(forms.ModelForm):
         
         if profile.status != 'gm':
             self.fields['characters'].queryset = \
-                profile.characters_all_known_annotated_if_indirectly()
+                profile.characters_known_annotated()
             self.fields['default_knowledge_packets'].widget = forms.HiddenInput()
             self.fields['default_skills'].widget = forms.HiddenInput()
             
