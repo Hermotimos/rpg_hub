@@ -10,6 +10,7 @@
 {% block content %}
 
     {% regroup all_characters by initial as character_list %}
+
     <div class="container">
         <div class="row d-flex justify-content-center text-center mb-5">
             {% for character_group in character_list %}
@@ -20,6 +21,7 @@
             {% endfor %}
         </div>
     </div>
+
     <div class="container">
         {% if all_characters %}
             {% for character_group in character_list %}
