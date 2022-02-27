@@ -22,7 +22,7 @@
         </div>
     </div>
 
-    <article>
+    <div class="container">
         {% if all_characters %}
             {% for character_group in character_list %}
                 <div class="anchor" id="letter-{{ character_group.grouper }}">
@@ -37,6 +37,6 @@
                 </div>
             {% endfor %}
         {% endif %}
-    </article>
+    </div>
 
 {% endblock content %}
