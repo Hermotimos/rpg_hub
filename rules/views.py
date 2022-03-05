@@ -14,7 +14,7 @@ from rules.models import (
     Weapon,
 )
 from rules.utils import get_overload_ranges, LOAD_LIMITS, \
-    get_synergies_allowed, can_view_enchanting_rules
+    get_synergies_allowed, get_user_professions, can_view_special_rules
 from users.models import Profile
 
 
@@ -22,10 +22,21 @@ from users.models import Profile
 def rules_main_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
+
+    # Only Characters with specific Professions or a GM/Spectator can access some rules
+    allowed_professions = ['Kapłan', 'Czarodziej', 'Teurg', 'Bard']
+    if current_profile.status in ['gm', 'spectator']:
+        user_professions_all = allowed_professions
+        can_view_power_rules = True
+    else:
+        user_professions_all = get_user_professions(user_profiles)
+        can_view_power_rules = can_view_special_rules(user_profiles, allowed_professions)
+        
     context = {
         'current_profile': current_profile,
         'page_title': 'Zasady',
-        'can_view_enchanting_rules': can_view_enchanting_rules(user_profiles),
+        'can_view_power_rules': can_view_power_rules,
+        'user_professions_all': user_professions_all,
     }
     return render(request, 'rules/main.html', context)
 
@@ -159,7 +170,7 @@ def rules_power_trait_view(request):
         'current_profile': current_profile,
         'page_title': 'Moc'
     }
-    if can_view_enchanting_rules(user_profiles):
+    if can_view_special_rules(user_profiles, ['Kapłan', 'Czarodziej', 'Teurg']):
         return render(request, 'rules/power_trait.html', context)
     else:
         return redirect('users:dupa')
@@ -173,7 +184,7 @@ def rules_power_priests_view(request):
         'current_profile': current_profile,
         'page_title': 'Moce Kapłańskie'
     }
-    if can_view_enchanting_rules(user_profiles):
+    if can_view_special_rules(user_profiles, ['Kapłan']):
         return render(request, 'rules/power_priests.html', context)
     else:
         return redirect('users:dupa')
@@ -187,7 +198,7 @@ def rules_power_sorcerers_view(request):
         'current_profile': current_profile,
         'page_title': 'Magia'
     }
-    if can_view_enchanting_rules(user_profiles):
+    if can_view_special_rules(user_profiles, ['Czarodziej']):
         return render(request, 'rules/power_sorcerers.html', context)
     else:
         return redirect('users:dupa')
@@ -201,7 +212,7 @@ def rules_power_theurgists_view(request):
         'current_profile': current_profile,
         'page_title': 'Teurgia'
     }
-    if can_view_enchanting_rules(user_profiles):
+    if can_view_special_rules(user_profiles, ['Teurg']):
         return render(request, 'rules/power_theurgists.html', context)
     else:
         return redirect('users:dupa')

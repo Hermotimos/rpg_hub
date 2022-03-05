@@ -15,11 +15,10 @@ from django.db.models import (
 )
 from django.db.models.signals import post_save
 
-from imaginarion.models import Picture
 from knowledge.models import BiographyPacket, DialoguePacket
 from knowledge.models import KnowledgePacket
 from rpg_project.utils import create_sorting_name
-from rules.models import Skill
+from rules.models import Skill, Profession
 from toponomikon.models import Location
 from users.models import Profile
 
@@ -200,6 +199,7 @@ class Character(Model):
         to=DialoguePacket,
         related_name='characters',
         blank=True)
+    professions = M2M(to=Profession, related_name='characters', blank=True)
     
     # USE: profile.characters_known_directly.all()
     # for characters that the profile knows directly

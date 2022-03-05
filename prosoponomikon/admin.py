@@ -112,32 +112,12 @@ class AuxiliaryNameGroupAdmin(admin.ModelAdmin):
             'location',
         ]
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-
-
-class CharacterAdminForm(forms.ModelForm):
-    class Meta:
-        model = Character
-        fields = [
-            'profile', 'first_name', 'family_name', 'cognomen', 'description',
-            'frequented_locations', 'biography_packets', 'dialogue_packets',
-            'known_directly', 'known_indirectly',
-        ]
-        widgets = {
-            'frequented_locations': FilteredSelectMultiple(
-                'Frequented_locations', False),
-            'biography_packets': FilteredSelectMultiple(
-                'Biography_packets', False),
-            'dialogue_packets': FilteredSelectMultiple(
-                'Dialogue_packets', False),
-            'known_directly': FilteredSelectMultiple(
-                'Known_directly', False),
-            'known_indirectly': FilteredSelectMultiple(
-                'Known_indirectly', False),
-        }
-
+   
 
 class CharacterAdmin(admin.ModelAdmin):
-    form = CharacterAdminForm
+    filter_horizontal = [
+        'frequented_locations', 'biography_packets', 'dialogue_packets',
+        'known_directly', 'known_indirectly', 'professions']
     list_display = [
         'get_img', 'first_name', 'family_name', 'cognomen', 'description']
     list_editable = ['first_name', 'family_name', 'cognomen', 'description']
@@ -175,7 +155,7 @@ class CharacterGroupAdminForm(forms.ModelForm):
             'characters': FilteredSelectMultiple('Characters', False),
             'default_knowledge_packets': FilteredSelectMultiple(
                 'Pakiety wiedzy', False),
-            'default_skills': FilteredSelectMultiple('Umiejetności', False),
+            'default_skills': FilteredSelectMultiple('Umiejętności', False),
         }
 
 

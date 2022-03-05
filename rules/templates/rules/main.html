@@ -46,7 +46,7 @@
             <li><h6><a href="{% url 'rules:character-sheet' %}">Szablony [nieaktualne]</a></h6></li>
         </ol>
     
-        {% if can_view_enchanting_rules %}
+        {% if can_view_power_rules %}
             <h2 class="mt-4">
                 <img class="img-rules" src="{% static 'img/WALKA.png' %}">
                 <strong class="align-middle small-caps border-bottom-dark">Moc</strong>
@@ -58,11 +58,16 @@
                         <li><h6><a href="{% url 'rules:skills-list' 'Mentalne' %}">Lista Umiejętności Mentalnych</a></h6></li>
                     </ul>
                 </li>
-                <li><h6><a href="{% url 'rules:power-priests' %}">Moce Kapłańskie</a></h6></li>
-                <li><h6><a href="{% url 'rules:power-sorcerers' %}">Magia</a></h6></li>
-                <li><h6><a href="{% url 'rules:power-theurgists' %}">Teurgia</a></h6></li>
+                {% if 'Kapłan' in user_professions_all %}
+                    <li><h6><a href="{% url 'rules:power-priests' %}">Moce Kapłańskie</a></h6></li>
+                {% endif %}
+                {% if 'Czarodziej' in user_professions_all %}
+                    <li><h6><a href="{% url 'rules:power-sorcerers' %}">Magia</a></h6></li>
+                {% endif %}
+                {% if 'Teurg' in user_professions_all %}
+                    <li><h6><a href="{% url 'rules:power-theurgists' %}">Teurgia</a></h6></li>
+                {% endif %}
             </ol>
-            <br>
         {% endif %}
     </div>
 

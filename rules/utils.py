@@ -7,9 +7,22 @@ import users
 from rules.models import Synergy, Skill, SkillLevel, SynergyLevel
 
 
-def can_view_enchanting_rules(user_profiles):
-    allowed_profiles = user_profiles.filter(Q(status='gm') | Q(is_enchanter=True))
-    return allowed_profiles.exists()
+def get_user_professions(user_profiles):
+    user_professions_all = []
+    for profile in user_profiles.prefetch_related('character__professions'):
+        user_professions_all.extend(
+            [p.name for p in profile.character.professions.all()])
+    return user_professions_all
+
+
+def can_view_special_rules(user_profiles, allowed_professions):
+    if user_profiles.filter(status__in=['gm', 'spectator']):
+        return True
+    else:
+        user_professions_all = get_user_professions(user_profiles)
+        return any(
+            [profession in allowed_professions for profession in user_professions_all]
+        )
 
 
 LOAD_LIMITS = [
