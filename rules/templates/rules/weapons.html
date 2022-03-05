@@ -21,7 +21,6 @@
             <table class="weapons-table rules-table mt-2">
                 <colgroup>
                     <col class="class">
-    <!--                <col class="delay">-->
                     <col class="damage">
                     <col class="damage-type">
                     <col class="special">
@@ -34,7 +33,6 @@
                 <thead class="align-center">
                     <tr>
                         <th class="small-caps align-left pl-2 font-17" >{{ weapon_type.name }}</th>
-    <!--                    <th>Opóźń</th>-->
                         <th>Obrażenia</th>
                         <th>Typ</th>
                         <th>Specjalne</th>
@@ -49,7 +47,6 @@
                     {% for weapon in weapon_type.weapons.all %}
                         <tr>
                             <td class="hover-blue" data-toggle="collapse" data-target="#{{ weapon.short_name }}">&nbsp;{{ weapon.name }}</td>
-    <!--                        <td class="align-center">{{ weapon.delay }}</td>-->
                             <td class="align-center">{{ weapon.damage_summary }}</td>
                             <td class="align-center">{{ weapon.damage_type }}</td>
                             <td class="align-center"><small>{{ weapon.special|linebreaksbr }}</small></td>
