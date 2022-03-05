@@ -107,10 +107,11 @@ table.weapons-table {border: double;}
     max-height: 300px;
     height: auto;
 }
-/*
+
+/* This is responsible for table styling in armor.html */
 .rules-table th,
 .rules-table td {border-style: none !important;}
-*/
+
 
 .armor-table th,
 .armor-table td,
@@ -131,6 +132,13 @@ td .nowrap { white-space: nowrap;}
 
 .rules-red {color: #993300 !important;}
 .rules-green {color: #008000 !important;}
+
+.rules-blue1 {color: #b3cde0 !important;}
+.rules-blue2 {color: #6497b1 !important;}
+.rules-blue3 {color: #005b96 !important;}
+.rules-blue4 {color: #03396c  !important;}
+.rules-blue5 {color: #011f4b !important;}
+
 
 .back-gray {background-color: #f2f2f2;}
 
