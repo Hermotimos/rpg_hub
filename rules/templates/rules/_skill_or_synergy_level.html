@@ -5,14 +5,18 @@
 <tr>
     <td class="align-top"></td>
     <td class="align-top pl-1">
-        <a href="{% url 'admin:rules_skilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+        {% if current_profile.status == 'gm' %}
+            <a href="{% url 'admin:rules_skilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                <img class="img-xs" src="{% static level_img %}">
+            </a>
+        {% else %}
             <img class="img-xs" src="{% static level_img %}">
-        </a>
+        {% endif %}
     </td>
     <td class="align-top pl-1 pr-4 py-1 text-justify font-14">
         
         <!-- This is only triggered in Synergy-->
-        <div class="">
+        <div>
             {{ skill_or_synergy_level.skill_levels.all|join:" + " }}
         </div>
         

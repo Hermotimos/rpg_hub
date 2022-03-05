@@ -5,34 +5,31 @@
 <table class="mt-2">
     <thead>
         <tr>
-            <td>
-                <!-- TODO why not working-->
-                <a href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
-                    {% if skill.image %}
-                        <img class="img-skill" src="{{ skill.image.url }}">
-                    {% else %}
-                        <img class="img-skill" src="{% static 'img/skill-default.png' %}">
-                    {% endif %}
-                </a>
+            <td class="hover-pointer" data-toggle="collapse" data-target="#{{ skill.short_name }}{{ id_suffix }}">
+                {% if skill.image %}
+                    <img class="img-skill" src="{{ skill.image.url }}">
+                {% else %}
+                    <img class="img-skill" src="{% static 'img/skill-default.png' %}">
+                {% endif %}
             </td>
             <th colspan="11">
-                <h2 class="pt-3 ml-1" data-toggle="collapse" data-target="#{{ skill.short_name }}{{ id_suffix }}">
-                    <b class="hover-blue ml-1">
-                        {{ skill.name }}
+                <h2 class="pt-3 ml-1" >
+                    <b class="ml-1">
+                        {% if current_profile.status == 'gm' %}
+                            <a class="hover-blue" href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                                {{ skill.name }}
+                            </a>
+                        {% else %}
+                            {{ skill.name }}
+                        {% endif %}
                         <!-- Used when template is called from prosoponomikon_character_for_player_view -->
                         {% if max_level_only %}
                             [{{ skill.skill_levels.all|get_max_skill_level_no }}]
                         {% endif %}
                     </b>
-                    {% if current_profile.status == 'gm' %}
-                        <a class="btn btn-outline-secondary icon-edit icon-small py-2 mb-sm-1"
-                           href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank"
-                           data-toggle="tooltip" data-placement="top" title="Edytuj Umiejętność">
-                        </a>
-                    {% endif %}
-                    <small class="text-muted smaller">
+                    <small class="rules-gray1 smaller">
                         {% if skill.tested_trait %}
-                            [{{ skill.tested_trait }}]
+                            ({{ skill.tested_trait }})
                         {% endif %}
                     </small>
                 </h2>

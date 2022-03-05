@@ -147,13 +147,13 @@ class SynergyLevelInline(admin.TabularInline):
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 20, 'cols': 30})},
     }
-
+    
     def formfield_for_dbfield(self, db_field, **kwargs):
         fields = [
             'skill_levels',
         ]
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-    
+
 
 @admin.register(Synergy)
 class SynergyAdmin(admin.ModelAdmin):
@@ -166,6 +166,14 @@ class SynergyAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
     list_editable = ['name']
     search_fields = ['name']
+
+    # def formfield_for_dbfield(self, db_field, **kwargs):
+    #     fields = [
+    #         'skill_levels',
+    #         'skill_levels__skill',
+    #         'skills',
+    #     ]
+    #     return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
 
 
 @admin.register(SkillLevel)

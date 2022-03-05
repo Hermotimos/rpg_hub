@@ -394,6 +394,9 @@ td.hover-pointer:hover {cursor: pointer;}
     color: #3366cc;
     cursor: pointer;
 }
+.hover-pointer:hover {
+    cursor: pointer;
+}
 
 .unblue-black a {color: #212529;}
 

@@ -5,7 +5,7 @@
 <table class="mt-2">
     <thead>
         <tr>
-            <th class="m-0 p-0">
+            <th class="m-0 p-0 hover-pointer" data-toggle="collapse" data-target="#{{ synergy.short_name }}">
                 <div class="m-0 p-0">
                     {% for skill in synergy.skills.all %}
                         {% if skill.image %}
@@ -17,9 +17,15 @@
                 </div>
             </th>
             <th colspan="2"  class="m-0 p-0">
-                <h2 class="pt-3" data-toggle="collapse" data-target="#{{ synergy.short_name }}">
-                    <b class="hover-blue ml-1">
-                        {{ synergy.name }}
+                <h2 class="pt-3">
+                    <b class="ml-1">
+                        {% if current_profile.status == 'gm' %}
+                            <a class="hover-blue" href="{% url 'admin:rules_synergy_change' synergy.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                                {{ synergy.name }}
+                            </a>
+                        {% else %}
+                            {{ synergy.name }}
+                        {% endif %}
                     </b>
                 </h2>
             </th>
