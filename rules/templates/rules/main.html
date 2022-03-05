@@ -38,14 +38,6 @@
             <li><h6><a href="{% url 'rules:combat' %}">Przebieg walki</a></h6></li>
         </ol>
     
-        <h2 class="mt-4">
-            <img class="img-rules" src="{% static 'img/KARTA POSTACI.png' %}">
-            <strong class="align-middle small-caps border-bottom-dark">Karta Postaci</strong>
-        </h2>
-        <ol class="ml-3 pl-5">
-            <li><h6><a href="{% url 'rules:character-sheet' %}">Szablony [nieaktualne]</a></h6></li>
-        </ol>
-    
         {% if can_view_power_rules %}
             <h2 class="mt-4">
                 <img class="img-rules" src="{% static 'img/WALKA.png' %}">
@@ -69,6 +61,15 @@
                 {% endif %}
             </ol>
         {% endif %}
+        
+        <h2 class="mt-4">
+            <img class="img-rules" src="{% static 'img/KARTA POSTACI.png' %}">
+            <strong class="align-middle small-caps border-bottom-dark">Karta Postaci</strong>
+        </h2>
+        <ol class="ml-3 pl-5">
+            <li><h6><a href="{% url 'rules:character-sheet' %}">Szablony [nieaktualne]</a></h6></li>
+        </ol>
+    
     </div>
 
 {% endblock content %}
