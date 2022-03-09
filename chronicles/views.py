@@ -74,6 +74,8 @@ def chronicle_game_view(request, game_id):
         'known_indirectly',
         'picture_sets',
         'debates__statements__author',
+        'debates__statements__seen_by',
+        'debates__known_directly',
     )
     if not profile.can_view_all:
         events = events.filter(
