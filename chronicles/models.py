@@ -17,7 +17,7 @@ from django.db.models import (
 )
 from django.db.models.signals import post_save, m2m_changed
 
-from communications.models import Debate
+from communications.models import Thread
 from imaginarion.models import Audio, PictureSet
 from rpg_project.utils import create_sorting_name
 from toponomikon.models import Location
@@ -199,13 +199,11 @@ class TimeUnit(Model):
     known_short_desc = M2M(
         to=Profile,
         related_name='timeunits_known_short_desc',
-        limit_choices_to=Q(status='player'),
         blank=True,
     )
     known_long_desc = M2M(
         to=Profile,
         related_name='timeunits_long_desc',
-        limit_choices_to=Q(status='player'),
         blank=True,
     )
 
@@ -240,17 +238,19 @@ class TimeUnit(Model):
     known_directly = M2M(
         to=Profile,
         related_name='events_known_directly',
-        limit_choices_to=Q(status='player'),
         blank=True,
     )
     known_indirectly = M2M(
         to=Profile,
         related_name='events_known_indirectly',
-        limit_choices_to=Q(status='player'),
         blank=True,
     )
     picture_sets = M2M(to=PictureSet, related_name='events', blank=True)
-    debates = M2M(to=Debate, related_name='events', blank=True)
+    debates = M2M(
+        to=Thread,
+        related_name='events',
+        limit_choices_to={'kind': 'Debate'},
+        blank=True)
     
     class Meta:
         ordering = ['date_start']

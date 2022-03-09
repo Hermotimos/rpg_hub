@@ -24,6 +24,14 @@ from users.models import Profile
 # ----------------------------------------------
 
 class GameEventAdminForm(forms.ModelForm):
+    
+    # Filter FK to Thread to only include Debates
+    debates = forms.ModelMultipleChoiceField(
+        queryset=Thread.objects.filter(kind='Debate'),
+        required=False,
+        widget=FilteredSelectMultiple('Debates', False, attrs={'style': 'height:100px'})
+    )
+    
     class Meta:
         model = GameEvent
         fields = ['game', 'event_no_in_game', 'date_start', 'date_end',
@@ -45,9 +53,6 @@ class GameEventAdminForm(forms.ModelForm):
             ),
             'plot_threads': FilteredSelectMultiple(
                 'PlotThreads', False, attrs={'style': 'height:100px'}
-            ),
-            'debates': FilteredSelectMultiple(
-                'Debates', False, attrs={'style': 'height:100px'}
             ),
         }
         
