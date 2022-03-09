@@ -4,7 +4,7 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
 from django.forms import Select, TextInput
 
-from communications.models import Statement, Debate, Announcement, Thread, ThreadTag
+from communications.models import Statement, Debate, Announcement, Thread, ThreadTag, AnnouncementStatement, DebateStatement
 from rpg_project.utils import formfield_for_dbfield_cached
 from users.models import Profile
 
@@ -95,3 +95,5 @@ admin.site.register(ThreadTag, ThreadTagAdmin)
 admin.site.register(Debate, DebateAdmin)
 admin.site.register(Announcement, AnnouncementAdmin)
 admin.site.register(Statement, StatementAdmin)
+admin.site.register(AnnouncementStatement, StatementAdmin)
+admin.site.register(DebateStatement, StatementAdmin)

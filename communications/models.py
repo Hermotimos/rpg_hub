@@ -88,22 +88,6 @@ class Thread(Model):
         return f'/communications/thread:{self.pk}/None/#page-bottom'
 
 
-class DebateManager(Manager):
-    
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(kind='Debate')
-        return qs
-
-
-class Debate(Thread):
-    objects = DebateManager()
-    
-    class Meta:
-        ordering = ['created_at']
-        proxy = True
-
-
 class AnnouncementManager(Manager):
     
     def get_queryset(self):
@@ -119,6 +103,26 @@ class Announcement(Thread):
     
     class Meta:
         proxy = True
+        verbose_name = 'ANNOUNCEMENT'
+        verbose_name_plural = 'ANNOUNCEMENTS'
+
+
+class DebateManager(Manager):
+    
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(kind='Debate')
+        return qs
+
+
+class Debate(Thread):
+    objects = DebateManager()
+    
+    class Meta:
+        ordering = ['created_at']
+        proxy = True
+        verbose_name = 'DEBATE'
+        verbose_name_plural = 'DEBATES'
 
 
 #  ==========================================================================
@@ -167,8 +171,44 @@ class Statement(Model):
                 output_size = (700, 700)
                 img.thumbnail(output_size)
                 img.save(self.image.path)
+
+
+class AnnouncementStatementManager(Manager):
     
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(thread__kind='Announcement')
+        return qs
+
+
+class AnnouncementStatement(Statement):
+    objects = DebateManager()
     
+    class Meta:
+        ordering = ['created_at']
+        proxy = True
+        verbose_name = 'ANNOUNCEMENT STATEMENT'
+        verbose_name_plural = 'ANNOUNCEMENT STATEMENTS'
+
+
+class DebateStatementManager(Manager):
+    
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(thread__kind='Debate')
+        return qs
+
+
+class DebateStatement(Statement):
+    objects = DebateManager()
+    
+    class Meta:
+        ordering = ['created_at']
+        proxy = True
+        verbose_name = 'DEBATE STATEMENT'
+        verbose_name_plural = 'DEBATE STATEMENTS'
+
+
 # -----------------------------------------------------------------------------
 # ---------------------------------------- SIGNALS ----------------------------
 # -----------------------------------------------------------------------------
