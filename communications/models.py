@@ -100,6 +100,7 @@ class Debate(Thread):
     objects = DebateManager()
     
     class Meta:
+        ordering = ['created_at']
         proxy = True
 
 
