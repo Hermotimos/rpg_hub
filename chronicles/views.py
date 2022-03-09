@@ -103,6 +103,8 @@ def chronicle_chapter_view(request, chapter_id):
         'known_indirectly',
         'picture_sets',
         'debates__statements__author',
+        'debates__statements__seen_by',
+        'debates__known_directly',
     )
     if not profile.can_view_all:
         events = events.filter(
@@ -132,6 +134,7 @@ def chronicle_all_view(request):
         'known_indirectly',
         'picture_sets',
         'debates__statements__author',
+        # 'debates__statements__seen_by',   # TODO add in Postgres, now causes SQLite error "Too many SQl variables"
         'debates__known_directly',
     )
     if not profile.can_view_all:
