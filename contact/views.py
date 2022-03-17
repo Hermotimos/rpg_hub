@@ -170,12 +170,11 @@ def plans_main_view(request):
     plans = Plan.objects.filter(author=profile).select_related('author')
 
     if profile.status == 'gm':
-        models = [Skill, Synergy, Weapon, Plate]
+        models = [Skill, Weapon, Plate]
         # Objs known to no profile: {'model_1': [obj1, obj2], model_2: [obj1]}
         todos = {}
         for m in models:
-            todos[f'{m._meta.verbose_name_plural}'] = \
-                m.objects.annotate(cnt=Count('allowees')).filter(cnt=0)
+            todos[f'{m._meta.verbose_name_plural}'] = m.objects.annotate(cnt=Count('allowees')).filter(cnt=0)
     
         text = '=>Do uzupełnienia:\n\n '
         create_todo = False
