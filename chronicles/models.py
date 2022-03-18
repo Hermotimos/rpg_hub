@@ -161,6 +161,11 @@ class TimeUnitManager(Manager):
         return qs
 
 
+def non_GM():
+    non_GM = Profile.non_gm.all()
+    return Q(id__in=non_GM)
+
+
 class TimeUnit(Model):
     objects = TimeUnitManager()
     
@@ -238,11 +243,13 @@ class TimeUnit(Model):
     known_directly = M2M(
         to=Profile,
         related_name='events_known_directly',
+        limit_choices_to=non_GM,
         blank=True,
     )
     known_indirectly = M2M(
         to=Profile,
         related_name='events_known_indirectly',
+        limit_choices_to=non_GM,
         blank=True,
     )
     picture_sets = M2M(to=PictureSet, related_name='events', blank=True)
@@ -255,7 +262,7 @@ class TimeUnit(Model):
     class Meta:
         ordering = ['date_start']
         verbose_name_plural = '* Time Units (Time spans, History events, Game events)'
-    
+
     def __str__(self):
         res = str(self.name)
         if self.in_timeunit and self.date_start:

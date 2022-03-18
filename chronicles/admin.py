@@ -87,12 +87,23 @@ class GameEventAdmin(admin.ModelAdmin):
             'audio',    # Tested that here only audio optimizes queries
         ]
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-    
-    
+
+
 class GameEventInlineForm(GameEventAdminForm):
     exclude = ['game']
-    
-    
+
+    # Filter FK to Profile to exclude GMN
+    known_directly = forms.ModelMultipleChoiceField(
+        queryset=Profile.non_gm.all(),
+        required=False,
+        widget=FilteredSelectMultiple('Known directly', False))
+    # Filter FK to Profile to exclude GMN
+    known_indirectly = forms.ModelMultipleChoiceField(
+        queryset=Profile.non_gm.all(),
+        required=False,
+        widget=FilteredSelectMultiple('Known indirectly', False))
+
+
 class GameEventInline(admin.TabularInline):
     model = GameEvent
     extra = 0
@@ -216,40 +227,27 @@ class TimeUnitAdmin(admin.ModelAdmin):
     
 
 class ChronologyAdminForm(forms.ModelForm):
+    
     class Meta:
         model = TimeUnit
         fields = ['name', 'name_genetive', 'date_start', 'date_end',
                   'description_short', 'description_long',
                   'known_short_desc', 'known_long_desc']
-        widgets = {
-            'known_short_desc': FilteredSelectMultiple(
-                'Known short desc', False, attrs={'style': 'height:200px'}
-            ),
-            'known_long_desc': FilteredSelectMultiple(
-                'Known long desc', False, attrs={'style': 'height:200px'}
-            ),
-        }
 
 
 @admin.register(Chronology)
 class ChronologyAdmin(admin.ModelAdmin):
+    filter_horizontal = ['known_short_desc', 'known_long_desc']
     form = ChronologyAdminForm
 
 
 class TimeSpanForm(forms.ModelForm):
+    
     class Meta:
         model = TimeUnit
         fields = ['name', 'name_genetive', 'date_start', 'date_end',
                   'in_timeunit', 'description_short', 'description_long',
                   'known_short_desc', 'known_long_desc']
-        widgets = {
-            'known_short_desc': FilteredSelectMultiple(
-                'Known short desc', False, attrs={'style': 'height:200px'}
-            ),
-            'known_long_desc': FilteredSelectMultiple(
-                'Known long desc', False, attrs={'style': 'height:200px'}
-            ),
-        }
 
 
 class EraAdminForm(TimeSpanForm):
@@ -258,6 +256,7 @@ class EraAdminForm(TimeSpanForm):
 
 @admin.register(Era)
 class EraAdmin(admin.ModelAdmin):
+    filter_horizontal = ['known_short_desc', 'known_long_desc']
     form = EraAdminForm
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 40})},
@@ -292,6 +291,7 @@ class PeriodAdminForm(TimeSpanForm):
 
 @admin.register(Period)
 class PeriodAdmin(EraAdmin):
+    filter_horizontal = ['known_short_desc', 'known_long_desc']
     form = PeriodAdminForm
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 40})},
