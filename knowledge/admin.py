@@ -5,14 +5,13 @@ from django.db.models import Q, CharField, TextField
 from django.forms.widgets import TextInput, Textarea
 from django.utils.html import format_html
 
-from imaginarion.models import Picture
 from knowledge.models import KnowledgePacket, MapPacket, BiographyPacket, \
     DialoguePacket
 from rpg_project.utils import update_rel_objs
-from rules.models import Skill
 from toponomikon.models import Location, PrimaryLocation, SecondaryLocation
 
 
+@admin.register(DialoguePacket)
 class DialoguePacketAdmin(admin.ModelAdmin):
     formfield_overrides = {
         CharField: {'widget': TextInput(attrs={'size': 50})},
@@ -34,6 +33,7 @@ class BiographyPacketAdminForm(forms.ModelForm):
         }
 
 
+@admin.register(BiographyPacket)
 class BiographyPacketAdmin(admin.ModelAdmin):
     form = BiographyPacketAdminForm
     list_display = ['id', 'title', 'text', 'author']
@@ -115,6 +115,7 @@ class KnowledgePacketAdminForm(forms.ModelForm):
         return instance
     
 
+@admin.register(KnowledgePacket)
 class KnowledgePacketAdmin(admin.ModelAdmin):
     form = KnowledgePacketAdminForm
     formfield_overrides = {
@@ -207,6 +208,7 @@ class MapPacketAdminForm(forms.ModelForm):
         return instance
 
 
+@admin.register(MapPacket)
 class MapPacketAdmin(admin.ModelAdmin):
     form = MapPacketAdminForm
     list_display = ['id', 'title', 'get_acquired_by']
@@ -227,9 +229,3 @@ class MapPacketAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         qs = qs.prefetch_related('acquired_by', 'picture_sets')
         return qs
-
-
-admin.site.register(DialoguePacket, DialoguePacketAdmin)
-admin.site.register(BiographyPacket, BiographyPacketAdmin)
-admin.site.register(KnowledgePacket, KnowledgePacketAdmin)
-admin.site.register(MapPacket, MapPacketAdmin)

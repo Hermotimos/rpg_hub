@@ -11,6 +11,7 @@ from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, \
 from rpg_project.utils import formfield_for_dbfield_cached
 
 
+@admin.register(FirstName)
 class FirstNameAdmin(admin.ModelAdmin):
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 40})},
@@ -59,6 +60,7 @@ class FamilyNameAdminForm(forms.ModelForm):
         }
 
 
+@admin.register(FamilyName)
 class FamilyNameAdmin(admin.ModelAdmin):
     form = FamilyNameAdminForm
     list_display = ['id', 'group', 'form', 'info', 'locs']
@@ -80,16 +82,19 @@ class FamilyNameAdmin(admin.ModelAdmin):
         return " | ".join([loc.name for loc in obj.locations.all()])
 
 
+@admin.register(NameGroup)
 class NameGroupAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'type', 'description']
     list_editable = ['title', 'type', 'description']
 
 
+@admin.register(FamilyNameGroup)
 class FamilyNameGroupAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'description']
     list_editable = ['title', 'description']
 
 
+@admin.register(AffixGroup)
 class AffixGroupAdmin(admin.ModelAdmin):
     inlines = [FirstNameInline]
     list_display = ['id', 'affix', 'type', 'name_group']
@@ -103,6 +108,7 @@ class AffixGroupAdmin(admin.ModelAdmin):
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
     
 
+@admin.register(AuxiliaryNameGroup)
 class AuxiliaryNameGroupAdmin(admin.ModelAdmin):
     list_display = ['id', 'color', 'location', 'social_info']
     list_editable = ['color', 'location', 'social_info']
@@ -114,6 +120,7 @@ class AuxiliaryNameGroupAdmin(admin.ModelAdmin):
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
    
 
+@admin.register(Character, PlayerCharacter, NPCCharacter)
 class CharacterAdmin(admin.ModelAdmin):
     filter_horizontal = [
         'frequented_locations', 'biography_packets', 'dialogue_packets',
@@ -159,17 +166,7 @@ class CharacterGroupAdminForm(forms.ModelForm):
         }
 
 
+@admin.register(CharacterGroup)
 class CharacterGroupAdmin(admin.ModelAdmin):
     form = CharacterGroupAdminForm
     
-
-admin.site.register(NameGroup, NameGroupAdmin)
-admin.site.register(AffixGroup, AffixGroupAdmin)
-admin.site.register(AuxiliaryNameGroup, AuxiliaryNameGroupAdmin)
-admin.site.register(FirstName, FirstNameAdmin)
-admin.site.register(FamilyNameGroup, FamilyNameGroupAdmin)
-admin.site.register(FamilyName, FamilyNameAdmin)
-admin.site.register(CharacterGroup, CharacterGroupAdmin)
-admin.site.register(Character, CharacterAdmin)
-admin.site.register(PlayerCharacter, CharacterAdmin)
-admin.site.register(NPCCharacter, CharacterAdmin)

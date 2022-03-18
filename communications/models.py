@@ -182,7 +182,7 @@ class AnnouncementStatementManager(Manager):
 
 
 class AnnouncementStatement(Statement):
-    objects = DebateManager()
+    objects = AnnouncementStatementManager()
     
     class Meta:
         ordering = ['created_at']
@@ -200,7 +200,7 @@ class DebateStatementManager(Manager):
 
 
 class DebateStatement(Statement):
-    objects = DebateManager()
+    objects = DebateStatementManager()
     
     class Meta:
         ordering = ['created_at']

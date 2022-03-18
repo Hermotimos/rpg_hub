@@ -59,6 +59,7 @@ class LocationInline(admin.TabularInline):
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
     
 
+@admin.register(Location, SecondaryLocation)
 class LocationAdmin(admin.ModelAdmin):
     form = ToponomikonForm
     formfield_overrides = {
@@ -96,6 +97,7 @@ class LocationAdmin(admin.ModelAdmin):
         return formfield
     
 
+@admin.register(PrimaryLocation)
 class PrimaryLocationAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.ForeignKey: {'widget': Select(attrs={'style': 'width:300px'})},
@@ -114,12 +116,9 @@ class PrimaryLocationAdmin(admin.ModelAdmin):
             'location_type',
         ]
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-
+  
     
-class SecondaryLocationAdmin(LocationAdmin):
-    pass
-    
-    
+@admin.register(LocationType)
 class LocationTypeAdmin(admin.ModelAdmin):
     list_display = ['id', 'order_no', 'name', 'name_plural', 'default_img']
     list_editable = ['order_no', 'name', 'name_plural', 'default_img']
@@ -130,9 +129,3 @@ class LocationTypeAdmin(admin.ModelAdmin):
             'default_img',
         ]
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-
-
-admin.site.register(LocationType, LocationTypeAdmin)
-admin.site.register(Location, LocationAdmin)
-admin.site.register(PrimaryLocation, PrimaryLocationAdmin)
-admin.site.register(SecondaryLocation, SecondaryLocationAdmin)

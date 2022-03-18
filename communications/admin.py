@@ -4,11 +4,13 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
 from django.forms import Select, TextInput
 
-from communications.models import Statement, Debate, Announcement, Thread, ThreadTag, AnnouncementStatement, DebateStatement
+from communications.models import Statement, Debate, Announcement, Thread, \
+    ThreadTag, AnnouncementStatement, DebateStatement
 from rpg_project.utils import formfield_for_dbfield_cached
 from users.models import Profile
 
 
+@admin.register(Thread)
 class ThreadAdmin(admin.ModelAdmin):
     pass
 
@@ -54,11 +56,13 @@ class ThreadTagAdminForm(forms.ModelForm):
         }
 
 
+@admin.register(ThreadTag)
 class ThreadTagAdmin(admin.ModelAdmin):
     form = ThreadTagAdminForm
     list_display = ['id', 'kind', 'author', 'title', 'color']
 
 
+@admin.register(Debate)
 class DebateAdmin(admin.ModelAdmin):
     form = DebateAdminForm
     list_display = ['title', 'is_ended', 'is_exclusive', 'created_at']
@@ -66,12 +70,14 @@ class DebateAdmin(admin.ModelAdmin):
     search_fields = ['title']
     
 
+@admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
     form = AnnouncementAdminForm
     list_display = ['title', 'created_at']
     search_fields = ['title']
     
 
+@admin.register(Statement, AnnouncementStatement, DebateStatement)
 class StatementAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.ForeignKey: {'widget': Select(attrs={'style': 'width:250px'})},
@@ -89,11 +95,3 @@ class StatementAdmin(admin.ModelAdmin):
         ]
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
     
-    
-admin.site.register(Thread, ThreadAdmin)
-admin.site.register(ThreadTag, ThreadTagAdmin)
-admin.site.register(Debate, DebateAdmin)
-admin.site.register(Announcement, AnnouncementAdmin)
-admin.site.register(Statement, StatementAdmin)
-admin.site.register(AnnouncementStatement, StatementAdmin)
-admin.site.register(DebateStatement, StatementAdmin)

@@ -10,6 +10,7 @@ from imaginarion.models import Picture, PictureImage, PictureSet, Audio, \
 from rpg_project.utils import formfield_for_dbfield_cached
 
 
+@admin.register(Audio)
 class AudioAdmin(admin.ModelAdmin):
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 50})},
@@ -23,6 +24,7 @@ class AudioAdmin(admin.ModelAdmin):
         return obj.__str__()
     
     
+@admin.register(AudioSet)
 class AudioSetAdmin(admin.ModelAdmin):
     formfield_overrides = {
         TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 50})},
@@ -38,6 +40,7 @@ class AudioSetAdmin(admin.ModelAdmin):
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
     
     
+@admin.register(Picture)
 class PictureAdmin(admin.ModelAdmin):
     list_display = ['id', 'type', 'description', 'get_image']
     list_editable = ['type', 'description']
@@ -54,6 +57,7 @@ class PictureAdmin(admin.ModelAdmin):
         return format_html(html)
 
     
+@admin.register(PictureImage)
 class PictureImageAdmin(admin.ModelAdmin):
     list_display = ['id', 'description', 'image', 'sorting_name']
     list_editable = ['description', 'image']
@@ -71,6 +75,7 @@ class PictureSetAdminForm(forms.ModelForm):
         }
 
 
+@admin.register(PictureSet)
 class PictureSetAdmin(admin.ModelAdmin):
     form = PictureSetAdminForm
     list_display = ['id', 'title', 'images']
@@ -86,10 +91,3 @@ class PictureSetAdmin(admin.ModelAdmin):
         else:
             html = '<h1><font color="red">BRAK OBRAZÓW</font></h1>'
         return format_html(html)
-
-
-admin.site.register(Audio, AudioAdmin)
-admin.site.register(AudioSet, AudioSetAdmin)
-admin.site.register(Picture, PictureAdmin)
-admin.site.register(PictureImage, PictureImageAdmin)
-admin.site.register(PictureSet, PictureSetAdmin)

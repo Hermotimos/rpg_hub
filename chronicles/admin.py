@@ -23,6 +23,11 @@ from users.models import Profile
 # ----------------------------------------------
 # ----------------------------------------------
 
+@admin.register(Date)
+class DateAdmin(admin.ModelAdmin):
+    pass
+
+
 class GameEventAdminForm(forms.ModelForm):
     
     # Filter FK to Thread to only include Debates
@@ -64,6 +69,7 @@ class GameEventAdminForm(forms.ModelForm):
         self.fields['debates'].queryset = Thread.objects.filter(kind='Debate')
 
 
+@admin.register(GameEvent)
 class GameEventAdmin(admin.ModelAdmin):
     form = GameEventAdminForm
     formfield_overrides = {
@@ -145,6 +151,7 @@ class HistoryEventAdminForm(forms.ModelForm):
         self.fields['known_long_desc'].queryset = Profile.non_gm.all()
         
         
+@admin.register(HistoryEvent)
 class HistoryEventAdmin(admin.ModelAdmin):
     form = HistoryEventAdminForm
     list_display = ['id', 'date_in_period', 'date_in_era',
@@ -161,6 +168,7 @@ class HistoryEventAdmin(admin.ModelAdmin):
 # ----------------------------------------------
 
 
+@admin.register(GameSession)
 class GameSessionAdmin(admin.ModelAdmin):
     formfield_overrides = {
         CharField: {'widget': TextInput(attrs={'size': 70})},
@@ -179,6 +187,7 @@ class GameSessionAdmin(admin.ModelAdmin):
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
 
     
+@admin.register(Chapter)
 class ChapterAdmin(admin.ModelAdmin):
     list_display = ['chapter_no', 'title', 'image']
     list_editable = ['title', 'image']
@@ -186,6 +195,7 @@ class ChapterAdmin(admin.ModelAdmin):
     select_related = ['image']
 
 
+@admin.register(PlotThread)
 class PlotThreadAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'is_ended']
     list_editable = ['name', 'is_ended']
@@ -199,6 +209,7 @@ class PlotThreadAdmin(admin.ModelAdmin):
 # ----------------------------------------------
 # ----------------------------------------------
 
+@admin.register(TimeUnit)
 class TimeUnitAdmin(admin.ModelAdmin):
     list_display = ['id', 'description_short', 'description_long']
     search_fields = ['description_short', 'description_long']
@@ -220,6 +231,7 @@ class ChronologyAdminForm(forms.ModelForm):
         }
 
 
+@admin.register(Chronology)
 class ChronologyAdmin(admin.ModelAdmin):
     form = ChronologyAdminForm
 
@@ -244,6 +256,7 @@ class EraAdminForm(TimeSpanForm):
     in_timeunit = forms.ModelChoiceField(queryset=Chronology.objects.all())
 
 
+@admin.register(Era)
 class EraAdmin(admin.ModelAdmin):
     form = EraAdminForm
     formfield_overrides = {
@@ -277,6 +290,7 @@ class PeriodAdminForm(TimeSpanForm):
     )
 
 
+@admin.register(Period)
 class PeriodAdmin(EraAdmin):
     form = PeriodAdminForm
     formfield_overrides = {
@@ -298,20 +312,3 @@ class PeriodAdmin(EraAdmin):
             'in_timeunit',
         ]
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-
-
-# Chronicle models
-admin.site.register(PlotThread, PlotThreadAdmin)
-admin.site.register(Date)
-admin.site.register(Chapter, ChapterAdmin)
-admin.site.register(GameSession, GameSessionAdmin)
-
-# TimeUnit model
-admin.site.register(TimeUnit, TimeUnitAdmin)
-
-# TimeUnit proxies
-admin.site.register(Chronology, ChronologyAdmin)
-admin.site.register(Era, EraAdmin)
-admin.site.register(Period, PeriodAdmin)
-admin.site.register(HistoryEvent, HistoryEventAdmin)
-admin.site.register(GameEvent, GameEventAdmin)

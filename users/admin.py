@@ -5,7 +5,7 @@ from django.utils.html import format_html
 
 from rpg_project.utils import update_rel_objs
 from rules.models import EliteProfession, EliteKlass, Klass, Plate, Shield, \
-    Weapon, Skill, Synergy
+    Weapon, Skill
 from users.models import Profile
 
 
@@ -102,6 +102,7 @@ class ProfileAdminForm(forms.ModelForm):
         return instance
 
 
+@admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     form = ProfileAdminForm
     list_display = [
@@ -118,5 +119,3 @@ class ProfileAdmin(admin.ModelAdmin):
         default_img = "media/profile_pics/profile_default.jpg"
         return format_html(f'<img src={default_img} width="70" height="70">')
 
-
-admin.site.register(Profile, ProfileAdmin)
