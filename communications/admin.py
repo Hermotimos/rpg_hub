@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib import admin
 from django.db import models
-from django.forms import Select, TextInput
 
 from communications.models import Statement, Debate, Announcement, Thread, \
     ThreadTag, AnnouncementStatement, DebateStatement
@@ -17,7 +16,7 @@ class ThreadTagAdminForm(forms.ModelForm):
     class Meta:
         model = ThreadTag
         exclude = []
-        widgets = {'color': TextInput(attrs={'type': 'color'})}
+        widgets = {'color': forms.TextInput(attrs={'type': 'color'})}
 
 
 @admin.register(ThreadTag)
@@ -72,7 +71,7 @@ class DebateAdmin(admin.ModelAdmin):
 class StatementAdmin(admin.ModelAdmin):
     filter_horizontal = ['seen_by', 'options']
     formfield_overrides = {
-        models.ForeignKey: {'widget': Select(attrs={'style': 'width:250px'})},
+        models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:250px'})},
     }
     list_display = ['id', '__str__', 'author', 'thread', 'created_at']
     list_editable = ['thread', 'author']

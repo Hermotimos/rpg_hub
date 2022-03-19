@@ -1,8 +1,7 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.db.models import TextField, CharField, ForeignKey, OneToOneField
-from django.forms import Textarea, TextInput, Select
+from django.db import models
 
 from chronicles.models import (
     PlotThread,
@@ -73,7 +72,7 @@ class GameEventAdminForm(forms.ModelForm):
 class GameEventAdmin(admin.ModelAdmin):
     form = GameEventAdminForm
     formfield_overrides = {
-        TextField: {'widget': Textarea(attrs={'rows': 12, 'cols': 40})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 12, 'cols': 40})},
     }
     list_display = ['id', 'game', 'event_no_in_game', 'date_in_period',
                     'description_short', 'description_long', 'audio']
@@ -109,10 +108,10 @@ class GameEventInline(admin.TabularInline):
     extra = 0
     form = GameEventInlineForm
     formfield_overrides = {
-        TextField: {'widget': Textarea(attrs={'rows': 12, 'cols': 45})},
-        CharField: {'widget': TextInput(attrs={'size': 15})},
-        ForeignKey: {'widget': Select(attrs={'style': 'width:180px'})},
-        OneToOneField: {'widget': Select(attrs={'style': 'width:200px'})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 12, 'cols': 45})},
+        models.CharField: {'widget': forms.TextInput(attrs={'size': 15})},
+        models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
+        models.OneToOneField: {'widget': forms.Select(attrs={'style': 'width:200px'})},
     }
     
     def formfield_for_dbfield(self, db_field, **kwargs):
@@ -182,7 +181,7 @@ class HistoryEventAdmin(admin.ModelAdmin):
 @admin.register(GameSession)
 class GameSessionAdmin(admin.ModelAdmin):
     formfield_overrides = {
-        CharField: {'widget': TextInput(attrs={'size': 70})},
+        models.CharField: {'widget': forms.TextInput(attrs={'size': 70})},
     }
     inlines = [GameEventInline]
     list_display = ['game_no', 'title', 'chapter', 'date']
@@ -259,9 +258,9 @@ class EraAdmin(admin.ModelAdmin):
     filter_horizontal = ['known_short_desc', 'known_long_desc']
     form = EraAdminForm
     formfield_overrides = {
-        TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 40})},
-        CharField: {'widget': TextInput(attrs={'size': 12})},
-        ForeignKey: {'widget': Select(attrs={'style': 'width:180px'})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 15, 'cols': 40})},
+        models.CharField: {'widget': forms.TextInput(attrs={'size': 12})},
+        models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
     }
     list_display = ['id', 'name', 'name_genetive', 'date_start', 'date_end',
                     'in_timeunit', 'description_short', 'description_long']
@@ -294,9 +293,9 @@ class PeriodAdmin(EraAdmin):
     filter_horizontal = ['known_short_desc', 'known_long_desc']
     form = PeriodAdminForm
     formfield_overrides = {
-        TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 40})},
-        CharField: {'widget': TextInput(attrs={'size': 12})},
-        ForeignKey: {'widget': Select(attrs={'style': 'width:180px'})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 15, 'cols': 40})},
+        models.CharField: {'widget': forms.TextInput(attrs={'size': 12})},
+        models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
     }
     list_display = ['id', 'name', 'name_genetive', 'date_start', 'date_end',
                     'in_timeunit', 'description_short', 'description_long']
