@@ -3,19 +3,19 @@
 
 <!-- BUTTONS -->
 <div class="row">
-    
+
     <div>
         <a class="btn btn-outline-dark icon-parent-obj py-2 mt-1" href="{% url 'communications:threads' thread.kind tag_title %}#thread_{{ thread.id }}"
             data-toggle="tooltip" data-placement="bottom" title="
-                {% if thread_kind == 'Announcement' %}
+                {% if thread.kind == 'Announcement' %}
                      Ogłoszenia
-                {% elif thread_kind == 'Debate' %}
+                {% elif thread.kind == 'Debate' %}
                      Narady
-                {% elif thread_kind == 'Demand' %}
+                {% elif thread.kind == 'Demand' %}
                     Dezyderaty
-                {% elif thread_kind == 'Plan' %}
+                {% elif thread.kind == 'Plan' %}
                     Plany
-                {% elif thread_kind == 'Report' %}
+                {% elif thread.kind == 'Report' %}
                     Zgłoszenia
                 {% endif %}">
         </a>
@@ -23,7 +23,7 @@
     
     {% if not thread.is_ended %}
         <div>
-            <p data-toggle="tooltip" data-placement="bottom" title="Udostępnij Ogłoszenie">
+            <p data-toggle="tooltip" data-placement="bottom" title="Udostępnij">
                 <span class="btn btn-outline-dark icon-inform py-2 ml-1 mt-1" data-toggle="modal" data-target="#infoThreadModal"></span>
             </p>
         </div>
@@ -50,7 +50,7 @@
     {% endif %}
     
     <div>
-        <p data-toggle="tooltip" data-placement="bottom" title="Edytuj tagi Ogłoszenia">
+        <p data-toggle="tooltip" data-placement="bottom" title="Edytuj tagi">
             <span class="btn btn-outline-dark icon-hash py-2 ml-1 mt-1" data-toggle="modal" data-target="#tagsModal{{ thread.id }}"></span>
         </p>
         <!-- Modal -->
