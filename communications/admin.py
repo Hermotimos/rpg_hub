@@ -1,59 +1,23 @@
 from django import forms
 from django.contrib import admin
-from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
 from django.forms import Select, TextInput
 
 from communications.models import Statement, Debate, Announcement, Thread, \
     ThreadTag, AnnouncementStatement, DebateStatement
-from rpg_project.utils import formfield_for_dbfield_cached
+from rpg_project.utils import formfield_with_cache
 from users.models import Profile
 
 
-@admin.register(Thread)
-class ThreadAdmin(admin.ModelAdmin):
-    pass
-
-
-class DebateAdminForm(forms.ModelForm):
-    
-    class Meta:
-        model = Debate
-        fields = ['title', 'kind', 'known_directly', 'is_ended', 'is_exclusive']
-        widgets = {}
-        
-    known_directly = forms.ModelMultipleChoiceField(
-        queryset=Profile.living.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Known directly', False),
-    )
-
-
-class AnnouncementAdminForm(forms.ModelForm):
-    
-    class Meta:
-        model = Announcement
-        fields = ['title', 'kind', 'known_directly', 'followers', 'tags']
-        widgets = {
-            'followers': FilteredSelectMultiple('Followers', False),
-            'tags': FilteredSelectMultiple('Tags', False),
-        }
-    
-    known_directly = forms.ModelMultipleChoiceField(
-        queryset=Profile.objects.exclude(status='npc'),
-        required=False,
-        widget=FilteredSelectMultiple('Known directly', False),
-    )
+# -----------------------------------------------------------------------------
 
 
 class ThreadTagAdminForm(forms.ModelForm):
     
     class Meta:
         model = ThreadTag
-        fields = ['kind', 'author', 'title', 'color']
-        widgets = {
-            'color': TextInput(attrs={'type': 'color'}),
-        }
+        exclude = []
+        widgets = {'color': TextInput(attrs={'type': 'color'})}
 
 
 @admin.register(ThreadTag)
@@ -62,23 +26,51 @@ class ThreadTagAdmin(admin.ModelAdmin):
     list_display = ['id', 'kind', 'author', 'title', 'color']
 
 
-@admin.register(Debate)
-class DebateAdmin(admin.ModelAdmin):
-    form = DebateAdminForm
-    list_display = ['title', 'is_ended', 'is_exclusive', 'created_at']
-    list_editable = ['is_ended', 'is_exclusive']
-    search_fields = ['title']
-    
+# -----------------------------------------------------------------------------
+
+
+@admin.register(Thread)
+class ThreadAdmin(admin.ModelAdmin):
+    pass
+
 
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
-    form = AnnouncementAdminForm
+    fields = ['title', 'kind', 'known_directly', 'followers', 'tags']
+    filter_horizontal = ['known_directly', 'followers', 'tags']
     list_display = ['title', 'created_at']
     search_fields = ['title']
     
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "known_directly":
+            kwargs["queryset"] = Profile.objects.exclude(status='npc')
+        if db_field.name == "followers":
+            kwargs["queryset"] = Profile.objects.exclude(status='npc')
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
 
-@admin.register(Statement, AnnouncementStatement, DebateStatement)
+
+@admin.register(Debate)
+class DebateAdmin(admin.ModelAdmin):
+    fields = ['title', 'kind', 'known_directly', 'followers', 'is_ended', 'is_exclusive']
+    filter_horizontal = ['known_directly', 'followers']
+    list_display = ['title', 'is_ended', 'is_exclusive', 'created_at']
+    list_editable = ['is_ended', 'is_exclusive']
+    search_fields = ['title']
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "known_directly":
+            kwargs["queryset"] = Profile.living.all()
+        if db_field.name == "followers":
+            kwargs["queryset"] = Profile.living.all()
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
+
+# -----------------------------------------------------------------------------
+
+
+@admin.register(Statement)
 class StatementAdmin(admin.ModelAdmin):
+    filter_horizontal = ['seen_by', 'options']
     formfield_overrides = {
         models.ForeignKey: {'widget': Select(attrs={'style': 'width:250px'})},
     }
@@ -88,10 +80,31 @@ class StatementAdmin(admin.ModelAdmin):
     ordering = ['-created_at']
     search_fields = ['text']
     
-    def formfield_for_dbfield(self, db_field, **kwargs):
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
         fields = [
             'thread',
             'author',
         ]
-        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in fields:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
     
+
+@admin.register(AnnouncementStatement)
+class AnnouncementStatementAdmin(StatementAdmin):
+    
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "seen_by":
+            kwargs["queryset"] = Profile.objects.exclude(status='npc')
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
+
+@admin.register(DebateStatement)
+class DebateStatementAdmin(StatementAdmin):
+    
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "seen_by":
+            kwargs["queryset"] = Profile.living.all()
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
