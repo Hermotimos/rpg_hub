@@ -65,23 +65,23 @@ table.weapons-table {border: double;}
 .weapons-table .weight {width: 7%;}
 
 @media only screen and (max-width: 400px) {
-    .rules-table {font-size: 0.6rem;}
+    .rules-table {font-size: 0.6rem !important;}
     .rules-table td {padding: 0.1rem !important;}
     .rules-table th {padding: 0.1rem !important;}
 }
 @media only screen and (min-width: 401px) {
-    .rules-table {font-size: 0.7rem;}
+    .rules-table {font-size: 0.7rem !important;}
     .rules-table td {padding: 0.1rem !important;}
     .rules-table th {padding: 0.1rem !important;}
 }
 @media only screen and (min-width: 601px) {
-    .rules-table {font-size: 0.8rem;}
+    .rules-table {font-size: 0.8rem !important;}
 }
 @media only screen and (min-width: 1001px) {
-    .rules-table {font-size: 0.9rem;}
+    .rules-table {font-size: 0.9rem !important;}
 }
 @media only screen and (min-width: 1201px) {
-    .rules-table {font-size: 1rem;}
+    .rules-table {font-size: 1rem !important;}
 }
 
 .weapons-table th {
@@ -109,8 +109,8 @@ table.weapons-table {border: double;}
 }
 
 /* This is responsible for table styling in armor.html */
-.rules-table th,
-.rules-table td {border-style: none !important;}
+.no-border th,
+.no-border td {border-style: none !important;}
 
 
 .armor-table th,
