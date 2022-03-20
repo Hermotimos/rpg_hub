@@ -65,12 +65,9 @@ class Location(Model):
         blank=True,
         null=True,
     )
-    knowledge_packets = M2M(
-        to=KnowledgePacket,
-        related_name='locations',
-        blank=True,
-    )
+    knowledge_packets = M2M(to=KnowledgePacket, related_name='locations', blank=True)
     map_packets = M2M(to=MapPacket, related_name='locations', blank=True)
+    
     location_type = FK(
         to=LocationType,
         related_name='locations',
