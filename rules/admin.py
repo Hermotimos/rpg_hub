@@ -1,6 +1,6 @@
+from django import forms
 from django.contrib import admin
-from django.db.models import TextField, ForeignKey, CharField
-from django.forms import Textarea, Select
+from django.db import models
 
 from rpg_project.utils import formfield_for_dbfield_cached
 from rules.admin_filters import SkillLevelFilter, SynergyLevelFilter
@@ -14,7 +14,7 @@ from rules.models import (
 )
 
 
-# =============================================================================
+# -----------------------------------------------------------------------------
 
 
 @admin.register(Factor)
@@ -78,7 +78,7 @@ class ConditionalModifierAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        qs = qs.select_related('modifier__factor')
+        qs = qs.forms.Select_related('modifier__factor')
         qs = qs.prefetch_related('combat_types', 'conditions')
         return qs
 
@@ -89,7 +89,7 @@ class CombatTypeAdmin(admin.ModelAdmin):
     list_editable = ['name']
 
     
-# =============================================================================
+# -----------------------------------------------------------------------------
 
 
 @admin.register(SkillKind)
@@ -145,7 +145,7 @@ class SynergyLevelInline(admin.TabularInline):
     extra = 1
     filter_horizontal = ['skill_levels', 'perks']
     formfield_overrides = {
-        TextField: {'widget': Textarea(attrs={'rows': 20, 'cols': 30})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 20, 'cols': 30})},
     }
     
     def formfield_for_dbfield(self, db_field, **kwargs):
@@ -159,8 +159,8 @@ class SynergyLevelInline(admin.TabularInline):
 class SynergyAdmin(admin.ModelAdmin):
     filter_horizontal = ['skills']
     formfield_overrides = {
-        CharField: {'widget': Textarea(attrs={'rows': 3, 'cols': 10})},
-        TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 30})},
+        models.CharField: {'widget': forms.Textarea(attrs={'rows': 3, 'cols': 10})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 10, 'cols': 30})},
     }
     inlines = [SynergyLevelInline]
     list_display = ['id', 'name']
@@ -180,7 +180,7 @@ class SynergyAdmin(admin.ModelAdmin):
 class SkillLevelAdmin(admin.ModelAdmin):
     filter_horizontal = ['acquired_by', 'perks']
     formfield_overrides = {
-        TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 80})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 8, 'cols': 80})},
     }
     list_display = ['name', 'description']
     list_editable = ['description']
@@ -196,7 +196,7 @@ class SkillLevelAdmin(admin.ModelAdmin):
 class SynergyLevelAdmin(admin.ModelAdmin):
     filter_horizontal = ['acquired_by', 'perks']
     formfield_overrides = {
-        TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 80})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 8, 'cols': 80})},
     }
     list_display = ['name', 'description']
     list_editable = ['description']
@@ -208,7 +208,7 @@ class SynergyLevelAdmin(admin.ModelAdmin):
         return f'{str(obj.synergy.name)} [{obj.level}]'
 
 
-# =============================================================================
+# -----------------------------------------------------------------------------
 
 
 class KlassInline(admin.TabularInline):
@@ -217,8 +217,8 @@ class KlassInline(admin.TabularInline):
     fields = ['name', 'description', 'start_perks', 'allowees']
     filter_horizontal = ['allowees']
     formfield_overrides = {
-        CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
-        TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 40})},
+        models.CharField: {'widget': forms.Textarea(attrs={'rows': 1, 'cols': 10})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 15, 'cols': 40})},
     }
 
 
@@ -226,8 +226,8 @@ class KlassInline(admin.TabularInline):
 class KlassAdmin(admin.ModelAdmin):
     filter_horizontal = ['allowees']
     formfield_overrides = {
-        CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
-        TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 60})},
+        models.CharField: {'widget': forms.Textarea(attrs={'rows': 1, 'cols': 10})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 10, 'cols': 60})},
     }
     list_display = ['name', 'profession', 'description', 'start_perks']
     list_editable = ['description', 'start_perks']
@@ -247,8 +247,8 @@ class EliteKlassInline(admin.TabularInline):
     extra = 2
     filter_horizontal = ['allowees']
     formfield_overrides = {
-        CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
-        TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 40})},
+        models.CharField: {'widget': forms.Textarea(attrs={'rows': 1, 'cols': 10})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 15, 'cols': 40})},
     }
 
 
@@ -256,8 +256,8 @@ class EliteKlassInline(admin.TabularInline):
 class EliteKlassAdmin(admin.ModelAdmin):
     filter_horizontal = ['allowees']
     formfield_overrides = {
-        CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 10})},
-        TextField: {'widget': Textarea(attrs={'rows': 10, 'cols': 60})},
+        models.CharField: {'widget': forms.Textarea(attrs={'rows': 1, 'cols': 10})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 10, 'cols': 60})},
     }
     list_display = ['name', 'elite_profession', 'description', 'start_perks']
     list_editable = ['description', 'start_perks']
@@ -273,15 +273,15 @@ class EliteProfessionAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description']
 
 
-# =============================================================================
+# -----------------------------------------------------------------------------
 
 
 class WeaponInline(admin.TabularInline):
     model = Weapon
     extra = 2
     formfield_overrides = {
-        TextField: {'widget': Textarea(attrs={'rows': 1, 'cols': 25})},
-        CharField: {'widget': Textarea(attrs={'rows': 1, 'cols': 5})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 1, 'cols': 25})},
+        models.CharField: {'widget': forms.Textarea(attrs={'rows': 1, 'cols': 5})},
     }
 
 
@@ -295,7 +295,7 @@ class WeaponTypeAdmin(admin.ModelAdmin):
 class WeaponAdmin(admin.ModelAdmin):
     filter_horizontal = ['allowees']
     formfield_overrides = {
-        TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 2, 'cols': 100})},
     }
     list_display = ['name', 'description']
     list_editable = ['description']
@@ -314,7 +314,7 @@ class WeaponAdmin(admin.ModelAdmin):
 class PlateAdmin(admin.ModelAdmin):
     filter_horizontal = ['allowees']
     formfield_overrides = {
-        TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 100})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 2, 'cols': 100})},
     }
     list_display = ['name', 'description', 'comment']
     list_editable = ['description', 'comment']
@@ -325,8 +325,8 @@ class PlateAdmin(admin.ModelAdmin):
 class ShieldAdmin(admin.ModelAdmin):
     filter_horizontal = ['allowees']
     formfield_overrides = {
-        TextField: {'widget': Textarea(attrs={'rows': 2, 'cols': 50})},
-        ForeignKey: {'widget': Select(attrs={'style': 'width:180px'})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 2, 'cols': 50})},
+        models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
     }
     list_display = ['id', 'name', 'armor_class_bonus', 'weight', 'description', 'picture_set', 'comment']
     list_editable = ['name', 'armor_class_bonus', 'weight', 'description', 'picture_set', 'comment']
