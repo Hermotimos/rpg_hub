@@ -312,6 +312,7 @@ class HistorySkill(Skill):
 
 
 class Synergy(Model):
+    # TODO replace name with a composite of skills names with .join()
     name = CharField(max_length=100)
     skills = M2M(to=Skill, related_name='skills')
     sorting_name = CharField(max_length=250, blank=True, null=True)
