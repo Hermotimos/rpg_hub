@@ -20,7 +20,7 @@ from users.models import Profile, User
 
 
 @login_required
-def prosoponomikon_ungrouped_view(request):
+def prosoponomikon_characters_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     
     all_characters = profile.characters_known_annotated()
