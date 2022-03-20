@@ -88,9 +88,7 @@ class ProfileAdminForm(forms.ModelForm):
         instance = super().save(*args, **kwargs)
         try:
             for field, Model in self.fields_and_models.items():
-                update_rel_objs(
-                    instance, Model, self.cleaned_data[field],
-                    "allowees")
+                update_rel_objs(instance, Model, self.cleaned_data[field], "allowees")
         except ValueError:
             text = self.cleaned_data['text']
             raise ValueError(
@@ -118,4 +116,3 @@ class ProfileAdmin(admin.ModelAdmin):
                 f'<img src="{obj.image.url}" width="70" height="70">')
         default_img = "media/profile_pics/profile_default.jpg"
         return format_html(f'<img src={default_img} width="70" height="70">')
-
