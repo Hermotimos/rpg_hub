@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib import admin
-from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
 from django.utils.html import format_html
 
@@ -163,23 +162,3 @@ class CharacterAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         qs = qs.select_related('profile', 'first_name', 'family_name')
         return qs
-
-
-# class CharacterGroupAdminForm(forms.ModelForm):
-#     class Meta:
-#         model = CharacterGroup
-#         fields = [
-#             'name', 'author', 'characters', 'default_knowledge_packets',
-#             'default_skills']
-#         widgets = {
-#             'characters': FilteredSelectMultiple('Characters', False),
-#             'default_knowledge_packets': FilteredSelectMultiple(
-#                 'Pakiety wiedzy', False),
-#             'default_skills': FilteredSelectMultiple('Umiejętności', False),
-#         }
-#
-#
-# @admin.register(CharacterGroup)
-# class CharacterGroupAdmin(admin.ModelAdmin):
-#     form = CharacterGroupAdminForm
-#
