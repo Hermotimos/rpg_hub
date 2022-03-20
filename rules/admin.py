@@ -78,7 +78,7 @@ class ConditionalModifierAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        qs = qs.forms.Select_related('modifier__factor')
+        qs = qs.select_related('modifier__factor')
         qs = qs.prefetch_related('combat_types', 'conditions')
         return qs
 
