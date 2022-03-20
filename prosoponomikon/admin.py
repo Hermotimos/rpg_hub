@@ -5,7 +5,7 @@ from django.db import models
 from django.utils.html import format_html
 
 from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, \
-    CharacterGroup, FirstName, NameGroup, FamilyName, AffixGroup, \
+    FirstName, NameGroup, FamilyName, AffixGroup, \
     AuxiliaryNameGroup, FamilyNameGroup
 from rpg_project.utils import formfield_for_dbfield_cached, formfield_with_cache
 
@@ -89,6 +89,9 @@ class FamilyNameAdmin(admin.ModelAdmin):
         return " | ".join([loc.name for loc in obj.locations.all()])
 
 
+# -----------------------------------------------------------------------------
+
+
 @admin.register(NameGroup)
 class NameGroupAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'type', 'description']
@@ -99,6 +102,9 @@ class NameGroupAdmin(admin.ModelAdmin):
 class FamilyNameGroupAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'description']
     list_editable = ['title', 'description']
+
+
+# -----------------------------------------------------------------------------
 
 
 @admin.register(AffixGroup)
@@ -159,21 +165,21 @@ class CharacterAdmin(admin.ModelAdmin):
         return qs
 
 
-class CharacterGroupAdminForm(forms.ModelForm):
-    class Meta:
-        model = CharacterGroup
-        fields = [
-            'name', 'author', 'characters', 'default_knowledge_packets',
-            'default_skills']
-        widgets = {
-            'characters': FilteredSelectMultiple('Characters', False),
-            'default_knowledge_packets': FilteredSelectMultiple(
-                'Pakiety wiedzy', False),
-            'default_skills': FilteredSelectMultiple('Umiejętności', False),
-        }
-
-
-@admin.register(CharacterGroup)
-class CharacterGroupAdmin(admin.ModelAdmin):
-    form = CharacterGroupAdminForm
-    
+# class CharacterGroupAdminForm(forms.ModelForm):
+#     class Meta:
+#         model = CharacterGroup
+#         fields = [
+#             'name', 'author', 'characters', 'default_knowledge_packets',
+#             'default_skills']
+#         widgets = {
+#             'characters': FilteredSelectMultiple('Characters', False),
+#             'default_knowledge_packets': FilteredSelectMultiple(
+#                 'Pakiety wiedzy', False),
+#             'default_skills': FilteredSelectMultiple('Umiejętności', False),
+#         }
+#
+#
+# @admin.register(CharacterGroup)
+# class CharacterGroupAdmin(admin.ModelAdmin):
+#     form = CharacterGroupAdminForm
+#

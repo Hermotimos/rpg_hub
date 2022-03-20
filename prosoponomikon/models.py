@@ -8,17 +8,13 @@ from django.db.models import (
     Model,
     OneToOneField as OneToOne,
     PROTECT,
-    Q,
-    SET_NULL,
-    SmallIntegerField,
     TextField,
 )
 from django.db.models.signals import post_save
 
 from knowledge.models import BiographyPacket, DialoguePacket
-from knowledge.models import KnowledgePacket
 from rpg_project.utils import create_sorting_name
-from rules.models import Skill, Profession
+from rules.models import Profession
 from toponomikon.models import Location
 from users.models import Profile
 
@@ -284,39 +280,6 @@ class NonGMCharacter(Character):
         proxy = True
         verbose_name = '--- Player or NPC'
         verbose_name_plural = '--- Players and NPCs'
-
-
-class CharacterGroup(Model):
-    """A mnodel for storing default knowledge packet sets for groups of
-     characters. These should be automatically added to the knowlege packets of
-     a newly created Character that belongs to a CharacterGroup (by signals).
-    """
-    name = CharField(max_length=250)
-    author = FK(
-        to=Profile,
-        related_name='character_groups_authored',
-        on_delete=SET_NULL,
-        blank=True,
-        null=True,
-    )
-    characters = M2M(to=Character, related_name='character_groups')
-    default_knowledge_packets = M2M(
-        to=KnowledgePacket,
-        related_name='character_group_defaults',
-        blank=True,
-    )
-    default_skills = M2M(
-        to=Skill, related_name='character_group_defaults', blank=True)
-    order_no = SmallIntegerField(default=1)
-    
-    class Meta:
-        ordering = ['order_no', 'name']
-        unique_together = ('name', 'author')
-        verbose_name = '* CHARACTER GROUP'
-        verbose_name_plural = '* CHARACTER GROUPS'
-    
-    def __str__(self):
-        return f"{self.name} [{self.author}]"
 
 
 def copy_name_from_character_to_profile(sender, instance, **kwargs):
