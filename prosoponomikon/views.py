@@ -14,7 +14,6 @@ from prosoponomikon.forms import CharacterCreateForm
 from prosoponomikon.models import Character, NameGroup, FamilyName
 from rpg_project.settings import get_secret
 from rpg_project.utils import handle_inform_form, backup_db, only_game_masters
-from rules.utils import get_synergies_acquired
 from toponomikon.models import Location
 from users.models import Profile, User
 
@@ -53,10 +52,9 @@ def prosoponomikon_character_view(request, character_id):
     # Player viewing own Character or GM viewing any Character
     if current_profile.character.id == character_id or current_profile.status == 'gm':
         skills = character.profile.skills_acquired_with_skill_levels()
-        synergies = get_synergies_acquired(character.profile)
-
-        knowledge_packets = character.profile.knowledge_packets.order_by('title')
-        knowledge_packets = knowledge_packets.prefetch_related('picture_sets__pictures')
+        synergies = character.profile.synergies_acquired_with_synergies_levels()
+        knowledge_packets = character.profile.knowledge_packets.prefetch_related(
+            'picture_sets__pictures').order_by('title')
         known_characters = character.profile.characters_known_annotated()
     
     # Player viewing other Characters

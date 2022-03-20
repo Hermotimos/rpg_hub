@@ -143,12 +143,45 @@ class Profile(Model):
         return skills
 
     def synergies_acquired_with_synergies_levels(self):
-        from rules.models import Synergy, SynergyLevel
-        synergies = Synergy.objects.filter(synergy_levels__acquired_by=self)
-        synergy_levels = SynergyLevel.objects.filter(acquired_by=self)
+        from rules.models import Synergy, SynergyLevel, SkillLevel
+        skill_levels = SkillLevel.objects.filter(acquired_by=self)
+    
+        synergy_levels = SynergyLevel.objects.prefetch_related('skill_levels')
+        synergy_levels_ids = [
+            synergy_lvl.id for synergy_lvl in synergy_levels
+            if all([(skill_lvl in skill_levels) for skill_lvl in
+                    synergy_lvl.skill_levels.all()])
+        ]
+        synergy_levels = SynergyLevel.objects.filter(id__in=synergy_levels_ids)
+        synergy_levels = synergy_levels.prefetch_related(
+            'synergy__skills',
+            'perks__conditional_modifiers__conditions',
+            'perks__conditional_modifiers__combat_types',
+            'perks__conditional_modifiers__modifier__factor',
+            'perks__comments',
+            'skill_levels__skill',
+        )
+        synergies = Synergy.objects.filter(synergy_levels__in=synergy_levels)
         synergies = synergies.prefetch_related(
             Prefetch('synergy_levels', queryset=synergy_levels))
         return synergies.distinct()
+
+    def synergies_allowed(self):
+        """Get synergies whose all composing skills are allowed to any od user's profiles."""
+        from rules.models import Synergy, Skill
+        skills = Skill.objects.filter(allowees__in=self.user.profiles.all())
+        synergies = Synergy.objects.prefetch_related(
+            'skills',
+            'synergy_levels__skill_levels__skill',
+            'synergy_levels__perks__conditional_modifiers__conditions',
+            'synergy_levels__perks__conditional_modifiers__combat_types',
+            'synergy_levels__perks__conditional_modifiers__modifier__factor',
+            'synergy_levels__perks__comments',
+        )
+        return [
+            synergy for synergy in synergies
+            if all([(skill in skills) for skill in synergy.skills.all()])
+        ]
 
     @property
     def undone_demands(self):

@@ -13,8 +13,8 @@ from rules.models import (
     WeaponType,
     Weapon,
 )
-from rules.utils import get_overload_ranges, LOAD_LIMITS, \
-    get_synergies_allowed, get_user_professions, can_view_special_rules
+from rules.utils import get_overload_ranges, LOAD_LIMITS, get_user_professions, \
+    can_view_special_rules
 from users.models import Profile
 
 
@@ -143,11 +143,10 @@ def rules_skills_list_view(request, skilltype_kind):
 @login_required
 def rules_synergies_list_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
-    user_profiles = current_profile.user.profiles.all()
     context = {
         'current_profile': current_profile,
         'page_title': 'Lista Synergii',
-        'synergies': get_synergies_allowed(user_profiles),
+        'synergies': current_profile.synergies_allowed(),
     }
     return render(request, 'rules/synergies_list.html', context)
 
