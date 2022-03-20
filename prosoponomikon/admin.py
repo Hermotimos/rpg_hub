@@ -59,7 +59,7 @@ class FamilyNameAdmin(admin.ModelAdmin):
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         form_field = super().formfield_for_manytomany(db_field, request, **kwargs)
-        if db_field.name in [*self.filter_horizontal]:
+        if db_field.name == 'locations':
             form_field.widget.attrs = {'style': 'height:400px'}
         return form_field
 
