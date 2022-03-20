@@ -1,21 +1,20 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.db.models import TextField, CharField
-from django.forms import Textarea, TextInput
+from django.db import models
 from django.utils.html import format_html
 
 from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, \
     CharacterGroup, FirstName, NameGroup, FamilyName, AffixGroup, \
     AuxiliaryNameGroup, FamilyNameGroup
-from rpg_project.utils import formfield_for_dbfield_cached
+from rpg_project.utils import formfield_for_dbfield_cached, formfield_with_cache
 
 
 @admin.register(FirstName)
 class FirstNameAdmin(admin.ModelAdmin):
     formfield_overrides = {
-        TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 40})},
-        CharField: {'widget': TextInput(attrs={'size': 20})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 3, 'cols': 40})},
+        models.CharField: {'widget': forms.TextInput(attrs={'size': 20})},
     }
     list_display = [
         'id', 'form', 'form_2', 'is_ancient', 'info', 'affix_group',
@@ -37,7 +36,7 @@ class FirstNameAdmin(admin.ModelAdmin):
     
 class FirstNameInline(admin.TabularInline):
     formfield_overrides = {
-        TextField: {'widget': Textarea(attrs={'rows': 3, 'cols': 50})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 3, 'cols': 50})},
     }
     model = FirstName
     extra = 10
@@ -49,30 +48,38 @@ class FirstNameInline(admin.TabularInline):
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
 
 
-class FamilyNameAdminForm(forms.ModelForm):
-    class Meta:
-        model = FamilyName
-        fields = ['form', 'info', 'locations', 'group']
-        widgets = {
-            'locations': FilteredSelectMultiple(
-                'Locations', False, attrs={'style': 'height:400px'}
-            ),
-        }
+# -----------------------------------------------------------------------------
 
 
 @admin.register(FamilyName)
 class FamilyNameAdmin(admin.ModelAdmin):
-    form = FamilyNameAdminForm
+    filter_horizontal = ['locations']
     list_display = ['id', 'group', 'form', 'info', 'locs']
     list_editable = ['group', 'form', 'info']
     ordering = ['group', 'form']
-    
-    def formfield_for_dbfield(self, db_field, **kwargs):
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        form_field = super().formfield_for_manytomany(db_field, request, **kwargs)
+        if db_field.name in [*self.filter_horizontal]:
+            form_field.widget.attrs = {'style': 'height:400px'}
+        return form_field
+
+    # def formfield_for_dbfield(self, db_field, **kwargs):
+    #     fields = [
+    #         'group',
+    #     ]
+    #     return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
         fields = [
             'group',
         ]
-        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in fields:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
+    
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         qs = qs.prefetch_related('locations', 'group')
