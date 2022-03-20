@@ -11,11 +11,9 @@ from imaginarion.models import Picture, PictureImage, PictureSet
 from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
 from prosoponomikon.forms import CharacterCreateForm
-from prosoponomikon.models import Character, NameGroup, \
-    FamilyName
+from prosoponomikon.models import Character, NameGroup, FamilyName
 from rpg_project.settings import get_secret
-from rpg_project.utils import handle_inform_form, backup_db, only_game_masters, \
-    only_game_masters_and_spectators
+from rpg_project.utils import handle_inform_form, backup_db, only_game_masters
 from rules.utils import get_synergies_acquired
 from toponomikon.models import Location
 from users.models import Profile, User
@@ -38,89 +36,39 @@ def prosoponomikon_ungrouped_view(request):
 
 @login_required
 def prosoponomikon_character_view(request, character_id):
-    profile = Profile.objects.get(id=request.session['profile_id'])
-    if profile.can_view_all:
-        return redirect('prosoponomikon:character-for-gm', character_id)
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    
+    if current_profile.character.id == character_id:
+        # Players viewing their own Characters
+        character = current_profile.character
     else:
-        return redirect('prosoponomikon:character-for-player', character_id)
+        # Player or GM viewing other Characters
+        known_bio_packets = (current_profile.biography_packets.all() | current_profile.authored_bio_packets.all()).prefetch_related('picture_sets')
+        characters = Character.objects.select_related('first_name')
+        characters = characters.prefetch_related(
+            Prefetch('biography_packets', queryset=known_bio_packets),
+            'dialogue_packets')
+        character = characters.get(id=character_id)
 
+    # Player viewing own Character or GM viewing any Character
+    if current_profile.character.id == character_id or current_profile.status == 'gm':
+        skills = character.profile.skills_acquired_with_skill_levels()
+        synergies = get_synergies_acquired(character.profile)
 
-@login_required
-@only_game_masters_and_spectators
-def prosoponomikon_character_for_gm_view(request, character_id):
-    profile = Profile.objects.get(id=request.session['profile_id'])
-    if profile.character.id == character_id:
-        character = profile.character
-    else:
-        character = Character.objects.get(id=character_id)
-
-    known_characters = character.profile.characters_known_annotated()
-    
-    skills = character.profile.skills_acquired_with_skill_levels()
-    skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__conditions')
-    skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__combat_types')
-    skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__modifier__factor')
-    skills = skills.prefetch_related('skill_levels__perks__comments')
-    skills = skills.distinct()
-
-    synergies = get_synergies_acquired(character.profile)
-    
-    knowledge_packets = character.profile.knowledge_packets.order_by('title')
-    knowledge_packets = knowledge_packets.prefetch_related('picture_sets__pictures')
- 
-    # INFORM FORM
-    if request.method == 'POST':
-        handle_inform_form(request)
-    
-    context = {
-        'current_profile': profile,
-        'page_title': character,
-        'character': character,
-        'skills': skills,
-        'synergies': synergies,
-        'known_characters': known_characters,
-        'knowledge_packets': knowledge_packets,
-    }
-    return render(request, 'prosoponomikon/character.html', context)
-
-
-@login_required
-def prosoponomikon_character_for_player_view(request, character_id):
-    profile = Profile.objects.get(id=request.session['profile_id'])
-    
-    known_bio_packets = (
-        profile.biography_packets.all() | profile.authored_bio_packets.all())
-    characters = Character.objects.select_related('first_name')
-    characters = characters.prefetch_related(
-        Prefetch('biography_packets', queryset=known_bio_packets))
-    
-    character = characters.filter(id=character_id).first()
-    
-    # Player viewing own Character
-    if profile.character.id == character_id:
-        skills = profile.skills_acquired_with_skill_levels()
-        skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__conditions')
-        skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__combat_types')
-        skills = skills.prefetch_related('skill_levels__perks__conditional_modifiers__modifier__factor')
-        skills = skills.prefetch_related('skill_levels__perks__comments')
-        skills = skills.distinct()
-        
-        synergies = get_synergies_acquired(profile)
-
-        knowledge_packets = profile.knowledge_packets.order_by('title')
+        knowledge_packets = character.profile.knowledge_packets.order_by('title')
         knowledge_packets = knowledge_packets.prefetch_related('picture_sets__pictures')
         known_characters = character.profile.characters_known_annotated()
     
     # Player viewing other Characters
     else:
         skills, knowledge_packets, known_characters, synergies = [], [], [], []
-
+        
     # INFORM FORM
     if request.method == 'POST':
         handle_inform_form(request)
     
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': character,
         'character': character,
         'skills': skills,
@@ -128,8 +76,8 @@ def prosoponomikon_character_for_player_view(request, character_id):
         'knowledge_packets': knowledge_packets,
         'known_characters': known_characters,
     }
-    if (profile in character.all_known() or profile.character == character
-            or profile.can_view_all):
+    if (current_profile in character.all_known() or current_profile.character == character
+            or current_profile.can_view_all):
         return render(request, 'prosoponomikon/character.html', context)
     else:
         return redirect('users:dupa')

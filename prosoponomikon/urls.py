@@ -6,22 +6,9 @@ app_name = 'prosoponomikon'
 urlpatterns = [
     path('ungrouped/', views.prosoponomikon_ungrouped_view, name='ungrouped'),
     
-    # path('grouped/', views.prosoponomikon_grouped_view, name='grouped'),
-    # path('groups-create/', views.prosoponomikon_character_group_create_view,
-    #      name='groups-create'),
-    # path('groups-edit/', views.prosoponomikon_character_groups_edit_view,
-    #      name='groups-edit'),
-    
     path('character/<int:character_id>/', views.prosoponomikon_character_view,
          name='character'),
-    path('character-for-gm/<int:character_id>/',
-         views.prosoponomikon_character_for_gm_view,
-         name='character-for-gm'),
-    path('character-for-player/<int:character_id>/',
-         views.prosoponomikon_character_for_player_view,
-         name='character-for-player'),
-    
-    
+
     path('character/<int:character_id>/bio-packet-form/<int:bio_packet_id>/',
          views.prosoponomikon_bio_packet_form_view, name='bio-packet-form'),
     

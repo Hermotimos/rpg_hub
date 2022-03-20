@@ -134,8 +134,13 @@ class Profile(Model):
         skills = Skill.objects.filter(skill_levels__acquired_by=self)
         skill_levels = SkillLevel.objects.filter(acquired_by=self)
         skills = skills.prefetch_related(
-            Prefetch('skill_levels', queryset=skill_levels))
-        return skills.distinct()
+            Prefetch('skill_levels', queryset=skill_levels),
+            'skill_levels__perks__conditional_modifiers__conditions',
+            'skill_levels__perks__conditional_modifiers__combat_types',
+            'skill_levels__perks__conditional_modifiers__modifier__factor',
+            'skill_levels__perks__comments'
+        ).distinct()
+        return skills
 
     def synergies_acquired_with_synergies_levels(self):
         from rules.models import Synergy, SynergyLevel
