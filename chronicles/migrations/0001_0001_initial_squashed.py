@@ -16,12 +16,9 @@ class Migration(migrations.Migration):
     dependencies = [
         ('imaginarion', '0001_initial'),
         ('imaginarion', '0012_pictureset'),
-        ('communications', '0017_announcementstatement_debatestatement_and_more'),
-        ('communications', '0014_alter_thread_topic'),
-        ('communications', '0015_auto_20220109_1758'),
+        ('communications', '0001_0001_initial_squashed'),
         ('users', '0001_initial'),
         ('toponomikon', '0001_initial'),
-        ('communications', '0016_alter_debate_options'),
         ('users', '0016_profile_user_image'),
         ('users', '0007_auto_20210106_1613'),
     ]
