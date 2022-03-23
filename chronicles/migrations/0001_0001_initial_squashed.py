@@ -18,7 +18,6 @@ class Migration(migrations.Migration):
         ('imaginarion', '0012_pictureset'),
         ('communications', '0017_announcementstatement_debatestatement_and_more'),
         ('communications', '0014_alter_thread_topic'),
-        ('debates', '0001_initial'),
         ('communications', '0015_auto_20220109_1758'),
         ('users', '0001_initial'),
         ('toponomikon', '0001_initial'),
@@ -104,7 +103,7 @@ class Migration(migrations.Migration):
                 ('date_in_chronology', models.CharField(blank=True, max_length=99, null=True)),
                 ('date_in_era', models.CharField(blank=True, max_length=99, null=True)),
                 ('date_in_period', models.CharField(blank=True, max_length=99, null=True)),
-                ('debates', models.ManyToManyField(blank=True, related_name='events', to='debates.Debate')),
+                ('debates', models.ManyToManyField(blank=True, limit_choices_to={'kind': 'Debate'}, related_name='events', to='communications.Thread')),
                 ('audio', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='events', to='imaginarion.audio')),
                 ('picture_sets', models.ManyToManyField(blank=True, related_name='events', to='imaginarion.PictureSet')),
             ],
@@ -255,15 +254,6 @@ class Migration(migrations.Migration):
         ),
         migrations.DeleteModel(
             name='Thread',
-        ),
-        migrations.RemoveField(
-            model_name='timeunit',
-            name='debates',
-        ),
-        migrations.AddField(
-            model_name='timeunit',
-            name='debates',
-            field=models.ManyToManyField(blank=True, limit_choices_to={'kind': 'Debate'}, related_name='events', to='communications.Thread'),
         ),
         migrations.AlterField(
             model_name='timeunit',
