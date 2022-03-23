@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         ('imaginarion', '0012_pictureset'),
         ('communications', '0001_0001_initial_squashed'),
         ('users', '0001_initial'),
-        ('toponomikon', '0001_initial'),
+        ('toponomikon', '0001_0001_initial_squashed'),
         ('users', '0016_profile_user_image'),
         ('users', '0007_auto_20210106_1613'),
     ]

@@ -23,11 +23,11 @@ class Migration(migrations.Migration):
         ('knowledge', '0004_auto_20201228_2101'),
         ('users', '0008_auto_20210309_1955'),
         ('knowledge', '0005_biographypacket_show_in_prosoponomikon'),
-        ('toponomikon', '0003_auto_20210106_1613'),
+        ('toponomikon', '0001_0001_initial_squashed'),
         ('rules', '0005_auto_20211017_1835'),
         ('knowledge', '0006_remove_biographypacket_show_in_prosoponomikon'),
         ('imaginarion', '0001_initial'),
-        ('toponomikon', '0001_initial'),
+        # ('toponomikon', '0001_initial'),
         ('imaginarion', '0002_auto_20210103_1049'),
     ]
 
