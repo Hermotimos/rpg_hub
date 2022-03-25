@@ -14,8 +14,8 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('imaginarion', '0001_initial'),
-        ('imaginarion', '0012_pictureset'),
+        ('imaginarion', '0001_initial_squashed'),
+        # ('imaginarion', '0012_pictureset'),
         ('communications', '0001_0001_initial_squashed'),
         ('users', '0001_initial'),
         ('toponomikon', '0001_0001_initial_squashed'),

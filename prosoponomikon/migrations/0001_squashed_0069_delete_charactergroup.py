@@ -26,9 +26,9 @@ class Migration(migrations.Migration):
         ('toponomikon', '0001_0001_initial_squashed'),
         # ('rules', '0005_auto_20211017_1835'),
         # ('knowledge', '0006_remove_biographypacket_show_in_prosoponomikon'),
-        ('imaginarion', '0001_initial'),
+        ('imaginarion', '0001_initial_squashed'),
         # ('toponomikon', '0001_initial'),
-        ('imaginarion', '0002_auto_20210103_1049'),
+        # ('imaginarion', '0002_auto_20210103_1049'),
     ]
 
     operations = [
