@@ -6,7 +6,7 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    replaces = [('rules', '0001_initial'), ('rules', '0002_auto_20210106_1613'), ('rules', '0003_auto_20210922_1956'), ('rules', '0004_auto_20210922_2034'), ('rules', '0005_auto_20211017_1835')]
+    # replaces = [('rules', '0001_initial'), ('rules', '0002_auto_20210106_1613'), ('rules', '0003_auto_20210922_1956'), ('rules', '0004_auto_20210922_2034'), ('rules', '0005_auto_20211017_1835')]
 
     initial = True
 
