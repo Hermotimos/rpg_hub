@@ -12,11 +12,11 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('users', '0014_alter_profile_options'),
-        ('users', '0007_auto_20210106_1613'),
+        ('users', '0001_initial_squashed'),
+        # ('users', '0007_auto_20210106_1613'),
         ('imaginarion', '0001_initial_squashed'),
         # ('imaginarion', '0012_pictureset'),
-        ('users', '0001_initial'),
+        # ('users', '0001_initial'),
     ]
 
     operations = [

@@ -11,9 +11,9 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('users', '0009_auto_20210912_1017'),
-        ('users', '0014_alter_profile_options'),
-        ('users', '0013_auto_20211023_1358'),
+        ('users', '0001_initial_squashed'),
+        # ('users', '0014_alter_profile_options'),
+        # ('users', '0013_auto_20211023_1358'),
     ]
 
     operations = [

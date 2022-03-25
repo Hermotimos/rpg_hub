@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('rules', '0001_initial_squashed'),
         ('imaginarion', '0001_initial_squashed'),
-        ('users', '0001_initial'),
+        ('users', '0001_initial_squashed'),
         # ('imaginarion', '0012_pictureset'),
         # ('imaginarion', '0001_initial'),
         # ('imaginarion', '0011_auto_20210221_1423'),
