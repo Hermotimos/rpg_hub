@@ -24,9 +24,9 @@ class DemandsCreateForm(forms.ModelForm):
         self.fields['text'].label = "Tekst"
 
         addressees = Profile.contactables.exclude(id=profile.id)
+        gms = addressees.filter(status='gm')
         if profile.status == 'player':
-            gms = addressees.filter(status='gm')
-            addressees = addressees.filter(id__in=profile.characters_participated.all())
+            addressees = addressees.filter(character__in=profile.characters_participated.all())
             addressees = (addressees | gms)
         elif profile.status == 'npc':
             addressees = addressees.filter(status='gm')
