@@ -11,6 +11,9 @@ from rpg_project.utils import update_rel_objs
 from toponomikon.models import Location, PrimaryLocation, SecondaryLocation
 
 
+# -----------------------------------------------------------------------------
+
+
 @admin.register(DialoguePacket)
 class DialoguePacketAdmin(admin.ModelAdmin):
     formfield_overrides = {
@@ -22,20 +25,13 @@ class DialoguePacketAdmin(admin.ModelAdmin):
     search_fields = ['title']
 
 
-class BiographyPacketAdminForm(forms.ModelForm):
-    class Meta:
-        model = BiographyPacket
-        fields = [
-            'title', 'text', 'author', 'acquired_by', 'picture_sets', 'order_no']
-        widgets = {
-            'acquired_by': FilteredSelectMultiple('Acquired by', False),
-            'picture_sets': FilteredSelectMultiple('Picture Sets', False),
-        }
+# -----------------------------------------------------------------------------
 
 
 @admin.register(BiographyPacket)
 class BiographyPacketAdmin(admin.ModelAdmin):
-    form = BiographyPacketAdminForm
+    exclude = ['sorting_name']
+    filter_horizontal = ['acquired_by', 'picture_sets']
     list_display = ['id', 'title', 'text', 'author']
     list_editable = ['title', 'text']
     search_fields = ['title', 'text']
@@ -47,17 +43,14 @@ class BiographyPacketAdmin(admin.ModelAdmin):
         return qs
 
 
+# -----------------------------------------------------------------------------
+
+
 class KnowledgePacketAdminForm(forms.ModelForm):
     
     class Meta:
         model = KnowledgePacket
-        fields = [
-            'title', 'text', 'author', 'acquired_by', 'skills', 'picture_sets']
-        widgets = {
-            'acquired_by': FilteredSelectMultiple('Acquired by', False),
-            'skills': FilteredSelectMultiple('Skills', False),
-            'picture_sets': FilteredSelectMultiple('Picture Sets', False),
-        }
+        fields = ['title', 'text', 'author', 'acquired_by', 'skills', 'picture_sets']
     
     warning = """
     <b style="color:red">
@@ -117,6 +110,7 @@ class KnowledgePacketAdminForm(forms.ModelForm):
 
 @admin.register(KnowledgePacket)
 class KnowledgePacketAdmin(admin.ModelAdmin):
+    filter_horizontal = ['acquired_by', 'picture_sets', 'skills']
     form = KnowledgePacketAdminForm
     formfield_overrides = {
         CharField: {'widget': TextInput(attrs={'size': 50})},
@@ -142,29 +136,29 @@ class KnowledgePacketAdmin(admin.ModelAdmin):
         return qs
     
         
+# -----------------------------------------------------------------------------
+
+
 class MapPacketAdminForm(forms.ModelForm):
     
     class Meta:
         model = MapPacket
         fields = ['picture_sets']
-        widgets = {
-            'picture_sets': FilteredSelectMultiple('Picture Sets', False),
-        }
 
-    gen_locations = forms.ModelMultipleChoiceField(
+    primary_locations = forms.ModelMultipleChoiceField(
         queryset=Location.objects.filter(in_location=None),
         required=False,
-        widget=FilteredSelectMultiple('General locations', False),
+        widget=FilteredSelectMultiple('Primary locations', False),
         label=format_html('<b style="color:red">'
                           'PRZY TWORZENIU NOWEJ ZAPIS LOKACJI JEST NIEMOŻLIWY'
                           '<br><br>'
                           'PODAJ LOKACJĘ W DRUGIEJ TURZE :)'
                           '</b>'),
     )
-    spec_locations = forms.ModelMultipleChoiceField(
+    secondary_locations = forms.ModelMultipleChoiceField(
         queryset=Location.objects.filter(~Q(in_location=None)),
         required=False,
-        widget=FilteredSelectMultiple('Specific locations', False),
+        widget=FilteredSelectMultiple('Secondary locations', False),
         label=format_html('<b style="color:red">'
                           'PRZY TWORZENIU NOWEJ ZAPIS LOKACJI JEST NIEMOŻLIWY'
                           '<br><br>'
@@ -182,19 +176,19 @@ class MapPacketAdminForm(forms.ModelForm):
             return
         try:
             gen_locs = Location.objects.filter(in_location=None).filter(map_packets=id_)
-            self.__dict__['initial'].update({'gen_locations': gen_locs})
+            self.__dict__['initial'].update({'primary_locations': gen_locs})
         except AttributeError:
             pass
         try:
             spec_locs = Location.objects.filter(~Q(in_location=None)).filter(map_packets=id_)
-            self.__dict__['initial'].update({'spec_locations': spec_locs})
+            self.__dict__['initial'].update({'secondary_locations': spec_locs})
         except AttributeError:
             pass
 
     def save(self, *args, **kwargs):
         instance = super().save(*args, **kwargs)
-        gen_loc_ids = self.cleaned_data['gen_locations']
-        spec_loc_ids = self.cleaned_data['spec_locations']
+        gen_loc_ids = self.cleaned_data['primary_locations']
+        spec_loc_ids = self.cleaned_data['secondary_locations']
         try:
             for gen_loc in Location.objects.filter(in_location=None).filter(id__in=gen_loc_ids):
                 gen_loc.map_packets.add(instance)
@@ -210,6 +204,7 @@ class MapPacketAdminForm(forms.ModelForm):
 
 @admin.register(MapPacket)
 class MapPacketAdmin(admin.ModelAdmin):
+    filter_horizontal = ['picture_sets']
     form = MapPacketAdminForm
     list_display = ['id', 'title', 'get_acquired_by']
     list_editable = ['title']

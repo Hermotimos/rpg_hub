@@ -137,6 +137,7 @@ class AuxiliaryNameGroupAdmin(admin.ModelAdmin):
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
 
+
 # -----------------------------------------------------------------------------
 
 
