@@ -19,7 +19,7 @@ from toponomikon.models import Location
 from users.models import Profile
 
 
-class NameGroup(Model):
+class FirstNameGroup(Model):
     NAME_GROUP_TYPES = (
         ('local', 'local'),
         ('racial', 'racial'),
@@ -55,8 +55,7 @@ class AffixGroup(Model):
     
     affix = CharField(max_length=100)
     type = CharField(max_length=20, choices=NAME_TYPES, default='MALE')
-    name_group = FK(
-        to=NameGroup, related_name='affix_groups', on_delete=PROTECT)
+    name_group = FK(to=FirstNameGroup, related_name='affix_groups', on_delete=PROTECT)
     
     class Meta:
         ordering = ['name_group', 'type', 'affix']

@@ -11,8 +11,7 @@ from imaginarion.models import Picture, PictureImage, PictureSet
 from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
 from prosoponomikon.forms import CharacterCreateForm
-from prosoponomikon.models import Character, NameGroup, FamilyName
-from rpg_project.settings import get_secret
+from prosoponomikon.models import Character, FirstNameGroup, FamilyName
 from rpg_project.utils import handle_inform_form, backup_db, only_game_masters
 from toponomikon.models import Location
 from users.models import Profile, User
@@ -158,7 +157,7 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
 def prosoponomikon_first_names_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     
-    name_groups = NameGroup.objects.prefetch_related(
+    name_groups = FirstNameGroup.objects.prefetch_related(
         'affix_groups__first_names__characters__profile',
         'affix_groups__first_names__auxiliary_group__location',
     )
