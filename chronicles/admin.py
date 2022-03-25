@@ -16,11 +16,8 @@ from toponomikon.models import SecondaryLocation
 from users.models import Profile
 
 
-# ----------------------------------------------
-# ----------------------------------------------
-# ---------- GameEvent & HistoryEvent ----------
-# ----------------------------------------------
-# ----------------------------------------------
+# -----------------------------------------------------------------------------
+
 
 @admin.register(Date)
 class DateAdmin(admin.ModelAdmin):
@@ -42,23 +39,6 @@ class GameEventAdminForm(forms.ModelForm):
                   'in_timeunit', 'description_short', 'description_long',
                   'plot_threads', 'locations', 'participants',
                   'informees', 'picture_sets', 'debates', 'audio']
-        widgets = {
-            'participants': FilteredSelectMultiple(
-                'Participants', False, attrs={'style': 'height:100px'}
-            ),
-            'informees': FilteredSelectMultiple(
-                'Informees', False, attrs={'style': 'height:100px'}
-            ),
-            'locations': FilteredSelectMultiple(
-                'Locations', False, attrs={'style': 'height:100px'}
-            ),
-            'picture_sets': FilteredSelectMultiple(
-                'Picture Sets', False, attrs={'style': 'height:100px'}
-            ),
-            'plot_threads': FilteredSelectMultiple(
-                'PlotThreads', False, attrs={'style': 'height:100px'}
-            ),
-        }
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -70,14 +50,21 @@ class GameEventAdminForm(forms.ModelForm):
 
 @admin.register(GameEvent)
 class GameEventAdmin(admin.ModelAdmin):
+    filter_horizontal = [
+        'participants', 'informees', 'locations', 'picture_sets', 'plot_threads'
+    ]
     form = GameEventAdminForm
     formfield_overrides = {
-        models.TextField: {'widget': forms.Textarea(attrs={'rows': 12, 'cols': 40})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 12, 'cols': 35})},
+        models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
     }
-    list_display = ['id', 'game', 'event_no_in_game', 'date_in_period',
-                    'description_short', 'description_long', 'audio']
-    list_editable = ['event_no_in_game', 'description_short',
-                     'description_long', 'audio']
+    list_display = [
+        'id', 'game', 'event_no_in_game', 'date_in_period',
+        'description_short', 'description_long', 'audio'
+    ]
+    list_editable = [
+        'event_no_in_game', 'description_short', 'description_long', 'audio'
+    ]
     list_filter = ['game']
     search_fields = ['description_short', 'description_long']
     
@@ -86,6 +73,9 @@ class GameEventAdmin(admin.ModelAdmin):
             'audio',    # Tested that here only audio optimizes queries
         ]
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+
+
+# -----------------------------------------------------------------------------
 
 
 class GameEventInlineForm(GameEventAdminForm):
@@ -128,31 +118,19 @@ class GameEventInline(admin.TabularInline):
             'debates',
         ]
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-    
-    
+
+
+# -----------------------------------------------------------------------------
+
+
 class HistoryEventAdminForm(forms.ModelForm):
     class Meta:
         model = GameEvent
-        fields = ['date_start', 'date_end', 'in_timeunit', 'description_short',
-                  'description_long', 'plot_threads', 'locations',
-                  'known_short_desc', 'known_long_desc']
-        widgets = {
-            'known_short_desc': FilteredSelectMultiple(
-                'Known directly', False, attrs={'style': 'height:100px'}
-            ),
-            'known_long_desc': FilteredSelectMultiple(
-                'Known indirectly', False, attrs={'style': 'height:100px'}
-            ),
-            'locations': FilteredSelectMultiple(
-                'Locations', False, attrs={'style': 'height:100px'}
-            ),
-            'picture_sets': FilteredSelectMultiple(
-                'Picture Sets', False, attrs={'style': 'height:100px'}
-            ),
-            'plot_threads': FilteredSelectMultiple(
-                'PlotThreads', False, attrs={'style': 'height:100px'}
-            ),
-        }
+        fields = [
+            'date_start', 'date_end', 'in_timeunit', 'description_short',
+            'description_long', 'plot_threads', 'locations',
+            'known_short_desc', 'known_long_desc'
+        ]
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -163,19 +141,20 @@ class HistoryEventAdminForm(forms.ModelForm):
         
 @admin.register(HistoryEvent)
 class HistoryEventAdmin(admin.ModelAdmin):
+    filter_horizontal = [
+        'known_short_desc', 'known_long_desc', 'locations', 'picture_sets',
+        'plot_threads'
+    ]
     form = HistoryEventAdminForm
-    list_display = ['id', 'date_in_period', 'date_in_era',
-                    'date_in_chronology', 'description_short',
-                    'description_long', 'audio']
+    list_display = [
+        'id', 'date_in_period', 'date_in_era', 'date_in_chronology',
+        'description_short', 'description_long', 'audio'
+    ]
     list_editable = ['description_short', 'description_long', 'audio']
     search_fields = ['description_short', 'description_long']
     
     
-# ----------------------------------------------
-# ----------------------------------------------
-# ------ GameSession, Chapter & PlotThread -----
-# ----------------------------------------------
-# ----------------------------------------------
+# -----------------------------------------------------------------------------
 
 
 @admin.register(GameSession)
@@ -213,11 +192,8 @@ class PlotThreadAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
-# ----------------------------------------------
-# ----------------------------------------------
-# ---------- Chronology, Era & Period ----------
-# ----------------------------------------------
-# ----------------------------------------------
+# -----------------------------------------------------------------------------
+
 
 @admin.register(TimeUnit)
 class TimeUnitAdmin(admin.ModelAdmin):
@@ -262,12 +238,17 @@ class EraAdmin(admin.ModelAdmin):
         models.CharField: {'widget': forms.TextInput(attrs={'size': 12})},
         models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
     }
-    list_display = ['id', 'name', 'name_genetive', 'date_start', 'date_end',
-                    'in_timeunit', 'description_short', 'description_long']
-    list_editable = ['name', 'name_genetive', 'date_start', 'date_end',
-                     'in_timeunit', 'description_short', 'description_long']
-    search_fields = ['name', 'name_genetive', 'description_short',
-                     'description_long']
+    list_display = [
+        'id', 'name', 'name_genetive', 'date_start', 'date_end', 'in_timeunit',
+        'description_short', 'description_long'
+    ]
+    list_editable = [
+        'name', 'name_genetive', 'date_start', 'date_end', 'in_timeunit',
+        'description_short', 'description_long'
+    ]
+    search_fields = [
+        'name', 'name_genetive', 'description_short', 'description_long'
+    ]
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         fields = [
@@ -297,12 +278,17 @@ class PeriodAdmin(EraAdmin):
         models.CharField: {'widget': forms.TextInput(attrs={'size': 12})},
         models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
     }
-    list_display = ['id', 'name', 'name_genetive', 'date_start', 'date_end',
-                    'in_timeunit', 'description_short', 'description_long']
-    list_editable = ['name', 'name_genetive', 'date_start', 'date_end',
-                     'in_timeunit', 'description_short', 'description_long']
-    search_fields = ['name', 'name_genetive', 'description_short',
-                     'description_long']
+    list_display = [
+        'id', 'name', 'name_genetive', 'date_start', 'date_end', 'in_timeunit',
+        'description_short', 'description_long'
+    ]
+    list_editable = [
+        'name', 'name_genetive', 'date_start', 'date_end', 'in_timeunit',
+        'description_short', 'description_long'
+    ]
+    search_fields = [
+        'name', 'name_genetive', 'description_short', 'description_long'
+    ]
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         fields = [
