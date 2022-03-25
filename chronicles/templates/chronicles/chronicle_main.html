@@ -54,7 +54,7 @@
                             <div class="col-10 mb-2 ml-n1 ml-sm-n3 ml-lg-n4 ml-xl-n4 pl-2 pl-lg-0">
                                 <div class="mt-1 font-italic">
                                     <a href="{% url 'chronicles:chronicle-game' game.id %}"
-                                       class="mr-2 {% if game.any_witnesses == 0 and current_profile.status != 'gm' %} text-muted {% endif %}">
+                                       class="mr-2 {% if game.any_participants == 0 and current_profile.status != 'gm' %} text-muted {% endif %}">
                                         {{ game.title }}
                                     </a>
                                     <div class="d-inline-flex">
@@ -79,7 +79,7 @@
                                                                     data-toggle="tooltip" data-placement="top" data-html="true"
                                                                     title='
                                                                         <div class="m-1">
-                                                                            {% for profile in debate.witnesses.all %}
+                                                                            {% for profile in debate.participants.all %}
                                                                                 {% if profile.status != "gm" %}
                                                                                     <img class="img-md rounded-circle" src="{{ profile.image.url }}">
                                                                                 {% endif %}

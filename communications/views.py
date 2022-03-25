@@ -67,7 +67,7 @@ def get_initiator(thread: Thread):
 def thread_inform(current_profile, request, thread, tag_title):
     informed_ids = [k for k, v_list in request.POST.items() if 'on' in v_list]
     informed = Profile.objects.filter(id__in=informed_ids)
-    thread.witnesses.add(*informed)
+    thread.participants.add(*informed)
     thread.followers.add(*informed)
     
     recipients = Profile.objects.filter(id__in=informed_ids)
@@ -91,9 +91,9 @@ def get_threads(current_profile, thread_kind):
     per_profile = ["Debate", "Plan"]
     per_user = ["Announcement", "Demand"]
     if thread_kind in per_profile:
-        threads = Thread.objects.filter(witnesses=current_profile, kind=thread_kind)
+        threads = Thread.objects.filter(participants=current_profile, kind=thread_kind)
     elif thread_kind in per_user:
-        threads = Thread.objects.filter(witnesses__in=current_profile.user.profiles.all(), kind=thread_kind)
+        threads = Thread.objects.filter(participants__in=current_profile.user.profiles.all(), kind=thread_kind)
     else:
         raise ValueError("Podany thread_kind nie występuje!")
     
@@ -101,7 +101,7 @@ def get_threads(current_profile, thread_kind):
         'statements__author',
         'tags__author',
         'events__game',
-        'witnesses',
+        'participants',
         'followers',
     )
     return threads
@@ -210,12 +210,12 @@ def thread_view(request, thread_id, tag_title):
         'statements__seen_by',
         'statements__author',
         'followers',
-        'witnesses')
+        'participants')
     thread = threads.get(id=thread_id)
     
     informables = thread.informables()
     if current_profile.status != 'gm':
-        informables = informables.filter(character__in=current_profile.characters_witnessed.all())
+        informables = informables.filter(character__in=current_profile.characters_participated.all())
 
     # Update all statements to be seen by the profile
     SeenBy = Statement.seen_by.through
@@ -237,7 +237,7 @@ def thread_view(request, thread_id, tag_title):
         files=request.FILES or None,
         current_profile=current_profile,
         thread_kind=thread.kind,
-        witnesses=thread.witnesses.all(),
+        participants=thread.participants.all(),
         initial={'author': current_profile})
 
     if request.method == 'POST' and any(
@@ -276,7 +276,7 @@ def thread_view(request, thread_id, tag_title):
         'form_1': statement_form,
         'thread_tags_form': thread_tags_form,
     }
-    if current_profile in thread.witnesses.all() or current_profile.status == 'gm':
+    if current_profile in thread.participants.all() or current_profile.status == 'gm':
         return render(request, 'communications/thread.html', context)
     else:
         return redirect('users:dupa')
@@ -296,7 +296,7 @@ def create_thread_view(request, thread_kind):
         files=request.FILES or None,
         current_profile=current_profile,
         thread_kind=thread_kind,
-        witnesses=[],
+        participants=[],
         initial={'author': current_profile.id})
 
     if thread_form.is_valid() and statement_form.is_valid():
@@ -304,11 +304,11 @@ def create_thread_view(request, thread_kind):
         thread.kind = thread_kind
         thread.save()
         
-        witnesses = thread_form.cleaned_data['witnesses']
-        witnesses |= Profile.objects.filter(
+        participants = thread_form.cleaned_data['participants']
+        participants |= Profile.objects.filter(
             Q(id=current_profile.id) | Q(status='gm'))
-        thread.witnesses.set(witnesses)
-        thread.followers.set(witnesses.filter(id__in=Profile.active_players.all()))
+        thread.participants.set(participants)
+        thread.followers.set(participants.filter(id__in=Profile.active_players.all()))
 
         statement = statement_form.save(commit=False)
         statement.thread = thread
@@ -339,7 +339,7 @@ def unfollow_thread_view(request, thread_id):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     thread = get_object_or_404(Thread, id=thread_id)
-    if current_profile in thread.witnesses.all():
+    if current_profile in thread.participants.all():
         thread.followers.remove(current_profile)
         messages.info(request, f"Przestałeś obserwować \"{thread}\"!")
         return redirect(request.META.get('HTTP_REFERER', '/'))
@@ -352,7 +352,7 @@ def follow_thread_view(request, thread_id):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     thread = get_object_or_404(Thread, id=thread_id)
-    if current_profile in thread.witnesses.all():
+    if current_profile in thread.participants.all():
         thread.followers.add(current_profile)
         messages.info(request, f"Zacząłeś obserwować \"{thread}\"!")
         return redirect(request.META.get('HTTP_REFERER', '/'))

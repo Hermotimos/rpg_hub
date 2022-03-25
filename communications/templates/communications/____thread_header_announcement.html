@@ -112,7 +112,7 @@
             Uczestnicy:
         </div>
         <div class="col-10 pl-5 pl-lg-0">
-            {% for profile in thread.witnesses.all %}
+            {% for profile in thread.participants.all %}
                 <img class="rounded portait img-sm border border-dark" src="{{ profile.image.url }}">
             {% endfor %}
         </div>

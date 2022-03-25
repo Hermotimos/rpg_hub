@@ -26,7 +26,7 @@
         <div class="col-12 col-sm-11 mt-2 p-0 pl-sm-2 pl-lg-0">
             <!-- AUDIO -->
             {% if event.audio %}
-                {% if current_profile in event.witnesses.all or current_profile.can_view_all %}
+                {% if current_profile in event.participants.all or current_profile.can_view_all %}
                     <audio class="chronicle-audio-main" controls loop>
                         <source src="{{ event.audio.path }}" type="audio/mpeg">
                     </audio>
@@ -57,7 +57,7 @@
             {% if event.debates and current_profile not in event.known_indirectly.all %}
                 <div>
                     {% for debate in event.debates.all %}
-                        {% if current_profile in debate.witnesses.all or current_profile.can_view_all %}
+                        {% if current_profile in debate.participants.all or current_profile.can_view_all %}
                             <ul class="bullets-3 mt-5 pl-3">
                                 <li class="align-middle">
                                     <span class="font-18 font-italic hover-blue text-justify" data-toggle="collapse" data-target="#debate_{{ debate.id }}">

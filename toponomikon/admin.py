@@ -27,7 +27,7 @@ class LocationTypeAdmin(admin.ModelAdmin):
 @admin.register(Location, SecondaryLocation, PrimaryLocation)
 class LocationAdmin(admin.ModelAdmin):
     filter_horizontal = [
-        'witnesses', 'known_indirectly', 'knowledge_packets',
+        'participants', 'known_indirectly', 'knowledge_packets',
         'map_packets', 'picture_sets']
     formfield_overrides = {
         models.CharField: {'widget': forms.TextInput(attrs={'size': 15})},

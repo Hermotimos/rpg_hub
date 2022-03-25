@@ -75,7 +75,7 @@ class PlayerKnPacketForm(KnPacketForm):
         self.fields['title'].label = "Tytuł"
 
         self.fields['locations'].queryset = (
-                current_profile.locations_witnessed.all()
+                current_profile.locations_participated.all()
                 | current_profile.locs_known_indirectly.all()
         ).distinct()
         self.fields['skills'].queryset = current_profile.allowed_skills.all()

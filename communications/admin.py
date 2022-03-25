@@ -35,13 +35,13 @@ class ThreadAdmin(admin.ModelAdmin):
 
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
-    fields = ['title', 'kind', 'witnesses', 'followers', 'tags']
-    filter_horizontal = ['witnesses', 'followers', 'tags']
+    fields = ['title', 'kind', 'participants', 'followers', 'tags']
+    filter_horizontal = ['participants', 'followers', 'tags']
     list_display = ['title', 'created_at']
     search_fields = ['title']
     
     def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == "witnesses":
+        if db_field.name == "participants":
             kwargs["queryset"] = Profile.objects.exclude(status='npc')
         if db_field.name == "followers":
             kwargs["queryset"] = Profile.objects.exclude(status='npc')
@@ -50,14 +50,14 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
 @admin.register(Debate)
 class DebateAdmin(admin.ModelAdmin):
-    fields = ['title', 'kind', 'witnesses', 'followers', 'is_ended', 'is_exclusive']
-    filter_horizontal = ['witnesses', 'followers']
+    fields = ['title', 'kind', 'participants', 'followers', 'is_ended', 'is_exclusive']
+    filter_horizontal = ['participants', 'followers']
     list_display = ['title', 'is_ended', 'is_exclusive', 'created_at']
     list_editable = ['is_ended', 'is_exclusive']
     search_fields = ['title']
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == "witnesses":
+        if db_field.name == "participants":
             kwargs["queryset"] = Profile.living.all()
         if db_field.name == "followers":
             kwargs["queryset"] = Profile.living.all()

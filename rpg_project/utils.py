@@ -111,7 +111,7 @@ def handle_inform_form(request):
     elif 'Debate' in post_data.keys():
         model = all_models['Debate']
         obj = model.objects.get(id=post_data['Debate'][0])
-        obj.witnesses.add(*informed_ids)
+        obj.participants.add(*informed_ids)
         send_emails(request, informed_ids, debate=obj)
 
     elif 'GameEvent' in post_data.keys():

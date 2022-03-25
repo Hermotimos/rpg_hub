@@ -40,11 +40,11 @@ class GameEventAdminForm(forms.ModelForm):
         model = GameEvent
         fields = ['game', 'event_no_in_game', 'date_start', 'date_end',
                   'in_timeunit', 'description_short', 'description_long',
-                  'plot_threads', 'locations', 'witnesses',
+                  'plot_threads', 'locations', 'participants',
                   'known_indirectly', 'picture_sets', 'debates', 'audio']
         widgets = {
-            'witnesses': FilteredSelectMultiple(
-                'Witnesses', False, attrs={'style': 'height:100px'}
+            'participants': FilteredSelectMultiple(
+                'Participants', False, attrs={'style': 'height:100px'}
             ),
             'known_indirectly': FilteredSelectMultiple(
                 'Known indirectly', False, attrs={'style': 'height:100px'}
@@ -63,7 +63,7 @@ class GameEventAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['plot_threads'].label = 'Active PlotThreads'
-        self.fields['witnesses'].queryset = Profile.non_gm.all()
+        self.fields['participants'].queryset = Profile.non_gm.all()
         self.fields['known_indirectly'].queryset = Profile.non_gm.all()
         self.fields['debates'].queryset = Thread.objects.filter(kind='Debate')
 
@@ -92,10 +92,10 @@ class GameEventInlineForm(GameEventAdminForm):
     exclude = ['game']
 
     # Filter FK to Profile to exclude GMN
-    witnesses = forms.ModelMultipleChoiceField(
+    participants = forms.ModelMultipleChoiceField(
         queryset=Profile.non_gm.all(),
         required=False,
-        widget=FilteredSelectMultiple('Witnesses', False))
+        widget=FilteredSelectMultiple('Participants', False))
     # Filter FK to Profile to exclude GMN
     known_indirectly = forms.ModelMultipleChoiceField(
         queryset=Profile.non_gm.all(),
@@ -119,7 +119,7 @@ class GameEventInline(admin.TabularInline):
             'date_start',
             'date_end',
             'in_timeunit',
-            'witnesses',
+            'participants',
             'known_indirectly',
             'locations',
             'plot_threads',    # To allow for filtering in GameEventAdminForm

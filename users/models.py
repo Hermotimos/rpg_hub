@@ -84,7 +84,7 @@ class Profile(Model):
         if self.can_view_all:
             qs = Character.objects.all()
         else:
-            known_dir = self.characters_witnessed.all()
+            known_dir = self.characters_participated.all()
             known_indir = self.characters_known_indirectly.all()
             known_only_indir = known_indir.exclude(id__in=known_dir)
             all_known = (known_dir | known_indir).distinct()
@@ -94,7 +94,7 @@ class Profile(Model):
                     default=Value(0),
                     output_field=IntegerField(),
                 ))
-        qs = qs.prefetch_related('witnesses', 'known_indirectly')
+        qs = qs.prefetch_related('participants', 'known_indirectly')
         qs = qs.select_related('profile')
         qs = qs.exclude(id=self.character.id)
         return qs
@@ -104,7 +104,7 @@ class Profile(Model):
             from toponomikon.models import Location
             qs = Location.objects.all()
         else:
-            known_dir = self.locations_witnessed.all()
+            known_dir = self.locations_participated.all()
             known_indir = self.locs_known_indirectly.all()
             known_only_indir = known_indir.exclude(id__in=known_dir)
             all_known = (known_dir | known_indir).distinct()
@@ -114,7 +114,7 @@ class Profile(Model):
                     default=Value(0),
                     output_field=IntegerField(),
                 ))
-        qs = qs.prefetch_related('witnesses', 'known_indirectly')
+        qs = qs.prefetch_related('participants', 'known_indirectly')
         qs = qs.select_related('main_image__image')
         return qs
 
@@ -124,7 +124,7 @@ class Profile(Model):
         character_groups = character_groups.prefetch_related(
             Prefetch('characters', queryset=characters),
             'characters__profile__user',
-            'characters__witnessed',
+            'characters__participated',
             'characters__known_indirectly',
             'characters__first_name')
         return character_groups
@@ -193,7 +193,7 @@ class Profile(Model):
         from communications.models import Announcement, Statement
         unseen_statements = Statement.objects.exclude(seen_by=self)
         return Announcement.objects.filter(
-            witnesses=self,
+            participants=self,
             statements__in=unseen_statements)
         
     @property
@@ -201,7 +201,7 @@ class Profile(Model):
         from communications.models import Statement, Debate
         unseen_remarks = Statement.objects.exclude(seen_by=self)
         return Debate.objects.filter(
-            witnesses=self,
+            participants=self,
             statements__in=unseen_remarks).distinct()
 
     @property

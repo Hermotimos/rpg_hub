@@ -15,7 +15,7 @@ def plot_threads(request):
     objects = PlotThread.objects.all()
     if not profile.can_view_all:
         objects = objects.filter(
-            Q(events__witnessed=profile)
+            Q(events__participated=profile)
             | Q(events__known_indirectly=profile)
         )
     return objects.distinct()
@@ -26,7 +26,7 @@ def locations(request):
     objects = Location.objects.all()
     if not profile.can_view_all:
         objects = objects.filter(
-            Q(events__witnessed=profile)
+            Q(events__participated=profile)
             | Q(events__known_indirectly=profile)
         )
     return objects.distinct()
@@ -38,7 +38,7 @@ def participants(request):
     if not profile.can_view_all:
         # Get profiles that know directly the same events as the current one
         objects = objects.filter(
-            events_witnessed__in=profile.events_witnessed.all()
+            events_participated__in=profile.events_participated.all()
         )
     return objects.distinct().select_related()
 
@@ -48,7 +48,7 @@ def games(request):
     objects = GameSession.objects.all()
     if not profile.can_view_all:
         objects = objects.filter(
-            Q(game_events__witnessed=profile)
+            Q(game_events__participated=profile)
             | Q(game_events__known_indirectly=profile)
         )
     return objects.distinct().select_related()
@@ -70,7 +70,7 @@ class GameEventFilter(FilterSet):
         queryset=locations,
         label="Lokacje:")
     participants = ModelMultipleChoiceFilter(
-        field_name='witnesses',
+        field_name='participants',
         queryset=participants,
         label="Uczestnicy:")
     games = ModelMultipleChoiceFilter(
