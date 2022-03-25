@@ -9,18 +9,13 @@ import django.db.models.manager
 
 class Migration(migrations.Migration):
 
-    # replaces = [('chronicles', '0001_initial'), ('chronicles', '0002_auto_20210106_1613'), ('chronicles', '0003_timeunit_picture_sets'), ('chronicles', '0004_remove_timeunit_pictures'), ('chronicles', '0005_auto_20211017_1457'), ('chronicles', '0006_plotthread'), ('chronicles', '0007_timeunit_plot_threads'), ('chronicles', '0008_auto_20211017_1514'), ('chronicles', '0009_auto_20211017_1531'), ('chronicles', '0010_alter_date_options'), ('chronicles', '0011_timeunit_new_debates'), ('chronicles', '0012_alter_timeunit_new_debates'), ('chronicles', '0013_remove_timeunit_debates'), ('chronicles', '0014_rename_new_debates_timeunit_debates'), ('chronicles', '0015_alter_timeunit_debates'), ('chronicles', '0016_alter_timeunit_debates'), ('chronicles', '0017_alter_timeunit_debates_alter_timeunit_known_directly_and_more'), ('chronicles', '0018_alter_timeunit_known_directly_and_more')]
-
     initial = True
 
     dependencies = [
         ('imaginarion', '0001_initial_squashed'),
-        # ('imaginarion', '0012_pictureset'),
         ('communications', '0001_0001_initial_squashed'),
         ('users', '0001_initial_squashed'),
         ('toponomikon', '0001_0001_initial_squashed'),
-        # ('users', '0016_profile_user_image'),
-        # ('users', '0007_auto_20210106_1613'),
     ]
 
     operations = [

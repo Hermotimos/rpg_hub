@@ -7,8 +7,6 @@ import rpg_project.utils
 
 class Migration(migrations.Migration):
 
-    # replaces = [('imaginarion', '0001_initial'), ('imaginarion', '0002_auto_20210103_1049'), ('imaginarion', '0003_auto_20210121_1949'), ('imaginarion', '0004_auto_20210220_1321'), ('imaginarion', '0005_remove_picture_title'), ('imaginarion', '0006_auto_20210220_1353'), ('imaginarion', '0007_auto_20210220_1454'), ('imaginarion', '0008_auto_20210220_1506'), ('imaginarion', '0009_auto_20210220_1506'), ('imaginarion', '0010_remove_picture_image_old'), ('imaginarion', '0011_auto_20210221_1423'), ('imaginarion', '0012_pictureset')]
-
     initial = True
 
     dependencies = [

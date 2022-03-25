@@ -6,16 +6,12 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    # replaces = [('toponomikon', '0001_initial'), ('toponomikon', '0002_auto_20210103_1358'), ('toponomikon', '0003_auto_20210106_1613'), ('toponomikon', '0004_auto_20210922_1415')]
-
     initial = True
 
     dependencies = [
         ('imaginarion', '0001_initial_squashed'),
         ('users', '0001_initial_squashed'),
         ('knowledge', '0001_initial_squashed'),
-        # ('imaginarion', '0012_pictureset'),
-        # ('users', '0007_auto_20210106_1613'),
     ]
 
     operations = [

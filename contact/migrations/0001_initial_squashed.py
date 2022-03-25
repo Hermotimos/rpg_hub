@@ -7,13 +7,10 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    # replaces = [('contact', '0001_initial'), ('contact', '0002_auto_20201226_2252'), ('contact', '0003_auto_20201228_2101'), ('contact', '0004_auto_20210106_1733'), ('contact', '0005_auto_20210106_1743'), ('contact', '0006_auto_20210106_1752'), ('contact', '0007_auto_20210205_0001'), ('contact', '0008_auto_20211017_1835')]
-
     initial = True
 
     dependencies = [
         ('users', '0001_initial_squashed'),
-        # ('users', '0009_auto_20210912_1017'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 

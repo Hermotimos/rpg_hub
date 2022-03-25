@@ -8,8 +8,6 @@ import rpg_project.utils
 
 class Migration(migrations.Migration):
 
-    # replaces = [('users', '0001_initial'), ('users', '0002_auto_20201225_1757'), ('users', '0003_auto_20210103_0647'), ('users', '0004_auto_20210103_0759'), ('users', '0005_remove_profile_name'), ('users', '0006_auto_20210106_1303'), ('users', '0007_auto_20210106_1613'), ('users', '0008_auto_20210309_1955'), ('users', '0009_auto_20210912_1017'), ('users', '0010_profile_user_fk'), ('users', '0011_auto_20211023_1146'), ('users', '0012_auto_20211023_1222'), ('users', '0013_auto_20211023_1358'), ('users', '0014_alter_profile_options'), ('users', '0015_profile_is_enchanter'), ('users', '0016_profile_user_image')]
-
     initial = True
 
     dependencies = [

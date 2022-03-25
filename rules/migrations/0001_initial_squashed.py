@@ -7,16 +7,11 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    # replaces = [('rules', '0001_squashed_0005_auto_20211017_1835'), ('rules', '0002_remove_weapontype_description'), ('rules', '0003_auto_20220116_2236'), ('rules', '0004_auto_20220117_1958'), ('rules', '0005_auto_20220117_2021'), ('rules', '0006_auto_20220118_1844'), ('rules', '0007_skilltype_sorting_name'), ('rules', '0008_auto_20220118_1911'), ('rules', '0009_auto_20220118_1927'), ('rules', '0010_skillgroup_type'), ('rules', '0011_alter_skillgroup_type'), ('rules', '0012_auto_20220119_2218'), ('rules', '0013_alter_factor_name'), ('rules', '0014_alter_factor_name'), ('rules', '0015_perk_cost'), ('rules', '0016_alter_modifier_options'), ('rules', '0017_auto_20220125_2135'), ('rules', '0018_alter_perk_name'), ('rules', '0019_alter_skilllevel_options'), ('rules', '0020_alter_modifier_options'), ('rules', '0021_modifier_value_text'), ('rules', '0022_auto_20220129_0938'), ('rules', '0023_rename_modifiers_perk_modifiers_old'), ('rules', '0024_auto_20220129_1024'), ('rules', '0025_auto_20220129_1132'), ('rules', '0026_auto_20220129_1143'), ('rules', '0027_alter_condition_text'), ('rules', '0028_auto_20220129_1158'), ('rules', '0029_remove_perk_modifiers_old'), ('rules', '0030_auto_20220129_2212'), ('rules', '0031_auto_20220130_0728'), ('rules', '0032_auto_20220130_0739'), ('rules', '0033_alter_modifier_unique_together'), ('rules', '0034_auto_20220131_1911'), ('rules', '0035_auto_20220131_1911'), ('rules', '0036_auto_20220131_1921'), ('rules', '0037_auto_20220204_2309'), ('rules', '0038_plate_comment'), ('rules', '0039_auto_20220210_1707'), ('rules', '0040_alter_perk_modifiers'), ('rules', '0041_bonus_perk_bonuses'), ('rules', '0042_remove_perk_modifiers_delete_conditionalmodifier'), ('rules', '0043_rename_bonus_conditionalmodifier'), ('rules', '0044_rename_bonuses_perk_conditional_modifiers_and_more'), ('rules', '0045_conditionalmodifier_overview_modifier_overview'), ('rules', '0046_alter_modifier_sign'), ('rules', '0047_alter_modifier_sign'), ('rules', '0048_alter_perk_cost'), ('rules', '0049_rename_allowed_profiles_eliteklass_allowees_and_more'), ('rules', '0050_weapon_picture_set'), ('rules', '0051_plate_picture_set'), ('rules', '0052_remove_plate_picture_sets_remove_weapon_picture_sets'), ('rules', '0053_alter_plate_picture_set_alter_weapon_picture_set'), ('rules', '0054_remove_weapon_damage_big_add_and_more'), ('rules', '0055_rename_damage_small_add_weapon_damage_bonus_and_more'), ('rules', '0056_alter_conditionalmodifier_overview_and_more'), ('rules', '0057_alter_conditionalmodifier_options_and_more'), ('rules', '0058_remove_synergy_allowees_synergylevel_skill_levels'), ('rules', '0059_alter_conditionalmodifier_options')]
-
     initial = True
 
     dependencies = [
         ('users', '0001_initial_squashed'),
-        # ('users', '0007_auto_20210106_1613'),
         ('imaginarion', '0001_initial_squashed'),
-        # ('imaginarion', '0012_pictureset'),
-        # ('users', '0001_initial'),
     ]
 
     operations = [

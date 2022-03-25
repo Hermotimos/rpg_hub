@@ -6,29 +6,14 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    # replaces = [('prosoponomikon', '0001_initial'), ('prosoponomikon', '0002_auto_20201225_2018'), ('prosoponomikon', '0003_auto_20201225_2018'), ('prosoponomikon', '0004_character_descr_psychophysical'), ('prosoponomikon', '0005_character_descr_for_gm'), ('prosoponomikon', '0006_auto_20201225_2108'), ('prosoponomikon', '0007_auto_20201226_1050'), ('prosoponomikon', '0008_auto_20201226_1055'), ('prosoponomikon', '0009_auto_20201226_2252'), ('prosoponomikon', '0010_auto_20210103_0524'), ('prosoponomikon', '0011_auto_20210103_0537'), ('prosoponomikon', '0012_auto_20210103_0647'), ('prosoponomikon', '0013_auto_20210103_0653'), ('prosoponomikon', '0014_auto_20210103_1358'), ('prosoponomikon', '0015_auto_20210106_1613'), ('prosoponomikon', '0016_auto_20210106_1852'), ('prosoponomikon', '0017_character_charactergroup_npccharacter_playercharacter'), ('prosoponomikon', '0018_auto_20210117_1618'), ('prosoponomikon', '0019_character_charactergroup_npccharacter_playercharacter'), ('prosoponomikon', '0020_auto_20210117_1651'), ('prosoponomikon', '0021_auto_20210131_1139'), ('prosoponomikon', '0022_auto_20210131_1902'), ('prosoponomikon', '0023_auto_20210220_1123'), ('prosoponomikon', '0024_character_cognomen'), ('prosoponomikon', '0025_auto_20210221_1554'), ('prosoponomikon', '0026_auto_20210221_1558'), ('prosoponomikon', '0027_namecontinuum_nameform'), ('prosoponomikon', '0028_auto_20210221_1619'), ('prosoponomikon', '0029_auto_20210221_1632'), ('prosoponomikon', '0030_auto_20210221_1642'), ('prosoponomikon', '0031_nameform_type'), ('prosoponomikon', '0032_auto_20210221_1808'), ('prosoponomikon', '0033_auto_20210221_1943'), ('prosoponomikon', '0034_auto_20210223_2005'), ('prosoponomikon', '0035_auto_20210225_2010'), ('prosoponomikon', '0036_auto_20210225_2026'), ('prosoponomikon', '0037_auto_20210226_1740'), ('prosoponomikon', '0038_auto_20210227_0001'), ('prosoponomikon', '0039_auto_20210305_1323'), ('prosoponomikon', '0040_auto_20210305_1325'), ('prosoponomikon', '0041_auto_20210305_1326'), ('prosoponomikon', '0042_auto_20210305_1421'), ('prosoponomikon', '0043_auto_20210305_1504'), ('prosoponomikon', '0044_auto_20210305_1513'), ('prosoponomikon', '0045_auto_20210305_1612'), ('prosoponomikon', '0046_auto_20210308_2009'), ('prosoponomikon', '0047_auto_20210310_1828'), ('prosoponomikon', '0048_auto_20210310_1831'), ('prosoponomikon', '0049_auto_20210310_1832'), ('prosoponomikon', '0050_auto_20210310_1902'), ('prosoponomikon', '0051_auto_20210310_1921'), ('prosoponomikon', '0052_auto_20210311_2137'), ('prosoponomikon', '0053_auto_20210312_1153'), ('prosoponomikon', '0054_auto_20210312_2133'), ('prosoponomikon', '0055_auto_20210318_2315'), ('prosoponomikon', '0056_firstname_form_2'), ('prosoponomikon', '0057_namegroup_type'), ('prosoponomikon', '0058_auto_20210319_0943'), ('prosoponomikon', '0059_auto_20210320_1417'), ('prosoponomikon', '0060_familyname_auxiliary_group'), ('prosoponomikon', '0061_remove_familyname_auxiliary_group'), ('prosoponomikon', '0062_auto_20210320_1809'), ('prosoponomikon', '0063_familyname_info'), ('prosoponomikon', '0064_auto_20210807_1249'), ('prosoponomikon', '0065_auto_20210807_1929'), ('prosoponomikon', '0066_remove_character_pictures'), ('prosoponomikon', '0067_auto_20211017_1835'), ('prosoponomikon', '0068_character_professions'), ('prosoponomikon', '0069_delete_charactergroup')]
-
     initial = True
 
     dependencies = [
         ('knowledge', '0001_initial_squashed'),
-        # ('knowledge', '0002_auto_20201225_1400'),
         ('users', '0001_initial_squashed'),
         ('rules', '0001_initial_squashed'),
-        # ('users', '0003_auto_20210103_0647'),
-        # ('knowledge', '0011_auto_20210221_1423'),
-        # ('knowledge', '0003_auto_20201226_2252'),
-        # ('users', '0007_auto_20210106_1613'),
-        # ('rules', '0059_alter_conditionalmodifier_options'),
-        # ('knowledge', '0004_auto_20201228_2101'),
-        # ('users', '0008_auto_20210309_1955'),
-        # ('knowledge', '0005_biographypacket_show_in_prosoponomikon'),
         ('toponomikon', '0001_0001_initial_squashed'),
-        # ('rules', '0005_auto_20211017_1835'),
-        # ('knowledge', '0006_remove_biographypacket_show_in_prosoponomikon'),
         ('imaginarion', '0001_initial_squashed'),
-        # ('toponomikon', '0001_initial'),
-        # ('imaginarion', '0002_auto_20210103_1049'),
     ]
 
     operations = [

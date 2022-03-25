@@ -6,17 +6,12 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    # replaces = [('knowledge', '0001_initial'), ('knowledge', '0002_auto_20201225_1400'), ('knowledge', '0003_auto_20201226_2252'), ('knowledge', '0004_auto_20201228_2101'), ('knowledge', '0005_biographypacket_show_in_prosoponomikon'), ('knowledge', '0006_remove_biographypacket_show_in_prosoponomikon'), ('knowledge', '0007_auto_20210205_0001'), ('knowledge', '0008_auto_20210220_1110'), ('knowledge', '0009_auto_20210220_1118'), ('knowledge', '0010_auto_20210220_1123'), ('knowledge', '0011_auto_20210221_1423'), ('knowledge', '0012_mappacket_picture_sets'), ('knowledge', '0013_remove_mappacket_pictures'), ('knowledge', '0014_knowledgepacket_picture_sets'), ('knowledge', '0015_remove_knowledgepacket_pictures'), ('knowledge', '0016_biographypacket_picture_sets'), ('knowledge', '0017_remove_biographypacket_pictures'), ('knowledge', '0018_auto_20211017_1835')]
-
     initial = True
 
     dependencies = [
         ('rules', '0001_initial_squashed'),
         ('imaginarion', '0001_initial_squashed'),
         ('users', '0001_initial_squashed'),
-        # ('imaginarion', '0012_pictureset'),
-        # ('imaginarion', '0001_initial'),
-        # ('imaginarion', '0011_auto_20210221_1423'),
     ]
 
     operations = [

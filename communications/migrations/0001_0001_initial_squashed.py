@@ -6,14 +6,10 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    # replaces = [('communications', '0001_initial'), ('communications', '0002_auto_20211020_1651'), ('communications', '0003_auto_20211020_1704'), ('communications', '0004_auto_20211021_1932'), ('communications', '0005_auto_20211026_2032'), ('communications', '0006_auto_20211113_1314'), ('communications', '0007_auto_20211113_2050'), ('communications', '0008_auto_20211114_1152'), ('communications', '0009_auto_20211114_1619'), ('communications', '0010_alter_threadtag_color'), ('communications', '0011_auto_20220101_1115'), ('communications', '0012_alter_threadtag_unique_together'), ('communications', '0013_auto_20220106_1352'), ('communications', '0014_alter_thread_topic'), ('communications', '0015_auto_20220109_1758'), ('communications', '0016_alter_debate_options'), ('communications', '0017_announcementstatement_debatestatement_and_more')]
-
     initial = True
 
     dependencies = [
         ('users', '0001_initial_squashed'),
-        # ('users', '0014_alter_profile_options'),
-        # ('users', '0013_auto_20211023_1358'),
     ]
 
     operations = [
