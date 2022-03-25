@@ -24,9 +24,7 @@ def chronicle_main_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     if current_profile.can_view_all:
-        chapters = Chapter.objects.all()
-        games = GameSession.objects.select_related('chapter')
-        games = games.prefetch_related(
+        games = GameSession.objects.prefetch_related(
             'game_events__participants__character',
             'game_events__debates__participants__character',
         )
@@ -47,10 +45,10 @@ def chronicle_main_view(request):
             any_participants=Count(
                 'game_events',
                 filter=Q(game_events__in=current_profile.events_participated.all())))
-        games = games.order_by('game_no').select_related('chapter')
-        
-        chapters = Chapter.objects.filter(game_sessions__in=games).distinct()
-        
+           
+    games = games.order_by('game_no').select_related('chapter').exclude(game_no=0)
+    chapters = Chapter.objects.filter(game_sessions__in=games).distinct()
+
     context = {
         'current_profile': current_profile,
         'page_title': 'Kronika',
