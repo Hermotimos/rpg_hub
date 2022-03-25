@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('rules', '0001_squashed_0005_auto_20211017_1835'),
+        ('rules', '0001_initial_squashed'),
         ('knowledge', '0017_remove_biographypacket_pictures'),
     ]
 
