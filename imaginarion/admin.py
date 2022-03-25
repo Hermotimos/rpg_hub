@@ -1,19 +1,19 @@
 from django import forms
 from django.contrib import admin
-from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.db.models import TextField
-from django.forms import Textarea
+from django.db import models
 from django.utils.html import format_html
 
-from imaginarion.models import Picture, PictureImage, PictureSet, Audio, \
-    AudioSet
+from imaginarion.models import Picture, PictureImage, PictureSet, Audio, AudioSet
 from rpg_project.utils import formfield_for_dbfield_cached
+
+
+# -----------------------------------------------------------------------------
 
 
 @admin.register(Audio)
 class AudioAdmin(admin.ModelAdmin):
     formfield_overrides = {
-        TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 50})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 8, 'cols': 50})},
     }
     list_display = ['id', 'admin_title', 'type', 'description', 'path']
     list_editable = ['type', 'description', 'path']
@@ -26,8 +26,9 @@ class AudioAdmin(admin.ModelAdmin):
     
 @admin.register(AudioSet)
 class AudioSetAdmin(admin.ModelAdmin):
+    filter_horizontal = ['audios']
     formfield_overrides = {
-        TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 50})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 8, 'cols': 50})},
     }
     list_display = ['id', 'title', 'description', 'main_audio']
     list_editable = ['title', 'description', 'main_audio']
@@ -40,6 +41,9 @@ class AudioSetAdmin(admin.ModelAdmin):
         return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
     
     
+# -----------------------------------------------------------------------------
+
+
 @admin.register(Picture)
 class PictureAdmin(admin.ModelAdmin):
     list_display = ['id', 'type', 'description', 'get_image']
@@ -64,20 +68,9 @@ class PictureImageAdmin(admin.ModelAdmin):
     search_fields = ['description', 'sorting_name']
 
 
-class PictureSetAdminForm(forms.ModelForm):
-    class Meta:
-        model = PictureSet
-        fields = ['title', 'pictures']
-        widgets = {
-            'pictures': FilteredSelectMultiple(
-                'Pictures', False, attrs={'style': 'height:400px'}
-            )
-        }
-
-
 @admin.register(PictureSet)
 class PictureSetAdmin(admin.ModelAdmin):
-    form = PictureSetAdminForm
+    filter_horizontal = ['pictures']
     list_display = ['id', 'title', 'images']
     list_editable = ['title']
     search_fields = ['title']
