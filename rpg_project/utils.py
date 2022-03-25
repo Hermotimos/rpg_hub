@@ -93,7 +93,7 @@ def handle_inform_form(request):
     if 'Location' in post_data.keys():
         model = all_models['Location']
         obj = model.objects.get(id=post_data['Location'][0])
-        obj.known_indirectly.add(*informed_ids)
+        obj.informees.add(*informed_ids)
         send_emails(request, informed_ids, location=obj)
 
     elif 'KnowledgePacket' in post_data.keys():
@@ -117,19 +117,19 @@ def handle_inform_form(request):
     elif 'GameEvent' in post_data.keys():
         model = all_models['GameEvent']
         obj = model.objects.get(id=post_data['GameEvent'][0])
-        obj.known_indirectly.add(*informed_ids)
+        obj.informees.add(*informed_ids)
         send_emails(request, informed_ids, game_event=obj)
 
     elif 'HistoryEvent' in post_data.keys():
         model = all_models['HistoryEvent']
         obj = model.objects.get(id=post_data['HistoryEvent'][0])
-        obj.known_indirectly.add(*informed_ids)
+        obj.informees.add(*informed_ids)
         send_emails(request, informed_ids, history_event=obj)
     
     elif 'Character' in post_data.keys():
         model = all_models['Character']
         obj = model.objects.get(id=post_data['Character'][0])
-        obj.known_indirectly.add(*informed_ids)
+        obj.informees.add(*informed_ids)
         send_emails(request, informed_ids, character=obj)
 
     else:

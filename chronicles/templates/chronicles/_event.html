@@ -35,7 +35,7 @@
             
             <!-- DESCRIPTION -->
             <p class="font-18 font-italic px-1 py-1 mb-0 text-justify">
-                {% if current_profile in event.known_indirectly.all %}
+                {% if current_profile in event.informees.all %}
                     <span class="text-muted">(Znasz z opowieści) {{ event.description_long|linebreaksbr }}</span>
                 {% else %}
                     {{ event.description_long|custom_linebreaksbr:2 }}
@@ -43,7 +43,7 @@
             </p>
             
             <!-- PICTURE SETS -->
-            {% if current_profile not in event.known_indirectly.all %}
+            {% if current_profile not in event.informees.all %}
                 {% for picture_set in event.picture_sets.all %}
                     <div class="d-flex justify-content-center my-3">
                         {% for picture in picture_set|pictureset_pictures_in_custom_order %}
@@ -54,7 +54,7 @@
             {% endif %}
             
             <!-- DEBATES -->
-            {% if event.debates and current_profile not in event.known_indirectly.all %}
+            {% if event.debates and current_profile not in event.informees.all %}
                 <div>
                     {% for debate in event.debates.all %}
                         {% if current_profile in debate.participants.all or current_profile.can_view_all %}

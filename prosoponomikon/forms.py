@@ -29,7 +29,7 @@ class CharacterCreateForm(forms.ModelForm):
         """
         model = Character
         fields = ['first_name', 'family_name', 'cognomen', 'description',
-                  'frequented_locations', 'participants', 'known_indirectly']
+                  'frequented_locations', 'participants', 'informees']
 
     NAME_TYPES = (
         ('MALE', 'MALE'),
@@ -45,7 +45,7 @@ class CharacterCreateForm(forms.ModelForm):
         custom_order = [
             'username', 'first_name', 'family_name', 'cognomen', 'is_alive',
             'image', 'description', 'frequented_locations', 'participants',
-            'known_indirectly',
+            'informees',
         ]
         self.fields = {
             f_name: self.fields[f_name] for f_name in custom_order
@@ -53,7 +53,7 @@ class CharacterCreateForm(forms.ModelForm):
         self.fields['first_name'].queryset = FirstName.objects.order_by('form')
         self.fields['frequented_locations'].widget.attrs['size'] = 12
         self.fields['participants'].widget.attrs['size'] = 10
-        self.fields['known_indirectly'].widget.attrs['size'] = 10
+        self.fields['informees'].widget.attrs['size'] = 10
     
         self.helper = FormHelper()
         self.helper.add_input(

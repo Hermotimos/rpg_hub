@@ -46,7 +46,7 @@ def todos_view(request):
     locations_no_description = Location.objects.filter(description__exact="")
     
     game_event_no_known = GameEvent.objects.filter(
-        participants=None).filter(known_indirectly=None)
+        participants=None).filter(informees=None)
     
     skills_no_skill_type = Skill.objects.filter(types=None)
     skills_no_allowed_profile = Skill.objects.filter(allowees=None)

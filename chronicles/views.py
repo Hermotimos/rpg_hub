@@ -36,7 +36,7 @@ def chronicle_main_view(request):
         
         events = GameEvent.objects.filter(
             Q(id__in=current_profile.events_participated.all())
-            | Q(id__in=current_profile.events_known_indirectly.all()))
+            | Q(id__in=current_profile.events_informed.all()))
         events = events.prefetch_related(
             Prefetch('debates', queryset=debates),
             'participants__character')
@@ -68,7 +68,7 @@ def chronicle_game_view(request, game_id):
     events = GameEvent.objects.filter(game=game)
     events = events.prefetch_related(
         'participants',
-        'known_indirectly',
+        'informees',
         'picture_sets',
         'debates__statements__author',
         'debates__statements__seen_by',
@@ -76,7 +76,7 @@ def chronicle_game_view(request, game_id):
     )
     if not profile.can_view_all:
         events = events.filter(
-            Q(participants=profile) | Q(known_indirectly=profile))
+            Q(participants=profile) | Q(informees=profile))
         events = events.distinct()
 
     context = {
@@ -97,7 +97,7 @@ def chronicle_chapter_view(request, chapter_id):
     events = GameEvent.objects.filter(game__chapter=chapter)
     events = events.prefetch_related(
         'participants',
-        'known_indirectly',
+        'informees',
         'picture_sets',
         'debates__statements__author',
         'debates__statements__seen_by',
@@ -105,7 +105,7 @@ def chronicle_chapter_view(request, chapter_id):
     )
     if not profile.can_view_all:
         events = events.filter(
-            Q(participants=profile) | Q(known_indirectly=profile))
+            Q(participants=profile) | Q(informees=profile))
         events = events.distinct()
         
     games = GameSession.objects.filter(game_events__in=events)
@@ -128,7 +128,7 @@ def chronicle_all_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     events = GameEvent.objects.prefetch_related(
         'participants',
-        'known_indirectly',
+        'informees',
         'picture_sets',
         'debates__statements__author',
         # 'debates__statements__seen_by',   # TODO add in Postgres, now causes SQLite error "Too many SQl variables"
@@ -136,7 +136,7 @@ def chronicle_all_view(request):
     )
     if not profile.can_view_all:
         events = events.filter(
-            Q(participants=profile) | Q(known_indirectly=profile))
+            Q(participants=profile) | Q(informees=profile))
         events = events.distinct()
     
     games = GameSession.objects.filter(game_events__in=events)
@@ -167,7 +167,7 @@ def game_event_inform_view(request, game_event_id):
     profile = Profile.objects.get(id=request.session['profile_id'])
     game_event = get_object_or_404(TimeUnit, id=game_event_id)
     allowed = (
-        game_event.participants.all() | game_event.known_indirectly.all()
+        game_event.participants.all() | game_event.informees.all()
     )
     allowed = allowed.filter(status='player')
     
@@ -180,7 +180,7 @@ def game_event_inform_view(request, game_event_id):
     if request.method == 'POST' and 'game_event' in request.POST:
         data = dict(request.POST)
         informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
-        game_event.known_indirectly.add(*informed_ids)
+        game_event.informees.add(*informed_ids)
 
         send_emails(request, informed_ids, game_event=game_event)
         if informed_ids:
@@ -236,16 +236,16 @@ def timeline_view(request):
     if not profile.can_view_all:
         events = events.filter(
             Q(id__in=profile.events_participated.all())
-            | Q(id__in=profile.events_known_indirectly.all())
+            | Q(id__in=profile.events_informed.all())
         )
         events = events.distinct()
         
     events = events.prefetch_related(
         'plot_threads',
         'participants__user',
-        'known_indirectly__user',
+        'informees__user',
         'participants__character',
-        'known_indirectly__character',
+        'informees__character',
         'locations',
     )
     events = events.order_by(

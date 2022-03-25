@@ -246,9 +246,9 @@ class TimeUnit(Model):
         limit_choices_to=non_GM,
         blank=True,
     )
-    known_indirectly = M2M(
+    informees = M2M(
         to=Profile,
-        related_name='events_known_indirectly',
+        related_name='events_informed',
         limit_choices_to=non_GM,
         blank=True,
     )
@@ -277,7 +277,7 @@ class TimeUnit(Model):
     def informables(self):
         qs = Profile.active_players.all()
         qs = qs.exclude(
-            id__in=(self.participants.all() | self.known_indirectly.all())
+            id__in=(self.participants.all() | self.informees.all())
         )
         return qs
 
@@ -478,28 +478,28 @@ class GameEvent(Event):
 def update_known_locations(sender, instance, **kwargs):
     """Whenever a profile becomes 'participant' or 'informed' of an event in
     specific location add this location to profile's 'participants'
-    (if participant) or 'known_indirectly' (if informed).
+    (if participant) or 'informees' (if informed).
     """
     participants = instance.participants.all()
-    known_indirectly = instance.known_indirectly.all()
+    informees = instance.informees.all()
     locations = instance.locations.all()
     for location in locations:
         location.participants.add(*participants)
-        location.known_indirectly.add(*known_indirectly)
+        location.informees.add(*informees)
 
 
 post_save.connect(
     receiver=update_known_locations,
     sender=GameEvent)
 
-# Run by each change of 'participants', 'known_indirectly' or 'locations':
+# Run by each change of 'participants', 'informees' or 'locations':
 m2m_changed.connect(
     receiver=update_known_locations,
     sender=GameEvent.participants.through)
 
 m2m_changed.connect(
     receiver=update_known_locations,
-    sender=GameEvent.known_indirectly.through)
+    sender=GameEvent.informees.through)
 
 m2m_changed.connect(
     receiver=update_known_locations,

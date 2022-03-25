@@ -203,9 +203,9 @@ class Character(Model):
         to=Profile,
         related_name='characters_participated',
         blank=True)
-    known_indirectly = M2M(
+    informees = M2M(
         to=Profile,
-        related_name='characters_known_indirectly',
+        related_name='characters_informed',
         blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
     
@@ -225,7 +225,7 @@ class Character(Model):
         super().save(*args, **kwargs)
     
     def all_known(self):
-        return self.participants.all() | self.known_indirectly.all()
+        return self.participants.all() | self.informees.all()
     
     def informables(self):
         qs = Profile.active_players.all()

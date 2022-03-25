@@ -136,7 +136,7 @@ class AuxiliaryNameGroupAdmin(admin.ModelAdmin):
 class CharacterAdmin(admin.ModelAdmin):
     filter_horizontal = [
         'frequented_locations', 'biography_packets', 'dialogue_packets',
-        'participants', 'known_indirectly', 'professions']
+        'participants', 'informees', 'professions']
     list_display = [
         'get_img', 'first_name', 'family_name', 'cognomen', 'description']
     list_editable = ['first_name', 'family_name', 'cognomen', 'description']

@@ -16,7 +16,7 @@ def plot_threads(request):
     if not profile.can_view_all:
         objects = objects.filter(
             Q(events__participants=profile)
-            | Q(events__known_indirectly=profile)
+            | Q(events__informees=profile)
         )
     return objects.distinct()
 
@@ -27,7 +27,7 @@ def locations(request):
     if not profile.can_view_all:
         objects = objects.filter(
             Q(events__participants=profile)
-            | Q(events__known_indirectly=profile)
+            | Q(events__informees=profile)
         )
     return objects.distinct()
 
@@ -49,7 +49,7 @@ def games(request):
     if not profile.can_view_all:
         objects = objects.filter(
             Q(game_events__participants=profile)
-            | Q(game_events__known_indirectly=profile)
+            | Q(game_events__informees=profile)
         )
     return objects.distinct().select_related()
 

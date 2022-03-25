@@ -85,7 +85,7 @@ class Profile(Model):
             qs = Character.objects.all()
         else:
             known_dir = self.characters_participated.all()
-            known_indir = self.characters_known_indirectly.all()
+            known_indir = self.characters_informed.all()
             known_only_indir = known_indir.exclude(id__in=known_dir)
             all_known = (known_dir | known_indir).distinct()
             qs = all_known.annotate(
@@ -94,7 +94,7 @@ class Profile(Model):
                     default=Value(0),
                     output_field=IntegerField(),
                 ))
-        qs = qs.prefetch_related('participants', 'known_indirectly')
+        qs = qs.prefetch_related('participants', 'informees')
         qs = qs.select_related('profile')
         qs = qs.exclude(id=self.character.id)
         return qs
@@ -105,7 +105,7 @@ class Profile(Model):
             qs = Location.objects.all()
         else:
             known_dir = self.locations_participated.all()
-            known_indir = self.locs_known_indirectly.all()
+            known_indir = self.locations_informed.all()
             known_only_indir = known_indir.exclude(id__in=known_dir)
             all_known = (known_dir | known_indir).distinct()
             qs = all_known.annotate(
@@ -114,20 +114,10 @@ class Profile(Model):
                     default=Value(0),
                     output_field=IntegerField(),
                 ))
-        qs = qs.prefetch_related('participants', 'known_indirectly')
+        qs = qs.prefetch_related('participants', 'informees')
         qs = qs.select_related('main_image__image')
         return qs
 
-    def characters_groups_authored_with_characters(self):
-        characters = self.characters_known_annotated()
-        character_groups = self.character_groups_authored.all()
-        character_groups = character_groups.prefetch_related(
-            Prefetch('characters', queryset=characters),
-            'characters__profile__user',
-            'characters__participated',
-            'characters__known_indirectly',
-            'characters__first_name')
-        return character_groups
 
     def skills_acquired_with_skill_levels(self):
         from rules.models import Skill, SkillLevel
