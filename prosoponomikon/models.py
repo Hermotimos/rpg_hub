@@ -197,11 +197,11 @@ class Character(Model):
         blank=True)
     professions = M2M(to=Profession, related_name='characters', blank=True)
     
-    # USE: profile.characters_known_directly.all()
+    # USE: profile.characters_witnessed.all()
     # for characters that the profile knows directly
-    known_directly = M2M(
+    witnesses = M2M(
         to=Profile,
-        related_name='characters_known_directly',
+        related_name='characters_witnessed',
         blank=True)
     known_indirectly = M2M(
         to=Profile,
@@ -225,7 +225,7 @@ class Character(Model):
         super().save(*args, **kwargs)
     
     def all_known(self):
-        return self.known_directly.all() | self.known_indirectly.all()
+        return self.witnesses.all() | self.known_indirectly.all()
     
     def informables(self):
         qs = Profile.active_players.all()

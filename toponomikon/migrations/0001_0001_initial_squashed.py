@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
                 ('sorting_name', models.CharField(blank=True, max_length=250, null=True)),
                 ('in_location', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='locations', to='toponomikon.location')),
                 ('knowledge_packets', models.ManyToManyField(blank=True, related_name='locations', to='knowledge.KnowledgePacket')),
-                ('known_directly', models.ManyToManyField(blank=True, limit_choices_to=models.Q(('status', 'player')), related_name='locs_known_directly', to='users.Profile')),
+                ('known_directly', models.ManyToManyField(blank=True, limit_choices_to=models.Q(('status', 'player')), related_name='locations_witnessed', to='users.Profile')),
                 ('known_indirectly', models.ManyToManyField(blank=True, limit_choices_to=models.Q(('status', 'player')), related_name='locs_known_indirectly', to='users.Profile')),
                 ('location_type', models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, related_name='locations', to='toponomikon.locationtype')),
                 ('main_image', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='locations_main_pics', to='imaginarion.picture')),

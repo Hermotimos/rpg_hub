@@ -62,7 +62,7 @@ class Thread(Model):
     
     title = CharField(max_length=100, unique=True)
     kind = CharField(max_length=15, choices=THREAD_KINDS)
-    known_directly = M2M(to=Profile, related_name='threads_known_directly')     # known_directly also use instead of inform_gm in Plans
+    witnesses = M2M(to=Profile, related_name='threads_witnessed')     # witnesses also use instead of inform_gm in Plans
     followers = M2M(to=Profile, related_name='threads_followed', blank=True)
     tags = M2M(to=ThreadTag, related_name='threads', blank=True)
     is_ended = BooleanField(default=False)                                      # also Demands instead of is_done
@@ -82,7 +82,7 @@ class Thread(Model):
             qs = Profile.living.all()
         else:
             qs = Profile.objects.none()
-        return qs.exclude(id__in=self.known_directly.all())
+        return qs.exclude(id__in=self.witnesses.all())
 
     def get_absolute_url(self):
         return f'/communications/thread:{self.pk}/None/#page-bottom'

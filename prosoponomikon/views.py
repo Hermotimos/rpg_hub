@@ -228,7 +228,7 @@ def prosoponomikon_acquaintances_view(request, location_id):
         frequented_locations__in=location.with_sublocations()).distinct()
 
     for character in inhabitants:
-        [character.known_directly.add(i.profile) for i in inhabitants]
+        [character.witnesses.add(i.profile) for i in inhabitants]
 
     msg = f"""
         {location.name}:

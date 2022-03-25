@@ -45,7 +45,7 @@
                 {% endif %}
                 <div class="{% if thread.kind == 'Debate' and statement.author.status == 'gm' %} col-12 mt-2 {% else %} col-10 mt-3 {% endif %}">
                     {% with next_statement=thread.statements.all|next_elem:forloop.counter0 %}
-                        {% for profile in thread.known_directly.all %}
+                        {% for profile in thread.witnesses.all %}
                             {% if profile in statement.seen_by.all and profile not in next_statement.seen_by.all and profile.status != 'npc' %}
                                 {% include '_img_sm.html' %}
                             {% endif %}

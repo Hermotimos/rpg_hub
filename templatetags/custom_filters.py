@@ -204,7 +204,7 @@ def game_participants(obj):
     game_events_qs = obj.game_events.all()
     participants = set()
     for event in game_events_qs:
-        for profile in event.known_directly.all():
+        for profile in event.witnesses.all():
             if profile.status == 'player':
                 participants.add(profile)
     return participants
@@ -287,7 +287,7 @@ def next_elem(list_, current_index):
 def include_silent_participants(results: List[GroupedResult], thread: communications.models.Thread):
     profiles_with_statements = [gr.grouper for gr in results]
     profiles_without_statements = [
-        p for p in thread.known_directly.all()
+        p for p in thread.witnesses.all()
         if p not in profiles_with_statements]
     results.extend(
         [GroupedResult(grouper=profile, list=[])

@@ -81,9 +81,9 @@ class Location(Model):
         blank=True,
         null=True,
     )
-    known_directly = M2M(
+    witnesses = M2M(
         to=Profile,
-        related_name='locs_known_directly',
+        related_name='locations_witnessed',
         limit_choices_to=Q(status='player'),
         blank=True,
     )
@@ -111,7 +111,7 @@ class Location(Model):
     def informables(self):
         qs = Profile.active_players.all()
         qs = qs.exclude(
-            id__in=(self.known_directly.all() | self.known_indirectly.all())
+            id__in=(self.witnesses.all() | self.known_indirectly.all())
         )
         return qs
     
@@ -162,20 +162,20 @@ class SecondaryLocation(Location):
 
 
 def update_known_locations(sender, instance, **kwargs):
-    """Whenever a location becomes 'known_directly' or 'known_indirectly' to
+    """Whenever a location becomes 'witnesses' or 'known_indirectly' to
     a profile, add this location's 'in_location' (i.e. more general location)
-    to profile's 'known_directly' or 'known_indirectly', respectively.
+    to profile's 'witnesses' or 'known_indirectly', respectively.
     """
-    known_directly = instance.known_directly.all()
+    witnesses = instance.witnesses.all()
     known_indirectly = instance.known_indirectly.all()
     in_location = instance.in_location
     if in_location:
-        in_location.known_directly.add(*known_directly)
+        in_location.witnesses.add(*witnesses)
         in_location.known_indirectly.add(*known_indirectly)
 
 
 post_save.connect(update_known_locations, sender=Location)
 m2m_changed.connect(update_known_locations,
-                    sender=Location.known_directly.through)
+                    sender=Location.witnesses.through)
 m2m_changed.connect(update_known_locations,
                     sender=Location.known_indirectly.through)

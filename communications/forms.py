@@ -59,32 +59,31 @@ class AnnouncementCreateForm(forms.ModelForm):
     
     class Meta:
         model = Announcement
-        fields = ['title', 'known_directly']
+        fields = ['title', 'witnesses']
         
     def __init__(self, *args, **kwargs):
         current_profile = kwargs.pop('current_profile')
         super().__init__(*args, **kwargs)
 
-        self.fields['known_directly'].help_text = """
+        self.fields['witnesses'].help_text = """
             ***Aby zaznaczyć wiele Postaci - użyj CTRL albo SHIFT.<br><br>
             1) Ogłoszenie zobaczą tylko wybrani adresaci (i zawsze MG).<br>
             2) Późniejsze dodanie adresatów - wyślij MG Dezyderat.<br><br>
         """
         
-        self.fields['known_directly'].label = "Adresaci"
+        self.fields['witnesses'].label = "Adresaci"
         self.fields['title'].label = "Tytuł"
 
-        known_directly = Profile.contactables.exclude(id=current_profile.id)
-        self.fields['known_directly'].queryset = known_directly
-        self.fields['known_directly'].widget.attrs['size'] = min(
-            len(known_directly), 10)
+        witnesses = Profile.contactables.exclude(id=current_profile.id)
+        self.fields['witnesses'].queryset = witnesses
+        self.fields['witnesses'].widget.attrs['size'] = min(len(witnesses), 10)
         
 
 class DebateCreateForm(forms.ModelForm):
     
     class Meta:
         model = Debate
-        fields = ['title', 'known_directly', 'is_exclusive']
+        fields = ['title', 'witnesses', 'is_exclusive']
         
     def __init__(self, *args, **kwargs):
         current_profile = kwargs.pop('current_profile')
@@ -92,7 +91,7 @@ class DebateCreateForm(forms.ModelForm):
 
         self.fields['is_exclusive'].help_text = """
             Wykluczyć możliwość dodawania uczestników?'"""
-        self.fields['known_directly'].help_text = """
+        self.fields['witnesses'].help_text = """
             ***Aby zaznaczyć wiele Postaci - użyj CTRL albo SHIFT.<br><br>
             1) Włączaj tylko Postacie znajdujące się w pobliżu w chwili
                 zakończenia ostatniej sesji.<br>
@@ -101,21 +100,21 @@ class DebateCreateForm(forms.ModelForm):
             4) Jeśli na liście brakuje Postaci, powiadom MG.<br><br>"""
 
         self.fields['is_exclusive'].label = "Narada zamknięta?"
-        self.fields['known_directly'].label = "Uczestnicy"
+        self.fields['witnesses'].label = "Uczestnicy"
         self.fields['title'].label = "Tytuł"
 
-        known_directly = Profile.living.all()
+        witnesses = Profile.living.all()
 
         if current_profile.status != 'gm':
             self.fields['is_exclusive'].widget = HiddenInput()
-            known_directly = known_directly.filter(
-                character__in=current_profile.characters_known_directly.all()
+            witnesses = witnesses.filter(
+                character__in=current_profile.characters_witnessed.all()
             ).exclude(id=current_profile.id).select_related()
 
-        self.fields['known_directly'].queryset = known_directly
+        self.fields['witnesses'].queryset = witnesses
 
-        self.fields['known_directly'].widget.attrs['size'] = min(
-            len(known_directly), 10)
+        self.fields['witnesses'].widget.attrs['size'] = min(
+            len(witnesses), 10)
 
 
 class ThreadEditTagsForm(forms.ModelForm):
@@ -150,7 +149,7 @@ class StatementCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         current_profile = kwargs.pop('current_profile')
         thread_kind = kwargs.pop('thread_kind')
-        known_directly = kwargs.pop('known_directly')
+        witnesses = kwargs.pop('witnesses')
         super().__init__(*args, **kwargs)
         
         self.fields['author'].label = "Autor"
@@ -162,11 +161,11 @@ class StatementCreateForm(forms.ModelForm):
         else:
             # If Thread doesn't exist yet, meaning this form is used with
             # thread create form, put all profiles in author choice list
-            if not known_directly:
+            if not witnesses:
                 self.fields['author'].queryset = Profile.gm_controlled.all()
             else:
                 self.fields['author'].queryset = Profile.objects.filter(
-                    Q(status='gm') | Q(id__in=known_directly))
+                    Q(status='gm') | Q(id__in=witnesses))
             
         if thread_kind != "Debate":
             self.fields['author'].widget = HiddenInput()

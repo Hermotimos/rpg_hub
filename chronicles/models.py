@@ -240,9 +240,9 @@ class TimeUnit(Model):
         blank=True,
         null=True,
     )
-    known_directly = M2M(
+    witnesses = M2M(
         to=Profile,
-        related_name='events_known_directly',
+        related_name='events_witnessed',
         limit_choices_to=non_GM,
         blank=True,
     )
@@ -277,7 +277,7 @@ class TimeUnit(Model):
     def informables(self):
         qs = Profile.active_players.all()
         qs = qs.exclude(
-            id__in=(self.known_directly.all() | self.known_indirectly.all())
+            id__in=(self.witnesses.all() | self.known_indirectly.all())
         )
         return qs
 
@@ -477,14 +477,14 @@ class GameEvent(Event):
 
 def update_known_locations(sender, instance, **kwargs):
     """Whenever a profile becomes 'participant' or 'informed' of an event in
-    specific location add this location to profile's 'known_directly'
+    specific location add this location to profile's 'witnesses'
     (if participant) or 'known_indirectly' (if informed).
     """
-    known_directly = instance.known_directly.all()
+    witnesses = instance.witnesses.all()
     known_indirectly = instance.known_indirectly.all()
     locations = instance.locations.all()
     for location in locations:
-        location.known_directly.add(*known_directly)
+        location.witnesses.add(*witnesses)
         location.known_indirectly.add(*known_indirectly)
 
 
@@ -492,10 +492,10 @@ post_save.connect(
     receiver=update_known_locations,
     sender=GameEvent)
 
-# Run by each change of 'known_directly', 'known_indirectly' or 'locations':
+# Run by each change of 'witnesses', 'known_indirectly' or 'locations':
 m2m_changed.connect(
     receiver=update_known_locations,
-    sender=GameEvent.known_directly.through)
+    sender=GameEvent.witnesses.through)
 
 m2m_changed.connect(
     receiver=update_known_locations,
@@ -511,14 +511,14 @@ m2m_changed.connect(
 # It's unsafe to use as participation not always implies "known_direclty" !!!
 
 # def update_known_characters(sender, instance, **kwargs):
-#     """Whenever the signal is called, for each profile in known_directly
-#     update their known_directly characters with all other "direct" event
+#     """Whenever the signal is called, for each profile in witnesses
+#     update their witnesses characters with all other "direct" event
 #     participants.
 #     This works between NPCs, too. This is for future...
 #     """
-#     known_directly = instance.known_directly.all()
-#     for profile in known_directly.all():
-#         profile.character.known_directly.add(*known_directly)
+#     witnesses = instance.witnesses.all()
+#     for profile in witnesses.all():
+#         profile.character.witnesses.add(*witnesses)
 #
 #
 # post_save.connect(
@@ -527,4 +527,4 @@ m2m_changed.connect(
 #
 # m2m_changed.connect(
 #     receiver=update_known_characters,
-#     sender=GameEvent.known_directly.through)
+#     sender=GameEvent.witnesses.through)

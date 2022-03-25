@@ -27,29 +27,26 @@ def chronicle_main_view(request):
         chapters = Chapter.objects.all()
         games = GameSession.objects.select_related('chapter')
         games = games.prefetch_related(
-            'game_events__known_directly__character',
-            # 'game_events__debates__known_directly__character',
-            'game_events__debates__known_directly__character',
+            'game_events__witnesses__character',
+            'game_events__debates__witnesses__character',
         )
     else:
-        # debates = current_profile.debates_known_directly.prefetch_related(
-        #     'known_directly__character')
-        debates = current_profile.threads_known_directly.filter(kind='Debate')
-        debates = debates.prefetch_related('known_directly__character')
+        debates = current_profile.threads_witnessed.filter(kind='Debate')
+        debates = debates.prefetch_related('witnesses__character')
         
         events = GameEvent.objects.filter(
-            Q(id__in=current_profile.events_known_directly.all())
+            Q(id__in=current_profile.events_witnessed.all())
             | Q(id__in=current_profile.events_known_indirectly.all()))
         events = events.prefetch_related(
             Prefetch('debates', queryset=debates),
-            'known_directly__character')
+            'witnesses__character')
         
         games = GameSession.objects.filter(game_events__in=events)
         games = games.prefetch_related(Prefetch('game_events', queryset=events))
         games = games.annotate(
-            any_known_directly=Count(
+            any_witnesses=Count(
                 'game_events',
-                filter=Q(game_events__in=current_profile.events_known_directly.all())))
+                filter=Q(game_events__in=current_profile.events_witnessed.all())))
         games = games.order_by('game_no').select_related('chapter')
         
         chapters = Chapter.objects.filter(game_sessions__in=games).distinct()
@@ -70,16 +67,16 @@ def chronicle_game_view(request, game_id):
     game = get_object_or_404(GameSession, id=game_id)
     events = GameEvent.objects.filter(game=game)
     events = events.prefetch_related(
-        'known_directly',
+        'witnesses',
         'known_indirectly',
         'picture_sets',
         'debates__statements__author',
         'debates__statements__seen_by',
-        'debates__known_directly',
+        'debates__witnesses',
     )
     if not profile.can_view_all:
         events = events.filter(
-            Q(known_directly=profile) | Q(known_indirectly=profile))
+            Q(witnesses=profile) | Q(known_indirectly=profile))
         events = events.distinct()
 
     context = {
@@ -99,16 +96,16 @@ def chronicle_chapter_view(request, chapter_id):
     chapter = get_object_or_404(Chapter, id=chapter_id)
     events = GameEvent.objects.filter(game__chapter=chapter)
     events = events.prefetch_related(
-        'known_directly',
+        'witnesses',
         'known_indirectly',
         'picture_sets',
         'debates__statements__author',
         'debates__statements__seen_by',
-        'debates__known_directly',
+        'debates__witnesses',
     )
     if not profile.can_view_all:
         events = events.filter(
-            Q(known_directly=profile) | Q(known_indirectly=profile))
+            Q(witnesses=profile) | Q(known_indirectly=profile))
         events = events.distinct()
         
     games = GameSession.objects.filter(game_events__in=events)
@@ -130,16 +127,16 @@ def chronicle_chapter_view(request, chapter_id):
 def chronicle_all_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     events = GameEvent.objects.prefetch_related(
-        'known_directly',
+        'witnesses',
         'known_indirectly',
         'picture_sets',
         'debates__statements__author',
         # 'debates__statements__seen_by',   # TODO add in Postgres, now causes SQLite error "Too many SQl variables"
-        'debates__known_directly',
+        'debates__witnesses',
     )
     if not profile.can_view_all:
         events = events.filter(
-            Q(known_directly=profile) | Q(known_indirectly=profile))
+            Q(witnesses=profile) | Q(known_indirectly=profile))
         events = events.distinct()
     
     games = GameSession.objects.filter(game_events__in=events)
@@ -170,7 +167,7 @@ def game_event_inform_view(request, game_event_id):
     profile = Profile.objects.get(id=request.session['profile_id'])
     game_event = get_object_or_404(TimeUnit, id=game_event_id)
     allowed = (
-        game_event.known_directly.all() | game_event.known_indirectly.all()
+        game_event.witnesses.all() | game_event.known_indirectly.all()
     )
     allowed = allowed.filter(status='player')
     
@@ -238,16 +235,16 @@ def timeline_view(request):
     events = GameEvent.objects.all()
     if not profile.can_view_all:
         events = events.filter(
-            Q(id__in=profile.events_known_directly.all())
+            Q(id__in=profile.events_witnessed.all())
             | Q(id__in=profile.events_known_indirectly.all())
         )
         events = events.distinct()
         
     events = events.prefetch_related(
         'plot_threads',
-        'known_directly__user',
+        'witnesses__user',
         'known_indirectly__user',
-        'known_directly__character',
+        'witnesses__character',
         'known_indirectly__character',
         'locations',
     )
