@@ -60,7 +60,7 @@ def chronicle_main_view(request):
 
 @login_required
 def chronicle_game_view(request, game_id):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     game = get_object_or_404(GameSession, id=game_id)
     events = GameEvent.objects.filter(game=game)
@@ -72,13 +72,13 @@ def chronicle_game_view(request, game_id):
         'debates__statements__seen_by',
         'debates__participants',
     )
-    if not profile.can_view_all:
+    if not current_profile.can_view_all:
         events = events.filter(
-            Q(participants=profile) | Q(informees=profile))
+            Q(participants=current_profile) | Q(informees=current_profile))
         events = events.distinct()
 
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': game.title,
         'events': events,
     }
@@ -90,7 +90,7 @@ def chronicle_game_view(request, game_id):
 
 @login_required
 def chronicle_chapter_view(request, chapter_id):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     chapter = get_object_or_404(Chapter, id=chapter_id)
     events = GameEvent.objects.filter(game__chapter=chapter)
     events = events.prefetch_related(
@@ -101,9 +101,9 @@ def chronicle_chapter_view(request, chapter_id):
         'debates__statements__seen_by',
         'debates__participants',
     )
-    if not profile.can_view_all:
+    if not current_profile.can_view_all:
         events = events.filter(
-            Q(participants=profile) | Q(informees=profile))
+            Q(participants=current_profile) | Q(informees=current_profile))
         events = events.distinct()
         
     games = GameSession.objects.filter(game_events__in=events)
@@ -111,7 +111,7 @@ def chronicle_chapter_view(request, chapter_id):
     games = games.distinct()
 
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': chapter.title,
         'games': games,
     }
@@ -123,7 +123,7 @@ def chronicle_chapter_view(request, chapter_id):
 
 @login_required
 def chronicle_all_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     events = GameEvent.objects.prefetch_related(
         'participants',
         'informees',
@@ -132,9 +132,9 @@ def chronicle_all_view(request):
         # 'debates__statements__seen_by',   # TODO add in Postgres, now causes SQLite error "Too many SQl variables"
         'debates__participants',
     )
-    if not profile.can_view_all:
+    if not current_profile.can_view_all:
         events = events.filter(
-            Q(participants=profile) | Q(informees=profile))
+            Q(participants=current_profile) | Q(informees=current_profile))
         events = events.distinct()
     
     games = GameSession.objects.filter(game_events__in=events)
@@ -148,7 +148,7 @@ def chronicle_all_view(request):
     chapters = chapters.distinct()
     
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Pełna kronika',
         'chapters': chapters,
     }
@@ -162,7 +162,7 @@ def chronicle_all_view(request):
 #  TODO or maybe just check if id in GameEvent or HistoryEvent
 @login_required
 def game_event_inform_view(request, game_event_id):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     game_event = get_object_or_404(TimeUnit, id=game_event_id)
     allowed = (
         game_event.participants.all() | game_event.informees.all()
@@ -185,19 +185,19 @@ def game_event_inform_view(request, game_event_id):
             messages.info(request, f'Poinformowano wybrane Postacie!')
 
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Poinformuj o wydarzeniu',
         'event': game_event,
         'event_type': 'game_event'
     }
-    if profile in allowed or profile.status == 'gm':
+    if current_profile in allowed or current_profile.status == 'gm':
         return render(request, 'chronicles/_event_inform.html', context)
     else:
         return redirect('users:dupa')
 
 
 def chronologies_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     chronologies = Chronology.objects.prefetch_related(
         'timeunits__timeunits__timeunits',
@@ -211,7 +211,7 @@ def chronologies_view(request):
     ).select_related('in_timeunit')
     
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Chronologie',
         'chronologies': chronologies,
         'event_type': 'game_event'
@@ -228,13 +228,13 @@ def chronologies_view(request):
 
 @login_required
 def timeline_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
 
     events = GameEvent.objects.all()
-    if not profile.can_view_all:
+    if not current_profile.can_view_all:
         events = events.filter(
-            Q(id__in=profile.events_participated.all())
-            | Q(id__in=profile.events_informed.all())
+            Q(id__in=current_profile.events_participated.all())
+            | Q(id__in=current_profile.events_informed.all())
         )
         events = events.distinct()
         
@@ -267,7 +267,7 @@ def timeline_view(request):
         request.GET, queryset=events, request=request)
    
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Pełne Kalendarium',
        
         # TODO the use of filter rises query cnt from 8 to 13, somehow causing
