@@ -55,11 +55,11 @@ class HistoryEventAdmin(admin.ModelAdmin):
 
 @admin.register(GameEvent)
 class GameEventAdmin(admin.ModelAdmin):
-    fields = [
-        'game', 'event_no_in_game', 'date_start', 'date_end', 'in_timeunit',
-        'description_short', 'description_long', 'plot_threads', 'locations',
+    fields = (
+        ('game', 'event_no_in_game'), ('date_start', 'date_end', 'in_timeunit'),
+        ('description_short', 'description_long'), 'plot_threads', 'locations',
         'participants', 'informees', 'picture_sets', 'debates', 'audio'
-    ]
+    )
     filter_horizontal = [
         'participants', 'informees', 'locations', 'picture_sets',
         'plot_threads', 'debates',
