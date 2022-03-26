@@ -313,45 +313,6 @@ def formfield_with_cache(field, formfield, request):
     return formfield
 
 
-def formfield_for_dbfield_cached(cls, db_field, fields, **kwargs):
-    """An abstraction to override formfield_for_dbfield inside any
-    admin.ModelAdmin or admin.TabularInline subclass (others not tested yet).
-    The original post has a different trick for inlines, but this works better.
-    
-    https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
-    If you have foreign keys in list_editable django will make 1 database query
-    for each item in the changelist.
-    
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        request = kwargs['request']
-        formfield = super().formfield_for_dbfield(db_field, **kwargs)
-        fields = [
-            'affix_group',
-            'auxiliary_group',
-        ]
-        for field in fields:
-            if db_field.name == field:
-                choices = getattr(request, f'_{field}_choices_cache', None)
-                if choices is None:
-                    choices = list(formfield.choices)
-                    setattr(request, f'_{field}_choices_cache', choices)
-                formfield.choices = choices
-        return formfield
-
-    Greatly reduces queries in main view, doubles in detail view: trade-off ok.
-    """
-    request = kwargs['request']
-    formfield = super(type(cls), cls).formfield_for_dbfield(db_field, **kwargs)
-    for f in fields:
-        if db_field.name == f:
-            choices = getattr(request, f'_{f}_choices_cache', None)
-            if choices is None:
-                choices = list(formfield.choices)
-                setattr(request, f'_{f}_choices_cache', choices)
-            formfield.choices = choices
-    return formfield
-
-
 def update_rel_objs(instance, RelModel, rel_queryset, rel_name: str):
     """A helper function to use in AdminForm's, where related objects are
     presented as a virtual field, in order to facilitate updates.
