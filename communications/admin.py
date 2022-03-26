@@ -50,7 +50,10 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
 @admin.register(Debate)
 class DebateAdmin(admin.ModelAdmin):
-    fields = ['title', 'kind', 'participants', 'followers', 'is_ended', 'is_exclusive']
+    fields = [
+        'title', 'kind', 'participants', 'followers', 'is_ended',
+        'is_exclusive'
+    ]
     filter_horizontal = ['participants', 'followers']
     list_display = ['title', 'is_ended', 'is_exclusive', 'created_at']
     list_editable = ['is_ended', 'is_exclusive']
@@ -80,12 +83,11 @@ class StatementAdmin(admin.ModelAdmin):
     search_fields = ['text']
     
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        fields = [
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in [
             'thread',
             'author',
-        ]
-        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
-        for field in fields:
+        ]:
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield

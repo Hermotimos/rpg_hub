@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.html import format_html
 
-from rpg_project.utils import update_rel_objs, formfield_for_dbfield_cached, formfield_with_cache
+from rpg_project.utils import update_rel_objs, formfield_with_cache
 from rules.models import EliteProfession, EliteKlass, Klass, Plate, Shield, \
     Weapon, Skill
 from users.models import Profile
@@ -105,8 +105,11 @@ class ProfileAdmin(admin.ModelAdmin):
     form = ProfileAdminForm
     list_display = [
         'get_img', 'id', 'character_name_copy', 'user', 'status', 'is_alive',
-        'is_active', 'is_enchanter', 'image']
-    list_editable = ['user', 'status', 'is_alive', 'is_active', 'is_enchanter', 'image']
+        'is_active', 'is_enchanter', 'image'
+    ]
+    list_editable = [
+        'user', 'status', 'is_alive', 'is_active', 'is_enchanter', 'image'
+    ]
     list_filter = ['user', 'status', 'is_alive', 'is_active', 'is_enchanter', ]
     search_fields = ['user__username', 'character_name_copy']
 
@@ -116,12 +119,6 @@ class ProfileAdmin(admin.ModelAdmin):
                 f'<img src="{obj.image.url}" width="70" height="70">')
         default_img = "media/profile_pics/profile_default.jpg"
         return format_html(f'<img src={default_img} width="70" height="70">')
-    
-    # def formfield_for_dbfield(self, db_field, **kwargs):
-    #     fields = [
-    #         'user',
-    #     ]
-    #     return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
     
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         fields = [

@@ -69,10 +69,12 @@ class FirstNameAdmin(admin.ModelAdmin):
     }
     list_display = [
         'id', 'form', 'form_2', 'is_ancient', 'info', 'affix_group',
-        'auxiliary_group']
+        'auxiliary_group'
+    ]
     list_editable = [
         'form', 'form_2', 'is_ancient', 'info', 'affix_group',
-        'auxiliary_group']
+        'auxiliary_group'
+    ]
     list_filter = ['auxiliary_group', 'is_ancient']
     ordering = ['form']
     search_fields = ['form', 'form_2']
@@ -90,11 +92,11 @@ class FirstNameAdmin(admin.ModelAdmin):
        
     
 class FirstNameInline(admin.TabularInline):
+    model = FirstName
+    extra = 10
     formfield_overrides = {
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 3, 'cols': 50})},
     }
-    model = FirstName
-    extra = 10
     
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)

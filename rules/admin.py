@@ -2,7 +2,7 @@ from django import forms
 from django.contrib import admin
 from django.db import models
 
-from rpg_project.utils import formfield_for_dbfield_cached
+from rpg_project.utils import formfield_with_cache
 from rules.admin_filters import SkillLevelFilter, SynergyLevelFilter
 from rules.models import (
     SkillGroup, SkillKind, SkillType,
@@ -26,19 +26,26 @@ class FactorAdmin(admin.ModelAdmin):
 @admin.register(Modifier)
 class ModifierAdmin(admin.ModelAdmin):
     empty_value_display = ''
-    list_display = ['id', 'sign', 'value_number', 'value_percent', 'value_text', 'factor']
-    list_editable = ['sign', 'value_number', 'value_percent', 'value_text', 'factor']
+    list_display = [
+        'id', 'sign', 'value_number', 'value_percent', 'value_text', 'factor'
+    ]
+    list_editable = [
+        'sign', 'value_number', 'value_percent', 'value_text', 'factor'
+    ]
     list_filter = ['factor', 'sign']
     list_select_related = ['factor']
     radio_fields = {"sign": admin.VERTICAL}
     readonly_fields = ['overview']
     search_fields = ['value_number', 'value_percent', 'value_text', 'factor']
 
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        fields = [
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in [
             'factor',
-        ]
-        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+        ]:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
 
 
 @admin.register(RulesComment)
@@ -114,13 +121,16 @@ class SkillLevelInline(admin.TabularInline):
     model = SkillLevel
     extra = 4
     
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        fields = [
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in [
             'perks',
             'acquired_by',
-        ]
-        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-    
+        ]:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
+
     
 @admin.register(Skill, BooksSkill, TheologySkill)
 class SkillAdmin(admin.ModelAdmin):
@@ -133,11 +143,14 @@ class SkillAdmin(admin.ModelAdmin):
     list_select_related = ['group__type']
     search_fields = ['name']
     
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        fields = [
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in [
             'group',
-        ]
-        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+        ]:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
 
 
 class SynergyLevelInline(admin.TabularInline):
@@ -147,12 +160,15 @@ class SynergyLevelInline(admin.TabularInline):
     formfield_overrides = {
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 20, 'cols': 30})},
     }
-    
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        fields = [
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in [
             'skill_levels',
-        ]
-        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+        ]:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
 
 
 @admin.register(Synergy)
@@ -167,13 +183,16 @@ class SynergyAdmin(admin.ModelAdmin):
     list_editable = ['name']
     search_fields = ['name']
 
-    # def formfield_for_dbfield(self, db_field, **kwargs):
-    #     fields = [
+    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    #     formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+    #     for field in [
     #         'skill_levels',
     #         'skill_levels__skill',
     #         'skills',
-    #     ]
-    #     return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+    #     ]:
+    #         if db_field.name == field:
+    #             formfield = formfield_with_cache(field, formfield, request)
+    #     return formfield
 
 
 @admin.register(SkillLevel)
@@ -302,12 +321,15 @@ class WeaponAdmin(admin.ModelAdmin):
     list_filter = ['weapon_type']
     search_fields = ['name', 'description']
 
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        fields = [
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in [
             'allowees',
             'picture_set',
-        ]
-        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+        ]:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
 
 
 @admin.register(Plate)
@@ -328,15 +350,13 @@ class ShieldAdmin(admin.ModelAdmin):
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 2, 'cols': 50})},
         models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
     }
-    list_display = ['id', 'name', 'armor_class_bonus', 'weight', 'description', 'picture_set', 'comment']
-    list_editable = ['name', 'armor_class_bonus', 'weight', 'description', 'picture_set', 'comment']
+    list_display = [
+        'id', 'name', 'armor_class_bonus', 'weight', 'description',
+        'picture_set', 'comment'
+    ]
+    list_editable = [
+        'name', 'armor_class_bonus', 'weight', 'description', 'picture_set',
+        'comment'
+    ]
     search_fields = ['name', 'description', 'comment']
     list_select_related = True
-
-    # def formfield_for_dbfield(self, db_field, **kwargs):
-    #     fields = [
-    #         'allowees',
-    #         'picture_set',
-    #     ]
-    #     return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-    #

@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.html import format_html
 
 from imaginarion.models import Picture, PictureImage, PictureSet, Audio, AudioSet
-from rpg_project.utils import formfield_for_dbfield_cached
+from rpg_project.utils import formfield_with_cache
 
 
 # -----------------------------------------------------------------------------
@@ -34,12 +34,15 @@ class AudioSetAdmin(admin.ModelAdmin):
     list_editable = ['title', 'description', 'main_audio']
     search_fields = ['title', 'description', 'main_audio']
     
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        fields = [
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in [
             'main_audio',
-        ]
-        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
-    
+        ]:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
+
     
 # -----------------------------------------------------------------------------
 
