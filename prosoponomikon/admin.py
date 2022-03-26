@@ -6,7 +6,7 @@ from django.utils.html import format_html
 from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, \
     FirstName, FirstNameGroup, FamilyName, AffixGroup, \
     AuxiliaryNameGroup, FamilyNameGroup
-from rpg_project.utils import formfield_for_dbfield_cached, formfield_with_cache
+from rpg_project.utils import formfield_with_cache
 
 
 # -----------------------------------------------------------------------------
@@ -156,12 +156,15 @@ class CharacterAdmin(admin.ModelAdmin):
         'cognomen', 'description'
     ]
 
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        fields = [
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in [
             'first_name',
             'family_name',
-        ]
-        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+        ]:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
     
     def get_img(self, obj):
         if obj.profile.image:

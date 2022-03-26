@@ -11,7 +11,7 @@ from chronicles.models import (
     GameSession,
 )
 from communications.models import Thread
-from rpg_project.utils import formfield_for_dbfield_cached
+from rpg_project.utils import formfield_for_dbfield_cached, formfield_with_cache
 from toponomikon.models import SecondaryLocation
 from users.models import Profile
 
@@ -24,39 +24,20 @@ class DateAdmin(admin.ModelAdmin):
     pass
 
 
-class GameEventAdminForm(forms.ModelForm):
-    
-    # Filter FK to Thread to only include Debates
-    debates = forms.ModelMultipleChoiceField(
-        queryset=Thread.objects.filter(kind='Debate'),
-        required=False,
-        widget=FilteredSelectMultiple('Debates', False, attrs={'style': 'height:100px'})
-    )
-    
-    class Meta:
-        model = GameEvent
-        fields = ['game', 'event_no_in_game', 'date_start', 'date_end',
-                  'in_timeunit', 'description_short', 'description_long',
-                  'plot_threads', 'locations', 'participants',
-                  'informees', 'picture_sets', 'debates', 'audio']
-        
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['plot_threads'].label = 'Active PlotThreads'
-        self.fields['participants'].queryset = Profile.non_gm.all()
-        self.fields['informees'].queryset = Profile.non_gm.all()
-        self.fields['debates'].queryset = Thread.objects.filter(kind='Debate')
-
-
 @admin.register(GameEvent)
 class GameEventAdmin(admin.ModelAdmin):
-    filter_horizontal = [
-        'participants', 'informees', 'locations', 'picture_sets', 'plot_threads'
+    fields = [
+        'game', 'event_no_in_game', 'date_start', 'date_end', 'in_timeunit',
+        'description_short', 'description_long', 'plot_threads', 'locations',
+        'participants', 'informees', 'picture_sets', 'debates', 'audio'
     ]
-    form = GameEventAdminForm
+    filter_horizontal = [
+        'participants', 'informees', 'locations', 'picture_sets',
+        'plot_threads', 'debates',
+    ]
     formfield_overrides = {
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 12, 'cols': 35})},
-        models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
+        models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:140px'})},
     }
     list_display = [
         'id', 'game', 'event_no_in_game', 'date_in_period',
@@ -68,6 +49,13 @@ class GameEventAdmin(admin.ModelAdmin):
     list_filter = ['game']
     search_fields = ['description_short', 'description_long']
     
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name in ["participants", "informees"]:
+            kwargs["queryset"] = Profile.non_gm.all()
+        if db_field.name == "debates":
+            kwargs["queryset"] = Thread.objects.filter(kind='Debate')
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+        
     def formfield_for_dbfield(self, db_field, **kwargs):
         fields = [
             'audio',    # Tested that here only audio optimizes queries
@@ -78,48 +66,60 @@ class GameEventAdmin(admin.ModelAdmin):
 # -----------------------------------------------------------------------------
 
 
-class GameEventInlineForm(GameEventAdminForm):
-    exclude = ['game']
-
-    # Filter FK to Profile to exclude GMN
-    participants = forms.ModelMultipleChoiceField(
-        queryset=Profile.non_gm.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Participants', False))
-    # Filter FK to Profile to exclude GMN
-    informees = forms.ModelMultipleChoiceField(
-        queryset=Profile.non_gm.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Informees', False))
-
-
 class GameEventInline(admin.TabularInline):
     model = GameEvent
     extra = 0
-    form = GameEventInlineForm
+    fields = [
+        'game', 'event_no_in_game', 'date_start', 'date_end', 'in_timeunit',
+        'description_short', 'description_long', 'plot_threads', 'locations',
+        'participants', 'informees', 'picture_sets', 'debates', 'audio'
+    ]
+    filter_horizontal = [
+        'participants', 'informees', 'locations', 'picture_sets',
+        'plot_threads', 'debates',
+    ]
     formfield_overrides = {
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 12, 'cols': 45})},
         models.CharField: {'widget': forms.TextInput(attrs={'size': 15})},
         models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
         models.OneToOneField: {'widget': forms.Select(attrs={'style': 'width:200px'})},
     }
-    
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        fields = [
-            'date_start',
-            'date_end',
-            'in_timeunit',
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        
+        # Filter querysets before calling super(), otherwise it has no effect
+        if db_field.name in ["participants", "informees"]:
+            kwargs["queryset"] = Profile.non_gm.all()
+        if db_field.name == "debates":
+            kwargs["queryset"] = Thread.objects.filter(kind='Debate')
+
+        form_field = super().formfield_for_manytomany(db_field, request, **kwargs)
+        for field in [
             'participants',
             'informees',
             'locations',
-            'plot_threads',    # To allow for filtering in GameEventAdminForm
+            'plot_threads',
             'picture_sets',
-            'audio',
             'debates',
-        ]
-        return formfield_for_dbfield_cached(self, db_field, fields, **kwargs)
+        ]:
+            if db_field.name == field:
+                form_field = formfield_with_cache(field, form_field, request)
+                form_field.widget.attrs = {'style': 'height:150px'}
 
+        return form_field
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in [
+            'date_start',
+            'date_end',
+            'in_timeunit',
+            'audio',
+        ]:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
+    
 # -----------------------------------------------------------------------------
 
 
