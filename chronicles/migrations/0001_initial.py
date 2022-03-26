@@ -13,9 +13,9 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('users', '0001_initial_squashed'),
-        ('communications', '0001_0001_initial_squashed'),
+        ('communications', '0001_initial'),
         ('imaginarion', '0001_initial_squashed'),
-        ('toponomikon', '0001_0001_initial_squashed'),
+        ('toponomikon', '0001_initial'),
     ]
 
     operations = [

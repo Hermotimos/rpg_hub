@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('rules', '0001_initial_squashed'),
+        ('rules', '0001_initial'),
         ('imaginarion', '0001_initial_squashed'),
         ('users', '0001_initial_squashed'),
     ]
