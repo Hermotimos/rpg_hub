@@ -8,6 +8,7 @@ urlpatterns = [
     path('armor/', views.rules_armor_view, name='armor'),
     path('character-sheet/', views.rules_character_sheet_view, name='character-sheet'),
     path('combat/', views.rules_combat_view, name='combat'),
+    path('experience-demand/', views.rules_experience_demand_view, name='experience-demand'),
     path('fitness-and-tricks/', views.rules_fitness_and_tricks_view, name='fitness-and-tricks'),
     path('professions/', views.rules_professions_view, name='professions'),
     path('skills-and-synergies/', views.rules_skills_view, name='skills-and-synergies'),
@@ -21,7 +22,4 @@ urlpatterns = [
     path('power-theurgists/', views.rules_power_theurgists_view, name='power-theurgists'),
     path('weapons/', views.rules_weapons_view, name='weapons'),
     path('wounds/', views.rules_wounds_view, name='wounds'),
-    # path('combat/pdf/', html2pdf_views.yet_another, name='combat-pdf'),
-    # path('combat/pdf2/', html2pdf_views.export_word_2, name='combat-pdf2'),
-
 ]

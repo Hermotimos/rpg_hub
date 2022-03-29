@@ -62,16 +62,6 @@ def rules_armor_view(request):
 
 
 @login_required
-def rules_character_sheet_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
-    context = {
-        'current_profile': current_profile,
-        'page_title': 'Karta Postaci'
-    }
-    return render(request, 'rules/character_sheet.html', context)
-
-
-@login_required
 def rules_combat_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
@@ -265,3 +255,23 @@ def rules_wounds_view(request):
         'page_title': 'Progi i skutki ran'
     }
     return render(request, 'rules/wounds.html', context)
+
+
+@login_required
+def rules_character_sheet_view(request):
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    context = {
+        'current_profile': current_profile,
+        'page_title': 'Karta Postaci'
+    }
+    return render(request, 'rules/character_sheet.html', context)
+
+
+@login_required
+def rules_experience_demand_view(request):
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    context = {
+        'current_profile': current_profile,
+        'page_title': 'Sztuka kompozycji Dezyderatu Expowego'
+    }
+    return render(request, 'rules/experience_demand.html', context)
