@@ -323,3 +323,10 @@ def format_conditional_modifier(conditional_modifier: rules.models.ConditionalMo
         text = '<i class="ra ra-perspective-dice-two pr-1"></i>' + text
 
     return mark_safe(text)
+
+
+@register.filter
+def rid_of_special_chars(text_or_obj):
+    return "".join(
+        [ch for ch in str(text_or_obj) if ch.lower() in 'abcdefghijklmnopqrstuvwxyz']
+    )

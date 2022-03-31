@@ -48,7 +48,7 @@
                 <tbody>
                     {% for weapon in weapon_type.weapons.all %}
                         <tr>
-                            <td class="hover-blue" data-toggle="collapse" data-target="#{{ weapon.short_name }}">&nbsp;{{ weapon.name }}</td>
+                            <td class="hover-blue" data-toggle="collapse" data-target="#{{ weapon|rid_of_special_chars }}">&nbsp;{{ weapon.name }}</td>
                             <td class="align-center">{{ weapon.damage_summary }}</td>
                             <td class="align-center">{{ weapon.damage_type }}</td>
                             <td class="align-center"><small>{{ weapon.special|linebreaksbr }}</small></td>
@@ -58,7 +58,7 @@
                             <td class="align-center">{{ weapon.avg_price_value }} {{ weapon.avg_price_currency }}</td>
                             <td class="align-center">{{ weapon.avg_weight.normalize }}</td>
                         </tr>
-                        <tr id="{{ weapon.short_name }}" class="collapse">
+                        <tr id="{{ weapon|rid_of_special_chars }}" class="collapse">
                             <td colspan="10" class="weapons-img px-2">
                                 <br>
                                 {{ weapon.description|linebreaksbr }}

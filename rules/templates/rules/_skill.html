@@ -5,11 +5,15 @@
 <table class="mt-2">
     <thead>
         <tr>
-            <td class="hover-pointer" data-toggle="collapse" data-target="#{{ skill.short_name }}{{ id_suffix }}">
-                {% if skill.image %}
-                    <img class="img-skill" src="{{ skill.image.url }}">
+            <td class="hover-pointer" data-toggle="collapse" data-target="#{{ skill|rid_of_special_chars }}{{ id_suffix }}">
+                {% if skilltype_kind == 'Moce Kapłańskie' or skilltype_kind == 'Zaklęcia' or skilltype_kind == 'Moce Teurgiczne' %}
+                    <img class="img-skill" src="{% static 'img/'|add:skill.skill_levels.first.level|add:'.png' %}">
                 {% else %}
-                    <img class="img-skill" src="{% static 'img/skill-default.png' %}">
+                    {% if skill.image %}
+                        <img class="img-skill" src="{{ skill.image.url }}">
+                    {% else %}
+                        <img class="img-skill" src="{% static 'img/skill-default.png' %}">
+                    {% endif %}
                 {% endif %}
             </td>
             <th colspan="11">
@@ -36,7 +40,7 @@
             </th>
         </tr>
     </thead>
-    <tbody id="{{ skill.short_name }}{{ id_suffix }}" class="collapse">
+    <tbody id="{{ skill|rid_of_special_chars }}{{ id_suffix }}" class="collapse">
             {% for skill_level in skill.skill_levels.all %}
                 {% if not forloop.last and max_level_only %}
                     <!-- When called from prosoponomikon_character_for_player_view skill all levels but the highest -->
@@ -48,7 +52,6 @@
                     {% endwith %}
                 {% endif %}
             {% endfor %}
-
     </tbody>
 </table>
 

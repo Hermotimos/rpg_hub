@@ -47,11 +47,16 @@
                 <li>
                     <h6><a href="{% url 'rules:power-trait' %}">Cecha Mentalna "Moc"</a></h6>
                     <ul class="ml-3">
-                        <li><h6><a href="{% url 'rules:skills-list' 'Mentalne' %}">Lista Umiejętności Mentalnych</a></h6></li>
+                        <li><h6><a href="{% url 'rules:skills-list' 'Mentalne' %}">Umiejętności Mentalne</a></h6></li>
                     </ul>
                 </li>
                 {% if 'Kapłan' in user_professions_all %}
-                    <li><h6><a href="{% url 'rules:power-priests' %}">Moce Kapłańskie</a></h6></li>
+                    <li>
+                        <h6><a href="{% url 'rules:power-priests' %}">Moce Kapłańskie</a></h6>
+                        <ul class="ml-3">
+                            <li><h6><a href="{% url 'rules:skills-list' 'Moce Kapłańskie' %}">Moce Kapłańskie</a></h6></li>
+                        </ul>
+                    </li>
                 {% endif %}
                 {% if 'Czarodziej' in user_professions_all %}
                     <li><h6><a href="{% url 'rules:power-sorcerers' %}">Magia</a></h6></li>

@@ -116,14 +116,15 @@ def rules_skills_list_view(request, skilltype_kind):
         'skill_levels__perks__conditional_modifiers__modifier__factor',
         'skill_levels__perks__comments',
     )
-    
+
     skill_types = SkillType.objects.filter(kinds__name=skilltype_kind)
     skill_types = skill_types.prefetch_related(Prefetch('skills', queryset=skills), 'skill_groups')
     skill_types = skill_types.filter(skills__in=skills).distinct()
     
     context = {
         'current_profile': current_profile,
-        'page_title': 'Lista Umiejętności',
+        'page_title': f'Umiejętności: {skilltype_kind}',
+        'skilltype_kind': skilltype_kind,
         'skill_types': skill_types,
         'skills': skills,
     }

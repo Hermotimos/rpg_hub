@@ -227,9 +227,6 @@ class Skill(Model):
             self.sorting_name = create_sorting_name(self.name)
         super().save(*args, **kwargs)
 
-    def short_name(self):
-        return rid_of_special_chars(self.name)
-
 
 S_LEVELS = [
     ('0', '0'),
@@ -330,9 +327,6 @@ class Synergy(Model):
             self.sorting_name = create_sorting_name(self.name)
         super().save(*args, **kwargs)
 
-    def short_name(self):
-        return rid_of_special_chars(self.name)
-
 
 class SynergyLevel(Model):
     synergy = FK(to=Synergy, related_name='synergy_levels', on_delete=CASCADE)
@@ -374,9 +368,6 @@ class Profession(Model):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
         super().save(*args, **kwargs)
-
-    def short_name(self):
-        return rid_of_special_chars(self.name)
 
     def allowed_list(self):
         allowees = []
@@ -432,9 +423,6 @@ class Klass(Model):
             self.sorting_name = create_sorting_name(self.name)
         super().save(*args, **kwargs)
 
-    def short_name(self):
-        return rid_of_special_chars(self.name)
-
 
 class EliteProfession(Model):
     name = CharField(max_length=100, unique=True)
@@ -459,9 +447,6 @@ class EliteProfession(Model):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
         super().save(*args, **kwargs)
-
-    def short_name(self):
-        return rid_of_special_chars(self.name)
 
 
 class EliteKlass(Model):
@@ -494,9 +479,6 @@ class EliteKlass(Model):
             self.sorting_name = create_sorting_name(self.name)
         super().save(*args, **kwargs)
 
-    def short_name(self):
-        return rid_of_special_chars(self.name)
-
 
 # =============================================================================
 
@@ -517,9 +499,6 @@ class WeaponType(Model):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
         super().save(*args, **kwargs)
-
-    def short_name(self):
-        return rid_of_special_chars(self.name)
 
 
 DAMAGE_TYPES = [
@@ -590,9 +569,6 @@ class Weapon(Model):
             self.sorting_name = create_sorting_name(self.name)
         super().save(*args, **kwargs)
 
-    def short_name(self):
-        return rid_of_special_chars(self.name)
-
     def damage_summary(self):
         if self.damage_bonus:
             return f"{self.damage_dices}+{self.damage_bonus}"
@@ -642,9 +618,6 @@ class Plate(Model):
 
     def __str__(self):
         return self.name
-
-    def short_name(self):
-        return rid_of_special_chars(self.name)
 
 
 class Shield(Model):

@@ -169,10 +169,10 @@
                 <ul class="bullets-1 bullets-lg ml-4">
                     {% for klass in profession.klasses.all %}
                         <li class="pl-1">
-                            <h5 data-toggle="collapse" data-target="#{{ klass.short_name }}">
+                            <h5 data-toggle="collapse" data-target="#{{ klass|rid_of_special_chars }}">
                                 <b class="hover-blue">{{ klass.name }}</b>
                             </h5>
-                            <div id="{{ klass.short_name }}" class="collapse">
+                            <div id="{{ klass|rid_of_special_chars }}" class="collapse">
                                 <p>{{ klass.description|custom_linebreaksbr:2 }}</p>
                                 <p>{{ klass.start_perks|linebreaksbr }}</p>
                                 <br>
@@ -253,10 +253,10 @@
                     <ul class="bullets-1 ml-4">
                         {% for elite_klass in elite_profession.elite_klasses.all %}
                         <li class="pl-1">
-                            <h5 data-toggle="collapse" data-target="#{{ elite_klass.short_name }}">
+                            <h5 data-toggle="collapse" data-target="#{{ elite_klass|rid_of_special_chars }}">
                                 <b class="hover-blue">{{ elite_klass.name }}</b>
                             </h5>
-                            <div id="{{ elite_klass.short_name }}" class="collapse">
+                            <div id="{{ elite_klass|rid_of_special_chars }}" class="collapse">
                                 <p>{{ elite_klass.description|custom_linebreaksbr:2 }}</p>
                                 <p>{{ elite_klass.start_perks|linebreaksbr }}</p>
                                 <br>
