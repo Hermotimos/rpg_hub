@@ -17,7 +17,7 @@ from django.db.models import Q
 from django.db.models.signals import post_save, m2m_changed
 
 from imaginarion.models import PictureSet
-from rpg_project.utils import create_sorting_name, rid_of_special_chars
+from rpg_project.utils import create_sorting_name
 from users.models import Profile
 
 

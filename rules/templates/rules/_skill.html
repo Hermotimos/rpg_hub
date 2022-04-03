@@ -5,7 +5,7 @@
 <table class="mt-2">
     <thead>
         <tr>
-            <td class="hover-pointer" data-toggle="collapse" data-target="#{{ skill|rid_of_special_chars }}{{ id_suffix }}">
+            <td class="hover-pointer" data-toggle="collapse" data-target="#{{ skill|remove_special_chars }}{{ id_suffix }}">
                 {% if skilltype_kind == 'Moce Kapłańskie' or skilltype_kind == 'Zaklęcia' or skilltype_kind == 'Moce Teurgiczne' %}
                     <img class="img-skill" src="{% static 'img/'|add:skill.skill_levels.first.level|add:'.png' %}">
                 {% else %}
@@ -40,7 +40,7 @@
             </th>
         </tr>
     </thead>
-    <tbody id="{{ skill|rid_of_special_chars }}{{ id_suffix }}" class="collapse">
+    <tbody id="{{ skill|remove_special_chars }}{{ id_suffix }}" class="collapse">
             {% for skill_level in skill.skill_levels.all %}
                 {% if not forloop.last and max_level_only %}
                     <!-- When called from prosoponomikon_character_for_player_view skill all levels but the highest -->

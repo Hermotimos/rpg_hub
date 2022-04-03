@@ -59,7 +59,7 @@
                                 {% endwith %}
                             {% else %}
                                 {% for skill in skill_type.skills.all %}
-                                    {% with id_suffix=skill_type.name|rid_of_special_chars %}
+                                    {% with id_suffix=skill_type.name|remove_special_chars %}
                                         {% include 'rules/_skill.html' %}
                                     {% endwith %}
                                 {% endfor %}

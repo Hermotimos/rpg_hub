@@ -118,7 +118,6 @@ class Profile(Model):
         qs = qs.select_related('main_image__image')
         return qs
 
-
     def skills_acquired_with_skill_levels(self):
         from rules.models import Skill, SkillLevel
         skills = Skill.objects.filter(skill_levels__acquired_by=self)

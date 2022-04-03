@@ -5,7 +5,7 @@
 <table class="mt-2">
     <thead>
         <tr>
-            <th class="m-0 p-0 hover-pointer" data-toggle="collapse" data-target="#{{ synergy|rid_of_special_chars }}">
+            <th class="m-0 p-0 hover-pointer" data-toggle="collapse" data-target="#{{ synergy|remove_special_chars }}">
                 <div class="m-0 p-0">
                     {% for skill in synergy.skills.all %}
                         {% if skill.image %}
@@ -31,7 +31,7 @@
             </th>
         </tr>
     </thead>
-    <tbody id="{{ synergy|rid_of_special_chars }}{{ collapse_id_suffix }}" class="collapse">
+    <tbody id="{{ synergy|remove_special_chars }}{{ collapse_id_suffix }}" class="collapse">
         {% for synergy_level in synergy.synergy_levels.all %}
             {% with level_img='img/'|add:synergy_level.level|add:'.png' %}
                 {% with skill_or_synergy_level=synergy_level %}

@@ -24,7 +24,7 @@
                             {% else %}
                                 <img class="img-skill" src="{% static 'img/skill-default.png' %}">
                             {% endif %}
-                            <h1 class="mt-2" data-toggle="collapse" data-target="#{{ skill|rid_of_special_chars }}">
+                            <h1 class="mt-2" data-toggle="collapse" data-target="#{{ skill|remove_special_chars }}">
                                 <b class="hover-blue">&nbsp;{{ skill.name }}</b>
                             </h1>
                         </div>
@@ -32,7 +32,7 @@
                     <div class="row mb-4">
                         <div class="col-1"></div>
                         <div class="col-11 p-0">
-                            <div class="collapse show" id="{{ skill|rid_of_special_chars }}">
+                            <div class="collapse show" id="{{ skill|remove_special_chars }}">
                                 {% for kn_packet in skill.knowledge_packets.all %}
                                     {% include 'knowledge/_knowledge_packet.html' %}
                                 {% endfor %}

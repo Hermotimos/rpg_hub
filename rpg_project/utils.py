@@ -65,12 +65,6 @@ def create_sorting_name(obj):
     return name
 
 
-def rid_of_special_chars(text):
-    return "".join(
-        [ch for ch in text if ch.lower() in 'abcdefghijklmnopqrstuvwxyz']
-    )
-
-
 def sample_from_qs(qs, max_size):
     obj_set = set(qs)
     size = max_size if len(obj_set) >= max_size else len(obj_set)
