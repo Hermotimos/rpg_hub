@@ -214,11 +214,11 @@ class Character(Model):
         verbose_name_plural = '* CHARACTERS'
     
     def __str__(self):
-        name = f"{self.first_name} " if self.first_name else ""
+        first_name = f"{self.first_name} " if self.first_name else ""
         family_name = f"{self.family_name} " if self.family_name else ""
         cognomen = f"{self.cognomen} " if self.cognomen else ""
-        return f"{name}{family_name}{cognomen}".strip()
-    
+        return f"{first_name}{family_name}{cognomen}".strip()
+
     def save(self, *args, **kwargs):
         self.sorting_name = create_sorting_name(self.__str__())
         super().save(*args, **kwargs)
