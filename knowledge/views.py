@@ -10,7 +10,7 @@ from imaginarion.models import Picture, PictureImage, PictureSet
 from knowledge.forms import KnPacketForm, PlayerKnPacketForm
 from knowledge.models import KnowledgePacket
 from rpg_project.utils import handle_inform_form
-from rules.models import SkillLevel, Skill
+from rules.models import Skill
 from users.models import Profile
 
 
@@ -46,24 +46,21 @@ def knowledge_packets_in_skills_view(request, model_name):
     
     # Filter skills queryset according to current_profile's permissions
     kn_packets = KnowledgePacket.objects.all()
-    skill_levels = SkillLevel.objects.all()
     if not current_profile.can_view_all:
         kn_packets = kn_packets.filter(acquired_by=current_profile)
-        skill_levels = skill_levels.filter(acquired_by=current_profile)
     
     skills = skills.filter(knowledge_packets__in=kn_packets)
     skills = skills.prefetch_related(
         Prefetch('knowledge_packets', queryset=kn_packets),
-        Prefetch('skill_levels', queryset=skill_levels),
         'knowledge_packets__picture_sets__pictures',
-    )
-    skills = skills.distinct()
+    ).distinct()
+    
     if page_title != 'Almanach':
         skills = custom_sort(skills)
     
     if request.method == 'POST':
         handle_inform_form(request)
-    
+
     context = {
         'current_profile': current_profile,
         'page_title': page_title,
