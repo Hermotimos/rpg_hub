@@ -20,15 +20,15 @@ from users.managers import ActivePlayerProfileManager, NonGMProfileManager, \
     ContactableProfileManager, LivingProfileManager, NPCProfileManager, \
     PlayerProfileManager, GMControlledProfileManager
 
-STATUS = [
-    ('gm', 'MG'),
-    ('npc', 'BN'),
-    ('player', 'GRACZ'),
-    ('spectator', 'WIDZ'),
-]
-
 
 class Profile(Model):
+    STATUS = [
+        ('gm', 'MG'),
+        ('npc', 'BN'),
+        ('player', 'GRACZ'),
+        ('spectator', 'WIDZ'),
+    ]
+    
     user = FK(to=User, related_name='profiles', on_delete=CASCADE, default=1)
     status = CharField(max_length=50, choices=STATUS, default='npc')
     is_alive = BooleanField(default=True)

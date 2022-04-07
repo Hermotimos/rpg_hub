@@ -196,8 +196,7 @@ class Character(Model):
         blank=True)
     professions = M2M(to=Profession, related_name='characters', blank=True)
     
-    # USE: profile.characters_participated.all()
-    # for characters that the profile knows directly
+    # profile.characters_participated.all() for Characters that Profile knows directly
     participants = M2M(
         to=Profile,
         related_name='characters_participated',
