@@ -20,6 +20,7 @@ class FirstNameGroupAdmin(admin.ModelAdmin):
 
 @admin.register(FamilyName)
 class FamilyNameAdmin(admin.ModelAdmin):
+    fields = ['form', 'group', 'info', 'locations']
     filter_horizontal = ['locations']
     list_display = ['id', 'group', 'form', 'info', 'locs']
     list_editable = ['group', 'form', 'info']
