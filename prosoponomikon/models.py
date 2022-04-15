@@ -131,6 +131,9 @@ class FirstName(Model):
         return self.form
 
 
+# -----------------------------------------------------------------------------
+
+
 class FamilyNameGroup(Model):
     title = CharField(max_length=250, unique=True)
     description = TextField(blank=True, null=True)
@@ -146,14 +149,16 @@ class FamilyName(Model):
     form = CharField(max_length=250, unique=True)
     info = TextField(blank=True, null=True)
     locations = M2M(to=Location, related_name="family_names", blank=True)
-    group = FK(
-        to=FamilyNameGroup, on_delete=PROTECT, blank=True, null=True)
+    group = FK(to=FamilyNameGroup, on_delete=PROTECT)
 
     class Meta:
         ordering = ['group', 'form']
     
     def __str__(self):
         return self.form
+
+
+# -----------------------------------------------------------------------------
 
 
 class CharacterManager(Manager):
