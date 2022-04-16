@@ -6,11 +6,11 @@
         
         <!--   Random pictures from Chronicle    -->
         <section>
-            <div class="container px-3 mb-2">
+            <div class="container px-3 pb-3 mb-4">
                 <div class="row">
                     {% for event in rand_gameevents %}
                         <a href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">
-                            <p class="font-18 font-italic px-2 mt-3 text-justify content-section border-none fading-top-bottom
+                            <p class="font-18 font-italic px-2 pb-0 mt-3 mb-0 text-justify content-section border-none fading-top-bottom
                                 {% if current_profile not in event.participants.all and current_profile.status != 'gm' %} text-muted {% endif %}"
                                 data-toggle="tooltip" data-placement="bottom" data-html="true" title='<span class="font-italic">Pokaż Kronikę wydarzenia</span>'>
                                 {{ event.description_long|get_random_paragraph_caption }}
@@ -23,7 +23,7 @@
         
         <!--   Random pictures from Prosoponomikon    -->
         <section>
-            <div class="container px-2 mb-4">
+            <div class="container px-2 pb-3 mb-4">
                 <div class="row">
                     {% for character in rand_characters %}
                         {% with show_caption=False %}
@@ -36,7 +36,7 @@
         
         <!--   Random pictures from Toponomikon    -->
         <section>
-            <div class="container px-2 mb-4">
+            <div class="container px-2 pb-3 mb-4">
                 <div class="row">
                     {% for location in rand_locations %}
                         <div class="col-sm-12 col-lg-6 px-2">
