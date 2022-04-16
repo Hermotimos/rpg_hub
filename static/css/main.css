@@ -106,7 +106,6 @@ td.align-right {text-align: right;}
 
 .border-double {
     border: double #444444;
-    border-style: ;
 }
 
 
@@ -276,8 +275,8 @@ img.img-grayscale:hover {filter: grayscale(0%);}
 .img-hover-zoom:hover img {transform: scale(1.2);}
 
 div.img-hover-zoom {
-    border-style: double;
-    color: #444444;
+   /* border-style: double;*/
+   /* color: #444444;*/
 }
 
 
@@ -383,6 +382,9 @@ div.img-hover-zoom {
 }
 
 
+.img-blurred-edges {
+    box-shadow: 20px 20px 20px 20px pink inset;
+}
 
 
 /*****************************************************************************/

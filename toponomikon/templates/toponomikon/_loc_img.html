@@ -1,6 +1,6 @@
 
 <a href="{% url 'toponomikon:location' location.name %}">
-    <div class="img-hover-zoom m-0" data-toggle="tooltip" data-placement="bottom" data-html="true"
+    <div class="img-hover-zoom border-double m-0" data-toggle="tooltip" data-placement="bottom" data-html="true"
         title='<span class="font-italic">{% if location.only_indirectly %} {{ location }}<br>(Lokacja znana ze słyszenia) {% else %} {{ location }} {% endif %}</span>'>
         <img class="img-fluid {% if location.only_indirectly %} img-grayscale {% endif %}"
              src="{% if location.main_image %} {{ location.main_image.image.image.url }} {% else %} {{ location.location_type.default_img.image.url }} {% endif %}">

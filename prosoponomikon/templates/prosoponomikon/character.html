@@ -15,7 +15,7 @@
                     <div class="col-12 px-0">
                         
                         <!-- CHARACTER PICTURE -->
-                        <div class="float-left mr-3 img-hover-zoom">
+                        <div class="float-left mr-3 img-hover-zoom border-double">
                             <img class="character-detail {% if not character.profile.is_alive %} img-grayscale {% endif %}"
                                  src="
                                     {% if current_profile.character == character or current_profile in character.participants.all or current_profile.can_view_all %}
