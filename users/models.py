@@ -75,9 +75,29 @@ class Profile(Model):
                 output_size = (300, 300)
                 img.thumbnail(output_size)
                 img.save(self.image.path)
-       
+                
+    def gameevents_known_annotated(self):
+        """Get GameEvent set known to the profile, annotate if GameEvent
+        is known only indirectly.
+        """
+        from chronicles.models import GameEvent
+        if self.can_view_all:
+            qs = GameEvent.objects.all()
+        else:
+            known_dir = GameEvent.objects.filter(participants=self)
+            known_indir = GameEvent.objects.filter(informees=self)
+            known_only_indir = known_indir.exclude(id__in=known_dir)
+            all_known = (known_dir | known_indir).distinct()
+            qs = all_known.annotate(
+                only_indirectly=Case(
+                    When(id__in=known_only_indir, then=Value(1)),
+                    default=Value(0),
+                    output_field=IntegerField(),
+                ))
+        return qs
+
     def characters_known_annotated(self):
-        """Get all Characters known to this one, annotate if another character
+        """Get Character set known to the profile, annotate if Character
         is known only indirectly.
         """
         from prosoponomikon.models import Character
@@ -100,6 +120,9 @@ class Profile(Model):
         return qs
     
     def locations_known_annotated(self):
+        """Get Location set known to the profile, annotate if Location
+        is known only indirectly.
+        """
         if self.can_view_all:
             from toponomikon.models import Location
             qs = Location.objects.all()

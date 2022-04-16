@@ -34,8 +34,8 @@
             {% endif %}
             
             <!-- DESCRIPTION -->
-            <p class="font-18 font-italic px-1 py-1 mb-0 text-justify">
-                {% if current_profile in event.informees.all %}
+            <p class="font-18 font-italic p-1 mb-0 text-justify">
+                {% if current_profile not in event.participants.all %}
                     <span class="text-muted">(Znasz z opowieści) {{ event.description_long|linebreaksbr }}</span>
                 {% else %}
                     {{ event.description_long|custom_linebreaksbr:2 }}

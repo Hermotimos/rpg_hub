@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
+from django.db.models.functions import Length
 from django.shortcuts import redirect
 from django.shortcuts import render
 
@@ -112,7 +113,7 @@ def edit_user_view(request):
         'user_form': user_form,
         'user_image_form': user_image_form,
     }
-    return render(request, 'users/user_edit.html', context)
+    return render(request, 'users/edit_user.html', context)
 
 
 @login_required
@@ -178,16 +179,20 @@ def home_view(request):
     
     known_characters = current_profile.characters_known_annotated()
     known_locations = current_profile.locations_known_annotated()
+    known_gameevents = current_profile.gameevents_known_annotated().annotate(
+        text_len=Length('description_long')).filter(text_len__gt=5)
     
     # set() ensures that if len(known) < k, than duplicates will be removed
     rand_characters = sample_from_qs(qs=known_characters, max_size=4)
-    rand_locations = sample_from_qs(qs=known_locations, max_size=4)
-    
+    rand_locations = sample_from_qs(qs=known_locations, max_size=2)
+    rand_gameevents = sample_from_qs(qs=known_gameevents, max_size=1)
+    print(rand_gameevents)
     context = {
         'current_profile': current_profile,
         'page_title': 'Hyllemath',
         'rand_characters': rand_characters,
         'rand_locations': rand_locations,
+        'rand_gameevents': rand_gameevents,
     }
     return render(request, 'users/home.html', context)
 

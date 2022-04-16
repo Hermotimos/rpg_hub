@@ -1,8 +1,25 @@
 {% extends 'base.html' %}
+{% load custom_filters %}
 
 {% block content %}
-    <br>
     <article>
+        
+        <!--   Random pictures from Chronicle    -->
+        <section>
+            <div class="container px-3">
+                <div class="row">
+                    {% for event in rand_gameevents %}
+                        <p class="font-18 font-italic px-2 mb-4 mt-3 text-justify content-section border-none text-fading-top-bottom ">
+                            {% if current_profile not in event.participants.all %}
+                                <span class="text-muted">{{ event.description_long|get_random_paragraph_caption }}</span>
+                            {% else %}
+                                {{ event.description_long|get_random_paragraph_caption }}
+                            {% endif %}
+                        </p>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
         
         <!--   Random pictures from Prosoponomikon    -->
         <section>
