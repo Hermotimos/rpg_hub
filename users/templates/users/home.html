@@ -10,11 +10,9 @@
                 <div class="row">
                     {% for event in rand_gameevents %}
                         <p class="font-18 font-italic px-2 mt-3 text-justify content-section border-none text-fading-top-bottom ">
-                            {% if current_profile not in event.participants.all %}
-                                <span class="text-muted">{{ event.description_long|get_random_paragraph_caption }}</span>
-                            {% else %}
-                                {{ event.description_long|get_random_paragraph_caption }}
-                            {% endif %}
+                            <span class="{% if current_profile not in event.participants.all %} text-muted {% endif %}">
+                                <a href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">{{ event.description_long|get_random_paragraph_caption }}</a>
+                            </span>
                         </p>
                     {% endfor %}
                 </div>
