@@ -10,8 +10,8 @@
                 <div class="row">
                     {% for event in rand_gameevents %}
                         <a href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">
-                            <p class="font-18 font-italic px-2 mt-3 text-justify content-section border-none text-fading-top-bottom
-                                {% if current_profile not in event.participants.all %} text-muted {% endif %}"
+                            <p class="font-18 font-italic px-2 mt-3 text-justify content-section border-none fading-top-bottom
+                                {% if current_profile not in event.participants.all and current_profile.status != 'gm' %} text-muted {% endif %}"
                                 data-toggle="tooltip" data-placement="bottom" data-html="true" title='<span class="font-italic">Pokaż Kronikę wydarzenia</span>'>
                                 {{ event.description_long|get_random_paragraph_caption }}
                             </p>

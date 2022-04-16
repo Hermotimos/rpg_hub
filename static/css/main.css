@@ -177,15 +177,17 @@ th.orientation-rl-tb {
 }
 
 
-.text-fading-bottom {
+.fading-bottom {
   -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
 }
-.text-fading-top {
+.fading-top {
   -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0));
 }
-.text-fading-top-bottom {
+.fading-top-bottom {
   -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0), rgba(0,0,0,1), rgba(0,0,0,0));
 }
+
+
 
 /*****************************************************************************/
 /********************************* IMAGES ***********************************/
@@ -273,12 +275,6 @@ img.img-grayscale:hover {filter: grayscale(0%);}
 }
 
 .img-hover-zoom:hover img {transform: scale(1.2);}
-
-div.img-hover-zoom {
-   /* border-style: double;*/
-   /* color: #444444;*/
-}
-
 
 
 /* END Image zoom on hover */
@@ -374,7 +370,6 @@ div.img-hover-zoom {
 }
 
 
-
 /* Image in modal */
 .modal-img img {
     max-width: 100%;
@@ -382,9 +377,6 @@ div.img-hover-zoom {
 }
 
 
-.img-blurred-edges {
-    box-shadow: 20px 20px 20px 20px pink inset;
-}
 
 
 /*****************************************************************************/
