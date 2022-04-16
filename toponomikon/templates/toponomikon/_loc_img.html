@@ -6,3 +6,6 @@
              src="{% if location.main_image %} {{ location.main_image.image.image.url }} {% else %} {{ location.location_type.default_img.image.url }} {% endif %}">
     </div>
 </a>
+{% if show_caption %}
+    <p class="pt-1 font-italic font-14 text-center">{{ location.name }}</p>
+{% endif %}

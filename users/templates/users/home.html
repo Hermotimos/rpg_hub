@@ -23,10 +23,12 @@
         
         <!--   Random pictures from Prosoponomikon    -->
         <section>
-            <div class="container px-2 mb-2">
+            <div class="container px-2 mb-4">
                 <div class="row">
                     {% for character in rand_characters %}
-                        {% include 'prosoponomikon/_char_img.html' %}
+                        {% with show_caption=False %}
+                            {% include 'prosoponomikon/_char_img.html' %}
+                        {% endwith %}
                     {% endfor %}
                 </div>
             </div>
@@ -34,12 +36,13 @@
         
         <!--   Random pictures from Toponomikon    -->
         <section>
-            <div class="container px-2">
+            <div class="container px-2 mb-4">
                 <div class="row">
                     {% for location in rand_locations %}
                         <div class="col-sm-12 col-lg-6 px-2">
-                            {% include 'toponomikon/_loc_img.html' %}
-                            <p class="pt-1 font-italic font-14 text-center">{{ location.name }}</p>
+                            {% with show_caption=False %}
+                                {% include 'toponomikon/_loc_img.html' %}
+                            {% endwith %}
                         </div>
                     {% endfor %}
                 </div>

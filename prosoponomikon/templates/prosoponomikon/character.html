@@ -187,7 +187,9 @@
                         <div class="container">
                             <div class="row">
                                 {% for character in known_characters %}
-                                    {% include 'prosoponomikon/_char_img.html' %}
+                                    {% with show_caption=True %}
+                                        {% include 'prosoponomikon/_char_img.html' %}
+                                    {% endwith %}
                                 {% endfor %}
                             </div>
                         </div>

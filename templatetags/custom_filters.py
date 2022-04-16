@@ -269,7 +269,7 @@ def get_random_paragraph_caption(text):
     
     caption = paragraph.strip().split(' ')[:70]
     caption = " ".join(caption)
-    caption = caption.strip().rstrip(";,:")
+    caption = caption.strip().rstrip(";,:.")
     
-    endings = [".", "!", "?", "..."]
+    endings = ["!", "?", "..."]
     return caption if caption[-1] in endings else caption + "..."

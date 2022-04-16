@@ -12,5 +12,7 @@
                     {% endif %}">
         </div>
     </a>
-    <p class="pt-1 font-italic font-14 text-center">{{ character }}</p>
+    {% if show_caption %}
+        <p class="pt-1 font-italic font-14 text-center">{{ character }}</p>
+    {% endif %}
 </div>
