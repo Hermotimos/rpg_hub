@@ -79,7 +79,7 @@ def rules_professions_view(request):
     
     subprofessions = SubProfession.objects.filter(allowees__in=user_profiles)
     professions = Profession.objects.filter(allowees__in=user_profiles)
-    professions = professions.prefetch_related(Prefetch('subprofessions', queryset=subprofessions)).distinct()
+    professions = professions.prefetch_related(Prefetch('professions', queryset=subprofessions)).distinct()
 
     context = {
         'current_profile': current_profile,

@@ -159,7 +159,7 @@
                     <h4 class="font-weight-bold">{{ profession.name }}</h4>
                     <p>{{ profession.description|custom_linebreaksbr:2 }}</p>
                     <ul class="bullets-1 bullets-lg ml-4 mb-4">
-                        {% for subprofession in profession.subprofessions.all %}
+                        {% for subprofession in profession.professions.all %}
                             <li class="pl-1">
                                 <h5 data-toggle="collapse" data-target="#{{ subprofession|remove_special_chars }}">
                                     <b class="hover-blue">{{ subprofession.name }}</b>
@@ -205,7 +205,7 @@
                     <div>
                         <p>{{ profession.description|custom_linebreaksbr:2 }}</p>
                         <ul class="bullets-1 ml-4 mb-4">
-                            {% for subprofession in profession.subprofessions.all %}
+                            {% for subprofession in profession.professions.all %}
                             <li class="pl-1">
                                 <h5 data-toggle="collapse" data-target="#{{ subprofession|remove_special_chars }}">
                                     <b class="hover-blue">{{ subprofession.name }}</b>

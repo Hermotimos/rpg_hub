@@ -362,7 +362,7 @@ class Profession(Model):
     objects = ProfessionManager()
     
     name = CharField(max_length=100, unique=True)
-    profession = FK(to='self', related_name='subprofessions', on_delete=PROTECT,
+    profession = FK(to='self', related_name='professions', on_delete=PROTECT,
                     blank=True, null=True)  # TODO delete nullable after transition
     description = TextField(max_length=4000, blank=True, null=True)
     is_elite = BooleanField(default=False)
