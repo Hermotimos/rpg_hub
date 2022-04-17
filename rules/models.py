@@ -1,5 +1,6 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
+    BooleanField,
     CASCADE,
     CharField,
     DecimalField,
@@ -353,7 +354,12 @@ class SynergyLevel(Model):
 
 class Profession(Model):
     name = CharField(max_length=100, unique=True)
+    profession = FK(to='self', related_name='professions', on_delete=PROTECT,
+                    blank=True, null=True)  # TODO delete nullable after transition
     description = TextField(max_length=4000, blank=True, null=True)
+    is_elite = BooleanField(default=False)
+    starting_skills = M2M(to=Skill, blank=True)
+    allowees = M2M(to=Profile, related_name='professions_allowed', blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
@@ -369,12 +375,24 @@ class Profession(Model):
             self.sorting_name = create_sorting_name(self.name)
         super().save(*args, **kwargs)
 
-    def allowed_list(self):
-        allowees = []
-        for klass in self.klasses.all():
-            for profile in klass.allowees.all():
-                allowees.append(profile)
-        return allowees
+
+class SubProfessionManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.exclude(profession=None)
+        return qs
+
+
+class SubProfession(Profession):
+    objects = SubProfessionManager()
+    
+    class Meta:
+        proxy = True
+        verbose_name = '--- SubProfession'
+        verbose_name_plural = '--- SubProfessions'
+        
+        
+# =============================================================================
 
 
 class Klass(Model):
@@ -382,32 +400,7 @@ class Klass(Model):
     profession = FK(to=Profession, related_name='klasses', on_delete=PROTECT)
     description = TextField(max_length=4000, blank=True, null=True)
     start_perks = TextField(max_length=4000, blank=True, null=True)
-    lvl_1 = CharField(max_length=500, blank=True, null=True)
-    lvl_2 = CharField(max_length=500, blank=True, null=True)
-    lvl_3 = CharField(max_length=500, blank=True, null=True)
-    lvl_4 = CharField(max_length=500, blank=True, null=True)
-    lvl_5 = CharField(max_length=500, blank=True, null=True)
-    lvl_6 = CharField(max_length=500, blank=True, null=True)
-    lvl_7 = CharField(max_length=500, blank=True, null=True)
-    lvl_8 = CharField(max_length=500, blank=True, null=True)
-    lvl_9 = CharField(max_length=500, blank=True, null=True)
-    lvl_10 = CharField(max_length=500, blank=True, null=True)
-    lvl_11 = CharField(max_length=500, blank=True, null=True)
-    lvl_12 = CharField(max_length=500, blank=True, null=True)
-    lvl_13 = CharField(max_length=500, blank=True, null=True)
-    lvl_14 = CharField(max_length=500, blank=True, null=True)
-    lvl_15 = CharField(max_length=500, blank=True, null=True)
-    lvl_16 = CharField(max_length=500, blank=True, null=True)
-    lvl_17 = CharField(max_length=500, blank=True, null=True)
-    lvl_18 = CharField(max_length=500, blank=True, null=True)
-    lvl_19 = CharField(max_length=500, blank=True, null=True)
-    lvl_20 = CharField(max_length=500, blank=True, null=True)
-    allowees = M2M(
-        to=Profile,
-        limit_choices_to=Q(status__in=['player', 'gm']),
-        related_name='allowed_klasses',
-        blank=True,
-    )
+    allowees = M2M(to=Profile, related_name='allowed_klasses', blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
