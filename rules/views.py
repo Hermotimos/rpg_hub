@@ -77,9 +77,18 @@ def rules_professions_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
     
-    subprofessions = SubProfession.objects.filter(allowees__in=user_profiles)
-    professions = Profession.objects.filter(allowees__in=user_profiles)
-    professions = professions.prefetch_related(Prefetch('professions', queryset=subprofessions)).distinct()
+    if current_profile.can_view_all:
+        professions = Profession.objects.prefetch_related(
+            Prefetch('professions', queryset=SubProfession.objects.all())).distinct()
+        # for p in professions:
+        #     print(p, p.professions.all())
+    else:
+        subprofessions = SubProfession.objects.filter(allowees__in=user_profiles)
+        professions = Profession.objects.filter(allowees__in=user_profiles)
+        professions = professions.prefetch_related(
+            Prefetch('professions', queryset=subprofessions)).distinct()
+        # for p in professions:
+        #     print(p, p.professions.all())
 
     context = {
         'current_profile': current_profile,
