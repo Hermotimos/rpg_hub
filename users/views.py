@@ -1,3 +1,5 @@
+import random
+
 from django.contrib import messages
 from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
@@ -169,6 +171,29 @@ def get_profile(user):
     return profiles.first()
 
 
+def game_event_with_caption(game_events_qs):
+    """Get the beginning (first n words as per words_limit) of a random
+    paragraph from a random GameEvent.description_long from queryset.
+    The paragraph has to have a minimum number of words as per words_min.
+    """
+    words_min = 40
+    words_limit = 70
+    game_event = sample_from_qs(qs=game_events_qs, max_size=1)[0]
+    
+    paragraphs = game_event.description_long.split('\n')
+    paragraphs = [p for p in paragraphs if len(p.split(' ')) >= words_min]
+    if not paragraphs:
+        return game_event_with_caption(game_events_qs)
+    
+    paragraph = random.choice(paragraphs)
+    caption = paragraph.strip().split(' ')[:words_limit]
+    caption = " ".join(caption).strip().rstrip(";,:.")
+    caption = caption if caption[-1] in ["!", "?", "..."] else caption + "..."
+    game_event.caption = caption
+
+    return game_event
+
+
 @login_required
 def home_view(request):
     try:
@@ -180,19 +205,20 @@ def home_view(request):
     known_characters = current_profile.characters_known_annotated()
     known_locations = current_profile.locations_known_annotated()
     known_gameevents = current_profile.gameevents_known_annotated().annotate(
-        text_len=Length('description_long')).filter(text_len__gt=5)
+        text_len=Length('description_long')).filter(text_len__gt=400)
     
-    # set() ensures that if len(known) < k, than duplicates will be removed
     rand_characters = sample_from_qs(qs=known_characters, max_size=4)
     rand_locations = sample_from_qs(qs=known_locations, max_size=2)
-    rand_gameevents = sample_from_qs(qs=known_gameevents, max_size=1)
-    print(rand_gameevents)
+    rand_gameevent = game_event_with_caption(known_gameevents)
+    
+    print(rand_gameevent)
+    
     context = {
         'current_profile': current_profile,
         'page_title': 'Hyllemath',
         'rand_characters': rand_characters,
         'rand_locations': rand_locations,
-        'rand_gameevents': rand_gameevents,
+        'rand_gameevent': rand_gameevent,
     }
     return render(request, 'users/home.html', context)
 

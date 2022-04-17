@@ -256,20 +256,3 @@ def remove_special_chars(text_or_obj):
     return "".join(
         [ch for ch in str(text_or_obj) if ch.lower() in 'abcdefghijklmnopqrstuvwxyz']
     )
-
-
-@register.filter
-def get_random_paragraph_caption(text):
-    """Get the beginning of a random paragraph from a GameEvent.description_long
-    that consists of 10 words at minimum.
-    """
-    paragraphs = text.split('\n')
-    paragraphs = [p for p in paragraphs if len(p.split(' ')) >= 10]
-    paragraph = random.choice(paragraphs)
-    
-    caption = paragraph.strip().split(' ')[:70]
-    caption = " ".join(caption)
-    caption = caption.strip().rstrip(";,:.")
-    
-    endings = ["!", "?", "..."]
-    return caption if caption[-1] in endings else caption + "..."

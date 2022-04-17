@@ -66,9 +66,9 @@ def create_sorting_name(obj):
 
 
 def sample_from_qs(qs, max_size):
-    obj_set = set(qs)
-    size = max_size if len(obj_set) >= max_size else len(obj_set)
-    return sample(obj_set, k=size)
+    objs_set = set(qs)
+    size = max_size if len(objs_set) >= max_size else len(objs_set)
+    return sample(objs_set, k=size)
 
 
 def handle_inform_form(request):
