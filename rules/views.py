@@ -8,6 +8,7 @@ from rules.models import (
     Klass,
     Plate,
     Profession,
+    SubProfession,
     Shield,
     Skill, SkillType,
     WeaponType,
@@ -75,20 +76,15 @@ def rules_combat_view(request):
 def rules_professions_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
-
-    klasses = Klass.objects.filter(allowees__in=user_profiles).distinct()
-    professions = Profession.objects.filter(klasses__allowees__in=user_profiles)
-    professions = professions.prefetch_related(Prefetch('klasses', queryset=klasses)).distinct()
-
-    elite_klasses = EliteKlass.objects.filter(allowees__in=user_profiles).distinct()
-    elite_professions = EliteProfession.objects.filter(allowees__in=user_profiles)
-    elite_professions = elite_professions.prefetch_related(Prefetch('elite_klasses', queryset=elite_klasses)).distinct()
+    
+    subprofessions = SubProfession.objects.filter(allowees__in=user_profiles)
+    professions = Profession.objects.filter(allowees__in=user_profiles)
+    professions = professions.prefetch_related(Prefetch('subprofessions', queryset=subprofessions)).distinct()
 
     context = {
         'current_profile': current_profile,
         'page_title': 'Tworzenie Postaci, Klasa i Profesja',
         'professions': professions,
-        'elite_professions': elite_professions
     }
     return render(request, 'rules/character_and_professions.html', context)
 

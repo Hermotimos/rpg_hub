@@ -9,7 +9,7 @@ from rules.models import (
     Skill, SkillLevel, Synergy, SynergyLevel, BooksSkill, TheologySkill,
     Perk, Modifier, Factor, RulesComment, Condition, CombatType,
     ConditionalModifier,
-    Profession, EliteProfession, Klass, EliteKlass,
+    Profession, SubProfession, EliteProfession, Klass, EliteKlass,
     WeaponType, Weapon, Plate, Shield,
 )
 
@@ -255,10 +255,17 @@ class KlassAdmin(admin.ModelAdmin):
 
 @admin.register(Profession)
 class ProfessionAdmin(admin.ModelAdmin):
-    inlines = [KlassInline]
+    filter_horizontal = ['allowees', 'starting_skills']
+    # inlines = [KlassInline] # TODO !!!!!!!!
     list_display = ['name', 'description']
     list_editable = ['description']
     search_fields = ['name', 'description']
+    
+    
+@admin.register(SubProfession)
+class ProfessionAdmin(ProfessionAdmin):
+    list_display = ['name', 'profession', 'description']
+    list_editable = ['profession', 'description']
 
 
 class EliteKlassInline(admin.TabularInline):

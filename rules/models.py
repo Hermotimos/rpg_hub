@@ -351,10 +351,18 @@ class SynergyLevel(Model):
 
 # =============================================================================
 
-
+class ProfessionManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(profession=None)
+        return qs
+    
+    
 class Profession(Model):
+    objects = ProfessionManager()
+    
     name = CharField(max_length=100, unique=True)
-    profession = FK(to='self', related_name='professions', on_delete=PROTECT,
+    profession = FK(to='self', related_name='subprofessions', on_delete=PROTECT,
                     blank=True, null=True)  # TODO delete nullable after transition
     description = TextField(max_length=4000, blank=True, null=True)
     is_elite = BooleanField(default=False)

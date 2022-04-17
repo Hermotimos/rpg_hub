@@ -219,14 +219,51 @@ def reload_rules(request):
 
 @login_required
 @only_game_masters
+def reload_professions(request):
+    for obj in Klass.objects.all():
+        try:
+            new, _ = Profession.objects.update_or_create(
+                name=obj.name,
+                profession=obj.profession,
+                description=obj.description,
+                is_elite=False,
+            )
+            new.allowees.set(obj.allowees.all())
+        except Exception as exc:
+            print(exc)
+        
+    for obj in EliteProfession.objects.all():
+        try:
+            new, _ = Profession.objects.update_or_create(
+                name=obj.name,
+                description=obj.description,
+                is_elite=True,
+            )
+            new.allowees.set(obj.allowees.all())
+        except Exception as exc:
+            print(exc)
+        
+    for obj in EliteKlass.objects.all():
+        try:
+            new, _ = Profession.objects.update_or_create(
+                name=obj.name,
+                profession=Profession.objects.get(name=obj.elite_profession.name),
+                description=obj.description,
+                is_elite=True,
+            )
+            new.allowees.set(obj.allowees.all())
+        except Exception as exc:
+            print(exc)
+        
+        
+    messages.info(request, 'Przeładowano Professions "rules"!')
+    return redirect('technicalities:reload-main')
+
+
+@login_required
+@only_game_masters
 def reload_toponomikon(request):
     for obj in Location.objects.all():
         obj.save()
     messages.info(request, 'Przeładowano "Location" dla "toponomikon"!')
     return redirect('technicalities:reload-main')
-
-
-
-#  ---------------------------------------------------------------------
-
-
