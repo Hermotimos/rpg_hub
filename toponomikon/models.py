@@ -38,16 +38,7 @@ class LocationType(Model):
         return self.name
 
 
-class LocationManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        # No select_related, as it greatly increases queries in LocationAdmin
-        return qs
-
-
 class Location(Model):
-    objects = LocationManager()
-    
     name = CharField(unique=True, max_length=100)
     description = TextField(blank=True, null=True)
     main_image = FK(
@@ -148,7 +139,7 @@ class PrimaryLocation(Location):
 class SecondaryLocationManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.filter(~Q(in_location=None))
+        qs = qs.exclude(in_location=None)
         return qs
 
 
