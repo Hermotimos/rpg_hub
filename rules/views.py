@@ -71,24 +71,39 @@ def rules_combat_view(request):
 
 
 @login_required
-def rules_professions_view(request):
+def rules_character_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
-    user_profiles = current_profile.user.profiles.all()
-    
-    if current_profile.can_view_all:
-        professions = PrimaryProfession.objects.prefetch_related('secondary_professions').distinct()
-    else:
-        ssecondary_professions = SecondaryProfession.objects.filter(allowees__in=user_profiles)
-        professions = Profession.objects.filter(allowees__in=user_profiles)
-        professions = professions.prefetch_related(
-            Prefetch('ssecondary_professions', queryset=ssecondary_professions)).distinct()
-
     context = {
         'current_profile': current_profile,
         'page_title': 'Tworzenie Postaci, Klasa i Profesja',
-        'professions': professions,
     }
-    return render(request, 'rules/character_and_professions.html', context)
+    return render(request, 'rules/character.html', context)
+
+
+@login_required
+def rules_professions_view(request, is_elite: str):
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    user_profiles = current_profile.user.profiles.all()
+
+    is_elite = True if is_elite == "True" else False
+
+    if current_profile.can_view_all:
+        primary_professions = PrimaryProfession.objects.filter(
+            is_elite=is_elite).prefetch_related('secondary_professions')
+    else:
+        secondary_professions = SecondaryProfession.objects.filter(
+            is_elite=is_elite, allowees__in=user_profiles)
+        primary_professions = Profession.objects.filter(
+            is_elite=is_elite, allowees__in=user_profiles)
+        primary_professions = primary_professions.prefetch_related(
+            Prefetch('secondary_professions', queryset=secondary_professions))
+
+    context = {
+        'current_profile': current_profile,
+        'page_title': 'Lista Klas Elitarnych' if is_elite else 'Lista Klas',
+        'primary_professions': primary_professions.distinct(),
+    }
+    return render(request, 'rules/professions_list.html', context)
 
 
 @login_required

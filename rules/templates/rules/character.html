@@ -3,12 +3,11 @@
 {% load custom_filters %}
 
 {% block head_extra %}
-<link rel="stylesheet" href="{% static 'css/rules.css' %}">
+    <link rel="stylesheet" href="{% static 'css/rules.css' %}">
 {% endblock head_extra %}
 
 {% block content %}
     <div class="rules-styling pt-3">
-        
         
         <h2 class="rules mt-5 mb-3">
             Tożsamość Postaci
@@ -16,7 +15,7 @@
         <p>
             Na tożsamość Postaci składają się następujące elementy:
             Biografia (imię, pochodzenie - rodzina i kraina, zawód czy fach), Cechy Fizyczne (Siła, Zręczność i Kondycja; w skrócie Cechy) oraz Umiejętności,
-            a także obrany przez Gracza sposób jej odgrywania. Elementem opcjonalnym jest określenie Profesji i Klasy (zob. dalej).
+            a także obrany przez Gracza sposób jej odgrywania. Elementem opcjonalnym jest określenie Klasy i Podklasy (zob. dalej).
         </p>
         <p>
             Trzy Cechy Fizyczne opisujące Postać (w skrócie Cechy) to: Siła, Zręczność i Kondycja.
@@ -103,36 +102,40 @@
         </p>
 
         <h2 class="rules mt-5 mb-3">
-            Profesja i Klasa
+            Klasy Postaci
         </h2>
         <p>
-            Profesja i Klasa to kategorie pomocnicze przy tworzeniu koncepcji Postaci.
-            W zależności od decyzji Mistrza Gry wybór Profesji czy Klasy może podlegać ograniczeniom, a nawet zostać narzucony przez Mistrza Gry.
+            <span>&#9755;</span>
+            <a href="{% url 'rules:professions' 'False' %}">Lista Klas</a>
+        </p>
+        <p>
+            Klasa i Podklasa to kategorie pomocnicze przy tworzeniu koncepcji Postaci.
+            W zależności od decyzji Mistrza Gry wybór Klasy może podlegać ograniczeniom, a nawet zostać narzucony przez Mistrza Gry.
             Zazwyczaj taka decyzja wynika z ograniczeń fabularnych (realiów obowiązujących w miejscu świata, w którym toczy się rozgrywka).
             Jeżeli jednak Graczom przysługuje wybór, to w zakresie, w jakim istnieje, stosują się do niego poniższe uwagi.
         </p>
         <p>
-            Profesje i Klasy stanowią materiał pomocniczy na etapie tworzenia Postaci; służą głównie za schematy, wokół których Gracz może zbudować koncepcję Postaci.
+            Klasy stanowią materiał pomocniczy na etapie tworzenia Postaci; służą głównie za schematy, wokół których Gracz może zbudować koncepcję Postaci.
             Ich zadaniem jest dostarczenie podstawowych informacji o realiach, w jakich Postać będzie się poruszać w świecie gry,
             przez co pozwalają Graczowi przypisać ją do jakiegoś miejsca w rzeczywistości.
             Grupują one szablony koncepcyjne Postaci o zbliżonej charakterystyce, a często również rysie psychologicznym.
-            Na przykład Profesja Wojownika zawiera Klasy takie jak Gladiator, Najemnik czy Gwardzista,
-            a Profesja Awanturnika grupuje między innymi Klasy Szpiega, Łowcy Nagród, Zwiadowcy czy Kupca.
+            Na przykład Klasa Wojownika zawiera Podklasy takie jak Gladiator, Najemnik czy Gwardzista,
+            a Klasa Awanturnika grupuje między innymi Podklasy Szpiega, Łowcy Nagród, Zwiadowcy czy Kupca.
         </p>
         <p>
-            Oprócz Profesji i Klas dobrze znanych z kultury, Gracz może również wybrać te charakterystyczne wyłącznie dla świata gry.
-            Należą do nich wszystkie Klasy w ramach Profesji Kapłana (ze względu na unikalny dla świata gry panteon),
-            a także np. Szarogwardzista (Profesja Awanturnika), czy Syssition (Profesja Wojownika).
-            Jeśli wybór Profesji i Klas należących do tej kategorii jest dopuszczony przez Mistrza Gry w ramach aktualnej rozgrywki,
+            Oprócz Klas dobrze znanych z kultury, Gracz może również wybrać te charakterystyczne wyłącznie dla świata gry.
+            Należą do nich wszystkie Podklasy w ramach Klasy Kapłana (ze względu na unikalny dla świata gry panteon),
+            a także np. Szarogwardzista (Podklasa Awanturnika), czy Syssition (Podklasa Wojownika).
+            Jeśli wybór Klas należących do tej kategorii jest dopuszczony przez Mistrza Gry w ramach aktualnej rozgrywki,
             pociąga on za sobą daleko idące konsekwencje w zakresie Biografii tworzonej Postaci i jej dalszych losów
             (z jednej strony ograniczając je, a z drugiej – otwierając unikalne możliwości).
-            Zarazem, zwłaszcza w tym przypadku, uwidacznia się podstawowe zadanie Profesji i Klas
+            Zarazem, zwłaszcza w tym przypadku, uwidacznia się podstawowe zadanie Klas
             – przedstawienie Graczowi charakteru, jaki może przybrać rozgrywka Postacią o danym profilu.
         </p>
         <p>
-            Wprawdzie Gracz nie musi określać Profesji czy Klasy swojej Postaci (chyba że taka konieczność zostanie narzucona Mistrza Gry),
+            Wprawdzie Gracz nie musi określać Klasy swojej Postaci (chyba że taka konieczność zostanie narzucona Mistrza Gry),
             ale jeśli to uczyni, to w ten sposób komunikuje i w znacznej mierze narzuca Mistrzowi Gry, w jakiej sferze rzeczywistości będzie się poruszać jego Postać.
-            Racjonalne założenie jest tu takie, że jeśli Mistrz Gry nie ograniczył wyboru danego Profesji czy Klasy, to będzie go respektował,
+            Racjonalne założenie jest tu takie, że jeśli Mistrz Gry nie ograniczył wyboru danej Klasy, to będzie go respektował,
             a rozgrywka będzie uwzględniać spektrum rzeczywistości, w jakim porusza się dana Postać.
             Np. w przypadku dopuszczenia wyboru Maga – Mistrz Gry poprowadzi rozgrywkę tak,
             aby Postać była osadzona biograficznie i fabularnie w sferach rzeczywistości oscylujących wokół magii,
@@ -140,88 +143,34 @@
             (albo przynajmniej okaże się bardzo prędko, że to tylko pozory…).
         </p>
         <p>
-            Wybór Profesji i/lub Klasy nie ogranicza na płaszczyźnie Zasad dalszego rozwoju Postaci.
+            Wybór Klasy nie ogranicza na płaszczyźnie Zasad dalszego rozwoju Postaci.
             Żadne Umiejętności nie zostają „zablokowane” czy „wykluczone” na płaszczyźnie mechaniki rozgrywki.
-            Natomiast konsekwencje fabularne mogą być bardzo istotne. Np. wybór Klasy Gladiator,
+            Natomiast konsekwencje fabularne mogą być bardzo istotne. Np. wybór Podklasy Gladiator,
             a co za tym idzie również bardzo specyficznego profilu biograficznego,
             może czynić niezwykle mało prawdopodobnym rozwój umiejętności magicznych, a także karierę polityczną w danej społeczności.
             Jednak, nie wyklucza ich w żaden absolutny i nieodwołalny sposób. Zgodnie z maksymą „dla chcącego nic trudnego”,
             Postać może poświęcić się nowej wizji i przezwyciężając niewyobrażalne przeciwności losu otworzyć sobie nowe horyzonty rozwoju.
         </p>
-
+        <p>
+            Lista Klas ma otwarty charakter. Widoczne na niej Klasy i Podklasy to te, które są znane Postaci na podstawie wiedzy ogólnej.
+        </p>
         
         <h2 class="rules mt-5 mb-3">
-            Lista Profesji i Klas
+            Elitarne Klasy Postaci
         </h2>
-        <div id="professions">
-            {% for profession in professions %}
-                {% if not profession.is_elite %}
-                    <h4 class="font-weight-bold">{{ profession.name }}</h4>
-                    <p>{{ profession.description|custom_linebreaksbr:2 }}</p>
-                    <ul class="bullets-1 bullets-lg ml-4 mb-4">
-                        {% for secondary_profession in profession.secondary_professions.all %}
-                            <li class="pl-1">
-                                <h5 data-toggle="collapse" data-target="#{{ secondary_profession|remove_special_chars }}">
-                                    <b class="hover-blue">{{ secondary_profession.name }}</b>
-                                </h5>
-                                <div id="{{ secondary_profession|remove_special_chars }}" class="collapse">
-                                    <p>{{ secondary_profession.description|custom_linebreaksbr:2 }}</p>
-                                    <p>{{ secondary_profession.start_perks|linebreaksbr }}</p>
-                                </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            {% endfor %}
-        </div>
-
-
-        <h2 class="rules mt-5 mb-3">
-            Profesje i Klasy elitarne
-        </h2>
-        <br>
+        <p>
+            <span>&#9755;</span>
+            <a href="{% url 'rules:professions' 'True' %}">Lista Klas Elitarnych</a>
+        </p>
         <p>
             Przed nielicznymi jednostkami, które dzięki swoim umiejętnościom, doświadczeniu i koligacjom osiągnęły wysoki status
             w ramach hierarchii charakterystycznej dla ich Klasy, otwierają się szersze możliwości rozwoju.
-            Profesje i Klasy elitarne mogą stanowić kierunek dążenia i obiekt ambicji Postaci w świecie gry.
+            Klasy i Podklasy Elitarne mogą stanowić kierunek dążenia i obiekt ambicji Postaci w świecie gry.
             Alternatywnie, mogą stanowić punkt wyjścia dla rozgrywki, w której Postacie startują z wysokiego pułapu doświadczenia i statusu społecznego.
         </p>
-
-        <img class="img-fluid mx-auto d-block" src="{% static 'img/Profesje elitarne.png' %}">
-        <br><br>
-
-        <h2 class="rules mt-5 mb-3">
-            Lista Profesji i Klas elitarnych
-        </h2>
-        <br>
         <p>
-            Poniższa lista ma otwarty charakter. Widoczne na niej Profesje i Klasy to te, które są znane Postaci na podstawie wiedzy ogólnej.
+            Lista Klas Elitarnych ma otwarty charakter. Widoczne na niej Klasy i Podklasy to te, które są znane Postaci na podstawie wiedzy ogólnej.
         </p>
-        <br>
-        <div>
-            {% for profession in professions %}
-                {% if profession.is_elite %}
-                    <h4><b>{{ profession.name }}</b></h4>
-                    <div>
-                        <p>{{ profession.description|custom_linebreaksbr:2 }}</p>
-                        <ul class="bullets-1 ml-4 mb-4">
-                            {% for secondary_profession in profession.secondary_professions.all %}
-                            <li class="pl-1">
-                                <h5 data-toggle="collapse" data-target="#{{ secondary_profession|remove_special_chars }}">
-                                    <b class="hover-blue">{{ secondary_profession.name }}</b>
-                                </h5>
-                                <div id="{{ secondary_profession|remove_special_chars }}" class="collapse">
-                                    <p>{{ secondary_profession.description|custom_linebreaksbr:2 }}</p>
-                                    <p>{{ secondary_profession.start_perks|linebreaksbr }}</p>
-                                    <br>
-                                </div>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
         
     </div>
 {% endblock content %}

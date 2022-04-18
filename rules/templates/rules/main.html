@@ -14,7 +14,13 @@
             <strong class="align-middle small-caps border-bottom-dark">Tworzenie i rozwój Postaci</strong>
         </h2>
         <ol class="ml-3 mt-3 pl-5">
-            <li><h6><a href="{% url 'rules:professions' %}">Tworzenie Postaci, Klasa i Profesja</a></h6></li>
+            <li>
+                <h6><a href="{% url 'rules:character' %}">Tworzenie Postaci, Klasa i Profesja</a></h6>
+                <ul class="ml-3">
+                    <li><h6><a href="{% url 'rules:professions' 'False' %}">Lista Klas</a></h6></li>
+                    <li><h6><a href="{% url 'rules:professions' 'True' %}">Lista Klas Elitarnych</a></h6></li>
+                </ul>
+            </li>
             <li><h6><a href="{% url 'rules:traits' %}">Cechy Fizyczne</a></h6></li>
             <li><h6><a href="{% url 'rules:tests' %}">Testy Cech</a></h6></li>
             <li><h6><a href="{% url 'rules:fitness-and-tricks' %}">Wydolność, Sprawności i Podstępy</a></h6></li>
