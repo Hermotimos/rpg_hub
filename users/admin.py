@@ -4,8 +4,7 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.html import format_html
 
 from rpg_project.utils import update_rel_objs, formfield_with_cache
-from rules.models import EliteProfession, EliteKlass, Klass, Plate, Shield, \
-    Weapon, Skill
+from rules.models import PrimaryProfession, SecondaryProfession, Plate, Shield,  Weapon, Skill
 from users.models import Profile
 
 
@@ -24,22 +23,16 @@ class ProfileAdminForm(forms.ModelForm):
         widget=FilteredSelectMultiple('Skills', False),
         label=format_html(warning),
     )
-    klasses = forms.ModelMultipleChoiceField(
-        queryset=Klass.objects.all(),
+    primary_professions = forms.ModelMultipleChoiceField(
+        queryset=PrimaryProfession.objects.all(),
         required=False,
-        widget=FilteredSelectMultiple('Klasses', False),
+        widget=FilteredSelectMultiple('Primary Profession', False),
         label=format_html(warning),
     )
-    elite_professions = forms.ModelMultipleChoiceField(
-        queryset=EliteProfession.objects.all(),
+    secondary_professions = forms.ModelMultipleChoiceField(
+        queryset=SecondaryProfession.objects.all(),
         required=False,
-        widget=FilteredSelectMultiple('Elite Professions', False),
-        label=format_html(warning),
-    )
-    elite_klasses = forms.ModelMultipleChoiceField(
-        queryset=EliteKlass.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Elite Klasses', False),
+        widget=FilteredSelectMultiple('Secondary Profession', False),
         label=format_html(warning),
     )
     plates = forms.ModelMultipleChoiceField(
@@ -63,9 +56,8 @@ class ProfileAdminForm(forms.ModelForm):
 
     fields_and_models = {
         'skills': Skill,
-        'klasses': Klass,
-        'elite_professions': EliteProfession,
-        'elite_klasses': EliteKlass,
+        'primary_professions': PrimaryProfession,
+        'secondary_professions': SecondaryProfession,
         'plates': Plate,
         'shields': Shield,
         'weapons': Weapon,

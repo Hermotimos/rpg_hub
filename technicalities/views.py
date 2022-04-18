@@ -16,9 +16,6 @@ from rules.models import (
     Skill, SkillLevel,
     Synergy, SynergyLevel,
     Profession,
-    Klass,
-    EliteProfession,
-    EliteKlass,
     WeaponType,
     Weapon,
     Plate,
@@ -89,8 +86,7 @@ def download_db(request):
 @only_game_masters
 def allow_game_masters_to_all(request):
     models = [
-        Skill, Synergy, Klass, EliteProfession, EliteKlass, Weapon, Plate,
-        Shield,
+        Skill, Synergy, Profession, Weapon, Plate, Shield,
     ]
     for Model in models:
         print(f"Processing Model: {Model}")
@@ -200,13 +196,6 @@ def reload_rules(request):
 
     for obj in Profession.objects.all():
         obj.save()
-    for obj in Klass.objects.all():
-        obj.save()
-
-    for obj in EliteProfession.objects.all():
-        obj.save()
-    for obj in EliteKlass.objects.all():
-        obj.save()
 
     for obj in WeaponType.objects.all():
         obj.save()
@@ -214,49 +203,6 @@ def reload_rules(request):
         obj.save()
 
     messages.info(request, 'Przeładowano "sorting_name" dla "rules"!')
-    return redirect('technicalities:reload-main')
-
-
-@login_required
-@only_game_masters
-def reload_professions(request):
-    for obj in Klass.objects.all():
-        try:
-            new, _ = Profession.objects.update_or_create(
-                name=obj.name,
-                profession=obj.profession,
-                description=obj.description,
-                is_elite=False,
-            )
-            new.allowees.set(obj.allowees.all())
-        except Exception as exc:
-            print(exc)
-        
-    for obj in EliteProfession.objects.all():
-        try:
-            new, _ = Profession.objects.update_or_create(
-                name=obj.name,
-                description=obj.description,
-                is_elite=True,
-            )
-            new.allowees.set(obj.allowees.all())
-        except Exception as exc:
-            print(exc)
-        
-    for obj in EliteKlass.objects.all():
-        try:
-            new, _ = Profession.objects.update_or_create(
-                name=obj.name,
-                profession=Profession.objects.get(name=obj.elite_profession.name),
-                description=obj.description,
-                is_elite=True,
-            )
-            new.allowees.set(obj.allowees.all())
-        except Exception as exc:
-            print(exc)
-        
-        
-    messages.info(request, 'Przeładowano Professions "rules"!')
     return redirect('technicalities:reload-main')
 
 

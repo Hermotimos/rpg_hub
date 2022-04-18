@@ -15,7 +15,6 @@ urlpatterns = [
     path('reload-chronicles/', views.reload_chronicles, name='reload-chronicles'),
     path('reload-imaginarion/', views.reload_imaginarion, name='reload-imaginarion'),
     path('reload-rules/', views.reload_rules, name='reload-rules'),
-    path('reload-professions/', views.reload_professions, name='reload-professions'),
     path('reload-toponomikon/', views.reload_toponomikon, name='reload-toponomikon'),
     path('reload-prosoponomikon/', views.reload_prosoponomikon, name='reload-prosoponomikon'),
     

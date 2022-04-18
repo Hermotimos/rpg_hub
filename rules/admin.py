@@ -10,7 +10,6 @@ from rules.models import (
     Perk, Modifier, Factor, RulesComment, Condition, CombatType,
     ConditionalModifier,
     Profession, PrimaryProfession, SecondaryProfession,
-    EliteProfession, Klass, EliteKlass, # TODO delete
     WeaponType, Weapon, Plate, Shield,
 )
 
@@ -231,33 +230,21 @@ class SynergyLevelAdmin(admin.ModelAdmin):
 # -----------------------------------------------------------------------------
 
 
-class KlassInline(admin.TabularInline):
-    model = Klass
+class SecondaryProfessionInline(admin.TabularInline):
+    model = SecondaryProfession
     extra = 2
-    fields = ['name', 'description', 'start_perks', 'allowees']
-    filter_horizontal = ['allowees']
+    fields = ['name', 'description', 'allowees']
+    filter_horizontal = ['allowees', 'starting_skills']
     formfield_overrides = {
         models.CharField: {'widget': forms.Textarea(attrs={'rows': 1, 'cols': 10})},
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 15, 'cols': 40})},
     }
 
 
-@admin.register(Klass)
-class KlassAdmin(admin.ModelAdmin):
-    filter_horizontal = ['allowees']
-    formfield_overrides = {
-        models.CharField: {'widget': forms.Textarea(attrs={'rows': 1, 'cols': 10})},
-        models.TextField: {'widget': forms.Textarea(attrs={'rows': 10, 'cols': 60})},
-    }
-    list_display = ['name', 'profession', 'description', 'start_perks']
-    list_editable = ['description', 'start_perks']
-    search_fields = ['name', 'description', 'start_perks']
-
-
 @admin.register(Profession, PrimaryProfession)
 class ProfessionAdmin(admin.ModelAdmin):
     filter_horizontal = ['allowees', 'starting_skills']
-    # inlines = [KlassInline] # TODO !!!!!!!!
+    inlines = [SecondaryProfessionInline]
     list_display = ['name', 'description']
     list_editable = ['description']
     search_fields = ['name', 'description']
@@ -267,37 +254,6 @@ class ProfessionAdmin(admin.ModelAdmin):
 class ProfessionAdmin(ProfessionAdmin):
     list_display = ['name', 'profession', 'description']
     list_editable = ['profession', 'description']
-
-
-class EliteKlassInline(admin.TabularInline):
-    model = EliteKlass
-    extra = 2
-    filter_horizontal = ['allowees']
-    formfield_overrides = {
-        models.CharField: {'widget': forms.Textarea(attrs={'rows': 1, 'cols': 10})},
-        models.TextField: {'widget': forms.Textarea(attrs={'rows': 15, 'cols': 40})},
-    }
-
-
-@admin.register(EliteKlass)
-class EliteKlassAdmin(admin.ModelAdmin):
-    filter_horizontal = ['allowees']
-    formfield_overrides = {
-        models.CharField: {'widget': forms.Textarea(attrs={'rows': 1, 'cols': 10})},
-        models.TextField: {'widget': forms.Textarea(attrs={'rows': 10, 'cols': 60})},
-    }
-    list_display = ['name', 'elite_profession', 'description', 'start_perks']
-    list_editable = ['description', 'start_perks']
-    search_fields = ['name', 'description', 'start_perks']
-
-
-@admin.register(EliteProfession)
-class EliteProfessionAdmin(admin.ModelAdmin):
-    filter_horizontal = ['allowees']
-    inlines = [EliteKlassInline]
-    list_display = ['name', 'description']
-    list_editable = ['description']
-    search_fields = ['name', 'description']
 
 
 # -----------------------------------------------------------------------------
