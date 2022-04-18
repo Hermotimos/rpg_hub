@@ -351,20 +351,12 @@ class SynergyLevel(Model):
 
 # =============================================================================
 
-class ProfessionManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(profession=None)
-        return qs
-    
-    
+
 class Profession(Model):
-    objects = ProfessionManager()
-    
     name = CharField(max_length=100, unique=True)
     profession = FK(
         to='self',
-        related_name='subprofessions',
+        related_name='secondary_professions',
         on_delete=PROTECT,
         blank=True,
         null=True)
@@ -377,7 +369,7 @@ class Profession(Model):
     class Meta:
         ordering = ['sorting_name']
         verbose_name = 'Profession'
-        verbose_name_plural = 'Professions'
+        verbose_name_plural = '--- PROFESSIONS'
 
     def __str__(self):
         return self.name
@@ -388,20 +380,36 @@ class Profession(Model):
         super().save(*args, **kwargs)
 
 
-class SubProfessionManager(Manager):
+class PrimaryProfessionManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(profession=None)
+        return qs
+
+
+class PrimaryProfession(Profession):
+    objects = PrimaryProfessionManager()
+    
+    class Meta:
+        proxy = True
+        verbose_name = 'Primary Profession'
+        verbose_name_plural = '--- Primary Professions'
+        
+        
+class SecondaryProfessionManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.exclude(profession=None)
         return qs
 
 
-class SubProfession(Profession):
-    objects = SubProfessionManager()
+class SecondaryProfession(Profession):
+    objects = SecondaryProfessionManager()
     
     class Meta:
         proxy = True
-        verbose_name = '--- SubProfession'
-        verbose_name_plural = '--- SubProfessions'
+        verbose_name = 'Secondary Profession'
+        verbose_name_plural = '--- Secondary Professions'
         
         
 # =============================================================================

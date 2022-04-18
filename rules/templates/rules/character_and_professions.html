@@ -159,14 +159,14 @@
                     <h4 class="font-weight-bold">{{ profession.name }}</h4>
                     <p>{{ profession.description|custom_linebreaksbr:2 }}</p>
                     <ul class="bullets-1 bullets-lg ml-4 mb-4">
-                        {% for subprofession in profession.subprofessions.all %}
+                        {% for secondary_profession in profession.secondary_professions.all %}
                             <li class="pl-1">
-                                <h5 data-toggle="collapse" data-target="#{{ subprofession|remove_special_chars }}">
-                                    <b class="hover-blue">{{ subprofession.name }}</b>
+                                <h5 data-toggle="collapse" data-target="#{{ secondary_profession|remove_special_chars }}">
+                                    <b class="hover-blue">{{ secondary_profession.name }}</b>
                                 </h5>
-                                <div id="{{ subprofession|remove_special_chars }}" class="collapse">
-                                    <p>{{ subprofession.description|custom_linebreaksbr:2 }}</p>
-                                    <p>{{ subprofession.start_perks|linebreaksbr }}</p>
+                                <div id="{{ secondary_profession|remove_special_chars }}" class="collapse">
+                                    <p>{{ secondary_profession.description|custom_linebreaksbr:2 }}</p>
+                                    <p>{{ secondary_profession.start_perks|linebreaksbr }}</p>
                                 </div>
                             </li>
                         {% endfor %}
@@ -205,14 +205,14 @@
                     <div>
                         <p>{{ profession.description|custom_linebreaksbr:2 }}</p>
                         <ul class="bullets-1 ml-4 mb-4">
-                            {% for subprofession in profession.subprofessions.all %}
+                            {% for secondary_profession in profession.secondary_professions.all %}
                             <li class="pl-1">
-                                <h5 data-toggle="collapse" data-target="#{{ subprofession|remove_special_chars }}">
-                                    <b class="hover-blue">{{ subprofession.name }}</b>
+                                <h5 data-toggle="collapse" data-target="#{{ secondary_profession|remove_special_chars }}">
+                                    <b class="hover-blue">{{ secondary_profession.name }}</b>
                                 </h5>
-                                <div id="{{ subprofession|remove_special_chars }}" class="collapse">
-                                    <p>{{ subprofession.description|custom_linebreaksbr:2 }}</p>
-                                    <p>{{ subprofession.start_perks|linebreaksbr }}</p>
+                                <div id="{{ secondary_profession|remove_special_chars }}" class="collapse">
+                                    <p>{{ secondary_profession.description|custom_linebreaksbr:2 }}</p>
+                                    <p>{{ secondary_profession.start_perks|linebreaksbr }}</p>
                                     <br>
                                 </div>
                             </li>

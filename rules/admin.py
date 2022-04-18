@@ -9,7 +9,8 @@ from rules.models import (
     Skill, SkillLevel, Synergy, SynergyLevel, BooksSkill, TheologySkill,
     Perk, Modifier, Factor, RulesComment, Condition, CombatType,
     ConditionalModifier,
-    Profession, SubProfession, EliteProfession, Klass, EliteKlass,
+    Profession, PrimaryProfession, SecondaryProfession,
+    EliteProfession, Klass, EliteKlass, # TODO delete
     WeaponType, Weapon, Plate, Shield,
 )
 
@@ -253,7 +254,7 @@ class KlassAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description', 'start_perks']
 
 
-@admin.register(Profession)
+@admin.register(Profession, PrimaryProfession)
 class ProfessionAdmin(admin.ModelAdmin):
     filter_horizontal = ['allowees', 'starting_skills']
     # inlines = [KlassInline] # TODO !!!!!!!!
@@ -262,7 +263,7 @@ class ProfessionAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description']
     
     
-@admin.register(SubProfession)
+@admin.register(SecondaryProfession)
 class ProfessionAdmin(ProfessionAdmin):
     list_display = ['name', 'profession', 'description']
     list_editable = ['profession', 'description']

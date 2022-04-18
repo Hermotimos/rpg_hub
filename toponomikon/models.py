@@ -88,8 +88,8 @@ class Location(Model):
 
     class Meta:
         ordering = ['sorting_name']
-        verbose_name = '* LOCATION'
-        verbose_name_plural = '* LOCATIONS'
+        verbose_name = 'Location'
+        verbose_name_plural = '--- LOCATIONS'
 
     def __str__(self):
         return self.name

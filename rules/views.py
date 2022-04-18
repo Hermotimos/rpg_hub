@@ -3,12 +3,10 @@ from django.db.models import Prefetch
 from django.shortcuts import render, redirect
 
 from rules.models import (
-    EliteKlass,
-    EliteProfession,
-    Klass,
     Plate,
     Profession,
-    SubProfession,
+    PrimaryProfession,
+    SecondaryProfession,
     Shield,
     Skill, SkillType,
     WeaponType,
@@ -78,17 +76,12 @@ def rules_professions_view(request):
     user_profiles = current_profile.user.profiles.all()
     
     if current_profile.can_view_all:
-        professions = Profession.objects.prefetch_related(
-            Prefetch('subprofessions', queryset=SubProfession.objects.all())).distinct()
-        # for p in professions:
-        #     print(p, p.professions.all())
+        professions = PrimaryProfession.objects.prefetch_related('secondary_professions').distinct()
     else:
-        subprofessions = SubProfession.objects.filter(allowees__in=user_profiles)
+        ssecondary_professions = SecondaryProfession.objects.filter(allowees__in=user_profiles)
         professions = Profession.objects.filter(allowees__in=user_profiles)
         professions = professions.prefetch_related(
-            Prefetch('subprofessions', queryset=subprofessions)).distinct()
-        # for p in professions:
-        #     print(p, p.professions.all())
+            Prefetch('ssecondary_professions', queryset=ssecondary_professions)).distinct()
 
     context = {
         'current_profile': current_profile,
