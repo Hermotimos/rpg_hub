@@ -121,7 +121,11 @@ def rules_skills_list_view(request, skilltype_kind):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
 
-    skills = Skill.objects.filter(allowees__in=user_profiles, types__kinds__name=skilltype_kind)
+    if current_profile.can_view_all:
+        skills = Skill.objects.filter(types__kinds__name=skilltype_kind)
+    else:
+        skills = Skill.objects.filter(allowees__in=user_profiles, types__kinds__name=skilltype_kind)
+        
     skills = skills.select_related('group__type').distinct()
     skills = skills.prefetch_related(
         'skill_levels__perks__conditional_modifiers__conditions',
