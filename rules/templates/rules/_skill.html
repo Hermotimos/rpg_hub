@@ -6,7 +6,7 @@
     <thead>
         <tr>
             <td class="hover-pointer" data-toggle="collapse" data-target="#{{ skill|remove_special_chars }}{{ id_suffix }}">
-                {% if skilltype_kind == 'Moce Kapłańskie' or skilltype_kind == 'Zaklęcia' or skilltype_kind == 'Moce Teurgiczne' %}
+                {% if skilltype_kind == 'Kapłańskie' or skilltype_kind == 'Zaklęcia' or skilltype_kind == 'Teurgiczne' %}
                     <img class="img-skill" src="{% static 'img/'|add:skill.skill_levels.first.level|add:'.png' %}">
                 {% else %}
                     {% if skill.image %}
@@ -26,7 +26,7 @@
                         {% else %}
                             {{ skill.name }}
                         {% endif %}
-                        <!-- Used when template is called from prosoponomikon_character_for_player_view -->
+                        <!-- Used when template is called from Prosoponomikon -->
                         {% if max_level_only %}
                             [{{ skill.skill_levels.all|get_max_skill_level_no }}]
                         {% endif %}
@@ -43,7 +43,7 @@
     <tbody id="{{ skill|remove_special_chars }}{{ id_suffix }}" class="collapse">
             {% for skill_level in skill.skill_levels.all %}
                 {% if not forloop.last and max_level_only %}
-                    <!-- When called from prosoponomikon_character_for_player_view skill all levels but the highest -->
+                    <!-- When called from Prosoponomikon skip all levels but the highest -->
                 {% else %}
                     {% with level_img='img/'|add:skill_level.level|add:'.png' %}
                         {% with skill_or_synergy_level=skill_level %}
