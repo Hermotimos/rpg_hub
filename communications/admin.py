@@ -2,6 +2,8 @@ from django import forms
 from django.contrib import admin
 from django.db import models
 
+from communications.admin_filters import AnnouncementStatementAuthorFilter, \
+    DebateStatementAuthorFilter
 from communications.models import Statement, Debate, Announcement, Thread, \
     ThreadTag, AnnouncementStatement, DebateStatement
 from rpg_project.utils import formfield_with_cache
@@ -91,11 +93,12 @@ class StatementAdmin(admin.ModelAdmin):
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
-    
+
 
 @admin.register(AnnouncementStatement)
 class AnnouncementStatementAdmin(StatementAdmin):
-    
+    list_filter = ['thread__kind', AnnouncementStatementAuthorFilter, 'thread']
+
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "seen_by":
             kwargs["queryset"] = Profile.objects.exclude(status='npc')
@@ -104,7 +107,8 @@ class AnnouncementStatementAdmin(StatementAdmin):
 
 @admin.register(DebateStatement)
 class DebateStatementAdmin(StatementAdmin):
-    
+    list_filter = ['thread__kind', DebateStatementAuthorFilter, 'thread']
+
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "seen_by":
             kwargs["queryset"] = Profile.living.all()
