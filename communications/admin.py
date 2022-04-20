@@ -111,5 +111,5 @@ class DebateStatementAdmin(StatementAdmin):
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "seen_by":
-            kwargs["queryset"] = Profile.living.all()
+            kwargs["queryset"] = Profile.living.all() | Profile.objects.filter(status='gm')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
