@@ -23,12 +23,12 @@
                                 {{ subprofession.name }}
                             </h5>
                             <div id="{{ subprofession|remove_special_chars }}" class="collapse">
-                                <p>
+                                <p class="pb-0 mb-1">
                                     {{ subprofession.description|custom_linebreaksbr:2 }}
                                 </p>
-                                {% for essential_skill in subprofession.essential_skills.all %}
-                                    {{ essential_skill }}
-                                {% endfor %}
+                                <div class="mb-3 small font-italic text-muted">
+                                    Umiejętności klasowe: {{ subprofession.essential_skills.all|join:", " }}.
+                                </div>
                             </div>
                         </li>
                     {% endfor %}
