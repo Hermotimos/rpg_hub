@@ -211,8 +211,6 @@ def home_view(request):
     rand_locations = sample_from_qs(qs=known_locations, max_size=2)
     rand_gameevent = game_event_with_caption(known_gameevents)
     
-    print(rand_gameevent)
-    
     context = {
         'current_profile': current_profile,
         'page_title': 'Hyllemath',
