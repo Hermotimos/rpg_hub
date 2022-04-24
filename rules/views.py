@@ -7,6 +7,7 @@ from rules.models import (
     Profession,
     PrimaryProfession,
     SecondaryProfession,
+    SubProfession,
     Shield,
     Skill, SkillType,
     WeaponType,
@@ -19,6 +20,15 @@ from users.models import Profile
 
 @login_required
 def rules_main_view(request):
+    
+    for sec_prof in SecondaryProfession.objects.all():
+        subprof, _ = SubProfession.objects.update_or_create(
+            name=sec_prof.name,
+            profession=sec_prof.profession,
+            description=sec_prof.description,
+        )
+        subprof.allowees.set(sec_prof.allowees.all())
+        
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
 
@@ -86,20 +96,20 @@ def rules_professions_view(request, profession_type):
     user_profiles = current_profile.user.profiles.all()
 
     if current_profile.can_view_all:
-        primary_professions = PrimaryProfession.objects.filter(
-            type=profession_type).prefetch_related('secondary_professions')
+        professions = PrimaryProfession.objects.filter(
+            type=profession_type).prefetch_related('subprofessions')
     else:
-        secondary_professions = SecondaryProfession.objects.filter(
+        subprofessions = SubProfession.objects.filter(
             allowees__in=user_profiles)
-        primary_professions = Profession.objects.filter(
+        professions = Profession.objects.filter(
             type=profession_type, allowees__in=user_profiles)
-        primary_professions = primary_professions.prefetch_related(
-            Prefetch('secondary_professions', queryset=secondary_professions))
+        professions = professions.prefetch_related(
+            Prefetch('subprofessions', queryset=subprofessions))
 
     context = {
         'current_profile': current_profile,
         'page_title': f'Klasy {profession_type}',
-        'primary_professions': primary_professions.distinct(),
+        'professions': professions.distinct(),
     }
     return render(request, 'rules/professions_list.html', context)
 

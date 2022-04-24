@@ -9,22 +9,22 @@
 {% block content %}
     <div class="rules-styling pt-3">
         <div class="mt-5" id="professions">
-            {% for primary_profession in primary_professions %}
+            {% for profession in professions %}
                 <h4 class="font-weight-bold">
-                    {{ primary_profession.name }}
+                    {{ profession.name }}
                 </h4>
                 <p>
-                    {{ primary_profession.description|custom_linebreaksbr:2 }}
+                    {{ profession.description|custom_linebreaksbr:2 }}
                 </p>
                 <ul class="bullets-1 bullets-lg ml-4 mb-5">
-                    {% for secondary_profession in primary_profession.secondary_professions.all %}
+                    {% for subprofession in profession.subprofessions.all %}
                         <li class="pl-1">
-                            <h5 class="hover-blue font-weight-bold" data-toggle="collapse" data-target="#{{ secondary_profession|remove_special_chars }}">
-                                {{ secondary_profession.name }}
+                            <h5 class="hover-blue font-weight-bold" data-toggle="collapse" data-target="#{{ subprofession|remove_special_chars }}">
+                                {{ subprofession.name }}
                             </h5>
                             <div id="{{ secondary_profession|remove_special_chars }}" class="collapse">
                                 <p>
-                                    {{ secondary_profession.description|custom_linebreaksbr:2 }}
+                                    {{ subprofession.description|custom_linebreaksbr:2 }}
                                 </p>
                                 <p>
                                     TODO starting_skills

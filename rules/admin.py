@@ -9,7 +9,7 @@ from rules.models import (
     Skill, SkillLevel, Synergy, SynergyLevel, BooksSkill, TheologySkill,
     Perk, Modifier, Factor, RulesComment, Condition, CombatType,
     ConditionalModifier,
-    Profession, PrimaryProfession, SecondaryProfession,
+    SubProfession, PrimaryProfession, SecondaryProfession,
     WeaponType, Weapon, Plate, Shield,
 )
 
@@ -251,6 +251,32 @@ class ProfessionAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description']
     
     
+@admin.register(SubProfession)
+class SubProfessionAdmin(admin.ModelAdmin):
+    fields = [
+        'name', 'profession', 'description', 'starting_skills', 'allowees']
+    filter_horizontal = ['allowees', 'starting_skills']
+    list_display = ['name', 'profession', 'description']
+    list_editable = ['profession', 'description']
+    search_fields = ['name', 'description']
+    list_select_related = True
+    
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_foreignkey(db_field, request,
+                                                     **kwargs)
+        for field in [
+            'profession',
+        ]:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
+    
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.select_related('profession')
+        return qs
+
+
 @admin.register(SecondaryProfession)
 class ProfessionAdmin(admin.ModelAdmin):
     fields = [

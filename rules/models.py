@@ -416,8 +416,31 @@ class SecondaryProfession(Profession):
         proxy = True
         verbose_name = 'Secondary Profession'
         verbose_name_plural = '--- Secondary Professions'
-        
-        
+
+
+class SubProfession(Model):
+    name = CharField(max_length=100, unique=True)
+    profession = FK(
+        to=Profession, related_name='subprofessions', on_delete=PROTECT)
+    description = TextField(max_length=4000, blank=True, null=True)
+    starting_skills = M2M(to=Skill, blank=True)
+    allowees = M2M(to=Profile, related_name='subprofessions_allowed', blank=True)
+    sorting_name = CharField(max_length=250, blank=True, null=True)
+    
+    class Meta:
+        ordering = ['sorting_name']
+        verbose_name = 'SubProfession'
+        verbose_name_plural = '--- SUBPROFESSIONS'
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.sorting_name = create_sorting_name(self.name)
+        super().save(*args, **kwargs)
+
+
 # =============================================================================
 
 
