@@ -243,18 +243,39 @@ class SecondaryProfessionInline(admin.TabularInline):
 
 @admin.register(Profession, PrimaryProfession)
 class ProfessionAdmin(admin.ModelAdmin):
+    fields = ['name', 'type', 'description', 'starting_skills', 'allowees']
     filter_horizontal = ['allowees', 'starting_skills']
     inlines = [SecondaryProfessionInline]
-    list_display = ['name', 'description']
-    list_editable = ['description']
+    list_display = ['name', 'type', 'description']
+    list_editable = ['type', 'description']
     search_fields = ['name', 'description']
     
     
 @admin.register(SecondaryProfession)
-class ProfessionAdmin(ProfessionAdmin):
-    list_display = ['name', 'profession', 'description']
-    list_editable = ['profession', 'description']
+class ProfessionAdmin(admin.ModelAdmin):
+    fields = [
+        'name', 'profession', 'type', 'description', 'starting_skills',
+        'allowees'
+    ]
+    filter_horizontal = ['allowees', 'starting_skills']
+    list_display = ['name', 'profession', 'type', 'description']
+    list_editable = ['profession', 'type', 'description']
+    search_fields = ['name', 'description']
+    list_select_related = True
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in [
+            'profession',
+        ]:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
+    
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.select_related('profession')
+        return qs
 
 # -----------------------------------------------------------------------------
 

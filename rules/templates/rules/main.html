@@ -17,8 +17,9 @@
             <li>
                 <h6><a href="{% url 'rules:character' %}">Tworzenie Postaci, Klasa i Profesja</a></h6>
                 <ul class="ml-3">
-                    <li><h6><a href="{% url 'rules:professions' 'False' %}">Lista Klas</a></h6></li>
-                    <li><h6><a href="{% url 'rules:professions' 'True' %}">Lista Klas Elitarnych</a></h6></li>
+                    <li><h6><a href="{% url 'rules:professions' 'Pospolite' %}">Klasy Pospolite</a></h6></li>
+                    <li><h6><a href="{% url 'rules:professions' 'Elitarne' %}">Klasy Elitarne</a></h6></li>
+                    <li><h6><a href="{% url 'rules:professions' 'Ezoteryczne' %}">Klasy Ezoteryczne</a></h6></li>
                 </ul>
             </li>
             <li><h6><a href="{% url 'rules:traits' %}">Cechy Fizyczne</a></h6></li>

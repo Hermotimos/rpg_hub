@@ -81,26 +81,25 @@ def rules_character_view(request):
 
 
 @login_required
-def rules_professions_view(request, is_elite: str):
+def rules_professions_view(request, profession_type):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
 
-    is_elite = True if is_elite == "True" else False
-
     if current_profile.can_view_all:
         primary_professions = PrimaryProfession.objects.filter(
-            is_elite=is_elite).prefetch_related('secondary_professions')
+            type=profession_type).prefetch_related('secondary_professions')
+        print(primary_professions)
     else:
         secondary_professions = SecondaryProfession.objects.filter(
-            is_elite=is_elite, allowees__in=user_profiles)
+            type=profession_type, allowees__in=user_profiles)
         primary_professions = Profession.objects.filter(
-            is_elite=is_elite, allowees__in=user_profiles)
+            type=profession_type, allowees__in=user_profiles)
         primary_professions = primary_professions.prefetch_related(
             Prefetch('secondary_professions', queryset=secondary_professions))
 
     context = {
         'current_profile': current_profile,
-        'page_title': 'Lista Klas Elitarnych' if is_elite else 'Lista Klas',
+        'page_title': f'Klasy {profession_type}',
         'primary_professions': primary_professions.distinct(),
     }
     return render(request, 'rules/professions_list.html', context)

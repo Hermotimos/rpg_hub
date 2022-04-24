@@ -12,7 +12,7 @@ urlpatterns = [
     path('fitness-and-tricks/', views.rules_fitness_and_tricks_view, name='fitness-and-tricks'),
     
     path('character/', views.rules_character_view, name='character'),
-    path('professions/<str:is_elite>/', views.rules_professions_view, name='professions'),
+    path('professions/<str:profession_type>/', views.rules_professions_view, name='professions'),
     
     path('skills-and-synergies/', views.rules_skills_view, name='skills-and-synergies'),
     path('skills-list/<str:skilltype_kind>/', views.rules_skills_list_view, name='skills-list'),

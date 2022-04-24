@@ -353,6 +353,12 @@ class SynergyLevel(Model):
 
 
 class Profession(Model):
+    TYPES = [
+        ('Pospolite', 'Pospolite'),
+        ('Elitarne', 'Elitarne'),
+        ('Ezoteryczne', 'Ezoteryczne'),
+    ]
+    
     name = CharField(max_length=100, unique=True)
     profession = FK(
         to='self',
@@ -361,7 +367,7 @@ class Profession(Model):
         blank=True,
         null=True)
     description = TextField(max_length=4000, blank=True, null=True)
-    is_elite = BooleanField(default=False)
+    type = CharField(max_length=50, choices=TYPES, default='Pospolite')
     starting_skills = M2M(to=Skill, blank=True)
     allowees = M2M(to=Profile, related_name='professions_allowed', blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
