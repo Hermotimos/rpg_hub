@@ -1,6 +1,5 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
-    BooleanField,
     CASCADE,
     CharField,
     DecimalField,
@@ -360,15 +359,8 @@ class Profession(Model):
     ]
     
     name = CharField(max_length=100, unique=True)
-    profession = FK(
-        to='self',
-        related_name='secondary_professions',
-        on_delete=PROTECT,
-        blank=True,
-        null=True)
-    description = TextField(max_length=4000, blank=True, null=True)
     type = CharField(max_length=50, choices=TYPES)
-    starting_skills = M2M(to=Skill, blank=True)
+    description = TextField(max_length=4000, blank=True, null=True)
     allowees = M2M(to=Profile, related_name='professions_allowed', blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
@@ -386,44 +378,13 @@ class Profession(Model):
         super().save(*args, **kwargs)
 
 
-class PrimaryProfessionManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(profession=None)
-        return qs
-
-
-class PrimaryProfession(Profession):
-    objects = PrimaryProfessionManager()
-    
-    class Meta:
-        proxy = True
-        verbose_name = 'Primary Profession'
-        verbose_name_plural = '--- Primary Professions'
-        
-        
-class SecondaryProfessionManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.exclude(profession=None)
-        return qs
-
-
-class SecondaryProfession(Profession):
-    objects = SecondaryProfessionManager()
-    
-    class Meta:
-        proxy = True
-        verbose_name = 'Secondary Profession'
-        verbose_name_plural = '--- Secondary Professions'
-
-
 class SubProfession(Model):
     name = CharField(max_length=100, unique=True)
     profession = FK(
         to=Profession, related_name='subprofessions', on_delete=PROTECT)
     description = TextField(max_length=4000, blank=True, null=True)
-    starting_skills = M2M(to=Skill, blank=True)
+    starting_skilllevels = M2M(to=SkillLevel, related_name='x', blank=True)
+    developed_skilllevels = M2M(to=SkillLevel, related_name='y', blank=True)
     allowees = M2M(to=Profile, related_name='subprofessions_allowed', blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
     

@@ -5,8 +5,6 @@ from django.shortcuts import render, redirect
 from rules.models import (
     Plate,
     Profession,
-    PrimaryProfession,
-    SecondaryProfession,
     SubProfession,
     Shield,
     Skill, SkillType,
@@ -20,15 +18,6 @@ from users.models import Profile
 
 @login_required
 def rules_main_view(request):
-    
-    for sec_prof in SecondaryProfession.objects.all():
-        subprof, _ = SubProfession.objects.update_or_create(
-            name=sec_prof.name,
-            profession=sec_prof.profession,
-            description=sec_prof.description,
-        )
-        subprof.allowees.set(sec_prof.allowees.all())
-        
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
 
@@ -96,7 +85,7 @@ def rules_professions_view(request, profession_type):
     user_profiles = current_profile.user.profiles.all()
 
     if current_profile.can_view_all:
-        professions = PrimaryProfession.objects.filter(
+        professions = Profession.objects.filter(
             type=profession_type).prefetch_related('subprofessions')
     else:
         subprofessions = SubProfession.objects.filter(

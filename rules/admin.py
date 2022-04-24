@@ -9,7 +9,7 @@ from rules.models import (
     Skill, SkillLevel, Synergy, SynergyLevel, BooksSkill, TheologySkill,
     Perk, Modifier, Factor, RulesComment, Condition, CombatType,
     ConditionalModifier,
-    SubProfession, PrimaryProfession, SecondaryProfession,
+    Profession, SubProfession,
     WeaponType, Weapon, Plate, Shield,
 )
 
@@ -230,22 +230,22 @@ class SynergyLevelAdmin(admin.ModelAdmin):
 # -----------------------------------------------------------------------------
 
 
-class SecondaryProfessionInline(admin.TabularInline):
-    model = SecondaryProfession
+class SubProfessionInline(admin.TabularInline):
+    model = SubProfession
     extra = 2
     fields = ['name', 'description', 'allowees']
-    filter_horizontal = ['allowees', 'starting_skills']
+    filter_horizontal = ['allowees', 'starting_skilllevels']
     formfield_overrides = {
         models.CharField: {'widget': forms.Textarea(attrs={'rows': 1, 'cols': 10})},
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 15, 'cols': 40})},
     }
 
 
-@admin.register(PrimaryProfession)
+@admin.register(Profession)
 class ProfessionAdmin(admin.ModelAdmin):
     fields = ['name', 'type', 'description', 'allowees']
     filter_horizontal = ['allowees']
-    inlines = [SecondaryProfessionInline]
+    inlines = [SubProfessionInline]
     list_display = ['name', 'type', 'description']
     list_editable = ['type', 'description']
     search_fields = ['name', 'description']
@@ -254,8 +254,8 @@ class ProfessionAdmin(admin.ModelAdmin):
 @admin.register(SubProfession)
 class SubProfessionAdmin(admin.ModelAdmin):
     fields = [
-        'name', 'profession', 'description', 'starting_skills', 'allowees']
-    filter_horizontal = ['allowees', 'starting_skills']
+        'name', 'profession', 'description', 'starting_skilllevels', 'allowees']
+    filter_horizontal = ['allowees', 'starting_skilllevels']
     list_display = ['name', 'profession', 'description']
     list_editable = ['profession', 'description']
     search_fields = ['name', 'description']
@@ -276,32 +276,6 @@ class SubProfessionAdmin(admin.ModelAdmin):
         qs = qs.select_related('profession')
         return qs
 
-
-@admin.register(SecondaryProfession)
-class ProfessionAdmin(admin.ModelAdmin):
-    fields = [
-        'name', 'profession', 'type', 'description', 'starting_skills',
-        'allowees'
-    ]
-    filter_horizontal = ['allowees', 'starting_skills']
-    list_display = ['name', 'profession', 'type', 'description']
-    list_editable = ['profession', 'type', 'description']
-    search_fields = ['name', 'description']
-    list_select_related = True
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
-        for field in [
-            'profession',
-        ]:
-            if db_field.name == field:
-                formfield = formfield_with_cache(field, formfield, request)
-        return formfield
-    
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        qs = qs.select_related('profession')
-        return qs
 
 # -----------------------------------------------------------------------------
 
