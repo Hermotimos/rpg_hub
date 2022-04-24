@@ -22,13 +22,13 @@
                             <h5 class="hover-blue font-weight-bold" data-toggle="collapse" data-target="#{{ subprofession|remove_special_chars }}">
                                 {{ subprofession.name }}
                             </h5>
-                            <div id="{{ secondary_profession|remove_special_chars }}" class="collapse">
+                            <div id="{{ subprofession|remove_special_chars }}" class="collapse">
                                 <p>
                                     {{ subprofession.description|custom_linebreaksbr:2 }}
                                 </p>
-                                <p>
-                                    TODO starting_skills
-                                </p>
+                                {% for essential_skill in subprofession.essential_skills.all %}
+                                    {{ essential_skill }}
+                                {% endfor %}
                             </div>
                         </li>
                     {% endfor %}

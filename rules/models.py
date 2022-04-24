@@ -383,8 +383,7 @@ class SubProfession(Model):
     profession = FK(
         to=Profession, related_name='subprofessions', on_delete=PROTECT)
     description = TextField(max_length=4000, blank=True, null=True)
-    starting_skilllevels = M2M(to=SkillLevel, related_name='x', blank=True)
-    developed_skilllevels = M2M(to=SkillLevel, related_name='y', blank=True)
+    essential_skills = M2M(to=Skill, blank=True)
     allowees = M2M(to=Profile, related_name='subprofessions_allowed', blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
     

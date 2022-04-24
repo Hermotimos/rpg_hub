@@ -233,8 +233,8 @@ class SynergyLevelAdmin(admin.ModelAdmin):
 class SubProfessionInline(admin.TabularInline):
     model = SubProfession
     extra = 2
-    fields = ['name', 'description', 'allowees']
-    filter_horizontal = ['allowees', 'starting_skilllevels']
+    fields = ['name', 'description', 'allowees', 'essential_skills']
+    filter_horizontal = ['allowees', 'essential_skills']
     formfield_overrides = {
         models.CharField: {'widget': forms.Textarea(attrs={'rows': 1, 'cols': 10})},
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 15, 'cols': 40})},
@@ -254,8 +254,8 @@ class ProfessionAdmin(admin.ModelAdmin):
 @admin.register(SubProfession)
 class SubProfessionAdmin(admin.ModelAdmin):
     fields = [
-        'name', 'profession', 'description', 'starting_skilllevels', 'allowees']
-    filter_horizontal = ['allowees', 'starting_skilllevels']
+        'name', 'profession', 'description', 'essential_skills', 'allowees']
+    filter_horizontal = ['allowees', 'essential_skills']
     list_display = ['name', 'profession', 'description']
     list_editable = ['profession', 'description']
     search_fields = ['name', 'description']
