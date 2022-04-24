@@ -88,10 +88,9 @@ def rules_professions_view(request, profession_type):
     if current_profile.can_view_all:
         primary_professions = PrimaryProfession.objects.filter(
             type=profession_type).prefetch_related('secondary_professions')
-        print(primary_professions)
     else:
         secondary_professions = SecondaryProfession.objects.filter(
-            type=profession_type, allowees__in=user_profiles)
+            allowees__in=user_profiles)
         primary_professions = Profession.objects.filter(
             type=profession_type, allowees__in=user_profiles)
         primary_professions = primary_professions.prefetch_related(
