@@ -356,7 +356,7 @@ class Profession(Model):
     TYPES = [
         ('Pospolite', 'Pospolite'),
         ('Elitarne', 'Elitarne'),
-        ('Ezoteryczne', 'Ezoteryczne'),
+        ('Hermetyczne', 'Hermetyczne'),
     ]
     
     name = CharField(max_length=100, unique=True)
@@ -367,7 +367,7 @@ class Profession(Model):
         blank=True,
         null=True)
     description = TextField(max_length=4000, blank=True, null=True)
-    type = CharField(max_length=50, choices=TYPES, default='Pospolite')
+    type = CharField(max_length=50, choices=TYPES)
     starting_skills = M2M(to=Skill, blank=True)
     allowees = M2M(to=Profile, related_name='professions_allowed', blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)

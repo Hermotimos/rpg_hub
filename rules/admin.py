@@ -241,10 +241,10 @@ class SecondaryProfessionInline(admin.TabularInline):
     }
 
 
-@admin.register(Profession, PrimaryProfession)
+@admin.register(PrimaryProfession)
 class ProfessionAdmin(admin.ModelAdmin):
-    fields = ['name', 'type', 'description', 'starting_skills', 'allowees']
-    filter_horizontal = ['allowees', 'starting_skills']
+    fields = ['name', 'type', 'description', 'allowees']
+    filter_horizontal = ['allowees']
     inlines = [SecondaryProfessionInline]
     list_display = ['name', 'type', 'description']
     list_editable = ['type', 'description']
