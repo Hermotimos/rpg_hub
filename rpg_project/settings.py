@@ -193,3 +193,13 @@ INTERNAL_IPS = ['127.0.0.1', ]
 # https://www.taricorp.net/2020/windows-mime-pitfalls/
 # https://stackoverflow.com/questions/16303098/django-development-server-and-mime-types/64055514#64055514
 # After editing registry - restart local server for changes to take effect
+
+
+# Online tool for CDEditor Toolbar customizations, but it produces JS:
+# https://ckeditor.com/latest/samples/toolbarconfigurator/index.html#basic
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+    },
+}
+
