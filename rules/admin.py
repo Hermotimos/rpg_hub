@@ -134,10 +134,13 @@ class SkillLevelInline(admin.TabularInline):
     
 @admin.register(Skill, BooksSkill, TheologySkill)
 class SkillAdmin(admin.ModelAdmin):
-    fields = ['name', 'tested_trait', 'image', 'group', 'types', 'allowees']
+    fields = [
+        'name', 'is_version', 'tested_trait', 'image', 'group', 'types',
+        'allowees',
+    ]
     filter_horizontal = ['allowees', 'types']
     inlines = [SkillLevelInline]
-    list_display = ['id', 'name', 'tested_trait', 'image', 'group']
+    list_display = ['id', 'name', 'is_version', 'tested_trait', 'image', 'group']
     list_editable = ['name', 'tested_trait', 'image', 'group']
     list_filter = ['types', 'group']
     list_select_related = ['group__type']

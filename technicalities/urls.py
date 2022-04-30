@@ -17,5 +17,6 @@ urlpatterns = [
     path('reload-rules/', views.reload_rules, name='reload-rules'),
     path('reload-toponomikon/', views.reload_toponomikon, name='reload-toponomikon'),
     path('reload-prosoponomikon/', views.reload_prosoponomikon, name='reload-prosoponomikon'),
+    path('reload-skillversion/', views.reload_skillversion, name='reload-skillversion'),
     
 ]

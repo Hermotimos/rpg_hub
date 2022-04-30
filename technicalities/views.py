@@ -25,6 +25,7 @@ from toponomikon.models import Location
 from users.models import Profile
 
 
+    
 @login_required
 @only_game_masters
 def todos_view(request):
@@ -212,4 +213,30 @@ def reload_toponomikon(request):
     for obj in Location.objects.all():
         obj.save()
     messages.info(request, 'Przeładowano "Location" dla "toponomikon"!')
+    return redirect('technicalities:reload-main')
+
+
+@login_required
+@only_game_masters
+def reload_skillversion(request):
+    mastery = Skill.objects.get(name="Biegłość w broni", is_version=False)
+    mastery_skill_levels = SkillLevel.objects.filter(
+        skill__name="Biegłość w broni", is_version=False)
+    for weapon in Weapon.objects.all():
+        obj, _ = Skill.objects.update_or_create(
+            name=mastery.name + ": " + weapon.name.capitalize(),
+            tested_trait=mastery.tested_trait,
+            image=mastery.image,
+            group=mastery.group,
+            is_version=True
+        )
+        for lvl in mastery_skill_levels:
+            new, _ = SkillLevel.objects.update_or_create(
+                skill=obj,
+                level=lvl.level,
+                description=lvl.description,
+            )
+            new.perks.set(lvl.perks.all())
+        print(obj.name)
+    messages.info(request, 'Przeładowano SkillLevel - wersje!')
     return redirect('technicalities:reload-main')

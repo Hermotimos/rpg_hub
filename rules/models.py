@@ -1,5 +1,6 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
+    BooleanField,
     CASCADE,
     CharField,
     DecimalField,
@@ -154,6 +155,170 @@ class Perk(Model):
 # =============================================================================
 
 
+class Plate(Model):
+    name = CharField(max_length=100, unique=True)
+    description = TextField(max_length=4000, blank=True, null=True)
+    picture_set = FK(
+        to=PictureSet,
+        related_name='plates',
+        blank=True,
+        null=True,
+        on_delete=PROTECT)
+    allowees = M2M(
+        to=Profile,
+        limit_choices_to=Q(status__in=['player', 'gm']),
+        related_name='allowed_plates',
+        blank=True)
+    
+    armor_class_bonus = PositiveSmallIntegerField(blank=True, null=True)
+    parrying = PositiveSmallIntegerField(blank=True, null=True)
+    endurance = PositiveSmallIntegerField()
+    weight = DecimalField(max_digits=10, decimal_places=1)
+    comment = TextField(max_length=200, blank=True, null=True)
+    mod_running = SmallIntegerField(blank=True, null=True)
+    mod_swimming = SmallIntegerField(blank=True, null=True)
+    mod_climbing = SmallIntegerField(blank=True, null=True)
+    mod_listening = SmallIntegerField(blank=True, null=True)
+    mod_lookout = SmallIntegerField(blank=True, null=True)
+    mod_trailing = SmallIntegerField(blank=True, null=True)
+    mod_sneaking = SmallIntegerField(blank=True, null=True)
+    mod_hiding = SmallIntegerField(blank=True, null=True)
+    mod_traps = SmallIntegerField(blank=True, null=True)
+    mod_lockpicking = SmallIntegerField(blank=True, null=True)
+    mod_pickpocketing = SmallIntegerField(blank=True, null=True)
+    mod_conning = SmallIntegerField(blank=True, null=True)
+    
+    sorting_number = DecimalField(max_digits=3, decimal_places=2)
+    
+    class Meta:
+        ordering = ['sorting_number']
+    
+    def __str__(self):
+        return self.name
+
+
+class Shield(Model):
+    name = CharField(max_length=100, unique=True)
+    description = TextField(max_length=4000, blank=True, null=True)
+    picture_set = FK(
+        to=PictureSet,
+        related_name='shields',
+        blank=True,
+        null=True,
+        on_delete=PROTECT)
+    allowees = M2M(
+        to=Profile,
+        limit_choices_to=Q(status__in=['player', 'gm']),
+        related_name='allowed_shields',
+        blank=True)
+    armor_class_bonus = PositiveSmallIntegerField()
+    weight = DecimalField(max_digits=10, decimal_places=1)
+    comment = TextField(max_length=200, blank=True, null=True)
+    sorting_number = DecimalField(max_digits=3, decimal_places=2)
+    
+    class Meta:
+        ordering = ['sorting_number']
+    
+    def __str__(self):
+        return self.name
+
+
+class WeaponType(Model):
+    name = CharField(max_length=100, unique=True)
+    sorting_name = CharField(max_length=250, blank=True, null=True)
+    
+    class Meta:
+        ordering = ['sorting_name']
+        verbose_name = 'Weapon type'
+        verbose_name_plural = 'Weapon types'
+    
+    def __str__(self):
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.sorting_name = create_sorting_name(self.name)
+        super().save(*args, **kwargs)
+
+
+DAMAGE_TYPES = [
+    ('K', 'K'),
+    ('S', 'S'),
+    ('O', 'O'),
+    ('K/S', 'K/S'),
+    ('K/O', 'K/O'),
+    ('O/S', 'O/S'),
+    ('K/S/O', 'K/S/O')
+]
+TRAITS = [
+    ('Sił', 'Sił'),
+    ('Zrc', 'Zrc'),
+    ('Sił/Zrc', 'Sił/Zrc')
+]
+SIZES = [
+    ('M', 'M'),
+    ('Ś', 'Ś'),
+    ('D', 'D')
+]
+CURRENCIES = [
+    ('m', 'm'),
+    ('ss', 'ss'),
+    ('sz', 'sz'),
+    ('sp', 'sp'),
+]
+
+
+class Weapon(Model):
+    weapon_type = FK(to=WeaponType, related_name='weapons', on_delete=PROTECT)
+    name = CharField(max_length=100, unique=True)
+    description = TextField(max_length=4000, blank=True, null=True)
+    picture_set = FK(
+        to=PictureSet,
+        related_name='weapons',
+        blank=True,
+        null=True,
+        on_delete=PROTECT)
+    allowees = M2M(
+        to=Profile,
+        limit_choices_to=Q(status__in=['player', 'gm']),
+        related_name='allowed_weapons',
+        blank=True)
+    # modifiers = M2M(to=ConditionalModifier, related_name='weapons', blank=True)
+    # -------------------------------------------------------------------------
+    damage_dices = CharField(max_length=10, blank=True, null=True)
+    damage_bonus = PositiveSmallIntegerField(blank=True, null=True)
+    damage_type = CharField(max_length=10, choices=DAMAGE_TYPES)
+    special = TextField(max_length=4000, blank=True, null=True)
+    range = CharField(max_length=100, blank=True, null=True)
+    size = CharField(max_length=5, choices=SIZES)
+    trait = CharField(max_length=10, choices=TRAITS)
+    avg_price_value = PositiveSmallIntegerField(blank=True, null=True)
+    avg_price_currency = CharField(max_length=5, choices=CURRENCIES,
+                                   blank=True, null=True)
+    avg_weight = DecimalField(max_digits=10, decimal_places=1)
+    
+    sorting_name = CharField(max_length=250, blank=True, null=True)
+    
+    class Meta:
+        ordering = ['sorting_name']
+    
+    def __str__(self):
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.sorting_name = create_sorting_name(self.name)
+        super().save(*args, **kwargs)
+    
+    def damage_summary(self):
+        if self.damage_bonus:
+            return f"{self.damage_dices}+{self.damage_bonus}"
+        return f"{self.damage_dices}"
+
+
+# =============================================================================
+
+
 class SkillKind(Model):
     """A classification category for Skills."""
     name = CharField(max_length=100, unique=True)
@@ -202,6 +367,10 @@ class SkillGroup(Model):
         return self.name
 
 
+class Sphragis(Model):
+    name = CharField(max_length=100, unique=True)
+    
+    
 class Skill(Model):
     name = CharField(max_length=100, unique=True)
     tested_trait = CharField(max_length=50, blank=True, null=True)
@@ -215,11 +384,19 @@ class Skill(Model):
         blank=True,
     )
     sorting_name = CharField(max_length=101, blank=True, null=True)
+    # ------------------------------------------
+    is_version = BooleanField(default=False)
+    weapon = FK(to=Weapon, on_delete=CASCADE, blank=True, null=True)
+    sphragis = FK(to=Sphragis, on_delete=CASCADE, blank=True, null=True)
 
     class Meta:
         ordering = ['sorting_name']
 
     def __str__(self):
+        if self.is_version:
+            weapon = f": {self.weapon.name.title()}" if self.weapon else ""
+            sphragis = f" ({self.sphragis})" if self.sphragis else ""
+            return str(self.name) + weapon + sphragis
         return str(self.name)
 
     def save(self, *args, **kwargs):
@@ -243,6 +420,8 @@ class SkillLevel(Model):
     perks = M2M(to=Perk, related_name='skill_levels', blank=True)
     acquired_by = M2M(to=Profile, related_name='skill_levels', blank=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
+    # ------------------------------------------
+    is_version = BooleanField(default=False)
 
     class Meta:
         ordering = ['sorting_name', 'id']
@@ -399,172 +578,6 @@ class SubProfession(Model):
         if self.name:
             self.sorting_name = create_sorting_name(self.name)
         super().save(*args, **kwargs)
-
-
-# =============================================================================
-
-
-class WeaponType(Model):
-    name = CharField(max_length=100, unique=True)
-    sorting_name = CharField(max_length=250, blank=True, null=True)
-
-    class Meta:
-        ordering = ['sorting_name']
-        verbose_name = 'Weapon type'
-        verbose_name_plural = 'Weapon types'
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        if self.name:
-            self.sorting_name = create_sorting_name(self.name)
-        super().save(*args, **kwargs)
-
-
-DAMAGE_TYPES = [
-    ('K', 'K'),
-    ('S', 'S'),
-    ('O', 'O'),
-    ('K/S', 'K/S'),
-    ('K/O', 'K/O'),
-    ('O/S', 'O/S'),
-    ('K/S/O', 'K/S/O')
-]
-TRAITS = [
-    ('Sił', 'Sił'),
-    ('Zrc', 'Zrc'),
-    ('Sił/Zrc', 'Sił/Zrc')
-]
-SIZES = [
-    ('M', 'M'),
-    ('Ś', 'Ś'),
-    ('D', 'D')
-]
-CURRENCIES = [
-    ('m', 'm'),
-    ('ss', 'ss'),
-    ('sz', 'sz'),
-    ('sp', 'sp'),
-]
-
-
-class Weapon(Model):
-    weapon_type = FK(to=WeaponType, related_name='weapons', on_delete=PROTECT)
-    name = CharField(max_length=100, unique=True)
-    description = TextField(max_length=4000, blank=True, null=True)
-    picture_set = FK(
-        to=PictureSet,
-        related_name='weapons',
-        blank=True,
-        null=True,
-        on_delete=PROTECT)
-    allowees = M2M(
-        to=Profile,
-        limit_choices_to=Q(status__in=['player', 'gm']),
-        related_name='allowed_weapons',
-        blank=True)
-    # modifiers = M2M(to=ConditionalModifier, related_name='weapons', blank=True)
-    # -------------------------------------------------------------------------
-    damage_dices = CharField(max_length=10, blank=True, null=True)
-    damage_bonus = PositiveSmallIntegerField(blank=True, null=True)
-    damage_type = CharField(max_length=10, choices=DAMAGE_TYPES)
-    special = TextField(max_length=4000, blank=True, null=True)
-    range = CharField(max_length=100, blank=True, null=True)
-    size = CharField(max_length=5, choices=SIZES)
-    trait = CharField(max_length=10, choices=TRAITS)
-    avg_price_value = PositiveSmallIntegerField(blank=True, null=True)
-    avg_price_currency = CharField(max_length=5, choices=CURRENCIES, blank=True, null=True)
-    avg_weight = DecimalField(max_digits=10, decimal_places=1)
-    
-    sorting_name = CharField(max_length=250, blank=True, null=True)
-
-    class Meta:
-        ordering = ['sorting_name']
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        if self.name:
-            self.sorting_name = create_sorting_name(self.name)
-        super().save(*args, **kwargs)
-
-    def damage_summary(self):
-        if self.damage_bonus:
-            return f"{self.damage_dices}+{self.damage_bonus}"
-        return f"{self.damage_dices}"
-
-
-# =============================================================================
-
-
-class Plate(Model):
-    name = CharField(max_length=100, unique=True)
-    description = TextField(max_length=4000, blank=True, null=True)
-    picture_set = FK(
-        to=PictureSet,
-        related_name='plates',
-        blank=True,
-        null=True,
-        on_delete=PROTECT)
-    allowees = M2M(
-        to=Profile,
-        limit_choices_to=Q(status__in=['player', 'gm']),
-        related_name='allowed_plates',
-        blank=True)
-    
-    armor_class_bonus = PositiveSmallIntegerField(blank=True, null=True)
-    parrying = PositiveSmallIntegerField(blank=True, null=True)
-    endurance = PositiveSmallIntegerField()
-    weight = DecimalField(max_digits=10, decimal_places=1)
-    comment = TextField(max_length=200, blank=True, null=True)
-    mod_running = SmallIntegerField(blank=True, null=True)
-    mod_swimming = SmallIntegerField(blank=True, null=True)
-    mod_climbing = SmallIntegerField(blank=True, null=True)
-    mod_listening = SmallIntegerField(blank=True, null=True)
-    mod_lookout = SmallIntegerField(blank=True, null=True)
-    mod_trailing = SmallIntegerField(blank=True, null=True)
-    mod_sneaking = SmallIntegerField(blank=True, null=True)
-    mod_hiding = SmallIntegerField(blank=True, null=True)
-    mod_traps = SmallIntegerField(blank=True, null=True)
-    mod_lockpicking = SmallIntegerField(blank=True, null=True)
-    mod_pickpocketing = SmallIntegerField(blank=True, null=True)
-    mod_conning = SmallIntegerField(blank=True, null=True)
-    
-    sorting_number = DecimalField(max_digits=3, decimal_places=2)
-
-    class Meta:
-        ordering = ['sorting_number']
-
-    def __str__(self):
-        return self.name
-
-
-class Shield(Model):
-    name = CharField(max_length=100, unique=True)
-    description = TextField(max_length=4000, blank=True, null=True)
-    picture_set = FK(
-        to=PictureSet,
-        related_name='shields',
-        blank=True,
-        null=True,
-        on_delete=PROTECT)
-    allowees = M2M(
-        to=Profile,
-        limit_choices_to=Q(status__in=['player', 'gm']),
-        related_name='allowed_shields',
-        blank=True)
-    armor_class_bonus = PositiveSmallIntegerField()
-    weight = DecimalField(max_digits=10, decimal_places=1)
-    comment = TextField(max_length=200, blank=True, null=True)
-    sorting_number = DecimalField(max_digits=3, decimal_places=2)
-
-    class Meta:
-        ordering = ['sorting_number']
-        
-    def __str__(self):
-        return self.name
 
 
 # =============================================================================
