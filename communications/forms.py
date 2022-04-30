@@ -170,12 +170,26 @@ class StatementCreateForm(forms.ModelForm):
             
         if thread_kind != "Debate":
             self.fields['author'].widget = HiddenInput()
-            self.fields['text'].widget = TinyMCE(attrs={'cols': 80, 'rows': 30})
+            self.fields['text'].widget = TinyMCE(
+                attrs={'cols': 80, 'rows': 30, 'placeholder': 'Twoja wypowiedź*'})
+        else:
+            self.fields['text'].widget.attrs = {
+                'cols': 60, 'rows': 10, 'placeholder': 'Twoja wypowiedź*'}
 
-        self.fields['text'].widget.attrs = {
-            'cols': 60, 'rows': 10, 'placeholder': 'Twoja wypowiedź*'}
-
-
+    def save(self, commit=True):
+        """Override TinyMCE default behavior, which is that lists loose
+         indentation given by the user.
+        """
+        if not commit:
+            instance = super().save(commit=False)
+            instance.text = instance.text.replace('<ol>', '<ol class="ml-2">')
+            instance.text = instance.text.replace('<ul>', '<ul class="ml-2">')
+            instance.text = instance.text.replace('<li>', '<li class="ml-3">')
+            return instance
+        else:
+            return super().save()
+        
+    
 class OptionCreateForm(forms.ModelForm):
     # TODO Separate view and template reached by means of a "+option" button
     
