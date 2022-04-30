@@ -193,7 +193,3 @@ INTERNAL_IPS = ['127.0.0.1', ]
 # https://www.taricorp.net/2020/windows-mime-pitfalls/
 # https://stackoverflow.com/questions/16303098/django-development-server-and-mime-types/64055514#64055514
 # After editing registry - restart local server for changes to take effect
-
-
-# CKEDITOR_BASEPATH = os.path.join(os.path.dirname(STATIC_ROOT), 'ckeditor/ckeditor/')
-# print(CKEDITOR_BASEPATH)
