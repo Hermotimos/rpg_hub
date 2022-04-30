@@ -264,8 +264,7 @@ class SubProfessionAdmin(admin.ModelAdmin):
     list_select_related = True
     
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        formfield = super().formfield_for_foreignkey(db_field, request,
-                                                     **kwargs)
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
             'profession',
         ]:
@@ -273,6 +272,12 @@ class SubProfessionAdmin(admin.ModelAdmin):
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
     
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "essential_skills":
+            kwargs["queryset"] = Skill.objects.filter(
+                types__kinds__name__in=["Powszechne", "Mentalne"])
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         qs = qs.select_related('profession')
