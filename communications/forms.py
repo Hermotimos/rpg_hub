@@ -176,15 +176,29 @@ class StatementCreateForm(forms.ModelForm):
         # self.fields['text'].widget.attrs = {
         #     'cols': 60, 'rows': 10, 'placeholder': 'Twoja wypowiedź*'}
 
-    def save(self, commit=True):
+    def save(self, commit=True, **kwargs):
         """Override TinyMCE default behavior, which is that lists loose
          indentation given by the user.
         """
         if not commit:
             instance = super().save(commit=False)
-            instance.text = instance.text.replace('<ol>', '<ol class="ml-2">')
-            instance.text = instance.text.replace('<ul>', '<ul class="ml-2">')
-            instance.text = instance.text.replace('<li>', '<li class="ml-3">')
+            text = instance.text
+            replacements = {
+                '<ol>': '<ol class="ml-2">', '<ul>': '<ul class="ml-2">',
+                '<li>': '<li class="ml-3">',
+            }
+            for k, v in replacements.items():
+                text = text.replace(k, v)
+            
+            if kwargs.get('thread_kind') == "Debate":
+                for k in ['<p>', '</p>', '&nbsp;']:
+                    text = text.replace(k, '')
+                text = text.capitalize()
+                if '</' in text:
+                    print(text)
+                    raise Exception("W Naradach nie można formatować tekstu!")
+                
+            instance.text = text
             return instance
         else:
             return super().save()

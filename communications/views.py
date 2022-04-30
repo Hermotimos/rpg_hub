@@ -249,9 +249,20 @@ def thread_view(request, thread_id, tag_title):
         return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
 
     if statement_form.is_valid():
-        statement = statement_form.save(commit=False)
+        try:
+            statement = statement_form.save(commit=False,
+                                            thread_kind=thread.kind)
+        except Exception as exc:
+            if "W Naradach nie można formatować tekstu!" in exc.args[0]:
+                messages.warning(request, exc.args[0])
+                return redirect('communications:thread', thread_id=thread.id,
+                                tag_title=tag_title)
+            else:
+                raise exc
+    
         statement.thread = thread
         statement.save()
+    
         try:
             statement.seen_by.add(current_profile)
         except ValueError as exc:
@@ -259,7 +270,7 @@ def thread_view(request, thread_id, tag_title):
             # This happens in cases of doubled Statement's
             if 'needs to have a value for field "id"' not in exc.args[0]:
                 raise exc
-                
+            
         send_mail(
             subject=f"[RPG] Nowa wypowiedź: '{thread.title}'",
             message=f"{request.get_host()}{thread.get_absolute_url()}",

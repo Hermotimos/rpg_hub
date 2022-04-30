@@ -3,12 +3,24 @@
 
 {% block content %}
     <article class="top-space">
-        {{ form_1.media }}
-        {{ form_2.media }}
-        {{ form_3.media }}
-        {{ form_4.media }}
+        {% if statement.thread.kind != 'Debate' %}
+            {{ form_1.media }}
+            {{ form_2.media }}
+            {{ form_3.media }}
+            {{ form_4.media }}
+        {% endif %}
+        
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} mb-0">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
             {{ form_1|crispy }}
             {{ form_2|crispy }}
             {{ form_3|crispy }}
