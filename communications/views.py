@@ -252,8 +252,14 @@ def thread_view(request, thread_id, tag_title):
         statement = statement_form.save(commit=False)
         statement.thread = thread
         statement.save()
-        statement.seen_by.add(current_profile)
-
+        try:
+            statement.seen_by.add(current_profile)
+        except ValueError as exc:
+            # Ignore ValueErrors caused by Statement deleted by signal
+            # This happens in cases of doubled Statement's
+            if 'needs to have a value for field "id"' not in exc.args[0]:
+                raise exc
+                
         send_mail(
             subject=f"[RPG] Nowa wypowiedź: '{thread.title}'",
             message=f"{request.get_host()}{thread.get_absolute_url()}",
