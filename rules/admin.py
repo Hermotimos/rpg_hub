@@ -248,6 +248,7 @@ class ProfessionAdmin(admin.ModelAdmin):
     inlines = [SubProfessionInline]
     list_display = ['name', 'type', 'description']
     list_editable = ['type', 'description']
+    list_filter = ['type']
     search_fields = ['name', 'description']
     
     
@@ -258,6 +259,7 @@ class SubProfessionAdmin(admin.ModelAdmin):
     filter_horizontal = ['allowees', 'essential_skills']
     list_display = ['name', 'profession', 'description']
     list_editable = ['profession', 'description']
+    list_filter = ['profession', 'profession__type']
     search_fields = ['name', 'description']
     list_select_related = True
     
