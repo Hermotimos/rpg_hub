@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'debug_toolbar',
     'django_filters',
-    'tinymce',
+    # 'tinymce',
+    'ckeditor',
 
     # own
     'chronicles',

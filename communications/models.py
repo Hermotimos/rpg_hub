@@ -18,6 +18,7 @@ from django.db.models import (
     TextField,
 )
 from django.db.models.signals import post_save
+from ckeditor.fields import RichTextField
 
 from users.models import Profile
 
@@ -146,7 +147,7 @@ class Option(Model):
 
 
 class Statement(Model):
-    text = TextField()
+    text = RichTextField()
     thread = FK(to=Thread, related_name='statements', on_delete=CASCADE)
     author = FK(to=Profile, related_name='statements', on_delete=PROTECT)
     image = ImageField(upload_to='post_pics', blank=True, null=True)
