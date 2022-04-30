@@ -30,7 +30,7 @@ class UserImageUpdateForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['user_image'].label = "AWATAR UŻYTKOWNIKA (wymiary kwadratu!)"
+        self.fields['user_image'].label = "ZMIEŃ AWATAR UŻYTKOWNIKA (wymiary kwadratu!)"
 
 
 class ProfileUpdateForm(forms.ModelForm):
