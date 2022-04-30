@@ -160,9 +160,11 @@
                 {% if skills %}
                     <section id="skills" class="tab-panel">
                         {% for skill in skills %}
-                            {% with max_level_only=True %}
-                                {% include 'rules/_skill.html' %}
-                            {% endwith %}
+                            {% if skill.name != "Biegłość w broni" %}
+                                {% with max_level_only=True %}
+                                    {% include 'rules/_skill.html' %}
+                                {% endwith %}
+                            {% endif %}
                         {% endfor %}
                         {% for synergy in synergies %}
                             {% with max_level_only=True %}
