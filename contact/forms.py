@@ -5,7 +5,7 @@ from django import forms
 from contact.models import Demand, DemandAnswer, Plan
 from users.models import Profile
 
-from django.db.models.query_utils import Q
+
 # ------------------- DEMANDS -------------------
 
 

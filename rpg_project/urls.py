@@ -33,7 +33,8 @@ urlpatterns = [
     path('toponomikon/', include('toponomikon.urls')),
     path('prosoponomikon/', include('prosoponomikon.urls')),
     
-    path('__debug__/', include(debug_toolbar.urls))
+    path('__debug__/', include(debug_toolbar.urls)),
+    path('tinymce/', include('tinymce.urls')),
 ]
 
 

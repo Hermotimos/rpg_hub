@@ -27,7 +27,11 @@
                 <div class="col-10 font-18 font-italic text-justify ">
                     <small class="text-muted">{{ statement.created_at|date:'d-M-Y | H:i' }}</small>
                     <br>
-                    <p>{{ statement.text|capfirst|custom_linebreaksbr:2 }}</p>
+                    {% if statement.thread.kind == 'Debate' %}
+                        <p>{{ statement.text|capfirst|custom_linebreaksbr:2 }}</p>
+                    {% else %}
+                        <p>{{ statement.text|safe }}</p>
+                    {% endif %}
                     {% if statement.image %}
                         <p><img class="img-fluid mx-auto d-block" src="{{ statement.image.url }}"></p>
                     {% endif %}
