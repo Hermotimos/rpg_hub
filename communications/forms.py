@@ -189,15 +189,8 @@ class StatementCreateForm(forms.ModelForm):
             }
             for k, v in replacements.items():
                 text = text.replace(k, v)
-            
             if kwargs.get('thread_kind') == "Debate":
-                for k in ['<p>', '</p>', '&nbsp;']:
-                    text = text.replace(k, '')
                 text = text.capitalize()
-                if '</' in text:
-                    print(text)
-                    raise Exception("W Naradach nie można formatować tekstu!")
-                
             instance.text = text
             return instance
         else:

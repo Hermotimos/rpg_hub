@@ -7,10 +7,8 @@
         {{ form_2.media }}
         {{ form_3.media }}
         {{ form_4.media }}
-        
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            
             {% if messages %}
                 {% for message in messages %}
                     <div class="alert alert-{{ message.tags }} mb-0">
@@ -18,7 +16,6 @@
                     </div>
                 {% endfor %}
             {% endif %}
-
             {{ form_1|crispy }}
             {{ form_2|crispy }}
             {{ form_3|crispy }}

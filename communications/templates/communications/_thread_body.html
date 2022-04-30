@@ -10,10 +10,9 @@
         <div class="row">
             {% if statement.author.status == 'gm' and statement.thread.kind == 'Debate' %}
                 <div class="col-12">
-                    <span class="font-18 font-italic text-justify">{{ statement.text|capfirst|linebreaks }}</span>
+                    <span class="font-18 font-italic text-justify">{{ statement.text|safe }}</span>
                     {% if statement.image %}
                         <p><img class="img-fluid mx-auto d-block" src="{{ statement.image.url }}"></p>
-                        <br>
                     {% endif %}
                 </div>
             {% else %}
@@ -26,12 +25,9 @@
                 </div>
                 <div class="col-10 font-18 font-italic text-justify ">
                     <small class="text-muted">{{ statement.created_at|date:'d-M-Y | H:i' }}</small>
-                    <br>
-                    {% if statement.thread.kind == 'Debate' %}
-                        {{ statement.text|capfirst|custom_linebreaksbr:2 }}
-                    {% else %}
+                    <div>
                         {{ statement.text|safe }}
-                    {% endif %}
+                    </div>
                     {% if statement.image %}
                         <p><img class="img-fluid mx-auto d-block" src="{{ statement.image.url }}"></p>
                     {% endif %}
