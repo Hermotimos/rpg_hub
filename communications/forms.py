@@ -7,7 +7,7 @@ from django.forms.widgets import HiddenInput, TextInput
 from communications.models import ThreadTag, Statement, Option, \
     Announcement, Debate, Thread
 from users.models import Profile
-# from tinymce.widgets import TinyMCE
+from tinymce.widgets import TinyMCE
 
 
 class ThreadTagEditForm(forms.ModelForm):
