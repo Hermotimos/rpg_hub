@@ -162,8 +162,8 @@ USE_TZ = True
 
 # [custom] Following configuration is suitable for development:
 STATIC_ROOT = 'rpg_project/static'
-STATIC_URL = 'rpg_project/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'rpg_project/static')]
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')        # path to uploaded pics
