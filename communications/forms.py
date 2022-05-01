@@ -7,7 +7,6 @@ from django.forms.widgets import HiddenInput, TextInput
 from communications.models import ThreadTag, Statement, Option, \
     Announcement, Debate, Thread
 from users.models import Profile
-from tinymce.widgets import TinyMCE
 
 
 class ThreadTagEditForm(forms.ModelForm):
@@ -170,11 +169,6 @@ class StatementCreateForm(forms.ModelForm):
             
         if thread_kind != "Debate":
             self.fields['author'].widget = HiddenInput()
-            # self.fields['text'].widget = TinyMCE(
-            #     attrs={'cols': 80, 'rows': 30, 'placeholder': 'Twoja wypowiedź*'})
-        # else:
-        # self.fields['text'].widget.attrs = {
-        #     'cols': 60, 'rows': 10, 'placeholder': 'Twoja wypowiedź*'}
 
     def save(self, commit=True, **kwargs):
         """Override TinyMCE default behavior, which is that lists loose
