@@ -1,13 +1,15 @@
 import json
 import os
+import socket
 
 from django.core.exceptions import ImproperlyConfigured
+
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+print(BASE_DIR)
 
 def get_secret(setting):
     """Get secret setting or fail with ImproperlyConfigured"""
@@ -100,20 +102,24 @@ WSGI_APPLICATION = 'rpg_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+# if socket.gethostbyname(socket.gethostname()) == get_secret('LOCALHOST'):
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#             'NAME': get_secret('POSTGRES_DBNAME'),
+#             'USER': get_secret('POSTGRES_USER'),
+#             'PASSWORD': get_secret('POSTGRES_PASSWORD'),
+#             'HOST': get_secret('POSTGRES_HOST'),
+#             'PORT': get_secret('POSTGRES_PORT'),
+#
+#         }
+#     }
+# else:
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': get_secret('POSTGRES_DBNAME'),
-    #     'USER': get_secret('POSTGRES_USER'),
-    #     'PASSWORD': get_secret('POSTGRES_PASSWORD'),
-    #     'HOST': get_secret('POSTGRES_HOST'),
-    #     'PORT': get_secret('POSTGRES_PORT'),
-    #
-    # }
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
@@ -156,8 +162,8 @@ USE_TZ = True
 
 # [custom] Following configuration is suitable for development:
 STATIC_ROOT = 'rpg_project/static'
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_URL = 'rpg_project/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'rpg_project/static')]
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')        # path to uploaded pics
