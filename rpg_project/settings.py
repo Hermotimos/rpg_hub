@@ -27,6 +27,10 @@ ALLOWED_HOSTS = [
     'burkelt.pythonanywhere.com',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://8000-cs-570532252862-default.cs-europe-west4-fycr.cloudshell.dev'
+]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
