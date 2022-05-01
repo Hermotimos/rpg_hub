@@ -2,6 +2,8 @@ import json
 import os
 
 from django.core.exceptions import ImproperlyConfigured
+# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -14,11 +16,7 @@ def get_secret(setting):
     try:
         return secrets[setting]
     except KeyError:
-        raise ImproperlyConfigured("Set the {} setting".format(setting))
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
+        raise ImproperlyConfigured(f"Set the {setting} setting")
 
 
 SECRET_KEY = get_secret('SECRET_KEY')
@@ -119,7 +117,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -186,7 +183,9 @@ EMAIL_HOST_USER = get_secret('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = get_secret('EMAIL_HOST_PASSWORD_TWO_STEP')
 
 
-# For debug-toolbar
+# -----------------------------------------------------------------------------
+
+# debug-toolbar
 INTERNAL_IPS = ['127.0.0.1', ]
 # debug-toolbar not rendering problem:
 # https://www.taricorp.net/2020/windows-mime-pitfalls/
@@ -194,6 +193,9 @@ INTERNAL_IPS = ['127.0.0.1', ]
 # After editing registry - restart local server for changes to take effect
 
 
+# -----------------------------------------------------------------------------
+
+# django-ckeditor
 # Online tool for CDEditor Toolbar customizations, but it produces JS:
 # https://ckeditor.com/latest/samples/toolbarconfigurator/index.html#basic
 CKEDITOR_CONFIGS = {
