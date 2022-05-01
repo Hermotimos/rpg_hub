@@ -27,6 +27,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'hyllemath.pythonanywhere.com',
     'burkelt.pythonanywhere.com',
+    'hyllemath.lm.r.appspot.com',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
