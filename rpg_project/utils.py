@@ -370,3 +370,13 @@ COLORS_LIST = [
 ]
 COLORS_DICT = {c: c for c in COLORS_LIST}
 COLORS_CHOICES = [(c, c) for c in COLORS_LIST]
+
+
+def transform_to_paragraphs():
+    from communications.models import Statement
+    for statement in Statement.objects.all():
+        if not statement.text[:2] == '<p>':
+            statement.text = '<p>' + statement.text.replace('\r\n\r\n', '</p><p>') + '</p>'
+            statement.text = statement.text.replace('\r\n', '</p><p>')
+            statement.save()
+
