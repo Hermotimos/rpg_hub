@@ -8,14 +8,20 @@
     {% endif %}
     <div id="statement-{{ statement.id }}" class="container anchor px-0 mt-n5">
         <div class="row">
+            
             {% if statement.author.status == 'gm' and statement.thread.kind == 'Debate' %}
-                <div class="col-12">
-                    <span class="font-18 font-italic text-justify">{{ statement.text|safe }}</span>
+            
+                <div class="col-12 font-18 font-italic text-justify">
+                    <div class="statement">
+                        {{ statement.text|safe }}
+                    </div>
                     {% if statement.image %}
                         <p><img class="img-fluid mx-auto d-block" src="{{ statement.image.url }}"></p>
                     {% endif %}
                 </div>
+            
             {% else %}
+            
                 <div class="col-2 pr-0">
                     <figure class="figure align-top mx-auto mb-0 px-lg-3 pt-1">
                         {% with profile=statement.author %}
@@ -24,15 +30,19 @@
                     </figure>
                 </div>
                 <div class="col-10 font-18 font-italic text-justify ">
-                    <small class="text-muted">{{ statement.created_at|date:'d-M-Y | H:i' }}</small>
-                    <div>
+                    <small class="text-muted">
+                        {{ statement.created_at|date:'d-M-Y | H:i' }}
+                    </small>
+                    <div class="statement">
                         {{ statement.text|safe }}
                     </div>
                     {% if statement.image %}
                         <p><img class="img-fluid mx-auto d-block" src="{{ statement.image.url }}"></p>
                     {% endif %}
                 </div>
+            
             {% endif %}
+            
         </div>
         
         
