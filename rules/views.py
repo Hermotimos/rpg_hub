@@ -85,12 +85,16 @@ def rules_professions_view(request, profession_type):
     user_profiles = current_profile.user.profiles.all()
 
     professions = Profession.objects.filter(type=profession_type)
-    subprofessions = SubProfession.objects.prefetch_related('essential_skills')
-    
+    subprofessions = SubProfession.objects.all()
+    essential_skills = Skill.objects.filter()
+
     if not current_profile.can_view_all:
-        subprofessions = subprofessions.filter(allowees__in=user_profiles)
         professions = professions.filter(allowees__in=user_profiles)
-        
+        subprofessions = subprofessions.filter(allowees__in=user_profiles)
+        essential_skills = Skill.objects.filter(allowees__in=user_profiles)
+
+    subprofessions = subprofessions.prefetch_related(
+        Prefetch('essential_skills', queryset=essential_skills))
     professions = professions.prefetch_related(
         Prefetch('subprofessions', queryset=subprofessions))
 
