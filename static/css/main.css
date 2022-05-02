@@ -120,7 +120,7 @@ td.align-right {text-align: right;}
     font-family: 'IM Fell Great Primer';
     src: url("../font/IMFellGreatPrimer-Regular.ttf");
 }
-
+.line-height-13 {line-height: 1.3 !important;}
 
 * {font-family: 'IM Fell Great Primer';}
 

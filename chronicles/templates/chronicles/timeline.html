@@ -281,12 +281,14 @@
                     </td>
                     <!-- SECONDARY LOCATIONS -->
                     <td class="font-13 align-top">
-                        <ul class="bullets-4 pl-1">
+                        <ul class="bullets-4 pl-1 line-height-13">
                             {% for location in event.locations.all %}
                                 <li class="pl-0-05">
                                     <a class="hover-pointer" href="{% url 'toponomikon:location' location.name %}"
                                        data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic">Toponomikon:<br>"{{ location.name }}"</span>'>
-                                        <small>{{ location.name }}</small>
+                                        <small>
+                                            {{ location.name }}
+                                        </small>
                                     </a>
                                 </li>
                             {% endfor %}
