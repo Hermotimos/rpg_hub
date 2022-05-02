@@ -373,6 +373,10 @@ COLORS_CHOICES = [(c, c) for c in COLORS_LIST]
 
 
 def transform_to_paragraphs():
+    """A function for restoring paragraphs from Django TextField
+    and lost by transition to RichTextField
+    (in the future should be modified with filter on Statement).
+    """
     from communications.models import Statement
     for statement in Statement.objects.all():
         if not statement.text[:2] == '<p>':

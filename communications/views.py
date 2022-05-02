@@ -212,9 +212,6 @@ def thread_view(request, thread_id, tag_title):
         'followers',
         'participants')
     thread = threads.get(id=thread_id)
-
-    from rpg_project.utils import transform_to_paragraphs
-    transform_to_paragraphs()
     
     informables = thread.informables()
     if current_profile.status != 'gm':
