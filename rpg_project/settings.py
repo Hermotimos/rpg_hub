@@ -219,10 +219,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 # [custom] Following configuration is suitable for development:
-STATIC_ROOT = '/static'
+STATIC_ROOT = 'rpg_project/static'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-# STATICFILES_DIRS = ['static']
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')        # path to uploaded pics
