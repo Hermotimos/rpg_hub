@@ -229,16 +229,15 @@ print(os.path.abspath(os.path.join(os.getcwd(), os.pardir)))
 
 if os.getenv('GAE_ENV', '').startswith('standard'):
     GS_BUCKET_NAME = env("GS_BUCKET_NAME")
-    STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/static/"
+    STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/"
+    GS_LOCATION = "static"
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
     DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
     STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-    # from django.core.files.storage import default_storage
-    # print(default_storage.__class__)
-
+    
     GOOGLE_APPLICATION_CREDENTIALS = env("GOOGLE_APPLICATION_CREDENTIALS")
     GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-        "./hyllemath-cf23b4703a39.json")
+        GOOGLE_APPLICATION_CREDENTIALS)
 
 else:
     STATIC_ROOT = 'rpg_project/static'
