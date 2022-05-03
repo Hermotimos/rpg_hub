@@ -220,6 +220,11 @@ USE_TZ = True
 # -----------------------------------------------------------------------------
 # Static files (CSS, JavaScript, Images)
 
+print('HEEEEEERE')
+print(os.getcwd())
+print(os.path.abspath(os.path.join(os.getcwd(), os.pardir)))
+
+
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 if os.getenv('GAE_ENV', '').startswith('standard'):
@@ -233,7 +238,7 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
 
     GOOGLE_APPLICATION_CREDENTIALS = env("GOOGLE_APPLICATION_CREDENTIALS")
     GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-        GOOGLE_APPLICATION_CREDENTIALS)
+        "./hyllemath-cf23b4703a39.json")
 
 else:
     STATIC_ROOT = 'rpg_project/static'
