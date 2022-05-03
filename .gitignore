@@ -3,6 +3,7 @@ db.sqlite3
 
 secret.json
 credentials.py
+.env
 
 rpg_project/static/
 

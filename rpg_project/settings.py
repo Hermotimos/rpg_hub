@@ -1,38 +1,108 @@
+import io
 import json
 import os
-import socket
+from urllib.parse import urlparse
 
+import environ
 from django.core.exceptions import ImproperlyConfigured
-
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
+from google.cloud import secretmanager
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print(BASE_DIR)
-
-def get_secret(setting):
-    """Get secret setting or fail with ImproperlyConfigured"""
-    with open(os.path.join(f'{BASE_DIR}/rpg_project/', 'secret.json')) as f:
-        secrets = json.load(f)
-    try:
-        return secrets[setting]
-    except KeyError:
-        raise ImproperlyConfigured(f"Set the {setting} setting")
 
 
-SECRET_KEY = get_secret('SECRET_KEY')
-DEBUG = True
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'hyllemath.pythonanywhere.com',
-    'burkelt.pythonanywhere.com',
-    'hyllemath.lm.r.appspot.com',
-]
+# def get_secret(setting):
+#     """Get secret setting or fail with ImproperlyConfigured"""
+#     with open(os.path.join(f'{BASE_DIR}/rpg_project/', 'secret.json')) as f:
+#         secrets = json.load(f)
+#     try:
+#         return secrets[setting]
+#     except KeyError:
+#         raise ImproperlyConfigured(f"Set the {setting} setting")
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://8000-cs-570532252862-default.cs-europe-west4-fycr.cloudshell.dev'
-]
+
+# -----------------------------------------------------------------------------
+
+
+# [START gaestd_py_django_secret_config]
+
+env = environ.Env(DEBUG=(bool, False))
+env_file = os.path.join(BASE_DIR, ".env")
+
+# Use a local secret file, if provided
+if os.path.isfile(env_file):
+    env.read_env(env_file)
+    
+# [START_EXCLUDE]
+# Create local settings if running with CI, for unit testing
+elif os.getenv("TRAMPOLINE_CI", None):
+    placeholder = (
+        f"SECRET_KEY=a\n"
+        f"DATABASE_URL=sqlite://{os.path.join(BASE_DIR, 'db.sqlite3')}"
+    )
+    env.read_env(io.StringIO(placeholder))
+# [END_EXCLUDE]
+
+# Pull secrets from Secret Manager
+elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
+    # Pull secrets from Secret Manager
+    project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
+
+    client = secretmanager.SecretManagerServiceClient()
+    settings_name = os.environ.get("SETTINGS_NAME", "django_settings")
+    name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
+    payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
+
+    env.read_env(io.StringIO(payload))
+    
+else:
+    raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
+
+# [END gaestd_py_django_secret_config]
+
+
+# -----------------------------------------------------------------------------
+
+
+SECRET_KEY = env("SECRET_KEY")
+DEBUG = env("DEBUG")
+
+
+# -----------------------------------------------------------------------------
+
+
+# [START gaestd_py_django_csrf]
+
+# SECURITY WARNING: It's recommended that you use this when running in production.
+# The URL will be known once you first deploy to App Engine.
+# This code takes the URL and converts it to both these settings formats.
+
+APPENGINE_URL = env("APPENGINE_URL", default=None)
+if APPENGINE_URL:
+    # Ensure a scheme is present in the URL before it's processed.
+    if not urlparse(APPENGINE_URL).scheme:
+        APPENGINE_URL = f"https://{APPENGINE_URL}"
+
+    ALLOWED_HOSTS = [urlparse(APPENGINE_URL).netloc]
+    CSRF_TRUSTED_ORIGINS = [APPENGINE_URL]
+    SECURE_SSL_REDIRECT = True
+else:
+    CSRF_TRUSTED_ORIGINS = [
+        'https://8000-cs-570532252862-default.cs-europe-west4-fycr.cloudshell.dev'
+    ]
+    ALLOWED_HOSTS = [
+        '127.0.0.1',
+        'hyllemath.pythonanywhere.com',
+        'burkelt.pythonanywhere.com',
+        'hyllemath.lm.r.appspot.com',
+    ]
+    
+# [END gaestd_py_django_csrf]
+
+
+# -----------------------------------------------------------------------------
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -148,13 +218,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 LANGUAGE_CODE = 'pl'
-
 TIME_ZONE = 'Europe/Warsaw'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
@@ -190,13 +256,13 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = get_secret('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = get_secret('EMAIL_HOST_PASSWORD_TWO_STEP')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD_TWO_STEP')
 
 
 # -----------------------------------------------------------------------------
-
 # debug-toolbar
+
 INTERNAL_IPS = ['127.0.0.1', ]
 # debug-toolbar not rendering problem:
 # https://www.taricorp.net/2020/windows-mime-pitfalls/
@@ -205,8 +271,8 @@ INTERNAL_IPS = ['127.0.0.1', ]
 
 
 # -----------------------------------------------------------------------------
-
 # django-ckeditor
+
 # Online tool for CDEditor Toolbar customizations, but it produces JS:
 # https://ckeditor.com/latest/samples/toolbarconfigurator/index.html#basic
 CKEDITOR_CONFIGS = {
