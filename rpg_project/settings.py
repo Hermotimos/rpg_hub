@@ -239,8 +239,8 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
         GOOGLE_APPLICATION_CREDENTIALS)
 
-    MEDIA_ROOT = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
-    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')        # path to uploaded pics
+    MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
 
 else:
     STATIC_ROOT = 'rpg_project/static'
