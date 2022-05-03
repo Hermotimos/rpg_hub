@@ -234,10 +234,15 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]           # TODO produces: ['/srv/static'] - might be a problem?
     DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
     STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+
+    # This might be needed to access Cloud Storage without credentials,
+    # which should by possible from App Engine
+    # https://pnote.eu/notes/django-app-engine-user-uploaded-files/
+    GS_DEFAULT_ACL = 'publicRead'
     
-    GOOGLE_APPLICATION_CREDENTIALS = env("GOOGLE_APPLICATION_CREDENTIALS")
-    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-        GOOGLE_APPLICATION_CREDENTIALS)
+    # GOOGLE_APPLICATION_CREDENTIALS = env("GOOGLE_APPLICATION_CREDENTIALS")
+    # GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    #     GOOGLE_APPLICATION_CREDENTIALS)
 
     MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
 
