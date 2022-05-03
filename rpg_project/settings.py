@@ -193,22 +193,11 @@ WSGI_APPLICATION = 'rpg_project.wsgi.application'
 #     }
 # }
 
-print('GAEEEEEEEEEEE', env("GAE_APPLICATION", default=None))
 
-if env("GAE_APPLICATION", default=None):
-    # Running on production App Engine, so connect to Google Cloud SQL using
-    # the unix socket at /cloudsql/<your-cloudsql-connection string>
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': env('POSTGRES_DBNAME'),
-            'USER': env('POSTGRES_USER'),
-            'PASSWORD': env('POSTGRES_PASSWORD'),
-            'HOST': env('POSTGRES_HOST'),
-            'PORT': env('POSTGRES_PORT'),
-
-        }
-    }
+if os.getenv('GAE_ENV', '').startswith('standard'):
+    # Requires DATABASE_URL environmental variable
+    print('GAEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE'*10)
+    DATABASES = {"default": env.db()}
 else:
     DATABASES = {
         'default': {
