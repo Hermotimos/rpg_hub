@@ -219,9 +219,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 # [custom] Following configuration is suitable for development:
-STATIC_ROOT = 'rpg_project/static'
+STATIC_ROOT = '/static'
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = ['../rpg_hub/static']
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')        # path to uploaded pics
@@ -272,3 +273,13 @@ CKEDITOR_CONFIGS = {
     },
 }
 
+# DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+# GS_BUCKET_NAME = env("GS_BUCKET_NAME")
+# print()
+#
+# STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+#
+#
+#
+# from django.core.files.storage import default_storage
+# print(default_storage.__class__)
