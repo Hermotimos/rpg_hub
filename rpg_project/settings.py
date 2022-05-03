@@ -220,13 +220,6 @@ USE_TZ = True
 # -----------------------------------------------------------------------------
 # Static files (CSS, JavaScript, Images)
 
-print('HEEEEEERE')
-print(os.getcwd())
-print(os.path.abspath(os.path.join(os.getcwd(), os.pardir)))
-
-
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
 if os.getenv('GAE_ENV', '').startswith('standard'):
     GS_BUCKET_NAME = env("GS_BUCKET_NAME")
     STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/"
@@ -245,6 +238,7 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     #     GOOGLE_APPLICATION_CREDENTIALS)
 
     MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
+    MEDIA_ROOT = MEDIA_URL
 
 else:
     STATIC_ROOT = 'rpg_project/static'
@@ -260,14 +254,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = 'users:home'
 LOGIN_URL = 'users:login'
 LOGOUT_REDIRECT_URL = 'users:login'
-
-# With 2-step verification turn off:
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_USE_TLS = True
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = get_secret('EMAIL_HOST_USER')
-# EMAIL_HOST_PASSWORD = get_secret('EMAIL_HOST_PASSWORD')
 
 
 # With 2-step verification turn on:
