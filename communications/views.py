@@ -90,10 +90,15 @@ def get_threads(current_profile, thread_kind):
     """
     per_profile = ["Debate", "Plan"]
     per_user = ["Announcement", "Demand"]
-    if thread_kind in per_profile:
-        threads = Thread.objects.filter(participants=current_profile, kind=thread_kind)
+    
+    threads = Thread.objects.filter(kind=thread_kind)
+    
+    if current_profile.can_view_all:
+        threads = threads
+    elif thread_kind in per_profile:
+        threads = threads.filter(participants=current_profile)
     elif thread_kind in per_user:
-        threads = Thread.objects.filter(participants__in=current_profile.user.profiles.all(), kind=thread_kind)
+        threads = threads.filter(participants__in=current_profile.user.profiles.all())
     else:
         raise ValueError("Podany thread_kind nie występuje!")
     
@@ -114,7 +119,7 @@ def threads_view(request, thread_kind, tag_title):
     threads = get_threads(current_profile, thread_kind)
     if tag_title != 'None':
         threads = threads.filter(tags__title=tag_title)
-        
+
     if thread_kind == 'Announcement':
         page_title = "Ogłoszenia"
         unseen = threads.filter(id__in=current_profile.unseen_announcements)
@@ -124,7 +129,7 @@ def threads_view(request, thread_kind, tag_title):
     else:
         page_title = "TODO"
         unseen = Thread.objects.none()
-
+    
     # Annotate threads with attribute 'initiator'
     threads = threads.exclude(id__in=unseen)
     for thread in threads:
