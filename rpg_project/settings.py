@@ -221,8 +221,8 @@ USE_TZ = True
 # [custom] Following configuration is suitable for development:
 STATIC_ROOT = '/static'
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATICFILES_DIRS = ['../rpg_hub/static']
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+# STATICFILES_DIRS = ['static']
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')        # path to uploaded pics
