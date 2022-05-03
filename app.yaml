@@ -9,3 +9,5 @@ handlers:
 
 env_variables:
     APPENGINE_URL: https://hyllemath.lm.r.appspot.com
+#    APPENGINE_URL: hyllemath.lm.r.appspot.com
+
