@@ -239,14 +239,16 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
         GOOGLE_APPLICATION_CREDENTIALS)
 
+    MEDIA_ROOT = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
+    MEDIA_URL = '/media/'
+
 else:
     STATIC_ROOT = 'rpg_project/static'
     STATIC_URL = '/static/'
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
     
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')        # path to uploaded pics
-MEDIA_URL = '/media/'                               # url to media
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')        # path to uploaded pics
+    MEDIA_URL = '/media/'                               # url to media
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
