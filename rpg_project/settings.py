@@ -232,8 +232,6 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     # print(default_storage.__class__)
 
     GOOGLE_APPLICATION_CREDENTIALS = env("GOOGLE_APPLICATION_CREDENTIALS")
-    print('HEREEEEEEEEEEEEEEEEEEE', os.getcwd())
-    print([f for f in os.listdir('.') if os.path.isfile(f)])
     GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
         GOOGLE_APPLICATION_CREDENTIALS)
 
