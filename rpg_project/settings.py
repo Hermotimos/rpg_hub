@@ -171,32 +171,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'rpg_project.wsgi.application'
 
 
+# -----------------------------------------------------------------------------
 # Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-# if socket.gethostbyname(socket.gethostname()) == get_secret('LOCALHOST'):
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#             'NAME': get_secret('POSTGRES_DBNAME'),
-#             'USER': get_secret('POSTGRES_USER'),
-#             'PASSWORD': get_secret('POSTGRES_PASSWORD'),
-#             'HOST': get_secret('POSTGRES_HOST'),
-#             'PORT': get_secret('POSTGRES_PORT'),
-#
-#         }
-#     }
-# else:
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
 
 if os.getenv('GAE_ENV', '').startswith('standard'):
-    # Requires DATABASE_URL environmental variable
-    print('GAEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE'*10)
+    # Requires DATABASE_URL environmental variable to be set
     DATABASES = {"default": env.db()}
 else:
     DATABASES = {
@@ -206,10 +185,22 @@ else:
         }
     }
     
+# Use a in-memory sqlite3 database when testing in CI systems
+if os.getenv("TRAMPOLINE_CI", None):
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
+    }
+    
+    
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
+# -----------------------------------------------------------------------------
 # Password validation
+
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -226,10 +217,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+# -----------------------------------------------------------------------------
 # Internationalization
-# https://docs.djangoproject.com/en/2.2/topics/i18n/
 
+# https://docs.djangoproject.com/en/2.2/topics/i18n/
 LANGUAGE_CODE = 'pl'
 TIME_ZONE = 'Europe/Warsaw'
 USE_I18N = True
@@ -237,7 +228,9 @@ USE_L10N = True
 USE_TZ = True
 
 
+# -----------------------------------------------------------------------------
 # Static files (CSS, JavaScript, Images)
+
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 # [custom] Following configuration is suitable for development:
