@@ -4,6 +4,7 @@ from urllib.parse import urlparse
 
 import environ
 from google.cloud import secretmanager
+from google.oauth2 import service_account
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -229,17 +230,16 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
     # from django.core.files.storage import default_storage
     # print(default_storage.__class__)
+
+    GOOGLE_APPLICATION_CREDENTIALS = env("GOOGLE_APPLICATION_CREDENTIALS")
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+        GOOGLE_APPLICATION_CREDENTIALS)
+
 else:
     STATIC_ROOT = 'rpg_project/static'
     STATIC_URL = '/static/'
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
     
-# TODO for collectstatic from local machine to GCP Storage bucket
-# from google.oauth2 import service_account
-# GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-#     'path/to/the/downloaded/json/key/credentials.json' # see step 3
-# )
-
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')        # path to uploaded pics
 MEDIA_URL = '/media/'                               # url to media
