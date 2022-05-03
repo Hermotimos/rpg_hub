@@ -218,14 +218,29 @@ USE_TZ = True
 
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-# [custom] Following configuration is suitable for development:
-STATIC_ROOT = 'rpg_project/static'
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+if os.getenv('GAE_ENV', '').startswith('standard'):
+    GS_BUCKET_NAME = env("GS_BUCKET_NAME")
+    STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/static/"
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    # from django.core.files.storage import default_storage
+    # print(default_storage.__class__)
+else:
+    STATIC_ROOT = 'rpg_project/static'
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+    
+# TODO for collectstatic from local machine to GCP Storage bucket
+# from google.oauth2 import service_account
+# GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+#     'path/to/the/downloaded/json/key/credentials.json' # see step 3
+# )
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')        # path to uploaded pics
 MEDIA_URL = '/media/'                               # url to media
+
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -271,14 +286,3 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'full',
     },
 }
-
-# DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-# GS_BUCKET_NAME = env("GS_BUCKET_NAME")
-# print()
-#
-# STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-#
-#
-#
-# from django.core.files.storage import default_storage
-# print(default_storage.__class__)
