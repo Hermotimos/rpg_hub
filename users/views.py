@@ -202,6 +202,7 @@ def home_view(request):
         if skill.image:
             url = skill.image.url
             url = url.replace('.png', '.jpg')
+            url = url.replace('/media', '').url.replace('/media', '')
             skill.image = url
             print(url)
             skill.save()
