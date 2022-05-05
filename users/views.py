@@ -196,16 +196,6 @@ def game_event_with_caption(game_events_qs):
 
 @login_required
 def home_view(request):
-    
-    from rules.models import Skill
-    for skill in Skill.objects.all():
-        if skill.image:
-            url = skill.image.url
-            url = url.replace('.png', '.jpg')
-            url = url.replace('/media', '').replace('/media', '')
-            skill.image = url
-            print(url)
-            skill.save()
     try:
         current_profile = Profile.objects.get(id=request.session['profile_id'])
     except KeyError:
