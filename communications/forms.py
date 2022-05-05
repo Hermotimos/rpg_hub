@@ -156,7 +156,7 @@ class StatementCreateForm(forms.ModelForm):
         self.fields['image'].label = "Załącz obraz"
         self.fields['text'].label = ""
         
-        if current_profile.status != 'gm':
+        if thread_kind != "Debate" or current_profile.status != 'gm':
             self.fields['author'].widget = HiddenInput()
         else:
             # If Thread doesn't exist yet, meaning this form is used with
@@ -166,9 +166,6 @@ class StatementCreateForm(forms.ModelForm):
             else:
                 self.fields['author'].queryset = Profile.objects.filter(
                     Q(status='gm') | Q(id__in=participants))
-            
-        if thread_kind != "Debate":
-            self.fields['author'].widget = HiddenInput()
 
     def save(self, commit=True, **kwargs):
         """Override TinyMCE default behavior, which is that lists loose
@@ -183,8 +180,6 @@ class StatementCreateForm(forms.ModelForm):
             }
             for k, v in replacements.items():
                 text = text.replace(k, v)
-            if kwargs.get('thread_kind') == "Debate":
-                text = text.capitalize()
             instance.text = text
             return instance
         else:
