@@ -21,7 +21,7 @@
         </a>
     </div>
     
-    {% if not thread.is_ended %}
+    {% if not thread.is_ended and not thread.is_exclusive %}
         <div>
             <p data-toggle="tooltip" data-placement="bottom" title="Udostępnij">
                 <span class="btn btn-outline-dark icon-inform py-2 ml-1 mt-1" data-toggle="modal" data-target="#infoThreadModal"></span>
