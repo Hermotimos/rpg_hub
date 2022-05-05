@@ -238,7 +238,7 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     #     GOOGLE_APPLICATION_CREDENTIALS)
 
     MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
-    MEDIA_ROOT = MEDIA_URL
+    MEDIA_ROOT = '/media/'
 
 else:
     STATIC_ROOT = 'rpg_project/static'
