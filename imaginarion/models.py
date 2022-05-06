@@ -110,7 +110,7 @@ class Picture(Model):
     in which it was seen and to whom it is known. This allows to create
     multiple overlays for one image with varying descriptions and types.
     """
-    image = FK(to=PictureImage, related_name='used_in_pics', on_delete=CASCADE)
+    image = FK(to=PictureImage, related_name='pictures', on_delete=CASCADE)
     type = CharField(max_length=20, choices=IMG_TYPES)
     description = CharField(max_length=200, blank=True, null=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)

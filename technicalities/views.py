@@ -166,8 +166,8 @@ def reload_chronicles(request):
 @only_game_masters
 def reload_imaginarion(request):
     for obj in PictureImage.objects.all():
-        # print(obj.used_in_pics.first().description)
-        obj.description = obj.used_in_pics.first().description
+        # print(obj.pictures.first().description)
+        obj.description = obj.pictures.first().description
         obj.save()
     messages.info(request, f'Przeładowano "PictureImage" dla "imaginarion"!')
     return redirect('technicalities:reload-main')
