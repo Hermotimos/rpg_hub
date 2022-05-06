@@ -1,3 +1,5 @@
+import re
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit
 from django import forms
@@ -180,6 +182,10 @@ class StatementCreateForm(forms.ModelForm):
             }
             for k, v in replacements.items():
                 text = text.replace(k, v)
+            if kwargs.get('thread_kind') == "Debate":
+                # Remove HTML tags from Statements in Debates
+                clean = re.compile('<.*?>')
+                text = re.sub(clean, '', text)
             instance.text = text
             return instance
         else:
