@@ -1,5 +1,6 @@
 from PIL import Image
 from django.db.models import (
+    BooleanField,
     CASCADE,
     CharField,
     ForeignKey as FK,
@@ -66,9 +67,27 @@ class AudioSet(Model):
         return self.title
 
 
+# TODO osobno w każdej app odpalać pętlę, która:
+#   1) zaktualizuje 'type'
+#   2) zapisze obraz w nowej lokacji (storage.blob)
+#   3) zaktualizuje ścieżkę w ImagePicture - to chyba nie takie proste
+# TODO zapis bez jakichkolwiek prefiksów
+# TODO symbola -> realia_symbola
+# TODO add 'type'
 class PictureImage(Model):
+    TYPES = (
+        ('toponomikon-main', 'toponomikon-main'),
+        ('toponomikon-other', 'toponomikon-other'),
+        ('prosoponomikon-main', 'prosoponomikon-main'),
+        ('prosoponomikon-other', 'prosoponomikon-other'),
+        ('therionomikon', 'therionomikon'),
+        ('knowledge', 'knowledge'),
+        ('realia', 'realia'),
+        ('varia', 'varia'),
+    )
     """A model to store paths to internally stored image files."""
     image = ImageField(upload_to='post_pics', storage=ReplaceFileStorage())
+    # type = CharField(max_length=20, choices=TYPES)
     description = CharField(max_length=200, blank=True, null=True)
     sorting_name = CharField(max_length=250, blank=True, null=True)
 
@@ -76,6 +95,7 @@ class PictureImage(Model):
         ordering = ['sorting_name']
         
     def save(self, *args, **kwargs):
+        # TODO add re-save of image (to enforce new location on type change)
         self.sorting_name = create_sorting_name(self.__str__())
         first_save = True if not self.pk else False
         super().save(*args, **kwargs)
@@ -90,7 +110,6 @@ class PictureImage(Model):
         return str(self.image.name).replace("post_pics/", "")
 
 
-# TODO delete model, below is a replacement model (work with existing objs...)
 IMG_TYPES = (
     ('knowledge', 'KNOWLEDGE'),
     ('npc', 'NPC'),
@@ -144,38 +163,3 @@ class PictureSet(Model):
 
     def __str__(self):
         return self.title
-
-
-# TODO: REPLACEMENT !!!!
-# class Picture(models.Model):
-#
-#     class PictureType(models.TextChoices):
-#         knowledge = 'KNOW'
-#         npc = 'NPC'
-#         realia = 'REAL'
-#         symbola = 'SYMB'
-#         thera = 'THERA'
-#         topoi = 'TOPOI'
-#         varia = 'VARIA'
-#
-#     type = models.CharField(max_length=5, choices=PictureType.choices)
-#     image = models.ImageField(upload_to='post_pics',
-#                               storage=ReplaceFileStorage())
-#     title = models.CharField(max_length=200, unique=True)
-#     description = models.CharField(max_length=200, blank=True, null=True)
-#
-#     class Meta:
-#         ordering = ['type', 'title', 'description']
-#
-#     def __str__(self):
-#         return f'{str(self.type).upper()}__{str(self.title).split("_", 1)[1]}'
-#
-#     def save(self, *args, **kwargs):
-#         first_save = True if not self.pk else False
-#         super().save(*args, **kwargs)
-#         if first_save and self.image:
-#             img = Image.open(self.image.path)
-#             if img.height > 1000 or img.width > 1000:
-#                 output_size = (1000, 1000)
-#                 img.thumbnail(output_size)
-#                 img.save(self.image.path)
