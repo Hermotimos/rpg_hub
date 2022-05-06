@@ -241,7 +241,7 @@ span.pointer {cursor: pointer;}
 }
 
 .img-skill {
-    float: left;
+    /*float: left;*/
     height: 60px;
     width: 60px;
 }
