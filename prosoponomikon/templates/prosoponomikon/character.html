@@ -21,7 +21,7 @@
                                     {% if current_profile.character == character or current_profile in character.participants.all or current_profile.can_view_all %}
                                         {{ character.profile.image.url }}
                                     {% else %}
-                                         /media/profile_pics/profile_known_only_indirectly.jpg
+                                         /static/img/profile_known_only_indirectly.jpg
                                     {% endif %}"
                             >
                         </div>
