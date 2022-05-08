@@ -2,40 +2,44 @@
 {% load custom_filters %}
 
 
-<div class="container my-2">
+<div class="container my-1">
     
     <div class="row">
-        <span class="hover-pointer" data-toggle="collapse" data-target="#{{ skill|remove_special_chars }}{{ id_suffix }}">
-            {% if skilltype_kind == 'Kapłańskie' or skilltype_kind == 'Zaklęcia' or skilltype_kind == 'Teurgiczne' %}
-                <img class="img-skill" src="{% static 'img/'|add:skill.skill_levels.first.level|add:'.png' %}">
-            {% else %}
-                {% if skill.image %}
-                    <img class="img-skill" src="{{ skill.image.url }}">
+        <div class="col-1 p-0">
+            <div class="hover-pointer" data-toggle="collapse" data-target="#{{ skill|remove_special_chars }}{{ id_suffix }}">
+                {% if skilltype_kind == 'Kapłańskie' or skilltype_kind == 'Zaklęcia' or skilltype_kind == 'Teurgiczne' %}
+                    <img class="img-skill" src="{% static 'img/'|add:skill.skill_levels.first.level|add:'.png' %}">
                 {% else %}
-                    <img class="img-skill" src="{% static 'img/skill-default.png' %}">
+                    {% if skill.image %}
+                        <img class="img-skill" src="{{ skill.image.url }}">
+                    {% else %}
+                        <img class="img-skill" src="{% static 'img/skill-default.png' %}">
+                    {% endif %}
                 {% endif %}
-            {% endif %}
-        </span>
-        <span class="pt-2 ml-1">
-            <b class="ml-1 skill-or-synergy-name">
-                {% if current_profile.status == 'gm' %}
-                    <a class="hover-blue" href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+            </div>
+        </div>
+        <div class="col-11 p-0 mt-1 mt-lg-2">
+            <span class="pt-3">
+                <b class="ml-1 skill-or-synergy-name">
+                    {% if current_profile.status == 'gm' %}
+                        <a class="hover-blue" href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                            {{ skill.name }}
+                        </a>
+                    {% else %}
                         {{ skill.name }}
-                    </a>
-                {% else %}
-                    {{ skill.name }}
-                {% endif %}
-                <!-- Used when template is called from Prosoponomikon -->
-                {% if max_level_only %}
-                    [{{ skill.skill_levels.all|get_max_skill_level_no }}]
-                {% endif %}
-            </b>
-            <small class="rules-gray1 smaller">
-                {% if skill.tested_trait %}
-                    ({{ skill.tested_trait }})
-                {% endif %}
-            </small>
-        </span>
+                    {% endif %}
+                    <!-- Used when template is called from Prosoponomikon -->
+                    {% if max_level_only %}
+                        [{{ skill.skill_levels.all|get_max_skill_level_no }}]
+                    {% endif %}
+                </b>
+                <small class="rules-gray1 smaller">
+                    {% if skill.tested_trait %}
+                        ({{ skill.tested_trait }})
+                    {% endif %}
+                </small>
+            </span>
+        </div>
     </div>
     
     <div class="row collapse" id="{{ skill|remove_special_chars }}{{ id_suffix }}">

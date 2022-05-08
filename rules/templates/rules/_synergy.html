@@ -6,26 +6,30 @@
 <div class="container my-2">
     
     <div class="row">
-        <span class="m-0 p-0 hover-pointer" data-toggle="collapse" data-target="#{{ synergy|remove_special_chars }}">
-            {% for skill in synergy.skills.all %}
-                {% if skill.image %}
-                    <img class="img-skill" src="{{ skill.image.url }}">
-                {% else %}
-                    <img class="img-skill" src="{% static 'img/skill-default.png' %}">
-                {% endif %}
-            {% endfor %}
-        </span>
-        <span class="pt-2 ml-1">
-            <b class="ml-2 skill-or-synergy-name">
-                {% if current_profile.status == 'gm' %}
-                    <a class="hover-blue" href="{% url 'admin:rules_synergy_change' synergy.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+        <div class="col-2 p-0">
+            <div class="m-0 p-0" data-toggle="collapse" data-target="#{{ synergy|remove_special_chars }}">
+                {% for skill in synergy.skills.all %}
+                    {% if skill.image %}
+                        <img class="img-skill hover-pointer" src="{{ skill.image.url }}">
+                    {% else %}
+                        <img class="img-skill hover-pointer" src="{% static 'img/skill-default.png' %}">
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-10 p-0 mt-1 mt-lg-2 pl-1 pl-sm-0">
+            <span>
+                <b class="skill-or-synergy-name">
+                    {% if current_profile.status == 'gm' %}
+                        <a class="hover-blue" href="{% url 'admin:rules_synergy_change' synergy.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                            {{ synergy.name }}
+                        </a>
+                    {% else %}
                         {{ synergy.name }}
-                    </a>
-                {% else %}
-                    {{ synergy.name }}
-                {% endif %}
-            </b>
-        </span>
+                    {% endif %}
+                </b>
+            </span>
+        </div>
     </div>
     
     <div class="row collapse" id="{{ synergy|remove_special_chars }}{{ collapse_id_suffix }}">

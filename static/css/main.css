@@ -240,12 +240,6 @@ span.pointer {cursor: pointer;}
     border: 0;
 }
 
-.img-skill {
-    /*float: left;*/
-    height: 60px;
-    width: 60px;
-}
-
 a.img-link {
     opacity: 1;
     filter: grayscale(0%);
@@ -547,6 +541,41 @@ input.select-profile[type=checkbox]:checked + label {
 
 
 /*****************************************************************************/
+/********************************** SKILLS ***********************************/
+/*****************************************************************************/
+
+
+@media only screen and (min-width: 0px) {
+    .skill-or-synergy-name {font-size: 1.1rem;}
+    .img-skill {
+        height: 2rem;
+        width: 2rem;
+    }
+}
+@media only screen and (min-width: 600px) {
+    .skill-or-synergy-name {font-size: 1.5rem;}
+    .img-skill {
+        height: 2.5rem;
+        width: 2.5rem;
+    }
+}
+@media only screen and (min-width: 1000px) {
+    .skill-or-synergy-name {font-size: 1.8rem;}
+    .img-skill {
+        height: 3rem;
+        width: 3rem;
+    }
+}
+@media only screen and (min-width: 1200px) {
+    .skill-or-synergy-name {font-size: 2.1rem;}
+    .img-skill {
+        height: 3.75rem;
+        width: 3.75rem;
+    }
+}
+
+
+/*****************************************************************************/
 /********************************** VARIA ************************************/
 /*****************************************************************************/
 /*
@@ -571,6 +600,7 @@ div.anchor:before {
 .border-none {
     border: none !important;
 }
+
 
 
 

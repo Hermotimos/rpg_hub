@@ -153,19 +153,3 @@ tbody.align-center td.align-right {text-align: right;}
 tbody.align-center td.align-left {text-align: left;}
 thead.align-center th.align-left {text-align: left;}
 thead.align-center th.align-right {text-align: right;}
-
-
-
-
-@media only screen and (min-width: 0px) {
-    .skill-or-synergy-name {font-size: 0.8rem;}
-}
-@media only screen and (min-width: 600px) {
-    .skill-or-synergy-name {font-size: 0.9rem;}
-}
-@media only screen and (min-width: 1000px) {
-    .skill-or-synergy-name {font-size: 1rem;}
-}
-@media only screen and (min-width: 1200px) {
-    .skill-or-synergy-name {font-size: 2.1rem;}
-}
