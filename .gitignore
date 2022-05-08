@@ -1,21 +1,27 @@
 db.sqlite3
 *.sqlite3
 
+myenv
+myvirtualenv
+
 secret.json
-credentials.py
+dumped.json
+# for GCP authentication
+hyllemath-cf23b4703a39.json
+# for setting GCP bucket CORS conf
+cors.json
+
 .env
 
+rpg_project/settings_collectstatic.py
+
 rpg_project/static/
+media
 
 PyCharm_ReferenceCard.pdf
 
 .DS_Store
 .idea
-
-media
-myenv
-myvirtualenv
-
 *.pyc
 *~
 __pycache__
@@ -23,7 +29,3 @@ __pycache__
 
 
 
-
-hyllemath-cf23b4703a39.json
-rpg_project/settings_collectstatic.py
-/dumped.json
