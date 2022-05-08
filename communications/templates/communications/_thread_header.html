@@ -141,7 +141,9 @@
             </div>
             <div class="col-10 pl-5 pl-lg-0">
                 {% for profile in thread.followers.all %}
-                    {% include '_img_sm.html' %}
+                    {% if thread.kind != "Debate" or profile.status != "gm" %}
+                        {% include '_img_sm.html' %}
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>

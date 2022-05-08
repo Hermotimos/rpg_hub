@@ -40,18 +40,6 @@ THREADS_MAP = {
 }
 
 
-def get_recipients(statement: communications.models.Statement):
-    """Determine recipients list for emails about new statements.
-    For cases when GM 'speaks' through NPCs and ex-Players, exclude GMs
-    and all profiles controlled by them (other than active players).
-    """
-    # Exclude via user, because all NPCs are linked with GM via user
-    recipients = statement.thread.followers.exclude(user__profiles=statement.author)
-    if statement.author in Profile.gm_controlled.all():
-        recipients = recipients.exclude(status='gm')
-    return recipients
-
-
 def get_initiator(thread: Thread):
     """Get URL of the Profile who "initiated" the Thread.
     Take the author of first Statement as the initiator; only in Announcements
@@ -269,7 +257,8 @@ def thread_view(request, thread_id, tag_title):
             subject=f"[RPG] Nowa wypowiedź: '{thread.title}'",
             message=f"{request.get_host()}{thread.get_absolute_url()}",
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[p.user.email for p in get_recipients(statement)])
+            recipient_list=[
+                p.user.email for p in thread.followers.exclude(id=current_profile.id)])
         messages.info(request, "Dodano wypowiedź!")
         return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
     
@@ -330,7 +319,8 @@ def create_thread_view(request, thread_kind):
             subject=f"[RPG] {THREADS_MAP[thread_kind]['text']}: '{thread}'",
             message=f"{request.get_host()}{thread.get_absolute_url()}",
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[p.user.email for p in get_recipients(statement)])
+            recipient_list=[
+                p.user.email for p in thread.followers.exclude(id=current_profile.id)])
 
         messages.info(request, f"{THREADS_MAP[thread_kind]['text']}: '{thread}!")
         return redirect('communications:thread', thread_id=thread.id, tag_title=None)
