@@ -6,34 +6,36 @@
 <div class="container my-2 p-0">
     
     <div class="d-flex flex-row">
+        
         <div class="d-flex flex-nowrap hover-pointer m-0 p-0" data-toggle="collapse" data-target="#{{ synergy|remove_special_chars }}">
             {% for skill in synergy.skills.all %}
                 {% if skill.image %}
-                    <img class="img-skill mr-1 mx-sm-1" src="{{ skill.image.url }}">
+                    <img class="img-skill mx-sm-1" src="{{ skill.image.url }}">
                 {% else %}
-                    <img class="img-skill mr-1 mx-sm-1" src="{% static 'img/skill-default.png' %}">
+                    <img class="img-skill mx-sm-1" src="{% static 'img/skill-default.png' %}">
                 {% endif %}
             {% endfor %}
         </div>
-        <div class="skill-or-synergy-name font-weight-bold ml-2 mt-1">
+        
+        <div class="skill-or-synergy-name ml-2 mt-1">
             {% if current_profile.status == 'gm' %}
-                <a class="hover-blue" href="{% url 'admin:rules_synergy_change' synergy.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                <a class="hover-blue font-weight-bold" href="{% url 'admin:rules_synergy_change' synergy.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
                     {{ synergy.name }}
                 </a>
             {% else %}
                 {{ synergy.name }}
             {% endif %}
+            <div class="row collapse mt-2" id="{{ synergy|remove_special_chars }}{{ collapse_id_suffix }}">
+                {% for synergy_level in synergy.synergy_levels.all %}
+                    {% with level_img='img/'|add:synergy_level.level|add:'.png' %}
+                        {% with skill_or_synergy_level=synergy_level %}
+                            {% include 'rules/_skill_or_synergy_level.html' %}
+                        {% endwith %}
+                    {% endwith %}
+                {% endfor %}
+            </div>
         </div>
-    </div>
-    
-    <div class="row collapse" id="{{ synergy|remove_special_chars }}{{ collapse_id_suffix }}">
-        {% for synergy_level in synergy.synergy_levels.all %}
-            {% with level_img='img/'|add:synergy_level.level|add:'.png' %}
-                {% with skill_or_synergy_level=synergy_level %}
-                    {% include 'rules/_skill_or_synergy_level.html' %}
-                {% endwith %}
-            {% endwith %}
-        {% endfor %}
+        
     </div>
     
 </div>
