@@ -3,7 +3,8 @@
 
 
 
-<div class="container">
+<div class="container my-2">
+    
     <div class="row">
         <span class="m-0 p-0 hover-pointer" data-toggle="collapse" data-target="#{{ synergy|remove_special_chars }}">
             {% for skill in synergy.skills.all %}
@@ -13,21 +14,20 @@
                     <img class="img-skill" src="{% static 'img/skill-default.png' %}">
                 {% endif %}
             {% endfor %}
-            <span class="h2 pt-3">
-                <b class="ml-2">
-                    {% if current_profile.status == 'gm' %}
-                        <a class="hover-blue" href="{% url 'admin:rules_synergy_change' synergy.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
-                            {{ synergy.name }}
-                        </a>
-                    {% else %}
-                        {{ synergy.name }}
-                    {% endif %}
-                </b>
-            </span>
-
         </span>
-        
+        <span class="pt-2 ml-1">
+            <b class="ml-2 skill-or-synergy-name">
+                {% if current_profile.status == 'gm' %}
+                    <a class="hover-blue" href="{% url 'admin:rules_synergy_change' synergy.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                        {{ synergy.name }}
+                    </a>
+                {% else %}
+                    {{ synergy.name }}
+                {% endif %}
+            </b>
+        </span>
     </div>
+    
     <div class="row collapse" id="{{ synergy|remove_special_chars }}{{ collapse_id_suffix }}">
         {% for synergy_level in synergy.synergy_levels.all %}
             {% with level_img='img/'|add:synergy_level.level|add:'.png' %}
@@ -37,45 +37,49 @@
             {% endwith %}
         {% endfor %}
     </div>
+    
 </div>
 
 
-<table class="mt-2">
-    <thead>
-        <tr>
-            <th class="m-0 p-0 hover-pointer" data-toggle="collapse" data-target="#{{ synergy|remove_special_chars }}">
-                <div class="m-0 p-0">
-                    {% for skill in synergy.skills.all %}
-                        {% if skill.image %}
-                            <img class="img-skill" src="{{ skill.image.url }}">
-                        {% else %}
-                            <img class="img-skill" src="{% static 'img/skill-default.png' %}">
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </th>
-            <th colspan="2"  class="m-0 p-0">
-                <h2 class="pt-3">
-                    <b class="ml-2">
-                        {% if current_profile.status == 'gm' %}
-                            <a class="hover-blue" href="{% url 'admin:rules_synergy_change' synergy.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
-                                {{ synergy.name }}
-                            </a>
-                        {% else %}
-                            {{ synergy.name }}
-                        {% endif %}
-                    </b>
-                </h2>
-            </th>
-        </tr>
-    </thead>
-    <tbody id="{{ synergy|remove_special_chars }}{{ collapse_id_suffix }}" class="collapse">
-        {% for synergy_level in synergy.synergy_levels.all %}
-            {% with level_img='img/'|add:synergy_level.level|add:'.png' %}
-                {% with skill_or_synergy_level=synergy_level %}
-                    {% include 'rules/_skill_or_synergy_level.html' %}
-                {% endwith %}
-            {% endwith %}
-        {% endfor %}
-    </tbody>
-</table>
+
+
+
+<!--<table class="mt-2">-->
+<!--    <thead>-->
+<!--        <tr>-->
+<!--            <th class="m-0 p-0 hover-pointer" data-toggle="collapse" data-target="#{{ synergy|remove_special_chars }}">-->
+<!--                <div class="m-0 p-0">-->
+<!--                    {% for skill in synergy.skills.all %}-->
+<!--                        {% if skill.image %}-->
+<!--                            <img class="img-skill" src="{{ skill.image.url }}">-->
+<!--                        {% else %}-->
+<!--                            <img class="img-skill" src="{% static 'img/skill-default.png' %}">-->
+<!--                        {% endif %}-->
+<!--                    {% endfor %}-->
+<!--                </div>-->
+<!--            </th>-->
+<!--            <th colspan="2"  class="m-0 p-0">-->
+<!--                <h2 class="pt-3">-->
+<!--                    <b class="ml-2">-->
+<!--                        {% if current_profile.status == 'gm' %}-->
+<!--                            <a class="hover-blue" href="{% url 'admin:rules_synergy_change' synergy.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">-->
+<!--                                {{ synergy.name }}-->
+<!--                            </a>-->
+<!--                        {% else %}-->
+<!--                            {{ synergy.name }}-->
+<!--                        {% endif %}-->
+<!--                    </b>-->
+<!--                </h2>-->
+<!--            </th>-->
+<!--        </tr>-->
+<!--    </thead>-->
+<!--    <tbody id="{{ synergy|remove_special_chars }}{{ collapse_id_suffix }}" class="collapse">-->
+<!--        {% for synergy_level in synergy.synergy_levels.all %}-->
+<!--            {% with level_img='img/'|add:synergy_level.level|add:'.png' %}-->
+<!--                {% with skill_or_synergy_level=synergy_level %}-->
+<!--                    {% include 'rules/_skill_or_synergy_level.html' %}-->
+<!--                {% endwith %}-->
+<!--            {% endwith %}-->
+<!--        {% endfor %}-->
+<!--    </tbody>-->
+<!--</table>-->

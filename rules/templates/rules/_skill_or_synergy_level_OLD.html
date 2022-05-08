@@ -1,0 +1,69 @@
+{% load static %}
+{% load custom_filters %}
+
+
+<tr>
+    <td class="align-top"></td>
+    <td class="align-top pl-1">
+        {% if skilltype_kind != 'Kapłańskie' and skilltype_kind != 'Zaklęcia' and skilltype_kind != 'Moce Teurgiczne' %}
+            {% if current_profile.status == 'gm' %}
+                <a href="{% url 'admin:rules_skilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                    <img class="img-xs" src="{% static level_img %}">
+                </a>
+            {% else %}
+                <img class="img-xs" src="{% static level_img %}">
+            {% endif %}
+        {% endif %}
+    </td>
+    <td class="align-top pl-1 pr-4 py-1 text-justify font-14">
+        
+        <!-- This is only triggered in Synergy-->
+        <div>
+            {{ skill_or_synergy_level.skill_levels.all|join:" + " }}
+        </div>
+        
+        {% if skill_or_synergy_level.description %}
+            <span class="mt-1">
+                {{ skill_or_synergy_level.description|custom_linebreaksbr:2 }}
+            </span>
+        {% endif %}
+        
+        {% for perk in skill_or_synergy_level.perks.all %}
+            <div class="mb-1 {% if skill_or_synergy_level.description %} mt-1 {% endif %}">
+                <div class="font-weight-bold">
+                    {% if current_profile.status == 'gm' %}
+                        <a href="{% url 'admin:rules_perk_change' perk.id %}" target="_blank"
+                           data-toggle="tooltip" data-placement="right" title="Edytuj Atut">
+                            ✧ {{ perk.name|trim_nums }}
+                        </a>
+                    {% else %}
+                        ✧ {{ perk.name|trim_nums }}
+                    {% endif %}
+                    {% if perk.cost %}
+                        <span class="small text-danger border-top-dotted">
+                            [{{ perk.cost }}]
+                        </span>
+                    {% endif %}
+                </div>
+                {% if perk.description %}
+                    <div class="ml-3 mb-1">
+                        {{ perk.description|custom_linebreaksbr:1 }}
+                    </div>
+                {% endif %}
+                {% for conditional_modifier in perk.conditional_modifiers.all %}
+                    <div class="ml-3">
+                        {{ conditional_modifier|format_conditional_modifier:"text-info" }}
+                    </div>
+                {% endfor %}
+                <ul class="ml-4 pl-1 bullets-2 mb-1">
+                    {% for comment in perk.comments.all %}
+                        <li class="pl-1">{{ comment }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+        
+    </td>
+</tr>
+
+    
