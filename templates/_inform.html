@@ -42,7 +42,11 @@
                                 {% if profile.status == 'player' %}
                                     <input class="select-profile" type="checkbox" id="id_{{ forloop.counter }}{{ id_ }}" name="{{ profile.id }}">
                                     <label for="id_{{ forloop.counter }}{{ id_ }}">
-                                        {% include '_profile_round_img.html' %}
+                                        {% if inform_type != "Announcement" %}
+                                            {% include '_profile_round_img.html' %}
+                                        {% else %}
+                                            {% include '_user_round_img.html' %}
+                                        {% endif %}
                                     </label>
                                 {% endif %}
                             {% endfor %}
