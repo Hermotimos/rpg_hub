@@ -323,7 +323,6 @@ def create_thread_view(request, thread_kind):
 
         statement = statement_form.save(commit=False)
         statement.thread = thread
-        statement.author = current_profile
         statement.save()
         statement.seen_by.add(current_profile)
 
