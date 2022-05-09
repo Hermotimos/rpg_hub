@@ -16,18 +16,47 @@ from rules.utils import get_overload_ranges, LOAD_LIMITS, get_user_professions, 
 from users.models import Profile
 
 
+
 @login_required
-def mockskill_view(request):
+def mockskill_view(request, skilltype_kind):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
-    skills = Skill.objects.all()
+    user_profiles = current_profile.user.profiles.all()
+    
+    if current_profile.can_view_all:
+        skills = Skill.objects.filter(
+            types__kinds__name=skilltype_kind,
+            is_version=False,
+        )
+    else:
+        skills = Skill.objects.filter(
+            allowees__in=user_profiles,
+            types__kinds__name=skilltype_kind,
+            is_version=False,
+        )
+    
+    skills = skills.select_related('group__type').distinct()
+    skills = skills.prefetch_related(
+        'skill_levels__perks__conditional_modifiers__conditions',
+        'skill_levels__perks__conditional_modifiers__combat_types',
+        'skill_levels__perks__conditional_modifiers__modifier__factor',
+        'skill_levels__perks__comments',
+    )
+    
+    skill_types = SkillType.objects.filter(kinds__name=skilltype_kind)
+    skill_types = skill_types.prefetch_related(
+        Prefetch('skills', queryset=skills), 'skill_groups')
+    skill_types = skill_types.filter(skills__in=skills).distinct()
+    
     context = {
         'current_profile': current_profile,
-        'page_title': 'Zasady',
+        'page_title': f'Umiejętności: {skilltype_kind}',
+        'skilltype_kind': skilltype_kind,
+        'skill_types': skill_types,
         'skills': skills,
     }
     return render(request, 'rules/mockskill.html', context)
 
-    
+
 @login_required
 def rules_main_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])

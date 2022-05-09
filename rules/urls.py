@@ -27,5 +27,5 @@ urlpatterns = [
     path('weapons/', views.rules_weapons_view, name='weapons'),
     path('wounds/', views.rules_wounds_view, name='wounds'),
     
-    path('mockskill/', views.mockskill_view, name='mockskill'),
+    path('mockskill/<str:skilltype_kind>/', views.mockskill_view, name='mockskill'),
 ]
