@@ -165,7 +165,7 @@ WSGI_APPLICATION = 'rpg_project.wsgi.application'
 if os.getenv('GAE_ENV', '').startswith('standard'):
     # Requires DATABASE_URL environmental variable to be set
     DATABASES = {"default": env.db()}
-else:
+elif os.environ['COMPUTERNAME'] == "LUKASZ-KOMPUTER":
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -177,7 +177,14 @@ else:
     
         }
     }
-    
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
+    }
+
 # Use a in-memory sqlite3 database when testing in CI systems
 if os.getenv("TRAMPOLINE_CI", None):
     DATABASES = {
