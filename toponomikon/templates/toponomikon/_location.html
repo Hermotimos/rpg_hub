@@ -1,4 +1,6 @@
 {% load static %}
+{% load custom_filters %}
+
 
 <div class="anchor mt-n5" id="location_{{ location.id }}">
     <div class="row">
@@ -13,9 +15,9 @@
                     {{ location.name }}
                 </small>
             </h2>
-            <h6 class="font-italic linebreaks-style text-justify
+            <h6 class="font-italic text-justify
                 {% if location.only_indirectly %} text-muted {% endif %}">
-                {% if location.description %} {{ location.description|linebreaks }} {% endif %}
+                {% if location.description %} {{ location.description|custom_linebreaksbr:1 }} {% endif %}
             </h6>
             <p class="text-justify">
                 {% for location in location.locations.all %}

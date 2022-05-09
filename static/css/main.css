@@ -8,6 +8,12 @@ body {
     color: #444444;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
 article.content {min-height: 700px}
 
 article.top-space {margin-top: 5rem;}
@@ -97,12 +103,6 @@ td.align-right {text-align: right;}
     bottom: 10px;
     display: none;
 }
-
-.linebreaks-style {
-    font-weight: 500;
-    line-height: 1.5;
-}
-.linebreaks-style p {margin-bottom: 0.55rem;}
 
 .border-double {
     border: double #444444;

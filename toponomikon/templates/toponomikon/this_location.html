@@ -67,9 +67,9 @@
                         </div>
                         <!-- DESCRIPTION -->
                         <div class="col-12 col-md-11 p-0 pl-md-3 ml-lg-n3 ml-xl-n4">
-                            <h6 class="font-18 font-italic linebreaks-style text-justify
+                            <h6 class="font-18 font-italic text-justify
                                 {% if this_location.only_indirectly %} text-muted {% endif %}">
-                                {{ this_location.description|linebreaks }}
+                                {{ this_location.description|custom_linebreaksbr:1 }}
                             </h6>
                         </div>
                     </div>

@@ -7,29 +7,29 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <div class="mt-5 pt-4">
+    <div class="pt-5">
         
         <h2 class="mt-4">
             <img class="img-rules" src="{% static 'img/TWORZENIE I ROZWÓJ POSTACI.png' %}">
             <strong class="align-middle small-caps border-bottom-dark">Tworzenie i rozwój Postaci</strong>
         </h2>
-        <ol class="ml-3 mt-3 pl-5">
+        <ol class="ml-3 pl-5">
             <li>
-                <h6><a href="{% url 'rules:character' %}">Tworzenie Postaci, Klasa i Profesja</a></h6>
+                <a href="{% url 'rules:character' %}">Tworzenie Postaci, Klasa i Profesja</a>
                 <ul class="ml-3">
-                    <li><h6><a href="{% url 'rules:professions' 'Pospolite' %}">Klasy Pospolite</a></h6></li>
-                    <li><h6><a href="{% url 'rules:professions' 'Elitarne' %}">Klasy Elitarne</a></h6></li>
-                    <li><h6><a href="{% url 'rules:professions' 'Hermetyczne' %}">Klasy Hermetyczne</a></h6></li>
+                    <li><a href="{% url 'rules:professions' 'Pospolite' %}">Klasy Pospolite</a></li>
+                    <li><a href="{% url 'rules:professions' 'Elitarne' %}">Klasy Elitarne</a></li>
+                    <li><a href="{% url 'rules:professions' 'Hermetyczne' %}">Klasy Hermetyczne</a></li>
                 </ul>
             </li>
-            <li><h6><a href="{% url 'rules:traits' %}">Cechy Fizyczne</a></h6></li>
-            <li><h6><a href="{% url 'rules:tests' %}">Testy Cech</a></h6></li>
-            <li><h6><a href="{% url 'rules:fitness-and-tricks' %}">Wydolność, Sprawności i Podstępy</a></h6></li>
+            <li><a href="{% url 'rules:traits' %}">Cechy Fizyczne</a></li>
+            <li><a href="{% url 'rules:tests' %}">Testy Cech</a></li>
+            <li><a href="{% url 'rules:fitness-and-tricks' %}">Wydolność, Sprawności i Podstępy</a></li>
             <li>
-                <h6><a href="{% url 'rules:skills-and-synergies' %}">Umiejętności</a></h6>
+                <a href="{% url 'rules:skills-and-synergies' %}">Umiejętności</a>
                 <ul class="ml-3">
-                    <li><h6><a href="{% url 'rules:skills-list' 'Powszechne' %}">Lista Umiejętności</a></h6></li>
-                    <li><h6><a href="{% url 'rules:synergies-list' %}">Lista Synergii</a></h6></li>
+                    <li><a href="{% url 'rules:skills-list' 'Powszechne' %}">Lista Umiejętności</a></li>
+                    <li><a href="{% url 'rules:synergies-list' %}">Lista Synergii</a></li>
                 </ul>
             </li>
         </ol>
@@ -38,11 +38,11 @@
             <img class="img-rules" src="{% static 'img/WALKA.png' %}">
             <strong class="align-middle small-caps border-bottom-dark">Walka i obrażenia</strong>
         </h2>
-        <ol class="ml-3 mt-3 pl-5">
-            <li><h6><a href="{% url 'rules:weapons' %}">Broń</a></h6></li>
-            <li><h6><a href="{% url 'rules:armor' %}">Pancerz</a></h6></li>
-            <li><h6><a href="{% url 'rules:wounds' %}">Progi i skutki ran</a></h6></li>
-            <li><h6><a href="{% url 'rules:combat' %}">Przebieg walki</a></h6></li>
+        <ol class="ml-3 pl-5">
+            <li><a href="{% url 'rules:weapons' %}">Broń</a></li>
+            <li><a href="{% url 'rules:armor' %}">Pancerz</a></li>
+            <li><a href="{% url 'rules:wounds' %}">Progi i skutki ran</a></li>
+            <li><a href="{% url 'rules:combat' %}">Przebieg walki</a></li>
         </ol>
     
         {% if can_view_power_rules %}
@@ -50,26 +50,26 @@
                 <img class="img-rules" src="/static/img/skill-default.png">
                 <strong class="align-middle small-caps border-bottom-dark">Moc</strong>
             </h2>
-            <ol class="ml-3 mt-3 pl-5">
+            <ol class="ml-3 pl-5">
                 <li>
-                    <h6><a href="{% url 'rules:power-trait' %}">Cecha Mentalna "Moc"</a></h6>
+                    <a href="{% url 'rules:power-trait' %}">Cecha Mentalna "Moc"</a>
                     <ul class="ml-3">
-                        <li><h6><a href="{% url 'rules:skills-list' 'Mentalne' %}">Umiejętności Mentalne</a></h6></li>
+                        <li><a href="{% url 'rules:skills-list' 'Mentalne' %}">Umiejętności Mentalne</a></li>
                     </ul>
                 </li>
                 {% if 'Kapłan' in user_professions_all %}
                     <li>
-                        <h6><a href="{% url 'rules:power-priests' %}">Moce Kapłańskie</a></h6>
+                        <a href="{% url 'rules:power-priests' %}">Moce Kapłańskie</a>
                         <ul class="ml-3">
-                            <li><h6><a href="{% url 'rules:skills-list' 'Kapłańskie' %}">Moce Kapłańskie</a></h6></li>
+                            <li><a href="{% url 'rules:skills-list' 'Kapłańskie' %}">Moce Kapłańskie</a></li>
                         </ul>
                     </li>
                 {% endif %}
                 {% if 'Czarodziej' in user_professions_all %}
-                    <li><h6><a href="{% url 'rules:power-sorcerers' %}">Magia</a></h6></li>
+                    <li><a href="{% url 'rules:power-sorcerers' %}">Magia</a></li>
                 {% endif %}
                 {% if 'Teurg' in user_professions_all %}
-                    <li><h6><a href="{% url 'rules:power-theurgists' %}">Teurgia</a></h6></li>
+                    <li><a href="{% url 'rules:power-theurgists' %}">Teurgia</a></li>
                 {% endif %}
             </ol>
         {% endif %}
@@ -79,10 +79,8 @@
             <strong class="align-middle small-caps border-bottom-dark">Varia</strong>
         </h2>
         <ol class="ml-3 pl-5">
-            <li><h6><a href="{% url 'rules:experience-demand' %}">Sztuka kompozycji Dezyderatu ekspowego</a></h6></li>
-        </ol>
-        <ol class="ml-3 pl-5">
-            <li><h6><a href="{% url 'rules:character-sheet' %}">Szablony [nieaktualne]</a></h6></li>
+            <li><a href="{% url 'rules:experience-demand' %}">Sztuka kompozycji Dezyderatu ekspowego</a></li>
+            <li><a href="{% url 'rules:character-sheet' %}">Szablony [nieaktualne]</a></li>
         </ol>
     
     </div>
