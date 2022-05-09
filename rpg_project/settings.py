@@ -4,7 +4,6 @@ from urllib.parse import urlparse
 
 import environ
 from google.cloud import secretmanager
-from google.oauth2 import service_account
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -51,13 +50,6 @@ else:
 # -----------------------------------------------------------------------------
 
 
-SECRET_KEY = env("SECRET_KEY")
-DEBUG = env("DEBUG")
-
-
-# -----------------------------------------------------------------------------
-
-
 # [START gaestd_py_django_csrf]
 
 # SECURITY WARNING: It's recommended that you use this when running in production.
@@ -88,6 +80,13 @@ else:
     ]
     
 # [END gaestd_py_django_csrf]
+
+
+# -----------------------------------------------------------------------------
+
+
+SECRET_KEY = env("SECRET_KEY")
+DEBUG = env("DEBUG")
 
 
 # -----------------------------------------------------------------------------
@@ -167,12 +166,7 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     # Requires DATABASE_URL environmental variable to be set
     DATABASES = {"default": env.db()}
 else:
-    
     DATABASES = {
-        # 'default': {
-        #     'ENGINE': 'django.db.backends.sqlite3',
-        #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        # }
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': env('POSTGRES_DBNAME'),
@@ -216,6 +210,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 # -----------------------------------------------------------------------------
 # Internationalization
 
@@ -249,7 +244,7 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
 
     MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
     MEDIA_ROOT = '/media/'
-
+    
 else:
     STATIC_ROOT = 'rpg_project/static'
     STATIC_URL = '/static/'
