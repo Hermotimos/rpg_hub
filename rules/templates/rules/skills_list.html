@@ -8,28 +8,26 @@
 
 {% block content %}
     <div class="rules-styling pt-3">
-        
         <div class="mt-5" id="accordion">
-            {% if skilltype_kind == "Powszechne" %}
-                <!-- ALL SKILLS -->
-                <div class="card mb-2">
-                    <div class="card-header hover-blue" id="all-skills"
-                         data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        <label class="h4 font-weight-bold mb-0 hover-blue small-caps">
-                            Wszystkie
-                        </label>
-                    </div>
-                    <div id="collapseOne" class="collapse show" aria-labelledby="all-skills" data-parent="#accordion">
-                        <div class="card-body container">
-                            {% with id_suffix="skills-all" %}
-                                {% for skill in skills %}
-                                    {% include 'rules/_skill.html' %}
-                                {% endfor %}
-                            {% endwith %}
-                        </div>
+            
+            <!-- ALL SKILLS -->
+            <div class="card mb-2">
+                <div class="card-header hover-blue" id="all-skills"
+                     data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <label class="h4 font-weight-bold mb-0 hover-blue small-caps">
+                        Wszystkie
+                    </label>
+                </div>
+                <div id="collapseOne" class="collapse show" aria-labelledby="all-skills" data-parent="#accordion">
+                    <div class="card-body container">
+                        {% with id_suffix="skills-all" %}
+                            {% for skill in skills %}
+                                {% include 'rules/_skill.html' %}
+                            {% endfor %}
+                        {% endwith %}
                     </div>
                 </div>
-            {% endif %}
+            </div>
           
             <!-- SKILLS PER SKILL TYPES-->
             {% for skill_type in skill_types %}
@@ -71,6 +69,5 @@
             {% endfor %}
             
         </div>
-        
     </div>
 {% endblock content %}
