@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/rules.css' %}">
+{% endblock head_extra %}
+
+{% block content %}
+   
+    {% for skill in skills %}
+        {{ skill }}<br>
+    {% endfor %}
+{% endblock content %}

@@ -17,6 +17,18 @@ from users.models import Profile
 
 
 @login_required
+def mockskill_view(request):
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    skills = Skill.objects.all()
+    context = {
+        'current_profile': current_profile,
+        'page_title': 'Zasady',
+        'skills': skills,
+    }
+    return render(request, 'rules/mockskill.html', context)
+
+    
+@login_required
 def rules_main_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
