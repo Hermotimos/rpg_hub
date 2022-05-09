@@ -15,7 +15,7 @@ cors.json
 
 rpg_project/settings_collectstatic.py
 
-#rpg_project/static/
+/rpg_project/static/
 media
 
 PyCharm_ReferenceCard.pdf
@@ -25,6 +25,7 @@ PyCharm_ReferenceCard.pdf
 *.pyc
 *~
 __pycache__
+
 
 
 
