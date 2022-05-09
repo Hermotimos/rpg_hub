@@ -165,7 +165,7 @@ WSGI_APPLICATION = 'rpg_project.wsgi.application'
 if os.getenv('GAE_ENV', '').startswith('standard'):
     # Requires DATABASE_URL environmental variable to be set
     DATABASES = {"default": env.db()}
-elif os.environ['COMPUTERNAME'] == "LUKASZ-KOMPUTER":
+elif os.environ.get('COMPUTERNAME') == "LUKASZ-KOMPUTER":
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
