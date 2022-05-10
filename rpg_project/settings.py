@@ -286,7 +286,7 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     DOWNLOAD_ROOT = os.path.join(PROJECT_ROOT, "static/media/downloads")
     DOWNLOAD_URL = STATIC_URL + "media/downloads"
 
-
+    GS_DEFAULT_ACL = 'publicRead'
 
 
 else:
