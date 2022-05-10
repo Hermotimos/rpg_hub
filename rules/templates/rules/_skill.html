@@ -10,7 +10,8 @@
                 <img class="img-skill" src="{% static 'img/'|add:skill.skill_levels.first.level|add:'.png' %}">
             {% else %}
                 {% if skill.image %}
-                    <img class="img-skill mr-sm-1" src="{{ skill.image.url }}">
+                    <img class="img-skill mr-sm-1" src="{% static 'img/skill-default.png' %}">
+                        <!-- within double curly braces skill.image.url -->
                 {% else %}
                     <img class="img-skill mr-sm-1" src="{% static 'img/skill-default.png' %}">
                 {% endif %}
@@ -21,6 +22,11 @@
             {% if current_profile.status == 'gm' %}
                 <a class="hover-blue font-weight-bold" href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
                     {{ skill.name }}
+                    <small class="font-12">
+                        {% if skill.image %}
+                            {{ skill.image.url }}
+                        {% endif %}
+                    </small>
                 </a>
             {% else %}
                 {{ skill.name }}

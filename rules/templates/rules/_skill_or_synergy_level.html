@@ -4,6 +4,7 @@
 
 <div class="container align-top pl-1 my-1 text-justify font-14">
     <div class="d-flex flex-row">
+        
         <div class="pl-1">
             {% if skilltype_kind != 'Kapłańskie' and skilltype_kind != 'Zaklęcia' and skilltype_kind != 'Moce Teurgiczne' %}
                 {% if current_profile.status == 'gm' %}
@@ -17,7 +18,6 @@
         </div>
         
         <div>
-            
             <div class="ml-1">
                 {% if skill_or_synergy_level.skill_levels.exists %}
                     <div class="mt-1">
@@ -30,7 +30,6 @@
                     </div>
                 {% endif %}
             </div>
-            
             {% for perk in skill_or_synergy_level.perks.all %}
                 <div class="ml-1 mt-1">
                     <div class="font-weight-bold">
@@ -66,6 +65,7 @@
                 </div>
             {% endfor %}
         </div>
+        
     </div>
 </div>
 
