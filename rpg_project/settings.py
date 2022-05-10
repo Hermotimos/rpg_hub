@@ -268,8 +268,8 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
         GOOGLE_APPLICATION_CREDENTIALS)
     
-    DEFAULT_FILE_STORAGE = 'rpg_project.settings.gcloud.GoogleCloudMediaFileStorage'
-    STATICFILES_STORAGE = 'rpg_project.settings.gcloud.GoogleCloudStaticFileStorage'
+    DEFAULT_FILE_STORAGE = 'rpg_project.gcloud.GoogleCloudMediaFileStorage'
+    STATICFILES_STORAGE = 'rpg_project.gcloud.GoogleCloudStaticFileStorage'
 
     GS_PROJECT_ID = 'gcloud_storage'
     GS_STATIC_BUCKET_NAME = env("GS_BUCKET_NAME")
