@@ -232,34 +232,58 @@ USE_TZ = True
 # -----------------------------------------------------------------------------
 # Static files (CSS, JavaScript, Images)
 
+PROJECT_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir)
+
 if os.getenv('GAE_ENV', '').startswith('standard'):
-    GS_BUCKET_NAME = env("GS_BUCKET_NAME")
+    # GS_BUCKET_NAME = env("GS_BUCKET_NAME")
+    # # STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/"
+    # # GS_LOCATION = "static"
+    # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]           # TODO produces: ['/srv/static'] - might be a problem?
+    # DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    # STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    #
+    # # This might be needed to access Cloud Storage without credentials,
+    # # which should by possible from App Engine
+    # # https://pnote.eu/notes/django-app-engine-user-uploaded-files/
+    # GS_DEFAULT_ACL = 'publicRead'
+    #
+    # # For media storage in the bucket
+    # GOOGLE_APPLICATION_CREDENTIALS = env("GOOGLE_APPLICATION_CREDENTIALS")
+    # GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    #     GOOGLE_APPLICATION_CREDENTIALS)
+    #
+    # # MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
+    # # MEDIA_ROOT = '/media'
+    #
+    #
     # STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/"
-    # GS_LOCATION = "static"
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]           # TODO produces: ['/srv/static'] - might be a problem?
-    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-    STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-
-    # This might be needed to access Cloud Storage without credentials,
-    # which should by possible from App Engine
-    # https://pnote.eu/notes/django-app-engine-user-uploaded-files/
-    GS_DEFAULT_ACL = 'publicRead'
-    
-    # For media storage in the bucket
-    GOOGLE_APPLICATION_CREDENTIALS = env("GOOGLE_APPLICATION_CREDENTIALS")
-    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-        GOOGLE_APPLICATION_CREDENTIALS)
-
-    # MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
-    # MEDIA_ROOT = '/media'
+    # STATIC_ROOT = "static/"
+    #
+    # MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/"
+    # MEDIA_ROOT = "media/"
 
 
-    STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/"
+    DEFAULT_FILE_STORAGE = 'rpg_project.settings.gcloud_storage.GoogleCloudMediaFileStorage'
+    STATICFILES_STORAGE = 'rpg_project.settings.gcloud_storage.GoogleCloudStaticFileStorage'
+
+    GS_PROJECT_ID = 'gcloud_storage'
+    GS_STATIC_BUCKET_NAME = env("GS_BUCKET_NAME")
+    GS_MEDIA_BUCKET_NAME = env("GS_BUCKET_NAME")  # same as STATIC BUCKET if using single bucket both for static and media
+
+    STATIC_URL = 'https://storage.googleapis.com/{}/'.format(GS_STATIC_BUCKET_NAME)
     STATIC_ROOT = "static/"
 
-    MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/"
+    MEDIA_URL = 'https://storage.googleapis.com/{}/'.format(GS_MEDIA_BUCKET_NAME)
     MEDIA_ROOT = "media/"
-    
+
+    UPLOAD_ROOT = 'media/uploads/'
+
+    DOWNLOAD_ROOT = os.path.join(PROJECT_ROOT, "static/media/downloads")
+    DOWNLOAD_URL = STATIC_URL + "media/downloads"
+
+
+
+
 else:
     STATIC_ROOT = 'rpg_project/static'
     STATIC_URL = '/static/'
