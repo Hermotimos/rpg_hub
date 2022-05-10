@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 
 import environ
 from google.cloud import secretmanager
-
+from google.oauth2 import service_account
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -245,9 +245,10 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     # https://pnote.eu/notes/django-app-engine-user-uploaded-files/
     GS_DEFAULT_ACL = 'publicRead'
     
-    # GOOGLE_APPLICATION_CREDENTIALS = env("GOOGLE_APPLICATION_CREDENTIALS")
-    # GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-    #     GOOGLE_APPLICATION_CREDENTIALS)
+    # For media storage in the bucket
+    GOOGLE_APPLICATION_CREDENTIALS = env("GOOGLE_APPLICATION_CREDENTIALS")
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+        GOOGLE_APPLICATION_CREDENTIALS)
 
     MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
     MEDIA_ROOT = '/media/'
