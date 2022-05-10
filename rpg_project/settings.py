@@ -275,10 +275,10 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     GS_STATIC_BUCKET_NAME = env("GS_BUCKET_NAME")
     GS_MEDIA_BUCKET_NAME = env("GS_BUCKET_NAME")  # same as STATIC BUCKET if using single bucket both for static and media
 
-    STATIC_URL = 'https://storage.googleapis.com/{}/'.format(GS_STATIC_BUCKET_NAME)
+    STATIC_URL = 'https://storage.googleapis.com/{}/static/'.format(GS_STATIC_BUCKET_NAME)
     STATIC_ROOT = "static/"
 
-    MEDIA_URL = 'https://storage.googleapis.com/{}/'.format(GS_MEDIA_BUCKET_NAME)
+    MEDIA_URL = 'https://storage.googleapis.com/{}/media/'.format(GS_MEDIA_BUCKET_NAME)
     MEDIA_ROOT = "media/"
 
     UPLOAD_ROOT = 'media/uploads/'
