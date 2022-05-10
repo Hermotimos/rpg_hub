@@ -263,8 +263,13 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     # MEDIA_ROOT = "media/"
 
 
-    DEFAULT_FILE_STORAGE = 'rpg_project.settings.gcloud_storage.GoogleCloudMediaFileStorage'
-    STATICFILES_STORAGE = 'rpg_project.settings.gcloud_storage.GoogleCloudStaticFileStorage'
+    # For media storage in the bucket
+    GOOGLE_APPLICATION_CREDENTIALS = env("GOOGLE_APPLICATION_CREDENTIALS")
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+        GOOGLE_APPLICATION_CREDENTIALS)
+    
+    DEFAULT_FILE_STORAGE = 'rpg_project.settings.gcloud.GoogleCloudMediaFileStorage'
+    STATICFILES_STORAGE = 'rpg_project.settings.gcloud.GoogleCloudStaticFileStorage'
 
     GS_PROJECT_ID = 'gcloud_storage'
     GS_STATIC_BUCKET_NAME = env("GS_BUCKET_NAME")
