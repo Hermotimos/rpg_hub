@@ -234,8 +234,8 @@ USE_TZ = True
 
 if os.getenv('GAE_ENV', '').startswith('standard'):
     GS_BUCKET_NAME = env("GS_BUCKET_NAME")
-    STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/"
-    GS_LOCATION = "static"
+    STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/static/"
+    # GS_LOCATION = "static"
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]           # TODO produces: ['/srv/static'] - might be a problem?
     DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
     STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
@@ -259,7 +259,6 @@ else:
     
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')        # path to uploaded pics
     MEDIA_URL = '/media/'                               # url to media
-
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
