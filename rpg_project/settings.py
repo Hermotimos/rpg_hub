@@ -234,8 +234,8 @@ USE_TZ = True
 
 if os.getenv('GAE_ENV', '').startswith('standard'):
     GS_BUCKET_NAME = env("GS_BUCKET_NAME")
-    STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/"
-    GS_LOCATION = "static"
+    # STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/"
+    # GS_LOCATION = "static"
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]           # TODO produces: ['/srv/static'] - might be a problem?
     DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
     STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
@@ -250,8 +250,15 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
         GOOGLE_APPLICATION_CREDENTIALS)
 
-    MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
-    MEDIA_ROOT = '/media'
+    # MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
+    # MEDIA_ROOT = '/media'
+
+
+    STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/"
+    STATIC_ROOT = "static/"
+
+    MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/"
+    MEDIA_ROOT = "media/"
     
 else:
     STATIC_ROOT = 'rpg_project/static'
