@@ -272,14 +272,13 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     STATICFILES_STORAGE = 'rpg_project.gcloud.GoogleCloudStaticFileStorage'
 
     GS_PROJECT_ID = 'gcloud_storage'
-    GS_STATIC_BUCKET_NAME = env("GS_BUCKET_NAME")
-    GS_MEDIA_BUCKET_NAME = env("GS_BUCKET_NAME")  # same as STATIC BUCKET if using single bucket both for static and media
+    GS_BUCKET_NAME = env("GS_BUCKET_NAME")
 
-    STATIC_URL = 'https://storage.googleapis.com/{}/static/'.format(GS_STATIC_BUCKET_NAME)
+    STATIC_URL = 'https://storage.googleapis.com/{}/static/'.format(GS_BUCKET_NAME)
     STATIC_ROOT = "static/"
     # GS_LOCATION = "static"    # points to static dir within STATIC_URL
 
-    MEDIA_URL = 'https://storage.googleapis.com/{}/media/'.format(GS_MEDIA_BUCKET_NAME)
+    MEDIA_URL = 'https://storage.googleapis.com/{}/media/'.format(GS_BUCKET_NAME)
     MEDIA_ROOT = "media/"
 
     UPLOAD_ROOT = 'media/uploads/'
