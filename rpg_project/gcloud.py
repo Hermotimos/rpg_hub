@@ -12,13 +12,12 @@ class GoogleCloudMediaFileStorage(GoogleCloudStorage):
     
     def url(self, name):
         """Gives correct MEDIA_URL and not google generated url."""
-        print('MEDIA', urljoin(settings.MEDIA_URL, name))
+        print('MEDIA', settings.MEDIA_URL,name, '//', urljoin(settings.MEDIA_URL, name))
         return urljoin(settings.MEDIA_URL, name)
 
 
 class GoogleCloudStaticFileStorage(GoogleCloudStorage):
-    """Google file storage class which gives a media file path from STATIC_URL not google generated one."""
-
+    """Google file storage class which gives a static file path from STATIC_URL not google generated one."""
     bucket_name = setting('GS_STATIC_BUCKET_NAME')
     
     def url(self, name):

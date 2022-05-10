@@ -277,6 +277,7 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
 
     STATIC_URL = 'https://storage.googleapis.com/{}/static/'.format(GS_STATIC_BUCKET_NAME)
     STATIC_ROOT = "static/"
+    # GS_LOCATION = "static"    # points to static dir within STATIC_URL
 
     MEDIA_URL = 'https://storage.googleapis.com/{}/media/'.format(GS_MEDIA_BUCKET_NAME)
     MEDIA_ROOT = "media/"
