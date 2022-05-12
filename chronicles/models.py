@@ -34,7 +34,7 @@ SEASONS = {
 class Chapter(Model):
     chapter_no = IntegerField(blank=True, null=True)
     title = CharField(max_length=200, unique=True)
-    image = ImageField(upload_to='site_features_pics', blank=True, null=True)
+    image = ImageField(upload_to='chronicles', blank=True, null=True)
     
     class Meta:
         ordering = ['chapter_no']

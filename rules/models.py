@@ -374,7 +374,7 @@ class Sphragis(Model):
 class Skill(Model):
     name = CharField(max_length=100, unique=True)
     tested_trait = CharField(max_length=50, blank=True, null=True)
-    image = ImageField(upload_to='site_features_pics', blank=True, null=True)
+    image = ImageField(upload_to='skills', blank=True, null=True)
     group = FK(to=SkillGroup, related_name='skills', on_delete=PROTECT, blank=True, null=True)
     types = M2M(to=SkillType, related_name='skills', blank=True)
     allowees = M2M(
