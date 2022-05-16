@@ -316,5 +316,8 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
+        'width': 'auto',
+        'toolbarCanCollapse': True,
+    
     },
 }
