@@ -269,12 +269,12 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     # DOWNLOAD_URL = STATIC_URL + "media/downloads"
 
 else:
-    STATIC_ROOT = 'rpg_project/static'
-    STATIC_URL = '/static/'
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-    
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')        # path to uploaded pics
-    MEDIA_URL = '/media/'                               # url to media
+    STATIC_ROOT = 'static'
+    STATIC_URL = 'static/'
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, '/static')]
+
+    MEDIA_ROOT = 'media'
+    MEDIA_URL = 'media/'
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -302,6 +302,11 @@ INTERNAL_IPS = ['127.0.0.1', ]
 # https://stackoverflow.com/questions/16303098/django-development-server-and-mime-types/64055514#64055514
 # After editing registry - restart local server for changes to take effect
 
+# Disable in production (even if DEBUG is set to true)
+if os.getenv('GAE_ENV', '').startswith('standard'):
+    DEBUG_TOOLBAR_CONFIG = {
+        'SHOW_TOOLBAR_CALLBACK': lambda r: False,
+    }
 
 # -----------------------------------------------------------------------------
 # django-ckeditor
