@@ -60,9 +60,9 @@
                         </tr>
                         <tr id="{{ weapon|remove_special_chars }}" class="collapse">
                             <td colspan="10" class="weapons-img px-2">
-                                <br>
-                                {{ weapon.description|linebreaksbr }}
-                                <br><br>
+                                <div class="m-1 mr-2 font-italic text-justify">
+                                    {{ weapon.description|linebreaksbr }}
+                                </div>
                                 {% if weapon.picture_set %}
                                     <div class="mb-1">
                                         <div class="d-flex justify-content-center my-3">
