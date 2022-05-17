@@ -6,8 +6,10 @@ myvirtualenv
 
 secret.json
 dumped.json
+
 # for GCP authentication
 hyllemath-cf23b4703a39.json
+
 # for setting GCP bucket CORS conf
 cors.json
 

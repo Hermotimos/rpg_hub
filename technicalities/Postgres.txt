@@ -1,0 +1,19 @@
+
+# [1]
+# First copy production db SqLite to local 'hyllemath' db --> 'SQLite to Postgres.txt'
+
+# [2]
+# This creates a copy in the current folder
+pg_dump --format=c -U postgres -d hyllemath > hyllemath_dumped.dump
+# Password: postgres
+
+# [3]
+pg_restore -h HHHHHHHH -U hyllemath --no-owner --no-acl -d hyllemath hyllemath_dumped.dump
+# HHHHHHHH: IP of the database
+# Password: xxxxxx (password for 'hyllemath' db on GCP Cloud Storage)
+
+
+# Save db dump to local directory
+pg_dump -h HHHHHHHH -U hyllemath -d hyllemath > hyllemath.dump
+# HHHHHHHH: IP of the database
+# Password: xxxxxx (password for 'hyllemath' db on GCP Cloud Storage)
