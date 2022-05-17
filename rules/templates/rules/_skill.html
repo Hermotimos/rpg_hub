@@ -5,19 +5,9 @@
 <div class="container my-1 p-0">
     <div class="d-flex flex-row">
         
-        <div class="d-flex flex-nowrap hover-pointer" data-toggle="collapse" data-target="#{{ skill|remove_special_chars }}{{ id_suffix }}">
-            {% if skilltype_kind == 'Kapłańskie' or skilltype_kind == 'Zaklęcia' or skilltype_kind == 'Teurgiczne' %}
-                <img class="img-skill" src="{% static 'img/'|add:skill.skill_levels.first.level|add:'.png' %}">
-            {% else %}
-                {% if skill.image %}
-                    <img class="img-skill mr-sm-1" src="{{ skill.image.url }}">
-                {% else %}
-                    <img class="img-skill mr-sm-1" src="{% static 'img/skill-default.png' %}">
-                {% endif %}
-            {% endif %}
-        </div>
+        {% include 'rules/_skill_img.html' %}
         
-        <div class="skill-or-synergy-name ml-2 mt-1">
+        <div class="skill-or-synergy-name ml-2 mt-2">
             {% if current_profile.status == 'gm' %}
                 <a class="hover-blue font-weight-bold" href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
                     {{ skill.name }}
