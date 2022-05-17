@@ -5,7 +5,6 @@ from django.core.mail import send_mail
 from django.db.models import Prefetch, Q
 from django.shortcuts import render, redirect, get_object_or_404
 
-import communications.models
 from communications.forms import (
     AnnouncementCreateForm,
     DebateCreateForm,
@@ -308,7 +307,7 @@ def create_thread_view(request, thread_kind):
         participants |= Profile.objects.filter(
             Q(id=current_profile.id) | Q(status='gm'))
         thread.participants.set(participants)
-        thread.followers.set(participants.filter(id__in=Profile.active_players.all()))
+        thread.followers.set(participants)
 
         statement = statement_form.save(commit=False)
         statement.thread = thread
@@ -320,8 +319,10 @@ def create_thread_view(request, thread_kind):
             message=f"{request.get_host()}{thread.get_absolute_url()}",
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[
-                p.user.email for p in thread.followers.exclude(id=current_profile.id)])
-
+                p.user.email for p in thread.followers.exclude(
+                    id__in=current_profile.user.profiles.all())
+            ]
+        )
         messages.info(request, f"{THREADS_MAP[thread_kind]['text']}: '{thread}!")
         return redirect('communications:thread', thread_id=thread.id, tag_title=None)
 
@@ -339,7 +340,7 @@ def unfollow_thread_view(request, thread_id):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     thread = get_object_or_404(Thread, id=thread_id)
-    if current_profile in thread.participants.all():
+    if current_profile in thread.participants.all() or current_profile.can_view_all:
         thread.followers.remove(current_profile)
         messages.info(request, f"Przestałeś obserwować \"{thread}\"!")
         return redirect(request.META.get('HTTP_REFERER', '/'))
@@ -352,7 +353,7 @@ def follow_thread_view(request, thread_id):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     thread = get_object_or_404(Thread, id=thread_id)
-    if current_profile in thread.participants.all():
+    if current_profile in thread.participants.all() or current_profile.can_view_all:
         thread.followers.add(current_profile)
         messages.info(request, f"Zacząłeś obserwować \"{thread}\"!")
         return redirect(request.META.get('HTTP_REFERER', '/'))
