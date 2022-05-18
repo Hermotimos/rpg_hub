@@ -11,53 +11,40 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # -----------------------------------------------------------------------------
-
-
-# [START gaestd_py_django_secret_config]
+# gaestd_py_django_secret_config
 
 env = environ.Env(DEBUG=(bool, False))
 env_file = os.path.join(BASE_DIR, ".env")
 
-# Use a local secret file, if provided
 if os.path.isfile(env_file):
+    # Use a local secret file, if provided
     env.read_env(env_file)
-    
-# [START_EXCLUDE]
-# Create local settings if running with CI, for unit testing
 elif os.getenv("TRAMPOLINE_CI", None):
+    # Create local settings if running with CI, for unit testing
     placeholder = (
         f"SECRET_KEY=a\n"
-        f"DATABASE_URL=sqlite://{os.path.join(BASE_DIR, 'db.sqlite3')}"
-    )
+        f"DATABASE_URL=sqlite://{os.path.join(BASE_DIR, 'db.sqlite3')}")
     env.read_env(io.StringIO(placeholder))
-# [END_EXCLUDE]
-
-# Pull secrets from Secret Manager
 elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
+    # Pull secrets from Secret Manager
     project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
     client = secretmanager.SecretManagerServiceClient()
     settings_name = os.environ.get("SETTINGS_NAME", "django_settings")
     name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
     payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
-    
     env.read_env(io.StringIO(payload))
 else:
     raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
 
-# [END gaestd_py_django_secret_config]
-
 
 # -----------------------------------------------------------------------------
-
-
-# [START gaestd_py_django_csrf]
+#  gaestd_py_django_csrf
 
 # SECURITY WARNING: It's recommended that you use this when running in production.
 # The URL will be known once you first deploy to App Engine.
 # This code takes the URL and converts it to both these settings formats.
 
-APPENGINE_URL = env("APPENGINE_URL", default=None)
-if APPENGINE_URL:
+if APPENGINE_URL := env("APPENGINE_URL", default=None):
     # Ensure a scheme is present in the URL before it's processed.
     if not urlparse(APPENGINE_URL).scheme:
         APPENGINE_URL = f"https://{APPENGINE_URL}"
@@ -79,8 +66,6 @@ else:
         'hyllemath.lm.r.appspot.com',
     ]
     
-# [END gaestd_py_django_csrf]
-
 
 # -----------------------------------------------------------------------------
 
@@ -148,10 +133,6 @@ TEMPLATES = [
             'libraries': {
                 'custom_filters': 'templatetags.custom_filters',
             },
-            # 'loaders': [
-            #      'django.template.loaders.filesystem.Loader',
-            #      'django.template.loaders.app_directories.Loader',
-            #   ],
         },
     },
 ]
@@ -174,7 +155,6 @@ elif os.environ.get('COMPUTERNAME'):
             'PASSWORD': env('POSTGRES_PASSWORD'),
             'HOST': env('POSTGRES_HOST'),
             'PORT': env('POSTGRES_PORT'),
-    
         }
     }
 else:
@@ -237,8 +217,6 @@ USE_TZ = True
 # -----------------------------------------------------------------------------
 # Static files (CSS, JavaScript, Images)
 
-PROJECT_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir)
-
 if os.getenv('GAE_ENV', '').startswith('standard'):
     # https://medium.com/@umeshsaruk/upload-to-google-cloud-storage-using-django-storages-72ddec2f0d05
 
@@ -262,30 +240,18 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
 
     STATIC_URL = 'https://storage.googleapis.com/{}/static/'.format(GS_BUCKET_NAME)
     STATIC_ROOT = "static/"
-    # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]      # TODO produces: ['/srv/static'] - might be a problem?
-    # GS_LOCATION = "static"                                     # points to dir within STATIC_URL, now not needed?
 
     MEDIA_URL = 'https://storage.googleapis.com/{}/media/'.format(GS_BUCKET_NAME)
     MEDIA_ROOT = "media/"
 
-    #  Maybe useful in the future
-    # UPLOAD_ROOT = 'media/uploads/'
-    # DOWNLOAD_ROOT = os.path.join(PROJECT_ROOT, "static/media/downloads")
-    # DOWNLOAD_URL = STATIC_URL + "media/downloads"
-
 else:
-    STATIC_ROOT = 'static'
+    # STATIC_ROOT needed only in production
     STATIC_URL = 'static/'
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, '/static')]
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
     MEDIA_ROOT = 'media'
     MEDIA_URL = 'media/'
-
-
-# # TODO del start
-# GOOGLE_APPLICATION_CREDENTIALS = env("GOOGLE_APPLICATION_CREDENTIALS")
-# GS_BUCKET_NAME = env("GS_BUCKET_NAME")
-# # TODO del end
+    
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -293,6 +259,9 @@ LOGIN_REDIRECT_URL = 'users:home'
 LOGIN_URL = 'users:login'
 LOGOUT_REDIRECT_URL = 'users:login'
 
+
+# -----------------------------------------------------------------------------
+# email backend
 
 # With 2-step verification turn on:
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
