@@ -4,23 +4,22 @@ db.sqlite3
 myenv
 myvirtualenv
 
-secret.json
-dumped.json
-
 # for GCP authentication
-hyllemath-cf23b4703a39.json
+gcp-service-account-key.json
 
 # for setting GCP bucket CORS conf
 cors.json
 
 .env
 
-rpg_project/settings_collectstatic.py
 
 static
 media
+_local_snippets/
+
 
 PyCharm_ReferenceCard.pdf
+
 
 .DS_Store
 .idea
@@ -29,6 +28,7 @@ PyCharm_ReferenceCard.pdf
 __pycache__
 
 
+hyllemath_db*
 
 
 

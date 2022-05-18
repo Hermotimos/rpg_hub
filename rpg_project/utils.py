@@ -1,18 +1,29 @@
 import os
 import re
-import shutil
 import time
 from functools import wraps
 from random import sample
 
+import delegator
 from django.apps import apps
-from django.conf import settings
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import send_mail
 from django.shortcuts import redirect
+from google.cloud import storage
 
-from rpg_project.settings import EMAIL_HOST_USER
+from django.conf import settings
+
+
+def upload_to_bucket(destination_path, source_path, bucket_name):
+    storage_client = storage.Client.from_service_account_json(
+        settings.GOOGLE_APPLICATION_CREDENTIALS)
+    bucket = storage_client.get_bucket(bucket_name)
+    
+    blob = bucket.blob(destination_path)
+    blob.upload_from_filename(source_path)
+    
+    return blob.public_url
 
 
 class ReplaceFileStorage(FileSystemStorage):
@@ -136,7 +147,7 @@ def handle_inform_form(request):
 def send_emails(request, profile_ids=None, **kwargs):
     from users.models import Profile
     profile = Profile.objects.get(id=request.session['profile_id'])
-    sender = EMAIL_HOST_USER
+    sender = settings.EMAIL_HOST_USER
     receivers = [
         p.user.email
         for p in Profile.active_players.filter(id__in=profile_ids or []).select_related()]
@@ -318,13 +329,34 @@ def update_rel_objs(instance, RelModel, rel_queryset, rel_name: str):
             exec(f"obj.{rel_name}.remove(instance)")
 
 
-def backup_db(reason=""):
-    cwd = os.getcwd()
-    date = time.strftime("%Y-%m-%d_%H.%M")
-    reason = f"_{reason}"
-    shutil.copy2(f"{cwd}/db.sqlite3", f"{cwd}/db_copy_{date}{reason}.sqlite3")
+def backup_db(reason: str):
+    date = time.strftime("%Y-%m-%d_%H-%M")
+    filename = f"hyllemath_db_{reason}_{date}.json"
+
+    delegator.run(
+        f"pg_dump --dbname={settings.GCP_DATABASE_DNS} --format=c --no-owner --no-acl > {filename}")
+
+    upload_to_bucket(
+        destination_path=f"backups/{filename}",
+        source_path=f"./{filename}",
+        bucket_name=settings.GS_BUCKET_NAME)
+
+    return
 
 
+def update_local_db(reason: str):
+    date = time.strftime("%Y-%m-%d_%H-%M")
+    filename = f"hyllemath_db_{reason}_{date}.json"
+    
+    delegator.run(
+        f"pg_dump --dbname={settings.GCP_DATABASE_DNS} --format=c --no-owner --no-acl > {filename}")
+    delegator.run(
+        f"pg_restore --dbname={settings.DEV_DATABASE_DNS} --no-owner --no-acl --clean {filename}",
+        block=False)
+    
+    return
+
+    
 def only_game_masters(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):

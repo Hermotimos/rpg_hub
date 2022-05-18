@@ -1,5 +1,8 @@
+import os
+
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.core.files import File
@@ -11,7 +14,7 @@ from django.utils.safestring import mark_safe
 from chronicles.models import GameEvent
 from imaginarion.models import PictureImage
 from prosoponomikon.models import Character, NonGMCharacter
-from rpg_project.utils import backup_db, only_game_masters
+from rpg_project.utils import backup_db, only_game_masters, update_local_db
 from rules.models import (
     Skill, SkillLevel,
     Synergy, SynergyLevel,
@@ -24,12 +27,11 @@ from rules.models import (
 from toponomikon.models import Location
 from users.models import Profile
 
-
     
 @login_required
 @only_game_masters
 def todos_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     
     characters = NonGMCharacter.objects.all()
     
@@ -50,7 +52,7 @@ def todos_view(request):
     skills_no_allowed_profile = Skill.objects.filter(allowees=None)
     
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'TODOs',
         'characters_no_frequented_location': characters_no_frequented_location,
         'characters_no_description': characters_no_description,
@@ -67,20 +69,27 @@ def todos_view(request):
 @login_required
 @only_game_masters
 def backup_db_view(request):
+    if os.environ.get('COMPUTERNAME'):
+        messages.warning(request, 'Funkcja dostępna tylko na produkcji!')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    
     backup_db(reason="manual")
-    messages.info(request, 'Wykonano backup bazy na serwerze!')
+    messages.info(request, 'Wykonano backup bazy do Cloud Storage bucket!')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
+    
 
 @login_required
 @only_game_masters
-def download_db(request):
-    db_path = settings.DATABASES['default']['NAME']
-    db_file = File(open(db_path, "rb"))
-    response = HttpResponse(db_file, content_type='application/x-sqlite3')
-    response['Content-Disposition'] = 'attachment; filename=db.sqlite3'
-    response['Content-Length'] = db_file.size
-    return response
+def update_local_db_view(request):
+    if not os.environ.get('COMPUTERNAME'):
+        messages.warning(request, 'Funkcja dostępna tylko lokalnie!')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+    update_local_db(reason="localupdate")
+    messages.info(request, 'Nadpisano lokalną bazę danymi z bazy GCP!')
+    messages.info(request, 'Zapisano lokalną kopię bazy w folderze projektu!')
+    logout(request)
+    return redirect('users:login')
 
 
 @login_required

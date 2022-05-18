@@ -197,6 +197,10 @@ if os.getenv("TRAMPOLINE_CI", None):
     
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
+# Used in backup_db
+GCP_DATABASE_DNS = env('GCP_DATABASE_DNS')
+DEV_DATABASE_DNS = env('DEV_DATABASE_DNS')
+
 
 # -----------------------------------------------------------------------------
 # Password validation
@@ -276,6 +280,11 @@ else:
     MEDIA_ROOT = 'media'
     MEDIA_URL = 'media/'
 
+
+# # TODO del start
+# GOOGLE_APPLICATION_CREDENTIALS = env("GOOGLE_APPLICATION_CREDENTIALS")
+# GS_BUCKET_NAME = env("GS_BUCKET_NAME")
+# # TODO del end
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 

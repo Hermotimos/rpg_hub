@@ -65,10 +65,13 @@
         {% if current_profile.status == 'gm' %}
             <div class="mt-2">
                 <a class="btn btn-outline-secondary icon-database-backup py-2" href="{% url 'technicalities:backup-db' %}"
-                    data-toggle="tooltip" data-placement="bottom" title="Backup bazy na serwerze">
+                    data-toggle="tooltip" data-placement="bottom" title="Backup bazy GCP do Cloud Storage bucket">
                 </a>
-                <a class="btn btn-outline-secondary icon-download py-2" href="{% url 'technicalities:download-db' %}"
-                    data-toggle="tooltip" data-placement="bottom" title="Pobierz bazę">
+                <a class="btn btn-outline-secondary icon-download py-2" href="{% url 'technicalities:update-local-db' %}"
+                    data-toggle="tooltip" data-placement="bottom" title="GCP db --> LOCAL db">
+                </a>
+                <a class="btn btn-outline-secondary icon-dollar py-2" href="https://console.cloud.google.com/home"
+                    data-toggle="tooltip" data-placement="bottom" title="Idź do konsoli GCP">
                 </a>
             </div>
         {% endif %}
