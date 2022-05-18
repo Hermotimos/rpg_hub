@@ -197,9 +197,10 @@ if os.getenv("TRAMPOLINE_CI", None):
     
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
-# Used in backup_db
+# Used in backup_db and update_local_db
 GCP_DATABASE_DNS = env('GCP_DATABASE_DNS')
-DEV_DATABASE_DNS = env('DEV_DATABASE_DNS')
+if os.environ.get('COMPUTERNAME'):
+    DEV_DATABASE_DNS = env('DEV_DATABASE_DNS')
 
 
 # -----------------------------------------------------------------------------
