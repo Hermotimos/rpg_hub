@@ -42,13 +42,17 @@ def get_max_skill_level_no(skill_levels_list):
 
 @register.filter
 def add_season_img(text):
+    from django.conf import settings
+    # static_dir = '/static/' if settings.IS_LOCAL_ENVIRON else settings.ROOT
+    static_dir = settings.STATIC_URL
+    # print(static_dir)
     if text:
         text = text.replace('. dnia', '')
         replacements = {
-            'Wiosny': '<br><img class="img-season" src="/static/img/seasons_spring.png"><br>',
-            'Lata': '<br><img class="img-season" src="/static/img/seasons_summer.png"><br>',
-            'Jesieni': '<br><img class="img-season" src="/static/img/seasons_autumn.png"><br>',
-            'Zimy': '<br><img class="img-season" src="/static/img/seasons_winter.png"><br>',
+            'Wiosny': f'<br><img class="img-season" src="{static_dir}img/seasons_spring.png"><br>',
+            'Lata': f'<br><img class="img-season" src="{static_dir}img/seasons_summer.png"><br>',
+            'Jesieni': f'<br><img class="img-season" src="{static_dir}img/seasons_autumn.png"><br>',
+            'Zimy': f'<br><img class="img-season" src="{static_dir}img/seasons_winter.png"><br>',
         }
         cnt = 0
         for k, v in replacements.items():

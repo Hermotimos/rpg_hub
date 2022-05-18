@@ -9,6 +9,8 @@ from google.oauth2 import service_account
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+IS_LOCAL_ENVIRON = True if os.environ.get('COMPUTERNAME') else False
+
 
 # -----------------------------------------------------------------------------
 # gaestd_py_django_secret_config
@@ -146,7 +148,7 @@ WSGI_APPLICATION = 'rpg_project.wsgi.application'
 if os.getenv('GAE_ENV', '').startswith('standard'):
     # Requires DATABASE_URL environmental variable to be set
     DATABASES = {"default": env.db()}
-elif os.environ.get('COMPUTERNAME'):
+elif IS_LOCAL_ENVIRON:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -179,7 +181,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Used in backup_db and update_local_db
 GCP_DATABASE_DNS = env('GCP_DATABASE_DNS')
-if os.environ.get('COMPUTERNAME'):
+if IS_LOCAL_ENVIRON:
     DEV_DATABASE_DNS = env('DEV_DATABASE_DNS')
 
 
