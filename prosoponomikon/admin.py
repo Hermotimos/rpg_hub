@@ -146,6 +146,11 @@ class AuxiliaryNameGroupAdmin(admin.ModelAdmin):
 
 @admin.register(Character, PlayerCharacter, NPCCharacter)
 class CharacterAdmin(admin.ModelAdmin):
+    fields = [
+        'profile', 'first_name', 'family_name', 'cognomen', 'fullname',
+        'description', 'frequented_locations', 'biography_packets',
+        'dialogue_packets', 'professions', 'participants', 'informees',
+    ]
     filter_horizontal = [
         'frequented_locations', 'biography_packets', 'dialogue_packets',
         'participants', 'informees', 'professions'
@@ -154,6 +159,7 @@ class CharacterAdmin(admin.ModelAdmin):
         'get_img', 'first_name', 'family_name', 'cognomen', 'description'
     ]
     list_editable = ['first_name', 'family_name', 'cognomen', 'description']
+    readonly_fields = ['fullname']
     search_fields = [
         'first_name__form', 'first_name__form_2', 'family_name__form',
         'cognomen', 'description'

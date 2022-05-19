@@ -185,6 +185,8 @@ class Character(Model):
         blank=True,
         null=True)
     cognomen = CharField(max_length=250, blank=True, null=True)
+    fullname = CharField(max_length=250, blank=True, null=True)
+
     description = TextField(blank=True, null=True)
     frequented_locations = M2M(
         to=Location,
@@ -210,11 +212,9 @@ class Character(Model):
         related_name='characters_informed',
         blank=True)
     
-    # -------------------------------------------------------------------------
-    name = CharField(max_length=250, blank=True, null=True)
     
     class Meta:
-        ordering = ['name']
+        ordering = ['fullname']
         verbose_name = '* CHARACTER'
         verbose_name_plural = '* CHARACTERS'
     
@@ -225,7 +225,7 @@ class Character(Model):
         return f"{first_name}{family_name}{cognomen}".strip()
 
     def save(self, *args, **kwargs):
-        self.name = self.__str__()
+        self.fullname = self.__str__()
         super().save(*args, **kwargs)
     
     def all_known(self):
