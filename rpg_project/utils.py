@@ -316,8 +316,6 @@ def backup_db(reason: str):
         source_path=f"./{filename}",
         bucket_name=settings.GS_BUCKET_NAME)
 
-    return
-
 
 def update_local_db(reason: str):
     date = time.strftime("%Y-%m-%d_%H-%M")
@@ -328,8 +326,6 @@ def update_local_db(reason: str):
     delegator.run(
         f"pg_restore --dbname={settings.DEV_DATABASE_DNS} --no-owner --no-acl --clean {filename}",
         block=False)
-    
-    return
 
     
 def only_game_masters(function):
