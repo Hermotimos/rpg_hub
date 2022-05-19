@@ -333,7 +333,7 @@ def update_production_db():
     delegator.run("python manage.py migrate")
     
     date = time.strftime("%Y-%m-%d_%H-%M")
-    filename = f"hyllemath_djangomigrations_{date}.json"
+    filename = f"hyllemath_db_djangomigrations_{date}.json"
     
     delegator.run(
         f"pg_dump --dbname={settings.DEV_DATABASE_DNS} --format=c --no-owner --no-acl > {filename}")
