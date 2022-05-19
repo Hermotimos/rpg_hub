@@ -221,7 +221,7 @@ def include_silent_participants(results: List[GroupedResult], thread: communicat
     results.extend(
         [GroupedResult(grouper=profile, list=[])
          for profile in profiles_without_statements])
-    return sorted(results, key=lambda gr_result: gr_result.grouper.character_name_copy)
+    return sorted(results, key=lambda gr_result: gr_result.grouper.character.fullname)
 
 
 @register.filter

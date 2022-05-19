@@ -90,10 +90,10 @@ def get_threads(current_profile, thread_kind):
         raise ValueError("Podany thread_kind nie występuje!")
     
     threads = threads.prefetch_related(
-        'statements__author',
+        'statements__author__character',
         'tags__author',
         'events__game',
-        'participants',
+        'participants__character',
         'followers',
     )
     return threads
@@ -116,9 +116,9 @@ def threads_view(request, thread_kind, tag_title):
     else:
         page_title = "TODO"
         unseen = Thread.objects.none()
-    
-    # Annotate threads with attribute 'initiator'
     threads = threads.exclude(id__in=unseen)
+
+    # Annotate threads with attribute 'initiator'
     for thread in threads:
         thread.initiator = get_initiator(thread)
     for thread_unseen in unseen:

@@ -5,5 +5,5 @@
      <figcaption class="font-12 font-italic text-center pt-1">{{ profile.user.username }}</figcaption>
 {% elif thread.kind == 'Debate' %}
      <img class="img-fluid rounded-circle" src="{{ statement.author.image.url }}">
-     <figcaption class="font-12 font-italic text-center pt-1">{{ profile.character_name_copy }}</figcaption>
+     <figcaption class="font-12 font-italic text-center pt-1">{{ profile.character__fullname }}</figcaption>
 {% endif %}

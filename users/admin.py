@@ -96,14 +96,14 @@ class ProfileAdminForm(forms.ModelForm):
 class ProfileAdmin(admin.ModelAdmin):
     form = ProfileAdminForm
     list_display = [
-        'get_img', 'id', 'character_name_copy', 'user', 'status', 'is_alive',
-        'is_active', 'is_enchanter', 'image'
+        'get_img', 'user', 'status', 'is_alive', 'is_active', 'is_enchanter',
+        'image'
     ]
     list_editable = [
         'user', 'status', 'is_alive', 'is_active', 'is_enchanter', 'image'
     ]
     list_filter = ['user', 'status', 'is_alive', 'is_active', 'is_enchanter', ]
-    search_fields = ['user__username', 'character_name_copy']
+    search_fields = ['user__username', 'character__fullname']
 
     def get_img(self, obj):
         if obj.image:
@@ -111,7 +111,7 @@ class ProfileAdmin(admin.ModelAdmin):
                 f'<img src="{obj.image.url}" width="70" height="70">')
         default_img = "media/profile_pics/profile_default.jpg"
         return format_html(f'<img src={default_img} width="70" height="70">')
-    
+   
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         fields = [
             'user',

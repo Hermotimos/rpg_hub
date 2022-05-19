@@ -25,9 +25,9 @@ class DebateStatementAuthorFilter(admin.SimpleListFilter):
     parameter_name = 'author'
     
     def lookups(self, request, model_admin):
-        authors = Profile.objects.exclude(statements=None)
+        authors = Profile.objects.exclude(statements=None).select_related('character')
         return [
-            (profile.id, profile.character_name_copy) for profile in authors]
+            (profile.id, profile.character.fullname) for profile in authors]
     
     def queryset(self, request, queryset):
         if self.value() is not None:

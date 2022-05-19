@@ -286,6 +286,7 @@ class NonGMCharacter(Character):
         verbose_name_plural = '--- Players and NPCs'
 
 
+# TODO delete after more testing (along field on Profile)
 def copy_name_from_character_to_profile(sender, instance, **kwargs):
     profile = instance.profile
     profile.character_name_copy = str(instance)

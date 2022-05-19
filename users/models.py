@@ -48,7 +48,7 @@ class Profile(Model):
         null=True,
         storage=ReplaceFileStorage(),
     )
-    # Character name copied from Character (by signal) to avoid queries
+    # TODO delete after more testing (along signal in prosoponomikon.models)
     character_name_copy = CharField(max_length=100, blank=True, null=True)
 
     objects = Manager()
@@ -61,10 +61,10 @@ class Profile(Model):
     contactables = ContactableProfileManager()
 
     class Meta:
-        ordering = ['-status', '-is_active', 'character_name_copy']
+        ordering = ['-status', '-is_active', 'character__fullname']
     
     def __str__(self):
-        return self.character_name_copy or self.user.username
+        return self.character.fullname or self.user.username
 
     def save(self, *args, **kwargs):
         first_save = True if not self.pk else False
@@ -223,3 +223,14 @@ class Profile(Model):
     @property
     def can_action(self):
         return self.status in ['gm', 'player']
+
+
+# -----------------------------------------------------------------------------
+# Provide User with method to get Profile-s with prefetched Character-s
+
+def get_profiles(self):
+    user_profiles = self.profiles.select_related('character')
+    return user_profiles.order_by('status', 'character__fullname')
+
+
+User.add_to_class("get_profiles", get_profiles)

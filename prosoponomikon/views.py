@@ -22,7 +22,7 @@ def prosoponomikon_characters_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     
     all_characters = profile.characters_known_annotated()
-    all_characters = all_characters.annotate(initial=Lower(Substr('profile__character_name_copy', 1, 1)))
+    all_characters = all_characters.annotate(initial=Lower(Substr('profile__character__fullname', 1, 1)))
     
     context = {
         'current_profile': profile,

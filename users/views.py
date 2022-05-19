@@ -148,7 +148,7 @@ def switch_profile(request, profile_id):
     request.session['profile_id'] = profile_id
     chosen_profile = Profile.objects.get(id=profile_id)
     
-    msg = f"Zmieniono Postać na {chosen_profile.character_name_copy}!"
+    msg = f"Zmieniono Postać na {chosen_profile.character.fullname}!"
     messages.info(request, msg)
     
     response = redirect(request.META.get('HTTP_REFERER'))
@@ -167,7 +167,8 @@ def switch_profile(request, profile_id):
 
 def get_profile(user):
     """Get User's Profile by the priority of 'status' and probable recent use."""
-    profiles = user.profiles.order_by('status', '-is_alive', '-is_active', 'character_name_copy')
+    profiles = user.profiles.order_by(
+        'status', '-is_alive', '-is_active', 'character__fullname')
     return profiles.first()
 
 
