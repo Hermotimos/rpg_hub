@@ -196,10 +196,10 @@ def game_event_with_caption(game_events_qs):
 
 @login_required
 def home_view(request):
-    from imaginarion.models import PictureImage
-    first = PictureImage.objects.first()
-    print(first.image.url)  # /media/post_pics/knowledge_Struktura%20organizacyjna%20Szarej%20Gwardii.jpg
-    print(first.image.path) # C:\Users\Lukasz\PycharmProjects\rpg_hub\media\post_pics\knowledge_Struktura organizacyjna Szarej Gwardii.jpg
+    # from imaginarion.models import PictureImage
+    # first = PictureImage.objects.first()
+    # print(first.image.url)  # /media/post_pics/knowledge_Struktura%20organizacyjna%20Szarej%20Gwardii.jpg
+    # print(first.image.path) # C:\Users\Lukasz\PycharmProjects\rpg_hub\media\post_pics\knowledge_Struktura organizacyjna Szarej Gwardii.jpg
     try:
         current_profile = Profile.objects.get(id=request.session['profile_id'])
     except KeyError:

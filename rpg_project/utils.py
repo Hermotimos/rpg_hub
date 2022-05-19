@@ -327,6 +327,20 @@ def update_local_db(reason: str):
         f"pg_restore --dbname={settings.DEV_DATABASE_DNS} --no-owner --no-acl --clean {filename}",
         block=False)
 
+
+def update_production_db():
+    update_local_db('beforemigrationsbackup')
+    delegator.run("python manage.py migrate")
+    
+    date = time.strftime("%Y-%m-%d_%H-%M")
+    filename = f"hyllemath_djangomigrations_{date}.json"
+    
+    delegator.run(
+        f"pg_dump --dbname={settings.DEV_DATABASE_DNS} --format=c --no-owner --no-acl > {filename}")
+    delegator.run(
+        f"pg_restore --dbname={settings.GCP_DATABASE_DNS} --no-owner --no-acl --clean {filename}",
+        block=False)
+
     
 def only_game_masters(function):
     @wraps(function)

@@ -9,7 +9,7 @@
 # This creates a copy in the current folder
 
 # LOCAL DB:
-pg_dump --format=c -U postgres -d hyllemath > hyllemath.dump
+pg_dump --format=c -U postgres -d hyllemath > hyllemath.json
 # Password: postgres
 
 # GCP DB

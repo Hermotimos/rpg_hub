@@ -67,11 +67,15 @@
                 <a class="btn btn-outline-secondary icon-database-backup py-2" href="{% url 'technicalities:backup-db' %}"
                     data-toggle="tooltip" data-placement="bottom" title="Backup bazy GCP do Cloud Storage bucket">
                 </a>
-                <a class="btn btn-outline-secondary icon-download py-2" href="{% url 'technicalities:update-local-db' %}"
-                    data-toggle="tooltip" data-placement="bottom" title="GCP db --> LOCAL db">
+                <a class="btn btn-outline-secondary icon-update py-2" href="{% url 'technicalities:update-local-db' %}"
+                   data-toggle="tooltip" data-placement="bottom" title="GCP db --> LOCAL db">
+                </a>
+                <a class="btn btn-outline-danger icon-upload-cloud py-2" href="{% url 'technicalities:update-prod-db' %}"
+                   onclick="return confirm('Potwierdź aktualizację migracji w bazie produkcyjnej!');"
+                   data-toggle="tooltip" data-placement="bottom" title="Aktualizuj migracje Django w bazie produkcyjnej">
                 </a>
                 <a class="btn btn-outline-secondary icon-cloud py-2" href="https://console.cloud.google.com/home"
-                    data-toggle="tooltip" data-placement="bottom" title="Idź do konsoli GCP">
+                   data-toggle="tooltip" data-placement="bottom" title="Idź do konsoli GCP">
                 </a>
             </div>
         {% endif %}

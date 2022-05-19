@@ -8,6 +8,7 @@ urlpatterns = [
     path('todos/', views.todos_view, name='todos'),
     path('backup-db/', views.backup_db_view, name='backup-db'),
     path('update-local-db/', views.update_local_db_view, name='update-local-db'),
+    path('update-prod-db/', views.update_production_db_view, name='update-prod-db'),
     path('allow-game-masters-to-all/', views.allow_game_masters_to_all, name='allow-game-masters-to-all'),
     path('refresh-contenttypes/', views.refresh_content_types, name='refresh-contenttypes'),
     path('cleanup-rules-objects/', views.cleanup_rules_objects, name='cleanup-rules-objects'),

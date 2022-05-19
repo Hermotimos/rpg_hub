@@ -1,20 +1,18 @@
 import os
 
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
-from django.core.files import File
 from django.db.models import Q
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.utils.safestring import mark_safe
 
 from chronicles.models import GameEvent
 from imaginarion.models import PictureImage
 from prosoponomikon.models import Character, NonGMCharacter
-from rpg_project.utils import backup_db, only_game_masters, update_local_db
+from rpg_project.utils import backup_db, only_game_masters, update_local_db, update_production_db
 from rules.models import (
     Skill, SkillLevel,
     Synergy, SynergyLevel,
@@ -73,7 +71,7 @@ def backup_db_view(request):
         messages.warning(request, 'Funkcja dostępna tylko na produkcji!')
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     
-    backup_db(reason="manual")
+    backup_db(reason="manualbackup")
     messages.info(request, 'Wykonano backup bazy do Cloud Storage bucket!')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     
@@ -87,7 +85,23 @@ def update_local_db_view(request):
 
     update_local_db(reason="localupdate")
     messages.info(request, 'Nadpisano lokalną bazę danymi z bazy GCP!')
-    messages.info(request, 'Zapisano lokalną kopię bazy w folderze projektu!')
+    messages.info(request, 'Zapisano kopię bazy produkcyjnej w folderze projektu!')
+    logout(request)
+    return redirect('users:login')
+
+
+@login_required
+@only_game_masters
+def update_production_db_view(request):
+    if not os.environ.get('COMPUTERNAME'):
+        messages.warning(request, 'Funkcja dostępna tylko lokalnie!')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+    update_production_db()
+    messages.info(request, 'Nadpisano lokalną bazę danymi z bazy GCP!')
+    messages.info(request, 'Zapisano kopię bazy produkcyjnej w folderze projektu!')
+    messages.info(request, 'Wykonano migracje na lokalnej bazie!')
+    messages.info(request, 'Nadpisano bazę produkcyjną z bazy lokalnej!')
     logout(request)
     return redirect('users:login')
 
