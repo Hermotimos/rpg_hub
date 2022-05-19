@@ -8,193 +8,66 @@
 
 {% block content %}
     <div class="rules-styling pt-3">
+        <div class="mt-5" id="accordion">
+          
+            <!-- SKILLS PER SKILL TYPES-->
+            {% for skill_type in skill_types %}
+                <div class="card mb-2">
+                    <div class="card-header hover-blue" id="{{ skill_type.name }}"
+                         data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter }}">
+                        <label class="h4 font-weight-bold mb-0 hover-blue">
+                            {{ skill_type.name }}
+                        </label>
+                    </div>
+                    <div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="{{ skill_type.name }}" data-parent="#accordion">
+                        <div class="card-body container">
+                            <!-- This conditional is necessary to avoid regrouping of skills that have multiple SkillTypes within each SkillType
+                                In some cases it would result in leaving most of the skills ungrouped while some of them grouped. -->
+                            {% if skill_type.skill_groups.exists %}
+                                {% with skills=skill_type.skills.all %}
+                                    {% regroup skills|dictsort:"group.name" by group as skillgroup_list %}
+                                    {% for skillgroup in skillgroup_list %}
+                                        {% if skillgroup.grouper.name %}
+                                            <h4 class="mt-4 mb-2 border-bottom text-center">
+                                                {{ skillgroup.grouper.name }}
+                                            </h4>
+                                        {% endif %}
+                                        {% for skill in skillgroup.list %}
+                                            {% include 'rules/_skill.html' %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                {% endwith %}
+                            {% else %}
+                                {% for skill in skill_type.skills.all %}
+                                    {% with id_suffix=skill_type.name|remove_special_chars %}
+                                        {% include 'rules/_skill.html' %}
+                                    {% endwith %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            
+            <!-- ALL SKILLS -->
+            <div class="card mb-2">
+                <div class="card-header hover-blue" id="all-skills"
+                     data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <label class="h4 font-weight-bold mb-0 hover-blue small-caps">
+                        Wszystkie
+                    </label>
+                </div>
+                <div id="collapseOne" class="collapse show" aria-labelledby="all-skills" data-parent="#accordion">
+                    <div class="card-body container">
+                        {% with id_suffix="skills-all" %}
+                            {% for skill in skills %}
+                                {% include 'rules/_skill.html' %}
+                            {% endfor %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
 
-        <!-- SKILLS RULES  -->
-        <h2 class="rules mt-5 mb-3">Umiejętności</h2>
-        <p>
-            <span>&#9755;</span>
-            <a href="{% url 'rules:skills-list' 'Powszechne' %}">Lista Umiejętności</a>
-        </p>
-        <p>
-            Nabywanie Umiejętności w zamian za Punkty Doświadczenia stanowi podstawowy mechanizm rozwoju Postaci.
-            Każdy poziom Umiejętności ma cenę wyrażoną w Punktach Doświadczenia, które przy nabyciu zostają odjęte od aktualnej sumy Doświadczenia Postaci.
-            Innymi słowy, Doświadczenie to waluta, a każda Umiejętność ma swoją cenę.
-            Nabywanie w ten sposób Umiejętności stanowi istotę rozwoju Postaci.
-        </p>
-        <p>
-            Sam termin "Umiejętności" używany jest w specyficznym znaczeniu, pod którym kryją się różnorodne zdolności
-            – z jednej strony takie, które bez wahania określilibyśmy mianem umiejętności (np. Czytanie i pisanie, Wspinaczka),
-            jak i różnorodne właściwości fizyczne i psychiczne (np. Wytrzymałość, Wola życia, Spostrzegawczość, Zwiększona Siła)
-            czy wiedza (Doktryna bóstwa, Historia, Księgi).
-        </p>
-        <p>
-            Nie wszystkie Umiejętności są równie atrakcyjnymi i opłacalnymi wyborami dla Postaci.
-            Zależnie od charakteru rozgrywki, który może zostać zarysowany na początku rozgrywki przez Mistrza Gry, a później musi być rozpoznany przez Gracza,
-            niektóre Umiejętności z poniższej listy mogą okazać się zupełnie nieopłacalne i nieatrakcyjne.
-            Ponadto może dochodzić do nierównowagi w korzyściach płynących z różnych Umiejętności na tym samym poziomie.
-            Te mniej korzystne mogą jednak okazać się nader atrakcyjne, kiedy na stole nie pozostanie już żadna inna możliwość podniesienia danego współczynnika.
-        </p>
-        <p>
-            Wiele z Umiejętności dostarcza Postaci możliwości korzystania z różnorakich Atutów.
-            Atuty stanowią mini-Umiejętności, zazwyczaj dostarczające Bonusów do konkretnych Współczynników i Testów.
-            Każdy Atut powiązany jest z konkretnym poziomem Umiejętności i posiada nazwę (niejednokrotnie identyczną z nazwą samej Umiejętności).
-            Niektóre Atuty występują przy więcej niż jednej Umiejętności. W przypadku identycznych Atutów ich Bonusy nie sumują się.
-            Dla przykładu 1. Poziom Umiejętności "Pływanie" dostarcza Atutu "Pływanie" identycznego z 2. Poziomem Umiejętności Rybołówstwo.
-            Bonusy wynikający z obu Umiejętności nie sumują się; stanowią one odrębne ścieżki dojścia do tych samych zdolności.
-        </p>
-        <p>
-            Lista Umiejętności jest otwarta, jednak nie na mnożenie ponad miarę Umiejętności adresujących tę samą domenę aktywności.
-            Jednak w przypadku, gdy jakaś domena aktywności leżąca w sferze zainteresowań Postaci jest poszkodowana przez niedostatek czy niedoprecyzowanie Umiejętności,
-            Gracz może w każdej chwili wysłać do Mistrza Gry Dezyderat z odpowiednią propozycją lub zgłoszeniem zapotrzebowania.
-        </p>
-        <p>
-            Podstawowy schemat Poziomów Umiejętności i ich kosztów w Punktach Doświadczenia to 0-1-2-3 | 0-400-800-2000.
-            Poziom zerowy opisuje sytuację braku Umiejętności, aby nie pozostawiać złudzeń co do zdolności Postaci w danej dziedzinie.
-        </p>
-        <table class="mt-3 mx-3 font-italic">
-            <tr>
-                <td class="align-top">
-                    <img class="img-xs" src="{% static 'img/0.png' %}">
-                </td>
-                <td class="align-bottom pl-1 text-justify">
-                    <p class="font-weight-bold m-0">
-                        Brak umiejętności
-                    </p>
-                    <p class="m-0 ml-1">
-                        Postać nie posiada jakiejkolwiek sprawności w danym zakresie, która wykraczałaby ponad przeciętne rozeznanie w świecie i rozgarnięcie życiowe.
-                        Ewentualnie Postaci może się zdawać, że coś na dany temat wie albo umie. Oczywiście mało komu przeszkadza to, żeby się wymądrzać.
-                        Jeśli Postać spróbuje użyć danej Umiejętności, to istnieje oczywiście szansa na to, że próba się powiedzie, jednak jest to szansa niezwykle mała...
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td class="align-top">
-                    <img class="img-xs" src="{% static 'img/1.png' %}">
-                </td>
-                <td class="align-bottom pl-1 text-justify">
-                    <p class="font-weight-bold m-0">
-                        Poziom kompetentny
-                    </p>
-                    <p class="m-0 ml-1">
-                        Pozwala na wykonywanie standardowych testów za powodzenie zastosowania danej Umiejętności z modyfikatorami zależnymi od sytuacji.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td class="align-top">
-                    <img class="img-xs" src="{% static 'img/2.png' %}">
-                </td>
-                <td class="align-bottom pl-1 text-justify">
-                    <p class="font-weight-bold m-0">
-                        Poziom ekspercki
-                    </p>
-                    <p class="m-0 ml-1">
-                        Pozwala na pełne wykorzystanie danej Umiejętności oraz eksperymentowanie poza jej zakresem standardowego zastosowania.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td class="align-top">
-                    <img class="img-xs" src="{% static 'img/3.png' %}">
-                </td>
-                <td class="align-bottom pl-1 text-justify">
-                    <p class="font-weight-bold m-0">
-                        Poziom legendarny
-                    </p>
-                    <p class="m-0 ml-1">
-                        Pozwala na działania wykraczające poza zdolności pojmowania przeciętnego człowieka i naginające granicę między rzeczywistością a eposem…
-                    </p>
-                </td>
-            </tr>
-        </table>
-       
-        
-        <h2 class="rules mt-5 mb-3 hover-blue" data-toggle="collapse" data-target="#skills">Synergie</h2>
-        <p>
-            <span>&#9755;</span>
-            <a href="{% url 'rules:synergies-list' %}">Lista Synergii</a>
-        </p>
-        <p>
-            Synergie zestaw dwóch lub więcej Umiejętności wraz z dodatkowymi bonusami, które wypływają z takiego połączenia.
-            Nabycie Synergii następuje automatycznie w wyniku zgromadzenia wszystkich składających się na nią Umiejętności na odpowiednim poziomie.
-            Synergie są niezależne od Paska Postępu oraz nie wymagają zakupu za Punkty Doświadczenia.
-        </p>
-
-        <h2 class="rules mt-5 mb-3">Pasek Postępu</h2>
-        <p>
-            Oprócz Punktów Doświadczenia nabycie Umiejętności wymaga także szkolenia u nauczyciela albo pewnego czasu przeznaczonego na jej opanowanie.
-            Miernikiem spełnienia tego rodzaju przesłanki fabularnej jest Pasek Postępu.
-            Wprowadza on pewne, choć nie absolutne, zobiektywizowanie zasad dotyczących przesłanek fabularnych nabycia nowych Umiejętności oraz umożliwia Graczowi orientację,
-            na jakim etapie nauki znajduje się jego Postać.
-        </p>
-        <p>
-            Zapełnienie Paska Postępu jest warunkiem koniecznym do nabycia Umiejętności za Doświadczenie,
-            ale z drugiej strony nie zobowiązuje do niego, tzn. nie „więzi” Doświadczenia.
-            Pula Doświadczenia jest jedna i niepodzielna, a decyzja, żeby rozwijać jakąś Umiejętność nie zobowiązuje do tego,
-            żeby przeznaczyć na nią choćby 1 punkt doświadczenia.
-            Oznacza to, że Postać może zapełnić Paski Postępu dla kilku Umiejętności, których wcale nie ma zamiaru wykupić w najbliższym czasie<sup>✵</sup>,
-            a być może w ogóle, ponieważ rozwijała je wyłącznie z braku dostępu do doświadczeń pozwalających na rozwijanie o wiele bardziej pożądanych Umiejętności.
-            Odpowiada to nauce różnych głupot z nudów, która prowadzi do sytuacji bliskiej nabyciu nowych kompetencji przy odrobinie dalszego wysiłku.
-            Jedyne ograniczenie jest tu takie, że aby rozwijać w ramach Paska Postępu Umiejętność wyższego poziomu, trzeba już posiadać jej niższy poziom
-            (wybrany na początku gry, uzyskany fabularnie lub wykupiony za Doświadczenie).
-        </p>
-        <ul class="rules bullets-2 ml-4 mt-2 font-italic">
-            <li>
-                Jednakże, w przypadku, gdyby po zapełnieniu Paska Postępu Postać na długi czas całkowicie zaprzestała działań związanych z daną Umiejętnością,
-                które odświeżałyby jej obycie w danej materii, Mistrz Gry może zdecydować o przedłużeniu Paska Postępu dla danego poziomu Umiejętności u tej Postaci o kilka kratek.
-            </li>
-        </ul>
-        <p>
-            Każdy Poziom Umiejętności ma osobny Pasek Postępu, o pewnej liczbie kratek.
-            Każda z kratek odpowiada jednemu doświadczeniu w życiu Postaci o wystarczającym stopniu złożoności, aby przyczynić się do rozwoju danej Umiejętności.
-            Ilość kratek oraz wymagania dotyczące ich zapełnienia oddają prawidłowość dotyczącą nauki nowych Umiejętności znaną z życia:
-            trudne początki z koniecznością sporej inwestycji czasu, następnie stosunkowo prędki postęp, aż wreszcie sufit,
-            który przebiją tylko najbardziej zdeterminowani i wytrwali.
-            Odpowiada to następującemu schematowi Pasków Postępu dla poziomów Umiejętności, gdzie poszczególne „kratki" odpowiadają jednemu doświadczeniu:
-        </p>
-        
-        <div class="ml-3 mb-3">
-            <p>
-                <img class="img-xs" src="{% static 'img/1.png' %}">
-                <b>20 Prozaicznych:</b> bardzo niskie wymaganie, ale przez ilość wymaga pewnego czasu.
-            </p>
-            <p>
-                <img class="img-xs" src="{% static 'img/2.png' %}">
-                <b>5 Wymagających:</b> wystarczy niewielka liczba, ale za to „jakościowych” doświadczeń.
-            </p>
-            <p>
-                <img class="img-xs" src="{% static 'img/3.png' %}">
-                <b>15 Trudnych:</b> tylko nieliczni i naprawdę zdeterminowani są w stanie wspiąć się na ten pułap.
-            </p>
         </div>
-        
-
-        <p>
-            Uzupełnianie kratek Paska Postępu następuje przy okazji przydzielenia Doświadczenia po zakończeniu Sesji.
-            Gracz wskazuje doświadczenie, które jego zdaniem przyczynia się do zapełnienia kratki Paska Postępu, a Mistrz Gry ustosunkowuje się do tego.
-            W przypadku doświadczeń o wyższym stopniu trudności niż wymagany do zapełnienia jednej kratki na aktualnym Pasku Postępu
-            Mistrz Gry może dopuścić na zapełnienie większej ich liczby.
-            Rozwiązania typu zapełnienie pół kratki czy kropka w kratce są również dopuszczalne, kiedy danemu doświadczeniu ciężko przyporządkować poziom trudności.
-        </p>
-        
-        <h2 class="rules mt-5 mb-3">Tryb "fabularny" nabywania Umiejętności</h2>
-        <p>
-            Mistrz Gry może przyznać Postaci Umiejętność w całości lub w części bez potrzeby wydawania Punktów Doświadczenia i realizacji Paska Postępu.
-            Jest to uproszczony tryb rozwoju Postaci znajdujący zastosowanie np. w razie poświęcenia przez nią wycinka życia na naukę konkretnej Umiejętności.
-            Na tej zasadzie odbywa się również nabywanie Atutów, czyli pomniejszych, zindywidualizowanych zdolności i sprawności (bądź ułomności),
-            które mogą pozostawać bez związku z Umiejętnością.
-        </p>
-
-        <h2 class="rules mt-5 mb-3">Domyślny tryb użycia Umiejętności</h2>
-        <p>
-            Niektóre Umiejętności zawierają zobowiązanie Gracza do wyboru domyślnego trybu ich użycia, co zmierza do tego,
-            aby w każdym momencie gry możliwe było ustalenie, czy Postać zastosowała daną Umiejętność, czy nie - niezależnie od Deklaracji Gracza.
-            Jeśli opis Umiejętności nie stwierdza inaczej, to Gracz zobowiązany jest do wpisania Domyślnego Trybu na swojej Karcie Postaci przy danej Umiejętności.
-            Domyślny tryb można zmienić w każdej chwili, jednak absolutnie i nieodwołalnie obowiązujący jest tryb wpisany na najnowszej Karcie Postaci, jaką dysponuje Gracz
-            (choćby tak nowej, że nie w pełni uzupełnionej).
-            Wszystkie inne wpisy trybu muszą być wymazane lub przekreślone na śmierć,
-            a przy najmniejszej niejasności/nieczytelności decyzja należy do MG, który oczywiście zdecyduje na niekorzyść.
-        </p>
-
     </div>
 {% endblock content %}

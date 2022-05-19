@@ -103,21 +103,21 @@ def rules_professions_view(request, profession_type):
         'page_title': f'Klasy {profession_type}',
         'professions': professions.distinct(),
     }
-    return render(request, 'rules/professions_list.html', context)
+    return render(request, 'rules/professions.html', context)
 
 
 @login_required
-def rules_skills_view(request):
+def rules_character_development_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
         'current_profile': current_profile,
-        'page_title': 'Umiejętności',
+        'page_title': 'Rozwój Postaci',
     }
-    return render(request, 'rules/skills.html', context)
+    return render(request, 'rules/character_development.html', context)
 
 
 @login_required
-def rules_skills_list_view(request, skilltype_kind):
+def rules_skills_view(request, skilltype_kind):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
 
@@ -147,23 +147,23 @@ def rules_skills_list_view(request, skilltype_kind):
     
     context = {
         'current_profile': current_profile,
-        'page_title': f'Umiejętności: {skilltype_kind}',
+        'page_title': skilltype_kind,
         'skilltype_kind': skilltype_kind,
         'skill_types': skill_types,
         'skills': skills,
     }
-    return render(request, 'rules/skills_list.html', context)
+    return render(request, 'rules/skills.html', context)
 
 
 @login_required
-def rules_synergies_list_view(request):
+def rules_synergies_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
         'current_profile': current_profile,
         'page_title': 'Lista Synergii',
         'synergies': current_profile.synergies_allowed(),
     }
-    return render(request, 'rules/synergies_list.html', context)
+    return render(request, 'rules/synergies.html', context)
 
 
 @login_required
@@ -191,21 +191,21 @@ def rules_power_trait_view(request):
     
     
 @login_required
-def rules_power_priests_view(request):
+def rules_priesthood_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
     context = {
         'current_profile': current_profile,
-        'page_title': 'Moce Kapłańskie'
+        'page_title': 'Kapłaństwo'
     }
     if can_view_special_rules(user_profiles, ['Kapłan']):
-        return render(request, 'rules/power_priests.html', context)
+        return render(request, 'rules/priesthood.html', context)
     else:
         return redirect('users:dupa')
      
      
 @login_required
-def rules_power_sorcerers_view(request):
+def rules_sorcery_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
     context = {
@@ -213,13 +213,13 @@ def rules_power_sorcerers_view(request):
         'page_title': 'Magia'
     }
     if can_view_special_rules(user_profiles, ['Czarodziej']):
-        return render(request, 'rules/power_sorcerers.html', context)
+        return render(request, 'rules/sorcery.html', context)
     else:
         return redirect('users:dupa')
     
      
 @login_required
-def rules_power_theurgists_view(request):
+def rules_theurgy_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
     context = {
@@ -227,7 +227,7 @@ def rules_power_theurgists_view(request):
         'page_title': 'Teurgia'
     }
     if can_view_special_rules(user_profiles, ['Teurg']):
-        return render(request, 'rules/power_theurgists.html', context)
+        return render(request, 'rules/theurgy.html', context)
     else:
         return redirect('users:dupa')
 

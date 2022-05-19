@@ -26,10 +26,10 @@
             <li><a href="{% url 'rules:tests' %}">Testy Cech</a></li>
             <li><a href="{% url 'rules:fitness-and-tricks' %}">Wydolność, Sprawności i Podstępy</a></li>
             <li>
-                <a href="{% url 'rules:skills-and-synergies' %}">Umiejętności</a>
+                <a href="{% url 'rules:character-development' %}">Rozwój Postaci</a>
                 <ul class="ml-3">
-                    <li><a href="{% url 'rules:skills-list' 'Powszechne' %}">Lista Umiejętności</a></li>
-                    <li><a href="{% url 'rules:synergies-list' %}">Lista Synergii</a></li>
+                    <li><a href="{% url 'rules:skills' 'Powszechne' %}">Umiejętności</a></li>
+                    <li><a href="{% url 'rules:synergies' %}">Synergie</a></li>
                 </ul>
             </li>
         </ol>
@@ -54,22 +54,22 @@
                 <li>
                     <a href="{% url 'rules:power-trait' %}">Cecha Mentalna "Moc"</a>
                     <ul class="ml-3">
-                        <li><a href="{% url 'rules:skills-list' 'Mentalne' %}">Umiejętności Mentalne</a></li>
+                        <li><a href="{% url 'rules:skills' 'Mentalne' %}">Umiejętności Mentalne</a></li>
                     </ul>
                 </li>
                 {% if 'Kapłan' in user_professions_all %}
                     <li>
-                        <a href="{% url 'rules:power-priests' %}">Moce Kapłańskie</a>
+                        <a href="{% url 'rules:priesthood' %}">Kapłaństwo</a>
                         <ul class="ml-3">
-                            <li><a href="{% url 'rules:skills-list' 'Kapłańskie' %}">Moce Kapłańskie</a></li>
+                            <li><a href="{% url 'rules:skills' 'Moce Kapłańskie' %}">Moce Kapłańskie</a></li>
                         </ul>
                     </li>
                 {% endif %}
                 {% if 'Czarodziej' in user_professions_all %}
-                    <li><a href="{% url 'rules:power-sorcerers' %}">Magia</a></li>
+                    <li><a href="{% url 'rules:sorcery' %}">Magia</a></li>
                 {% endif %}
                 {% if 'Teurg' in user_professions_all %}
-                    <li><a href="{% url 'rules:power-theurgists' %}">Teurgia</a></li>
+                    <li><a href="{% url 'rules:theurgy' %}">Teurgia</a></li>
                 {% endif %}
             </ol>
         {% endif %}

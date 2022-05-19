@@ -14,16 +14,16 @@ urlpatterns = [
     path('character/', views.rules_character_view, name='character'),
     path('professions/<str:profession_type>/', views.rules_professions_view, name='professions'),
     
-    path('skills-and-synergies/', views.rules_skills_view, name='skills-and-synergies'),
-    path('skills-list/<str:skilltype_kind>/', views.rules_skills_list_view, name='skills-list'),
-    path('synergies-list/', views.rules_synergies_list_view, name='synergies-list'),
+    path('character-development/', views.rules_character_development_view, name='character-development'),
+    path('skills/<str:skilltype_kind>/', views.rules_skills_view, name='skills'),
+    path('synergies/', views.rules_synergies_view, name='synergies'),
     
     path('tests/', views.rules_tests_view, name='tests'),
     path('traits/', views.rules_traits_view, name='traits'),
     path('power-trait/', views.rules_power_trait_view, name='power-trait'),
-    path('power-priests/', views.rules_power_priests_view, name='power-priests'),
-    path('power-sorcerers/', views.rules_power_sorcerers_view, name='power-sorcerers'),
-    path('power-theurgists/', views.rules_power_theurgists_view, name='power-theurgists'),
+    path('priesthood/', views.rules_priesthood_view, name='priesthood'),
+    path('sorcery/', views.rules_sorcery_view, name='sorcery'),
+    path('theurgy/', views.rules_theurgy_view, name='theurgy'),
     path('weapons/', views.rules_weapons_view, name='weapons'),
     path('wounds/', views.rules_wounds_view, name='wounds'),
 ]
