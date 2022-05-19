@@ -18,7 +18,6 @@ from django.db.models import Q
 from django.db.models.signals import post_save, m2m_changed
 
 from imaginarion.models import PictureSet
-from rpg_project.utils import create_sorting_name
 from users.models import Profile
 
 
@@ -225,20 +224,14 @@ class Shield(Model):
 
 class WeaponType(Model):
     name = CharField(max_length=100, unique=True)
-    sorting_name = CharField(max_length=250, blank=True, null=True)
     
     class Meta:
-        ordering = ['sorting_name']
+        ordering = ['name']
         verbose_name = 'Weapon type'
         verbose_name_plural = 'Weapon types'
     
     def __str__(self):
         return self.name
-    
-    def save(self, *args, **kwargs):
-        if self.name:
-            self.sorting_name = create_sorting_name(self.name)
-        super().save(*args, **kwargs)
 
 
 DAMAGE_TYPES = [
@@ -297,18 +290,11 @@ class Weapon(Model):
                                    blank=True, null=True)
     avg_weight = DecimalField(max_digits=10, decimal_places=1)
     
-    sorting_name = CharField(max_length=250, blank=True, null=True)
-    
     class Meta:
-        ordering = ['sorting_name']
+        ordering = ['name']
     
     def __str__(self):
         return self.name
-    
-    def save(self, *args, **kwargs):
-        if self.name:
-            self.sorting_name = create_sorting_name(self.name)
-        super().save(*args, **kwargs)
     
     def damage_summary(self):
         if self.damage_bonus:
@@ -322,15 +308,9 @@ class Weapon(Model):
 class SkillKind(Model):
     """A classification category for Skills."""
     name = CharField(max_length=100, unique=True)
-    sorting_name = CharField(max_length=101, blank=True, null=True)
 
     class Meta:
-        ordering = ['sorting_name']
-
-    def save(self, *args, **kwargs):
-        if self.name:
-            self.sorting_name = create_sorting_name(self.name)
-        super().save(*args, **kwargs)
+        ordering = ['name']
     
     def __str__(self):
         return self.name
@@ -340,15 +320,9 @@ class SkillType(Model):
     """A classification category for Skills."""
     name = CharField(max_length=100, unique=True)
     kinds = M2M(to=SkillKind, related_name='skill_types', blank=True)
-    sorting_name = CharField(max_length=101, blank=True, null=True)
 
     class Meta:
-        ordering = ['sorting_name']
-
-    def save(self, *args, **kwargs):
-        if self.name:
-            self.sorting_name = create_sorting_name(self.name)
-        super().save(*args, **kwargs)
+        ordering = ['name']
         
     def __str__(self):
         kinds = "|".join([str(kind) for kind in self.kinds.all()])
@@ -383,14 +357,13 @@ class Skill(Model):
         related_name='allowed_skills',
         blank=True,
     )
-    sorting_name = CharField(max_length=101, blank=True, null=True)
     # ------------------------------------------
     is_version = BooleanField(default=False)
     weapon = FK(to=Weapon, on_delete=CASCADE, blank=True, null=True)
     sphragis = FK(to=Sphragis, on_delete=CASCADE, blank=True, null=True)
 
     class Meta:
-        ordering = ['sorting_name']
+        ordering = ['name']
 
     def __str__(self):
         if self.is_version:
@@ -398,11 +371,6 @@ class Skill(Model):
             sphragis = f" ({self.sphragis})" if self.sphragis else ""
             return str(self.name) + weapon + sphragis
         return str(self.name)
-
-    def save(self, *args, **kwargs):
-        if self.name:
-            self.sorting_name = create_sorting_name(self.name)
-        super().save(*args, **kwargs)
 
 
 S_LEVELS = [
@@ -419,19 +387,14 @@ class SkillLevel(Model):
     description = TextField(max_length=4000, blank=True, null=True)
     perks = M2M(to=Perk, related_name='skill_levels', blank=True)
     acquired_by = M2M(to=Profile, related_name='skill_levels', blank=True)
-    sorting_name = CharField(max_length=250, blank=True, null=True)
     # ------------------------------------------
     is_version = BooleanField(default=False)
 
     class Meta:
-        ordering = ['sorting_name', 'id']
+        ordering = ['skill__name', 'level']
 
     def __str__(self):
         return f'{str(self.skill.name)} [{self.level}]'
-
-    def save(self, *args, **kwargs):
-        self.sorting_name = create_sorting_name(self.__str__())
-        super().save(*args, **kwargs)
 
 
 class TheologySkillManager(Manager):
@@ -491,20 +454,14 @@ class Synergy(Model):
     # TODO replace name with a composite of skills names with .join()
     name = CharField(max_length=100)
     skills = M2M(to=Skill, related_name='skills')
-    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
-        ordering = ['sorting_name']
+        ordering = ['name']
         verbose_name = 'Synergy'
         verbose_name_plural = 'Synergies'
 
     def __str__(self):
         return self.name
-
-    def save(self, *args, **kwargs):
-        if self.name:
-            self.sorting_name = create_sorting_name(self.name)
-        super().save(*args, **kwargs)
 
 
 class SynergyLevel(Model):
@@ -514,17 +471,12 @@ class SynergyLevel(Model):
     perks = M2M(to=Perk, related_name='synergy_levels', blank=True)
     skill_levels = M2M(to=SkillLevel, related_name='synergy_levels')
     acquired_by = M2M(to=Profile, related_name='synergy_levels', blank=True)
-    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
-        ordering = ['sorting_name']
+        ordering = ['synergy', 'level']
         
     def __str__(self):
         return f'{str(self.synergy.name)} [{self.level}]'
-
-    def save(self, *args, **kwargs):
-        self.sorting_name = create_sorting_name(self.__str__())
-        super().save(*args, **kwargs)
 
 
 # =============================================================================
@@ -541,20 +493,14 @@ class Profession(Model):
     type = CharField(max_length=50, choices=TYPES)
     description = TextField(max_length=4000, blank=True, null=True)
     allowees = M2M(to=Profile, related_name='professions_allowed', blank=True)
-    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
-        ordering = ['sorting_name']
+        ordering = ['name']
         verbose_name = 'Profession'
         verbose_name_plural = '--- PROFESSIONS'
 
     def __str__(self):
         return self.name
-
-    def save(self, *args, **kwargs):
-        if self.name:
-            self.sorting_name = create_sorting_name(self.name)
-        super().save(*args, **kwargs)
 
 
 class SubProfession(Model):
@@ -564,20 +510,14 @@ class SubProfession(Model):
     description = TextField(max_length=4000, blank=True, null=True)
     essential_skills = M2M(to=Skill, blank=True)
     allowees = M2M(to=Profile, related_name='subprofessions_allowed', blank=True)
-    sorting_name = CharField(max_length=250, blank=True, null=True)
     
     class Meta:
-        ordering = ['sorting_name']
+        ordering = ['name']
         verbose_name = 'SubProfession'
         verbose_name_plural = '--- SUBPROFESSIONS'
 
     def __str__(self):
         return self.name
-
-    def save(self, *args, **kwargs):
-        if self.name:
-            self.sorting_name = create_sorting_name(self.name)
-        super().save(*args, **kwargs)
 
 
 # =============================================================================

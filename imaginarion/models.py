@@ -1,6 +1,5 @@
 from PIL import Image
 from django.db.models import (
-    BooleanField,
     CASCADE,
     CharField,
     ForeignKey as FK,
@@ -12,7 +11,7 @@ from django.db.models import (
     TextField,
 )
 
-from rpg_project.utils import ReplaceFileStorage, create_sorting_name
+from rpg_project.utils import ReplaceFileStorage
 
 # TODO rename app 'imaginarion' -> 'mousarion'
 
@@ -89,14 +88,12 @@ class PictureImage(Model):
     image = ImageField(upload_to='post_pics', storage=ReplaceFileStorage())
     # type = CharField(max_length=20, choices=TYPES)
     description = CharField(max_length=200, blank=True, null=True)
-    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
-        ordering = ['sorting_name']
+        ordering = ['image']
         
     def save(self, *args, **kwargs):
         # TODO add re-save of image (to enforce new location on type change)
-        self.sorting_name = create_sorting_name(self.__str__())
         first_save = True if not self.pk else False
         super().save(*args, **kwargs)
         if first_save and self.image:
@@ -132,17 +129,12 @@ class Picture(Model):
     image = FK(to=PictureImage, related_name='pictures', on_delete=CASCADE)
     type = CharField(max_length=20, choices=IMG_TYPES)
     description = CharField(max_length=200, blank=True, null=True)
-    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
-        ordering = ['type', 'sorting_name']
+        ordering = ['type', 'image']
 
     def __str__(self):
         return f"[{self.type.upper()}] {self.description}"
-
-    def save(self, *args, **kwargs):
-        self.sorting_name = create_sorting_name(self.description)
-        super().save(*args, **kwargs)
 
 
 class PictureSetManager(Manager):

@@ -30,7 +30,7 @@ class DialoguePacketAdmin(admin.ModelAdmin):
 
 @admin.register(BiographyPacket)
 class BiographyPacketAdmin(admin.ModelAdmin):
-    exclude = ['sorting_name']
+    exclude = ['title']
     filter_horizontal = ['acquired_by', 'picture_sets']
     list_display = ['id', 'title', 'text', 'author']
     list_editable = ['title', 'text']

@@ -9,7 +9,6 @@ from django.db.models import (
 )
 
 from imaginarion.models import PictureSet
-from rpg_project.utils import create_sorting_name
 from rules.models import Skill
 from users.models import Profile
 
@@ -17,18 +16,13 @@ from users.models import Profile
 class InfoPacket(Model):
     title = CharField(max_length=100, unique=True)
     text = TextField(blank=True, null=True)
-    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
         abstract = True
-        ordering = ['sorting_name']
+        ordering = ['title']
         
     def __str__(self):
         return self.title
-
-    def save(self, *args, **kwargs):
-        self.sorting_name = create_sorting_name(self.__str__())
-        super().save(*args, **kwargs)
         
 
 class DialoguePacket(InfoPacket):
@@ -50,7 +44,7 @@ class BiographyPacket(InfoPacket):
     order_no = SmallIntegerField(default=1)
 
     class Meta:
-        ordering = ['order_no', 'sorting_name']
+        ordering = ['order_no', 'title']
    
     def informables(self):
         qs = Profile.active_players.all()

@@ -66,9 +66,9 @@ class PictureAdmin(admin.ModelAdmin):
     
 @admin.register(PictureImage)
 class PictureImageAdmin(admin.ModelAdmin):
-    list_display = ['id', 'description', 'image', 'sorting_name']
+    list_display = ['id', 'description', 'image']
     list_editable = ['description', 'image']
-    search_fields = ['description', 'sorting_name']
+    search_fields = ['description']
 
 
 @admin.register(PictureSet)
