@@ -13,7 +13,6 @@ from django.db.models import (
 from django.db.models.signals import post_save
 
 from knowledge.models import BiographyPacket, DialoguePacket
-from rpg_project.utils import create_sorting_name
 from rules.models import Profession
 from toponomikon.models import Location
 from users.models import Profile
@@ -210,10 +209,12 @@ class Character(Model):
         to=Profile,
         related_name='characters_informed',
         blank=True)
-    sorting_name = CharField(max_length=250, blank=True, null=True)
+    
+    # -------------------------------------------------------------------------
+    name = CharField(max_length=250, blank=True, null=True)
     
     class Meta:
-        ordering = ['sorting_name']
+        ordering = ['name']
         verbose_name = '* CHARACTER'
         verbose_name_plural = '* CHARACTERS'
     
@@ -224,7 +225,7 @@ class Character(Model):
         return f"{first_name}{family_name}{cognomen}".strip()
 
     def save(self, *args, **kwargs):
-        self.sorting_name = create_sorting_name(self.__str__())
+        self.name = self.__str__()
         super().save(*args, **kwargs)
     
     def all_known(self):

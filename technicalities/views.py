@@ -157,7 +157,7 @@ def reload_main_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
         'current_profile': profile,
-        'page_title': 'Przeładowanie sorting_name'
+        'page_title': 'Przeładowanie modeli'
     }
     return render(request, 'technicalities/reload_main.html', context)
 
@@ -212,7 +212,7 @@ def reload_rules(request):
     for obj in Weapon.objects.all():
         obj.save()
 
-    messages.info(request, 'Przeładowano "sorting_name" dla "rules"!')
+    messages.info(request, 'Przeładowano modele dla "rules"!')
     return redirect('technicalities:reload-main')
 
 

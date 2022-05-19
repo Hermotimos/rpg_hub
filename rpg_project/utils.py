@@ -50,31 +50,6 @@ class ReplaceFileStorage(FileSystemStorage):
         name = str(name).strip()
         return re.sub(r'(?u)[^-\w.\s]', '', name)
     
-    
-def create_sorting_name(obj):
-    name = str(obj).lower()
-    name = name.replace('a', 'aa')
-    name = name.replace('ą', 'aą')
-    name = name.replace('c', 'cc')
-    name = name.replace('ć', 'cć')
-    name = name.replace('e', 'ee')
-    name = name.replace('ę', 'eę')
-    name = name.replace('l', 'll')
-    name = name.replace('ł', 'lł')
-    name = name.replace('n', 'nn')
-    name = name.replace('ń', 'nń')
-    name = name.replace('o', 'oo')
-    name = name.replace('ó', 'oó')
-    name = name.replace('s', 'ss')
-    name = name.replace('ś', 'sś')
-    name = name.replace('z', 'zz')
-    name = name.replace('ż', 'zż')
-    name = name.replace('ź', 'zź')
-    
-    name = name.replace('"', '')
-    
-    return name
-
 
 def sample_from_qs(qs, max_size):
     objs_set = set(qs)

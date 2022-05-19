@@ -14,7 +14,6 @@ from django.db.models.signals import post_save, m2m_changed
 
 from imaginarion.models import AudioSet, Picture, PictureSet
 from knowledge.models import KnowledgePacket, MapPacket
-from rpg_project.utils import create_sorting_name
 from users.models import Profile
 
 
@@ -84,20 +83,15 @@ class Location(Model):
         limit_choices_to=Q(status='player'),
         blank=True,
     )
-    sorting_name = CharField(max_length=250, blank=True, null=True)
 
     class Meta:
-        ordering = ['sorting_name']
+        ordering = ['name']
         verbose_name = 'Location'
         verbose_name_plural = '--- LOCATIONS'
 
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        if self.name:
-            self.sorting_name = create_sorting_name(self.name)
-        super().save(*args, **kwargs)
 
     def informables(self):
         qs = Profile.active_players.all()
