@@ -26,6 +26,4 @@ urlpatterns = [
     path('power-theurgists/', views.rules_power_theurgists_view, name='power-theurgists'),
     path('weapons/', views.rules_weapons_view, name='weapons'),
     path('wounds/', views.rules_wounds_view, name='wounds'),
-    
-    path('mockskill/<str:skilltype_kind>/', views.mockskill_view, name='mockskill'),
 ]
