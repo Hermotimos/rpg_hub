@@ -240,10 +240,10 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     GS_PROJECT_ID = 'gcloud_storage'
     GS_BUCKET_NAME = env("GS_BUCKET_NAME")
 
-    STATIC_URL = 'https://storage.googleapis.com/{}/static/'.format(GS_BUCKET_NAME)
+    STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/static/"
     STATIC_ROOT = "static/"
 
-    MEDIA_URL = 'https://storage.googleapis.com/{}/media/'.format(GS_BUCKET_NAME)
+    MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/v/"
     MEDIA_ROOT = "media/"
 
 else:

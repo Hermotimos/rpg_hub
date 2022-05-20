@@ -8,19 +8,19 @@ from urllib.parse import urljoin
 
 class GoogleCloudMediaFileStorage(GoogleCloudStorage):
     """Google file storage class which gives a media file path from MEDIA_URL not google generated one."""
-    bucket_name = setting('GS_MEDIA_BUCKET_NAME')
-    
+    bucket_name = setting('GS_BUCKET_NAME')
+
     def url(self, name):
         """Gives correct MEDIA_URL and not google generated url."""
-        print('MEDIA', settings.MEDIA_URL,name, '//', urljoin(settings.MEDIA_URL, name))
+        print('MEDIA', settings.MEDIA_URL, name, '//', urljoin(settings.MEDIA_URL, name))
         return urljoin(settings.MEDIA_URL, name)
 
 
 class GoogleCloudStaticFileStorage(GoogleCloudStorage):
     """Google file storage class which gives a static file path from STATIC_URL not google generated one."""
-    bucket_name = setting('GS_STATIC_BUCKET_NAME')
-    
+    bucket_name = setting('GS_BUCKET_NAME')
+
     def url(self, name):
         """Gives correct STATIC_URL and not google generated url."""
-        print('STATIC', urljoin(settings.STATIC_URL, name))
+        print('STATIC',  settings.STATIC_URL, name, '//', urljoin(settings.STATIC_URL, name))
         return urljoin(settings.STATIC_URL, name)
