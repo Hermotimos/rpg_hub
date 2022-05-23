@@ -11,30 +11,31 @@ from rules.models import (
     WeaponType,
     Weapon,
 )
-from rules.utils import get_overload_ranges, LOAD_LIMITS, get_user_professions, \
-    can_view_special_rules
+from rules.utils import get_overload_ranges, LOAD_LIMITS, \
+    get_allowed_professions, can_view_special_rules
 from users.models import Profile
 
 
 @login_required
 def rules_main_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
-    user_profiles = current_profile.user.profiles.all()
-
+    
     # Only Characters with specific Professions or a GM/Spectator can access some rules
-    allowed_professions = ['Kapłan', 'Czarodziej', 'Teurg', 'Bard']
+    elite_professions = [
+        p.name for p in Profession.objects.filter(type='Elitarne')]
+    
     if current_profile.status in ['gm', 'spectator']:
-        user_professions_all = allowed_professions
+        allowed_professions = elite_professions
         can_view_power_rules = True
     else:
-        user_professions_all = get_user_professions(user_profiles)
-        can_view_power_rules = can_view_special_rules(user_profiles, allowed_professions)
-        
+        allowed_professions = get_allowed_professions(current_profile)
+        can_view_power_rules = can_view_special_rules(current_profile, elite_professions)
+
     context = {
         'current_profile': current_profile,
         'page_title': 'Zasady',
         'can_view_power_rules': can_view_power_rules,
-        'user_professions_all': user_professions_all,
+        'allowed_professions': allowed_professions,
     }
     return render(request, 'rules/main.html', context)
 
@@ -179,12 +180,11 @@ def rules_traits_view(request):
 @login_required
 def rules_power_trait_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
-    user_profiles = current_profile.user.profiles.all()
     context = {
         'current_profile': current_profile,
         'page_title': 'Moc'
     }
-    if can_view_special_rules(user_profiles, ['Kapłan', 'Czarodziej', 'Teurg']):
+    if can_view_special_rules(current_profile, ['Kapłan', 'Czarodziej', 'Teurg']):
         return render(request, 'rules/power_trait.html', context)
     else:
         return redirect('users:dupa')
@@ -193,12 +193,11 @@ def rules_power_trait_view(request):
 @login_required
 def rules_priesthood_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
-    user_profiles = current_profile.user.profiles.all()
     context = {
         'current_profile': current_profile,
-        'page_title': 'Kapłaństwo'
+        'page_title': 'Kapłaństwo',
     }
-    if can_view_special_rules(user_profiles, ['Kapłan']):
+    if can_view_special_rules(current_profile, ['Kapłan']):
         return render(request, 'rules/priesthood.html', context)
     else:
         return redirect('users:dupa')
@@ -207,12 +206,11 @@ def rules_priesthood_view(request):
 @login_required
 def rules_sorcery_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
-    user_profiles = current_profile.user.profiles.all()
     context = {
         'current_profile': current_profile,
-        'page_title': 'Magia'
+        'page_title': 'Magia',
     }
-    if can_view_special_rules(user_profiles, ['Czarodziej']):
+    if can_view_special_rules(current_profile, ['Czarodziej']):
         return render(request, 'rules/sorcery.html', context)
     else:
         return redirect('users:dupa')
@@ -224,7 +222,7 @@ def rules_theurgy_view(request):
     user_profiles = current_profile.user.profiles.all()
     context = {
         'current_profile': current_profile,
-        'page_title': 'Teurgia'
+        'page_title': 'Teurgia',
     }
     if can_view_special_rules(user_profiles, ['Teurg']):
         return render(request, 'rules/theurgy.html', context)

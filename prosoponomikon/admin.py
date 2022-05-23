@@ -159,6 +159,7 @@ class CharacterAdmin(admin.ModelAdmin):
         'get_img', 'first_name', 'family_name', 'cognomen', 'description'
     ]
     list_editable = ['first_name', 'family_name', 'cognomen', 'description']
+    list_select_related = True
     readonly_fields = ['fullname']
     search_fields = [
         'first_name__form', 'first_name__form_2', 'family_name__form',

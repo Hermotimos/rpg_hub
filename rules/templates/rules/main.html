@@ -57,7 +57,7 @@
                         <li><a href="{% url 'rules:skills' 'Mentalne' %}">Umiejętności Mentalne</a></li>
                     </ul>
                 </li>
-                {% if 'Kapłan' in user_professions_all %}
+                {% if 'Kapłan' in allowed_professions %}
                     <li>
                         <a href="{% url 'rules:priesthood' %}">Kapłaństwo</a>
                         <ul class="ml-3">
@@ -65,10 +65,10 @@
                         </ul>
                     </li>
                 {% endif %}
-                {% if 'Czarodziej' in user_professions_all %}
+                {% if 'Czarodziej' in allowed_professions %}
                     <li><a href="{% url 'rules:sorcery' %}">Magia</a></li>
                 {% endif %}
-                {% if 'Teurg' in user_professions_all %}
+                {% if 'Teurg' in allowed_professions %}
                     <li><a href="{% url 'rules:theurgy' %}">Teurgia</a></li>
                 {% endif %}
             </ol>

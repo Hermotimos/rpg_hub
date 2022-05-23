@@ -1,23 +1,26 @@
 from collections import namedtuple
 from typing import Tuple
 
-
-def get_user_professions(user_profiles):
-    user_professions_all = []
-    for profile in user_profiles.prefetch_related('character__professions'):
-        user_professions_all.extend(
-            [p.name for p in profile.character.professions.all()])
-    return user_professions_all
+from prosoponomikon.models import Character
+from rules.models import Profession, SubProfession
 
 
-def can_view_special_rules(user_profiles, allowed_professions):
+def get_allowed_professions(current_profile):
+    user_profiles = current_profile.user.profiles.all()
+    subprofessions = SubProfession.objects.filter(
+        characters__in=Character.objects.filter(profile__in=user_profiles))
+    allowed_professions = Profession.objects.filter(
+        subprofessions__in=subprofessions)
+    return [p.name for p in allowed_professions]
+
+
+def can_view_special_rules(current_profile, restricted_professions):
+    user_profiles = current_profile.user.profiles.all()
     if user_profiles.filter(status__in=['gm', 'spectator']):
         return True
     else:
-        user_professions_all = get_user_professions(user_profiles)
-        return any(
-            [profession in allowed_professions for profession in user_professions_all]
-        )
+        allowed_professions = get_allowed_professions(current_profile)
+        return any([p in restricted_professions for p in allowed_professions])
 
 
 LOAD_LIMITS = [
