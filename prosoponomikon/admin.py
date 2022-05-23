@@ -149,11 +149,11 @@ class CharacterAdmin(admin.ModelAdmin):
     fields = [
         'profile', 'first_name', 'family_name', 'cognomen', 'fullname',
         'description', 'frequented_locations', 'biography_packets',
-        'dialogue_packets', 'professions', 'participants', 'informees',
+        'dialogue_packets', 'subprofessions', 'participants', 'informees',
     ]
     filter_horizontal = [
         'frequented_locations', 'biography_packets', 'dialogue_packets',
-        'participants', 'informees', 'professions'
+        'participants', 'informees', 'subprofessions',
     ]
     list_display = [
         'get_img', 'first_name', 'family_name', 'cognomen', 'description'

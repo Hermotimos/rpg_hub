@@ -13,7 +13,7 @@ from django.db.models import (
 from django.db.models.signals import post_save
 
 from knowledge.models import BiographyPacket, DialoguePacket
-from rules.models import Profession
+from rules.models import SubProfession
 from toponomikon.models import Location
 from users.models import Profile
 
@@ -185,7 +185,7 @@ class Character(Model):
     frequented_locations = M2M(to=Location, related_name='characters', blank=True)
     biography_packets = M2M(to=BiographyPacket, related_name='characters', blank=True)
     dialogue_packets = M2M(to=DialoguePacket, related_name='characters', blank=True)
-    professions = M2M(to=Profession, related_name='characters', blank=True)
+    subprofessions = M2M(to=SubProfession, related_name='characters', blank=True)
     # Participants = direct acquaintances; informees = known by hearsay
     participants = M2M(to=Profile, related_name='characters_participated', blank=True)
     informees = M2M(to=Profile, related_name='characters_informed', blank=True)
