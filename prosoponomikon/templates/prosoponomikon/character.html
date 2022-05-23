@@ -16,14 +16,11 @@
                         
                         <!-- CHARACTER PICTURE -->
                         <div class="float-left mr-3 img-hover-zoom border-double">
-                            <img class="character-detail {% if not character.profile.is_alive %} img-grayscale {% endif %}"
-                                 src="
-                                    {% if current_profile.character == character or current_profile in character.participants.all or current_profile.can_view_all %}
-                                        {{ character.profile.image.url }}
-                                    {% else %}
-                                         /static/img/profile_known_only_indirectly.jpg
-                                    {% endif %}"
-                            >
+                            {% if current_profile.character == character or current_profile in character.participants.all or current_profile.can_view_all %}
+                                <img class="character-detail {% if not character.profile.is_alive %} img-grayscale {% endif %}" src="{{ character.profile.image.url }}">
+                            {% else %}
+                                <img class="character-detail {% if not character.profile.is_alive %} img-grayscale {% endif %}" src="{% static 'img/profile_known_only_indirectly.jpg' %}">
+                            {% endif %}
                         </div>
                         
                         <!-- BUTTONS -->
