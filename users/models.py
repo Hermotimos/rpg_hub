@@ -33,7 +33,6 @@ class Profile(Model):
     status = CharField(max_length=50, choices=STATUS, default='npc')
     is_alive = BooleanField(default=True)
     is_active = BooleanField(default=True)
-    is_enchanter = BooleanField(default=False)
     image = ImageField(
         default='profile_pics/profile_default.jpg',
         upload_to='profile_pics',
