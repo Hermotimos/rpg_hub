@@ -26,6 +26,7 @@ pg_dump --dbname=postgres://hyllemath:XXXXXX@HHHHHHH:PPPP/hyllemath --format=c -
 # [3]
 
 # GCP DB
+pg_restore --dbname=GCP_DATABASE_DNS_FROM_SETTINGS --no-owner --no-acl --clean FILENAME
 pg_restore -h HHHHHHHH -U hyllemath --no-owner --no-acl -d hyllemath hyllemath_dumped.dump
 # HHHHHHHH: IP of the database
 # Password: xxxxxx (password for 'hyllemath' db on GCP Cloud Storage)
