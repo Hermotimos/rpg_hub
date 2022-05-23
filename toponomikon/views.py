@@ -48,7 +48,7 @@ def toponomikon_location_view(request, loc_name):
             'knowledge_packets__picture_sets__pictures',
             'map_packets__picture_sets__pictures',
             'picture_sets__pictures',
-            'frequented_by_characters__profile',
+            'characters__profile',
         )
     else:
         locs = known_locations.prefetch_related(
