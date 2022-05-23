@@ -1,5 +1,6 @@
 import os
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -12,7 +13,7 @@ from django.utils.safestring import mark_safe
 from chronicles.models import GameEvent
 from imaginarion.models import PictureImage
 from prosoponomikon.models import Character, NonGMCharacter
-from rpg_project.utils import backup_db, only_game_masters, update_local_db, update_production_db
+from rpg_project.utils import backup_db, only_game_masters, update_db
 from rules.models import (
     Skill, SkillLevel,
     Synergy, SynergyLevel,
@@ -25,7 +26,7 @@ from rules.models import (
 from toponomikon.models import Location
 from users.models import Profile
 
-    
+
 @login_required
 @only_game_masters
 def todos_view(request):
@@ -67,12 +68,13 @@ def todos_view(request):
 @login_required
 @only_game_masters
 def backup_db_view(request):
-    if os.environ.get('COMPUTERNAME'):
-        messages.warning(request, 'Funkcja dostępna tylko na produkcji!')
+    if not os.environ.get('COMPUTERNAME'):
+        messages.warning(request, 'Funkcja dostępna tylko w developmencie!')
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     
     backup_db(reason="manualbackup")
-    messages.info(request, 'Wykonano backup bazy do Cloud Storage bucket!')
+    
+    messages.info(request, 'Wykonano lokalny backup bazy produkcyjnej!')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     
 
@@ -80,12 +82,16 @@ def backup_db_view(request):
 @only_game_masters
 def update_local_db_view(request):
     if not os.environ.get('COMPUTERNAME'):
-        messages.warning(request, 'Funkcja dostępna tylko lokalnie!')
+        messages.warning(request, 'Funkcja dostępna tylko w developmencie!')
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-    update_local_db(reason="localupdate")
+    update_db(
+        reason="localupdate",
+        src=settings.GCP_DATABASE_DNS,
+        dst=settings.DEV_DATABASE_DNS)
+    
     messages.info(request, 'Nadpisano lokalną bazę danymi z bazy GCP!')
-    messages.info(request, 'Zapisano kopię bazy produkcyjnej w folderze projektu!')
+    messages.info(request, 'Wykonano lokalny backup bazy produkcyjnej!')
     logout(request)
     return redirect('users:login')
 
@@ -94,16 +100,17 @@ def update_local_db_view(request):
 @only_game_masters
 def update_production_db_view(request):
     if not os.environ.get('COMPUTERNAME'):
-        messages.warning(request, 'Funkcja dostępna tylko lokalnie!')
+        messages.warning(request, 'Funkcja dostępna tylko w developmencie!')
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-    update_production_db()
-    messages.info(request, 'Nadpisano lokalną bazę danymi z bazy GCP!')
-    messages.info(request, 'Zapisano kopię bazy produkcyjnej w folderze projektu!')
-    messages.info(request, 'Wykonano migracje na lokalnej bazie!')
+    update_db(
+        reason="localupdate",
+        src=settings.DEV_DATABASE_DNS,
+        dst=settings.GCP_DATABASE_DNS)
+
     messages.info(request, 'Nadpisano bazę produkcyjną z bazy lokalnej!')
-    logout(request)
-    return redirect('users:login')
+    messages.info(request, 'Wykonano lokalny backup bazy dev!')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required

@@ -309,39 +309,20 @@ def backup_db(reason: str):
     filename = f"hyllemath_db_{reason}_{date}.json"
 
     delegator.run(
-        f"pg_dump --dbname={settings.GCP_DATABASE_DNS} --format=c --no-owner --no-acl > {filename}")
-
-    upload_to_bucket(
-        destination_path=f"backups/{filename}",
-        source_path=f"./{filename}",
-        bucket_name=settings.GS_BUCKET_NAME)
-
-
-def update_local_db(reason: str):
-    date = time.strftime("%Y-%m-%d_%H-%M")
-    filename = f"hyllemath_db_{reason}_{date}.json"
-    
-    delegator.run(
-        f"pg_dump --dbname={settings.GCP_DATABASE_DNS} --format=c --no-owner --no-acl > {filename}")
-    delegator.run(
-        f"pg_restore --dbname={settings.DEV_DATABASE_DNS} --no-owner --no-acl --clean {filename}",
-        block=False)
-
-
-def update_production_db():
-    update_local_db('beforemigrationsbackup')
-    delegator.run("python manage.py migrate")
-    
-    date = time.strftime("%Y-%m-%d_%H-%M")
-    filename = f"hyllemath_db_djangomigrations_{date}.json"
-    
-    delegator.run(
         f"pg_dump --dbname={settings.DEV_DATABASE_DNS} --format=c --no-owner --no-acl > {filename}")
+
+
+def update_db(reason: str, src: str, dst: str):
+    date = time.strftime("%Y-%m-%d_%H-%M")
+    filename = f"hyllemath_{reason}_{date}.json"
+    
     delegator.run(
-        f"pg_restore --dbname={settings.GCP_DATABASE_DNS} --no-owner --no-acl --clean {filename}",
+        f"pg_dump --dbname={src} --format=c --no-owner --no-acl > {filename}")
+    delegator.run(
+        f"pg_restore --dbname={dst} --no-owner --no-acl --clean {filename}",
         block=False)
 
-    
+
 def only_game_masters(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):

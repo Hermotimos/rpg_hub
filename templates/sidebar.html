@@ -62,22 +62,23 @@
             </li>
         </ul>
         
-        {% if current_profile.status == 'gm' %}
+        {% if current_profile.status == 'gm' and '127.0.0.1' in request.get_host%}
             <div class="mt-2 ml-1 mr-n1 d-flex flex-wrap">
                 <div class="mr-md-auto py-1 px-1 px-md-0">
                     <a class="btn btn-outline-secondary icon-database-backup py-2" href="{% url 'technicalities:backup-db' %}"
-                        data-toggle="tooltip" data-placement="bottom" title="Backup bazy GCP do Cloud Storage bucket">
+                        data-toggle="tooltip" data-placement="bottom" title="wykonaj lokalny backup bazy GCP">
                     </a>
                 </div>
                 <div class="mr-md-auto py-1 px-1 px-md-0">
-                    <a class="btn btn-outline-secondary icon-update py-2" href="{% url 'technicalities:update-local-db' %}"
-                       data-toggle="tooltip" data-placement="bottom" title="GCP db --> LOCAL db">
+                    <a class="btn btn-outline-warning icon-update py-2" href="{% url 'technicalities:update-local-db' %}"
+                       onclick="return confirm('Potwierdź nadpisanie bazy lokalnej przez bazę produkcyjną!');"
+                       data-toggle="tooltip" data-placement="bottom" title="GCP --> LOCAL">
                     </a>
                 </div>
                 <div class="mr-md-auto py-1 px-1 px-md-0">
                     <a class="btn btn-outline-danger icon-upload-cloud py-2" href="{% url 'technicalities:update-prod-db' %}"
-                       onclick="return confirm('Potwierdź aktualizację migracji w bazie produkcyjnej!');"
-                       data-toggle="tooltip" data-placement="bottom" title="Aktualizuj migracje Django w bazie produkcyjnej">
+                       onclick="return confirm('Potwierdź nadpisanie bazy PRODUKCYJNEJ przez bazę lokalną!');"
+                       data-toggle="tooltip" data-placement="bottom" title="LOCAL --> GCP">
                     </a>
                 </div>
                 <div class="mr-md-auto py-1 px-1 px-md-0">
