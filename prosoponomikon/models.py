@@ -110,8 +110,8 @@ class FirstNameManager(Manager):
 class FirstName(Model):
     objects = FirstNameManager()
     
-    form = CharField(max_length=250, unique=True)
-    form_2 = CharField(max_length=250, blank=True, null=True)
+    form = CharField(max_length=50, unique=True)
+    form_2 = CharField(max_length=50, blank=True, null=True)
     info = TextField(blank=True, null=True)
     is_ancient = BooleanField(default=False)
     # FK fields nullable to allow creation of Character via registration form
@@ -145,7 +145,7 @@ class FamilyNameGroup(Model):
     
     
 class FamilyName(Model):
-    form = CharField(max_length=250, unique=True)
+    form = CharField(max_length=50, unique=True)
     info = TextField(blank=True, null=True)
     locations = M2M(to=Location, related_name="family_names", blank=True)
     group = FK(to=FamilyNameGroup, on_delete=PROTECT)
@@ -173,45 +173,22 @@ class Character(Model):
     
     profile = OneToOne(to=Profile, on_delete=CASCADE)
     first_name = FK(
-        to=FirstName,
-        related_name='characters',
-        on_delete=PROTECT,
-        blank=True,
-        null=True)
+        to=FirstName, related_name='characters', on_delete=PROTECT,
+        blank=True, null=True)
     family_name = FK(
-        to=FamilyName,
-        related_name='characters',
-        on_delete=PROTECT,
-        blank=True,
-        null=True)
-    cognomen = CharField(max_length=250, blank=True, null=True)
-    fullname = CharField(max_length=250, blank=True, null=True)
+        to=FamilyName, related_name='characters', on_delete=PROTECT,
+        blank=True, null=True)
+    cognomen = CharField(max_length=50, blank=True, null=True)
+    fullname = CharField(max_length=150, blank=True, null=True)
 
     description = TextField(blank=True, null=True)
-    frequented_locations = M2M(
-        to=Location,
-        related_name='frequented_by_characters',
-        blank=True)
-    biography_packets = M2M(
-        to=BiographyPacket,
-        related_name='characters',
-        blank=True)
-    dialogue_packets = M2M(
-        to=DialoguePacket,
-        related_name='characters',
-        blank=True)
+    frequented_locations = M2M(to=Location, related_name='characters', blank=True)
+    biography_packets = M2M(to=BiographyPacket, related_name='characters', blank=True)
+    dialogue_packets = M2M(to=DialoguePacket, related_name='characters', blank=True)
     professions = M2M(to=Profession, related_name='characters', blank=True)
-    
-    # profile.characters_participated.all() for Characters that Profile knows directly
-    participants = M2M(
-        to=Profile,
-        related_name='characters_participated',
-        blank=True)
-    informees = M2M(
-        to=Profile,
-        related_name='characters_informed',
-        blank=True)
-    
+    # Participants = direct acquaintances; informees = known by hearsay
+    participants = M2M(to=Profile, related_name='characters_participated', blank=True)
+    informees = M2M(to=Profile, related_name='characters_informed', blank=True)
     
     class Meta:
         ordering = ['fullname']
