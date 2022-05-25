@@ -12,6 +12,7 @@ from rules.models import (
     Profession, SubProfession,
     WeaponType, Weapon, Plate, Shield,
 )
+from users.models import Profile
 
 
 # -----------------------------------------------------------------------------
@@ -139,22 +140,37 @@ class SkillAdmin(admin.ModelAdmin):
         'allowees',
     ]
     filter_horizontal = ['allowees', 'types']
-    inlines = [SkillLevelInline]
+    # inlines = [SkillLevelInline]
     list_display = ['id', 'name', 'is_version', 'tested_trait', 'image', 'group']
     list_editable = ['name', 'tested_trait', 'image', 'group']
     list_filter = ['types', 'group']
-    list_select_related = ['group__type']
+    list_select_related = True
     search_fields = ['name']
     
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
             'group',
+            # 'weapon',
+            # 'shpragis',
         ]:
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
 
+    def get_object(self, request, object_id, from_field=None):
+        obj = super().get_object(request, object_id, from_field=from_field)
+        # Cache object for use in formfield_for_manytomany
+        request.edited_skill = obj
+        return obj
+    
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "types":
+            kwargs["queryset"] = SkillType.objects.prefetch_related('kinds')
+        if db_field.name == "allowees" and hasattr(request, 'edited_skill'):
+            kwargs["queryset"] = request.edited_skill.allowees.select_related('character')
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+    
 
 class SynergyLevelInline(admin.TabularInline):
     model = SynergyLevel
