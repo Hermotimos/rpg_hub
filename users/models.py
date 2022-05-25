@@ -63,7 +63,7 @@ class Profile(Model):
         ordering = ['-status', '-is_active', 'character__fullname']
     
     def __str__(self):
-        return self.character.fullname or self.user.username
+        return str(self.character) or self.user.username
 
     def save(self, *args, **kwargs):
         first_save = True if not self.pk else False
