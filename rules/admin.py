@@ -144,7 +144,7 @@ class SkillAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'is_version', 'tested_trait', 'image', 'group']
     list_editable = ['name', 'tested_trait', 'image', 'group']
     list_filter = ['types', 'group']
-    list_select_related = True
+    list_select_related = ['group__type']
     search_fields = ['name']
     
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
