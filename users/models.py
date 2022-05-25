@@ -15,7 +15,7 @@ from django.db.models import (
     When,
 )
 
-from rpg_project.utils import ReplaceFileStorage
+from rpg_project.storages import ReplaceFileStorage
 from users.managers import ActivePlayerProfileManager, NonGMProfileManager, \
     ContactableProfileManager, LivingProfileManager, NPCProfileManager, \
     PlayerProfileManager, GMControlledProfileManager

@@ -1,55 +1,14 @@
-import os
-import re
 import time
 from functools import wraps
 from random import sample
 
 import delegator
 from django.apps import apps
+from django.conf import settings
 from django.contrib import messages
-from django.core.files.storage import FileSystemStorage
 from django.core.mail import send_mail
 from django.shortcuts import redirect
-from google.cloud import storage
 
-from django.conf import settings
-
-
-def upload_to_bucket(destination_path, source_path, bucket_name):
-    storage_client = storage.Client.from_service_account_json(
-        settings.GOOGLE_APPLICATION_CREDENTIALS)
-    bucket = storage_client.get_bucket(bucket_name)
-    
-    blob = bucket.blob(destination_path)
-    blob.upload_from_filename(source_path)
-    
-    return blob.public_url
-
-
-class ReplaceFileStorage(FileSystemStorage):
-    
-    def get_available_name(self, name, max_length=None):
-        """
-        Returns a filename that's free on the target storage system, and
-        available for new content to be written to.
-        Found at http://djangosnippets.org/snippets/976/
-        This file storage solves overwrite on upload problem.
-        """
-        # If the filename already exists, remove it
-        if self.exists(name):
-            os.remove(os.path.join(settings.MEDIA_ROOT, name))
-        return name
-    
-    def get_valid_name(self, name):
-        """Overrides method which would normally replace whitespaces with
-        underscores and remove special characters.
-            s = str(s).strip().replace(' ', '_')
-            return re.sub(r'(?u)[^-\w.]', '', s)
-        Modified to leave whitespace and to accept it in regular expressions.
-        """
-        name = str(name).strip()
-        return re.sub(r'(?u)[^-\w.\s]', '', name)
-    
 
 def sample_from_qs(qs, max_size):
     objs_set = set(qs)

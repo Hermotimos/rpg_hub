@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-import rpg_project.utils
+import rpg_project.storages
 
 
 class Migration(migrations.Migration):
@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
             name='PictureImage',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(storage=rpg_project.utils.ReplaceFileStorage(), upload_to='post_pics')),
+                ('image', models.ImageField(storage=rpg_project.storages.ReplaceFileStorage(), upload_to='post_pics')),
                 ('description', models.CharField(blank=True, max_length=200, null=True)),
                 ('sorting_name', models.CharField(blank=True, max_length=250, null=True)),
             ],

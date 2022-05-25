@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import rpg_project.utils
+import rpg_project.storages
 
 
 class Migration(migrations.Migration):
@@ -19,14 +19,14 @@ class Migration(migrations.Migration):
             name='Profile',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(blank=True, default='profile_pics/profile_default.jpg', null=True, storage=rpg_project.utils.ReplaceFileStorage(), upload_to='profile_pics')),
+                ('image', models.ImageField(blank=True, default='profile_pics/profile_default.jpg', null=True, storage=rpg_project.storages.ReplaceFileStorage(), upload_to='profile_pics')),
                 ('status', models.CharField(choices=[('gm', 'MG'), ('npc', 'BN'), ('player', 'GRACZ'), ('spectator', 'WIDZ')], default='npc', max_length=50)),
                 ('is_active', models.BooleanField(default=True)),
                 ('is_alive', models.BooleanField(default=True)),
                 ('character_name_copy', models.CharField(blank=True, max_length=100, null=True)),
                 ('user', models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='profiles', to=settings.AUTH_USER_MODEL)),
                 ('is_enchanter', models.BooleanField(default=False)),
-                ('user_image', models.ImageField(blank=True, default='profile_pics/profile_default.jpg', null=True, storage=rpg_project.utils.ReplaceFileStorage(), upload_to='user_pics')),
+                ('user_image', models.ImageField(blank=True, default='profile_pics/profile_default.jpg', null=True, storage=rpg_project.storages.ReplaceFileStorage(), upload_to='user_pics')),
             ],
             options={
                 'ordering': ['-status', '-is_active', 'character_name_copy'],

@@ -11,7 +11,7 @@ from django.db.models import (
     TextField,
 )
 
-from rpg_project.utils import ReplaceFileStorage
+from rpg_project.storages import ReplaceFileStorage
 
 # TODO rename app 'imaginarion' -> 'mousarion'
 

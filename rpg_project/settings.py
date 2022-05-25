@@ -234,10 +234,10 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     
     # TODO check if only one is needed: GS_CREDENTIALS or GS_DEFAULT_ACL
     
-    DEFAULT_FILE_STORAGE = 'rpg_project.gcloud.GoogleCloudMediaFileStorage'
-    STATICFILES_STORAGE = 'rpg_project.gcloud.GoogleCloudStaticFileStorage'
+    DEFAULT_FILE_STORAGE = 'rpg_project.storages.GoogleCloudMediaFileStorage'
+    STATICFILES_STORAGE = 'rpg_project.storages.GoogleCloudStaticFileStorage'
 
-    GS_PROJECT_ID = 'gcloud_storage'
+    GS_PROJECT_ID = 'hyllemath'
     GS_BUCKET_NAME = env("GS_BUCKET_NAME")
 
     STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/static/"
