@@ -215,30 +215,23 @@ def reload_prosoponomikon(request):
 @login_required
 @only_game_masters
 def reload_rules(request):
-    # for obj in Skill.objects.all():
-    #     obj.save()
-    # for obj in SkillLevel.objects.all():
-    #     obj.save()
-    #
-    # for obj in Synergy.objects.all():
-    #     obj.save()
-    # for obj in SynergyLevel.objects.all():
-    #     obj.save()
-    #
-    # for obj in Profession.objects.all():
-    #     obj.save()
-    #
-    # for obj in WeaponType.objects.all():
-    #     obj.save()
-    # for obj in Weapon.objects.all():
-    #     obj.save()
+    for obj in Skill.objects.all():
+        obj.save()
+    for obj in SkillLevel.objects.all():
+        obj.save()
 
-    bieglosc_skill = Skill.objects.get(name='Biegłość w broni')
-    for skill_v in Skill.objects.filter(name__icontains='Biegłość'):
-        skill_v.save()
-    for skill_v in Skill.objects.filter(name__icontains='Biegłość w broni:'):
-        skill_v.version_of = bieglosc_skill
-        skill_v.save()
+    for obj in Synergy.objects.all():
+        obj.save()
+    for obj in SynergyLevel.objects.all():
+        obj.save()
+
+    for obj in Profession.objects.all():
+        obj.save()
+
+    for obj in WeaponType.objects.all():
+        obj.save()
+    for obj in Weapon.objects.all():
+        obj.save()
     
     messages.info(request, 'Przeładowano modele dla "rules"!')
     return redirect('technicalities:reload-main')
