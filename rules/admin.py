@@ -158,17 +158,11 @@ class SkillAdmin(admin.ModelAdmin):
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
 
-    def get_object(self, request, object_id, from_field=None):
-        obj = super().get_object(request, object_id, from_field=from_field)
-        # Cache object for use in formfield_for_manytomany
-        request.edited_skill = obj
-        return obj
-    
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "types":
             kwargs["queryset"] = SkillType.objects.prefetch_related('kinds')
-        if db_field.name == "allowees" and hasattr(request, 'edited_skill'):
-            kwargs["queryset"] = request.edited_skill.allowees.select_related('character')
+        if db_field.name == "allowees":
+            kwargs["queryset"] = Profile.players.select_related('character')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
     
 
@@ -228,16 +222,10 @@ class SkillLevelAdmin(admin.ModelAdmin):
 
     def name(self, obj):
         return f'{str(obj.skill.name)} [{obj.level}]'
-
-    def get_object(self, request, object_id, from_field=None):
-        obj = super().get_object(request, object_id, from_field=from_field)
-        # Cache object for use in formfield_for_manytomany
-        request.edited_skilllevel = obj
-        return obj
     
     def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == "acquired_by" and hasattr(request, 'edited_skilllevel'):
-            kwargs["queryset"] = request.edited_skilllevel.acquired_by.select_related('character')
+        if db_field.name == "acquired_by":
+            kwargs["queryset"] = Profile.objects.select_related('character')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
     
 
