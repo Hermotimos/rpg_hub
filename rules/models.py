@@ -358,7 +358,7 @@ class Skill(Model):
         blank=True,
     )
     # ------------------------------------------
-    is_version = BooleanField(default=False)
+    version_of = FK(to='self', related_name='versions', on_delete=CASCADE, blank=True, null=True)
     weapon = FK(to=Weapon, on_delete=CASCADE, blank=True, null=True)
     sphragis = FK(to=Sphragis, on_delete=CASCADE, blank=True, null=True)
 
@@ -366,13 +366,16 @@ class Skill(Model):
         ordering = ['name']
 
     def __str__(self):
-        if self.is_version:
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if self.version_of:
             weapon = f": {self.weapon.name.title()}" if self.weapon else ""
             sphragis = f" ({self.sphragis})" if self.sphragis else ""
-            return str(self.name) + weapon + sphragis
-        return str(self.name)
-
-
+            self.name = str(self.name) + weapon + sphragis
+        super().save(*args, **kwargs)
+       
+        
 S_LEVELS = [
     ('0', '0'),
     ('1', '1'),
@@ -387,9 +390,7 @@ class SkillLevel(Model):
     description = TextField(max_length=4000, blank=True, null=True)
     perks = M2M(to=Perk, related_name='skill_levels', blank=True)
     acquired_by = M2M(to=Profile, related_name='skill_levels', blank=True)
-    # ------------------------------------------
-    is_version = BooleanField(default=False)
-
+    
     class Meta:
         ordering = ['skill__name', 'level']
 

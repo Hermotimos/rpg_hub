@@ -136,12 +136,12 @@ class SkillLevelInline(admin.TabularInline):
 @admin.register(Skill, BooksSkill, TheologySkill)
 class SkillAdmin(admin.ModelAdmin):
     fields = [
-        'name', 'is_version', 'tested_trait', 'image', 'group', 'types',
+        'name', 'version_of', 'tested_trait', 'image', 'group', 'types',
         'allowees',
     ]
     filter_horizontal = ['allowees', 'types']
     # inlines = [SkillLevelInline]
-    list_display = ['id', 'name', 'is_version', 'tested_trait', 'image', 'group']
+    list_display = ['id', 'name', 'version_of', 'tested_trait', 'image', 'group']
     list_editable = ['name', 'tested_trait', 'image', 'group']
     list_filter = ['types', 'group']
     list_select_related = ['group__type']
@@ -151,7 +151,7 @@ class SkillAdmin(admin.ModelAdmin):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
             'group',
-            # 'weapon',
+            'version_of',
             # 'shpragis',
         ]:
             if db_field.name == field:

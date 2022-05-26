@@ -125,13 +125,13 @@ def rules_skills_view(request, skilltype_kind):
     if current_profile.can_view_all:
         skills = Skill.objects.filter(
             types__kinds__name=skilltype_kind,
-            is_version=False,
+            version_of=None,
         )
     else:
         skills = Skill.objects.filter(
             allowees__in=user_profiles,
             types__kinds__name=skilltype_kind,
-            is_version=False,
+            version_of=None,
         )
         
     skills = skills.select_related('group__type').distinct()

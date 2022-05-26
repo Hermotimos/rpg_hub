@@ -7,6 +7,8 @@
     {% else %}
         {% if skill.image %}
             <img class="img-skill mr-sm-1" src="{{ skill.image.url }}">
+        {% elif skill.version_of %}
+            <img class="img-skill mr-sm-1" src="{{ skill.version_of.image.url }}">
         {% else %}
             <img class="img-skill mr-sm-1" src="{% static 'img/skill-default.png' %}">
         {% endif %}
