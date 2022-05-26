@@ -15,7 +15,7 @@ from django.db.models import (
     When,
 )
 
-from rpg_project.storages import ReplaceFileStorage
+# from rpg_project.storages import ReplaceFileStorage
 from users.managers import ActivePlayerProfileManager, NonGMProfileManager, \
     ContactableProfileManager, LivingProfileManager, NPCProfileManager, \
     PlayerProfileManager, GMControlledProfileManager
@@ -38,14 +38,14 @@ class Profile(Model):
         upload_to='profile_pics',
         blank=True,
         null=True,
-        storage=ReplaceFileStorage(),
+        # storage=ReplaceFileStorage(),
     )
     user_image = ImageField(
         default='profile_pics/profile_default.jpg',
         upload_to='user_pics',
         blank=True,
         null=True,
-        storage=ReplaceFileStorage(),
+        # storage=ReplaceFileStorage(),
     )
     # TODO delete after more testing (along signal in prosoponomikon.models)
     character_name_copy = CharField(max_length=100, blank=True, null=True)
@@ -140,7 +140,7 @@ class Profile(Model):
         qs = qs.select_related('main_image__image')
         return qs
 
-    def skills_acquired_with_skill_levels(self):
+    def skills_acquired_with_skill_levels(self, skilltype_kinds=None):
         from rules.models import Skill, SkillLevel
         skills = Skill.objects.filter(skill_levels__acquired_by=self)
         skill_levels = SkillLevel.objects.filter(acquired_by=self)
@@ -149,9 +149,11 @@ class Profile(Model):
             'skill_levels__perks__conditional_modifiers__conditions',
             'skill_levels__perks__conditional_modifiers__combat_types',
             'skill_levels__perks__conditional_modifiers__modifier__factor',
-            'skill_levels__perks__comments'
-        ).distinct()
-        return skills
+            'skill_levels__perks__comments',
+        )
+        if skilltype_kinds:
+            skills = skills.filter(types__kinds__name__in=skilltype_kinds)
+        return skills.select_related('group__type').distinct()
 
     def synergies_acquired_with_synergies_levels(self):
         from rules.models import Synergy, SynergyLevel, SkillLevel

@@ -11,7 +11,7 @@ from django.db.models import (
     TextField,
 )
 
-from rpg_project.storages import ReplaceFileStorage
+# from rpg_project.storages import ReplaceFileStorage
 
 # TODO rename app 'imaginarion' -> 'mousarion'
 
@@ -85,7 +85,8 @@ class PictureImage(Model):
         ('varia', 'varia'),
     )
     """A model to store paths to internally stored image files."""
-    image = ImageField(upload_to='post_pics', storage=ReplaceFileStorage())
+    # image = ImageField(upload_to='post_pics', storage=ReplaceFileStorage())
+    image = ImageField(upload_to='post_pics')
     # type = CharField(max_length=20, choices=TYPES)
     description = CharField(max_length=200, blank=True, null=True)
 
