@@ -123,35 +123,36 @@ def rules_skills_view(request, skilltype_kind):
     user_profiles = current_profile.user.profiles.all()
 
     if current_profile.can_view_all:
-        skills = Skill.objects.filter(
+        skills_regular = Skill.objects.filter(
             types__kinds__name=skilltype_kind,
             version_of=None,
         )
     else:
-        skills = Skill.objects.filter(
+        skills_regular = Skill.objects.filter(
             allowees__in=user_profiles,
             types__kinds__name=skilltype_kind,
             version_of=None,
         )
         
-    skills = skills.select_related('group__type').distinct()
-    skills = skills.prefetch_related(
+    skills_regular = skills_regular.select_related('group__type').distinct()
+    skills_regular = skills_regular.prefetch_related(
         'skill_levels__perks__conditional_modifiers__conditions',
         'skill_levels__perks__conditional_modifiers__combat_types',
         'skill_levels__perks__conditional_modifiers__modifier__factor',
         'skill_levels__perks__comments',
     )
 
-    skill_types = SkillType.objects.filter(kinds__name=skilltype_kind)
-    skill_types = skill_types.prefetch_related(Prefetch('skills', queryset=skills), 'skill_groups')
-    skill_types = skill_types.filter(skills__in=skills).distinct()
+    skill_types_regular = SkillType.objects.filter(kinds__name=skilltype_kind)
+    skill_types_regular = skill_types_regular.prefetch_related(
+        Prefetch('skills', queryset=skills_regular), 'skill_groups')
+    skill_types_regular = skill_types_regular.filter(skills__in=skills_regular).distinct()
     
     context = {
         'current_profile': current_profile,
         'page_title': skilltype_kind,
         'skilltype_kind': skilltype_kind,
-        'skill_types': skill_types,
-        'skills': skills,
+        'skill_types_regular': skill_types_regular,
+        'skills_regular': skills_regular,
     }
     return render(request, 'rules/skills.html', context)
 

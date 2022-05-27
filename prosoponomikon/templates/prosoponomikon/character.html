@@ -71,19 +71,19 @@
         </header>
         
         
-        <article class="tabset multiline-header pt-5">
+        <article class="tabset multiline-header">
             
             <!-- TAB HEADERS -->
             
             <!-- Biography packets -->
-            {% if character.biography_packets.all %}
+            {% if biography_packets %}
                 <input type="radio" name="tabset" id="tab1" aria-controls="biography_packets" checked>
                 <label class="h4 mb-0" for="tab1">Biografia</label>
             {% endif %}
             
             <!-- Dialogue packets -->
-            {% if current_profile.status == 'gm' and character.dialogue_packets.all %}
-                {% if character.biography_packets.all %}
+            {% if current_profile.status == 'gm' and dialogue_packets %}
+                {% if biography_packets %}
                     <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets">
                 {% else %}
                     <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets" checked>
@@ -92,11 +92,11 @@
             {% endif %}
             
             <!-- Skills and synergies-->
-            {% if skills %}
-                {% if character.biography_packets.all or character.dialogue_packets.all %}
-                    <input type="radio" name="tabset" id="tab3" aria-controls="skills">
+            {% if skills_regular %}
+                {% if biography_packets or dialogue_packets %}
+                    <input type="radio" name="tabset" id="tab3" aria-controls="skills_regular">
                 {% else %}
-                    <input type="radio" name="tabset" id="tab3" aria-controls="skills" checked>
+                    <input type="radio" name="tabset" id="tab3" aria-controls="skills_regular" checked>
                 {% endif %}
                 <label class="h4 mb-0" for="tab3">
                     {% if character.profile != current_profile and character.profile.status != 'player' %} ~ {% endif %}
@@ -106,7 +106,7 @@
     
             <!-- Knowledge packets -->
             {% if knowledge_packets %}
-                {% if character.biography_packets.all or character.dialogue_packets.all or skills %}
+                {% if biography_packets or dialogue_packets or skills_regular %}
                     <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets">
                 {% else %}
                     <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets" checked>
@@ -119,7 +119,7 @@
             
             <!-- Known characters -->
             {% if known_characters %}
-                {% if character.biography_packets.all or character.dialogue_packets.all or skills or knowledge_packets %}
+                {% if biography_packets or dialogue_packets or skills_regular or knowledge_packets %}
                     <input type="radio" name="tabset" id="tab5" aria-controls="known_characters">
                 {% else %}
                     <input type="radio" name="tabset" id="tab5" aria-controls="known_characters" checked>
@@ -130,39 +130,49 @@
                 </label>
             {% endif %}
             
+            <!-- Priest powers and mental Skills -->
+            {% if skills_priests %}
+                {% if biography_packets or dialogue_packets or skills_regular or knowledge_packets or known_characters %}
+                    <input type="radio" name="tabset" id="tab6" aria-controls="priest_powers_and_mental_skills">
+                {% else %}
+                    <input type="radio" name="tabset" id="tab6" aria-controls="priest_powers_and_mental_skills" checked>
+                {% endif %}
+                <label class="h4 mb-0" for="tab6">
+                    {% if character.profile != current_profile and character.profile.status != 'player' %} ~ {% endif %}
+                    Moce kapłańskie
+                </label>
+            {% endif %}
+            
             
             <!-- TABS -->
             <div class="tab-panels">
                 
                 <!-- Biography packets -->
-                {% if character.biography_packets.all %}
+                {% if biography_packets %}
                     <section id="biography_packets" class="tab-panel">
                         <!-- Biography packets are filtered in the view for the requesting profile -->
-                        {% for biography_packet in character.biography_packets.all %}
+                        {% for biography_packet in biography_packets %}
                             {% include 'knowledge/_biography_packet.html' %}
                         {% endfor %}
                     </section>
                 {% endif %}
                 
                 <!-- Dialogue packets -->
-                {% if current_profile.status == 'gm' and character.dialogue_packets.all %}
+                {% if current_profile.status == 'gm' and dialogue_packets %}
                     <section id="dialogue_packets" class="tab-panel">
-                        {% for dialogue_packet in character.dialogue_packets.all %}
+                        {% for dialogue_packet in dialogue_packets %}
                             {% include 'knowledge/_dialogue_packet.html' %}
                         {% endfor %}
                     </section>
                 {% endif %}
             
                 <!-- Skills and synergies-->
-                {% if skills %}
-                    <section id="skills" class="tab-panel">
-                        {% for skill in skills %}
-                            {% if skill.name != "Biegłość w broni" %}
-                                {% with max_level_only=True %}
-                                    {% include 'rules/_skill.html' %}
-                                {% endwith %}
-                            {% endif %}
-                        {% endfor %}
+                {% if skills_regular %}
+                    <section id="skills_regular" class="tab-panel">
+                        {% with max_level_only=True skill_types=skill_types_regular skills=skills_regular panel_id=1 %}
+                            {% include 'rules/_skills_by_type.html' %}
+                        {% endwith %}
+
                         {% for synergy in synergies %}
                             {% with max_level_only=True %}
                                 {% include 'rules/_synergy.html' %}
@@ -192,6 +202,22 @@
                                 {% endfor %}
                             </div>
                         </div>
+                    </section>
+                {% endif %}
+                
+                <!-- Priest powers and mental skills-->
+                {% if skills_priests %}
+                    <section id="priest_powers_and_mental_skills" class="tab-panel">
+                        {% with skill_types=skill_types_for_priests skills=skills_priests panel_id=2 %}
+                            {% include 'rules/_skills_by_type.html' %}
+                        {% endwith %}
+
+                        <!-- TODO synergies_priests etc.-->
+                        {% for synergy in synergies %}
+                            {% with max_level_only=True %}
+                                {% include 'rules/_synergy.html' %}
+                            {% endwith %}
+                        {% endfor %}
                     </section>
                 {% endif %}
                 

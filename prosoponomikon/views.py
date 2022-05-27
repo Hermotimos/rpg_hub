@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.db.models.functions import Substr, Lower
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -13,6 +13,7 @@ from knowledge.models import BiographyPacket
 from prosoponomikon.forms import CharacterCreateForm
 from prosoponomikon.models import Character, FirstNameGroup, FamilyName
 from rpg_project.utils import handle_inform_form, backup_db, only_game_masters
+from rules.models import SkillType
 from toponomikon.models import Location
 from users.models import Profile, User
 
@@ -36,6 +37,10 @@ def prosoponomikon_characters_view(request):
 def prosoponomikon_character_view(request, character_id):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
+    knowledge_packets, known_characters, synergies, dialogue_packets = [], [], [], []
+    skill_types_regular, skill_types_for_priests, skill_types_for_sorcerers, skill_types_for_theurgists = [], [], [], []
+    skills_regular, skills_priests, skills_sorcerers, skills_theurgists = [], [], [], []
+    
     if current_profile.character.id == character_id:
         # Players viewing their own Characters
         character = current_profile.character
@@ -47,30 +52,67 @@ def prosoponomikon_character_view(request, character_id):
             Prefetch('biography_packets', queryset=known_bio_packets),
             'dialogue_packets')
         character = characters.get(id=character_id)
+        
+        dialogue_packets = character.dialogue_packets.all()
+        
+    biography_packets = character.biography_packets.all()
 
     # Player viewing own Character or GM viewing any Character
     if current_profile.character.id == character_id or current_profile.status == 'gm':
-        skills = character.profile.skills_acquired_with_skill_levels()
+        
+        skills_regular = character.profile.skills_acquired_with_skill_levels(
+            skilltype_kinds=["Powszechne"]).exclude(~Q(versions=None))
+        skill_types_regular = SkillType.objects.filter(kinds__name="Powszechne")
+        skill_types_regular = skill_types_regular.prefetch_related(
+            Prefetch('skills', queryset=skills_regular), 'skill_groups')
+        skill_types_regular = skill_types_regular.filter(skills__in=skills_regular).distinct()
+
+        skills_priests = character.profile.skills_acquired_with_skill_levels(
+           skilltype_kinds=["Moce Kapłańskie", "Mentalne"]).exclude(~Q(versions=None))  # TODO Mentalne ok ???
+        skill_types_for_priests = SkillType.objects.filter(kinds__name__in=["Moce Kapłańskie", "Mentalne"])
+        skill_types_for_priests = skill_types_for_priests.prefetch_related(
+            Prefetch('skills', queryset=skills_priests), 'skill_groups')
+        skill_types_for_priests = skill_types_for_priests.filter(skills__in=skills_priests).distinct()
+
+        skills_sorcerers = character.profile.skills_acquired_with_skill_levels(
+            skilltype_kinds=["Zaklęcia", "Mentalne"]).exclude(~Q(versions=None))  # TODO Mentalne ok ???
+        skill_types_for_sorcerers = SkillType.objects.filter(kinds__name__in=["Zaklęcia", "Mentalne"])
+        skill_types_for_sorcerers = skill_types_for_sorcerers.prefetch_related(
+            Prefetch('skills', queryset=skills_sorcerers), 'skill_groups')
+        skill_types_for_sorcerers = skill_types_for_sorcerers.filter(skills__in=skills_sorcerers).distinct()
+        
+        skills_theurgists = character.profile.skills_acquired_with_skill_levels(
+            skilltype_kinds=["Moce Teurgiczne", "Mentalne"]).exclude(~Q(versions=None))  # TODO Mentalne ok ???
+        skill_types_for_theurgists = SkillType.objects.filter(kinds__name__in=["Moce Teurgiczne", "Mentalne"])
+        skill_types_for_theurgists = skill_types_for_theurgists.prefetch_related(
+            Prefetch('skills', queryset=skills_theurgists), 'skill_groups')
+        skill_types_for_theurgists = skill_types_for_theurgists.filter(skills__in=skills_theurgists).distinct()
+
         synergies = character.profile.synergies_acquired_with_synergies_levels()
         knowledge_packets = character.profile.knowledge_packets.prefetch_related(
             'picture_sets__pictures').order_by('title')
         known_characters = character.profile.characters_known_annotated()
     
-    # Player viewing other Characters
-    else:
-        skills, knowledge_packets, known_characters, synergies = [], [], [], []
-        
     # INFORM FORM
     if request.method == 'POST':
         handle_inform_form(request)
-    
+
     context = {
         'current_profile': current_profile,
         'page_title': character,
         'character': character,
-        'skills': skills,
+        'skill_types_regular': skill_types_regular,
+        'skills_regular': skills_regular,
+        'skill_types_for_priests': skill_types_for_priests,
+        'skills_priests': skills_priests,
+        'skill_types_for_sorcerers': skill_types_for_sorcerers,
+        'skills_sorcerers': skills_sorcerers,
+        'skill_types_for_theurgists': skill_types_for_theurgists,
+        'skills_theurgists': skills_theurgists,
         'synergies': synergies,
         'knowledge_packets': knowledge_packets,
+        'biography_packets': biography_packets,
+        'dialogue_packets': dialogue_packets,
         'known_characters': known_characters,
     }
     if (current_profile in character.all_known() or current_profile.character == character

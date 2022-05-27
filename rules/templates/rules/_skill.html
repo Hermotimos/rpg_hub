@@ -9,7 +9,7 @@
         
         <div class="skill-or-synergy-name ml-2 mt-2">
             {% if current_profile.status == 'gm' %}
-                <a class="hover-blue font-weight-bold" href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                <a class="hover-blue" href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
                     {{ skill.name }}
                 </a>
             {% else %}
