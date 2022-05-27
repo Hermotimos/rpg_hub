@@ -10,20 +10,20 @@ from storages.utils import setting
 
 # ----------------------------------------------------------------------------
 
-#
-# class ReplaceFileStorage(FileSystemStorage):
-#
-#     def get_available_name(self, name, max_length=None):
-#         """
-#         Returns a filename that's free on the target storage system, and
-#         available for new content to be written to.
-#         Found at http://djangosnippets.org/snippets/976/
-#         This file storage solves overwrite on upload problem.
-#         """
-#         # If the filename already exists, remove it
-#         if self.exists(name):
-#             os.remove(os.path.join(settings.MEDIA_ROOT, name))
-#         return name
+
+class ReplaceFileStorage(FileSystemStorage):
+
+    def get_available_name(self, name, max_length=None):
+        """
+        Returns a filename that's free on the target storage system, and
+        available for new content to be written to.
+        Found at http://djangosnippets.org/snippets/976/
+        This file storage solves overwrite on upload problem.
+        """
+        # If the filename already exists, remove it
+        if self.exists(name):
+            os.remove(os.path.join(settings.MEDIA_ROOT, name))
+        return name
     
     # Commented out: the reason for replacing whitespaces with underscores is
     # that a valid url cannot be formed with whitespaces
