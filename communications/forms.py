@@ -105,7 +105,7 @@ class DebateCreateForm(forms.ModelForm):
         self.fields['participants'].label = "Uczestnicy"
         self.fields['title'].label = "Tytuł"
 
-        participants = Profile.living.all()
+        participants = Profile.living.select_related('character')
 
         if current_profile.status != 'gm':
             self.fields['is_exclusive'].widget = HiddenInput()
@@ -164,10 +164,10 @@ class StatementCreateForm(forms.ModelForm):
             # If Thread doesn't exist yet, meaning this form is used along
             # thread create form, put all profiles in author choice list
             if not participants:
-                self.fields['author'].queryset = Profile.gm_controlled.all()
+                self.fields['author'].queryset = Profile.gm_controlled.select_related('character')
             else:
                 self.fields['author'].queryset = Profile.objects.filter(
-                    Q(status='gm') | Q(id__in=participants))
+                    Q(status='gm') | Q(id__in=participants)).select_related('character')
 
     def save(self, commit=True, **kwargs):
         """Override TinyMCE default behavior, which is that lists loose
