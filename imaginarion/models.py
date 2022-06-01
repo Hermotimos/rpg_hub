@@ -1,4 +1,3 @@
-from PIL import Image
 from django.db.models import (
     CASCADE,
     CharField,
@@ -10,8 +9,6 @@ from django.db.models import (
     PROTECT,
     TextField,
 )
-
-# from rpg_project.storages import ReplaceFileStorage
 
 # TODO rename app 'imaginarion' -> 'mousarion'
 
@@ -85,7 +82,6 @@ class PictureImage(Model):
         ('varia', 'varia'),
     )
     """A model to store paths to internally stored image files."""
-    # image = ImageField(upload_to='post_pics', storage=ReplaceFileStorage())
     image = ImageField(upload_to='post_pics')
     # type = CharField(max_length=20, choices=TYPES)
     description = CharField(max_length=200, blank=True, null=True)
@@ -93,17 +89,6 @@ class PictureImage(Model):
     class Meta:
         ordering = ['image']
         
-    def save(self, *args, **kwargs):
-        # TODO add re-save of image (to enforce new location on type change)
-        first_save = True if not self.pk else False
-        super().save(*args, **kwargs)
-        if first_save and self.image:
-            img = Image.open(self.image.path)
-            if img.height > 1000 or img.width > 1000:
-                output_size = (1000, 1000)
-                img.thumbnail(output_size)
-                img.save(self.image.path)
-
     def __str__(self):
         return str(self.image.name).replace("post_pics/", "")
 

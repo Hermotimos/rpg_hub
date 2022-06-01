@@ -1,6 +1,5 @@
 import datetime
 
-from PIL import Image
 from django.db.models import (
     BooleanField,
     CharField,
@@ -162,16 +161,6 @@ class Statement(Model):
     def __str__(self):
         text = self.text
         return f'{text[:100]}...' if len(str(text)) > 100 else text
-    
-    def save(self, *args, **kwargs):
-        first_save = True if not self.pk else False
-        super().save(*args, **kwargs)
-        if first_save and self.image:
-            img = Image.open(self.image.path)
-            if img.height > 700 or img.width > 700:
-                output_size = (700, 700)
-                img.thumbnail(output_size)
-                img.save(self.image.path)
 
 
 class AnnouncementStatementManager(Manager):

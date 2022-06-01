@@ -1,4 +1,3 @@
-from PIL import Image
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import (
     BooleanField,
@@ -41,16 +40,6 @@ class Chapter(Model):
     
     def __str__(self):
         return self.title
-    
-    def save(self, *args, **kwargs):
-        first_save = True if not self.pk else False
-        super().save(*args, **kwargs)
-        if first_save and self.image:
-            img = Image.open(self.image.path)
-            if img.height > 700 or img.width > 700:
-                output_size = (700, 700)
-                img.thumbnail(output_size)
-                img.save(self.image.path)
 
 
 class GameSession(Model):

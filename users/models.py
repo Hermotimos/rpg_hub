@@ -1,4 +1,3 @@
-from PIL import Image
 from django.contrib.auth.models import User
 from django.db.models import (
     BooleanField,
@@ -15,7 +14,6 @@ from django.db.models import (
     When,
 )
 
-# from rpg_project.storages import ReplaceFileStorage
 from users.managers import ActivePlayerProfileManager, NonGMProfileManager, \
     ContactableProfileManager, LivingProfileManager, NPCProfileManager, \
     PlayerProfileManager, GMControlledProfileManager
@@ -38,14 +36,12 @@ class Profile(Model):
         upload_to='profile_pics',
         blank=True,
         null=True,
-        # storage=ReplaceFileStorage(),
     )
     user_image = ImageField(
         default='profile_pics/profile_default.jpg',
         upload_to='user_pics',
         blank=True,
         null=True,
-        # storage=ReplaceFileStorage(),
     )
     # TODO delete after more testing (along signal in prosoponomikon.models)
     character_name_copy = CharField(max_length=100, blank=True, null=True)
@@ -64,16 +60,6 @@ class Profile(Model):
     
     def __str__(self):
         return str(self.character) or self.user.username
-
-    def save(self, *args, **kwargs):
-        first_save = True if not self.pk else False
-        super().save(*args, **kwargs)
-        if first_save and self.image:
-            img = Image.open(self.image.path)
-            if img.height > 300 or img.width > 300:
-                output_size = (300, 300)
-                img.thumbnail(output_size)
-                img.save(self.image.path)
                 
     def gameevents_known_annotated(self):
         """Get GameEvent set known to the profile, annotate if GameEvent
