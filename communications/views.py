@@ -58,7 +58,7 @@ def thread_inform(current_profile, request, thread, tag_title):
     thread.followers.add(*informed)
     
     recipients = Profile.objects.filter(id__in=informed_ids)
-    if current_profile.status == 'gm':
+    if any([p.status == "gm" for p in current_profile.user.profiles.all()]):
         # Exclude via user, because all NPCs are linked with GM via user
         recipients = recipients.exclude(user__profiles__status='gm')
 
