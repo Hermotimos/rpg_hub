@@ -212,6 +212,7 @@ class Character(Model):
         qs = Profile.active_players.all()
         qs = qs.exclude(id__in=self.all_known())
         qs = qs.exclude(character__id=self.pk)
+        qs = qs.select_related('character')
         return qs
 
 

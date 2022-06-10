@@ -1,6 +1,13 @@
 from django.db.models import Manager
 
 
+class ProfileManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.select_related('character', 'user')
+        return qs
+    
+
 class NonGMProfileManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()

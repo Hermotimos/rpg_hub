@@ -50,6 +50,7 @@ class BiographyPacket(InfoPacket):
         qs = Profile.active_players.all()
         qs = qs.exclude(id__in=self.acquired_by.all())
         qs = qs.exclude(id=self.author_id)
+        qs = qs.select_related('character')
         return qs
 
 
@@ -70,6 +71,7 @@ class KnowledgePacket(InfoPacket):
     def informables(self):
         qs = Profile.active_players.all()
         qs = qs.exclude(id__in=self.acquired_by.all())
+        qs = qs.select_related('character')
         return qs
     
 

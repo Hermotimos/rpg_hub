@@ -92,12 +92,12 @@ class Location(Model):
     def __str__(self):
         return self.name
 
-
     def informables(self):
         qs = Profile.active_players.all()
         qs = qs.exclude(
             id__in=(self.participants.all() | self.informees.all())
         )
+        qs = qs.select_related('character')
         return qs
     
     def with_sublocations(self):

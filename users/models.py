@@ -7,16 +7,13 @@ from django.db.models import (
     ForeignKey as FK,
     ImageField,
     IntegerField,
-    Manager,
     Model,
     Prefetch,
     Value,
     When,
 )
 
-from users.managers import ActivePlayerProfileManager, NonGMProfileManager, \
-    ContactableProfileManager, LivingProfileManager, NPCProfileManager, \
-    PlayerProfileManager, GMControlledProfileManager
+from users import managers
 
 
 class Profile(Model):
@@ -46,14 +43,14 @@ class Profile(Model):
     # TODO delete after more testing (along signal in prosoponomikon.models)
     character_name_copy = CharField(max_length=100, blank=True, null=True)
 
-    objects = Manager()
-    non_gm = NonGMProfileManager()
-    gm_controlled = GMControlledProfileManager()
-    players = PlayerProfileManager()
-    active_players = ActivePlayerProfileManager()
-    npcs = NPCProfileManager()
-    living = LivingProfileManager()
-    contactables = ContactableProfileManager()
+    objects = managers.ProfileManager()
+    non_gm = managers.NonGMProfileManager()
+    gm_controlled = managers.GMControlledProfileManager()
+    players = managers.PlayerProfileManager()
+    active_players = managers.ActivePlayerProfileManager()
+    npcs = managers.NPCProfileManager()
+    living = managers.LivingProfileManager()
+    contactables = managers.ContactableProfileManager()
 
     class Meta:
         ordering = ['-status', '-is_active', 'character__fullname']
