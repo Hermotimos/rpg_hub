@@ -179,7 +179,7 @@ class Character(Model):
         to=FamilyName, related_name='characters', on_delete=PROTECT,
         blank=True, null=True)
     cognomen = CharField(max_length=50, blank=True, null=True)
-    fullname = CharField(max_length=150, blank=True, null=True)
+    fullname = CharField(max_length=150)
 
     description = TextField(blank=True, null=True)
     frequented_locations = M2M(to=Location, related_name='characters', blank=True)
