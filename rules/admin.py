@@ -7,6 +7,7 @@ from rules.admin_filters import SkillLevelFilter, SynergyLevelFilter
 from rules.models import (
     SkillGroup, SkillKind, SkillType,
     Skill, SkillLevel, Synergy, SynergyLevel,
+    RegularSkill, MentalSkill, PriestsSkill, SorcerersSkill, TheurgistsSkill,
     Perk, Modifier, Factor, RulesComment, Condition, CombatType,
     ConditionalModifier,
     Profession, SubProfession,
@@ -118,6 +119,9 @@ class SkillGroupAdmin(admin.ModelAdmin):
     list_editable = ['name', 'type']
 
 
+# -----------------------------------------------------------------------------
+
+
 class SkillLevelInline(admin.TabularInline):
     model = SkillLevel
     extra = 4
@@ -133,17 +137,16 @@ class SkillLevelInline(admin.TabularInline):
         return formfield
 
     
-@admin.register(Skill)
+@admin.register(RegularSkill)
 class SkillAdmin(admin.ModelAdmin):
     fields = [
-        'name', 'version_of', 'tested_trait', 'image', 'group', 'types',
-        'allowees',
+        'name', 'version_of', 'weapon', 'tested_trait', 'image', 'group',
+        'types', 'allowees',
     ]
     filter_horizontal = ['allowees', 'types']
     # inlines = [SkillLevelInline]
     list_display = ['id', 'name', 'version_of', 'tested_trait', 'image', 'group']
     list_editable = ['name', 'tested_trait', 'image', 'group']
-    list_filter = ['types', 'group']
     list_select_related = ['group__type']
     search_fields = ['name']
     
@@ -152,7 +155,6 @@ class SkillAdmin(admin.ModelAdmin):
         for field in [
             'group',
             'version_of',
-            # 'shpragis',
         ]:
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
@@ -165,6 +167,13 @@ class SkillAdmin(admin.ModelAdmin):
             kwargs["queryset"] = Profile.players.select_related('character')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
     
+    
+@admin.register(PriestsSkill, MentalSkill, SorcerersSkill, TheurgistsSkill)
+class PriestsSkillAdmin(SkillAdmin):
+    fields = ['name', 'tested_trait', 'image', 'group', 'types', 'allowees']
+
+
+# -----------------------------------------------------------------------------
 
 class SynergyLevelInline(admin.TabularInline):
     model = SynergyLevel
@@ -208,6 +217,9 @@ class SynergyAdmin(admin.ModelAdmin):
     #     return formfield
 
 
+# -----------------------------------------------------------------------------
+
+
 @admin.register(SkillLevel)
 class SkillLevelAdmin(admin.ModelAdmin):
     filter_horizontal = ['acquired_by', 'perks']
@@ -228,6 +240,9 @@ class SkillLevelAdmin(admin.ModelAdmin):
             kwargs["queryset"] = Profile.objects.select_related('character')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
     
+
+# -----------------------------------------------------------------------------
+
 
 @admin.register(SynergyLevel)
 class SynergyLevelAdmin(admin.ModelAdmin):

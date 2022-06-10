@@ -325,9 +325,8 @@ class SkillType(Model):
         ordering = ['name']
         
     def __str__(self):
-        kinds = "|".join([str(kind) for kind in self.kinds.all()])
-        return f"[{kinds}] {self.name}"
-      
+        return self.name
+
         
 class SkillGroup(Model):
     """A loose grouping category for Skills."""
@@ -339,11 +338,7 @@ class SkillGroup(Model):
 
     def __str__(self):
         return self.name
-
-
-class Sphragis(Model):
-    name = CharField(max_length=100, unique=True)
-    
+   
     
 class Skill(Model):
     name = CharField(max_length=100, unique=True)
@@ -360,7 +355,6 @@ class Skill(Model):
     # ------------------------------------------
     version_of = FK(to='self', related_name='versions', on_delete=CASCADE, blank=True, null=True)
     weapon = FK(to=Weapon, on_delete=CASCADE, blank=True, null=True)
-    sphragis = FK(to=Sphragis, on_delete=CASCADE, blank=True, null=True)
 
     class Meta:
         ordering = ['name']
@@ -371,10 +365,90 @@ class Skill(Model):
     def save(self, *args, **kwargs):
         if self.version_of:
             weapon = f": {self.weapon.name.title()}" if self.weapon else ""
-            sphragis = f" ({self.sphragis})" if self.sphragis else ""
-            self.name = str(self.name) + weapon + sphragis
+            self.name = str(self.version_of.name) + weapon
         super().save(*args, **kwargs)
        
+        
+class RegularSkillManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(types__kinds__name="Powszechne")
+        return qs
+
+
+class RegularSkill(Skill):
+    objects = RegularSkillManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Skill - POWSZECHNE'
+        verbose_name_plural = 'Skills - POWSZECHNE'
+        
+        
+class MentalSkillManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(types__kinds__name="Mentalne")
+        return qs
+
+
+class MentalSkill(Skill):
+    objects = MentalSkillManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Skill - MENTALNE'
+        verbose_name_plural = 'Skills - MENTALNE'
+        
+        
+class PriestsSkillManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(types__kinds__name="Moce Kapłańskie")
+        qs = qs.prefetch_related('types__kinds')
+        return qs
+
+
+class PriestsSkill(Skill):
+    objects = PriestsSkillManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Skill - MOCE KAPŁAŃSKIE'
+        verbose_name_plural = 'Skills - MOCE KAPŁAŃSKIE'
+        
+
+class SorcerersSkillManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(types__kinds__name="Zaklęcia")
+        return qs
+
+
+class SorcerersSkill(Skill):
+    objects = SorcerersSkillManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Skill - ZAKLĘCIA'
+        verbose_name_plural = 'Skills - ZAKLĘCIA'
+       
+        
+class TheurgistsSkillManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(types__kinds__name="Moce Teurgiczne")
+        return qs
+
+
+class TheurgistsSkill(Skill):
+    objects = TheurgistsSkillManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Skill - MOCE TEURGICZNE'
+        verbose_name_plural = 'Skills - MOCE TEURGICZNE'
+        
         
 S_LEVELS = [
     ('0', '0'),
