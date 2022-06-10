@@ -168,9 +168,14 @@ class SkillAdmin(admin.ModelAdmin):
         return super().formfield_for_manytomany(db_field, request, **kwargs)
     
     
-@admin.register(PriestsSkill, MentalSkill, SorcerersSkill, TheurgistsSkill)
+@admin.register(MentalSkill)
 class PriestsSkillAdmin(SkillAdmin):
     fields = ['name', 'tested_trait', 'image', 'group', 'types', 'allowees']
+
+
+@admin.register(PriestsSkill, SorcerersSkill, TheurgistsSkill)
+class PriestsSkillAdmin(SkillAdmin):
+    fields = ['name', 'tested_trait', 'group', 'types', 'allowees']
 
 
 # -----------------------------------------------------------------------------
