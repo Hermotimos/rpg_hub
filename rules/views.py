@@ -12,7 +12,7 @@ from rules.models import (
     Weapon,
 )
 from rules.utils import get_overload_ranges, LOAD_LIMITS, \
-    get_allowed_professions, can_view_special_rules
+    get_own_professions, can_view_special_rules
 from users.models import Profile
 
 
@@ -25,17 +25,17 @@ def rules_main_view(request):
         p.name for p in Profession.objects.filter(type='Elitarne')]
     
     if current_profile.status in ['gm', 'spectator']:
-        allowed_professions = elite_professions
+        own_professions = elite_professions
         can_view_power_rules = True
     else:
-        allowed_professions = get_allowed_professions(current_profile)
+        own_professions = get_own_professions(current_profile)
         can_view_power_rules = can_view_special_rules(current_profile, elite_professions)
 
     context = {
         'current_profile': current_profile,
         'page_title': 'Zasady',
         'can_view_power_rules': can_view_power_rules,
-        'allowed_professions': allowed_professions,
+        'own_professions': own_professions,
     }
     return render(request, 'rules/main.html', context)
 
@@ -95,7 +95,7 @@ def rules_professions_view(request, profession_type):
         essential_skills = Skill.objects.filter(allowees__in=user_profiles)
 
     subprofessions = subprofessions.prefetch_related(
-        Prefetch('essential_skills', queryset=essential_skills))
+        Prefetch('essential_skills', queryset=essential_skills)).distinct()
     professions = professions.prefetch_related(
         Prefetch('subprofessions', queryset=subprofessions))
 
@@ -220,12 +220,11 @@ def rules_sorcery_view(request):
 @login_required
 def rules_theurgy_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
-    user_profiles = current_profile.user.profiles.all()
     context = {
         'current_profile': current_profile,
         'page_title': 'Teurgia',
     }
-    if can_view_special_rules(user_profiles, ['Teurg']):
+    if can_view_special_rules(current_profile, ['Teurg']):
         return render(request, 'rules/theurgy.html', context)
     else:
         return redirect('users:dupa')

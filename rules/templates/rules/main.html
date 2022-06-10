@@ -58,7 +58,7 @@
                         <li><a href="{% url 'rules:synergies' 'Mentalne' %}">Synergie Mentalne</a></li>
                     </ul>
                 </li>
-                {% if 'Kapłan' in allowed_professions %}
+                {% if 'Kapłan' in own_professions %}
                     <li>
                         <a href="{% url 'rules:priesthood' %}">Kapłaństwo</a>
                         <ul class="ml-3">
@@ -66,11 +66,21 @@
                         </ul>
                     </li>
                 {% endif %}
-                {% if 'Czarodziej' in allowed_professions %}
-                    <li><a href="{% url 'rules:sorcery' %}">Magia</a></li>
+                {% if 'Czarodziej' in own_professions %}
+                    <li>
+                        <a href="{% url 'rules:sorcery' %}">Magia</a>
+                        <ul class="ml-3">
+                            <li><a href="#">Zaklęcia</a></li>
+                        </ul>
+                    </li>
                 {% endif %}
-                {% if 'Teurg' in allowed_professions %}
-                    <li><a href="{% url 'rules:theurgy' %}">Teurgia</a></li>
+                {% if 'Teurg' in own_professions %}
+                    <li>
+                        <a href="{% url 'rules:theurgy' %}">Teurgia</a>
+                        <ul class="ml-3">
+                            <li><a href="#">Moce Teurgiczne</a></li>
+                        </ul>
+                    </li>
                 {% endif %}
             </ol>
         {% endif %}
