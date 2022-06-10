@@ -37,6 +37,8 @@ THREADS_MAP = {
       'form': DebateCreateForm,
     },
 }
+PROFILE_THREADS = ["Debate", "Plan"]
+USER_THREADS = ["Announcement", "Demand"]
 
 
 def get_initiator(thread: Thread):
@@ -58,7 +60,7 @@ def thread_inform(current_profile, request, thread, tag_title):
     thread.followers.add(*informed)
     
     recipients = Profile.objects.filter(id__in=informed_ids)
-    if any([p.status == "gm" for p in current_profile.user.profiles.all()]):
+    if current_profile.user.profiles.filter(status="gm").exists():
         # Exclude via user, because all NPCs are linked with GM via user
         recipients = recipients.exclude(user__profiles__status='gm')
 
@@ -75,16 +77,13 @@ def get_threads(current_profile, thread_kind):
     """Get threads with prefetched related objects. Filter threads depending
     whether it's a per-profile or per-user ThreadKind.
     """
-    per_profile = ["Debate", "Plan"]
-    per_user = ["Announcement", "Demand"]
-    
     threads = Thread.objects.filter(kind=thread_kind)
     
     if current_profile.can_view_all:
         threads = threads
-    elif thread_kind in per_profile:
+    elif thread_kind in PROFILE_THREADS:
         threads = threads.filter(participants=current_profile)
-    elif thread_kind in per_user:
+    elif thread_kind in USER_THREADS:
         threads = threads.filter(participants__in=current_profile.user.profiles.all())
     else:
         raise ValueError("Podany thread_kind nie występuje!")
@@ -200,7 +199,8 @@ def thread_view(request, thread_id, tag_title):
     threads = Thread.objects.prefetch_related(
         Prefetch('tags', queryset=tags),
         'statements__seen_by',
-        'statements__author',
+        'statements__author__user',
+        'statements__author__character',
         'followers',
         'participants')
     thread = threads.get(id=thread_id)
@@ -304,6 +304,9 @@ def create_thread_view(request, thread_kind):
         thread.save()
         
         participants = thread_form.cleaned_data['participants']
+        if thread_kind in USER_THREADS:
+            # USER_THREADS show users as participants - translate to Profiles
+            participants = Profile.objects.filter(user__in=participants)
         participants |= Profile.objects.filter(
             Q(id=current_profile.id) | Q(status='gm'))
         thread.participants.set(participants)

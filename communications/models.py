@@ -82,7 +82,9 @@ class Thread(Model):
             qs = Profile.living.all()
         else:
             qs = Profile.objects.none()
-        return qs.exclude(id__in=self.participants.all())
+        qs = qs.exclude(id__in=self.participants.all())
+        qs = qs.select_related('character', 'user')
+        return qs
 
     def get_absolute_url(self):
         return f'/communications/thread:{self.pk}/None/#page-bottom'

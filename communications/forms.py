@@ -8,7 +8,7 @@ from django.forms.widgets import HiddenInput, TextInput
 
 from communications.models import ThreadTag, Statement, Option, \
     Announcement, Debate, Thread
-from users.models import Profile
+from users.models import Profile, User
 
 
 class ThreadTagEditForm(forms.ModelForm):
@@ -75,8 +75,10 @@ class AnnouncementCreateForm(forms.ModelForm):
         
         self.fields['participants'].label = "Adresaci"
         self.fields['title'].label = "Tytuł"
-
-        participants = Profile.contactables.exclude(id=current_profile.id)
+        
+        # Show profiles' Users as options (translated to Profiles in the view)
+        participants = User.objects.filter(
+            profiles__in=Profile.contactables.exclude(id=current_profile.id))
         self.fields['participants'].queryset = participants
         self.fields['participants'].widget.attrs['size'] = min(len(participants), 10)
         
@@ -105,15 +107,13 @@ class DebateCreateForm(forms.ModelForm):
         self.fields['participants'].label = "Uczestnicy"
         self.fields['title'].label = "Tytuł"
 
-        participants = Profile.living.select_related('character')
-
+        participants = Profile.living.all()
         if current_profile.status != 'gm':
             self.fields['is_exclusive'].widget = HiddenInput()
             participants = participants.filter(
                 character__in=current_profile.characters_participated.all()
-            ).exclude(id=current_profile.id).select_related()
-
-        self.fields['participants'].queryset = participants
+            ).exclude(id=current_profile.id)
+        self.fields['participants'].queryset = participants.select_related('character', 'user')
 
         self.fields['participants'].widget.attrs['size'] = min(
             len(participants), 10)
