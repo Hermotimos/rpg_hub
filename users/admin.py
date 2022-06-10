@@ -23,13 +23,13 @@ class ProfileAdminForm(forms.ModelForm):
         widget=FilteredSelectMultiple('Skills', False),
         label=format_html(warning),
     )
-    primary_professions = forms.ModelMultipleChoiceField(
+    professions = forms.ModelMultipleChoiceField(
         queryset=Profession.objects.all(),
         required=False,
         widget=FilteredSelectMultiple('Profession', False),
         label=format_html(warning),
     )
-    secondary_professions = forms.ModelMultipleChoiceField(
+    subprofessions = forms.ModelMultipleChoiceField(
         queryset=SubProfession.objects.all(),
         required=False,
         widget=FilteredSelectMultiple('SubProfession', False),
