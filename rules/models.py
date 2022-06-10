@@ -449,7 +449,10 @@ class TheurgistsSkill(Skill):
         verbose_name = 'Skill - MOCE TEURGICZNE'
         verbose_name_plural = 'Skills - MOCE TEURGICZNE'
         
-        
+
+# -----------------------------------------------------------------------------
+
+
 S_LEVELS = [
     ('0', '0'),
     ('1', '1'),
@@ -472,6 +475,89 @@ class SkillLevel(Model):
         return f'{str(self.skill.name)} [{self.level}]'
 
 
+class RegularSkillLevelManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(skill__in=RegularSkill.objects.all())
+        return qs
+
+
+class RegularSkillLevel(SkillLevel):
+    objects = RegularSkillLevelManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Skill Level - POWSZECHNE'
+        verbose_name_plural = 'Skill Levels - POWSZECHNE'
+        
+
+class MentalSkillLevelManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(skill__in=MentalSkill.objects.all())
+        return qs
+
+
+class MentalSkillLevel(SkillLevel):
+    objects = MentalSkillLevelManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Skill Level - MENTALNE'
+        verbose_name_plural = 'Skill Levels - MENTALNE'
+        
+
+class PriestsSkillLevelManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(skill__in=PriestsSkill.objects.all())
+        return qs
+
+
+class PriestsSkillLevel(SkillLevel):
+    objects = PriestsSkillLevelManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Skill Level - MOCE KAPŁAŃSKIE'
+        verbose_name_plural = 'Skill Levels - MOCE KAPŁAŃSKIE'
+        
+
+class SorcerersSkillLevelManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(skill__in=SorcerersSkill.objects.all())
+        return qs
+
+
+class SorcerersSkillLevel(SkillLevel):
+    objects = SorcerersSkillLevelManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Skill Level - ZAKLĘCIA'
+        verbose_name_plural = 'Skill Levels - ZAKLĘCIA'
+        
+
+class TheurgistsSkillLevelManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(skill__in=TheurgistsSkill.objects.all())
+        return qs
+
+
+class TheurgistsSkillLevel(SkillLevel):
+    objects = TheurgistsSkillLevelManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Skill Level - MOCE TEURGICZNE'
+        verbose_name_plural = 'Skill Levels - MOCE TEURGICZNE'
+        
+
+# -----------------------------------------------------------------------------
+
+
 class Synergy(Model):
     # TODO replace name with a composite of skills names with .join()
     name = CharField(max_length=100)
@@ -484,6 +570,41 @@ class Synergy(Model):
 
     def __str__(self):
         return self.name
+
+
+class RegularSynergyManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.exclude(skills__types__kinds__name__in=["Mentalne"])
+        return qs
+
+
+class RegularSynergy(Synergy):
+    objects = RegularSynergyManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Synergy - POWSZECHNE'
+        verbose_name_plural = 'Synergies - POWSZECHNE'
+
+
+class MentalSynergyManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(skills__types__kinds__name="Mentalne")
+        return qs
+
+
+class MentalSynergy(Synergy):
+    objects = MentalSynergyManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Synergy - MENTALNE'
+        verbose_name_plural = 'Synergies - MENTALNE'
+
+
+# -----------------------------------------------------------------------------
 
 
 class SynergyLevel(Model):
@@ -499,6 +620,38 @@ class SynergyLevel(Model):
         
     def __str__(self):
         return f'{str(self.synergy.name)} [{self.level}]'
+
+
+class RegularSynergyLevelManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.exclude(synergy__in=MentalSynergy.objects.all())
+        return qs
+
+
+class RegularSynergyLevel(SynergyLevel):
+    objects = RegularSynergyLevelManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Synergy Level - POWSZECHNE'
+        verbose_name_plural = 'Synergy Levels - POWSZECHNE'
+
+
+class MentalSynergyLevelManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(synergy__in=MentalSynergy.objects.all())
+        return qs
+
+
+class MentalSynergyLevel(SynergyLevel):
+    objects = MentalSynergyLevelManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Synergy Level - MENTALNE'
+        verbose_name_plural = 'Synergy Levels - MENTALNE'
 
 
 # =============================================================================

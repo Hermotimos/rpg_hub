@@ -16,7 +16,7 @@ urlpatterns = [
     
     path('character-development/', views.rules_character_development_view, name='character-development'),
     path('skills/<str:skilltype_kind>/', views.rules_skills_view, name='skills'),
-    path('synergies/', views.rules_synergies_view, name='synergies'),
+    path('synergies/<str:skilltype_kind>/', views.rules_synergies_view, name='synergies'),
     
     path('tests/', views.rules_tests_view, name='tests'),
     path('traits/', views.rules_traits_view, name='traits'),

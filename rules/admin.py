@@ -7,7 +7,12 @@ from rules.admin_filters import SkillLevelFilter, SynergyLevelFilter
 from rules.models import (
     SkillGroup, SkillKind, SkillType,
     Skill, SkillLevel, Synergy, SynergyLevel,
-    RegularSkill, MentalSkill, PriestsSkill, SorcerersSkill, TheurgistsSkill,
+    RegularSkill, RegularSkillLevel, RegularSynergy, RegularSynergyLevel,
+    MentalSkill, MentalSkillLevel, MentalSynergy, MentalSynergyLevel,
+    PriestsSkill, PriestsSkillLevel,
+    SorcerersSkill, SorcerersSkillLevel,
+    TheurgistsSkill, TheurgistsSkillLevel,
+    
     Perk, Modifier, Factor, RulesComment, Condition, CombatType,
     ConditionalModifier,
     Profession, SubProfession,
@@ -137,7 +142,7 @@ class SkillLevelInline(admin.TabularInline):
         return formfield
 
     
-@admin.register(RegularSkill)
+@admin.register(Skill, RegularSkill)
 class SkillAdmin(admin.ModelAdmin):
     fields = [
         'name', 'version_of', 'weapon', 'tested_trait', 'image', 'group',
@@ -198,14 +203,14 @@ class SynergyLevelInline(admin.TabularInline):
         return formfield
 
 
-@admin.register(Synergy)
+@admin.register(Synergy, RegularSynergy, MentalSynergy)
 class SynergyAdmin(admin.ModelAdmin):
     filter_horizontal = ['skills']
     formfield_overrides = {
         models.CharField: {'widget': forms.Textarea(attrs={'rows': 3, 'cols': 10})},
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 10, 'cols': 30})},
     }
-    inlines = [SynergyLevelInline]
+    # inlines = [SynergyLevelInline]
     list_display = ['id', 'name']
     list_editable = ['name']
     search_fields = ['name']
@@ -225,7 +230,9 @@ class SynergyAdmin(admin.ModelAdmin):
 # -----------------------------------------------------------------------------
 
 
-@admin.register(SkillLevel)
+@admin.register(
+    SkillLevel, RegularSkillLevel, MentalSkillLevel, PriestsSkillLevel,
+    SorcerersSkillLevel, TheurgistsSkillLevel)
 class SkillLevelAdmin(admin.ModelAdmin):
     filter_horizontal = ['acquired_by', 'perks']
     formfield_overrides = {
@@ -249,7 +256,7 @@ class SkillLevelAdmin(admin.ModelAdmin):
 # -----------------------------------------------------------------------------
 
 
-@admin.register(SynergyLevel)
+@admin.register(SynergyLevel, RegularSynergyLevel, MentalSynergyLevel)
 class SynergyLevelAdmin(admin.ModelAdmin):
     filter_horizontal = ['acquired_by', 'perks']
     formfield_overrides = {

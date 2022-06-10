@@ -149,7 +149,7 @@ def rules_skills_view(request, skilltype_kind):
     
     context = {
         'current_profile': current_profile,
-        'page_title': skilltype_kind,
+        'page_title': f"Umiejętności {skilltype_kind}",
         'skilltype_kind': skilltype_kind,
         'skill_types_regular': skill_types_regular,
         'skills_regular': skills_regular,
@@ -158,12 +158,12 @@ def rules_skills_view(request, skilltype_kind):
 
 
 @login_required
-def rules_synergies_view(request):
+def rules_synergies_view(request, skilltype_kind="Powszechne"):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
         'current_profile': current_profile,
-        'page_title': 'Lista Synergii',
-        'synergies': current_profile.synergies_allowed(),
+        'page_title': f"Synergie {skilltype_kind}",
+        'synergies': current_profile.synergies_allowed(skilltype_kind=skilltype_kind),
     }
     return render(request, 'rules/synergies.html', context)
 

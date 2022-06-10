@@ -29,7 +29,7 @@
                 <a href="{% url 'rules:character-development' %}">Rozwój Postaci</a>
                 <ul class="ml-3">
                     <li><a href="{% url 'rules:skills' 'Powszechne' %}">Umiejętności</a></li>
-                    <li><a href="{% url 'rules:synergies' %}">Synergie</a></li>
+                    <li><a href="{% url 'rules:synergies' 'Powszechne' %}">Synergie</a></li>
                 </ul>
             </li>
         </ol>
@@ -55,6 +55,7 @@
                     <a href="{% url 'rules:power-trait' %}">Cecha Mentalna "Moc"</a>
                     <ul class="ml-3">
                         <li><a href="{% url 'rules:skills' 'Mentalne' %}">Umiejętności Mentalne</a></li>
+                        <li><a href="{% url 'rules:synergies' 'Mentalne' %}">Synergie Mentalne</a></li>
                     </ul>
                 </li>
                 {% if 'Kapłan' in allowed_professions %}
