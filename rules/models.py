@@ -398,59 +398,6 @@ class SkillLevel(Model):
         return f'{str(self.skill.name)} [{self.level}]'
 
 
-class TheologySkillManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(Q(name__icontains='Doktryn')
-                       | Q(name__icontains='Kult')
-                       | Q(name__icontains='Mister')
-                       | Q(name__icontains='Wierzenia')
-                       | Q(name__icontains='Wiar')
-                       | Q(name__icontains='Teolog'))
-        return qs
-    
-
-class TheologySkill(Skill):
-    objects = TheologySkillManager()
-    
-    class Meta:
-        proxy = True
-        verbose_name = 'Teologia'
-        verbose_name_plural = 'Skills - THEOLOGY'
-
-
-class BooksSkillManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(Q(name__icontains='Księg'))
-        return qs
-    
-
-class BooksSkill(Skill):
-    objects = BooksSkillManager()
-
-    class Meta:
-        proxy = True
-        verbose_name = 'Księgi'
-        verbose_name_plural = 'Skills - BOOKS'
-
-
-class HistorySkillManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(Q(name__icontains='Histor'))
-        return qs
-    
-
-class HistorySkill(Skill):
-    objects = HistorySkillManager()
-
-    class Meta:
-        proxy = True
-        verbose_name = 'Historia'
-        verbose_name_plural = 'Skills - HISTORY'
-
-
 class Synergy(Model):
     # TODO replace name with a composite of skills names with .join()
     name = CharField(max_length=100)

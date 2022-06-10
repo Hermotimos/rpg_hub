@@ -88,8 +88,6 @@
                                         {% endif %}
                                     </div>
                                 </li>
-                                <li><a class="font-14 nav-link small-caps" href="{% url 'prosoponomikon:characters' %}">Prosoponomikon</a></li>
-                                <li><a class="font-14 nav-link small-caps" href="{% url 'toponomikon:main' %}">Toponomikon</a></li>
                             </ul>
                         </div>
                         <div class="row info-row float-right mr-n2">
@@ -107,10 +105,9 @@
                     <div class="dropdown-content">
                         <ul class="bullets-1 pl-4">
                             <li><a class="font-14 nav-link small-caps" href="{% url 'knowledge:knowledge-packets-in-skills' 'Skill' %}">Almanach</a></li>
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'knowledge:knowledge-packets-in-skills' 'BooksSkill' %}">Biblioteka</a></li>
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'knowledge:knowledge-packets-in-skills' 'HistorySkill' %}">Historia</a></li>
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'knowledge:knowledge-packets-in-skills' 'TheologySkill' %}">Teologia</a></li>
-                            
+                            <li><a class="font-14 nav-link small-caps" href="{% url 'prosoponomikon:characters' %}">Prosoponomikon</a></li>
+                            <li><a class="font-14 nav-link small-caps" href="{% url 'toponomikon:main' %}">Toponomikon</a></li>
+
         <!--  THESE ARE ALREADY PRESENT IN PROSOPONOMIKON  But they can be presented with new features, not just grouping by Location  -->
         <!--                    <li><a class="font-14 nav-link small-caps" href="#">Arkana</a></li>-->
     <!--                        SEPARATE MONSTERS:-->

@@ -6,7 +6,7 @@ from rpg_project.utils import formfield_with_cache
 from rules.admin_filters import SkillLevelFilter, SynergyLevelFilter
 from rules.models import (
     SkillGroup, SkillKind, SkillType,
-    Skill, SkillLevel, Synergy, SynergyLevel, BooksSkill, TheologySkill,
+    Skill, SkillLevel, Synergy, SynergyLevel,
     Perk, Modifier, Factor, RulesComment, Condition, CombatType,
     ConditionalModifier,
     Profession, SubProfession,
@@ -133,7 +133,7 @@ class SkillLevelInline(admin.TabularInline):
         return formfield
 
     
-@admin.register(Skill, BooksSkill, TheologySkill)
+@admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
     fields = [
         'name', 'version_of', 'tested_trait', 'image', 'group', 'types',
