@@ -1,0 +1,21 @@
+{% load static %}
+{% load custom_filters %}
+
+
+<div class="rules-styling" id="accordion{{ panel_id }}_synergies">
+
+    <div class="card mb-1">
+        <div class="card-header hover-blue py-2" data-toggle="collapse" data-target="#collapse_synergies{{ panel_id }}" aria-expanded="true">
+            <label class="h4 font-weight-bold m-0 hover-blue small-caps deep-red">
+                Synergie
+            </label>
+        </div>
+        <div id="collapse_synergies{{ panel_id }}" class="collapse show"  data-parent="#accordion{{ panel_id }}_synergies">
+            <div class="card-body container">
+                {% for synergy in synergies %}
+                    {% include 'rules/_synergy.html' %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

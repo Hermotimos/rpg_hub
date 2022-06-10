@@ -9,6 +9,7 @@ from django.db.models import (
     IntegerField,
     Model,
     Prefetch,
+    Q,
     Value,
     When,
 )
@@ -123,7 +124,7 @@ class Profile(Model):
         qs = qs.select_related('main_image__image')
         return qs
 
-    def skills_acquired_with_skill_levels(self, skilltype_kinds=None):
+    def skills_acquired_with_skill_levels(self):
         from rules.models import Skill, SkillLevel
         skills = Skill.objects.filter(skill_levels__acquired_by=self)
         skill_levels = SkillLevel.objects.filter(acquired_by=self)
@@ -134,14 +135,11 @@ class Profile(Model):
             'skill_levels__perks__conditional_modifiers__modifier__factor',
             'skill_levels__perks__comments',
         )
-        if skilltype_kinds:
-            skills = skills.filter(types__kinds__name__in=skilltype_kinds)
         return skills.select_related('group__type').distinct()
 
     def synergies_acquired_with_synergies_levels(self):
         from rules.models import Synergy, SynergyLevel, SkillLevel
         skill_levels = SkillLevel.objects.filter(acquired_by=self)
-    
         synergy_levels = SynergyLevel.objects.prefetch_related('skill_levels')
         synergy_levels_ids = [
             synergy_lvl.id for synergy_lvl in synergy_levels
@@ -164,10 +162,7 @@ class Profile(Model):
 
     def synergies_allowed(self, skilltype_kind="Powszechne"):
         """Get synergies whose all composing skills are allowed to any od user's profiles."""
-        from rules.models import Synergy, Skill, RegularSynergy, MentalSynergy
-
-        skills = Skill.objects.filter(allowees__in=self.user.profiles.all())
-
+        from rules.models import Synergy, RegularSynergy, MentalSynergy
         if skilltype_kind == "Powszechne":
             synergies = RegularSynergy.objects.all()
         elif skilltype_kind == "Mentalne":
@@ -183,10 +178,7 @@ class Profile(Model):
             'synergy_levels__perks__conditional_modifiers__modifier__factor',
             'synergy_levels__perks__comments',
         )
-        return synergies # [
-        #     synergy for synergy in synergies
-        #     if all([(skill in skills) for skill in synergy.skills.all()])
-        # ]
+        return synergies.exclude(~Q(skills__allowees__in=self.user.profiles.all()))
 
     @property
     def undone_demands(self):

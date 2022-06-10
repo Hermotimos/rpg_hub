@@ -60,30 +60,29 @@ def prosoponomikon_character_view(request, character_id):
     # Player viewing own Character or GM viewing any Character
     if current_profile.character.id == character_id or current_profile.status == 'gm':
         
-        skills_regular = character.profile.skills_acquired_with_skill_levels(
-            skilltype_kinds=["Powszechne"]).exclude(~Q(versions=None))
-        skill_types_regular = SkillType.objects.filter(kinds__name="Powszechne")
+        skills = character.profile.skills_acquired_with_skill_levels().exclude(~Q(versions=None))
+        skill_types = SkillType.objects.all()
+        
+        skills_regular = skills.filter(types__kinds__name="Powszechne")
+        skill_types_regular = skill_types.filter(kinds__name="Powszechne")
         skill_types_regular = skill_types_regular.prefetch_related(
             Prefetch('skills', queryset=skills_regular), 'skill_groups')
         skill_types_regular = skill_types_regular.filter(skills__in=skills_regular).distinct()
 
-        skills_priests = character.profile.skills_acquired_with_skill_levels(
-           skilltype_kinds=["Moce Kapłańskie", "Mentalne"]).exclude(~Q(versions=None))  # TODO Mentalne ok ???
-        skill_types_for_priests = SkillType.objects.filter(kinds__name__in=["Moce Kapłańskie", "Mentalne"])
+        skills_priests = skills.filter(types__kinds__name__in=["Moce Kapłańskie", "Mentalne"])
+        skill_types_for_priests = skill_types.filter(kinds__name__in=["Moce Kapłańskie", "Mentalne"])
         skill_types_for_priests = skill_types_for_priests.prefetch_related(
             Prefetch('skills', queryset=skills_priests), 'skill_groups')
         skill_types_for_priests = skill_types_for_priests.filter(skills__in=skills_priests).distinct()
-
-        skills_sorcerers = character.profile.skills_acquired_with_skill_levels(
-            skilltype_kinds=["Zaklęcia", "Mentalne"]).exclude(~Q(versions=None))  # TODO Mentalne ok ???
-        skill_types_for_sorcerers = SkillType.objects.filter(kinds__name__in=["Zaklęcia", "Mentalne"])
+        
+        skills_sorcerers = skills.filter(types__kinds__name__in=["Zaklęcia", "Mentalne"])
+        skill_types_for_sorcerers = skill_types.filter(kinds__name__in=["Zaklęcia", "Mentalne"])
         skill_types_for_sorcerers = skill_types_for_sorcerers.prefetch_related(
             Prefetch('skills', queryset=skills_sorcerers), 'skill_groups')
         skill_types_for_sorcerers = skill_types_for_sorcerers.filter(skills__in=skills_sorcerers).distinct()
-        
-        skills_theurgists = character.profile.skills_acquired_with_skill_levels(
-            skilltype_kinds=["Moce Teurgiczne", "Mentalne"]).exclude(~Q(versions=None))  # TODO Mentalne ok ???
-        skill_types_for_theurgists = SkillType.objects.filter(kinds__name__in=["Moce Teurgiczne", "Mentalne"])
+
+        skills_theurgists = skills.filter(types__kinds__name__in=["Moce Teurgiczne", "Mentalne"])
+        skill_types_for_theurgists = skill_types.filter(kinds__name__in=["Moce Teurgiczne", "Mentalne"])
         skill_types_for_theurgists = skill_types_for_theurgists.prefetch_related(
             Prefetch('skills', queryset=skills_theurgists), 'skill_groups')
         skill_types_for_theurgists = skill_types_for_theurgists.filter(skills__in=skills_theurgists).distinct()
@@ -109,7 +108,10 @@ def prosoponomikon_character_view(request, character_id):
         'skills_sorcerers': skills_sorcerers,
         'skill_types_for_theurgists': skill_types_for_theurgists,
         'skills_theurgists': skills_theurgists,
-        'synergies': synergies,
+        'synergies_regular': synergies.exclude(skills__types__kinds__name="Mentalne"),
+        'synergies_priests': synergies.filter(skills__types__kinds__name__in=["Mentalne", "Moce Kapłańskie"]),
+        'synergies_sorcerers': synergies.filter(skills__types__kinds__name__in=["Mentalne", "Zaklęcia"]),
+        'synergies_theurgists': synergies.filter(skills__types__kinds__name__in=["Mentalne", "Moce Teurgiczne"]),
         'knowledge_packets': knowledge_packets,
         'biography_packets': biography_packets,
         'dialogue_packets': dialogue_packets,
