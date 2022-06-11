@@ -41,8 +41,6 @@ class Profile(Model):
         blank=True,
         null=True,
     )
-    # TODO delete after more testing (along signal in prosoponomikon.models)
-    character_name_copy = CharField(max_length=100, blank=True, null=True)
 
     objects = managers.ProfileManager()
     non_gm = managers.NonGMProfileManager()
