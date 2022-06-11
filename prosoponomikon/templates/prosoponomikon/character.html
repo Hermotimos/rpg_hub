@@ -130,7 +130,7 @@
                 </label>
             {% endif %}
             
-            <!-- Priest powers and mental Skills -->
+            <!-- Priest powers and MentalSkills -->
             {% if skills_priests %}
                 {% if biography_packets or dialogue_packets or skills_regular or knowledge_packets or known_characters %}
                     <input type="radio" name="tabset" id="tab6" aria-controls="priest_powers_and_mental_skills">
@@ -140,6 +140,32 @@
                 <label class="h4 mb-0" for="tab6">
                     {% if character.profile != current_profile and character.profile.status != 'player' %} ~ {% endif %}
                     Moce kapłańskie
+                </label>
+            {% endif %}
+            
+            <!-- Sorcery and MentalSkills -->
+            {% if skills_sorcerers %}
+                {% if biography_packets or dialogue_packets or skills_regular or knowledge_packets or known_characters or skills_priests %}
+                    <input type="radio" name="tabset" id="tab7" aria-controls="sorcerers_powers_and_mental_skills">
+                {% else %}
+                    <input type="radio" name="tabset" id="tab7" aria-controls="sorcerers_powers_and_mental_skills" checked>
+                {% endif %}
+                <label class="h4 mb-0" for="tab6">
+                    {% if character.profile != current_profile and character.profile.status != 'player' %} ~ {% endif %}
+                    Zaklęcia
+                </label>
+            {% endif %}
+            
+            <!-- Theurgy and MentalSkills -->
+            {% if skills_theurgists %}
+                {% if biography_packets or dialogue_packets or skills_regular or knowledge_packets or known_characters or skills_priests or skills_sorcerers %}
+                    <input type="radio" name="tabset" id="tab8" aria-controls="theurgists_powers_and_mental_skills">
+                {% else %}
+                    <input type="radio" name="tabset" id="tab8" aria-controls="theurgists_powers_and_mental_skills" checked>
+                {% endif %}
+                <label class="h4 mb-0" for="tab6">
+                    {% if character.profile != current_profile and character.profile.status != 'player' %} ~ {% endif %}
+                    Moce Teurgiczne
                 </label>
             {% endif %}
             
@@ -166,14 +192,11 @@
                     </section>
                 {% endif %}
             
-                <!-- Skills and synergies-->
+                <!-- RegularSkills and RegularSynergies -->
                 {% if skills_regular %}
                     <section id="skills_regular" class="tab-panel">
-                        {% with max_level_only=True skill_types=skill_types_regular skills=skills_regular panel_id=1 %}
+                        {% with max_level_only=True skill_types=skill_types_regular skills=skills_regular max_level_only=True synergies=synergies_regular panel_id=1 %}
                             {% include 'rules/_skills_by_type.html' %}
-                        {% endwith %}
-                        
-                        {% with max_level_only=True synergies=synergies_regular panel_id=1 %}
                             {% include 'rules/_synergies.html' %}
                         {% endwith %}
                     </section>
@@ -203,14 +226,31 @@
                     </section>
                 {% endif %}
                 
-                <!-- Priest powers and mental skills-->
+                <!-- PriestsSkill and MentalSkills -->
                 {% if skills_priests %}
                     <section id="priest_powers_and_mental_skills" class="tab-panel">
-                        {% with skill_types=skill_types_for_priests skills=skills_priests panel_id=2 %}
+                        {% with skill_types=skill_types_priests skills=skills_priests max_level_only=True synergies=synergies_priests panel_id=2 %}
                             {% include 'rules/_skills_by_type.html' %}
+                            {% include 'rules/_synergies.html' %}
                         {% endwith %}
-
-                        {% with max_level_only=True synergies=synergies_priests panel_id=2 %}
+                    </section>
+                {% endif %}    
+                
+                <!-- SorcerersSkill and MentalSkills -->
+                {% if skills_sorcerers %}
+                    <section id="sorcerers_powers_and_mental_skills" class="tab-panel">
+                        {% with skill_types=skill_types_sorcerers skills=skills_sorcerers max_level_only=True synergies=synergies_sorcerers panel_id=2 %}
+                            {% include 'rules/_skills_by_type.html' %}
+                            {% include 'rules/_synergies.html' %}
+                        {% endwith %}
+                    </section>
+                {% endif %}
+                
+                <!-- TheurgistsSkill and MentalSkills -->
+                {% if skills_theurgists %}
+                    <section id="theurgists_powers_and_mental_skills" class="tab-panel">
+                        {% with skill_types=skill_types_theurgists skills=skills_theurgists max_level_only=True synergies=synergies_theurgists panel_id=2 %}
+                            {% include 'rules/_skills_by_type.html' %}
                             {% include 'rules/_synergies.html' %}
                         {% endwith %}
                     </section>
