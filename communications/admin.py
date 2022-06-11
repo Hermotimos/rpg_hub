@@ -97,7 +97,7 @@ class StatementAdmin(admin.ModelAdmin):
 
 @admin.register(AnnouncementStatement)
 class AnnouncementStatementAdmin(StatementAdmin):
-    list_filter = ['thread__kind', AnnouncementStatementAuthorFilter, 'thread']
+    list_filter = [AnnouncementStatementAuthorFilter, 'thread']
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "seen_by":
@@ -107,13 +107,9 @@ class AnnouncementStatementAdmin(StatementAdmin):
 
 @admin.register(DebateStatement)
 class DebateStatementAdmin(StatementAdmin):
-    list_filter = ['thread__kind', DebateStatementAuthorFilter, 'thread']
+    list_filter = [DebateStatementAuthorFilter, 'thread']
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "seen_by":
             kwargs["queryset"] = Profile.living.all() | Profile.objects.filter(status='gm')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
-
-
-# TODO optimize AnnouncementStatementAuthorFilter & DebateStatementAuthorFilter
-#   (they cause ca.300 queries)
