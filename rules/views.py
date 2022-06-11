@@ -257,8 +257,11 @@ def rules_weapons_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
     
-    weapons = Weapon.objects.filter(allowees__in=user_profiles).distinct()
-    weapons = weapons.prefetch_related('picture_set__pictures__image')
+    weapons = Weapon.objects.prefetch_related('picture_set__pictures__image')
+    if not current_profile.can_view_all:
+        weapons = weapons.filter(allowees__in=user_profiles).distinct()
+    
+    # TODO usunąć WeaponTypes
     weapon_types = WeaponType.objects.filter(weapons__allowees__in=user_profiles).distinct()
     weapon_types = weapon_types.prefetch_related(Prefetch('weapons', queryset=weapons))
     
