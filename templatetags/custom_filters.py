@@ -246,6 +246,7 @@ def format_conditional_modifier(conditional_modifier: rules.models.ConditionalMo
         '/zwar': '<i class="ra ra-crossed-axes pr-1"></i>',
         '/dyst': '<i class="ra ra-archery-target pr-1"></i>',
         '/wręc': '<i class="ra ra-hand pr-1"></i>',
+        '/konn': '<i class="ra ra-horseshoe pr-1"></i>',
     }
     if any(k in text for k in combat_types_icons.keys()):
         for abbr, icon in combat_types_icons.items():
