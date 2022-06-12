@@ -6,11 +6,10 @@ from django.db.models import (
     Manager,
     ManyToManyField as M2M,
     Model,
-    OneToOneField as OneToOne,
+    OneToOneField as One2One,
     PROTECT,
     TextField,
 )
-from django.db.models.signals import post_save
 
 from knowledge.models import BiographyPacket, DialoguePacket
 from rules.models import SubProfession
@@ -171,7 +170,7 @@ class CharacterManager(Manager):
 class Character(Model):
     objects = CharacterManager()
     
-    profile = OneToOne(to=Profile, on_delete=CASCADE)
+    profile = One2One(to=Profile, on_delete=CASCADE)
     first_name = FK(
         to=FirstName, related_name='characters', on_delete=PROTECT,
         blank=True, null=True)

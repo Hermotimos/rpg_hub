@@ -1,6 +1,5 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
-    BooleanField,
     CASCADE,
     CharField,
     DecimalField,
@@ -9,6 +8,7 @@ from django.db.models import (
     Manager,
     ManyToManyField as M2M,
     Model,
+    OneToOneField as One2One,
     PositiveSmallIntegerField,
     PROTECT,
     SmallIntegerField,
@@ -301,6 +301,22 @@ class Weapon(Model):
             return f"{self.damage_dices}+{self.damage_bonus}"
         return f"{self.damage_dices}"
 
+    def save(self, *args, **kwargs):
+        """Override save() to ensure existence of related "mastery" skill."""
+        super().save(*args, **kwargs)
+        try:
+            Skill.objects.get(name=f"Biegłość w broni: {self.name}")
+        except Skill.DoesNotExist:
+            general_skill = Skill.objects.get(name="Biegłość w broni")
+            skill = Skill.objects.create(
+                name=f"Biegłość w broni: {self.name}",
+                tested_trait=self.trait,
+                group=general_skill.group,
+                version_of=general_skill,
+                weapon=self)
+            skill.types.set(general_skill.types.all())
+            skill.save()
+
 
 # =============================================================================
 
@@ -354,7 +370,7 @@ class Skill(Model):
     )
     # ------------------------------------------
     version_of = FK(to='self', related_name='versions', on_delete=CASCADE, blank=True, null=True)
-    weapon = FK(to=Weapon, on_delete=CASCADE, blank=True, null=True)
+    weapon = One2One(to=Weapon, on_delete=CASCADE, blank=True, null=True)
 
     class Meta:
         ordering = ['name']
@@ -364,7 +380,7 @@ class Skill(Model):
 
     def save(self, *args, **kwargs):
         if self.version_of:
-            weapon = f": {self.weapon.name.title()}" if self.weapon else ""
+            weapon = f": {self.weapon.name}" if self.weapon else ""
             self.name = str(self.version_of.name) + weapon
         super().save(*args, **kwargs)
        
@@ -373,7 +389,7 @@ class RegularSkillManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(types__kinds__name="Powszechne")
-        return qs
+        return qs.distinct()
 
 
 class RegularSkill(Skill):
@@ -389,7 +405,7 @@ class MentalSkillManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(types__kinds__name="Mentalne")
-        return qs
+        return qs.distinct()
 
 
 class MentalSkill(Skill):
@@ -406,7 +422,7 @@ class PriestsSkillManager(Manager):
         qs = super().get_queryset()
         qs = qs.filter(types__kinds__name="Moce Kapłańskie")
         qs = qs.prefetch_related('types__kinds')
-        return qs
+        return qs.distinct()
 
 
 class PriestsSkill(Skill):
@@ -422,7 +438,7 @@ class SorcerersSkillManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(types__kinds__name="Zaklęcia")
-        return qs
+        return qs.distinct()
 
 
 class SorcerersSkill(Skill):
@@ -438,7 +454,7 @@ class TheurgistsSkillManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(types__kinds__name="Moce Teurgiczne")
-        return qs
+        return qs.distinct()
 
 
 class TheurgistsSkill(Skill):
@@ -479,7 +495,7 @@ class RegularSkillLevelManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(skill__in=RegularSkill.objects.all())
-        return qs
+        return qs.distinct()
 
 
 class RegularSkillLevel(SkillLevel):
@@ -495,7 +511,7 @@ class MentalSkillLevelManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(skill__in=MentalSkill.objects.all())
-        return qs
+        return qs.distinct()
 
 
 class MentalSkillLevel(SkillLevel):
@@ -511,7 +527,7 @@ class PriestsSkillLevelManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(skill__in=PriestsSkill.objects.all())
-        return qs
+        return qs.distinct()
 
 
 class PriestsSkillLevel(SkillLevel):
@@ -527,7 +543,7 @@ class SorcerersSkillLevelManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(skill__in=SorcerersSkill.objects.all())
-        return qs
+        return qs.distinct()
 
 
 class SorcerersSkillLevel(SkillLevel):
@@ -543,7 +559,7 @@ class TheurgistsSkillLevelManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(skill__in=TheurgistsSkill.objects.all())
-        return qs
+        return qs.distinct()
 
 
 class TheurgistsSkillLevel(SkillLevel):
@@ -576,7 +592,7 @@ class RegularSynergyManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.exclude(skills__types__kinds__name__in=["Mentalne"])
-        return qs
+        return qs.distinct()
 
 
 class RegularSynergy(Synergy):
@@ -592,7 +608,7 @@ class MentalSynergyManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(skills__types__kinds__name="Mentalne")
-        return qs
+        return qs.distinct()
 
 
 class MentalSynergy(Synergy):
@@ -626,7 +642,7 @@ class RegularSynergyLevelManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.exclude(synergy__in=MentalSynergy.objects.all())
-        return qs
+        return qs.distinct()
 
 
 class RegularSynergyLevel(SynergyLevel):
@@ -642,7 +658,7 @@ class MentalSynergyLevelManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(synergy__in=MentalSynergy.objects.all())
-        return qs
+        return qs.distinct()
 
 
 class MentalSynergyLevel(SynergyLevel):
