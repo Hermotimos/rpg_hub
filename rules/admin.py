@@ -255,7 +255,7 @@ class SkillLevelAdmin(admin.ModelAdmin):
 
 @admin.register(SynergyLevel, RegularSynergyLevel, MentalSynergyLevel)
 class SynergyLevelAdmin(admin.ModelAdmin):
-    filter_horizontal = ['acquired_by', 'perks']
+    filter_horizontal = ['acquired_by', 'perks', 'skill_levels']
     formfield_overrides = {
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 8, 'cols': 80})},
     }
@@ -267,6 +267,11 @@ class SynergyLevelAdmin(admin.ModelAdmin):
 
     def name(self, obj):
         return f'{str(obj.synergy.name)} [{obj.level}]'
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "skill_levels":
+            kwargs["queryset"] = SkillLevel.objects.select_related('skill')
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
 # -----------------------------------------------------------------------------
