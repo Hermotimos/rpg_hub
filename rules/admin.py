@@ -67,6 +67,7 @@ class PerkAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'description', 'cost']
     list_editable = ['name', 'description', 'cost']
     list_filter = ['skill_levels__skill']
+    search_fields = ['name', 'description']
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
