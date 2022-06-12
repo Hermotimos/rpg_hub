@@ -69,15 +69,11 @@ class PerkAdmin(admin.ModelAdmin):
     list_filter = ['skill_levels__skill']
     search_fields = ['name', 'description']
 
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        qs = qs.prefetch_related(
-            'conditional_modifiers__modifier__factor',
-            'conditional_modifiers__combat_types',
-            'conditional_modifiers__conditions',
-            'comments')
-        return qs
-
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "conditional_modifiers":
+            kwargs["queryset"] = ConditionalModifier.objects.prefetch_related('combat_types')
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+    
     
 @admin.register(Condition)
 class ConditionAdmin(admin.ModelAdmin):
