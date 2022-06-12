@@ -147,27 +147,21 @@ class SkillAdmin(admin.ModelAdmin):
     ]
     filter_horizontal = ['allowees', 'types']
     # inlines = [SkillLevelInline]
-    list_display = ['id', 'name', 'version_of', 'tested_trait', 'image', 'group']
+    list_display = [
+        'id', 'name', 'version_of', 'tested_trait', 'image', 'group'
+    ]
     list_editable = ['name', 'tested_trait', 'image', 'group']
-    list_select_related = ['group__type']
+    list_select_related = ['group']
     search_fields = ['name']
     
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
             'group',
-            'version_of',
         ]:
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
-
-    def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == "types":
-            kwargs["queryset"] = SkillType.objects.prefetch_related('kinds')
-        if db_field.name == "allowees":
-            kwargs["queryset"] = Profile.players.select_related('character')
-        return super().formfield_for_manytomany(db_field, request, **kwargs)
     
     
 @admin.register(MentalSkill)
@@ -398,4 +392,13 @@ class ShieldAdmin(admin.ModelAdmin):
         'comment'
     ]
     search_fields = ['name', 'description', 'comment']
-    list_select_related = True
+    
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in [
+            'picture_set',
+        ]:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
+
