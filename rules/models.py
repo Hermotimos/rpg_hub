@@ -273,6 +273,22 @@ CURRENCIES = [
 ]
 
 
+class DamageType(Model):
+    description = CharField(max_length=30, blank=True, null=True)
+    type = CharField(max_length=10, choices=DAMAGE_TYPES)
+    damage = CharField(max_length=15)
+    special = CharField(max_length=100, blank=True, null=True)
+    range = CharField(max_length=100, blank=True, null=True)
+    
+    class Meta:
+        ordering = ['type', 'description']
+
+    def __str__(self):
+        description = f"{self.description} " if self.description else ""
+        damage_type = f"{self.type}: {self.damage}"
+        return description + damage_type
+
+
 class WeaponType(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
@@ -289,10 +305,13 @@ class WeaponType(Model):
         blank=True)
     # modifiers = M2M(to=ConditionalModifier, related_name='weapons_types', blank=True)
     # -------------------------------------------------------------------------
+    # TODO del blank/null and old fields
+    damage_types = M2M(to=DamageType, related_name='weapon_types', blank=True, null=True)
     damage_dices = CharField(max_length=10, blank=True, null=True)
     damage_bonus = PositiveSmallIntegerField(blank=True, null=True)
     damage_type = CharField(max_length=10, choices=DAMAGE_TYPES)
-    special = TextField(max_length=4000, blank=True, null=True)
+    # -------------------------------------------------------------------------
+    special = TextField(max_length=100, blank=True, null=True)
     range = CharField(max_length=100, blank=True, null=True)
     size = CharField(max_length=5, choices=SIZES)
     trait = CharField(max_length=10, choices=TRAITS)

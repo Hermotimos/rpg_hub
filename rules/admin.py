@@ -16,7 +16,7 @@ from rules.models import (
     Perk, Modifier, Factor, RulesComment, Condition, CombatType,
     ConditionalModifier,
     Profession, SubProfession,
-    WeaponType, Plate, Shield,
+    DamageType, WeaponType, Plate, Shield,
 )
 from users.models import Profile
 
@@ -328,11 +328,19 @@ class SubProfessionAdmin(admin.ModelAdmin):
 # -----------------------------------------------------------------------------
 
 
+@admin.register(DamageType)
+class DamageTypeAdmin(admin.ModelAdmin):
+    list_display = ['id', 'description', 'type', 'damage', 'special', 'range']
+    list_editable = ['description', 'type', 'damage', 'special', 'range']
+    list_filter = ['type', 'description']
+    search_fields = ['description', 'damage', 'special']
+
+
 @admin.register(WeaponType)
 class WeaponTypeAdmin(admin.ModelAdmin):
-    filter_horizontal = ['allowees']
+    filter_horizontal = ['allowees', 'damage_types']
     formfield_overrides = {
-        models.TextField: {'widget': forms.Textarea(attrs={'rows': 2, 'cols': 100})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 5, 'cols': 100})},
     }
     list_display = ['name', 'description']
     list_editable = ['description']
@@ -341,7 +349,6 @@ class WeaponTypeAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
-            'allowees',
             'picture_set',
         ]:
             if db_field.name == field:

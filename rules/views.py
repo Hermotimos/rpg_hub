@@ -256,7 +256,9 @@ def rules_weapon_types_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
     
-    weapon_types = WeaponType.objects.prefetch_related('picture_set__pictures__image')
+    weapon_types = WeaponType.objects.prefetch_related(
+        'picture_set__pictures__image',
+        'damage_types')
     if not current_profile.can_view_all:
         weapon_types = weapon_types.filter(allowees__in=user_profiles).distinct()
         
