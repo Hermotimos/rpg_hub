@@ -285,9 +285,7 @@ class DamageType(Model):
 
     def __str__(self):
         description = f"{self.description} " if self.description else ""
-        damage_type = f"{self.type}: "
-        damage = f"{self.damage} "
-        return (description + damage_type + damage).strip()
+        return f"{self.damage} [{self.type}] {description}"
 
 
 class WeaponType(Model):
