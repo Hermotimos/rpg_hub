@@ -315,9 +315,7 @@ class WeaponType(Model):
     def save(self, *args, **kwargs):
         """Override save() to ensure existence of related "mastery" skill."""
         super().save(*args, **kwargs)
-        try:
-            Skill.objects.get(name=f"Biegłość w broni: {self.name}")
-        except Skill.DoesNotExist:
+        if not self.skill:
             general_skill = Skill.objects.get(name="Biegłość w broni")
             skill = Skill.objects.create(
                 name=f"Biegłość w broni: {self.name}",
@@ -326,6 +324,10 @@ class WeaponType(Model):
                 version_of=general_skill,
                 weapon=self)
             skill.types.set(general_skill.types.all())
+            skill.save()
+        elif self.skill.name != f"Biegłość w broni: {self.name}":
+            skill = Skill.objects.get(id=self.skill.id)
+            skill.name = f"Biegłość w broni: {self.name}"
             skill.save()
 
 
