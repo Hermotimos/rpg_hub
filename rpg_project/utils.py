@@ -263,9 +263,9 @@ def update_rel_objs(instance, RelModel, rel_queryset, rel_name: str):
             exec(f"obj.{rel_name}.remove(instance)")
 
 
-def backup_db(reason: str):
+def backup_db():
     date = time.strftime("%Y-%m-%d_%H-%M")
-    filename = f"hyllemath_db_{reason}_{date}.json"
+    filename = f"_db_saves/hyllemath_prod_{date}.json"
 
     delegator.run(
         f"pg_dump --dbname={settings.DEV_DATABASE_DNS} --format=c --no-owner --no-acl > {filename}")
@@ -273,13 +273,36 @@ def backup_db(reason: str):
 
 def update_db(reason: str, src: str, dst: str):
     date = time.strftime("%Y-%m-%d_%H-%M")
-    filename = f"hyllemath_{reason}_{date}.json"
     
+    # Backup dst db
+    if reason == "prod":
+        backup_name = f"_db_saves/prod_hyllemath_{date}.json"
+    else:
+        backup_name = f"_db_saves/dev_hyllemath_{date}.json"
+    delegator.run(
+        f"pg_dump --dbname={dst} --format=c --no-owner --no-acl > {backup_name}")
+
+    # Create tmp dump file used in pg_restore
+    filename = f"tmp_hyllemath_{date}.json"
     delegator.run(
         f"pg_dump --dbname={src} --format=c --no-owner --no-acl > {filename}")
+    
+    # Clean-up dst db ("pg_restore --clean" sometimes fails to drop tables):
+    reset_db_sql = """
+        DROP SCHEMA public CASCADE;
+        CREATE SCHEMA public;
+        GRANT ALL ON SCHEMA public TO postgres;
+        GRANT ALL ON SCHEMA public TO public;
+    """
+    delegator.run(f"psql --dbname={dst} {reset_db_sql}")
+    
+    # Update dst db
     delegator.run(
         f"pg_restore --dbname={dst} --no-owner --no-acl --clean {filename}",
         block=False)
+    
+    # Remove tmp_hyllemath file
+    delegator.run(f"rm {filename}")
 
 
 def only_game_masters(function):

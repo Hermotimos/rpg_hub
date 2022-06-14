@@ -71,7 +71,7 @@ def backup_db_view(request):
         messages.warning(request, 'Funkcja dostępna tylko w developmencie!')
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     
-    backup_db(reason="manualbackup")
+    backup_db()
     
     messages.info(request, 'Wykonano lokalny backup bazy produkcyjnej!')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -85,12 +85,12 @@ def update_local_db_view(request):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
     update_db(
-        reason="localupdate",
+        reason="dev",
         src=settings.GCP_DATABASE_DNS,
         dst=settings.DEV_DATABASE_DNS)
     
+    messages.info(request, 'Wykonano lokalny backup bazy dev!')
     messages.info(request, 'Nadpisano lokalną bazę danymi z bazy GCP!')
-    messages.info(request, 'Wykonano lokalny backup bazy produkcyjnej!')
     logout(request)
     return redirect('users:login')
 
@@ -103,12 +103,12 @@ def update_production_db_view(request):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
     update_db(
-        reason="localupdate",
+        reason="prod",
         src=settings.DEV_DATABASE_DNS,
         dst=settings.GCP_DATABASE_DNS)
 
+    messages.info(request, 'Wykonano lokalny backup bazy prod!')
     messages.info(request, 'Nadpisano bazę produkcyjną z bazy lokalnej!')
-    messages.info(request, 'Wykonano lokalny backup bazy dev!')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
