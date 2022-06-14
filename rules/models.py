@@ -154,6 +154,30 @@ class Perk(Model):
 # =============================================================================
 
 
+# class ItemType(Model):
+#     name = CharField(max_length=100, unique=True)
+#     description = TextField(max_length=4000, blank=True, null=True)
+#     picture_set = FK(
+#         to=PictureSet,
+#         related_name='item_types',
+#         blank=True,
+#         null=True,
+#         on_delete=PROTECT)
+#     allowees = M2M(
+#         to=Profile,
+#         limit_choices_to=Q(status='player'),
+#         related_name='allowed_item_types',
+#         blank=True)
+#     weight = DecimalField(max_digits=10, decimal_places=1)
+#     price = CharField(max_length=20)
+#
+#     class Meta:
+#         ordering = ['name']
+#
+#     def __str__(self):
+#         return self.name
+
+
 class Plate(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
