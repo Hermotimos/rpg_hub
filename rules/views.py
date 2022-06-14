@@ -261,8 +261,12 @@ def rules_weapon_types_view(request):
         'damage_types')
     if not current_profile.can_view_all:
         weapon_types = weapon_types.filter(allowees__in=user_profiles).distinct()
-        
+    #
     # from rules.models import DamageType
+    # for dmgt in DamageType.objects.all():
+    #     if not dmgt.weapon_types.all():
+    #         dmgt.delete()
+    #
     # for weapon_type in WeaponType.objects.all():
     #     print(weapon_type)
     #     bonus = f"+{weapon_type.damage_bonus}" if weapon_type.damage_bonus else ""
