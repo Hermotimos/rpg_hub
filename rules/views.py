@@ -262,6 +262,17 @@ def rules_weapon_types_view(request):
     if not current_profile.can_view_all:
         weapon_types = weapon_types.filter(allowees__in=user_profiles).distinct()
         
+    # from rules.models import DamageType
+    # for weapon_type in WeaponType.objects.all():
+    #     print(weapon_type)
+    #     bonus = f"+{weapon_type.damage_bonus}" if weapon_type.damage_bonus else ""
+    #     damage_type, _ = DamageType.objects.get_or_create(
+    #             type=weapon_type.damage_type,
+    #             damage=f"{weapon_type.damage_dices}{bonus}",
+    #         )
+    #     print(damage_type, damage_type.id)
+    #     weapon_type.damage_types.set([damage_type.id])
+        
     context = {
         'current_profile': current_profile,
         'page_title': 'Broń',
