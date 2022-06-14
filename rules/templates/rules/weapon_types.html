@@ -74,7 +74,9 @@
                                 <div class="mb-1">
                                     <div class="d-flex justify-content-center my-3">
                                         {% for picture in weapon_type.picture_set|pictureset_pictures_in_custom_order %}
-                                            {% include '_pic_with_modal.html' %}
+                                            {% with hide_description=True %}
+                                                {% include '_pic_with_modal.html' %}
+                                            {% endwith %}
                                         {% endfor %}
                                     </div>
                                 </div>
