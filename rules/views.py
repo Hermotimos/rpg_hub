@@ -9,7 +9,6 @@ from rules.models import (
     Shield,
     Skill, SkillType,
     WeaponType,
-    Weapon,
 )
 from rules.utils import get_overload_ranges, LOAD_LIMITS, \
     get_own_professions, can_view_special_rules
@@ -253,24 +252,20 @@ def rules_fitness_and_tricks_view(request):
 
 
 @login_required
-def rules_weapons_view(request):
+def rules_weapon_types_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
     
-    weapons = Weapon.objects.prefetch_related('picture_set__pictures__image')
+    weapon_types = WeaponType.objects.prefetch_related('picture_set__pictures__image')
     if not current_profile.can_view_all:
-        weapons = weapons.filter(allowees__in=user_profiles).distinct()
-    
-    # TODO usunąć WeaponTypes
-    weapon_types = WeaponType.objects.filter(weapons__allowees__in=user_profiles).distinct()
-    weapon_types = weapon_types.prefetch_related(Prefetch('weapons', queryset=weapons))
-    
+        weapon_types = weapon_types.filter(allowees__in=user_profiles).distinct()
+        
     context = {
         'current_profile': current_profile,
         'page_title': 'Broń',
         'weapon_types': weapon_types,
     }
-    return render(request, 'rules/weapons.html', context)
+    return render(request, 'rules/weapon_types.html', context)
 
 
 @login_required

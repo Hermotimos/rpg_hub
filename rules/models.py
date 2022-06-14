@@ -222,18 +222,6 @@ class Shield(Model):
         return self.name
 
 
-class WeaponType(Model):
-    name = CharField(max_length=100, unique=True)
-    
-    class Meta:
-        ordering = ['name']
-        verbose_name = 'Weapon type'
-        verbose_name_plural = 'Weapon types'
-    
-    def __str__(self):
-        return self.name
-
-
 DAMAGE_TYPES = [
     ('K', 'K'),
     ('S', 'S'),
@@ -261,22 +249,21 @@ CURRENCIES = [
 ]
 
 
-class Weapon(Model):
-    weapon_type = FK(to=WeaponType, related_name='weapons', on_delete=PROTECT)
+class WeaponType(Model):
     name = CharField(max_length=100, unique=True)
     description = TextField(max_length=4000, blank=True, null=True)
     picture_set = FK(
         to=PictureSet,
-        related_name='weapons',
+        related_name='weapon_types',
         blank=True,
         null=True,
         on_delete=PROTECT)
     allowees = M2M(
         to=Profile,
         limit_choices_to=Q(status__in=['player', 'gm']),
-        related_name='allowed_weapons',
+        related_name='allowed_weapon_types',
         blank=True)
-    # modifiers = M2M(to=ConditionalModifier, related_name='weapons', blank=True)
+    # modifiers = M2M(to=ConditionalModifier, related_name='weapons_types', blank=True)
     # -------------------------------------------------------------------------
     damage_dices = CharField(max_length=10, blank=True, null=True)
     damage_bonus = PositiveSmallIntegerField(blank=True, null=True)
@@ -370,7 +357,7 @@ class Skill(Model):
     )
     # ------------------------------------------
     version_of = FK(to='self', related_name='versions', on_delete=CASCADE, blank=True, null=True)
-    weapon = One2One(to=Weapon, on_delete=CASCADE, blank=True, null=True)
+    weapon = One2One(to=WeaponType, on_delete=CASCADE, blank=True, null=True)
 
     class Meta:
         ordering = ['name']

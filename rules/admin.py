@@ -16,7 +16,7 @@ from rules.models import (
     Perk, Modifier, Factor, RulesComment, Condition, CombatType,
     ConditionalModifier,
     Profession, SubProfession,
-    WeaponType, Weapon, Plate, Shield,
+    WeaponType, Plate, Shield,
 )
 from users.models import Profile
 
@@ -328,30 +328,14 @@ class SubProfessionAdmin(admin.ModelAdmin):
 # -----------------------------------------------------------------------------
 
 
-class WeaponInline(admin.TabularInline):
-    model = Weapon
-    extra = 2
-    formfield_overrides = {
-        models.TextField: {'widget': forms.Textarea(attrs={'rows': 1, 'cols': 25})},
-        models.CharField: {'widget': forms.Textarea(attrs={'rows': 1, 'cols': 5})},
-    }
-
-
 @admin.register(WeaponType)
 class WeaponTypeAdmin(admin.ModelAdmin):
-    inlines = [WeaponInline]
-    list_display = ['name']
-
-
-@admin.register(Weapon)
-class WeaponAdmin(admin.ModelAdmin):
     filter_horizontal = ['allowees']
     formfield_overrides = {
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 2, 'cols': 100})},
     }
     list_display = ['name', 'description']
     list_editable = ['description']
-    list_filter = ['weapon_type']
     search_fields = ['name', 'description']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):

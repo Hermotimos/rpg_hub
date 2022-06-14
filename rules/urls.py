@@ -24,6 +24,6 @@ urlpatterns = [
     path('priesthood/', views.rules_priesthood_view, name='priesthood'),
     path('sorcery/', views.rules_sorcery_view, name='sorcery'),
     path('theurgy/', views.rules_theurgy_view, name='theurgy'),
-    path('weapons/', views.rules_weapons_view, name='weapons'),
+    path('weapon-types/', views.rules_weapon_types_view, name='weapon-types'),
     path('wounds/', views.rules_wounds_view, name='wounds'),
 ]

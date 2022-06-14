@@ -7,7 +7,7 @@ from django.utils import timezone
 from contact.forms import (DemandsCreateForm, DemandAnswerForm, PlanForm)
 from contact.models import Demand, DemandAnswer, Plan
 from rpg_project.utils import only_game_masters, send_emails
-from rules.models import Skill, Synergy, Weapon, Plate
+from rules.models import Skill, WeaponType, Plate
 from users.models import Profile
 
 
@@ -170,7 +170,7 @@ def plans_main_view(request):
     plans = Plan.objects.filter(author=profile).select_related('author')
 
     if profile.status == 'gm':
-        models = [Skill, Weapon, Plate]
+        models = [Skill, WeaponType, Plate]
         # Objs known to no profile: {'model_1': [obj1, obj2], model_2: [obj1]}
         todos = {}
         for m in models:

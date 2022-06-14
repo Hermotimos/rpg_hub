@@ -17,67 +17,63 @@
             Odpowiedni rozwój Postaci w kontekście tych Umiejętności może pozwalać jej na korzystanie w skuteczny sposób z szerokiego wyboru broni o rozmaitym charakterze.
         </p>
         
-        {% for weapon_type in weapon_types %}
-            <table class="weapons-table rules-table mt-2">
-                <colgroup>
-                    <col class="class">
-                    <col class="damage">
-                    <col class="damage-type">
-                    <col class="special">
-                    <col class="range">
-                    <col class="size">
-                    <col class="trait">
-                    <col class="price">
-                    <col class="weight">
-                </colgroup>
-                <thead class="align-center">
+        <table class="weapon-types rules-table mt-2">
+            <colgroup>
+                <col class="class">
+                <col class="damage">
+                <col class="damage-type">
+                <col class="special">
+                <col class="range">
+                <col class="size">
+                <col class="trait">
+                <col class="price">
+                <col class="weight">
+            </colgroup>
+            <thead class="align-center">
+                <tr>
+                    <th></th>
+                    <th>Obrażenia</th>
+                    <th>Typ</th>
+                    <th>Specjalne</th>
+                    <th>Zasięg</th>
+                    <th>Rozm</th>
+                    <th>Cecha</th>
+                    <th>Cena</th>
+                    <th>Waga</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for weapon_type in weapon_types %}
                     <tr>
-                        <th class="small-caps align-left py-2">
-                            <span class="pl-2">{{ weapon_type.name }}</span>
-                        </th>
-                        <th>Obrażenia</th>
-                        <th>Typ</th>
-                        <th>Specjalne</th>
-                        <th>Zasięg</th>
-                        <th>Rozm</th>
-                        <th>Cecha</th>
-                        <th>Cena</th>
-                        <th>Waga</th>
+                        <td class="hover-blue" data-toggle="collapse" data-target="#{{ weapon_type|remove_special_chars }}">&nbsp;{{ weapon_type.name }}</td>
+                        <td class="align-center">{{ weapon_type.damage_summary }}</td>
+                        <td class="align-center">{{ weapon_type.damage_type }}</td>
+                        <td class="align-center"><small>{{ weapon_type.special|linebreaksbr }}</small></td>
+                        <td class="align-center nowrap">{% if weapon_type.range %}{{ weapon_type.range }}{% endif %}</td>
+                        <td class="align-center">{{ weapon_type.size }}</td>
+                        <td class="align-center">{{ weapon_type.trait }}</td>
+                        <td class="align-center">{{ weapon_type.avg_price_value }} {{ weapon_type.avg_price_currency }}</td>
+                        <td class="align-center">{{ weapon_type.avg_weight.normalize }}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for weapon in weapon_type.weapons.all %}
-                        <tr>
-                            <td class="hover-blue" data-toggle="collapse" data-target="#{{ weapon|remove_special_chars }}">&nbsp;{{ weapon.name }}</td>
-                            <td class="align-center">{{ weapon.damage_summary }}</td>
-                            <td class="align-center">{{ weapon.damage_type }}</td>
-                            <td class="align-center"><small>{{ weapon.special|linebreaksbr }}</small></td>
-                            <td class="align-center nowrap">{% if weapon.range %}{{ weapon.range }}{% endif %}</td>
-                            <td class="align-center">{{ weapon.size }}</td>
-                            <td class="align-center">{{ weapon.trait }}</td>
-                            <td class="align-center">{{ weapon.avg_price_value }} {{ weapon.avg_price_currency }}</td>
-                            <td class="align-center">{{ weapon.avg_weight.normalize }}</td>
-                        </tr>
-                        <tr id="{{ weapon|remove_special_chars }}" class="collapse">
-                            <td colspan="10" class="weapons-img px-2">
-                                <div class="m-1 mr-2 font-italic text-justify">
-                                    {{ weapon.description|linebreaksbr }}
-                                </div>
-                                {% if weapon.picture_set %}
-                                    <div class="mb-1">
-                                        <div class="d-flex justify-content-center my-3">
-                                            {% for picture in weapon.picture_set|pictureset_pictures_in_custom_order %}
-                                                {% include '_pic_with_modal.html' %}
-                                            {% endfor %}
-                                        </div>
+                    <tr id="{{ weapon_type|remove_special_chars }}" class="collapse">
+                        <td colspan="10" class="px-2">
+                            <div class="m-1 mr-2 font-italic text-justify">
+                                {{ weapon_type.description|linebreaksbr }}
+                            </div>
+                            {% if weapon_type.picture_set %}
+                                <div class="mb-1">
+                                    <div class="d-flex justify-content-center my-3">
+                                        {% for picture in weapon_type.picture_set|pictureset_pictures_in_custom_order %}
+                                            {% include '_pic_with_modal.html' %}
+                                        {% endfor %}
                                     </div>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endfor %}
+                                </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
         <h5 class="mt-5"><b>Legenda</b></h5>
         <table class="rules-table">

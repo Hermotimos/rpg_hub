@@ -19,7 +19,6 @@ from rules.models import (
     Synergy, SynergyLevel,
     Profession,
     WeaponType,
-    Weapon,
     Plate,
     Shield,
 )
@@ -117,7 +116,7 @@ def update_production_db_view(request):
 @only_game_masters
 def allow_game_masters_to_all(request):
     models = [
-        Skill, Synergy, Profession, Weapon, Plate, Shield,
+        Skill, Synergy, Profession, WeaponType, Plate, Shield,
     ]
     for Model in models:
         print(f"Processing Model: {Model}")
@@ -229,8 +228,6 @@ def reload_rules(request):
         obj.save()
 
     for obj in WeaponType.objects.all():
-        obj.save()
-    for obj in Weapon.objects.all():
         obj.save()
     
     messages.info(request, 'Przeładowano modele dla "rules"!')
