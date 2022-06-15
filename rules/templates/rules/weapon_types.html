@@ -9,12 +9,51 @@
 {% block content %}
     <div class="rules-styling pt-3">
 
-        <h2 class="rules mt-5 mb-3">Klasa broni</h2>
+        <h2 class="rules mt-5 mb-3">Typy broni</h2>
         <p>
-            Przedstawione poniżej statystyki broni określają jej przydatność w sytuacji walki.
-            Podział na Klasy jest istotny ze względu na Umiejętności podnoszące skuteczność Postaci w posługiwaniu się bronią; są to Biegłość w broni
-            (Umiejętność, która może być wybrana wielokrotnie) oraz Obycie z bronią.
-            Odpowiedni rozwój Postaci w kontekście tych Umiejętności może pozwalać jej na korzystanie w skuteczny sposób z szerokiego wyboru broni o rozmaitym charakterze.
+            Przedstawione poniżej statystyki broni określają jej przydatność w różnych sytuacjach na polu walki,
+            jak również inne cechy, które mogą mieć niebanalne znaczenie dla możliwości pozyskania, naprawy i przechowywania uzbrojenia.
+        </p>
+        <p>
+            <b>§ Obrażenia.</b>
+            Standardowe Obrażenia typowego egzemplarza danej broni w połączeniu z informacją o ich Typie (K - kłute, O - obuchowe, S - sieczne).
+            Niektóre typy broni posiadają możliwość zastosowania więcej niż jednego Typu Obrażeń, w zależności od sposobu użycia.
+            Ponadto, w niektórych przypadkach Typ Obrażeń decyduje o odmiennych właściwościach ataku opisanych w sekcjach "Specjalne" oraz "Zasięg".
+        </p>
+        <p>
+            <b>§ Specjalne.</b>
+            Dodatkowe cechy broni mające istotny wpływ na jej zastosowanie i przydatność w różnych sytuacjach bitewnych.
+            Legenda oznaczeń znajduje się poniżej Tabeli Broni.
+        </p>
+        <p>
+            <b>§ Zasięg.</b>
+            Opisuje Zasięg Bazowy i Zasięg Maksymalny.
+            Pierwszy z nich określa optymalną odległość ataku dystansowego, to jest taką, która nie powoduje Malusa do Trafienia.
+            Każdy kolejny próg zasięgu stanowi mnożnik Zasięgu Podstawowego i wiąże się z Malusem -1 TRAF
+            (np. Zasięg Bazowy 10 pozwala na atak bez Malusa na odległość 10 m, a dalej do 20 m z Malusem -1 TRAF, do 30 m z Malusem -2 TRAF, i tak dalej).
+            Zasięg Maksymalny określa natomiast maksymalną odległość ataku, na jaką pozwala dany typ broni dystansowej.
+        </p>
+        <p>
+            <b>§ Cecha.</b>
+            Określa, z której Cechy broń może czerpać Bonusy do Trafienia i Obrażeń.
+            Większość typów broni nadaje się albo do techniki walki z akcentem na siłę, albo na precyzję uderzenia,
+            jednak niektóre dopuszczają obie.
+        </p>
+        <p>
+            <b>§ Rozmiar.</b>
+            Współczynnik ten nie zawsze pozostaje w bezpośrednim związku z faktycznymi wymiarami przestrzennymi lub wagą broni.
+            Decyduje on o możliwości wykorzystania danego typu broni w ramach niektórych Atutów (Umiejętności).
+        </p>
+        <p>
+            <b>§ Cena.</b>
+            Cena broni stanowi o jej dostępności dla Postaci - z jednej strony ze względu na zawartość jej kiesy,
+            z drugiej zaś świadczy o ogólnej popularności danego typu uzbrojenia, a więc również o łatwości nabycia i naprawy.
+            Broń o wysokiej cenie zazwyczaj wymaga skomplikowanego procesu produkcyjnego lub stosunkowo drogich składników.
+        </p>
+        <p>
+            <b>§ Waga.</b>
+            Waga broni ma istotne znaczenie ze względu na Udźwig.
+            Broń lekka lepiej nadaje się dla tych Postaci, które polegają na szybkości i zwinności.
         </p>
         
         <table class="weapon-types rules-table mt-2">
@@ -51,7 +90,7 @@
                         <td class="align-center nowrap">{{ weapon_type.damage_types.first.range|default_if_none:"" }}</td>
                         <td class="align-center">{{ weapon_type.trait }}</td>
                         <td class="align-center">{{ weapon_type.size }}</td>
-                        <td class="align-center">{{ weapon_type.avg_price_value }} {{ weapon_type.avg_price_currency }}</td>
+                        <td class="align-center">{{ weapon_type.avg_price_value|default_if_none:"" }}{{ weapon_type.avg_price_currency|default_if_none:"" }}</td>
                         <td class="align-center">{{ weapon_type.avg_weight.normalize }}</td>
                     </tr>
                     {% for damage_type in weapon_type.damage_types.all %}
@@ -90,14 +129,12 @@
         <h5 class="mt-5"><b>Legenda</b></h5>
         <table class="rules-table">
             <tbody>
-                <tr><td><b>&nbsp;3m</b></td><td>Broń do walki wręcz o dużym zasięgu - umożliwia atak rundę wcześniej niż przeciwnik, jednak staje się bezużyteczna, jeśli przeciwnikowi uda się zbliżyć.</td></tr>
+                <tr><td><b>&nbsp;Drzewcowa 3m</b></td><td>Broń drzewcowa nadaje się lepiej do przyjmowania szarży, ponadto ze względu na długość zapewnia Inicjatywę w walce w zwarciu, o ile przeciwnik sam nie dysponuje podobną bronią.</td></tr>
                 <tr><td><b>&nbsp;nie zabija!</b></td><td>Przy odebraniu ostatnich Punktów Życia broń nie zabija, tylko pozbawia przytomności. Zabicie wymaga dalszego pastwienia się nad nieprzytomną ofiarą. Szybciej już zwykłym nożem...</td></tr>
                 <tr><td><b>&nbsp;1 AT/2r</b></td><td>Wskazuje liczbę AT/r w przypadku broni, której użycie wymaga długiego przygotowania.</td></tr>
                 <tr><td><b>&nbsp;+15% Oszołomienie</b></td><td>Wskazuje szanse na Oszołomienie przeciwnika w przypadku trafienia (przeciwnik przez 1R nie może atakować; może przejść do Defensywy).</td></tr>
                 <tr><td><b>&nbsp;+Par</b></td><td>Broń umożliwiająca Parowanie, czyli zastosowanie premii z KON do KP Parowanie.</td></tr>
                 <tr><td><b>&nbsp;Przeb+3</b></td><td>Przebicie określa, ile punktów Wyparowań zbroi dana broń ignoruje w przypadku trafienia.</td></tr>
-                <tr><td><b>&nbsp;K:Przeb+1</b></td><td>Wskazuje, że Przebicie jest zależne od zastosowania konkretnego Typu OBR przy broni o wielu typach.</td></tr>
-                <tr><td><b>&nbsp;Szarża konna +1k6 OBR</b></td><td>Określa dodatkowe OBR przy broni o dewastującej szarży w przypadku zastosowana z wierzchowca.</td></tr>
                 <tr><td><b>&nbsp;vs. szarży </b></td><td>Bonus przy wykorzystaniu Umiejętności "Przyjęcie szarży".</td></tr>
                 <tr>
                     <td><b>&nbsp;-ZRC/Ruch/AT</b></td>
