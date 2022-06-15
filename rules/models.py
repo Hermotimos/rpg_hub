@@ -310,7 +310,7 @@ class WeaponType(Model):
         on_delete=PROTECT)
     allowees = M2M(
         to=Profile,
-        limit_choices_to=Q(status__in=['player', 'gm']),
+        limit_choices_to=Q(status='player'),
         related_name='allowed_weapon_types',
         blank=True)
     # -------------------------------------------------------------------------
