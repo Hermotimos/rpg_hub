@@ -313,15 +313,7 @@ class WeaponType(Model):
         limit_choices_to=Q(status='player'),
         related_name='allowed_weapon_types',
         blank=True)
-    # -------------------------------------------------------------------------
-    # TODO del blank/null and old fields
     damage_types = M2M(to=DamageType, related_name='weapon_types', blank=True, null=True)
-    damage_dices = CharField(max_length=10, blank=True, null=True)
-    damage_bonus = PositiveSmallIntegerField(blank=True, null=True)
-    damage_type = CharField(max_length=10, choices=DAMAGE_TYPES)
-    special = TextField(max_length=100, blank=True, null=True)
-    range = CharField(max_length=100, blank=True, null=True)
-    # -------------------------------------------------------------------------
     size = CharField(max_length=5, choices=SIZES)
     trait = CharField(max_length=10, choices=TRAITS)
     avg_price_value = PositiveSmallIntegerField(blank=True, null=True)
@@ -334,11 +326,6 @@ class WeaponType(Model):
     
     def __str__(self):
         return self.name
-    
-    def damage_summary(self):
-        if self.damage_bonus:
-            return f"{self.damage_dices}+{self.damage_bonus}"
-        return f"{self.damage_dices}"
 
     def save(self, *args, **kwargs):
         """Override save() to ensure existence of related "mastery" skill."""

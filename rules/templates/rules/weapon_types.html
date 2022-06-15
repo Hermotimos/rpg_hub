@@ -90,7 +90,7 @@
                         <td class="align-center nowrap">{{ weapon_type.damage_types.first.range|default_if_none:"" }}</td>
                         <td class="align-center">{{ weapon_type.trait }}</td>
                         <td class="align-center">{{ weapon_type.size }}</td>
-                        <td class="align-center">{{ weapon_type.avg_price_value|default_if_none:"" }}{{ weapon_type.avg_price_currency|default_if_none:"" }}</td>
+                        <td class="align-center">{{ weapon_type.avg_price_value|default_if_none:"" }} {{ weapon_type.avg_price_currency|default_if_none:"" }}</td>
                         <td class="align-center">{{ weapon_type.avg_weight.normalize }}</td>
                     </tr>
                     {% for damage_type in weapon_type.damage_types.all %}
