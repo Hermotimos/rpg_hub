@@ -46,8 +46,8 @@
                         <td class="hover-blue" data-toggle="collapse" data-target="#{{ weapon_type|remove_special_chars }}">
                             <span class="px-1">{{ weapon_type.name }}</span>
                         </td>
-                        <td class="align-center"><small>{{ weapon_type.damage_types.first }}</small></td>
-                        <td class="align-center"><small>{{ weapon_type.damage_types.first.special|linebreaksbr }}</small></td>
+                        <td class="align-center"><small>{{ weapon_type.damage_types.first.short }}</small></td>
+                        <td class="align-center"><small>{{ weapon_type.damage_types.first.special|default_if_none:""|linebreaksbr }}</small></td>
                         <td class="align-center nowrap">{{ weapon_type.damage_types.first.range|default_if_none:"" }}</td>
                         <td class="align-center">{{ weapon_type.trait }}</td>
                         <td class="align-center">{{ weapon_type.size }}</td>
@@ -56,9 +56,9 @@
                     </tr>
                     {% for damage_type in weapon_type.damage_types.all %}
                         {% if not forloop.first %}
-                            <tr id="{{ weapon_type|remove_special_chars }}" class="{% if forloop.parentloop.counter|divisibleby:2 %} bg-gray {% endif %}" >
+                            <tr class="{% if forloop.parentloop.counter|divisibleby:2 %} bg-gray {% endif %}" >
                                 <td></td>
-                                <td class="align-center text-small"><small>{{ damage_type }}</small></td>
+                                <td class="align-center"><small>{{ damage_type.short }}</small></td>
                                 <td class="align-center"><small>{{ damage_type.special|default_if_none:"" }}</small></td>
                                 <td class="align-center"><small>{{ damage_type.range|default_if_none:"" }}</small></td>
                                 <td colspan="4"></td>

@@ -330,7 +330,7 @@ class SubProfessionAdmin(admin.ModelAdmin):
 
 @admin.register(DamageType)
 class DamageTypeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'description', 'type', 'damage', 'special', 'range']
+    list_display = ['__str__', 'description', 'type', 'damage', 'special', 'range']
     list_editable = ['description', 'type', 'damage', 'special', 'range']
     list_filter = ['type', 'description']
     search_fields = ['description', 'damage', 'special']

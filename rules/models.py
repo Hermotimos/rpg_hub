@@ -279,13 +279,24 @@ class DamageType(Model):
     damage = CharField(max_length=15)
     special = CharField(max_length=100, blank=True, null=True)
     range = CharField(max_length=100, blank=True, null=True)
-    
+    # modifiers = M2M(to=ConditionalModifier, related_name='weapons_types', blank=True)
+
     class Meta:
         ordering = ['type', 'description']
+        unique_together = [
+            ('description', 'type', 'damage', 'special', 'range'),
+        ]
 
     def __str__(self):
-        description = f"{self.description} " if self.description else ""
-        return f"{self.damage} [{self.type}] {description}"
+        description = f" {self.description}" if self.description else ""
+        special = f" {self.special}" if self.special else ""
+        range = f" {self.range}" if self.range else ""
+        return f"{self.damage} [{self.type}]{description}{special}{range}"
+    
+    @property
+    def short(self):
+        description = f" {self.description}" if self.description else ""
+        return f"{self.damage} [{self.type}]{description}"
 
 
 class WeaponType(Model):
@@ -302,16 +313,15 @@ class WeaponType(Model):
         limit_choices_to=Q(status__in=['player', 'gm']),
         related_name='allowed_weapon_types',
         blank=True)
-    # modifiers = M2M(to=ConditionalModifier, related_name='weapons_types', blank=True)
     # -------------------------------------------------------------------------
     # TODO del blank/null and old fields
     damage_types = M2M(to=DamageType, related_name='weapon_types', blank=True, null=True)
     damage_dices = CharField(max_length=10, blank=True, null=True)
     damage_bonus = PositiveSmallIntegerField(blank=True, null=True)
     damage_type = CharField(max_length=10, choices=DAMAGE_TYPES)
-    # -------------------------------------------------------------------------
     special = TextField(max_length=100, blank=True, null=True)
     range = CharField(max_length=100, blank=True, null=True)
+    # -------------------------------------------------------------------------
     size = CharField(max_length=5, choices=SIZES)
     trait = CharField(max_length=10, choices=TRAITS)
     avg_price_value = PositiveSmallIntegerField(blank=True, null=True)

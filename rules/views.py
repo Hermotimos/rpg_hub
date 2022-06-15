@@ -264,8 +264,8 @@ def rules_weapon_types_view(request):
     #
     # from rules.models import DamageType
     # for dmgt in DamageType.objects.all():
-    #     if not dmgt.weapon_types.all():
-    #         dmgt.delete()
+    #     # if not dmgt.weapon_types.all():
+    #     dmgt.delete()
     #
     # for weapon_type in WeaponType.objects.all():
     #     print(weapon_type)
@@ -275,7 +275,6 @@ def rules_weapon_types_view(request):
     #         damage=f"{weapon_type.damage_dices}{bonus}",
     #         special=weapon_type.special,
     #         range=weapon_type.range,
-    #
     #     )
     #     print(damage_type, damage_type.id)
     #     weapon_type.damage_types.set([damage_type.id])
