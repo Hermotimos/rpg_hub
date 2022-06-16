@@ -7,13 +7,15 @@
 
 <div class="content-section-sidebar">
     <aside>
-        <img class="account-img-sidebar mt-50" onload="showTime()" src="{{ current_profile.image.url }}">
-        <h3 class="mb-1 mb-4">
-            <a href="{% url 'prosoponomikon:character' current_profile.character.id %}">{{ current_profile.character }}</a>
+        <img class="account-img-sidebar mb-1" onload="showTime()" src="{{ current_profile.image.url }}">
+        <h3 class="mb-4 text-center">
+            <a href="{% url 'prosoponomikon:character' current_profile.character.id %}">
+               {{ current_profile.character.fullname }}
+            </a>
+        </h3>
             {% if current_profile.status == 'gm' %}
                 <span class="h5 float-right" id="time"></span>
             {% endif %}
-        </h3>
         
         <!-- For game master -->
         {% if current_profile.status == 'gm' %}
