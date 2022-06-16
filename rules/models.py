@@ -313,7 +313,7 @@ class WeaponType(Model):
         limit_choices_to=Q(status='player'),
         related_name='allowed_weapon_types',
         blank=True)
-    damage_types = M2M(to=DamageType, related_name='weapon_types', blank=True, null=True)
+    damage_types = M2M(to=DamageType, related_name='weapon_types')
     size = CharField(max_length=5, choices=SIZES)
     trait = CharField(max_length=10, choices=TRAITS)
     avg_price_value = PositiveSmallIntegerField(blank=True, null=True)

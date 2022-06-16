@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib import admin
 from django.db import models
+from django.utils.html import format_html
 
 from rpg_project.utils import formfield_with_cache
 from rules.admin_filters import SkillLevelFilter, SynergyLevelFilter
@@ -330,10 +331,25 @@ class SubProfessionAdmin(admin.ModelAdmin):
 
 @admin.register(DamageType)
 class DamageTypeAdmin(admin.ModelAdmin):
-    list_display = ['__str__', 'description', 'type', 'damage', 'special', 'range']
+    formfield_overrides = {
+        models.CharField: {'widget': forms.TextInput(attrs={'size': 15})},
+    }
+    list_display = [
+        '__str__', 'description', 'type', 'damage', 'special', 'range',
+        '_weapon_types',
+    ]
     list_editable = ['description', 'type', 'damage', 'special', 'range']
     list_filter = ['type', 'description']
     search_fields = ['description', 'damage', 'special']
+
+    def _weapon_types(self, obj):
+        weapon_types = " | ".join([wt.name for wt in obj.weapon_types.all()])
+        return format_html(f'<span>{weapon_types}</span>')
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.prefetch_related('weapon_types')
+        return qs
 
 
 @admin.register(WeaponType)
@@ -341,9 +357,16 @@ class WeaponTypeAdmin(admin.ModelAdmin):
     filter_horizontal = ['allowees', 'damage_types']
     formfield_overrides = {
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 5, 'cols': 100})},
+        models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
     }
-    list_display = ['name', 'description']
-    list_editable = ['description']
+    list_display = [
+        'name', 'description', 'picture_set', 'size', 'trait',
+        'avg_price_value', 'avg_price_currency',
+    ]
+    list_editable = [
+        'description', 'picture_set', 'size', 'trait', 'avg_price_value',
+        'avg_price_currency',
+    ]
     search_fields = ['name', 'description']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -354,6 +377,11 @@ class WeaponTypeAdmin(admin.ModelAdmin):
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.prefetch_related('picture_set__pictures')
+        return qs
 
 
 @admin.register(Plate)
