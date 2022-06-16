@@ -40,6 +40,7 @@ def prosoponomikon_character_view(request, character_id):
     knowledge_packets, known_characters, synergies, dialogue_packets = [], [], [], []
     skill_types_regular, skill_types_priests, skill_types_sorcerers, skill_types_theurgists = [], [], [], []
     skills_regular, skills_priests, skills_sorcerers, skills_theurgists = [], [], [], []
+    synergies_regular, synergies_priests, synergies_sorcerers, synergies_theurgists = [], [], [], []
     
     if current_profile.character.id == character_id:
         # Players viewing their own Characters
@@ -88,6 +89,11 @@ def prosoponomikon_character_view(request, character_id):
         skill_types_theurgists = skill_types_theurgists.filter(skills__in=skills_theurgists).distinct()
 
         synergies = character.profile.synergies_acquired_with_synergies_levels()
+        synergies_regular = synergies.exclude(skills__types__kinds__name="Mentalne"),
+        synergies_priests = synergies.filter(skills__types__kinds__name__in=["Mentalne", "Moce Kapłańskie"]),
+        synergies_sorcerers = synergies.filter(skills__types__kinds__name__in=["Mentalne", "Zaklęcia"]),
+        synergies_theurgists = synergies.filter(skills__types__kinds__name__in=["Mentalne", "Moce Teurgiczne"]),
+
         knowledge_packets = character.profile.knowledge_packets.prefetch_related(
             'picture_sets__pictures').order_by('title')
         known_characters = character.profile.characters_known_annotated()
@@ -108,10 +114,10 @@ def prosoponomikon_character_view(request, character_id):
         'skills_sorcerers': skills_sorcerers,
         'skill_types_theurgists': skill_types_theurgists,
         'skills_theurgists': skills_theurgists,
-        'synergies_regular': synergies.exclude(skills__types__kinds__name="Mentalne"),
-        'synergies_priests': synergies.filter(skills__types__kinds__name__in=["Mentalne", "Moce Kapłańskie"]),
-        'synergies_sorcerers': synergies.filter(skills__types__kinds__name__in=["Mentalne", "Zaklęcia"]),
-        'synergies_theurgists': synergies.filter(skills__types__kinds__name__in=["Mentalne", "Moce Teurgiczne"]),
+        'synergies_regular': synergies_regular,
+        'synergies_priests': synergies_priests,
+        'synergies_sorcerers': synergies_sorcerers,
+        'synergies_theurgists': synergies_theurgists,
         'knowledge_packets': knowledge_packets,
         'biography_packets': biography_packets,
         'dialogue_packets': dialogue_packets,
