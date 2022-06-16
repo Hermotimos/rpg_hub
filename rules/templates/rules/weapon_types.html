@@ -63,7 +63,6 @@
         </p>
         
         <h2 class="rules mt-5 mb-3">Tabela broni</h2>
-
         <table class="weapon-types rules-table mt-3">
             <colgroup>
                 <col class="class">
@@ -135,24 +134,90 @@
         </table>
 
         <h5 class="mt-5"><b>Legenda</b></h5>
-        <table class="rules-table">
-            <tbody>
-                <tr><td><b>&nbsp;Drzewcowa 3m</b></td><td>Broń drzewcowa nadaje się lepiej do przyjmowania szarży, ponadto ze względu na długość zapewnia Inicjatywę w walce w zwarciu, o ile przeciwnik sam nie dysponuje podobną bronią.</td></tr>
-                <tr><td><b>&nbsp;nie zabija!</b></td><td>Przy odebraniu ostatnich Punktów Życia broń nie zabija, tylko pozbawia przytomności. Zabicie wymaga dalszego pastwienia się nad nieprzytomną ofiarą. Szybciej już zwykłym nożem...</td></tr>
-                <tr><td><b>&nbsp;1 AT/2r</b></td><td>Wskazuje liczbę AT/r w przypadku broni, której użycie wymaga długiego przygotowania.</td></tr>
-                <tr><td><b>&nbsp;+15% Oszołomienie</b></td><td>Wskazuje szanse na Oszołomienie przeciwnika w przypadku trafienia (przeciwnik przez 1R nie może atakować; może przejść do Defensywy).</td></tr>
-                <tr><td><b>&nbsp;+Par</b></td><td>Broń umożliwiająca Parowanie, czyli zastosowanie premii z KON do KP Parowanie.</td></tr>
-                <tr><td><b>&nbsp;Przeb+3</b></td><td>Przebicie określa, ile punktów Wyparowań zbroi dana broń ignoruje w przypadku trafienia.</td></tr>
-                <tr><td><b>&nbsp;vs. szarży </b></td><td>Bonus przy wykorzystaniu Umiejętności "Przyjęcie szarży".</td></tr>
+        
+        <table class="table table-hover table-bordered table-sm mt-3">
+            <thead class="thead-dark">
                 <tr>
-                    <td><b>&nbsp;-ZRC/Ruch/AT</b></td>
+                    <th>Oznaczenie</th>
+                    <th>Wyjaśnienie</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>OBR z SIŁ</th>
+                    <td>
+                        Niektóre egzemplarze łuku długiego, dostosowane do wyjątkowo silnego łucznika,
+                        mogą pozwalać na dodanie Obrażeń z Siły do poziomu,
+                        jednak tylko do poziomu, do jakiego przystosowany jest łuk.
+                    </td>
+                </tr>
+                <tr>
+                    <th>Drzewce-3m</th>
+                    <td>
+                        Broń drzewcowa nadaje się lepiej do przyjmowania szarży,
+                        ponadto ze względu na długość zapewnia Inicjatywę w walce w zwarciu,
+                        o ile przeciwnik dysponuje krótszą bronią.
+                        Drzewce-4m wygrywa z Drzewce-3m oraz z każdą bronią nie-drzewcową służącą do walki w zwarciu.
+                    </td>
+                </tr>
+                <tr>
+                    <th>Dyst-10</th>
+                    <td>
+                        Zasięg Podstawowy broni dystansowej w metrach (patrz zasady Zasięgu broni dystansowej powyżej).
+                    </td>
+                </tr>
+                <tr>
+                    <th>NieZabija</th>
+                    <td>
+                        Przy odebraniu ostatnich Punktów Życia broń nie zabija, tylko kaleczy i pozbawia przytomności.
+                        Zabicie nieprzytomnego wymaga osobnej akcji.
+                    </td>
+                </tr>
+                <tr>
+                    <th>1 AT/2r</th>
+                    <td>
+                        Wskazuje liczbę AT/r w przypadku broni, której użycie wymaga długiego przygotowania.
+                    </td>
+                </tr>
+                <tr>
+                    <th>+15% Oszołomienie</th>
+                    <td>
+                        Wskazuje szanse na Oszołomienie przeciwnika w przypadku trafienia
+                        (przeciwnik przez 1R nie może atakować; może przejść do Defensywy).
+                    </td>
+                </tr>
+                <tr>
+                    <th>+Par</th>
+                    <td>
+                        Broń umożliwiająca Parowanie, czyli zastosowanie premii z KON do KP Parowanie.
+                    </td>
+                </tr>
+                <tr>
+                    <th>PRZEB+3</th>
+                    <td>
+                        Przebicie: określa, ile punktów Wyparowań zbroi dana broń ignoruje w przypadku trafienia.
+                    </td>
+                </tr>
+                <tr>
+                    <th>vs. szarży</th>
+                    <td>
+                        TODO - przenieść do Umiejętności - albo synergia z Obyciem z bronią / czymś
+                        Bonus przy wykorzystaniu Umiejętności "Przyjęcie szarży".
+                    </td>
+                </tr>
+                <tr>
+                    <th>-ZRC/Ruch/AT</th>
                     <td>
                         W zależności od tego, czy Trafienie dotyczy korpusu, nóg czy broni - albo powoduje Malus do wszystkich współczynników zręcznościowych
                         (KP Uniki, IN, TRAF, OBR, test ZRC), albo ogranicza Ruch do 0, albo pozbawia możliwości ataku tą bronią.
-                        Warunkiem oswobodzenia jest wygranie Konfliktu Siły z atakującym oraz poświęcenie 1 rundy na oswobodzenie (lasso) lub poświęcenie 1k2 rund na oswobodzenie (bolas).
+                        Warunkiem oswobodzenia jest wygranie Konfliktu Siły z atakującym oraz poświęcenie 1 rundy na oswobodzenie (lasso)
+                        lub poświęcenie 1k2 rund na oswobodzenie (bolas).
                     </td>
                 </tr>
+
             </tbody>
         </table>
+        
+        
     </div>
 {% endblock content %}
