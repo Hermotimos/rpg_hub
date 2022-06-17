@@ -226,12 +226,12 @@ def include_silent_participants(results: List[GroupedResult], thread: communicat
 
 @register.filter
 def trim_nums(text: str):
-    # Remove level numbers in perks' names (ex. 'Uniki 2' -> 'Uniki').
-    if text[-1:] in [str(num) for num in range(1, 10)]:
-        return text[:-2]
     # Remove level numbers in perks' names (ex. 'Uniki 0.5' -> 'Uniki').
-    if text.split('.')[0][-1:] == 0:
+    if text.split('.')[0][-1:] == '0':
         return text.split('.')[0][:-1].strip()
+    # Remove level numbers in perks' names (ex. 'Uniki 2' -> 'Uniki').
+    if text[-1:] in [str(num) for num in range(0, 10)]:
+        return text[:-2]
     return text
 
 
