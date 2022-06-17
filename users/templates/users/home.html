@@ -2,6 +2,10 @@
 {% load custom_filters %}
 
 {% block content %}
+
+<!-- TODO del condition when ready -->
+{% if current_profile.user.username != 'Marta' and current_profile.user.username != 'Dawid' and current_profile.user.username != 'Hubert' and current_profile.user.username != 'Tomek' %}
+
     <article>
         
         <!--   Beginning of a random paragraph from a random GameEvent    -->
@@ -59,5 +63,7 @@
         </section>
         
     </article>
+
+{% endif %}
 
 {% endblock content %}

@@ -69,6 +69,10 @@
                     </li>
                 {% endwith %}
                 
+                
+            <!-- TODO del condition when ready -->
+            {% if current_profile.user.username != 'Marta' and current_profile.user.username != 'Dawid' and current_profile.user.username != 'Hubert' and current_profile.user.username != 'Tomek' %}
+
                 {% with unseen_debates=current_profile.unseen_debates %}
                     <li class="dropdown pr-4 mr-auto">
                         <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
@@ -151,6 +155,9 @@
                     </li>
                 {% endif %}
     
+                
+            {% endif %}
+            
             </ul>
             <!-- End Navbar Left Side -->
     

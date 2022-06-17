@@ -9,13 +9,16 @@
     <aside>
         <img class="account-img-sidebar mb-1" onload="showTime()" src="{{ current_profile.image.url }}">
         <h3 class="mb-4 text-center">
-            <a href="{% url 'prosoponomikon:character' current_profile.character.id %}">
-               {{ current_profile.character.fullname }}
-            </a>
-        </h3>
-            {% if current_profile.status == 'gm' %}
-                <span class="h5 float-right" id="time"></span>
+            
+            <!-- TODO del condition when ready -->
+            {% if current_profile.user.username != 'Marta' and current_profile.user.username != 'Dawid' and current_profile.user.username != 'Hubert' and current_profile.user.username != 'Tomek' %}
+                <a href="{% url 'prosoponomikon:character' current_profile.character.id %}">
+                   {{ current_profile.character.fullname }}
+                </a>
+            {% else %}
+                {{ current_profile.character.fullname }}
             {% endif %}
+        </h3>
         
         <!-- For game master -->
         {% if current_profile.status == 'gm' %}
