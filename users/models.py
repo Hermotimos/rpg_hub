@@ -185,19 +185,24 @@ class Profile(Model):
 
     @property
     def unseen_announcements(self):
-        from communications.models import Announcement, Statement
-        unseen_statements = Statement.objects.exclude(seen_by=self)
-        return Announcement.objects.filter(
-            participants=self,
-            statements__in=unseen_statements)
-        
+        from communications.models import Announcement, AnnouncementStatement
+        announcements = Announcement.objects.filter(
+            statements__in=AnnouncementStatement.objects.exclude(seen_by=self)
+        ).distinct()
+        if self.status == 'gm':
+            return announcements.filter(participants=self)
+        return announcements
+
     @property
     def unseen_debates(self):
-        from communications.models import Statement, Debate
-        unseen_remarks = Statement.objects.exclude(seen_by=self)
-        return Debate.objects.filter(
-            participants=self,
-            statements__in=unseen_remarks).distinct()
+        from communications.models import DebateStatement, Debate
+        debates = Debate.objects.filter(
+            statements__in=DebateStatement.objects.exclude(seen_by=self)
+        ).distinct()
+        if self.status != 'gm':
+            return debates.filter(participants=self)
+        return debates
+        
 
     @property
     def can_view_all(self):
