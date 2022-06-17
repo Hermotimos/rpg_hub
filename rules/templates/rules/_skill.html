@@ -30,7 +30,7 @@
                         <!-- When called from Prosoponomikon skip all levels but the highest -->
                     {% else %}
                         {% with level_img='img/'|add:skill_level.level|add:'.png' %}
-                            {% with skill_or_synergy_level=skill_level %}
+                            {% with skill_or_synergy_level=skill_level type='skill_level' %}
                                 {% include 'rules/_skill_or_synergy_level.html' %}
                             {% endwith %}
                         {% endwith %}

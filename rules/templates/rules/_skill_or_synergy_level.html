@@ -8,9 +8,15 @@
         <div class="pl-1">
             {% if skilltype_kind != 'Moce Kapłańskie' and skilltype_kind != 'Zaklęcia' and skilltype_kind != 'Moce Teurgiczne' %}
                 {% if current_profile.status == 'gm' %}
-                    <a href="{% url 'admin:rules_synergylevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
-                        <img class="img-xs" src="{% static level_img %}">
-                    </a>
+                    {% if type == 'skill_level' %}
+                        <a href="{% url 'admin:rules_skilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                            <img class="img-xs" src="{% static level_img %}">
+                        </a>
+                    {% elif type == 'skill_level' %}
+                        <a href="{% url 'admin:rules_synergylevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                            <img class="img-xs" src="{% static level_img %}">
+                        </a>
+                    {% endif %}
                 {% else %}
                     <img class="img-xs" src="{% static level_img %}">
                 {% endif %}
