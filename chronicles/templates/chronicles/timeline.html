@@ -248,14 +248,16 @@
                         {% if event.participants.all %}
                             <div class="pb-1">
                                 {% for profile in event.participants.all %}
-                                    {% if profile.status == 'player' or profile == current_profile %}
-                                        <a href="{% url 'prosoponomikon:character' profile.character.id %}"
-                                           data-toggle="tooltip" data-placement="top" data-html="true"
-                                           title='<span class="font-italic">Prosoponomikon<br>"{{ profile }}"</span>'>
-                                            <div class="d-inline">
-                                               <img class="rounded-circle portait img-xs border border-dark mt-1" src="{{ profile.image.url }}">
-                                            </div>
-                                        </a>
+                                    {% if not profile.only_indirectly %}
+                                        {% if profile.status == 'player' or profile == current_profile %}
+                                            <a href="{% url 'prosoponomikon:character' profile.character.id %}"
+                                               data-toggle="tooltip" data-placement="top" data-html="true"
+                                               title='<span class="font-italic">Prosoponomikon<br>"{{ profile }}"</span>'>
+                                                <div class="d-inline">
+                                                   <img class="rounded-circle portait img-xs border border-dark mt-1" src="{{ profile.image.url }}">
+                                                </div>
+                                            </a>
+                                        {% endif %}
                                     {% endif %}
                                     {% if forloop.counter|divisibleby:2 and not forloop.last and profile.status == 'player' %}<br>{% endif %}
                                 {% endfor %}
