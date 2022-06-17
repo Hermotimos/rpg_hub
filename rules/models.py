@@ -407,7 +407,7 @@ class Skill(Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        if self.version_of:
+        if self.version_of and self.weapon:
             weapon = f": {self.weapon.name}" if self.weapon else ""
             self.name = str(self.version_of.name) + weapon
         super().save(*args, **kwargs)
