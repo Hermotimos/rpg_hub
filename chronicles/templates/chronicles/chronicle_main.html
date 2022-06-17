@@ -42,19 +42,19 @@
             <div class="container mt-4 p-0 ml-lg-n4 ml-xl-n5">
                 {% for game in games %}
                     {% if game.chapter %}
-                        <div class="row ">
-                            <div class="col-1 p-0 pt-1 text-right">
-                                 {{ forloop.counter }}.
+                        <div class="row">
+                            <div class="col-1 pt-1">
+                            
                             </div>
                             <div class="col-1 p-0 pl-1">
                                 <figure class="figure mb-0" data-toggle="tooltip" data-placement="right" title="{{ game.title }}">
                                     <img class="img-game" src="{{ game.chapter.image.url }}">
                                 </figure>
                             </div>
-                            <div class="col-10 mb-2 ml-n1 ml-sm-n3 ml-lg-n4 ml-xl-n4 pl-2 pl-lg-0">
+                            <div class="col-10 mb-1 ml-n1 ml-sm-n3 ml-lg-n4 ml-xl-n4 pl-2 pl-lg-0">
                                 <div class="mt-1 font-italic">
                                     <a href="{% url 'chronicles:chronicle-game' game.id %}"
-                                       class="mr-2 {% if game.any_participants == 0 and current_profile.status != 'gm' %} text-muted {% endif %}">
+                                       class="mr-2 font-18 {% if game.any_participants == 0 and current_profile.status != 'gm' %} text-muted {% endif %}">
                                         {{ game.title }}
                                     </a>
                                     <div class="d-inline-flex">

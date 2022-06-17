@@ -32,12 +32,17 @@ def chronicle_main_view(request):
         debates = current_profile.threads_participated.filter(kind='Debate')
         debates = debates.prefetch_related('participants__character')
         
+        known_profiles = Profile.players.filter(
+            Q(character__in=current_profile.characters_known_annotated())
+            | Q(id=current_profile.id)
+        ).prefetch_related('character')
+        
         events = GameEvent.objects.filter(
             Q(id__in=current_profile.events_participated.all())
             | Q(id__in=current_profile.events_informed.all()))
         events = events.prefetch_related(
             Prefetch('debates', queryset=debates),
-            'participants__character')
+            Prefetch('participants', queryset=known_profiles))
         
         games = GameSession.objects.filter(game_events__in=events)
         games = games.prefetch_related(Prefetch('game_events', queryset=events))
