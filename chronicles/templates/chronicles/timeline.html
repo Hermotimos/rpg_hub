@@ -218,7 +218,7 @@
                     <td class="text-left text-sm-justify align-top font-italic hover-pointer pl-2 pr-2 pb-3 timeline"
                         data-toggle="modal" data-target="#event_{{ event.id }}">
                         <span class="{% if current_profile not in event.participants.all and current_profile.status != 'gm' %} text-muted {% endif %}"
-                              data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic">Pokaż Kronikę wydarzenia</span>'>
+                              data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic">Pokaż pełny opis wydarzenia</span>'>
                             {{ event.description_short|custom_linebreaksbr:1 }}
                         </span>
                         <!-- Modal -->
@@ -251,7 +251,7 @@
                                     {% if profile.status == 'player' or profile == current_profile %}
                                         <a href="{% url 'prosoponomikon:character' profile.character.id %}"
                                            data-toggle="tooltip" data-placement="top" data-html="true"
-                                           title='<span class="font-italic">Prosoponomikon:<br>"{{ profile }}"</span>'>
+                                           title='<span class="font-italic">Prosoponomikon<br>"{{ profile }}"</span>'>
                                             <div class="d-inline">
                                                <img class="rounded-circle portait img-xs border border-dark mt-1" src="{{ profile.image.url }}">
                                             </div>
@@ -268,7 +268,7 @@
                                     {% if profile.status == 'player' or profile == current_profile %}
                                         <a href="{% url 'prosoponomikon:character' profile.character.id %}"
                                            data-toggle="tooltip" data-placement="top" data-html="true"
-                                           title='<span class="font-italic">Prosoponomikon:<br>"{{ profile }}"</span>'>
+                                           title='<span class="font-italic">Prosoponomikon<br>"{{ profile }}"</span>'>
                                             <div class="d-inline">
                                                <img class="rounded-circle img-grayscale portait img-xs border border-dark mt-1" src="{{ profile.image.url }}">
                                             </div>
@@ -285,7 +285,7 @@
                             {% for location in event.locations.all %}
                                 <li class="pl-0-05">
                                     <a class="hover-pointer" href="{% url 'toponomikon:location' location.name %}"
-                                       data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic">Toponomikon:<br>"{{ location.name }}"</span>'>
+                                       data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic">Toponomikon<br>"{{ location.name }}"</span>'>
                                         <small>
                                             {{ location.name }}
                                         </small>
@@ -301,7 +301,7 @@
                         {% else %}
                             <a href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">
                                 <small data-toggle="tooltip" data-placement="top" data-html="true"
-                                       title='<span class="font-italic">Kronika:<br>"{{ event.game.title }}"</span>'>
+                                       title='<span class="font-italic">Kronika<br>"{{ event.game.title }}"</span>'>
                                     {% if event.game.game_no > 0 %}
                                         -{{ event.game.game_no }}-
                                     {% else %}

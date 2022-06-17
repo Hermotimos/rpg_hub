@@ -40,7 +40,7 @@ def participants(request):
         objects = objects.filter(
             events_participated__in=profile.events_participated.all()
         )
-    return objects.distinct().select_related()
+    return objects.distinct().select_related().prefetch_related('character', 'user')
 
 
 def games(request):
