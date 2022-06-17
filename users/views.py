@@ -177,6 +177,9 @@ def game_event_with_caption(game_events_qs):
     paragraph from a random GameEvent.description_long from queryset.
     The paragraph has to have a minimum number of words as per words_min.
     """
+    if len(game_events_qs) == 0:
+        return None
+    
     words_min = 40
     words_limit = 70
     game_event = sample_from_qs(qs=game_events_qs, max_size=1)[0]
