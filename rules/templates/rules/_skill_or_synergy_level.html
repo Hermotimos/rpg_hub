@@ -12,7 +12,7 @@
                         <a href="{% url 'admin:rules_skilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
                             <img class="img-xs" src="{% static level_img %}">
                         </a>
-                    {% elif type == 'skill_level' %}
+                    {% elif type == 'synergy_level' %}
                         <a href="{% url 'admin:rules_synergylevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
                             <img class="img-xs" src="{% static level_img %}">
                         </a>
