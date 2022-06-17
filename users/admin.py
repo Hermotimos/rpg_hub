@@ -4,7 +4,7 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.html import format_html
 
 from rpg_project.utils import update_rel_objs, formfield_with_cache
-from rules.models import Profession, SubProfession, Plate, Shield,  WeaponType, Skill
+from rules.models import Profession, SubProfession, Plate, Shield,  WeaponType, Skill, RegularSkill
 from users.models import Profile
 
 
@@ -18,21 +18,21 @@ class ProfileAdminForm(forms.ModelForm):
     """
     
     skills = forms.ModelMultipleChoiceField(
-        queryset=Skill.objects.all(),
+        queryset=RegularSkill.objects.all(),
         required=False,
-        widget=FilteredSelectMultiple('Skills', False),
+        widget=FilteredSelectMultiple('RegularSkills', False),
         label=format_html(warning),
     )
     professions = forms.ModelMultipleChoiceField(
         queryset=Profession.objects.all(),
         required=False,
-        widget=FilteredSelectMultiple('Profession', False),
+        widget=FilteredSelectMultiple('Professions', False),
         label=format_html(warning),
     )
     subprofessions = forms.ModelMultipleChoiceField(
         queryset=SubProfession.objects.all(),
         required=False,
-        widget=FilteredSelectMultiple('SubProfession', False),
+        widget=FilteredSelectMultiple('SubProfessions', False),
         label=format_html(warning),
     )
     plates = forms.ModelMultipleChoiceField(

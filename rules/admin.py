@@ -360,28 +360,14 @@ class WeaponTypeAdmin(admin.ModelAdmin):
         models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
     }
     list_display = [
-        'name', 'description', 'picture_set', 'size', 'trait',
-        'avg_price_value', 'avg_price_currency',
+        'name', 'description', 'size', 'trait', 'avg_price_value',
+        'avg_price_currency', 'avg_weight',
     ]
     list_editable = [
-        'description', 'picture_set', 'size', 'trait', 'avg_price_value',
-        'avg_price_currency',
+        'description', 'size', 'trait', 'avg_price_value',
+        'avg_price_currency', 'avg_weight',
     ]
     search_fields = ['name', 'description']
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
-        for field in [
-            'picture_set',
-        ]:
-            if db_field.name == field:
-                formfield = formfield_with_cache(field, formfield, request)
-        return formfield
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        qs = qs.prefetch_related('picture_set__pictures')
-        return qs
 
 
 @admin.register(Plate)
