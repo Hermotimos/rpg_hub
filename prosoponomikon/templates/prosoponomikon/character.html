@@ -197,7 +197,9 @@
                     <section id="skills_regular" class="tab-panel">
                         {% with max_level_only=True skill_types=skill_types_regular skills=skills_regular max_level_only=True synergies=synergies_regular panel_id=1 %}
                             {% include 'rules/_skills_by_type.html' %}
-                            {% include 'rules/_synergies.html' %}
+                            {% if synergies_regular %}
+                                {% include 'rules/_synergies.html' %}
+                            {% endif %}
                         {% endwith %}
                     </section>
                 {% endif %}
@@ -231,7 +233,9 @@
                     <section id="priest_powers_and_mental_skills" class="tab-panel">
                         {% with skill_types=skill_types_priests skills=skills_priests max_level_only=True synergies=synergies_priests panel_id=2 %}
                             {% include 'rules/_skills_by_type.html' %}
-                            {% include 'rules/_synergies.html' %}
+                            {% if synergies_priests %}
+                                {% include 'rules/_synergies.html' %}
+                            {% endif %}
                         {% endwith %}
                     </section>
                 {% endif %}    
@@ -241,7 +245,9 @@
                     <section id="sorcerers_powers_and_mental_skills" class="tab-panel">
                         {% with skill_types=skill_types_sorcerers skills=skills_sorcerers max_level_only=True synergies=synergies_sorcerers panel_id=2 %}
                             {% include 'rules/_skills_by_type.html' %}
-                            {% include 'rules/_synergies.html' %}
+                            {% if synergies_sorcerers %}
+                                {% include 'rules/_synergies.html' %}
+                            {% endif %}
                         {% endwith %}
                     </section>
                 {% endif %}
@@ -251,7 +257,9 @@
                     <section id="theurgists_powers_and_mental_skills" class="tab-panel">
                         {% with skill_types=skill_types_theurgists skills=skills_theurgists max_level_only=True synergies=synergies_theurgists panel_id=2 %}
                             {% include 'rules/_skills_by_type.html' %}
-                            {% include 'rules/_synergies.html' %}
+                            {% if synergies_theurgists %}
+                                {% include 'rules/_synergies.html' %}
+                            {% endif %}
                         {% endwith %}
                     </section>
                 {% endif %}

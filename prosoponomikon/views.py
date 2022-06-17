@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch, Q
+from django.db.models import Prefetch, Q, QuerySet
 from django.db.models.functions import Substr, Lower
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -37,17 +37,25 @@ def prosoponomikon_characters_view(request):
 def prosoponomikon_character_view(request, character_id):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
-    knowledge_packets, known_characters, synergies, dialogue_packets = [], [], [], []
-    skill_types_regular, skill_types_priests, skill_types_sorcerers, skill_types_theurgists = [], [], [], []
-    skills_regular, skills_priests, skills_sorcerers, skills_theurgists = [], [], [], []
-    synergies_regular, synergies_priests, synergies_sorcerers, synergies_theurgists = [], [], [], []
-    
+    # Declare empty variables
+    [
+        knowledge_packets, known_characters, dialogue_packets,
+        skill_types_regular, skill_types_priests, skill_types_sorcerers,
+        skill_types_theurgists,
+        skills_regular, skills_priests, skills_sorcerers, skills_theurgists,
+        synergies_regular, synergies_priests, synergies_sorcerers,
+        synergies_theurgists,
+    ] = [list() for _ in range(15)]
+
     if current_profile.character.id == character_id:
         # Players viewing their own Characters
         character = current_profile.character
     else:
         # Player or GM viewing other Characters
-        known_bio_packets = (current_profile.biography_packets.all() | current_profile.authored_bio_packets.all()).prefetch_related('picture_sets')
+        known_bio_packets = (
+            current_profile.biography_packets.all()
+            | current_profile.authored_bio_packets.all()
+        ).prefetch_related('picture_sets')
         characters = Character.objects.select_related('first_name')
         characters = characters.prefetch_related(
             Prefetch('biography_packets', queryset=known_bio_packets),
@@ -89,10 +97,10 @@ def prosoponomikon_character_view(request, character_id):
         skill_types_theurgists = skill_types_theurgists.filter(skills__in=skills_theurgists).distinct()
 
         synergies = character.profile.synergies_acquired_with_synergies_levels()
-        synergies_regular = synergies.exclude(skills__types__kinds__name="Mentalne"),
-        synergies_priests = synergies.filter(skills__types__kinds__name__in=["Mentalne", "Moce Kapłańskie"]),
-        synergies_sorcerers = synergies.filter(skills__types__kinds__name__in=["Mentalne", "Zaklęcia"]),
-        synergies_theurgists = synergies.filter(skills__types__kinds__name__in=["Mentalne", "Moce Teurgiczne"]),
+        synergies_regular = synergies.exclude(skills__types__kinds__name="Mentalne")
+        synergies_priests = synergies.filter(skills__types__kinds__name__in=["Mentalne", "Moce Kapłańskie"])
+        synergies_sorcerers = synergies.filter(skills__types__kinds__name__in=["Mentalne", "Zaklęcia"])
+        synergies_theurgists = synergies.filter(skills__types__kinds__name__in=["Mentalne", "Moce Teurgiczne"])
 
         knowledge_packets = character.profile.knowledge_packets.prefetch_related(
             'picture_sets__pictures').order_by('title')
