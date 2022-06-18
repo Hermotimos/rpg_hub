@@ -317,7 +317,7 @@ class SubProfessionAdmin(admin.ModelAdmin):
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "essential_skills":
             kwargs["queryset"] = Skill.objects.filter(
-                types__kinds__name__in=["Powszechne", "Mentalne"])
+                types__kinds__name__in=["Powszechne", "Mentalne"]).distinct()
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
     def get_queryset(self, request):
