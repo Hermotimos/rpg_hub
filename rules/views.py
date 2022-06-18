@@ -91,7 +91,7 @@ def rules_professions_view(request, profession_type):
     if not current_profile.can_view_all:
         professions = professions.filter(allowees__in=user_profiles)
         subprofessions = subprofessions.filter(allowees__in=user_profiles)
-        essential_skills = Skill.objects.filter(allowees__in=user_profiles)
+        essential_skills = Skill.objects.filter(allowees__in=user_profiles).distinct()
 
     subprofessions = subprofessions.prefetch_related(
         Prefetch('essential_skills', queryset=essential_skills)).distinct()
