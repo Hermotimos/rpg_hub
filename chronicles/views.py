@@ -73,7 +73,7 @@ def chronicle_game_view(request, game_id):
         'participants',
         'informees',
         'picture_sets',
-        'debates__statements__author',
+        'debates__statements__author__character',
         'debates__statements__seen_by',
         'debates__participants',
     )
@@ -102,7 +102,7 @@ def chronicle_chapter_view(request, chapter_id):
         'participants',
         'informees',
         'picture_sets',
-        'debates__statements__author',
+        'debates__statements__author__character',
         'debates__statements__seen_by',
         'debates__participants',
     )
@@ -133,8 +133,8 @@ def chronicle_all_view(request):
         'participants',
         'informees',
         'picture_sets',
-        'debates__statements__author',
-        # 'debates__statements__seen_by',   # TODO add in Postgres, now causes SQLite error "Too many SQl variables"
+        'debates__statements__author__character',
+        'debates__statements__seen_by',
         'debates__participants',
     )
     if not current_profile.can_view_all:
