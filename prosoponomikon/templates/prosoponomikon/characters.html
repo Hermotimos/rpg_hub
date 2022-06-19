@@ -15,10 +15,22 @@
     <div class="container">
         <div class="row d-flex justify-content-center text-center mb-5">
             {% for character_group in character_list %}
-                <a class="col font-12 border-double p-2 mt-2 mx-1" style="max-width:2rem;min-width:2rem;"
-                    href="{{ request.path }}#letter-{{ character_group.grouper }}">
+            <div class="dropdown">
+                <div class="col hover-pointer font-12 border-double p-2 mt-2 mx-1" style="max-width:2rem;min-width:2rem;"
+                     id="menu_{{ forloop.counter }}" data-toggle="dropdown" >
                     {{ character_group.grouper|capfirst }}
-                </a>
+                </div>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="menu_{{ forloop.counter }}">
+                    <li>
+                        <a class="pl-2" href="{{ request.path }}#letter-{{ character_group.grouper }}">{{ character_group.grouper|capfirst }}</a>
+                    </li>
+                    {% for character in character_group.list %}
+                        <li>
+                            <a class="pl-2" href="{{ request.path }}#character_{{ character.id }}">{{ character.fullname }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
             {% endfor %}
         </div>
     </div>
