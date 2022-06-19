@@ -1,0 +1,15 @@
+https://www.youtube.com/watch?v=uwCdiJ2RFCY
+
+SCENARIO 1
+If Fontello is accessed from the PC whose cookies it stores, than just add icons to those already chosen, (maybe customize their names),
+and replace  "fontello.css" file and replace fontello files within "font" directory (do not remove other files from there).
+
+Place config.json inside "font" directory, as it may be usefull in the second scenario.
+
+REMEMBER - Copy the following files from the old to the new 'font' directory
+1) IMFellGreatPrimer-Italic.ttf
+2) IMFellGreatPrimer-Regular.ttf
+3) OFL.txt
+
+SCENARIO 2
+If Fontello is accessed from a new machine, use Import feature (requires config.json file).

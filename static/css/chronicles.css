@@ -1,0 +1,165 @@
+
+
+/*****************************************************************************/
+/***************************** TIMELINE filters ******************************/
+/*****************************************************************************/
+
+select option {font-size: 0.85rem; padding-left: 0.3rem;}
+
+select {height: 13rem;}
+
+.input-18 input[type="text"] {width: 18rem;}
+
+@media only screen and (min-width: 200px) and (max-width: 499px) {
+    select {width: 18rem;}
+    .input-18 input[type="text"] {width: 18rem;}
+    .img-timeline-filter {height: 60px;}
+}
+@media only screen and (min-width: 500px) and (max-width: 991px) {
+    select {width: 24rem;}
+    .input-18 input[type="text"] {width: 24rem;}
+    .img-timeline-filter {height: 65px;}
+}
+@media only screen and (min-width: 992px) {
+    select {width: 17rem;}
+    .input-18 input[type="text"] {width: 17rem;}
+    .img-timeline-filter {height: 50px;}
+}
+@media only screen and (min-width: 1200px) {
+    select {width: 20rem;}
+    .input-18 input[type="text"] {width: 20rem;}
+    .img-timeline-filter {height: 55px;}
+}
+@media only screen and (min-width: 1400px) {
+    select {width: 21rem;}
+    .input-18 input[type="text"] {width: 21rem;}
+}
+
+
+
+
+
+
+/*****************************************************************************/
+/****************************** TIMELINE Table *******************************/
+/*****************************************************************************/
+
+table.timeline {border: double;}
+
+.timeline .date {width: 8%;}
+.timeline .plot_thread {width: 17%;}
+.timeline .description {width: %;}
+.timeline .participants {width: 6.5%;}
+.timeline .locations {width: 12%;}
+.timeline .actions {width: 3%;}
+
+
+.timeline tr:nth-child(even) {background-color: #f2f2f2;}
+
+.timeline thead {
+    background-color: #363636;
+    border-bottom: double;
+    color: #ffffff;
+}
+
+.timeline th {font-weight: normal;}
+
+.timeline td {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+
+@media only screen and (max-width: 400px) {
+    td.timeline {
+        font-size: 0.6rem !important;
+        padding-left: 0.1rem !important;
+        padding-right: 0.1rem !important;
+        font-weight: normal;
+    }
+    .timeline img {height: 0.9rem;}
+    th.timeline {
+        transform: rotate(270deg);
+        white-space: nowrap;
+    }
+}
+@media only screen and (min-width: 401px) {
+    td.timeline {
+        font-size: 0.7rem !important;
+    }
+}
+@media only screen and (min-width: 601px) {
+    td.timeline {
+        font-size: 0.8rem !important;
+    }
+}
+
+
+
+/*****************************************************************************/
+/****************************** CHRONICLE imgs *******************************/
+/*****************************************************************************/
+.img-chapter {
+    float: left;
+    height: 45px;
+    width: auto;
+}
+
+.img-chapter-header {
+    float: left;
+}
+
+@media only screen and (max-width: 600px) {
+    .img-chapter-header {
+        height: 3rem;
+        width: 3rem;
+    }
+    .chapter-title {font-size: 1.6rem;}
+}
+@media only screen and (min-width: 601px) {
+    .img-chapter-header {
+        height: 4rem;
+        width: 4rem;
+    }
+    .chapter-title {font-size: 2rem;}
+}
+
+@media only screen and (min-width: 1001px) {
+    .img-chapter-header {
+        height: 5.5rem;
+        width: 5.5rem;
+    }
+    .chapter-title {font-size: 2.62rem;}
+}
+
+.img-game {
+    float: left;
+    height: 30px;
+    width: auto;
+}
+
+
+/*****************************************************************************/
+/***************************** CHRONICLE Audio *******************************/
+/*****************************************************************************/
+
+audio.chronicle-audio-main {
+    height: 1.6rem;
+    width: 100%;
+    max-width: 100rem;
+    margin-top: -0.25rem;
+    padding: 0 0.15rem 0 0.15rem;
+    background-color: none;
+    border-radius: 1rem;
+}
+
+
+
+
+
+
+/*****************************************************************************/
+/******************************** PURGATORY **********************************/
+/*****************************************************************************/
+
+

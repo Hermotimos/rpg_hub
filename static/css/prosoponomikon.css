@@ -1,0 +1,17 @@
+
+ul.dropdown-menu {
+  top: auto !important;
+  transform: none !important;
+  width: 15rem;
+  min-width: auto;
+  max-height: 18rem !important;
+  overflow-y: auto !important;
+
+}
+@media only screen and (max-width: 600px) {
+    ul.dropdown-menu {
+        position:fixed !important;
+        right: auto !important;
+        left: 2rem !important;
+    }
+}

@@ -1,0 +1,609 @@
+/*****************************************************************************/
+/******************************* SITE LAYOUT *********************************/
+/*****************************************************************************/
+
+body {
+    background: #fafafa;
+    margin-top: 4rem;
+    color: #444444;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+article.content {min-height: 700px}
+
+article.top-space {margin-top: 5rem;}
+article.top-image {margin-top: 1.5rem;}
+article.top-button {margin-top: 0.5rem;}
+
+footer {
+    color: gray;
+    margin-top: 5rem;
+}
+
+@media only screen and (max-width: 600px) {
+    .header-img {
+        height: 4rem;
+        width: 4rem;
+    }
+    .page-title {
+        font-size: 1.6rem;
+        line-height: 1;
+    }
+    .header-title {font-size: 1.4rem;}
+}
+@media only screen and (min-width: 601px) {
+    .header-img {
+        height: 6.25rem;
+        width: 6.25rem;
+    }
+    .page-title {
+        font-size: 2.62rem;
+        line-height: 1;
+    }
+    .header-title {font-size: 1.5rem;}
+}
+
+.bg-gray {background-color: #f2f2f2;}
+
+.pt-01 {padding-top: 0.1rem}
+
+
+/*****************************************************************************/
+/********************************* GENERAL ***********************************/
+/*****************************************************************************/
+
+/* PREVENTS USERS FROM SELECTING TEXT ON PAGE:
+*:not(textarea):not(input) {
+        user-select: none;
+}
+*/
+
+.border-bottom-dark {border-bottom: 1px solid #444444;}
+
+.btn-space {margin: 2px;}
+
+.errorlist {color: red;}
+
+.hide tr {display: none;}
+
+.pt-6, .py-6 {padding-top: 5rem !important;}
+.pr-6, .px-6 {padding-right: 5rem !important;}
+.pb-6, .py-6 {padding-bottom: 5rem !important;}
+.pl-6, .px-6 {padding-left: 5rem !important;}
+
+.pt-7, .py-7 {padding-top: 6rem !important;}
+.pr-7, .px-7 {padding-right: 6rem !important;}
+.pb-7, .py-7 {padding-bottom: 6rem !important;}
+.pl-7, .px-7 {padding-left: 6rem !important;}
+
+.pt-3_9rem, .py-3_9rem {padding-top: 3.9rem !important;}
+.pr-3_9rem, .px-3_9rem {padding-right: 3.9rem !important;}
+.pb-3_9rem, .py-3_9rem {padding-bottom: 3.9rem !important;}
+.pl-3_9rem, .px-3_9rem {padding-left: 3.9rem !important;}
+
+.pt-4_7rem, .py-3_9rem {padding-top: 4.7rem !important;}
+.pr-4_7rem, .px-3_9rem {padding-right: 4.7rem !important;}
+.pb-4_7rem, .py-3_9rem {padding-bottom: 4.7rem !important;}
+.pl-4_7rem, .px-3_9rem {padding-left: 4.7rem !important;}
+
+
+td.align-center {text-align: center;}
+td.align-right {text-align: right;}
+
+.scrollup {
+    width: 64px;
+    height: 64px;
+    text-decoration: none;
+    background: url('/static/img/up.png') 0px 0px;
+    background-size: cover;
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    display: none;
+}
+
+.border-double {
+    border: double #444444;
+}
+
+
+
+
+
+/*****************************************************************************/
+/******************************* TEXT & FONT *********************************/
+/*****************************************************************************/
+
+@font-face {
+    font-family: 'IM Fell Great Primer';
+    src: url("../font/IMFellGreatPrimer-Regular.ttf");
+}
+.line-height-13 {line-height: 1.3 !important;}
+
+* {font-family: 'IM Fell Great Primer';}
+
+.deep-red {color: #C70039;}
+
+.font-10 {font-size: 0.625rem;}
+.font-11 {font-size: 0.7rem;}   /* not exactly, but this is desirable */
+.font-12 {font-size: 0.75rem;}
+.font-13 {font-size: 0.8125rem;}
+.font-14 {font-size: 0.875rem;}
+.font-15 {font-size: 0.9375rem;}
+.font-16 {font-size: 1rem;}
+.font-17 {font-size: 1.0625rem;}
+.font-18 {font-size: 1.125rem;}
+
+.font-24 {font-size: 1.5rem;}
+.font-25 {font-size: 1.562rem;}
+.font-30 {font-size: 1.875rem;}
+.font-40 {font-size: 2.5rem;}
+.font-50 {font-size: 3.125rem;}
+/*
+19px 	1.1875rem
+20px 	1.25rem
+21px 	1.3125rem
+22px 	1.375rem
+23px 	1.4375rem
+24px 	1.5rem
+*/
+
+
+small.red {color: red;}
+
+small.smaller {font-size: 12px;}
+
+.small-caps {font-variant: small-caps;}
+
+
+@media only screen and (min-width: 600px) {
+    .sm-nowrap {white-space: nowrap;}
+}
+
+.text-muted-more {color: #bfbfbf;}
+
+
+/* Classes for Fontello font-icons */
+.icon-medium {font-size: 0.8rem;}
+.icon-small {font-size: 0.6rem;}
+
+
+th.orientation-rl-tb {
+    writing-mode: vertical-rl;
+    transform:scale(-1);
+    vertical-align: top !important;
+}
+
+
+.fading-bottom {
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+}
+.fading-top {
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0));
+}
+.fading-right {
+  -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0));
+}
+.fading-left {
+  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0));
+}
+.fading-top-bottom {
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0), rgba(0,0,0,1), rgba(0,0,0,0));
+}
+
+
+
+/*****************************************************************************/
+/********************************* IMAGES ***********************************/
+/*****************************************************************************/
+
+img {border: double #444444;}
+
+/*
+    Make all imgs unclickable. Disables "Pokaż obraz" feature that would enable
+    site users to view the original form of pictures that are presented to them
+    in modified way (ex. grayscale for "known only indirectly").
+*/
+img {pointer-events: none;}
+
+/*
+    Make figure with class .pointer show pointer on hover. This allows pointer
+    over img tags (that have pointer-events: none).
+*/
+figure.pointer,
+div.pointer,
+span.pointer {cursor: pointer;}
+
+.portrait {
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+.img-xl {height: 5rem;}
+.img-lg {height: 4.2rem;}
+.img-md {height: 2.5rem;}
+.img-sm {height: 1.875rem;}
+.img-xs {height: 1.25rem;}
+.img-xxs {height: 0.9rem;}
+
+@media only screen and (max-width: 600px) {
+    .img-xl {height: 4rem;}
+}
+
+.img-season {
+    height: 25px;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    border: 0;
+}
+
+a.img-link {
+    opacity: 1;
+    filter: grayscale(0%);
+}
+a.img-link:hover {color: #444444;}
+
+
+img.img-grayscale {filter: grayscale(100%) !important;}
+img.img-grayscale:hover {filter: grayscale(0%);}
+
+/* Image zoom on hover */
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.img-hover-zoom {
+    position: relative;
+    margin: auto;
+    overflow: hidden;
+}
+.img-hover-zoom img {
+    max-width: 100%;
+    transition: all 1s;
+    display: block;
+    width: 100%;
+    height: auto;
+    transform: scale(1);
+    border-style: none;
+}
+
+.img-hover-zoom:hover img {transform: scale(1.2);}
+
+
+/* END Image zoom on hover */
+
+
+
+/* Prosoponomikon-based images, but user throughout the site */
+
+
+
+@media only screen and (min-width: 0px) {
+    span.character-name {font-size: 1.4rem;}
+    img.character {max-width: 7rem;}
+    img.character-detail {max-width: 8rem;}
+}
+@media only screen and (min-width: 600px) {
+    span.character-name {font-size: 1.5rem;}
+    img.character {max-width: 8rem;}
+    img.character-detail {max-width: 10rem;}
+}
+@media only screen and (min-width: 1000px) {
+    span.character-name {font-size: 1.6rem;}
+    img.character {max-width: 10rem;}
+    img.character-detail {max-width: 13rem;}
+}
+@media only screen and (min-width: 1200px) {
+    span.character-name {font-size: 1.9rem;}
+    img.character {max-width: 12rem;}
+    img.character-detail {max-width: 15rem;}
+}
+
+
+@media only screen and (min-width: 320px) {
+    img.character-toponomikon {max-width: 5rem;}
+    div.img-hover-zoom {margin: 0.1rem}
+}
+@media only screen and (min-width: 600px) {
+    img.character-toponomikon {max-width: 6rem;}
+    div.img-hover-zoom {margin: 0.15rem}
+}
+@media only screen and (min-width: 800px) {
+    img.character-toponomikon {max-width: 7rem;}
+    div.img-hover-zoom {margin: 0.15rem}
+}
+@media only screen and (min-width: 1000px) {
+    img.character-toponomikon {max-width: 8rem;}
+}
+@media only screen and (min-width: 1200px) {
+    img.character-toponomikon {max-width: 9rem;}
+}
+
+
+
+
+/* Required for img modal to show only imgs and center them on the screen */
+.img-modal .modal-dialog {
+    text-align:center;
+    max-width:100rem;
+    margin-top:5rem;
+}
+.img-modal .modal-content {
+    display:inline-block;
+    width:auto;
+    max-width:100rem;
+}
+.img-modal .modal-body {
+    background-color: none;
+    padding: 0;
+}
+.img-modal .modal-body img {
+    max-height: 50rem;
+}
+@media only screen and (max-width: 600px) {
+    .img-modal .modal-body img {
+        max-height: 60rem;
+        max-width: 19rem;
+    }
+}
+.modal-backdrop {opacity:0.9 !important;}
+
+
+
+/* Modal for Chronicle filters */
+.filters-modal .modal-dialog {
+    max-width: 70rem;
+    margin: 1rem auto auto auto
+}
+
+/* Modal for Thread tag */
+.tags-modal .modal-dialog {
+    max-width: 15rem;       /* provided that ThreadTag.title max_lenght=20 */
+    margin: 1rem auto auto auto
+}
+
+
+/* Image in modal */
+.modal-img img {
+    max-width: 100%;
+    max-height: 330px;
+}
+
+
+
+
+/*****************************************************************************/
+/************************** LINKS & COLLAPSIBLES *****************************/
+/*****************************************************************************/
+
+a {color: #444444;}
+
+a:hover {
+    text-decoration: none;
+    color: #3366cc;
+}
+
+.hover-pointer li:hover, a:hover {cursor: pointer;}
+
+td.hover-pointer:hover {cursor: pointer;}
+
+.hover-blue:hover {
+    color: #3366cc;
+    cursor: pointer;
+}
+.hover-pointer:hover {
+    cursor: pointer;
+}
+
+a.text-muted:hover {color: #3366cc !important;}
+
+
+/*****************************************************************************/
+/********************************** FORMS ************************************/
+/*****************************************************************************/
+
+.multiselect-form-small select {
+    min-height: 150px;
+    width: 400px;
+}
+
+.forms td {
+    vertical-align: top;
+    padding: 2px 10px;
+}
+
+
+/*****************************************************************************/
+/********************************** LISTS ************************************/
+/*****************************************************************************/
+
+ul.bullets-1 li {list-style: "✧";}
+ul.bullets-2 li {list-style: "✵";}
+ul.bullets-3 li {list-style: "❖";}
+ul.bullets-4 li {list-style: "•";}
+ul.bullets-5 li {list-style: "✰";}
+
+
+nav ul.bullets-1 {margin-bottom: 0.5rem;}
+nav ul.bullets-1 li {color: #cbd5db;}
+
+.bullets-sm li::marker {font-size: 70%;}
+.bullets-lg li::marker {font-size: 120%;}
+.bullets-xl li::marker {font-size: 170%;}
+
+.pl-0-05  {padding-left: 0.05rem;}
+.pl-0-10  {padding-left: 0.10rem;}
+.pl-0-15  {padding-left: 0.15rem;}
+.pl-0-20  {padding-left: 0.20rem;}
+
+
+li a {vertical-align: middle;}
+
+
+/*****************************************************************************/
+/*********************************** TABS ************************************/
+/*****************************************************************************/
+
+/* Tab Source: https://codepen.io/markcaron/pen/MvGRYV */
+
+/* Tab main interaction */
+.tabset > input[type="radio"] {
+  position: absolute;
+  left: -200vw;
+}
+
+.tabset .tab-panel {display: none;}
+
+.tabset > input:first-child:checked ~ .tab-panels > .tab-panel:first-child,
+.tabset > input:nth-child(3):checked ~ .tab-panels > .tab-panel:nth-child(2),
+.tabset > input:nth-child(5):checked ~ .tab-panels > .tab-panel:nth-child(3),
+.tabset > input:nth-child(7):checked ~ .tab-panels > .tab-panel:nth-child(4),
+.tabset > input:nth-child(9):checked ~ .tab-panels > .tab-panel:nth-child(5),
+.tabset > input:nth-child(11):checked ~ .tab-panels > .tab-panel:nth-child(6) {
+  display: block;
+}
+
+/* Tab Styling */
+
+.tabset > input:checked + label {border-color: #ccc;}
+.tabset > label:hover {color: #06c;}
+.tabset > label {
+  position: relative;
+  display: inline-block;
+  padding: 15px 15px 10px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Adds bottom border to tabs with multiline headers*/
+.tabset.multiline-header > label {
+  border-bottom: 1px solid transparent;
+}
+
+.tab-panel {
+  padding: 3rem 0rem;
+  border-top: 1px solid #ccc;
+}
+
+
+@media only screen and (max-width: 600px) {
+    .tabset label {font-size: 1.1rem;}
+}
+
+
+/* old
+.tabset > label:hover {color: #06c;}
+.tabset > label:hover::after,
+.tabset > input:focus + label::after,
+.tabset > input:checked + label::after {background: #06c;}
+.tabset > input:checked + label {
+  border-color: #ccc;
+  margin-bottom: -1px;
+}
+.tab-panel {
+  padding: 3rem 0rem;
+  border-top: 1px solid #ccc;
+}
+*/
+
+
+
+/*****************************************************************************/
+/************************* MODAL WITH INFORM FORM ****************************/
+/*****************************************************************************/
+
+
+/* Inform form */
+input.select-profile[type=checkbox] {display:none;}
+input.select-profile[type=checkbox] + label img:hover {cursor: pointer;}
+
+input.select-profile[type=checkbox] + label {
+    filter: saturate(25%) opacity(70%);
+    display:inline-block;
+}
+
+input.select-profile[type=checkbox]:checked + label {
+    filter: grayscale(0%);
+    display:inline-block;
+}
+
+
+
+
+
+/*****************************************************************************/
+/********************************** SKILLS ***********************************/
+/*****************************************************************************/
+
+
+@media only screen and (min-width: 0px) {
+    .skill-or-synergy-name {font-size: 1.1rem;}
+    .img-skill {
+        height: 2rem;
+        width: 2rem;
+    }
+}
+@media only screen and (min-width: 600px) {
+    .skill-or-synergy-name {font-size: 1.5rem;}
+    .img-skill {
+        height: 2.5rem;
+        width: 2.5rem;
+    }
+}
+@media only screen and (min-width: 1000px) {
+    .skill-or-synergy-name {font-size: 1.8rem;}
+    .img-skill {
+        height: 3rem;
+        width: 3rem;
+    }
+}
+@media only screen and (min-width: 1200px) {
+    .skill-or-synergy-name {font-size: 2.1rem;}
+    .img-skill {
+        height: 3.75rem;
+        width: 3.75rem;
+    }
+}
+
+
+/*****************************************************************************/
+/********************************** VARIA ************************************/
+/*****************************************************************************/
+/*
+Needed for the links anchored in GameEvents in Chronicle, Remarks in Debates
+and others to preserve proper position, not affected by the navbar covering
+the top of the page.
+*/
+div.anchor:before {
+    height: 5rem;
+    content: "";
+    display:block;
+}
+
+
+.content-section {
+    background: #ffffff;
+    padding: 10px 20px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+}
+
+.border-none {
+    border: none !important;
+}
+
+
+
+
