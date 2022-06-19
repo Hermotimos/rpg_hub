@@ -85,14 +85,18 @@ class ConditionAdmin(admin.ModelAdmin):
 @admin.register(ConditionalModifier)
 class ConditionalModifierAdmin(admin.ModelAdmin):
     filter_horizontal = ['combat_types', 'conditions']
-    list_display = ['__str__']
+    list_display = ['__str__', '_perks']
     readonly_fields = ['overview']
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         qs = qs.select_related('modifier__factor')
-        qs = qs.prefetch_related('combat_types', 'conditions')
+        qs = qs.prefetch_related('combat_types', 'conditions', 'perks')
         return qs
+
+    def _perks(self, obj):
+        perks = " | ".join([p.name for p in obj.perks.all()])
+        return format_html(f'<span>{perks}</span>')
 
 
 @admin.register(CombatType)
