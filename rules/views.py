@@ -10,8 +10,8 @@ from rules.models import (
     Skill, SkillType,
     WeaponType,
 )
-from rules.utils import get_overload_ranges, LOAD_LIMITS, \
-    get_own_professions, can_view_special_rules
+from rules.utils import get_overload_ranges, get_own_professions, \
+    can_view_special_rules, get_overload_ranges2
 from users.models import Profile
 
 
@@ -232,11 +232,13 @@ def rules_theurgy_view(request):
 @login_required
 def rules_tests_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
-    load_infos = [get_overload_ranges(v) for v in LOAD_LIMITS]
+    load_infos = get_overload_ranges()
+    load_infos2 = get_overload_ranges2()
     context = {
         'current_profile': current_profile,
         'page_title': 'Testy Cech',
         'load_infos': load_infos,
+        'load_infos2': load_infos2,
     }
     return render(request, 'rules/tests.html', context)
 

@@ -283,6 +283,36 @@
             Np. Postać o Sile 10 i Udźwigu Normalnym 20 kg nie wchodzi jeszcze w I Próg Przeciążenia, jeśli niesie na sobie 20.99 kg.
         </p>
         
+        <table class="table table-hover table-bordered table-sm mt-3">
+            <thead class="thead-dark align-center">
+                <tr>
+                    <th>Siła</th>
+                    <th>Udźwig Normalny</th>
+                    <th>I Próg Przeciążenia</th>
+                    <th>II Próg Przeciążenia</th>
+                    <th>III Próg Przeciążenia</th>
+                    <th>IV Próg Przeciążenia</th>
+                </tr>
+            </thead>
+            <tbody class="align-center">
+                {% for load_info in load_infos2 %}
+                    <tr>
+                        <th class="text-center">{{ forloop.counter }}</th>
+                        <td>{{ load_info.load_regular }}</td>
+                        <td>{{ load_info.overload_1 }}</td>
+                        <td>{{ load_info.overload_2 }}</td>
+                        <td>{{ load_info.overload_3 }}</td>
+                        <td>{{ load_info.overload_4 }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p>
+            Postać wchodzi w Próg Przeciążenia w chwili, gdy osiąga jego dolną wartość;
+            górne wartości Udźwigu Normalnego oraz Progów Przeciążenia mieszczą w sobie całość danego "kilograma".
+            Np. Postać o Sile 10 i Udźwigu Normalnym 20 kg nie wchodzi jeszcze w I Próg Przeciążenia, jeśli niesie na sobie 20.99 kg.
+        </p>
+        
         
     </div>
 

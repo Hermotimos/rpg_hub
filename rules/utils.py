@@ -47,13 +47,59 @@ LOAD_LIMITS = [
 ]
 
 
-def get_overload_ranges(vals: Tuple[int, int]) -> namedtuple:
-    load_regular, load_max = vals
-    third = (load_max - load_regular) // 3
-    overload_1 = f"{load_regular+1} - {load_regular+third}"
-    overload_2 = f"{load_regular+1+third} - {load_regular+third*2}"
-    overload_3 = f"{min(load_regular+1+third*2, load_max-1)} - {load_max-1}"
-    LoadInfo = namedtuple(
-        'LoadInfo',
-        ['load_regular', 'load_max', 'overload_1', 'overload_2', 'overload_3'])
-    return LoadInfo(load_regular, load_max, overload_1, overload_2, overload_3)
+def get_overload_ranges() -> namedtuple:
+    
+    def _get_overload_ranges(vals: Tuple[int, int]) -> namedtuple:
+        load_regular, load_max = vals
+        third = (load_max - load_regular) // 3
+        overload_1 = f"{load_regular + 1} - {load_regular + third}"
+        overload_2 = f"{load_regular + 1 + third} - {load_regular + third * 2}"
+        overload_3 = f"{min(load_regular + 1 + third * 2, load_max - 1)} - {load_max - 1}"
+        LoadInfo = namedtuple(
+            'LoadInfo',
+            ['load_regular', 'load_max', 'overload_1', 'overload_2',
+             'overload_3'])
+        return LoadInfo(load_regular, load_max, overload_1, overload_2, overload_3)
+    
+    return [_get_overload_ranges(v) for v in LOAD_LIMITS]
+    
+
+LOAD_LIMITS2 = [
+    [1, 0],
+    [2, 2],
+    [3, 3],
+    [4, 6],
+    [5, 9],
+    [6, 12],
+    [7, 15],
+    [8, 18],
+    [9, 20],
+    [10, 20],
+    [11, 21],
+    [12, 24],
+    [12, 26],
+    [14, 29],
+    [15, 32],
+    [16, 37],
+    [17, 42],
+    [18, 56],
+    [19, 70],
+    [20, 85]
+]
+
+
+def get_overload_ranges2() -> namedtuple:
+    
+    def _get_overload_ranges(vals: Tuple[int, int]) -> namedtuple:
+        strength, load_regular = vals
+        overload_1 = f"{load_regular + 1} - {load_regular + strength}"
+        overload_2 = f"{load_regular + strength + 1} - {load_regular + strength*2}"
+        overload_3 = f"{load_regular + strength*2 + 1} - {load_regular + strength*3}"
+        overload_4 = f"{load_regular + strength*3 + 1} - {load_regular + strength*4}"
+        LoadInfo = namedtuple(
+            'LoadInfo',
+            ['load_regular', 'overload_1', 'overload_2', 'overload_3', 'overload_4'])
+        return LoadInfo(
+            load_regular, overload_1, overload_2, overload_3, overload_4)
+    
+    return [_get_overload_ranges(v) for v in LOAD_LIMITS2]
