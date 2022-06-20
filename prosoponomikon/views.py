@@ -127,7 +127,7 @@ def prosoponomikon_character_view(request, character_id):
         knowledge_packets = character.profile.knowledge_packets.prefetch_related(
             'picture_sets__pictures').order_by('title')
         # known_characters = character.profile.characters_known_annotated()
-        acquaintanceships = current_profile.character.acquaintanceships()
+        acquaintanceships = character.acquaintanceships()
     
     # INFORM FORM
     if request.method == 'POST':
