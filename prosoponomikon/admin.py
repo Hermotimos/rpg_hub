@@ -156,6 +156,7 @@ class AcquaintanceshipAdmin(admin.ModelAdmin):
     list_editable = [
         'knowing_character', 'known_character', 'is_direct', 'knows_if_dead',
     ]
+    list_filter = ['known_character__profile__is_alive']
     list_select_related = ['knowing_character', 'known_character']
     search_fields = [
         'knowing_character__fullname', 'known_character__fullname'
