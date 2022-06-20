@@ -4,7 +4,7 @@ from prosoponomikon import views
 
 app_name = 'prosoponomikon'
 urlpatterns = [
-    path('characters/', views.prosoponomikon_characters_view, name='characters'),
+    path('acquaintanceships/', views.prosoponomikon_acquaintanceships_view, name='acquaintanceships'),
     path('character/<int:character_id>/', views.prosoponomikon_character_view,
          name='character'),
     path('character/<int:character_id>/bio-packet-form/<int:bio_packet_id>/',

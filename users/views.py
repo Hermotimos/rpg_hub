@@ -210,19 +210,21 @@ def home_view(request):
         current_profile = get_profile(request.user)
         request.session['profile_id'] = current_profile.id
     
-    known_characters = current_profile.characters_known_annotated()
+    # known_characters = current_profile.characters_known_annotated()
+    acquaintanceships = current_profile.character.acquaintanceships()
     known_locations = current_profile.locations_known_annotated()
     known_gameevents = current_profile.gameevents_known_annotated().annotate(
         text_len=Length('description_long')).filter(text_len__gt=400)
     
-    rand_characters = sample_from_qs(qs=known_characters, max_size=4)
+    # rand_characters = sample_from_qs(qs=known_characters, max_size=4)
+    rand_acquaintanceships = sample_from_qs(qs=acquaintanceships, max_size=4)
     rand_locations = sample_from_qs(qs=known_locations, max_size=2)
     rand_gameevent = game_event_with_caption(known_gameevents)
     
     context = {
         'current_profile': current_profile,
         'page_title': 'Hyllemath',
-        'rand_characters': rand_characters,
+        'rand_acquaintanceships': rand_acquaintanceships,
         'rand_locations': rand_locations,
         'rand_gameevent': rand_gameevent,
     }

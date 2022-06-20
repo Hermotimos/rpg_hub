@@ -85,19 +85,19 @@
                     <label class="h3" for="tab1">Lokacje</label>
                 {% endif %}
 
-                <!-- TAB HEADER: Characters (Prosoponomikon) -->
-                {% if characters %}
+                <!-- TAB HEADER: Acquaintanceships (Prosoponomikon) -->
+                {% if acquaintanceships %}
                     {% if location_types %}
-                        <input type="radio" name="tabset" id="tab2" aria-controls="characters">
+                        <input type="radio" name="tabset" id="tab2" aria-controls="acquaintanceships">
                     {% else %}
-                        <input type="radio" name="tabset" id="tab2" aria-controls="characters" checked>
+                        <input type="radio" name="tabset" id="tab2" aria-controls="acquaintanceships" checked>
                     {% endif %}
                     <label class="h3" for="tab2">Postacie</label>
                 {% endif %}
 
                 <!-- TAB HEADER: Knowledge packets -->
                 {% if this_location.knowledge_packets.all %}
-                    {% if location_types or characters %}
+                    {% if location_types or acquaintanceships %}
                         <input type="radio" name="tabset" id="tab3" aria-controls="knowledge">
                     {% else %}
                         <input type="radio" name="tabset" id="tab3" aria-controls="knowledge" checked>
@@ -107,7 +107,7 @@
                 
                 <!-- TAB HEADER: Map packets -->
                 {% if this_location.map_packets.all %}
-                    {% if location_types or characters or this_location.knowledge_packets.all %}
+                    {% if location_types or acquaintanceships or this_location.knowledge_packets.all %}
                         <input type="radio" name="tabset" id="tab4" aria-controls="maps">
                     {% else %}
                         <input type="radio" name="tabset" id="tab4" aria-controls="maps" checked>
@@ -117,7 +117,7 @@
                 
                 <!-- TAB HEADER: Picture Sets -->
                 {% if this_location.picture_sets.all %}
-                    {% if location_types or characters or this_location.knowledge_packets.all or this_location.map_packets.all %}
+                    {% if location_types or acquaintanceships or this_location.knowledge_packets.all or this_location.map_packets.all %}
                         <input type="radio" name="tabset" id="tab5" aria-controls="picture_sets">
                     {% else %}
                         <input type="radio" name="tabset" id="tab5" aria-controls="picture_sets" checked>
@@ -127,7 +127,7 @@
 
                 <!-- TAB HEADER: Audio -->
                 {% if current_profile.status == 'gm' and audio_set %}
-                    {% if location_types or characters or this_location.knowledge_packets.all or this_location.map_packets.all or this_location.picture_sets.all %}
+                    {% if location_types or acquaintanceships or this_location.knowledge_packets.all or this_location.map_packets.all or this_location.picture_sets.all %}
                         <input type="radio" name="tabset" id="tab6" aria-controls="audios">
                     {% else %}
                         <input type="radio" name="tabset" id="tab6" aria-controls="audios" checked>
@@ -158,9 +158,9 @@
                         </section>
                     {% endif %}
 
-                    <!-- TAB CONTENT: Characters (Prosoponomikon) -->
-                    {% if characters %}
-                        <section id="characters" class="tab-panel">
+                    <!-- TAB CONTENT: Acquaintanceships (Prosoponomikon) -->
+                    {% if acquaintanceships %}
+                        <section id="acquaintanceships" class="tab-panel">
                             <div class="container">
                                 <p class="mb-0 text-center">✧</p>
                                 <p class="mb-0 text-center">✧ ✦ ✧</p>
@@ -169,9 +169,9 @@
                                 <p class="mb-5 mt-0 text-center">✧</p>
                                 <div class="container">
                                     <div class="row">
-                                        {% for character in characters %}
+                                        {% for acquaintanceship in acquaintanceships %}
                                             {% with show_caption=True %}
-                                                {% include 'prosoponomikon/_char_img.html' %}
+                                                {% include 'prosoponomikon/_acquaintance_img.html' %}
                                             {% endwith %}
                                         {% endfor %}
                                     </div>

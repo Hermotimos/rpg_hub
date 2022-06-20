@@ -29,9 +29,9 @@
         <section>
             <div class="container px-2 pb-3 mb-4">
                 <div class="row">
-                    {% for character in rand_characters %}
+                    {% for acquaintanceship in rand_acquaintanceships %}
                         {% with show_caption=False %}
-                            {% include 'prosoponomikon/_char_img.html' %}
+                            {% include 'prosoponomikon/_acquaintance_img.html' %}
                         {% endwith %}
                     {% endfor %}
                 </div>

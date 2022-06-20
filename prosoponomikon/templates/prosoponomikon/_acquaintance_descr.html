@@ -6,15 +6,14 @@
 <div class="col-9 col-lg-6 px-0">
     <div>
         <p class="mb-1 {% if side == 'left' %} text-left {% else %} text-right {% endif %}
-            {% if character.only_indirectly %} text-muted {% endif %}">
+            {% if not acquaintanceship.is_direct %} text-muted {% endif %}">
             <span class="border-bottom-dark character-name">
-                {{ character }}
+                {{ acquaintanceship.known_character.fullname }}
             </span>
         </p>
-        <h6 class="font-italic text-justify mb-2
-            {% if character.only_indirectly %} text-muted {% endif %}">
-            {% if character.description %}
-                {{ character.description }}
+        <h6 class="font-italic text-justify mb-2 {% if not acquaintanceship.is_direct %} text-muted {% endif %}">
+            {% if acquaintanceship.known_character.description %}
+                {{ acquaintanceship.known_character.description }}
             {% endif %}
         </h6>
     </div>

@@ -16,17 +16,19 @@
                         
                         <!-- CHARACTER PICTURE -->
                         <div class="float-left mr-3 img-hover-zoom border-double">
-                            {% if current_profile.character == character or current_profile in character.participants.all or current_profile.can_view_all %}
-                                <img class="character-detail {% if not character.profile.is_alive %} img-grayscale {% endif %}" src="{{ character.profile.image.url }}">
+                            {% if current_profile.character == character or this_acquaintance.is_direct or current_profile.can_view_all %}
+                                <img class="character-detail {% if this_acquaintance.knows_if_dead and not character.profile.is_alive %} img-grayscale {% endif %}"
+                                     src="{{ character.profile.image.url }}">
                             {% else %}
-                                <img class="character-detail {% if not character.profile.is_alive %} img-grayscale {% endif %}" src="{% static 'img/profile_known_only_indirectly.jpg' %}">
+                                <img class="character-detail {% if this_acquaintance.knows_if_dead and not character.profile.is_alive %} img-grayscale {% endif %}"
+                                     src="{% static 'img/profile_known_only_indirectly.jpg' %}">
                             {% endif %}
                         </div>
                         
                         <!-- BUTTONS -->
                         <div class="row mt-1">
                             <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Przejdź do Prosoponomikonu">
-                                <a class="btn btn-outline-dark icon-parent-obj py-2" href="{% url 'prosoponomikon:characters' %}#character_{{ character.id }}"></a>
+                                <a class="btn btn-outline-dark icon-parent-obj py-2" href="{% url 'prosoponomikon:acquaintanceships' %}#character_{{ character.id }}"></a>
                             </div>
                             {% if current_profile.can_action %}
                                 <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Przekaż wiedzę o Postaci">
@@ -118,11 +120,11 @@
             {% endif %}
             
             <!-- Known characters -->
-            {% if known_characters %}
+            {% if acquaintanceships %}
                 {% if biography_packets or dialogue_packets or skills_regular or knowledge_packets %}
-                    <input type="radio" name="tabset" id="tab5" aria-controls="known_characters">
+                    <input type="radio" name="tabset" id="tab5" aria-controls="acquaintanceships">
                 {% else %}
-                    <input type="radio" name="tabset" id="tab5" aria-controls="known_characters" checked>
+                    <input type="radio" name="tabset" id="tab5" aria-controls="acquaintanceships" checked>
                 {% endif %}
                 <label class="h4 mb-0" for="tab5">
                     {% if character.profile != current_profile and character.profile.status != 'player' %} ~ {% endif %}
@@ -132,7 +134,7 @@
             
             <!-- Priest powers and MentalSkills -->
             {% if skills_priests %}
-                {% if biography_packets or dialogue_packets or skills_regular or knowledge_packets or known_characters %}
+                {% if biography_packets or dialogue_packets or skills_regular or knowledge_packets or acquaintanceships %}
                     <input type="radio" name="tabset" id="tab6" aria-controls="priest_powers_and_mental_skills">
                 {% else %}
                     <input type="radio" name="tabset" id="tab6" aria-controls="priest_powers_and_mental_skills" checked>
@@ -145,7 +147,7 @@
             
             <!-- Sorcery and MentalSkills -->
             {% if skills_sorcerers %}
-                {% if biography_packets or dialogue_packets or skills_regular or knowledge_packets or known_characters or skills_priests %}
+                {% if biography_packets or dialogue_packets or skills_regular or knowledge_packets or acquaintanceships or skills_priests %}
                     <input type="radio" name="tabset" id="tab7" aria-controls="sorcerers_powers_and_mental_skills">
                 {% else %}
                     <input type="radio" name="tabset" id="tab7" aria-controls="sorcerers_powers_and_mental_skills" checked>
@@ -158,7 +160,7 @@
             
             <!-- Theurgy and MentalSkills -->
             {% if skills_theurgists %}
-                {% if biography_packets or dialogue_packets or skills_regular or knowledge_packets or known_characters or skills_priests or skills_sorcerers %}
+                {% if biography_packets or dialogue_packets or skills_regular or knowledge_packets or acquaintanceships or skills_priests or skills_sorcerers %}
                     <input type="radio" name="tabset" id="tab8" aria-controls="theurgists_powers_and_mental_skills">
                 {% else %}
                     <input type="radio" name="tabset" id="tab8" aria-controls="theurgists_powers_and_mental_skills" checked>
@@ -214,13 +216,13 @@
                 {% endif %}
                 
                 <!-- Known characters -->
-                {% if known_characters %}
-                    <section id="known_characters" class="tab-panel">
+                {% if acquaintanceships %}
+                    <section id="acquaintanceships" class="tab-panel">
                         <div class="container">
                             <div class="row">
-                                {% for character in known_characters %}
+                                {% for acquaintanceship in acquaintanceships %}
                                     {% with show_caption=True %}
-                                        {% include 'prosoponomikon/_char_img.html' %}
+                                        {% include 'prosoponomikon/_acquaintance_img.html' %}
                                     {% endwith %}
                                 {% endfor %}
                             </div>

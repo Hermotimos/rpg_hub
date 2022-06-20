@@ -5,7 +5,7 @@ from django.utils.html import format_html
 
 from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, \
     FirstName, FirstNameGroup, FamilyName, AffixGroup, \
-    AuxiliaryNameGroup, FamilyNameGroup
+    AuxiliaryNameGroup, FamilyNameGroup, Acquaintanceship
 from rpg_project.utils import formfield_with_cache
 
 
@@ -25,15 +25,7 @@ class FamilyNameAdmin(admin.ModelAdmin):
     list_display = ['id', 'group', 'form', 'info', 'locs']
     list_editable = ['group', 'form', 'info']
     ordering = ['group', 'form']
-    
-    def formfield_for_manytomany(self, db_field, request, **kwargs):
-        form_field = super().formfield_for_manytomany(db_field, request, **kwargs)
-        if db_field.name in [
-            'locations',
-        ]:
-            form_field.widget.attrs = {'style': 'height:400px'}
-        return form_field
-    
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
@@ -42,6 +34,14 @@ class FamilyNameAdmin(admin.ModelAdmin):
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        form_field = super().formfield_for_manytomany(db_field, request, **kwargs)
+        if db_field.name in [
+            'locations',
+        ]:
+            form_field.widget.attrs = {'style': 'height:400px'}
+        return form_field
     
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -144,6 +144,56 @@ class AuxiliaryNameGroupAdmin(admin.ModelAdmin):
 # -----------------------------------------------------------------------------
 
 
+@admin.register(Acquaintanceship)
+class AcquaintanceshipAdmin(admin.ModelAdmin):
+    fields = [
+        'knowing_character', 'known_character', 'is_direct', 'knows_if_dead',
+    ]
+    list_display = [
+        'id', 'knowing_character', 'known_character', 'is_direct',
+        'knows_if_dead',
+    ]
+    list_editable = [
+        'knowing_character', 'known_character', 'is_direct', 'knows_if_dead',
+    ]
+    list_select_related = ['knowing_character', 'known_character']
+    search_fields = [
+        'knowing_character__fullname', 'known_character__fullname'
+    ]
+    
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in [
+            'knowing_character',
+            'known_character',
+        ]:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
+
+
+class AcquaintanceshipInline(admin.TabularInline):
+    model = Character.acquaintances.through
+    fk_name = 'knowing_character'
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related('known_character', 'knowing_character')
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in [
+            'known_character',
+            'knowing_character',
+        ]:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
+
+
+# -----------------------------------------------------------------------------
+
+
 @admin.register(Character, PlayerCharacter, NPCCharacter)
 class CharacterAdmin(admin.ModelAdmin):
     fields = [
@@ -153,13 +203,13 @@ class CharacterAdmin(admin.ModelAdmin):
     ]
     filter_horizontal = [
         'frequented_locations', 'biography_packets', 'dialogue_packets',
-        'participants', 'informees', 'subprofessions',
+        'participants', 'informees', 'subprofessions', 'acquaintances',
     ]
+    inlines = [AcquaintanceshipInline]
     list_display = [
         'get_img', 'first_name', 'family_name', 'cognomen', 'description'
     ]
     list_editable = ['first_name', 'family_name', 'cognomen', 'description']
-    list_select_related = True
     readonly_fields = ['fullname']
     search_fields = [
         'first_name__form', 'first_name__form_2', 'family_name__form',

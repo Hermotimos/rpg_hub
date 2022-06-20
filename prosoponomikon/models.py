@@ -10,6 +10,7 @@ from django.db.models import (
     PROTECT,
     TextField,
 )
+from django.db.models.functions import Substr, Lower
 
 from knowledge.models import BiographyPacket, DialoguePacket
 from rules.models import SubProfession
@@ -163,7 +164,7 @@ class CharacterManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.exclude(profile__status='spectator')
-        qs = qs.select_related('first_name', 'family_name')
+        qs = qs.select_related('first_name', 'family_name', 'profile')
         return qs
     
     
@@ -188,6 +189,13 @@ class Character(Model):
     # Participants = direct acquaintances; informees = known by hearsay
     participants = M2M(to=Profile, related_name='characters_participated', blank=True)
     informees = M2M(to=Profile, related_name='characters_informed', blank=True)
+    acquaintances = M2M(
+        to='self',
+        through='Acquaintanceship',
+        related_name='acquaintaned_to',
+        # through_fields=('knowing_character', 'known_character'),
+        blank=True, symmetrical=False
+    )
     
     class Meta:
         ordering = ['fullname']
@@ -213,6 +221,14 @@ class Character(Model):
         qs = qs.exclude(character__id=self.pk)
         qs = qs.select_related('character')
         return qs
+        
+    def acquaintanceships(self):
+        return Acquaintanceship.objects.filter(
+            knowing_character=self
+        ).select_related(
+            'known_character__profile'
+        ).annotate(
+            initial=Lower(Substr('known_character__fullname', 1, 1)))
 
 
 class PlayerCharacterManager(Manager):
@@ -262,3 +278,18 @@ class NonGMCharacter(Character):
         verbose_name = '--- Player or NPC'
         verbose_name_plural = '--- Players and NPCs'
 
+
+# -----------------------------------------------------------------------------
+
+
+class Acquaintanceship(Model):
+    knowing_character = FK(to=Character, related_name='known_characters', on_delete=CASCADE)
+    known_character = FK(to=Character, related_name='knowing_characters', on_delete=CASCADE)
+    is_direct = BooleanField(default=False)
+    knows_if_dead = BooleanField(default=False)
+
+    class Meta:
+        ordering = ['known_character']
+
+    def __str__(self):
+        return f"{self.knowing_character} -> {self.known_character}"

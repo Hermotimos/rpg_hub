@@ -11,9 +11,9 @@ from users.models import Profile
 
 @login_required
 def toponomikon_main_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
 
-    known_locations = profile.locations_known_annotated()
+    known_locations = current_profile.locations_known_annotated()
     all_locs = Location.objects.values('name').filter(id__in=known_locations)
 
     secondary_locs = SecondaryLocation.objects.filter(id__in=known_locations)
@@ -21,13 +21,13 @@ def toponomikon_main_view(request):
     primary_locs = primary_locs.prefetch_related(
         Prefetch('locations', queryset=secondary_locs))
 
-    if profile.can_view_all:
+    if current_profile.can_view_all:
         all_maps = MapPacket.objects.all()
     else:
-        all_maps = profile.map_packets.all()
+        all_maps = current_profile.map_packets.all()
     
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Toponomikon',
         'primary_locs': primary_locs,
         'all_locs': all_locs,
@@ -38,12 +38,12 @@ def toponomikon_main_view(request):
     
 @login_required
 def toponomikon_location_view(request, loc_name):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
 
-    known_locations = profile.locations_known_annotated()
+    known_locations = current_profile.locations_known_annotated()
     
     # THIS LOCATION
-    if profile.can_view_all:
+    if current_profile.can_view_all:
         locs = known_locations.prefetch_related(
             'knowledge_packets__picture_sets__pictures',
             'map_packets__picture_sets__pictures',
@@ -52,8 +52,8 @@ def toponomikon_location_view(request, loc_name):
         )
     else:
         locs = known_locations.prefetch_related(
-            Prefetch('knowledge_packets', profile.knowledge_packets.all()),
-            Prefetch('map_packets', profile.map_packets.all()),
+            Prefetch('knowledge_packets', current_profile.knowledge_packets.all()),
+            Prefetch('map_packets', current_profile.map_packets.all()),
             'knowledge_packets__picture_sets__pictures',
             'map_packets__picture_sets__pictures',
             'picture_sets__pictures',
@@ -74,23 +74,23 @@ def toponomikon_location_view(request, loc_name):
     location_types = location_types.prefetch_related(
         Prefetch('locations', queryset=locations))
 
-    # CHARACTERS TAB
+    # ACQUAINTANCES TAB
     # Characters in this location and its sub-locations if known to profile:
-    characters = profile.characters_known_annotated()
-    characters = characters.filter(
-        frequented_locations__in=this_location.with_sublocations())
+    acquaintanceships = current_profile.character.acquaintanceships()
+    acquaintanceships = acquaintanceships.filter(
+        known_character__frequented_locations__in=this_location.with_sublocations())
 
     if request.method == 'POST':
         handle_inform_form(request)
         
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': this_location.name,
         'this_location': this_location,
         'location_types': location_types.distinct(),
-        'characters': characters.distinct(),
+        'acquaintanceships': acquaintanceships.distinct(),
     }
-    if this_location in known_locations or profile.can_view_all:
+    if this_location in known_locations or current_profile.can_view_all:
         return render(request, 'toponomikon/this_location.html', context)
     else:
         return redirect('users:dupa')

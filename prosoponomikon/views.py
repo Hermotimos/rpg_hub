@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch, Q, QuerySet
+from django.db.models import Prefetch, Q
 from django.db.models.functions import Substr, Lower
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -11,7 +11,7 @@ from imaginarion.models import Picture, PictureImage, PictureSet
 from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
 from prosoponomikon.forms import CharacterCreateForm
-from prosoponomikon.models import Character, FirstNameGroup, FamilyName
+from prosoponomikon.models import Character, FirstNameGroup, FamilyName, Acquaintanceship
 from rpg_project.utils import handle_inform_form, backup_db, only_game_masters
 from rules.models import SkillType
 from toponomikon.models import Location
@@ -19,18 +19,36 @@ from users.models import Profile, User
 
 
 @login_required
-def prosoponomikon_characters_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+def prosoponomikon_acquaintanceships_view(request):
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     
-    all_characters = profile.characters_known_annotated()
-    all_characters = all_characters.annotate(initial=Lower(Substr('profile__character__fullname', 1, 1)))
+    # for profile in Profile.objects.filter():
+    #     print(profile)
+    #     for character in profile.characters_known_annotated():
+    #         Acquaintanceship.objects.get_or_create(
+    #             knowing_character=profile.character,
+    #             known_character=character,
+    #             is_direct=(not character.only_indirectly),
+    #         )
+    #     if profile.status == 'player':
+    #         print(profile.character, profile.character.acquaintances.count())
+
+    # for character in Character.objects.all():
+    #     Acquaintanceship.objects.create(
+    #         knowing_character=Character.objects.get(profile__status='gm'),
+    #         known_character=character,
+    #         is_direct=True,
+    #         knows_if_dead=True,
+    #     )
+
+    acquaintanceships = current_profile.character.acquaintanceships()
     
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': 'Prosoponomikon',
-        'all_characters': all_characters,
+        'acquaintanceships': acquaintanceships,
     }
-    return render(request, 'prosoponomikon/characters.html', context)
+    return render(request, 'prosoponomikon/acquaintances.html', context)
 
 
 @login_required
@@ -39,7 +57,7 @@ def prosoponomikon_character_view(request, character_id):
     
     # Declare empty variables
     [
-        knowledge_packets, known_characters, dialogue_packets,
+        knowledge_packets, acquaintanceships, dialogue_packets,
         skill_types_regular, skill_types_priests, skill_types_sorcerers,
         skill_types_theurgists,
         skills_regular, skills_priests, skills_sorcerers, skills_theurgists,
@@ -50,6 +68,7 @@ def prosoponomikon_character_view(request, character_id):
     if current_profile.character.id == character_id:
         # Players viewing their own Characters
         character = current_profile.character
+        this_acquaintance = None
     else:
         # Player or GM viewing other Characters
         known_bio_packets = (
@@ -61,6 +80,9 @@ def prosoponomikon_character_view(request, character_id):
             Prefetch('biography_packets', queryset=known_bio_packets),
             'dialogue_packets')
         character = characters.get(id=character_id)
+        this_acquaintance = Acquaintanceship.objects.get(
+            knowing_character=current_profile.character,
+            known_character=character)
         
         dialogue_packets = character.dialogue_packets.all()
         
@@ -104,7 +126,8 @@ def prosoponomikon_character_view(request, character_id):
 
         knowledge_packets = character.profile.knowledge_packets.prefetch_related(
             'picture_sets__pictures').order_by('title')
-        known_characters = character.profile.characters_known_annotated()
+        # known_characters = character.profile.characters_known_annotated()
+        acquaintanceships = current_profile.character.acquaintanceships()
     
     # INFORM FORM
     if request.method == 'POST':
@@ -129,7 +152,9 @@ def prosoponomikon_character_view(request, character_id):
         'knowledge_packets': knowledge_packets,
         'biography_packets': biography_packets,
         'dialogue_packets': dialogue_packets,
-        'known_characters': known_characters,
+        # 'known_characters': known_characters,
+        'acquaintanceships': acquaintanceships,
+        'this_acquaintance': this_acquaintance,
     }
     if (current_profile in character.all_known() or current_profile.character == character
             or current_profile.can_view_all):
