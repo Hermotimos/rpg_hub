@@ -358,7 +358,7 @@ class DamageTypeAdmin(admin.ModelAdmin):
 
 @admin.register(WeaponType)
 class WeaponTypeAdmin(admin.ModelAdmin):
-    filter_horizontal = ['allowees', 'damage_types']
+    filter_horizontal = ['allowees', 'damage_types', 'comparables']
     formfield_overrides = {
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 5, 'cols': 100})},
         models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},

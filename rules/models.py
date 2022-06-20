@@ -279,7 +279,6 @@ class DamageType(Model):
     damage = CharField(max_length=15)
     special = CharField(max_length=100, blank=True, null=True)
     range = CharField(max_length=100, blank=True, null=True)
-    # modifiers = M2M(to=ConditionalModifier, related_name='weapons_types', blank=True)
 
     class Meta:
         ordering = ['type', 'description']
@@ -308,19 +307,20 @@ class WeaponType(Model):
         blank=True,
         null=True,
         on_delete=PROTECT)
+    damage_types = M2M(to=DamageType, related_name='weapon_types')
+    comparables = M2M(to='self', blank=True)
+    size = CharField(max_length=5, choices=SIZES)
+    trait = CharField(max_length=10, choices=TRAITS)
+    avg_price_value = PositiveSmallIntegerField(blank=True, null=True)
+    avg_price_currency = CharField(
+        max_length=5, choices=CURRENCIES,  blank=True, null=True)
+    avg_weight = DecimalField(max_digits=10, decimal_places=1)
     allowees = M2M(
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_weapon_types',
         blank=True)
-    damage_types = M2M(to=DamageType, related_name='weapon_types')
-    size = CharField(max_length=5, choices=SIZES)
-    trait = CharField(max_length=10, choices=TRAITS)
-    avg_price_value = PositiveSmallIntegerField(blank=True, null=True)
-    avg_price_currency = CharField(max_length=5, choices=CURRENCIES,
-                                   blank=True, null=True)
-    avg_weight = DecimalField(max_digits=10, decimal_places=1)
-    
+
     class Meta:
         ordering = ['name']
     

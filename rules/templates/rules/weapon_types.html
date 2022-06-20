@@ -76,7 +76,7 @@
             </colgroup>
             <thead class="align-center">
                 <tr>
-                    <th></th>
+                    <th>Broń</th>
                     <th>Obrażenia</th>
                     <th>Właściwości</th>
                     <th>Zasięg</th>
@@ -90,7 +90,7 @@
                 {% for weapon_type in weapon_types %}
                     <tr class="{% if forloop.counter|divisibleby:2 %} bg-gray {% endif %}">
                         <td class="hover-blue" data-toggle="collapse" data-target="#{{ weapon_type|remove_special_chars }}">
-                            <span class="px-1">{{ weapon_type.name }}</span>
+                            <span class="pl-1">{{ weapon_type.name }}</span>
                         </td>
                         <td class="align-center"><small>{{ weapon_type.damage_types.first.short }}</small></td>
                         <td class="align-center"><small>{{ weapon_type.damage_types.first.special|default_if_none:""|linebreaksbr }}</small></td>
@@ -116,6 +116,11 @@
                             <div class="m-1 mr-2 font-italic text-justify">
                                 {{ weapon_type.description|linebreaksbr }}
                             </div>
+                            {% if weapon_type.comparables.exists %}
+                                <small class="smaller text-justify text-muted ml-1">
+                                    Podobne: {{ weapon_type.comparables.all|join:' | ' }}
+                                </small>
+                            {% endif %}
                             {% if weapon_type.picture_set %}
                                 <div class="mb-1">
                                     <div class="d-flex justify-content-center my-3">
