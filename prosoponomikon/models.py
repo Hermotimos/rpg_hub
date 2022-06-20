@@ -290,6 +290,7 @@ class Acquaintanceship(Model):
 
     class Meta:
         ordering = ['known_character']
+        unique_together = ['known_character', 'knowing_character']
 
     def __str__(self):
         return f"{self.knowing_character} -> {self.known_character}"
