@@ -245,7 +245,7 @@
                     </td>
                     <!-- KNOWN DIRECTLY AND INDIRECTLY -->
                     <td class="font-13 align-center align-top timeline">
-                        {% if event.participants.all %}
+                        {% if event.participants.exists %}
                             <div class="pb-1">
                                 {% for profile in event.participants.all %}
                                     {% if not profile.only_indirectly %}

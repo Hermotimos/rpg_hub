@@ -236,7 +236,7 @@ def timeline_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
 
     events = GameEvent.objects.all()
-    known_profiles = Profile.players.all()
+    known_profiles = Profile.players.select_related('character', 'user')
     
     if not current_profile.can_view_all:
         events = events.filter(
@@ -244,17 +244,17 @@ def timeline_view(request):
             | Q(id__in=current_profile.events_informed.all())
         ).distinct()
 
-        known_profiles = Profile.players.filter(
-            Q(character__in=current_profile.characters_known_annotated())
-            | Q(id=current_profile.id)
-        ).prefetch_related('character')
+        known_characters_ids = [
+            acq.known_character.id
+            for acq in current_profile.character.acquaintanceships()
+        ]
+        known_profiles = known_profiles.filter(
+            Q(character__id__in=known_characters_ids) | Q(id=current_profile.id))
     
     events = events.prefetch_related(
         Prefetch('participants', queryset=known_profiles),
         Prefetch('informees', queryset=known_profiles),
         'plot_threads',
-        'participants__user',
-        'informees__user',
         'locations',
     )
     events = events.order_by(

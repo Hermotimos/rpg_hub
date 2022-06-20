@@ -226,7 +226,7 @@ class Character(Model):
         return Acquaintanceship.objects.filter(
             knowing_character=self
         ).select_related(
-            'known_character__profile'
+            'known_character__profile',
         ).annotate(
             initial=Lower(Substr('known_character__fullname', 1, 1)))
 
