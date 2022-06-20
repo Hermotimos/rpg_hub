@@ -3,15 +3,7 @@
 <div class="col-3 px-0 pt-1">
     <div class="{% if side == 'left' %} float-left pr-3 {% else %} float-right pl-3 {% endif %}">
         <a href="{% url 'prosoponomikon:character' acquaintanceship.known_character.id %}">
-            <div class="img-hover-zoom border-double m-0" data-toggle="tooltip" data-placement="bottom" data-html="true"
-                 title='<span class="font-italic"> {{ acquaintanceship.known_character }} {% if not acquaintanceship.is_direct %} <br>(Postać znana ze słyszenia) {% endif %}</span>'>
-                {% if acquaintanceship.is_direct %}
-                    <img class="character {% if acquaintanceship.knows_if_dead and not acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
-                         src="{{ acquaintanceship.known_character.profile.image.url }}">
-                {% else %}
-                    <img class="character {% if not acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}" src="{% static 'img/profile_known_only_indirectly.jpg' %}">
-                {% endif %}
-            </div>
+            {% include 'prosoponomikon/__acquaintance_img.html' %}
         </a>
     </div>
 </div>

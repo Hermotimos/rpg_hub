@@ -1,11 +1,10 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch, When, Case, Value, IntegerField
+from django.db.models import Prefetch
 from django.shortcuts import render, redirect
 
-from knowledge.models import MapPacket
+from knowledge.models import MapPacket, KnowledgePacket
 from rpg_project.utils import handle_inform_form
-from toponomikon.models import Location, LocationType, PrimaryLocation, \
-    SecondaryLocation
+from toponomikon.models import Location, LocationType, SecondaryLocation
 from users.models import Profile
 
 
@@ -44,17 +43,20 @@ def toponomikon_location_view(request, loc_name):
     
     # THIS LOCATION
     if current_profile.can_view_all:
+        knowledge_packets = KnowledgePacket.objects.prefetch_related(
+            'picture_sets__pictures')
         locs = known_locations.prefetch_related(
-            'knowledge_packets__picture_sets__pictures',
+            Prefetch('knowledge_packets', knowledge_packets.distinct()),
             'map_packets__picture_sets__pictures',
             'picture_sets__pictures',
             'characters__profile',
         )
     else:
+        knowledge_packets = current_profile.knowledge_packets.prefetch_related(
+            'picture_sets__pictures')
         locs = known_locations.prefetch_related(
-            Prefetch('knowledge_packets', current_profile.knowledge_packets.all()),
+            Prefetch('knowledge_packets', knowledge_packets.distinct()),
             Prefetch('map_packets', current_profile.map_packets.all()),
-            'knowledge_packets__picture_sets__pictures',
             'map_packets__picture_sets__pictures',
             'picture_sets__pictures',
         )
