@@ -308,7 +308,7 @@ class WeaponType(Model):
         null=True,
         on_delete=PROTECT)
     damage_types = M2M(to=DamageType, related_name='weapon_types')
-    comparables = M2M(to='self', blank=True)
+    comparables = M2M(to='self', symmetrical=False, blank=True)
     size = CharField(max_length=5, choices=SIZES)
     trait = CharField(max_length=10, choices=TRAITS)
     avg_price_value = PositiveSmallIntegerField(blank=True, null=True)
