@@ -21,35 +21,28 @@ class CharacterForm(forms.ModelForm):
 
 
 class CharacterCreateForm(forms.ModelForm):
-    
+    username = forms.CharField(max_length=250)
+    is_alive = forms.BooleanField(required=False, initial=True)
+    image = forms.ImageField()
+
     class Meta:
         model = Character
         fields = [
             'first_name', 'family_name', 'cognomen', 'description',
-            'frequented_locations', 'acquaintances',
+            'frequented_locations',
         ]
-
-    NAME_TYPES = (
-        ('MALE', 'MALE'),
-        ('FEMALE', 'FEMALE'),
-        ('DAEMON', 'DAEMON'),
-    )
-    username = forms.CharField(max_length=250)
-    is_alive = forms.BooleanField(required=False, initial=True)
-    image = forms.ImageField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         custom_order = [
             'username', 'first_name', 'family_name', 'cognomen', 'is_alive',
-            'image', 'description', 'frequented_locations', 'acquaintances',
+            'image', 'description', 'frequented_locations',
         ]
         self.fields = {
             f_name: self.fields[f_name] for f_name in custom_order
         }
         self.fields['first_name'].queryset = FirstName.objects.order_by('form')
         self.fields['frequented_locations'].widget.attrs['size'] = 12
-        self.fields['acquaintances'].widget.attrs['size'] = 10
     
         self.helper = FormHelper()
         self.helper.add_input(

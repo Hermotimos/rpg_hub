@@ -173,7 +173,7 @@ class AcquaintanceshipAdmin(admin.ModelAdmin):
         return formfield
 
 
-class AcquaintanceshipInline(admin.TabularInline):
+class AcquaintanceshipActiveInline(admin.TabularInline):
     model = Character.acquaintances.through
     fk_name = 'knowing_character'
 
@@ -192,6 +192,11 @@ class AcquaintanceshipInline(admin.TabularInline):
         return formfield
 
 
+class AcquaintanceshipPassiveInline(AcquaintanceshipActiveInline):
+    model = Character.acquaintances.through
+    fk_name = 'known_character'
+
+
 # -----------------------------------------------------------------------------
 
 
@@ -206,7 +211,7 @@ class CharacterAdmin(admin.ModelAdmin):
         'frequented_locations', 'biography_packets', 'dialogue_packets',
         'subprofessions', 'acquaintances',
     ]
-    inlines = [AcquaintanceshipInline]
+    inlines = [AcquaintanceshipActiveInline, AcquaintanceshipPassiveInline]
     list_display = [
         'get_img', 'first_name', 'family_name', 'cognomen', 'description'
     ]
