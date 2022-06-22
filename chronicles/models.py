@@ -488,25 +488,50 @@ m2m_changed.connect(
     sender=GameEvent.locations.through)
 
 
-# DEACTIVATED
-# The signal was used while entering NPCs as participants in GameEvents.
-# It's unsafe to use as participation not always implies "known_direclty" !!!
+def update_acquantanceships_for_participants(sender, instance, **kwargs):
+    """Whenever GameEvent is saved (create & update), create Acquaintanceship
+    objects for all participants, in both directions.
+    """
+    from prosoponomikon.models import Acquaintanceship, Character
+    
+    participating_characters = Character.objects.filter(
+        profile__in=instance.participants.all())
+    
+    for knowing_character in participating_characters:
+        for known_character in participating_characters.exclude(id=knowing_character.id):
+            Acquaintanceship.objects.get_or_create(
+                knowing_character=knowing_character,
+                known_character=known_character,
+                is_direct=True)
+    
 
-# def update_known_characters(sender, instance, **kwargs):
-#     """Whenever the signal is called, for each profile in participants
-#     update their participants characters with all other "direct" event
-#     participants.
-#     This works between NPCs, too. This is for future...
-#     """
-#     participants = instance.participants.all()
-#     for profile in participants.all():
-#         profile.character.participants.add(*participants)
-#
-#
-# post_save.connect(
-#     receiver=update_known_characters,
-#     sender=GameEvent)
-#
-# m2m_changed.connect(
-#     receiver=update_known_characters,
-#     sender=GameEvent.participants.through)
+# This signal also fires on GameEvent object creation
+m2m_changed.connect(
+    receiver=update_acquantanceships_for_participants,
+    sender=GameEvent.participants.through)
+
+
+def update_acquantanceships_for_informees(sender, instance, **kwargs):
+    """Whenever GameEvent is saved (create & update), create Acquaintanceship
+    objects for all informees, so that they know all participants indirectly.
+    """
+    from prosoponomikon.models import Acquaintanceship, Character
+    
+    characters = Character.objects.all()
+    participating_characters = characters.filter(
+        profile__in=instance.participants.all())
+    informed_characters = characters.filter(
+        profile__in=instance.informees.all())
+    
+    for knowing_character in informed_characters:
+        for known_character in participating_characters.exclude():
+            Acquaintanceship.objects.get_or_create(
+                knowing_character=knowing_character,
+                known_character=known_character,
+                is_direct=False)
+            
+            
+# This signal also fires on GameEvent object creation
+m2m_changed.connect(
+    receiver=update_acquantanceships_for_informees,
+    sender=GameEvent.informees.through)
