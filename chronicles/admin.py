@@ -80,7 +80,7 @@ class GameEventAdmin(admin.ModelAdmin):
     
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name in ["participants", "informees"]:
-            kwargs["queryset"] = Profile.non_gm.all()
+            kwargs["queryset"] = Profile.non_gm.select_related('character')
         if db_field.name == "debates":
             kwargs["queryset"] = Thread.objects.filter(kind='Debate')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
