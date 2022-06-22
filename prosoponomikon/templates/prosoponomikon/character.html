@@ -78,19 +78,23 @@
             <!-- TAB HEADERS -->
             
             <!-- Biography packets -->
-            {% if biography_packets %}
-                <input type="radio" name="tabset" id="tab1" aria-controls="biography_packets" checked>
-                <label class="h4 mb-0" for="tab1">Biografia</label>
+            {% if current_profile.status == 'gm' or current_profile.character == character %}
+                {% if biography_packets %}
+                    <input type="radio" name="tabset" id="tab1" aria-controls="biography_packets" checked>
+                    <label class="h4 mb-0" for="tab1">Biografia</label>
+                {% endif %}
             {% endif %}
             
             <!-- Dialogue packets -->
-            {% if current_profile.status == 'gm' and dialogue_packets %}
-                {% if biography_packets %}
-                    <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets">
-                {% else %}
-                    <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets" checked>
+            {% if current_profile.status == 'gm' or current_profile.character == character %}
+                {% if dialogue_packets %}
+                    {% if biography_packets %}
+                        <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets">
+                    {% else %}
+                        <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets" checked>
+                    {% endif %}
+                    <label class="h4 mb-0" for="tab2">Dialogi</label>
                 {% endif %}
-                <label class="h4 mb-0" for="tab2">Dialogi</label>
             {% endif %}
             
             <!-- Skills and synergies-->
@@ -176,22 +180,26 @@
             <div class="tab-panels">
                 
                 <!-- Biography packets -->
-                {% if biography_packets %}
-                    <section id="biography_packets" class="tab-panel">
-                        <!-- Biography packets are filtered in the view for the requesting profile -->
-                        {% for biography_packet in biography_packets %}
-                            {% include 'knowledge/_biography_packet.html' %}
-                        {% endfor %}
-                    </section>
+                {% if current_profile.status == 'gm' or current_profile.character == character %}
+                    {% if biography_packets %}
+                        <section id="biography_packets" class="tab-panel">
+                            <!-- Biography packets are filtered in the view for the requesting profile -->
+                            {% for biography_packet in biography_packets %}
+                                {% include 'knowledge/_biography_packet.html' %}
+                            {% endfor %}
+                        </section>
+                    {% endif %}
                 {% endif %}
                 
                 <!-- Dialogue packets -->
-                {% if current_profile.status == 'gm' and dialogue_packets %}
-                    <section id="dialogue_packets" class="tab-panel">
-                        {% for dialogue_packet in dialogue_packets %}
-                            {% include 'knowledge/_dialogue_packet.html' %}
-                        {% endfor %}
-                    </section>
+                {% if current_profile.status == 'gm' or current_profile.character == character %}
+                    {% if dialogue_packets %}
+                        <section id="dialogue_packets" class="tab-panel">
+                            {% for dialogue_packet in dialogue_packets %}
+                                {% include 'knowledge/_dialogue_packet.html' %}
+                            {% endfor %}
+                        </section>
+                    {% endif %}
                 {% endif %}
             
                 <!-- RegularSkills and RegularSynergies -->

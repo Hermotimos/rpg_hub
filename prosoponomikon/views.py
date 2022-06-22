@@ -57,38 +57,45 @@ def prosoponomikon_character_view(request, character_id):
     
     # Declare empty variables
     [
-        knowledge_packets, acquaintanceships, dialogue_packets,
+        knowledge_packets, acquaintanceships,
         skill_types_regular, skill_types_priests, skill_types_sorcerers,
         skill_types_theurgists,
         skills_regular, skills_priests, skills_sorcerers, skills_theurgists,
         synergies_regular, synergies_priests, synergies_sorcerers,
         synergies_theurgists,
-    ] = [list() for _ in range(15)]
+    ] = [list() for _ in range(14)]
 
     if current_profile.character.id == character_id:
-        # Players viewing their own Characters
+        # Players on NPCs viewing their own Characters
         character = current_profile.character
         this_acquaintance = None
     else:
-        # Player or GM viewing other Characters
-        known_bio_packets = (
-            current_profile.biography_packets.all()
-            | current_profile.authored_bio_packets.all()
-        ).prefetch_related('picture_sets')
+        # GM viewing another Character
+        if current_profile.can_view_all:
+            bio_packets = BiographyPacket.objects.all()
+        # Player or NPC viewing another Character
+        else:
+            bio_packets = (
+                current_profile.biography_packets.all()
+                | current_profile.authored_bio_packets.all()
+            ).prefetch_related('picture_sets')
         characters = Character.objects.select_related('first_name')
         characters = characters.prefetch_related(
-            Prefetch('biography_packets', queryset=known_bio_packets),
+            Prefetch('biography_packets', queryset=bio_packets),
             'dialogue_packets')
         character = characters.get(id=character_id)
-        this_acquaintance = Acquaintanceship.objects.get(
-            knowing_character=current_profile.character,
-            known_character=character)
+        try:
+            this_acquaintance = Acquaintanceship.objects.get(
+                knowing_character=current_profile.character,
+                known_character=character)
+        except Acquaintanceship.DoesNotExist:
+            # when GM moves between NPCs with open Prosoponomikon
+            return redirect('prosoponomikon:acquaintanceships')
         
-        dialogue_packets = character.dialogue_packets.all()
-        
+    dialogue_packets = character.dialogue_packets.all()
     biography_packets = character.biography_packets.all()
 
-    # Player viewing own Character or GM viewing any Character
+    # Any Profile viewing own Character or GM viewing any Character
     if current_profile.character.id == character_id or current_profile.status == 'gm':
         
         skills = character.profile.skills_acquired_with_skill_levels().exclude(~Q(versions=None))
@@ -126,7 +133,7 @@ def prosoponomikon_character_view(request, character_id):
 
         knowledge_packets = character.profile.knowledge_packets.prefetch_related(
             'picture_sets__pictures').order_by('title')
-        # known_characters = character.profile.characters_known_annotated()
+        
         acquaintanceships = character.acquaintanceships()
     
     # INFORM FORM
@@ -152,12 +159,15 @@ def prosoponomikon_character_view(request, character_id):
         'knowledge_packets': knowledge_packets,
         'biography_packets': biography_packets,
         'dialogue_packets': dialogue_packets,
-        # 'known_characters': known_characters,
         'acquaintanceships': acquaintanceships,
         'this_acquaintance': this_acquaintance,
     }
-    if (current_profile in character.all_known() or current_profile.character == character
-            or current_profile.can_view_all):
+    if (
+            current_profile.character.acquaintanceships().filter(
+                known_character=character).exists()
+            or current_profile.character == character
+            or current_profile.can_view_all
+    ):
         return render(request, 'prosoponomikon/character.html', context)
     else:
         return redirect('users:dupa')
@@ -303,6 +313,9 @@ def prosoponomikon_character_create_form_view(request):
 @only_game_masters
 def prosoponomikon_acquaintances_view(request, location_id):
     """Make everybody know directly everybody in a given Location."""
+
+    # TODO update this view
+    
     location = Location.objects.get(id=location_id)
     backup_db(reason=f"acquaintances_{location.name}")
     
