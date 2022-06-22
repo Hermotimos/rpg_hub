@@ -11,6 +11,7 @@ from django.db.models import (
     TextField,
 )
 from django.db.models.functions import Substr, Lower
+from django.db.models.signals import post_save
 
 from knowledge.models import BiographyPacket, DialoguePacket
 from rules.models import SubProfession
@@ -187,15 +188,11 @@ class Character(Model):
     dialogue_packets = M2M(to=DialoguePacket, related_name='characters', blank=True)
     subprofessions = M2M(to=SubProfession, related_name='characters', blank=True)
     # Participants = direct acquaintances; informees = known by hearsay
-    participants = M2M(to=Profile, related_name='characters_participated', blank=True)
-    informees = M2M(to=Profile, related_name='characters_informed', blank=True)
+    # participants = M2M(to=Profile, related_name='characters_participated', blank=True)
+    # informees = M2M(to=Profile, related_name='characters_informed', blank=True)
     acquaintances = M2M(
-        to='self',
-        through='Acquaintanceship',
-        related_name='acquaintaned_to',
-        # through_fields=('knowing_character', 'known_character'),
-        blank=True, symmetrical=False
-    )
+        to='self', through='Acquaintanceship', related_name='acquaintaned_to',
+        blank=True, symmetrical=False)
     
     class Meta:
         ordering = ['fullname']
@@ -212,14 +209,10 @@ class Character(Model):
         self.fullname = f"{first_name}{family_name}{cognomen}".strip()
         super().save(*args, **kwargs)
     
-    def all_known(self):
-        return self.participants.all() | self.informees.all()
-    
     def informables(self):
-        qs = Profile.active_players.all()
-        qs = qs.exclude(id__in=self.all_known())
-        qs = qs.exclude(character__id=self.pk)
-        qs = qs.select_related('character')
+        qs = Profile.active_players.select_related('character')
+        qs = qs.exclude(character__in=self.acquaintaned_to.all())
+        qs = qs.exclude(character=self)
         return qs
         
     def acquaintanceships(self):
@@ -294,3 +287,22 @@ class Acquaintanceship(Model):
 
     def __str__(self):
         return f"{self.knowing_character} -> {self.known_character}"
+
+
+# -----------------------------------------------------------------------------
+
+
+def update_known_locations(sender, instance, **kwargs):
+    """Make an Acquaintance for GMs -> new Character."""
+    for gm_character in Character.objects.filter(profile__status='gm'):
+        Acquaintanceship.objects.create(
+            knowing_character=gm_character,
+            known_character=instance,
+            is_direct=True,
+            knows_if_dead=True,
+        )
+
+
+post_save.connect(
+    receiver=update_known_locations,
+    sender=Character)

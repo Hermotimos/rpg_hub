@@ -23,13 +23,11 @@ class CharacterForm(forms.ModelForm):
 class CharacterCreateForm(forms.ModelForm):
     
     class Meta:
-        """'name' and 'family_name' can only be chosen from the existing ones.
-        # Creating new instances of name and family_name requires info about
-        # their locations and other modalities. Hence it's restricted to admin.
-        """
         model = Character
-        fields = ['first_name', 'family_name', 'cognomen', 'description',
-                  'frequented_locations', 'participants', 'informees']
+        fields = [
+            'first_name', 'family_name', 'cognomen', 'description',
+            'frequented_locations', 'acquaintances',
+        ]
 
     NAME_TYPES = (
         ('MALE', 'MALE'),
@@ -44,16 +42,14 @@ class CharacterCreateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         custom_order = [
             'username', 'first_name', 'family_name', 'cognomen', 'is_alive',
-            'image', 'description', 'frequented_locations', 'participants',
-            'informees',
+            'image', 'description', 'frequented_locations', 'acquaintances',
         ]
         self.fields = {
             f_name: self.fields[f_name] for f_name in custom_order
         }
         self.fields['first_name'].queryset = FirstName.objects.order_by('form')
         self.fields['frequented_locations'].widget.attrs['size'] = 12
-        self.fields['participants'].widget.attrs['size'] = 10
-        self.fields['informees'].widget.attrs['size'] = 10
+        self.fields['acquaintances'].widget.attrs['size'] = 10
     
         self.helper = FormHelper()
         self.helper.add_input(

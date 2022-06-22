@@ -200,11 +200,11 @@ class CharacterAdmin(admin.ModelAdmin):
     fields = [
         'profile', 'first_name', 'family_name', 'cognomen', 'fullname',
         'description', 'frequented_locations', 'biography_packets',
-        'dialogue_packets', 'subprofessions', 'participants', 'informees',
+        'dialogue_packets', 'subprofessions',
     ]
     filter_horizontal = [
         'frequented_locations', 'biography_packets', 'dialogue_packets',
-        'participants', 'informees', 'subprofessions', 'acquaintances',
+        'subprofessions', 'acquaintances',
     ]
     inlines = [AcquaintanceshipInline]
     list_display = [
