@@ -284,51 +284,47 @@ img.img-grayscale:hover {filter: grayscale(0%);}
 
 
 
-/* Prosoponomikon-based images, but user throughout the site */
-
+/* Prosoponomikon-based images, but used throughout the site */
 
 
 @media only screen and (min-width: 0px) {
     span.character-name {font-size: 1.4rem;}
-    img.character {max-width: 7rem;}
     img.character-detail {max-width: 8rem;}
 }
 @media only screen and (min-width: 600px) {
     span.character-name {font-size: 1.5rem;}
-    img.character {max-width: 8rem;}
     img.character-detail {max-width: 10rem;}
 }
 @media only screen and (min-width: 1000px) {
     span.character-name {font-size: 1.6rem;}
-    img.character {max-width: 10rem;}
     img.character-detail {max-width: 13rem;}
 }
 @media only screen and (min-width: 1200px) {
     span.character-name {font-size: 1.9rem;}
-    img.character {max-width: 12rem;}
     img.character-detail {max-width: 15rem;}
 }
 
 
 @media only screen and (min-width: 320px) {
-    img.character-toponomikon {max-width: 5rem;}
+   /* img.character-toponomikon {max-width: 5rem;}*/
     div.img-hover-zoom {margin: 0.1rem}
 }
 @media only screen and (min-width: 600px) {
-    img.character-toponomikon {max-width: 6rem;}
+  /*  img.character-toponomikon {max-width: 6rem;}*/
     div.img-hover-zoom {margin: 0.15rem}
 }
 @media only screen and (min-width: 800px) {
-    img.character-toponomikon {max-width: 7rem;}
+  /*  img.character-toponomikon {max-width: 7rem;}*/
     div.img-hover-zoom {margin: 0.15rem}
 }
+/*
 @media only screen and (min-width: 1000px) {
     img.character-toponomikon {max-width: 8rem;}
 }
 @media only screen and (min-width: 1200px) {
     img.character-toponomikon {max-width: 9rem;}
 }
-
+*/
 
 
 
