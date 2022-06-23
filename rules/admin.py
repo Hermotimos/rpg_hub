@@ -130,18 +130,16 @@ class SkillGroupAdmin(admin.ModelAdmin):
 
 
 class SkillLevelInline(admin.TabularInline):
+    filter_horizontal = ['perks', 'acquired_by']
+    formfield_overrides = {
+        models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
+    }
     model = SkillLevel
-    extra = 4
-    
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
-        for field in [
-            'perks',
-            'acquired_by',
-        ]:
-            if db_field.name == field:
-                formfield = formfield_with_cache(field, formfield, request)
-        return formfield
+    extra = 2
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.prefetch_related('perks', 'acquired_by')
 
     
 @admin.register(Skill, RegularSkill)
@@ -151,12 +149,12 @@ class SkillAdmin(admin.ModelAdmin):
         'types', 'allowees',
     ]
     filter_horizontal = ['allowees', 'types']
-    # inlines = [SkillLevelInline]
+    inlines = [SkillLevelInline]
     list_display = [
         'id', 'name', 'version_of', 'tested_trait', 'image', 'group'
     ]
     list_editable = ['name', 'tested_trait', 'image', 'group']
-    list_select_related = ['group']
+    list_select_related = ['group', 'version_of']
     search_fields = ['name']
     
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
