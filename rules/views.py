@@ -44,17 +44,18 @@ def rules_armor_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
     
-    plates = Plate.objects.filter(allowees__in=user_profiles).distinct()
-    plates = plates.prefetch_related('picture_set__pictures__image')
+    plates = Plate.objects.prefetch_related('picture_set__pictures__image')
+    shields = Shield.objects.prefetch_related('picture_set__pictures__image')
     
-    shields = Shield.objects.filter(allowees__in=user_profiles).distinct()
-    shields = shields.prefetch_related('picture_set__pictures__image')
+    if not current_profile.can_view_all:
+        plates = plates.filter(allowees__in=user_profiles)
+        shields = shields.filter(allowees__in=user_profiles)
     
     context = {
         'current_profile': current_profile,
         'page_title': 'Pancerz',
-        'plates': plates,
-        'shields': shields,
+        'plates': plates.distinct(),
+        'shields': shields.distinct(),
     }
     return render(request, 'rules/armor.html', context)
 
@@ -121,25 +122,19 @@ def rules_skills_view(request, skilltype_kind):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
 
-    if current_profile.can_view_all:
-        skills_regular = Skill.objects.filter(
-            types__kinds__name=skilltype_kind,
-            version_of=None,
-        )
-    else:
-        skills_regular = Skill.objects.filter(
-            allowees__in=user_profiles,
-            types__kinds__name=skilltype_kind,
-            version_of=None,
-        )
+    skills_regular = Skill.objects.filter(
+        types__kinds__name=skilltype_kind, version_of=None)
+    
+    if not current_profile.can_view_all:
+        skills_regular = skills_regular.filter(allowees__in=user_profiles)
         
-    skills_regular = skills_regular.select_related('group__type').distinct()
+    skills_regular = skills_regular.select_related('group__type')
     skills_regular = skills_regular.prefetch_related(
         'skill_levels__perks__conditional_modifiers__conditions',
         'skill_levels__perks__conditional_modifiers__combat_types',
         'skill_levels__perks__conditional_modifiers__modifier__factor',
         'skill_levels__perks__comments',
-    )
+    ).distinct()
 
     skill_types_regular = SkillType.objects.filter(kinds__name=skilltype_kind)
     skill_types_regular = skill_types_regular.prefetch_related(
@@ -263,29 +258,12 @@ def rules_weapon_types_view(request):
         'damage_types',
         'comparables')
     if not current_profile.can_view_all:
-        weapon_types = weapon_types.filter(allowees__in=user_profiles).distinct()
-    #
-    # from rules.models import DamageType
-    # for dmgt in DamageType.objects.all():
-    #     # if not dmgt.weapon_types.all():
-    #     dmgt.delete()
-    #
-    # for weapon_type in WeaponType.objects.all():
-    #     print(weapon_type)
-    #     bonus = f"+{weapon_type.damage_bonus}" if weapon_type.damage_bonus else ""
-    #     damage_type, _ = DamageType.objects.get_or_create(
-    #         type=weapon_type.damage_type,
-    #         damage=f"{weapon_type.damage_dices}{bonus}",
-    #         special=weapon_type.special,
-    #         range=weapon_type.range,
-    #     )
-    #     print(damage_type, damage_type.id)
-    #     weapon_type.damage_types.set([damage_type.id])
-        
+        weapon_types = weapon_types.filter(allowees__in=user_profiles)
+
     context = {
         'current_profile': current_profile,
         'page_title': 'Broń',
-        'weapon_types': weapon_types,
+        'weapon_types': weapon_types.distinct(),
     }
     return render(request, 'rules/weapon_types.html', context)
 

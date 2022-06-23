@@ -189,7 +189,7 @@ class Plate(Model):
         on_delete=PROTECT)
     allowees = M2M(
         to=Profile,
-        limit_choices_to=Q(status__in=['player', 'gm']),
+        limit_choices_to=Q(status='player'),
         related_name='allowed_plates',
         blank=True)
     
@@ -231,7 +231,7 @@ class Shield(Model):
         on_delete=PROTECT)
     allowees = M2M(
         to=Profile,
-        limit_choices_to=Q(status__in=['player', 'gm']),
+        limit_choices_to=Q(status='player'),
         related_name='allowed_shields',
         blank=True)
     armor_class_bonus = PositiveSmallIntegerField()
@@ -392,7 +392,7 @@ class Skill(Model):
     types = M2M(to=SkillType, related_name='skills', blank=True)
     allowees = M2M(
         to=Profile,
-        limit_choices_to=Q(status__in=['player', 'gm']),
+        limit_choices_to=Q(status='player'),
         related_name='allowed_skills',
         blank=True,
     )
