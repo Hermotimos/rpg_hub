@@ -205,7 +205,7 @@
                 <!-- RegularSkills and RegularSynergies -->
                 {% if skills_regular %}
                     <section id="skills_regular" class="tab-panel">
-                        {% with max_level_only=True skill_types=skill_types_regular skills=skills_regular max_level_only=True synergies=synergies_regular panel_id=1 %}
+                        {% with max_level_only=True skill_types=skill_types_regular skills=skills_regular max_level_only=True synergies=synergies_regular panel_id=1 skilltype_kind='Powszechne'%}
                             {% include 'rules/_skills_by_type.html' %}
                             {% if synergies_regular %}
                                 {% include 'rules/_synergies.html' %}
@@ -241,8 +241,10 @@
                 <!-- PriestsSkill and MentalSkills -->
                 {% if skills_priests %}
                     <section id="priest_powers_and_mental_skills" class="tab-panel">
-                        {% with skill_types=skill_types_priests skills=skills_priests max_level_only=True synergies=synergies_priests panel_id=2 %}
-                            {% include 'rules/_skills_by_type.html' %}
+                        {% with skill_types=skill_types_priests skills=skills_priests synergies=synergies_priests panel_id=2 %}
+                            {% with skilltype_kind="Moce Kapłańskie" %}
+                                {% include 'rules/_skills_by_type.html' %}
+                            {% endwith %}
                             {% if synergies_priests %}
                                 {% include 'rules/_synergies.html' %}
                             {% endif %}
@@ -253,7 +255,7 @@
                 <!-- SorcerersSkill and MentalSkills -->
                 {% if skills_sorcerers %}
                     <section id="sorcerers_powers_and_mental_skills" class="tab-panel">
-                        {% with skill_types=skill_types_sorcerers skills=skills_sorcerers max_level_only=True synergies=synergies_sorcerers panel_id=2 %}
+                        {% with skill_types=skill_types_sorcerers skills=skills_sorcerers synergies=synergies_sorcerers panel_id=2 %}
                             {% include 'rules/_skills_by_type.html' %}
                             {% if synergies_sorcerers %}
                                 {% include 'rules/_synergies.html' %}
@@ -265,7 +267,7 @@
                 <!-- TheurgistsSkill and MentalSkills -->
                 {% if skills_theurgists %}
                     <section id="theurgists_powers_and_mental_skills" class="tab-panel">
-                        {% with skill_types=skill_types_theurgists skills=skills_theurgists max_level_only=True synergies=synergies_theurgists panel_id=2 %}
+                        {% with skill_types=skill_types_theurgists skills=skills_theurgists synergies=synergies_theurgists panel_id=2 %}
                             {% include 'rules/_skills_by_type.html' %}
                             {% if synergies_theurgists %}
                                 {% include 'rules/_synergies.html' %}

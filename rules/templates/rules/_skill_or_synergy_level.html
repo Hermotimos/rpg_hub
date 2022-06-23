@@ -2,7 +2,7 @@
 {% load custom_filters %}
 
 
-<div class="container align-top pl-1 pr-md-4 mb-2 text-justify font-14">
+<div class="container align-top pl-1 pr-md-4 text-justify font-14">
     <div class="d-flex flex-row">
         
         <div class="pl-1 pt-01">
@@ -35,6 +35,40 @@
                         {{ skill_or_synergy_level.description|custom_linebreaksbr:2 }}
                     </div>
                 {% endif %}
+                {% if skill_or_synergy_level.distance is not None %}
+                    <div class="mt-1">
+                        <span data-toggle="tooltip" data-placement="right" title="Zasięg">
+                            <i class="ra ra-focused-lightning pr-1"></i>:
+                            {{ skill_or_synergy_level.distance }} m
+                        </span>
+                    </div>
+                {% endif %}
+                {% if skill_or_synergy_level.radius is not None %}
+                    <div class="mt-1">
+                        <span data-toggle="tooltip" data-placement="right" title="Promień">
+                            <i class="ra ra-radial-balance pr-1"></i>:
+                            {{ skill_or_synergy_level.radius }} m
+                        </span>
+                    </div>
+                {% endif %}
+                {% if skill_or_synergy_level.duration is not None %}
+                    <div class="mt-1">
+                        <span data-toggle="tooltip" data-placement="right" title="Czas działania">
+                            <i class="ra ra-hourglass pr-1"></i>:
+                            {{ skill_or_synergy_level.duration }} min
+                        </span>
+                    </div>
+                {% endif %}
+                {% if skill_or_synergy_level.damage is not None %}
+                    <div class="mt-1">
+                        <span data-toggle="tooltip" data-placement="right" title="Obrażenia">
+                            <i class="ra ra-cut-palm  pr-1"></i>:
+                            {{ skill_or_synergy_level.damage }}
+                        </span>
+                    </div>
+                {% endif %}
+                
+                
             </div>
             {% for perk in skill_or_synergy_level.perks.all %}
                 <div class="ml-1 mt-1">

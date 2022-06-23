@@ -168,13 +168,16 @@ class SkillAdmin(admin.ModelAdmin):
     
     
 @admin.register(MentalSkill)
-class PriestsSkillAdmin(SkillAdmin):
+class MentalSkillAdmin(SkillAdmin):
     fields = ['name', 'tested_trait', 'image', 'group', 'types', 'allowees']
 
 
 @admin.register(PriestsSkill, SorcerersSkill, TheurgistsSkill)
-class PriestsSkillAdmin(SkillAdmin):
-    fields = ['name', 'tested_trait', 'group', 'types', 'allowees']
+class PowerSkillAdmin(SkillAdmin):
+    fields = [
+        'name', 'name_second', 'name_origin', 'tested_trait', 'group', 'types',
+        'allowees'
+    ]
 
 
 # -----------------------------------------------------------------------------
@@ -224,9 +227,7 @@ class SynergyAdmin(admin.ModelAdmin):
 # -----------------------------------------------------------------------------
 
 
-@admin.register(
-    SkillLevel, RegularSkillLevel, MentalSkillLevel, PriestsSkillLevel,
-    SorcerersSkillLevel, TheurgistsSkillLevel)
+@admin.register(SkillLevel, RegularSkillLevel, MentalSkillLevel)
 class SkillLevelAdmin(admin.ModelAdmin):
     filter_horizontal = ['acquired_by', 'perks']
     formfield_overrides = {
@@ -246,6 +247,14 @@ class SkillLevelAdmin(admin.ModelAdmin):
             kwargs["queryset"] = Profile.objects.select_related('character')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
     
+    
+@admin.register(PriestsSkillLevel, SorcerersSkillLevel, TheurgistsSkillLevel)
+class PowerSkillLevelAdmin(admin.ModelAdmin):
+    fields = [
+        'skill', 'level', 'distance', 'radius', 'damage', 'duration',
+        'description', 'acquired_by',
+    ]
+    filter_horizontal = ['acquired_by']
 
 # -----------------------------------------------------------------------------
 

@@ -6,25 +6,47 @@
     <div class="d-flex flex-row">
         
         {% include 'rules/_skill_img.html' %}
-        
         <div class="skill-or-synergy-name ml-2 mt-2">
-            {% if current_profile.status == 'gm' %}
-                <a class="hover-blue" href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+            <div>
+                {% if current_profile.status == 'gm' %}
+                    {% if skilltype_kind == 'Powszechne' %}
+                        <a class="hover-blue" href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                            {{ skill.name }}
+                        </a>
+                    {% elif skilltype_kind == 'Moce Kapłańskie' %}
+                        <a class="hover-blue" href="{% url 'admin:rules_priestsskill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                            {{ skill.name }} ({{ skill.name_second }})
+                        </a>
+                    {% elif skilltype_kind == 'Zaklęcia' %}
+                        <a class="hover-blue" href="{% url 'admin:rules_sorcerersskill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                            {{ skill.name }}
+                        </a>
+                    {% elif skilltype_kind == 'Moce Teurgiczne' %}
+                        <a class="hover-blue" href="{% url 'admin:rules_theurgistsskill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                            {{ skill.name }}
+                        </a>
+                    {% endif %}
+                {% else %}
                     {{ skill.name }}
-                </a>
-            {% else %}
-                {{ skill.name }}
-            {% endif %}
-            <!-- Used when template is called from Prosoponomikon -->
-            {% if max_level_only %}
-                [{{ skill.skill_levels.all|get_max_skill_level_no }}]
-            {% endif %}
-            <small class="rules-gray1 smaller">
-                {% if skill.tested_trait %}
-                    ({{ skill.tested_trait }})
                 {% endif %}
-            </small>
-            <div class="row collapse mt-2" id="{{ skill|remove_special_chars }}{{ id_suffix }}">
+                <!-- Used when template is called from Prosoponomikon -->
+                {% if max_level_only %}
+                    [{{ skill.skill_levels.all|get_max_skill_level_no }}]
+                {% endif %}
+                <small class="rules-gray1 smaller">
+                    {% if skill.tested_trait %}
+                        ({{ skill.tested_trait }})
+                    {% endif %}
+                </small>
+                <br>
+                
+            </div>
+            {% if skill.name_origin and current_profile.can_view_all %}
+                <div class="mt-n5 pt-3 mb-n2">
+                    <small class="smaller font-italic text-muted">{{ skill.name_origin }}</small>
+                </div>
+            {% endif %}
+            <div class="row collapse" id="{{ skill|remove_special_chars }}{{ id_suffix }}">
                 {% for skill_level in skill.skill_levels.all %}
                     {% if not forloop.last and max_level_only %}
                         <!-- When called from Prosoponomikon skip all levels but the highest -->

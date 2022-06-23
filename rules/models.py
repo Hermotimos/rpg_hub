@@ -386,6 +386,8 @@ class SkillGroup(Model):
     
 class Skill(Model):
     name = CharField(max_length=100, unique=True)
+    name_second = CharField(max_length=100, blank=True, null=True)
+    name_origin = CharField(max_length=100, blank=True, null=True)
     tested_trait = CharField(max_length=50, blank=True, null=True)
     image = ImageField(upload_to='skills', blank=True, null=True)
     group = FK(to=SkillGroup, related_name='skills', on_delete=PROTECT, blank=True, null=True)
@@ -396,8 +398,9 @@ class Skill(Model):
         related_name='allowed_skills',
         blank=True,
     )
-    # ------------------------------------------
     version_of = FK(to='self', related_name='versions', on_delete=CASCADE, blank=True, null=True)
+    # ------------------------------------------
+    # For RegularSkills for weapon masteries
     weapon = One2One(to=WeaponType, on_delete=CASCADE, blank=True, null=True)
 
     class Meta:
@@ -508,10 +511,15 @@ S_LEVELS = [
 class SkillLevel(Model):
     skill = FK(to=Skill, related_name='skill_levels', on_delete=CASCADE)
     level = CharField(max_length=10, choices=S_LEVELS)
-    description = TextField(max_length=4000, blank=True, null=True)
+    description = TextField()
     perks = M2M(to=Perk, related_name='skill_levels', blank=True)
     acquired_by = M2M(to=Profile, related_name='skill_levels', blank=True)
-    
+    # ------------------------------------------
+    distance = PositiveSmallIntegerField(blank=True, null=True)
+    radius = PositiveSmallIntegerField(blank=True, null=True)
+    duration = PositiveSmallIntegerField(blank=True, null=True)
+    damage = CharField(max_length=20, blank=True, null=True)
+
     class Meta:
         ordering = ['skill__name', 'level']
 
