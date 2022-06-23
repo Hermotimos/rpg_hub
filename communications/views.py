@@ -207,7 +207,8 @@ def thread_view(request, thread_id, tag_title):
     
     informables = thread.informables()
     if current_profile.status != 'gm':
-        informables = informables.filter(character__in=current_profile.characters_participated.all())
+        informables = informables.filter(
+            character__in=current_profile.character.acquaintaned_to.all())
 
     # Update all statements to be seen by the profile
     SeenBy = Statement.seen_by.through

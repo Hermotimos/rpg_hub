@@ -111,7 +111,7 @@ class DebateCreateForm(forms.ModelForm):
         if current_profile.status != 'gm':
             self.fields['is_exclusive'].widget = HiddenInput()
             participants = participants.filter(
-                character__in=current_profile.characters_participated.all()
+                character__in=current_profile.character.acquaintaned_to.all()
             ).exclude(id=current_profile.id)
         self.fields['participants'].queryset = participants.select_related('character', 'user')
 

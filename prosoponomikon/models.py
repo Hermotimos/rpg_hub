@@ -187,9 +187,6 @@ class Character(Model):
     biography_packets = M2M(to=BiographyPacket, related_name='characters', blank=True)
     dialogue_packets = M2M(to=DialoguePacket, related_name='characters', blank=True)
     subprofessions = M2M(to=SubProfession, related_name='characters', blank=True)
-    # Participants = direct acquaintances; informees = known by hearsay
-    # participants = M2M(to=Profile, related_name='characters_participated', blank=True)
-    # informees = M2M(to=Profile, related_name='characters_informed', blank=True)
     acquaintances = M2M(
         to='self', through='Acquaintanceship', related_name='acquaintaned_to',
         blank=True, symmetrical=False)

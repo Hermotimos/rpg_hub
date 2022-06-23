@@ -33,7 +33,7 @@ def chronicle_main_view(request):
         debates = debates.prefetch_related('participants__character')
         
         known_profiles = Profile.players.filter(
-            Q(character__in=current_profile.characters_known_annotated())
+            Q(character__in=current_profile.character.acquaintaned_to.all())
             | Q(id=current_profile.id)
         ).prefetch_related('character')
         
