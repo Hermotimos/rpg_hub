@@ -289,17 +289,17 @@ class Acquaintanceship(Model):
 # -----------------------------------------------------------------------------
 
 
-def update_known_locations(sender, instance, **kwargs):
+def update_acquaintanceships(sender, instance, created, **kwargs):
     """Make an Acquaintance for GMs -> new Character."""
-    for gm_character in Character.objects.filter(profile__status='gm'):
-        Acquaintanceship.objects.create(
-            knowing_character=gm_character,
-            known_character=instance,
-            is_direct=True,
-            knows_if_dead=True,
-        )
+    if created:
+        for gm_character in Character.objects.filter(profile__status='gm'):
+            Acquaintanceship.objects.create(
+                knowing_character=gm_character,
+                known_character=instance,
+                is_direct=True,
+                knows_if_dead=True)
 
 
 post_save.connect(
-    receiver=update_known_locations,
+    receiver=update_acquaintanceships,
     sender=Character)
