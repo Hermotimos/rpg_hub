@@ -111,21 +111,6 @@ td.align-right {text-align: right;}
     border: double #444444;
 }
 
-blockquote {
-  background:  #fafafa;;
-  border-left: 5px solid #ccc;
-  margin: 0.5rem 0 0 0;
-  padding: 0.5rem 0.5rem;
-  quotes: "\201C""\201D""\2018""\2019";
-}
-blockquote:before {
-  color: #ccc;
-  content: open-quote;
-  font-size: 2.5rem;
-  line-height: 1rem;
-}
-blockquote p {display: inline;}
-
 
 /*****************************************************************************/
 /******************************* TEXT & FONT *********************************/
@@ -600,6 +585,22 @@ div.anchor:before {
     display:block;
 }
 
+div.anchor-2:before {
+    height: 11.8rem;
+    content: "";
+    display:block;
+    margin-top: -5rem;
+}
+
+@media only screen and (max-width: 600px) {
+    div.anchor-2:before {
+        height: 14.8rem;
+        content: "";
+        display:block;
+        margin-top: -10rem;
+    }
+}
+
 
 .content-section {
     background: #ffffff;
@@ -614,4 +615,18 @@ div.anchor:before {
 
 
 
+blockquote {
+  background:  #fafafa;;
+  border-left: 5px solid #ccc;
+  margin: 0.5rem 0 0 0;
+  padding: 0.5rem 0.5rem;
+  quotes: "\201C""\201D""\2018""\2019";
+}
+blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 2.5rem;
+  line-height: 1rem;
+}
+blockquote p {display: inline;}
 

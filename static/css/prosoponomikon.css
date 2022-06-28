@@ -10,8 +10,17 @@ ul.dropdown-menu {
 }
 @media only screen and (max-width: 600px) {
     ul.dropdown-menu {
-        position:fixed !important;
-        right: auto !important;
-        left: 2rem !important;
+        position: fixed !important;
+        top: 14rem !important;
+        right: 100% !important;
+        left: 1rem !important;
     }
+}
+
+.sticky-menu {
+    background-color: #fafafa;
+    position:sticky;
+    top:60px;
+    width:auto;
+    z-index:100;
 }
