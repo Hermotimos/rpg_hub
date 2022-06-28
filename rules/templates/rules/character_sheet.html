@@ -7,19 +7,36 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <div class="rules-styling">
-        <br><br><br>
-
-        <h2 class="rules">Karta Postaci</h2>
-        <br>
-        &#9758; <a href="{% static 'files/CECHY.jpg' %}" aria-disabled="true">Karta Postaci I (Cechy i Walka) - <span class="text-danger">wkrótce aktualizacja</span></a>
-        <br>
-        &#9758; <a href="{% static 'files/EKWIPUNEK.jpg' %}" aria-disabled="true">Karta Postaci II (Ekwipunek i Udźwig) - <span class="text-danger">wkrótce aktualizacja</span></a>
-        <br>
-        &#9758; <a href="{% static 'files/UMIEJĘTNOŚCI_1940x3000.jpg' %}">Karta Postaci III (Umiejętności)</a>
-        <br>
-        &#9758; <a href="{% static 'files/PASEK_1940x3000.jpg' %}">Karta Postaci IV.b (Pasek Postępu - wersja bez Cech)</a>
-        <br>
-        &#9758; <a href="{% static 'files/PASEK_CECHY_1940x3000.jpg' %}">Karta Postaci IV.b (Pasek Postępu - wersja z Cechami)</a>
+    <div class="rules-styling pt-3">
+        <h2 class="rules mt-5 mb-3">
+            Karta Postaci
+        </h2>
+        <ul>
+            <li>
+                <a href="{% static 'files/CECHY.jpg' %}" aria-disabled="true">
+                    Karta Postaci I (Cechy i Walka) - <span class="text-danger">wkrótce aktualizacja</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% static 'files/EKWIPUNEK.jpg' %}" aria-disabled="true">
+                    Karta Postaci II (Ekwipunek i Udźwig) - <span class="text-danger">wkrótce aktualizacja</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% static 'files/UMIEJĘTNOŚCI_1940x3000.jpg' %}">
+                    Karta Postaci III (Umiejętności)
+                </a>
+            </li>
+            <li>
+                <a href="{% static 'files/PASEK_1940x3000.jpg' %}">
+                    Karta Postaci IV.b (Pasek Postępu - wersja bez Cech)
+                </a>
+            </li>
+            <li>
+                <a href="{% static 'files/PASEK_CECHY_1940x3000.jpg' %}">
+                    Karta Postaci IV.b (Pasek Postępu - wersja z Cechami)
+                </a>
+            </li>
+        </ul>
     </div>
 {% endblock content %}
