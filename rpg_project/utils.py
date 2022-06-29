@@ -364,3 +364,10 @@ def transform_to_paragraphs():
             statement.text = statement.text.replace('\r\n', '</p><p>')
             statement.save()
 
+
+def get_obj_or_none(classmodel, **kwargs):
+    """Analogue to get_obj_or_404 to automate exception handling."""
+    try:
+        return classmodel.objects.get(**kwargs)
+    except classmodel.DoesNotExist:
+        return None
