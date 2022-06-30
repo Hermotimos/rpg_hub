@@ -261,7 +261,7 @@ img.img-grayscale:hover {filter: grayscale(0%);}
 
 .img-hover-zoom {
     position: relative;
-    margin: auto;
+    /*margin: auto;*/
     overflow: hidden;
 }
 .img-hover-zoom img {
