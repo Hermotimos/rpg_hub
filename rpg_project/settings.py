@@ -88,6 +88,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # imported
+    'ckeditor',
     'crispy_forms',
     'debug_toolbar',
     'django_filters',
@@ -253,7 +254,10 @@ else:
 
     MEDIA_ROOT = 'media'
     MEDIA_URL = 'media/'
+   
     
+# -----------------------------------------------------------------------------
+
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -261,6 +265,8 @@ LOGIN_REDIRECT_URL = 'users:home'
 LOGIN_URL = 'users:login'
 LOGOUT_REDIRECT_URL = 'users:login'
 
+# Default 1000 is too low for large inlines in admin
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
 # -----------------------------------------------------------------------------
 # email backend
