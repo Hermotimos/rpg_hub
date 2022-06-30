@@ -108,7 +108,7 @@
                     <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Wiedza</button>
                     <div class="dropdown-content">
                         <ul class="bullets-1 pl-4">
-                            <li><a class="font-14 nav-link small-caps" href="{% url 'knowledge:knowledge-packets-in-skills' 'Skill' %}">Almanach</a></li>
+                            <li><a class="font-14 nav-link small-caps" href="{% url 'knowledge:almanac' %}">Almanach</a></li>
                             <li><a class="font-14 nav-link small-caps" href="{% url 'prosoponomikon:acquaintanceships' %}">Prosoponomikon</a></li>
                             <li><a class="font-14 nav-link small-caps" href="{% url 'toponomikon:main' %}">Toponomikon</a></li>
 

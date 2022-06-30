@@ -14,57 +14,26 @@ from rules.models import Skill
 from users.models import Profile
 
 
-def custom_sort(skills_qs):
-    # Custom sorting to bring specific skills to the front of the queryset:
-    # Source: https://stackoverflow.com/questions/11622501/order-query-results-by-startswith-match
-    
-    search_terms = [
-        'Teolog',
-    ]
-    for search_term in search_terms:
-        # Use expression evaluation to annotate objects; order by annotation
-        expression = Q(name__startswith=search_term)
-        is_match = ExpressionWrapper(expression, output_field=BooleanField())
-        skills_qs = skills_qs.annotate(annotation=is_match)
-        # Order by the annotated field in reverse, so `True` is first (0 < 1).
-        skills_qs = skills_qs.order_by('-annotation')
-    
-    return skills_qs
-
-
 @login_required
-def knowledge_packets_in_skills_view(request, model_name):
+def almanac_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
-    skill_model = apps.get_app_config('rules').get_model(model_name)
-    skills = skill_model.objects.all()
     
-    page_title = skill_model._meta.verbose_name
-    if page_title == 'Księgi':
-        page_title = 'Biblioteka'
-    elif skill_model == Skill:
-        page_title = 'Almanach'
-    
-    # Filter skills queryset according to current_profile's permissions
     kn_packets = KnowledgePacket.objects.all()
     if not current_profile.can_view_all:
         kn_packets = kn_packets.filter(acquired_by=current_profile)
     
-    skills = skills.filter(knowledge_packets__in=kn_packets)
+    skills = Skill.objects.filter(knowledge_packets__in=kn_packets)
     skills = skills.prefetch_related(
         Prefetch('knowledge_packets', queryset=kn_packets),
-        'knowledge_packets__picture_sets__pictures',
-    ).distinct()
-    
-    if page_title != 'Almanach':
-        skills = custom_sort(skills)
+        'knowledge_packets__picture_sets__pictures')
     
     if request.method == 'POST':
         handle_inform_form(request)
 
     context = {
         'current_profile': current_profile,
-        'page_title': page_title,
-        'skills': skills,
+        'page_title': 'Almanach',
+        'skills': skills.distinct(),
     }
     return render(request, 'knowledge/skills_with_kn_packets.html', context)
 
@@ -125,7 +94,7 @@ def kn_packet_form_view(request, kn_packet_id):
             
         messages.success(
             request, f'Zapisano pakiet wiedzy "{kn_packet.title}"!')
-        return redirect('knowledge:knowledge-packets-in-skills', 'Skill')
+        return redirect('knowledge:almanac', 'Skill')
     else:
         messages.warning(request, form.errors)
         
