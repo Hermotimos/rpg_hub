@@ -13,6 +13,10 @@
                         <a class="hover-blue" href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
                             {{ skill.name }}
                         </a>
+                    {% elif skilltype_kind == 'Mentalne' %}
+                        <a class="hover-blue" href="{% url 'admin:rules_mentalskill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                            {{ skill.name }}
+                        </a>
                     {% elif skilltype_kind == 'Moce Kapłańskie' %}
                         <a class="hover-blue" href="{% url 'admin:rules_priestsskill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
                             {{ skill.name }} ({{ skill.name_second }})
