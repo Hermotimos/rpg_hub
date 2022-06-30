@@ -8,8 +8,8 @@
 
 {% block content %}
     <div class="pt-3 mt-5">
-                        {% with max_level_only=False skill_types=skill_types_regular skills=skills_regular %}
-                            {% include 'rules/_skills_by_type.html' %}
-                        {% endwith %}
+        {% with max_level_only=False skill_types=skill_types_regular skills=skills_regular %}
+            {% include 'rules/_skills_by_type.html' %}
+        {% endwith %}
     </div>
 {% endblock content %}
