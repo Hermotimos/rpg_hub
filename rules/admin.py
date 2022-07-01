@@ -174,13 +174,16 @@ class MentalSkillAdmin(SkillAdmin):
 
 class PowerSkillLevelInline(admin.StackedInline):
     fields = [
-        ('skill', 'level', 'distance', 'radius', 'duration', 'damage'),
+        (
+            'skill', 'level', 'distance', 'radius', 'duration',
+            'saving_throw_malus', 'damage'
+        ),
         ('description', 'acquired_by'),
     ]
-    filter_horizontal = ['acquired_by']
+    filter_vertical = ['acquired_by']
     formfield_overrides = {
         models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
-        models.TextField: {'widget': forms.Textarea(attrs={'rows': 15, 'cols': 50})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 30, 'cols': 80})},
     }
     model = PriestsSkillLevel
     extra = 0
@@ -270,8 +273,8 @@ class SkillLevelAdmin(admin.ModelAdmin):
 @admin.register(PriestsSkillLevel, SorcerersSkillLevel, TheurgistsSkillLevel)
 class PowerSkillLevelAdmin(admin.ModelAdmin):
     fields = [
-        'skill', 'level', 'distance', 'radius', 'damage', 'duration',
-        'description', 'acquired_by',
+        'skill', 'level', 'distance', 'radius', 'damage', 'saving_throw_malus',
+        'duration', 'description', 'acquired_by',
     ]
     filter_horizontal = ['acquired_by']
 

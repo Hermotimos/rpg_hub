@@ -59,6 +59,14 @@
                         </span>
                     </div>
                 {% endif %}
+                {% if skill_or_synergy_level.saving_throw_malus is not None %}
+                    <div class="mt-1">
+                        <span data-toggle="tooltip" data-placement="right" data-html="true" title="Malus do Rzutu Obronnego<br>(Test Cechy Prozaiczny)">
+                            <i class="ra ra-perspective-dice-random pr-1"></i>:
+                            +{{ skill_or_synergy_level.saving_throw_malus }}
+                        </span>
+                    </div>
+                {% endif %}
                 {% if skill_or_synergy_level.damage is not None %}
                     <div class="mt-1">
                         <span data-toggle="tooltip" data-placement="right" title="Obrażenia">

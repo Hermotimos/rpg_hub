@@ -519,6 +519,7 @@ class SkillLevel(Model):
     radius = PositiveSmallIntegerField(blank=True, null=True)
     duration = PositiveSmallIntegerField(blank=True, null=True)
     damage = CharField(max_length=20, blank=True, null=True)
+    saving_throw_malus = PositiveSmallIntegerField(blank=True, null=True)
 
     class Meta:
         ordering = ['skill__name', 'level']
