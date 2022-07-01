@@ -172,12 +172,31 @@ class MentalSkillAdmin(SkillAdmin):
     fields = ['name', 'tested_trait', 'image', 'group', 'types', 'allowees']
 
 
+class PowerSkillLevelInline(admin.StackedInline):
+    fields = [
+        ('skill', 'level', 'distance', 'radius', 'duration', 'damage'),
+        ('description', 'acquired_by'),
+    ]
+    filter_horizontal = ['acquired_by']
+    formfield_overrides = {
+        models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 15, 'cols': 50})},
+    }
+    model = PriestsSkillLevel
+    extra = 0
+    
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.prefetch_related('acquired_by')
+    
+    
 @admin.register(PriestsSkill, SorcerersSkill, TheurgistsSkill)
 class PowerSkillAdmin(SkillAdmin):
     fields = [
         'name', 'name_second', 'name_origin', 'tested_trait', 'group', 'types',
         'allowees'
     ]
+    inlines = [PowerSkillLevelInline]
 
 
 # -----------------------------------------------------------------------------
