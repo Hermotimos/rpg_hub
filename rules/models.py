@@ -278,19 +278,15 @@ class DamageType(Model):
     type = CharField(max_length=10, choices=DAMAGE_TYPES)
     damage = CharField(max_length=15)
     special = CharField(max_length=100, blank=True, null=True)
-    range = CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         ordering = ['type', 'description']
-        unique_together = [
-            ('description', 'type', 'damage', 'special', 'range'),
-        ]
+        unique_together = [('description', 'type', 'damage', 'special')]
 
     def __str__(self):
         description = f" {self.description}" if self.description else ""
         special = f" {self.special}" if self.special else ""
-        range = f" {self.range}" if self.range else ""
-        return f"{self.damage} [{self.type}]{description}{special}{range}"
+        return f"{self.damage} [{self.type}]{description}{special}"
     
     @property
     def short(self):

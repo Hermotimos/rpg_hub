@@ -369,10 +369,9 @@ class DamageTypeAdmin(admin.ModelAdmin):
         models.CharField: {'widget': forms.TextInput(attrs={'size': 15})},
     }
     list_display = [
-        '__str__', 'description', 'type', 'damage', 'special', 'range',
-        '_weapon_types',
+        '__str__', 'description', 'type', 'damage', 'special', '_weapon_types',
     ]
-    list_editable = ['description', 'type', 'damage', 'special', 'range']
+    list_editable = ['description', 'type', 'damage', 'special']
     list_filter = ['type', 'description']
     search_fields = ['description', 'damage', 'special']
 

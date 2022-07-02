@@ -68,7 +68,6 @@
                 <col class="class">
                 <col class="damage">
                 <col class="special">
-                <col class="range">
                 <col class="size">
                 <col class="trait">
                 <col class="price">
@@ -79,7 +78,6 @@
                     <th class="py-2">Broń</th>
                     <th>Obrażenia</th>
                     <th>Właściwości</th>
-                    <th>Zasięg</th>
                     <th>Cecha</th>
                     <th>Rozm</th>
                     <th>Cena</th>
@@ -91,11 +89,10 @@
                     <tr class="align-top {% if forloop.counter|divisibleby:2 %} bg-gray {% endif %}">
                         <td class="hover-blue" rowspan="{{ weapon_type.damage_types.count }}"
                             data-toggle="collapse" data-target="#{{ weapon_type|remove_special_chars }}" >
-                            <span class="pl-1">{{ weapon_type.name }}</span>
+                            <div class="ml-1">{{ weapon_type.name }}</div>
                         </td>
                         <td class="align-center"><small>{{ weapon_type.damage_types.first.short }}</small></td>
                         <td class="align-center"><small>{{ weapon_type.damage_types.first.special|default_if_none:""|linebreaksbr }}</small></td>
-                        <td class="align-center nowrap">{{ weapon_type.damage_types.first.range|default_if_none:"" }}</td>
                         <td class="align-center" rowspan="{{ weapon_type.damage_types.count }}">{{ weapon_type.trait }}</td>
                         <td class="align-center" rowspan="{{ weapon_type.damage_types.count }}">{{ weapon_type.size }}</td>
                         <td class="align-center" rowspan="{{ weapon_type.damage_types.count }}">
@@ -109,8 +106,9 @@
                                 {% if weapon_type.damage_types.count == 1 %}<td></td>{% endif %}
                                 <td class="align-center"><small>{{ damage_type.short }}</small></td>
                                 <td class="align-center"><small>{{ damage_type.special|default_if_none:"" }}</small></td>
-                                <td class="align-center"><small>{{ damage_type.range|default_if_none:"" }}</small></td>
-                                {% if weapon_type.damage_types.count == 1 %}<td colspan="4"></td>{% endif %}
+                                {% if weapon_type.damage_types.count == 1 %}
+                                    <td colspan="4"></td>
+                                {% endif %}
                             </tr>
                         {% endif %}
                     {% endfor %}
