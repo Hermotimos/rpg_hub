@@ -94,7 +94,7 @@ def kn_packet_form_view(request, kn_packet_id):
             
         messages.success(
             request, f'Zapisano pakiet wiedzy "{kn_packet.title}"!')
-        return redirect('knowledge:almanac', 'Skill')
+        return redirect('knowledge:almanac')
     else:
         messages.warning(request, form.errors)
         
