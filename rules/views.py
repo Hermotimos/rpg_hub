@@ -152,7 +152,7 @@ def rules_skills_view(request, skilltype_kind):
 
 
 @login_required
-def rules_synergies_view(request, skilltype_kind="Powszechne"):
+def rules_synergies_view(request, skilltype_kind):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
         'current_profile': current_profile,

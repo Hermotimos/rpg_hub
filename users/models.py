@@ -158,16 +158,21 @@ class Profile(Model):
             Prefetch('synergy_levels', queryset=synergy_levels))
         return synergies.distinct()
 
-    def synergies_allowed(self, skilltype_kind="Powszechne"):
+    def synergies_allowed(self, skilltype_kind):
         """Get synergies whose all composing skills are allowed to any od user's profiles."""
-        from rules.models import Synergy, RegularSynergy, MentalSynergy
+        from rules.models import Synergy, RegularSynergy, MentalSynergy, Skill
+        
+        skills = Skill.objects.filter(types__kinds__name=skilltype_kind, version_of=None)
+        skills = skills.exclude(~Q(allowees__in=self.user.profiles.all()))
+
         if skilltype_kind == "Powszechne":
             synergies = RegularSynergy.objects.all()
         elif skilltype_kind == "Mentalne":
             synergies = MentalSynergy.objects.all()
         else:
             synergies = Synergy.objects.none()
-            
+
+        synergies = synergies.filter(skills__in=skills)
         synergies = synergies.prefetch_related(
             'skills',
             'synergy_levels__skill_levels__skill',
@@ -176,7 +181,7 @@ class Profile(Model):
             'synergy_levels__perks__conditional_modifiers__modifier__factor',
             'synergy_levels__perks__comments',
         )
-        return synergies.exclude(~Q(skills__allowees__in=self.user.profiles.all()))
+        return synergies
 
     @property
     def undone_demands(self):
