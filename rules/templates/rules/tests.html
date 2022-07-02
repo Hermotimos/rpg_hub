@@ -245,13 +245,19 @@
             Przeciążenie
         </h2>
         <p>
-            Sytuacja, w której Postać nosi na swoich plecach ekwipunek na tyle ciężki, aby jego waga wkraczała poza I Próg Przeciążenia,
+            Z Przeciążeniem mierzy się Postać, która nosi na swoich plecach ekwipunek przewyższający jej Udźwig.
             stanowi przykład zastosowania zasad Malusa Generalnego.
-            Każdy z Progów Przeciążenia (I-II-III) wprowadza Malus Generalny o wartości odpowiednio -1, -2 oraz -4.
+            Każdy z Progów Przeciążenia (I-II-III-IV) wprowadza Malus Generalny o wartości odpowiednio -1, -2, -4 oraz -10,
+            a także ograniczenie Ruchu o 25%, 50%, 75% oraz 99%.
             Oznacza to, że Postać taszcząca ze sobą kilkadziesiąt kilogramów dobytku i wkraczająca w III Próg Przeciążenia otrzymuje Malus Generalny -4,
             co skutkuje zastosowaniem modyfikatora -4 do wszystkich Testów i Współczynników występujących na liście Bonusu/Malusa Generalnego.
             Postać skrajnie przeciążona jest zatem nieruchawa, ociężała i niezdolna do pełnego wykorzystania swoich atutów fizycznych.
             Czyli bardzo, bardzo źle...
+        </p>
+        <p>
+            Postać wchodzi w Próg Przeciążenia w chwili, gdy osiąga jego dolną wartość;
+            górne wartości Udźwigu Normalnego oraz Progów Przeciążenia mieszczą w sobie całość danego "kilograma".
+            Np. Postać o Udźwigu Podstawowym 20 kg nie wchodzi jeszcze w I Próg Przeciążenia, jeśli niesie na sobie 20.99 kg.
         </p>
         <table class="table table-hover table-bordered table-sm mt-3">
             <thead class="thead-dark align-center">
@@ -277,12 +283,6 @@
                 {% endfor %}
             </tbody>
         </table>
-        <p>
-            Postać wchodzi w Próg Przeciążenia w chwili, gdy osiąga jego dolną wartość;
-            górne wartości Udźwigu Normalnego oraz Progów Przeciążenia mieszczą w sobie całość danego "kilograma".
-            Np. Postać o Sile 10 i Udźwigu Normalnym 20 kg nie wchodzi jeszcze w I Próg Przeciążenia, jeśli niesie na sobie 20.99 kg.
-        </p>
-        
         
     </div>
 
