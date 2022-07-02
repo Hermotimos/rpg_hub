@@ -59,11 +59,11 @@
                         </span>
                     </div>
                 {% endif %}
-                {% if skill_or_synergy_level.saving_throw_malus is not None %}
+                {% if skill_or_synergy_level.saving_throw_trait is not None %}
                     <div class="mt-1">
                         <span data-toggle="tooltip" data-placement="right" title="Malus RO">
                             <i class="ra ra-perspective-dice-random pr-1"></i>:
-                            {{ skill_or_synergy_level.saving_throw_malus }}
+                            {{ skill_or_synergy_level.saving_throw_trait }} -{{ skill_or_synergy_level.saving_throw_malus }}
                         </span>
                     </div>
                 {% endif %}

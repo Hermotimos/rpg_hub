@@ -500,17 +500,25 @@ class TheurgistsSkill(Skill):
 # -----------------------------------------------------------------------------
 
 
-S_LEVELS = [
-    ('0', '0'),
-    ('1', '1'),
-    ('2', '2'),
-    ('3', '3')
-]
-
-
 class SkillLevel(Model):
+    LEVELS = [
+        ('0', '0'),
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+    ]
+    TRAITS = [
+        ('Sił', 'Sił'),
+        ('Zrc', 'Zrc'),
+        ('Kon', 'Kon'),
+        ('Sił/Zrc', 'Sił/Zrc'),
+        ('Sił/Kon', 'Sił/Kon'),
+        ('Zrc/Kon', 'Zrc/Kon'),
+        ('Sił/Zrc/Kon', 'Sił/Zrc/Kon'),
+    ]
+    
     skill = FK(to=Skill, related_name='skill_levels', on_delete=CASCADE)
-    level = CharField(max_length=10, choices=S_LEVELS)
+    level = CharField(max_length=10, choices=LEVELS)
     description = TextField()
     perks = M2M(to=Perk, related_name='skill_levels', blank=True)
     acquired_by = M2M(to=Profile, related_name='skill_levels', blank=True)
@@ -520,6 +528,8 @@ class SkillLevel(Model):
     duration = PositiveSmallIntegerField(blank=True, null=True)
     damage = CharField(max_length=20, blank=True, null=True)
     saving_throw_malus = PositiveSmallIntegerField(blank=True, null=True)
+    saving_throw_trait = CharField(
+        max_length=20, choices=TRAITS, blank=True, null=True)
 
     class Meta:
         ordering = ['skill__name', 'level']
@@ -661,8 +671,13 @@ class MentalSynergy(Synergy):
 
 
 class SynergyLevel(Model):
+    LEVELS = [
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+    ]
     synergy = FK(to=Synergy, related_name='synergy_levels', on_delete=CASCADE)
-    level = CharField(max_length=10, choices=S_LEVELS[1:])
+    level = CharField(max_length=10, choices=LEVELS)
     description = TextField(max_length=4000, blank=True, null=True)
     perks = M2M(to=Perk, related_name='synergy_levels', blank=True)
     skill_levels = M2M(to=SkillLevel, related_name='synergy_levels')

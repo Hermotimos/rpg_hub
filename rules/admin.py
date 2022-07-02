@@ -129,7 +129,8 @@ class SkillGroupAdmin(admin.ModelAdmin):
 # -----------------------------------------------------------------------------
 
 
-class SkillLevelInline(admin.TabularInline):
+class RegularSkillLevelInline(admin.TabularInline):
+    fields = ['level', 'description', 'acquired_by']
     filter_horizontal = ['perks', 'acquired_by']
     formfield_overrides = {
         models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
@@ -149,7 +150,7 @@ class SkillAdmin(admin.ModelAdmin):
         'types', 'allowees',
     ]
     filter_horizontal = ['allowees', 'types']
-    inlines = [SkillLevelInline]
+    inlines = [RegularSkillLevelInline]
     list_display = [
         'id', 'name', 'version_of', 'tested_trait', 'image', 'group'
     ]
@@ -176,7 +177,7 @@ class PowerSkillLevelInline(admin.StackedInline):
     fields = [
         (
             'skill', 'level', 'distance', 'radius', 'duration',
-            'saving_throw_malus', 'damage'
+            'saving_throw_trait', 'saving_throw_malus', 'damage',
         ),
         ('description', 'acquired_by'),
     ]
@@ -273,8 +274,8 @@ class SkillLevelAdmin(admin.ModelAdmin):
 @admin.register(PriestsSkillLevel, SorcerersSkillLevel, TheurgistsSkillLevel)
 class PowerSkillLevelAdmin(admin.ModelAdmin):
     fields = [
-        'skill', 'level', 'distance', 'radius', 'damage', 'saving_throw_malus',
-        'duration', 'description', 'acquired_by',
+        'skill', 'level', 'distance', 'radius', 'damage', 'saving_throw_trait',
+        'saving_throw_malus', 'duration', 'description', 'acquired_by',
     ]
     filter_horizontal = ['acquired_by']
 
