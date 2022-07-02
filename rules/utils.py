@@ -24,47 +24,6 @@ def can_view_special_rules(current_profile, restricted_professions):
 
 
 LOAD_LIMITS = [
-    [0, 3],
-    [2, 6],
-    [3, 10],
-    [6, 15],
-    [9, 22],
-    [12, 25],
-    [15, 28],
-    [18, 35],
-    [20, 45],
-    [20, 57],
-    [20, 62],
-    [23, 70],
-    [24, 75],
-    [27, 85],
-    [30, 90],
-    [35, 98],
-    [40, 110],
-    [55, 128],
-    [68, 140],
-    [80, 153]
-]
-
-
-def get_overload_ranges() -> namedtuple:
-    
-    def _get_overload_ranges(vals: Tuple[int, int]) -> namedtuple:
-        load_regular, load_max = vals
-        third = (load_max - load_regular) // 3
-        overload_1 = f"{load_regular + 1} - {load_regular + third}"
-        overload_2 = f"{load_regular + 1 + third} - {load_regular + third * 2}"
-        overload_3 = f"{min(load_regular + 1 + third * 2, load_max - 1)} - {load_max - 1}"
-        LoadInfo = namedtuple(
-            'LoadInfo',
-            ['load_regular', 'load_max', 'overload_1', 'overload_2',
-             'overload_3'])
-        return LoadInfo(load_regular, load_max, overload_1, overload_2, overload_3)
-    
-    return [_get_overload_ranges(v) for v in LOAD_LIMITS]
-    
-
-LOAD_LIMITS2 = [
     [1, 0],
     [2, 2],
     [3, 3],
@@ -88,7 +47,7 @@ LOAD_LIMITS2 = [
 ]
 
 
-def get_overload_ranges2() -> namedtuple:
+def get_overload_ranges() -> namedtuple:
     
     def _get_overload_ranges(vals: Tuple[int, int]) -> namedtuple:
         strength, load_regular = vals
@@ -102,4 +61,4 @@ def get_overload_ranges2() -> namedtuple:
         return LoadInfo(
             load_regular, overload_1, overload_2, overload_3, overload_4)
     
-    return [_get_overload_ranges(v) for v in LOAD_LIMITS2]
+    return [_get_overload_ranges(v) for v in LOAD_LIMITS]

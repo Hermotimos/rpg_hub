@@ -11,7 +11,7 @@ from rules.models import (
     WeaponType,
 )
 from rules.utils import get_overload_ranges, get_visible_professions, \
-    can_view_special_rules, get_overload_ranges2
+    can_view_special_rules
 from users.models import Profile
 
 
@@ -29,7 +29,7 @@ def rules_main_view(request):
     else:
         visible_professions = get_visible_professions(current_profile)
         can_view_power_rules = can_view_special_rules(current_profile, elite_professions)
-    print(visible_professions)
+
     context = {
         'current_profile': current_profile,
         'page_title': 'Zasady',
@@ -227,13 +227,10 @@ def rules_theurgy_view(request):
 @login_required
 def rules_tests_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
-    load_infos = get_overload_ranges()
-    load_infos2 = get_overload_ranges2()
     context = {
         'current_profile': current_profile,
         'page_title': 'Testy Cech',
-        'load_infos': load_infos,
-        'load_infos2': load_infos2,
+        'load_infos': get_overload_ranges(),
     }
     return render(request, 'rules/tests.html', context)
 
