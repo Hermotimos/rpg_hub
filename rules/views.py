@@ -250,17 +250,19 @@ def rules_weapon_types_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
     
-    weapon_types = WeaponType.objects.prefetch_related(
-        'picture_set__pictures__image',
-        'damage_types',
-        'comparables')
+    weapon_types = WeaponType.objects.all()
     if not current_profile.can_view_all:
-        weapon_types = weapon_types.filter(allowees__in=user_profiles)
+        weapon_types = weapon_types.filter(allowees__in=user_profiles).distinct()
+        
+    weapon_types = weapon_types.prefetch_related(
+        Prefetch('comparables', queryset=weapon_types),  # filter out unknown
+        'picture_set__pictures__image',
+        'damage_types')
 
     context = {
         'current_profile': current_profile,
         'page_title': 'Broń',
-        'weapon_types': weapon_types.distinct(),
+        'weapon_types': weapon_types,
     }
     return render(request, 'rules/weapon_types.html', context)
 
