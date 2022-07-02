@@ -83,11 +83,11 @@ table.weapon-types thead {
 }
 table.weapon-types .class {width: 22%;}
 table.weapon-types .damage {width: 15%;}
-table.weapon-types .special {width: 40%;}
+table.weapon-types .special {width: 38%;}
 table.weapon-types .size {width: 5%;}
-table.weapon-types .trait {width: 7%;}
+table.weapon-types .trait {width: 9%;}
 table.weapon-types .price {width: 5%;}
-table.weapon-types .weight {width: 7%;}
+table.weapon-types .weight {width: 6%;}
 
 
 .striped-2n tr:nth-child(2n) {background-color: #f2f2f2;}
