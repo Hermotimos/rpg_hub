@@ -10,7 +10,7 @@ from rules.models import (
     Skill, SkillType,
     WeaponType,
 )
-from rules.utils import get_overload_ranges, get_own_professions, \
+from rules.utils import get_overload_ranges, get_visible_professions, \
     can_view_special_rules, get_overload_ranges2
 from users.models import Profile
 
@@ -24,17 +24,17 @@ def rules_main_view(request):
         p.name for p in Profession.objects.filter(type='Elitarne')]
     
     if current_profile.status in ['gm', 'spectator']:
-        own_professions = elite_professions
+        visible_professions = elite_professions
         can_view_power_rules = True
     else:
-        own_professions = get_own_professions(current_profile)
+        visible_professions = get_visible_professions(current_profile)
         can_view_power_rules = can_view_special_rules(current_profile, elite_professions)
-
+    print(visible_professions)
     context = {
         'current_profile': current_profile,
         'page_title': 'Zasady',
         'can_view_power_rules': can_view_power_rules,
-        'own_professions': own_professions,
+        'visible_professions': visible_professions,
     }
     return render(request, 'rules/main.html', context)
 

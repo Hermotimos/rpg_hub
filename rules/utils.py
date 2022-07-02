@@ -5,7 +5,7 @@ from prosoponomikon.models import Character
 from rules.models import Profession, SubProfession
 
 
-def get_own_professions(current_profile):
+def get_visible_professions(current_profile):
     user_profiles = current_profile.user.profiles.all()
     subprofessions = SubProfession.objects.filter(
         characters__in=Character.objects.filter(profile__in=user_profiles))
@@ -19,7 +19,7 @@ def can_view_special_rules(current_profile, restricted_professions):
     if user_profiles.filter(status__in=['gm', 'spectator']):
         return True
     else:
-        allowed_professions = get_own_professions(current_profile)
+        allowed_professions = get_visible_professions(current_profile)
         return any([p in restricted_professions for p in allowed_professions])
 
 
