@@ -9,25 +9,24 @@
 {% block content %}
     <div class="rules-styling pt-3">
 
-        <h2 class="rules mt-5 mb-3">Obrażenia i Progi ran</h2>
+        <h2 class="rules mt-5 mb-3">Obrażenia i Progi Ran</h2>
         <p>
-            Progi ran określają, jak Postać reaguje na obrażenia mieszczące się w różnych przedziałach liczbowych.
-            Opisują zarówno skutki ran w trakcie walki i po niej, jak i czas ich gojenia.
-            Według Progów ran obrażenia dzielą się na Obicia i zadrapania, Lekkie, Średnie, Ciężkie oraz Śmiertelne.
-            Oprócz tego każda Postać posiada Próg Przytomności, który określa, ile obrażeń jest w stanie znieść, zanim omdleje z bólu i upływu krwi.
-            Progi ran oraz Próg Przytomności zależną od Kondycji Postaci, mogą być również modyfikowane przez Umiejętności.
+            Progi Ran określają, jak Postać reaguje na obrażenia mieszczące się w różnych przedziałach liczbowych.
+            Opisują zarówno skutki Ran w trakcie walki i po niej, jak i czas ich gojenia.
+            Według Progów Ran obrażenia dzielą się na Obicia i zadrapania, Lekkie, Średnie, Ciężkie oraz Śmiertelne.
+            Progi Ran zależną od Zdrowia Postaci, a to jest pochodną Kondycji oraz niektórych Umiejętności.
         </p>
 
-        <h2 class="rules mt-5 mb-3">Skutki ran w walce i po niej</h2>
+        <h2 class="rules mt-5 mb-3">Skutki Ran w walce i po niej</h2>
         <p>
-            Obicia i zadrapania oraz Rany Lekkie nie powodują żadnych negatywnych skutków dla Postaci, ani w trakcie walki, ani po niej.
-            Jednak mimo wszystko obciążają żywotność Postaci. Obicia i zadrapania mogą prowadzić do utraty przytomności, choć zazwyczaj nie do śmierci.
-            Jednak w szczególnych przypadkach nawet najmniejsze rany mogą sprowadzić śmierć,
+            Obicia i zadrapania oraz Rany Lekkie nie powodują żadnych dodatkowych skutków (poza utratą punktów Zdrowia), ani w trakcie walki, ani po niej.
+            W przypadku wyczerpania Zdrowia obicia i zadrapania mogą prowadzić do utraty przytomności, choć zazwyczaj nie do śmierci.
+            Jednak w szczególnych przypadkach nawet najmniejsze Rany mogą sprowadzić śmierć,
             np. szczury zjadające unieruchomioną Postać mogą zadawać po 1 OBR, ale w końcu dogryzą się od witalnych organów.
         </p>
         <p>
-            Wszystkie cięższe rany powodują skutki w Postaci ograniczenia sprawności Postaci, które trwają dopóki dana rana nie wygoi się całkowicie.
-            Jest to uzasadnione tym, że nawet stare rany potrafią szarpać bólem albo ograniczać elastyczność tkanki.
+            Wszystkie cięższe Rany powodują skutki w Postaci ograniczenia sprawności Postaci, które trwają dopóki dana Rana nie wygoi się całkowicie.
+            Jest to uzasadnione tym, że nawet stare Rany potrafią szarpać bólem albo ograniczać elastyczność tkanki.
         </p>
         <ul class="rules ml-4 font-italic text-justify">
             <li class="pb-2">
@@ -45,14 +44,14 @@
                 Skutki po walce: -
             </li>
             <li class="pb-2">
-                <b>Średnie: </b>ograniczają sprawność jedynie po walce, gdy rany zaczną krzepnąć.
+                <b>Średnie: </b>ograniczają sprawność jedynie po walce, gdy Rany zaczną krzepnąć.
                 <br>
                 Skutki w walce: -
                 <br>
                 Skutki po walce: Malus Generalny -1
             </li>
             <li class="pb-2">
-                <b>Ciężkie: </b>ograniczają sprawność w bieżącej walce, a efekt podwaja się, kiedy rany zaczną krzepnąć.
+                <b>Ciężkie: </b>ograniczają sprawność w bieżącej walce, a efekt podwaja się, kiedy Rany zaczną krzepnąć.
                 <br>
                 Skutki w walce: Malus Generalny -1
                 <br>
@@ -60,7 +59,7 @@
             </li>
             <li>
                 <b>Śmiertelne: </b>przed utratą przytomności następującą w ich wyniku możliwa jest ostatnia akcja ze znacząco ograniczoną sprawnością;
-                jednak w przypadku rany znacznie przewyższającej próg Ran Śmiertelnych (o 5 OBR) Postać ginie natychmiast, nieświadoma nawet tego, że umiera.
+                jednak w przypadku Obrażenia znacznie przewyższającej próg Ran Śmiertelnych (o 5 OBR) Postać ginie natychmiast, nieświadoma nawet tego, że umiera.
                 <br>
                 Skutki w walce: kumulatywnie Malus Generalny -5 przy ostatniej Akcji, następnie odpadnięcie z walki
                 <br>
@@ -69,13 +68,14 @@
         </ul>
         <p>
             W przypadku przeżycia Rany Śmiertelnej należy wykonać rzut k100 w celu określenia zakresu trwałego okaleczenia.
-            Jest to okaleczenie wynikające z nieodwracalnego zniszczenia tkanek, które nie poddaje się żadnej naturalnej kuracji czy odbudowie.
+            Jest to okaleczenie wynikające z nieodwracalnego zniszczenia tkanek, które zazwyczaj nie poddaje się naturalnej kuracji czy odbudowie.
             Może się ono wahać od lekkiego ograniczenia sprawności po ciężkie kalectwo.
-            Jeśli cios pozbawił Postać oka/oczu, ręki albo nogi, albo chociaż palców (np. na skutek Krytycznego Trafienia), nie wykonuje się tego rzutu.
+            Jeśli cios pozbawił Postać oka/oczu, ręki albo nogi, albo chociaż palców (np. na skutek Krytycznego Trafienia),
+            to nie wykonuje się tego rzutu, ponieważ dewastujący skutek jest już znany.
             W takich przypadkach trwałe okaleczenie sprowadza się do wszelkich skutków niemożności posługiwania się utraconą kończyną lub organem.
         </p>
         <h6 class="font-weight-bold font-italic">
-            Rzut za trwałe okalecznie:
+            Rzut za trwałe okaleczenie:
         </h6>
         <ul class="rules ml-4 font-italic">
             <li>1-20: -1 SIŁ</li>
@@ -88,13 +88,14 @@
             <li>100: -2 SIŁ, -2 ZRC, -2 KON</li>
         </ul>
 
-        <h2 class="rules mt-5 mb-3">Gojenie ran</h2>
+        <h2 class="rules mt-5 mb-3">Gojenie Ran</h2>
         <p>
-            Notując obrażenia należy zapisywać każdą ranę z osobna i przypisywać do odpowiedniej części ciała wraz z hasłowym opisem.
-            Tempo gojenia ran określone przez odpowiedni Próg ran stosuje się do każdej rany z osobna.
-            To znaczy, że 20 ran każda po 1 obr. w przypadku przeciętnego człowieka wygoi się w ciągu kilku godzin.
-            W przypadku poważniejszych ran do ich zagojenia wymagana jest opieka, a przynajmniej odpoczynek.
-            W skrajnych przypadkach brak odpoczynku i długotrwałe ignorowanie ran może skutkować zapaścią.
+            Notując obrażenia należy zapisywać każdą Ranę z osobna i przypisywać do odpowiedniej części ciała,
+            a w przypadku Ran Ciężkich i Śmiertelnych - załączyć hasłowy opis.
+            Tempo gojenia Ran określone przez odpowiedni Próg Ran stosuje się do każdej Rany z osobna.
+            To znaczy, że 20 Ran każda po 1 obr. w przypadku przeciętnego człowieka wygoi się w ciągu kilku godzin.
+            W przypadku poważniejszych Ran do ich zagojenia wymagana jest opieka, a przynajmniej odpoczynek.
+            W skrajnych przypadkach brak odpoczynku i długotrwałe ignorowanie Ran może skutkować zapaścią.
         </p>
         <ul class="rules ml-4 font-italic text-justify">
             <li class="pb-2">
@@ -111,22 +112,24 @@
                 <b>Ciężkie: </b>goją się w tempie 1 pkt/dzień pod warunkiem opieki specjalisty i odpoczynku, inaczej goją się tygodniami.
             </li>
             <li class="pb-2">
-                <b>Śmiertelne: </b>są to rany zagrażające życiu, które w braku natychmiastowego opatrzenia skutkują śmiercią;
-                zapoczątkowanie procesu gojenia wymaga otrzymania specjalistycznej pomocy, inaczej - nawet opatrzone - rany takie skutkują długą i bolesną agonią.
+                <b>Śmiertelne: </b>są to Rany zagrażające życiu, które w braku natychmiastowego opatrzenia skutkują śmiercią;
+                zapoczątkowanie procesu gojenia wymaga otrzymania specjalistycznej pomocy, inaczej - nawet opatrzone - Rany takie skutkują długą i bolesną agonią.
             </li>
         </ul>
 
-        <h2 class="rules mt-5 mb-3">Próg Przytomności</h2>
+        <h2 class="rules mt-5 mb-3">Życie a Zdrowie</h2>
         <p>
-            Próg Przytomności charakteryzuje zdolność Postaci do ignorowania bólu, upływu krwi i strachu wynikających z otrzymanych ran.
-            Utrata punktów Życia równa lub wyższa niż Próg Przytomności skutkuje natychmiastową utratą świadomości niezależnie od rodzaju otrzymanych ran - mogą to być nawet Obicia i zadrapania.
+            Postaci o niezwykle silnym organizmie zahartowanym przez trudy i boje, mają szanse na przeżycie nawet w przypadku, gdy ich Zdrowie osiągnęło wartość 0.
+            W zależności od wartości KON oraz niektórych Umiejętności, jej współczynnik Życia może nieznacznie wykraczać ponad wartość Zdrowia.
+            Jeśli odniesione Rany zmieszczą się w tej wartości, to Postać nie umiera natychmiast,
+            choć w przypadku otrzymania Rany Śmiertelnej jej przeżycie jest uzależnione od otrzymania pomocy.
+            Ponadto taka Postać znajduje się w stanie zapaści. Nie jest już zdolna uczestniczyć w walce i traci przytomność na wiele godzin. A być może na zawsze.
+            Dla otoczenia Postać jest jak martwa - jedynie wprawne oko może stwierdzić, że wciąż dycha.
+            W tym stanie jej dobicie przez przeciwnika lub pożarcie przez drapieżną bestię jest łatwe i dość prawdopodobne.
+            W przypadku przeżycia Postać wykonuje Rzut za trwałe okaleczenie jak w przypadku przeżycia Rany Śmiertelnej,
+            a jeśli Rana Śmiertelna zbiegła się z zapaścią spowodowaną utrawą Zdrowia, to rzut należy wykonać dwukrotnie, a Malusy zsumować.
         </p>
-        <p>
-            Ze wględu na to, że utrata przytomności na skutek przekroczenia Progu Przytomności nie różni się dla zewnętrznego obserwatora od śmierci,
-            w obu przypadkach Gracz powinien opuścić natychmiast pokój powstrzymując się od meta-komentarza, który zdradzi pozostałym Graczom (i Mistrzowi Gry), które z dwojga spotkało jego Postać.
-            Postulat ten jest trudny do realizacji ze względu na emocje, jednak korzyścią z niego jest wyższy poziom napięcia i realizmu,
-            a także tragizmu, jeśli kolejna Postać polegnie próbując ratować martwego już towarzysza.
-        </p>
+
         
     </div>
 {% endblock content %}
