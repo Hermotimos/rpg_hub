@@ -61,27 +61,23 @@
                         
                         <!-- CLASSES, TRAITS, EXPERIENCE -->
                         {% if current_profile.status == 'gm' or current_profile.status == 'player' and current_profile.character == character %}
-                            <div class="row ml-1 mt-2">
-                                <div class="font-italic">
-                                    {% if character.subprofessions.count == 1 %}
-                                        <b>Profesja</b>: {{ character.subprofessions.first }}
-                                    {% else %}
-                                        <b>Profesje</b>: {{ character.subprofessions.all|join:", " }}
-                                    {% endif %}
-                                </div>
+                            <div class="row font-italic pl-1 mt-2">
+                                {% if character.subprofessions.count == 1 %}
+                                    <b>Profesja</b>: {{ character.subprofessions.first }}
+                                {% else %}
+                                    <b>Profesje</b>: {{ character.subprofessions.all|join:", " }}
+                                {% endif %}
                             </div>
-                            <div class="row ml-1">
-                                <div class="font-italic">
-                                    <span class="mr-2"><b>Sił</b>: {{ character.strength }}</span>
-                                    <span class="mr-2"><b>Zrc</b>: {{ character.dexterity }}</span>
-                                    <span class="mr-2"><b>Kon</b>: {{ character.endurance }}</span>
-                                </div>
+                            <div class="row font-italic pl-1">
+                                <span class="mr-2"><b>Sił</b>: {{ character.strength }}</span>
+                                <span class="mr-2"><b>Zrc</b>: {{ character.dexterity }}</span>
+                                <span class="mr-2"><b>Kon</b>: {{ character.endurance }}</span>
                             </div>
-                            <div class="row ml-1">
-                                <div class="font-italic">
+                            {% if character.experience %}
+                                <div class="row font-italic pl-1">
                                     <span class="mr-2"><b>Exp</b>: {{ character.experience }}</span>
                                 </div>
-                            </div>
+                            {% endif %}
                         {% endif %}
     
                         <!-- CHARACTER DESCRIPTION -->
