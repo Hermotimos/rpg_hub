@@ -16,7 +16,7 @@
             Podstawową funkcją Cech jest określenie szans powodzenia Postaci podczas działań, które wymagają sprawności fizycznej,
             zwłaszcza kiedy Postać próbuje wykonać czynność o poziomie trudności wyższym niż banalny z perspektywy Cech, jakimi dysponuje.
             Również wykorzystanie wielu Umiejętności polega na wykonaniu Testu Cechy (☞<mark><a href="{% url 'rules:tests' %}">Testy Cech</a></mark>).
-            Ponadto każda z Cech dostarcza kilku współczynników pochodnych, np. Siła ➟ Udźwig, Zręczność ➟ Inicjatywa, Kondycja ➟ Życie.
+            Ponadto każda z Cech dostarcza kilku współczynników pochodnych, np. Siła ➟ Udźwig, Zręczność ➟ Inicjatywa, Kondycja ➟ Zdrowie, Wydolność.
         </p>
         <p>
             Wartości Cech mogą ulegać zmianie ze względów fabularnych (choroba, kalectwo, wpływ magii itp.) oraz w następstwie Rozwoju Postaci.
@@ -118,26 +118,26 @@
             </thead>
 
             <tbody class="align-center dark">
-                <tr><td class="border-custom-right">1</td>      <td class="rules-red">-10</td>      <td class="rules-red">-10</td>      <td class="rules-red">0</td>    </tr>
-                <tr><td class="border-custom-right">2</td>      <td class="rules-red">-6</td>       <td class="rules-red">-6</td>       <td class="rules-red">2</td>    </tr>
-                <tr><td class="border-custom-right">3</td>      <td class="rules-red">-5</td>       <td class="rules-red">-5</td>       <td class="rules-red">3</td>    </tr>
-                <tr><td class="border-custom-right">4</td>      <td class="rules-red">-4</td>       <td class="rules-red">-4</td>       <td class="rules-red">6</td>    </tr>
-                <tr><td class="border-custom-right">5</td>      <td class="rules-red">-3</td>       <td class="rules-red">-3</td>       <td class="rules-red">9</td>    </tr>
-                <tr><td class="border-custom-right">6</td>      <td class="rules-red">-2</td>       <td class="rules-red">-2</td>       <td class="rules-red">12</td>   </tr>
-                <tr><td class="border-custom-right">7</td>      <td class="rules-red">-1</td>       <td class="rules-red">-2</td>       <td class="rules-red">15</td>   </tr>
-                <tr><td class="border-custom-right">8</td>      <td class="rules-red">-1</td>       <td class="rules-red">-1</td>       <td class="rules-red">18</td>   </tr>
-                <tr><td class="border-custom-right">9</td>                           <td>0</td>     <td class="rules-red">-1</td>                           <td>20</td> </tr>
-                <tr><td class="border-custom-right">10</td>                          <td>0</td>                          <td>0</td>                         <td>20</td> </tr>
-                <tr><td class="border-custom-right">11</td>                          <td>0</td>     <td class="rules-green">+1</td>                         <td>20</td> </tr>
-                <tr><td class="border-custom-right">12</td>     <td class="rules-green">+1</td>     <td class="rules-green">+1</td>     <td class="rules-green">23</td> </tr>
-                <tr><td class="border-custom-right">13</td>     <td class="rules-green">+1</td>     <td class="rules-green">+2</td>     <td class="rules-green">24</td> </tr>
-                <tr><td class="border-custom-right">14</td>     <td class="rules-green">+2</td>     <td class="rules-green">+2</td>     <td class="rules-green">27</td> </tr>
-                <tr><td class="border-custom-right">15</td>     <td class="rules-green">+2</td>     <td class="rules-green">+3</td>     <td class="rules-green">30</td> </tr>
-                <tr><td class="border-custom-right">16</td>     <td class="rules-green">+3</td>     <td class="rules-green">+3</td>     <td class="rules-green">35</td> </tr>
-                <tr><td class="border-custom-right">17</td>     <td class="rules-green">+3</td>     <td class="rules-green">+4</td>     <td class="rules-green">40</td> </tr>
-                <tr><td class="border-custom-right">18</td>     <td class="rules-green">+4</td>     <td class="rules-green">+4</td>     <td class="rules-green">55</td> </tr>
-                <tr><td class="border-custom-right">19</td>     <td class="rules-green">+5</td>     <td class="rules-green">+5</td>     <td class="rules-green">68</td> </tr>
-                <tr><td class="border-custom-right">20</td>     <td class="rules-green">+6</td>     <td class="rules-green">+6</td>     <td class="rules-green">80</td> </tr>
+                <tr><td class="border-custom-right">1</td>        <td class="rules-red">-10</td>     <td class="rules-red">-10</td>      <td class="rules-red">0</td>    </tr>
+                <tr><td class="border-custom-right">2</td>        <td class="rules-red">-6</td>      <td class="rules-red">-6</td>       <td class="rules-red">2</td>    </tr>
+                <tr><td class="border-custom-right">3</td>        <td class="rules-red">-5</td>      <td class="rules-red">-5</td>       <td class="rules-red">3</td>    </tr>
+                <tr><td class="border-custom-right">4</td>        <td class="rules-red">-4</td>      <td class="rules-red">-4</td>       <td class="rules-red">6</td>    </tr>
+                <tr><td class="border-custom-right">5</td>        <td class="rules-red">-3</td>      <td class="rules-red">-3</td>       <td class="rules-red">9</td>    </tr>
+                <tr><td class="border-custom-right">6</td>        <td class="rules-red">-2</td>      <td class="rules-red">-2</td>       <td class="rules-red">12</td>   </tr>
+                <tr><td class="border-custom-right">7</td>        <td class="rules-red">-1</td>      <td class="rules-red">-2</td>       <td class="rules-red">14</td>   </tr>
+                <tr><td class="border-custom-right">8</td>        <td class="rules-red">-1</td>      <td class="rules-red">-1</td>       <td class="rules-red">16</td>   </tr>
+                <tr><td class="border-custom-right">9</td>                          <td>0</td>       <td class="rules-red">-1</td>       <td class="rules-red">18</td> </tr>
+                <tr><td class="border-custom-right">10</td>                         <td>0</td>                         <td>0</td>                          <td>20</td> </tr>
+                <tr><td class="border-custom-right">11</td>                         <td>0</td>     <td class="rules-green">+1</td>     <td class="rules-green">22</td> </tr>
+                <tr><td class="border-custom-right">12</td>     <td class="rules-green">+1</td>     <td class="rules-green">+1</td>    <td class="rules-green">24</td> </tr>
+                <tr><td class="border-custom-right">13</td>     <td class="rules-green">+1</td>     <td class="rules-green">+2</td>    <td class="rules-green">26</td> </tr>
+                <tr><td class="border-custom-right">14</td>     <td class="rules-green">+2</td>     <td class="rules-green">+2</td>    <td class="rules-green">29</td> </tr>
+                <tr><td class="border-custom-right">15</td>     <td class="rules-green">+2</td>     <td class="rules-green">+3</td>    <td class="rules-green">32</td> </tr>
+                <tr><td class="border-custom-right">16</td>     <td class="rules-green">+3</td>     <td class="rules-green">+3</td>    <td class="rules-green">37</td> </tr>
+                <tr><td class="border-custom-right">17</td>     <td class="rules-green">+3</td>     <td class="rules-green">+4</td>    <td class="rules-green">42</td> </tr>
+                <tr><td class="border-custom-right">18</td>     <td class="rules-green">+4</td>     <td class="rules-green">+4</td>    <td class="rules-green">56</td> </tr>
+                <tr><td class="border-custom-right">19</td>     <td class="rules-green">+5</td>     <td class="rules-green">+5</td>    <td class="rules-green">70</td> </tr>
+                <tr><td class="border-custom-right">20</td>     <td class="rules-green">+6</td>     <td class="rules-green">+6</td>    <td class="rules-green">85</td> </tr>
             </tbody>
         </table>
         <br>
