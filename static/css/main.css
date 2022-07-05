@@ -150,6 +150,21 @@ td.align-right {text-align: right;}
 24px 	1.5rem
 */
 
+/* Responsive font: font-resp-15 ending for font with 1.5rem for full screen */
+@media only screen and (max-width: 600px) {
+    .font-resp-15 {font-size: 0.9rem; !important}
+}
+@media only screen and (min-width: 601px) {
+    .font-resp-15 {font-size: 1.1rem !important;}
+}
+@media only screen and (min-width: 900px) {
+    .font-resp-15 {font-size: 1.3rem !important;}
+}
+@media only screen and (min-width: 1200px) {
+    .font-resp-15 {font-size: 1.5rem !important;}
+}
+
+
 
 small.red {color: red;}
 
@@ -451,8 +466,8 @@ li a {vertical-align: middle;}
 
 /* Tab main interaction */
 .tabset > input[type="radio"] {
-  position: absolute;
-  left: -200vw;
+    position: absolute;
+    left: -200vw;
 }
 
 .tabset .tab-panel {display: none;}
@@ -463,53 +478,63 @@ li a {vertical-align: middle;}
 .tabset > input:nth-child(7):checked ~ .tab-panels > .tab-panel:nth-child(4),
 .tabset > input:nth-child(9):checked ~ .tab-panels > .tab-panel:nth-child(5),
 .tabset > input:nth-child(11):checked ~ .tab-panels > .tab-panel:nth-child(6) {
-  display: block;
+    display: block;
 }
 
 /* Tab Styling */
-
 .tabset > input:checked + label {border-color: #ccc;}
 .tabset > label:hover {color: #06c;}
 .tabset > label {
-  position: relative;
-  display: inline-block;
-  padding: 15px 15px 10px;
-  border: 1px solid transparent;
-  border-bottom: 0;
-  cursor: pointer;
-  font-weight: 600;
+    position: relative;
+    display: inline-block;
+    border: 1px solid transparent;
+    border-bottom: 0;
+    cursor: pointer;
+    font-weight: 600;
 }
 
 /* Adds bottom border to tabs with multiline headers*/
 .tabset.multiline-header > label {
-  border-bottom: 1px solid transparent;
+    border-bottom: 1px solid transparent;
 }
 
 .tab-panel {
-  padding: 3rem 0rem;
-  border-top: 1px solid #ccc;
+    padding: 1rem 0rem;
+    border-top: 1px solid #ccc;
 }
 
 
 @media only screen and (max-width: 600px) {
-    .tabset label {font-size: 1.1rem;}
+    label.resp-tab-label {padding: 7px 7px 5px;}
+}
+@media only screen and (min-width: 601px) {
+    label.resp-tab-label {padding: 9px 9px 6px;}
+}
+@media only screen and (min-width: 901px) {
+    label.resp-tab-label {padding: 12px 12px 8px;}
+}
+@media only screen and (min-width: 1201px) {
+    label.resp-tab-label {padding: 15px 15px 10px;}
 }
 
 
-/* old
-.tabset > label:hover {color: #06c;}
-.tabset > label:hover::after,
-.tabset > input:focus + label::after,
-.tabset > input:checked + label::after {background: #06c;}
-.tabset > input:checked + label {
-  border-color: #ccc;
-  margin-bottom: -1px;
+/* This is not tabs, but has similar styling and is used together */
+@media only screen and (max-width: 600px) {
+    div.card-header-resp {padding: 4px 15px !important;}
 }
-.tab-panel {
-  padding: 3rem 0rem;
-  border-top: 1px solid #ccc;
+@media only screen and (min-width: 601px) {
+    div.card-header-resp {padding: 9px 15px !important;}
 }
-*/
+@media only screen and (min-width: 901px) {
+    div.card-header-resp {padding: 12px 15px !important;}
+}
+@media only screen and (min-width: 1201px) {
+    div.card-header-resp {padding: 10px 15px !important;}
+}
+
+
+
+
 
 
 

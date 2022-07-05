@@ -12,9 +12,9 @@
     <!-- SKILLS PER SKILL TYPES-->
     {% for skill_type in skill_types %}
         <div class="card mb-1">
-            <div class="card-header hover-blue py-2" id="{{ skill_type.name|remove_special_chars }}"
+            <div class="card-header card-header-resp hover-blue" id="{{ skill_type.name|remove_special_chars }}"
                  data-toggle="collapse" data-target="#collapse{{ skill_type.name|remove_special_chars }}" aria-expanded="true" aria-controls="collapse{{ skill_type.name|remove_special_chars }}">
-                <label class="h4 font-weight-bold m-0 hover-blue">
+                <label class="h4 font-weight-bold m-0 hover-blue font-resp-15">
                     {{ skill_type.name }}
                 </label>
             </div>
@@ -27,7 +27,7 @@
                             {% regroup skills|dictsort:"group.name" by group as skillgroup_list %}
                             {% for skillgroup in skillgroup_list %}
                                 {% if skillgroup.grouper.name %}
-                                    <h4 class="mt-4 mb-2 border-bottom text-center">
+                                    <h4 class="mt-4 mb-2 border-bottom text-center font-resp-15">
                                         {{ skillgroup.grouper.name }}
                                     </h4>
                                 {% endif %}
@@ -50,9 +50,9 @@
     
     <!-- ALL SKILLS -->
     <div class="card mb-2">
-        <div class="card-header hover-blue py-2" id="all-skills"
+        <div class="card-header card-header-resp hover-blue" id="all-skills"
              data-toggle="collapse" data-target="#collapse{{ panel_id }}" aria-expanded="true" aria-controls="collapse{{ panel_id }}">
-            <label class="h4 font-weight-bold mb-0 hover-blue small-caps">
+            <label class="h4 font-weight-bold mb-0 hover-blue small-caps font-resp-15">
                 Wszystkie
             </label>
         </div>
