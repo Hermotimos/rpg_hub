@@ -11,7 +11,7 @@ from rules.models import (
     WeaponType,
 )
 from rules.utils import get_overload_ranges, get_visible_professions, \
-    can_view_special_rules
+    can_view_special_rules, get_wounds_ranges
 from users.models import Profile
 
 
@@ -272,7 +272,8 @@ def rules_wounds_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
         'current_profile': current_profile,
-        'page_title': 'Progi i skutki ran'
+        'page_title': 'Progi i skutki ran',
+        'wounds_ranges': get_wounds_ranges(),
     }
     return render(request, 'rules/wounds.html', context)
 

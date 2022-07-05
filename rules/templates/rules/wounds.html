@@ -11,22 +11,44 @@
 
         <h2 class="rules mt-5 mb-3">Obrażenia i Progi Ran</h2>
         <p>
-            Progi Ran określają, jak Postać reaguje na obrażenia mieszczące się w różnych przedziałach liczbowych.
+            Progi Ran określają, jak Postać reaguje na Obrażenia mieszczące się w różnych przedziałach liczbowych.
             Opisują zarówno skutki Ran w trakcie walki i po niej, jak i czas ich gojenia.
-            Według Progów Ran obrażenia dzielą się na Obicia i zadrapania, Lekkie, Średnie, Ciężkie oraz Śmiertelne.
+            Według Progów Ran obrażenia dzielą się na Lekkie, Średnie, Ciężkie oraz Śmiertelne.
+            Obrażenia o wartości niższej niż dolna granica Ran Lekkich to obtłuczenia, obicia i zadrapania, które goją się w ciągu kilku godzin.
             Progi Ran zależną od Zdrowia Postaci, a to jest pochodną Kondycji oraz niektórych Umiejętności.
         </p>
+        <table class="table table-hover table-bordered table-sm mt-3">
+            <thead class="thead-dark align-center">
+                <tr>
+                    <th>Zdrowie</th>
+                    <th>Rany Lekkie</th>
+                    <th>Rany Średnie</th>
+                    <th>Rany Ciężkie</th>
+                    <th>Rany Śmiertelne</th>
+                </tr>
+            </thead>
+            <tbody class="align-center">
+                {% for wounds_range in wounds_ranges %}
+                    <tr>
+                        <td class="p-0 rules-green">{{ wounds_range.health }}</td>
+                        <td class="p-0">{{ wounds_range.light }}</td>
+                        <td class="p-0">{{ wounds_range.medium }}</td>
+                        <td class="p-0">{{ wounds_range.heavy }}</td>
+                        <td class="p-0">{{ wounds_range.deadly }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
         <h2 class="rules mt-5 mb-3">Skutki Ran w walce i po niej</h2>
         <p>
-            Obicia i zadrapania oraz Rany Lekkie nie powodują żadnych dodatkowych skutków (poza utratą punktów Zdrowia), ani w trakcie walki, ani po niej.
-            W przypadku wyczerpania Zdrowia obicia i zadrapania mogą prowadzić do utraty przytomności, choć zazwyczaj nie do śmierci.
-            Jednak w szczególnych przypadkach nawet najmniejsze Rany mogą sprowadzić śmierć,
-            np. szczury zjadające unieruchomioną Postać mogą zadawać po 1 OBR, ale w końcu dogryzą się od witalnych organów.
+            Poza utratą punktów Zdrowia Rany Lekkie oraz obicia i zadrapania nie powodują żadnych dodatkowych skutków ani w trakcie walki, ani po niej.
+            W przypadku wyczerpania Zdrowia obicia i zadrapania mogą prowadzić do utraty przytomności, ale nie do śmierci.
+            Oczywiście w szczególnych przypadkach nawet najmniejsze Rany mogą sprowadzić śmierć, np. mrówki zjadające unieruchomioną Postać.
         </p>
         <p>
-            Wszystkie cięższe Rany powodują skutki w Postaci ograniczenia sprawności Postaci, które trwają dopóki dana Rana nie wygoi się całkowicie.
-            Jest to uzasadnione tym, że nawet stare Rany potrafią szarpać bólem albo ograniczać elastyczność tkanki.
+            Wszystkie cięższe Rany powodują skutki w Postaci ograniczenia sprawności Postaci, które trwają ustepują dopiero wówczas, gdy Rana całkowicie się wygoi.
+            Jest to uzasadnione tym, że nawet stare Rany potrafią szarpać bólem i ograniczać elastyczność tkanki.
         </p>
         <ul class="rules ml-4 font-italic text-justify">
             <li class="pb-2">
@@ -51,7 +73,7 @@
                 Skutki po walce: Malus Generalny -1
             </li>
             <li class="pb-2">
-                <b>Ciężkie: </b>ograniczają sprawność w bieżącej walce, a efekt podwaja się, kiedy Rany zaczną krzepnąć.
+                <b>Ciężkie: </b>ograniczają sprawność w bieżącej walce, a efekt podwaja się, gdy Rany zaczną krzepnąć.
                 <br>
                 Skutki w walce: Malus Generalny -1
                 <br>
@@ -61,21 +83,22 @@
                 <b>Śmiertelne: </b>przed utratą przytomności następującą w ich wyniku możliwa jest ostatnia akcja ze znacząco ograniczoną sprawnością;
                 jednak w przypadku Obrażenia znacznie przewyższającej próg Ran Śmiertelnych (o 5 OBR) Postać ginie natychmiast, nieświadoma nawet tego, że umiera.
                 <br>
-                Skutki w walce: kumulatywnie Malus Generalny -5 przy ostatniej Akcji, następnie odpadnięcie z walki
+                Skutki w walce: Malus Generalny -5 przy ostatniej Akcji, następnie odpadnięcie z walki
                 <br>
-                Skutki po walce: w razie przeżycia - trwałe okaleczenie
+                Skutki po walce: Malus Generalny -10, Rzut za Trwałe Okaleczenie
             </li>
         </ul>
         <p>
-            W przypadku przeżycia Rany Śmiertelnej należy wykonać rzut k100 w celu określenia zakresu trwałego okaleczenia.
+            W przypadku przeżycia Rany Śmiertelnej należy wykonać rzut k100 w celu określenia zakresu Trwałego Okaleczenia.
             Jest to okaleczenie wynikające z nieodwracalnego zniszczenia tkanek, które zazwyczaj nie poddaje się naturalnej kuracji czy odbudowie.
             Może się ono wahać od lekkiego ograniczenia sprawności po ciężkie kalectwo.
             Jeśli cios pozbawił Postać oka/oczu, ręki albo nogi, albo chociaż palców (np. na skutek Krytycznego Trafienia),
             to nie wykonuje się tego rzutu, ponieważ dewastujący skutek jest już znany.
-            W takich przypadkach trwałe okaleczenie sprowadza się do wszelkich skutków niemożności posługiwania się utraconą kończyną lub organem.
+            W takich przypadkach trwałe okaleczenie sprowadza się do wszelkich skutków niemożności posługiwania się utraconą kończyną lub organem,
+            co zazwyczaj jest znacznie bardziej dojmujące niż utrata jednego czy dwóch punktów Cech.
         </p>
         <h6 class="font-weight-bold font-italic">
-            Rzut za trwałe okaleczenie:
+            Rzut za Trwałe Okaleczenia:
         </h6>
         <ul class="rules ml-4 font-italic">
             <li>1-20: -1 SIŁ</li>
@@ -87,6 +110,10 @@
             <li>91-99: -1 SIŁ, -1 ZRC, -1 KON</li>
             <li>100: -2 SIŁ, -2 ZRC, -2 KON</li>
         </ul>
+        <p>
+            Postać, która doznała Trwałego Okaleczenia, dopisuje wynikający z niego Malus do wynikającej z rzutu Cechy lub Cech.
+            
+        </p>
 
         <h2 class="rules mt-5 mb-3">Gojenie Ran</h2>
         <p>
