@@ -7,6 +7,7 @@ from django.db.models import (
     ManyToManyField as M2M,
     Model,
     OneToOneField as One2One,
+    PositiveSmallIntegerField,
     PROTECT,
     TextField,
 )
@@ -181,6 +182,11 @@ class Character(Model):
         blank=True, null=True)
     cognomen = CharField(max_length=50, blank=True, null=True)
     fullname = CharField(max_length=150)
+    
+    strength = PositiveSmallIntegerField(blank=True, null=True)
+    dexterity = PositiveSmallIntegerField(blank=True, null=True)
+    endurance = PositiveSmallIntegerField(blank=True, null=True)
+    experience = PositiveSmallIntegerField(blank=True, null=True)
 
     description = TextField(blank=True, null=True)
     frequented_locations = M2M(to=Location, related_name='characters', blank=True)

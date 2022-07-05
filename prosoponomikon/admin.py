@@ -203,7 +203,9 @@ class AcquaintanceshipPassiveInline(AcquaintanceshipActiveInline):
 @admin.register(Character, PlayerCharacter, NPCCharacter)
 class CharacterAdmin(admin.ModelAdmin):
     fields = [
-        'profile', 'first_name', 'family_name', 'cognomen', 'fullname',
+        'profile',
+        ('first_name', 'family_name', 'cognomen', 'fullname'),
+        ('strength', 'dexterity', 'endurance', 'experience'),
         'description', 'frequented_locations', 'biography_packets',
         'dialogue_packets', 'subprofessions',
     ]

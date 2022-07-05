@@ -58,6 +58,31 @@
                                 </div>
                             {% endif %}
                         </div>
+                        
+                        <!-- CLASSES, TRAITS, EXPERIENCE -->
+                        {% if current_profile.status == 'gm' or current_profile.status == 'player' and current_profile.character == character %}
+                            <div class="row ml-1 mt-2">
+                                <div class="font-italic">
+                                    {% if character.subprofessions.count == 1 %}
+                                        <b>Profesja</b>: {{ character.subprofessions.first }}
+                                    {% else %}
+                                        <b>Profesje</b>: {{ character.subprofessions.all|join:", " }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row ml-1">
+                                <div class="font-italic">
+                                    <span class="mr-2"><b>Sił</b>: {{ character.strength }}</span>
+                                    <span class="mr-2"><b>Zrc</b>: {{ character.dexterity }}</span>
+                                    <span class="mr-2"><b>Kon</b>: {{ character.endurance }}</span>
+                                </div>
+                            </div>
+                            <div class="row ml-1">
+                                <div class="font-italic">
+                                    <span class="mr-2"><b>Exp</b>: {{ character.experience }}</span>
+                                </div>
+                            </div>
+                        {% endif %}
     
                         <!-- CHARACTER DESCRIPTION -->
                         <div class="font-italic text-justify my-2 font-18 {% if character.only_indirectly %} text-muted {% endif %}">
