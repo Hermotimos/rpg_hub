@@ -199,8 +199,8 @@ class Character(Model):
     
     class Meta:
         ordering = ['fullname']
-        verbose_name = '* CHARACTER'
-        verbose_name_plural = '* CHARACTERS'
+        verbose_name = '*Character'
+        verbose_name_plural = '*Characters (ALL)'
     
     def __str__(self):
         return self.fullname
@@ -232,8 +232,9 @@ class CharacterAcquaintanceships(Character):
     
     class Meta:
         proxy = True
-        verbose_name_plural = "Character Acquaintanceships"
-        
+        verbose_name = '*Character (ACQUAINTANCESHIPS)'
+        verbose_name_plural = '*Characters (ACQUAINTANCESHIPS)'
+
         
 class PlayerCharacterManager(Manager):
     def get_queryset(self):
@@ -247,8 +248,8 @@ class PlayerCharacter(Character):
     
     class Meta:
         proxy = True
-        verbose_name = '--- Player'
-        verbose_name_plural = '--- Players'
+        verbose_name = '- Player'
+        verbose_name_plural = '- Players'
 
 
 class NPCCharacterManager(Manager):
@@ -263,8 +264,8 @@ class NPCCharacter(Character):
     
     class Meta:
         proxy = True
-        verbose_name = '--- NPC'
-        verbose_name_plural = '--- NPCs'
+        verbose_name = '- NPC'
+        verbose_name_plural = '- NPCs'
 
 
 class NonGMCharacterManager(Manager):
