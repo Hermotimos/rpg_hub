@@ -81,3 +81,18 @@ class GameEventFilter(FilterSet):
     class Meta:
         model = GameEvent
         fields = []
+
+
+# -----------------------------------------------------------------------------
+
+
+def add_sublocations(request):
+    """Modify locations filter result to include sublocations."""
+    all_locs_ids = []
+    for loc_id in request.GET.getlist('locations'):
+        sublocations = Location.objects.get(id=loc_id).with_sublocations()
+        all_locs_ids.extend([s.id for s in sublocations])
+    
+    request.GET = request.GET.copy()
+    request.GET.setlist('locations', all_locs_ids)
+    return request

@@ -279,7 +279,6 @@ def timeline_view(request):
         'event_no_in_game',
     )
     
-    # Modify locations filter to include sublocations
     request = add_sublocations(request)
     events_filter = GameEventFilter(
         request.GET, queryset=events, request=request)
@@ -295,12 +294,3 @@ def timeline_view(request):
     return render(request, 'chronicles/timeline.html', context)
 
 
-def add_sublocations(request):
-    all_locs_ids = []
-    for loc_id in request.GET.getlist('locations'):
-        sublocations = Location.objects.get(id=loc_id).with_sublocations()
-        all_locs_ids.extend([s.id for s in sublocations])
-        
-    request.GET = request.GET.copy()
-    request.GET.setlist('locations', all_locs_ids)
-    return request
