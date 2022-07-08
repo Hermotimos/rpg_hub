@@ -13,7 +13,7 @@ from django.utils.safestring import mark_safe
 from chronicles.models import GameEvent
 from imaginarion.models import PictureImage
 from prosoponomikon.models import Character, NonGMCharacter
-from rpg_project.utils import backup_db, only_game_masters, update_db
+from rpg_project.utils import backup_db, update_db, auth_profile
 from rules.models import (
     Skill, SkillLevel,
     Synergy, SynergyLevel,
@@ -27,9 +27,9 @@ from users.models import Profile
 
 
 @login_required
-@only_game_masters
+@auth_profile(['gm'])
 def todos_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     
     characters = NonGMCharacter.objects.all()
     
@@ -65,7 +65,7 @@ def todos_view(request):
 
 
 @login_required
-@only_game_masters
+@auth_profile(['gm'])
 def backup_db_view(request):
     if not os.environ.get('COMPUTERNAME'):
         messages.warning(request, 'Funkcja dostępna tylko w developmencie!')
@@ -78,7 +78,7 @@ def backup_db_view(request):
     
 
 @login_required
-@only_game_masters
+@auth_profile(['gm'])
 def update_local_db_view(request):
     if not os.environ.get('COMPUTERNAME'):
         messages.warning(request, 'Funkcja dostępna tylko w developmencie!')
@@ -96,7 +96,7 @@ def update_local_db_view(request):
 
 
 @login_required
-@only_game_masters
+@auth_profile(['gm'])
 def update_production_db_view(request):
     if not os.environ.get('COMPUTERNAME'):
         messages.warning(request, 'Funkcja dostępna tylko w developmencie!')
@@ -113,7 +113,7 @@ def update_production_db_view(request):
 
 
 @login_required
-@only_game_masters
+@auth_profile(['gm'])
 def allow_game_masters_to_all(request):
     models = [
         Skill, Synergy, Profession, WeaponType, Plate, Shield,
@@ -131,7 +131,7 @@ def allow_game_masters_to_all(request):
 
 
 @login_required
-@only_game_masters
+@auth_profile(['gm'])
 def cleanup_rules_objects(request):
     from rules.models import Factor, Modifier, ConditionalModifier, DamageType
     
@@ -160,7 +160,7 @@ def cleanup_rules_objects(request):
 
 
 @login_required
-@only_game_masters
+@auth_profile(['gm'])
 def refresh_content_types(request):
     """Remove stale content types."""
     deleted = []
@@ -177,7 +177,7 @@ def refresh_content_types(request):
 
 
 @login_required
-@only_game_masters
+@auth_profile(['gm'])
 def reload_main_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
@@ -188,7 +188,7 @@ def reload_main_view(request):
 
 
 @login_required
-@only_game_masters
+@auth_profile(['gm'])
 def reload_chronicles(request):
     for obj in GameEvent.objects.all():
         obj.save()
@@ -197,7 +197,7 @@ def reload_chronicles(request):
 
 
 @login_required
-@only_game_masters
+@auth_profile(['gm'])
 def reload_imaginarion(request):
     for obj in PictureImage.objects.all():
         # print(obj.pictures.first().description)
@@ -208,7 +208,7 @@ def reload_imaginarion(request):
 
 
 @login_required
-@only_game_masters
+@auth_profile(['gm'])
 def reload_prosoponomikon(request):
     for obj in Character.objects.all():
         obj.save()
@@ -217,7 +217,7 @@ def reload_prosoponomikon(request):
 
 
 @login_required
-@only_game_masters
+@auth_profile(['gm'])
 def reload_rules(request):
     for obj in Skill.objects.all():
         obj.save()
@@ -240,7 +240,7 @@ def reload_rules(request):
 
 
 @login_required
-@only_game_masters
+@auth_profile(['gm'])
 def reload_toponomikon(request):
     for obj in Location.objects.all():
         obj.save()

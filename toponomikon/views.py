@@ -3,12 +3,13 @@ from django.db.models import Prefetch
 from django.shortcuts import render, redirect
 
 from knowledge.models import MapPacket, KnowledgePacket
-from rpg_project.utils import handle_inform_form
+from rpg_project.utils import handle_inform_form, auth_profile
 from toponomikon.models import Location, LocationType, SecondaryLocation
 from users.models import Profile
 
 
 @login_required
+@auth_profile(['all'])
 def toponomikon_main_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
 
@@ -36,6 +37,7 @@ def toponomikon_main_view(request):
 
     
 @login_required
+@auth_profile(['all'])
 def toponomikon_location_view(request, loc_name):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
 

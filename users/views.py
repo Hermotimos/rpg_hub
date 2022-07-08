@@ -12,7 +12,7 @@ from django.shortcuts import render
 
 from prosoponomikon.forms import CharacterForm
 from prosoponomikon.models import Character, FirstName
-from rpg_project.utils import sample_from_qs
+from rpg_project.utils import sample_from_qs, auth_profile
 from users.forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm, UserImageUpdateForm
 from users.models import Profile
 
@@ -62,7 +62,8 @@ def register_view(request):
     return render(request, 'users/register.html', context)
 
 
-@login_required()
+@login_required
+@auth_profile(['all'])
 def change_password_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
 
@@ -87,6 +88,7 @@ def change_password_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def edit_user_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
@@ -119,6 +121,7 @@ def edit_user_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def edit_profile_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
@@ -144,6 +147,7 @@ def edit_profile_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def switch_profile(request, profile_id):
     request.session['profile_id'] = profile_id
     chosen_profile = Profile.objects.get(id=profile_id)
@@ -199,6 +203,7 @@ def game_event_with_caption(game_events_qs):
 
 
 @login_required
+@auth_profile(['all'])
 def home_view(request):
     # from imaginarion.models import PictureImage
     # first = PictureImage.objects.first()
@@ -232,6 +237,7 @@ def home_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def dupa_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {

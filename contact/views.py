@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from contact.forms import (DemandsCreateForm, DemandAnswerForm, PlanForm)
 from contact.models import Demand, DemandAnswer, Plan
-from rpg_project.utils import only_game_masters, send_emails
+from rpg_project.utils import only_game_masters, send_emails, auth_profile
 from rules.models import Skill, WeaponType, Plate
 from users.models import Profile
 
@@ -15,6 +15,7 @@ from users.models import Profile
 
 
 @login_required
+@auth_profile(['all'])
 def demands_main_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     ds = Demand.objects.all().\
@@ -59,6 +60,7 @@ def demands_main_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def demands_create_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     
@@ -86,6 +88,7 @@ def demands_create_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def demands_delete_view(request, demand_id):
     profile = Profile.objects.get(id=request.session['profile_id'])
     demand = get_object_or_404(Demand, id=demand_id)
@@ -99,6 +102,7 @@ def demands_delete_view(request, demand_id):
 
 
 @login_required
+@auth_profile(['all'])
 def demands_detail_view(request, demand_id):
     profile = Profile.objects.get(id=request.session['profile_id'])
     demand = get_object_or_404(Demand, id=demand_id)
@@ -136,6 +140,7 @@ def demands_detail_view(request, demand_id):
 
 
 @login_required
+@auth_profile(['all'])
 def demand_done_undone_view(request, demand_id, is_done):
     profile = Profile.objects.get(id=request.session['profile_id'])
     demand = get_object_or_404(Demand, id=demand_id)
@@ -165,6 +170,7 @@ def demand_done_undone_view(request, demand_id, is_done):
 
 
 @login_required
+@auth_profile(['all'])
 def plans_main_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     plans = Plan.objects.filter(author=profile).select_related('author')
@@ -204,7 +210,7 @@ def plans_main_view(request):
 
 
 @login_required
-@only_game_masters
+@auth_profile(['gm', 'spectator'])
 def plans_for_gm_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
@@ -216,6 +222,7 @@ def plans_for_gm_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def plans_create_view(request):
     profile = Profile.objects.get(id=request.session['profile_id'])
     
@@ -243,6 +250,7 @@ def plans_create_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def plans_delete_view(request, plan_id):
     profile = Profile.objects.get(id=request.session['profile_id'])
     plan = get_object_or_404(Plan, id=plan_id)
@@ -257,6 +265,7 @@ def plans_delete_view(request, plan_id):
 
 
 @login_required
+@auth_profile(['all'])
 def plans_modify_view(request, plan_id):
     profile = Profile.objects.get(id=request.session['profile_id'])
     plan = get_object_or_404(Plan, id=plan_id)

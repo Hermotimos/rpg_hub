@@ -9,12 +9,13 @@ from django.shortcuts import render, redirect
 from imaginarion.models import Picture, PictureImage, PictureSet
 from knowledge.forms import KnPacketForm, PlayerKnPacketForm
 from knowledge.models import KnowledgePacket
-from rpg_project.utils import handle_inform_form
+from rpg_project.utils import handle_inform_form, auth_profile
 from rules.models import Skill
 from users.models import Profile
 
 
 @login_required
+@auth_profile(['all'])
 def almanac_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
@@ -39,6 +40,7 @@ def almanac_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def kn_packet_form_view(request, kn_packet_id):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     kn_packet = KnowledgePacket.objects.filter(id=kn_packet_id).first()

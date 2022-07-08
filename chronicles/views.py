@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch, Q, Count
 from django.shortcuts import render, redirect, get_object_or_404
 
-from chronicles.filters import GameEventFilter
+from chronicles.filters import GameEventFilter, add_sublocations
 from chronicles.models import (
     Chapter,
     GameSession,
@@ -11,8 +11,7 @@ from chronicles.models import (
     TimeUnit,
     Chronology,
 )
-from rpg_project.utils import send_emails
-from toponomikon.models import Location
+from rpg_project.utils import send_emails, auth_profile
 from users.models import Profile
 
 
@@ -20,6 +19,7 @@ from users.models import Profile
 
 
 @login_required
+@auth_profile(['all'])
 def chronicle_main_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
@@ -64,6 +64,7 @@ def chronicle_main_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def chronicle_game_view(request, game_id):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
@@ -94,6 +95,7 @@ def chronicle_game_view(request, game_id):
 
 
 @login_required
+@auth_profile(['all'])
 def chronicle_chapter_view(request, chapter_id):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     chapter = get_object_or_404(Chapter, id=chapter_id)
@@ -127,6 +129,7 @@ def chronicle_chapter_view(request, chapter_id):
 
 
 @login_required
+@auth_profile(['all'])
 def chronicle_all_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     events = GameEvent.objects.prefetch_related(
@@ -166,6 +169,7 @@ def chronicle_all_view(request):
 #  TODO another view for HistoryEvent ?
 #  TODO or maybe just check if id in GameEvent or HistoryEvent
 @login_required
+@auth_profile(['all'])
 def game_event_inform_view(request, game_event_id):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     game_event = get_object_or_404(TimeUnit, id=game_event_id)
@@ -201,6 +205,8 @@ def game_event_inform_view(request, game_event_id):
         return redirect('users:dupa')
 
 
+@login_required
+@auth_profile(['gm'])
 def chronologies_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
@@ -232,6 +238,7 @@ def chronologies_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def timeline_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
 

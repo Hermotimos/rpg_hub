@@ -10,38 +10,19 @@ from imaginarion.models import Picture, PictureImage, PictureSet
 from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
 from prosoponomikon.forms import CharacterCreateForm
-from prosoponomikon.models import Character, FirstNameGroup, FamilyName, Acquaintanceship
-from rpg_project.utils import handle_inform_form, backup_db, only_game_masters
+from prosoponomikon.models import Character, FirstNameGroup, FamilyName, \
+    Acquaintanceship
+from rpg_project.utils import handle_inform_form, backup_db, auth_profile
 from rules.models import SkillType
 from toponomikon.models import Location
 from users.models import Profile, User
 
 
 @login_required
+@auth_profile(['all'])
 def prosoponomikon_acquaintanceships_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
-    
-    # for profile in Profile.objects.filter():
-    #     print(profile)
-    #     for character in profile.characters_known_annotated():
-    #         Acquaintanceship.objects.get_or_create(
-    #             knowing_character=profile.character,
-    #             known_character=character,
-    #             is_direct=(not character.only_indirectly),
-    #         )
-    #     if profile.status == 'player':
-    #         print(profile.character, profile.character.acquaintances.count())
-
-    # for character in Character.objects.all():
-    #     Acquaintanceship.objects.create(
-    #         knowing_character=Character.objects.get(profile__status='gm'),
-    #         known_character=character,
-    #         is_direct=True,
-    #         knows_if_dead=True,
-    #     )
-
+    current_profile = request.current_profile
     acquaintanceships = current_profile.character.acquaintanceships()
-    
     context = {
         'current_profile': current_profile,
         'page_title': 'Prosoponomikon',
@@ -51,8 +32,9 @@ def prosoponomikon_acquaintanceships_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def prosoponomikon_character_view(request, character_id):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     
     # Declare empty variables
     [
@@ -174,32 +156,37 @@ def prosoponomikon_character_view(request, character_id):
 
 
 @login_required
+@auth_profile(['all'])
 def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
 
     bio_packet = BiographyPacket.objects.filter(id=bio_packet_id).first()
     character = Character.objects.filter(id=character_id).first()
 
-    if profile.status == 'gm':
-        form = BioPacketForm(data=request.POST or None,
-                             files=request.FILES or None,
-                             instance=bio_packet)
+    if current_profile.status == 'gm':
+        form = BioPacketForm(
+            data=request.POST or None,
+            files=request.FILES or None,
+            instance=bio_packet)
     else:
-        form = PlayerBioPacketForm(data=request.POST or None,
-                                   files=request.FILES or None,
-                                   instance=bio_packet)
+        form = PlayerBioPacketForm(
+            data=request.POST or None,
+            files=request.FILES or None,
+            instance=bio_packet)
     
     if form.is_valid():
-        if profile.status == 'gm':
+        if current_profile.status == 'gm':
             bio_packet = form.save()
         else:
             bio_packet = form.save(commit=False)
-            bio_packet.author = profile
+            bio_packet.author = current_profile
             bio_packet.save()
-            bio_packet.acquired_by.add(profile)
+            bio_packet.acquired_by.add(current_profile)
             
-            pictures = [v for k, v in form.cleaned_data.items()
-                        if 'picture' in k and v is not None]
+            pictures = [
+                v for k, v in form.cleaned_data.items()
+                if 'picture' in k and v is not None
+            ]
 
             new_pictures = []
             for cnt, picture in enumerate(pictures, 1):
@@ -218,7 +205,7 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
                 now = datetime.now().strftime("%Y-%d-%m %H:%M:%S")
                 title = f"""
                     BiographyPacket: '{bio_packet.title}'
-                    [Autor: {profile.character.first_name} - {now}]
+                    [Autor: {current_profile.character.first_name} - {now}]
                 """
                 new_picture_set = PictureSet.objects.create(title=title)
                 new_picture_set.pictures.set(new_pictures)
@@ -226,36 +213,35 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
 
         character.biography_packets.add(bio_packet)
         
-        messages.success(request, "Zapisano pakiet biograficzny!")
+        messages.success(request, "Zapisano Biogram!")
         return redirect('prosoponomikon:character', character_id)
 
     else:
         messages.warning(request, form.errors)
 
     context = {
-        'current_profile': profile,
-        'page_title': f"{character}: " + (
-            bio_packet.title if bio_packet else 'Nowy pakiet wiedzy'),
+        'current_profile': current_profile,
+        'page_title': f"{character}: {bio_packet.title}" if bio_packet else f"Biogram: {character}",
         'form': form,
     }
-    if not bio_packet_id or profile.status == 'gm' \
-            or profile.biography_packets.filter(id=bio_packet_id):
+    if not bio_packet_id or current_profile.status == 'gm' \
+            or current_profile.biography_packets.filter(id=bio_packet_id):
         return render(request, '_form.html', context)
     else:
         return redirect('users:dupa')
 
 
 @login_required
-@only_game_masters
+@auth_profile(['gm'])
 def prosoponomikon_first_names_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     
     name_groups = FirstNameGroup.objects.prefetch_related(
         'affix_groups__first_names__characters__profile',
         'affix_groups__first_names__auxiliary_group__location',
     )
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': "Imiona",
         'name_groups': name_groups,
     }
@@ -263,16 +249,16 @@ def prosoponomikon_first_names_view(request):
 
 
 @login_required
-@only_game_masters
+@auth_profile(['gm'])
 def prosoponomikon_family_names_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     
     family_names = FamilyName.objects.select_related('group')
     family_names = family_names.prefetch_related(
         'characters__profile', 'locations')
 
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': "Nazwiska",
         'family_names': family_names,
     }
@@ -280,10 +266,10 @@ def prosoponomikon_family_names_view(request):
 
 
 @login_required
-@only_game_masters
+@auth_profile(['gm'])
 def prosoponomikon_character_create_form_view(request):
     """Handle CharacterCreateForm intended for GM."""
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     
     form = CharacterCreateForm(
         data=request.POST or None, files=request.FILES or None)
@@ -302,7 +288,7 @@ def prosoponomikon_character_create_form_view(request):
         return redirect('prosoponomikon:character-create')
         
     context = {
-        'current_profile': profile,
+        'current_profile': current_profile,
         'page_title': "Nowa Postać",
         'form': form,
     }
@@ -310,7 +296,7 @@ def prosoponomikon_character_create_form_view(request):
 
 
 @login_required
-@only_game_masters
+@auth_profile(['gm'])
 def prosoponomikon_acquaintances_view(request, location_id):
     """Make everybody know directly everybody in a given Location."""
 

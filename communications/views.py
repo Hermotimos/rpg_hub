@@ -18,6 +18,7 @@ from communications.models import (
     Thread,
     ThreadTag,
 )
+from rpg_project.utils import auth_profile
 from users.models import Profile
 
 # TODO
@@ -99,6 +100,7 @@ def get_threads(current_profile, thread_kind):
 
 
 @login_required
+@auth_profile(['all'])
 def threads_view(request, thread_kind, tag_title):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
 
@@ -191,6 +193,7 @@ def threads_view(request, thread_kind, tag_title):
 
 
 @login_required
+@auth_profile(['all'])
 def thread_view(request, thread_id, tag_title):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
 
@@ -283,6 +286,7 @@ def thread_view(request, thread_id, tag_title):
     
 
 @login_required
+@auth_profile(['all'])
 def create_thread_view(request, thread_kind):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
 
@@ -340,6 +344,7 @@ def create_thread_view(request, thread_kind):
 
 
 @login_required
+@auth_profile(['all'])
 def unfollow_thread_view(request, thread_id):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
@@ -353,6 +358,7 @@ def unfollow_thread_view(request, thread_id):
 
 
 @login_required
+@auth_profile(['all'])
 def follow_thread_view(request, thread_id):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     

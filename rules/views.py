@@ -10,12 +10,14 @@ from rules.models import (
     Skill, SkillType,
     WeaponType,
 )
+from rpg_project.utils import auth_profile
 from rules.utils import get_overload_ranges, get_visible_professions, \
     can_view_special_rules, get_wounds_ranges
 from users.models import Profile
 
 
 @login_required
+@auth_profile(['all'])
 def rules_main_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     
@@ -40,6 +42,7 @@ def rules_main_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def rules_armor_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
@@ -61,6 +64,7 @@ def rules_armor_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def rules_combat_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
@@ -71,6 +75,7 @@ def rules_combat_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def rules_character_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
@@ -81,6 +86,7 @@ def rules_character_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def rules_professions_view(request, profession_type):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
@@ -108,6 +114,7 @@ def rules_professions_view(request, profession_type):
 
 
 @login_required
+@auth_profile(['all'])
 def rules_character_development_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
@@ -118,6 +125,7 @@ def rules_character_development_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def rules_skills_view(request, skilltype_kind):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
@@ -152,6 +160,7 @@ def rules_skills_view(request, skilltype_kind):
 
 
 @login_required
+@auth_profile(['all'])
 def rules_synergies_view(request, skilltype_kind):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
@@ -163,6 +172,7 @@ def rules_synergies_view(request, skilltype_kind):
 
 
 @login_required
+@auth_profile(['all'])
 def rules_traits_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
@@ -173,6 +183,7 @@ def rules_traits_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def rules_power_trait_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
@@ -186,6 +197,7 @@ def rules_power_trait_view(request):
     
     
 @login_required
+@auth_profile(['all'])
 def rules_priesthood_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
@@ -199,6 +211,7 @@ def rules_priesthood_view(request):
      
      
 @login_required
+@auth_profile(['all'])
 def rules_sorcery_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
@@ -212,6 +225,7 @@ def rules_sorcery_view(request):
     
      
 @login_required
+@auth_profile(['all'])
 def rules_theurgy_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
@@ -225,6 +239,7 @@ def rules_theurgy_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def rules_tests_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
@@ -236,6 +251,7 @@ def rules_tests_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def rules_fitness_and_tricks_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
@@ -246,6 +262,7 @@ def rules_fitness_and_tricks_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def rules_weapon_types_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     user_profiles = current_profile.user.profiles.all()
@@ -268,6 +285,7 @@ def rules_weapon_types_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def rules_wounds_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
@@ -279,6 +297,7 @@ def rules_wounds_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def rules_character_sheet_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
@@ -289,6 +308,7 @@ def rules_character_sheet_view(request):
 
 
 @login_required
+@auth_profile(['all'])
 def rules_experience_demand_view(request):
     current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
