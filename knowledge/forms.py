@@ -114,7 +114,7 @@ class BioPacketForm(ModelForm):
         
         self.helper = FormHelper()
         self.helper.add_input(
-            Submit('submit', 'Zapisz pakiet biograficzny', css_class='btn-dark'))
+            Submit('submit', 'Zapisz Biogram', css_class='btn-dark'))
 
 
 class PlayerBioPacketForm(BioPacketForm):

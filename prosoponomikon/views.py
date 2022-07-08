@@ -3,7 +3,6 @@ from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch, Q
-from django.db.models.functions import Substr, Lower
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
@@ -68,7 +67,7 @@ def prosoponomikon_character_view(request, character_id):
     if current_profile.character.id == character_id:
         # Players on NPCs viewing their own Characters
         character = current_profile.character
-        this_acquaintance = None
+        this_acquaintanceship = None
     else:
         # GM viewing another Character
         if current_profile.can_view_all:
@@ -85,11 +84,12 @@ def prosoponomikon_character_view(request, character_id):
             'dialogue_packets')
         character = characters.get(id=character_id)
         try:
-            this_acquaintance = Acquaintanceship.objects.get(
+            this_acquaintanceship = Acquaintanceship.objects.get(
                 knowing_character=current_profile.character,
                 known_character=character)
         except Acquaintanceship.DoesNotExist:
             # when GM moves between NPCs with open Prosoponomikon
+            messages.info(request, "Aktualna Postać nie zna wybranej Postaci")
             return redirect('prosoponomikon:acquaintanceships')
         
     dialogue_packets = character.dialogue_packets.all()
@@ -160,7 +160,7 @@ def prosoponomikon_character_view(request, character_id):
         'biography_packets': biography_packets,
         'dialogue_packets': dialogue_packets,
         'acquaintanceships': acquaintanceships,
-        'this_acquaintance': this_acquaintance,
+        'this_acquaintanceship': this_acquaintanceship,
     }
     if (
             current_profile.character.acquaintanceships().filter(
