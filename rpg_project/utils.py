@@ -5,9 +5,10 @@ from random import sample
 import delegator
 from django.apps import apps
 from django.conf import settings
-from django.contrib import messages
+from django.contrib import messages, auth
 from django.core.mail import send_mail
 from django.shortcuts import redirect
+from users.models import Profile
 
 
 def sample_from_qs(qs, max_size):
@@ -243,6 +244,9 @@ def send_emails(request, profile_ids=None, **kwargs):
     send_mail(subject, message, sender, receivers)
 
 
+# -----------------------------------------------------------------------------
+
+
 def formfield_with_cache(field, formfield, request):
     choices = getattr(request, f'_{field}_choices_cache', None)
     if choices is None:
@@ -261,6 +265,9 @@ def update_rel_objs(instance, RelModel, rel_queryset, rel_name: str):
             exec(f"obj.{rel_name}.add(instance)")
         else:
             exec(f"obj.{rel_name}.remove(instance)")
+
+
+# -----------------------------------------------------------------------------
 
 
 def backup_db():
@@ -305,6 +312,9 @@ def update_db(reason: str, src: str, dst: str):
     delegator.run(f"rm {filename}")
 
 
+# -----------------------------------------------------------------------------
+
+
 def only_game_masters(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):
@@ -331,6 +341,36 @@ def only_game_masters_and_spectators(function):
     return wrap
 
 
+def auth_profile(allowed_status: list):
+    """Check User's Profile authorization to use a view.
+    Log out user if there's a NoReverseMatch exception due to problems with
+    session['profile_id'] with URL of 'prosoponomikon:character' view.
+    If Profile is authorized to use the view, provide request with
+    'current_profile' attribute.
+    """
+    def wrapper(view_func):
+        
+        def wrapped(request, *args, **kwargs):
+            current_profile = Profile.objects.get(id=request.session['profile_id'])
+            
+            if not current_profile.character.id:
+                auth.logout(request)
+                messages.warning(request, 'Wystąpił problem z uwierzytelnieniem sesji użytkownika. Zaloguj się ponownie!')
+                return redirect('users:logout')
+    
+            request.current_profile = current_profile
+            
+            if 'all' in allowed_status or current_profile.status in allowed_status:
+                return view_func(request, *args, **kwargs)
+            return redirect('users:dupa')
+            
+        return wrapped
+    
+    return wrapper
+
+
+# -----------------------------------------------------------------------------
+        
 COLORS_LIST = [
     '#000000',
     '#FF0000',
@@ -350,6 +390,9 @@ COLORS_LIST = [
 ]
 COLORS_DICT = {c: c for c in COLORS_LIST}
 COLORS_CHOICES = [(c, c) for c in COLORS_LIST]
+
+
+# -----------------------------------------------------------------------------
 
 
 def transform_to_paragraphs():
