@@ -227,6 +227,14 @@ class Character(Model):
             initial=Lower(Substr('known_character__fullname', 1, 1)))
 
 
+class CharacterAcquaintanceships(Character):
+    """A class to enable a separate AdminModel-s."""
+    
+    class Meta:
+        proxy = True
+        verbose_name_plural = "Character Acquaintanceships"
+        
+        
 class PlayerCharacterManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()

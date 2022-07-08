@@ -4,8 +4,8 @@ from django.db import models
 from django.utils.html import format_html
 
 from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, \
-    FirstName, FirstNameGroup, FamilyName, AffixGroup, \
-    AuxiliaryNameGroup, FamilyNameGroup, Acquaintanceship
+    CharacterAcquaintanceships, FirstName, FirstNameGroup, FamilyName, \
+    AffixGroup, AuxiliaryNameGroup, FamilyNameGroup, Acquaintanceship
 from rpg_project.utils import formfield_with_cache
 
 
@@ -213,7 +213,6 @@ class CharacterAdmin(admin.ModelAdmin):
         'frequented_locations', 'biography_packets', 'dialogue_packets',
         'subprofessions', 'acquaintances',
     ]
-    inlines = [AcquaintanceshipActiveInline, AcquaintanceshipPassiveInline]
     list_display = [
         'get_img', 'first_name', 'family_name', 'cognomen', 'description'
     ]
@@ -245,3 +244,9 @@ class CharacterAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         qs = qs.select_related('profile', 'first_name', 'family_name')
         return qs
+
+
+@admin.register(CharacterAcquaintanceships)
+class CharacterAcquaintanceshipsAdmin(CharacterAdmin):
+    fields = ['profile', 'fullname']
+    inlines = [AcquaintanceshipActiveInline, AcquaintanceshipPassiveInline]
