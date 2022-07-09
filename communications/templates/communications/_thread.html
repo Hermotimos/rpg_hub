@@ -53,7 +53,7 @@
                 </div>
                 <div class="row mt-n1">
                     <div class="col pr-0">
-                        <div class="font-16 ">
+                        <div>
                             <a class="border-bottom align-top font-17" href="{% url 'communications:thread' thread.id tag_title %}{% if not thread.is_ended %}#page-bottom{% endif %}">
                                 {{ thread.title|capfirst }}
                             </a>
@@ -64,7 +64,7 @@
                     <div class="col-auto pr-0">
                         <div class="font-11 mt-1">
                             {% for tag in thread.tags.all %}
-                                {% if tag.author == current_profile %}
+                                {% if tag.author == request.current_profile %}
                                     <a class="mr-2" style="color: {{ tag.color }};" href="{% url 'communications:threads' thread_kind tag.title %}">{{ tag }}</a>
                                 {% endif %}
                             {% endfor %}
