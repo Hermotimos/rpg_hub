@@ -24,6 +24,7 @@ admin.site.enable_nav_sidebar = False
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls')),
+    # path('associations/', include('associations.urls')),
     path('chronicles/', include('chronicles.urls')),
     path('communications/', include('communications.urls')),
     path('contact/', include('contact.urls')),

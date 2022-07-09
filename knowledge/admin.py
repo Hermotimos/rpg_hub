@@ -1,14 +1,34 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.contrib.contenttypes.admin import GenericTabularInline
 from django.db.models import Q, CharField, TextField
 from django.forms.widgets import TextInput, Textarea
 from django.utils.html import format_html
 
+# from associations.models import Comment
 from knowledge.models import KnowledgePacket, MapPacket, BiographyPacket, \
     DialoguePacket
-from rpg_project.utils import update_rel_objs
+from rpg_project.utils import update_rel_objs, formfield_with_cache
 from toponomikon.models import Location, PrimaryLocation, SecondaryLocation
+
+
+# -----------------------------------------------------------------------------
+
+
+# class CommentInline(GenericTabularInline):
+#     filter_horizontal = ['linked_comments']
+#     model = Comment
+#     extra = 2
+#
+#     def formfield_for_foreignkey(self, db_field, request, **kwargs):
+#         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+#         for field in [
+#             'author',
+#         ]:
+#             if db_field.name == field:
+#                 formfield = formfield_with_cache(field, formfield, request)
+#         return formfield
 
 
 # -----------------------------------------------------------------------------
@@ -115,6 +135,7 @@ class KnowledgePacketAdmin(admin.ModelAdmin):
     formfield_overrides = {
         CharField: {'widget': TextInput(attrs={'size': 50})},
     }
+    # inlines = [CommentInline]
     list_display = ['id', 'title', 'text', 'get_acquired_by']
     list_editable = ['title', 'text']
     list_filter = ['skills__name']

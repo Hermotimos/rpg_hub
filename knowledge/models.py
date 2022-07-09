@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db.models import (
     CharField,
     ForeignKey as FK,
@@ -8,6 +9,7 @@ from django.db.models import (
     TextField,
 )
 
+# from associations.models import Comment
 from imaginarion.models import PictureSet
 from rules.models import Skill
 from users.models import Profile
@@ -16,6 +18,7 @@ from users.models import Profile
 class InfoPacket(Model):
     title = CharField(max_length=100, unique=True)
     text = TextField(blank=True, null=True)
+    # comments = GenericRelation(Comment)
 
     class Meta:
         abstract = True

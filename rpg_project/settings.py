@@ -94,6 +94,7 @@ INSTALLED_APPS = [
     'django_filters',
 
     # own
+    # 'associations',
     'chronicles',
     'communications',
     'contact',

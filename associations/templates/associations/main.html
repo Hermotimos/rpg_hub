@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+
+{% block content %}
+<br><br>
+    {% for comment in comments %}
+        {{ comment.author }}<br>
+        {{ comment.object_id }}<br>
+        {{ comment.content_type }}<br>
+        {{ comment.content_object }}<br>
+<br>
+    {% endfor %}
+
+<br>
+    {% for author in authors %}
+        {% if author.comments.exists %}
+            {{ author.character.fullname }}: {{ author.comments.all }}<br>
+        {% endif %}
+    {% endfor %}
+
+<br>
+    {% for knowledge_packet in knowledge_packets %}
+        {{ knowledge_packet.author }}: {{ knowledge_packet.comments.all }}<br>
+    {% endfor %}
+
+{% endblock content %}
