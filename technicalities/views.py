@@ -29,8 +29,6 @@ from users.models import Profile
 @login_required
 @auth_profile(['gm'])
 def todos_view(request):
-    current_profile = request.current_profile
-    
     characters = NonGMCharacter.objects.all()
     
     characters_no_frequented_location = characters.filter(
@@ -50,7 +48,6 @@ def todos_view(request):
     skills_no_allowed_profile = Skill.objects.filter(allowees=None)
     
     context = {
-        'current_profile': current_profile,
         'page_title': 'TODOs',
         'characters_no_frequented_location': characters_no_frequented_location,
         'characters_no_description': characters_no_description,
@@ -179,9 +176,7 @@ def refresh_content_types(request):
 @login_required
 @auth_profile(['gm'])
 def reload_main_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
-        'current_profile': profile,
         'page_title': 'Przeładowanie modeli'
     }
     return render(request, 'technicalities/reload_main.html', context)

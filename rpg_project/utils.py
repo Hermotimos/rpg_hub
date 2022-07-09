@@ -346,7 +346,7 @@ def auth_profile(allowed_status: list):
     Log out user if there's a NoReverseMatch exception due to problems with
     session['profile_id'] with URL of 'prosoponomikon:character' view.
     If Profile is authorized to use the view, provide request with
-    'current_profile' attribute.
+    'current_profile' attribute that can be accessed in vies and templates.
     """
     def wrapper(view_func):
         

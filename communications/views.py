@@ -102,7 +102,7 @@ def get_threads(current_profile, thread_kind):
 @login_required
 @auth_profile(['all'])
 def threads_view(request, thread_kind, tag_title):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
 
     threads = get_threads(current_profile, thread_kind)
     if tag_title != 'None':
@@ -179,7 +179,6 @@ def threads_view(request, thread_kind, tag_title):
                 return redirect('communications:threads', thread_kind=thread_kind, tag_title=tag_title)
 
     context = {
-        'current_profile': current_profile,
         'page_title': page_title,
         'threads': threads,
         'unseen': unseen,
@@ -195,7 +194,7 @@ def threads_view(request, thread_kind, tag_title):
 @login_required
 @auth_profile(['all'])
 def thread_view(request, thread_id, tag_title):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
 
     tags = ThreadTag.objects.filter(
         author=current_profile, kind=Thread.objects.get(id=thread_id).kind).select_related('author')
@@ -271,7 +270,6 @@ def thread_view(request, thread_id, tag_title):
         return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
 
     context = {
-        'current_profile': current_profile,
         'page_title': thread.title,
         'thread': thread,
         'tag_title': tag_title,
@@ -288,7 +286,7 @@ def thread_view(request, thread_id, tag_title):
 @login_required
 @auth_profile(['all'])
 def create_thread_view(request, thread_kind):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
 
     thread_form = THREADS_MAP[thread_kind]['form'](
         data=request.POST or None,
@@ -335,7 +333,6 @@ def create_thread_view(request, thread_kind):
         return redirect('communications:thread', thread_id=thread.id, tag_title=None)
 
     context = {
-        'current_profile': current_profile,
         'page_title': f"{THREADS_MAP[thread_kind]['text']}",
         'form_1': thread_form,
         'form_2': statement_form,
@@ -346,7 +343,7 @@ def create_thread_view(request, thread_kind):
 @login_required
 @auth_profile(['all'])
 def unfollow_thread_view(request, thread_id):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     
     thread = get_object_or_404(Thread, id=thread_id)
     if current_profile in thread.participants.all() or current_profile.can_view_all:
@@ -360,7 +357,7 @@ def unfollow_thread_view(request, thread_id):
 @login_required
 @auth_profile(['all'])
 def follow_thread_view(request, thread_id):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     
     thread = get_object_or_404(Thread, id=thread_id)
     if current_profile in thread.participants.all() or current_profile.can_view_all:
@@ -375,7 +372,7 @@ def follow_thread_view(request, thread_id):
 #
 # @login_required
 # def vote_yes_view(request, survey_id, option_id):
-#     profile = Profile.objects.get(id=request.session['profile_id'])
+#     profile = request.current_profile
 #     option = get_object_or_404(SurveyOption, id=option_id)
 #
 #     if profile in option.survey.addressees.all() or profile.status == 'gm':
@@ -392,7 +389,7 @@ def follow_thread_view(request, thread_id):
 #
 # @login_required
 # def vote_no_view(request, survey_id, option_id):
-#     profile = Profile.objects.get(id=request.session['profile_id'])
+#     profile = request.current_profile
 #     option = get_object_or_404(SurveyOption, id=option_id)
 #
 #     if profile in option.survey.addressees.all() or profile.status == 'gm':
@@ -409,7 +406,7 @@ def follow_thread_view(request, thread_id):
 #
 # @login_required
 # def unvote_view(request, survey_id, option_id):
-#     profile = Profile.objects.get(id=request.session['profile_id'])
+#     profile = request.current_profile
 #     option = get_object_or_404(SurveyOption, id=option_id)
 #
 #     if profile in option.survey.addressees.all() or profile.status == 'gm':
@@ -427,7 +424,7 @@ def follow_thread_view(request, thread_id):
 # #
 # # @login_required
 # # def survey_create_view(request):
-# #     profile = Profile.objects.get(id=request.session['profile_id'])
+# #     profile = request.current_profile
 # #     if request.method == 'POST':
 # #         form = CreateSurveyForm(profile=profile, data=request.POST, files=request.FILES)
 # #
@@ -467,7 +464,7 @@ def follow_thread_view(request, thread_id):
 #
 # @login_required
 # def survey_option_modify_view(request, survey_id, option_id):
-#     profile = Profile.objects.get(id=request.session['profile_id'])
+#     profile = request.current_profile
 #
 #     option = get_object_or_404(SurveyOption, id=option_id)
 #
@@ -494,7 +491,7 @@ def follow_thread_view(request, thread_id):
 #
 # @login_required
 # def survey_option_delete_view(request, survey_id, option_id):
-#     profile = Profile.objects.get(id=request.session['profile_id'])
+#     profile = request.current_profile
 #
 #     option = get_object_or_404(SurveyOption, id=option_id)
 #     if profile == option.author:

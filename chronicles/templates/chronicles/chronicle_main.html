@@ -54,7 +54,7 @@
                             <div class="col-10 mb-1 ml-n1 ml-sm-n3 ml-lg-n4 ml-xl-n4 pl-2 pl-lg-0">
                                 <div class="mt-1 font-italic">
                                     <a href="{% url 'chronicles:chronicle-game' game.id %}"
-                                       class="mr-2 font-18 {% if game.any_participants == 0 and current_profile.status != 'gm' %} text-muted {% endif %}">
+                                       class="mr-2 font-18 {% if game.any_participants == 0 and request.current_profile.status != 'gm' %} text-muted {% endif %}">
                                         {{ game.title }}
                                     </a>
                                     <div class="d-inline-flex">

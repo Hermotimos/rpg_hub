@@ -19,7 +19,7 @@
     
     <!-- BUTTONS -->
     <div class="row pl-2">
-        {% if current_profile.can_action %}
+        {% if request.current_profile.can_action %}
             <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Przekaż wiedzę">
                 <!-- Modal -->
                 <p class="btn btn-outline-dark icon-inform py-2" data-toggle="modal" data-target="#infoKnPacketModal_{{ kn_packet.id }}"></p>
@@ -33,7 +33,7 @@
 <!--        <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">-->
 <!--            <a class="btn btn-outline-dark icon-note py-2 disabled" href="#"></a>-->
 <!--        </div>-->
-        {% if current_profile == kn_packet.author or current_profile.status == 'gm' and not kn_packet.author %}
+        {% if request.current_profile == kn_packet.author or request.current_profile.status == 'gm' and not kn_packet.author %}
             <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj pakiet wiedzy">
                 <a class="btn btn-outline-dark icon-edit py-2" href="{% url 'knowledge:kn-packet-form' kn_packet.id %}"></a>
             </div>

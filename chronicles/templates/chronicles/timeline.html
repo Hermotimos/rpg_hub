@@ -217,7 +217,7 @@
                     <!-- DESCRIPTION SHORT -->
                     <td class="text-left text-sm-justify align-top font-italic hover-pointer pl-2 pr-2 pb-3 timeline"
                         data-toggle="modal" data-target="#event_{{ event.id }}">
-                        <span class="{% if current_profile not in event.participants.all and current_profile.status != 'gm' %} text-muted {% endif %}"
+                        <span class="{% if request.current_profile not in event.participants.all and request.current_profile.status != 'gm' %} text-muted {% endif %}"
                               data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic">Pokaż pełny opis wydarzenia</span>'>
                             {{ event.description_short|custom_linebreaksbr:1 }}
                         </span>
@@ -249,7 +249,7 @@
                             <div class="pb-1">
                                 {% for profile in event.participants.all %}
                                     {% if not profile.only_indirectly %}
-                                        {% if profile.status == 'player' or profile == current_profile %}
+                                        {% if profile.status == 'player' or profile == request.current_profile %}
                                             <a href="{% url 'prosoponomikon:character' profile.character.id %}"
                                                data-toggle="tooltip" data-placement="top" data-html="true"
                                                title='<span class="font-italic">Prosoponomikon<br>"{{ profile }}"</span>'>
@@ -267,7 +267,7 @@
                             -✧-
                             <div>
                                 {% for profile in event.informees.all %}
-                                    {% if profile.status == 'player' or profile == current_profile %}
+                                    {% if profile.status == 'player' or profile == request.current_profile %}
                                         <a href="{% url 'prosoponomikon:character' profile.character.id %}"
                                            data-toggle="tooltip" data-placement="top" data-html="true"
                                            title='<span class="font-italic">Prosoponomikon<br>"{{ profile }}"</span>'>
@@ -317,7 +317,7 @@
                                href="#">
                             </a>
                         </div>
-                        {% if current_profile.status == 'gm' %}
+                        {% if request.current_profile.status == 'gm' %}
                             <div class="mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj wydarzenie">
                                 <a class="btn btn-outline-dark btn-sm icon-edit icon-small py-1"
                                    href="{% url 'admin:chronicles_gameevent_change' event.id %}" target="_blank">

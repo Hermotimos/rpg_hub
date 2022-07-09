@@ -1,9 +1,8 @@
 from datetime import datetime
 
-from django.apps import apps
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch, Q, ExpressionWrapper, BooleanField
+from django.db.models import Prefetch
 from django.shortcuts import render, redirect
 
 from imaginarion.models import Picture, PictureImage, PictureSet
@@ -11,13 +10,12 @@ from knowledge.forms import KnPacketForm, PlayerKnPacketForm
 from knowledge.models import KnowledgePacket
 from rpg_project.utils import handle_inform_form, auth_profile
 from rules.models import Skill
-from users.models import Profile
 
 
 @login_required
 @auth_profile(['all'])
 def almanac_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     
     kn_packets = KnowledgePacket.objects.all()
     if not current_profile.can_view_all:
@@ -32,7 +30,6 @@ def almanac_view(request):
         handle_inform_form(request)
 
     context = {
-        'current_profile': current_profile,
         'page_title': 'Almanach',
         'skills': skills.distinct(),
     }
@@ -42,7 +39,8 @@ def almanac_view(request):
 @login_required
 @auth_profile(['all'])
 def kn_packet_form_view(request, kn_packet_id):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
+    
     kn_packet = KnowledgePacket.objects.filter(id=kn_packet_id).first()
         
     if current_profile.status == 'gm':
@@ -101,7 +99,6 @@ def kn_packet_form_view(request, kn_packet_id):
         messages.warning(request, form.errors)
         
     context = {
-        'current_profile': current_profile,
         'page_title': kn_packet.title if kn_packet else 'Nowy pakiet wiedzy',
         'form': form,
     }

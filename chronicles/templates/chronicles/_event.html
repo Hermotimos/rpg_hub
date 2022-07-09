@@ -5,7 +5,7 @@
     <div class="row border-top">
         
         <!-- ACTIONS -->
-        {% if current_profile.can_action %}
+        {% if request.current_profile.can_action %}
             <div class="col-12 col-sm-1 p-0">
                 <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Poinformuj o wydarzeniu">
                     <a class="btn btn-outline-dark icon-inform mt-1 py-2" href="{% url 'chronicles:game-event-inform' event.id %}" target="_blank"></a>
@@ -13,7 +13,7 @@
     <!--            <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">-->
     <!--                <a class="btn btn-outline-dark icon-note mt-1 py-2 disabled" href="#"></a>-->
     <!--            </div>-->
-                {% if current_profile.status == 'gm' %}
+                {% if request.current_profile.status == 'gm' %}
                     <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Edytuj wydarzenie">
                         <a class="btn btn-outline-secondary icon-edit mt-1 py-2" href="{% url 'admin:chronicles_gameevent_change' event.id %}" target="_blank"></a>
                     </div>
@@ -26,7 +26,7 @@
         <div class="col-12 col-sm-11 mt-2 p-0 pl-sm-2 pl-lg-0">
             <!-- AUDIO -->
             {% if event.audio %}
-                {% if current_profile in event.participants.all or current_profile.can_view_all %}
+                {% if request.current_profile in event.participants.all or request.current_profile.can_view_all %}
                     <audio class="chronicle-audio-main" controls loop>
                         <source src="{{ event.audio.path }}" type="audio/mpeg">
                     </audio>
@@ -35,7 +35,7 @@
             
             <!-- DESCRIPTION -->
             <p class="font-18 font-italic p-1 mb-0 text-justify">
-                {% if current_profile not in event.participants.all and not current_profile.can_view_all %}
+                {% if request.current_profile not in event.participants.all and not request.current_profile.can_view_all %}
                     <span class="text-muted">(Znasz z opowieści) {{ event.description_long|custom_linebreaksbr:2 }}</span>
                 {% else %}
                     {{ event.description_long|custom_linebreaksbr:2 }}
@@ -43,7 +43,7 @@
             </p>
             
             <!-- PICTURE SETS -->
-            {% if current_profile not in event.informees.all %}
+            {% if request.current_profile not in event.informees.all %}
                 {% for picture_set in event.picture_sets.all %}
                     <div class="d-flex justify-content-center my-3">
                         {% for picture in picture_set|pictureset_pictures_in_custom_order %}
@@ -54,10 +54,10 @@
             {% endif %}
             
             <!-- DEBATES -->
-            {% if event.debates and current_profile not in event.informees.all %}
+            {% if event.debates and request.current_profile not in event.informees.all %}
                 <div>
                     {% for debate in event.debates.all %}
-                        {% if current_profile in debate.participants.all or current_profile.can_view_all %}
+                        {% if request.current_profile in debate.participants.all or request.current_profile.can_view_all %}
                             <ul class="bullets-3 mt-5 pl-3">
                                 <li class="align-middle">
                                     <span class="font-18 font-italic hover-blue text-justify" data-toggle="collapse" data-target="#debate_{{ debate.id }}">

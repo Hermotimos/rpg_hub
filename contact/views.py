@@ -6,9 +6,8 @@ from django.utils import timezone
 
 from contact.forms import (DemandsCreateForm, DemandAnswerForm, PlanForm)
 from contact.models import Demand, DemandAnswer, Plan
-from rpg_project.utils import only_game_masters, send_emails, auth_profile
+from rpg_project.utils import send_emails, auth_profile
 from rules.models import Skill, WeaponType, Plate
-from users.models import Profile
 
 
 # ----------------------------- DEMANDS -----------------------------
@@ -17,16 +16,16 @@ from users.models import Profile
 @login_required
 @auth_profile(['all'])
 def demands_main_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
-    ds = Demand.objects.all().\
-        select_related('author__user', 'addressee__user').\
-        prefetch_related('demand_answers__author')
+    current_profile = request.current_profile
+    
+    demands = Demand.objects.select_related('author__user', 'addressee__user')
+    demands = demands.prefetch_related('demand_answers__author')
     
     # excludes necessery to filter out plans (Demands sent to oneself)
-    received_u = ds.filter(is_done=False, addressee=profile).exclude(author=profile)
-    received_d = ds.filter(is_done=True, addressee=profile).exclude(author=profile)
-    sent_u = ds.filter(is_done=False, author=profile).exclude(addressee=profile)
-    sent_d = ds.filter(is_done=True, author=profile).exclude(addressee=profile)
+    received_u = demands.filter(is_done=False, addressee=current_profile).exclude(author=current_profile)
+    received_d = demands.filter(is_done=True, addressee=current_profile).exclude(author=current_profile)
+    sent_u = demands.filter(is_done=False, author=current_profile).exclude(addressee=current_profile)
+    sent_d = demands.filter(is_done=True, author=current_profile).exclude(addressee=current_profile)
 
     if request.method == 'POST':
         form = DemandAnswerForm(request.POST, request.FILES)
@@ -35,10 +34,10 @@ def demands_main_view(request):
             demand = Demand.objects.get(id=id_)
             answer = form.save(commit=False)
             answer.demand = demand
-            answer.author = profile
+            answer.author = current_profile
             answer.save()
     
-            if profile == demand.author:
+            if current_profile == demand.author:
                 informed_ids = [demand.addressee.id]
             else:
                 informed_ids = [demand.author.id]
@@ -48,7 +47,6 @@ def demands_main_view(request):
         form = DemandAnswerForm()
     
     context = {
-        'current_profile': profile,
         'page_title': 'Dezyderaty',
         'received_undone': received_u,
         'received_done': received_d,
@@ -62,25 +60,24 @@ def demands_main_view(request):
 @login_required
 @auth_profile(['all'])
 def demands_create_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     
     if request.method == 'POST':
         form = DemandsCreateForm(
-            profile=profile, data=request.POST, files=request.FILES)
+            profile=current_profile, data=request.POST, files=request.FILES)
         
         if form.is_valid():
             demand = form.save(commit=False)
-            demand.author = profile
+            demand.author = current_profile
             demand.save()
 
             informed_ids = [demand.addressee.id]
             send_emails(request, informed_ids, demand=demand)
             return redirect('contact:demands-main')
     else:
-        form = DemandsCreateForm(profile=profile)
+        form = DemandsCreateForm(profile=current_profile)
 
     context = {
-        'current_profile': profile,
         'page_title': 'Nowy dezyderat',
         'form': form,
     }
@@ -90,10 +87,9 @@ def demands_create_view(request):
 @login_required
 @auth_profile(['all'])
 def demands_delete_view(request, demand_id):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     demand = get_object_or_404(Demand, id=demand_id)
-    
-    if profile == demand.author:
+    if current_profile == demand.author:
         demand.delete()
         messages.info(request, 'Usunięto dezyderat!')
         return redirect('contact:demands-main')
@@ -104,7 +100,8 @@ def demands_delete_view(request, demand_id):
 @login_required
 @auth_profile(['all'])
 def demands_detail_view(request, demand_id):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
+    
     demand = get_object_or_404(Demand, id=demand_id)
     answers = DemandAnswer.objects.filter(demand=demand).select_related('author').order_by('date_posted')
 
@@ -114,10 +111,10 @@ def demands_detail_view(request, demand_id):
         if form.is_valid():
             answer = form.save(commit=False)
             answer.demand = demand
-            answer.author = profile
+            answer.author = current_profile
             answer.save()
 
-            if profile == demand.author:
+            if current_profile == demand.author:
                 informed_ids = [demand.addressee.id]
             else:
                 informed_ids = [demand.author.id]
@@ -127,13 +124,12 @@ def demands_detail_view(request, demand_id):
         form = DemandAnswerForm()
 
     context = {
-        'current_profile': profile,
         'page_title': 'Dezyderat - szczegóły',
         'demand': demand,
         'answers': answers,
         'form': form
     }
-    if profile in [demand.author, demand.addressee]:
+    if current_profile in [demand.author, demand.addressee]:
         return render(request, 'contact/demands_detail.html', context)
     else:
         return redirect('users:dupa')
@@ -142,20 +138,20 @@ def demands_detail_view(request, demand_id):
 @login_required
 @auth_profile(['all'])
 def demand_done_undone_view(request, demand_id, is_done):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
+    
     demand = get_object_or_404(Demand, id=demand_id)
     
-    if profile in [demand.author, demand.addressee]:
+    if current_profile in [demand.author, demand.addressee]:
         demand.is_done = is_done
-        
         if is_done:
             demand.date_done = timezone.now()
             demand.save()
-            DemandAnswer.objects.create(demand=demand, author=profile,
-                                        text='Zrobione!')
+            DemandAnswer.objects.create(
+                demand=demand, author=current_profile, text='Zrobione!')
         demand.save()
 
-        if profile == demand.author:
+        if current_profile == demand.author:
             informed_ids = [demand.addressee.id]
         else:
             informed_ids = [demand.author.id]
@@ -172,10 +168,10 @@ def demand_done_undone_view(request, demand_id, is_done):
 @login_required
 @auth_profile(['all'])
 def plans_main_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
-    plans = Plan.objects.filter(author=profile).select_related('author')
+    current_profile = request.current_profile
+    plans = Plan.objects.filter(author=current_profile).select_related('author')
 
-    if profile.status == 'gm':
+    if current_profile.status == 'gm':
         models = [Skill, WeaponType, Plate]
         # Objs known to no profile: {'model_1': [obj1, obj2], model_2: [obj1]}
         todos = {}
@@ -193,7 +189,7 @@ def plans_main_view(request):
         if create_todo:
             Plan.objects.update_or_create(
                 text__contains='=>Do uzupełnienia:',
-                defaults={'text': text, 'author': profile}
+                defaults={'text': text, 'author': current_profile}
             )
         else:
             try:
@@ -202,7 +198,6 @@ def plans_main_view(request):
                 pass
     
     context = {
-        'current_profile': profile,
         'page_title': 'Plany',
         'plans': plans,
     }
@@ -212,9 +207,7 @@ def plans_main_view(request):
 @login_required
 @auth_profile(['gm', 'spectator'])
 def plans_for_gm_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
-        'current_profile': profile,
         'page_title': 'Plany graczy',
         'plans': Plan.objects.filter(inform_gm=True).select_related('author'),
     }
@@ -224,7 +217,7 @@ def plans_for_gm_view(request):
 @login_required
 @auth_profile(['all'])
 def plans_create_view(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    profile = request.current_profile
     
     if request.method == 'POST':
         form = PlanForm(request.POST, request.FILES)
@@ -242,7 +235,6 @@ def plans_create_view(request):
         form = PlanForm()
 
     context = {
-        'current_profile': profile,
         'page_title': 'Nowy plan',
         'form': form,
     }
@@ -252,12 +244,10 @@ def plans_create_view(request):
 @login_required
 @auth_profile(['all'])
 def plans_delete_view(request, plan_id):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    profile = request.current_profile
     plan = get_object_or_404(Plan, id=plan_id)
-    
     if profile == plan.author:
         plan.delete()
-        
         messages.info(request, 'Usunięto plan!')
         return redirect('contact:plans-main')
     else:
@@ -267,7 +257,8 @@ def plans_delete_view(request, plan_id):
 @login_required
 @auth_profile(['all'])
 def plans_modify_view(request, plan_id):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    profile = request.current_profile
+    
     plan = get_object_or_404(Plan, id=plan_id)
     
     if request.method == 'POST':
@@ -275,6 +266,7 @@ def plans_modify_view(request, plan_id):
         
         if form.is_valid():
             plan = form.save()
+            
             if plan.inform_gm:
                 send_emails(request, plan_modified=plan)
             return redirect('contact:plans-main')
@@ -282,7 +274,6 @@ def plans_modify_view(request, plan_id):
         form = PlanForm(instance=plan)
 
     context = {
-        'current_profile': profile,
         'page_title': 'Zmiana planów?',
         'form': form,
     }

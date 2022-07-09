@@ -5,13 +5,12 @@ from django.shortcuts import render, redirect
 from knowledge.models import MapPacket, KnowledgePacket
 from rpg_project.utils import handle_inform_form, auth_profile
 from toponomikon.models import Location, LocationType, SecondaryLocation
-from users.models import Profile
 
 
 @login_required
 @auth_profile(['all'])
 def toponomikon_main_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
 
     known_locations = current_profile.locations_known_annotated()
     all_locs = Location.objects.values('name').filter(id__in=known_locations)
@@ -27,7 +26,6 @@ def toponomikon_main_view(request):
         all_maps = current_profile.map_packets.all()
     
     context = {
-        'current_profile': current_profile,
         'page_title': 'Toponomikon',
         'primary_locs': primary_locs,
         'all_locs': all_locs,
@@ -39,7 +37,7 @@ def toponomikon_main_view(request):
 @login_required
 @auth_profile(['all'])
 def toponomikon_location_view(request, loc_name):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
 
     known_locations = current_profile.locations_known_annotated()
     
@@ -88,7 +86,6 @@ def toponomikon_location_view(request, loc_name):
         handle_inform_form(request)
         
     context = {
-        'current_profile': current_profile,
         'page_title': this_location.name,
         'this_location': this_location,
         'location_types': location_types.distinct(),

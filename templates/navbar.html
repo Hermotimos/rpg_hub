@@ -22,7 +22,7 @@
             <!-- Navbar Left Side -->
             <ul class="navbar-nav mr-auto">
                 
-                {% with undone_demands=current_profile.undone_demands unseen_announcements=current_profile.unseen_announcements %}
+                {% with undone_demands=request.current_profile.undone_demands unseen_announcements=request.current_profile.unseen_announcements %}
                     <li class="dropdown pr-4 mr-auto">
                         <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
                             Organizacyjne
@@ -39,7 +39,7 @@
                                         </div>
                                     {% endif %}
                                 </li>
-                                {% if current_profile.status != 'spectator' %}
+                                {% if request.current_profile.status != 'spectator' %}
                                     <li>
                                         <a class="font-14 nav-link small-caps" href="{% url 'communications:threads' 'Announcement' None %}">Ogłoszenia</a>
                                         <div class="row info-row-sub news-bubble float-right">
@@ -71,9 +71,9 @@
                 
                 
             <!-- TODO del condition when ready -->
-            {% if current_profile.user.username != 'Marta' and current_profile.user.username != 'Dawid' and current_profile.user.username != 'Hubert' and current_profile.user.username != 'Tomek' %}
+            {% if current_profile.user.username != 'Marta' and request.current_profile.user.username != 'Dawid' and request.current_profile.user.username != 'Hubert' and request.current_profile.user.username != 'Tomek' %}
 
-                {% with unseen_debates=current_profile.unseen_debates %}
+                {% with unseen_debates=request.current_profile.unseen_debates %}
                     <li class="dropdown pr-4 mr-auto">
                         <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
                             Przygody
@@ -123,7 +123,7 @@
                     </div>
                 </li>
     
-                {% if current_profile.status == 'gm' %}
+                {% if request.current_profile.status == 'gm' %}
                     <li class="dropdown pr-4">
                         <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Postacie</button>
                         <div class="dropdown-content">
@@ -136,7 +136,7 @@
                             </ul>
                         </div>
                     </li>
-                {% elif current_profile.status == 'spectator' %}
+                {% elif request.current_profile.status == 'spectator' %}
                     <!-- Nothing -->
                 {% else %}
                     <li class="dropdown pr-4">
@@ -146,7 +146,7 @@
             <!--                            <li><a class="font-14 nav-link small-caps" href="#">Cechy i walka</a></li>-->
             <!--                            <li><a class="font-14 nav-link small-caps" href="#">Doświadczenie | Tabela awansów</a></li>-->
             <!--                            <li><a class="font-14 nav-link small-caps" href="#">Ekwipunek | Skrytki</a></li>-->
-                                <li><a class="font-14 nav-link small-caps" href="{% url 'prosoponomikon:character' current_profile.character.id %}">Postać</a></li>
+                                <li><a class="font-14 nav-link small-caps" href="{% url 'prosoponomikon:character' request.current_profile.character.id %}">Postać</a></li>
             <!--                            <li><a class="font-14 nav-link small-caps" href="#">Moce</a></li>-->
                                 <li><a class="font-14 nav-link small-caps" href="{% url 'contact:plans-main' %}">Plany</a></li>
             <!--                            <li><a class="font-14 nav-link small-caps" href="#">Przemyślenia</a></li>-->

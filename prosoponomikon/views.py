@@ -24,7 +24,6 @@ def prosoponomikon_acquaintanceships_view(request):
     current_profile = request.current_profile
     acquaintanceships = current_profile.character.acquaintanceships()
     context = {
-        'current_profile': current_profile,
         'page_title': 'Prosoponomikon',
         'acquaintanceships': acquaintanceships,
     }
@@ -71,7 +70,7 @@ def prosoponomikon_character_view(request, character_id):
                 known_character=character)
         except Acquaintanceship.DoesNotExist:
             # when GM moves between NPCs with open Prosoponomikon
-            messages.info(request, "Aktualna Postać nie zna wybranej Postaci")
+            messages.info(request, "Aktualna Postać nie zna wybranej Postaci!")
             return redirect('prosoponomikon:acquaintanceships')
         
     dialogue_packets = character.dialogue_packets.all()
@@ -123,7 +122,6 @@ def prosoponomikon_character_view(request, character_id):
         handle_inform_form(request)
 
     context = {
-        'current_profile': current_profile,
         'page_title': character,
         'character': character,
         'skill_types_regular': skill_types_regular,
@@ -220,7 +218,6 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
         messages.warning(request, form.errors)
 
     context = {
-        'current_profile': current_profile,
         'page_title': f"{character}: {bio_packet.title}" if bio_packet else f"Biogram: {character}",
         'form': form,
     }
@@ -234,14 +231,11 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
 @login_required
 @auth_profile(['gm'])
 def prosoponomikon_first_names_view(request):
-    current_profile = request.current_profile
-    
     name_groups = FirstNameGroup.objects.prefetch_related(
         'affix_groups__first_names__characters__profile',
         'affix_groups__first_names__auxiliary_group__location',
     )
     context = {
-        'current_profile': current_profile,
         'page_title': "Imiona",
         'name_groups': name_groups,
     }
@@ -251,14 +245,11 @@ def prosoponomikon_first_names_view(request):
 @login_required
 @auth_profile(['gm'])
 def prosoponomikon_family_names_view(request):
-    current_profile = request.current_profile
-    
     family_names = FamilyName.objects.select_related('group')
     family_names = family_names.prefetch_related(
         'characters__profile', 'locations')
 
     context = {
-        'current_profile': current_profile,
         'page_title': "Nazwiska",
         'family_names': family_names,
     }
@@ -269,8 +260,6 @@ def prosoponomikon_family_names_view(request):
 @auth_profile(['gm'])
 def prosoponomikon_character_create_form_view(request):
     """Handle CharacterCreateForm intended for GM."""
-    current_profile = request.current_profile
-    
     form = CharacterCreateForm(
         data=request.POST or None, files=request.FILES or None)
     
@@ -288,7 +277,6 @@ def prosoponomikon_character_create_form_view(request):
         return redirect('prosoponomikon:character-create')
         
     context = {
-        'current_profile': current_profile,
         'page_title': "Nowa Postać",
         'form': form,
     }

@@ -37,7 +37,7 @@
                                    {% endif %}"
                                data-toggle="tooltip" data-placement="left" title="Przejdź do lokacji nadrzędnej">
                             </a>
-                            {% if current_profile.can_action %}
+                            {% if request.current_profile.can_action %}
                                 <span data-toggle="modal" data-target="#infoLocationModal">
                                     <span class="btn btn-outline-dark icon-inform py-2 mb-sm-1"
                                         data-toggle="tooltip" data-placement="left" title="Przekaż wiedzę o lokacji">
@@ -53,7 +53,7 @@
 <!--                                href="#"-->
 <!--                                data-toggle="tooltip" data-placement="left" title="Notatki"></a>-->
                             {% endif %}
-                            {% if current_profile.status == 'gm' %}
+                            {% if request.current_profile.status == 'gm' %}
                                 <a class="btn btn-outline-secondary icon-edit py-2 mb-sm-1"
                                    href="{% url 'admin:toponomikon_location_change' this_location.id %}" target="_blank"
                                    data-toggle="tooltip" data-placement="left" title="Edytuj lokację">
@@ -126,7 +126,7 @@
                 {% endif %}
 
                 <!-- TAB HEADER: Audio -->
-                {% if current_profile.status == 'gm' and audio_set %}
+                {% if request.current_profile.status == 'gm' and audio_set %}
                     {% if location_types or acquaintanceships or this_location.knowledge_packets.all or this_location.map_packets.all or this_location.picture_sets.all %}
                         <input type="radio" name="tabset" id="tab6" aria-controls="audios">
                     {% else %}
@@ -219,7 +219,7 @@
                     {% endif %}
                     
                     <!-- TAB CONTENT: Audio -->
-                    {% if current_profile.status == 'gm' and audio_set %}
+                    {% if request.current_profile.status == 'gm' and audio_set %}
                         <section id="audios" class="tab-panel">
                             <div class="container">
                                 <p class="mb-0 text-center">✧</p>

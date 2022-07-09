@@ -7,21 +7,21 @@
 
 <div class="content-section-sidebar">
     <aside>
-        <img class="account-img-sidebar mb-1" onload="showTime()" src="{{ current_profile.image.url }}">
+        <img class="account-img-sidebar mb-1" onload="showTime()" src="{{ request.current_profile.image.url }}">
         <h3 class="mb-4 text-center">
             
             <!-- TODO del condition when ready -->
-            {% if current_profile.user.username != 'Marta' and current_profile.user.username != 'Dawid' and current_profile.user.username != 'Hubert' and current_profile.user.username != 'Tomek' %}
-                <a href="{% url 'prosoponomikon:character' current_profile.character.id %}">
-                   {{ current_profile.character.fullname }}
+            {% if request.current_profile.user.username != 'Marta' and request.current_profile.user.username != 'Dawid' and request.current_profile.user.username != 'Hubert' and request.current_profile.user.username != 'Tomek' %}
+                <a href="{% url 'prosoponomikon:character' request.current_profile.character.id %}">
+                   {{ request.current_profile.character.fullname }}
                 </a>
             {% else %}
-                {{ current_profile.character.fullname }}
+                {{ request.current_profile.character.fullname }}
             {% endif %}
         </h3>
         
         <!-- For game master -->
-        {% if current_profile.status == 'gm' %}
+        {% if request.current_profile.status == 'gm' %}
             <ul class="list-group hover-pointer">
                 <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#technical"><h6 class="mb-0">Techniczne</h6></li>
                 <li id="technical" class="list-group collapse">
@@ -67,7 +67,7 @@
             </li>
         </ul>
         
-        {% if current_profile.status == 'gm' and '127.0.0.1' in request.get_host%}
+        {% if request.current_profile.status == 'gm' and '127.0.0.1' in request.get_host%}
             <div class="mt-2 ml-1 mr-n1 d-flex flex-wrap">
                 <div class="mr-md-auto py-1 px-1 px-md-0">
                     <a class="btn btn-outline-secondary icon-database-backup py-2" href="{% url 'technicalities:backup-db' %}"

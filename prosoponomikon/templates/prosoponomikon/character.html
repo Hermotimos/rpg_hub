@@ -16,7 +16,7 @@
                         
                         <!-- CHARACTER PICTURE -->
                         <div class="float-left mr-3">
-                            {% if current_profile.character == character or this_acquaintanceship.is_direct or current_profile.can_view_all %}
+                            {% if request.current_profile.character == character or this_acquaintanceship.is_direct or request.current_profile.can_view_all %}
                                 <img class="character-detail {% if this_acquaintanceship.knows_if_dead and not character.profile.is_alive %} img-grayscale {% endif %}"
                                      src="{{ character.profile.image.url }}">
                             {% else %}
@@ -30,7 +30,7 @@
                             <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Przejdź do Prosoponomikonu">
                                 <a class="btn btn-outline-dark icon-parent-obj py-2" href="{% url 'prosoponomikon:acquaintanceships' %}#character_{{ character.id }}"></a>
                             </div>
-                            {% if current_profile.can_action %}
+                            {% if request.current_profile.can_action %}
                                 <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Przekaż wiedzę o Postaci">
                                     <!-- Modal -->
                                     <span class="btn btn-outline-dark icon-inform py-2" data-toggle="modal" data-target="#infoCharacterModal_{{ character.id }}"></span>
@@ -47,12 +47,12 @@
 <!--                            <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">-->
 <!--                                <a class="btn btn-outline-dark icon-note py-2 disabled" href="#"></a>-->
 <!--                            </div>-->
-                            {% if current_profile.status == 'player' and current_profile.character == character %}
+                            {% if request.current_profile.status == 'player' and request.current_profile.character == character %}
                                 <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
                                     <a class="btn btn-outline-dark icon-edit py-2" href="{% url 'users:edit-profile' %}"></a>
                                 </div>
                             {% endif %}
-                            {% if current_profile.status == 'gm' %}
+                            {% if request.current_profile.status == 'gm' %}
                                 <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
                                     <a class="btn btn-outline-secondary icon-edit py-2" href="{% url 'admin:prosoponomikon_character_change' character.id %}" target="_blank"></a>
                                 </div>
@@ -60,7 +60,7 @@
                         </div>
                         
                         <!-- CLASSES, TRAITS, EXPERIENCE -->
-                        {% if current_profile.status == 'gm' or current_profile.status == 'player' and current_profile.character == character %}
+                        {% if request.current_profile.status == 'gm' or request.current_profile.status == 'player' and request.current_profile.character == character %}
                             <div class="mt-2">
                                 {% if character.subprofessions.exists %}
                                     <div class="row font-italic pl-1">
@@ -103,7 +103,7 @@
             <!-- TAB HEADERS -->
             
             <!-- Biography packets -->
-            {% if current_profile.status == 'gm' or current_profile.character == character %}
+            {% if request.current_profile.status == 'gm' or request.current_profile.character == character %}
                 {% if biography_packets %}
                     <input type="radio" name="tabset" id="tab1" aria-controls="biography_packets" checked>
                     <label class="h4 mb-0 font-resp-15 resp-tab-label" for="tab1">Biografia</label>
@@ -111,7 +111,7 @@
             {% endif %}
             
             <!-- Dialogue packets -->
-            {% if current_profile.status == 'gm' or current_profile.character == character %}
+            {% if request.current_profile.status == 'gm' or request.current_profile.character == character %}
                 {% if dialogue_packets %}
                     {% if biography_packets %}
                         <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets">
@@ -130,7 +130,7 @@
                     <input type="radio" name="tabset" id="tab3" aria-controls="skills_regular" checked>
                 {% endif %}
                 <label class="h4 mb-0 font-resp-15 resp-tab-label" for="tab3">
-                    {% if character.profile != current_profile and character.profile.status != 'player' %} ~ {% endif %}
+                    {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
                     Umiejętności
                 </label>
             {% endif %}
@@ -143,7 +143,7 @@
                     <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets" checked>
                 {% endif %}
                 <label class="h4 mb-0 font-resp-15 resp-tab-label" for="tab4">
-                    {% if character.profile != current_profile and character.profile.status != 'player' %} ~ {% endif %}
+                    {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
                     Wiedza
                 </label>
             {% endif %}
@@ -156,7 +156,7 @@
                     <input type="radio" name="tabset" id="tab5" aria-controls="acquaintanceships" checked>
                 {% endif %}
                 <label class="h4 mb-0 font-resp-15 resp-tab-label" for="tab5">
-                    {% if character.profile != current_profile and character.profile.status != 'player' %} ~ {% endif %}
+                    {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
                     Znajomości
                 </label>
             {% endif %}
@@ -169,7 +169,7 @@
                     <input type="radio" name="tabset" id="tab6" aria-controls="priest_powers_and_mental_skills" checked>
                 {% endif %}
                 <label class="h4 mb-0 font-resp-15 resp-tab-label" for="tab6">
-                    {% if character.profile != current_profile and character.profile.status != 'player' %} ~ {% endif %}
+                    {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
                     Moce kapłańskie
                 </label>
             {% endif %}
@@ -182,7 +182,7 @@
                     <input type="radio" name="tabset" id="tab7" aria-controls="sorcerers_powers_and_mental_skills" checked>
                 {% endif %}
                 <label class="h4 mb-0 font-resp-15 resp-tab-label" for="tab6">
-                    {% if character.profile != current_profile and character.profile.status != 'player' %} ~ {% endif %}
+                    {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
                     Zaklęcia
                 </label>
             {% endif %}
@@ -195,7 +195,7 @@
                     <input type="radio" name="tabset" id="tab8" aria-controls="theurgists_powers_and_mental_skills" checked>
                 {% endif %}
                 <label class="h4 mb-0 font-resp-15 resp-tab-label" for="tab6">
-                    {% if character.profile != current_profile and character.profile.status != 'player' %} ~ {% endif %}
+                    {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
                     Moce Teurgiczne
                 </label>
             {% endif %}
@@ -205,7 +205,7 @@
             <div class="tab-panels">
                 
                 <!-- Biography packets -->
-                {% if current_profile.status == 'gm' or current_profile.character == character %}
+                {% if request.current_profile.status == 'gm' or request.current_profile.character == character %}
                     {% if biography_packets %}
                         <section id="biography_packets" class="tab-panel">
                             <!-- Biography packets are filtered in the view for the requesting profile -->
@@ -217,7 +217,7 @@
                 {% endif %}
                 
                 <!-- Dialogue packets -->
-                {% if current_profile.status == 'gm' or current_profile.character == character %}
+                {% if request.current_profile.status == 'gm' or request.current_profile.character == character %}
                     {% if dialogue_packets %}
                         <section id="dialogue_packets" class="tab-panel">
                             {% for dialogue_packet in dialogue_packets %}

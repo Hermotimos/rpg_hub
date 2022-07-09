@@ -13,13 +13,12 @@ from rules.models import (
 from rpg_project.utils import auth_profile
 from rules.utils import get_overload_ranges, get_visible_professions, \
     can_view_special_rules, get_wounds_ranges
-from users.models import Profile
 
 
 @login_required
 @auth_profile(['all'])
 def rules_main_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     
     # Only Characters with specific Professions or a GM/Spectator can access some rules
     elite_professions = [
@@ -33,7 +32,6 @@ def rules_main_view(request):
         can_view_power_rules = can_view_special_rules(current_profile, elite_professions)
 
     context = {
-        'current_profile': current_profile,
         'page_title': 'Zasady',
         'can_view_power_rules': can_view_power_rules,
         'visible_professions': visible_professions,
@@ -44,7 +42,7 @@ def rules_main_view(request):
 @login_required
 @auth_profile(['all'])
 def rules_armor_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     user_profiles = current_profile.user.profiles.all()
     
     plates = Plate.objects.prefetch_related('picture_set__pictures__image')
@@ -55,7 +53,6 @@ def rules_armor_view(request):
         shields = shields.filter(allowees__in=user_profiles)
     
     context = {
-        'current_profile': current_profile,
         'page_title': 'Pancerz',
         'plates': plates.distinct(),
         'shields': shields.distinct(),
@@ -66,9 +63,7 @@ def rules_armor_view(request):
 @login_required
 @auth_profile(['all'])
 def rules_combat_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
-        'current_profile': current_profile,
         'page_title': 'Przebieg walki'
     }
     return render(request, 'rules/combat.html', context)
@@ -77,9 +72,7 @@ def rules_combat_view(request):
 @login_required
 @auth_profile(['all'])
 def rules_character_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
-        'current_profile': current_profile,
         'page_title': 'Tworzenie Postaci, Klasa i Profesja',
     }
     return render(request, 'rules/character.html', context)
@@ -88,7 +81,7 @@ def rules_character_view(request):
 @login_required
 @auth_profile(['all'])
 def rules_professions_view(request, profession_type):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     user_profiles = current_profile.user.profiles.all()
 
     professions = Profession.objects.filter(type=profession_type)
@@ -106,7 +99,6 @@ def rules_professions_view(request, profession_type):
         Prefetch('subprofessions', queryset=subprofessions))
 
     context = {
-        'current_profile': current_profile,
         'page_title': f'Klasy {profession_type}',
         'professions': professions.distinct(),
     }
@@ -116,9 +108,7 @@ def rules_professions_view(request, profession_type):
 @login_required
 @auth_profile(['all'])
 def rules_character_development_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
-        'current_profile': current_profile,
         'page_title': 'Rozwój Postaci',
     }
     return render(request, 'rules/character_development.html', context)
@@ -127,7 +117,7 @@ def rules_character_development_view(request):
 @login_required
 @auth_profile(['all'])
 def rules_skills_view(request, skilltype_kind):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     user_profiles = current_profile.user.profiles.all()
 
     skills_regular = Skill.objects.filter(
@@ -150,7 +140,6 @@ def rules_skills_view(request, skilltype_kind):
     skill_types_regular = skill_types_regular.filter(skills__in=skills_regular).distinct()
     
     context = {
-        'current_profile': current_profile,
         'page_title': f"Umiejętności {skilltype_kind}",
         'skilltype_kind': skilltype_kind,
         'skill_types_regular': skill_types_regular,
@@ -162,9 +151,8 @@ def rules_skills_view(request, skilltype_kind):
 @login_required
 @auth_profile(['all'])
 def rules_synergies_view(request, skilltype_kind):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     context = {
-        'current_profile': current_profile,
         'page_title': f"Synergie {skilltype_kind}",
         'synergies': current_profile.synergies_allowed(skilltype_kind=skilltype_kind),
     }
@@ -174,9 +162,7 @@ def rules_synergies_view(request, skilltype_kind):
 @login_required
 @auth_profile(['all'])
 def rules_traits_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
-        'current_profile': current_profile,
         'page_title': 'Cechy Fizyczne'
     }
     return render(request, 'rules/traits.html', context)
@@ -185,9 +171,8 @@ def rules_traits_view(request):
 @login_required
 @auth_profile(['all'])
 def rules_power_trait_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     context = {
-        'current_profile': current_profile,
         'page_title': 'Moc'
     }
     if can_view_special_rules(current_profile, ['Kapłan', 'Czarodziej', 'Teurg']):
@@ -199,9 +184,8 @@ def rules_power_trait_view(request):
 @login_required
 @auth_profile(['all'])
 def rules_priesthood_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     context = {
-        'current_profile': current_profile,
         'page_title': 'Kapłaństwo',
     }
     if can_view_special_rules(current_profile, ['Kapłan']):
@@ -213,9 +197,8 @@ def rules_priesthood_view(request):
 @login_required
 @auth_profile(['all'])
 def rules_sorcery_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     context = {
-        'current_profile': current_profile,
         'page_title': 'Magia',
     }
     if can_view_special_rules(current_profile, ['Czarodziej']):
@@ -227,9 +210,8 @@ def rules_sorcery_view(request):
 @login_required
 @auth_profile(['all'])
 def rules_theurgy_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     context = {
-        'current_profile': current_profile,
         'page_title': 'Teurgia',
     }
     if can_view_special_rules(current_profile, ['Teurg']):
@@ -241,9 +223,7 @@ def rules_theurgy_view(request):
 @login_required
 @auth_profile(['all'])
 def rules_tests_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
-        'current_profile': current_profile,
         'page_title': 'Testy Cech',
         'load_infos': get_overload_ranges(),
     }
@@ -253,9 +233,7 @@ def rules_tests_view(request):
 @login_required
 @auth_profile(['all'])
 def rules_fitness_and_tricks_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
-        'current_profile': current_profile,
         'page_title': 'Wydolność, Sprawności i Podstępy',
     }
     return render(request, 'rules/fitness_and_tricks.html', context)
@@ -264,7 +242,7 @@ def rules_fitness_and_tricks_view(request):
 @login_required
 @auth_profile(['all'])
 def rules_weapon_types_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     user_profiles = current_profile.user.profiles.all()
     
     weapon_types = WeaponType.objects.all()
@@ -277,7 +255,6 @@ def rules_weapon_types_view(request):
         'damage_types')
 
     context = {
-        'current_profile': current_profile,
         'page_title': 'Broń',
         'weapon_types': weapon_types,
     }
@@ -287,9 +264,7 @@ def rules_weapon_types_view(request):
 @login_required
 @auth_profile(['all'])
 def rules_wounds_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
-        'current_profile': current_profile,
         'page_title': 'Progi i skutki ran',
         'wounds_ranges': get_wounds_ranges(),
     }
@@ -299,9 +274,7 @@ def rules_wounds_view(request):
 @login_required
 @auth_profile(['all'])
 def rules_character_sheet_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
-        'current_profile': current_profile,
         'page_title': 'Karta Postaci'
     }
     return render(request, 'rules/character_sheet.html', context)
@@ -310,9 +283,7 @@ def rules_character_sheet_view(request):
 @login_required
 @auth_profile(['all'])
 def rules_experience_demand_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
-        'current_profile': current_profile,
         'page_title': 'Sztuka kompozycji Dezyderatu Expowego'
     }
     return render(request, 'rules/experience_demand.html', context)

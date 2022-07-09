@@ -24,7 +24,6 @@ def comments_view(request):
     knowledge_packets = knowledge_packets.prefetch_related('comments')
     
     context = {
-        'current_profile': current_profile,
         'page_title': 'Komentarze',
         'comments': comments,
         'authors': authors,

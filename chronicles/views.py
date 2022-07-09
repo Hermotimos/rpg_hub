@@ -21,7 +21,7 @@ from users.models import Profile
 @login_required
 @auth_profile(['all'])
 def chronicle_main_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     
     if current_profile.can_view_all:
         games = GameSession.objects.prefetch_related(
@@ -55,7 +55,6 @@ def chronicle_main_view(request):
     chapters = Chapter.objects.filter(game_sessions__in=games).distinct()
 
     context = {
-        'current_profile': current_profile,
         'page_title': 'Kronika',
         'chapters': chapters,
         'games': games,
@@ -66,7 +65,7 @@ def chronicle_main_view(request):
 @login_required
 @auth_profile(['all'])
 def chronicle_game_view(request, game_id):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     
     game = get_object_or_404(GameSession, id=game_id)
     events = GameEvent.objects.filter(game=game)
@@ -84,7 +83,6 @@ def chronicle_game_view(request, game_id):
         events = events.distinct()
 
     context = {
-        'current_profile': current_profile,
         'page_title': game.title,
         'events': events,
     }
@@ -97,7 +95,8 @@ def chronicle_game_view(request, game_id):
 @login_required
 @auth_profile(['all'])
 def chronicle_chapter_view(request, chapter_id):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
+    
     chapter = get_object_or_404(Chapter, id=chapter_id)
     events = GameEvent.objects.filter(game__chapter=chapter)
     events = events.prefetch_related(
@@ -118,7 +117,6 @@ def chronicle_chapter_view(request, chapter_id):
     games = games.distinct()
 
     context = {
-        'current_profile': current_profile,
         'page_title': chapter.title,
         'games': games,
     }
@@ -131,7 +129,8 @@ def chronicle_chapter_view(request, chapter_id):
 @login_required
 @auth_profile(['all'])
 def chronicle_all_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
+    
     events = GameEvent.objects.prefetch_related(
         'participants',
         'informees',
@@ -156,7 +155,6 @@ def chronicle_all_view(request):
     chapters = chapters.distinct()
     
     context = {
-        'current_profile': current_profile,
         'page_title': 'Pełna kronika',
         'chapters': chapters,
     }
@@ -171,7 +169,8 @@ def chronicle_all_view(request):
 @login_required
 @auth_profile(['all'])
 def game_event_inform_view(request, game_event_id):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
+    
     game_event = get_object_or_404(TimeUnit, id=game_event_id)
     allowed = (
         game_event.participants.all() | game_event.informees.all()
@@ -194,7 +193,6 @@ def game_event_inform_view(request, game_event_id):
             messages.info(request, f'Poinformowano wybrane Postacie!')
 
     context = {
-        'current_profile': current_profile,
         'page_title': 'Poinformuj o wydarzeniu',
         'event': game_event,
         'event_type': 'game_event'
@@ -208,7 +206,7 @@ def game_event_inform_view(request, game_event_id):
 @login_required
 @auth_profile(['gm'])
 def chronologies_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     
     chronologies = Chronology.objects.prefetch_related(
         'timeunits__timeunits__timeunits',
@@ -222,7 +220,6 @@ def chronologies_view(request):
     ).select_related('in_timeunit')
     
     context = {
-        'current_profile': current_profile,
         'page_title': 'Chronologie',
         'chronologies': chronologies,
         'event_type': 'game_event'
@@ -240,7 +237,7 @@ def chronologies_view(request):
 @login_required
 @auth_profile(['all'])
 def timeline_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
 
     events = GameEvent.objects.all()
     known_profiles = Profile.players.select_related('character', 'user')
@@ -272,7 +269,6 @@ def timeline_view(request):
         'date_start__year',
         'date_start__season',
         'date_start__day',
-        
         # Ordering by these might be problematic for HistoryEvents,
         # but is necessary to properly order events from to 2+ synchronic games
         'game',     # No -game: later game's events are usually later
@@ -284,9 +280,7 @@ def timeline_view(request):
         request.GET, queryset=events, request=request)
    
     context = {
-        'current_profile': current_profile,
         'page_title': 'Pełne Kalendarium',
-       
         # TODO the use of filter rises query cnt from 8 to 13, somehow causing
         #  2x queries for certain fields. Try to resolve it in the future.
         'events_filter': events_filter,

@@ -18,7 +18,7 @@
         </div>
         
         <div class="skill-or-synergy-name ml-2 mt-1">
-            {% if current_profile.status == 'gm' %}
+            {% if request.current_profile.status == 'gm' %}
                 <a class="hover-blue" href="{% url 'admin:rules_synergy_change' synergy.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
                     {{ synergy.name }}
                 </a>

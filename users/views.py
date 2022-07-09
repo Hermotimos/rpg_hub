@@ -65,8 +65,6 @@ def register_view(request):
 @login_required
 @auth_profile(['all'])
 def change_password_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
-
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
@@ -80,7 +78,6 @@ def change_password_view(request):
         form = PasswordChangeForm(request.user)
 
     context = {
-        'current_profile': current_profile,
         'page_title': 'Zmiana hasła',
         'form': form
     }
@@ -90,7 +87,8 @@ def change_password_view(request):
 @login_required
 @auth_profile(['all'])
 def edit_user_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
+    
     user_profiles = current_profile.user.profiles.all()
     
     if request.method == 'POST':
@@ -112,7 +110,6 @@ def edit_user_view(request):
         user_image_form = UserImageUpdateForm()
 
     context = {
-        'current_profile': current_profile,
         'page_title': 'Konto Użytkownika',
         'user_form': user_form,
         'user_image_form': user_image_form,
@@ -123,7 +120,7 @@ def edit_user_view(request):
 @login_required
 @auth_profile(['all'])
 def edit_profile_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     
     if request.method == 'POST':
         profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=current_profile)
@@ -138,7 +135,6 @@ def edit_profile_view(request):
         character_form = CharacterForm(instance=current_profile.character)
 
     context = {
-        'current_profile': current_profile,
         'page_title': 'Edycja Postaci',
         'profile_form': profile_form,
         'character_form': character_form,
@@ -209,11 +205,13 @@ def home_view(request):
     # first = PictureImage.objects.first()
     # print(first.image.url)  # /media/post_pics/knowledge_Struktura%20organizacyjna%20Szarej%20Gwardii.jpg
     # print(first.image.path) # C:\Users\Lukasz\PycharmProjects\rpg_hub\media\post_pics\knowledge_Struktura organizacyjna Szarej Gwardii.jpg
-    try:
-        current_profile = Profile.objects.get(id=request.session['profile_id'])
-    except KeyError:
-        current_profile = get_profile(request.user)
-        request.session['profile_id'] = current_profile.id
+    
+    current_profile = request.current_profile
+    # try:
+    #     current_profile = request.current_profile
+    # except KeyError:
+    #     current_profile = get_profile(request.user)
+    #     request.session['profile_id'] = current_profile.id
     
     # known_characters = current_profile.characters_known_annotated()
     acquaintanceships = current_profile.character.acquaintanceships()
@@ -227,7 +225,6 @@ def home_view(request):
     rand_gameevent = game_event_with_caption(known_gameevents)
     
     context = {
-        'current_profile': current_profile,
         'page_title': 'Hyllemath',
         'rand_acquaintanceships': rand_acquaintanceships,
         'rand_locations': rand_locations,
@@ -239,9 +236,7 @@ def home_view(request):
 @login_required
 @auth_profile(['all'])
 def dupa_view(request):
-    current_profile = Profile.objects.get(id=request.session['profile_id'])
     context = {
-        'current_profile': current_profile,
         'page_title': 'Dupa',
     }
     return render(request, 'users/dupa.html', context)
