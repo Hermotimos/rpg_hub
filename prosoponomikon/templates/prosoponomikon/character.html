@@ -25,6 +25,9 @@
                             {% endif %}
                         </div>
                         
+                        
+        <!-- Temp delete when GO LIVE -->
+        {% if request.current_profile.user.username != 'Marta' and request.current_profile.user.username != 'Dawid' and request.current_profile.user.username != 'Hubert' and request.current_profile.user.username != 'Tomek' %}
                         <!-- BUTTONS -->
                         <div class="row">
                             <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Przejdź do Prosoponomikonu">
@@ -58,6 +61,8 @@
                                 </div>
                             {% endif %}
                         </div>
+        {% endif %}
+                        
                         
                         <!-- CLASSES, TRAITS, EXPERIENCE -->
                         {% if request.current_profile.status == 'gm' or request.current_profile.status == 'player' and request.current_profile.character == character %}
@@ -147,6 +152,10 @@
                     Wiedza
                 </label>
             {% endif %}
+          
+            
+    <!-- Temp delete when GO LIVE -->
+    {% if request.current_profile.user.username != 'Marta' and request.current_profile.user.username != 'Dawid' and request.current_profile.user.username != 'Hubert' and request.current_profile.user.username != 'Tomek' %}
             
             <!-- Known characters -->
             {% if acquaintanceships %}
@@ -160,6 +169,7 @@
                     Znajomości
                 </label>
             {% endif %}
+    {% endif %}
             
             <!-- Priest powers and MentalSkills -->
             {% if skills_priests %}
