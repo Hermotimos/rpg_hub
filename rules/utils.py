@@ -65,8 +65,7 @@ def get_overload_ranges() -> namedtuple:
         LoadInfo = namedtuple(
             'LoadInfo',
             ['load_regular', 'overload_1', 'overload_2', 'overload_3', 'overload_4'])
-        return LoadInfo(
-            load_regular, overload_1, overload_2, overload_3, overload_4)
+        return LoadInfo(load_regular, overload_1, overload_2, overload_3, overload_4)
     
     return [_get_overload_ranges(v) for v in LOAD_LIMITS]
 
@@ -74,57 +73,65 @@ def get_overload_ranges() -> namedtuple:
 # -----------------------------------------------------------------------------
 
 
-HEALTH_VALUES = range(1, 51)
+WOUNDS_RANGES = [
+    ['1',   '-',        '-',        '-',        '1+'],
+    ['2',   '-',        '-',        '-',        '1+'],
+    ['3',   '-',        '-',        '1',        '2+'],
+    ['4',   '-',        '1',        '2',        '3+'],
+    ['5',   '1',        '2',        '3',        '4+'],
+    ['6',   '1',        '2',        '3',        '4+'],
+    ['7',   '1 - 2',    '3',        '4',        '5+'],
+    ['8',   '1 - 2',    '3',        '4',        '5+'],
+    ['9',   '1 - 2',    '3 - 4',    '5',        '6+'],
+    ['10',  '1 - 2',    '3 - 4',    '5',        '6+'],
+    ['11',  '1 - 2',    '3 - 4',    '5 - 6',    '7+'],
+    ['12',  '1 - 2',    '3 - 4',    '5 - 6',    '7+'],
+    ['13',  '1 - 3',    '4 - 5',    '6',        '7+'],
+    ['14',  '1 - 3',    '4 - 5',    '6',        '7+'],
+    ['15',  '1 - 3',    '4 - 5',    '6',        '7+'],
+    ['16',  '2 - 3',    '4 - 5',    '6 - 7',    '8+'],
+    ['17',  '2 - 3',    '4 - 5',    '6 - 7',    '8+'],
+    ['18',  '2 - 3',    '4 - 6',    '7 - 8',    '9+'],
+    ['19',  '2 - 3',    '4 - 6',    '7 - 8',    '9+'],
+    ['20',  '2 - 4',    '5 - 6',    '7 - 9',    '10+'],
+    ['21',  '3 - 4',    '5 - 7',    '8 - 9',    '10+'],
+    ['22',  '3 - 4',    '5 - 7',    '8 - 10',   '11+'],
+    ['23',  '3 - 5',    '6 - 8',    '9 - 10',   '11+'],
+    ['24',  '3 - 5',    '6 - 8',    '9 - 11',   '12+'],
+    ['25',  '4 - 5',    '6 - 8',    '9 - 11',   '12+'],
+    ['26',  '4 - 5',    '6 - 8',    '9 - 12',   '13+'],
+    ['27',  '4 - 5',    '6 - 9',    '10 - 12',  '13+'],
+    ['28',  '4 - 6',    '7 - 9',    '10 - 13',  '14+'],
+    ['29',  '4 - 6',    '7 - 9',    '10 - 13',  '14+'],
+    ['30',  '5 - 6',    '7 - 9',    '10 - 14',  '15+'],
+    ['31',  '5 - 6',    '7 - 10',   '11 - 14',  '15+'],
+    ['32',  '5 - 6',    '7 - 10',   '11 - 15',  '16+'],
+    ['33',  '5 - 7',    '8 - 10',   '11 - 15',  '16+'],
+    ['34',  '6 - 7',    '8 - 12',   '13 - 16',  '17+'],
+    ['35',  '6 - 8',    '9 - 12',   '13 - 16',  '17+'],
+    ['36',  '6 - 8',    '9 - 13',   '14 - 17',  '18+'],
+    ['37',  '7 - 8',    '9 - 13',   '14 - 17',  '18+'],
+    ['38',  '7 - 8',    '9 - 13',   '14 - 18',  '19+'],
+    ['39',  '7 - 9',    '10 - 13',  '14 - 18',  '19+'],
+    ['40',  '7 - 9',    '10 - 14',  '15 - 19',  '20+'],
+    ['41',  '8 - 9',    '10 - 14',  '15 - 19',  '20+'],
+    ['42',  '8 - 9',    '10 - 14',  '15 - 20',  '21+'],
+    ['43',  '8 - 9',    '10 - 14',  '15 - 20',  '21+'],
+    ['44',  '8 - 10',   '11 - 14',  '15 - 21',  '22+'],
+    ['45',  '8 - 10',   '11 - 15',  '16 - 21',  '22+'],
+    ['46',  '8 - 10',   '11 - 16',  '17 - 22',  '23+'],
+    ['47',  '8 - 10',   '11 - 16',  '17 - 22',  '23+'],
+    ['48',  '9 - 10',   '11 - 16',  '17 - 23',  '24+'],
+    ['49',  '9 - 10',   '11 - 16',  '17 - 23',  '24+'],
+    ['50',  '9 - 10',   '11 - 16',  '17 - 22',  '25+'],
+]
 
 
 def get_wounds_ranges() -> namedtuple:
-    
-    def simplify_false_ranges(text: str):
-        """Convert range with bottom identical to top, ex. "2 - 2" -> "2"."""
-        bottom, top = text.split(" - ")
-        if bottom == top:
-            return bottom
-        return text
-        
-    def _get_wounds_ranges(health: int) -> namedtuple:
-        WoundsRanges = namedtuple(
-            'WoundsRanges', ['health', 'light', 'medium', 'heavy', 'deadly'])
-
-        if health <= 2:
-            return WoundsRanges(health, "-", "-", "-", "1+")
-        elif health == 3:
-            return WoundsRanges(health, "-", "-", "1", "2+")
-        elif health == 4:
-            return WoundsRanges(health, "-", "1", "2", "3+")
-        else:
-            if health < 17:
-                light_bottom = health // 7
-                light_top = light_bottom + 1
-            elif health < 23:
-                light_bottom = health // 7
-                light_top = light_bottom + max(floor(health % 7 / 2 - 1), 1)
-            elif health < 34:
-                light_bottom = health // 6
-                light_top = light_bottom + max(floor(health % 6 / 2), 1)
-            else:
-                light_bottom = health // 6 + 1
-                light_top = light_bottom + max(floor(health % 6 / 2), 1)
-
-            light = simplify_false_ranges(f"{min(max(light_bottom, 1), 10)} - {light_top}")
-            
-            medium_bottom = light_top + 1
-            medium_top = medium_bottom + health // 9
-            medium = simplify_false_ranges(f"{medium_bottom} - {medium_top}")
-            
-            heavy_bottom = medium_top + 1
-            heavy_top = heavy_bottom + health // 9
-            heavy = simplify_false_ranges(f"{heavy_bottom} - {heavy_top}")
-            
-            deadly = f"{heavy_top + 1}+"
-    
-        return WoundsRanges(health, light, medium, heavy, deadly)
-
-    return [_get_wounds_ranges(v) for v in HEALTH_VALUES]
+    WoundsRanges = namedtuple(
+        'WoundsRanges', ['health', 'light', 'medium', 'heavy', 'deadly'])
+    return [WoundsRanges(*vals) for vals in WOUNDS_RANGES]
 
 
 # -----------------------------------------------------------------------------
+
