@@ -263,3 +263,11 @@ def remove_special_chars(text_or_obj):
     return "".join(
         [ch for ch in str(text_or_obj) if ch.lower() in 'abcdefghijklmnopqrstuvwxyz']
     )
+
+
+@register.filter
+def default_if_emptystring(string, text_if_emtystring):
+    if string == "":
+        return text_if_emtystring
+    return string
+
