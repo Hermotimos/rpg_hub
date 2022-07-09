@@ -30,7 +30,25 @@ class FactorAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
     list_editable = ['name']
 
-   
+
+@admin.register(Condition)
+class ConditionAdmin(admin.ModelAdmin):
+    list_display = ['id', 'text']
+    list_editable = ['text']
+
+
+@admin.register(RulesComment)
+class RulesCommentAdmin(admin.ModelAdmin):
+    list_display = ['id', 'text']
+    list_editable = ['text']
+
+
+@admin.register(CombatType)
+class CombatTypeAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
+    list_editable = ['name']
+
+
 @admin.register(Modifier)
 class ModifierAdmin(admin.ModelAdmin):
     empty_value_display = ''
@@ -43,7 +61,6 @@ class ModifierAdmin(admin.ModelAdmin):
     list_filter = ['factor', 'sign']
     list_select_related = ['factor']
     radio_fields = {"sign": admin.VERTICAL}
-    readonly_fields = ['overview']
     search_fields = ['value_number', 'value_percent', 'value_text', 'factor']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -54,12 +71,6 @@ class ModifierAdmin(admin.ModelAdmin):
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
-
-
-@admin.register(RulesComment)
-class RulesCommentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'text']
-    list_editable = ['text']
 
 
 @admin.register(Perk)
@@ -75,19 +86,25 @@ class PerkAdmin(admin.ModelAdmin):
             kwargs["queryset"] = ConditionalModifier.objects.prefetch_related('combat_types')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
     
+
+class ConditionalModifierAdminForm(forms.ModelForm):
+    """Custom form for query optimization."""
     
-@admin.register(Condition)
-class ConditionAdmin(admin.ModelAdmin):
-    list_display = ['id', 'text']
-    list_editable = ['text']
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['modifier'].queryset = Modifier.objects.select_related('factor')
 
+    class Meta:
+        model = ConditionalModifier
+        exclude = []
 
+        
 @admin.register(ConditionalModifier)
 class ConditionalModifierAdmin(admin.ModelAdmin):
     filter_horizontal = ['combat_types', 'conditions']
+    form = ConditionalModifierAdminForm
     list_display = ['__str__', '_perks']
-    readonly_fields = ['overview']
-
+    
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         qs = qs.select_related('modifier__factor')
@@ -97,12 +114,6 @@ class ConditionalModifierAdmin(admin.ModelAdmin):
     def _perks(self, obj):
         perks = " | ".join([p.name for p in obj.perks.all()])
         return format_html(f'<span>{perks}</span>')
-
-
-@admin.register(CombatType)
-class CombatTypeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name']
-    list_editable = ['name']
 
     
 # -----------------------------------------------------------------------------

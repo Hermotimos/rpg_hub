@@ -15,7 +15,6 @@ from django.db.models import (
     TextField,
 )
 from django.db.models import Q
-from django.db.models.signals import post_save, m2m_changed
 
 from imaginarion.models import PictureSet
 from users.models import Profile
@@ -35,7 +34,10 @@ class Factor(Model):
         return self.name
 
 
-PERCENTAGE_VALIDATOR = [MinValueValidator(0.01), MaxValueValidator(1.00)]
+PERCENTAGE_VALIDATOR = [
+    MinValueValidator(0.01),
+    MaxValueValidator(1.00),
+]
 SIGN_CHOICES = [
     ('-', '-'),
     ('+', '+'),
@@ -50,7 +52,6 @@ class Modifier(Model):
         max_digits=3, decimal_places=2, validators=PERCENTAGE_VALIDATOR, blank=True, null=True)
     value_text = CharField(max_length=30, blank=True, null=True)
     factor = FK(to=Factor, related_name='modifiers', on_delete=PROTECT)
-    overview = CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         ordering = ['factor', 'sign', 'value_number', 'value_percent', 'value_text']
@@ -61,9 +62,6 @@ class Modifier(Model):
         ]
 
     def __str__(self):
-        return str(self.overview)
-
-    def create_overview(self):
         value = ""
         if self.value_number:
             value = str(self.value_number).rstrip('0').rstrip('.')
@@ -72,10 +70,6 @@ class Modifier(Model):
         elif self.value_text:
             value = self.value_text
         return f"{self.sign}{value} {self.factor.name}"
-        
-    def save(self, *args, **kwargs):
-        self.overview = self.create_overview()
-        super().save(*args, **kwargs)
 
 
 class RulesComment(Model):
@@ -114,28 +108,19 @@ class ConditionalModifier(Model):
     modifier = FK(to=Modifier, related_name="conditional_modifiers", on_delete=CASCADE)
     conditions = M2M(to=Condition, related_name="conditional_modifiers", blank=True)
     combat_types = M2M(to=CombatType, related_name="conditional_modifiers", blank=True)
-    overview = CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         ordering = ['modifier']
 
     def __str__(self):
-        combat_types = [str(ct).split()[-1][:4] for ct in self.combat_types.all()]
-        combat_types = "".join(["/" + str(ct) for ct in combat_types])
-        return f"{self.overview} {combat_types}"
-    
-    def update_overview(self):
         conditions = ""
         if self.conditions.exists():
             conditions = f" [{' | '.join([str(condition) for condition in self.conditions.all()])}]"
-        return f"{self.modifier}{conditions}"
+        combat_types = [str(ct).split()[-1][:4] for ct in self.combat_types.all()]
+        combat_types = "".join(["/" + str(ct) for ct in combat_types])
+        return f"{self.modifier}{conditions} {combat_types}"
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        self.overview = self.update_overview()
-        super().save(*args, **kwargs)
         
-
 class Perk(Model):
     """A class describing a special ability of an item or a skill level."""
     name = CharField(max_length=50, unique=True)
@@ -757,35 +742,3 @@ class SubProfession(Model):
 
     def __str__(self):
         return self.name
-
-
-# =============================================================================
-
-
-def update_conditional_modifier_overview(sender, instance, **kwargs):
-    """Update ConditionalModifier.overview when 'conditions' is changed."""
-    conditions = ""
-    if instance.conditions.exists():
-        conditions = f" [{' | '.join([str(condition) for condition in instance.conditions.all()])}]"
-    instance.overview = f"{instance.modifier}{conditions}"
-    instance.save()
-
-
-m2m_changed.connect(
-    sender=ConditionalModifier.conditions.through,
-    receiver=update_conditional_modifier_overview)
-
-
-def update_conditional_modifiers_overview(sender, instance, **kwargs):
-    """Update referencing ConditionalModifier.overview when Modifier is changed.
-    Do this by calling ConditionalModifier's save() method, which will call
-    'update_overview' and update the 'overview' field.
-    """
-    conditional_modifiers = instance.conditional_modifiers.all()
-    for conditional_modifier in conditional_modifiers:
-        conditional_modifier.save()
-
-
-post_save.connect(
-    sender=Modifier,
-    receiver=update_conditional_modifiers_overview)
