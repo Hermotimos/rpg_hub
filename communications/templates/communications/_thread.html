@@ -24,7 +24,7 @@
             <div class="container h-100">
                 <div class="row">
                     <div class="col pr-0">
-                        <div class="font-11 font-italic text-muted align-top">
+                        <div class="font-11 font-italic text-muted align-top mb-1">
                             {% if thread_kind == 'Announcement' %}
                                 {{ thread.created_at|date:'d-M-Y' }} | {{ thread.last_activity|date:'d-M-Y' }}
                             {% elif thread_kind == 'Debate' %}
