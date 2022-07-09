@@ -500,7 +500,7 @@ class SkillLevel(Model):
     
     skill = FK(to=Skill, related_name='skill_levels', on_delete=CASCADE)
     level = CharField(max_length=10, choices=LEVELS)
-    description = TextField()
+    description = TextField(blank=True, null=True)
     perks = M2M(to=Perk, related_name='skill_levels', blank=True)
     acquired_by = M2M(to=Profile, related_name='skill_levels', blank=True)
     # ------------------------------------------
