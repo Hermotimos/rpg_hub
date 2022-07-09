@@ -9,7 +9,7 @@
         
         <div class="skill-or-synergy-name ml-2 mt-1 mt-lg-2">
             <div>
-                {% if current_profile.status == 'gm' %}
+                {% if request.current_profile.status == 'gm' %}
                     {% if skilltype_kind == 'Powszechne' %}
                         <a class="hover-blue" href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
                             {{ skill.name }}

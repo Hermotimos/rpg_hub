@@ -71,7 +71,7 @@
                 
                 
             <!-- TODO del condition when ready -->
-            {% if current_profile.user.username != 'Marta' and request.current_profile.user.username != 'Dawid' and request.current_profile.user.username != 'Hubert' and request.current_profile.user.username != 'Tomek' %}
+            {% if request.current_profile.user.username != 'Marta' and request.current_profile.user.username != 'Dawid' and request.current_profile.user.username != 'Hubert' and request.current_profile.user.username != 'Tomek' %}
 
                 {% with unseen_debates=request.current_profile.unseen_debates %}
                     <li class="dropdown pr-4 mr-auto">

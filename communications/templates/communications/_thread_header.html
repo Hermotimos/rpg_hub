@@ -37,7 +37,7 @@
     
     {% if not thread.is_ended %}
         <div>
-            {% if current_profile in thread.followers.all %}
+            {% if request.current_profile in thread.followers.all %}
                 <a class="btn btn-outline-dark icon-unfollow py-2 ml-1 mt-1" href="{% url 'communications:unfollow' thread.id %}"
                    data-toggle="tooltip" data-placement="bottom" title="Nie obserwuj">
                 </a>
@@ -86,7 +86,7 @@
     <div data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">
         <a class="btn btn-outline-dark icon-note py-2 ml-1 mt-1 disabled" href="#"></a>
     </div>
-    {% if current_profile.status == 'gm' %}
+    {% if request.current_profile.status == 'gm' %}
         <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Edycja">
             {% if thread.kind == "Debate" %}
                 <a class="btn btn-outline-secondary icon-edit py-2 ml-1 mt-1" href="{% url 'admin:communications_debate_change' thread.id %}" target="_blank"></a>
