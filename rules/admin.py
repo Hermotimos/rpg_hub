@@ -271,7 +271,7 @@ class SkillLevelAdmin(admin.ModelAdmin):
     list_editable = ['description']
     list_filter = [SkillLevelFilter]
     list_select_related = ['skill']
-    search_fields = ['level', 'description']
+    search_fields = ['skill__name', 'level', 'description']
 
     def name(self, obj):
         return f'{str(obj.skill.name)} [{obj.level}]'
