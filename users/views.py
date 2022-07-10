@@ -1,14 +1,13 @@
 import random
 
 from django.contrib import messages
-from django.contrib.auth import login, update_session_auth_hash
+from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
 from django.db.models.functions import Length
-from django.shortcuts import redirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 from prosoponomikon.forms import CharacterForm
 from prosoponomikon.models import Character, FirstName
@@ -33,6 +32,18 @@ class CustomLoginView(LoginView):
         context = super().get_context_data(**kwargs)
         context['page_title'] = 'Logowanie'
         return context
+
+    def get(self, request, *args, **kwargs):
+        """Override method to handle situation when 'go back' browser button is
+        used from the home page directly after loging in.
+        Going back from home page would result in NoReverseMatch exception
+        as request has no 'current_profile' attribute and some navbar & sidebar
+        links demand it to resolve URLs.
+        """
+        if request.META['HTTP_REFERER'] == "http://127.0.0.1:8000/":
+            logout(request)
+            redirect('users:login')
+        return self.render_to_response(self.get_context_data())
 
 
 class CustomLogoutView(LogoutView):
@@ -230,8 +241,15 @@ def home_view(request):
         'rand_locations': rand_locations,
         'rand_gameevent': rand_gameevent,
     }
-    return render(request, 'users/home.html', context)
 
+    response = render(request, 'users/home.html', context)
+    print(response)
+    if 'NoReverseMatch' in response:
+        from django.contrib.auth import logout
+        logout(request)
+        redirect('users:login')
+    return response
+    
 
 @login_required
 @auth_profile(['all'])
