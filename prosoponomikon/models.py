@@ -15,7 +15,7 @@ from django.db.models.functions import Substr, Lower
 from django.db.models.signals import post_save
 
 from knowledge.models import BiographyPacket, DialoguePacket
-from rules.models import SubProfession
+from rules.models import SubProfession, SkillLevel, WeaponType, Sphragis
 from toponomikon.models import Location
 from users.models import Profile
 
@@ -196,6 +196,11 @@ class Character(Model):
     acquaintances = M2M(
         to='self', through='Acquaintanceship', related_name='acquaintaned_to',
         blank=True, symmetrical=False)
+    # skill_levels = M2M(
+    #     to=SkillLevel,
+    #     through='Acquisition',
+    #     related_name='acquiring_characters',
+    #     blank=True)
     
     class Meta:
         ordering = ['fullname']
@@ -299,6 +304,25 @@ class Acquaintanceship(Model):
 
     def __str__(self):
         return f"{self.knowing_character} -> {self.known_character}"
+
+
+# -----------------------------------------------------------------------------
+
+
+# class Acquisition(Model):
+#     skill_level = FK(to=SkillLevel, on_delete=CASCADE)
+#     character = FK(to=Character, on_delete=CASCADE)
+#     weapon = FK(to=WeaponType, on_delete=CASCADE, blank=True, null=True)
+#     sphragis = FK(to=Sphragis, on_delete=CASCADE, blank=True, null=True)
+#
+#     class Meta:
+#         ordering = ['character', 'skill_level__skill']
+#         unique_together = ['character', 'skill_level']
+#
+#     def __str__(self):
+#         weapon = f" {self.weapon}" if self.weapon else ""
+#         sphragis = f" ({self.sphragis})" if self.sphragis else ""
+#         return f"{self.character}: {self.skill_level}{weapon}{sphragis}"
 
 
 # -----------------------------------------------------------------------------

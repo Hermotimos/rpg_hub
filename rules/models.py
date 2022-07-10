@@ -1,5 +1,6 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
+    AutoField,
     CASCADE,
     CharField,
     DecimalField,
@@ -739,6 +740,17 @@ class SubProfession(Model):
         ordering = ['name']
         verbose_name = 'SubProfession'
         verbose_name_plural = '--- SUBPROFESSIONS'
+
+    def __str__(self):
+        return self.name
+
+
+class Sphragis(Model):
+    name = CharField(max_length=100, unique=True)
+    name_genitive = CharField(max_length=100, unique=True)
+    
+    class Meta:
+        ordering = ['name']
 
     def __str__(self):
         return self.name
