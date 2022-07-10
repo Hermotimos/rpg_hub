@@ -41,7 +41,8 @@ class CustomLoginView(LoginView):
         as request has no 'current_profile' attribute and some navbar & sidebar
         links demand it to resolve URLs.
         """
-        if any(host in request.META.get('HTTP_REFERER') for host in settings.ALLOWED_HOSTS):
+        hosts = settings.ALLOWED_HOSTS
+        if any(host in request.META.get('HTTP_REFERER', '') for host in hosts):
             logout(request)
             redirect('users:login')
         return self.render_to_response(self.get_context_data())
@@ -242,15 +243,8 @@ def home_view(request):
         'rand_locations': rand_locations,
         'rand_gameevent': rand_gameevent,
     }
+    return render(request, 'users/home.html', context)
 
-    response = render(request, 'users/home.html', context)
-    print(response)
-    if 'NoReverseMatch' in response:
-        from django.contrib.auth import logout
-        logout(request)
-        redirect('users:login')
-    return response
-    
 
 @login_required
 @auth_profile(['all'])
