@@ -7,8 +7,6 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    # replaces = [('users', '0001_initial_squashed'), ('users', '0002_alter_profile_options_remove_profile_is_enchanter'), ('users', '0003_alter_profile_image_alter_profile_user_image'), ('users', '0004_remove_profile_character_name_copy')]
-
     initial = True
 
     dependencies = [
