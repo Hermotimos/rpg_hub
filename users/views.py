@@ -1,5 +1,6 @@
 import random
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
@@ -40,7 +41,7 @@ class CustomLoginView(LoginView):
         as request has no 'current_profile' attribute and some navbar & sidebar
         links demand it to resolve URLs.
         """
-        if request.META['HTTP_REFERER'] == "http://127.0.0.1:8000/":
+        if any(host in request.META.get('HTTP_REFERER') for host in settings.ALLOWED_HOSTS):
             logout(request)
             redirect('users:login')
         return self.render_to_response(self.get_context_data())
