@@ -111,7 +111,7 @@
             {% if request.current_profile.status == 'gm' or request.current_profile.character == character %}
                 {% if biography_packets %}
                     <input type="radio" name="tabset" id="tab1" aria-controls="biography_packets" checked>
-                    <label class="h4 mb-0 font-resp-15 resp-tab-label" for="tab1">Biografia</label>
+                    <label class="font-resp-15 resp-tab-label" for="tab1">Biografia</label>
                 {% endif %}
             {% endif %}
             
@@ -123,7 +123,7 @@
                     {% else %}
                         <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets" checked>
                     {% endif %}
-                    <label class="h4 mb-0 font-resp-15 resp-tab-label" for="tab2">Dialogi</label>
+                    <label class="font-resp-15 resp-tab-label" for="tab2">Dialogi</label>
                 {% endif %}
             {% endif %}
             
@@ -134,7 +134,7 @@
                 {% else %}
                     <input type="radio" name="tabset" id="tab3" aria-controls="skills_regular" checked>
                 {% endif %}
-                <label class="h4 mb-0 font-resp-15 resp-tab-label" for="tab3">
+                <label class="font-resp-15 resp-tab-label" for="tab3">
                     {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
                     Umiejętności
                 </label>
@@ -147,7 +147,7 @@
                 {% else %}
                     <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets" checked>
                 {% endif %}
-                <label class="h4 mb-0 font-resp-15 resp-tab-label" for="tab4">
+                <label class="font-resp-15 resp-tab-label" for="tab4">
                     {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
                     Wiedza
                 </label>
@@ -164,7 +164,7 @@
                 {% else %}
                     <input type="radio" name="tabset" id="tab5" aria-controls="acquaintanceships" checked>
                 {% endif %}
-                <label class="h4 mb-0 font-resp-15 resp-tab-label" for="tab5">
+                <label class="font-resp-15 resp-tab-label" for="tab5">
                     {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
                     Znajomości
                 </label>
@@ -178,7 +178,7 @@
                 {% else %}
                     <input type="radio" name="tabset" id="tab6" aria-controls="priest_powers_and_mental_skills" checked>
                 {% endif %}
-                <label class="h4 mb-0 font-resp-15 resp-tab-label" for="tab6">
+                <label class="font-resp-15 resp-tab-label" for="tab6">
                     {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
                     Moce kapłańskie
                 </label>
@@ -191,7 +191,7 @@
                 {% else %}
                     <input type="radio" name="tabset" id="tab7" aria-controls="sorcerers_powers_and_mental_skills" checked>
                 {% endif %}
-                <label class="h4 mb-0 font-resp-15 resp-tab-label" for="tab6">
+                <label class="font-resp-15 resp-tab-label" for="tab6">
                     {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
                     Zaklęcia
                 </label>
@@ -204,7 +204,7 @@
                 {% else %}
                     <input type="radio" name="tabset" id="tab8" aria-controls="theurgists_powers_and_mental_skills" checked>
                 {% endif %}
-                <label class="h4 mb-0 font-resp-15 resp-tab-label" for="tab6">
+                <label class="font-resp-15 resp-tab-label" for="tab6">
                     {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
                     Moce Teurgiczne
                 </label>

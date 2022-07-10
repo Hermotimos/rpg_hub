@@ -13,7 +13,7 @@
         <!-- TAB HEADER: Locations -->
         {% if primary_locs %}
             <input type="radio" name="tabset" id="tab1" aria-controls="locations" checked>
-            <label class="h3" for="tab1">Lokacje</label>
+            <label class="font-resp-15 resp-tab-label" for="tab1">Lokacje</label>
         {% endif %}
         
         <!-- TAB HEADER: Index -->
@@ -23,7 +23,7 @@
             {% else %}
                 <input type="radio" name="tabset" id="tab2" aria-controls="index">
             {% endif %}
-            <label class="h3" for="tab2">Indeks</label>
+            <label class="font-resp-15 resp-tab-label" for="tab2">Indeks</label>
         {% endif %}
         
         <!-- TAB HEADER: Maps -->
@@ -33,7 +33,7 @@
             {% else %}
                 <input type="radio" name="tabset" id="tab3" aria-controls="maps">
             {% endif %}
-            <label class="h3" for="tab3">Mapy i plany</label>
+            <label class="font-resp-15 resp-tab-label" for="tab3">Mapy i plany</label>
         {% endif %}
         
         
@@ -41,7 +41,7 @@
             
             <!-- TAB CONTENT: Locations -->
             {% if primary_locs %}
-                <section id="locations" class="tab-panel">
+                <section id="locations" class="tab-panel py-5">
                     <div class="container">
                         <p class="mb-0 text-center">✧</p>
                         <p class="mb-0 text-center">✧ ✦ ✧</p>
@@ -57,7 +57,7 @@
             
             <!-- TAB CONTENT: Index -->
             {% if all_locs %}
-                <section id="index" class="tab-panel">
+                <section id="index" class="tab-panel py-5">
                     <div class="container">
                         <p class="mb-0 text-center">✧</p>
                         <p class="mb-0 text-center">✧ ✦ ✧</p>
