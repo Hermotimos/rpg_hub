@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('users', '0001_initial_squashed'),
+        ('users', '0001_initial'),
         ('communications', '0001_initial'),
         ('imaginarion', '0001_initial_squashed'),
         ('toponomikon', '0001_initial'),

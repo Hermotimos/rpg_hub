@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
         ('rules', '0001_initial'),
         ('toponomikon', '0001_initial'),
         ('knowledge', '0001_initial_squashed'),
-        ('users', '0001_initial_squashed'),
+        ('users', '0001_initial'),
     ]
 
     operations = [

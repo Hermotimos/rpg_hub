@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('rules', '0004_alter_profession_options_alter_skillkind_options_and_more'),
+        ('rules', '0001_initial'),
         ('prosoponomikon', '0004_alter_character_cognomen_and_more'),
     ]
 

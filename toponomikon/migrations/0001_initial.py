@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('knowledge', '0001_initial_squashed'),
-        ('users', '0001_initial_squashed'),
+        ('users', '0001_initial'),
         ('imaginarion', '0001_initial_squashed'),
     ]
 
