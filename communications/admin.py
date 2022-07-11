@@ -53,8 +53,8 @@ class AnnouncementAdmin(admin.ModelAdmin):
 @admin.register(Debate)
 class DebateAdmin(admin.ModelAdmin):
     fields = [
-        'title', 'kind', 'participants', 'followers', 'is_ended',
-        'is_exclusive'
+        'title', 'kind', 'is_ended', 'is_exclusive', 'participants',
+        'followers',
     ]
     filter_horizontal = ['participants', 'followers']
     list_display = ['title', 'is_ended', 'is_exclusive', 'created_at']
