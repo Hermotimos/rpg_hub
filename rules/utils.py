@@ -30,63 +30,58 @@ def can_view_special_rules(current_profile, restricted_professions):
 # -----------------------------------------------------------------------------
 
 
-LOAD_LIMITS = [
-    [1, 0],
-    [2, 2],
-    [3, 3],
-    [4, 6],
-    [5, 9],
-    [6, 12],
-    [7, 14],
-    [8, 16],
-    [9, 18],
-    [10, 20],
-    [11, 22],
-    [12, 24],
-    [12, 26],
-    [14, 29],
-    [15, 32],
-    [16, 37],
-    [17, 42],
-    [18, 56],
-    [19, 70],
-    [20, 85]
-]
+@dataclass(frozen=True)
+class OverLoadRangeSet:
+    base_load: int
 
+    @property
+    def interval(self):
+        if self.base_load < 30:
+            return self.base_load / 2
+        return self.base_load / 2 - (self.base_load / 20)
 
-def get_overload_ranges() -> namedtuple:
+    def get_top(self, overload_lvl):
+        return int(self.base_load + (self.interval * overload_lvl))
+
+    def get_bottom(self, overload_lvl):
+        return int(self.get_top(overload_lvl-1) + 1)
     
-    def _get_overload_ranges(vals: Tuple[int, int]) -> namedtuple:
-        strength, load_regular = vals
-        overload_1 = f"{load_regular + 1} - {load_regular + strength}"
-        overload_2 = f"{load_regular + strength + 1} - {load_regular + strength*2}"
-        overload_3 = f"{load_regular + strength*2 + 1} - {load_regular + strength*3}"
-        overload_4 = f"{load_regular + strength*3 + 1} - {load_regular + strength*4}"
-        LoadInfo = namedtuple(
-            'LoadInfo',
-            ['load_regular', 'overload_1', 'overload_2', 'overload_3', 'overload_4'])
-        return LoadInfo(load_regular, overload_1, overload_2, overload_3, overload_4)
-    
-    return [_get_overload_ranges(v) for v in LOAD_LIMITS]
+    @staticmethod
+    def get_overload_range_str(bottom, top):
+        if bottom > top or top == 0:
+            return '-'
+        if bottom >= top:
+            return f"{bottom}"
+        return f"{bottom}-{top}"
+
+    @property
+    def overload_1(self):
+        return self.get_overload_range_str(self.get_bottom(1), self.get_top(1))
+     
+    @property
+    def overload_2(self):
+        return self.get_overload_range_str(self.get_bottom(2), self.get_top(2))
+     
+    @property
+    def overload_3(self):
+        return self.get_overload_range_str(self.get_bottom(3), self.get_top(3))
+     
+    @property
+    def overload_4(self):
+        return self.get_overload_range_str(self.get_bottom(4), self.get_top(4))
+     
+     
+def get_overload_ranges():
+    return [OverLoadRangeSet(val) for val in range(1, 61)]
 
 
 # -----------------------------------------------------------------------------
 
 
-def construct_range_str(bottom, top):
-    if bottom > top or top == 0:
-        return '-'
-    if bottom == 0:
-        return f"{top}"
-    if bottom == top:
-        return f"{bottom}"
-    return f"{bottom}-{top}"
-
-
 @dataclass(frozen=True)
 class WoundsRangeSet:
     health: int
-
+    
     @property
     def deadly_bottom(self):
         if self.health == 1:
@@ -123,17 +118,27 @@ class WoundsRangeSet:
     def heavy_top(self):
         return self.deadly_bottom - 1
 
+    @staticmethod
+    def get_wounds_range_str(bottom, top):
+        if bottom > top or top == 0:
+            return '-'
+        if bottom == 0:
+            return f"{top}"
+        if bottom == top:
+            return f"{bottom}"
+        return f"{bottom}-{top}"
+
     @property
     def light_wounds(self):
-        return construct_range_str(self.light_bottom, self.light_top)
+        return self.get_wounds_range_str(self.light_bottom, self.light_top)
 
     @property
     def medium_wounds(self):
-        return construct_range_str(self.medium_bottom, self.medium_top)
+        return self.get_wounds_range_str(self.medium_bottom, self.medium_top)
 
     @property
     def heavy_wounds(self):
-        return construct_range_str(self.heavy_bottom, self.heavy_top)
+        return self.get_wounds_range_str(self.heavy_bottom, self.heavy_top)
     
     @property
     def deadly_wounds(self):
