@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('users', '0001_initial'),
-        ('toponomikon', '0002_alter_location_options_remove_location_sorting_name'),
+        ('toponomikon', '0001_initial'),
         ('imaginarion', '0004_alter_pictureimage_image'),
         ('communications', '0002_alter_statement_text'),
     ]
