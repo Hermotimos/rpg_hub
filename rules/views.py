@@ -12,7 +12,7 @@ from rules.models import (
 )
 from rpg_project.utils import auth_profile
 from rules.utils import get_overload_ranges, get_visible_professions, \
-    can_view_special_rules, get_wounds_ranges
+    can_view_special_rules, get_wounds_range_sets
 
 
 @login_required
@@ -266,7 +266,7 @@ def rules_weapon_types_view(request):
 def rules_wounds_view(request):
     context = {
         'page_title': 'Progi i skutki ran',
-        'wounds_ranges': get_wounds_ranges(),
+        'wounds_range_sets': get_wounds_range_sets(),
     }
     return render(request, 'rules/wounds.html', context)
 

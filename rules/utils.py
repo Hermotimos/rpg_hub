@@ -1,5 +1,5 @@
 from collections import namedtuple
-from math import floor, ceil
+from dataclasses import dataclass
 from typing import Tuple
 
 from prosoponomikon.models import Character
@@ -73,65 +73,75 @@ def get_overload_ranges() -> namedtuple:
 # -----------------------------------------------------------------------------
 
 
-WOUNDS_RANGES = [
-    ['1',   '-',        '-',        '-',        '1+'],
-    ['2',   '-',        '-',        '-',        '1+'],
-    ['3',   '-',        '-',        '1',        '2+'],
-    ['4',   '-',        '1',        '2',        '3+'],
-    ['5',   '1',        '2',        '3',        '4+'],
-    ['6',   '1',        '2',        '3',        '4+'],
-    ['7',   '1 - 2',    '3',        '4',        '5+'],
-    ['8',   '1 - 2',    '3',        '4',        '5+'],
-    ['9',   '1 - 2',    '3 - 4',    '5',        '6+'],
-    ['10',  '1 - 2',    '3 - 4',    '5',        '6+'],
-    ['11',  '1 - 2',    '3 - 4',    '5 - 6',    '7+'],
-    ['12',  '1 - 2',    '3 - 4',    '5 - 6',    '7+'],
-    ['13',  '1 - 3',    '4 - 5',    '6',        '7+'],
-    ['14',  '1 - 3',    '4 - 5',    '6',        '7+'],
-    ['15',  '1 - 3',    '4 - 5',    '6',        '7+'],
-    ['16',  '2 - 3',    '4 - 5',    '6 - 7',    '8+'],
-    ['17',  '2 - 3',    '4 - 5',    '6 - 7',    '8+'],
-    ['18',  '2 - 3',    '4 - 6',    '7 - 8',    '9+'],
-    ['19',  '2 - 3',    '4 - 6',    '7 - 8',    '9+'],
-    ['20',  '2 - 4',    '5 - 6',    '7 - 9',    '10+'],
-    ['21',  '3 - 4',    '5 - 7',    '8 - 9',    '10+'],
-    ['22',  '3 - 4',    '5 - 7',    '8 - 10',   '11+'],
-    ['23',  '3 - 5',    '6 - 8',    '9 - 10',   '11+'],
-    ['24',  '3 - 5',    '6 - 8',    '9 - 11',   '12+'],
-    ['25',  '4 - 5',    '6 - 8',    '9 - 11',   '12+'],
-    ['26',  '4 - 5',    '6 - 8',    '9 - 12',   '13+'],
-    ['27',  '4 - 5',    '6 - 9',    '10 - 12',  '13+'],
-    ['28',  '4 - 6',    '7 - 9',    '10 - 13',  '14+'],
-    ['29',  '4 - 6',    '7 - 9',    '10 - 13',  '14+'],
-    ['30',  '5 - 6',    '7 - 9',    '10 - 14',  '15+'],
-    ['31',  '5 - 6',    '7 - 10',   '11 - 14',  '15+'],
-    ['32',  '5 - 6',    '7 - 10',   '11 - 15',  '16+'],
-    ['33',  '5 - 7',    '8 - 10',   '11 - 15',  '16+'],
-    ['34',  '6 - 7',    '8 - 12',   '13 - 16',  '17+'],
-    ['35',  '6 - 8',    '9 - 12',   '13 - 16',  '17+'],
-    ['36',  '6 - 8',    '9 - 13',   '14 - 17',  '18+'],
-    ['37',  '7 - 8',    '9 - 13',   '14 - 17',  '18+'],
-    ['38',  '7 - 8',    '9 - 13',   '14 - 18',  '19+'],
-    ['39',  '7 - 9',    '10 - 13',  '14 - 18',  '19+'],
-    ['40',  '7 - 9',    '10 - 14',  '15 - 19',  '20+'],
-    ['41',  '8 - 9',    '10 - 14',  '15 - 19',  '20+'],
-    ['42',  '8 - 9',    '10 - 14',  '15 - 20',  '21+'],
-    ['43',  '8 - 9',    '10 - 14',  '15 - 20',  '21+'],
-    ['44',  '8 - 10',   '11 - 14',  '15 - 21',  '22+'],
-    ['45',  '8 - 10',   '11 - 15',  '16 - 21',  '22+'],
-    ['46',  '8 - 10',   '11 - 16',  '17 - 22',  '23+'],
-    ['47',  '8 - 10',   '11 - 16',  '17 - 22',  '23+'],
-    ['48',  '9 - 10',   '11 - 16',  '17 - 23',  '24+'],
-    ['49',  '9 - 10',   '11 - 16',  '17 - 23',  '24+'],
-    ['50',  '9 - 10',   '11 - 16',  '17 - 22',  '25+'],
-]
+def construct_range_str(bottom, top):
+    if bottom > top or top == 0:
+        return '-'
+    if bottom == 0:
+        return f"{top}"
+    if bottom == top:
+        return f"{bottom}"
+    return f"{bottom}-{top}"
 
 
-def get_wounds_ranges() -> namedtuple:
-    WoundsRanges = namedtuple(
-        'WoundsRanges', ['health', 'light', 'medium', 'heavy', 'deadly'])
-    return [WoundsRanges(*vals) for vals in WOUNDS_RANGES]
+@dataclass(frozen=True)
+class WoundsRangeSet:
+    health: int
+
+    @property
+    def deadly_bottom(self):
+        if self.health == 1:
+            return 1
+        if self.health < 30:
+            return self.health // 2
+        return (self.health // 2) + (self.health // 10) - 2
+
+    @property
+    def light_bottom(self):
+        return self.deadly_bottom // 3
+    
+    @property
+    def interval(self):
+        return (self.deadly_bottom - self.light_bottom) // 3
+
+    @property
+    def medium_bottom(self):
+        return self.light_bottom + self.interval
+
+    @property
+    def heavy_bottom(self):
+        return self.medium_bottom + self.interval
+
+    @property
+    def light_top(self):
+        return self.medium_bottom - 1
+
+    @property
+    def medium_top(self):
+        return self.heavy_bottom - 1
+
+    @property
+    def heavy_top(self):
+        return self.deadly_bottom - 1
+
+    @property
+    def light_wounds(self):
+        return construct_range_str(self.light_bottom, self.light_top)
+
+    @property
+    def medium_wounds(self):
+        return construct_range_str(self.medium_bottom, self.medium_top)
+
+    @property
+    def heavy_wounds(self):
+        return construct_range_str(self.heavy_bottom, self.heavy_top)
+    
+    @property
+    def deadly_wounds(self):
+        return f"{self.deadly_bottom}+"
+    
+
+def get_wounds_range_sets() -> namedtuple:
+    return [WoundsRangeSet(val) for val in range(1, 51)]
 
 
 # -----------------------------------------------------------------------------
-

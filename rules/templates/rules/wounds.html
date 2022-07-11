@@ -28,13 +28,13 @@
                 </tr>
             </thead>
             <tbody class="align-center">
-                {% for wounds_range in wounds_ranges %}
+                {% for wounds_range_set in wounds_range_sets %}
                     <tr>
-                        <td class="p-0 rules-green">{{ wounds_range.health }}</td>
-                        <td class="p-0">{{ wounds_range.light }}</td>
-                        <td class="p-0">{{ wounds_range.medium }}</td>
-                        <td class="p-0">{{ wounds_range.heavy }}</td>
-                        <td class="p-0">{{ wounds_range.deadly }}</td>
+                        <td class="p-0 rules-green">{{ wounds_range_set.health }}</td>
+                        <td class="p-0">{{ wounds_range_set.light_wounds }}</td>
+                        <td class="p-0">{{ wounds_range_set.medium_wounds }}</td>
+                        <td class="p-0">{{ wounds_range_set.heavy_wounds }}</td>
+                        <td class="p-0">{{ wounds_range_set.deadly_wounds }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
