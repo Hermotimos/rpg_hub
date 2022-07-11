@@ -136,6 +136,7 @@ td.align-right {text-align: right;}
 .font-17 {font-size: 1.0625rem;}
 .font-18 {font-size: 1.125rem;}
 
+
 .font-24 {font-size: 1.5rem;}
 .font-25 {font-size: 1.562rem;}
 .font-30 {font-size: 1.875rem;}
@@ -604,13 +605,24 @@ Needed for the links anchored in GameEvents in Chronicle, Remarks in Debates
 and others to preserve proper position, not affected by the navbar covering
 the top of the page.
 */
-div.anchor:before {
+
+
+a.anchor-1 {
+    display: block;
+    position: relative;
+    top: -3rem;
+    visibility: hidden;
+}
+
+
+
+.anchor:before {
     height: 5rem;
     content: "";
     display:block;
 }
 
-div.anchor-2:before {
+.anchor-2:before {
     height: 11.8rem;
     content: "";
     display:block;

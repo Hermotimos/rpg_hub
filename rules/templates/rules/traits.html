@@ -15,7 +15,7 @@
         <p>
             Podstawową funkcją Cech jest określenie szans powodzenia Postaci podczas działań, które wymagają sprawności fizycznej,
             zwłaszcza kiedy Postać próbuje wykonać czynność o poziomie trudności wyższym niż banalny z perspektywy Cech, jakimi dysponuje.
-            Również wykorzystanie wielu Umiejętności polega na wykonaniu Testu Cechy (☞<mark><a href="{% url 'rules:tests' %}">Testy Cech</a></mark>).
+            Również wykorzystanie wielu Umiejętności polega na wykonaniu <mark><a href="{% url 'rules:tests' %}">Testu Cechy</a></mark>.
             Ponadto każda z Cech dostarcza kilku współczynników pochodnych, np. Siła ➟ Udźwig, Zręczność ➟ Inicjatywa, Kondycja ➟ Zdrowie, Wydolność.
         </p>
         <p>
@@ -157,7 +157,9 @@
             Udźwig (inaczej Udźwig Podstawowy) wskazuje limit wagi możliwej do uniesienia bez Przeciążenia.
             Oczywiście, ekwipunek zawsze można odrzucić, aby uwolnić się od tego ograniczenia - tak czynią choćby wojowie, którzy odrzucają tarczę w panicznej ucieczce.
             Powyżej Udźwigu, który może być modyfikowany przez Umiejętności, rozciągają się Progi Przeciążenia I, II, III i IV, które opisują,
-            w jaki sposób Przeciążenie ogranicza sprawność fizyczną Postaci (☞<mark><a href="{% url 'rules:tests' %}#Przeciążenie">Progi Przeciążenia</a></mark>).
+            w jaki sposób Przeciążenie ogranicza sprawność fizyczną Postaci.
+            Udźwig wynikający z Siły Postaci, a modyfikowany przez niektóre Umiejętności, warunkuje wartości
+            <mark><a href="{% url 'rules:tests' %}#Przeciążenie">Progów Przeciążenia</a></mark>.
         </p>
 
 
@@ -230,8 +232,9 @@
         </p>
         <p>
             <b>§ Inicjatywa.</b>
-            Niezwykle ważnym aspektem Zręczności jest Konflikt Inicjatywy, który decyduje o kolejności działań w walce i innych konfrontacjach.
-            Podstawowa wartość Inicjatywy Postaci jest równa jej Zręczności.
+            Pochodną Zręczności jest Inicjatywa. Jej podstawowa wartość jest równa jej Zręczności Postaci, ale może być modyfikowana przez liczne Umiejętności.
+            Jest ona kluczowa podczas <mark><a href="{% url 'rules:combat' %}#Inicjatywa">Konfliktu Inicjatywy</a></mark>,
+            który decyduje o kolejności działań w walce i innych konfrontacjach.
         </p>
 
         <h2 class="rules mt-5 mb-3">
