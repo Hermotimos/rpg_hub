@@ -607,12 +607,20 @@ the top of the page.
 */
 
 
-a.anchor-1 {
+a.anchor-2 {
     display: block;
     position: relative;
-    top: -3rem;
+    top: -2rem;
     visibility: hidden;
 }
+
+a.anchor-4 {
+    display: block;
+    position: relative;
+    top: -4rem;
+    visibility: hidden;
+}
+
 
 
 

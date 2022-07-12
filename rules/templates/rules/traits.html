@@ -8,14 +8,14 @@
 
 {% block content %}
     <div class="rules-styling pt-3">
-
+        
         <h2 class="rules mt-5 mb-3">
             Funkcja Cech
         </h2>
         <p>
             Podstawową funkcją Cech jest określenie szans powodzenia Postaci podczas działań, które wymagają sprawności fizycznej,
             zwłaszcza kiedy Postać próbuje wykonać czynność o poziomie trudności wyższym niż banalny z perspektywy Cech, jakimi dysponuje.
-            Również wykorzystanie wielu Umiejętności polega na wykonaniu <mark><a href="{% url 'rules:tests' %}">Testu Cechy</a></mark>.
+            Również wykorzystanie wielu Umiejętności polega na wykonaniu <mark><a href="{% url 'rules:tests' %}#TestCechy">Testu Cechy</a></mark>.
             Ponadto każda z Cech dostarcza kilku współczynników pochodnych, np. Siła ➟ Udźwig, Zręczność ➟ Inicjatywa, Kondycja ➟ Zdrowie, Wydolność.
         </p>
         <p>
@@ -92,6 +92,7 @@
         </div>
 
 
+        
         <h2 class="rules mt-5 mb-3">
             Siła
         </h2>
@@ -116,7 +117,6 @@
                     </th>
                 </tr>
             </thead>
-
             <tbody class="align-center dark">
                 <tr><td class="border-custom-right">1</td>        <td class="rules-red">-10</td>     <td class="rules-red">-10</td>      <td class="rules-red">0</td>    </tr>
                 <tr><td class="border-custom-right">2</td>        <td class="rules-red">-6</td>      <td class="rules-red">-6</td>       <td class="rules-red">2</td>    </tr>
@@ -162,6 +162,7 @@
             <mark><a href="{% url 'rules:tests' %}#Przeciążenie">Progów Przeciążenia</a></mark>.
         </p>
 
+        
 
         <h2 class="rules mt-5 mb-3">
             Zręczność
@@ -187,7 +188,6 @@
                     </th>
                 </tr>
             </thead>
-
             <tbody class="align-center dark">
                 <tr><td class="border-custom-right">1</td>      <td class="rules-red">-10</td>      <td class="rules-red">-10</td>                           <td>0</td>   </tr>
                 <tr><td class="border-custom-right">2</td>      <td class="rules-red">-6</td>       <td class="rules-red">-6</td>                            <td>0</td>   </tr>
@@ -235,8 +235,11 @@
             Pochodną Zręczności jest Inicjatywa. Jej podstawowa wartość jest równa jej Zręczności Postaci, ale może być modyfikowana przez liczne Umiejętności.
             Jest ona kluczowa podczas <mark><a href="{% url 'rules:combat' %}#Inicjatywa">Konfliktu Inicjatywy</a></mark>,
             który decyduje o kolejności działań w walce i innych konfrontacjach.
+            Poza tą szczególną rolą Konflikt Inicjatywy nie różni się od pozostałych <mark><a href="{% url 'rules:tests' %}#KonfliktCech">Konfliktów Cech</a></mark>.
         </p>
 
+        
+        
         <h2 class="rules mt-5 mb-3">
             Kondycja
         </h2>
@@ -256,46 +259,44 @@
                     <th class="small-caps">
                         <span class="mx-2">KP Parowanie</span>
                     </th>
-                    <th class="small-caps align-right">
-                        <span class="mx-2">Progi Ran L/Śr/C/Śm</span>
-                    </th>
                 </tr>
             </thead>
-
             <tbody class="align-center dark">
-                <tr><td class="border-custom-right">1</td>       <td class="rules-red">?</td>                           <td>0</td>    <td class="rules-red align-right"> - / - / - / pac!</td>            </tr>
-                <tr><td class="border-custom-right">2</td>       <td class="rules-red">1</td>                           <td>0</td>    <td class="rules-red align-right">- / - / - / 1+</td>               </tr>
-                <tr><td class="border-custom-right">3</td>       <td class="rules-red">3</td>                           <td>0</td>    <td class="rules-red align-right">- / - / 1 / 2+</td>               </tr>
-                <tr><td class="border-custom-right">4</td>       <td class="rules-red">5</td>                           <td>0</td>    <td class="rules-red align-right">1 / 2 / 3 / 4+</td>               </tr>
-                <tr><td class="border-custom-right">5</td>       <td class="rules-red">7</td>                           <td>0</td>    <td class="rules-red align-right">1 / 2-3 / 4-6 / 7+</td>           </tr>
-                <tr><td class="border-custom-right">6</td>       <td class="rules-red">9</td>                          <td>0</td>   <td class="rules-red align-right">1-2 / 3-4 / 5-7 / 8+</td>          </tr>
-                <tr><td class="border-custom-right">7</td>       <td class="rules-red">11</td>                          <td>0</td>  <td class="rules-red align-right">2-3 / 4-5 / 6-8 / 9+</td>           </tr>
-                <tr><td class="border-custom-right">8</td>       <td class="rules-red">13</td>                          <td>0</td>   <td class="rules-red align-right">2-3 / 4-6 / 7-9 / 10+</td>          </tr>
-                <tr><td class="border-custom-right">9</td>       <td class="rules-red">15</td>                          <td>0</td>   <td class="rules-red align-right">2-4 / 5-7 / 8-10 / 11+</td>         </tr>
-                <tr><td class="border-custom-right">10</td>                          <td>18</td>                        <td>0</td>   <td class="align-right">3-4 / 5-7 / 8-11 / 12+</td>                   </tr>
-                <tr><td class="border-custom-right">11</td>      <td class="rules-green">22</td>                        <td>0</td>   <td class="align-right">3-4 / 5-7 / 8-11 / 12+</td>                   </tr>
-                <tr><td class="border-custom-right">12</td>      <td class="rules-green">24</td>    <td class="rules-green">+1</td>   <td class="rules-green align-right">3-5 / 6-8 / 9-11 / 12+</td>      </tr>
-                <tr><td class="border-custom-right">13</td>      <td class="rules-green">27</td>    <td class="rules-green">+1</td>   <td class="rules-green align-right">3-5 / 6-9 / 10-12 / 13+</td>     </tr>
-                <tr><td class="border-custom-right">14</td>      <td class="rules-green">29</td>    <td class="rules-green">+2</td>   <td class="rules-green align-right">3-6 / 7-9 / 10-13 / 14+</td>     </tr>
-                <tr><td class="border-custom-right">15</td>      <td class="rules-green">32</td>    <td class="rules-green">+2</td>   <td class="rules-green align-right">4-6 / 7-10 / 11-13 / 14+</td>    </tr>
-                <tr><td class="border-custom-right">16</td>      <td class="rules-green">34</td>    <td class="rules-green">+3</td>   <td class="rules-green align-right">5-7 / 8-11 / 12-14 / 15+</td>    </tr>
-                <tr><td class="border-custom-right">17</td>      <td class="rules-green">37</td>    <td class="rules-green">+3</td>   <td class="rules-green align-right">6-8 / 9-12 / 13-15 / 16+</td>     </tr>
-                <tr><td class="border-custom-right">18</td>      <td class="rules-green">40</td>    <td class="rules-green">+4</td>   <td class="rules-green align-right">6-9 / 10-13 / 14-16 / 17+</td>   </tr>
-                <tr><td class="border-custom-right">19</td>      <td class="rules-green">44</td>    <td class="rules-green">+5</td>   <td class="rules-green align-right">6-10 / 11-14 / 15-17 / 18+</td>  </tr>
-                <tr><td class="border-custom-right">20</td>      <td class="rules-green">50</td>    <td class="rules-green">+6</td>   <td class="rules-green align-right">6-11 / 12-15 / 16-18 / 19+</td>  </tr>
+                <tr><td class="border-custom-right">1</td>       <td class="rules-red">?</td>                           <td>0</td>  </tr>
+                <tr><td class="border-custom-right">2</td>       <td class="rules-red">1</td>                           <td>0</td>  </tr>
+                <tr><td class="border-custom-right">3</td>       <td class="rules-red">3</td>                           <td>0</td>  </tr>
+                <tr><td class="border-custom-right">4</td>       <td class="rules-red">5</td>                           <td>0</td>  </tr>
+                <tr><td class="border-custom-right">5</td>       <td class="rules-red">7</td>                           <td>0</td>  </tr>
+                <tr><td class="border-custom-right">6</td>       <td class="rules-red">9</td>                           <td>0</td>  </tr>
+                <tr><td class="border-custom-right">7</td>       <td class="rules-red">11</td>                          <td>0</td>  </tr>
+                <tr><td class="border-custom-right">8</td>       <td class="rules-red">13</td>                          <td>0</td>  </tr>
+                <tr><td class="border-custom-right">9</td>       <td class="rules-red">15</td>                          <td>0</td>  </tr>
+                <tr><td class="border-custom-right">10</td>                          <td>18</td>                        <td>0</td>  </tr>
+                <tr><td class="border-custom-right">11</td>      <td class="rules-green">22</td>                        <td>0</td>  </tr>
+                <tr><td class="border-custom-right">12</td>      <td class="rules-green">24</td>    <td class="rules-green">+1</td> </tr>
+                <tr><td class="border-custom-right">13</td>      <td class="rules-green">27</td>    <td class="rules-green">+1</td> </tr>
+                <tr><td class="border-custom-right">14</td>      <td class="rules-green">29</td>    <td class="rules-green">+2</td> </tr>
+                <tr><td class="border-custom-right">15</td>      <td class="rules-green">32</td>    <td class="rules-green">+2</td> </tr>
+                <tr><td class="border-custom-right">16</td>      <td class="rules-green">34</td>    <td class="rules-green">+3</td> </tr>
+                <tr><td class="border-custom-right">17</td>      <td class="rules-green">37</td>    <td class="rules-green">+3</td> </tr>
+                <tr><td class="border-custom-right">18</td>      <td class="rules-green">40</td>    <td class="rules-green">+4</td> </tr>
+                <tr><td class="border-custom-right">19</td>      <td class="rules-green">44</td>    <td class="rules-green">+5</td> </tr>
+                <tr><td class="border-custom-right">20</td>      <td class="rules-green">50</td>    <td class="rules-green">+6</td> </tr>
             </tbody>
         </table>
         <br>
         <p>
             <b>§ Zdrowie, Życie i Progi Ran.</b>
-            Każda Postać dysponuje jawnym dla Gracza parametrem Zdrowia oraz niejawnym parametrem Życia.
-            Zdrowie określa ilość Obrażeń, jakie Postać jest w stanie znieść, zanim padnie nieprzytomna lub martwa.
+            Każda Postać dysponuje jawnym dla Gracza parametrem Zdrowia oraz wynikającymi z niego Progami Ran oraz niejawnym parametrem Życia.
+            Zdrowie określa limit Obrażeń, jakie Postać jest w stanie znieść, zanim padnie nieprzytomna lub martwa.
             O tym, czy wyczerpanie Zdrowia skutkuje śmiercią, czy tylko utratą przytomności (choć często również zapaścią/kalectwem) decyduje parametr Życia,
             który jest zawsze równy lub wyższy niż Życie.
             Dla przeciętnego człowieka Zdrowie i Życie to jedno - jego organizm nieprzywykły do obrażeń łatwo poddaje się śmierci.
             Tylko osobniki zaprawione w bojach lub cechujące się niezwykle silnym organizmem są w stanie przetrwać tego rodzaju sytuację;
             o podniesieniu Życia ponad Zdrowie można mówić w przypadku wysokich wartości KON oraz niektórych Umiejętności,
             jednak dokładna wartość pozostaje niejawna dla Gracza.
+            Obrażenia mają swoje konsekwencje również w przypadku, gdy Postać nie utraci całości Zdrowia, a to w zależności od Progu Ran, pod który podpadają.
+            Dalsza część Zasad zawiera szczegółowe informacje na temat <mark><a href="{% url 'rules:wounds' %}">Progów Ran</a></mark> - ich wartości, konsekwencji i regeneracji.
         </p>
         <p>
             <b>§ Parowanie.</b>
@@ -310,10 +311,10 @@
         </p>
         <p>
             <b>§ Wydolność.</b>
+            Pochodną Kondycji jest Wydolność. Podstawowa Wydolność Postaci jest równa jej Kondycji, jednak może podlegać modyfikatorom sytuacyjnym oraz wynikającym z Umiejętności.
             Wydolność określa, jak długo Postać jest w stanie wykonywać aktywność fizyczną o wysokiej intensywności
             (walka w zwarciu, szybki bieg, wspinaczka, dźwiganie ciężaru bliskiego Udźwigowi Maksymalnemu).
-            Podstawowa Wydolność Postaci jest równa jej Kondycji, jednak może podlegać modyfikatorom sytuacyjnym oraz wynikającym z Umiejętności.
-            Dalsza część Zasad zawiera szczegółowe informacje dotyczące skutków zużycia i regeneracji Wydolności.
+            Dalsza część Zasad zawiera szczegółowe informacje dotyczące skutków zużycia i regeneracji <mark><a href="{% url 'rules:fitness-and-tricks' %}">Wydolności</a></mark>.
         </p>
         
     </div>

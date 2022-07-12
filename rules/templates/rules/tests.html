@@ -9,7 +9,8 @@
 {% block content %}
     <div class="rules-styling pt-3">
 
-        <h2 class="rules mt-5 mb-3" id="TestCechy">
+        <a class="anchor-2" id="TestCechy"></a>
+        <h2 class="rules mt-5 mb-3">
             Testy Cech
         </h2>
         <p>
@@ -149,6 +150,7 @@
             a jeżeli ktoś dostrzega tu niesprawiedliwość, to wzruszają tylko ramionami i odsyłają go z powrotem do mamusi.
         </p>
         <p>
+            <a class="anchor-4" id="KonfliktCech"></a>
             <b>§ Konflikt Cechy.</b>
             Większość Testów Cech polega na konfrontacji Postaci z rzeczywistością, a więc zestawieniu sumy <i>wartość Cechy + 1k20 + Modyfikatory</i> z Poziomem Trudności działania.
             Jednak w sytuacjach takich jak siłowanie się na rękę, przeciąganie liny czy wzajemne duszenie należy przeprowadzić Konflikt Cechy.
@@ -158,9 +160,9 @@
             Sytuacja taka zachodzi przede wszystkim kontekście zawodów lekkoatletycznych, które polegają na porównaniu zdolności fizycznych uczestników w wyizolowany, jednoczynnikowy sposób.
             W przypadku rzutu dyskiem, biegu krótkodystansowego czy siłowania się na rękę, Konflikt Cechy może być automatycznie rozstrzygnięty,
             jeśli pomiędzy oponentami występuje duży rozstrzał wartości Cechy, np. SIŁ 10 kontra SIŁ 15.
-            Konflikt Cechy (ZRC) jest również standardowym sposobem rozstrzygania o kolejce Inicjatywy w walce
-            (☞<mark><a href="{% url 'rules:combat' %}">Przebieg walki</a></mark>),
-            jednak jest to sytuacja wieloczynnikowa, niewyizolowana, dlatego w tym przypadku nie stosuje się zasad miażdżącej przewagi.
+            Konflikt Cechy (ZRC) jest również standardowym sposobem rozstrzygania o kolejce Inicjatywy w
+            <mark><a href="{% url 'rules:combat' %}">Przebiegu walki</a></mark>.
+            Jednak w przypadku Konfliktu Inicjatywy nie stosuje się zasad miażdżącej przewagi, gdyż jest to sytuacja wieloczynnikowa, niewyizolowana i nieprzewidywalna.
         </p>
 
         
@@ -240,7 +242,7 @@
         </p>
 
         
-        <a class="anchor-1" id="Przeciążenie"></a>
+        <a class="anchor-2" id="Przeciążenie"></a>
         <h2 class="rules mt-5 mb-3">
             Przeciążenie
         </h2>
