@@ -8,6 +8,11 @@ div.rules-styling {padding-top: 1rem;}
 .rules-styling h5,
 .rules-styling h6 {font-weight: bold;}
 
+.rules-styling h2 {
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+}
+
 .rules-styling p {
     font-size: 18px;
     font-style: italic;
@@ -67,9 +72,6 @@ div.rules-styling {padding-top: 1rem;}
     border: 0;
 }
 
-
-.professions .level {width: 100px;}
-.professions .level-desc {width: 350px;}
 
 
 table.weapon-types {
