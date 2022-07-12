@@ -118,7 +118,6 @@ class GameEventInline(admin.TabularInline):
     }
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
-        
         # Filter querysets before calling super(), otherwise it has no effect
         if db_field.name in ["participants", "informees"]:
             kwargs["queryset"] = Profile.non_gm.all()

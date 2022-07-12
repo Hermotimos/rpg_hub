@@ -5,7 +5,8 @@ from django.utils.html import format_html
 
 from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, \
     CharacterAcquaintanceships, FirstName, FirstNameGroup, FamilyName, \
-    AffixGroup, AuxiliaryNameGroup, FamilyNameGroup, Acquaintanceship
+    AffixGroup, AuxiliaryNameGroup, FamilyNameGroup, Acquaintanceship, \
+    Acquisition
 from rpg_project.utils import formfield_with_cache
 
 
@@ -195,6 +196,74 @@ class AcquaintanceshipActiveInline(admin.TabularInline):
 class AcquaintanceshipPassiveInline(AcquaintanceshipActiveInline):
     model = Character.acquaintances.through
     fk_name = 'known_character'
+
+
+# -----------------------------------------------------------------------------
+
+
+class AcquisitionAdminForm(forms.ModelForm):
+    """Custom form for query optimization."""
+    
+    def __init__(self, *args, **kwargs):
+        from rules.models import SkillLevel
+        super().__init__(*args, **kwargs)
+        self.fields['skill_level'].queryset = SkillLevel.objects.select_related('skill')
+    
+    class Meta:
+        model = Acquisition
+        exclude = []
+        
+        
+@admin.register(Acquisition)
+class AcquisitionAdmin(admin.ModelAdmin):
+    fields = ['character', 'skill_level', 'weapon', 'sphragis']
+    form = AcquisitionAdminForm
+    list_display = ['id', 'get_img', 'character', 'skill_level', 'weapon', 'sphragis']
+    list_filter = ['sphragis', 'character', 'skill_level__skill', 'weapon']
+    search_fields = ['skill_level', 'character', 'weapon', 'sphragis']
+    
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.select_related(
+            'skill_level__skill',
+            'character__first_name',
+            'character__family_name',
+            'character__profile',
+            'weapon',
+            'sphragis',
+        )
+        return qs
+    
+    def get_img(self, obj):
+        if obj.character.profile.image:
+            return format_html(
+                f'<img src="{obj.character.profile.image.url}" width="70" height="70">')
+        default_img = "media/profile_pics/profile_default.jpg"
+        return format_html(f'<img src={default_img} width="70" height="70">')
+
+
+class AcquisitionInline(admin.TabularInline):
+    model = Character.skill_levels.through
+    # fk_name = 'knowing_character'
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related('character', 'skill_level__skill')
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in [
+            'character',
+            'skill_level',
+        ]:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
+
+#
+# class AcquaintanceshipPassiveInline(AcquaintanceshipActiveInline):
+#     model = Character.acquaintances.through
+#     fk_name = 'known_character'
 
 
 # -----------------------------------------------------------------------------

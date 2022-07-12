@@ -310,8 +310,8 @@ class Acquaintanceship(Model):
 
 
 class Acquisition(Model):
-    skill_level = FK(to=SkillLevel, on_delete=CASCADE)
     character = FK(to=Character, on_delete=CASCADE)
+    skill_level = FK(to=SkillLevel, on_delete=CASCADE)
     weapon = FK(to=WeaponType, on_delete=CASCADE, blank=True, null=True)
     sphragis = FK(to=Sphragis, on_delete=CASCADE, blank=True, null=True)
 

@@ -7,6 +7,7 @@ from rpg_project.utils import formfield_with_cache
 from rules.admin_filters import SkillLevelFilter, SynergyLevelFilter
 from rules.models import (
     SkillGroup, SkillKind, SkillType,
+    Sphragis,
     Skill, SkillLevel, Synergy, SynergyLevel,
     RegularSkill, RegularSkillLevel, RegularSynergy, RegularSynergyLevel,
     MentalSkill, MentalSkillLevel, MentalSynergy, MentalSynergyLevel,
@@ -369,6 +370,15 @@ class SubProfessionAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         qs = qs.select_related('profession')
         return qs
+
+
+# -----------------------------------------------------------------------------
+
+
+@admin.register(Sphragis)
+class SphragisAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'name_genitive']
+    list_editable = ['name', 'name_genitive']
 
 
 # -----------------------------------------------------------------------------
