@@ -103,7 +103,7 @@
         </header>
         
         
-        <article class="tabset multiline-header">
+        <article class="tabset">
             
             <!-- TAB HEADERS -->
             
@@ -238,7 +238,7 @@
                 {% endif %}
             
                 <!-- RegularSkills and RegularSynergies -->
-                {% if skills_regular %}
+                {% if skill_types_regular %}
                     <section id="skills_regular" class="tab-panel">
                         {% with max_level_only=True skill_types=skill_types_regular skills=skills_regular max_level_only=True synergies=synergies_regular panel_id=1 skilltype_kind='Powszechne'%}
                             {% include 'rules/_skills_by_type.html' %}

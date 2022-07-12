@@ -606,45 +606,26 @@ and others to preserve proper position, not affected by the navbar covering
 the top of the page.
 */
 
-
-a.anchor2 {
+a.anchor {
     display: block;
     position: relative;
-    top: -2rem;
     visibility: hidden;
 }
+a.anchor2 {top: -2rem;}
+a.anchor4 {top: -4rem;}
+a.anchor6 {top: -6rem;}
+a.anchor7 {top: -7rem;}
+a.anchor8 {top: -8rem;}
+a.anchor10 {top: -10rem;}
 
-a.anchor4 {
-    display: block;
-    position: relative;
-    top: -4rem;
-    visibility: hidden;
-}
 
-
-/* TODO Old anchor solution - replace it with anchor2, anchor4 like above */
-.anchor:before {
-    height: 5rem;
-    content: "";
-    display:block;
-}
-
-.anchor-2:before {
-    height: 11.8rem;
-    content: "";
-    display:block;
-    margin-top: -5rem;
-}
-
+/* Necessary on mobile when Prosoponomikon sticky-menu on top is compressed to more rows */
 @media only screen and (max-width: 600px) {
-    div.anchor-2:before {
-        height: 14.8rem;
-        content: "";
-        display:block;
-        margin-top: -10rem;
-    }
+    a.anchor6 {top: -8rem;}
+    a.anchor7 {top: -9rem;}
+    a.anchor8 {top: -10rem;}
+    a.anchor10 {top: -12rem;}
 }
-/* end TODO */
 
 
 .content-section {
