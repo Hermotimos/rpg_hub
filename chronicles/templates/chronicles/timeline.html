@@ -201,8 +201,12 @@
             {% for event in events_filter.qs %}
                 <tr>
                     <!-- DATES -->
-                    <td class="align-center align-top font-weight-bold timeline" data-toggle="collapse" data-target="#event_{{ event.id }}">
-                        {{ event.date_in_period|add_season_img }}
+                    <td class="align-center align-top font-weight-bold timeline">
+                        <a class="hover-pointer-black" href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">
+                            <span  data-toggle="tooltip" data-placement="top" data-html="true" title='Idź do kroniki Wydarzenia'>
+                                {{ event.date_in_period|add_season_img }}
+                            </span>
+                        </a>
                     </td>
                     <!-- PLOT THREADS -->
                     <td class="align-top pl-2 timeline">
@@ -301,9 +305,9 @@
                         {% if event.game.game_no == 0 %}
                             ✴
                         {% else %}
-                            <a href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">
+                            <a href="{% url 'chronicles:chronicle-game' event.game.id %}">
                                 <small data-toggle="tooltip" data-placement="top" data-html="true"
-                                       title='<span class="font-italic">Kronika<br>"{{ event.game.title }}"</span>'>
+                                       title='<span class="font-italic">Kronika Sesji<br>"{{ event.game.title }}"</span>'>
                                     {% if event.game.game_no > 0 %}
                                         -{{ event.game.game_no }}-
                                     {% else %}

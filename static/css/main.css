@@ -406,6 +406,11 @@ a:hover {
 
 td.hover-pointer:hover {cursor: pointer;}
 
+.hover-pointer-black:hover {
+    cursor: pointer;
+    color: #444444;
+}
+
 .hover-blue:hover {
     color: #3366cc;
     cursor: pointer;
