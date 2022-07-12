@@ -1,4 +1,6 @@
 
+div.rules-styling {padding-top: 1rem;}
+
 .rules-styling h1,
 .rules-styling h2,
 .rules-styling h3,
@@ -12,6 +14,7 @@
     margin-bottom: 0.5rem;
     text-align: justify;
 }
+
 
 .img-rules {
     float: left;
@@ -98,16 +101,14 @@ table.weapon-types .weight {width: 6%;}
 .no-border th,
 .no-border td {border-style: none !important;}
 
-
+/*
 .armor-table th,
 .armor-table td,
-.plate-tricks-table th,
-.plate-tricks-table td,
 .shields-table th,
 .shields-table td {
     padding: 0.25rem 0rem 0rem 0rem !important;
 }
-
+*/
 
 td .nowrap { white-space: nowrap;}
 
