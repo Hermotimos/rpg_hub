@@ -1,28 +1,25 @@
 {% load static %}
 {% load custom_filters %}
 
-<div class="anchor mt-n5" id="dialogue_packet_{{ dialogue_packet.id }}">
+
+<div class="container mt-2">
     
-    <div class="container mb-5">
-        
-        <!-- TITLE -->
-        <div class="row">
-            <h3 class="mb-3">
-                <span class="border-bottom-dark">
-                    {{ dialogue_packet.title }}
-                </span>
-            </h3>
-        </div>
-        
-        <!-- TEXT -->
-        <div class="row">
-            <div class="col-12 col-sm-11 mt-2 p-0 pl-sm-3 pl-lg-0">
-                <p class="font-italic text-justify font-18">
-                    {{ dialogue_packet.text|custom_linebreaksbr:2 }}
-                </p>
-            </div>
+    <!-- TITLE -->
+    <div class="row">
+        <h3 class="mb-3">
+            <span class="border-bottom-dark">
+                {{ dialogue_packet.title }}
+            </span>
+        </h3>
+    </div>
+    
+    <!-- TEXT -->
+    <div class="row">
+        <div class="col-12 col-sm-11 mt-2 p-0 pl-sm-3 pl-lg-0">
+            <p class="font-italic text-justify font-18">
+                {{ dialogue_packet.text|custom_linebreaksbr:2 }}
+            </p>
         </div>
     </div>
-
 </div>
 

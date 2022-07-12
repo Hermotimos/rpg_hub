@@ -1,69 +1,66 @@
 {% load static %}
 {% load custom_filters %}
 
-<div class="anchor mt-n5" id="bio_packet_{{ biography_packet.id }}">
-    
-    <div class="container mb-5">
-        
-        <!-- TITLE -->
-        <div class="row">
-            <h3 class="mb-3">
-                {% if biography_packet.author and biography_packet.author.status != 'gm' %}
-                    <img class="rounded-circle portait img-sm border border-dark mr-1 mt-1" src="{{ biography_packet.author.image.url }}">
-                {% endif %}
-                <span class="border-bottom-dark">
-                    {{ biography_packet.title }}
-                </span>
-            </h3>
-        </div>
-        
-        <div class="row">
-        
-            <!-- BUTTONS -->
-            {% if request.current_profile.can_action %}
-                <div class="col-12 col-sm-1 p-0">
-                    <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Przekaż wiedzę o biografii">
-                        <!-- Modal -->
-                        <span class="btn btn-outline-dark icon-inform mt-1 py-2" data-toggle="modal" data-target="#infoBioPacketModal_{{ biography_packet.id }}"></span>
-                        <div class="modal fade" id="infoBioPacketModal_{{ biography_packet.id }}" tabindex="-1" role="dialog" aria-hidden="true">
-                            {% with informables=biography_packet.informables inform_type=biography_packet|get_model_name id_=biography_packet.id %}
-                                {% include '_inform.html' %}
-                            {% endwith %}
-                        </div>
-                    </div>
-    <!--                <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">-->
-    <!--                    <a class="btn btn-outline-dark icon-note mt-1 py-2 disabled" href="#"></a>-->
-    <!--                </div>-->
-                    <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Edytuj Biogram">
-                        <a class="btn btn-outline-dark icon-biography-packet mt-1 py-2" href="{% url 'prosoponomikon:bio-packet-form' character.id biography_packet.id %}"></a>
-                    </div>
-                </div>
-            {% endif %}
-            
-            <!-- TEXT -->
-            <!-- If not text, Pictures should be dragged into the same row as buttons -->
-            {% if biography_packet.text %}
-                <div class="col-12 col-sm-11 my-2 p-0 pl-sm-3 pl-lg-0">
-                    <p class="font-italic text-justify font-18">
-                        {{ biography_packet.text|custom_linebreaksbr:2 }}
-                    </p>
-                </div>
-                <div class="col-12 col-sm-1 p-0"></div>
-            {% endif %}
-            
-            <!-- Pictures in BiographyPacket should be visible to the author and GM exclusively -->
-            {% if request.current_profile.status == 'gm' or request.current_profile == biography_packet.author or request.current_profile in biography_packet.acquired_by.all %}
-                {% for picture_set in biography_packet.picture_sets.all %}
-                    <div class="d-flex justify-content-center my-3">
-                        {% for picture in picture_set|pictureset_pictures_in_custom_order %}
-                            {% include '_pic_with_modal.html' %}
-                        {% endfor %}
-                    </div>
-                {% endfor %}
-            {% endif %}
-            
-        </div>
-    </div>
 
+<div class="container mt-2">
+    
+    <!-- TITLE -->
+    <div class="row">
+        <h3 class="mb-3">
+            {% if biography_packet.author and biography_packet.author.status != 'gm' %}
+                <img class="rounded-circle portait img-sm border border-dark mr-1 mt-1" src="{{ biography_packet.author.image.url }}">
+            {% endif %}
+            <span class="border-bottom-dark">
+                {{ biography_packet.title }}
+            </span>
+        </h3>
+    </div>
+    
+    <div class="row">
+    
+        <!-- BUTTONS -->
+        {% if request.current_profile.can_action %}
+            <div class="col-12 col-sm-1 p-0">
+                <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Przekaż wiedzę o biografii">
+                    <!-- Modal -->
+                    <span class="btn btn-outline-dark icon-inform mt-1 py-2" data-toggle="modal" data-target="#infoBioPacketModal_{{ biography_packet.id }}"></span>
+                    <div class="modal fade" id="infoBioPacketModal_{{ biography_packet.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                        {% with informables=biography_packet.informables inform_type=biography_packet|get_model_name id_=biography_packet.id %}
+                            {% include '_inform.html' %}
+                        {% endwith %}
+                    </div>
+                </div>
+<!--                <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">-->
+<!--                    <a class="btn btn-outline-dark icon-note mt-1 py-2 disabled" href="#"></a>-->
+<!--                </div>-->
+                <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Edytuj Biogram">
+                    <a class="btn btn-outline-dark icon-biography-packet mt-1 py-2" href="{% url 'prosoponomikon:bio-packet-form' character.id biography_packet.id %}"></a>
+                </div>
+            </div>
+        {% endif %}
+        
+        <!-- TEXT -->
+        <!-- If not text, Pictures should be dragged into the same row as buttons -->
+        {% if biography_packet.text %}
+            <div class="col-12 col-sm-11 my-2 p-0 pl-sm-3 pl-lg-0">
+                <p class="font-italic text-justify font-18">
+                    {{ biography_packet.text|custom_linebreaksbr:2 }}
+                </p>
+            </div>
+            <div class="col-12 col-sm-1 p-0"></div>
+        {% endif %}
+        
+        <!-- Pictures in BiographyPacket should be visible to the author and GM exclusively -->
+        {% if request.current_profile.status == 'gm' or request.current_profile == biography_packet.author or request.current_profile in biography_packet.acquired_by.all %}
+            {% for picture_set in biography_packet.picture_sets.all %}
+                <div class="d-flex justify-content-center my-3">
+                    {% for picture in picture_set|pictureset_pictures_in_custom_order %}
+                        {% include '_pic_with_modal.html' %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+    </div>
 </div>
 
