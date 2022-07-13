@@ -20,13 +20,13 @@ from users.models import Profile, User
 @login_required
 @auth_profile(['all'])
 def prosoponomikon_acquaintanceships_view(request):
-    for character in Character.objects.all():
-        for skill_level in character.profile.skill_levels.all():
-            Acquisition.objects.create(
-                character=character,
-                skill_level=skill_level,
-                weapon=skill_level.skill.weapon,
-            )
+    # for character in Character.objects.all():
+    #     for skill_level in character.profile.skill_levels.all():
+    #         Acquisition.objects.create(
+    #             character=character,
+    #             skill_level=skill_level,
+    #             weapon=skill_level.skill.weapon,
+    #         )
     current_profile = request.current_profile
     acquaintanceships = current_profile.character.acquaintanceships()
     context = {
