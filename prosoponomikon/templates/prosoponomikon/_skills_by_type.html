@@ -8,7 +8,7 @@
 
 
 <div class="rules-styling" id="accordion{{ panel_id }}">
-
+{% with acquisitions=acquisitions|acquisitions_distinct_maxlevel:skilltype_kinds %}
     <!-- SKILLS PER SKILL TYPES-->
     {% for skill_type in skill_types %}
         <div class="card mb-1">
@@ -25,6 +25,7 @@
                     {% with skills=skill_type.skills.all %}
                     
                         {% if skill_type.skill_groups.exists %}
+                    
                             {% regroup skills|dictsort:"group.name" by group as skillgroup_list %}
                             {% for skillgroup in skillgroup_list %}
                                 {% if skillgroup.grouper.name %}
@@ -32,16 +33,23 @@
                                         {{ skillgroup.grouper.name }}
                                     </h4>
                                 {% endif %}
-                                {% for skill in skillgroup.list %}
-                                    {% include 'rules/_skill.html' %}
+                                {% for acquisition in acquisitions %}
+                                    {% if acquisition.skill_level.skill in skillgroup.list %}
+                                        {% include 'prosoponomikon/_skill.html' %}
+                                    {% endif %}
                                 {% endfor %}
                             {% endfor %}
+                    
                         {% else %}
-                            {% for skill in skills %}
-                                {% with id_suffix=skill_type.name|remove_special_chars %}
-                                    {% include 'rules/_skill.html' %}
-                                {% endwith %}
+                    
+                            {% for acquisition in acquisitions %}
+                                {% if acquisition.skill_level.skill in skills %}
+                                    {% with id_suffix=skill_type.name|remove_special_chars %}
+                                        {% include 'prosoponomikon/_skill.html' %}
+                                    {% endwith %}
+                                {% endif %}
                             {% endfor %}
+                    
                         {% endif %}
                     
                     {% endwith %}
@@ -60,13 +68,15 @@
         </div>
         <div id="collapse{{ panel_id }}" class="collapse show" aria-labelledby="all-skills" data-parent="#accordion{{ panel_id }}">
             <div class="card-body container">
-                {% with id_suffix="skills-all" %}
-                    {% for skill in skills %}
-                        {% include 'rules/_skill.html' %}
+                
+                
+                    {% for acquisition in acquisitions %}
+                        {% include 'prosoponomikon/_skill.html' %}
                     {% endfor %}
-                {% endwith %}
+                
+                
             </div>
         </div>
     </div>
-    
+{% endwith %}
 </div>

@@ -35,9 +35,35 @@ def ordered_columns(list_: list, n: int) -> List[list]:
 
 
 @register.filter
-def get_max_skill_level_no(skill_levels_list):
+def get_max_skill_level_no(skill_levels_list, ):
     levels = [skill_lvl.level for skill_lvl in skill_levels_list]
     return max(levels)
+
+
+@register.filter
+def acquisitions_distinct_maxlevel(acquisitions, skilltype_kinds_str: str):
+    # This creates a DISTINCT ON query:
+    # https://docs.djangoproject.com/en/4.0/ref/models/querysets/#distinct
+    acquisitions = acquisitions.filter(
+        skill_level__skill__types__kinds__name__in=skilltype_kinds_str.split(','))
+    acquisitions = acquisitions.order_by('skill_level__skill__name', '-skill_level__level').distinct('skill_level__skill__name')
+    return acquisitions
+    
+    # TODO delete if not useful
+    #     acquisitions_levels = [(a.skill_level.skill.name, int(a.skill_level.level)) for a in qs]
+    #     max_levels_dict = {}
+    #     for e in acquisitions_levels:
+    #         if max_levels_dict.get(e[0], 0) < e[1]:
+    #             max_levels_dict[e[0]] = e[1]
+    #     print(max_levels_dict)
+    #     acquisitions_dict = {
+    #         (a.skill_level.skill.name, a.skill_level.level): a for a in qs
+    #         if max_levels_dict[a.skill_level.skill.name] == int(a.skill_level.level)
+    #     }
+    #     print(acquisitions_dict)
+    #     print(len(qs), len(acquisitions_dict))
+    #     from prosoponomikon.models import Acquisition
+    #     return qs.filter(id__in=[a.id for a in acquisitions_dict.values()])
 
 
 @register.filter

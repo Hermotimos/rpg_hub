@@ -1,0 +1,40 @@
+{% load static %}
+{% load custom_filters %}
+
+
+<div class="container my-1 p-0">
+    <div class="d-flex flex-row">
+        
+        {% include 'prosoponomikon/_skill_img.html' %}
+        
+        <div class="skill-or-synergy-name ml-2 mt-1 mt-lg-2">
+            <div>
+                {{ acquisition.skill_level.skill.name }}
+                [{{ acquisition.skill_level.level }}]
+                <small class="rules-gray1 smaller">
+                    {% if acquisition.skill_level.skill.tested_trait %}
+                        ({{ acquisition.skill_level.skill.tested_trait }})
+                    {% endif %}
+                </small>
+                <br>
+                
+            </div>
+            {% if acquisition.skill_level.skill.name_origin and current_profile.can_view_all %}
+                <div class="mt-n5 pt-3 mb-n2">
+                    <small class="smaller font-italic text-muted">{{ acquisition.skill_level.skill.name_origin }}</small>
+                </div>
+            {% endif %}
+            <div class="row collapse" id="{{ acquisition.skill_level.skill|remove_special_chars }}{{ id_suffix }}">
+
+                        {% with level_img='img/'|add:acquisition.skill_level.level|add:'.png' %}
+                            {% with skill_or_synergy_level=acquisition.skill_level type='skill_level' %}
+                                {% include 'rules/_skill_or_synergy_level.html' %}
+                            {% endwith %}
+                        {% endwith %}
+
+            </div>
+        </div>
+        
+    </div>
+</div>
+

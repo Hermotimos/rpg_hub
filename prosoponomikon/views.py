@@ -20,13 +20,13 @@ from users.models import Profile, User
 @login_required
 @auth_profile(['all'])
 def prosoponomikon_acquaintanceships_view(request):
-    # for character in Character.objects.all():
-    #     for skill_level in character.profile.skill_levels.all():
-    #         Acquisition.objects.create(
-    #             character=character,
-    #             skill_level=skill_level,
-    #             weapon=skill_level.skill.weapon,
-    #         )
+    for character in Character.objects.all():
+        for skill_level in character.profile.skill_levels.all():
+            Acquisition.objects.create(
+                character=character,
+                skill_level=skill_level,
+                weapon=skill_level.skill.weapon,
+            )
     current_profile = request.current_profile
     acquaintanceships = current_profile.character.acquaintanceships()
     context = {
@@ -47,9 +47,8 @@ def prosoponomikon_character_view(request, character_id):
         skill_types_regular, skill_types_priests, skill_types_sorcerers,
         skill_types_theurgists,
         skills_regular, skills_priests, skills_sorcerers, skills_theurgists,
-        synergies_regular, synergies_priests, synergies_sorcerers,
-        synergies_theurgists,
-    ] = [list() for _ in range(15)]
+        synergies_regular,
+    ] = [list() for _ in range(12)]
 
     if current_profile.character.id == character_id:
         # Players on NPCs viewing their own Characters
@@ -86,10 +85,17 @@ def prosoponomikon_character_view(request, character_id):
     if current_profile.character.id == character_id or current_profile.status == 'gm':
         
         skill_types, skills = character.skill_types_with_skills_with_max_skill_levels_acquired()
+        
         from django.db.models import F
         acquisitions = character.acquisitions.annotate(
             type=F('skill_level__skill__types__name'),
             group=F('skill_level__skill__group__name'),
+        ).prefetch_related(
+            'skill_level__skill',
+            'skill_level__perks__conditional_modifiers__conditions',
+            'skill_level__perks__conditional_modifiers__combat_types',
+            'skill_level__perks__conditional_modifiers__modifier__factor',
+            'skill_level__perks__comments',
         )
         for a in acquisitions:
             print(a, a.type, a.group)
@@ -97,35 +103,33 @@ def prosoponomikon_character_view(request, character_id):
         # skill_types = SkillType.objects.all()
         # skill_types_regular = skill_types.filter(kinds__name="Powszechne")
         
-        skills_regular = skills.filter(types__kinds__name="Powszechne")
-        skill_types_regular = skill_types.filter(kinds__name="Powszechne")
+        skills_regular = skills.filter(types__kinds__name__in=["Powszechne", "Mentalne"])
+        skill_types_regular = skill_types.filter(kinds__name__in=["Powszechne", "Mentalne"])
         # skill_types_regular = skill_types_regular.prefetch_related(
         #     Prefetch('skills', queryset=skills_regular), 'skill_groups')
         # skill_types_regular = skill_types_regular.filter(skills__in=skills_regular).distinct()
 
-        skills_priests = skills.filter(types__kinds__name__in=["Moce Kapłańskie", "Mentalne"])
-        skill_types_priests = skill_types.filter(kinds__name__in=["Moce Kapłańskie", "Mentalne"])
+        skills_priests = skills.filter(types__kinds__name="Moce Kapłańskie")
+        skill_types_priests = skill_types.filter(kinds__name="Moce Kapłańskie")
         # skill_types_priests = skill_types_priests.prefetch_related(
         #     Prefetch('skills', queryset=skills_priests), 'skill_groups')
         # skill_types_priests = skill_types_priests.filter(skills__in=skills_priests).distinct()
         
-        skills_sorcerers = skills.filter(types__kinds__name__in=["Zaklęcia", "Mentalne"])
-        skill_types_sorcerers = skill_types.filter(kinds__name__in=["Zaklęcia", "Mentalne"])
+        skills_sorcerers = skills.filter(types__kinds__name="Zaklęcia")
+        skill_types_sorcerers = skill_types.filter(kinds__name="Zaklęcia")
         # skill_types_sorcerers = skill_types_sorcerers.prefetch_related(
         #     Prefetch('skills', queryset=skills_sorcerers), 'skill_groups')
         # skill_types_sorcerers = skill_types_sorcerers.filter(skills__in=skills_sorcerers).distinct()
         #
-        skills_theurgists = skills.filter(types__kinds__name__in=["Moce Teurgiczne", "Mentalne"])
-        skill_types_theurgists = skill_types.filter(kinds__name__in=["Moce Teurgiczne", "Mentalne"])
+        skills_theurgists = skills.filter(types__kinds__name="Moce Teurgiczne")
+        skill_types_theurgists = skill_types.filter(kinds__name="Moce Teurgiczne")
         # skill_types_theurgists = skill_types_theurgists.prefetch_related(
         #     Prefetch('skills', queryset=skills_theurgists), 'skill_groups')
         # skill_types_theurgists = skill_types_theurgists.filter(skills__in=skills_theurgists).distinct()
 
         synergies = character.profile.synergies_acquired_with_synergies_levels()
-        synergies_regular = synergies.exclude(skills__types__kinds__name="Mentalne")
-        synergies_priests = synergies.filter(skills__types__kinds__name__in=["Mentalne", "Moce Kapłańskie"])
-        synergies_sorcerers = synergies.filter(skills__types__kinds__name__in=["Mentalne", "Zaklęcia"])
-        synergies_theurgists = synergies.filter(skills__types__kinds__name__in=["Mentalne", "Moce Teurgiczne"])
+        synergies_regular = synergies.exclude(
+            skills__types__kinds__name__in=["Moce Kapłańskie",  "Zaklęcia", "Moce Teurgiczne"])
 
         knowledge_packets = character.profile.knowledge_packets.prefetch_related(
             'picture_sets__pictures').order_by('title')
@@ -149,9 +153,6 @@ def prosoponomikon_character_view(request, character_id):
         'skill_types_theurgists': skill_types_theurgists,
         'skills_theurgists': skills_theurgists,
         'synergies_regular': synergies_regular,
-        'synergies_priests': synergies_priests,
-        'synergies_sorcerers': synergies_sorcerers,
-        'synergies_theurgists': synergies_theurgists,
         'knowledge_packets': knowledge_packets,
         'biography_packets': biography_packets,
         'dialogue_packets': dialogue_packets,

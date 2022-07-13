@@ -1,0 +1,16 @@
+{% load static %}
+{% load custom_filters %}
+
+<div class="d-flex flex-nowrap hover-pointer" data-toggle="collapse" data-target="#{{ acquisition.skill_level.skill|remove_special_chars }}{{ id_suffix }}">
+    {% if skilltype_kinds == 'Moce Kapłańskie' or skilltype_kinds == 'Zaklęcia' or skilltype_kinds == 'Moce Teurgiczne' %}
+        <img class="img-skill" src="{% static 'img/'|add:acquisition.skill_level.level|add:'.png' %}">
+    {% else %}
+        {% if acquisition.skill_level.skill.image %}
+            <img class="img-skill mr-sm-1" src="{{ acquisition.skill_level.skill.image.url }}">
+        {% elif acquisition.skill_level.skill.version_of %}
+            <img class="img-skill mr-sm-1" src="{{ acquisition.skill_level.skill.version_of.image.url }}">
+        {% else %}
+            <img class="img-skill mr-sm-1" src="{% static 'img/skill-default.png' %}">
+        {% endif %}
+    {% endif %}
+</div>
