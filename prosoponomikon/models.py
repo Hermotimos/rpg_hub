@@ -8,6 +8,7 @@ from django.db.models import (
     Model,
     OneToOneField as One2One,
     PositiveSmallIntegerField,
+    Prefetch,
     PROTECT,
     TextField,
 )
@@ -15,7 +16,7 @@ from django.db.models.functions import Substr, Lower
 from django.db.models.signals import post_save
 
 from knowledge.models import BiographyPacket, DialoguePacket
-from rules.models import SubProfession, SkillLevel, WeaponType, Sphragis
+from rules.models import SubProfession, Skill, SkillLevel, WeaponType, Sphragis, SkillType
 from toponomikon.models import Location
 from users.models import Profile
 
@@ -231,7 +232,26 @@ class Character(Model):
         ).annotate(
             initial=Lower(Substr('known_character__fullname', 1, 1)))
 
+    def skill_types_with_skills_with_max_skill_levels_acquired(self):
+        skill_levels = SkillLevel.objects.filter(acquiring_characters=self)
 
+        skills = Skill.objects.filter(skill_levels__acquiring_characters=self)
+        skills = skills.prefetch_related(
+            Prefetch('skill_levels', queryset=skill_levels),
+            'skill_levels__perks__conditional_modifiers__conditions',
+            'skill_levels__perks__conditional_modifiers__combat_types',
+            'skill_levels__perks__conditional_modifiers__modifier__factor',
+            'skill_levels__perks__comments',
+        ).select_related('group__type').distinct()
+
+        skill_types = SkillType.objects.prefetch_related(
+            Prefetch('skills', queryset=skills),
+            'skill_groups',
+        ).filter(skills__in=skills).distinct()
+        
+        return skill_types, skills
+    
+        
 class CharacterAcquaintanceships(Character):
     """A class to enable a separate AdminModel-s."""
     
@@ -310,13 +330,13 @@ class Acquaintanceship(Model):
 
 
 class Acquisition(Model):
-    character = FK(to=Character, on_delete=CASCADE)
-    skill_level = FK(to=SkillLevel, on_delete=CASCADE)
+    character = FK(to=Character, related_name='acquisitions', on_delete=CASCADE)
+    skill_level = FK(to=SkillLevel, related_name='acquisitions', on_delete=CASCADE)
     weapon = FK(to=WeaponType, on_delete=CASCADE, blank=True, null=True)
     sphragis = FK(to=Sphragis, on_delete=CASCADE, blank=True, null=True)
 
     class Meta:
-        ordering = ['character', 'skill_level__skill']
+        ordering = ['character', 'skill_level__skill', 'skill_level']
         unique_together = ['character', 'skill_level']
 
     def __str__(self):

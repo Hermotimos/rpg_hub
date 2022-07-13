@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch, Q
+from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
@@ -11,9 +11,8 @@ from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
 from prosoponomikon.forms import CharacterCreateForm
 from prosoponomikon.models import Character, FirstNameGroup, FamilyName, \
-    Acquaintanceship
+    Acquaintanceship, Acquisition
 from rpg_project.utils import handle_inform_form, backup_db, auth_profile
-from rules.models import SkillType
 from toponomikon.models import Location
 from users.models import Profile, User
 
@@ -21,6 +20,13 @@ from users.models import Profile, User
 @login_required
 @auth_profile(['all'])
 def prosoponomikon_acquaintanceships_view(request):
+    # for character in Character.objects.all():
+    #     for skill_level in character.profile.skill_levels.all():
+    #         Acquisition.objects.create(
+    #             character=character,
+    #             skill_level=skill_level,
+    #             weapon=skill_level.skill.weapon,
+    #         )
     current_profile = request.current_profile
     acquaintanceships = current_profile.character.acquaintanceships()
     context = {
@@ -37,13 +43,13 @@ def prosoponomikon_character_view(request, character_id):
     
     # Declare empty variables
     [
-        knowledge_packets, acquaintanceships,
+        knowledge_packets, acquaintanceships, acquisitions,
         skill_types_regular, skill_types_priests, skill_types_sorcerers,
         skill_types_theurgists,
         skills_regular, skills_priests, skills_sorcerers, skills_theurgists,
         synergies_regular, synergies_priests, synergies_sorcerers,
         synergies_theurgists,
-    ] = [list() for _ in range(14)]
+    ] = [list() for _ in range(15)]
 
     if current_profile.character.id == character_id:
         # Players on NPCs viewing their own Characters
@@ -72,39 +78,48 @@ def prosoponomikon_character_view(request, character_id):
             # when GM moves between NPCs with open Prosoponomikon
             messages.info(request, "Aktualna Postać nie zna wybranej Postaci!")
             return redirect('prosoponomikon:acquaintanceships')
-        
+    
     dialogue_packets = character.dialogue_packets.all()
     biography_packets = character.biography_packets.all()
 
     # Any Profile viewing own Character or GM viewing any Character
     if current_profile.character.id == character_id or current_profile.status == 'gm':
         
-        skills = character.profile.skills_acquired_with_skill_levels().exclude(~Q(versions=None))
-        skill_types = SkillType.objects.all()
+        skill_types, skills = character.skill_types_with_skills_with_max_skill_levels_acquired()
+        from django.db.models import F
+        acquisitions = character.acquisitions.annotate(
+            type=F('skill_level__skill__types__name'),
+            group=F('skill_level__skill__group__name'),
+        )
+        for a in acquisitions:
+            print(a, a.type, a.group)
+        # skills = character.profile.skills_acquired_with_skill_levels().exclude(~Q(versions=None))
+        # skill_types = SkillType.objects.all()
+        # skill_types_regular = skill_types.filter(kinds__name="Powszechne")
         
         skills_regular = skills.filter(types__kinds__name="Powszechne")
         skill_types_regular = skill_types.filter(kinds__name="Powszechne")
-        skill_types_regular = skill_types_regular.prefetch_related(
-            Prefetch('skills', queryset=skills_regular), 'skill_groups')
-        skill_types_regular = skill_types_regular.filter(skills__in=skills_regular).distinct()
+        # skill_types_regular = skill_types_regular.prefetch_related(
+        #     Prefetch('skills', queryset=skills_regular), 'skill_groups')
+        # skill_types_regular = skill_types_regular.filter(skills__in=skills_regular).distinct()
 
         skills_priests = skills.filter(types__kinds__name__in=["Moce Kapłańskie", "Mentalne"])
         skill_types_priests = skill_types.filter(kinds__name__in=["Moce Kapłańskie", "Mentalne"])
-        skill_types_priests = skill_types_priests.prefetch_related(
-            Prefetch('skills', queryset=skills_priests), 'skill_groups')
-        skill_types_priests = skill_types_priests.filter(skills__in=skills_priests).distinct()
+        # skill_types_priests = skill_types_priests.prefetch_related(
+        #     Prefetch('skills', queryset=skills_priests), 'skill_groups')
+        # skill_types_priests = skill_types_priests.filter(skills__in=skills_priests).distinct()
         
         skills_sorcerers = skills.filter(types__kinds__name__in=["Zaklęcia", "Mentalne"])
         skill_types_sorcerers = skill_types.filter(kinds__name__in=["Zaklęcia", "Mentalne"])
-        skill_types_sorcerers = skill_types_sorcerers.prefetch_related(
-            Prefetch('skills', queryset=skills_sorcerers), 'skill_groups')
-        skill_types_sorcerers = skill_types_sorcerers.filter(skills__in=skills_sorcerers).distinct()
-
+        # skill_types_sorcerers = skill_types_sorcerers.prefetch_related(
+        #     Prefetch('skills', queryset=skills_sorcerers), 'skill_groups')
+        # skill_types_sorcerers = skill_types_sorcerers.filter(skills__in=skills_sorcerers).distinct()
+        #
         skills_theurgists = skills.filter(types__kinds__name__in=["Moce Teurgiczne", "Mentalne"])
         skill_types_theurgists = skill_types.filter(kinds__name__in=["Moce Teurgiczne", "Mentalne"])
-        skill_types_theurgists = skill_types_theurgists.prefetch_related(
-            Prefetch('skills', queryset=skills_theurgists), 'skill_groups')
-        skill_types_theurgists = skill_types_theurgists.filter(skills__in=skills_theurgists).distinct()
+        # skill_types_theurgists = skill_types_theurgists.prefetch_related(
+        #     Prefetch('skills', queryset=skills_theurgists), 'skill_groups')
+        # skill_types_theurgists = skill_types_theurgists.filter(skills__in=skills_theurgists).distinct()
 
         synergies = character.profile.synergies_acquired_with_synergies_levels()
         synergies_regular = synergies.exclude(skills__types__kinds__name="Mentalne")
@@ -124,6 +139,7 @@ def prosoponomikon_character_view(request, character_id):
     context = {
         'page_title': character,
         'character': character,
+        'acquisitions': acquisitions,
         'skill_types_regular': skill_types_regular,
         'skills_regular': skills_regular,
         'skill_types_priests': skill_types_priests,

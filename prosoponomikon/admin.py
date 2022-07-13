@@ -218,7 +218,7 @@ class AcquisitionAdminForm(forms.ModelForm):
 class AcquisitionAdmin(admin.ModelAdmin):
     fields = ['character', 'skill_level', 'weapon', 'sphragis']
     form = AcquisitionAdminForm
-    list_display = ['id', 'get_img', 'character', 'skill_level', 'weapon', 'sphragis']
+    list_display = ['get_img', 'character', 'skill_level', 'weapon', 'sphragis']
     list_filter = ['sphragis', 'character', 'skill_level__skill', 'weapon']
     search_fields = ['skill_level', 'character', 'weapon', 'sphragis']
     
