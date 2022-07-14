@@ -261,6 +261,15 @@ class CharacterAcquaintanceships(Character):
         verbose_name_plural = '*Characters (ACQUAINTANCESHIPS)'
 
         
+class CharacterAcquisitions(Character):
+    """A class to enable a separate AdminModel-s."""
+    
+    class Meta:
+        proxy = True
+        verbose_name = '*Character (ACQUISITIONS)'
+        verbose_name_plural = '*Characters (ACQUISITIONS)'
+
+        
 class PlayerCharacterManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()

@@ -1,12 +1,14 @@
 from django import forms
 from django.contrib import admin
 from django.db import models
+from django.forms import BaseInlineFormSet
 from django.utils.html import format_html
 
-from prosoponomikon.models import Character, NPCCharacter, PlayerCharacter, \
-    CharacterAcquaintanceships, FirstName, FirstNameGroup, FamilyName, \
-    AffixGroup, AuxiliaryNameGroup, FamilyNameGroup, Acquaintanceship, \
-    Acquisition
+from prosoponomikon.models import Acquaintanceship, Acquisition, \
+    Character, NPCCharacter, PlayerCharacter, \
+    CharacterAcquaintanceships, CharacterAcquisitions, \
+    FirstName, FirstNameGroup, FamilyName, \
+    AffixGroup, AuxiliaryNameGroup, FamilyNameGroup
 from rpg_project.utils import formfield_with_cache
 
 
@@ -203,15 +205,31 @@ class AcquaintanceshipPassiveInline(AcquaintanceshipActiveInline):
 
 class AcquisitionAdminForm(forms.ModelForm):
     """Custom form for query optimization."""
-    
+
+    class Meta:
+        model = Acquisition
+        exclude = []
+        
     def __init__(self, *args, **kwargs):
         from rules.models import SkillLevel
         super().__init__(*args, **kwargs)
         self.fields['skill_level'].queryset = SkillLevel.objects.select_related('skill')
     
-    class Meta:
-        model = Acquisition
-        exclude = []
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in [
+            'skill_level',
+        ]:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
+    
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.select_related(
+            'skill_level__skill',
+        )
+        return qs
         
         
 @admin.register(Acquisition)
@@ -244,26 +262,27 @@ class AcquisitionAdmin(admin.ModelAdmin):
 
 class AcquisitionInline(admin.TabularInline):
     model = Character.skill_levels.through
-    # fk_name = 'knowing_character'
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.select_related('character', 'skill_level__skill')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
-            'character',
-            'skill_level',
+            'sphragis',
+            'weapon',
         ]:
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
 
-#
-# class AcquaintanceshipPassiveInline(AcquaintanceshipActiveInline):
-#     model = Character.acquaintances.through
-#     fk_name = 'known_character'
+    def get_formset(self, request, obj=None, **kwargs):
+        formset = super().get_formset(request, obj, **kwargs)
+        formset.form.base_fields["skill_level"].queryset = \
+            formset.form.base_fields["skill_level"].queryset.select_related("skill")
+        return formset
+    
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related(
+            'character', 'skill_level__skill', 'sphragis', 'weapon')
 
 
 # -----------------------------------------------------------------------------
@@ -319,3 +338,9 @@ class CharacterAdmin(admin.ModelAdmin):
 class CharacterAcquaintanceshipsAdmin(CharacterAdmin):
     fields = ['profile', 'fullname']
     inlines = [AcquaintanceshipActiveInline, AcquaintanceshipPassiveInline]
+
+
+@admin.register(CharacterAcquisitions)
+class CharacterAcquisitionsAdmin(CharacterAdmin):
+    fields = ['profile', 'fullname']
+    inlines = [AcquisitionInline]

@@ -59,6 +59,12 @@
                                 <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
                                     <a class="btn btn-outline-secondary icon-edit py-2" href="{% url 'admin:prosoponomikon_character_change' character.id %}" target="_blank"></a>
                                 </div>
+                                <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Znajomości">
+                                    <a class="btn btn-outline-danger icon-edit py-2" href="{% url 'admin:prosoponomikon_characteracquaintanceships_change' character.id %}" target="_blank"></a>
+                                </div>
+                                <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Umiejętności">
+                                    <a class="btn btn-outline-info icon-edit py-2" href="{% url 'admin:prosoponomikon_characteracquisitions_change' character.id %}" target="_blank"></a>
+                                </div>
                             {% endif %}
                         </div>
         {% endif %}
