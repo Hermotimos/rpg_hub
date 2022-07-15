@@ -348,7 +348,10 @@ class Acquisition(Model):
 
     class Meta:
         ordering = ['character', 'skill_level__skill', 'skill_level']
-        unique_together = ['character', 'skill_level']
+        unique_together = [
+            ['character', 'skill_level', 'weapon'],
+            ['character', 'skill_level', 'sphragis'],
+        ]
 
     def __str__(self):
         weapon = f" {self.weapon}" if self.weapon else ""
