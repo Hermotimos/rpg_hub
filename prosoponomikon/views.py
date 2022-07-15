@@ -65,11 +65,14 @@ def prosoponomikon_character_view(request, character_id):
                 current_profile.biography_packets.all()
                 | current_profile.authored_bio_packets.all()
             ).prefetch_related('picture_sets')
-        characters = Character.objects.select_related('first_name')
-        characters = characters.prefetch_related(
+            
+        character = Character.objects.select_related(
+            'first_name'
+        ).prefetch_related(
             Prefetch('biography_packets', queryset=bio_packets),
-            'dialogue_packets')
-        character = characters.get(id=character_id)
+            'dialogue_packets'
+        ).get(id=character_id)
+        
         try:
             this_acquaintanceship = Acquaintanceship.objects.get(
                 knowing_character=current_profile.character,
@@ -100,16 +103,17 @@ def prosoponomikon_character_view(request, character_id):
         acquisitions = acquisitions.order_by(
             'skill_level__skill__name', '-skill_level__level').distinct('skill_level__skill__name')
         
-        for a in acquisitions:
-            print(a, a.type, a.group)
-        # skills.filter(types__kinds__name="Moce Kapłańskie")
+        # for a in acquisitions:
+        #     print(a, a.type, a.group)
+
         acquisitions_regular = acquisitions.filter(skill_level__skill__types__kinds__name__in=["Powszechne", "Mentalne"])
         acquisitions_priests = acquisitions.filter(skill_level__skill__types__kinds__name="Moce Kapłańskie")
         acquisitions_sorcerers = acquisitions.filter(skill_level__skill__types__kinds__name="Zaklęcia")
         acquisitions_theurgists = acquisitions.filter(skill_level__skill__types__kinds__name="Moce Teurgiczne")
         
-        # TODO probably no more need of max levels feature in view and templates (done by DISTINCT ON acquisitions)
-        skill_types, skills = character.skill_types_with_skills_with_max_skill_levels_acquired()
+
+        skill_types = character.skill_types()
+        
         skill_types_regular = skill_types.filter(kinds__name__in=["Powszechne", "Mentalne"])
         skill_types_priests = skill_types.filter(kinds__name="Moce Kapłańskie")
         skill_types_sorcerers = skill_types.filter(kinds__name="Zaklęcia")

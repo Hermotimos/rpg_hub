@@ -44,9 +44,7 @@
                         
                                 {% for acquisition in acquisitions %}
                                     {% if acquisition.skill_level.skill in skills %}
-                                        {% with id_suffix=skill_type.name|remove_special_chars %}
-                                            {% include 'prosoponomikon/_skill.html' %}
-                                        {% endwith %}
+                                        {% include 'prosoponomikon/_skill.html' %}
                                     {% endif %}
                                 {% endfor %}
                         

@@ -232,24 +232,26 @@ class Character(Model):
         ).annotate(
             initial=Lower(Substr('known_character__fullname', 1, 1)))
 
-    def skill_types_with_skills_with_max_skill_levels_acquired(self):
-        skill_levels = SkillLevel.objects.filter(acquiring_characters=self)
-
-        skills = Skill.objects.filter(skill_levels__acquiring_characters=self)
-        skills = skills.prefetch_related(
-            Prefetch('skill_levels', queryset=skill_levels),
+    def skill_types(self):
+        skills = Skill.objects.filter(
+            skill_levels__acquiring_characters=self
+        ).prefetch_related(
             'skill_levels__perks__conditional_modifiers__conditions',
             'skill_levels__perks__conditional_modifiers__combat_types',
             'skill_levels__perks__conditional_modifiers__modifier__factor',
             'skill_levels__perks__comments',
-        ).select_related('group__type').distinct()
+        ).select_related(
+            'group__type'
+        ).distinct()
 
-        skill_types = SkillType.objects.prefetch_related(
+        skill_types = SkillType.objects.filter(
+            skills__in=skills
+        ).prefetch_related(
             Prefetch('skills', queryset=skills),
             'skill_groups',
-        ).filter(skills__in=skills).distinct()
+        ).distinct()
         
-        return skill_types, skills
+        return skill_types
     
         
 class CharacterAcquaintanceships(Character):
