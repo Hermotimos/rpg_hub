@@ -88,34 +88,13 @@ def prosoponomikon_character_view(request, character_id):
     # Any Profile viewing own Character or GM viewing any Character
     if current_profile.character.id == character_id or current_profile.status == 'gm':
         
-        acquisitions = character.acquisitions.annotate(
-            type=F('skill_level__skill__types__name'),
-            group=F('skill_level__skill__group__name'),
-        ).prefetch_related(
-            'skill_level__skill',
-            'skill_level__perks__conditional_modifiers__conditions',
-            'skill_level__perks__conditional_modifiers__combat_types',
-            'skill_level__perks__conditional_modifiers__modifier__factor',
-            'skill_level__perks__comments',
-            'weapon',
-            'sphragis',
-        )
-        # This creates a DISTINCT ON query:
-        # https://docs.djangoproject.com/en/4.0/ref/models/querysets/#distinct
-        acquisitions = acquisitions.order_by(
-            'skill_level__skill__name', '-skill_level__level').distinct('skill_level__skill__name')
-        
-        # for a in acquisitions:
-        #     print(a, a.type, a.group)
-
+        acquisitions = character.acquisitions_for_character_sheet()
         acquisitions_regular = acquisitions.filter(skill_level__skill__types__kinds__name__in=["Powszechne", "Mentalne"])
         acquisitions_priests = acquisitions.filter(skill_level__skill__types__kinds__name="Moce Kapłańskie")
         acquisitions_sorcerers = acquisitions.filter(skill_level__skill__types__kinds__name="Zaklęcia")
         acquisitions_theurgists = acquisitions.filter(skill_level__skill__types__kinds__name="Moce Teurgiczne")
         
-
-        skill_types = character.skill_types()
-        
+        skill_types = character.skill_types_for_character_sheet()
         skill_types_regular = skill_types.filter(kinds__name__in=["Powszechne", "Mentalne"])
         skill_types_priests = skill_types.filter(kinds__name="Moce Kapłańskie")
         skill_types_sorcerers = skill_types.filter(kinds__name="Zaklęcia")

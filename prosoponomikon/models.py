@@ -2,6 +2,7 @@ from django.db.models import (
     BooleanField,
     CASCADE,
     CharField,
+    F,
     ForeignKey as FK,
     Manager,
     ManyToManyField as M2M,
@@ -232,7 +233,33 @@ class Character(Model):
         ).annotate(
             initial=Lower(Substr('known_character__fullname', 1, 1)))
 
-    def skill_types(self):
+    def acquisitions_for_character_sheet(self):
+        acquisitions = self.acquisitions.annotate(
+            type=F('skill_level__skill__types__name'),
+            group=F('skill_level__skill__group__name'),
+        ).prefetch_related(
+            'skill_level__skill',
+            'skill_level__perks__conditional_modifiers__conditions',
+            'skill_level__perks__conditional_modifiers__combat_types',
+            'skill_level__perks__conditional_modifiers__modifier__factor',
+            'skill_level__perks__comments',
+            'weapon',
+            'sphragis',
+        ).order_by(
+            # order_by combined with distinct for "DISTINCT ON" query:
+            # https://docs.djangoproject.com/en/4.0/ref/models/querysets/#distinct
+            'skill_level__skill__name',
+            'weapon__name',
+            'sphragis__name',
+            '-skill_level__level'
+        ).distinct(
+            'skill_level__skill__name',
+            'weapon__name',
+            'sphragis__name'
+        )
+        return acquisitions
+        
+    def skill_types_for_character_sheet(self):
         skills = Skill.objects.filter(
             skill_levels__acquiring_characters=self
         ).prefetch_related(
