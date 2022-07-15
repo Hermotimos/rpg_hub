@@ -36,11 +36,19 @@
                 </small>
                 <br>
             </div>
-            {% if acquisition.skill_level.skill.name_origin and current_profile.can_view_all %}
-                <div class="mt-n5 pt-3 mb-n2">
-                    <small class="smaller font-italic text-muted">{{ acquisition.skill_level.skill.name_origin }}</small>
-                </div>
-            {% endif %}
+            <div class="mt-n5 pt-3 mb-n2">
+                {% if acquisition.skill_level.skill.name_origin and request.current_profile.can_view_all %}
+                    <small class="smaller font-italic text-muted">
+                        {{ acquisition.skill_level.skill.name_origin }}
+                    </small>
+                    <small class="smaller ml-1"> |</small>
+                {% endif %}
+                <small class="rules-gray1 smaller">
+                    {% if acquisition.sphragis %}
+                        Sphragis {{ acquisition.sphragis.name_genitive }}
+                    {% endif %}
+                </small>
+            </div>
             <div class="row collapse" id="{{ acquisition.skill_level.skill|remove_special_chars }}{{ skill_type|remove_special_chars }}">
                 {% with level_img='img/'|add:acquisition.skill_level.level|add:'.png' %}
                     {% with skill_or_synergy_level=acquisition.skill_level type='skill_level' %}

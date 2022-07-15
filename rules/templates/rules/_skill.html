@@ -46,7 +46,7 @@
                 <br>
                 
             </div>
-            {% if skill.name_origin and current_profile.can_view_all %}
+            {% if skill.name_origin and request.current_profile.can_view_all %}
                 <div class="mt-n5 pt-3 mb-n2">
                     <small class="smaller font-italic text-muted">{{ skill.name_origin }}</small>
                 </div>
