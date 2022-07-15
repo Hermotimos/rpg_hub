@@ -9,8 +9,26 @@
         
         <div class="skill-or-synergy-name ml-2 mt-1 mt-lg-2">
             <div>
+                
+                {% if request.current_profile.status == 'gm' %}
+                    <a class="hover-blue" href="{% url 'admin:prosoponomikon_acquisition_change' acquisition.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                {% endif %}
+                
                 {{ acquisition.skill_level.skill.name }}
-                [{{ acquisition.skill_level.level }}]
+                
+                {% if acquisition.weapon %}
+                    : {{ acquisition.weapon.name }}
+                {% endif %}
+                
+                {% if "Powszechne" in skilltype_kinds %}
+                    [{{ acquisition.skill_level.level }}]
+                {% endif %}
+                
+                {% if request.current_profile.status == 'gm' %}
+                    </a>
+                {% endif %}
+
+                
                 <small class="rules-gray1 smaller">
                     {% if acquisition.skill_level.skill.tested_trait %}
                         ({{ acquisition.skill_level.skill.tested_trait }})

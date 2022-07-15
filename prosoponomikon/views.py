@@ -97,6 +97,8 @@ def prosoponomikon_character_view(request, character_id):
             'skill_level__perks__conditional_modifiers__combat_types',
             'skill_level__perks__conditional_modifiers__modifier__factor',
             'skill_level__perks__comments',
+            'weapon',
+            'sphragis',
         )
         # This creates a DISTINCT ON query:
         # https://docs.djangoproject.com/en/4.0/ref/models/querysets/#distinct
