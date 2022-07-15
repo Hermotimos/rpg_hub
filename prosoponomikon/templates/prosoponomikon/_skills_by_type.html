@@ -8,8 +8,6 @@
 
 
 <div class="rules-styling" id="accordion{{ panel_id }}">
-    
-    {% with acquisitions=acquisitions|acquisitions_distinct_maxlevel:skilltype_kinds %}
         
         <!-- SKILLS PER SKILL TYPES-->
         {% for skill_type in skill_types %}
@@ -76,7 +74,5 @@
                 </div>
             </div>
         </div>
-    
-    {% endwith %}
     
 </div>

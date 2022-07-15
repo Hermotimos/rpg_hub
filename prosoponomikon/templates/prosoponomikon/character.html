@@ -134,11 +134,11 @@
             {% endif %}
             
             <!-- Skills and synergies-->
-            {% if skills_regular %}
+            {% if acquisitions_regular %}
                 {% if biography_packets or dialogue_packets %}
-                    <input type="radio" name="tabset" id="tab3" aria-controls="skills_regular">
+                    <input type="radio" name="tabset" id="tab3" aria-controls="acquisitions_regular">
                 {% else %}
-                    <input type="radio" name="tabset" id="tab3" aria-controls="skills_regular" checked>
+                    <input type="radio" name="tabset" id="tab3" aria-controls="acquisitions_regular" checked>
                 {% endif %}
                 <label class="font-resp-15 resp-tab-label" for="tab3">
                     {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
@@ -148,7 +148,7 @@
     
             <!-- Knowledge packets -->
             {% if knowledge_packets %}
-                {% if biography_packets or dialogue_packets or skills_regular %}
+                {% if biography_packets or dialogue_packets or acquisitions_regular %}
                     <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets">
                 {% else %}
                     <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets" checked>
@@ -165,7 +165,7 @@
             
             <!-- Known characters -->
             {% if acquaintanceships %}
-                {% if biography_packets or dialogue_packets or skills_regular or knowledge_packets %}
+                {% if biography_packets or dialogue_packets or acquisitions_regular or knowledge_packets %}
                     <input type="radio" name="tabset" id="tab5" aria-controls="acquaintanceships">
                 {% else %}
                     <input type="radio" name="tabset" id="tab5" aria-controls="acquaintanceships" checked>
@@ -178,11 +178,11 @@
     {% endif %}
             
             <!-- Priest powers and MentalSkills -->
-            {% if skills_priests %}
-                {% if biography_packets or dialogue_packets or skills_regular or knowledge_packets or acquaintanceships %}
-                    <input type="radio" name="tabset" id="tab6" aria-controls="priest_powers_and_mental_skills">
+            {% if acquisitions_priests %}
+                {% if biography_packets or dialogue_packets or acquisitions_regular or knowledge_packets or acquaintanceships %}
+                    <input type="radio" name="tabset" id="tab6" aria-controls="acquisitions_priests">
                 {% else %}
-                    <input type="radio" name="tabset" id="tab6" aria-controls="priest_powers_and_mental_skills" checked>
+                    <input type="radio" name="tabset" id="tab6" aria-controls="acquisitions_priests" checked>
                 {% endif %}
                 <label class="font-resp-15 resp-tab-label" for="tab6">
                     {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
@@ -191,11 +191,11 @@
             {% endif %}
             
             <!-- Sorcery and MentalSkills -->
-            {% if skills_sorcerers %}
-                {% if biography_packets or dialogue_packets or skills_regular or knowledge_packets or acquaintanceships or skills_priests %}
-                    <input type="radio" name="tabset" id="tab7" aria-controls="sorcerers_powers_and_mental_skills">
+            {% if acquisitions_sorcerers %}
+                {% if biography_packets or dialogue_packets or acquisitions_regular or knowledge_packets or acquaintanceships or skills_priests %}
+                    <input type="radio" name="tabset" id="tab7" aria-controls="acquisitions_sorcerers">
                 {% else %}
-                    <input type="radio" name="tabset" id="tab7" aria-controls="sorcerers_powers_and_mental_skills" checked>
+                    <input type="radio" name="tabset" id="tab7" aria-controls="acquisitions_sorcerers" checked>
                 {% endif %}
                 <label class="font-resp-15 resp-tab-label" for="tab6">
                     {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
@@ -204,11 +204,11 @@
             {% endif %}
             
             <!-- Theurgy and MentalSkills -->
-            {% if skills_theurgists %}
-                {% if biography_packets or dialogue_packets or skills_regular or knowledge_packets or acquaintanceships or skills_priests or skills_sorcerers %}
-                    <input type="radio" name="tabset" id="tab8" aria-controls="theurgists_powers_and_mental_skills">
+            {% if acquisitions_theurgists %}
+                {% if biography_packets or dialogue_packets or acquisitions_regular or knowledge_packets or acquaintanceships or skills_priests or skills_sorcerers %}
+                    <input type="radio" name="tabset" id="tab8" aria-controls="acquisitions_theurgists">
                 {% else %}
-                    <input type="radio" name="tabset" id="tab8" aria-controls="theurgists_powers_and_mental_skills" checked>
+                    <input type="radio" name="tabset" id="tab8" aria-controls="acquisitions_theurgists" checked>
                 {% endif %}
                 <label class="font-resp-15 resp-tab-label" for="tab6">
                     {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
@@ -244,9 +244,9 @@
                 {% endif %}
             
                 <!-- RegularSkills and RegularSynergies -->
-                {% if skill_types_regular %}
-                    <section id="skills_regular" class="tab-panel">
-                        {% with max_level_only=True skill_types=skill_types_regular skills=skills_regular max_level_only=True synergies=synergies_regular panel_id=1 skilltype_kinds='Powszechne,Mentalne' %}
+                {% if acquisitions_regular %}
+                    <section id="acquisitions_regular" class="tab-panel">
+                        {% with skill_types=skill_types_regular acquisitions=acquisitions_regular synergies=synergies_regular skilltype_kinds='Powszechne,Mentalne' panel_id=1 %}
                             {% include 'prosoponomikon/_skills_by_type.html' %}
                             {% if synergies_regular %}
                                 {% include 'rules/_synergies.html' %}
@@ -280,9 +280,9 @@
                 {% endif %}
                 
                 <!-- PriestsSkill and MentalSkills -->
-                {% if skills_priests %}
-                    <section id="priest_powers_and_mental_skills" class="tab-panel">
-                        {% with skill_types=skill_types_priests skills=skills_priests panel_id=2 %}
+                {% if acquisitions_priests %}
+                    <section id="acquisitions_priests" class="tab-panel">
+                        {% with skill_types=skill_types_priests acquisitions=acquisitions_priests panel_id=2 %}
                             {% with skilltype_kinds="Moce Kapłańskie" %}
                                 {% include 'prosoponomikon/_skills_by_type.html' %}
                             {% endwith %}
@@ -291,18 +291,18 @@
                 {% endif %}    
                 
                 <!-- SorcerersSkill and MentalSkills -->
-                {% if skills_sorcerers %}
-                    <section id="sorcerers_powers_and_mental_skills" class="tab-panel">
-                        {% with skill_types=skill_types_sorcerers skills=skills_sorcerers panel_id=2 %}
+                {% if acquisitions_sorcerers %}
+                    <section id="acquisitions_sorcerers" class="tab-panel">
+                        {% with skill_types=skill_types_sorcerers acquisitions=acquisitions_sorcerers panel_id=2 %}
                             {% include 'rules/_skills_by_type.html' %}
                         {% endwith %}
                     </section>
                 {% endif %}
                 
                 <!-- TheurgistsSkill and MentalSkills -->
-                {% if skills_theurgists %}
-                    <section id="theurgists_powers_and_mental_skills" class="tab-panel">
-                        {% with skill_types=skill_types_theurgists skills=skills_theurgists panel_id=2 %}
+                {% if acquisitions_theurgists %}
+                    <section id="acquisitions_theurgists" class="tab-panel">
+                        {% with skill_types=skill_types_theurgists acquisitions=acquisitions_theurgists panel_id=2 %}
                             {% include 'rules/_skills_by_type.html' %}
                         {% endwith %}
                     </section>

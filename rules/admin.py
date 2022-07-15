@@ -155,7 +155,7 @@ class RegularSkillLevelInline(admin.TabularInline):
         return qs.prefetch_related('perks', 'acquired_by')
 
     
-@admin.register(Skill, RegularSkill)
+@admin.register(Skill, RegularSkill, MentalSkill)
 class SkillAdmin(admin.ModelAdmin):
     fields = [
         'name', 'version_of', 'weapon', 'tested_trait', 'image', 'group',
@@ -179,11 +179,6 @@ class SkillAdmin(admin.ModelAdmin):
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
     
-    
-@admin.register(MentalSkill)
-class MentalSkillAdmin(SkillAdmin):
-    fields = ['name', 'tested_trait', 'image', 'group', 'types', 'allowees']
-
 
 class PowerSkillLevelInline(admin.StackedInline):
     fields = [

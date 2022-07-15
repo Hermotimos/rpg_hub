@@ -1,0 +1,134 @@
+{% load static %}
+{% load custom_filters %}
+
+
+<div class="container align-top pl-1 pr-md-4 text-justify font-14">
+    <div class="d-flex flex-row">
+        
+        <div class="pl-1 pt-01">
+            {% if skilltype_kind != 'Moce Kapłańskie' and skilltype_kind != 'Zaklęcia' and skilltype_kind != 'Moce Teurgiczne' %}
+            
+                {% if request.current_profile.status == 'gm' %}
+            
+                    {% if type == 'skill_level' %}
+                        {% if "Moce Kapłańskie" in skilltype_kinds %}
+                        <a href="{% url 'admin:rules_priestsskilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                        {% elif "Zaklęcia" in skilltype_kinds %}
+                        <a href="{% url 'admin:rules_sorcerersskilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                        {% elif "Moce Teurgiczne" in skilltype_kinds %}
+                        <a href="{% url 'admin:rules_theurgistsskilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                        {% else %}
+                        <a href="{% url 'admin:rules_skilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                        {% endif %}
+                            <img class="img-xs" src="{% static level_img %}">
+                        </a>
+                        
+                    {% elif type == 'synergy_level' %}
+                        <a href="{% url 'admin:rules_synergylevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                            <img class="img-xs" src="{% static level_img %}">
+                        </a>
+                        
+                    {% endif %}
+                    
+                {% else %}
+                    <img class="img-xs" src="{% static level_img %}">
+                {% endif %}
+            
+            {% endif %}
+        </div>
+        
+        <div>
+            <div class="ml-1">
+                {% if skill_or_synergy_level.skill_levels.exists %}
+                    <div class="mt-1">
+                        {{ skill_or_synergy_level.skill_levels.all|join:" + " }}
+                    </div>
+                {% endif %}
+                {% if skill_or_synergy_level.description %}
+                    <div class="mt-1">
+                        {{ skill_or_synergy_level.description|custom_linebreaksbr:2 }}
+                    </div>
+                {% endif %}
+                {% if skill_or_synergy_level.distance is not None %}
+                    <div class="mt-1">
+                        <span data-toggle="tooltip" data-placement="right" title="Zasięg">
+                            <i class="ra ra-focused-lightning pr-1"></i>:
+                            {{ skill_or_synergy_level.distance }} m
+                        </span>
+                    </div>
+                {% endif %}
+                {% if skill_or_synergy_level.radius is not None %}
+                    <div class="mt-1">
+                        <span data-toggle="tooltip" data-placement="right" title="Promień">
+                            <i class="ra ra-radial-balance pr-1"></i>:
+                            {{ skill_or_synergy_level.radius }} m
+                        </span>
+                    </div>
+                {% endif %}
+                {% if skill_or_synergy_level.duration is not None %}
+                    <div class="mt-1">
+                        <span data-toggle="tooltip" data-placement="right" title="Czas działania">
+                            <i class="ra ra-hourglass pr-1"></i>:
+                            {{ skill_or_synergy_level.duration }} min
+                        </span>
+                    </div>
+                {% endif %}
+                {% if skill_or_synergy_level.saving_throw_trait is not None %}
+                    <div class="mt-1">
+                        <span data-toggle="tooltip" data-placement="right" title="Malus RO">
+                            <i class="ra ra-perspective-dice-random pr-1"></i>:
+                            {{ skill_or_synergy_level.saving_throw_trait }} -{{ skill_or_synergy_level.saving_throw_malus }}
+                        </span>
+                    </div>
+                {% endif %}
+                {% if skill_or_synergy_level.damage is not None %}
+                    <div class="mt-1">
+                        <span data-toggle="tooltip" data-placement="right" title="Obrażenia">
+                            <i class="ra ra-cut-palm  pr-1"></i>:
+                            {{ skill_or_synergy_level.damage }}
+                        </span>
+                    </div>
+                {% endif %}
+                
+                
+            </div>
+            {% for perk in skill_or_synergy_level.perks.all %}
+                <div class="ml-1 mt-1">
+                    <div class="font-weight-bold">
+                        {% if request.current_profile.status == 'gm' %}
+                            <a href="{% url 'admin:rules_perk_change' perk.id %}" target="_blank"
+                               data-toggle="tooltip" data-placement="right" title="Edytuj Atut">
+                                ✧ {{ perk.name|trim_nums }}
+                            </a>
+                        {% else %}
+                            ✧ {{ perk.name|trim_nums }}
+                        {% endif %}
+                        {% if perk.cost %}
+                            <span class="small text-danger border-top-dotted">
+                                [{{ perk.cost }}]
+                            </span>
+                        {% endif %}
+                    </div>
+                    {% if perk.description %}
+                        <div class="ml-3 mb-1">
+                            {{ perk.description|custom_linebreaksbr:1 }}
+                        </div>
+                    {% endif %}
+                    {% for conditional_modifier in perk.conditional_modifiers.all %}
+                        <div class="ml-3">
+                            {{ conditional_modifier|format_conditional_modifier:"text-info" }}
+                        </div>
+                    {% endfor %}
+                    <ul class="ml-4 pl-1 bullets-2 mb-1">
+                        {% for comment in perk.comments.all %}
+                            <li class="pl-1">{{ comment }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+        
+    </div>
+</div>
+
+

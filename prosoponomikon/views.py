@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch
+from django.db.models import Prefetch, F
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
@@ -46,7 +46,8 @@ def prosoponomikon_character_view(request, character_id):
         knowledge_packets, acquaintanceships, acquisitions,
         skill_types_regular, skill_types_priests, skill_types_sorcerers,
         skill_types_theurgists,
-        skills_regular, skills_priests, skills_sorcerers, skills_theurgists,
+        acquisitions_regular, acquisitions_priests, acquisitions_sorcerers,
+        acquisitions_theurgists,
         synergies_regular,
     ] = [list() for _ in range(12)]
 
@@ -84,9 +85,6 @@ def prosoponomikon_character_view(request, character_id):
     # Any Profile viewing own Character or GM viewing any Character
     if current_profile.character.id == character_id or current_profile.status == 'gm':
         
-        skill_types, skills = character.skill_types_with_skills_with_max_skill_levels_acquired()
-        
-        from django.db.models import F
         acquisitions = character.acquisitions.annotate(
             type=F('skill_level__skill__types__name'),
             group=F('skill_level__skill__group__name'),
@@ -97,35 +95,25 @@ def prosoponomikon_character_view(request, character_id):
             'skill_level__perks__conditional_modifiers__modifier__factor',
             'skill_level__perks__comments',
         )
+        # This creates a DISTINCT ON query:
+        # https://docs.djangoproject.com/en/4.0/ref/models/querysets/#distinct
+        acquisitions = acquisitions.order_by(
+            'skill_level__skill__name', '-skill_level__level').distinct('skill_level__skill__name')
+        
         for a in acquisitions:
             print(a, a.type, a.group)
-        # skills = character.profile.skills_acquired_with_skill_levels().exclude(~Q(versions=None))
-        # skill_types = SkillType.objects.all()
-        # skill_types_regular = skill_types.filter(kinds__name="Powszechne")
+        # skills.filter(types__kinds__name="Moce Kapłańskie")
+        acquisitions_regular = acquisitions.filter(skill_level__skill__types__kinds__name__in=["Powszechne", "Mentalne"])
+        acquisitions_priests = acquisitions.filter(skill_level__skill__types__kinds__name="Moce Kapłańskie")
+        acquisitions_sorcerers = acquisitions.filter(skill_level__skill__types__kinds__name="Zaklęcia")
+        acquisitions_theurgists = acquisitions.filter(skill_level__skill__types__kinds__name="Moce Teurgiczne")
         
-        skills_regular = skills.filter(types__kinds__name__in=["Powszechne", "Mentalne"])
+        # TODO probably no more need of max levels feature in view and templates (done by DISTINCT ON acquisitions)
+        skill_types, skills = character.skill_types_with_skills_with_max_skill_levels_acquired()
         skill_types_regular = skill_types.filter(kinds__name__in=["Powszechne", "Mentalne"])
-        # skill_types_regular = skill_types_regular.prefetch_related(
-        #     Prefetch('skills', queryset=skills_regular), 'skill_groups')
-        # skill_types_regular = skill_types_regular.filter(skills__in=skills_regular).distinct()
-
-        skills_priests = skills.filter(types__kinds__name="Moce Kapłańskie")
         skill_types_priests = skill_types.filter(kinds__name="Moce Kapłańskie")
-        # skill_types_priests = skill_types_priests.prefetch_related(
-        #     Prefetch('skills', queryset=skills_priests), 'skill_groups')
-        # skill_types_priests = skill_types_priests.filter(skills__in=skills_priests).distinct()
-        
-        skills_sorcerers = skills.filter(types__kinds__name="Zaklęcia")
         skill_types_sorcerers = skill_types.filter(kinds__name="Zaklęcia")
-        # skill_types_sorcerers = skill_types_sorcerers.prefetch_related(
-        #     Prefetch('skills', queryset=skills_sorcerers), 'skill_groups')
-        # skill_types_sorcerers = skill_types_sorcerers.filter(skills__in=skills_sorcerers).distinct()
-        #
-        skills_theurgists = skills.filter(types__kinds__name="Moce Teurgiczne")
         skill_types_theurgists = skill_types.filter(kinds__name="Moce Teurgiczne")
-        # skill_types_theurgists = skill_types_theurgists.prefetch_related(
-        #     Prefetch('skills', queryset=skills_theurgists), 'skill_groups')
-        # skill_types_theurgists = skill_types_theurgists.filter(skills__in=skills_theurgists).distinct()
 
         synergies = character.profile.synergies_acquired_with_synergies_levels()
         synergies_regular = synergies.exclude(
@@ -144,14 +132,14 @@ def prosoponomikon_character_view(request, character_id):
         'page_title': character,
         'character': character,
         'acquisitions': acquisitions,
+        'acquisitions_regular': acquisitions_regular,
+        'acquisitions_priests': acquisitions_priests,
+        'acquisitions_sorcerers': acquisitions_sorcerers,
+        'acquisitions_theurgists': acquisitions_theurgists,
         'skill_types_regular': skill_types_regular,
-        'skills_regular': skills_regular,
         'skill_types_priests': skill_types_priests,
-        'skills_priests': skills_priests,
         'skill_types_sorcerers': skill_types_sorcerers,
-        'skills_sorcerers': skills_sorcerers,
         'skill_types_theurgists': skill_types_theurgists,
-        'skills_theurgists': skills_theurgists,
         'synergies_regular': synergies_regular,
         'knowledge_packets': knowledge_packets,
         'biography_packets': biography_packets,

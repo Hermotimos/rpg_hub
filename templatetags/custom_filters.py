@@ -1,6 +1,7 @@
 from typing import List
 
 from django import template
+from django.conf import settings
 from django.template.defaultfilters import linebreaksbr
 from django.template.defaulttags import GroupedResult
 from django.utils.html import format_html
@@ -41,37 +42,8 @@ def get_max_skill_level_no(skill_levels_list, ):
 
 
 @register.filter
-def acquisitions_distinct_maxlevel(acquisitions, skilltype_kinds_str: str):
-    # This creates a DISTINCT ON query:
-    # https://docs.djangoproject.com/en/4.0/ref/models/querysets/#distinct
-    acquisitions = acquisitions.filter(
-        skill_level__skill__types__kinds__name__in=skilltype_kinds_str.split(','))
-    acquisitions = acquisitions.order_by('skill_level__skill__name', '-skill_level__level').distinct('skill_level__skill__name')
-    return acquisitions
-    
-    # TODO delete if not useful
-    #     acquisitions_levels = [(a.skill_level.skill.name, int(a.skill_level.level)) for a in qs]
-    #     max_levels_dict = {}
-    #     for e in acquisitions_levels:
-    #         if max_levels_dict.get(e[0], 0) < e[1]:
-    #             max_levels_dict[e[0]] = e[1]
-    #     print(max_levels_dict)
-    #     acquisitions_dict = {
-    #         (a.skill_level.skill.name, a.skill_level.level): a for a in qs
-    #         if max_levels_dict[a.skill_level.skill.name] == int(a.skill_level.level)
-    #     }
-    #     print(acquisitions_dict)
-    #     print(len(qs), len(acquisitions_dict))
-    #     from prosoponomikon.models import Acquisition
-    #     return qs.filter(id__in=[a.id for a in acquisitions_dict.values()])
-
-
-@register.filter
 def add_season_img(text):
-    from django.conf import settings
-    # static_dir = '/static/' if settings.IS_LOCAL_ENVIRON else settings.ROOT
     static_dir = settings.STATIC_URL
-    # print(static_dir)
     if text:
         text = text.replace('. dnia', '')
         replacements = {
