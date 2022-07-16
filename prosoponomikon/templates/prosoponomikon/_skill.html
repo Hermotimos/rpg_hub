@@ -9,9 +9,10 @@
         
         <div class="skill-or-synergy-name ml-2 mt-1 mt-lg-2">
             <div>
-                
+                <!-- For GM make skill name into a link to admin change form -->
                 {% if request.current_profile.status == 'gm' %}
-                    <a class="hover-blue" href="{% url 'admin:prosoponomikon_acquisition_change' acquisition.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                    <a class="hover-blue" href="{% url 'admin:prosoponomikon_acquisition_change' acquisition.id %}"
+                       target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja Akwizycji Umiejętności">
                 {% endif %}
                 
                 {{ acquisition.skill_level.skill.name }}
@@ -25,9 +26,9 @@
                 {% endif %}
                 
                 {% if request.current_profile.status == 'gm' %}
+                        | {{ acquisition.skill_level.skill.name_second }}
                     </a>
                 {% endif %}
-
                 
                 <small class="rules-gray1 smaller">
                     {% if acquisition.skill_level.skill.tested_trait %}
@@ -36,14 +37,14 @@
                 </small>
                 <br>
             </div>
-            <div class="mt-n5 pt-3 mb-n2">
+            <div class="mt-n5 pt-3 mb-n2 ml-1">
                 {% if acquisition.skill_level.skill.name_origin and request.current_profile.can_view_all %}
                     <small class="smaller font-italic text-muted">
                         {{ acquisition.skill_level.skill.name_origin }}
                     </small>
                     <small class="smaller ml-1"> |</small>
                 {% endif %}
-                <small class="rules-gray1 smaller">
+                <small class="smaller text-muted">
                     {% if acquisition.sphragis %}
                         Sphragis {{ acquisition.sphragis.name_genitive }}
                     {% endif %}

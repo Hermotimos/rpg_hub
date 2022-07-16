@@ -7,8 +7,6 @@
     {% else %}
         {% if acquisition.skill_level.skill.image %}
             <img class="img-skill mr-sm-1" src="{{ acquisition.skill_level.skill.image.url }}">
-        {% elif acquisition.skill_level.skill.version_of %}
-            <img class="img-skill mr-sm-1" src="{{ acquisition.skill_level.skill.version_of.image.url }}">
         {% else %}
             <img class="img-skill mr-sm-1" src="{% static 'img/skill-default.png' %}">
         {% endif %}
