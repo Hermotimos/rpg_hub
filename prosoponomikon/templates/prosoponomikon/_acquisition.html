@@ -5,7 +5,7 @@
 <div class="container my-1 p-0">
     <div class="d-flex flex-row">
         
-        {% include 'prosoponomikon/_skill_img.html' %}
+        {% include 'prosoponomikon/_acquisition_img.html' %}
         
         <div class="skill-or-synergy-name ml-2 mt-1 mt-lg-2">
             <div>
@@ -26,7 +26,9 @@
                 {% endif %}
                 
                 {% if request.current_profile.status == 'gm' %}
-                        | {{ acquisition.skill_level.skill.name_second }}
+                        {% if acquisition.skill_level.skill.name_second %}
+                            | {{ acquisition.skill_level.skill.name_second }}
+                        {% endif %}
                     </a>
                 {% endif %}
                 
@@ -37,23 +39,25 @@
                 </small>
                 <br>
             </div>
-            <div class="mt-n5 pt-3 mb-n2 ml-1">
-                {% if acquisition.skill_level.skill.name_origin and request.current_profile.can_view_all %}
-                    <small class="smaller font-italic text-muted">
-                        {{ acquisition.skill_level.skill.name_origin }}
-                    </small>
-                    <small class="smaller ml-1"> |</small>
-                {% endif %}
-                <small class="smaller text-muted">
-                    {% if acquisition.sphragis %}
-                        Sphragis {{ acquisition.sphragis.name_genitive }}
+            {% if acquisition.sphragis %}
+                <div class="mt-n5 pt-3 mb-n2 ml-1">
+                    {% if request.current_profile.can_view_all %}
+                        <small class="smaller font-italic text-muted">
+                            {{ acquisition.skill_level.skill.name_origin }}
+                        </small>
+                        <small class="smaller ml-1"> |</small>
                     {% endif %}
-                </small>
-            </div>
-            <div class="row collapse" id="{{ acquisition.skill_level.skill|remove_special_chars }}{{ skill_type|remove_special_chars }}">
+                    <small class="smaller text-muted">
+                        {% if acquisition.sphragis %}
+                            Sphragis {{ acquisition.sphragis.name_genitive }}
+                        {% endif %}
+                    </small>
+                </div>
+            {% endif %}
+            <div class="row collapse" id="{{ acquisition.skill_level.skill|remove_special_chars }}{{ skill_type|remove_special_chars }}{{ acquisition.weapon.id }}{{ acquisition.sphragis.id }}">
                 {% with level_img='img/'|add:acquisition.skill_level.level|add:'.png' %}
                     {% with skill_or_synergy_level=acquisition.skill_level type='skill_level' %}
-                        {% include 'prosoponomikon/_skill_or_synergy_level.html' %}
+                        {% include 'prosoponomikon/_acquisition_level.html' %}
                     {% endwith %}
                 {% endwith %}
             </div>

@@ -35,7 +35,7 @@
                                     {% endif %}
                                     {% for acquisition in acquisitions %}
                                         {% if acquisition.skill_level.skill in skillgroup.list %}
-                                            {% include 'prosoponomikon/_skill.html' %}
+                                            {% include 'prosoponomikon/_acquisition.html' %}
                                         {% endif %}
                                     {% endfor %}
                                 {% endfor %}
@@ -44,7 +44,7 @@
                         
                                 {% for acquisition in acquisitions %}
                                     {% if acquisition.skill_level.skill in skills %}
-                                        {% include 'prosoponomikon/_skill.html' %}
+                                        {% include 'prosoponomikon/_acquisition.html' %}
                                     {% endif %}
                                 {% endfor %}
                         
@@ -67,7 +67,7 @@
             <div id="collapse{{ panel_id }}" class="collapse show" aria-labelledby="all-skills" data-parent="#accordion{{ panel_id }}">
                 <div class="card-body container">
                     {% for acquisition in acquisitions %}
-                        {% include 'prosoponomikon/_skill.html' %}
+                        {% include 'prosoponomikon/_acquisition.html' %}
                     {% endfor %}
                 </div>
             </div>
