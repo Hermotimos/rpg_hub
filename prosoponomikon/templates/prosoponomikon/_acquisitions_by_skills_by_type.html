@@ -7,7 +7,7 @@
 
 
 
-<div class="rules-styling" id="accordion{{ panel_id }}">
+<div id="accordion{{ panel_id }}">
         
         <!-- SKILLS PER SKILL TYPES-->
         {% for skill_type in skill_types %}
@@ -29,7 +29,7 @@
                                 {% regroup skills|dictsort:"group.name" by group as skillgroup_list %}
                                 {% for skillgroup in skillgroup_list %}
                                     {% if skillgroup.grouper.name %}
-                                        <h4 class="mt-4 mb-2 border-bottom text-center font-resp-15">
+                                        <h4 class="mt-4 mb-2 border-bottom text-center font-resp-15 font-weight-bold">
                                             {{ skillgroup.grouper.name }}
                                         </h4>
                                     {% endif %}

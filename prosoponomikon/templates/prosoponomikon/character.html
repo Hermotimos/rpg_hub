@@ -223,7 +223,7 @@
                 <!-- Biography packets -->
                 {% if request.current_profile.status == 'gm' or request.current_profile.character == character %}
                     {% if biography_packets %}
-                        <section id="biography_packets" class="tab-panel">
+                        <section id="biography_packets" class="tab-panel ">
                             <!-- Biography packets are filtered in the view for the requesting profile -->
                             {% for biography_packet in biography_packets %}
                                 {% include 'knowledge/_biography_packet.html' %}
