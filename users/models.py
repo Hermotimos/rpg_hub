@@ -162,7 +162,7 @@ class Profile(Model):
         """Get synergies whose all composing skills are allowed to any od user's profiles."""
         from rules.models import Synergy, RegularSynergy, MentalSynergy, Skill
         
-        skills = Skill.objects.filter(types__kinds__name=skilltype_kind, version_of=None)
+        skills = Skill.objects.filter(types__kinds__name=skilltype_kind)
         skills = skills.exclude(~Q(allowees__in=self.user.profiles.all()))
 
         if skilltype_kind == "Powszechne":

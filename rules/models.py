@@ -309,24 +309,6 @@ class WeaponType(Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        """Override save() to ensure existence of related "mastery" skill."""
-        super().save(*args, **kwargs)
-        if not Skill.objects.filter(weapon=self).exists():
-            general_skill = Skill.objects.get(name="Biegłość w broni")
-            skill = Skill.objects.create(
-                name=f"Biegłość w broni: {self.name}",
-                tested_trait=self.trait,
-                group=general_skill.group,
-                version_of=general_skill,
-                weapon=self)
-            skill.types.set(general_skill.types.all())
-            skill.save()
-        elif self.skill.name != f"Biegłość w broni: {self.name}":
-            skill = Skill.objects.get(id=self.skill.id)
-            skill.name = f"Biegłość w broni: {self.name}"
-            skill.save()
-
 
 # =============================================================================
 
@@ -378,9 +360,7 @@ class Skill(Model):
         to=Profile,
         limit_choices_to=Q(status='player'),
         related_name='allowed_skills',
-        blank=True,
-    )
-    version_of = FK(to='self', related_name='versions', on_delete=CASCADE, blank=True, null=True)
+        blank=True)
     # ------------------------------------------
     # For RegularSkills for weapon masteries
     weapon = One2One(to=WeaponType, on_delete=CASCADE, blank=True, null=True)
@@ -391,13 +371,7 @@ class Skill(Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        if self.version_of and self.weapon:
-            weapon = f": {self.weapon.name}" if self.weapon else ""
-            self.name = str(self.version_of.name) + weapon
-        super().save(*args, **kwargs)
        
-        
 class RegularSkillManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()

@@ -158,16 +158,14 @@ class RegularSkillLevelInline(admin.TabularInline):
 @admin.register(Skill, RegularSkill, MentalSkill)
 class SkillAdmin(admin.ModelAdmin):
     fields = [
-        'name', 'version_of', 'weapon', 'tested_trait', 'name_origin', 'image',
-        'group', 'types', 'allowees',
+        'name', 'weapon', 'tested_trait', 'name_origin', 'image', 'group',
+        'types', 'allowees',
     ]
     filter_horizontal = ['allowees', 'types']
     inlines = [RegularSkillLevelInline]
-    list_display = [
-        'id', 'name', 'version_of', 'tested_trait', 'image', 'group'
-    ]
+    list_display = ['id', 'name', 'tested_trait', 'image', 'group']
     list_editable = ['name', 'tested_trait', 'image', 'group']
-    list_select_related = ['group', 'version_of']
+    list_select_related = ['group']
     search_fields = ['name']
     
     def formfield_for_foreignkey(self, db_field, request, **kwargs):

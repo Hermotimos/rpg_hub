@@ -120,8 +120,7 @@ def rules_skills_view(request, skilltype_kind):
     current_profile = request.current_profile
     user_profiles = current_profile.user.profiles.all()
 
-    skills_regular = Skill.objects.filter(
-        types__kinds__name=skilltype_kind, version_of=None)
+    skills_regular = Skill.objects.filter(types__kinds__name=skilltype_kind)
     
     if not current_profile.can_view_all:
         skills_regular = skills_regular.filter(allowees__in=user_profiles)
