@@ -1,7 +1,7 @@
 {% load static %}
 {% load custom_filters %}
 
-<div data-toggle="tooltip" data-placement="right" title="Sfragis {{ acquisition.sphragis.name_genitive }}">
+<div data-toggle="tooltip" data-placement="top" title="Sfragis {{ acquisition.sphragis.name_genitive }}">
     <div class="d-flex flex-nowrap hover-pointer" data-toggle="collapse"
          data-target="#{{ acquisition.skill_level.skill|cut:' ' }}{{ skill_type|cut:' ' }}{{ acquisition.weapon.id }}{{ acquisition.sphragis.id }}">
         {% if skilltype_kinds == 'Moce Kapłańskie' or skilltype_kinds == 'Zaklęcia' or skilltype_kinds == 'Moce Teurgiczne' %}
