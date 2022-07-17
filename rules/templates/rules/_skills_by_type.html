@@ -12,13 +12,13 @@
     <!-- SKILLS PER SKILL TYPES-->
     {% for skill_type in skill_types %}
         <div class="card mb-1">
-            <div class="card-header card-header-resp hover-blue" id="{{ skill_type.name|cut:" " }}"
-                 data-toggle="collapse" data-target="#collapse{{ skill_type.name|cut:" " }}" aria-expanded="true" aria-controls="collapse{{ skill_type.name|cut:" " }}">
+            <div class="card-header card-header-resp hover-blue" id="{{ skill_type.name|cut:' ' }}"
+                 data-toggle="collapse" data-target="#collapse{{ skill_type.name|cut:' ' }}" aria-expanded="true" aria-controls="collapse{{ skill_type.name|cut:' ' }}">
                 <label class="h4 font-weight-bold m-0 hover-blue font-resp-15">
                     {{ skill_type.name }}
                 </label>
             </div>
-            <div id="collapse{{ skill_type.name|cut:" " }}" class="collapse" aria-labelledby="{{ skill_type.name|cut:" " }}" data-parent="#accordion{{ panel_id }}">
+            <div id="collapse{{ skill_type.name|cut:' ' }}" class="collapse" aria-labelledby="{{ skill_type.name|cut:' ' }}" data-parent="#accordion{{ panel_id }}">
                 <div class="card-body container">
                     <!-- This conditional is necessary to avoid regrouping of skills that have multiple SkillTypes within each SkillType
                         In some cases it would result in leaving most of the skills ungrouped while some of them grouped. -->

@@ -88,7 +88,7 @@
                 {% for weapon_type in weapon_types %}
                     <tr class="align-top {% if forloop.counter|divisibleby:2 %} bg-gray {% endif %}">
                         <td class="hover-blue" rowspan="{{ weapon_type.damage_types.count }}"
-                            data-toggle="collapse" data-target="#{{ weapon_type|cut:" " }}" >
+                            data-toggle="collapse" data-target="#{{ weapon_type|cut:' ' }}" >
                             <div class="ml-1 font-weight-bold" style="letter-spacing: 0.03rem;">{{ weapon_type.name }}</div>
                         </td>
                         <td class="align-center"><small>{{ weapon_type.damage_types.first.short }}</small></td>
@@ -112,7 +112,7 @@
                             </tr>
                         {% endif %}
                     {% endfor %}
-                    <tr id="{{ weapon_type|cut:" " }}" class="collapse {% if forloop.counter|divisibleby:2 %} bg-gray {% endif %}">
+                    <tr id="{{ weapon_type|cut:' ' }}" class="collapse {% if forloop.counter|divisibleby:2 %} bg-gray {% endif %}">
                         <td colspan="10" class="px-2">
                             <div class="m-1 mr-2 font-italic text-justify">
                                 {{ weapon_type.description|linebreaksbr }}
