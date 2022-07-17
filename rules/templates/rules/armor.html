@@ -31,7 +31,7 @@
             <tbody class="align-center dark">
                 {% for plate in plates %}
                     <tr>
-                        <td class="{% if plate.description %} hover-blue {% endif %} align-left" data-toggle="collapse" data-target="#{{ plate|remove_special_chars }}">{{ plate.name }}</td>
+                        <td class="{% if plate.description %} hover-blue {% endif %} align-left" data-toggle="collapse" data-target="#{{ plate|cut:" " }}">{{ plate.name }}</td>
                         <td class="rules-green">{% if plate.armor_class_bonus %} +{{ plate.armor_class_bonus }} {% endif %}</td>
                         <td class="rules-green">{{ plate.parrying }}</td>
                         <td>{{ plate.endurance }}</td>
@@ -39,7 +39,7 @@
                         <td>{% if plate.comment %} {{ plate.comment }} {% endif %}</td>
                     </tr>
                     {% if plate.description %}
-                        <tr id="{{ plate|remove_special_chars }}" class="collapse">
+                        <tr id="{{ plate|cut:" " }}" class="collapse">
                             <td colspan="10" class="px-2 align-left">
                                 <br>
                                     {{ plate.description|linebreaksbr }}

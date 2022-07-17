@@ -1,7 +1,7 @@
 {% load static %}
 {% load custom_filters %}
 
-<div class="d-flex flex-nowrap hover-pointer" data-toggle="collapse" data-target="#{{ skill|remove_special_chars }}{{ skill_type|remove_special_chars }}">
+<div class="d-flex flex-nowrap hover-pointer" data-toggle="collapse" data-target="#{{ skill|cut:" " }}{{ skill_type|cut:" " }}">
     {% if skilltype_kind == 'Moce Kapłańskie' or skilltype_kind == 'Zaklęcia' or skilltype_kind == 'Moce Teurgiczne' %}
         <img class="img-skill" src="{% static 'img/'|add:skill.skill_levels.first.level|add:'.png' %}">
     {% else %}

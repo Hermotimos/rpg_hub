@@ -2,7 +2,7 @@
 {% load custom_filters %}
 
 <div class="d-flex flex-nowrap hover-pointer" data-toggle="collapse"
-     data-target="#{{ acquisition.skill_level.skill|remove_special_chars }}{{ skill_type|remove_special_chars }}{{ acquisition.weapon.id }}{{ acquisition.sphragis.id }}">
+     data-target="#{{ acquisition.skill_level.skill|cut:" " }}{{ skill_type|cut:" " }}{{ acquisition.weapon.id }}{{ acquisition.sphragis.id }}">
     {% if skilltype_kinds == 'Moce Kapłańskie' or skilltype_kinds == 'Zaklęcia' or skilltype_kinds == 'Moce Teurgiczne' %}
         <img class="img-skill" src="{% static 'img/'|add:acquisition.skill_level.level|add:'.png' %}">
     {% else %}

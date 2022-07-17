@@ -54,7 +54,7 @@
                     </small>
                 </div>
             {% endif %}
-            <div class="row collapse" id="{{ acquisition.skill_level.skill|remove_special_chars }}{{ skill_type|remove_special_chars }}{{ acquisition.weapon.id }}{{ acquisition.sphragis.id }}">
+            <div class="row collapse" id="{{ acquisition.skill_level.skill|cut:" " }}{{ skill_type|cut:" " }}{{ acquisition.weapon.id }}{{ acquisition.sphragis.id }}">
                 {% with level_img='img/'|add:acquisition.skill_level.level|add:'.png' %}
                     {% with skill_or_synergy_level=acquisition.skill_level type='skill_level' %}
                         {% include 'prosoponomikon/_acquisition_level.html' %}

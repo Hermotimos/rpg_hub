@@ -20,7 +20,7 @@
                     
                     <div class="d-flex flex-row mb-2">
                         {% include 'rules/_skill_img.html' %}
-                        <div class="skill-or-synergy-name ml-2 mt-2" data-toggle="collapse" data-target="#{{ skill|remove_special_chars }}">
+                        <div class="skill-or-synergy-name ml-2 mt-2" data-toggle="collapse" data-target="#{{ skill|cut:" " }}">
                             <a class="hover-blue font-weight-bold" href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
                                 {{ skill.name }}
                             </a>
@@ -30,7 +30,7 @@
                     <div class="d-flex flex-row">
                         <div class="col-1"></div>
                         <div class="col-11 p-0">
-                            <div class="collapse show mb-4" id="{{ skill|remove_special_chars }}">
+                            <div class="collapse show mb-4" id="{{ skill|cut:" " }}">
                                 {% for kn_packet in skill.knowledge_packets.all %}
                                     {% include 'knowledge/_knowledge_packet.html' %}
                                 {% endfor %}

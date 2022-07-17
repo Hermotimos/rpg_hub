@@ -7,7 +7,7 @@
     
     <div class="d-flex flex-row">
         
-        <div class="d-flex flex-nowrap hover-pointer m-0 p-0" data-toggle="collapse" data-target="#{{ synergy|remove_special_chars }}">
+        <div class="d-flex flex-nowrap hover-pointer m-0 p-0" data-toggle="collapse" data-target="#{{ synergy|cut:" " }}">
             {% for skill in synergy.skills.all %}
                 {% if skill.image %}
                     <img class="img-skill mx-sm-1" src="{{ skill.image.url }}">
@@ -25,7 +25,7 @@
             {% else %}
                 {{ synergy.name }}
             {% endif %}
-            <div class="row collapse mt-2" id="{{ synergy|remove_special_chars }}">
+            <div class="row collapse mt-2" id="{{ synergy|cut:" " }}">
                 {% for synergy_level in synergy.synergy_levels.all %}
                     {% with level_img='img/'|add:synergy_level.level|add:'.png' %}
                         {% with skill_or_synergy_level=synergy_level type='synergy_level' %}
