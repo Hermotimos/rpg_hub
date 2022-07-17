@@ -25,7 +25,7 @@
             {% else %}
                 {{ synergy.name }}
             {% endif %}
-            <div class="row collapse mt-2" id="{{ synergy|remove_special_chars }}{{ collapse_id_suffix }}">
+            <div class="row collapse mt-2" id="{{ synergy|remove_special_chars }}">
                 {% for synergy_level in synergy.synergy_levels.all %}
                     {% with level_img='img/'|add:synergy_level.level|add:'.png' %}
                         {% with skill_or_synergy_level=synergy_level type='synergy_level' %}

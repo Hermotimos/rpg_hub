@@ -51,7 +51,7 @@
                     <small class="smaller font-italic text-muted">{{ skill.name_origin }}</small>
                 </div>
             {% endif %}
-            <div class="row collapse" id="{{ skill|remove_special_chars }}{{ id_suffix }}">
+            <div class="row collapse" id="{{ skill|remove_special_chars }}{{ skill_type }}">
                 {% for skill_level in skill.skill_levels.all %}
                     {% if not forloop.last and max_level_only %}
                         <!-- When called from Prosoponomikon skip all levels but the highest -->

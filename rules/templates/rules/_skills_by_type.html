@@ -38,9 +38,7 @@
                             {% endfor %}
                         {% else %}
                             {% for skill in skills %}
-                                {% with id_suffix=skill_type.name|remove_special_chars %}
-                                    {% include 'rules/_skill.html' %}
-                                {% endwith %}
+                                {% include 'rules/_skill.html' %}
                             {% endfor %}
                         {% endif %}
                     
@@ -60,11 +58,9 @@
         </div>
         <div id="collapse{{ panel_id }}" class="collapse show" aria-labelledby="all-skills" data-parent="#accordion{{ panel_id }}">
             <div class="card-body container">
-                {% with id_suffix="skills-all" %}
-                    {% for skill in skills %}
-                        {% include 'rules/_skill.html' %}
-                    {% endfor %}
-                {% endwith %}
+                {% for skill in skills %}
+                    {% include 'rules/_skill.html' %}
+                {% endfor %}
             </div>
         </div>
     </div>
