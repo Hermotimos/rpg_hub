@@ -12,8 +12,8 @@
             <div>
                 <!-- For GM make skill name into a link to admin change form -->
                 {% if request.current_profile.status == 'gm' %}
-                    <a class="hover-blue" href="{% url 'admin:prosoponomikon_acquisition_change' acquisition.id %}"
-                       target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja Akwizycji Umiejętności">
+                    <a class="hover-blue" href="{% url 'admin:prosoponomikon_acquisition_change' acquisition.id %}" target="_blank"
+                       data-toggle="tooltip" data-placement="right" title="Edycja Akwizycji Umiejętności">
                 {% endif %}
                 
                 {{ acquisition.skill_level.skill.name }}
@@ -40,23 +40,12 @@
                 </small>
             </div>
             
-            {% if acquisition.sphragis %}
-                <div class="mt-n5 pt-3 mb-n2 ml-1">
-                    {% if request.current_profile.can_view_all %}
-                        <small class="smaller font-italic text-muted">
-                            {{ acquisition.skill_level.skill.name_origin }}
-                        </small>
-                        <small class="smaller ml-1"> |</small>
-                    {% endif %}
-                    <small class="smaller text-muted">
-                        {% if acquisition.sphragis %}
-                            Sphragis {{ acquisition.sphragis.name_genitive }}
-                        {% endif %}
-                    </small>
-                </div>
-            {% endif %}
-            
             <div class="row collapse" id="{{ acquisition.skill_level.skill|cut:' ' }}{{ skill_type|cut:' ' }}{{ acquisition.weapon.id }}{{ acquisition.sphragis.id }}">
+                {% if request.current_profile.can_view_all %}
+                    <span class="ml-4 font-14 font-italic text-muted">
+                        * {{ acquisition.skill_level.skill.name_origin }}
+                    </span>
+                {% endif %}
                 {% with level_img='img/'|add:acquisition.skill_level.level|add:'.png' %}
                     {% with skill_or_synergy_level=acquisition.skill_level type='skill_level' %}
                         {% include 'prosoponomikon/_acquisition_level.html' %}
