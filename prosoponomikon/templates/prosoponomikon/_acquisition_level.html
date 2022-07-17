@@ -12,26 +12,20 @@
             
                     {% if type == 'skill_level' %}
                         {% if "Moce Kapłańskie" in skilltype_kinds %}
-                        <a href="{% url 'admin:rules_priestsskilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                            <a href="{% url 'admin:rules_priestsskilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja"></a>
                         {% elif "Zaklęcia" in skilltype_kinds %}
-                        <a href="{% url 'admin:rules_sorcerersskilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                            <a href="{% url 'admin:rules_sorcerersskilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja"></a>
                         {% elif "Moce Teurgiczne" in skilltype_kinds %}
-                        <a href="{% url 'admin:rules_theurgistsskilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                            <a href="{% url 'admin:rules_theurgistsskilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja"></a>
                         {% else %}
-                        <a href="{% url 'admin:rules_skilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                            <a href="{% url 'admin:rules_skilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja"></a>
                         {% endif %}
-                            <img class="img-xs" src="{% static level_img %}">
-                        </a>
-                        
                     {% elif type == 'synergy_level' %}
                         <a href="{% url 'admin:rules_synergylevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
                             <img class="img-xs" src="{% static level_img %}">
                         </a>
-                        
                     {% endif %}
                     
-                {% else %}
-                    <img class="img-xs" src="{% static level_img %}">
                 {% endif %}
             
             {% endif %}

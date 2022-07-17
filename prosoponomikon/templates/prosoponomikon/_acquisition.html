@@ -27,9 +27,6 @@
                 {% endif %}
                 
                 {% if request.current_profile.status == 'gm' %}
-                        {% if acquisition.skill_level.skill.name_second %}
-                            | {{ acquisition.skill_level.skill.name_second }}
-                        {% endif %}
                     </a>
                 {% endif %}
                 
@@ -41,11 +38,6 @@
             </div>
             
             <div class="row collapse" id="{{ acquisition.skill_level.skill|cut:' ' }}{{ skill_type|cut:' ' }}{{ acquisition.weapon.id }}{{ acquisition.sphragis.id }}">
-                {% if request.current_profile.can_view_all %}
-                    <span class="ml-4 font-14 font-italic text-muted">
-                        * {{ acquisition.skill_level.skill.name_origin }}
-                    </span>
-                {% endif %}
                 {% with level_img='img/'|add:acquisition.skill_level.level|add:'.png' %}
                     {% with skill_or_synergy_level=acquisition.skill_level type='skill_level' %}
                         {% include 'prosoponomikon/_acquisition_level.html' %}

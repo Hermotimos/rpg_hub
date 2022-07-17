@@ -1,14 +1,18 @@
 {% load static %}
 {% load custom_filters %}
 
-<div class="d-flex flex-nowrap hover-pointer" data-toggle="collapse" data-target="#{{ skill|cut:' ' }}{{ skill_type|cut:' ' }}">
-    {% if skilltype_kind == 'Moce Kapłańskie' or skilltype_kind == 'Zaklęcia' or skilltype_kind == 'Moce Teurgiczne' %}
-        <img class="img-skill" src="{% static 'img/'|add:skill.skill_levels.first.level|add:'.png' %}">
-    {% else %}
-        {% if skill.image %}
-            <img class="img-skill mr-sm-1" src="{{ skill.image.url }}">
+
+<div data-toggle="tooltip" data-placement="top" data-html="true"
+     title="{% if request.current_profile.can_view_all and skilltype_kind in 'Moce Kapłańskie,Moce Teurgiczne,Zaklęcia' %}{{ skill.name_second }}<br>{{ skill.name_origin }}{% endif %}">
+    <div class="d-flex flex-nowrap hover-pointer" data-toggle="collapse" data-target="#{{ skill|cut:' ' }}{{ skill_type|cut:' ' }}">
+        {% if skilltype_kind == 'Moce Kapłańskie' or skilltype_kind == 'Zaklęcia' or skilltype_kind == 'Moce Teurgiczne' %}
+            <img class="img-skill" src="{% static 'img/'|add:skill.skill_levels.first.level|add:'.png' %}">
         {% else %}
-            <img class="img-skill mr-sm-1" src="{% static 'img/skill-default.png' %}">
+            {% if skill.image %}
+                <img class="img-skill mr-sm-1" src="{{ skill.image.url }}">
+            {% else %}
+                <img class="img-skill mr-sm-1" src="{% static 'img/skill-default.png' %}">
+            {% endif %}
         {% endif %}
-    {% endif %}
+    </div>
 </div>

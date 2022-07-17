@@ -21,7 +21,7 @@
                         </a>
                     {% elif skilltype_kind == 'Moce Kapłańskie' %}
                         <a class="hover-blue" href="{% url 'admin:rules_priestsskill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja Umiejętności">
-                            {{ skill.name }} ({{ skill.name_second }})
+                            {{ skill.name }}
                         </a>
                     {% elif skilltype_kind == 'Zaklęcia' %}
                         <a class="hover-blue" href="{% url 'admin:rules_sorcerersskill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja Umiejętności">
@@ -41,12 +41,6 @@
                     {% endif %}
                 </small>
             </div>
-            
-            {% if skill.name_origin and request.current_profile.can_view_all %}
-                <div class="mt-n5 pt-3 mb-n2">
-                    <small class="smaller font-italic text-muted">{{ skill.name_origin }}</small>
-                </div>
-            {% endif %}
             
             <div class="row collapse" id="{{ skill|cut:' ' }}{{ skill_type|cut:' ' }}">
                 {% for skill_level in skill.skill_levels.all %}
