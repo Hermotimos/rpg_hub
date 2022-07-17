@@ -8,6 +8,7 @@
         {% include 'rules/_skill_img.html' %}
         
         <div class="skill-or-synergy-name ml-2 mt-1 mt-lg-2">
+            
             <div>
                 {% if request.current_profile.status == 'gm' %}
                     {% if skilltype_kind == 'Powszechne' %}
@@ -34,23 +35,19 @@
                 {% else %}
                     {{ skill.name }}
                 {% endif %}
-                <!-- Used when template is called from Prosoponomikon -->
-                {% if max_level_only %}
-                    [{{ skill.skill_levels.all|get_max_skill_level_no }}]
-                {% endif %}
                 <small class="rules-gray1 smaller">
                     {% if skill.tested_trait %}
                         ({{ skill.tested_trait }})
                     {% endif %}
                 </small>
-                <br>
-                
             </div>
+            
             {% if skill.name_origin and request.current_profile.can_view_all %}
                 <div class="mt-n5 pt-3 mb-n2">
                     <small class="smaller font-italic text-muted">{{ skill.name_origin }}</small>
                 </div>
             {% endif %}
+            
             <div class="row collapse" id="{{ skill|cut:' ' }}{{ skill_type|cut:' ' }}">
                 {% for skill_level in skill.skill_levels.all %}
                     {% if not forloop.last and max_level_only %}
@@ -64,6 +61,7 @@
                     {% endif %}
                 {% endfor %}
             </div>
+            
         </div>
         
     </div>

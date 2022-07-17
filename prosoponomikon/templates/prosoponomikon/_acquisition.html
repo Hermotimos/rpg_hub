@@ -8,6 +8,7 @@
         {% include 'prosoponomikon/_acquisition_img.html' %}
         
         <div class="skill-or-synergy-name ml-2 mt-1 mt-lg-2">
+            
             <div>
                 <!-- For GM make skill name into a link to admin change form -->
                 {% if request.current_profile.status == 'gm' %}
@@ -37,8 +38,8 @@
                         ({{ acquisition.skill_level.skill.tested_trait }})
                     {% endif %}
                 </small>
-                <br>
             </div>
+            
             {% if acquisition.sphragis %}
                 <div class="mt-n5 pt-3 mb-n2 ml-1">
                     {% if request.current_profile.can_view_all %}
@@ -54,6 +55,7 @@
                     </small>
                 </div>
             {% endif %}
+            
             <div class="row collapse" id="{{ acquisition.skill_level.skill|cut:' ' }}{{ skill_type|cut:' ' }}{{ acquisition.weapon.id }}{{ acquisition.sphragis.id }}">
                 {% with level_img='img/'|add:acquisition.skill_level.level|add:'.png' %}
                     {% with skill_or_synergy_level=acquisition.skill_level type='skill_level' %}
@@ -61,6 +63,7 @@
                     {% endwith %}
                 {% endwith %}
             </div>
+            
         </div>
         
     </div>
