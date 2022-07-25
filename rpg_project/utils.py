@@ -351,10 +351,12 @@ def auth_profile(allowed_status: list):
     def wrapper(view_func):
         
         def wrapped(request, *args, **kwargs):
-            print(request.session.get('fdsfsds'))
-            current_profile = Profile.objects.get(id=request.session.get('profile_id'))
+            try:
+                current_profile = Profile.objects.get(id=request.session.get('profile_id'))
+            except Profile.DoesNotExist:
+                current_profile = None
             
-            if not (current_profile or current_profile.character.id):
+            if not current_profile or not current_profile.character.id:
                 auth.logout(request)
                 messages.warning(request, 'Wystąpił problem z uwierzytelnieniem sesji użytkownika. Zaloguj się ponownie!')
                 return redirect('users:logout')
