@@ -1,14 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load custom_filters %}
+{% load cache %}
+
 
 {% block head_extra %}
     <link rel="stylesheet" href="{% static 'css/rules.css' %}">
 {% endblock head_extra %}
 
-{% block content %}
-    <div class="rules-styling">
 
+{% block content %}
+
+    <div class="rules-styling">
+        
         <h2>
             Zbroja
         </h2>
@@ -221,4 +225,5 @@
         </table>
         
     </div>
+
 {% endblock content %}

@@ -1,5 +1,6 @@
 {% load custom_filters %}
 
+
 <!-- Modal controls -->
 <figure class="modal-img figure pointer text-center mx-1 my-0" data-toggle="modal" data-target="#imgModal{{ picture.id }}">
     <img src="{{ picture.image.image.url }}">
@@ -12,7 +13,9 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                <img class="border border-dark" src="{{ picture.image.image.url }}">
+                {% cache 8640 picture.image.image.url request.current_profile.user.username %}
+                    <img class="border border-dark" src="{{ picture.image.image.url }}">
+                {% endcache %}
             </div>
         </div>
     </div>
