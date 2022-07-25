@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load custom_filters %}
+{% load cache %}
+
 
 {% block head_extra %}
     <link rel="stylesheet" href="{% static 'css/rules.css' %}">
 {% endblock head_extra %}
 
 {% block content %}
+{% cache 500 weapon_types request.current_profile.user.username %}
+
     <div class="rules-styling">
 
         <h2>Typy broni</h2>
@@ -226,6 +230,7 @@
             </tbody>
         </table>
         
-        
     </div>
+
+{% endcache %}
 {% endblock content %}
