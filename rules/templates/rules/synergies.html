@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load custom_filters %}
+{% load cache %}
 
 
 {% block head_extra %}
@@ -9,6 +10,7 @@
 
 
 {% block content %}
+{% cache 360 synergies request.current_profile.user.username %}
     <div class="rules-styling">
         <div class="mt-5">
             {% with show_levels=False %}
@@ -18,4 +20,5 @@
             {% endwith %}
         </div>
     </div>
+{% endcache %}
 {% endblock content %}

@@ -10,6 +10,7 @@
 
 
 {% block content %}
+{% cache 360 armor request.current_profile.user.username %}
 
     <div class="rules-styling">
         
@@ -226,4 +227,5 @@
         
     </div>
 
+{% endcache %}
 {% endblock content %}
