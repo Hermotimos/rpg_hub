@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load custom_filters %}
-
+{% load cache %}
 
 {% block head_extra %}
     <link rel="stylesheet" href="{% static 'css/rules.css' %}">
@@ -9,6 +9,7 @@
 
 
 {% block content %}
+{% cache 8640 weapon_types request.current_profile.user.username %}
 
     <div class="rules-styling">
 
@@ -231,4 +232,5 @@
         
     </div>
 
+{% endcache %}
 {% endblock content %}
