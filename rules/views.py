@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
 from django.shortcuts import render, redirect
+from django.views.decorators.cache import cache_page
 
+from rpg_project.utils import auth_profile
 from rules.models import (
     Plate,
     Profession,
@@ -10,7 +12,6 @@ from rules.models import (
     Skill, SkillType,
     WeaponType,
 )
-from rpg_project.utils import auth_profile
 from rules.utils import get_overload_ranges, get_visible_professions, \
     can_view_special_rules, get_wounds_range_sets
 
@@ -238,6 +239,7 @@ def rules_fitness_and_tricks_view(request):
     return render(request, 'rules/fitness_and_tricks.html', context)
 
 
+@cache_page(60 * 15)
 @login_required
 @auth_profile(['all'])
 def rules_weapon_types_view(request):
