@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db.models import Prefetch, Q
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
 
 from communications.forms import (
     AnnouncementCreateForm,
@@ -283,6 +285,8 @@ def thread_view(request, thread_id, tag_title):
         return redirect('users:dupa')
     
 
+@cache_page(60 * 60 * 24 * 100)
+@vary_on_cookie
 @login_required
 @auth_profile(['all'])
 def create_thread_view(request, thread_kind):
