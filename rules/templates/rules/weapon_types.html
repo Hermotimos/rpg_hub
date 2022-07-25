@@ -9,7 +9,7 @@
 {% endblock head_extra %}
 
 {% block content %}
-{% cache 500 weapon_types request.current_profile.user.username %}
+{% cache 60480 weapon_types request.current_profile.user.username %}
 
     <div class="rules-styling">
 
@@ -21,7 +21,7 @@
         <p>
             <b>§ Obrażenia.</b>
             Standardowe Obrażenia typowego egzemplarza danej broni w połączeniu z informacją o ich Typie (K - kłute, O - obuchowe, S - sieczne).
-            Niektóre typy broni posiadają możliwość zastosowania więcej niż jednego Typu Obrażeń, w zależności od sposobu użycia.
+            Niektóre typy broni dają możliwość zastosowania więcej niż jednego Typu Obrażeń, w zależności od sposobu użycia.
             Ponadto, w niektórych przypadkach Typ Obrażeń decyduje o odmiennych właściwościach ataku opisanych w sekcjach "Specjalne" oraz "Zasięg".
         </p>
         <p>
