@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
 from django.shortcuts import render, redirect
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
 
 from imaginarion.models import Picture, PictureImage, PictureSet
 from knowledge.forms import KnPacketForm, PlayerKnPacketForm
@@ -12,6 +14,8 @@ from rpg_project.utils import handle_inform_form, auth_profile
 from rules.models import Skill
 
 
+@cache_page(60 * 60)
+@vary_on_cookie
 @login_required
 @auth_profile(['all'])
 def almanac_view(request):
@@ -36,6 +40,8 @@ def almanac_view(request):
     return render(request, 'knowledge/skills_with_kn_packets.html', context)
 
 
+@cache_page(60 * 60)
+@vary_on_cookie
 @login_required
 @auth_profile(['all'])
 def kn_packet_form_view(request, kn_packet_id):

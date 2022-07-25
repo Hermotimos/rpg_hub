@@ -285,7 +285,7 @@ def thread_view(request, thread_id, tag_title):
         return redirect('users:dupa')
     
 
-@cache_page(60 * 60 * 24 * 100)
+@cache_page(60 * 60 * 24)
 @vary_on_cookie
 @login_required
 @auth_profile(['all'])

@@ -2,9 +2,11 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch, F
+from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
 
 from imaginarion.models import Picture, PictureImage, PictureSet
 from knowledge.forms import BioPacketForm, PlayerBioPacketForm
@@ -17,16 +19,11 @@ from toponomikon.models import Location
 from users.models import Profile, User
 
 
+@cache_page(60 * 5)
+@vary_on_cookie
 @login_required
 @auth_profile(['all'])
 def prosoponomikon_acquaintanceships_view(request):
-    # for character in Character.objects.all():
-    #     for skill_level in character.profile.skill_levels.all():
-    #         Acquisition.objects.create(
-    #             character=character,
-    #             skill_level=skill_level,
-    #             weapon=skill_level.skill.weapon,
-    #         )
     current_profile = request.current_profile
     acquaintanceships = current_profile.character.acquaintanceships()
     context = {
@@ -36,6 +33,8 @@ def prosoponomikon_acquaintanceships_view(request):
     return render(request, 'prosoponomikon/acquaintances.html', context)
 
 
+@cache_page(60 * 5)
+@vary_on_cookie
 @login_required
 @auth_profile(['all'])
 def prosoponomikon_character_view(request, character_id):
@@ -143,6 +142,8 @@ def prosoponomikon_character_view(request, character_id):
         return redirect('users:dupa')
 
 
+@cache_page(60 * 60)
+@vary_on_cookie
 @login_required
 @auth_profile(['all'])
 def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0):
