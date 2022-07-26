@@ -211,38 +211,25 @@ def game_event_with_caption(game_events_qs):
     return game_event
 
 
-def sssss(request):
-    import time
-    
-    from chronicles.views import chronicle_all_view
-    resp = chronicle_all_view(request)
-    print(resp.content)
-    time.sleep(4)
-    print('slept')
-
-
 @login_required
 @auth_profile(['all'])
 def home_view(request):
+    current_profile = request.current_profile
+    
     # from imaginarion.models import PictureImage
     # first = PictureImage.objects.first()
     # print(first.image.url)  # /media/post_pics/knowledge_Struktura%20organizacyjna%20Szarej%20Gwardii.jpg
     # print(first.image.path) # C:\Users\Lukasz\PycharmProjects\rpg_hub\media\post_pics\knowledge_Struktura organizacyjna Szarej Gwardii.jpg
-
-    from concurrent.futures import ThreadPoolExecutor
-    executor = ThreadPoolExecutor(max_workers=1)
-    executor.submit(sssss, request)
     
-    current_profile = request.current_profile
-    
-    acquaintanceships = current_profile.character.acquaintanceships()
-    known_locations = current_profile.locations_known_annotated()
-    known_gameevents = current_profile.gameevents_known_annotated().annotate(
-        text_len=Length('description_long')).filter(text_len__gt=400)
-    
-    rand_acquaintanceships = sample_from_qs(qs=acquaintanceships, max_size=4)
-    rand_locations = sample_from_qs(qs=known_locations, max_size=2)
-    rand_gameevent = game_event_with_caption(known_gameevents)
+    rand_acquaintanceships = sample_from_qs(
+        qs=current_profile.character.acquaintanceships(),
+        max_size=4)
+    rand_locations = sample_from_qs(
+        qs=current_profile.locations_known_annotated(),
+        max_size=2)
+    rand_gameevent = game_event_with_caption(
+        game_events_qs=current_profile.gameevents_known_annotated().annotate(
+            text_len=Length('description_long')).filter(text_len__gt=400))
     
     context = {
         'page_title': 'Hyllemath',
