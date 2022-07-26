@@ -9,7 +9,6 @@ from rpg_project.utils import handle_inform_form, auth_profile
 from toponomikon.models import Location, LocationType, SecondaryLocation
 
 
-@cache_page(60 * 5)
 @vary_on_cookie
 @login_required
 @auth_profile(['all'])
