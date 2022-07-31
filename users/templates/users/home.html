@@ -4,7 +4,7 @@
 {% block content %}
 
 <!-- TODO del condition when ready -->
-{% if request.current_profile.user.username != 'Marta' and request.current_profile.user.username != 'Dawid' and request.current_profile.user.username != 'Hubert' and request.current_profile.user.username != 'Tomek' %}
+{% if request.current_profile.character.fullname not in 'Ilen z Astinary, Alora z Astinary, Heston z Astinary, Syngir' %}
 
     <article>
         

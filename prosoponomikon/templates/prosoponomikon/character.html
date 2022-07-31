@@ -27,7 +27,7 @@
                         
                         
         <!-- Temp delete when GO LIVE -->
-        {% if request.current_profile.user.username != 'Marta' and request.current_profile.user.username != 'Dawid' and request.current_profile.user.username != 'Hubert' and request.current_profile.user.username != 'Tomek' %}
+        {% if request.current_profile.character.fullname != 'Marta' and request.current_profile.character.fullname != 'Ilen' and request.current_profile.character.first_name != 'Syngir' and request.current_profile.character.fullname != 'Heston' %}
                         <!-- BUTTONS -->
                         <div class="row">
                             <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Przejdź do Prosoponomikonu">
@@ -161,7 +161,7 @@
           
             
     <!-- Temp delete when GO LIVE -->
-    {% if request.current_profile.user.username != 'Marta' and request.current_profile.user.username != 'Dawid' and request.current_profile.user.username != 'Hubert' and request.current_profile.user.username != 'Tomek' %}
+    {% if request.current_profile.character.fullname not in 'Ilen z Astinary, Alora z Astinary, Heston z Astinary, Syngir' %}
             
             <!-- Known characters -->
             {% if acquaintanceships %}

@@ -60,6 +60,11 @@ def prosoponomikon_character_view(request, character_id):
             bio_packets = BiographyPacket.objects.all()
         # Player or NPC viewing another Character
         else:
+            # TODO temp
+            if request.current_profile.character.fullname in 'Ilen z Astinary, Alora z Astinary, Heston z Astinary, Syngir':
+                return redirect('users:dupa')
+            # TODO end temp
+            
             bio_packets = (
                 current_profile.biography_packets.all()
                 | current_profile.authored_bio_packets.all()
