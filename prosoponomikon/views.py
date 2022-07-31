@@ -61,7 +61,7 @@ def prosoponomikon_character_view(request, character_id):
         # Player or NPC viewing another Character
         else:
             # TODO temp
-            if request.current_profile.character.fullname in 'Ilen z Astinary, Alora z Astinary, Heston z Astinary, Syngir':
+            if request.current_profile.character.fullname in 'Ilen z Astinary, Alora z Astinary, Murkon Lebioda, Syngir':
                 return redirect('users:dupa')
             # TODO end temp
             
