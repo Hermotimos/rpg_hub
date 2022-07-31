@@ -15,6 +15,7 @@ from django.db.models import (
 )
 
 from users import managers
+from django.conf import settings
 
 
 class Profile(Model):
@@ -56,7 +57,14 @@ class Profile(Model):
     
     def __str__(self):
         return str(self.character) or self.user.username
-                
+    
+    @property
+    def user_img_url(self):
+        try:
+            return self.user_image.url
+        except ValueError:
+            return f"{settings.STATIC_URL}img/profile_default.jpg"
+        
     def gameevents_known_annotated(self):
         """Get GameEvent set known to the profile, annotate if GameEvent
         is known only indirectly.

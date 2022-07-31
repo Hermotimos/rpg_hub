@@ -1,7 +1,7 @@
 
 
 {% if thread_kind == 'Announcement' %}
-     <img class="portait img-xs ml-1 border border-dark rounded" src="{{ author.grouper.user_image.url }}">
+     <img class="portait img-xs ml-1 border border-dark rounded" src="{{ author.grouper.user_img_url }}">
 {% elif thread_kind == 'Debate' %}
      <img class="portait img-xs ml-1 border border-dark rounded-circle" src="{{ author.grouper.image.url }}">
 {% endif %}

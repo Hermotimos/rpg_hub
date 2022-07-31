@@ -1,7 +1,7 @@
 
 
 {% if thread_kind == 'Announcement' %}
-     <img class="portait img-lg rounded" src="{{ profile.user_image.url }}">
+     <img class="portait img-lg rounded" src="{{ profile.user_img_url }}">
 {% elif thread_kind == 'Debate' %}
      <img class="portait img-lg rounded-circle" src="{{ profile.image.url }}">
 {% endif %}

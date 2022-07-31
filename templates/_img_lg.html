@@ -1,7 +1,7 @@
 
 
 {% if thread.kind == 'Announcement' %}
-     <img class="img-fluid rounded" src="{{ statement.author.user_image.url }}">
+     <img class="img-fluid rounded" src="{{ statement.author.user_img_url }}">
      <figcaption class="font-12 font-italic text-center pt-1">{{ profile.user.username }}</figcaption>
 {% elif thread.kind == 'Debate' %}
      <img class="img-fluid rounded-circle" src="{{ statement.author.image.url }}">
