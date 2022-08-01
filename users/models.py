@@ -16,6 +16,7 @@ from django.db.models import (
 
 from users import managers
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class Profile(Model):
@@ -58,7 +59,7 @@ class Profile(Model):
     def __str__(self):
         try:
             return str(self.character)
-        except:
+        except ObjectDoesNotExist:
             return self.user.username
     
     @property
