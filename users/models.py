@@ -56,7 +56,10 @@ class Profile(Model):
         ordering = ['-status', '-is_active', 'character__fullname']
     
     def __str__(self):
-        return str(self.character) or self.user.username
+        try:
+            return str(self.character)
+        except:
+            return self.user.username
     
     @property
     def user_img_url(self):
