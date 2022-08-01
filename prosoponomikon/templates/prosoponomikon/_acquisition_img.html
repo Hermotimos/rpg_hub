@@ -9,7 +9,7 @@
         {% endif %}">
     <div class="d-flex flex-nowrap hover-pointer" data-toggle="collapse"
          data-target="#{{ acquisition.skill_level.skill|cut:' ' }}{{ skill_type|cut:' ' }}{{ acquisition.weapon.id }}{{ acquisition.sphragis.id }}">
-        {% if skilltype_kinds == 'Moce Kapłańskie' or skilltype_kinds == 'Zaklęcia' or skilltype_kinds == 'Moce Teurgiczne' %}
+        {% if skilltype_kinds in 'Moce Kapłańskie,Zaklęcia,Moce Teurgiczne' %}
             <img class="img-skill" src="{% static 'img/'|add:acquisition.skill_level.level|add:'.png' %}">
         {% else %}
             {% if acquisition.skill_level.skill.image %}
