@@ -120,29 +120,36 @@ def rules_skills_view(request, skilltype_kind):
     current_profile = request.current_profile
     user_profiles = current_profile.user.profiles.all()
 
-    skills_regular = Skill.objects.filter(types__kinds__name=skilltype_kind)
-    
-    if not current_profile.can_view_all:
-        skills_regular = skills_regular.filter(allowees__in=user_profiles)
-        
-    skills_regular = skills_regular.select_related('group__type')
-    skills_regular = skills_regular.prefetch_related(
+    skills = Skill.objects.filter(
+        types__kinds__name=skilltype_kind
+    ).prefetch_related(
         'skill_levels__perks__conditional_modifiers__conditions',
         'skill_levels__perks__conditional_modifiers__combat_types',
         'skill_levels__perks__conditional_modifiers__modifier__factor',
         'skill_levels__perks__comments',
+    ).select_related(
+        'group__type'
     ).distinct()
 
-    skill_types_regular = SkillType.objects.filter(kinds__name=skilltype_kind)
-    skill_types_regular = skill_types_regular.prefetch_related(
-        Prefetch('skills', queryset=skills_regular), 'skill_groups')
-    skill_types_regular = skill_types_regular.filter(skills__in=skills_regular).distinct()
-    
+    if not current_profile.can_view_all:
+        skills = skills.filter(allowees__in=user_profiles)
+
+    skill_types = SkillType.objects.prefetch_related(
+        Prefetch('skills', queryset=skills), 'skill_groups',
+    ).filter(
+        skills__in=skills
+    ).distinct()
+
+    if skilltype_kind in ["Powszechne", "Mentalne"]:
+        page_title = f"Umiejętności {skilltype_kind}"
+    else:
+        page_title = skilltype_kind
+        
     context = {
-        'page_title': f"Umiejętności {skilltype_kind}",
+        'page_title': page_title,
         'skilltype_kind': skilltype_kind,
-        'skill_types_regular': skill_types_regular,
-        'skills_regular': skills_regular,
+        'skill_types': skill_types,
+        'skills': skills,
     }
     return render(request, 'rules/skills.html', context)
 
