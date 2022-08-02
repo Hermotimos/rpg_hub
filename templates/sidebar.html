@@ -9,15 +9,9 @@
     <aside>
         <img class="account-img-sidebar" onload="showTime()" src="{{ request.current_profile.image.url }}">
         <h3 class="mb-4 text-center">
-            
-            <!-- TODO del condition when ready -->
-            {% if request.current_profile.user.username != 'Hubert' and request.current_profile.user.username != 'Tomek' %}
-                <a href="{% url 'prosoponomikon:character' request.current_profile.character.id %}">
-                   {{ request.current_profile.character.fullname }}
-                </a>
-            {% else %}
-                {{ request.current_profile.character.fullname }}
-            {% endif %}
+            <a href="{% url 'prosoponomikon:character' request.current_profile.character.id %}">
+               {{ request.current_profile.character.fullname }}
+            </a>
         </h3>
         
         <!-- For game master -->

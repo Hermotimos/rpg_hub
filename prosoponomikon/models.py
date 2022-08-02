@@ -221,7 +221,7 @@ class Character(Model):
     
     def informables(self):
         qs = Profile.active_players.select_related('character')
-        qs = qs.exclude(character__in=self.acquaintaned_to.all())
+        qs = qs.filter(character__in=self.acquaintaned_to.all())
         qs = qs.exclude(character=self)
         return qs
         
