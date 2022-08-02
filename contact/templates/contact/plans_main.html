@@ -8,9 +8,12 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <br>
-    <a href="{% url 'contact:plans-create' %}" class="btn btn-outline-dark">Nowy plan</a>
-    <br><br><br><br>
+    <article class="top-button">
+        <header class="mb-5">
+            <a href="{% url 'contact:plans-create' %}" class="btn btn-outline-dark">Nowy plan</a>
+        </header>
+    </article>
+
     {% for plan in plans %}
         <table>
             <tr>
