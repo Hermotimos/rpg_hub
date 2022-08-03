@@ -142,8 +142,8 @@ class SkillGroupAdmin(admin.ModelAdmin):
 
 
 class RegularSkillLevelInline(admin.TabularInline):
-    fields = ['level', 'description', 'acquired_by']
-    filter_horizontal = ['perks', 'acquired_by']
+    fields = ['level', 'description', 'acquired_by', 'perks']
+    filter_horizontal = ['acquired_by', 'perks']
     formfield_overrides = {
         models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
     }
@@ -158,8 +158,8 @@ class RegularSkillLevelInline(admin.TabularInline):
 @admin.register(Skill, RegularSkill, MentalSkill)
 class SkillAdmin(admin.ModelAdmin):
     fields = [
-        'name', 'weapon', 'tested_trait', 'name_origin', 'image', 'group',
-        'types', 'allowees',
+        'name', 'weapon', 'tested_trait', 'image', 'group', 'types',
+        'allowees',
     ]
     filter_horizontal = ['allowees', 'types']
     inlines = [RegularSkillLevelInline]
