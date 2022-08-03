@@ -257,6 +257,7 @@ class SynergyAdmin(admin.ModelAdmin):
 
 @admin.register(SkillLevel, RegularSkillLevel, MentalSkillLevel)
 class SkillLevelAdmin(admin.ModelAdmin):
+    fields = ['skill', 'level', 'description', 'perks', 'acquired_by']
     filter_horizontal = ['acquired_by', 'perks']
     formfield_overrides = {
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 8, 'cols': 80})},
