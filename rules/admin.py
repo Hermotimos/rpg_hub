@@ -294,8 +294,8 @@ class SynergyLevelAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 8, 'cols': 80})},
     }
-    list_display = ['name', 'description']
-    list_editable = ['description']
+    list_display = ['name', 'level', 'description']
+    list_editable = ['level', 'description']
     list_filter = [SynergyLevelFilter]
     list_select_related = ['synergy']
     search_fields = ['level', 'description']

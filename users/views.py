@@ -101,7 +101,6 @@ def change_password_view(request):
 @auth_profile(['all'])
 def edit_user_view(request):
     current_profile = request.current_profile
-    
     user_profiles = current_profile.user.profiles.all()
     
     if request.method == 'POST':
