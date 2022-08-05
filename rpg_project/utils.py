@@ -272,7 +272,7 @@ def update_rel_objs(instance, RelModel, rel_queryset, rel_name: str):
 
 def backup_db():
     date = time.strftime("%Y-%m-%d_%H-%M")
-    filename = f"_db_saves/hyllemath_prod_{date}.json"
+    filename = f"_db_saves/prod_hyllemath_{date}.json"
 
     delegator.run(
         f"pg_dump --dbname={settings.DEV_DATABASE_DNS} --format=c --no-owner --no-acl > {filename}")
