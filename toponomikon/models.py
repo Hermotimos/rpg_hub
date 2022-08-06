@@ -18,7 +18,7 @@ from users.models import Profile
 
 
 class LocationType(Model):
-    name = CharField(max_length=100)
+    name = CharField(unique=True, max_length=100)
     name_plural = CharField(max_length=100, blank=True, null=True)
     default_img = FK(
         to=Picture,
