@@ -13,7 +13,7 @@
                 <div class="container">
                     <div class="row">
                         <img class="toponomikon {% if this_location.only_indirectly %} img-grayscale {% endif %}"
-                             src="{% if this_location.main_image %} {{ this_location.main_image.image.image.url }} {% else %} {{ this_location.location_type.default_img.image.url }} {% endif %}">
+                             src="{% if this_location.main_image %} {{ this_location.main_image.image.image.url }} {% else %} {{ this_location.location_type.default_img.image.image.url }} {% endif %}">
                         {% if audio_set %}
                             <audio class="toponomikon-audio-main" controls loop>
                                 <!-- For Google Drive construct path by: https://docs.google.com/uc?export=download&id=XXXXXXXX
