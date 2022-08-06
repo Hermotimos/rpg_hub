@@ -20,8 +20,9 @@ from communications.models import (
     Thread,
     ThreadTag,
 )
-from rpg_project.utils import auth_profile
+from rpg_project.utils import auth_profile, OrderByPolish
 from users.models import Profile
+
 
 # TODO
 #  1) main views separate? or separate templates based on 'thread_kind' param?
@@ -49,6 +50,8 @@ def get_initiator(thread: Thread):
     Take the author of first Statement as the initiator; only in Announcements
     take the first player's or NPC's Profile as initiator.
     """
+    if not thread.statements.exists():
+        return None
     if thread.kind == "Debate":
         for statement in thread.statements.all():
             if statement.author.status != 'gm':
@@ -119,7 +122,7 @@ def threads_view(request, thread_kind, tag_title):
     else:
         page_title = "TODO"
         unseen = Thread.objects.none()
-    threads = threads.exclude(id__in=unseen)
+    threads = threads.exclude(id__in=unseen).order_by(OrderByPolish('title'))
 
     # Annotate threads with attribute 'initiator'
     for thread in threads:

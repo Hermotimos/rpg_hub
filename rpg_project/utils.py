@@ -7,7 +7,9 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib import messages, auth
 from django.core.mail import send_mail
+from django.db.models import Func
 from django.shortcuts import redirect
+
 from users.models import Profile
 
 
@@ -417,3 +419,20 @@ def get_obj_or_none(classmodel, **kwargs):
         return classmodel.objects.get(**kwargs)
     except classmodel.DoesNotExist:
         return None
+
+
+# -----------------------------------------------------------------------------
+
+
+class OrderByPolish(Func):
+    """A Func object for ordering by Polish alphabet characters."""
+    function = 'COLLATE'
+
+    def as_sql(self, compiler, connection, **extra_context):
+        return super().as_sql(
+            compiler, connection,
+            function='pl-PL-x-icu',
+            template='(%(expressions)s) COLLATE "%(function)s"',
+            **extra_context)
+
+# -----------------------------------------------------------------------------

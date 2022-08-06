@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
 from django.shortcuts import render, redirect
 
-from rpg_project.utils import auth_profile
+from rpg_project.utils import auth_profile, OrderByPolish
 from rules.models import (
     Plate,
     Profession,
@@ -86,17 +86,24 @@ def rules_professions_view(request, profession_type):
 
     professions = Profession.objects.filter(type=profession_type)
     subprofessions = SubProfession.objects.all()
-    essential_skills = Skill.objects.filter()
+    essential_skills = Skill.objects.order_by(OrderByPolish('name'))
 
     if not current_profile.can_view_all:
         professions = professions.filter(allowees__in=user_profiles)
         subprofessions = subprofessions.filter(allowees__in=user_profiles)
-        essential_skills = Skill.objects.filter(allowees__in=user_profiles).distinct()
+        essential_skills = essential_skills.filter(allowees__in=user_profiles).distinct()
 
     subprofessions = subprofessions.prefetch_related(
-        Prefetch('essential_skills', queryset=essential_skills)).distinct()
+        Prefetch('essential_skills', queryset=essential_skills)
+    ).order_by(
+        OrderByPolish('name')
+    ).distinct()
+    
     professions = professions.prefetch_related(
-        Prefetch('subprofessions', queryset=subprofessions))
+        Prefetch('subprofessions', queryset=subprofessions)
+    ).order_by(
+        OrderByPolish('name')
+    ).distinct()
 
     context = {
         'page_title': f'Klasy {profession_type}',
@@ -119,7 +126,7 @@ def rules_character_development_view(request):
 def rules_skills_view(request, skilltype_kind):
     current_profile = request.current_profile
     user_profiles = current_profile.user.profiles.all()
-
+    
     skills = Skill.objects.filter(
         types__kinds__name=skilltype_kind
     ).prefetch_related(
@@ -129,6 +136,8 @@ def rules_skills_view(request, skilltype_kind):
         'skill_levels__perks__comments',
     ).select_related(
         'group__type'
+    ).order_by(
+        OrderByPolish('name')
     ).distinct()
 
     if not current_profile.can_view_all:
@@ -158,9 +167,16 @@ def rules_skills_view(request, skilltype_kind):
 @auth_profile(['all'])
 def rules_synergies_view(request, skilltype_kind):
     current_profile = request.current_profile
+    
+    synergies = current_profile.synergies_allowed(
+        skilltype_kind=skilltype_kind
+    ).order_by(
+        OrderByPolish('name')
+    ).distinct()
+    
     context = {
         'page_title': f"Synergie {skilltype_kind}",
-        'synergies': current_profile.synergies_allowed(skilltype_kind=skilltype_kind),
+        'synergies': synergies,
     }
     return render(request, 'rules/synergies.html', context)
 
@@ -258,8 +274,11 @@ def rules_weapon_types_view(request):
     weapon_types = weapon_types.prefetch_related(
         Prefetch('comparables', queryset=weapon_types),  # filter out unknown
         'picture_set__pictures__image',
-        'damage_types')
-
+        'damage_types'
+    ).order_by(
+        OrderByPolish('name')
+    ).distinct()
+    
     context = {
         'page_title': 'Broń',
         'weapon_types': weapon_types,

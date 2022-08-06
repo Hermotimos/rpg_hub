@@ -5,7 +5,7 @@ from django_filters import (
     FilterSet,
     ModelMultipleChoiceFilter,
 )
-
+from rpg_project.utils import OrderByPolish
 from chronicles.models import GameEvent, PlotThread, Location, GameSession
 from users.models import Profile
 
@@ -18,7 +18,7 @@ def plot_threads(request):
             Q(events__participants=profile)
             | Q(events__informees=profile)
         )
-    return objects.distinct()
+    return objects.order_by(OrderByPolish('name')).distinct()
 
 
 def locations(request):

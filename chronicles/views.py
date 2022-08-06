@@ -12,9 +12,11 @@ from chronicles.models import (
     GameEvent,
     TimeUnit,
     Chronology,
+    PlotThread,
 )
-from rpg_project.utils import send_emails, auth_profile
+from rpg_project.utils import send_emails, auth_profile, OrderByPolish
 from users.models import Profile
+from toponomikon.models import Location
 
 
 # #################### CHRONICLE ####################
@@ -250,6 +252,8 @@ def timeline_view(request):
 
     events = GameEvent.objects.all()
     known_profiles = Profile.players.select_related('character', 'user')
+    plot_threads = PlotThread.objects.order_by(OrderByPolish('name'))
+    locations = Location.objects.order_by(OrderByPolish('name'))
     
     if not current_profile.can_view_all:
         events = events.filter(
@@ -267,8 +271,8 @@ def timeline_view(request):
     events = events.prefetch_related(
         Prefetch('participants', queryset=known_profiles),
         Prefetch('informees', queryset=known_profiles),
-        'plot_threads',
-        'locations',
+        Prefetch('plot_threads', queryset=plot_threads),
+        Prefetch('locations', queryset=locations),
     )
     events = events.order_by(
         # DON'T ORDER BY 'game': this would mix events from 2+ synchronic games

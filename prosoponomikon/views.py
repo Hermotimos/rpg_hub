@@ -13,8 +13,9 @@ from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
 from prosoponomikon.forms import CharacterCreateForm
 from prosoponomikon.models import Character, FirstNameGroup, FamilyName, \
-    Acquaintanceship, Acquisition
-from rpg_project.utils import handle_inform_form, backup_db, auth_profile
+    Acquaintanceship
+from rpg_project.utils import handle_inform_form, auth_profile, backup_db, \
+    OrderByPolish
 from toponomikon.models import Location
 from users.models import Profile, User
 
@@ -25,7 +26,10 @@ from users.models import Profile, User
 @auth_profile(['all'])
 def prosoponomikon_acquaintanceships_view(request):
     current_profile = request.current_profile
-    acquaintanceships = current_profile.character.acquaintanceships()
+    
+    acquaintanceships = current_profile.character.acquaintanceships().order_by(
+        OrderByPolish('known_character__fullname'))
+    
     context = {
         'page_title': 'Prosoponomikon',
         'acquaintanceships': acquaintanceships,
