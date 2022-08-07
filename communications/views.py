@@ -20,7 +20,7 @@ from communications.models import (
     Thread,
     ThreadTag,
 )
-from rpg_project.utils import auth_profile, OrderByPolish
+from rpg_project.utils import auth_profile
 from users.models import Profile
 
 
@@ -122,7 +122,7 @@ def threads_view(request, thread_kind, tag_title):
     else:
         page_title = "TODO"
         unseen = Thread.objects.none()
-    threads = threads.exclude(id__in=unseen).order_by(OrderByPolish('title'))
+    threads = threads.exclude(id__in=unseen)
 
     # Annotate threads with attribute 'initiator'
     for thread in threads:
