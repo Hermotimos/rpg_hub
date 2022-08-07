@@ -26,4 +26,11 @@ urlpatterns = [
     #      name='survey-option-modify'),
     # path('survey-detail:<int:survey_id>/survey-option:<int:option_id>/delete', views.survey_option_delete_view,
     #      name='survey-option-delete'),
+    
+    path('', views.home, name='home'),
+    path('<str:room>/', views.room, name='room'),
+    path('checkview', views.checkview, name='checkview'),
+    path('send', views.send, name='send'),
+    path('getMessages/<str:room>/', views.getMessages, name='getMessages'),
+    
 ]
