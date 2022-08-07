@@ -60,21 +60,8 @@ def prosoponomikon_character_view(request, character_id):
         synergies_regular,
     ] = [list() for _ in range(12)]
 
-
-    bio_packets = current_profile.biography_packets.prefetch_related(
-        'picture_sets')
-    
-    this_acquaintanceship = Acquaintanceship.objects.select_related(
-        'known_character__first_name'
-    ).prefetch_related(
-        Prefetch('known_character__biography_packets', queryset=bio_packets))
-
-    if current_profile.can_view_all:
-        this_acquaintanceship = this_acquaintanceship.prefetch_related('known_character__dialogue_packets')
-
     try:
-        # print(bio_packets)
-        this_acquaintanceship = this_acquaintanceship.get(
+        this_acquaintanceship = Acquaintanceship.objects.get(
             knowing_character=current_profile.character,
             known_character=character_id)
     except Acquaintanceship.DoesNotExist:
@@ -85,12 +72,12 @@ def prosoponomikon_character_view(request, character_id):
     character = this_acquaintanceship.known_character
     page_title = this_acquaintanceship.knows_as_name or this_acquaintanceship.known_character.fullname
 
-    biography_packets = character.biography_packets.filter(
-        Q(acquired_by=current_profile) | Q(author=current_profile))
-
     if current_profile.can_view_all:
+        biography_packets = BiographyPacket.objects.filter(characters=character)
         dialogue_packets = character.dialogue_packets.all()
     else:
+        biography_packets = character.biography_packets.filter(
+            Q(acquired_by=current_profile) | Q(author=current_profile))
         dialogue_packets = None
     
     # Any Profile viewing own Character or GM viewing any Character
