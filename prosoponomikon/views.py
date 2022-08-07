@@ -27,7 +27,8 @@ def prosoponomikon_acquaintanceships_view(request):
     current_profile = request.current_profile
     
     acquaintanceships = current_profile.character.acquaintanceships().order_by(
-        OrderByPolish('known_character__fullname'))
+        OrderByPolish('known_character__fullname')
+    ).exclude(known_character=current_profile.character)
     
     context = {
         'page_title': 'Prosoponomikon',
