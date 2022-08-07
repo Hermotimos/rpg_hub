@@ -20,7 +20,6 @@ from toponomikon.models import Location
 from users.models import Profile, User
 
 
-@cache_page(60 * 5)
 @vary_on_cookie
 @login_required
 @auth_profile(['all'])
@@ -37,8 +36,6 @@ def prosoponomikon_acquaintanceships_view(request):
     return render(request, 'prosoponomikon/acquaintances.html', context)
 
 
-@cache_page(60 * 5)
-@vary_on_cookie
 @login_required
 @auth_profile(['all'])
 def prosoponomikon_character_view(request, character_id):
@@ -49,7 +46,6 @@ def prosoponomikon_character_view(request, character_id):
         return redirect('users:dupa')
     # TODO end temp
 
-    
     # Declare empty variables
     [
         knowledge_packets, acquaintanceships, acquisitions,
