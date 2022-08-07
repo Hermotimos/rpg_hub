@@ -9,7 +9,7 @@
 
 {% block content %}
 
-    <!-- INITIAL AS QUICK LINK -->
+    <!-- INITIALS AS QUICK LINKS -->
     {% regroup acquaintanceships by initial as acquaintanceships_list %}
     
     <div class="container sticky-menu border-bottom">
@@ -26,7 +26,9 @@
                         </li>
                         {% for acquaintanceship in acquaintanceships_group.list %}
                             <li>
-                                <a class="pl-2" href="{{ request.path }}#character_{{ acquaintanceship.known_character.id }}">{{ acquaintanceship.known_character.fullname }}</a>
+                                <a class="pl-2" href="{{ request.path }}#character_{{ acquaintanceship.known_character.id }}">
+                                    {% firstof acquaintanceship.knows_as_name acquaintanceship.known_character.fullname %}
+                                </a>
                             </li>
                         {% endfor %}
                     </ul>

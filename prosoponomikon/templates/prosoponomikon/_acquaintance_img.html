@@ -5,6 +5,6 @@
         {% include 'prosoponomikon/__acquaintance_img.html' %}
     </a>
     {% if show_caption %}
-        <p class="pt-1 font-italic font-14 text-center">{{ acquaintanceship.known_character.fullname }}</p>
+        <p class="pt-1 font-italic font-14 text-center">{% firstof acquaintanceship.knows_as_name acquaintanceship.known_character.fullname %}</p>
     {% endif %}
 </div>

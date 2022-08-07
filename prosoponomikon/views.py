@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.decorators.cache import cache_page
@@ -44,6 +44,12 @@ def prosoponomikon_acquaintanceships_view(request):
 def prosoponomikon_character_view(request, character_id):
     current_profile = request.current_profile
     
+    # TODO temp
+    if request.current_profile.character.fullname in 'Ilen z Astinary, Alora z Astinary':
+        return redirect('users:dupa')
+    # TODO end temp
+
+    
     # Declare empty variables
     [
         knowledge_packets, acquaintanceships, acquisitions,
@@ -54,45 +60,39 @@ def prosoponomikon_character_view(request, character_id):
         synergies_regular,
     ] = [list() for _ in range(12)]
 
-    if current_profile.character.id == character_id:
-        # Players on NPCs viewing their own Characters
-        character = current_profile.character
-        this_acquaintanceship = None
-    else:
-        # GM viewing another Character
-        if current_profile.can_view_all:
-            bio_packets = BiographyPacket.objects.all()
-        # Player or NPC viewing another Character
-        else:
-            # TODO temp
-            if request.current_profile.character.fullname in 'Ilen z Astinary, Alora z Astinary':
-                return redirect('users:dupa')
-            # TODO end temp
-            
-            bio_packets = (
-                current_profile.biography_packets.all()
-                | current_profile.authored_bio_packets.all()
-            ).prefetch_related('picture_sets')
-            
-        character = Character.objects.select_related(
-            'first_name'
-        ).prefetch_related(
-            Prefetch('biography_packets', queryset=bio_packets),
-            'dialogue_packets'
-        ).get(id=character_id)
-        
-        try:
-            this_acquaintanceship = Acquaintanceship.objects.get(
-                knowing_character=current_profile.character,
-                known_character=character)
-        except Acquaintanceship.DoesNotExist:
-            # when GM moves between NPCs with open Prosoponomikon
-            messages.info(request, "Aktualna Postać nie zna wybranej Postaci!")
-            return redirect('prosoponomikon:acquaintanceships')
-    
-    dialogue_packets = character.dialogue_packets.all()
-    biography_packets = character.biography_packets.all()
 
+    bio_packets = current_profile.biography_packets.prefetch_related(
+        'picture_sets')
+    
+    this_acquaintanceship = Acquaintanceship.objects.select_related(
+        'known_character__first_name'
+    ).prefetch_related(
+        Prefetch('known_character__biography_packets', queryset=bio_packets))
+
+    if current_profile.can_view_all:
+        this_acquaintanceship = this_acquaintanceship.prefetch_related('known_character__dialogue_packets')
+
+    try:
+        # print(bio_packets)
+        this_acquaintanceship = this_acquaintanceship.get(
+            knowing_character=current_profile.character,
+            known_character=character_id)
+    except Acquaintanceship.DoesNotExist:
+        # when GM moves between NPCs with open Prosoponomikon
+        messages.info(request, "Aktualna Postać nie zna wybranej Postaci!")
+        return redirect('prosoponomikon:acquaintanceships')
+    
+    character = this_acquaintanceship.known_character
+    page_title = this_acquaintanceship.knows_as_name or this_acquaintanceship.known_character.fullname
+
+    biography_packets = character.biography_packets.filter(
+        Q(acquired_by=current_profile) | Q(author=current_profile))
+
+    if current_profile.can_view_all:
+        dialogue_packets = character.dialogue_packets.all()
+    else:
+        dialogue_packets = None
+    
     # Any Profile viewing own Character or GM viewing any Character
     if current_profile.character.id == character_id or current_profile.status == 'gm':
         
@@ -115,15 +115,15 @@ def prosoponomikon_character_view(request, character_id):
         knowledge_packets = character.profile.knowledge_packets.prefetch_related(
             'picture_sets__pictures').order_by('title')
         
-        acquaintanceships = character.acquaintanceships()
+        acquaintanceships = character.acquaintanceships().exclude(known_character=character)
     
     # INFORM FORM
     if request.method == 'POST':
         handle_inform_form(request)
 
     context = {
-        'page_title': character,
-        'character': character,
+        'page_title': page_title,
+        'this_acquaintanceship': this_acquaintanceship,
         'acquisitions': acquisitions,
         'acquisitions_regular': acquisitions_regular,
         'acquisitions_priests': acquisitions_priests,
@@ -138,7 +138,6 @@ def prosoponomikon_character_view(request, character_id):
         'biography_packets': biography_packets,
         'dialogue_packets': dialogue_packets,
         'acquaintanceships': acquaintanceships,
-        'this_acquaintanceship': this_acquaintanceship,
     }
     if (
             current_profile.character.acquaintanceships().filter(
@@ -146,7 +145,7 @@ def prosoponomikon_character_view(request, character_id):
             or current_profile.character == character
             or current_profile.can_view_all
     ):
-        return render(request, 'prosoponomikon/character.html', context)
+        return render(request, 'prosoponomikon/this_acquaintanceship.html', context)
     else:
         return redirect('users:dupa')
 

@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib import admin
 from django.db import models
-from django.forms import BaseInlineFormSet
 from django.utils.html import format_html
 
 from prosoponomikon.models import Acquaintanceship, Acquisition, \
@@ -151,13 +150,15 @@ class AuxiliaryNameGroupAdmin(admin.ModelAdmin):
 class AcquaintanceshipAdmin(admin.ModelAdmin):
     fields = [
         'knowing_character', 'known_character', 'is_direct', 'knows_if_dead',
+        'knows_as_name', 'knows_as_description',
     ]
     list_display = [
         'id', 'knowing_character', 'known_character', 'is_direct',
-        'knows_if_dead',
+        'knows_if_dead', 'knows_as_name', 'knows_as_description',
     ]
     list_editable = [
         'knowing_character', 'known_character', 'is_direct', 'knows_if_dead',
+        'knows_as_name', 'knows_as_description',
     ]
     list_filter = ['known_character__profile__is_alive']
     list_select_related = ['knowing_character', 'known_character']
@@ -177,6 +178,9 @@ class AcquaintanceshipAdmin(admin.ModelAdmin):
 
 
 class AcquaintanceshipActiveInline(admin.TabularInline):
+    formfield_overrides = {
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 3, 'cols': 40})},
+    }
     model = Character.acquaintances.through
     fk_name = 'knowing_character'
 

@@ -34,7 +34,7 @@
 <!--                    <a class="btn btn-outline-dark icon-note mt-1 py-2 disabled" href="#"></a>-->
 <!--                </div>-->
                 <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Edytuj Biogram">
-                    <a class="btn btn-outline-dark icon-biography-packet mt-1 py-2" href="{% url 'prosoponomikon:bio-packet-form' character.id biography_packet.id %}"></a>
+                    <a class="btn btn-outline-dark icon-biography-packet mt-1 py-2" href="{% url 'prosoponomikon:bio-packet-form' this_acquaintanceship.known_character.id biography_packet.id %}"></a>
                 </div>
             </div>
         {% endif %}
