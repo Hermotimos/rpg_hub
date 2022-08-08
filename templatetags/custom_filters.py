@@ -270,12 +270,8 @@ def default_if_emptystring(string, text_if_emtystring):
     return string
 
 
-
 @register.filter
 def filter_players(informables_qs, current_profile):
-    print(current_profile.character.acquaintances.all())
-    informables_qs.filter(character__in=current_profile.character.acquaintances.all())
-    print(informables_qs)
-    # TODO temp for new hires
-    return None
+    return informables_qs.filter(
+        character__in=current_profile.character.acquaintances.all())
 
