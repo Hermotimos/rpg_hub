@@ -56,7 +56,7 @@ body {
 </head>
 <body>
 
-<h2>{{room_name}} - DjChat</h2>
+<h2>{{thread_title}} - DjChat</h2>
 
 <div id="display">
 
@@ -69,13 +69,18 @@ $(document).ready(function(){
 setInterval(function(){
     $.ajax({
         type: 'GET',
-        url : "/communications/getMessages/{{room_name}}/",
+        url : "/communications/getStatements/{{thread_title}}/",
         success: function(response){
             console.log(response);
             $("#display").empty();
-            for (var key in response.messages)
+            for (var key in response.statements)
             {
-                var temp="<div class='container darker'><b>"+response.messages[key].user+"</b><p>"+response.messages[key].value+"</p><span class='time-left'>"+response.messages[key].date+"</span></div>";
+                /*
+                $.get("/communications/_statement.html", function(temp) {
+                    // the contents is now in the variable temp
+                    alert(temp);
+                }); */
+                var temp="<div class='container darker'><b>"+response.statements[key].author_id+"</b><p>"+response.statements[key].text+"</p><span class='time-left'>"+response.statements[key].created_at+"</span></div>";
                 $("#display").append(temp);
             }
         },
@@ -124,10 +129,9 @@ setInterval(function(){
 
     <form id="post-form">
         {% csrf_token %}
-        <input type="hidden" name="username" id="username" value="{{username}}"/>
-        <input type="hidden" name="room_id" id="room_id" value="{{room.id}}"/>
-        <input type="text" name="message" id="message" width="100px" />
-        <input type="submit" value="Send">
+        <input type="hidden" name="thread_id" id="thread_id" value="{{thread.id}}"/>
+        <input type="text" name="text" id="text" width="100px" />
+        <input type="submit" value="Send2">
     </form>
 </div>
 
@@ -140,18 +144,17 @@ setInterval(function(){
 
     $.ajax({
       type:'POST',
-      url:'/communications/send',
+      url:'/communications/send2',
       data:{
-          username:$('#username').val(),
-          room_id:$('#room_id').val(),
-          message:$('#message').val(),
+          thread_id:$('#thread_id').val(),
+          text:$('#text').val(),
         csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
       },
       success: function(data){
          //alert(data)
       }
     });
-    document.getElementById('message').value = ''
+    document.getElementById('text').value = ''
   });
 </script>
 

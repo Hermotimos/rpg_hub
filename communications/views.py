@@ -512,29 +512,35 @@ def follow_thread_view(request, thread_id):
 from communications.models import Room, Message
 from django.http import HttpResponse, JsonResponse
 
-# Create your views here.
-def home(request):
-    return render(request, 'communications/home.html')
 
-def room(request, room):
+
+# def home(request):
+#     return render(request, 'communications/home.html')
+#
+#
+# def checkview(request):
+#     room = request.POST['room_name']
+#     username = request.POST['username']
+#
+#     if Room.objects.filter(name=room).exists():
+#         return redirect('/communications/'+room+'/?username='+username)
+#     else:
+#         new_room = Room.objects.create(name=room)
+#         new_room.save()
+#         return redirect('/communications/'+room+'/?username='+username)
+
+
+def room(request, room_name):
+    print(room_name)
     username = request.GET.get('username')
-    room_details = Room.objects.get(name=room)
-    return render(request, 'communications/room.html', {
+    room = Room.objects.get(name=room_name)
+    context = {
         'username': username,
-        'room': room,
-        'room_details': room_details
-    })
+        'room_name': room_name,
+        'room': room
+    }
+    return render(request, 'communications/room.html', context)
 
-def checkview(request):
-    room = request.POST['room_name']
-    username = request.POST['username']
-
-    if Room.objects.filter(name=room).exists():
-        return redirect('/communications/'+room+'/?username='+username)
-    else:
-        new_room = Room.objects.create(name=room)
-        new_room.save()
-        return redirect('/communications/'+room+'/?username='+username)
 
 def send(request):
     message = request.POST['message']
@@ -545,10 +551,49 @@ def send(request):
     new_message.save()
     return HttpResponse('Message sent successfully')
 
-def getMessages(request, room):
-    room_details = Room.objects.get(name=room)
 
-    messages = Message.objects.filter(room=room_details.id)
-    print(room, messages)
-    return JsonResponse({"messages": list(messages.values())})
+def getMessages(request, room_name):
+    room = Room.objects.get(name=room_name)
+    msgs = Message.objects.filter(room=room.id)
+    print(room_name, msgs)
+    return JsonResponse({"messages": list(msgs.values())})
 
+
+
+@login_required
+@auth_profile(['all'])
+def thread(request, thread_title):
+    thread = Thread.objects.get(title=thread_title)
+    context = {
+        'page_title': thread_title,
+        'thread_title': thread_title,
+        'thread': thread
+    }
+    return render(request, 'communications/room2.html', context)
+
+
+@login_required
+@auth_profile(['all'])
+def send2(request):
+    text = request.POST['text']
+    thread_id = request.POST['thread_id']
+    
+    new_statement = Statement.objects.create(
+        text=text,
+        thread=Thread.objects.get(id=thread_id),
+        author=request.current_profile,
+        # TODO image
+    )
+    new_statement.seen_by.add(request.current_profile)
+    print(new_statement)
+    new_statement.save()
+    return HttpResponse('Message sent successfully')
+
+
+@login_required
+@auth_profile(['all'])
+def getStatements(request, thread_title):
+    thread = Thread.objects.get(title=thread_title)
+    statements = Statement.objects.filter(thread=thread.id)
+    print(thread_title, len(statements))
+    return JsonResponse({"statements": list(statements.values())})

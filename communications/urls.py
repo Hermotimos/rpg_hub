@@ -27,10 +27,14 @@ urlpatterns = [
     # path('survey-detail:<int:survey_id>/survey-option:<int:option_id>/delete', views.survey_option_delete_view,
     #      name='survey-option-delete'),
     
-    path('', views.home, name='home'),
-    path('<str:room>/', views.room, name='room'),
-    path('checkview', views.checkview, name='checkview'),
+    # path('', views.home, name='home'),
+    # path('checkview', views.checkview, name='checkview'),
+    path('<str:room_name>/', views.room, name='room'),  # http://127.0.0.1:8000/communications/thread/THREAD_NAME/
     path('send', views.send, name='send'),
-    path('getMessages/<str:room>/', views.getMessages, name='getMessages'),
+    path('getMessages/<str:room_name>/', views.getMessages, name='getMessages'),
+    
+    path('thread/<str:thread_title>/', views.thread, name='thread'),
+    path('send2', views.send2, name='send2'),
+    path('getStatements/<str:thread_title>/', views.getStatements, name='getStatements'),
     
 ]
