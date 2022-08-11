@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch, Q
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.decorators.cache import cache_page
@@ -11,6 +11,7 @@ from django.views.decorators.vary import vary_on_cookie
 from imaginarion.models import Picture, PictureImage, PictureSet
 from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
+from knowledge.utils import annotate_informables
 from prosoponomikon.forms import CharacterCreateForm
 from prosoponomikon.models import Character, FirstNameGroup, FamilyName, \
     Acquaintanceship
@@ -76,7 +77,11 @@ def prosoponomikon_character_view(request, character_id):
         biography_packets = character.biography_packets.filter(
             Q(acquired_by=current_profile) | Q(author=current_profile))
         dialogue_packets = None
-    
+        
+    biography_packets = biography_packets.prefetch_related(
+        'picture_sets__pictures').select_related('author')
+    biography_packets = annotate_informables(biography_packets, current_profile)
+
     # Any Profile viewing own Character or GM viewing any Character
     if current_profile.character.id == character_id or current_profile.status == 'gm':
         
@@ -97,7 +102,8 @@ def prosoponomikon_character_view(request, character_id):
             skills__types__kinds__name__in=["Moce Kapłańskie",  "Zaklęcia", "Moce Teurgiczne"])
 
         knowledge_packets = character.profile.knowledge_packets.prefetch_related(
-            'picture_sets__pictures').order_by('title')
+            'picture_sets__pictures').select_related('author').order_by('title')
+        knowledge_packets = annotate_informables(knowledge_packets, current_profile)
         
         acquaintanceships = character.acquaintanceships().exclude(known_character=character)
     

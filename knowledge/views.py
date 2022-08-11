@@ -10,6 +10,7 @@ from django.views.decorators.vary import vary_on_cookie
 from imaginarion.models import Picture, PictureImage, PictureSet
 from knowledge.forms import KnPacketForm, PlayerKnPacketForm
 from knowledge.models import KnowledgePacket
+from knowledge.utils import annotate_informables
 from rpg_project.utils import handle_inform_form, auth_profile, OrderByPolish
 from rules.models import Skill
 
@@ -21,13 +22,15 @@ from rules.models import Skill
 def almanac_view(request):
     current_profile = request.current_profile
     
-    kn_packets = KnowledgePacket.objects.order_by(OrderByPolish('title'))
+    knowledge_packets = KnowledgePacket.objects.order_by(
+        OrderByPolish('title')).select_related('author')
+    knowledge_packets = annotate_informables(knowledge_packets, current_profile)
     if not current_profile.can_view_all:
-        kn_packets = kn_packets.filter(acquired_by=current_profile)
-    
-    skills = Skill.objects.filter(knowledge_packets__in=kn_packets)
+        knowledge_packets = knowledge_packets.filter(acquired_by=current_profile)
+        
+    skills = Skill.objects.filter(knowledge_packets__in=knowledge_packets)
     skills = skills.prefetch_related(
-        Prefetch('knowledge_packets', queryset=kn_packets),
+        Prefetch('knowledge_packets', queryset=knowledge_packets),
         'knowledge_packets__picture_sets__pictures',
     ).order_by(OrderByPolish('name'))
     
@@ -49,7 +52,6 @@ def kn_packet_form_view(request, kn_packet_id):
     current_profile = request.current_profile
     
     kn_packet = KnowledgePacket.objects.filter(id=kn_packet_id).first()
-        
     if current_profile.status == 'gm':
         form = KnPacketForm(data=request.POST or None,
                             files=request.FILES or None,
@@ -59,7 +61,7 @@ def kn_packet_form_view(request, kn_packet_id):
                                   files=request.FILES or None,
                                   instance=kn_packet,
                                   current_profile=current_profile)
-    
+
     if form.is_valid():
         if current_profile.status == 'gm':
             kn_packet = form.save()

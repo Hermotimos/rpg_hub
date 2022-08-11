@@ -28,7 +28,7 @@
                 <!-- Modal -->
                 <p class="btn btn-outline-dark icon-inform py-2" data-toggle="modal" data-target="#infoKnPacketModal_{{ kn_packet.id }}"></p>
                 <div class="modal fade" id="infoKnPacketModal_{{ kn_packet.id }}" tabindex="-1" role="dialog" aria-hidden="true">
-                    {% with informables=kn_packet.informables|filter_players:request.current_profile inform_type=kn_packet|get_model_name id_=kn_packet.id %}
+                    {% with informables=kn_packet.informables inform_type=kn_packet|get_model_name id_=kn_packet.id %}
                         {% include '_inform.html' %}
                     {% endwith %}
                 </div>
