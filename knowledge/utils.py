@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.postgres.expressions import ArraySubquery
 from django.db.models import Value, OuterRef
 from django.db.models.functions import Concat, JSONObject
@@ -19,7 +20,7 @@ def annotate_informables(info_packets, current_profile):
         json=JSONObject(
             id='id',
             status='status',
-            image=JSONObject(url=Concat(Value('/media/'), 'image')),
+            image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'image')),
             character=JSONObject(fullname='character__fullname'),
         )
     )
