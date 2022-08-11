@@ -68,9 +68,8 @@ class AnnouncementCreateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         self.fields['participants'].help_text = """
-            ***Aby zaznaczyć wiele Postaci - użyj CTRL albo SHIFT.<br><br>
-            1) Ogłoszenie zobaczą tylko wybrani adresaci (i zawsze MG).<br>
-            2) Późniejsze dodanie adresatów - wyślij MG Dezyderat.<br><br>
+            ✧ Aby zaznaczyć wiele Postaci - użyj CTRL albo SHIFT.<br>
+            ✧ MG jest dołączany automatycznie do wszystkich Ogłoszeń.<br><br>
         """
         
         self.fields['participants'].label = "Adresaci"
@@ -78,7 +77,9 @@ class AnnouncementCreateForm(forms.ModelForm):
         
         # Show profiles' Users as options (translated to Profiles in the view)
         participants = User.objects.filter(
-            profiles__in=Profile.contactables.exclude(id=current_profile.id))
+            profiles__in=Profile.contactables.exclude(id=current_profile.id),
+            profiles__character__in=current_profile.character.acquaintances.all(),
+        )
         self.fields['participants'].queryset = participants
         self.fields['participants'].widget.attrs['size'] = min(len(participants), 10)
         
@@ -96,12 +97,10 @@ class DebateCreateForm(forms.ModelForm):
         self.fields['is_exclusive'].help_text = """
             Wykluczyć możliwość dodawania uczestników?'"""
         self.fields['participants'].help_text = """
-            ***Aby zaznaczyć wiele Postaci - użyj CTRL albo SHIFT.<br><br>
-            1) Włączaj tylko Postacie znajdujące się w pobliżu w chwili
-                zakończenia ostatniej sesji.<br>
-            2) Postacie w pobliżu niewłączone do narady mogą to zauważyć.<br>
-            3) Jeśli chcesz zaczekać na sposobny moment, powiadom MG.<br>
-            4) Jeśli na liście brakuje Postaci, powiadom MG.<br><br>"""
+            ✧ Aby zaznaczyć wiele Postaci - użyj CTRL albo SHIFT.<br><br>
+            ✧ Dołączaj tylko Postacie znajdujące się w pobliżu w chwili zakończenia ostatniej sesji
+                (Postacie znajdujące się w pobliżu a niewłączone do narady mogą to zauważyć;
+                jeśli chcesz zaczekać na sposobny moment, powiadom MG).<br><br>"""
 
         self.fields['is_exclusive'].label = "Narada zamknięta?"
         self.fields['participants'].label = "Uczestnicy"

@@ -226,7 +226,7 @@ class Profile(Model):
     
     @property
     def can_action(self):
-        return self.status in ['gm', 'player']
+        return self.status in ['gm', 'player'] and self.is_active
 
 
 # -----------------------------------------------------------------------------
