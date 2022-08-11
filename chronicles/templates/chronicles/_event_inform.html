@@ -8,7 +8,7 @@
 
     <!-- Temporary solution until I am able to load modal with informables in a lazy way (not all at once) -->
     <div class="mt-5">
-        {% with informables=event.informables inform_type=event_type id_=event.id %}
+        {% with informables=event.informables|filter_players:request.current_profile inform_type=event_type id_=event.id %}
             {% include '_inform.html' %}
         {% endwith %}
     </div>

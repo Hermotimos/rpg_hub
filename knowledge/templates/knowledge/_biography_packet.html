@@ -25,7 +25,7 @@
                     <!-- Modal -->
                     <span class="btn btn-outline-dark icon-inform mt-1 py-2" data-toggle="modal" data-target="#infoBioPacketModal_{{ biography_packet.id }}"></span>
                     <div class="modal fade" id="infoBioPacketModal_{{ biography_packet.id }}" tabindex="-1" role="dialog" aria-hidden="true">
-                        {% with informables=biography_packet.informables inform_type=biography_packet|get_model_name id_=biography_packet.id %}
+                        {% with informables=biography_packet.informables|filter_players:request.current_profile inform_type=biography_packet|get_model_name id_=biography_packet.id %}
                             {% include '_inform.html' %}
                         {% endwith %}
                     </div>
