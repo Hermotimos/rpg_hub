@@ -13,48 +13,4 @@
         {% endwith %}
     </div>
 
-
-<!--    <div class="mt-5">-->
-<!--        &lt;!&ndash; This is superfluous at the moment, but may be needed when I am able to do this a modal &ndash;&gt;-->
-<!--        {% with informables=event.informables inform_type=event_type id_=event.id %}-->
-<!--            -->
-<!--            {% if informables %}-->
-<!--            -->
-<!--                <form method="POST" action="." name="{{ inform_type }}_form{{ id_ }}">-->
-<!--                    {% csrf_token %}-->
-<!--                    <div class="modal-body">-->
-<!--                        <h5 class="text-center text-danger">-->
-<!--                            Informuj jedynie Postacie, którym przekazałeś wiedzę w świecie gry.<br>-->
-<!--                            W razie wątpliwości skonsultuj się z MG.-->
-<!--                        </h5>-->
-<!--                        <br>-->
-<!--                        <h4 class="text-center">-->
-<!--                            {% for profile in informables %}-->
-<!--                                <input class="select-profile" type="checkbox" id="id_{{ forloop.counter }}{{ id_ }}" name="{{ profile.id }}">-->
-<!--                                <label for="id_{{ forloop.counter }}{{ id_ }}">-->
-<!--                                    <img class="portait img-xl rounded-circle" src="{{ profile.image.url }}">-->
-<!--                                </label>-->
-<!--                            {% endfor %}-->
-<!--                        </h4>-->
-<!--                        <div class="text-center pt-3">-->
-<!--                            <button class="btn btn-dark" type="submit" name="{{ inform_type }}" value="{{ id_ }}">-->
-<!--                                Poinformuj-->
-<!--                            </button>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </form>-->
-<!--            -->
-<!--            {% else %}-->
-<!--            -->
-<!--                <div class="modal-body mb-1">-->
-<!--                    <h5 class="text-center text-danger">-->
-<!--                        Wszyscy obecni człokowie drużyny dobrze już o tym wiedzą.-->
-<!--                    </h5>-->
-<!--                </div>-->
-<!--            -->
-<!--            {% endif %}-->
-<!--    -->
-<!--        {% endwith %}-->
-<!--    </div>-->
-
 {% endblock content %}
