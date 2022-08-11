@@ -16,11 +16,11 @@
                         
                         <!-- CHARACTER PICTURE -->
                         <div class="float-left mr-3">
-                            {% if request.current_profile.character == character or this_acquaintanceship.is_direct or request.current_profile.can_view_all %}
-                                <img class="character-detail {% if this_acquaintanceship.knows_if_dead and not character.profile.is_alive %} img-grayscale {% endif %}"
-                                     src="{{ character.profile.image.url }}">
+                            {% if request.current_profile.character == this_acquaintanceship.known_character or this_acquaintanceship.is_direct or request.current_profile.can_view_all %}
+                                <img class="character-detail {% if this_acquaintanceship.knows_if_dead and not this_acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
+                                     src="{{ this_acquaintanceship.known_character.profile.image.url }}">
                             {% else %}
-                                <img class="character-detail {% if this_acquaintanceship.knows_if_dead and not character.profile.is_alive %} img-grayscale {% endif %}"
+                                <img class="character-detail {% if this_acquaintanceship.knows_if_dead and not this_acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
                                      src="{% static 'img/profile_known_only_indirectly.jpg' %}">
                             {% endif %}
                         </div>
@@ -31,39 +31,39 @@
                         <!-- BUTTONS -->
                         <div class="row">
                             <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Przejdź do Prosoponomikonu">
-                                <a class="btn btn-outline-dark icon-parent-obj py-2" href="{% url 'prosoponomikon:acquaintanceships' %}#character_{{ character.id }}"></a>
+                                <a class="btn btn-outline-dark icon-parent-obj py-2" href="{% url 'prosoponomikon:acquaintanceships' %}#character_{{ this_acquaintanceship.known_character.id }}"></a>
                             </div>
                             {% if request.current_profile.can_action %}
                                 <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Przekaż wiedzę o Postaci">
                                     <!-- Modal -->
-                                    <span class="btn btn-outline-dark icon-inform py-2" data-toggle="modal" data-target="#infoCharacterModal_{{ character.id }}"></span>
-                                    <div class="modal fade" id="infoCharacterModal_{{ character.id }}" tabindex="-1" role="dialog" aria-hidden="true">
-                                        {% with informables=character.informables inform_type=character|get_model_name id_=character.id %}
+                                    <span class="btn btn-outline-dark icon-inform py-2" data-toggle="modal" data-target="#infoCharacterModal_{{ this_acquaintanceship.known_character.id }}"></span>
+                                    <div class="modal fade" id="infoCharacterModal_{{ this_acquaintanceship.known_character.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                        {% with informables=this_acquaintanceship.known_character.informables|filter_players:request.current_profile inform_type=this_acquaintanceship.known_character|get_model_name id_=this_acquaintanceship.known_character.id %}
                                             {% include '_inform.html' %}
                                         {% endwith %}
                                     </div>
                                 </div>
                                 <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Nowy Biogram">
-                                    <a class="btn btn-outline-dark icon-biography-packet py-2" href="{% url 'prosoponomikon:bio-packet-form' character.id 0 %}"></a>
+                                    <a class="btn btn-outline-dark icon-biography-packet py-2" href="{% url 'prosoponomikon:bio-packet-form' this_acquaintanceship.known_character.id 0 %}"></a>
                                 </div>
                             {% endif %}
 <!--                            <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">-->
 <!--                                <a class="btn btn-outline-dark icon-note py-2 disabled" href="#"></a>-->
 <!--                            </div>-->
-                            {% if request.current_profile.status == 'player' and request.current_profile.character == character %}
+                            {% if request.current_profile.status == 'player' and request.current_profile.character == this_acquaintanceship.known_character %}
                                 <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
                                     <a class="btn btn-outline-dark icon-edit py-2" href="{% url 'users:edit-profile' %}"></a>
                                 </div>
                             {% endif %}
                             {% if request.current_profile.status == 'gm' %}
                                 <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
-                                    <a class="btn btn-outline-secondary icon-edit py-2" href="{% url 'admin:prosoponomikon_character_change' character.id %}" target="_blank"></a>
+                                    <a class="btn btn-outline-secondary icon-edit py-2" href="{% url 'admin:prosoponomikon_character_change' this_acquaintanceship.known_character.id %}" target="_blank"></a>
                                 </div>
                                 <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Znajomości">
-                                    <a class="btn btn-outline-danger icon-edit py-2" href="{% url 'admin:prosoponomikon_characteracquaintanceships_change' character.id %}" target="_blank"></a>
+                                    <a class="btn btn-outline-danger icon-edit py-2" href="{% url 'admin:prosoponomikon_characteracquaintanceships_change' this_acquaintanceship.known_character.id %}" target="_blank"></a>
                                 </div>
                                 <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Umiejętności">
-                                    <a class="btn btn-outline-info icon-edit py-2" href="{% url 'admin:prosoponomikon_characteracquisitions_change' character.id %}" target="_blank"></a>
+                                    <a class="btn btn-outline-info icon-edit py-2" href="{% url 'admin:prosoponomikon_characteracquisitions_change' this_acquaintanceship.known_character.id %}" target="_blank"></a>
                                 </div>
                             {% endif %}
                         </div>
@@ -73,33 +73,31 @@
                         <!-- CLASSES, TRAITS, EXPERIENCE -->
                         {% if request.current_profile.status == 'gm' or request.current_profile.status == 'player' and request.current_profile.character == character %}
                             <div class="mt-2">
-                                {% if character.subprofessions.exists %}
+                                {% if this_acquaintanceship.known_character.subprofessions.exists %}
                                     <div class="row font-italic pl-1">
-                                        {% if character.subprofessions.count == 1 %}
-                                            <b>Profesja</b>: {{ character.subprofessions.first }}
+                                        {% if this_acquaintanceship.known_character.subprofessions.count == 1 %}
+                                            <b>Profesja</b>: {{ this_acquaintanceship.known_character.subprofessions.first }}
                                         {% else %}
-                                            <b>Profesje</b>: {{ character.subprofessions.all|join:", " }}
+                                            <b>Profesje</b>: {{ this_acquaintanceship.known_character.subprofessions.all|join:", " }}
                                         {% endif %}
                                     </div>
                                 {% endif %}
                                 <div class="row font-italic pl-1">
-                                    <span class="mr-2"><b>Sił</b>: {{ character.strength|default_if_none:"-" }}</span>
-                                    <span class="mr-2"><b>Zrc</b>: {{ character.dexterity|default_if_none:"-" }}</span>
-                                    <span class="mr-2"><b>Kon</b>: {{ character.endurance|default_if_none:"-" }}</span>
+                                    <span class="mr-2"><b>Sił</b>: {{ this_acquaintanceship.known_character.strength|default_if_none:"-" }}</span>
+                                    <span class="mr-2"><b>Zrc</b>: {{ this_acquaintanceship.known_character.dexterity|default_if_none:"-" }}</span>
+                                    <span class="mr-2"><b>Kon</b>: {{ this_acquaintanceship.known_character.endurance|default_if_none:"-" }}</span>
                                 </div>
-                                {% if character.experience %}
+                                {% if this_acquaintanceship.known_character.experience %}
                                     <div class="row font-italic pl-1">
-                                        <span class="mr-2"><b>Exp</b>: {{ character.experience }}</span>
+                                        <span class="mr-2"><b>Exp</b>: {{ this_acquaintanceship.known_character.experience }}</span>
                                     </div>
                                 {% endif %}
                             </div>
                         {% endif %}
     
                         <!-- CHARACTER DESCRIPTION -->
-                        <div class="font-italic text-justify my-2 font-18 {% if character.only_indirectly %} text-muted {% endif %}">
-                            {% if character.description %}
-                                {{ character.description }}
-                            {% endif %}
+                        <div class="font-italic text-justify my-2 font-18 {% if not this_acquaintanceship.is_direct %} text-muted {% endif %}">
+                            {% firstof this_acquaintanceship.knows_as_description this_acquaintanceship.known_character.description %}
                         </div>
                         
                     </div>
@@ -114,11 +112,9 @@
             <!-- TAB HEADERS -->
             
             <!-- Biography packets -->
-            {% if request.current_profile.status == 'gm' or request.current_profile.character == character %}
-                {% if biography_packets %}
-                    <input type="radio" name="tabset" id="tab1" aria-controls="biography_packets" checked>
-                    <label class="font-resp-15 resp-tab-label" for="tab1">Biografia</label>
-                {% endif %}
+            {% if biography_packets %}
+                <input type="radio" name="tabset" id="tab1" aria-controls="biography_packets" checked>
+                <label class="font-resp-15 resp-tab-label" for="tab1">Biografia</label>
             {% endif %}
             
             <!-- Dialogue packets -->
@@ -141,7 +137,7 @@
                     <input type="radio" name="tabset" id="tab3" aria-controls="acquisitions_regular" checked>
                 {% endif %}
                 <label class="font-resp-15 resp-tab-label" for="tab3">
-                    {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
+                    {% if this_acquaintanceship.known_character.profile != request.current_profile and this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
                     Umiejętności
                 </label>
             {% endif %}
@@ -154,7 +150,7 @@
                     <input type="radio" name="tabset" id="tab4" aria-controls="knowledge_packets" checked>
                 {% endif %}
                 <label class="font-resp-15 resp-tab-label" for="tab4">
-                    {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
+                    {% if this_acquaintanceship.known_character.profile != request.current_profile and this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
                     Wiedza
                 </label>
             {% endif %}
@@ -171,7 +167,7 @@
                     <input type="radio" name="tabset" id="tab5" aria-controls="acquaintanceships" checked>
                 {% endif %}
                 <label class="font-resp-15 resp-tab-label" for="tab5">
-                    {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
+                    {% if this_acquaintanceship.known_character.profile != request.current_profile and this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
                     Znajomości
                 </label>
             {% endif %}
@@ -185,7 +181,7 @@
                     <input type="radio" name="tabset" id="tab6" aria-controls="acquisitions_priests" checked>
                 {% endif %}
                 <label class="font-resp-15 resp-tab-label" for="tab6">
-                    {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
+                    {% if this_acquaintanceship.known_character.profile != request.current_profile and this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
                     Moce kapłańskie
                 </label>
             {% endif %}
@@ -198,7 +194,7 @@
                     <input type="radio" name="tabset" id="tab7" aria-controls="acquisitions_sorcerers" checked>
                 {% endif %}
                 <label class="font-resp-15 resp-tab-label" for="tab6">
-                    {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
+                    {% if this_acquaintanceship.known_character.profile != request.current_profile and this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
                     Zaklęcia
                 </label>
             {% endif %}
@@ -211,7 +207,7 @@
                     <input type="radio" name="tabset" id="tab8" aria-controls="acquisitions_theurgists" checked>
                 {% endif %}
                 <label class="font-resp-15 resp-tab-label" for="tab6">
-                    {% if character.profile != request.current_profile and character.profile.status != 'player' %} ~ {% endif %}
+                    {% if this_acquaintanceship.known_character.profile != request.current_profile and this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
                     Moce Teurgiczne
                 </label>
             {% endif %}
@@ -221,15 +217,13 @@
             <div class="tab-panels">
                 
                 <!-- Biography packets -->
-                {% if request.current_profile.status == 'gm' or request.current_profile.character == character %}
-                    {% if biography_packets %}
-                        <section id="biography_packets" class="tab-panel ">
-                            <!-- Biography packets are filtered in the view for the requesting profile -->
-                            {% for biography_packet in biography_packets %}
-                                {% include 'knowledge/_biography_packet.html' %}
-                            {% endfor %}
-                        </section>
-                    {% endif %}
+                {% if biography_packets %}
+                    <section id="biography_packets" class="tab-panel ">
+                        <!-- Biography packets are filtered in the view for the requesting profile -->
+                        {% for biography_packet in biography_packets %}
+                            {% include 'knowledge/_biography_packet.html' %}
+                        {% endfor %}
+                    </section>
                 {% endif %}
                 
                 <!-- Dialogue packets -->

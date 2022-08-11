@@ -221,7 +221,7 @@ class Character(Model):
     
     def informables(self):
         qs = Profile.active_players.select_related('character')
-        qs = qs.filter(character__in=self.acquaintaned_to.all())
+        qs = qs.exclude(character__in=self.acquaintaned_to.all())
         qs = qs.exclude(character=self)
         return qs
         
@@ -355,7 +355,9 @@ class Acquaintanceship(Model):
     known_character = FK(to=Character, related_name='knowing_characters', on_delete=CASCADE)
     is_direct = BooleanField(default=False)
     knows_if_dead = BooleanField(default=False)
-
+    knows_as_name = CharField(max_length=100, blank=True, null=True)
+    knows_as_description = TextField(blank=True, null=True)
+    
     class Meta:
         ordering = ['known_character']
         unique_together = ['known_character', 'knowing_character']

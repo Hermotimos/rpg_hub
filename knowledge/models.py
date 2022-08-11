@@ -49,13 +49,6 @@ class BiographyPacket(InfoPacket):
     class Meta:
         ordering = ['order_no', 'title']
    
-    def informables(self):
-        qs = Profile.active_players.all()
-        qs = qs.exclude(id__in=self.acquired_by.all())
-        qs = qs.exclude(id=self.author_id)
-        qs = qs.select_related('character')
-        return qs
-
 
 class KnowledgePacket(InfoPacket):
     """A class for info packets that might be shared among multiple Skills."""
@@ -71,13 +64,7 @@ class KnowledgePacket(InfoPacket):
     picture_sets = M2M(
         to=PictureSet, related_name='knowledge_packets', blank=True)
     
-    def informables(self):
-        qs = Profile.active_players.all()
-        qs = qs.exclude(id__in=self.acquired_by.all())
-        qs = qs.select_related('character')
-        return qs
     
-
 class MapPacket(InfoPacket):
     acquired_by = M2M(to=Profile, related_name='map_packets', blank=True)
     picture_sets = M2M(to=PictureSet, related_name='map_packets')

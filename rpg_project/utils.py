@@ -10,6 +10,7 @@ from django.core.mail import send_mail
 from django.db.models import Func
 from django.shortcuts import redirect
 
+from prosoponomikon.models import Acquaintanceship
 from users.models import Profile
 
 
@@ -70,9 +71,20 @@ def handle_inform_form(request):
     
     elif 'Character' in post_data.keys():
         model = all_models['Character']
-        obj = model.objects.get(id=post_data['Character'][0])
-        obj.informees.add(*informed_ids)
-        send_emails(request, informed_ids, character=obj)
+        known_character = model.objects.get(id=post_data['Character'][0])
+        knowing_characters = model.objects.filter(profile_id__in=informed_ids)
+        this_acquaintanceship = Acquaintanceship.objects.get(
+            knowing_character=request.current_profile.character,
+            known_character=known_character)
+        for character in knowing_characters:
+            Acquaintanceship.objects.create(
+                knowing_character=character,
+                known_character=known_character,
+                is_direct=this_acquaintanceship.is_direct,
+                knows_if_dead=this_acquaintanceship.knows_if_dead,
+                knows_as_name=this_acquaintanceship.knows_as_name,
+                knows_as_description=this_acquaintanceship.knows_as_description)
+        send_emails(request, informed_ids, character=known_character)
 
     else:
         messages.warning(

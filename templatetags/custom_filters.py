@@ -269,3 +269,9 @@ def default_if_emptystring(string, text_if_emtystring):
         return text_if_emtystring
     return string
 
+
+@register.filter
+def filter_players(informables_qs, current_profile):
+    return informables_qs.filter(
+        character__in=current_profile.character.acquaintances.all())
+

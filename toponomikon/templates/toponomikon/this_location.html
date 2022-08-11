@@ -45,7 +45,7 @@
                                 </span>
                                 <!-- The Modal -->
                                 <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
-                                    {% with informables=this_location.informables inform_type=this_location|get_model_name id_=this_location.id %}
+                                    {% with informables=this_location.informables|filter_players:request.current_profile inform_type=this_location|get_model_name id_=this_location.id %}
                                         {% include '_inform.html' %}
                                     {% endwith %}
                                 </div>

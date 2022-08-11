@@ -8,13 +8,11 @@
         <p class="mb-1 {% if side == 'left' %} text-left {% else %} text-right {% endif %}
             {% if not acquaintanceship.is_direct %} text-muted {% endif %}">
             <span class="border-bottom-dark character-name">
-                {{ acquaintanceship.known_character.fullname }}
+                {% firstof acquaintanceship.knows_as_name acquaintanceship.known_character.fullname %}
             </span>
         </p>
         <h6 class="font-italic text-justify mb-n5 {% if not acquaintanceship.is_direct %} text-muted {% endif %}">
-            {% if acquaintanceship.known_character.description %}
-                {{ acquaintanceship.known_character.description }}
-            {% endif %}
+            {% firstof acquaintanceship.knows_as_description acquaintanceship.known_character.description %}
         </h6>
     </div>
 </div>
