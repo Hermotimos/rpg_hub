@@ -97,7 +97,7 @@ def prosoponomikon_character_view(request, character_id):
         skill_types_sorcerers = skill_types.filter(kinds__name="Zaklęcia")
         skill_types_theurgists = skill_types.filter(kinds__name="Moce Teurgiczne")
 
-        synergies = character.profile.synergies_acquired_with_synergies_levels()
+        synergies = character.synergies_for_character_sheet()
         synergies_regular = synergies.exclude(
             skills__types__kinds__name__in=["Moce Kapłańskie",  "Zaklęcia", "Moce Teurgiczne"])
 

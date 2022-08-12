@@ -259,6 +259,35 @@ class Character(Model):
         )
         return acquisitions
         
+    def synergies_for_character_sheet(self):
+        from rules.models import Synergy, SynergyLevel
+        
+        skill_levels = self.skill_levels.all()
+        print(skill_levels)
+
+        synergy_levels = SynergyLevel.objects.prefetch_related('skill_levels')
+        synergy_levels_ids = [
+            synergy_lvl.id for synergy_lvl in synergy_levels
+            if all([(skill_lvl in skill_levels) for skill_lvl in
+                    synergy_lvl.skill_levels.all()])
+        ]
+        # print(synergy_levels)
+        synergy_levels = SynergyLevel.objects.filter(id__in=synergy_levels_ids)
+        synergy_levels = synergy_levels.prefetch_related(
+            'synergy__skills',
+            'perks__conditional_modifiers__conditions',
+            'perks__conditional_modifiers__combat_types',
+            'perks__conditional_modifiers__modifier__factor',
+            'perks__comments',
+            'skill_levels__skill',
+        )
+        synergies = Synergy.objects.filter(synergy_levels__in=synergy_levels)
+        # print(synergies)
+        synergies = synergies.prefetch_related(
+            Prefetch('synergy_levels', queryset=synergy_levels))
+
+        return synergies.distinct()
+    
     def skill_types_for_character_sheet(self):
         skills = Skill.objects.filter(
             skill_levels__acquiring_characters=self
