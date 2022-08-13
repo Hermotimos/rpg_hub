@@ -559,14 +559,16 @@ def getMessages(request, room_name):
     return JsonResponse({"messages": list(msgs.values())})
 
 
+#  ========================================================================
+
 
 @login_required
 @auth_profile(['all'])
-def thread(request, thread_title):
-    thread = Thread.objects.get(title=thread_title)
+def thread(request, thread_id):
+    thread = Thread.objects.get(id=thread_id)
     context = {
-        'page_title': thread_title,
-        'thread_title': thread_title,
+        'page_title': thread.title,
+        'thread_id': thread_id,
         'thread': thread
     }
     return render(request, 'communications/room2.html', context)
@@ -592,8 +594,8 @@ def send2(request):
 
 @login_required
 @auth_profile(['all'])
-def getStatements(request, thread_title):
-    thread = Thread.objects.get(title=thread_title)
-    statements = Statement.objects.filter(thread=thread.id)
-    print(thread_title, len(statements))
+def getStatements(request, thread_id):
+    thread = Thread.objects.get(id=thread_id)
+    statements = Statement.objects.filter(thread=thread_id)
+    print(thread.title, len(statements))
     return JsonResponse({"statements": list(statements.values())})

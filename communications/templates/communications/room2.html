@@ -13,6 +13,7 @@
 
 {% block content %}
 
+
     <div id="display">
         <!--  Used as container for statemens? -->
     </div>
@@ -41,7 +42,7 @@
         setInterval(function(){
             $.ajax({
                 type: 'GET',
-                url : "/communications/getStatements/{{thread_title}}/",
+                url : "/communications/getStatements/{{thread_id}}/",
                 success: function(response){
                     console.log(response);
                     $("#display").empty();
