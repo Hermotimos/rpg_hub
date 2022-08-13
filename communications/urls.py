@@ -33,7 +33,7 @@ urlpatterns = [
     path('send', views.send, name='send'),
     path('getMessages/<str:room_name>/', views.getMessages, name='getMessages'),
     
-    path('thread/<int:thread_id>/', views.thread, name='thread'),
+    path('thread/<int:thread_id>/<str:tag_title>/', views.thread, name='thread'),
     path('send2', views.send2, name='send2'),
     path('getStatements/<int:thread_id>/', views.getStatements, name='getStatements'),
     

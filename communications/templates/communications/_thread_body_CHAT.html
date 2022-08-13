@@ -1,0 +1,33 @@
+{% load crispy_forms_tags %}
+{% load custom_filters %}
+
+
+
+<div id="display">
+    <!--  Used as container for statemens? -->
+</div>
+<div class="container">
+
+    <!-- TODO include '_create_form.html' - wymaga dodania zmiennych form1, form2 w widoku-->
+    
+    <form id="post-form">
+        {% csrf_token %}
+        <input type="hidden" name="thread_id" id="thread_id" value="{{thread.id}}"/>
+        <input type="text" name="text" id="text" width="100px"/>
+        <input type="submit" value="Wyślij">
+    </form>
+</div>
+
+
+
+{% if thread.is_ended %}
+    <div class="row">
+        <div class="col-12">
+            <p class="mt-5 mb-0 text-center">✧</p>
+            <p class="mb-0 text-center">✧ ✦ ✧</p>
+            <p class="mb-5 mt-0 text-center">✧</p>
+        </div>
+    </div>
+{% else %}
+    {% include '_create_form.html' %}
+{% endif %}

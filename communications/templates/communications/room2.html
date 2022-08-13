@@ -6,31 +6,17 @@
 
 {% block head_extra %}
     <link rel="stylesheet" href="{% static 'css/communications.css' %}">
-    
 {% endblock head_extra %}
 
 
-
 {% block content %}
-
-
-    <div id="display">
-        <!--  Used as container for statemens? -->
-    </div>
     <div class="container">
-
-        <!-- TODO include '_create_form.html' - wymaga dodania zmiennych form1, form2 w widoku-->
-        
-        <form id="post-form">
-            {% csrf_token %}
-            <input type="hidden" name="thread_id" id="thread_id" value="{{thread.id}}"/>
-            <input type="text" name="text" id="text" width="100px"/>
-            <input type="submit" value="Wyślij">
-        </form>
+        {% include 'communications/_thread_header.html' %}
     </div>
-
+    <div class="container mt-5 pt-3 pl-0">
+        {% include 'communications/_thread_body_CHAT.html' %}
+    </div>
 {% endblock content %}
-
 
 
 {% block javascript %}

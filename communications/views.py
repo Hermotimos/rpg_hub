@@ -564,11 +564,12 @@ def getMessages(request, room_name):
 
 @login_required
 @auth_profile(['all'])
-def thread(request, thread_id):
+def thread(request, thread_id, tag_title):
     thread = Thread.objects.get(id=thread_id)
     context = {
         'page_title': thread.title,
         'thread_id': thread_id,
+        'tag_title': tag_title,
         'thread': thread
     }
     return render(request, 'communications/room2.html', context)
@@ -599,3 +600,107 @@ def getStatements(request, thread_id):
     statements = Statement.objects.filter(thread=thread_id)
     print(thread.title, len(statements))
     return JsonResponse({"statements": list(statements.values())})
+
+
+
+
+@login_required
+@auth_profile(['all'])
+def thread(request, thread_id, tag_title):
+    current_profile = request.current_profile
+    
+    tags = ThreadTag.objects.filter(
+        author=current_profile,
+        kind=Thread.objects.get(id=thread_id).kind).select_related('author')
+    print(tags)
+    threads = Thread.objects.prefetch_related(
+        Prefetch('tags', queryset=tags),
+        'statements__seen_by',
+        'statements__author__user',
+        'statements__author__character',
+        'followers',
+        'participants')
+    thread = threads.get(id=thread_id)
+    
+    informables = thread.informables()
+    if current_profile.status != 'gm':
+        informables = informables.filter(
+            character__in=current_profile.character.acquaintaned_to.all())
+    
+    # Update all statements to be seen by the profile
+    SeenBy = Statement.seen_by.through
+    relations = []
+    for statement in thread.statements.all():
+        relations.append(
+            SeenBy(statement_id=statement.id, profile_id=current_profile.id))
+    SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
+    
+    # Create ThreadEditTagsForm and StatementCreateForm
+    # Check if custom inform form activated, if not then StatementCreateForm,
+    # if not then ThreadEditTagsForm: this order ensures correct handling, as
+    # each form redirects if valid (and ThreadEditTagsForm is always invalid).
+    thread_tags_form = ThreadEditTagsForm(
+        data=request.POST or None,
+        instance=thread,
+        tags=tags)
+    statement_form = StatementCreateForm(
+        data=request.POST or None,
+        files=request.FILES or None,
+        current_profile=current_profile,
+        thread_kind=thread.kind,
+        participants=thread.participants.all(),
+        initial={'author': current_profile})
+    
+    if request.method == 'POST' and any(
+            [thread_kind in request.POST.keys() for thread_kind in
+             THREADS_MAP.keys()]
+    ):
+        # Enters only when request.POST has 'Debate', 'Announcement' etc. key
+        # <QueryDict: {'csrfmiddlewaretoken': [...], '145': ['on'], 'Debate': ['56']}>
+        thread_inform(current_profile, request, thread, tag_title)
+        return redirect('communications:thread', thread_id=thread.id,
+                        tag_title=tag_title)
+    
+    if statement_form.is_valid():
+        statement = statement_form.save(commit=False, thread_kind=thread.kind)
+        statement.thread = thread
+        statement.save()
+        try:
+            statement.seen_by.add(current_profile)
+        except ValueError as exc:
+            # Ignore ValueErrors caused by Statement deleted by signal
+            # This happens in cases of doubled Statement's
+            if 'needs to have a value for field "id"' not in exc.args[0]:
+                raise exc
+        
+        send_mail(
+            subject=f"[RPG] Nowa wypowiedź: '{thread.title}'",
+            message=f"{request.get_host()}{thread.get_absolute_url()}",
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[
+                p.user.email for p in
+                thread.followers.exclude(id=current_profile.id)])
+        messages.info(request, "Dodano wypowiedź!")
+        return redirect('communications:thread', thread_id=thread.id,
+                        tag_title=tag_title)
+    
+    if thread_tags_form.is_valid():
+        thread_tags_form.save()
+        messages.info(request, "Zapisano zmiany!")
+        return redirect('communications:thread', thread_id=thread.id,
+                        tag_title=tag_title)
+    
+    context = {
+        'page_title': thread.title,
+        'thread': thread,
+        'thread_id': thread_id,
+        'tag_title': tag_title,
+        'informables': informables,
+        'form_1': statement_form,
+        'thread_tags_form': thread_tags_form,
+    }
+    if current_profile in thread.participants.all() or current_profile.status == 'gm':
+        return render(request, 'communications/room2.html', context)
+    else:
+        return redirect('users:dupa')
+    
