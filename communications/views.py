@@ -600,7 +600,9 @@ def send2(request):
 def getStatements(request, thread_id):
     # thread = Thread.objects.get(id=thread_id)
     statements = Statement.objects.filter(thread=thread_id)
+    print(statements.values()[:1])
     # print(thread.title, len(statements))
+    from django.contrib.postgres.aggregates import ArrayAgg
 
     statements = statements.values(
         'thread_id', 'text', 'author_id', 'created_at',
@@ -613,7 +615,7 @@ def getStatements(request, thread_id):
                 image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'author__user_image'))
             ),
         ),
-        thread_obj=JSONObject(kind='thread__kind'),
+        thread_obj=JSONObject(kind='thread__kind', is_ended='thread__is_ended'),
         image_obj=JSONObject(
             url=Case(
                When(~Q(image=''), then=Concat(Value(settings.MEDIA_URL), 'image')),
@@ -622,8 +624,17 @@ def getStatements(request, thread_id):
             ExtractDay('created_at'), Value("-"), ExtractMonth('created_at'), Value("-"), ExtractYear('created_at'),
             Value(" | "),
             ExtractHour('created_at'), Value(":"), ExtractMinute('created_at'),
-            output_field=CharField())
-        # seen_by_objs=JSONObject(profiles='seen_by')             # returns only one profile and multiplies objects, use aggregate?: create list etc.
+            output_field=CharField()),
+        seen_by_objs=ArrayAgg(
+            JSONObject(
+                character=JSONObject(fullname='seen_by__character__fullname'),
+                image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'seen_by__image')),
+                user=JSONObject(
+                    username='seen_by__user__username',
+                    image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'seen_by__user_image'))
+                ),
+            )
+        )
     )
     
     print(statements.last())

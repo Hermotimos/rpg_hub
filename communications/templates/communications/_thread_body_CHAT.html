@@ -51,30 +51,33 @@
                     for (var num in response.statements)
                     {
                     
+                        var threadKind = response.statements[num].thread_obj.kind;
+                        var isGmAndDebate = ( response.statements[num].author_obj.status == 'gm' && threadKind == 'Debate' );
+                        var isLastStatement = ( num == response.statements.length - 1 );
+
                         var anchor = ``;
-                        if (num == response.statements.length - 1) {
+                        if (isLastStatement) {
                             anchor = `<a class="anchor anchor3" id="page-bottom"></a>`
                         };
-                    
-                        var stmtImage;
+
                         if ( response.statements[num].image_obj.url !== '' ) {
-                            stmtImage = `<p><img class="img-fluid mx-auto d-block" src="${response.statements[num].image_obj.url}"></p>`
+                            var stmtImage = `<p><img class="img-fluid mx-auto d-block" src="${response.statements[num].image_obj.url}"></p>`
                         } else {
                             stmtImage = ``
                         };
                         
                         
                         var authorImg;
-                        if ( response.statements[num].thread_obj.kind == 'Announcement' ) {
-                        
+                        if ( threadKind == 'Announcement' ) {
+
                             authorImg = `
                                 <img class="img-fluid rounded" src="${response.statements[num].author_obj.user.image.url}">
                                 <figcaption class="font-12 font-italic text-center pt-1">
                                     ${response.statements[num].author_obj.user.username}
                                 </figcaption>
                             `
-                        } else if ( response.statements[num].thread_obj.kind == 'Debate' ) {
-                        
+                        } else if ( threadKind == 'Debate' ) {
+
                             authorImg = `
                                  <img class="img-fluid rounded-circle" src="${response.statements[num].author_obj.image.url}">
                                  <figcaption class="font-12 font-italic text-center pt-1">
@@ -88,18 +91,18 @@
                         var stmtText = `<div class="statement">${response.statements[num].text}</div>`
                         var createdAt = response.statements[num].created_datetime;
                         
-                        var stmtRow;
-                        if ( response.statements[num].author_obj.status == 'gm' && response.statements[num].thread_obj.kind == 'Debate' ) {
-                        
-                            stmtRow = `
+
+                        if ( isGmAndDebate ) {
+
+                            var stmtRow = `
                                 <div class="col-12 font-18 font-italic text-justify">
                                     ${stmtText}
                                     ${stmtImage}
                                 </div>
                             `
                         } else {
-                        
-                            stmtRow = `
+
+                            var stmtRow = `
                                 <div class="col-2 pr-0">
                                     <figure class="figure align-top mx-auto mb-0 px-lg-3 pt-1">
                                         ${authorImg}
@@ -115,7 +118,46 @@
                             `
                         };
                             
+                        
+                        if ( !response.statements[num].thread_obj.is_ended ) {
+
+                            if ( isGmAndDebate ) {
+                                var tab = `<div></div>`;
+                                var seenByStyle = `col-12 mt-2`;
+                            } else {
+                                var tab = `<div class="col-2"></div>`;
+                                var seenByStyle = `col-10 mt-3`;
+                            };
+
+
+                            var seenByImgs = ``;
+                            var seen_by_objs = response.statements[num].seen_by_objs;
+
+                            for (var cnt in seen_by_objs) {
+                                if ( threadKind == 'Debate' ) {
+                                    var imgSmall = `<img class="portait img-sm border border-dark rounded-circle mr-1" src="${seen_by_objs[cnt].image.url}">`;
+                                } else if ( threadKind == 'Announcement' ) {
+                                    var imgSmall = `<img class="portait img-sm border border-dark rounded mr-1" src="${seen_by_objs[cnt].user.image.url}">`;
+                                }
+                                seenByImgs += imgSmall;
+                            };
                             
+                            
+                            
+                            var seenBy = `
+                                <div class="row mt-n3">
+                                    ${tab}
+                                    <div class="${seenByStyle}">
+                                        ${seenByImgs}
+                                    </div>
+                                </div>
+                            `
+                        } else {
+                            var seenBy = ``
+                        };
+                        
+                        
+                        
                         var stmt;
                         stmt = `
                             ${anchor}
@@ -123,7 +165,9 @@
                                 <div class="row">
                                     ${stmtRow}
                                 </div>
-                            </div>`
+                            </div>
+                            ${seenBy}
+                            `
                         
                         $("#display").append(stmt);
                     }
