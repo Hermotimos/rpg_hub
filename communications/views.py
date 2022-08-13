@@ -2,7 +2,10 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.db.models import Prefetch, Q
+from django.db.models import Prefetch, Value, Q, When, Case, ImageField, \
+    CharField
+from django.db.models.functions import Concat, JSONObject, \
+    ExtractDay, ExtractMonth, ExtractHour, ExtractMinute, ExtractYear
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
@@ -22,7 +25,6 @@ from communications.models import (
 )
 from rpg_project.utils import auth_profile
 from users.models import Profile
-
 
 # TODO
 #  1) main views separate? or separate templates based on 'thread_kind' param?
@@ -596,12 +598,36 @@ def send2(request):
 @login_required
 @auth_profile(['all'])
 def getStatements(request, thread_id):
-    thread = Thread.objects.get(id=thread_id)
+    # thread = Thread.objects.get(id=thread_id)
     statements = Statement.objects.filter(thread=thread_id)
-    print(thread.title, len(statements))
+    # print(thread.title, len(statements))
+
+    statements = statements.values(
+        'thread_id', 'text', 'author_id', 'created_at',
+        author_obj=JSONObject(
+            status='author__status',
+            image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'author__image')),
+            character=JSONObject(fullname='author__character__fullname'),
+            user=JSONObject(
+                username='author__user__username',
+                image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'author__user_image'))
+            ),
+        ),
+        thread_obj=JSONObject(kind='thread__kind'),
+        image_obj=JSONObject(
+            url=Case(
+               When(~Q(image=''), then=Concat(Value(settings.MEDIA_URL), 'image')),
+               default='image', output_field=ImageField())),
+        created_datetime=Concat(
+            ExtractDay('created_at'), Value("-"), ExtractMonth('created_at'), Value("-"), ExtractYear('created_at'),
+            Value(" | "),
+            ExtractHour('created_at'), Value(":"), ExtractMinute('created_at'),
+            output_field=CharField())
+        # seen_by_objs=JSONObject(profiles='seen_by')             # returns only one profile and multiplies objects, use aggregate?: create list etc.
+    )
+    
+    print(statements.last())
     return JsonResponse({"statements": list(statements.values())})
-
-
 
 
 @login_required
@@ -612,7 +638,7 @@ def thread(request, thread_id, tag_title):
     tags = ThreadTag.objects.filter(
         author=current_profile,
         kind=Thread.objects.get(id=thread_id).kind).select_related('author')
-    print(tags)
+
     threads = Thread.objects.prefetch_related(
         Prefetch('tags', queryset=tags),
         'statements__seen_by',

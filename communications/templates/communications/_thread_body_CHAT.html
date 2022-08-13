@@ -1,3 +1,4 @@
+{% load static %}
 {% load crispy_forms_tags %}
 {% load custom_filters %}
 
@@ -18,8 +19,6 @@
     </form>
 </div>
 
-
-
 {% if thread.is_ended %}
     <div class="row">
         <div class="col-12">
@@ -31,3 +30,130 @@
 {% else %}
     {% include '_create_form.html' %}
 {% endif %}
+
+
+
+{% block javascript %}
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+
+    <script>
+        
+        $(document).ready(function(){
+        
+        setInterval(function(){
+            $.ajax({
+                type: 'GET',
+                url : "/communications/getStatements/{{thread_id}}/",
+                success: function(response){
+                    console.log(response);
+                    $("#display").empty();
+                    
+                    for (var num in response.statements)
+                    {
+                    
+                        var anchor = ``;
+                        if (num == response.statements.length - 1) {
+                            anchor = `<a class="anchor anchor3" id="page-bottom"></a>`
+                        };
+                    
+                        var stmtImage;
+                        if ( response.statements[num].image_obj.url !== '' ) {
+                            stmtImage = `<p><img class="img-fluid mx-auto d-block" src="${response.statements[num].image_obj.url}"></p>`
+                        } else {
+                            stmtImage = ``
+                        };
+                        
+                        
+                        var authorImg;
+                        if ( response.statements[num].thread_obj.kind == 'Announcement' ) {
+                        
+                            authorImg = `
+                                <img class="img-fluid rounded" src="${response.statements[num].author_obj.user.image.url}">
+                                <figcaption class="font-12 font-italic text-center pt-1">
+                                    ${response.statements[num].author_obj.user.username}
+                                </figcaption>
+                            `
+                        } else if ( response.statements[num].thread_obj.kind == 'Debate' ) {
+                        
+                            authorImg = `
+                                 <img class="img-fluid rounded-circle" src="${response.statements[num].author_obj.image.url}">
+                                 <figcaption class="font-12 font-italic text-center pt-1">
+                                    ${response.statements[num].author_obj.character.fullname}
+                                 </figcaption>
+                            `
+                        };
+                        
+
+                        
+                        var stmtText = `<div class="statement">${response.statements[num].text}</div>`
+                        var createdAt = response.statements[num].created_datetime;
+                        
+                        var stmtRow;
+                        if ( response.statements[num].author_obj.status == 'gm' && response.statements[num].thread_obj.kind == 'Debate' ) {
+                        
+                            stmtRow = `
+                                <div class="col-12 font-18 font-italic text-justify">
+                                    ${stmtText}
+                                    ${stmtImage}
+                                </div>
+                            `
+                        } else {
+                        
+                            stmtRow = `
+                                <div class="col-2 pr-0">
+                                    <figure class="figure align-top mx-auto mb-0 px-lg-3 pt-1">
+                                        ${authorImg}
+                                    </figure>
+                                </div>
+                                <div class="col-10 font-18 font-italic text-justify">
+                                    <small class="text-muted">
+                                        ${createdAt}
+                                    </small>
+                                    ${stmtText}
+                                    ${stmtImage}
+                                </div>
+                            `
+                        };
+                            
+                            
+                        var stmt;
+                        stmt = `
+                            ${anchor}
+                            <div class="container px-0 mt-4">
+                                <div class="row">
+                                    ${stmtRow}
+                                </div>
+                            </div>`
+                        
+                        $("#display").append(stmt);
+                    }
+                },
+                error: function(response){
+                    alert('An error occured')
+                }
+            });
+        },3000);
+        })
+    </script>
+
+    <script type="text/javascript">
+      $(document).on('submit','#post-form',function(e){
+        e.preventDefault();
+    
+        $.ajax({
+          type:'POST',
+          url:'/communications/send2',
+          data:{
+              thread_id:$('#thread_id').val(),
+              text:$('#text').val(),
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+          },
+          success: function(data){
+             //alert(data)
+          }
+        });
+        document.getElementById('text').value = ''
+      });
+    </script>
+
+{% endblock javascript %}
