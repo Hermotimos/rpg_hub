@@ -63,7 +63,7 @@
                         if ( response.statements[num].image_obj.url !== '' ) {
                             var stmtImage = `<p><img class="img-fluid mx-auto d-block" src="${response.statements[num].image_obj.url}"></p>`
                         } else {
-                            stmtImage = ``
+                            var stmtImage = ``
                         };
                         
                         
@@ -87,11 +87,59 @@
                         };
                         
 
+
+                        if ( !response.statements[num].thread_obj.is_ended ) {
+
+                           
+
+
+
+                            var seenByImgs = ``;
+                            var seenByProfiles = response.statements[num].seen_by_objs;
+                            try {
+                                var nextnum = parseInt(num) + 1;
+                                var seenByProfilesNextStatementIds = [];
+                                for ( var idx in response.statements[nextnum].seen_by_objs ) {
+                                    console.log(response.statements[nextnum].seen_by_objs[idx].id)
+                                    seenByProfilesNextStatementIds.push(response.statements[nextnum].seen_by_objs[idx].id);
+                                };
+                            }
+                            catch(err) {
+                                var seenByProfilesNextStatementIds = [];
+                            }
+                            
+                            for (var cnt in seenByProfiles) {
+                                var imgSmall = ``;
+                                if ( !seenByProfilesNextStatementIds.includes(seenByProfiles[cnt].id) ) {
+                                
+                                    console.log(response.statements[num].text, seenByProfiles[cnt].id, seenByProfilesNextStatementIds);
+                                    console.log(seenByProfilesNextStatementIds.indexOf(seenByProfiles[cnt].id));
+                                    
+                                    if ( threadKind == 'Debate' ) {
+                                        imgSmall = `<img class="portait img-sm border border-dark rounded-circle mr-1" src="${seenByProfiles[cnt].image.url}">`;
+                                    } else if ( threadKind == 'Announcement' ) {
+                                        imgSmall = `<img class="portait img-sm border border-dark rounded mr-1" src="${seenByProfiles[cnt].user.image.url}">`;
+                                    };
+                                };
+                                seenByImgs += imgSmall;
+                            };
+                            
+                            
+                            var seenByRow = `
+                                <div class="row mt-2 ml-1">
+                                    <div>
+                                        ${seenByImgs}
+                                    </div>
+                                </div>
+                            `
+                        } else {
+                            var seenByRow = ``
+                        };
+                        
                         
                         var stmtText = `<div class="statement">${response.statements[num].text}</div>`
                         var createdAt = response.statements[num].created_datetime;
                         
-
                         if ( isGmAndDebate ) {
 
                             var stmtRow = `
@@ -114,59 +162,20 @@
                                     </small>
                                     ${stmtText}
                                     ${stmtImage}
+                                    ${seenByRow}
                                 </div>
                             `
                         };
-                            
-                        
-                        if ( !response.statements[num].thread_obj.is_ended ) {
-
-                            if ( isGmAndDebate ) {
-                                var tab = `<div></div>`;
-                                var seenByStyle = `col-12 mt-2`;
-                            } else {
-                                var tab = `<div class="col-2"></div>`;
-                                var seenByStyle = `col-10 mt-3`;
-                            };
-
-
-                            var seenByImgs = ``;
-                            var seen_by_objs = response.statements[num].seen_by_objs;
-
-                            for (var cnt in seen_by_objs) {
-                                if ( threadKind == 'Debate' ) {
-                                    var imgSmall = `<img class="portait img-sm border border-dark rounded-circle mr-1" src="${seen_by_objs[cnt].image.url}">`;
-                                } else if ( threadKind == 'Announcement' ) {
-                                    var imgSmall = `<img class="portait img-sm border border-dark rounded mr-1" src="${seen_by_objs[cnt].user.image.url}">`;
-                                }
-                                seenByImgs += imgSmall;
-                            };
-                            
-                            
-                            
-                            var seenBy = `
-                                <div class="row mt-n3">
-                                    ${tab}
-                                    <div class="${seenByStyle}">
-                                        ${seenByImgs}
-                                    </div>
-                                </div>
-                            `
-                        } else {
-                            var seenBy = ``
-                        };
                         
                         
-                        
-                        var stmt;
-                        stmt = `
+                        var stmt = `
                             ${anchor}
                             <div class="container px-0 mt-4">
                                 <div class="row">
                                     ${stmtRow}
                                 </div>
                             </div>
-                            ${seenBy}
+                            
                             `
                         
                         $("#display").append(stmt);

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.mail import send_mail
 from django.db.models import Prefetch, Value, Q, When, Case, ImageField, \
     CharField
@@ -598,11 +599,19 @@ def send2(request):
 @login_required
 @auth_profile(['all'])
 def getStatements(request, thread_id):
+    current_profile = request.current_profile
+
     # thread = Thread.objects.get(id=thread_id)
     statements = Statement.objects.filter(thread=thread_id)
-    print(statements.values()[:1])
-    # print(thread.title, len(statements))
-    from django.contrib.postgres.aggregates import ArrayAgg
+
+    # Update all statements to be seen by the profile
+    SeenBy = Statement.seen_by.through
+    relations = []
+    for statement in statements.exclude(seen_by=current_profile):
+        print(statement)
+        relations.append(
+            SeenBy(statement_id=statement.id, profile_id=current_profile.id))
+    SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
 
     statements = statements.values(
         'thread_id', 'text', 'author_id', 'created_at',
@@ -627,6 +636,7 @@ def getStatements(request, thread_id):
             output_field=CharField()),
         seen_by_objs=ArrayAgg(
             JSONObject(
+                id='seen_by__id',
                 character=JSONObject(fullname='seen_by__character__fullname'),
                 image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'seen_by__image')),
                 user=JSONObject(
@@ -665,12 +675,13 @@ def thread(request, thread_id, tag_title):
             character__in=current_profile.character.acquaintaned_to.all())
     
     # Update all statements to be seen by the profile
-    SeenBy = Statement.seen_by.through
-    relations = []
-    for statement in thread.statements.all():
-        relations.append(
-            SeenBy(statement_id=statement.id, profile_id=current_profile.id))
-    SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
+    # SeenBy = Statement.seen_by.through
+    # relations = []
+    # for statement in thread.statements.exclude(seen_by=current_profile):
+    #     relations.append(
+    #         SeenBy(statement_id=statement.id, profile_id=current_profile.id))
+    # SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
+    # TODO moved to getStatements - delete when ready
     
     # Create ThreadEditTagsForm and StatementCreateForm
     # Check if custom inform form activated, if not then StatementCreateForm,
