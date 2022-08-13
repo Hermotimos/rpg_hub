@@ -534,7 +534,6 @@ from django.http import HttpResponse, JsonResponse
 
 
 def room(request, room_name):
-    print(room_name)
     username = request.GET.get('username')
     room = Room.objects.get(name=room_name)
     context = {
@@ -558,7 +557,6 @@ def send(request):
 def getMessages(request, room_name):
     room = Room.objects.get(name=room_name)
     msgs = Message.objects.filter(room=room.id)
-    print(room_name, msgs)
     return JsonResponse({"messages": list(msgs.values())})
 
 
@@ -581,17 +579,14 @@ def thread(request, thread_id, tag_title):
 @login_required
 @auth_profile(['all'])
 def send2(request):
-    text = request.POST['text']
-    thread_id = request.POST['thread_id']
-    
+
     new_statement = Statement.objects.create(
-        text=text,
-        thread=Thread.objects.get(id=thread_id),
+        text=request.POST['ckeditortext'],
+        thread=Thread.objects.get(id=request.POST['thread_id']),
         author=request.current_profile,
         # TODO image
     )
     new_statement.seen_by.add(request.current_profile)
-    print(new_statement)
     new_statement.save()
     return HttpResponse('Message sent successfully')
 
@@ -601,16 +596,14 @@ def send2(request):
 def getStatements(request, thread_id):
     current_profile = request.current_profile
 
-    # thread = Thread.objects.get(id=thread_id)
     statements = Statement.objects.filter(thread=thread_id)
 
     # Update all statements to be seen by the profile
     SeenBy = Statement.seen_by.through
     relations = []
     for statement in statements.exclude(seen_by=current_profile):
-        print(statement)
-        relations.append(
-            SeenBy(statement_id=statement.id, profile_id=current_profile.id))
+        # print(statement)
+        relations.append(SeenBy(statement_id=statement.id, profile_id=current_profile.id))
     SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
 
     statements = statements.values(
@@ -646,8 +639,6 @@ def getStatements(request, thread_id):
             )
         )
     )
-    
-    print(statements.last())
     return JsonResponse({"statements": list(statements.values())})
 
 
@@ -698,10 +689,12 @@ def thread(request, thread_id, tag_title):
         thread_kind=thread.kind,
         participants=thread.participants.all(),
         initial={'author': current_profile})
-    
+
+    if request.method == 'POST':
+        print(request.POST)
+
     if request.method == 'POST' and any(
-            [thread_kind in request.POST.keys() for thread_kind in
-             THREADS_MAP.keys()]
+        [thread_kind in request.POST.keys() for thread_kind in THREADS_MAP.keys()]
     ):
         # Enters only when request.POST has 'Debate', 'Announcement' etc. key
         # <QueryDict: {'csrfmiddlewaretoken': [...], '145': ['on'], 'Debate': ['56']}>

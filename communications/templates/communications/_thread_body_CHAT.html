@@ -28,7 +28,7 @@
         </div>
     </div>
 {% else %}
-    {% include '_create_form.html' %}
+    {% include '_create_form2.html' %}
 {% endif %}
 
 
@@ -100,7 +100,6 @@
                                 var nextnum = parseInt(num) + 1;
                                 var seenByProfilesNextStatementIds = [];
                                 for ( var idx in response.statements[nextnum].seen_by_objs ) {
-                                    console.log(response.statements[nextnum].seen_by_objs[idx].id)
                                     seenByProfilesNextStatementIds.push(response.statements[nextnum].seen_by_objs[idx].id);
                                 };
                             }
@@ -111,9 +110,6 @@
                             for (var cnt in seenByProfiles) {
                                 var imgSmall = ``;
                                 if ( !seenByProfilesNextStatementIds.includes(seenByProfiles[cnt].id) ) {
-                                
-                                    console.log(response.statements[num].text, seenByProfiles[cnt].id, seenByProfilesNextStatementIds);
-                                    console.log(seenByProfilesNextStatementIds.indexOf(seenByProfiles[cnt].id));
                                     
                                     if ( threadKind == 'Debate' ) {
                                         imgSmall = `<img class="portait img-sm border border-dark rounded-circle mr-1" src="${seenByProfiles[cnt].image.url}">`;
@@ -192,20 +188,28 @@
     <script type="text/javascript">
       $(document).on('submit','#post-form',function(e){
         e.preventDefault();
-    
+        
+        frames = document.getElementsByClassName('cke_wysiwyg_frame ');
+        ckeditortext = frames[0].contentDocument.activeElement.innerHTML;
+        
         $.ajax({
           type:'POST',
           url:'/communications/send2',
           data:{
               thread_id:$('#thread_id').val(),
               text:$('#text').val(),
-            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+              ckeditortext:ckeditortext,
+              csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
           },
           success: function(data){
              //alert(data)
           }
         });
-        document.getElementById('text').value = ''
+        
+        document.getElementsByClassName('cke_wysiwyg_frame ')[0].contentDocument.activeElement.innerText = '';
+        
+        document.getElementById('text').value = '';
+        
       });
     </script>
 
