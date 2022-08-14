@@ -10,6 +10,7 @@ from django.db.models.functions import Concat, JSONObject, \
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
+from django.http import HttpResponse, JsonResponse
 
 from communications.forms import (
     AnnouncementCreateForm,
@@ -201,40 +202,113 @@ def threads_view(request, thread_kind, tag_title):
 
 @login_required
 @auth_profile(['all'])
+def statement_create_view(request):
+    current_profile = request.current_profile
+    
+    thread = Thread.objects.get(id=request.POST['thread_id'])
+    
+    new_statement = Statement.objects.create(
+        text=request.POST['ckeditortext'],
+        thread=thread,
+        author=Profile.objects.get(id=request.POST['author_id']),
+        image=request.FILES.get('file'))
+    new_statement.seen_by.add(request.current_profile)
+    new_statement.save()
+    
+    send_mail(
+        subject=f"[RPG] Nowa wypowiedź: '{thread.title}'",
+        message=f"{request.get_host()}{thread.get_absolute_url()}",
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[
+            p.user.email for p in
+            thread.followers.exclude(id=current_profile.id)])
+    
+    return HttpResponse('Message sent successfully')
+
+
+@login_required
+@auth_profile(['all'])
+def statements(request, thread_id):
+    current_profile = request.current_profile
+    
+    statements = Statement.objects.filter(thread=thread_id).order_by('created_at')
+    
+    # Update all statements to be seen by the profile
+    SeenBy = Statement.seen_by.through
+    relations = []
+    for statement in statements.exclude(seen_by=current_profile):
+        relations.append(SeenBy(statement_id=statement.id, profile_id=current_profile.id))
+    SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
+    
+    statements = statements.values(
+        'thread_id', 'text', 'author_id', 'created_at',
+        author_obj=JSONObject(
+            status='author__status',
+            image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'author__image')),
+            character=JSONObject(fullname='author__character__fullname'),
+            user=JSONObject(
+                username='author__user__username',
+                image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'author__user_image'))
+            ),
+        ),
+        thread_obj=JSONObject(kind='thread__kind', is_ended='thread__is_ended'),
+        image_obj=JSONObject(
+            url=Case(
+                When(~Q(image=''), then=Concat(Value(settings.MEDIA_URL), 'image')),
+                default='image', output_field=ImageField())),
+        created_datetime=Concat(
+            ExtractDay('created_at'), Value("-"), ExtractMonth('created_at'), Value("-"), ExtractYear('created_at'),
+            Value(" | "),
+            ExtractHour('created_at'), Value(":"), ExtractMinute('created_at'),
+            output_field=CharField()),
+        seen_by_objs=ArrayAgg(
+            JSONObject(
+                id='seen_by__id',
+                character=JSONObject(fullname='seen_by__character__fullname'),
+                image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'seen_by__image')),
+                user=JSONObject(
+                    username='seen_by__user__username',
+                    image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'seen_by__user_image'))
+                ),
+            )
+        )
+    )
+    return JsonResponse({"statements": list(statements.values())})
+
+
+@login_required
+@auth_profile(['all'])
 def thread_view(request, thread_id, tag_title):
     current_profile = request.current_profile
-
+    
     tags = ThreadTag.objects.filter(
-        author=current_profile, kind=Thread.objects.get(id=thread_id).kind).select_related('author')
-    threads = Thread.objects.prefetch_related(
+        author=current_profile,
+        kind=Thread.objects.get(id=thread_id).kind).select_related('author')
+    
+    thread = Thread.objects.prefetch_related(
         Prefetch('tags', queryset=tags),
         'statements__seen_by',
         'statements__author__user',
         'statements__author__character',
         'followers',
-        'participants')
-    thread = threads.get(id=thread_id)
+        'participants'
+    ).get(id=thread_id)
     
     informables = thread.informables()
     if current_profile.status != 'gm':
         informables = informables.filter(
             character__in=current_profile.character.acquaintaned_to.all())
-
-    # Update all statements to be seen by the profile
-    SeenBy = Statement.seen_by.through
-    relations = []
-    for statement in thread.statements.all():
-        relations.append(SeenBy(statement_id=statement.id, profile_id=current_profile.id))
-    SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
-
+    
     # Create ThreadEditTagsForm and StatementCreateForm
-    # Check if custom inform form activated, if not then StatementCreateForm,
+    # Check if custom inform form is activated, if not then StatementCreateForm,
     # if not then ThreadEditTagsForm: this order ensures correct handling, as
     # each form redirects if valid (and ThreadEditTagsForm is always invalid).
     thread_tags_form = ThreadEditTagsForm(
         data=request.POST or None,
         instance=thread,
         tags=tags)
+    
+    # StatementForm is handled via JS/Ajax in _thread_body.html and statement_create_view()
     statement_form = StatementCreateForm(
         data=request.POST or None,
         files=request.FILES or None,
@@ -242,44 +316,24 @@ def thread_view(request, thread_id, tag_title):
         thread_kind=thread.kind,
         participants=thread.participants.all(),
         initial={'author': current_profile})
-
+    
+    # Enters only when request.POST has 'Debate', 'Announcement' etc. key
+    # <QueryDict: {'csrfmiddlewaretoken': [...], '145': ['on'], 'Debate': ['56']}>
     if request.method == 'POST' and any(
         [thread_kind in request.POST.keys() for thread_kind in THREADS_MAP.keys()]
     ):
-        # Enters only when request.POST has 'Debate', 'Announcement' etc. key
-        # <QueryDict: {'csrfmiddlewaretoken': [...], '145': ['on'], 'Debate': ['56']}>
         thread_inform(current_profile, request, thread, tag_title)
-        return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
-
-    if statement_form.is_valid():
-        statement = statement_form.save(commit=False, thread_kind=thread.kind)
-        statement.thread = thread
-        statement.save()
-        try:
-            statement.seen_by.add(current_profile)
-        except ValueError as exc:
-            # Ignore ValueErrors caused by Statement deleted by signal
-            # This happens in cases of doubled Statement's
-            if 'needs to have a value for field "id"' not in exc.args[0]:
-                raise exc
-            
-        send_mail(
-            subject=f"[RPG] Nowa wypowiedź: '{thread.title}'",
-            message=f"{request.get_host()}{thread.get_absolute_url()}",
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[
-                p.user.email for p in thread.followers.exclude(id=current_profile.id)])
-        messages.info(request, "Dodano wypowiedź!")
         return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
     
     if thread_tags_form.is_valid():
         thread_tags_form.save()
         messages.info(request, "Zapisano zmiany!")
         return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
-
+    
     context = {
         'page_title': thread.title,
         'thread': thread,
+        'thread_id': thread_id,
         'tag_title': tag_title,
         'informables': informables,
         'form_1': statement_form,
@@ -289,7 +343,7 @@ def thread_view(request, thread_id, tag_title):
         return render(request, 'communications/thread.html', context)
     else:
         return redirect('users:dupa')
-    
+
 
 @cache_page(60 * 60 * 24)
 @vary_on_cookie
@@ -376,7 +430,6 @@ def follow_thread_view(request, thread_id):
         return redirect(request.META.get('HTTP_REFERER', '/'))
     else:
         return redirect('users:dupa')
-
 
 
 #
@@ -510,224 +563,5 @@ def follow_thread_view(request, thread_id):
 #     else:
 #         return redirect('users:dupa')
 
-
-
-from django.http import HttpResponse, JsonResponse
-
-
-
-# def home(request):
-#     return render(request, 'communications/home.html')
-#
-#
-# def checkview(request):
-#     room = request.POST['room_name']
-#     username = request.POST['username']
-#
-#     if Room.objects.filter(name=room).exists():
-#         return redirect('/communications/'+room+'/?username='+username)
-#     else:
-#         new_room = Room.objects.create(name=room)
-#         new_room.save()
-#         return redirect('/communications/'+room+'/?username='+username)
-
-#
-# def room(request, room_name):
-#     username = request.GET.get('username')
-#     room = Room.objects.get(name=room_name)
-#     context = {
-#         'username': username,
-#         'room_name': room_name,
-#         'room': room
-#     }
-#     return render(request, 'communications/room.html', context)
-
-
-# def send(request):
-#     message = request.POST['message']
-#     username = request.POST['username']
-#     room_id = request.POST['room_id']
-#
-#     new_message = Message.objects.create(value=message, user=username, room=room_id)
-#     new_message.save()
-#     return HttpResponse('Message sent successfully')
-#
-#
-# def getMessages(request, room_name):
-#     room = Room.objects.get(name=room_name)
-#     msgs = Message.objects.filter(room=room.id)
-#     return JsonResponse({"messages": list(msgs.values())})
-
-
 #  ========================================================================
-
-
-@login_required
-@auth_profile(['all'])
-def thread(request, thread_id, tag_title):
-    thread = Thread.objects.get(id=thread_id)
-    context = {
-        'page_title': thread.title,
-        'thread_id': thread_id,
-        'tag_title': tag_title,
-        'thread': thread
-    }
-    return render(request, 'communications/room2.html', context)
-
-
-@login_required
-@auth_profile(['all'])
-def send2(request):
-    current_profile = request.current_profile
-    print(request.POST)
-    thread = Thread.objects.get(id=request.POST['thread_id'])
-    
-    new_statement = Statement.objects.create(
-        text=request.POST['ckeditortext'],
-        thread=thread,
-        author=Profile.objects.get(id=request.POST['author_id']),
-        image=request.FILES.get('file'))
-    print(new_statement)
-    new_statement.seen_by.add(request.current_profile)
-    new_statement.save()
-    
-    send_mail(
-        subject=f"[RPG] Nowa wypowiedź: '{thread.title}'",
-        message=f"{request.get_host()}{thread.get_absolute_url()}",
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[
-            p.user.email for p in
-            thread.followers.exclude(id=current_profile.id)])
-
-    return HttpResponse('Message sent successfully')
-
-
-@login_required
-@auth_profile(['all'])
-def getStatements(request, thread_id):
-    current_profile = request.current_profile
-
-    statements = Statement.objects.filter(thread=thread_id).order_by('created_at')
-
-    # Update all statements to be seen by the profile
-    SeenBy = Statement.seen_by.through
-    relations = []
-    for statement in statements.exclude(seen_by=current_profile):
-        # print(statement)
-        relations.append(SeenBy(statement_id=statement.id, profile_id=current_profile.id))
-    SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
-
-    statements = statements.values(
-        'thread_id', 'text', 'author_id', 'created_at',
-        author_obj=JSONObject(
-            status='author__status',
-            image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'author__image')),
-            character=JSONObject(fullname='author__character__fullname'),
-            user=JSONObject(
-                username='author__user__username',
-                image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'author__user_image'))
-            ),
-        ),
-        thread_obj=JSONObject(kind='thread__kind', is_ended='thread__is_ended'),
-        image_obj=JSONObject(
-            url=Case(
-               When(~Q(image=''), then=Concat(Value(settings.MEDIA_URL), 'image')),
-               default='image', output_field=ImageField())),
-        created_datetime=Concat(
-            ExtractDay('created_at'), Value("-"), ExtractMonth('created_at'), Value("-"), ExtractYear('created_at'),
-            Value(" | "),
-            ExtractHour('created_at'), Value(":"), ExtractMinute('created_at'),
-            output_field=CharField()),
-        seen_by_objs=ArrayAgg(
-            JSONObject(
-                id='seen_by__id',
-                character=JSONObject(fullname='seen_by__character__fullname'),
-                image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'seen_by__image')),
-                user=JSONObject(
-                    username='seen_by__user__username',
-                    image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'seen_by__user_image'))
-                ),
-            )
-        )
-    )
-    return JsonResponse({"statements": list(statements.values())})
-
-
-@login_required
-@auth_profile(['all'])
-def thread(request, thread_id, tag_title):
-    current_profile = request.current_profile
-    
-    tags = ThreadTag.objects.filter(
-        author=current_profile,
-        kind=Thread.objects.get(id=thread_id).kind).select_related('author')
-    
-    threads = Thread.objects.prefetch_related(
-        Prefetch('tags', queryset=tags),
-        'statements__seen_by',
-        'statements__author__user',
-        'statements__author__character',
-        'followers',
-        'participants')
-    thread = threads.get(id=thread_id)
-    
-    informables = thread.informables()
-    if current_profile.status != 'gm':
-        informables = informables.filter(
-            character__in=current_profile.character.acquaintaned_to.all())
-    
-    # Update all statements to be seen by the profile
-    # SeenBy = Statement.seen_by.through
-    # relations = []
-    # for statement in thread.statements.exclude(seen_by=current_profile):
-    #     relations.append(
-    #         SeenBy(statement_id=statement.id, profile_id=current_profile.id))
-    # SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
-    # TODO moved to getStatements - delete when ready
-    
-    # Create ThreadEditTagsForm and StatementCreateForm
-    # Check if custom inform form is activated, if not then StatementCreateForm,
-    # if not then ThreadEditTagsForm: this order ensures correct handling, as
-    # each form redirects if valid (and ThreadEditTagsForm is always invalid).
-    thread_tags_form = ThreadEditTagsForm(
-        data=request.POST or None,
-        instance=thread,
-        tags=tags)
-    statement_form = StatementCreateForm(
-        data=request.POST or None,
-        files=request.FILES or None,
-        current_profile=current_profile,
-        thread_kind=thread.kind,
-        participants=thread.participants.all(),
-        initial={'author': current_profile})
-    
-    if request.method == 'POST':
-        print(request.POST)
-
-    # Enters only when request.POST has 'Debate', 'Announcement' etc. key
-    # <QueryDict: {'csrfmiddlewaretoken': [...], '145': ['on'], 'Debate': ['56']}>
-    if request.method == 'POST' and any(
-        [thread_kind in request.POST.keys() for thread_kind in THREADS_MAP.keys()]
-    ):
-        thread_inform(current_profile, request, thread, tag_title)
-        return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
-    
-    if thread_tags_form.is_valid():
-        thread_tags_form.save()
-        messages.info(request, "Zapisano zmiany!")
-        return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
-    
-    context = {
-        'page_title': thread.title,
-        'thread': thread,
-        'thread_id': thread_id,
-        'tag_title': tag_title,
-        'informables': informables,
-        'form_1': statement_form,
-        'thread_tags_form': thread_tags_form,
-    }
-    if current_profile in thread.participants.all() or current_profile.status == 'gm':
-        return render(request, 'communications/room2.html', context)
-    else:
-        return redirect('users:dupa')
 

@@ -1,0 +1,90 @@
+{% load crispy_forms_tags %}
+{% load custom_filters %}
+
+
+{% for statement in thread.statements.all %}
+    {% if forloop.last %}
+        <a class="anchor anchor3" id="page-bottom"></a>
+    {% endif %}
+    <div class="container px-0 mt-4">
+        <div class="row">
+            
+            {% if statement.author.status == 'gm' and statement.thread.kind == 'Debate' %}
+            
+                <div class="col-12 font-18 font-italic text-justify">
+                    <div class="statement">
+                        {{ statement.text|safe }}
+                    </div>
+                    {% if statement.image %}
+                        <p><img class="img-fluid mx-auto d-block" src="{{ statement.image.url }}"></p>
+                    {% endif %}
+                </div>
+            
+            {% else %}
+            
+                <div class="col-2 pr-0">
+                    <figure class="figure align-top mx-auto mb-0 px-lg-3 pt-1">
+                        {% with profile=statement.author %}
+                            {% include '_img_lg.html' %}
+                        {% endwith%}
+                    </figure>
+                </div>
+                <div class="col-10 font-18 font-italic text-justify ">
+                    <small class="text-muted">
+                        {{ statement.created_at|date:'d-M-Y | H:i' }}
+                    </small>
+                    <div class="statement">
+                        {{ statement.text|safe }}
+                    </div>
+                    {% if statement.image %}
+                        <p><img class="img-fluid mx-auto d-block" src="{{ statement.image.url }}"></p>
+                    {% endif %}
+                </div>
+            
+            {% endif %}
+            
+        </div>
+        
+        
+        {% if not thread.is_ended %}
+            <div class="row mt-n3" id="{% if forloop.last and not thread.is_ended %} page-bottom {% endif %}">
+                {% if thread.kind == 'Debate' and statement.author.status == 'gm' %}
+                    <div></div>
+                {% else %}
+                    <div class="col-2"></div>
+                {% endif %}
+                <div class="{% if thread.kind == 'Debate' and statement.author.status == 'gm' %} col-12 mt-2 {% else %} col-10 mt-3 {% endif %}">
+                    {% with next_statement=thread.statements.all|next_elem:forloop.counter0 %}
+                        {% for profile in statement.seen_by.all %}
+                            {% if profile not in next_statement.seen_by.all and profile.status != 'npc' %}
+                                {% include '_img_sm.html' %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endwith %}
+                    {% if forloop.last %}
+                        {% for profile in statement.seen_by.all %}
+                            {% if profile.status == 'gm' and statement.author.status == 'npc' %}
+                                <div></div>
+                            {% else %}
+                                {% include '_img_sm.html' %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
+{% endfor %}
+
+{% if thread.is_ended %}
+    <div class="row">
+        <div class="col-12">
+            <p class="mt-5 mb-0 text-center">✧</p>
+            <p class="mb-0 text-center">✧ ✦ ✧</p>
+            <p class="mb-5 mt-0 text-center">✧</p>
+        </div>
+    </div>
+{% else %}
+    {% include '_create_form.html' %}
+{% endif %}
