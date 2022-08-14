@@ -580,8 +580,6 @@ def thread(request, thread_id, tag_title):
 @auth_profile(['all'])
 def send2(request):
     current_profile = request.current_profile
-    
-    print(request.POST)
 
     thread = Thread.objects.get(id=request.POST['thread_id'])
     
@@ -589,8 +587,7 @@ def send2(request):
         text=request.POST['ckeditortext'],
         thread=thread,
         author=Profile.objects.get(id=request.POST['author_id']),
-        # TODO image
-    )
+        image=request.FILES.get('file'))
     new_statement.seen_by.add(request.current_profile)
     new_statement.save()
     
@@ -665,7 +662,7 @@ def thread(request, thread_id, tag_title):
     tags = ThreadTag.objects.filter(
         author=current_profile,
         kind=Thread.objects.get(id=thread_id).kind).select_related('author')
-
+    
     threads = Thread.objects.prefetch_related(
         Prefetch('tags', queryset=tags),
         'statements__seen_by',
@@ -690,7 +687,7 @@ def thread(request, thread_id, tag_title):
     # TODO moved to getStatements - delete when ready
     
     # Create ThreadEditTagsForm and StatementCreateForm
-    # Check if custom inform form activated, if not then StatementCreateForm,
+    # Check if custom inform form is activated, if not then StatementCreateForm,
     # if not then ThreadEditTagsForm: this order ensures correct handling, as
     # each form redirects if valid (and ThreadEditTagsForm is always invalid).
     thread_tags_form = ThreadEditTagsForm(
@@ -704,15 +701,17 @@ def thread(request, thread_id, tag_title):
         thread_kind=thread.kind,
         participants=thread.participants.all(),
         initial={'author': current_profile})
+    
+    if request.method == 'POST':
+        print(request.POST)
 
+    # Enters only when request.POST has 'Debate', 'Announcement' etc. key
+    # <QueryDict: {'csrfmiddlewaretoken': [...], '145': ['on'], 'Debate': ['56']}>
     if request.method == 'POST' and any(
         [thread_kind in request.POST.keys() for thread_kind in THREADS_MAP.keys()]
     ):
-        # Enters only when request.POST has 'Debate', 'Announcement' etc. key
-        # <QueryDict: {'csrfmiddlewaretoken': [...], '145': ['on'], 'Debate': ['56']}>
         thread_inform(current_profile, request, thread, tag_title)
-        return redirect('communications:thread', thread_id=thread.id,
-                        tag_title=tag_title)
+        return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
     
     # if statement_form.is_valid():
     #     statement = statement_form.save(commit=False, thread_kind=thread.kind)
@@ -740,8 +739,7 @@ def thread(request, thread_id, tag_title):
     if thread_tags_form.is_valid():
         thread_tags_form.save()
         messages.info(request, "Zapisano zmiany!")
-        return redirect('communications:thread', thread_id=thread.id,
-                        tag_title=tag_title)
+        return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
     
     context = {
         'page_title': thread.title,
@@ -756,4 +754,4 @@ def thread(request, thread_id, tag_title):
         return render(request, 'communications/room2.html', context)
     else:
         return redirect('users:dupa')
-    
+
