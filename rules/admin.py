@@ -201,11 +201,10 @@ class PowerSkillLevelInline(admin.StackedInline):
     
 @admin.register(PriestsSkill, SorcerersSkill, TheurgistsSkill)
 class PowerSkillAdmin(SkillAdmin):
-    fields = [
-        'name', 'name_second', 'name_origin', 'tested_trait', 'group', 'types',
-        'allowees'
-    ]
+    fields = ['name', 'name_second', 'name_origin', 'types', 'allowees']
     inlines = [PowerSkillLevelInline]
+    list_display = ['id', 'name', 'tested_trait']
+    list_editable = ['name', 'tested_trait']
 
 
 # -----------------------------------------------------------------------------
