@@ -29,9 +29,9 @@ urlpatterns = [
     
     # path('', views.home, name='home'),
     # path('checkview', views.checkview, name='checkview'),
-    path('<str:room_name>/', views.room, name='room'),  # http://127.0.0.1:8000/communications/thread/THREAD_NAME/
-    path('send', views.send, name='send'),
-    path('getMessages/<str:room_name>/', views.getMessages, name='getMessages'),
+    # path('<str:room_name>/', views.room, name='room'),  # http://127.0.0.1:8000/communications/thread/THREAD_NAME/
+    # path('send', views.send, name='send'),
+    # path('getMessages/<str:room_name>/', views.getMessages, name='getMessages'),
     
     path('thread/<int:thread_id>/<str:tag_title>/', views.thread, name='thread'),
     path('send2', views.send2, name='send2'),
