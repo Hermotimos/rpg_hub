@@ -100,7 +100,8 @@
                             
                             for (var cnt in seenByProfiles) {
                                 var imgSmall = ``;
-                                if ( !seenByProfilesNextStatementIds.includes(seenByProfiles[cnt].id) ) {
+                                console.log(seenByProfiles[cnt].id, response.statements[num].author_id);
+                                if ( !seenByProfilesNextStatementIds.includes(seenByProfiles[cnt].id)  && !(seenByProfiles[cnt].id == response.statements[num].author_id)) {
                                     
                                     if ( threadKind == 'Debate' ) {
                                         imgSmall = `<img class="portait img-sm border border-dark rounded-circle mr-1" src="${seenByProfiles[cnt].image.url}">`;
