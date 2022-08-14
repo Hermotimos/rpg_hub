@@ -175,7 +175,7 @@ def refresh_content_types(request):
 def clear_cache(request):
     cache.clear()
     messages.info(request, 'Opróżniono cache!')
-    return redirect('technicalities:reload-main')
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
 # ============================================================================
