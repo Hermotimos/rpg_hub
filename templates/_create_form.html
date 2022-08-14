@@ -7,7 +7,7 @@
         {{ form_2.media }}
         {{ form_3.media }}
         {{ form_4.media }}
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data" id="post-form">
             {% csrf_token %}
             {% if messages %}
                 {% for message in messages %}
