@@ -477,7 +477,6 @@ class SkillLevel(Model):
     level = CharField(max_length=10, choices=LEVELS)
     description = TextField(blank=True, null=True)
     perks = M2M(to=Perk, related_name='skill_levels', blank=True)
-    acquired_by = M2M(to=Profile, related_name='skill_levels', blank=True)
     # ------------------------------------------
     distance = PositiveSmallIntegerField(blank=True, null=True)
     radius = PositiveSmallIntegerField(blank=True, null=True)

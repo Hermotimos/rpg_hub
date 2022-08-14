@@ -142,8 +142,8 @@ class SkillGroupAdmin(admin.ModelAdmin):
 
 
 class RegularSkillLevelInline(admin.TabularInline):
-    fields = ['level', 'description', 'acquired_by', 'perks']
-    filter_horizontal = ['acquired_by', 'perks']
+    fields = ['level', 'description', 'perks']
+    filter_horizontal = ['perks']
     formfield_overrides = {
         models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
     }
@@ -152,7 +152,7 @@ class RegularSkillLevelInline(admin.TabularInline):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.prefetch_related('perks', 'acquired_by')
+        return qs.prefetch_related('perks')
 
     
 @admin.register(Skill, RegularSkill, MentalSkill)
@@ -184,19 +184,14 @@ class PowerSkillLevelInline(admin.StackedInline):
             'skill', 'level', 'distance', 'radius', 'duration',
             'saving_throw_trait', 'saving_throw_malus', 'damage',
         ),
-        ('description', 'acquired_by'),
+        'description',
     ]
-    filter_vertical = ['acquired_by']
     formfield_overrides = {
         models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 30, 'cols': 80})},
     }
     model = PriestsSkillLevel
     extra = 0
-    
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.prefetch_related('acquired_by')
     
     
 @admin.register(PriestsSkill, SorcerersSkill, TheurgistsSkill)
@@ -256,8 +251,8 @@ class SynergyAdmin(admin.ModelAdmin):
 
 @admin.register(SkillLevel, RegularSkillLevel, MentalSkillLevel)
 class SkillLevelAdmin(admin.ModelAdmin):
-    fields = ['skill', 'level', 'description', 'perks', 'acquired_by']
-    filter_horizontal = ['acquired_by', 'perks']
+    fields = ['skill', 'level', 'description', 'perks']
+    filter_horizontal = ['perks']
     formfield_overrides = {
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 8, 'cols': 80})},
     }
@@ -269,20 +264,14 @@ class SkillLevelAdmin(admin.ModelAdmin):
 
     def name(self, obj):
         return f'{str(obj.skill.name)} [{obj.level}]'
-    
-    def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == "acquired_by":
-            kwargs["queryset"] = Profile.objects.select_related('character')
-        return super().formfield_for_manytomany(db_field, request, **kwargs)
-    
+
     
 @admin.register(PriestsSkillLevel, SorcerersSkillLevel, TheurgistsSkillLevel)
 class PowerSkillLevelAdmin(admin.ModelAdmin):
     fields = [
         'skill', 'level', 'distance', 'radius', 'damage', 'saving_throw_trait',
-        'saving_throw_malus', 'duration', 'description', 'acquired_by',
+        'saving_throw_malus', 'duration', 'description',
     ]
-    filter_horizontal = ['acquired_by']
 
 # -----------------------------------------------------------------------------
 
