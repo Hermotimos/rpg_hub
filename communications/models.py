@@ -220,25 +220,3 @@ def delete_if_doubled(sender, instance, **kwargs):
 
 
 post_save.connect(delete_if_doubled, sender=Statement)
-
-
-
-
-
-
-
-
-
-
-class Room(Model):
-    name = CharField(max_length=1000)
-    
-    
-class Message(Model):
-    value = CharField(max_length=1000000)
-    date = DateTimeField(default=datetime.datetime.now, blank=True)
-    user = CharField(max_length=1000000)
-    room = CharField(max_length=1000000)
-    
-    
-    
