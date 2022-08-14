@@ -580,7 +580,7 @@ def thread(request, thread_id, tag_title):
 @auth_profile(['all'])
 def send2(request):
     current_profile = request.current_profile
-
+    print(request.POST)
     thread = Thread.objects.get(id=request.POST['thread_id'])
     
     new_statement = Statement.objects.create(
@@ -588,6 +588,7 @@ def send2(request):
         thread=thread,
         author=Profile.objects.get(id=request.POST['author_id']),
         image=request.FILES.get('file'))
+    print(new_statement)
     new_statement.seen_by.add(request.current_profile)
     new_statement.save()
     
@@ -598,7 +599,6 @@ def send2(request):
         recipient_list=[
             p.user.email for p in
             thread.followers.exclude(id=current_profile.id)])
-    messages.info(request, "Dodano wypowiedź!")
 
     return HttpResponse('Message sent successfully')
 
@@ -608,7 +608,7 @@ def send2(request):
 def getStatements(request, thread_id):
     current_profile = request.current_profile
 
-    statements = Statement.objects.filter(thread=thread_id)
+    statements = Statement.objects.filter(thread=thread_id).order_by('created_at')
 
     # Update all statements to be seen by the profile
     SeenBy = Statement.seen_by.through
@@ -712,29 +712,6 @@ def thread(request, thread_id, tag_title):
     ):
         thread_inform(current_profile, request, thread, tag_title)
         return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
-    
-    # if statement_form.is_valid():
-    #     statement = statement_form.save(commit=False, thread_kind=thread.kind)
-    #     statement.thread = thread
-    #     statement.save()
-    #     try:
-    #         statement.seen_by.add(current_profile)
-    #     except ValueError as exc:
-    #         # Ignore ValueErrors caused by Statement deleted by signal
-    #         # This happens in cases of doubled Statement's
-    #         if 'needs to have a value for field "id"' not in exc.args[0]:
-    #             raise exc
-    #
-    #     send_mail(
-    #         subject=f"[RPG] Nowa wypowiedź: '{thread.title}'",
-    #         message=f"{request.get_host()}{thread.get_absolute_url()}",
-    #         from_email=settings.EMAIL_HOST_USER,
-    #         recipient_list=[
-    #             p.user.email for p in
-    #             thread.followers.exclude(id=current_profile.id)])
-    #     messages.info(request, "Dodano wypowiedź!")
-    #     return redirect('communications:thread', thread_id=thread.id,
-    #                     tag_title=tag_title)
     
     if thread_tags_form.is_valid():
         thread_tags_form.save()

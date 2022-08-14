@@ -27,6 +27,12 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 
     <script>
+        $(document).ready(function(){
+            CKEDITOR.config.startupFocus = true;
+        })
+    </script>
+
+    <script>
         
         $(document).ready(function(){
         
@@ -163,49 +169,53 @@
                             
                             $("#display").append(stmt);
                         }
-                    },
-                    error: function(response){
-                        alert('An error occured')
                     }
+                    /*
+                    ,
+                    error: function(response){
+                        alert('An error occured');
+                        console.log('ggggggg', response);
+                    }
+                    */
+                    
                 });
             },3000);
         })
     </script>
 
-    <script type="text/javascript">
-      $(document).on('submit','#post-form',function(e){
-        e.preventDefault();
-        
-        frames = document.getElementsByClassName('cke_wysiwyg_frame');
-        ckeditortext = frames[0].contentDocument.activeElement.innerHTML;
-        
-        //console.log(file);
-        
-        var formData = new FormData();
-        formData.append('thread_id', $('#thread_id').val());
-        formData.append('author_id', $('#id_author').val());
-        formData.append('ckeditortext', ckeditortext);
-        formData.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
-        formData.append('file', document.getElementById('id_image').files[0]);
 
-        $.ajax({
-          type:'POST',
-          url:'/communications/send2',
-          
-          // processData and contentType required to use FormData
-          processData: false,
-          contentType: false,
-          data: formData,
-          
-          success: function(data){
-             //alert(data)
-          }
+    <script type="text/javascript">
+        $(document).on('submit','#post-form',function(e){
+            e.preventDefault();
+            
+            frames = document.getElementsByClassName('cke_wysiwyg_frame');
+            ckeditortext = frames[0].contentDocument.activeElement.innerHTML;
+            
+            var formData = new FormData();
+            formData.append('thread_id', $('#thread_id').val());
+            formData.append('author_id', $('#id_author').val());
+            formData.append('ckeditortext', ckeditortext);
+            formData.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+            formData.append('file', document.getElementById('id_image').files[0]);
+            
+            $.ajax({
+                type:'POST',
+                url:'/communications/send2',
+                
+                // processData and contentType required to use FormData
+                processData: false,
+                contentType: false,
+                data: formData,
+                
+                success: function(data){
+                 //alert(data)
+                }
+            });
+            
+            document.getElementsByClassName('cke_wysiwyg_frame ')[0].contentDocument.activeElement.innerText = null;
+            document.getElementById('id_image').value = null;
+        
         });
-        
-        document.getElementsByClassName('cke_wysiwyg_frame ')[0].contentDocument.activeElement.innerText = null;
-        document.getElementById('id_image').value = null;
-        
-      });
     </script>
 
 {% endblock javascript %}

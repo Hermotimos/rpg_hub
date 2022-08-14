@@ -2,12 +2,11 @@
 
 {% block head_extra %}
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
-    <script src="{% static 'js/showTime.js' %}"></script>
 {% endblock head_extra %}
 
 <div class="content-section-sidebar">
     <aside>
-        <img class="account-img-sidebar" onload="showTime()" src="{{ request.current_profile.image.url }}">
+        <img class="account-img-sidebar" src="{{ request.current_profile.image.url }}">
         <h3 class="mb-4 text-center">
             <a href="{% url 'prosoponomikon:character' request.current_profile.character.id %}">
                {{ request.current_profile.character.fullname }}
