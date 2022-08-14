@@ -512,7 +512,6 @@ def follow_thread_view(request, thread_id):
 
 
 
-from communications.models import Room, Message
 from django.http import HttpResponse, JsonResponse
 
 
@@ -532,32 +531,32 @@ from django.http import HttpResponse, JsonResponse
 #         new_room.save()
 #         return redirect('/communications/'+room+'/?username='+username)
 
-
-def room(request, room_name):
-    username = request.GET.get('username')
-    room = Room.objects.get(name=room_name)
-    context = {
-        'username': username,
-        'room_name': room_name,
-        'room': room
-    }
-    return render(request, 'communications/room.html', context)
-
-
-def send(request):
-    message = request.POST['message']
-    username = request.POST['username']
-    room_id = request.POST['room_id']
-
-    new_message = Message.objects.create(value=message, user=username, room=room_id)
-    new_message.save()
-    return HttpResponse('Message sent successfully')
+#
+# def room(request, room_name):
+#     username = request.GET.get('username')
+#     room = Room.objects.get(name=room_name)
+#     context = {
+#         'username': username,
+#         'room_name': room_name,
+#         'room': room
+#     }
+#     return render(request, 'communications/room.html', context)
 
 
-def getMessages(request, room_name):
-    room = Room.objects.get(name=room_name)
-    msgs = Message.objects.filter(room=room.id)
-    return JsonResponse({"messages": list(msgs.values())})
+# def send(request):
+#     message = request.POST['message']
+#     username = request.POST['username']
+#     room_id = request.POST['room_id']
+#
+#     new_message = Message.objects.create(value=message, user=username, room=room_id)
+#     new_message.save()
+#     return HttpResponse('Message sent successfully')
+#
+#
+# def getMessages(request, room_name):
+#     room = Room.objects.get(name=room_name)
+#     msgs = Message.objects.filter(room=room.id)
+#     return JsonResponse({"messages": list(msgs.values())})
 
 
 #  ========================================================================
