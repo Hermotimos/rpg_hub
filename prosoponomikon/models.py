@@ -234,7 +234,7 @@ class Character(Model):
             initial=Lower(Substr('known_character__fullname', 1, 1)))
 
     def acquisitions_for_character_sheet(self):
-        acquisitions = self.acquisitions.annotate(
+        return self.acquisitions.annotate(
             type=F('skill_level__skill__types__name'),
             group=F('skill_level__skill__group__name'),
         ).prefetch_related(
@@ -255,10 +255,37 @@ class Character(Model):
         ).distinct(
             'skill_level__skill__name',
             'weapon__name',
-            'sphragis__name'
+            'sphragis__name',
         )
-        return acquisitions
         
+    def synergies_for_character_sheet(self):
+        from rules.models import Synergy, SynergyLevel
+        skill_levels = self.skill_levels.all()
+        synergy_levels = SynergyLevel.objects.prefetch_related('skill_levels')
+        synergy_levels_ids = [
+            synergy_lvl.id for synergy_lvl in synergy_levels
+            if all(
+                [(skill_lvl in skill_levels) for skill_lvl in synergy_lvl.skill_levels.all()])
+        ]
+        synergy_levels = synergy_levels.filter(
+            id__in=synergy_levels_ids
+        ).prefetch_related(
+            'synergy__skills',
+            'perks__conditional_modifiers__conditions',
+            'perks__conditional_modifiers__combat_types',
+            'perks__conditional_modifiers__modifier__factor',
+            'perks__comments',
+            'skill_levels__skill',
+        )
+        
+        synergies = Synergy.objects.filter(
+            synergy_levels__in=synergy_levels
+        ).prefetch_related(
+            Prefetch('synergy_levels', queryset=synergy_levels)
+        ).distinct()
+        
+        return synergies
+    
     def skill_types_for_character_sheet(self):
         skills = Skill.objects.filter(
             skill_levels__acquiring_characters=self

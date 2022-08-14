@@ -134,42 +134,6 @@ class Profile(Model):
         qs = qs.select_related('main_image__image')
         return qs
 
-    def skills_acquired_with_skill_levels(self):
-        from rules.models import Skill, SkillLevel
-        skills = Skill.objects.filter(skill_levels__acquired_by=self)
-        skill_levels = SkillLevel.objects.filter(acquired_by=self)
-        skills = skills.prefetch_related(
-            Prefetch('skill_levels', queryset=skill_levels),
-            'skill_levels__perks__conditional_modifiers__conditions',
-            'skill_levels__perks__conditional_modifiers__combat_types',
-            'skill_levels__perks__conditional_modifiers__modifier__factor',
-            'skill_levels__perks__comments',
-        )
-        return skills.select_related('group__type').distinct()
-
-    def synergies_acquired_with_synergies_levels(self):
-        from rules.models import Synergy, SynergyLevel, SkillLevel
-        skill_levels = SkillLevel.objects.filter(acquired_by=self)
-        synergy_levels = SynergyLevel.objects.prefetch_related('skill_levels')
-        synergy_levels_ids = [
-            synergy_lvl.id for synergy_lvl in synergy_levels
-            if all([(skill_lvl in skill_levels) for skill_lvl in
-                    synergy_lvl.skill_levels.all()])
-        ]
-        synergy_levels = SynergyLevel.objects.filter(id__in=synergy_levels_ids)
-        synergy_levels = synergy_levels.prefetch_related(
-            'synergy__skills',
-            'perks__conditional_modifiers__conditions',
-            'perks__conditional_modifiers__combat_types',
-            'perks__conditional_modifiers__modifier__factor',
-            'perks__comments',
-            'skill_levels__skill',
-        )
-        synergies = Synergy.objects.filter(synergy_levels__in=synergy_levels)
-        synergies = synergies.prefetch_related(
-            Prefetch('synergy_levels', queryset=synergy_levels))
-        return synergies.distinct()
-
     def synergies_allowed(self, skilltype_kind):
         """Get synergies whose all composing skills are allowed to any od user's profiles."""
         from rules.models import Synergy, RegularSynergy, MentalSynergy, Skill

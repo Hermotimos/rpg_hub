@@ -346,5 +346,8 @@ class CharacterAcquaintanceshipsAdmin(CharacterAdmin):
 
 @admin.register(CharacterAcquisitions)
 class CharacterAcquisitionsAdmin(CharacterAdmin):
-    fields = ['profile', 'fullname']
+    fields = [
+        'fullname',
+        ('strength', 'dexterity', 'endurance', 'experience'),
+    ]
     inlines = [AcquisitionInline]
