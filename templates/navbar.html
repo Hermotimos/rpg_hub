@@ -168,6 +168,12 @@
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav">
                     {% if user.is_authenticated %}
+                        {% if request.current_profile.status == 'gm' %}
+                            <a class="btn btn-outline-light btn-space" href="{% url 'technicalities:clear-cache' %}"
+                                data-toggle="tooltip" data-placement="bottom" title="Opróżnij Cache">
+                                <i class="icon-clear-cache"></i>
+                            </a>
+                        {% endif %}
                         <a class="btn btn-outline-light btn-space" href="{% url 'contact:demands-create' %}"
                             data-toggle="tooltip" data-placement="bottom" title="Dezyderat">
                             <i class="icon-demand"></i>

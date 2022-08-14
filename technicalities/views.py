@@ -1,5 +1,5 @@
 import os
-
+from django.core.cache import cache
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import logout
@@ -167,6 +167,14 @@ def refresh_content_types(request):
             c.delete()
     deleted = "<br>".join([str(dict_) for dict_ in deleted]) if deleted else 0
     messages.info(request, mark_safe(f"Usunięto content types:\n{deleted}"))
+    return redirect('technicalities:reload-main')
+
+
+@login_required
+@auth_profile(['gm'])
+def clear_cache(request):
+    cache.clear()
+    messages.info(request, 'Opróżniono cache!')
     return redirect('technicalities:reload-main')
 
 
