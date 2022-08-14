@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% load crispy_forms_tags %}
+
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/communications.css' %}">
+{% endblock head_extra %}
+
+
+{% block content %}
+    <div class="container">
+        {% include 'communications/_thread_header.html' %}
+    </div>
+    <div class="container mt-5 pt-3 pl-0">
+        {% include 'communications/_thread_body_CHAT.html' %}
+    </div>
+{% endblock content %}
+
