@@ -636,7 +636,6 @@ class SynergyLevel(Model):
     description = TextField(max_length=4000, blank=True, null=True)
     perks = M2M(to=Perk, related_name='synergy_levels', blank=True)
     skill_levels = M2M(to=SkillLevel, related_name='synergy_levels')
-    acquired_by = M2M(to=Profile, related_name='synergy_levels', blank=True)
 
     class Meta:
         ordering = ['synergy', 'level']

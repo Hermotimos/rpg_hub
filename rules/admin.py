@@ -278,7 +278,7 @@ class PowerSkillLevelAdmin(admin.ModelAdmin):
 
 @admin.register(SynergyLevel, RegularSynergyLevel, MentalSynergyLevel)
 class SynergyLevelAdmin(admin.ModelAdmin):
-    filter_horizontal = ['acquired_by', 'perks', 'skill_levels']
+    filter_horizontal = ['perks', 'skill_levels']
     formfield_overrides = {
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 8, 'cols': 80})},
     }
