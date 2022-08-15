@@ -2,9 +2,14 @@
 {% load custom_filters %}
 
 <div data-toggle="tooltip" data-placement="top" data-html="true"
-     title="{% if acquisition.sphragis.id %}
-        [Sfragis {{ acquisition.sphragis.name_genitive }}]
-        {% if request.current_profile.can_view_all %}<br>{{ acquisition.skill_level.skill.name_second }}<br>{{ acquisition.skill_level.skill.name_origin }}{% endif %}
+     title="
+        {% if acquisition.sphragis.id %}
+            {% if request.current_profile.can_view_all %}
+                [Sfragis {{ acquisition.sphragis.name_genitive }}]
+                <br>{{ acquisition.skill_level.skill.name_second }}<br>{{ acquisition.skill_level.skill.name_origin }}
+            {% else %}
+                Sfragis {{ acquisition.sphragis.name_genitive }}
+            {% endif %}
         {% endif %}">
     <div class="d-flex flex-nowrap hover-pointer" data-toggle="collapse"
          data-target="#{{ acquisition.skill_level.skill|cut:' ' }}{{ skill_type|cut:' ' }}{{ acquisition.weapon.id }}{{ acquisition.sphragis.id }}">
