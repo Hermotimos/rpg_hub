@@ -36,9 +36,16 @@ def ordered_columns(list_: list, n: int) -> List[list]:
 
 
 @register.filter
-def get_max_skill_level_no(skill_levels_list, ):
-    levels = [skill_lvl.level for skill_lvl in skill_levels_list]
-    return max(levels)
+def max_synergy_level_no(synergy_levels):
+
+    def max_skill_level_no(skill_levels):
+        return max(
+            [skill_lvl.level for skill_lvl in skill_levels])
+    
+    return max(
+        [max_skill_level_no(synergy_lvl.skill_levels.all())
+         for synergy_lvl in synergy_levels]
+    )
 
 
 @register.filter
