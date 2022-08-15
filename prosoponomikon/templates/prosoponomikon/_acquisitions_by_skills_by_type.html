@@ -11,45 +11,48 @@
         
     <!-- ACQUISITIONS PER SKILLS TYPES-->
     {% for skill_type in skill_types %}
-        <div class="card mb-1">
-            <div class="card-header card-header-resp hover-blue" id="{{ skill_type.name|cut:' ' }}"
-                 data-toggle="collapse" data-target="#collapse{{ skill_type.name|cut:' ' }}" aria-expanded="true" aria-controls="collapse{{ skill_type.name|cut:' ' }}">
-                <label class="h4 font-weight-bold m-0 hover-blue font-resp-15">
-                    {{ skill_type.name }}
-                </label>
-            </div>
-            <div id="collapse{{ skill_type.name|cut:' ' }}" class="collapse" aria-labelledby="{{ skill_type.name|cut:' ' }}" data-parent="#accordion{{ panel_id }}">
-                <div class="card-body container">
-                    <!-- This conditional is necessary to avoid regrouping of skills that have multiple SkillTypes within each SkillType
-                        In some cases it would result in leaving most of the skills ungrouped while some of them grouped. -->
-                    {% with skills=skill_type.skills.all %}
-                    
-                        {% if skill_type.skill_groups.exists %}
-                            {% regroup skills|dictsort:"group.name" by group as skillgroup_list %}
-                            {% for skillgroup in skillgroup_list %}
-                                {% if skillgroup.grouper.name %}
-                                    <h4 class="mt-4 mb-2 border-bottom text-center font-resp-15 font-weight-bold">
-                                        {{ skillgroup.grouper.name }}
-                                    </h4>
-                                {% endif %}
+        {% if skill_type.kinds.all|match_kinds:skilltype_kinds %}
+    
+            <div class="card mb-1">
+                <div class="card-header card-header-resp hover-blue" id="{{ skill_type.name|cut:' ' }}"
+                     data-toggle="collapse" data-target="#collapse{{ skill_type.name|cut:' ' }}" aria-expanded="true" aria-controls="collapse{{ skill_type.name|cut:' ' }}">
+                    <label class="h4 font-weight-bold m-0 hover-blue font-resp-15">
+                        {{ skill_type.name }}
+                    </label>
+                </div>
+                <div id="collapse{{ skill_type.name|cut:' ' }}" class="collapse" aria-labelledby="{{ skill_type.name|cut:' ' }}" data-parent="#accordion{{ panel_id }}">
+                    <div class="card-body container">
+                        <!-- This conditional is necessary to avoid regrouping of skills that have multiple SkillTypes within each SkillType
+                            In some cases it would result in leaving most of the skills ungrouped while some of them grouped. -->
+                        {% with skills=skill_type.skills.all %}
+                        
+                            {% if skill_type.skill_groups.exists %}
+                                {% regroup skills|dictsort:"group.name" by group as skillgroup_list %}
+                                {% for skillgroup in skillgroup_list %}
+                                    {% if skillgroup.grouper.name %}
+                                        <h4 class="mt-4 mb-2 border-bottom text-center font-resp-15 font-weight-bold">
+                                            {{ skillgroup.grouper.name }}
+                                        </h4>
+                                    {% endif %}
+                                    {% for acquisition in acquisitions %}
+                                        {% if acquisition.skill_level.skill in skillgroup.list %}
+                                            {% include 'prosoponomikon/_acquisition.html' %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+                            {% else %}
                                 {% for acquisition in acquisitions %}
-                                    {% if acquisition.skill_level.skill in skillgroup.list %}
+                                    {% if acquisition.skill_level.skill in skills %}
                                         {% include 'prosoponomikon/_acquisition.html' %}
                                     {% endif %}
                                 {% endfor %}
-                            {% endfor %}
-                        {% else %}
-                            {% for acquisition in acquisitions %}
-                                {% if acquisition.skill_level.skill in skills %}
-                                    {% include 'prosoponomikon/_acquisition.html' %}
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    
-                    {% endwith %}
+                            {% endif %}
+                        
+                        {% endwith %}
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
     {% endfor %}
     
     <!-- ALL ACQUISITIONS -->

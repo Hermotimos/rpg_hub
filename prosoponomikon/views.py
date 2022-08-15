@@ -50,13 +50,11 @@ def prosoponomikon_character_view(request, character_id):
 
     # Declare empty variables
     [
-        knowledge_packets, acquaintanceships, acquisitions,
-        skill_types_regular, skill_types_priests, skill_types_sorcerers,
-        skill_types_theurgists,
+        knowledge_packets, acquaintanceships, acquisitions, skill_types,
         acquisitions_regular, acquisitions_priests, acquisitions_sorcerers,
         acquisitions_theurgists,
         synergies_regular,
-    ] = [list() for _ in range(12)]
+    ] = [list() for _ in range(9)]
 
     try:
         this_acquaintanceship = Acquaintanceship.objects.get(
@@ -92,10 +90,6 @@ def prosoponomikon_character_view(request, character_id):
         acquisitions_theurgists = acquisitions.filter(skill_level__skill__types__kinds__name="Moce Teurgiczne")
         
         skill_types = character.skill_types_for_character_sheet()
-        skill_types_regular = skill_types.filter(kinds__name__in=["Powszechne", "Mentalne"])
-        skill_types_priests = skill_types.filter(kinds__name="Moce Kapłańskie")
-        skill_types_sorcerers = skill_types.filter(kinds__name="Zaklęcia")
-        skill_types_theurgists = skill_types.filter(kinds__name="Moce Teurgiczne")
 
         synergies = character.synergies_for_character_sheet()
         synergies_regular = synergies.exclude(
@@ -119,10 +113,7 @@ def prosoponomikon_character_view(request, character_id):
         'acquisitions_priests': acquisitions_priests,
         'acquisitions_sorcerers': acquisitions_sorcerers,
         'acquisitions_theurgists': acquisitions_theurgists,
-        'skill_types_regular': skill_types_regular,
-        'skill_types_priests': skill_types_priests,
-        'skill_types_sorcerers': skill_types_sorcerers,
-        'skill_types_theurgists': skill_types_theurgists,
+        'skill_types': skill_types,
         'synergies_regular': synergies_regular,
         'knowledge_packets': knowledge_packets,
         'biography_packets': biography_packets,

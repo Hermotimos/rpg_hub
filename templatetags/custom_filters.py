@@ -282,3 +282,11 @@ def filter_players(informables_qs, current_profile):
     return informables_qs.filter(
         character__in=current_profile.character.acquaintances.all())
 
+
+@register.filter
+def match_kinds(skilltype_kinds_qs, skilltype_kinds_check):
+    return any([
+        kind in skilltype_kinds_check
+        for kind in [kind.name for kind in skilltype_kinds_qs]
+    ])
+

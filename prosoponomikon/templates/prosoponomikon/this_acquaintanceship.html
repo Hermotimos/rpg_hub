@@ -240,7 +240,7 @@
                 <!-- RegularSkills and RegularSynergies -->
                 {% if acquisitions_regular %}
                     <section id="acquisitions_regular" class="tab-panel">
-                        {% with skill_types=skill_types_regular acquisitions=acquisitions_regular synergies=synergies_regular skilltype_kinds='Powszechne,Mentalne' panel_id=1 %}
+                        {% with acquisitions=acquisitions_regular synergies=synergies_regular skilltype_kinds='Powszechne,Mentalne' panel_id=1 %}
                             {% include 'prosoponomikon/_acquisitions_by_skills_by_type.html' %}
                             {% if synergies_regular %}
                                 {% include 'rules/_synergies.html' %}
@@ -276,7 +276,7 @@
                 <!-- PriestsSkill and MentalSkills -->
                 {% if acquisitions_priests %}
                     <section id="acquisitions_priests" class="tab-panel">
-                        {% with skill_types=skill_types_priests acquisitions=acquisitions_priests panel_id=2 %}
+                        {% with acquisitions=acquisitions_priests panel_id=2 %}
                             {% with skilltype_kinds="Moce Kapłańskie" %}
                                 {% include 'prosoponomikon/_acquisitions_by_skills_by_type.html' %}
                             {% endwith %}
@@ -287,7 +287,7 @@
                 <!-- SorcerersSkill and MentalSkills -->
                 {% if acquisitions_sorcerers %}
                     <section id="acquisitions_sorcerers" class="tab-panel">
-                        {% with skill_types=skill_types_sorcerers acquisitions=acquisitions_sorcerers panel_id=2 %}
+                        {% with acquisitions=acquisitions_sorcerers panel_id=2 %}
                             {% include 'prosoponomikon/_acquisitions_by_skills_by_type.html' %}
                         {% endwith %}
                     </section>
@@ -296,7 +296,7 @@
                 <!-- TheurgistsSkill and MentalSkills -->
                 {% if acquisitions_theurgists %}
                     <section id="acquisitions_theurgists" class="tab-panel">
-                        {% with skill_types=skill_types_theurgists acquisitions=acquisitions_theurgists panel_id=2 %}
+                        {% with acquisitions=acquisitions_theurgists panel_id=2 %}
                             {% include 'prosoponomikon/_acquisitions_by_skills_by_type.html' %}
                         {% endwith %}
                     </section>

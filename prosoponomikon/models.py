@@ -314,6 +314,7 @@ class Character(Model):
         ).prefetch_related(
             Prefetch('skills', queryset=skills),
             'skill_groups',
+            'kinds',
         ).distinct()
         
         return skill_types
