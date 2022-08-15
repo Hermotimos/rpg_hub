@@ -357,12 +357,20 @@ class SubProfessionAdmin(admin.ModelAdmin):
 # -----------------------------------------------------------------------------
 
 
+class SphragisAdminAdminForm(forms.ModelForm):
+    class Meta:
+        model = Sphragis
+        exclude = []
+        widgets = {'color': forms.TextInput(attrs={'type': 'color'})}
+
+
 @admin.register(Sphragis)
 class SphragisAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'name_genitive']
-    list_editable = ['name', 'name_genitive']
+    form = SphragisAdminAdminForm
+    list_display = ['id', 'name', 'name_genitive', 'color']
+    list_editable = ['name', 'name_genitive', 'color']
 
-
+    
 # -----------------------------------------------------------------------------
 
 

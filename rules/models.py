@@ -719,6 +719,7 @@ class SubProfession(Model):
 class Sphragis(Model):
     name = CharField(max_length=100, unique=True)
     name_genitive = CharField(max_length=100, unique=True)
+    color = CharField(max_length=7, default='#000000')
     
     class Meta:
         ordering = ['name']
