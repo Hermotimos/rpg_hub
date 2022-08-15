@@ -358,6 +358,14 @@ class SubProfessionAdmin(admin.ModelAdmin):
 
 
 class SphragisAdminAdminForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['color'].help_text = """
+            <a href="https://www.w3schools.com/colors/colors_picker.asp" target="_blank">
+                https://www.w3schools.com/colors/colors_picker.asp
+            </a>"""
+        
     class Meta:
         model = Sphragis
         exclude = []
@@ -366,6 +374,7 @@ class SphragisAdminAdminForm(forms.ModelForm):
 
 @admin.register(Sphragis)
 class SphragisAdmin(admin.ModelAdmin):
+    link = "d"
     form = SphragisAdminAdminForm
     list_display = ['id', 'name', 'name_genitive', 'color']
     list_editable = ['name', 'name_genitive', 'color']
