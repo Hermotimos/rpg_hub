@@ -50,11 +50,11 @@ def prosoponomikon_character_view(request, character_id):
 
     # Declare empty variables
     [
-        knowledge_packets, acquaintanceships, acquisitions, skill_types,
+        knowledge_packets, acquaintanceships, skill_types,
         acquisitions_regular, acquisitions_priests, acquisitions_sorcerers,
         acquisitions_theurgists,
         synergies_regular,
-    ] = [list() for _ in range(9)]
+    ] = [list() for _ in range(8)]
 
     try:
         this_acquaintanceship = Acquaintanceship.objects.get(
@@ -108,7 +108,6 @@ def prosoponomikon_character_view(request, character_id):
     context = {
         'page_title': page_title,
         'this_acquaintanceship': this_acquaintanceship,
-        'acquisitions': acquisitions,
         'acquisitions_regular': acquisitions_regular,
         'acquisitions_priests': acquisitions_priests,
         'acquisitions_sorcerers': acquisitions_sorcerers,
@@ -121,10 +120,10 @@ def prosoponomikon_character_view(request, character_id):
         'acquaintanceships': acquaintanceships,
     }
     if (
-            current_profile.character.acquaintanceships().filter(
-                known_character=character).exists()
-            or current_profile.character == character
-            or current_profile.can_view_all
+        current_profile.character.acquaintanceships().filter(
+            known_character=character).exists()
+        or current_profile.character == character
+        or current_profile.can_view_all
     ):
         return render(request, 'prosoponomikon/this_acquaintanceship.html', context)
     else:

@@ -11,7 +11,7 @@
         
     <!-- ACQUISITIONS PER SKILLS TYPES-->
     {% for skill_type in skill_types %}
-        {% if skill_type.kinds.all|match_kinds:skilltype_kinds %}
+        {% if skill_type.kinds.all|kinds_filter:skilltype_kinds %}
     
             <div class="card mb-1">
                 <div class="card-header card-header-resp hover-blue" id="{{ skill_type.name|cut:' ' }}"

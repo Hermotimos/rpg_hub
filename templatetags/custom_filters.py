@@ -284,9 +284,8 @@ def filter_players(informables_qs, current_profile):
 
 
 @register.filter
-def match_kinds(skilltype_kinds_qs, skilltype_kinds_check):
+def kinds_filter(skilltype_kinds_qs, skilltype_kinds_str):
     return any([
-        kind in skilltype_kinds_check
+        kind in skilltype_kinds_str
         for kind in [kind.name for kind in skilltype_kinds_qs]
     ])
-
