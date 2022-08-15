@@ -87,7 +87,7 @@ class Thread(Model):
         return qs
 
     def get_absolute_url(self):
-        return f'/communications/thread:{self.pk}/None/#page-bottom'
+        return f'/communications/thread/{self.pk}/None/#page-bottom'
 
 
 class AnnouncementManager(Manager):
