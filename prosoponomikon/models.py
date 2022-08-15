@@ -133,6 +133,12 @@ class FirstName(Model):
     def __str__(self):
         return self.form
 
+    def save(self, *args, **kwargs):
+        """Save Character-s on their FirstName update."""
+        super().save(*args, **kwargs)
+        for character in Character.objects.filter(first_name=self):
+            character.save()
+        
 
 # -----------------------------------------------------------------------------
 
@@ -160,6 +166,11 @@ class FamilyName(Model):
     def __str__(self):
         return self.form
 
+    def save(self, *args, **kwargs):
+        """Save Character-s on their FamilyName update."""
+        super().save(*args, **kwargs)
+        for character in Character.objects.filter(family_name=self):
+            character.save()
 
 # -----------------------------------------------------------------------------
 
