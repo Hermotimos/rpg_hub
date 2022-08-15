@@ -58,7 +58,7 @@ class Profile(Model):
     
     def __str__(self):
         try:
-            return str(self.character)
+            return str(self.character.fullname)
         except ObjectDoesNotExist:
             return self.user.username
     

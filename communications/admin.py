@@ -43,10 +43,11 @@ class AnnouncementAdmin(admin.ModelAdmin):
     search_fields = ['title']
     
     def formfield_for_manytomany(self, db_field, request, **kwargs):
+        profiles = Profile.objects.exclude(status='npc').select_related('character')
         if db_field.name == "participants":
-            kwargs["queryset"] = Profile.objects.exclude(status='npc')
+            kwargs["queryset"] = profiles
         if db_field.name == "followers":
-            kwargs["queryset"] = Profile.objects.exclude(status='npc')
+            kwargs["queryset"] = profiles
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
@@ -62,10 +63,11 @@ class DebateAdmin(admin.ModelAdmin):
     search_fields = ['title']
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
+        profiles = Profile.living.select_related('character')
         if db_field.name == "participants":
-            kwargs["queryset"] = Profile.living.all()
+            kwargs["queryset"] = profiles
         if db_field.name == "followers":
-            kwargs["queryset"] = Profile.living.all()
+            kwargs["queryset"] = profiles
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
@@ -94,6 +96,11 @@ class StatementAdmin(admin.ModelAdmin):
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
 
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "seen_by":
+            kwargs["queryset"] = Profile.objects.select_related('character')
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
 
 @admin.register(AnnouncementStatement)
 class AnnouncementStatementAdmin(StatementAdmin):
@@ -101,7 +108,7 @@ class AnnouncementStatementAdmin(StatementAdmin):
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "seen_by":
-            kwargs["queryset"] = Profile.objects.exclude(status='npc')
+            kwargs["queryset"] = Profile.objects.exclude(status='npc').select_related('character')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
@@ -111,7 +118,9 @@ class DebateStatementAdmin(StatementAdmin):
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "seen_by":
-            kwargs["queryset"] = Profile.living.all() | Profile.objects.filter(status='gm')
+            kwargs["queryset"] = (
+                    Profile.living.all() | Profile.objects.filter(status='gm')
+            ).select_related('character')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
