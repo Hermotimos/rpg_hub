@@ -27,7 +27,11 @@
                         {% for acquaintanceship in acquaintanceships_group.list %}
                             <li>
                                 <a class="pl-2" href="{{ request.path }}#character_{{ acquaintanceship.known_character.id }}">
-                                    {% firstof acquaintanceship.knows_as_name acquaintanceship.known_character.fullname %}
+                                    {% if acquaintanceship.known_character.profile.status == 'player' and request.current_profile.status == 'gm' %}
+                                        <b>{% firstof acquaintanceship.knows_as_name acquaintanceship.known_character.fullname %}</b>
+                                    {% else %}
+                                        {% firstof acquaintanceship.knows_as_name acquaintanceship.known_character.fullname %}
+                                    {% endif %}
                                 </a>
                             </li>
                         {% endfor %}
