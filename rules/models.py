@@ -577,7 +577,6 @@ class TheurgistsSkillLevel(SkillLevel):
 
 
 class Synergy(Model):
-    # TODO replace name with a composite of skills names with .join()
     name = CharField(max_length=100)
     skills = M2M(to=Skill, related_name='skills')
 
