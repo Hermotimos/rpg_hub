@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/rules.css' %}">
+{% endblock head_extra %}
+
+{% block content %}
+    <div class="rules-styling">
+
+        <h2>
+            O co chodzi
+        </h2>
+        <p>
+            Dla tych, którzy potrzebują widoku bata, żeby zebrać dupę w troki, oto ona - lista obowiązków Gracza.
+        </p>
+
+        
+        <h2>
+            Przed Sesją
+        </h2>
+        <ol class="ml-4 mt-2 font-italic">
+            <li>
+                Przeczytać Kronikę ostatniej Sesji
+                (dla ambitnych: Prosoponomikon, Toponomikon - opisy powiązane z ostatnią sesją; Kalendarium - szersze spektrum czasowe).
+            </li>
+        </ol>
+
+
+        <h2>
+            Na Sesji
+        </h2>
+        <ol class="ml-4 mt-2 font-italic">
+            <li>Punktualność.</li>
+        </ol>
+
+
+        
+        <h2>
+            Po Sesji
+        </h2>
+        <ol class="ml-4 mt-2 font-italic">
+            <li>
+                Zaktualizować Ekwipunek na Karcie Postaci (na razie papierowej, w przyszłości na stronie).
+            </li>
+            <li>
+                Wysłać Dezyderat Expowy
+                (im prędzej, tym lepiej bo na świeżo obustronnie szybciej idzie;
+                nieprzekraczalny termin to 2 dni przed kolejną Sesja, chyba że następują dzień po dniu;
+                po terminie Exp przepada - Postać była zbyt zaaferowana bieżącymi sprawami, żeby przetrawić doświadczenia).
+            </li>
+            <li>
+                Przeczytać Kronikę, kiedy MG da znać, że jest gotowa (dla ambitnych: zasugerować MG uzupełnienia aspektów, które warto powierzyć pamięci absolutnej Kroniki).
+            </li>
+
+        </ol>
+
+        
+    </div>
+
+{% endblock content %}

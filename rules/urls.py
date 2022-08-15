@@ -9,6 +9,7 @@ urlpatterns = [
     path('character-sheet/', views.rules_character_sheet_view, name='character-sheet'),
     path('combat/', views.rules_combat_view, name='combat'),
     path('experience-demand/', views.rules_experience_demand_view, name='experience-demand'),
+    path('player-responsibilities/', views.rules_player_responsibilities_view, name='player-responsibilities'),
     path('fitness-and-tricks/', views.rules_fitness_and_tricks_view, name='fitness-and-tricks'),
     
     path('character/', views.rules_character_view, name='character'),

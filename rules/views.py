@@ -312,3 +312,12 @@ def rules_experience_demand_view(request):
         'page_title': 'Sztuka kompozycji Dezyderatu Expowego'
     }
     return render(request, 'rules/experience_demand.html', context)
+
+
+@login_required
+@auth_profile(['all'])
+def rules_player_responsibilities_view(request):
+    context = {
+        'page_title': 'Obowiązki Gracza'
+    }
+    return render(request, 'rules/player_responsibilities.html', context)
