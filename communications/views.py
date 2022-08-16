@@ -297,7 +297,7 @@ def thread_view(request, thread_id, tag_title):
     informables = thread.informables()
     if current_profile.status != 'gm':
         informables = informables.filter(
-            character__in=current_profile.character.acquaintaned_to.all())
+            character__in=current_profile.character.acquaintances.all())
     
     # Create ThreadEditTagsForm and StatementCreateForm
     # Check if custom inform form is activated, if not then StatementCreateForm,

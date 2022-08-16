@@ -25,9 +25,10 @@ class DemandsCreateForm(forms.ModelForm):
 
         addressees = Profile.contactables.exclude(id=profile.id)
         gms = addressees.filter(status='gm')
+        print(profile.character.acquaintances.all())
         if profile.status == 'player':
             addressees = addressees.filter(
-                character__in=profile.character.acquaintaned_to.all())
+                character__in=profile.character.acquaintances.all())
             addressees = (addressees | gms)
         elif profile.status == 'npc':
             addressees = addressees.filter(status='gm')
