@@ -102,7 +102,7 @@ class GameEventInline(admin.TabularInline):
     model = GameEvent
     extra = 0
     fields = [
-        'game', 'event_no_in_game', 'date_start', 'date_end', 'in_timeunit',
+        'event_no_in_game', 'date_start', 'date_end', 'in_timeunit',
         'description_short', 'description_long', 'plot_threads', 'locations',
         'participants', 'informees', 'picture_sets', 'debates', 'audio'
     ]
@@ -120,7 +120,7 @@ class GameEventInline(admin.TabularInline):
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         # Filter querysets before calling super(), otherwise it has no effect
         if db_field.name in ["participants", "informees"]:
-            kwargs["queryset"] = Profile.non_gm.all()
+            kwargs["queryset"] = Profile.non_gm.prefetch_related('character')
         if db_field.name == "debates":
             kwargs["queryset"] = Thread.objects.filter(kind='Debate')
 
