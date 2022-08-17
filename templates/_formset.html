@@ -1,25 +1,15 @@
-{% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
 
 {% block content %}
     <article class="top-space">
-        {% if formset.total_form_count %}
-            <form method="POST">
-                <!-- Upper submit button for easier handling of very large formsets -->
-                {% if formset.total_form_count > 10 %}
-                    <input id="submit-id-submit" class="btn btn-primary btn-dark mb-3" type="submit" name="submit" value="Zapisz zmiany">
-                {% endif %}
-                {% csrf_token %}
-                {% crispy formset formset_helper %}
-            </form>
-        {% else %}
-            <div class="font-italic">
-                <h3 class="font-italic">Brak utworzonych grup Postaci!</h3>
-                Grupy "Gracze" i "Pozostali" to grupy domyślne.<br>
-                Grupa "Gracze" jest niemodyfikowalna.<br>
-                Grupa "Pozostali" zawiera wszystkie Postacie nieprzypisane do żadnej grupy.
-            </div>
-        {% endif %}
+        <form method="POST">
+            <!-- Upper submit button for easier handling of very large formsets -->
+            {% if formset.total_form_count > 10 %}
+                <input id="submit-id-submit" class="btn btn-primary btn-dark mb-3" type="submit" name="submit" value="Zapisz zmiany">
+            {% endif %}
+            {% csrf_token %}
+            {% crispy formset formset_helper %}
+        </form>
     </article>
 {% endblock content %}

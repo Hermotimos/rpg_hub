@@ -36,11 +36,11 @@ class Collection(Model):
 class Item(Model):
     name = CharField(max_length=255)
     info = TextField(blank=True, null=True)
-    collection = FK(to=Collection, related_name='items', on_delete=CASCADE)
     weight = DecimalField(
         max_digits=12, decimal_places=2, default=0,
         validators=[MinValueValidator(0)])
-    
+    collection = FK(to=Collection, related_name='items', on_delete=CASCADE)
+
     class Meta:
         ordering = ['name']
 
