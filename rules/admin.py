@@ -20,7 +20,6 @@ from rules.models import (
     Profession, SubProfession,
     DamageType, WeaponType, Plate, Shield,
 )
-from users.models import Profile
 
 
 # -----------------------------------------------------------------------------

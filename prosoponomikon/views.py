@@ -53,8 +53,8 @@ def prosoponomikon_character_view(request, character_id):
         knowledge_packets, acquaintanceships, skill_types,
         acquisitions_regular, acquisitions_priests, acquisitions_sorcerers,
         acquisitions_theurgists,
-        synergies_regular,
-    ] = [list() for _ in range(8)]
+        synergies_regular, collections
+    ] = [list() for _ in range(9)]
 
     try:
         this_acquaintanceship = Acquaintanceship.objects.get(
@@ -100,6 +100,7 @@ def prosoponomikon_character_view(request, character_id):
         knowledge_packets = annotate_informables(knowledge_packets, current_profile)
         
         acquaintanceships = character.acquaintanceships().exclude(known_character=character)
+        collections = character.collections.prefetch_related('items')
     
     # INFORM FORM
     if request.method == 'POST':
@@ -118,6 +119,7 @@ def prosoponomikon_character_view(request, character_id):
         'biography_packets': biography_packets,
         'dialogue_packets': dialogue_packets,
         'acquaintanceships': acquaintanceships,
+        'collections': collections,
     }
     if (
         current_profile.character.acquaintanceships().filter(

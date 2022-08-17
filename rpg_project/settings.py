@@ -99,6 +99,7 @@ INSTALLED_APPS = [
     'communications',
     'contact',
     'imaginarion',
+    'items',
     'knowledge',
     'rules',
     'prosoponomikon',

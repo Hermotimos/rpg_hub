@@ -1,6 +1,5 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
-    AutoField,
     CASCADE,
     CharField,
     DecimalField,
@@ -12,10 +11,10 @@ from django.db.models import (
     OneToOneField as One2One,
     PositiveSmallIntegerField,
     PROTECT,
+    Q,
     SmallIntegerField,
     TextField,
 )
-from django.db.models import Q
 
 from imaginarion.models import PictureSet
 from users.models import Profile
