@@ -33,8 +33,7 @@ class ThreadTagEditFormSetHelper(FormHelper):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-        self.add_input(
-            Submit('submit', 'Zapisz', css_class='btn-dark d-block mx-auto'))
+        self.add_input(Submit('submit', 'Zapisz', css_class='btn-dark d-block mx-auto'))
         self.form_show_labels = False
         self.layout = Layout(
             Row(
@@ -112,7 +111,6 @@ class DebateCreateForm(forms.ModelForm):
             participants = participants.filter(
                 character__in=current_profile.character.acquaintances.all()
             ).exclude(id=current_profile.id)
-            print(participants)
         self.fields['participants'].queryset = participants.select_related('character', 'user')
 
         self.fields['participants'].widget.attrs['size'] = min(
