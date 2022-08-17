@@ -290,6 +290,15 @@
                     </section>
                 {% endif %}
                 
+                 <!-- Equipment (Collections of Items) -->
+                {% if collections %}
+                    <section id="collections" class="tab-panel">
+                        {% for formset in formsets %}
+                            {% include '_formset.html' %}
+                        {% endfor %}
+                    </section>
+                {% endif %}
+                
                  <!-- Knowledge packets -->
                 {% if knowledge_packets %}
                     <section id="knowledge_packets" class="tab-panel">
@@ -298,16 +307,7 @@
                         {% endfor %}
                     </section>
                 {% endif %}
-                
-                 <!-- Equipment (Collections of Items) -->
-                {% if collections %}
-                    <section id="collections" class="tab-panel">
-                        {% for collection in collections %}
-                            {{ collection }}
-                        {% endfor %}
-                    </section>
-                {% endif %}
-                
+
                 <!-- Known characters -->
                 {% if acquaintanceships %}
                     <section id="acquaintanceships" class="tab-panel">
