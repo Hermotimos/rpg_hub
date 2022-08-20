@@ -10,6 +10,7 @@ from django.views.decorators.vary import vary_on_cookie
 
 from imaginarion.models import Picture, PictureImage, PictureSet
 from items.forms import ItemFormSet, ItemFormSetHelper
+from items.models import Item
 from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
 from knowledge.utils import annotate_informables
@@ -61,13 +62,15 @@ def prosoponomikon_character_view(request, character_id):
         this_acquaintanceship = Acquaintanceship.objects.get(
             knowing_character=current_profile.character,
             known_character=character_id)
+        
     except Acquaintanceship.DoesNotExist:
         # when GM moves between NPCs with open Prosoponomikon
         messages.info(request, "Aktualna Postać nie zna wybranej Postaci!")
         return redirect('prosoponomikon:acquaintanceships')
-    
-    character = this_acquaintanceship.known_character
+
     page_title = this_acquaintanceship.knows_as_name or this_acquaintanceship.known_character.fullname
+    character = Character.objects.prefetch_related(
+        'collections').get(id=this_acquaintanceship.known_character.id)
 
     if current_profile.can_view_all:
         biography_packets = BiographyPacket.objects.filter(characters=character)
@@ -101,25 +104,20 @@ def prosoponomikon_character_view(request, character_id):
         knowledge_packets = annotate_informables(knowledge_packets, current_profile)
         
         acquaintanceships = character.acquaintanceships().exclude(known_character=character)
-        items = character.items.filter(owner=character)
+        items = Item.objects.filter(collection__owner=character, is_deleted=False)
      
     # Equipment
-    item_formset = ItemFormSet(request.POST or None, queryset=items)
+    item_formset = ItemFormSet(request.POST or None, queryset=items, character=character)
     if request.POST.get('formset-1'):
-        # item_formset = ItemFormSet(request.POST, queryset=items)
         if item_formset.is_valid():
             item_formset.save(commit=False)
-            if new_items := item_formset.new_objects or item_formset.deleted_objects:
-                for new in new_items:
-                    new.owner = character
-                    new.save()
+            if item_formset.new_objects or item_formset.changed_objects:
                 item_formset.save()
                 messages.success(request, f"Zaktualizowano Ekwipunek!")
             else:
                 messages.info(request, "Nie dokonano żadnych zmian!")
             return redirect('prosoponomikon:character', character_id=character_id)
         else:
-            print(item_formset.errors)
             messages.warning(request, "Popraw wskazane błędy, aby zaktualizować Ekwipunek!")
             
     # INFORM FORM
