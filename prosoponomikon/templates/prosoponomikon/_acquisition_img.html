@@ -1,16 +1,17 @@
 {% load static %}
 {% load custom_filters %}
 
-<div data-toggle="tooltip" data-placement="top" data-html="true"
+
+<div data-toggle="tooltip" data-placement="{% if acquisition.sphragis.id %}top{% endif %}" data-html="true"
      title="
-        {% if acquisition.sphragis.id %}
             {% if request.current_profile.can_view_all %}
                 [Sfragis {{ acquisition.sphragis.name_genitive }}]
                 <br>{{ acquisition.skill_level.skill.name_second }}<br>{{ acquisition.skill_level.skill.name_origin }}
             {% else %}
                 Sfragis {{ acquisition.sphragis.name_genitive }}
             {% endif %}
-        {% endif %}">
+        ">
+    
     <div class="d-flex flex-nowrap hover-pointer" data-toggle="collapse"
          data-target="#{{ acquisition.skill_level.skill|cut:' ' }}{{ skill_type|cut:' ' }}{{ acquisition.weapon.id }}{{ acquisition.sphragis.id }}">
         {% if skilltype_kinds in 'Moce Kapłańskie,Zaklęcia,Moce Teurgiczne' %}
@@ -24,4 +25,5 @@
             {% endif %}
         {% endif %}
     </div>
+    
 </div>
