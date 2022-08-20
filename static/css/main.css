@@ -436,6 +436,17 @@ a.text-muted:hover {color: #3366cc !important;}
     padding: 2px 10px;
 }
 
+/* crispy-forms for ItemFormset */
+.item-formset .form-group {margin: 0.1rem !important;}
+.item-formset textarea.form-control {height: 2.3rem;}
+.item-formset select {padding-left: 0.2rem;}
+.item-formset input.checkboxinput {max-width: 1rem;}
+.item-formset input.numberinput {
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+    font-size: 0.8rem;
+}
+
 
 /*****************************************************************************/
 /********************************** LISTS ************************************/

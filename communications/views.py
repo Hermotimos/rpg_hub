@@ -79,7 +79,7 @@ def thread_inform(current_profile, request, thread, tag_title):
         message=f"{request.get_host()}{thread.get_absolute_url()}",
         from_email=settings.EMAIL_HOST_USER,
         recipient_list=[p.user.email for p in recipients])
-    messages.info(request, f'Poinformowano wybranych Graczy!')
+    messages.success(request, f'Poinformowano wybranych Graczy!')
     return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
 
 
@@ -184,7 +184,7 @@ def threads_view(request, thread_kind, tag_title):
             if changed:
                 return redirect('communications:threads', thread_kind=thread_kind, tag_title=tag_title)
             else:
-                messages.warning(request, "Nie dokonano żadnych zmian!")
+                messages.info(request, "Nie dokonano żadnych zmian!")
                 return redirect('communications:threads', thread_kind=thread_kind, tag_title=tag_title)
 
     context = {
@@ -327,7 +327,7 @@ def thread_view(request, thread_id, tag_title):
     
     if thread_tags_form.is_valid():
         thread_tags_form.save()
-        messages.info(request, "Zapisano zmiany!")
+        messages.success(request, "Zapisano zmiany!")
         return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
     
     context = {

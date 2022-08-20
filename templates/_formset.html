@@ -2,8 +2,9 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <article class="top-space">
+    <article>
         <form method="POST">
+            <input id="formset-1" value="formset-1" name="formset-1" type="hidden">
             {{ formset_1.management_form }}
             <!-- Upper submit button for easier handling of very large formsets -->
             {% if formset_1.total_form_count > 10 %}

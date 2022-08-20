@@ -102,34 +102,30 @@ def prosoponomikon_character_view(request, character_id):
         
         acquaintanceships = character.acquaintanceships().exclude(known_character=character)
         items = character.items.filter(owner=character)
-    
-    # TODO feed data to formsets
-    #  #  formset_set = MatchSetFormset(request.POST or None, instance=match, prefix=f"form{match.pk}")
-    #  https://stackoverflow.com/a/56236440
-    # TODO try default django handling
-    
+     
+    # Equipment
     item_formset = ItemFormSet(request.POST or None, queryset=items)
-
-    # INFORM FORM
-    if request.method == 'POST' and request.POST.get('Character'):
-        handle_inform_form(request)
-        
-    elif request.method == 'POST':
+    if request.POST.get('formset-1'):
+        # item_formset = ItemFormSet(request.POST, queryset=items)
         if item_formset.is_valid():
             item_formset.save(commit=False)
-            new_items = item_formset.new_objects
-            for new_item in new_items:
-                new_item.owner = character
-                new_item.save()
-            item_formset.save()
-            messages.success(request, f"Zaktualizowano Ekwipunek!")
+            if new_items := item_formset.new_objects or item_formset.deleted_objects:
+                for new in new_items:
+                    new.owner = character
+                    new.save()
+                item_formset.save()
+                messages.success(request, f"Zaktualizowano Ekwipunek!")
+            else:
+                messages.info(request, "Nie dokonano żadnych zmian!")
             return redirect('prosoponomikon:character', character_id=character_id)
-        
         else:
-            for form in item_formset:
-                if not form.is_valid():
-                    messages.warning(request, form.errors)
-            return redirect('prosoponomikon:character', character_id=character_id)
+            print(item_formset.errors)
+            messages.warning(request, "Popraw wskazane błędy, aby zaktualizować Ekwipunek!")
+            
+    # INFORM FORM
+    elif request.POST.get('Character'):
+        handle_inform_form(request)
+        return redirect('prosoponomikon:character', character_id=character_id)
 
     context = {
         'page_title': page_title,

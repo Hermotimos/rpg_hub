@@ -1,9 +1,15 @@
 from django.contrib import admin
 from rpg_project.utils import formfield_with_cache
-from items.models import Item
+from items.models import Item, ItemCollection
 from items.admin_filters import OwnerFilter
 
 
+@admin.register(ItemCollection)
+class ItemCollectionAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
+    search_fields = ['name']
+    
+    
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
     list_display = ['id', 'owner', 'type', 'name', 'info', 'weight']
