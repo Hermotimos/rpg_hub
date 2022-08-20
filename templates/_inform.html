@@ -18,7 +18,11 @@
                     {% if inform_type == 'Announcement' %}
                         Brak Graczy możliwych do dołączenia.
                     {% else %}
-                        Brak Postaci możliwych do dołączenia.
+                        {% if inform_type in "Location,Character" %}
+                            Brak Postaci możliwych do poinformowania.
+                        {% else %}
+                            Brak Postaci możliwych do dołączenia.
+                        {% endif %}
                     {% endif %}
                 </h5>
             
