@@ -11,12 +11,13 @@ class BaseItemFormSet(BaseModelFormSet):
         character = kwargs.pop('character')
         super().__init__(*args, **kwargs)
         for form in self.forms:
-            form.fields['collection'].choices = [('', '--------')] + [(x.pk, x.name) for x in character.collections.all()]
+            form.fields['collection'].choices = [('', '--------')] + [
+                (x.pk, x.name) for x in character.collections.all()
+            ]
             
             
 ItemFormSet = modelformset_factory(
     Item,
-    # TODO is_deleted flag
     extra=4,
     fields=('name', 'info', 'weight', 'collection', 'is_deleted'),
     formset=BaseItemFormSet,
