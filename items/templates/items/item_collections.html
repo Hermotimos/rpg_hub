@@ -1,16 +1,14 @@
-
 {% load static %}
 {% load custom_filters %}
 
 
 {% include 'items/_items_formset.html' %}
 
-
 <div class="mt-5 font-italic">
     Podsumowanie:
-    {% for collection in collections %}
+    {% for item_collection in item_collections %}
         <div>
-            {{ collection.name }}: {{ collection.total_weight }} kg
+            {{ item_collection.name }}: {% firstof item_collection.total_weight '0' %} kg
         </div>
     {% endfor %}
 </div>

@@ -10,7 +10,6 @@ class ItemFormSetHelper(FormHelper):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(self)
         self.add_input(Submit('submit', 'Zapisz', css_class='btn-dark d-block mx-auto mt-2'))
         self.form_show_labels = False
         self.layout = Layout(
@@ -28,11 +27,11 @@ class BaseItemFormSet(BaseModelFormSet):
     
     def __init__(self, *args, **kwargs):
         """Optimize queries for 'collection' choice field."""
-        collections = kwargs.pop('collections')
+        item_collections = kwargs.pop('item_collections')
         super().__init__(*args, **kwargs)
         for form in self.forms:
             form.fields['collection'].choices = [('', '--------')] + [
-                (x.pk, x.name) for x in collections
+                (x.pk, x.name) for x in item_collections
             ]
         self.helper = ItemFormSetHelper()
             

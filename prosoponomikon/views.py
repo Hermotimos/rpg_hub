@@ -83,7 +83,7 @@ def prosoponomikon_character_view(request, character_id):
     biography_packets = biography_packets.prefetch_related(
         'picture_sets__pictures').select_related('author')
     biography_packets = annotate_informables(biography_packets, current_profile)
-    collections = character.collections.annotate(total_weight=Sum('items__weight'))
+    item_collections = character.collections.annotate(total_weight=Sum('items__weight'))
     
     # Any Profile viewing own Character or GM viewing any Character
     if current_profile.character.id == character_id or current_profile.status == 'gm':
@@ -105,10 +105,14 @@ def prosoponomikon_character_view(request, character_id):
         knowledge_packets = annotate_informables(knowledge_packets, current_profile)
         
         acquaintanceships = character.acquaintanceships().exclude(known_character=character)
-        items = Item.objects.filter(collection__in=collections, is_deleted=False)
+        items = Item.objects.filter(collection__in=item_collections, is_deleted=False)
      
     # Equipment
-    item_formset = ItemFormSet(request.POST or None, queryset=items, collections=collections)
+    item_formset = ItemFormSet(
+        request.POST or None,
+        queryset=items,
+        item_collections=item_collections)
+    
     if request.POST.get('formset-1'):
         if item_formset.is_valid():
             item_formset.save(commit=False)
@@ -139,7 +143,7 @@ def prosoponomikon_character_view(request, character_id):
         'biography_packets': biography_packets,
         'dialogue_packets': dialogue_packets,
         'acquaintanceships': acquaintanceships,
-        'collections': collections,
+        'item_collections': item_collections,
         'items': items,
         'formset_1': item_formset,
     }
@@ -248,6 +252,11 @@ def prosoponomikon_first_names_view(request):
 @login_required
 @auth_profile(['gm'])
 def prosoponomikon_family_names_view(request):
+    from items.models import ItemCollection
+    for ch in Character.objects.all():
+        ItemCollection.objects.create(name="Osobisty", owner=ch)
+        ItemCollection.objects.create(name="Bagaż", owner=ch)
+        print(ch)
     family_names = FamilyName.objects.select_related('group')
     family_names = family_names.prefetch_related(
         'characters__profile', 'locations')
