@@ -252,11 +252,6 @@ def prosoponomikon_first_names_view(request):
 @login_required
 @auth_profile(['gm'])
 def prosoponomikon_family_names_view(request):
-    from items.models import ItemCollection
-    for ch in Character.objects.all():
-        ItemCollection.objects.create(name="Osobisty", owner=ch)
-        ItemCollection.objects.create(name="Bagaż", owner=ch)
-        print(ch)
     family_names = FamilyName.objects.select_related('group')
     family_names = family_names.prefetch_related(
         'characters__profile', 'locations')
