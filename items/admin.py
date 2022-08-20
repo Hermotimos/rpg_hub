@@ -1,7 +1,9 @@
+from django import forms
 from django.contrib import admin
-from rpg_project.utils import formfield_with_cache
-from items.models import Item, ItemCollection
+from django.db import models
+
 from items.admin_filters import OwnerFilter
+from items.models import Item, ItemCollection
 
 
 @admin.register(ItemCollection)
@@ -15,16 +17,15 @@ class ItemCollectionAdmin(admin.ModelAdmin):
     
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ['id', 'collection', 'name', 'info', 'weight', 'is_deleted']
-    list_editable = ['collection', 'name', 'info', 'weight', 'is_deleted']
-    list_filter = ['is_deleted', OwnerFilter, 'collection']
+    formfield_overrides = {
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 2, 'cols': 40})},
+        models.CharField: {'widget': forms.TextInput(attrs={'size': 50})},
+        models.DecimalField: {'widget': forms.NumberInput(attrs={'size': 15})},
+        models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
+    }
+    list_display = ['collection', 'name', 'info', 'weight', 'is_deleted']
+    list_editable = ['name', 'info', 'weight', 'is_deleted']
+    list_filter = ['is_deleted', OwnerFilter]
     search_fields = ['name', 'info']
+    list_select_related = ['collection__owner']
     
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
-        for field in [
-            'collection',
-        ]:
-            if db_field.name == field:
-                formfield = formfield_with_cache(field, formfield, request)
-        return formfield
