@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q, Sum
+from django.db.models import Q, Sum, Case, When, F
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.decorators.cache import cache_page
@@ -83,7 +83,8 @@ def prosoponomikon_character_view(request, character_id):
     biography_packets = biography_packets.prefetch_related(
         'picture_sets__pictures').select_related('author')
     biography_packets = annotate_informables(biography_packets, current_profile)
-    item_collections = character.collections.annotate(total_weight=Sum('items__weight'))
+    item_collections = character.collections.annotate(total_weight=Sum(
+        Case(When(items__is_deleted=False, then=F('items__weight')))))
     
     # Any Profile viewing own Character or GM viewing any Character
     if current_profile.character.id == character_id or current_profile.status == 'gm':
