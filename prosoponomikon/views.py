@@ -54,7 +54,7 @@ def prosoponomikon_character_view(request, character_id):
         knowledge_packets, acquaintanceships, skill_types,
         acquisitions_regular, acquisitions_priests, acquisitions_sorcerers,
         acquisitions_theurgists,
-        synergies_regular, collections
+        synergies_regular, items
     ] = [list() for _ in range(9)]
 
     try:
@@ -101,69 +101,35 @@ def prosoponomikon_character_view(request, character_id):
         knowledge_packets = annotate_informables(knowledge_packets, current_profile)
         
         acquaintanceships = character.acquaintanceships().exclude(known_character=character)
-        collections = character.collections.prefetch_related('items').order_by('id')
+        items = character.items.filter(owner=character)
     
-    # formset = ThreadTagEditFormSet(
-    #     data=request.POST or None,
-    #     queryset=tags)
     # TODO feed data to formsets
     #  #  formset_set = MatchSetFormset(request.POST or None, instance=match, prefix=f"form{match.pk}")
     #  https://stackoverflow.com/a/56236440
     # TODO try default django handling
-    formsets = [
-        ItemFormSet(queryset=collection.items.all(), prefix=f"form0-{n}") for n, collection in enumerate(collections)]
+    
+    item_formset = ItemFormSet(request.POST or None, queryset=items)
 
     # INFORM FORM
     if request.method == 'POST' and request.POST.get('Character'):
         handle_inform_form(request)
         
-    # ItemFormSet
-    elif request.POST:
-        print(request.POST)
-        for formset in formsets:
-            if not formset.is_valid():
-                print(str(formset.errors))
-                # if "Thread tag z tymi Title i Author" in str(formset.errors):
-                #     messages.warning(request, "Zduplikowany tag!")
-                messages.warning(request, str(formset.errors))
-            else:
-                changed = False
-                for form in formset:
-                    if not form.is_valid():
-                        messages.warning(request, form.errors)
-                    else:
-                        # Ignore empty extra forms
-                        if not form.cleaned_data:
-                            continue
-                    
-                        # Deletion
-                        elif form.cleaned_data.get('DELETE'):
-                            tag = form.cleaned_data.get('id')
-                            if tag:
-                                tag.delete()
-                                changed = True
-                                messages.success(request, f"Usunięto tag '{tag}'!")
-                            else:
-                                messages.warning(request, "Nowy tag zaznaczony do usunięcia!")
-                    
-                        # Creation / Modification
-                        else:
-                            tag = form.save(commit=False)
-                            tag.author = form.cleaned_data['author']
-                            tag.save()
-                            if form.has_changed():
-                                changed = True
-                                messages.success(request, f"Zmieniono: {tag}!")
-                if changed:
-                    pass
-                    # return redirect('communications:threads', thread_kind=thread_kind,
-                    #                 tag_title=tag_title)
-                else:
-                    messages.warning(request, "Nie dokonano żadnych zmian!")
-                    # return redirect('communications:threads', thread_kind=thread_kind,
-                    #                 tag_title=tag_title)
-    
-
+    elif request.method == 'POST':
+        if item_formset.is_valid():
+            item_formset.save(commit=False)
+            new_items = item_formset.new_objects
+            for new_item in new_items:
+                new_item.owner = character
+                new_item.save()
+            item_formset.save()
+            messages.success(request, f"Zaktualizowano Ekwipunek!")
+            return redirect('prosoponomikon:character', character_id=character_id)
+        
+        else:
+            for form in item_formset:
+                if not form.is_valid():
+                    messages.warning(request, form.errors)
+            return redirect('prosoponomikon:character', character_id=character_id)
 
     context = {
         'page_title': page_title,
@@ -178,9 +144,9 @@ def prosoponomikon_character_view(request, character_id):
         'biography_packets': biography_packets,
         'dialogue_packets': dialogue_packets,
         'acquaintanceships': acquaintanceships,
-        'collections': collections,
-        'formsets': formsets,
-        'formset_helper': ItemFormSetHelper(),
+        'items': items,
+        'formset_1': item_formset,
+        'formset_helper_1': ItemFormSetHelper(),
     }
     if (
         current_profile.character.acquaintanceships().filter(

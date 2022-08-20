@@ -181,12 +181,12 @@
                 </label>
             {% endif %}
             
-            <!-- Equipment (Collections of Items) -->
-            {% if collections %}
+            <!-- Equipment (Items) -->
+            {% if items %}
                 {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists %}
-                    <input type="radio" name="tabset" id="tab7" aria-controls="collections">
+                    <input type="radio" name="tabset" id="tab7" aria-controls="items">
                 {% else %}
-                    <input type="radio" name="tabset" id="tab7" aria-controls="collections" checked>
+                    <input type="radio" name="tabset" id="tab7" aria-controls="items" checked>
                 {% endif %}
                 <label class="font-resp-15 resp-tab-label" for="tab7">
                     Ekwipunek
@@ -195,7 +195,7 @@
             
             <!-- Knowledge packets -->
             {% if knowledge_packets %}
-                {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists or collections %}
+                {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists or items %}
                     <input type="radio" name="tabset" id="tab8" aria-controls="knowledge_packets">
                 {% else %}
                     <input type="radio" name="tabset" id="tab8" aria-controls="knowledge_packets" checked>
@@ -212,7 +212,7 @@
             
             <!-- Known characters -->
             {% if acquaintanceships %}
-                {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists or collections or knowledge_packets %}
+                {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists or items or knowledge_packets %}
                     <input type="radio" name="tabset" id="tab9" aria-controls="acquaintanceships">
                 {% else %}
                     <input type="radio" name="tabset" id="tab9" aria-controls="acquaintanceships" checked>
@@ -290,12 +290,10 @@
                     </section>
                 {% endif %}
                 
-                 <!-- Equipment (Collections of Items) -->
-                {% if collections %}
-                    <section id="collections" class="tab-panel">
-                        {% for formset in formsets %}
-                            {% include '_formset.html' %}
-                        {% endfor %}
+                 <!-- Equipment (Items) -->
+                {% if items %}
+                    <section id="items" class="tab-panel">
+                        {% include '_formset.html' %}
                     </section>
                 {% endif %}
                 

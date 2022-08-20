@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy
 
 
-class CollectionFilter(admin.SimpleListFilter):
+class OwnerFilter(admin.SimpleListFilter):
     title = gettext_lazy('owner__fullname')
     parameter_name = 'owner__fullname'
 
