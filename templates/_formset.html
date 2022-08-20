@@ -11,7 +11,7 @@
                 <input id="submit-id-submit" class="btn btn-primary btn-dark mb-3" type="submit" name="submit" value="Zapisz zmiany">
             {% endif %}
             {% csrf_token %}
-            {% crispy formset_1 formset_helper_1 %}
+            {% crispy formset_1 formset_1.helper %}
         </form>
     </article>
 {% endblock content %}

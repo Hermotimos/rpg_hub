@@ -1,0 +1,13 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <article>
+        <form method="POST">
+            <input id="formset-1" value="formset-1" name="formset-1" type="hidden">
+            {% csrf_token %}
+            {{ formset_1.management_form }}
+            {% crispy formset_1 formset_1.helper %}
+        </form>
+    </article>
+{% endblock content %}

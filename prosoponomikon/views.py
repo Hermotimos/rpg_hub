@@ -2,14 +2,14 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
 
 from imaginarion.models import Picture, PictureImage, PictureSet
-from items.forms import ItemFormSet, ItemFormSetHelper
+from items.forms import ItemFormSet
 from items.models import Item
 from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
@@ -83,7 +83,8 @@ def prosoponomikon_character_view(request, character_id):
     biography_packets = biography_packets.prefetch_related(
         'picture_sets__pictures').select_related('author')
     biography_packets = annotate_informables(biography_packets, current_profile)
-
+    collections = character.collections.annotate(total_weight=Sum('items__weight'))
+    
     # Any Profile viewing own Character or GM viewing any Character
     if current_profile.character.id == character_id or current_profile.status == 'gm':
         
@@ -104,10 +105,10 @@ def prosoponomikon_character_view(request, character_id):
         knowledge_packets = annotate_informables(knowledge_packets, current_profile)
         
         acquaintanceships = character.acquaintanceships().exclude(known_character=character)
-        items = Item.objects.filter(collection__owner=character, is_deleted=False)
+        items = Item.objects.filter(collection__in=collections, is_deleted=False)
      
     # Equipment
-    item_formset = ItemFormSet(request.POST or None, queryset=items, character=character)
+    item_formset = ItemFormSet(request.POST or None, queryset=items, collections=collections)
     if request.POST.get('formset-1'):
         if item_formset.is_valid():
             item_formset.save(commit=False)
@@ -138,9 +139,9 @@ def prosoponomikon_character_view(request, character_id):
         'biography_packets': biography_packets,
         'dialogue_packets': dialogue_packets,
         'acquaintanceships': acquaintanceships,
+        'collections': collections,
         'items': items,
         'formset_1': item_formset,
-        'formset_helper_1': ItemFormSetHelper(),
     }
     if (
         current_profile.character.acquaintanceships().filter(

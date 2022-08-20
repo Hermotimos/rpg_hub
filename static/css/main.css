@@ -439,6 +439,7 @@ a.text-muted:hover {color: #3366cc !important;}
 /* crispy-forms for ItemFormset */
 .item-formset .form-group {margin: 0.1rem !important;}
 .item-formset textarea.form-control {height: 2.3rem;}
+.item-formset textarea.form-control[id*='info'] {font-style: italic; font-size: 0.8rem;}
 .item-formset select {padding-left: 0.2rem;}
 .item-formset input.checkboxinput {max-width: 1rem;}
 .item-formset input.numberinput {

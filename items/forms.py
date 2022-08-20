@@ -6,32 +6,11 @@ from django.forms.models import BaseModelFormSet
 from items.models import Item
 
 
-class BaseItemFormSet(BaseModelFormSet):
-    def __init__(self, *args, **kwargs):
-        character = kwargs.pop('character')
-        super().__init__(*args, **kwargs)
-        for form in self.forms:
-            form.fields['collection'].choices = [('', '--------')] + [
-                (x.pk, x.name) for x in character.collections.all()
-            ]
-            
-            
-ItemFormSet = modelformset_factory(
-    Item,
-    extra=4,
-    fields=('name', 'info', 'weight', 'collection', 'is_deleted'),
-    formset=BaseItemFormSet,
-    widgets={
-        "info": Textarea(attrs={'rows': 1}),
-    },
-)
-
-
 class ItemFormSetHelper(FormHelper):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+        print(self)
         self.add_input(Submit('submit', 'Zapisz', css_class='btn-dark d-block mx-auto mt-2'))
         self.form_show_labels = False
         self.layout = Layout(
@@ -43,3 +22,27 @@ class ItemFormSetHelper(FormHelper):
                 Div('is_deleted', css_class='col-sm-1 m-0 p-0', title="Usunąć?"),
                 css_class='item-formset',
             ))
+
+
+class BaseItemFormSet(BaseModelFormSet):
+    
+    def __init__(self, *args, **kwargs):
+        """Optimize queries for 'collection' choice field."""
+        collections = kwargs.pop('collections')
+        super().__init__(*args, **kwargs)
+        for form in self.forms:
+            form.fields['collection'].choices = [('', '--------')] + [
+                (x.pk, x.name) for x in collections
+            ]
+        self.helper = ItemFormSetHelper()
+            
+            
+ItemFormSet = modelformset_factory(
+    Item,
+    extra=4,
+    fields=('name', 'info', 'weight', 'collection', 'is_deleted'),
+    formset=BaseItemFormSet,
+    widgets={
+        "info": Textarea(attrs={'rows': 1}),
+    },
+)
