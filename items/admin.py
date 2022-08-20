@@ -9,7 +9,7 @@ from items.models import Item, ItemCollection
 @admin.register(ItemCollection)
 class ItemCollectionAdmin(admin.ModelAdmin):
     list_display = ['id', 'owner', 'name']
-    search_fields = ['owner', 'name']
+    search_fields = ['owner__fullname', 'name']
     
     def name_with_owner(self):
         return f"{self.name} [{self.owner.fullname}]"
