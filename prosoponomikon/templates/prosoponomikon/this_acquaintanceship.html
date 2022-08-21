@@ -182,15 +182,17 @@
             {% endif %}
             
             <!-- Item collections (Equipment) -->
-            {% if item_collections %}
-                {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists %}
-                    <input type="radio" name="tabset" id="tab7" aria-controls="item-collections">
-                {% else %}
-                    <input type="radio" name="tabset" id="tab7" aria-controls="item-collections" checked>
+            {% if request.current_profile.status == 'gm' or request.current_profile.character == character %}
+                {% if item_collections %}
+                    {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists %}
+                        <input type="radio" name="tabset" id="tab7" aria-controls="item-collections" checked>
+                    {% else %}
+                        <input type="radio" name="tabset" id="tab7" aria-controls="item-collections" checked>
+                    {% endif %}
+                    <label class="font-resp-15 resp-tab-label" for="tab7">
+                        Ekwipunek
+                    </label>
                 {% endif %}
-                <label class="font-resp-15 resp-tab-label" for="tab7">
-                    Ekwipunek
-                </label>
             {% endif %}
             
             <!-- Knowledge packets -->
@@ -291,10 +293,12 @@
                 {% endif %}
                 
                  <!-- Item collections (Equipment) -->
-                {% if item_collections %}
-                    <section id="item-collections" class="tab-panel">
-                        {% include 'items/item_collections.html' %}
-                    </section>
+                {% if request.current_profile.status == 'gm' or request.current_profile.character == character %}
+                    {% if item_collections %}
+                        <section id="item-collections" class="tab-panel">
+                            {% include 'items/item_collections.html' %}
+                        </section>
+                    {% endif %}
                 {% endif %}
                 
                  <!-- Knowledge packets -->
