@@ -182,10 +182,10 @@
             {% endif %}
             
             <!-- Item collections (Equipment) -->
-            {% if request.current_profile.status == 'gm' or request.current_profile.character == character %}
+            {% if request.current_profile.status == 'gm' or request.current_profile.character == this_acquaintanceship.known_character %}
                 {% if item_collections %}
                     {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists %}
-                        <input type="radio" name="tabset" id="tab7" aria-controls="item-collections" checked>
+                        <input type="radio" name="tabset" id="tab7" aria-controls="item-collections">
                     {% else %}
                         <input type="radio" name="tabset" id="tab7" aria-controls="item-collections" checked>
                     {% endif %}
@@ -293,7 +293,7 @@
                 {% endif %}
                 
                  <!-- Item collections (Equipment) -->
-                {% if request.current_profile.status == 'gm' or request.current_profile.character == character %}
+                {% if request.current_profile.status == 'gm' or request.current_profile.character == this_acquaintanceship.known_character %}
                     {% if item_collections %}
                         <section id="item-collections" class="tab-panel">
                             {% include 'items/item_collections.html' %}
