@@ -88,7 +88,8 @@ def toponomikon_location_view(request, loc_name):
     # Characters in this location and its sub-locations if known to profile:
     acquaintanceships = current_profile.character.acquaintanceships()
     acquaintanceships = acquaintanceships.filter(
-        known_character__frequented_locations__in=this_location.with_sublocations())
+        known_character__frequented_locations__in=this_location.with_sublocations()
+    ).exclude(known_character=current_profile.character)
 
     if request.method == 'POST':
         handle_inform_form(request)
