@@ -224,26 +224,6 @@ def statement_create_view(request):
     
     return HttpResponse('Message sent successfully')
 
-
-def to_polish_months(datetime_str: str):
-    map = {
-        'Jan': 'Sty',
-        'Feb': 'Lut',
-        'Mar': 'Mar',
-        'Apr': 'Kwi',
-        'May': 'Maj',
-        'Jun': 'Cze',
-        'Jul': 'Lip',
-        'Sep': 'Sie',
-        'Aug': 'Wrz',
-        'Oct': 'Paź',
-        'Nov': 'Lis',
-        'Dec': 'Gru',
-    }
-    for k, v in map:
-        datetime_str.replace(k, v)
-    return datetime_str
-    
     
 @login_required
 @auth_profile(['all'])
