@@ -4,13 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.mail import send_mail
 from django.db.models import Prefetch, Value, Q, When, Case, ImageField, \
-    CharField
-from django.db.models.functions import Concat, JSONObject, \
-    ExtractDay, ExtractMonth, ExtractHour, ExtractMinute, ExtractYear
+    DateTimeField, F, Func
+from django.db.models.functions import Concat, JSONObject
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
-from django.http import HttpResponse, JsonResponse
 
 from communications.forms import (
     AnnouncementCreateForm,
@@ -226,6 +225,26 @@ def statement_create_view(request):
     return HttpResponse('Message sent successfully')
 
 
+def to_polish_months(datetime_str: str):
+    map = {
+        'Jan': 'Sty',
+        'Feb': 'Lut',
+        'Mar': 'Mar',
+        'Apr': 'Kwi',
+        'May': 'Maj',
+        'Jun': 'Cze',
+        'Jul': 'Lip',
+        'Sep': 'Sie',
+        'Aug': 'Wrz',
+        'Oct': 'Paź',
+        'Nov': 'Lis',
+        'Dec': 'Gru',
+    }
+    for k, v in map:
+        datetime_str.replace(k, v)
+    return datetime_str
+    
+    
 @login_required
 @auth_profile(['all'])
 def statements(request, thread_id):
@@ -255,12 +274,14 @@ def statements(request, thread_id):
         image_obj=JSONObject(
             url=Case(
                 When(~Q(image=''), then=Concat(Value(settings.MEDIA_URL), 'image')),
-                default='image', output_field=ImageField())),
-        created_datetime=Concat(
-            ExtractDay('created_at'), Value("-"), ExtractMonth('created_at'), Value("-"), ExtractYear('created_at'),
-            Value(" | "),
-            ExtractHour('created_at'), Value(":"), ExtractMinute('created_at'),
-            output_field=CharField()),
+                default='image', output_field=ImageField())
+        ),
+        created_datetime=Func(
+            F('created_at'),
+            Value('YYYY-MM-DD | HH:MM'),
+            function='to_char',
+            output_field=DateTimeField()
+        ),
         seen_by_objs=ArrayAgg(
             JSONObject(
                 id='seen_by__id',
