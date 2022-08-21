@@ -30,9 +30,9 @@ class LocationTypeAdmin(admin.ModelAdmin):
 @admin.register(Location, SecondaryLocation, PrimaryLocation)
 class LocationAdmin(admin.ModelAdmin):
     fields = [
-        'name', 'description', 'location_type', 'in_location', 'audio_set',
-        'main_image', 'picture_sets', 'participants', 'informees',
-        'knowledge_packets', 'map_packets',
+        'name', 'description',  ('location_type', 'in_location'),
+        ('main_image', 'audio_set'), 'picture_sets', 'participants',
+        'informees', 'knowledge_packets', 'map_packets',
     ]
     filter_horizontal = [
         'participants', 'informees', 'knowledge_packets',
