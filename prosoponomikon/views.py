@@ -54,9 +54,9 @@ def prosoponomikon_character_view(request, character_id):
     [
         knowledge_packets, acquaintanceships, skill_types,
         acquisitions_regular, acquisitions_priests, acquisitions_sorcerers,
-        acquisitions_theurgists,
+        acquisitions_theurgists, item_formset,
         synergies_regular, items
-    ] = [list() for _ in range(9)]
+    ] = [list() for _ in range(10)]
 
     try:
         this_acquaintanceship = Acquaintanceship.objects.get(
@@ -108,11 +108,11 @@ def prosoponomikon_character_view(request, character_id):
         acquaintanceships = character.acquaintanceships().exclude(known_character=character)
         items = Item.objects.filter(collection__in=item_collections, is_deleted=False)
      
-    # Equipment
-    item_formset = ItemFormSet(
-        request.POST or None,
-        queryset=items,
-        item_collections=item_collections)
+        # Equipment
+        item_formset = ItemFormSet(
+            request.POST or None,
+            queryset=items,
+            item_collections=item_collections)
     
     if request.POST.get('formset-1'):
         if item_formset.is_valid():
