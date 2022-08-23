@@ -299,6 +299,10 @@ def thread_view(request, thread_id, tag_title):
     if current_profile.status != 'gm':
         informables = informables.filter(
             character__in=current_profile.character.acquaintances.all())
+    # TODO temp
+    if current_profile.character.fullname in 'Ilen z Astinary, Alora z Astinary, Syngir':
+        informables = Profile.objects.none()
+    # TODO end temp
     
     # Create ThreadEditTagsForm and StatementCreateForm
     # Check if custom inform form is activated, if not then StatementCreateForm,

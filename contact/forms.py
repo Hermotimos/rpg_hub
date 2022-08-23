@@ -31,6 +31,11 @@ class DemandsCreateForm(forms.ModelForm):
                 Q(character__in=profile.character.acquaintances.all()) | Q(status='gm'))
         else:
             addressees = Profile.objects.none()
+
+        # TODO temp
+        if profile.character.fullname in 'Ilen z Astinary, Alora z Astinary, Syngir':
+            addressees = Profile.objects.filter(status='gm')
+        # TODO end temp
             
         self.fields['addressee'].queryset = addressees.exclude(id=profile.id)
         
