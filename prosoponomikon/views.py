@@ -87,8 +87,14 @@ def prosoponomikon_character_view(request, character_id):
         Case(When(items__is_deleted=False, then=F('items__weight')))))
     
     # Any Profile viewing own Character or GM viewing any Character
-    if current_profile.character.id == character_id or current_profile.status == 'gm':
+    if current_profile.status == 'gm':
+        knowledge_packets = character.profile.knowledge_packets.prefetch_related(
+            'picture_sets__pictures').select_related('author').order_by('title')
+        knowledge_packets = annotate_informables(knowledge_packets, current_profile)
         
+        acquaintanceships = character.acquaintanceships().exclude(known_character=character)
+
+    if current_profile.character.id == character_id or current_profile.status == 'gm':
         acquisitions = character.acquisitions_for_character_sheet()
         acquisitions_regular = acquisitions.filter(skill_level__skill__types__kinds__name__in=["Powszechne", "Mentalne"])
         acquisitions_priests = acquisitions.filter(skill_level__skill__types__kinds__name="Moce Kapłańskie")
@@ -101,11 +107,6 @@ def prosoponomikon_character_view(request, character_id):
         synergies_regular = synergies.exclude(
             skills__types__kinds__name__in=["Moce Kapłańskie",  "Zaklęcia", "Moce Teurgiczne"])
 
-        knowledge_packets = character.profile.knowledge_packets.prefetch_related(
-            'picture_sets__pictures').select_related('author').order_by('title')
-        knowledge_packets = annotate_informables(knowledge_packets, current_profile)
-        
-        acquaintanceships = character.acquaintanceships().exclude(known_character=character)
         items = Item.objects.filter(collection__in=item_collections, is_deleted=False)
      
         # Equipment
