@@ -204,7 +204,7 @@
                     <td class="align-center align-top font-weight-bold timeline">
                         <a class="hover-pointer-black" href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">
                             <span  data-toggle="tooltip" data-placement="top" data-html="true" title='Kronika Wydarzenia'>
-                                {{ event.date_in_period|add_season_img }}
+                                {{ event.date_in_period|add_season_img|temp_chrono_override:request.current_profile.id }}
                             </span>
                         </a>
                     </td>
