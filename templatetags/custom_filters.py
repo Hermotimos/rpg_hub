@@ -298,12 +298,13 @@ def temp_chrono_override(chronology_info: str, profile_id: int):
     if profile_id in [82, 93]:
         idx = chronology_info.rindex("<br> ")
         before = chronology_info[:idx+5]
-        yeardate = int(chronology_info[idx+5:idx+6])
-        after = chronology_info[idx+6:]
+        yeardate = int(chronology_info[idx+5:].split(".")[0])
+        after = chronology_info[idx+5:].split(".")[1]
         # print(chronology_info)
         # print(before)
         # print(yeardate)
         # print(after)
+        # print()
         
         if "Nemetha" in chronology_info:
             after = after.replace("Archonatu Nemetha Samatiana", "Nowej Ery")
@@ -314,6 +315,6 @@ def temp_chrono_override(chronology_info: str, profile_id: int):
         else:
             after = after
         
-        chronology_info = f"{before}{yeardate}{after}"
+        chronology_info = f"{before}{yeardate}. {after}"
 
     return mark_safe(chronology_info)
