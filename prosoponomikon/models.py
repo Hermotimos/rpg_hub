@@ -1,8 +1,9 @@
+from django.conf import settings
 from django.db.models import (
     BooleanField,
     CASCADE,
     CharField,
-    F,
+    F, Q,
     ForeignKey as FK,
     Manager,
     ManyToManyField as M2M,
@@ -13,7 +14,7 @@ from django.db.models import (
     PROTECT,
     TextField,
 )
-from django.db.models.functions import Substr, Lower
+from django.db.models.functions import Substr, Lower, Coalesce
 from django.db.models.signals import post_save
 
 from knowledge.models import BiographyPacket, DialoguePacket
@@ -230,6 +231,9 @@ class Character(Model):
         self.fullname = f"{first_name}{family_name}{cognomen}".strip()
         super().save(*args, **kwargs)
     
+    def get_absolute_url(self):
+        return f'{settings.SERVER_ADDRESS}/prosoponomikon/character/{self.pk}/'
+    
     def informables(self):
         qs = Profile.active_players.select_related('character')
         qs = qs.exclude(character__in=self.acquaintaned_to.all())
@@ -237,12 +241,13 @@ class Character(Model):
         return qs
         
     def acquaintanceships(self):
-        return Acquaintanceship.objects.filter(
-            knowing_character=self
-        ).select_related(
+        return self.known_characters.select_related(
             'known_character__profile',
         ).annotate(
-            initial=Lower(Substr('known_character__fullname', 1, 1)))
+            known_name=Coalesce('knows_as_name', 'known_character__fullname')
+        ).annotate(
+            initial=Lower(Substr('known_name', 1, 1))
+        )
 
     def acquisitions_for_character_sheet(self):
         return self.acquisitions.annotate(

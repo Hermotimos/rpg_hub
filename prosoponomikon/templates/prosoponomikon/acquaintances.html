@@ -10,7 +10,7 @@
 {% block content %}
 
     <!-- INITIALS AS QUICK LINKS -->
-    {% regroup acquaintanceships by initial as acquaintanceships_list %}
+    {% regroup acquaintanceships|dictsort:"known_name" by initial as acquaintanceships_list %}
     
     <div class="container sticky-menu border-bottom">
         <div class="row d-flex justify-content-center text-center">

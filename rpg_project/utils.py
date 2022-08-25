@@ -10,7 +10,7 @@ from django.core.mail import send_mail
 from django.db.models import Func
 from django.shortcuts import redirect
 
-from prosoponomikon.models import Acquaintanceship
+from prosoponomikon.models import Acquaintanceship, Character
 from users.models import Profile
 
 
@@ -69,22 +69,18 @@ def handle_inform_form(request):
         obj.informees.add(*informed_ids)
         send_emails(request, informed_ids, history_event=obj)
     
-    elif 'Character' in post_data.keys():
-        model = all_models['Character']
-        known_character = model.objects.get(id=post_data['Character'][0])
-        knowing_characters = model.objects.filter(profile_id__in=informed_ids)
-        this_acquaintanceship = Acquaintanceship.objects.get(
-            knowing_character=request.current_profile.character,
-            known_character=known_character)
-        for character in knowing_characters:
+    elif 'Acquaintanceship' in post_data.keys():
+        model = all_models['Acquaintanceship']
+        obj = model.objects.get(id=post_data['Acquaintanceship'][0])
+        for character in Character.objects.filter(profile_id__in=informed_ids):
             Acquaintanceship.objects.create(
                 knowing_character=character,
-                known_character=known_character,
-                is_direct=this_acquaintanceship.is_direct,
-                knows_if_dead=this_acquaintanceship.knows_if_dead,
-                knows_as_name=this_acquaintanceship.knows_as_name,
-                knows_as_description=this_acquaintanceship.knows_as_description)
-        send_emails(request, informed_ids, character=known_character)
+                known_character=obj.known_character,
+                is_direct=obj.is_direct,
+                knows_if_dead=obj.knows_if_dead,
+                knows_as_name=obj.knows_as_name,
+                knows_as_description=obj.knows_as_description)
+        send_emails(request, informed_ids, acquaintanceship=obj)
 
     else:
         messages.warning(
@@ -243,16 +239,17 @@ def send_emails(request, profile_ids=None, **kwargs):
                   f"Było to w czasach...\n" \
                   # f"Wydarzenie zostało zapisane w Twojej Kronice: " \
                   # f"{request.get_host()}/chronicles/XXXXXXXX/\n"
-        messages.info(request, f'Poinformowano wybranych bohaterów!')
+        messages.info(request, f'Poinformowano wybrane Postacie!')
 
     # CHARACTER
-    elif 'character' in kwargs:
-        character = kwargs['character']
+    elif 'acquaintanceship' in kwargs:
+        acquaintanceship = kwargs['acquaintanceship']
         subject = "[RPG] Nowa opowieść o Postaci!"
-        message = f"{profile} rozprawia o Postaci '{character}'.\n" \
+        message = f"{profile} rozprawia o Postaci " \
+                  f"'{acquaintanceship.knows_as_name or acquaintanceship.known_character.fullname}'.\n" \
                   f"Postać została dodana do Twojego Prosoponomikonu: " \
-                  f"{request.get_host()}/prosoponomikon/character/{character}/\n"
-        messages.info(request, f'Poinformowano wybranych bohaterów!')
+                  f"{acquaintanceship.known_character.get_absolute_url()}\n"
+        messages.info(request, f'Poinformowano wybrane Postacie!')
 
     else:
         subject = 'Błąd'

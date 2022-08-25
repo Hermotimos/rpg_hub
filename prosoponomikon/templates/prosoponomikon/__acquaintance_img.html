@@ -1,7 +1,18 @@
 {% load static %}
 
 <div class="img-hover-zoom border-double m-0" data-toggle="tooltip" data-placement="bottom" data-html="true"
-     title='<span class="font-italic"> {{ acquaintanceship.known_character }} {% if not acquaintanceship.is_direct %} <br>(Postać znana ze słyszenia) {% endif %}</span>'>
+     title='<span class="font-italic">
+        {% if not aka %}
+            <div>{% firstof acquaintanceship.knows_as_name acquaintanceship.known_character.fullname %}</div>
+        {% endif %}
+        {% if not acquaintanceship.is_direct %}
+            <div>(Postać znana ze słyszenia)</div>
+        {% endif %}
+        {% if aka %}
+            <div>(Znany opis Postaci)</div>
+            <div>{{ acquaintanceship.knows_as_description }}</div>
+        {% endif %}
+        </span>'>
     {% if acquaintanceship.is_direct %}
         <img class="character {% if acquaintanceship.knows_if_dead and not acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
              src="{{ acquaintanceship.known_character.profile.image.url }}">
@@ -9,4 +20,5 @@
         <img class="character {% if acquaintanceship.knows_if_dead and not acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
              src="{% static 'img/profile_known_only_indirectly.jpg' %}">
     {% endif %}
+
 </div>

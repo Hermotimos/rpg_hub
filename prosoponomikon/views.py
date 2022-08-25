@@ -52,11 +52,11 @@ def prosoponomikon_character_view(request, character_id):
 
     # Declare empty variables
     [
-        knowledge_packets, acquaintanceships, skill_types,
+        knowledge_packets, acquaintanceships, also_known_as, skill_types,
         acquisitions_regular, acquisitions_priests, acquisitions_sorcerers,
         acquisitions_theurgists, item_formset,
         synergies_regular, items
-    ] = [list() for _ in range(10)]
+    ] = [list() for _ in range(11)]
 
     try:
         this_acquaintanceship = Acquaintanceship.objects.get(
@@ -93,6 +93,9 @@ def prosoponomikon_character_view(request, character_id):
         knowledge_packets = annotate_informables(knowledge_packets, current_profile)
         
         acquaintanceships = character.acquaintanceships().exclude(known_character=character)
+        also_known_as = character.knowing_characters.filter(
+            ~Q(knows_as_description=None) | ~Q(knows_as_name=None)
+        ).select_related('knowing_character__profile')
 
     if current_profile.character.id == character_id or current_profile.status == 'gm':
         acquisitions = character.acquisitions_for_character_sheet()
@@ -128,7 +131,7 @@ def prosoponomikon_character_view(request, character_id):
             messages.warning(request, "Popraw wskazane błędy, aby zaktualizować Ekwipunek!")
             
     # INFORM FORM
-    elif request.POST.get('Character'):
+    elif request.POST.get('Acquaintanceship'):
         handle_inform_form(request)
         return redirect('prosoponomikon:character', character_id=character_id)
 
@@ -145,6 +148,7 @@ def prosoponomikon_character_view(request, character_id):
         'biography_packets': biography_packets,
         'dialogue_packets': dialogue_packets,
         'acquaintanceships': acquaintanceships,
+        'also_known_as': also_known_as,
         'item_collections': item_collections,
         'items': items,
         'formset_1': item_formset,

@@ -1,10 +1,15 @@
 {% load static %}
 
 <div class="col-6 col-lg-3 px-2 mb-2">
+    {% if aka %}
+        {% include '_img_xs.html' %}
+    {% endif %}
     <a class="img-link" href="{% url 'prosoponomikon:character' acquaintanceship.known_character.id %}">
         {% include 'prosoponomikon/__acquaintance_img.html' %}
     </a>
     {% if show_caption %}
-        <p class="pt-1 font-italic font-14 text-center">{% firstof acquaintanceship.knows_as_name acquaintanceship.known_character.fullname %}</p>
+        <p class="pt-1 font-italic font-14 text-center">
+            {% firstof acquaintanceship.knows_as_name acquaintanceship.known_character.fullname %}
+        </p>
     {% endif %}
 </div>

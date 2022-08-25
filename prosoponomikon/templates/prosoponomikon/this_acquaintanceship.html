@@ -38,7 +38,7 @@
                                     <!-- Modal -->
                                     <span class="btn btn-outline-dark icon-inform py-2" data-toggle="modal" data-target="#infoCharacterModal_{{ this_acquaintanceship.known_character.id }}"></span>
                                     <div class="modal fade" id="infoCharacterModal_{{ this_acquaintanceship.known_character.id }}" tabindex="-1" role="dialog" aria-hidden="true">
-                                        {% with informables=this_acquaintanceship.known_character.informables|filter_players:request.current_profile inform_type=this_acquaintanceship.known_character|get_model_name id_=this_acquaintanceship.known_character.id %}
+                                        {% with informables=this_acquaintanceship.known_character.informables|filter_players:request.current_profile inform_type=this_acquaintanceship|get_model_name id_=this_acquaintanceship.id %}
                                             {% include '_inform.html' %}
                                         {% endwith %}
                                     </div>
@@ -216,8 +216,16 @@
                     <input type="radio" name="tabset" id="tab9" aria-controls="acquaintanceships" checked>
                 {% endif %}
                 <label class="font-resp-15 resp-tab-label" for="tab9">
-                    {% if this_acquaintanceship.known_character.profile != request.current_profile and this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
+                    {% if this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
                     Znajomości
+                </label>
+            {% endif %}
+            
+            <!-- Also known as -->
+            {% if also_known_as %}
+                <input type="radio" name="tabset" id="tab10" aria-controls="aka">
+                <label class="font-resp-15 resp-tab-label" for="tab10">
+                    A.K.A.
                 </label>
             {% endif %}
             
@@ -312,6 +320,21 @@
                             <div class="row">
                                 {% for acquaintanceship in acquaintanceships %}
                                     {% with show_caption=True %}
+                                        {% include 'prosoponomikon/_acquaintance_img.html' %}
+                                    {% endwith %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </section>
+                {% endif %}
+                
+                <!-- Also known as -->
+                {% if also_known_as %}
+                    <section id="aka" class="tab-panel">
+                        <div class="container">
+                            <div class="row">
+                                {% for acquaintanceship in also_known_as %}
+                                    {% with show_caption=True aka=True %}
                                         {% include 'prosoponomikon/_acquaintance_img.html' %}
                                     {% endwith %}
                                 {% endfor %}
