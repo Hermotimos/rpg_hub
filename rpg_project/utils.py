@@ -97,15 +97,19 @@ def send_emails(request, profile_ids=None, **kwargs):
     from users.models import Profile
     profile = Profile.objects.get(id=request.session['profile_id'])
     sender = settings.EMAIL_HOST_USER
-    receivers = [
-        p.user.email
-        for p in Profile.players.filter(id__in=profile_ids or []).select_related()]
+    receivers = []
+    
+    # Don't send emails to Players if used in development
+    if not settings.EMAIL_SEND_ALLOWED:
+        receivers = [
+            p.user.email
+            for p in Profile.players.filter(id__in=profile_ids or []).select_related()]
     if profile.status != 'gm':
         gms = [
             p.user.email
             for p in Profile.objects.filter(status='gm').select_related()]
         receivers.extend(gms)
-
+        
     # DEBATES
     if 'remark' in kwargs:
         remark = kwargs['remark']

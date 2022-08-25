@@ -290,6 +290,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD_TWO_STEP')
 
+EMAIL_SEND_ALLOWED = env('EMAIL_SEND_ALLOWED')
 
 # -----------------------------------------------------------------------------
 # debug-toolbar
