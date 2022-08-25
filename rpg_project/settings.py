@@ -273,7 +273,8 @@ else:
     MEDIA_ROOT = 'media'
     MEDIA_URL = 'media/'
 
-    MY_GCP_PROJECT_URL = env("MY_GCP_PROJECT_ULR")
+# For custom context manager
+MY_GCP_PROJECT_URL = env("MY_GCP_PROJECT_ULR")
     
 # -----------------------------------------------------------------------------
 
