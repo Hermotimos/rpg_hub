@@ -133,6 +133,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'technicalities.utils.gcp_project_url',
             ],
             'libraries': {
                 'custom_filters': 'templatetags.custom_filters',
@@ -265,7 +266,8 @@ else:
 
     MEDIA_ROOT = 'media'
     MEDIA_URL = 'media/'
-   
+
+    MY_GCP_PROJECT_URL = env("MY_GCP_PROJECT_ULR")
     
 # -----------------------------------------------------------------------------
 
