@@ -190,7 +190,7 @@ def send_emails(request, profile_ids=None, **kwargs):
                   f" '{location.name}'." \
                   f"\nInformacje zostały zapisane w Twoim Toponomikonie: " \
                   f"\n{request.build_absolute_uri()}\n"
-        messages.info(request, f'Poinformowano wybranych bohaterów!')
+        messages.info(request, f'Poinformowano wybrane Postacie!')
 
     # KNOWLEDGE PACKET
     elif 'kn_packet' in kwargs:
@@ -200,7 +200,7 @@ def send_emails(request, profile_ids=None, **kwargs):
                   f"\nWiędzę tę możesz odnaleźć w Almanachu pod:" \
                   f" {', '.join(s.name for s in kn_packet.skills.all())}:" \
                   f"\n{request.get_host()}/knowledge/almanac/\n"
-        messages.info(request, f'Poinformowano wybranych bohaterów!')
+        messages.info(request, f'Poinformowano wybrane Postacie!')
 
     # BIOGRAPHY PACKET
     elif 'bio_packet' in kwargs:
@@ -210,7 +210,7 @@ def send_emails(request, profile_ids=None, **kwargs):
                   f"\nWiędzę tę możesz odnaleźć w Prosoponomikonie pod:" \
                   f" {bio_packet.characters.all().first().name}:" \
                   f"\n{request.get_host()}/prosoponomikon/character/{bio_packet.characters.all().first().id}/\n"
-        messages.info(request, f'Poinformowano wybranych bohaterów!')
+        messages.info(request, f'Poinformowano wybrane Postacie!')
 
     # DEBATE
     elif 'debate' in kwargs:
@@ -229,7 +229,7 @@ def send_emails(request, profile_ids=None, **kwargs):
         message = f"{profile} rozprawia o przygodzie '{game_event.game.title}'.\n" \
                   f"Wydarzenie zostało zapisane w Twojej Kronice: " \
                   f"{request.get_host()}/chronicles/chronicle/game:{game_event.game.id}/\n"
-        messages.info(request, f'Poinformowano wybranych bohaterów!')
+        messages.info(request, f'Poinformowano wybrane Postacie!')
 
     # HISTORY EVENT
     elif 'history_event' in kwargs:

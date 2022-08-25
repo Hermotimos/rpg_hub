@@ -1,5 +1,7 @@
 import datetime
 
+from ckeditor.fields import RichTextField
+from django.conf import settings
 from django.db.models import (
     BooleanField,
     CharField,
@@ -13,14 +15,10 @@ from django.db.models import (
     Max,
     Model,
     PROTECT,
-    SmallIntegerField,
-    TextField,
 )
 from django.db.models.signals import post_save
-from ckeditor.fields import RichTextField
 
 from users.models import Profile
-
 
 #  ==========================================================================
 
@@ -87,7 +85,7 @@ class Thread(Model):
         return qs
 
     def get_absolute_url(self):
-        return f'/communications/thread/{self.pk}/None/#page-bottom'
+        return f'{settings.SERVER_ADDRESS}/communications/thread/{self.pk}/None/#page-bottom'
 
 
 class AnnouncementManager(Manager):
