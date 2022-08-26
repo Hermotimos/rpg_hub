@@ -248,7 +248,7 @@ class Character(Model):
             known_name=Coalesce('knows_as_name', 'known_character__fullname')
         ).annotate(
             initial=Lower(Substr('known_name', 1, 1))
-        )
+        ).exclude(known_character=self)
 
     def acquisitions_for_character_sheet(self):
         return self.acquisitions.annotate(

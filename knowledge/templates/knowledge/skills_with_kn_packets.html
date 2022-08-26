@@ -11,7 +11,11 @@
     <article class="top-button">
         
         <header class="mb-5">
-            <a href="{% url 'knowledge:kn-packet-form' 0 %}" class="btn btn-outline-dark">Nowy pakiet wiedzy</a>
+            {% if request.current_profile.status == 'gm' %}
+                <a href="{% url 'admin:knowledge_knowledgepacket_add' %}" class="btn btn-outline-dark">Nowy pakiet wiedzy</a>
+            {% else %}
+                <a href="{% url 'knowledge:kn-packet-form' 0 %}" class="btn btn-outline-dark">Nowy pakiet wiedzy</a>
+            {% endif %}
         </header>
     
         <div class="pt-5">
