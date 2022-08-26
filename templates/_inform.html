@@ -11,14 +11,14 @@
         <!-- The form encloses modal-body and modal-footer in order to enclose submit button -->
         <form method="POST" action="." name="{{ inform_type }}_form{{ id_ }}">
             {% csrf_token %}
-            
+
             {% if not informables %}
             
                 <h5 class="text-center text-danger m-3">
                     {% if inform_type == 'Announcement' %}
                         Brak Graczy możliwych do dołączenia.
                     {% else %}
-                        {% if inform_type in "Location,Character" %}
+                        {% if inform_type in "Location,Character,KnowledgePacket" %}
                             Brak Postaci możliwych do poinformowania.
                         {% else %}
                             Brak Postaci możliwych do dołączenia.
