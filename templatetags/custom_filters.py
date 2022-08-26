@@ -292,8 +292,8 @@ def kinds_filter(skilltype_kinds_qs, skilltype_kinds_str):
 @register.filter
 def temp_chrono_override(chronology_info: str, profile_id: int):
     
-    # Syngir, Murkon
-    if profile_id in [82, 93]:
+    # Syngir, Murkon, Dalamar
+    if profile_id in [11, 82, 93]:
         idx = chronology_info.rindex("<br> ")
         before = chronology_info[:idx+5]
         yeardate = int(chronology_info[idx+5:].split(".")[0])
