@@ -17,6 +17,7 @@ from django.db.models import (
 )
 
 from imaginarion.models import PictureSet
+from rpg_project.utils import OrderByPolish
 from users.models import Profile
 
 
@@ -76,7 +77,7 @@ class RulesComment(Model):
     text = TextField()
 
     class Meta:
-        ordering = ['text']
+        ordering = [OrderByPolish('text')]
 
     def __str__(self):
         return self.text
@@ -87,7 +88,7 @@ class Condition(Model):
     text = CharField(max_length=200, unique=True)
 
     class Meta:
-        ordering = ['text']
+        ordering = [OrderByPolish('text')]
 
     def __str__(self):
         return self.text
@@ -98,7 +99,7 @@ class CombatType(Model):
     name = CharField(max_length=100, unique=True)
 
     class Meta:
-        ordering = ['name']
+        ordering = [OrderByPolish('name')]
 
     def __str__(self):
         return self.name
@@ -130,7 +131,7 @@ class Perk(Model):
     comments = M2M(to=RulesComment, related_name='perks', blank=True)
 
     class Meta:
-        ordering = ['name', 'description']
+        ordering = [OrderByPolish('name'), OrderByPolish('description')]
 
     def __str__(self):
         return self.name
@@ -157,7 +158,7 @@ class Perk(Model):
 #     price = CharField(max_length=20)
 #
 #     class Meta:
-#         ordering = ['name']
+#        ordering = [OrderByPolish('name')]
 #
 #     def __str__(self):
 #         return self.name
@@ -303,7 +304,7 @@ class WeaponType(Model):
         blank=True)
 
     class Meta:
-        ordering = ['name']
+        ordering = [OrderByPolish('name')]
     
     def __str__(self):
         return self.name
@@ -317,7 +318,7 @@ class SkillKind(Model):
     name = CharField(max_length=100, unique=True)
 
     class Meta:
-        ordering = ['name']
+        ordering = [OrderByPolish('name')]
     
     def __str__(self):
         return self.name
@@ -329,7 +330,7 @@ class SkillType(Model):
     kinds = M2M(to=SkillKind, related_name='skill_types', blank=True)
 
     class Meta:
-        ordering = ['name']
+        ordering = [OrderByPolish('name')]
         
     def __str__(self):
         return self.name
@@ -341,7 +342,7 @@ class SkillGroup(Model):
     type = FK(to=SkillType, related_name='skill_groups', on_delete=PROTECT)
 
     class Meta:
-        ordering = ['name']
+        ordering = [OrderByPolish('name')]
 
     def __str__(self):
         return self.name
@@ -365,7 +366,7 @@ class Skill(Model):
     weapon = One2One(to=WeaponType, on_delete=CASCADE, blank=True, null=True)
 
     class Meta:
-        ordering = ['name']
+        ordering = [OrderByPolish('name')]
 
     def __str__(self):
         return self.name
@@ -486,7 +487,7 @@ class SkillLevel(Model):
         max_length=20, choices=TRAITS, blank=True, null=True)
 
     class Meta:
-        ordering = ['skill__name', 'level']
+        ordering = [OrderByPolish('skill__name'), 'level']
 
     def __str__(self):
         return f'{str(self.skill.name)} [{self.level}]'
@@ -580,7 +581,7 @@ class Synergy(Model):
     skills = M2M(to=Skill, related_name='skills')
 
     class Meta:
-        ordering = ['name']
+        ordering = [OrderByPolish('name')]
         verbose_name = 'Synergy'
         verbose_name_plural = 'Synergies'
 
@@ -636,7 +637,7 @@ class SynergyLevel(Model):
     skill_levels = M2M(to=SkillLevel, related_name='synergy_levels')
 
     class Meta:
-        ordering = ['synergy', 'level']
+        ordering = [OrderByPolish('synergy__name'), 'level']
         
     def __str__(self):
         return f'{str(self.synergy.name)} [{self.level}]'
@@ -690,7 +691,7 @@ class Profession(Model):
     allowees = M2M(to=Profile, related_name='professions_allowed', blank=True)
 
     class Meta:
-        ordering = ['name']
+        ordering = [OrderByPolish('name')]
         verbose_name = 'Profession'
         verbose_name_plural = '--- PROFESSIONS'
 
@@ -707,7 +708,7 @@ class SubProfession(Model):
     allowees = M2M(to=Profile, related_name='subprofessions_allowed', blank=True)
     
     class Meta:
-        ordering = ['name']
+        ordering = [OrderByPolish('name')]
         verbose_name = 'SubProfession'
         verbose_name_plural = '--- SUBPROFESSIONS'
 
@@ -721,7 +722,7 @@ class Sphragis(Model):
     color = CharField(max_length=7, default='#000000')
     
     class Meta:
-        ordering = ['name']
+        ordering = [OrderByPolish('name')]
 
     def __str__(self):
         return self.name

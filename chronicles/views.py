@@ -14,7 +14,7 @@ from chronicles.models import (
     Chronology,
     PlotThread,
 )
-from rpg_project.utils import send_emails, auth_profile, OrderByPolish
+from rpg_project.utils import send_emails, auth_profile
 from users.models import Profile
 from toponomikon.models import Location
 
@@ -252,8 +252,8 @@ def timeline_view(request):
 
     events = GameEvent.objects.all()
     known_profiles = Profile.players.select_related('character', 'user')
-    plot_threads = PlotThread.objects.order_by(OrderByPolish('name'))
-    locations = Location.objects.order_by(OrderByPolish('name'))
+    plot_threads = PlotThread.objects.all()
+    locations = Location.objects.all()
     
     if not current_profile.can_view_all:
         events = events.filter(

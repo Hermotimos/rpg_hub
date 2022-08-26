@@ -5,7 +5,7 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
 
 from knowledge.models import MapPacket, KnowledgePacket
-from rpg_project.utils import handle_inform_form, auth_profile, OrderByPolish
+from rpg_project.utils import handle_inform_form, auth_profile
 from toponomikon.models import Location, LocationType, SecondaryLocation
 
 
@@ -16,9 +16,7 @@ def toponomikon_main_view(request):
     current_profile = request.current_profile
 
     known_locations = current_profile.locations_known_annotated()
-    all_locs = Location.objects.values('name').filter(
-        id__in=known_locations
-    ).order_by(OrderByPolish('name'))
+    all_locs = Location.objects.values('name').filter(id__in=known_locations)
 
     secondary_locs = SecondaryLocation.objects.filter(id__in=known_locations)
     primary_locs = known_locations.filter(in_location=None)
@@ -77,8 +75,7 @@ def toponomikon_location_view(request, loc_name):
     # LOCATIONS TAB
     locations = known_locations.filter(in_location=this_location)
     locations = locations.prefetch_related(
-        Prefetch('locations', queryset=known_locations)
-    ).order_by(OrderByPolish('name'))
+        Prefetch('locations', queryset=known_locations))
     
     location_types = LocationType.objects.filter(locations__in=locations)
     location_types = location_types.prefetch_related(

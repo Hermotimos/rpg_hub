@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
 from django.shortcuts import render, redirect
 
-from rpg_project.utils import auth_profile, OrderByPolish
+from rpg_project.utils import auth_profile
 from rules.models import (
     Plate,
     Profession,
@@ -86,7 +86,7 @@ def rules_professions_view(request, profession_type):
 
     professions = Profession.objects.filter(type=profession_type)
     subprofessions = SubProfession.objects.all()
-    essential_skills = Skill.objects.order_by(OrderByPolish('name'))
+    essential_skills = Skill.objects.all()
 
     if not current_profile.can_view_all:
         professions = professions.filter(allowees__in=user_profiles)
@@ -95,14 +95,10 @@ def rules_professions_view(request, profession_type):
 
     subprofessions = subprofessions.prefetch_related(
         Prefetch('essential_skills', queryset=essential_skills)
-    ).order_by(
-        OrderByPolish('name')
     ).distinct()
     
     professions = professions.prefetch_related(
         Prefetch('subprofessions', queryset=subprofessions)
-    ).order_by(
-        OrderByPolish('name')
     ).distinct()
 
     context = {
@@ -136,8 +132,6 @@ def rules_skills_view(request, skilltype_kind):
         'skill_levels__perks__comments',
     ).select_related(
         'group__type'
-    ).order_by(
-        OrderByPolish('name')
     ).distinct()
 
     if not current_profile.can_view_all:
@@ -170,8 +164,6 @@ def rules_synergies_view(request, skilltype_kind):
     
     synergies = current_profile.synergies_allowed(
         skilltype_kind=skilltype_kind
-    ).order_by(
-        OrderByPolish('name')
     ).distinct()
     
     context = {
@@ -275,8 +267,6 @@ def rules_weapon_types_view(request):
         Prefetch('comparables', queryset=weapon_types),  # filter out unknown
         'picture_set__pictures__image',
         'damage_types'
-    ).order_by(
-        OrderByPolish('name')
     ).distinct()
     
     context = {

@@ -10,8 +10,8 @@ from django.core.mail import send_mail
 from django.db.models import Func
 from django.shortcuts import redirect
 
-from prosoponomikon.models import Acquaintanceship, Character
-from users.models import Profile
+
+
 
 
 def sample_from_qs(qs, max_size):
@@ -21,6 +21,8 @@ def sample_from_qs(qs, max_size):
 
 
 def handle_inform_form(request):
+    from prosoponomikon.models import Acquaintanceship, Character
+    
     # Example post data from form
     # dict(request.POST).items() == < QueryDict: {
     #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
@@ -28,6 +30,7 @@ def handle_inform_form(request):
     #     'Location': ['77']
     # } >
     # print(request.POST)
+    
     post_data = dict(request.POST)
     all_models = {model.__name__: model for model in apps.get_models()}
     
@@ -363,6 +366,8 @@ def auth_profile(allowed_status: list):
     If Profile is authorized to use the view, provide request with
     'current_profile' attribute that can be accessed in vies and templates.
     """
+    from users.models import Profile
+    
     def wrapper(view_func):
         
         def wrapped(request, *args, **kwargs):

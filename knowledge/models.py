@@ -13,6 +13,7 @@ from django.db.models import (
 from imaginarion.models import PictureSet
 from rules.models import Skill
 from users.models import Profile
+from rpg_project.utils import OrderByPolish
 
 
 class InfoPacket(Model):
@@ -22,7 +23,7 @@ class InfoPacket(Model):
 
     class Meta:
         abstract = True
-        ordering = ['title']
+        ordering = [OrderByPolish('title')]
         
     def __str__(self):
         return self.title
@@ -47,7 +48,7 @@ class BiographyPacket(InfoPacket):
     order_no = SmallIntegerField(default=1)
 
     class Meta:
-        ordering = ['order_no', 'title']
+        ordering = ['order_no', OrderByPolish('title')]
    
 
 class KnowledgePacket(InfoPacket):

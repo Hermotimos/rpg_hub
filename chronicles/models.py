@@ -18,8 +18,10 @@ from django.db.models.signals import post_save, m2m_changed
 
 from communications.models import Thread
 from imaginarion.models import Audio, PictureSet
+from rpg_project.utils import OrderByPolish
 from toponomikon.models import Location
 from users.models import Profile
+
 
 SEASONS = {
     '1': 'Wiosny',
@@ -94,7 +96,7 @@ class PlotThread(Model):
         return self.name
     
     class Meta:
-        ordering = ['name']
+        ordering = [OrderByPolish('name')]
         verbose_name = '- PlotThread'
 
 

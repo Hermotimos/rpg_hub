@@ -7,10 +7,6 @@ from django.template.defaulttags import GroupedResult
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
-import communications.models
-import rules.models
-from communications.models import ThreadTag
-from users.models import Profile
 
 register = template.Library()
 
@@ -177,6 +173,7 @@ def pictureset_pictures_in_custom_order(picture_set):
 
 @register.filter
 def players_names_bold(django_filter_html):
+    from users.models import Profile
     html = str(django_filter_html)
     for pid in Profile.players.values_list('id', flat=True):
         html = html.replace(
@@ -192,6 +189,7 @@ def get_selected(bound_field):
 
 @register.filter
 def render_option(field_choice, selected_objs):
+    from communications.models import ThreadTag
     value_obj, label = field_choice
     value = f'value="{value_obj.value}"'
     style = f'style="color: {ThreadTag.objects.get(id=value_obj.value).color};"'
@@ -218,7 +216,7 @@ def next_elem(list_, current_index):
 
 
 @register.filter
-def include_silent_participants(results: List[GroupedResult], thread: communications.models.Thread):
+def include_silent_participants(results: List[GroupedResult], thread):
     profiles_with_statements = [gr.grouper for gr in results]
     profiles_without_statements = [
         p for p in thread.participants.all()
@@ -241,7 +239,7 @@ def trim_nums(text: str):
 
 
 @register.filter
-def format_conditional_modifier(conditional_modifier: rules.models.ConditionalModifier, color_class: str):
+def format_conditional_modifier(conditional_modifier, color_class: str):
     text = str(conditional_modifier)
     if "[" in text:
         before, brackets = text.split(sep='[')

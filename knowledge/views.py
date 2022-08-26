@@ -11,7 +11,7 @@ from imaginarion.models import Picture, PictureImage, PictureSet
 from knowledge.forms import KnPacketForm, PlayerKnPacketForm
 from knowledge.models import KnowledgePacket
 from knowledge.utils import annotate_informables
-from rpg_project.utils import handle_inform_form, auth_profile, OrderByPolish
+from rpg_project.utils import handle_inform_form, auth_profile
 from rules.models import Skill
 
 
@@ -22,8 +22,7 @@ from rules.models import Skill
 def almanac_view(request):
     current_profile = request.current_profile
     
-    knowledge_packets = KnowledgePacket.objects.order_by(
-        OrderByPolish('title')).select_related('author')
+    knowledge_packets = KnowledgePacket.objects.select_related('author')
     knowledge_packets = annotate_informables(knowledge_packets, current_profile)
     if not current_profile.can_view_all:
         knowledge_packets = knowledge_packets.filter(acquired_by=current_profile)
@@ -31,8 +30,7 @@ def almanac_view(request):
     skills = Skill.objects.filter(knowledge_packets__in=knowledge_packets)
     skills = skills.prefetch_related(
         Prefetch('knowledge_packets', queryset=knowledge_packets),
-        'knowledge_packets__picture_sets__pictures',
-    ).order_by(OrderByPolish('name'))
+        'knowledge_packets__picture_sets__pictures')
     
     if request.method == 'POST':
         handle_inform_form(request)

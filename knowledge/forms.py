@@ -38,7 +38,7 @@ class KnPacketForm(ModelForm):
         self.fields['text'].label = "Tekst"
         self.fields['title'].label = "Tytuł"
         self.fields['skills'].label = "Umiejętności powiązane"
-
+        
         self.fields['locations'].widget.attrs['size'] = 10
         self.fields['skills'].widget.attrs['size'] = 10
         self.fields['text'].widget.attrs = {
@@ -74,11 +74,8 @@ class PlayerKnPacketForm(KnPacketForm):
         self.fields['text'].label = "Tekst"
         self.fields['title'].label = "Tytuł"
 
-        self.fields['locations'].queryset = (
-                current_profile.locations_participated.all()
-                | current_profile.locations_informed.all()
-        ).distinct()
-        self.fields['skills'].queryset = current_profile.allowed_skills.all()
+        self.fields['locations'].queryset = current_profile.locations_known_annotated()
+        self.fields['skills'].queryset = current_profile.allowed_skills()
 
         self.fields['descr_1'].widget.attrs = {
             'placeholder': 'Podpis grafiki nr 1',

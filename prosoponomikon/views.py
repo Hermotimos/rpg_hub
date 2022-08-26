@@ -17,8 +17,7 @@ from knowledge.utils import annotate_informables
 from prosoponomikon.forms import CharacterCreateForm
 from prosoponomikon.models import Character, FirstNameGroup, FamilyName, \
     Acquaintanceship
-from rpg_project.utils import handle_inform_form, auth_profile, backup_db, \
-    OrderByPolish
+from rpg_project.utils import handle_inform_form, auth_profile, backup_db
 from toponomikon.models import Location
 from users.models import Profile, User
 
@@ -29,9 +28,8 @@ from users.models import Profile, User
 def prosoponomikon_acquaintanceships_view(request):
     current_profile = request.current_profile
     
-    acquaintanceships = current_profile.character.acquaintanceships().order_by(
-        OrderByPolish('known_character__fullname')
-    ).exclude(known_character=current_profile.character)
+    acquaintanceships = current_profile.character.acquaintanceships().exclude(
+        known_character=current_profile.character)
     
     context = {
         'page_title': 'Prosoponomikon',

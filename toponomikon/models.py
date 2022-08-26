@@ -14,6 +14,7 @@ from django.db.models.signals import post_save, m2m_changed
 
 from imaginarion.models import AudioSet, Picture, PictureSet
 from knowledge.models import KnowledgePacket, MapPacket
+from rpg_project.utils import OrderByPolish
 from users.models import Profile
 
 
@@ -85,7 +86,7 @@ class Location(Model):
     )
 
     class Meta:
-        ordering = ['name']
+        ordering = [OrderByPolish('name')]
         verbose_name = 'Location'
         verbose_name_plural = '--- LOCATIONS'
 

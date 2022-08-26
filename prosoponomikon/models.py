@@ -3,8 +3,7 @@ from django.db.models import (
     BooleanField,
     CASCADE,
     CharField,
-    F, Q,
-    ForeignKey as FK,
+    F, ForeignKey as FK,
     Manager,
     ManyToManyField as M2M,
     Model,
@@ -18,7 +17,9 @@ from django.db.models.functions import Substr, Lower, Coalesce
 from django.db.models.signals import post_save
 
 from knowledge.models import BiographyPacket, DialoguePacket
-from rules.models import SubProfession, Skill, SkillLevel, WeaponType, Sphragis, SkillType
+from rpg_project.utils import OrderByPolish
+from rules.models import SubProfession, Skill, SkillLevel, WeaponType, \
+    Sphragis, SkillType
 from toponomikon.models import Location
 from users.models import Profile
 
@@ -217,7 +218,7 @@ class Character(Model):
         blank=True)
     
     class Meta:
-        ordering = ['fullname']
+        ordering = [OrderByPolish('fullname')]
         verbose_name = '*Character'
         verbose_name_plural = '*Characters (ALL)'
     
@@ -403,7 +404,7 @@ class Acquaintanceship(Model):
     knows_as_description = TextField(blank=True, null=True)
     
     class Meta:
-        ordering = ['known_character']
+        ordering = [OrderByPolish('known_character__fullname')]
         unique_together = ['known_character', 'knowing_character']
 
     def __str__(self):
@@ -420,7 +421,9 @@ class Acquisition(Model):
     sphragis = FK(to=Sphragis, on_delete=CASCADE, blank=True, null=True)
 
     class Meta:
-        ordering = ['character', 'skill_level__skill', 'skill_level']
+        ordering = [OrderByPolish('character__fullname'),  OrderByPolish('skill_level__skill__name'), 'skill_level__level']
+
+        # ordering = ['character__fullname', 'skill_level__skill__name', 'skill_level__level']
         unique_together = [
             ['character', 'skill_level', 'weapon'],
             ['character', 'skill_level', 'sphragis'],
