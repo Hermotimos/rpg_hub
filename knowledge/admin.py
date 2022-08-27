@@ -164,7 +164,7 @@ class MapPacketAdminForm(forms.ModelForm):
     
     class Meta:
         model = MapPacket
-        fields = ['picture_sets']
+        fields = ['title', 'acquired_by', 'picture_sets']
 
     primary_locations = forms.ModelMultipleChoiceField(
         queryset=Location.objects.filter(in_location=None),
@@ -225,7 +225,7 @@ class MapPacketAdminForm(forms.ModelForm):
 
 @admin.register(MapPacket)
 class MapPacketAdmin(admin.ModelAdmin):
-    filter_horizontal = ['picture_sets']
+    filter_horizontal = ['acquired_by', 'picture_sets']
     form = MapPacketAdminForm
     list_display = ['id', 'title', 'get_acquired_by']
     list_editable = ['title']
