@@ -67,7 +67,7 @@ class ForPlayerAcquaintanceshipCreateForm(forms.ModelForm):
         self.fields['frequented_locations'].help_text = """
             ✧ Aby zaznaczyć wiele Lokacji - użyj CTRL albo SHIFT.<br>
         """
-        if self.instance:
+        if self.instance.pk:
             acquaintanceship = Acquaintanceship.objects.get(
                 known_character=self.instance,
                 knowing_character=current_profile.character)
