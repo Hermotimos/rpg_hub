@@ -216,6 +216,10 @@ class Character(Model):
         through='Acquisition',
         related_name='acquiring_characters',
         blank=True)
+    # -------------------------------------------------------------------------
+    created_by = FK(
+        to=Profile, related_name='characters_created', on_delete=CASCADE,
+        blank=True, null=True)
     
     class Meta:
         ordering = [OrderByPolish('fullname')]
@@ -245,7 +249,7 @@ class Character(Model):
         return self.known_characters.select_related(
             'known_character__profile',
         ).annotate(
-            known_name=Coalesce('knows_as_name', 'known_character__fullname')
+            known_name=Lower(Coalesce('knows_as_name', 'known_character__fullname'))
         ).annotate(
             initial=Lower(Substr('known_name', 1, 1))
         ).exclude(known_character=self)

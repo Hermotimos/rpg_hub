@@ -14,9 +14,12 @@ from items.models import Item
 from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
 from knowledge.utils import annotate_informables
-from prosoponomikon.forms import CharacterCreateForm, ForPlayerCharacterCreateForm
-from prosoponomikon.models import Character, FirstNameGroup, FamilyName, \
-    Acquaintanceship
+from prosoponomikon.forms import (
+    CharacterCreateForm, ForPlayerAcquaintanceshipCreateForm
+)
+from prosoponomikon.models import (
+    Character, FirstNameGroup, FamilyName, Acquaintanceship
+)
 from rpg_project.utils import handle_inform_form, auth_profile, backup_db
 from toponomikon.models import Location
 from users.models import Profile, User
@@ -240,6 +243,80 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
 
 
 @login_required
+@auth_profile(['all'])
+def prosoponomikon_acquaintanceship_create_edit_view(request, character_id=None):
+    """Handle CharacterCreateForm intended for GM."""
+    current_profile = request.current_profile
+
+    if character_id:
+        character = Character.objects.get(id=character_id)
+        page_title = "Edytuj Postać"
+    else:
+        character = Character()
+        page_title = "Nowa Postać"
+
+    form = ForPlayerAcquaintanceshipCreateForm(
+        data=request.POST or None,
+        files=request.FILES or None,
+        current_profile=current_profile,
+        instance=character)
+    
+    if form.is_valid():
+        character = form.save(commit=False)
+        character.profile = Profile.objects.create(
+            user=User.objects.filter(profiles__status='gm').first(),
+            is_alive=form.cleaned_data['is_alive'])
+        character.created_by = current_profile
+        form.save()
+        
+        is_direct = form.cleaned_data['is_direct']
+        
+        if not character_id:
+            Acquaintanceship.objects.create(
+                known_character=character,
+                knowing_character=current_profile.character,
+                is_direct=is_direct)
+            messages.success(request, f"Utworzono Postać {character}!")
+        else:
+            Acquaintanceship.objects.update(is_direct=is_direct)
+            messages.success(request, f"Zaktualizowano Postać {character}!")
+
+        if character.profile.image == "profile_pics/profile_default.jpg" and is_direct:
+            messages.success(request, f"Wyślij Dezyderat do MG, żeby dodał jej obraz, jeśli znasz Postać z widzenia!")
+        return redirect('prosoponomikon:character', character.id)
+    
+    context = {
+        'page_title': page_title,
+        'form': form,
+    }
+    return render(request, '_form.html', context)
+
+
+@login_required
+@auth_profile(['gm'])
+def prosoponomikon_character_create_view(request):
+    """Handle CharacterCreateForm intended for GM."""
+    form = CharacterCreateForm(
+        data=request.POST or None, files=request.FILES or None)
+    
+    if form.is_valid():
+        character = form.save(commit=False)
+        character.profile = Profile.objects.create(
+            user=User.objects.filter(profiles__status='gm').first(),
+            is_alive=form.cleaned_data['is_alive'],
+            image=form.cleaned_data['image'])
+        form.save()
+        messages.success(request, f"Utworzono Postać {character}!")
+        return redirect('prosoponomikon:character-create')
+    
+    context = {
+        'page_title': "Nowa Postać",
+        'form': form,
+    }
+    return render(request, '_form.html', context)
+
+
+@login_required
 @auth_profile(['gm'])
 def prosoponomikon_first_names_view(request):
     name_groups = FirstNameGroup.objects.prefetch_related(
@@ -267,31 +344,7 @@ def prosoponomikon_family_names_view(request):
     return render(request, 'prosoponomikon/family_names.html', context)
 
 
-@login_required
-@auth_profile(['gm'])
-def prosoponomikon_character_create_form_view(request):
-    """Handle CharacterCreateForm intended for GM."""
-    form = CharacterCreateForm(
-        data=request.POST or None, files=request.FILES or None)
-    
-    if form.is_valid():
-        character = form.save(commit=False)
-        profile = Profile.objects.create(
-            user=User.objects.filter(profiles__status='gm').first(),
-            is_alive=form.cleaned_data['is_alive'],
-            image=form.cleaned_data['image'])
-        
-        character.profile = profile
-        form.save()
 
-        messages.success(request, f"Utworzono Postać {character}!")
-        return redirect('prosoponomikon:character-create')
-
-    context = {
-        'page_title': "Nowa Postać",
-        'form': form,
-    }
-    return render(request, '_form.html', context)
 
 
 @login_required

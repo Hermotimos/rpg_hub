@@ -54,8 +54,11 @@
                                 <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
                                     <a class="btn btn-outline-dark icon-edit py-2" href="{% url 'users:edit-profile' %}"></a>
                                 </div>
-                            {% endif %}
-                            {% if request.current_profile.status == 'gm' %}
+                            {% elif request.current_profile.status == 'player' and this_acquaintanceship.known_character.created_by == request.current_profile %}
+                                <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
+                                    <a class="btn btn-outline-dark icon-edit py-2" href="{% url 'prosoponomikon:acquaintanceship-create-edit' this_acquaintanceship.known_character.id %}"></a>
+                                </div>
+                            {% elif request.current_profile.status == 'gm' %}
                                 <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
                                     <a class="btn btn-outline-secondary icon-edit py-2" href="{% url 'admin:prosoponomikon_character_change' this_acquaintanceship.known_character.id %}" target="_blank"></a>
                                 </div>

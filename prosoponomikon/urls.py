@@ -6,7 +6,9 @@ app_name = 'prosoponomikon'
 urlpatterns = [
     path('acquaintanceships/', views.prosoponomikon_acquaintanceships_view, name='acquaintanceships'),
     path('character/<int:character_id>/', views.prosoponomikon_character_view, name='character'),
-    path('character-create/', views.prosoponomikon_character_create_form_view, name='character-create'),
+    path('acquaintanceship-create-edit/', views.prosoponomikon_acquaintanceship_create_edit_view, name='acquaintanceship-create-edit'),
+    path('acquaintanceship-create-edit/<int:character_id>/', views.prosoponomikon_acquaintanceship_create_edit_view, name='acquaintanceship-create-edit'),
+    path('character-create/', views.prosoponomikon_character_create_view, name='character-create'),
     path('character/<int:character_id>/bio-packet-form/<int:bio_packet_id>/',
          views.prosoponomikon_bio_packet_form_view, name='bio-packet-form'),
     
