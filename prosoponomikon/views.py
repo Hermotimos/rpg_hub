@@ -245,7 +245,7 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
 @login_required
 @auth_profile(['all'])
 def prosoponomikon_acquaintanceship_create_edit_view(request, character_id=None):
-    """Handle CharacterCreateForm intended for GM."""
+    """Handle ForPlayerAcquaintanceshipCreateForm."""
     current_profile = request.current_profile
 
     if character_id:
@@ -278,7 +278,11 @@ def prosoponomikon_acquaintanceship_create_edit_view(request, character_id=None)
                 is_direct=is_direct)
             messages.success(request, f"Utworzono Postać {character}!")
         else:
-            Acquaintanceship.objects.update(is_direct=is_direct)
+            acquaintanceship = Acquaintanceship.objects.get(
+                known_character=character,
+                knowing_character=current_profile.character)
+            acquaintanceship.is_direct = is_direct
+            acquaintanceship.save()
             messages.success(request, f"Zaktualizowano Postać {character}!")
 
         if character.profile.image == "profile_pics/profile_default.jpg" and is_direct:
