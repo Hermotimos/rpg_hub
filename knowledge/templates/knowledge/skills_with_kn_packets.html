@@ -27,9 +27,15 @@
                         {% include 'rules/_skill_img.html' %}
                         
                         <div class="skill-or-synergy-name ml-2 mt-2" data-toggle="collapse" data-target="#{{ skill|cut:' ' }}">
-                            <a class="hover-blue font-weight-bold" href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
-                                {{ skill.name }}
-                            </a>
+                            {% if request.current_profile.status == 'gm' %}
+                                <a class="hover-blue font-weight-bold" href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
+                                    {{ skill.name }}
+                                </a>
+                            {% else %}
+                                <span class="font-weight-bold">
+                                    {{ skill.name }}
+                                </span>
+                            {% endif %}
                         </div>
                     </div>
                     
