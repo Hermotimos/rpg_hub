@@ -21,7 +21,6 @@ class CharacterForm(forms.ModelForm):
 
 
 class CharacterCreateForm(forms.ModelForm):
-    username = forms.CharField(max_length=250)
     is_alive = forms.BooleanField(required=False, initial=True)
     image = forms.ImageField()
 
@@ -35,15 +34,17 @@ class CharacterCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         custom_order = [
-            'username', 'first_name', 'family_name', 'cognomen', 'is_alive',
+            'first_name', 'family_name', 'cognomen', 'is_alive',
             'image', 'description', 'frequented_locations',
         ]
-        self.fields = {
-            f_name: self.fields[f_name] for f_name in custom_order
-        }
+        self.fields = {f_name: self.fields[f_name] for f_name in custom_order}
         self.fields['first_name'].queryset = FirstName.objects.order_by('form')
         self.fields['frequented_locations'].widget.attrs['size'] = 12
     
         self.helper = FormHelper()
         self.helper.add_input(
             Submit('submit', 'Zapisz Postać', css_class='btn-dark'))
+
+
+class ForPlayerAcquaintanceCreateForm(forms.ModelForm):
+    pass

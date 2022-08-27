@@ -14,7 +14,7 @@ from items.models import Item
 from knowledge.forms import BioPacketForm, PlayerBioPacketForm
 from knowledge.models import BiographyPacket
 from knowledge.utils import annotate_informables
-from prosoponomikon.forms import CharacterCreateForm
+from prosoponomikon.forms import CharacterCreateForm, ForPlayerCharacterCreateForm
 from prosoponomikon.models import Character, FirstNameGroup, FamilyName, \
     Acquaintanceship
 from rpg_project.utils import handle_inform_form, auth_profile, backup_db
@@ -277,7 +277,7 @@ def prosoponomikon_character_create_form_view(request):
     if form.is_valid():
         character = form.save(commit=False)
         profile = Profile.objects.create(
-            user=User.objects.get(username=form.cleaned_data['username']),
+            user=User.objects.filter(profiles__status='gm').first(),
             is_alive=form.cleaned_data['is_alive'],
             image=form.cleaned_data['image'])
         
@@ -286,7 +286,7 @@ def prosoponomikon_character_create_form_view(request):
 
         messages.success(request, f"Utworzono Postać {character}!")
         return redirect('prosoponomikon:character-create')
-        
+
     context = {
         'page_title': "Nowa Postać",
         'form': form,
