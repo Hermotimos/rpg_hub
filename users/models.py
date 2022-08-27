@@ -60,7 +60,7 @@ class Profile(Model):
         try:
             return str(self.character.fullname)
         except ObjectDoesNotExist:
-            return self.user.username
+            return f"[{self.user.username}]: assign Character!"
     
     @property
     def user_img_url(self):
