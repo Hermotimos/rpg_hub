@@ -248,34 +248,34 @@ def prosoponomikon_acquaintanceship_create_edit_view(request, character_id=None)
     """Handle ForPlayerAcquaintanceshipCreateForm."""
     current_profile = request.current_profile
 
-    if character_id:
-        character = Character.objects.get(id=character_id)
-        page_title = "Edytuj Postać"
-    else:
-        character = Character()
-        page_title = "Nowa Postać"
-
     form = ForPlayerAcquaintanceshipCreateForm(
         data=request.POST or None,
         files=request.FILES or None,
         current_profile=current_profile,
-        instance=character)
+        instance=Character.objects.get(id=character_id) if character_id else Character())
     
     if form.is_valid():
-        character = form.save(commit=False)
-        character.profile = Profile.objects.create(
-            user=User.objects.filter(profiles__status='gm').first(),
-            is_alive=form.cleaned_data['is_alive'])
-        character.created_by = current_profile
-        form.save()
-        
         is_direct = form.cleaned_data['is_direct']
+        is_alive = form.cleaned_data['is_alive']
+        character = form.save(commit=False)
+        
+        if not character_id:
+            character.profile = Profile.objects.create(
+                user=User.objects.filter(profiles__status='gm').first(),
+                is_alive=is_alive)
+            character.created_by = current_profile
+        else:
+            profile = Profile.objects.get(character__id=character_id)
+            profile.is_alive = is_alive
+            profile.save()
+        form.save()
         
         if not character_id:
             Acquaintanceship.objects.create(
                 known_character=character,
                 knowing_character=current_profile.character,
-                is_direct=is_direct)
+                is_direct=is_direct,
+                knows_if_dead=True)
             messages.success(request, f"Utworzono Postać {character}!")
         else:
             acquaintanceship = Acquaintanceship.objects.get(
@@ -286,11 +286,11 @@ def prosoponomikon_acquaintanceship_create_edit_view(request, character_id=None)
             messages.success(request, f"Zaktualizowano Postać {character}!")
 
         if character.profile.image == "profile_pics/profile_default.jpg" and is_direct:
-            messages.success(request, f"Wyślij Dezyderat do MG, żeby dodał jej obraz, jeśli znasz Postać z widzenia!")
+            messages.info(request, f"Wyślij Dezyderat do MG, żeby dodał jej obraz, jeśli znasz Postać z widzenia!")
         return redirect('prosoponomikon:character', character.id)
     
     context = {
-        'page_title': page_title,
+        'page_title': "Edytuj Postać" if character_id else "Nowa Postać",
         'form': form,
     }
     return render(request, '_form.html', context)
