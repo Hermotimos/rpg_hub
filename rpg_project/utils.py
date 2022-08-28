@@ -211,7 +211,7 @@ def send_emails(request, profile_ids=None, **kwargs):
         subject = '[RPG] Transfer wiedzy!'
         message = f"{profile} przekazał/a Ci wiedzę nt. '{bio_packet.title}'." \
                   f"\nWiędzę tę możesz odnaleźć w Prosoponomikonie pod:" \
-                  f" {bio_packet.characters.all().first().name}:" \
+                  f" {bio_packet.characters.first().fullname}:" \
                   f"\n{request.get_host()}/prosoponomikon/character/{bio_packet.characters.all().first().id}/\n"
         messages.info(request, f'Poinformowano wybrane Postacie!')
 

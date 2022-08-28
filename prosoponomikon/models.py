@@ -100,7 +100,7 @@ class AuxiliaryNameGroup(Model):
         null=True)
 
     class Meta:
-        ordering = ['social_info', 'location']
+        ordering = [OrderByPolish('social_info'), OrderByPolish('location__name')]
 
     def __str__(self):
         return f"{self.location or self.social_info}"
@@ -130,7 +130,10 @@ class FirstName(Model):
         to=AuxiliaryNameGroup, on_delete=PROTECT, blank=True, null=True)
     
     class Meta:
-        ordering = ['auxiliary_group', 'form']
+        ordering = [
+            OrderByPolish('auxiliary_group__social_info'),
+            OrderByPolish('auxiliary_group__location__name'),
+            'form']
 
     def __str__(self):
         return self.form
