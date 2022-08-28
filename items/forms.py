@@ -33,6 +33,7 @@ class BaseItemFormSet(BaseModelFormSet):
             form.fields['collection'].choices = [('', '--------')] + [
                 (x.pk, x.name) for x in item_collections
             ]
+            form.fields['collection'].required = True
         self.helper = ItemFormSetHelper()
             
             
