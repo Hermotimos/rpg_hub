@@ -128,8 +128,21 @@ class AffixGroupAdmin(admin.ModelAdmin):
         return formfield
 
 
+class AuxiliaryNameGroupAdminForm(forms.ModelForm):
+    
+    class Meta:
+        model = AuxiliaryNameGroup
+        exclude = []
+        widgets = {'color': forms.TextInput(attrs={'type': 'color'})}
+        
+        
 @admin.register(AuxiliaryNameGroup)
 class AuxiliaryNameGroupAdmin(admin.ModelAdmin):
+    form = AuxiliaryNameGroupAdminForm
+    formfield_overrides = {
+        models.CharField: {'widget': forms.TextInput(attrs={'type': 'color'})},
+    }
+
     list_display = ['id', 'color', 'location', 'social_info']
     list_editable = ['color', 'location', 'social_info']
     

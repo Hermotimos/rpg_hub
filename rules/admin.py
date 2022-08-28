@@ -373,12 +373,11 @@ class SphragisAdminAdminForm(forms.ModelForm):
 
 @admin.register(Sphragis)
 class SphragisAdmin(admin.ModelAdmin):
-    link = "d"
     form = SphragisAdminAdminForm
     list_display = ['id', 'name', 'name_genitive', 'color']
     list_editable = ['name', 'name_genitive', 'color']
 
-    
+
 # -----------------------------------------------------------------------------
 
 
