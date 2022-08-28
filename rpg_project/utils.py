@@ -153,7 +153,7 @@ def send_emails(request, profile_ids=None, **kwargs):
         else:
             demand = kwargs['demand']
             subject = f"[RPG] Dezyderat {demand.id} [nowy]"
-            message = f"{demand.author} wysłał Ci Dezyderat:\n" \
+            message = f"Nowy Dezyderat od: {demand.author}\n" \
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             messages.info(request, 'Dezyderat został wysłany!')
         
