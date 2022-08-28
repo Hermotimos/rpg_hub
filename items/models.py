@@ -38,4 +38,4 @@ class Item(Model):
         ordering = ['collection', 'name']
 
     def __str__(self):
-        return f"{self.name} [{self.collection.owner.fullname}: {self.collection.name}]"
+        return self.name
