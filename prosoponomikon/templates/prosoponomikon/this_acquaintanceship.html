@@ -29,7 +29,8 @@
         <!-- Temp delete when GO LIVE -->
         {% if request.current_profile.character.fullname not in 'Ilen z Astinary, Alora z Astinary' %}
                         <!-- BUTTONS -->
-                        <div class="row">
+                        
+                        <div class="row mb-2">
                             <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Przejdź do Prosoponomikonu">
                                 <a class="btn btn-outline-dark icon-parent-obj py-2" href="{% url 'prosoponomikon:acquaintanceships' %}#character_{{ this_acquaintanceship.known_character.id }}"></a>
                             </div>
@@ -74,28 +75,26 @@
                         
                         
                         <!-- CLASSES, TRAITS, EXPERIENCE -->
-                        {% if request.current_profile.status == 'gm' or request.current_profile.status == 'player' and request.current_profile.character == character %}
-                            <div class="mt-2">
-                                {% if this_acquaintanceship.known_character.subprofessions.exists %}
-                                    <div class="row font-italic pl-1">
-                                        {% if this_acquaintanceship.known_character.subprofessions.count == 1 %}
-                                            <b>Profesja</b>: {{ this_acquaintanceship.known_character.subprofessions.first }}
-                                        {% else %}
-                                            <b>Profesje</b>: {{ this_acquaintanceship.known_character.subprofessions.all|join:", " }}
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
+                        {% if request.current_profile.status == 'gm' or request.current_profile.character == this_acquaintanceship.known_character %}
+                            {% if this_acquaintanceship.known_character.subprofessions.exists %}
                                 <div class="row font-italic pl-1">
-                                    <span class="mr-2"><b>Sił</b>: {{ this_acquaintanceship.known_character.strength|default_if_none:"-" }}</span>
-                                    <span class="mr-2"><b>Zrc</b>: {{ this_acquaintanceship.known_character.dexterity|default_if_none:"-" }}</span>
-                                    <span class="mr-2"><b>Kon</b>: {{ this_acquaintanceship.known_character.endurance|default_if_none:"-" }}</span>
+                                    {% if this_acquaintanceship.known_character.subprofessions.count == 1 %}
+                                        <b>Profesja:</b> {{ this_acquaintanceship.known_character.subprofessions.first }}
+                                    {% else %}
+                                        <b>Profesje:</b> {{ this_acquaintanceship.known_character.subprofessions.all|join:", " }}
+                                    {% endif %}
                                 </div>
-                                {% if this_acquaintanceship.known_character.experience %}
-                                    <div class="row font-italic pl-1">
-                                        <span class="mr-2"><b>Exp</b>: {{ this_acquaintanceship.known_character.experience }}</span>
-                                    </div>
-                                {% endif %}
+                            {% endif %}
+                            <div class="row font-italic pl-1">
+                                <span class="mr-2"><b>Sił:</b> {{ this_acquaintanceship.known_character.strength|default_if_none:"-" }}</span>
+                                <span class="mr-2"><b>Zrc:</b> {{ this_acquaintanceship.known_character.dexterity|default_if_none:"-" }}</span>
+                                <span class="mr-2"><b>Kon:</b> {{ this_acquaintanceship.known_character.endurance|default_if_none:"-" }}</span>
                             </div>
+                            {% if this_acquaintanceship.known_character.experience %}
+                                <div class="row font-italic pl-1">
+                                    <span class="mr-2"><b>Exp:</b> {{ this_acquaintanceship.known_character.experience }}</span>
+                                </div>
+                            {% endif %}
                         {% endif %}
     
                         <!-- CHARACTER DESCRIPTION -->
