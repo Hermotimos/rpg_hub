@@ -127,7 +127,7 @@
                     {% else %}
                         <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets" checked>
                     {% endif %}
-                    <label class="font-resp-15 resp-tab-label" for="tab2">Dialogi</label>
+                    <label class="font-resp-15 resp-tab-label text-secondary" for="tab2">Dialogi</label>
                 {% endif %}
             {% endif %}
             
@@ -204,7 +204,7 @@
                 {% else %}
                     <input type="radio" name="tabset" id="tab8" aria-controls="knowledge_packets" checked>
                 {% endif %}
-                <label class="font-resp-15 resp-tab-label" for="tab8">
+                <label class="font-resp-15 resp-tab-label text-secondary" for="tab8">
                     {% if this_acquaintanceship.known_character.profile != request.current_profile and this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
                     Wiedza
                 </label>
@@ -217,7 +217,7 @@
                 {% else %}
                     <input type="radio" name="tabset" id="tab9" aria-controls="acquaintanceships" checked>
                 {% endif %}
-                <label class="font-resp-15 resp-tab-label" for="tab9">
+                <label class="font-resp-15 resp-tab-label text-secondary" for="tab9">
                     {% if this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
                     Znajomości
                 </label>
@@ -226,7 +226,7 @@
             <!-- Also known as -->
             {% if also_known_as %}
                 <input type="radio" name="tabset" id="tab10" aria-controls="aka">
-                <label class="font-resp-15 resp-tab-label" for="tab10">
+                <label class="font-resp-15 resp-tab-label text-secondary" for="tab10">
                     A.K.A.
                 </label>
             {% endif %}
