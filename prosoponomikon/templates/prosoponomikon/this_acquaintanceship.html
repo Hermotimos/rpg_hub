@@ -77,22 +77,22 @@
                         <!-- CLASSES, TRAITS, EXPERIENCE -->
                         {% if request.current_profile.status == 'gm' or request.current_profile.character == this_acquaintanceship.known_character %}
                             {% if this_acquaintanceship.known_character.subprofessions.exists %}
-                                <div class="row font-italic pl-1">
+                                <div class="row font-italic ml-2">
                                     {% if this_acquaintanceship.known_character.subprofessions.count == 1 %}
-                                        <b>Profesja:</b> {{ this_acquaintanceship.known_character.subprofessions.first }}
+                                        <span><b>Profesja: .</b> {{ this_acquaintanceship.known_character.subprofessions.first }}</span>
                                     {% else %}
-                                        <b>Profesje:</b> {{ this_acquaintanceship.known_character.subprofessions.all|join:", " }}
+                                        <span><b>Profesje: </b> {{ this_acquaintanceship.known_character.subprofessions.all|join:", " }}</span>
                                     {% endif %}
                                 </div>
                             {% endif %}
-                            <div class="row font-italic pl-1">
-                                <span class="mr-2"><b>Sił:</b> {{ this_acquaintanceship.known_character.strength|default_if_none:"-" }}</span>
-                                <span class="mr-2"><b>Zrc:</b> {{ this_acquaintanceship.known_character.dexterity|default_if_none:"-" }}</span>
-                                <span class="mr-2"><b>Kon:</b> {{ this_acquaintanceship.known_character.endurance|default_if_none:"-" }}</span>
+                            <div class="row font-italic ml-2">
+                                <span class="mr-2"><b>Sił: </b>{{ this_acquaintanceship.known_character.strength|default_if_none:"-" }}</span>
+                                <span class="mr-2"><b>Zrc: </b>{{ this_acquaintanceship.known_character.dexterity|default_if_none:"-" }}</span>
+                                <span class="mr-2"><b>Kon: </b>{{ this_acquaintanceship.known_character.endurance|default_if_none:"-" }}</span>
                             </div>
                             {% if this_acquaintanceship.known_character.experience %}
-                                <div class="row font-italic pl-1">
-                                    <span class="mr-2"><b>Exp:</b> {{ this_acquaintanceship.known_character.experience }}</span>
+                                <div class="row font-italic ml-2">
+                                    <span class="mr-2"><b>Exp: </b>{{ this_acquaintanceship.known_character.experience }}</span>
                                 </div>
                             {% endif %}
                         {% endif %}
