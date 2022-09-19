@@ -11,9 +11,6 @@ from django.db.models import Func
 from django.shortcuts import redirect
 
 
-
-
-
 def sample_from_qs(qs, max_size):
     objs_set = set(qs)
     size = max_size if len(objs_set) >= max_size else len(objs_set)
@@ -98,8 +95,8 @@ def send_emails(request, profile_ids=None, **kwargs):
     sender = settings.EMAIL_HOST_USER
     receivers = []
     
-    # Don't send emails to Players if used in development
-    if not settings.EMAIL_SEND_ALLOWED:
+    # Send emails only in production
+    if settings.EMAIL_SEND_ALLOWED:
         receivers = [
             p.user.email
             for p in Profile.players.filter(id__in=profile_ids or []).select_related()]

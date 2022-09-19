@@ -25,7 +25,7 @@ class DemandsCreateForm(forms.ModelForm):
         self.fields['text'].label = "Tekst"
 
         if profile.status == 'gm':
-            addressees = Profile.players.all()
+            addressees = Profile.players.all()   # TODO change to active when moved to communications
         elif profile.status == 'player':
             addressees = Profile.contactables.filter(
                 Q(character__in=profile.character.acquaintances.all()) | Q(status='gm'))
