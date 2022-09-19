@@ -258,9 +258,8 @@ def statements(request, thread_id):
         ),
         created_datetime=Func(
             F('created_at'),
-            Value('YYYY-MM-DD | HH24:MI'),
             function='to_char',
-            output_field=DateTimeField()
+            template="%(function)s(%(expressions)s AT TIME ZONE 'Europe/Warsaw', 'YYYY-MM-DD | HH24:MI')",
         ),
         seen_by_objs=ArrayAgg(
             JSONObject(
