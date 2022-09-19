@@ -1,6 +1,5 @@
 import io
 import os
-from distutils.util import strtobool
 from urllib.parse import urlparse
 
 import environ
@@ -303,7 +302,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD_TWO_STEP')
 
-EMAIL_SEND_ALLOWED = strtobool(env('EMAIL_SEND_ALLOWED'))
+EMAIL_SEND_ALLOWED = env('EMAIL_SEND_ALLOWED').lower() == "true"
 
 # -----------------------------------------------------------------------------
 # debug-toolbar
