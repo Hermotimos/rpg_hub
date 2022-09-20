@@ -1,17 +1,28 @@
-from django import forms
 from django.contrib import admin
-from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.contrib.contenttypes.admin import GenericTabularInline
-from django.db.models import Q, CharField, TextField
+from django.db.models import CharField, TextField
 from django.forms.widgets import TextInput, Textarea
 from django.utils.html import format_html
 
+from knowledge.admin_forms import (
+    DialoguePacketAdminForm,
+    KnowledgePacketAdminForm,
+    MapPacketAdminForm
+)
 # from associations.models import Comment
-from knowledge.models import KnowledgePacket, MapPacket, BiographyPacket, \
+from knowledge.models import (
+    KnowledgePacket,
+    MapPacket,
+    BiographyPacket,
     DialoguePacket
-from rpg_project.utils import update_rel_objs, formfield_with_cache
-from toponomikon.models import Location, PrimaryLocation, SecondaryLocation
+)
 
+WARNING = """
+    <b style="color:red">
+        PRZY TWORZENIU NOWEGO PAKIETU ZAPIS POSTACI JEST NIEMOŻLIWY
+        <br><br>
+        PODAJ POSTACIE W DRUGIEJ TURZE :)
+    </b>
+"""
 
 # -----------------------------------------------------------------------------
 
@@ -33,9 +44,10 @@ from toponomikon.models import Location, PrimaryLocation, SecondaryLocation
 
 # -----------------------------------------------------------------------------
 
-
+        
 @admin.register(DialoguePacket)
 class DialoguePacketAdmin(admin.ModelAdmin):
+    form = DialoguePacketAdminForm
     formfield_overrides = {
         CharField: {'widget': TextInput(attrs={'size': 50})},
         TextField: {'widget': Textarea(attrs={'rows': 5, 'cols': 100})},
@@ -64,68 +76,6 @@ class BiographyPacketAdmin(admin.ModelAdmin):
 
 
 # -----------------------------------------------------------------------------
-
-
-class KnowledgePacketAdminForm(forms.ModelForm):
-    
-    class Meta:
-        model = KnowledgePacket
-        fields = ['title', 'text', 'author', 'acquired_by', 'skills', 'picture_sets']
-    
-    warning = """
-    <b style="color:red">
-        PRZY TWORZENIU NOWEGO PAKIETU ZAPIS LOKACJI JEST NIEMOŻLIWY
-        <br><br>
-        PODAJ LOKACJĘ W DRUGIEJ TURZE :)
-    </b>
-    """
-    primary_locs = forms.ModelMultipleChoiceField(
-        queryset=PrimaryLocation.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Primary locations', False),
-        label=format_html(warning),
-    )
-    secondary_locs = forms.ModelMultipleChoiceField(
-        queryset=SecondaryLocation.objects.all(),
-        required=False,
-        widget=FilteredSelectMultiple('Secondary locations', False),
-        label=format_html(warning),
-    )
-    
-    fields_and_models = {
-        'primary_locs': PrimaryLocation,
-        'secondary_locs': SecondaryLocation,
-    }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        id_ = self.instance.id
-        if id_ is None:
-            # If this is "New" form, avoid filling "virtual" field with data
-            return
-        try:
-            for field, Model in self.fields_and_models.items():
-                self.__dict__['initial'].update(
-                    {field: Model.objects.filter(knowledge_packets=id_)})
-        except AttributeError:
-            pass
-
-    def save(self, *args, **kwargs):
-        instance = super().save(*args, **kwargs)
-        try:
-            for field, Model in self.fields_and_models.items():
-                update_rel_objs(
-                    instance, Model, self.cleaned_data[field],
-                    "knowledge_packets")
-        except ValueError:
-            text = self.cleaned_data['text']
-            raise ValueError(
-                'Przy tworzeniu nowego pakietu nie da się zapisać lokacji - '
-                'podaj je jeszcze raz.\n'
-                f'SKOPIUJ TREŚC PACZKI, INACZEJ PRACA BĘDZIE UTRACONA:'
-                f'\n\n{text}\n\n'
-            )
-        return instance
     
 
 @admin.register(KnowledgePacket)
@@ -158,69 +108,6 @@ class KnowledgePacketAdmin(admin.ModelAdmin):
     
         
 # -----------------------------------------------------------------------------
-
-
-class MapPacketAdminForm(forms.ModelForm):
-    
-    class Meta:
-        model = MapPacket
-        fields = ['title', 'acquired_by', 'picture_sets']
-
-    primary_locations = forms.ModelMultipleChoiceField(
-        queryset=Location.objects.filter(in_location=None),
-        required=False,
-        widget=FilteredSelectMultiple('Primary locations', False),
-        label=format_html('<b style="color:red">'
-                          'PRZY TWORZENIU NOWEJ ZAPIS LOKACJI JEST NIEMOŻLIWY'
-                          '<br><br>'
-                          'PODAJ LOKACJĘ W DRUGIEJ TURZE :)'
-                          '</b>'),
-    )
-    secondary_locations = forms.ModelMultipleChoiceField(
-        queryset=Location.objects.filter(~Q(in_location=None)),
-        required=False,
-        widget=FilteredSelectMultiple('Secondary locations', False),
-        label=format_html('<b style="color:red">'
-                          'PRZY TWORZENIU NOWEJ ZAPIS LOKACJI JEST NIEMOŻLIWY'
-                          '<br><br>'
-                          'PODAJ LOKACJĘ W DRUGIEJ TURZE :)'
-                          '</b>'),
-    )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        id_ = self.instance.id
-        if id_ is None:
-            # trick to avoid new forms being populated with previous data
-            # I don't understand why that happens, but this works...
-            # TODO research this
-            return
-        try:
-            gen_locs = Location.objects.filter(in_location=None).filter(map_packets=id_)
-            self.__dict__['initial'].update({'primary_locations': gen_locs})
-        except AttributeError:
-            pass
-        try:
-            spec_locs = Location.objects.filter(~Q(in_location=None)).filter(map_packets=id_)
-            self.__dict__['initial'].update({'secondary_locations': spec_locs})
-        except AttributeError:
-            pass
-
-    def save(self, *args, **kwargs):
-        instance = super().save(*args, **kwargs)
-        gen_loc_ids = self.cleaned_data['primary_locations']
-        spec_loc_ids = self.cleaned_data['secondary_locations']
-        try:
-            for gen_loc in Location.objects.filter(in_location=None).filter(id__in=gen_loc_ids):
-                gen_loc.map_packets.add(instance)
-                gen_loc.save()
-            for spec_loc in Location.objects.filter(~Q(in_location=None)).filter(id__in=spec_loc_ids):
-                spec_loc.map_packets.add(instance)
-                spec_loc.save()
-        except ValueError:
-            raise ValueError('Przy tworzeniu nowej paczki nie da się zapisać '
-                             'lokacji - podaj jeszcze raz !!!\n')
-        return instance
 
 
 @admin.register(MapPacket)
