@@ -70,7 +70,7 @@
                                     <ul class="bullets-2 bullets-lg2 mb-0">
                                         {% for loc in row %}
                                             <li>
-                                                <a href="{% url 'toponomikon:location' loc.name %}" >
+                                                <a href="{% url 'toponomikon:location' loc.id %}" >
                                                     <span class="h3 font-weight-bold">{{ loc.name|slice:":1" }}</span><small>{{ loc.name|slice:"1:" }}</small>
                                                 </a>
                                                 <!-- Another <a> to ensure same line formatting as in the one above -->

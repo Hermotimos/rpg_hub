@@ -39,7 +39,7 @@ def toponomikon_main_view(request):
 @vary_on_cookie
 @login_required
 @auth_profile(['all'])
-def toponomikon_location_view(request, loc_name):
+def toponomikon_location_view(request, location_id):
     current_profile = request.current_profile
 
     known_locations = current_profile.locations_known_annotated()
@@ -66,7 +66,7 @@ def toponomikon_location_view(request, loc_name):
     locs = locs.select_related(
         'main_image', 'audio_set', 'in_location__in_location__in_location')
     try:
-        this_location = locs.get(name=loc_name)
+        this_location = locs.get(id=location_id)
     except Location.DoesNotExist:
         return redirect('users:dupa')
     

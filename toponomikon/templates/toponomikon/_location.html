@@ -22,7 +22,7 @@
             <p class="text-justify">
                 {% for location in location.locations.all %}
                     <small class="smaller">
-                        <a class="text-muted" href="{% url 'toponomikon:location' location.name %}">{{ location }}</a>
+                        <a class="text-muted" href="{% url 'toponomikon:location' location.id %}">{{ location }}</a>
                         {% if not forloop.last %} |{% endif %}
                     </small>
                 {% endfor %}

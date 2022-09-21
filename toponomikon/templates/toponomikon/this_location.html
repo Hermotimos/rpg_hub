@@ -31,7 +31,7 @@
                             <a class="btn btn-outline-dark icon-parent-obj py-2 mb-sm-1"
                                href="
                                    {% if this_location.in_location %}
-                                       {% url 'toponomikon:location' this_location.in_location.name %}#location_{{ this_location.id }}
+                                       {% url 'toponomikon:location' this_location.in_location.id %}#location_{{ this_location.id }}
                                    {% else %}
                                        {% url 'toponomikon:main' %}#location_{{ this_location.id }}
                                    {% endif %}"

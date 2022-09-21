@@ -1,6 +1,6 @@
 
 <div class="mb-sm-2">
-    <a href="{% url 'toponomikon:location' location.name %}">
+    <a href="{% url 'toponomikon:location' location.id %}">
         <div class="img-hover-zoom border-double m-0" data-toggle="tooltip" data-placement="bottom" data-html="true"
             title='<span class="font-italic">{% if location.only_indirectly %} {{ location }}<br>(Lokacja znana ze słyszenia) {% else %} {{ location }} {% endif %}</span>'>
             <img class="img-fluid {% if location.only_indirectly %} img-grayscale {% endif %}"
