@@ -233,11 +233,12 @@ def statements(request, thread_id):
     statements = Statement.objects.filter(thread=thread_id).order_by('created_at')
     
     # Update all statements to be seen by the profile
-    SeenBy = Statement.seen_by.through
-    relations = []
-    for statement in statements.exclude(seen_by=current_profile):
-        relations.append(SeenBy(statement_id=statement.id, profile_id=current_profile.id))
-    SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
+    if current_profile in Thread.objects.get(id=thread_id).participants.all():
+        SeenBy = Statement.seen_by.through
+        relations = []
+        for statement in statements.exclude(seen_by=current_profile):
+            relations.append(SeenBy(statement_id=statement.id, profile_id=current_profile.id))
+        SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
     
     statements = statements.values(
         'thread_id', 'text', 'author_id', 'created_at',
