@@ -39,7 +39,7 @@ class LocationType(Model):
 
 
 class Location(Model):
-    name = CharField(unique=True, max_length=100)
+    name = CharField(max_length=100)
     description = TextField(blank=True, null=True)
     main_image = FK(
         to=Picture,
@@ -87,6 +87,7 @@ class Location(Model):
 
     class Meta:
         ordering = [OrderByPolish('name')]
+        unique_together = ['name', 'location_type']
         verbose_name = 'Location'
         verbose_name_plural = '--- LOCATIONS'
 

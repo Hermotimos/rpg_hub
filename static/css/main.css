@@ -423,6 +423,9 @@ td.hover-pointer:hover {cursor: pointer;}
 
 a.text-muted:hover {color: #3366cc !important;}
 
+a.hover-noeffect:hover {pointer-events: none; !important}
+
+
 
 /*****************************************************************************/
 /********************************** FORMS ************************************/

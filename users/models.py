@@ -131,7 +131,7 @@ class Profile(Model):
                     output_field=IntegerField(),
                 ))
         qs = qs.prefetch_related('participants', 'informees')
-        qs = qs.select_related('main_image__image')
+        qs = qs.select_related('main_image__image', 'location_type')
         return qs
 
     def synergies_allowed(self, skilltype_kind):

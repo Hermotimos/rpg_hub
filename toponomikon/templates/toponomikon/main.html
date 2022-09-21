@@ -11,14 +11,14 @@
     <article class="tabset top-space">
         
         <!-- TAB HEADER: Locations -->
-        {% if primary_locs %}
+        {% if primary_locations %}
             <input type="radio" name="tabset" id="tab1" aria-controls="locations" checked>
             <label class="font-resp-15 resp-tab-label" for="tab1">Lokacje</label>
         {% endif %}
         
         <!-- TAB HEADER: Index -->
-        {% if all_locs %}
-            {% if not primary_locs %}
+        {% if known_locations %}
+            {% if not primary_locations %}
                 <input type="radio" name="tabset" id="tab2" aria-controls="index" checked>
             {% else %}
                 <input type="radio" name="tabset" id="tab2" aria-controls="index">
@@ -28,7 +28,7 @@
         
         <!-- TAB HEADER: Maps -->
         {% if all_maps %}
-            {% if not primary_locs and not all_locs %}
+            {% if not primary_locations and not known_locations %}
                 <input type="radio" name="tabset" id="tab3" aria-controls="maps" checked>
             {% else %}
                 <input type="radio" name="tabset" id="tab3" aria-controls="maps">
@@ -40,7 +40,7 @@
         <div class="tab-panels">
             
             <!-- TAB CONTENT: Locations -->
-            {% if primary_locs %}
+            {% if primary_locations %}
                 <section id="locations" class="tab-panel py-5">
                     <div class="container">
                         <p class="mb-0 text-center">✧</p>
@@ -48,7 +48,7 @@
                         <p class="h3 text-center mb-1">Krainy</p>
                         <p class="mb-0 text-center">✧ ✦ ✧</p>
                         <p class="mb-5 mt-0 text-center">✧</p>
-                        {% for location in primary_locs %}
+                        {% for location in primary_locations %}
                             {% include 'toponomikon/_location.html' %}
                         {% endfor %}
                     </div>
@@ -56,7 +56,7 @@
             {% endif %}
             
             <!-- TAB CONTENT: Index -->
-            {% if all_locs %}
+            {% if known_locations %}
                 <section id="index" class="tab-panel py-5">
                     <div class="container">
                         <p class="mb-0 text-center">✧</p>
@@ -64,14 +64,18 @@
                         <p class="h3 text-center mb-1">Indeks geograficzny</p>
                         <p class="mb-0 text-center">✧ ✦ ✧</p>
                         <p class="mb-5 mt-0 text-center">✧</p>
-                        <div class="row">
-                            {% for row in all_locs|ordered_columns:3 %}
+                        <div class="row ml-2 ml-sm-0">
+                            {% for row in known_locations|ordered_columns:3 %}
                                 <div class="col-sm-4 pr-0">
-                                    <ul class="bullets-2 bullets-xl mb-0">
+                                    <ul class="bullets-2 bullets-lg2 mb-0">
                                         {% for loc in row %}
                                             <li>
                                                 <a href="{% url 'toponomikon:location' loc.name %}" >
-                                                    <b class="h3">{{ loc.name|slice:":1" }}</b><small>{{ loc.name|slice:"1:" }}</small>
+                                                    <span class="h3 font-weight-bold">{{ loc.name|slice:":1" }}</span><small>{{ loc.name|slice:"1:" }}</small>
+                                                </a>
+                                                <!-- Another <a> to ensure same line formatting as in the one above -->
+                                                <a class="hover-noeffect">
+                                                    <small class="gray1">({{ loc.location_type.name }})</small>
                                                 </a>
                                             </li>
                                         {% endfor %}

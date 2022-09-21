@@ -9,6 +9,7 @@ from rpg_project.utils import handle_inform_form, auth_profile
 from toponomikon.models import Location, LocationType, SecondaryLocation
 
 
+@cache_page(60 * 5)
 @vary_on_cookie
 @login_required
 @auth_profile(['all'])
@@ -16,11 +17,8 @@ def toponomikon_main_view(request):
     current_profile = request.current_profile
 
     known_locations = current_profile.locations_known_annotated()
-    all_locs = Location.objects.values('name').filter(id__in=known_locations)
-
     secondary_locs = SecondaryLocation.objects.filter(id__in=known_locations)
-    primary_locs = known_locations.filter(in_location=None)
-    primary_locs = primary_locs.prefetch_related(
+    primary_locations = known_locations.filter(in_location=None).prefetch_related(
         Prefetch('locations', queryset=secondary_locs))
 
     if current_profile.can_view_all:
@@ -30,8 +28,8 @@ def toponomikon_main_view(request):
     
     context = {
         'page_title': 'Toponomikon',
-        'primary_locs': primary_locs,
-        'all_locs': all_locs,
+        'primary_locations': primary_locations,
+        'known_locations': known_locations,
         'all_maps': all_maps.prefetch_related('picture_sets__pictures'),
     }
     return render(request, 'toponomikon/main.html', context)
