@@ -29,14 +29,14 @@
             uwzględniając okresy odpoczynku pozwalającego na regenerację Wydolności.
         </p>
         <table class="table table-hover table-bordered table-sm mt-3">
-            <thead class="thead-dark">
+            <thead class="thead-dark align-center">
                 <tr>
                     <th class="align-middle">Czynność</th>
                     <th class="align-middle">Koszt Wydolności</th>
                     <th class="align-middle">Skutki utraty Wydolności</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="align-center">
                 <!-- Bieganie -->
                 <tr>
                     <th class="align-middle" nowrap="nowrap">
@@ -176,7 +176,7 @@
             <colgroup span="2"></colgroup>
             <colgroup span="2"></colgroup>
             <colgroup span="2"></colgroup>
-            <thead class="thead-dark">
+            <thead class="thead-dark align-center">
                 <tr>
                     <th></th>
                     <th scope="colgroup" colspan="2">Prędkość</th>
@@ -184,45 +184,45 @@
                     <th scope="colgroup">Koszt Wydolności</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="align-center">
                 <tr>
                     <th>Marsz (x1)</th>
                     <td>5 km/h</td>
                     <td>≈1.5 m/s</td>
                     <td>bez rzutu</td>
-                    <td>1/1h</td>
+                    <td>1/360r (1/1h)</td>
                 </tr>
                 <tr>
                     <th>Trucht (x2)</th>
                     <td>10 km/h</td>
                     <td>≈3 m/s</td>
                     <td>bez rzutu</td>
-                    <td>1/30r</td>
+                    <td>1/30r (1/5min)</td>
                 </tr>
                 <tr>
                     <th>Bieg (x3)</th>
                     <td>15 km/h</td>
                     <td>≈4.5 m/s</td>
                     <td>Prozaiczny (20)</td>
-                    <td>1/1r</td>
+                    <td>1/1r (1/10s)</td>
                 </tr>
                 <tr>
                     <th>Szybki Bieg (x4)</th>
                     <td>20 km/h</td>
                     <td>≈5.5 m/s</td>
                     <td>Umiarkowany (24)</td>
-                    <td>2/1r</td>
+                    <td>2/1r (2/10s)</td>
                 </tr>
                 <tr>
                     <th>Sprint (x5)</th>
                     <td>25 km/h</td>
                     <td>≈7 m/s</td>
                     <td>Trudny (28)</td>
-                    <td>4/1r</td>
+                    <td>4/1r (4/10s)</td>
                 </tr>
             </tbody>
         </table>
-
+        
         
         <h5 class="mt-4">
             Pływanie, Nurkowanie i Bezdech
@@ -252,13 +252,6 @@
         <p>
             Poniższa tabela przedstawia dokładniej koszty Wydolności oraz przybliżony Poziom Trudności Testu Przyspieszenia przy różnym tempie Pływania.
         </p>
-        <p>
-            <mark>
-                TODO
-                Bardzo długi dystans: 100km - 28h Kołobrzeg - Bornholm (ok. 3,5 km/h)
-                Przyjąć coś około Max tempo pływania 5 km/h przy dystansie max ok. 40km.
-            </mark>
-        </p>
         <table class="table table-hover table-bordered table-sm mt-3">
             <colgroup span="1"></colgroup>
             <colgroup span="1"></colgroup>
@@ -266,7 +259,7 @@
             <colgroup span="2"></colgroup>
             <colgroup span="2"></colgroup>
             <colgroup span="2"></colgroup>
-            <thead class="thead-dark">
+            <thead class="thead-dark align-center">
                 <tr>
                     <th></th>
                     <th scope="colgroup" colspan="2">Prędkość</th>
@@ -274,7 +267,7 @@
                     <th scope="colgroup">Koszt Wydolności</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="align-center">
                 <tr>
                     <th>Pływanie (x1)</th>
                     <td>≈2 km/h</td>
@@ -337,16 +330,16 @@
                     <th>Wspinaczka 3</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="align-center">
                 <tr>
-                    <th>Wspinaczka Sukces</th>
+                    <th>Sukces</th>
                     <td>1m/1r</td>
                     <td>1m/1r</td>
                     <td>2m/1r</td>
                     <td>3m/1r</td>
                 </tr>
                 <tr>
-                    <th>Wspinaczka Fiasko</th>
+                    <th>Fiasko</th>
                     <td>0m/1r</td>
                     <td>0m/1r</td>
                     <td>0m/1r</td>
@@ -453,40 +446,42 @@
             Natomiast do grubego zwierza zaliczają się drapieżniki (wilk, ryś, lis), zwierzyna płowa (sarna, jeleń, tur, łoś)
             oraz zwierzęta wszystkożerne jak dzik czy niedźwiedź.
         </p>
+        
+
         <table class="table table-hover table-bordered rules-table mt-3">
-            <thead class="thead-dark align-center align-top">
+            <thead class="thead-dark align-center">
                 <tr>
-                    <th rowspan="2" class="align-middle">Obszar</th>
-                    <th colspan="3" class="align-middle">Zastawianie pułapek</th>
-                    <th colspan="3" class="align-middle">Wykrywanie/rozbrajanie pułapek</th>
+                    <th rowspan="2">Obszar</th>
+                    <th colspan="3">Zastawianie pułapek</th>
+                    <th colspan="3">Wykrywanie/rozbrajanie pułapek</th>
                 </tr>
                 <tr>
-                    <th class="align-middle">Drobny zwierz</th>
-                    <th class="align-middle">Gruby zwierz</th>
-                    <th class="align-middle">Ludzie</th>
-                    <th class="align-middle">Drobny zwierz</th>
-                    <th class="align-middle">Gruby zwierz</th>
-                    <th class="align-middle">Ludzie</th>
+                    <th class="my-auto">Drobny zwierz</th>
+                    <th class="">Gruby zwierz</th>
+                    <th class="">Ludzie</th>
+                    <th class="">Drobny zwierz</th>
+                    <th class="">Gruby zwierz</th>
+                    <th class="">Ludzie</th>
                 </tr>
             </thead>
             <tbody class="align-center">
                 <tr>
                     <th>Miasto</th>
-                    <td>Prozaiczny</td>
-                    <td>Odstręczający</td>
-                    <td>Trudny</td>
-                    <td>Prozaiczny</td>
-                    <td>Prozaiczny</td>
-                    <td>Trudny</td>
+                    <td class="align-middle">Prozaiczny</td>
+                    <td class="align-middle">Odstręczający</td>
+                    <td class="align-middle">Trudny</td>
+                    <td class="align-middle">Prozaiczny</td>
+                    <td class="align-middle">Prozaiczny</td>
+                    <td class="align-middle">Trudny</td>
                 </tr>
                 <tr>
                     <th>Teren</th>
-                    <td>Umiarkowany</td>
-                    <td>Wymagający</td>
-                    <td>Wymagający</td>
-                    <td>Prozaiczny</td>
-                    <td>Umiarkowany</td>
-                    <td>Wymagający</td>
+                    <td class="align-middle">Umiarkowany</td>
+                    <td class="align-middle">Wymagający</td>
+                    <td class="align-middle">Wymagający</td>
+                    <td class="align-middle">Prozaiczny</td>
+                    <td class="align-middle">Umiarkowany</td>
+                    <td class="align-middle">Wymagający</td>
                 </tr>
 
             </tbody>
