@@ -114,7 +114,7 @@
         Konflikt Inicjatywy rozstrzyga się jak zwyczajny Konflikt Cech
         (☞<mark><a href="{% url 'rules:tests' %}">Testy Cech</a></mark>), tzn. wynik wyższy wygrywa.
         Kolejność wynikająca z Konfliktu Inicjatywy zostaje ustalona na kolejne rundy i nie podlega zmianie,
-        dopóki nie wystąpią okoliczności uzasadniające Rewizję Inicjatywy.
+        dopóki nie wystąpią okoliczności uzasadniające Utratę lub Rewizję Inicjatywy.
     </p>
     <p>
         Zdarzenia powodujące zmianę Inicjatywy w starciu można podzielić na te,
@@ -128,23 +128,23 @@
     </p>
     <p>
         Utrata Inicjatywy oznacza to spadnięcie na koniec kolejki w ramach danego Pola Walki.
-        Aby uniknąć nieporozumień, Zasady automatycznej zmiany kolejności akcji w starciu operują niemal wyłącznie kategorią Utraty Inicjatywy,
+        Aby uniknąć nieporozumień, Zasady operują niemal wyłącznie kategorią Utraty Inicjatywy,
         czyli przyjmują perspektywę tego uczestnika starcia, który ją traci i spada na koniec kolejki.
         W przypadku, gdy więcej niż jeden uczestnik starcia podlega Utracie Inicjatywy, decyduje kolejność zdarzeń
-        – kto później stracił Inicjatywę, znajdzie się na samym końcu, a kto wcześniej – tuż przed nim.
+        – kto później stracił Inicjatywę, ten znajdzie się na samym końcu.
     </p>
     <h6 class="font-weight-bold font-italic">
         Zdarzenia powodujące automatyczną Utratę Inicjatywy:
     </h6>
     <ul class="ml-4 mt-2 font-italic">
-        <li>Zmiana Deklaracji lub wahanie się przy Deklaracji.</li>
+        <li>Zmiana Deklaracji lub zbyt długie wahanie przy Deklaracji.</li>
         <li>Przejście w tryb Defensywy.</li>
         <li>Utrata/Brak Wydolności.</li>
         <li>Wyrzucenie na k20 Krytycznego Pudła/Fiaska.</li>
         <li>Krytyczne Trafienie/Sukces ze strony przeciwnika.</li>
         <li>Użycie Umiejętności wymagającej Poświęcenia Inicjatywy.</li>
         <li>Zmiana Pola Walki przy krótkim dystansie.</li>
-        <li>Rozmaite podstępy i sztuczki ze strony przeciwnika (np. wyczekanie przez poświęcienie 1 AT/r).<sup>✵</sup></li>
+        <li>Rozmaite podstępy i sztuczki ze strony przeciwnika (np. wyczekanie przez poświęcenie 1 AT/r).<sup>✵</sup></li>
     </ul>
     <ul class="bullets-2 ml-4 mt-2 font-italic text-justify">
         <li>
@@ -162,16 +162,16 @@
         Bardziej szczegółowo przypadki te są omówione poniżej, w ramach listy zdarzeń wymagających Rewizji Inicjatywy.
     </p>
     <h6 class="font-weight-bold font-italic">
-        Zdarzenia wymagające Rewizji Inicjatywy
+        Zdarzenia wymagające Rewizji Inicjatywy:
     </h6>
     <ul class="ml-4 mt-2 font-italic text-justify">
         <li>
             Powrót do walki po chwili odstąpienia od niej dla złapania tchu
             (sytuacja poświęcenia 1 AT/r lub więcej przez wszystkich uczestników Pola Walki)
-            lub na skutek przypadkowego rozdzielenia przez czynniki zewnętrzne  -> Rewizja Inicjatywy dla wszystkich uczestników Pola Walki;
+            lub na skutek przypadkowego rozdzielenia przez czynniki zewnętrzne  → Rewizja Inicjatywy dla wszystkich uczestników Pola Walki;
         </li>
         <li>
-            Zmiana Pola Walki przy długim dystansie -> jeśli dochodząca Postać
+            Zmiana Pola Walki przy długim dystansie → jeśli dochodząca Postać
             musi wykorzystać 1 rundę lub więcej na dołączenie,
             to ustala ona nową wartość Inicjatywy dla określenia swojej kolejki
             w ramach nowego Pola Walki;
@@ -204,8 +204,6 @@
         ataki siłą rzeczy i siłą rozpędu dochodzą do skutku.
         W nierzadkich przypadkach późniejszy z ataków może ugodzić przeciwnika
         już niejako zza grobu...
-        Jednak zachowanie tej zasady ma znaczenie honorowe, ponieważ poza tym
-        "kto ma większego" liczy się przecież także "kto kogo bardziej".
     </p>
     <p>
         <b>§ Broń zasięgowa.</b>
@@ -231,25 +229,28 @@
         Jeśli dwóch lub więcej uczestników Pola Walki poświęci Inicjatywę na
         wykorzystanie Umiejętności,
         to spadają na koniec kolejki w aktualnej kolejności względem siebie
-        (odpowiada to kolejności poświęcania Inicjatywy i spadania na koniec
-        kolejki).<sup>✵</sup>
+        (odpowiada to kolejności poświęcania Inicjatywy i spadania na koniec kolejki).<sup>✵</sup>
         Przejęcie Inicjatywy i pilnowanie jej może być sposobem na to, żeby nie
         dopuścić przeciwnika do wykorzystania jego Umiejętności.
         Z drugiej strony odstąpienie od walki może mieć na celu wymuszenie
         Rewizji Inicjatywy, aby w ten sposób uzyskać możliwość wykorzystania
         Umiejętności.
     </p>
-    <ul class="bullets-2 ml-4 mt-2 font-italic text-justify">
-        <li>
-            Może się zdarzyć, że drugi z dziesięciu walczących spadnie na
-            koniec kolejki, a zaraz po nim znajdzie się dziewiąty z nich,
-            który poświęcił swoją Inicjatywę względem dziesiątego (np. aby go
-            trafić), przez co stosunek poniesionej ceny wydaje się
-            niewspółmierny…
-            no cóż, im więcej uczestników Pola Walki, tym większy burdel, a jak
-            wiadomo burdel nie ma nic wspólnego ze sprawiedliwością.
-        </li>
-    </ul>
+    <p>
+        Dla możliwości poświęcenia Inicjatywy decydujący jest stan z początku rundy.
+        Jeśli Postać zadeklaruje atak na przeciwnika posiadającego aktualnie lepszą Inicjatywę, jednak w toku rundy przeciwnik ją utraci,
+        to Postać zyskuje nad przeciwnikiem przewagę Inicjatywy dopiero od początku kolejnej rundy.
+    </p>
+<!--    <ul class="bullets-2 ml-4 mt-2 font-italic text-justify">-->
+<!--        <li>-->
+<!--            Może się zdarzyć, że drugi z dziesięciu walczących spadnie na-->
+<!--            koniec kolejki, a zaraz po nim znajdzie się dziewiąty z nich,-->
+<!--            który poświęcił swoją Inicjatywę względem dziesiątego (np. aby go-->
+<!--            trafić), przez co stosunek poniesionej ceny wydaje się-->
+<!--            niewspółmierny, jednak im więcej uczestników Pola Walki, tym większy bałagan,-->
+<!--            nie ma to nic wspólnego ze sprawiedliwością.-->
+<!--        </li>-->
+<!--    </ul>-->
     
     <h5 class="mt-4">
         Rzut za Trafienie/Cechę
@@ -270,13 +271,6 @@
         możliwe są sytuacje Pewnego Trafienia/Pudła oraz Krytycznego
         Trafienia/Pudła.
     </p>
-        W przypadkach, kiedy Postać próbuje operować bronią, o której nie ma
-        najmniejszego pojęcia (brak Umiejętności "Biegłość w broni", która
-        obejmowałaby dany rodzaj oręża),
-        nie ma szans na Pewne Trafienie, a co za tym idzie również Krytyczne
-        Trafienie, natomiast ryzyko porażki jest znacznie wyższe:
-        Postać rzuca k20 za Trafienie tylko raz; wynik 1-10 oznacza Pewne
-        Pudło, przy czym 1 to od razu, bez drugiego rzutu - Krytyczne Pudło.
     <p>
         Natomiast w przypadku Postaci operującej bronią, którą obejmują zasady
         Umiejętności "Biegłość w broni", do Pewnego Trafienia dochodzi przy wyniku 20,
@@ -308,10 +302,20 @@
         <li>Następnie sumę tę należy zestawić z sumą KP przeciwnika. Jeśli TRAF&#8805; KP &#8594; sukces Ataku, przejście do Obrażeń.</li>
     </ol>
     <p>
-        W przypadku podejmowania Akcji innych niż Atak Mistrz Gry może
-        zarządzić test Cechy, jeśli ich poziom trudności jest istotny.
-        W takim wypadku wynik 1 na k20 to Pewne Fiasko natomiast wynik 20 to
-        Pewny Sukces. Kolejny rzut k20 określa, czy zajdzie sytuacja Krytycznego Fiaska lub Krytycznego Sukcesu.
+        W przypadku podejmowania Akcji innych niż Atak Mistrz Gry może zarządzić test Cechy,
+        jeśli ich poziom trudności jest istotny.
+        W takim wypadku wynik 1 na k20 to Pewne Fiasko natomiast wynik 20 to Pewny Sukces.
+        Kolejny rzut k20 określa, czy zajdzie sytuacja Krytycznego Fiaska lub Krytycznego Sukcesu.
+    </p>
+    <p>
+        <b>§ Brak biegłości w broni.</b>
+        W przypadkach, kiedy Postać próbuje operować bronią, o której nie ma pojęcia
+        (wobec której nie posiada Umiejętności "Biegłość w broni"),
+        nie ma ona żadnych szans na Pewne Trafienie, a co za tym idzie również Krytyczne Trafienie,
+        natomiast ryzyko porażki jest znacznie wyższe:
+        Postać rzuca k20 za Trafienie tylko raz; wynik 1-10 oznacza Pewne
+        Pudło, przy czym 1 to od razu, bez drugiego rzutu - Krytyczne Pudło.
+        W przypadku walki wręcz zasady te stosują się, o ile Postać nie posiada Umiejętności "Walka wręcz".
     </p>
     
     <h5 class="mt-4">
@@ -405,9 +409,9 @@
         Atak Wyprzedzający
     </h5>
     <p>
-        Jeśli atak następuje bez możliwości dostrzeżenia (Atak Wyprzedzający),
+        Jeśli atak następuje bez możliwości dostrzeżenia przez atakowanego,
         to dopiero po nim następuje pierwsza runda walki.
-        Odpowiednie przygotowanie takiego ataku może dać atakującym przewagę,
+        Odpowiednie przygotowanie takiego ataku może dać atakującemu przewagę,
         która zdecyduje o losach starcia.
         Wystąpienie sytuacji Ataku Wyprzedzającego jest zależne od tego, czy
         Postać ma szanse usłyszeć albo dostrzec zagrożenie, zanim na nią
