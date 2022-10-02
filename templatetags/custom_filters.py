@@ -245,11 +245,12 @@ def format_conditional_modifier(conditional_modifier, color_class: str):
         before, brackets = text.split(sep='[')
         text = before + f'<span class="{color_class}">[{brackets}</span>'
 
+    tooltip = 'data-toggle="tooltip" data-placement="top"'
     combat_types_icons = {
-        '/zwar': '<i class="ra ra-crossed-axes pr-1"></i>',
-        '/dyst': '<i class="ra ra-archery-target pr-1"></i>',
-        '/wręc': '<i class="ra ra-hand pr-1"></i>',
-        '/konn': '<i class="ra ra-horseshoe pr-1"></i>',
+        '/zwar': f'<i class="ra ra-crossed-axes pr-1" {tooltip} title="Walka w zwarciu"></i>',
+        '/dyst': f'<i class="ra ra-archery-target pr-1" {tooltip} title="Walka w dystansowa"></i>',
+        '/wręc': f'<i class="ra ra-hand pr-1" {tooltip} title="Walka wręcz"></i>',
+        '/konn': f'<i class="ra ra-horseshoe pr-1" {tooltip} title="Walka konna"></i>',
     }
     if any(k in text for k in combat_types_icons.keys()):
         for abbr, icon in combat_types_icons.items():
