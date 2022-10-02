@@ -3,14 +3,16 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.mail import send_mail
-from django.db.models import Prefetch, Value, Q, When, Case, ImageField, \
-    DateTimeField, F, Func
+from django.db.models import (
+    Prefetch, Value, Q, When, Case, ImageField, F, Func
+)
 from django.db.models.functions import Concat, JSONObject
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
 
+from chronicles.models import GameEvent
 from communications.forms import (
     AnnouncementCreateForm,
     DebateCreateForm,
@@ -97,13 +99,19 @@ def get_threads(current_profile, thread_kind):
     else:
         raise ValueError("Podany thread_kind nie występuje!")
     
+    if current_profile.status == 'gm':
+        game_events = GameEvent.objects.all()
+    else:
+        game_events = GameEvent.objects.filter(participants=current_profile)
+    
     threads = threads.prefetch_related(
         'statements__author__character',
         'tags__author',
-        'events__game',
         'participants__character',
         'followers',
+        Prefetch('events', queryset=game_events.prefetch_related('game')),
     )
+    
     return threads
 
 
