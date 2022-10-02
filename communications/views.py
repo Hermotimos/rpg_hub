@@ -296,9 +296,15 @@ def thread_view(request, thread_id, tag_title):
     tags = ThreadTag.objects.filter(
         author=current_profile,
         kind=Thread.objects.get(id=thread_id).kind).select_related('author')
-    
+
+    if current_profile.status == 'gm':
+        game_events = GameEvent.objects.all()
+    else:
+        game_events = GameEvent.objects.filter(participants=current_profile)
+
     thread = Thread.objects.prefetch_related(
         Prefetch('tags', queryset=tags),
+        Prefetch('events', queryset=game_events.prefetch_related('game')),
         'statements__seen_by',
         'statements__author__user',
         'statements__author__character',
