@@ -163,15 +163,15 @@ class AuxiliaryNameGroupAdmin(admin.ModelAdmin):
 class AcquaintanceshipAdmin(admin.ModelAdmin):
     fields = [
         'knowing_character', 'known_character', 'is_direct', 'knows_if_dead',
-        'knows_as_name', 'knows_as_description',
+        'knows_as_name', 'knows_as_description', 'knows_as_image',
     ]
     list_display = [
-        'id', 'knowing_character', 'known_character', 'is_direct',
-        'knows_if_dead', 'knows_as_name', 'knows_as_description',
+        'id', 'knowing_character', 'known_character', 'is_direct', 'knows_if_dead',
+        'knows_as_name', 'knows_as_description', 'knows_as_image',
     ]
     list_editable = [
         'knowing_character', 'known_character', 'is_direct', 'knows_if_dead',
-        'knows_as_name', 'knows_as_description',
+        'knows_as_name', 'knows_as_description', 'knows_as_image',
     ]
     list_filter = ['known_character__profile__is_alive']
     list_select_related = ['knowing_character', 'known_character']

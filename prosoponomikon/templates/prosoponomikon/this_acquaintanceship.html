@@ -18,7 +18,13 @@
                         <div class="float-left mr-3">
                             {% if request.current_profile.character == this_acquaintanceship.known_character or this_acquaintanceship.is_direct or request.current_profile.can_view_all %}
                                 <img class="character-detail {% if this_acquaintanceship.knows_if_dead and not this_acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
-                                     src="{{ this_acquaintanceship.known_character.profile.image.url }}">
+                                     src="
+                                        {% if this_acquaintanceship.knows_as_image %}
+                                            {{ this_acquaintanceship.knows_as_image.url }}
+                                        {% else %}
+                                            {{ this_acquaintanceship.known_character.profile.image.url }}
+                                        {% endif %}
+                                     ">
                             {% else %}
                                 <img class="character-detail {% if this_acquaintanceship.knows_if_dead and not this_acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
                                      src="{% static 'img/profile_known_only_indirectly.jpg' %}">

@@ -4,6 +4,7 @@ from django.db.models import (
     CASCADE,
     CharField,
     F, ForeignKey as FK,
+    ImageField,
     Manager,
     ManyToManyField as M2M,
     Model,
@@ -409,6 +410,11 @@ class Acquaintanceship(Model):
     knows_if_dead = BooleanField(default=False)
     knows_as_name = CharField(max_length=100, blank=True, null=True)
     knows_as_description = TextField(blank=True, null=True)
+    knows_as_image = ImageField(
+        upload_to='profile_pics',
+        blank=True,
+        null=True,
+    )
     
     class Meta:
         ordering = [OrderByPolish('known_character__fullname')]

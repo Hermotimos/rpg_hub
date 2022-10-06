@@ -79,7 +79,8 @@ def handle_inform_form(request):
                 is_direct=obj.is_direct,
                 knows_if_dead=obj.knows_if_dead,
                 knows_as_name=obj.knows_as_name,
-                knows_as_description=obj.knows_as_description)
+                knows_as_description=obj.knows_as_description,
+                knows_as_image=obj.knows_as_image)
         send_emails(request, informed_ids, acquaintanceship=obj)
 
     else:
