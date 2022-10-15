@@ -75,7 +75,7 @@ class PlayerKnPacketForm(KnPacketForm):
         self.fields['title'].label = "Tytuł"
 
         self.fields['locations'].queryset = current_profile.locations_known_annotated()
-        self.fields['skills'].queryset = current_profile.allowed_skills()
+        self.fields['skills'].queryset = current_profile.allowed_skills.distinct()
 
         self.fields['descr_1'].widget.attrs = {
             'placeholder': 'Podpis grafiki nr 1',
