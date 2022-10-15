@@ -76,7 +76,7 @@ class Profile(Model):
         """
         from chronicles.models import GameEvent
         if self.can_view_all:
-            qs = GameEvent.objects.all()
+            qs = GameEvent.objects.annotate(only_indirectly=Value(0))
         else:
             known_dir = GameEvent.objects.filter(participants=self)
             known_indir = GameEvent.objects.filter(informees=self)
@@ -119,7 +119,7 @@ class Profile(Model):
         """
         if self.can_view_all:
             from toponomikon.models import Location
-            qs = Location.objects.all()
+            qs = Location.objects.annotate(only_indirectly=Value(0))
         else:
             known_dir = self.locations_participated.all()
             known_indir = self.locations_informed.all()
