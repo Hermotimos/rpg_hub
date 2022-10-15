@@ -123,10 +123,10 @@ class Date(Model):
     
     def __str__(self):
         if self.season and self.day:
-            return f'{self.day}. dnia {SEASONS[self.season]} {self.year}. roku'
+            return f'{self.day} dnia {SEASONS[self.season]} {self.year} roku'
         elif self.season:
-            return f'{SEASONS[self.season]} {self.year}. roku'
-        return f'{self.year}. roku'
+            return f'{SEASONS[self.season]} {self.year} roku'
+        return f'{self.year} roku'
     
 
 class TimeUnitManager(Manager):
@@ -361,22 +361,22 @@ class Event(TimeUnit):
         # Date in period
         period = self.in_timeunit
         if not end:
-            prefix = f'{start_day}. dnia {start_season}'
+            prefix = f'{start_day} dnia {start_season}'
             date_in_period = f'{start}'
         else:
             if start_year_in_period != end_year_in_period:
                 prefix = None                   # is overriden with prefix_yr1 etc.
                 date_in_period = f'{start} - {end}'
             elif start_season != end_season:
-                prefix_s1 = f'{start_day}. dnia {start_season}'
-                prefix_s2 = f'{end_day}. dnia {end_season}'
+                prefix_s1 = f'{start_day} dnia {start_season}'
+                prefix_s2 = f'{end_day} dnia {end_season}'
                 prefix = prefix_s1 + ' - ' + prefix_s2
-                date_in_period = f'{start_day}. dnia {start_season} - {end}'
+                date_in_period = f'{start_day} dnia {start_season} - {end}'
             elif start_day != end_day:
-                prefix = f'{start_day}-{end_day}. dnia {end_season}'
+                prefix = f'{start_day}-{end_day} dnia {end_season}'
                 date_in_period = f'{start_day}-{end}'
             else:
-                prefix = f'{start_day}. dnia {start_season}'
+                prefix = f'{start_day} dnia {start_season}'
                 date_in_period = f'{start}'
         date_in_period += f' {period.name_genetive}'
 
@@ -386,16 +386,16 @@ class Event(TimeUnit):
         start_year_in_era = int(period_begin_in_era) + int(start_year_in_period)
         
         if not end:
-            date_in_era = f'{prefix} {start_year_in_era}. roku {era.name_genetive}'
+            date_in_era = f'{prefix} {start_year_in_era} roku {era.name_genetive}'
         else:
             end_year_in_era = int(period_begin_in_era) + int(end_year_in_period)
             if start_year_in_period != end_year_in_period:
-                prefix_yr1 = f'{start_day}. dnia {start_season}'
-                prefix_yr2 = f'{end_day}. dnia {end_season}'
-                date_in_era = f'{prefix_yr1} {start_year_in_era}. roku'
-                date_in_era += f' - {prefix_yr2} {end_year_in_era}. roku '
+                prefix_yr1 = f'{start_day} dnia {start_season}'
+                prefix_yr2 = f'{end_day} dnia {end_season}'
+                date_in_era = f'{prefix_yr1} {start_year_in_era} roku'
+                date_in_era += f' - {prefix_yr2} {end_year_in_era} roku '
             else:
-                date_in_era = f'{prefix} {start_year_in_era}. roku '
+                date_in_era = f'{prefix} {start_year_in_era} roku '
             date_in_era += f'{era.name_genetive}'
             
         # Date in chronology
@@ -404,16 +404,16 @@ class Event(TimeUnit):
         start_year_in_chronology = int(era_begin_in_chronology) + int(period_begin_in_era) + int(start_year_in_period)
         
         if not end:
-            date_in_chronology = f'{prefix} {start_year_in_chronology}. roku {chronology.name_genetive}'
+            date_in_chronology = f'{prefix} {start_year_in_chronology} roku {chronology.name_genetive}'
         else:
             end_year_in_chronology = int(era_begin_in_chronology) + int(period_begin_in_era) + int(end_year_in_period)
             if start_year_in_period != end_year_in_period:
-                prefix_yr1 = f'{start_day}. dnia {start_season}'
-                prefix_yr2 = f'{end_day}. dnia {end_season}'
-                date_in_chronology = f'{prefix_yr1} {start_year_in_chronology}. roku'
-                date_in_chronology += f' - {prefix_yr2} {end_year_in_chronology}. roku '
+                prefix_yr1 = f'{start_day} dnia {start_season}'
+                prefix_yr2 = f'{end_day} dnia {end_season}'
+                date_in_chronology = f'{prefix_yr1} {start_year_in_chronology} roku'
+                date_in_chronology += f' - {prefix_yr2} {end_year_in_chronology} roku '
             else:
-                date_in_chronology = f'{prefix} {start_year_in_chronology}. roku '
+                date_in_chronology = f'{prefix} {start_year_in_chronology} roku '
             date_in_chronology += f'{chronology.name_genetive}'
             
         self.date_in_period = str(date_in_period)

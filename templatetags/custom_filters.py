@@ -1,3 +1,4 @@
+import re
 from typing import List
 
 from django import template
@@ -42,24 +43,6 @@ def max_synergy_level_no(synergy_levels):
         [max_skill_level_no(synergy_lvl.skill_levels.all())
          for synergy_lvl in synergy_levels]
     )
-
-
-@register.filter
-def add_season_img(text):
-    static_dir = settings.STATIC_URL
-    if text:
-        text = text.replace('. dnia', '')
-        replacements = {
-            'Wiosny': f'<br><img class="img-season" src="{static_dir}img/seasons_spring.png"><br>',
-            'Lata': f'<br><img class="img-season" src="{static_dir}img/seasons_summer.png"><br>',
-            'Jesieni': f'<br><img class="img-season" src="{static_dir}img/seasons_autumn.png"><br>',
-            'Zimy': f'<br><img class="img-season" src="{static_dir}img/seasons_winter.png"><br>',
-        }
-        cnt = 0
-        for k, v in replacements.items():
-            cnt += 1 if k in text else 0
-            text = text.replace(k, v)
-    return mark_safe(text)
 
 
 @register.filter
@@ -291,24 +274,39 @@ def kinds_filter(skilltype_kinds_qs, skilltype_kinds_str):
 
 
 @register.filter
-def temp_chrono_override(chronology_info: str, profile_id: int):
-    
-    # Syngir, Murkon, Dalamar
-    if profile_id in [11, 82, 93]:
-        idx = chronology_info.rindex("<br> ")
-        before = chronology_info[:idx+5]
-        yeardate = int(chronology_info[idx+5:].split(".")[0])
-        after = chronology_info[idx+5:].split(".")[1]
-        
-        if "Nemetha" in chronology_info:
-            after = after.replace("Archonatu Nemetha Samatiana", "Nowej Ery")
-            yeardate += 480
-        elif "Enosa" in chronology_info:
-            after = after.replace("Archonatu Enosa Katenoda", "Nowej Ery")
-            yeardate += 444
-        else:
-            after = after
-        
-        chronology_info = f"{before}{yeardate}. {after}"
+def add_season_img(text):
+    static_dir = settings.STATIC_URL
+    if text:
+        text = text.replace(' dnia', '')
+        replacements = {
+            'Wiosny': f'<br><img class="img-season" src="{static_dir}img/seasons_spring.png"><br>',
+            'Lata': f'<br><img class="img-season" src="{static_dir}img/seasons_summer.png"><br>',
+            'Jesieni': f'<br><img class="img-season" src="{static_dir}img/seasons_autumn.png"><br>',
+            'Zimy': f'<br><img class="img-season" src="{static_dir}img/seasons_winter.png"><br>',
+        }
+        cnt = 0
+        for k, v in replacements.items():
+            cnt += 1 if k in text else 0
+            text = text.replace(k, v)
+    return mark_safe(text)
 
-    return mark_safe(chronology_info)
+
+@register.filter
+def temp_chrono_override(chrono_info: str, profile_id: int):
+    # Temporary chronology override for Syngir, Murkon, Dalamar
+    if profile_id in [11, 82, 93]:
+        for yd in re.findall(r"\s+[0-9]+\s+roku", chrono_info):
+            yearnum = int(yd.replace('roku', '').strip())
+            if "Nemetha" in chrono_info:
+                chrono_info = chrono_info.replace(yd, f" {yearnum+480} roku")
+            elif "Enosa" in chrono_info:
+                chrono_info = chrono_info.replace(yd, f" {yearnum+444} roku")
+
+        chrono_info = chrono_info.replace(
+            "Archonatu Nemetha Samatiana", "Nowej Ery"
+        ).replace(
+            "Archonatu Enosa Katenoda", "Nowej Ery"
+        )
+
+    return mark_safe(chrono_info)
+    
