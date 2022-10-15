@@ -69,6 +69,7 @@ class Profile(Model):
         except ValueError:
             return f"{settings.STATIC_URL}img/profile_default.jpg"
         
+    @property
     def gameevents_known_annotated(self):
         """Get GameEvent set known to the profile, annotate if GameEvent
         is known only indirectly.
