@@ -63,11 +63,13 @@ def prosoponomikon_character_view(request, character_id):
         this_acquaintanceship = Acquaintanceship.objects.get(
             knowing_character=current_profile.character,
             known_character=character_id)
-        
     except Acquaintanceship.DoesNotExist:
-        # when GM moves between NPCs with open Prosoponomikon
-        messages.info(request, "Aktualna Postać nie zna wybranej Postaci!")
-        return redirect('prosoponomikon:acquaintanceships')
+        if current_profile.can_view_all:
+            this_acquaintanceship = Acquaintanceship.objects.filter(
+                known_character=character_id).first()
+        else:
+            messages.info(request, "Aktualna Postać nie zna wybranej Postaci!")
+            return redirect('prosoponomikon:acquaintanceships')
 
     page_title = this_acquaintanceship.knows_as_name or this_acquaintanceship.known_character.fullname
     character = Character.objects.prefetch_related(
