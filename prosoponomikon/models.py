@@ -238,7 +238,15 @@ class Character(Model):
         cognomen = f"{self.cognomen} " if self.cognomen else ""
         self.fullname = f"{first_name}{family_name}{cognomen}".strip()
         super().save(*args, **kwargs)
-    
+
+        for character in Character.objects.filter(profile__status__in=['gm', 'spectator']):
+            if not Acquaintanceship.objects.filter(knowing_character=character, known_character=self,).exists():
+                Acquaintanceship.objects.create(
+                    knowing_character=character,
+                    known_character=self,
+                    is_direct=True,
+                    knows_if_dead=True)
+
     def get_absolute_url(self):
         return f'{settings.SERVER_ADDRESS}/prosoponomikon/character/{self.pk}/'
     
@@ -413,6 +421,7 @@ class Acquaintanceship(Model):
         upload_to='profile_pics',
         blank=True,
         null=True,
+        default=None,
     )
     
     class Meta:
