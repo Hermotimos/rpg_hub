@@ -71,14 +71,12 @@ class FirstNameAdmin(admin.ModelAdmin):
         models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
     }
     list_display = [
-        'id', 'form', 'form_2', 'is_ancient', 'info', 'affix_group',
-        'auxiliary_group'
+        'id', 'form', 'form_2', 'info', 'affix_group', 'auxiliary_group'
     ]
     list_editable = [
-        'form', 'form_2', 'is_ancient', 'info', 'affix_group',
-        'auxiliary_group'
+        'form', 'form_2', 'info', 'affix_group', 'auxiliary_group'
     ]
-    list_filter = ['auxiliary_group', 'is_ancient']
+    list_filter = ['auxiliary_group']
     ordering = ['form']
     search_fields = ['form', 'form_2']
     list_select_related = True
