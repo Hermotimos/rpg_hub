@@ -20,7 +20,10 @@
         <div class="skill-or-synergy-name ml-2 mt-1">
             {% if request.current_profile.status == 'gm' %}
                 <a class="hover-blue" href="{% url 'admin:rules_synergy_change' synergy.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
-                    {{ synergy.name }} [{{ synergy.synergy_levels.all|max_synergy_level_no }}]
+                    {{ synergy.name }}
+                    {% if this_acquaintanceship  %}
+                        [{{ synergy.synergy_levels.all|max_synergy_level_no }}]
+                    {% endif %}
                 </a>
             {% else %}
                 {{ synergy.name }}
