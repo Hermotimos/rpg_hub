@@ -5,12 +5,12 @@
 <a class="anchor anchor4" id="location_{{ location.id }}"></a>
 <div class="my-5">
     <div class="row">
-        <div class="col-md-4 px-0 py-sm-1">
+        <div class="col-md-5 px-0 py-sm-1">
             {% with show_caption=False %}
                 {% include 'toponomikon/_loc_img.html' %}
             {% endwith %}
         </div>
-        <div class="col-md-8 pr-0 pl-1 pl-md-4 ml-sm-n2">
+        <div class="col-md-7 pr-0 pl-1 pl-md-4 ml-sm-n2">
             <h2 class="border-bottom-dark">
                 <small class="pr-5 {% if location.only_indirectly %} text-muted {% endif %}">
                     {{ location.name }}
