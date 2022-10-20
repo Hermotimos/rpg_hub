@@ -11,7 +11,7 @@
                 {% firstof acquaintanceship.knows_as_name acquaintanceship.known_character.fullname %}
             </span>
         </p>
-        <h6 class="font-italic text-justify mb-n5 {% if not acquaintanceship.is_direct %} text-muted {% endif %}">
+        <h6 class="font-italic text-justify mb-5 {% if not acquaintanceship.is_direct %} text-muted {% endif %}">
             {% firstof acquaintanceship.knows_as_description acquaintanceship.known_character.description %}
         </h6>
     </div>

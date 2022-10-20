@@ -1,12 +1,12 @@
 
 
-<a class="anchor anchor10-resp" id="character_{{ acquaintanceship.known_character.id }}"></a>
-<div class="my-5 py-5">
+<a class="anchor anchor12-resp" id="character_{{ acquaintanceship.known_character.id }}"></a>
+<div class="">
     
     {% if forloop.counter|divisibleby:2 %}
     
         {% with side='right' %}
-            <div class="row mb-n5">
+            <div class="row">
                 {% include 'prosoponomikon/_acquaintance_descr.html' %}
                 {% include 'prosoponomikon/_acquaintance_img_left_or_right.html' %}
             </div>
@@ -15,7 +15,7 @@
     {% else %}
     
         {% with side='left' %}
-            <div class="row mb-n5">
+            <div class="row">
                 {% include 'prosoponomikon/_acquaintance_img_left_or_right.html' %}
                 {% include 'prosoponomikon/_acquaintance_descr.html' %}
             </div>

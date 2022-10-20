@@ -646,6 +646,7 @@ a.anchor6-resp {top: -6rem;}
 a.anchor7-resp {top: -7rem;}
 a.anchor8-resp {top: -8rem;}
 a.anchor10-resp {top: -10rem;}
+a.anchor12-resp {top: -12rem;}
 
 /* Necessary on mobile when Prosoponomikon sticky-menu on top is compressed to more rows */
 @media only screen and (max-width: 600px) {
@@ -653,6 +654,7 @@ a.anchor10-resp {top: -10rem;}
     a.anchor7-resp {top: -9rem;}
     a.anchor8-resp {top: -10rem;}
     a.anchor10-resp {top: -12rem;}
+    a.anchor12-resp {top: -14rem;}
 }
 
 
