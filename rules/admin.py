@@ -61,7 +61,7 @@ class ModifierAdmin(admin.ModelAdmin):
     list_filter = ['factor', 'sign']
     list_select_related = ['factor']
     radio_fields = {"sign": admin.VERTICAL}
-    search_fields = ['value_number', 'value_percent', 'value_text', 'factor']
+    search_fields = ['value_number', 'value_percent', 'value_text', 'factor__name']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
