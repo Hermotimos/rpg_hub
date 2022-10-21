@@ -13,13 +13,22 @@
         </h3>
     </div>
     
-    <!-- TEXT -->
     <div class="row">
-        <div class="col-12 col-sm-11 mt-2 p-0 pl-sm-3 pl-lg-0">
+    
+        <!-- BUTTONS -->
+        <div class="col-12 col-sm-1 p-0">
+            <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Edytuj Dialogi">
+                <a class="btn btn-outline-dark icon-biography-packet mt-1 py-2" href="{% url 'admin:knowledge_dialoguepacket_change' dialogue_packet.id %}" target="_blank"></a>
+            </div>
+        </div>
+        
+        <!-- TEXT -->
+        <div class="col-12 col-sm-11 my-2 p-0 pl-sm-3 pl-lg-0">
             <p class="font-italic text-justify font-18">
                 {{ dialogue_packet.text|custom_linebreaksbr:2 }}
             </p>
         </div>
+        
     </div>
 </div>
 
