@@ -239,6 +239,9 @@ class Character(Model):
         self.fullname = f"{first_name}{family_name}{cognomen}".strip()
         super().save(*args, **kwargs)
 
+        from items.models import ItemCollection
+        ItemCollection.objects.create(owner=self)
+        
         for character in Character.objects.filter(profile__status__in=['gm', 'spectator']):
             if not Acquaintanceship.objects.filter(knowing_character=character, known_character=self,).exists():
                 Acquaintanceship.objects.create(
@@ -417,12 +420,7 @@ class Acquaintanceship(Model):
     knows_if_dead = BooleanField(default=False)
     knows_as_name = CharField(max_length=100, blank=True, null=True)
     knows_as_description = TextField(blank=True, null=True)
-    knows_as_image = ImageField(
-        upload_to='profile_pics',
-        blank=True,
-        null=True,
-        default=None,
-    )
+    knows_as_image = ImageField(upload_to='profile_pics', blank=True)
     
     class Meta:
         ordering = [OrderByPolish('known_character__fullname')]
