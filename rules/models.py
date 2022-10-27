@@ -260,7 +260,7 @@ CURRENCIES = [
 
 
 class DamageType(Model):
-    description = CharField(max_length=30, blank=True, null=True)
+    description = CharField(max_length=60, blank=True, null=True)
     type = CharField(max_length=10, choices=DAMAGE_TYPES)
     damage = CharField(max_length=15)
     special = CharField(max_length=100, blank=True, null=True)
