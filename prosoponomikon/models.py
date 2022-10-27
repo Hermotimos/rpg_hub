@@ -240,7 +240,8 @@ class Character(Model):
         super().save(*args, **kwargs)
 
         from items.models import ItemCollection
-        ItemCollection.objects.create(owner=self)
+        if not ItemCollection.objects.filter(owner=self):
+            ItemCollection.objects.create(owner=self)
         
         for character in Character.objects.filter(profile__status__in=['gm', 'spectator']):
             if not Acquaintanceship.objects.filter(knowing_character=character, known_character=self,).exists():
