@@ -283,6 +283,7 @@ class Character(Model):
             'sphragis',
         ).order_by(
             # order_by combined with distinct for "DISTINCT ON" query:
+            # This filters out all SkillLevel-s apart from the highest one
             # https://docs.djangoproject.com/en/4.0/ref/models/querysets/#distinct
             'skill_level__skill__name',
             'weapon__name',
@@ -312,6 +313,14 @@ class Character(Model):
             'perks__conditional_modifiers__modifier__factor',
             'perks__comments',
             'skill_levels__skill',
+        ).order_by(
+            # order_by combined with distinct for "DISTINCT ON" query:
+            # This filters out all SkillLevel-s apart from the highest one
+            # https://docs.djangoproject.com/en/4.0/ref/models/querysets/#distinct
+            'synergy__name',
+            '-level',
+        ).distinct(
+            'synergy__name',
         )
         
         synergies = Synergy.objects.filter(
