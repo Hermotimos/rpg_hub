@@ -82,7 +82,7 @@
                             {% if this_acquaintanceship.known_character.subprofessions.exists %}
                                 <div class="row font-italic ml-2">
                                     {% if this_acquaintanceship.known_character.subprofessions.count == 1 %}
-                                        <span><b>Profesja: .</b> {{ this_acquaintanceship.known_character.subprofessions.first }}</span>
+                                        <span><b>Profesja: </b> {{ this_acquaintanceship.known_character.subprofessions.first }}</span>
                                     {% else %}
                                         <span><b>Profesje: </b> {{ this_acquaintanceship.known_character.subprofessions.all|join:", " }}</span>
                                     {% endif %}
