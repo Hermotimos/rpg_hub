@@ -37,11 +37,13 @@ from users.models import Profile
 THREADS_MAP = {
     'Announcement': {
       'name': "Ogłoszenie",
+      'name_genitive': "Ogłoszenia",
       'text': "Nowe Ogłoszenie",
       'form': AnnouncementCreateForm,
     },
     'Debate': {
       'name': "Narada",
+      'name_genitive': "Narady",
       'text': "Nowa Narada",
       'form': DebateCreateForm,
     },
@@ -69,17 +71,16 @@ def thread_inform(current_profile, request, thread, tag_title):
     informed = Profile.objects.filter(id__in=informed_ids)
     thread.participants.add(*informed)
     thread.followers.add(*informed)
-    
-    recipients = Profile.objects.filter(id__in=informed_ids)
-    if current_profile.user.profiles.filter(status="gm").exists():
-        # Exclude via user, because all NPCs are linked with GM via user
-        recipients = recipients.exclude(user__profiles__status='gm')
 
     send_mail(
-        subject=f"[RPG] Udostępnienie Ogłoszenia: '{thread.title}'",
+        subject=f"[RPG] Udostępnienie {THREADS_MAP[thread.kind]['name_genitive']}: '{thread.title}'",
         message=f"{thread.get_absolute_url()}",
         from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[p.user.email for p in recipients])
+        recipient_list=[
+            p.user.email
+            for p in informed.exclude(id__in=current_profile.user.profiles.all())
+        ]
+    )
     messages.success(request, f'Poinformowano wybranych Graczy!')
     return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
 
@@ -227,9 +228,10 @@ def statement_create_view(request):
         message=f"{thread.get_absolute_url()}",
         from_email=settings.EMAIL_HOST_USER,
         recipient_list=[
-            p.user.email for p in
-            thread.followers.exclude(id=current_profile.id)])
-    
+            p.user.email
+            for p in thread.followers.exclude(id__in=current_profile.user.profiles.all())
+        ]
+    )
     return HttpResponse('Message sent successfully')
 
     
@@ -411,8 +413,8 @@ def create_thread_view(request, thread_kind):
             message=f"{thread.get_absolute_url()}",
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[
-                p.user.email for p in thread.followers.exclude(
-                    id__in=current_profile.user.profiles.all())
+                p.user.email
+                for p in thread.followers.exclude(id__in=current_profile.user.profiles.all())
             ]
         )
         messages.info(request, f"{THREADS_MAP[thread_kind]['text']}: '{thread}!")
