@@ -81,20 +81,10 @@ class StatementAdmin(admin.ModelAdmin):
         models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:250px'})},
     }
     list_display = ['id', '__str__', 'author', 'thread', 'created_at']
-    list_editable = ['thread', 'author']
     list_filter = ['thread__kind', 'thread']
+    list_select_related = ['author__character', 'thread']
     ordering = ['-created_at']
     search_fields = ['text']
-    
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
-        for field in [
-            'thread',
-            'author',
-        ]:
-            if db_field.name == field:
-                formfield = formfield_with_cache(field, formfield, request)
-        return formfield
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "seen_by":
