@@ -80,7 +80,7 @@ class StatementAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:250px'})},
     }
-    list_display = ['id', '__str__', 'author', 'thread', 'created_at']
+    list_display = ['id', 'thread', 'author', '__str__', 'created_at']
     list_filter = ['thread__kind', 'thread']
     list_select_related = ['author__character', 'thread']
     ordering = ['-created_at']
