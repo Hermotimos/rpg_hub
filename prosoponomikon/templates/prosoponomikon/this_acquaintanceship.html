@@ -142,7 +142,6 @@
                     <input type="radio" name="tabset" id="tab3" aria-controls="acquisitions_regular" checked>
                 {% endif %}
                 <label class="font-resp-15 resp-tab-label" for="tab3">
-                    {% if this_acquaintanceship.known_character.profile != request.current_profile and this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
                     Umiejętności
                 </label>
             {% endif %}
@@ -155,7 +154,6 @@
                     <input type="radio" name="tabset" id="tab4" aria-controls="acquisitions_priests" checked>
                 {% endif %}
                 <label class="font-resp-15 resp-tab-label" for="tab4">
-                    {% if this_acquaintanceship.known_character.profile != request.current_profile and this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
                     Moce kapłańskie
                 </label>
             {% endif %}
@@ -168,7 +166,6 @@
                     <input type="radio" name="tabset" id="tab5" aria-controls="acquisitions_sorcerers" checked>
                 {% endif %}
                 <label class="font-resp-15 resp-tab-label" for="tab5">
-                    {% if this_acquaintanceship.known_character.profile != request.current_profile and this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
                     Zaklęcia
                 </label>
             {% endif %}
@@ -181,7 +178,6 @@
                     <input type="radio" name="tabset" id="tab6" aria-controls="acquisitions_theurgists" checked>
                 {% endif %}
                 <label class="font-resp-15 resp-tab-label" for="tab6">
-                    {% if this_acquaintanceship.known_character.profile != request.current_profile and this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
                     Moce Teurgiczne
                 </label>
             {% endif %}

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db.models import (
     CharField,
     ForeignKey as FK,
@@ -93,6 +94,9 @@ class Location(Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return f'{settings.SERVER_ADDRESS}/toponomikon/{self.pk}/'
 
     def informables(self):
         qs = Profile.active_players.all()
