@@ -25,7 +25,7 @@ from users.models import Profile
 
 
 class Factor(Model):
-    """Ex. KP, TRAF, OBR, IN, Życie, etc."""
+    """Ex. KP, TRAF, OBR, IN, Zdrowie, etc."""
     name = CharField(max_length=100, unique=True)
 
     class Meta:
