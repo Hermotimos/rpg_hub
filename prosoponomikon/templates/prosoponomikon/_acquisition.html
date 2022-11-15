@@ -13,7 +13,7 @@
                 <!-- For GM make skill name into a link to admin change form -->
                 {% if request.current_profile.status == 'gm' %}
                     <a class="hover-blue" href="{% url 'admin:prosoponomikon_acquisition_change' acquisition.id %}" target="_blank"
-                       data-toggle="tooltip" data-placement="right" title="Edycja Akwizycji Umiejętności">
+                       data-toggle="tooltip" data-placement="right" title="Edytuj Akwizycję Umiejętności">
                 {% endif %}
                 
                 {{ acquisition.skill_level.skill.name }}
@@ -40,7 +40,7 @@
             <div class="row collapse" id="{{ acquisition.skill_level.skill|cut:' ' }}{{ skill_type|cut:' ' }}{{ acquisition.weapon.id }}{{ acquisition.sphragis.id }}">
                 {% with level_img='img/'|add:acquisition.skill_level.level|add:'.png' %}
                     {% with skill_or_synergy_level=acquisition.skill_level type='skill_level' %}
-                        {% include 'prosoponomikon/_acquisition_level.html' %}
+                        {% include 'rules/_skill_or_synergy_level.html' %}
                     {% endwith %}
                 {% endwith %}
             </div>
