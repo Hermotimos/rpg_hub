@@ -231,7 +231,7 @@ def format_conditional_modifier(conditional_modifier, color_class: str):
     tooltip = 'data-toggle="tooltip" data-placement="top"'
     combat_types_icons = {
         '/zwar': f'<i class="ra ra-crossed-axes pr-1" {tooltip} title="Walka w zwarciu"></i>',
-        '/dyst': f'<i class="ra ra-archery-target pr-1" {tooltip} title="Walka w dystansowa"></i>',
+        '/dyst': f'<i class="ra ra-archery-target pr-1" {tooltip} title="Walka dystansowa"></i>',
         '/wręc': f'<i class="ra ra-hand pr-1" {tooltip} title="Walka wręcz"></i>',
         '/konn': f'<i class="ra ra-horseshoe pr-1" {tooltip} title="Walka konna"></i>',
     }
