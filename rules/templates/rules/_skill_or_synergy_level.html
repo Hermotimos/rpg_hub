@@ -4,7 +4,6 @@
 
 <div class="container align-top pl-1 pr-md-4 text-justify font-14">
     <div class="d-flex flex-row">
-
         <div class="pl-1 pt-01">
             {% if request.current_profile.status == 'gm' %}
                 {% if type == 'skill_level' %}
@@ -30,7 +29,8 @@
                         <img class="img-xs" src="{% static level_img %}">
                     </a>
                 {% endif %}
-            {% elif "Powszechne" in skilltype_kinds %}
+            <!-- If viewed by Players in rules_skills_view  -->
+            {% elif skilltype_kinds is None %}
                 <img class="img-xs" src="{% static level_img %}">
             {% endif %}
         </div>
