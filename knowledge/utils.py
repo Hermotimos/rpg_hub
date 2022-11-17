@@ -1,30 +1,42 @@
 from django.conf import settings
 from django.contrib.postgres.expressions import ArraySubquery
-from django.db.models import Value, OuterRef
+from django.db.models import Value, OuterRef, Case, When, Q
 from django.db.models.functions import Concat, JSONObject
 
 from users.models import Profile
 
 
 def annotate_informables(info_packets, current_profile):
-    if info_packets.model.__name__ == 'KnowledgePacket':
-        profiles = Profile.active_players.exclude(knowledge_packets=OuterRef('id'))
-    elif info_packets.model.__name__ == 'BiographyPacket':
-        profiles = Profile.active_players.exclude(biography_packets=OuterRef('id'))
+    if info_packets.model.__name__ in ['KnowledgePacket', 'BiographyPacket']:
+        acquaintanceships = current_profile.character.acquaintanceships().filter(
+            known_character__profile__in=Profile.active_players.all()
+        ).exclude(
+            known_character__profile__knowledge_packets=OuterRef('id')
+        )
     else:
         return info_packets
-        
-    informables_subq = profiles.filter(
-        character__in=current_profile.character.acquaintances.all()
-    ).values(
+
+    informables_subq = acquaintanceships.values(
         json=JSONObject(
-            id='id',
-            status='status',
-            image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'image')),
-            character=JSONObject(fullname='character__fullname'),
+            id='known_character__profile__id',
+            status='known_character__profile__status',
+            known_character=JSONObject(
+                fullname='known_character__fullname',
+                profile=JSONObject(
+                    id='known_character__profile__id',
+                    is_alive='known_character__profile__is_alive',
+                    image=JSONObject(
+                        url=Concat(Value(settings.MEDIA_URL), 'known_character__profile__image')
+                    ),
+                )
+            ),
+            is_direct='is_direct',
+            knows_if_dead='knows_if_dead',
+            knows_as_name='knows_as_name',
+            knows_as_image=Case(
+                When(~Q(knows_as_image=''), then=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'knows_as_image'))),
+                default=None,
+            ),
         )
     )
     return info_packets.annotate(informables=ArraySubquery(informables_subq))
-
-
-

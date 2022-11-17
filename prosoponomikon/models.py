@@ -254,20 +254,25 @@ class Character(Model):
     def get_absolute_url(self):
         return f'{settings.SERVER_ADDRESS}/prosoponomikon/character/{self.pk}/'
     
-    def informables(self):
-        qs = Profile.active_players.select_related('character')
-        qs = qs.exclude(character__in=self.acquaintaned_to.all())
-        qs = qs.exclude(character=self)
+    def informables(self, current_profile):
+        qs = current_profile.character.acquaintanceships()
+        qs = qs.exclude(
+            known_character__in=self.acquaintaned_to.all()
+        ).filter(
+            known_character__profile__in=Profile.active_players.all())
         return qs
-        
+    
     def acquaintanceships(self):
-        return self.known_characters.select_related(
+        qs = self.known_characters.select_related(
             'known_character__profile',
         ).annotate(
             known_name=Lower(Coalesce('knows_as_name', 'known_character__fullname'))
         ).annotate(
             initial=Lower(Substr('known_name', 1, 1))
-        ).exclude(known_character=self)
+        ).exclude(
+            known_character=self
+        )
+        return qs
 
     def acquisitions_for_character_sheet(self):
         return self.acquisitions.annotate(

@@ -314,15 +314,6 @@ def thread_view(request, thread_id, tag_title):
         'participants'
     ).get(id=thread_id)
     
-    informables = thread.informables()
-    if current_profile.status != 'gm':
-        informables = informables.filter(
-            character__in=current_profile.character.acquaintances.all())
-    # TODO temp
-    # if current_profile.character.fullname in 'Ilen z Astinary, Alora z Astinary, Syngir':
-    #     informables = Profile.objects.none()
-    # TODO end temp
-    
     # Create ThreadEditTagsForm and StatementCreateForm
     # Check if custom inform form is activated, if not then StatementCreateForm,
     # if not then ThreadEditTagsForm: this order ensures correct handling, as
@@ -359,7 +350,7 @@ def thread_view(request, thread_id, tag_title):
         'thread': thread,
         'thread_id': thread_id,
         'tag_title': tag_title,
-        'informables': informables,
+        'informables': thread.informables(current_profile),
         'form_1': statement_form,
         'thread_tags_form': thread_tags_form,
     }

@@ -257,12 +257,13 @@ class TimeUnit(Model):
                 res = res[:-1] + res[-1]
             res = res[:-1] + f' | {self.in_timeunit.name_genetive}' + res[-1]
         return res
-    
-    def informables(self):
-        qs = Profile.active_players.all()
+
+    def informables(self, current_profile):
+        qs = current_profile.character.acquaintanceships()
         qs = qs.exclude(
-            id__in=(self.participants.all() | self.informees.all())
-        )
+            known_character__profile__in=(self.participants.all() | self.informees.all())
+        ).filter(
+            known_character__profile__in=Profile.active_players.all())
         return qs
 
 
@@ -520,17 +521,16 @@ def update_acquantanceships_for_informees(sender, instance, **kwargs):
     from prosoponomikon.models import Acquaintanceship, Character
     
     characters = Character.objects.all()
-    participating_characters = characters.filter(
-        profile__in=instance.participants.all())
-    informed_characters = characters.filter(
-        profile__in=instance.informees.all())
+    participating_characters = characters.filter(profile__in=instance.participants.all())
+    informed_characters = characters.filter(profile__in=instance.informees.all())
     
     for knowing_character in informed_characters:
-        for known_character in participating_characters.exclude():
-            Acquaintanceship.objects.get_or_create(
+        for known_character in participating_characters:
+            Acquaintanceship.objects.update_or_create(
                 knowing_character=knowing_character,
                 known_character=known_character,
-                is_direct=False)
+                defaults={'is_direct': False},
+            )
             
             
 # This signal also fires on GameEvent object creation

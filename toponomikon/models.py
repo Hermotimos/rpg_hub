@@ -98,12 +98,12 @@ class Location(Model):
     def get_absolute_url(self):
         return f'{settings.SERVER_ADDRESS}/toponomikon/{self.pk}/'
 
-    def informables(self):
-        qs = Profile.active_players.all()
+    def informables(self, current_profile):
+        qs = current_profile.character.acquaintanceships()
         qs = qs.exclude(
-            id__in=(self.participants.all() | self.informees.all())
-        )
-        qs = qs.select_related('character')
+            known_character__profile__in=(self.participants.all() | self.informees.all())
+        ).filter(
+            known_character__profile__in=Profile.active_players.all())
         return qs
     
     def with_sublocations(self):

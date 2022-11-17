@@ -45,11 +45,6 @@ def prosoponomikon_acquaintanceships_view(request):
 @auth_profile(['all'])
 def prosoponomikon_character_view(request, character_id):
     current_profile = request.current_profile
-    
-    # TODO temp
-    # if current_profile.character.fullname in 'Ilen z Astinary, Alora z Astinary' and current_profile.character.id != character_id:
-    #     return redirect('users:dupa')
-    # TODO end temp
 
     # Declare empty variables
     [
@@ -154,6 +149,7 @@ def prosoponomikon_character_view(request, character_id):
         'also_known_as': also_known_as,
         'item_collections': item_collections,
         'items': items,
+        'informables': this_acquaintanceship.known_character.informables(current_profile),
         'formset_1': item_formset,
     }
     if (

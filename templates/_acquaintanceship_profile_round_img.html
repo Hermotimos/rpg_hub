@@ -1,0 +1,23 @@
+{% load static %}
+
+
+<!-- This has to be a div so that rounded-circle applies correctly -->
+<div class="pointer rounded-circle mb-0 m-auto"
+      data-toggle="tooltip" data-placement="bottom" data-html="true"
+      title='<span class="font-italic">{% firstof acquaintanceship.knows_as_name acquaintanceship.known_character.fullname %}</span>'>
+    
+    {% if acquaintanceship.is_direct %}
+        <img class="portait img-xl rounded-circle {% if acquaintanceship.knows_if_dead and not acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
+             src="
+                {% if acquaintanceship.knows_as_image %}
+                    {{ acquaintanceship.knows_as_image.url }}
+                {% else %}
+                    {{ acquaintanceship.known_character.profile.image.url }}
+                {% endif %}
+             ">
+    {% else %}
+        <img class="portait img-xl rounded-circle {% if acquaintanceship.knows_if_dead and not acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
+             src="{% static 'img/profile_known_only_indirectly.jpg' %}">
+    {% endif %}
+    
+</div>

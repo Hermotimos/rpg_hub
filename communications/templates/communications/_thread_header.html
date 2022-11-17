@@ -29,7 +29,7 @@
         </div>
         <!-- The Modal -->
         <div class="modal fade img-modal" id="infoThreadModal" tabindex="-1" role="dialog" aria-hidden="true">
-            {% with informables=informables inform_type=thread.kind id_=thread.id %}
+            {% with inform_type=thread.kind id_=thread.id %}
                 {% include '_inform.html' %}
             {% endwith %}
         </div>

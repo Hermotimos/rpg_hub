@@ -43,7 +43,7 @@
                                     <!-- Modal -->
                                     <span class="btn btn-outline-dark icon-inform py-2" data-toggle="modal" data-target="#infoCharacterModal_{{ this_acquaintanceship.known_character.id }}"></span>
                                     <div class="modal fade" id="infoCharacterModal_{{ this_acquaintanceship.known_character.id }}" tabindex="-1" role="dialog" aria-hidden="true">
-                                        {% with informables=this_acquaintanceship.known_character.informables|filter_players:request.current_profile inform_type=this_acquaintanceship|get_model_name id_=this_acquaintanceship.id %}
+                                        {% with inform_type=this_acquaintanceship|get_model_name id_=this_acquaintanceship.id %}
                                             {% include '_inform.html' %}
                                         {% endwith %}
                                     </div>

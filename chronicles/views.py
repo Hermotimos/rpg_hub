@@ -207,6 +207,7 @@ def game_event_inform_view(request, game_event_id):
     context = {
         'page_title': 'Poinformuj o wydarzeniu',
         'event': game_event,
+        'informables': game_event.informables(current_profile),
         'event_type': 'game_event'
     }
     if current_profile in allowed or current_profile.status == 'gm':

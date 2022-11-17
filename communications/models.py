@@ -64,7 +64,7 @@ class Thread(Model):
     followers = M2M(to=Profile, related_name='threads_followed', blank=True)
     tags = M2M(to=ThreadTag, related_name='threads', blank=True)
     is_ended = BooleanField(default=False)                                      # also Demands instead of is_done
-    is_exclusive = BooleanField(default=False)
+    is_exclusive = BooleanField(default=True)
     created_at = DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -73,15 +73,15 @@ class Thread(Model):
     def __str__(self):
         return self.title
     
-    def informables(self):
+    def informables(self, current_profile):
+        qs = current_profile.character.acquaintanceships().exclude(
+            known_character__profile__in=self.participants.all())
         if self.kind == 'Announcement':
-            qs = Profile.active_players.all()
+            qs = qs.filter(known_character__profile__in=Profile.active_players.all())
         elif self.kind == 'Debate':
-            qs = Profile.living.all()
+            qs = qs.filter(known_character__profile__in=Profile.living.all())
         else:
-            qs = Profile.objects.none()
-        qs = qs.exclude(id__in=self.participants.all())
-        qs = qs.select_related('character', 'user')
+            qs = qs.none()
         return qs
 
     def get_absolute_url(self):

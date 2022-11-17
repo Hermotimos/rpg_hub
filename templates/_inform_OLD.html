@@ -42,25 +42,25 @@
                     </h5>
                     <div class="text-center m-3">
                         <div>
-                            {% for acquaintanceship in informables %}
-                                {% if acquaintanceship.known_character.profile.status == 'player' %}
-                                    <input class="select-profile" type="checkbox" id="id_{{ forloop.counter }}{{ id_ }}" name="{{ acquaintanceship.known_character.profile.id }}">
+                            {% for profile in informables %}
+                                {% if profile.status == 'player' %}
+                                    <input class="select-profile" type="checkbox" id="id_{{ forloop.counter }}{{ id_ }}" name="{{ profile.id }}">
                                     <label for="id_{{ forloop.counter }}{{ id_ }}">
                                         {% if inform_type != "Announcement" %}
-                                            {% include '_acquaintanceship_profile_round_img.html' %}
+                                            {% include '_profile_round_img.html' %}
                                         {% else %}
-                                            {% include '_acquaintanceship_user_round_img.html' %}
+                                            {% include '_user_round_img.html' %}
                                         {% endif %}
                                     </label>
                                 {% endif %}
                             {% endfor %}
                         </div>
                         <div>
-                            {% for acquaintanceship in informables %}
-                                {% if acquaintanceship.known_character.profile.status != 'player' %}
-                                    <input class="select-profile" type="checkbox" id="id_{{ forloop.counter }}{{ id_ }}" name="{{ acquaintanceship.known_character.profile.id }}">
+                            {% for profile in informables %}
+                                {% if profile.status != 'player' %}
+                                    <input class="select-profile" type="checkbox" id="id_{{ forloop.counter }}{{ id_ }}" name="{{ profile.id }}">
                                     <label for="id_{{ forloop.counter }}{{ id_ }}">
-                                        {% include '_acquaintanceship_profile_round_img.html' %}
+                                        {% include '_profile_round_img.html' %}
                                     </label>
                                 {% endif %}
                             {% endfor %}

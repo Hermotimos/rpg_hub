@@ -3,7 +3,7 @@
 <div class="img-hover-zoom border-double m-0" data-toggle="tooltip" data-placement="bottom" data-html="true"
      title='<span class="font-italic">
         {% if not aka %}
-            <div>{% firstof acquaintanceship.knows_as_name acquaintanceship.known_character.fullname %}</div>
+            <div>{{ acquaintanceship.known_character.fullname }}</div>
         {% endif %}
         {% if not acquaintanceship.is_direct %}
             <div>(Postać znana ze słyszenia)</div>

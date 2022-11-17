@@ -93,6 +93,7 @@ def toponomikon_location_view(request, location_id):
         'page_title': this_location.name,
         'this_location': this_location,
         'location_types': location_types.distinct(),
+        'informables': this_location.informables(current_profile),
         'acquaintanceships': acquaintanceships.distinct(),
     }
     if this_location in known_locations or current_profile.can_view_all:
