@@ -91,8 +91,10 @@ def prosoponomikon_character_view(request, character_id):
         knowledge_packets = annotate_informables(knowledge_packets, current_profile)
         
         acquaintanceships = character.acquaintanceships().exclude(known_character=character)
-        also_known_as = character.knowing_characters.filter(
-            ~Q(knows_as_description=None) | ~Q(knows_as_name=None) | (~Q(knows_as_image=None) & ~Q(knows_as_image=''))
+        also_known_as = character.knowing_characters.exclude(
+            Q(knows_as_description=None) | Q(knows_as_name=None) | Q(knows_as_image=None)
+        ).exclude(
+            Q(knows_as_description='') | Q(knows_as_name='') | Q(knows_as_image='')
         ).select_related('knowing_character__profile')
 
     if current_profile.character.id == character_id or current_profile.status == 'gm':
