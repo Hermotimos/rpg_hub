@@ -7,7 +7,7 @@
             {% if not acquaintanceship.is_direct %}
                 <div>(Postać znana ze słyszenia)</div>
             {% endif %}
-            {% if acquaintanceship.knows_as_description %}
+            {% if aka and acquaintanceship.knows_as_description %}
                 <div>(Znany opis Postaci)</div>
                 <div>{{ acquaintanceship.knows_as_description }}</div>
             {% endif %}
