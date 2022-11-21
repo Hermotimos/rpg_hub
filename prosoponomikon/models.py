@@ -241,7 +241,7 @@ class Character(Model):
 
         from items.models import ItemCollection
         if not ItemCollection.objects.filter(owner=self):
-            ItemCollection.objects.create(owner=self)
+            ItemCollection.objects.create(owner=self, name="Osobisty")
         
         for character in Character.objects.filter(profile__status__in=['gm', 'spectator']):
             if not Acquaintanceship.objects.filter(knowing_character=character, known_character=self,).exists():
@@ -445,6 +445,7 @@ class Acquaintanceship(Model):
         return f"{self.knowing_character} -> {self.known_character}"
 
 
+
 # -----------------------------------------------------------------------------
 
 
@@ -455,8 +456,11 @@ class Acquisition(Model):
     sphragis = FK(to=Sphragis, on_delete=CASCADE, blank=True, null=True)
 
     class Meta:
-        ordering = [OrderByPolish('character__fullname'),  OrderByPolish('skill_level__skill__name'), 'skill_level__level']
-
+        ordering = [
+            OrderByPolish('character__fullname'),
+            OrderByPolish('skill_level__skill__name'),
+            'skill_level__level'
+        ]
         # ordering = ['character__fullname', 'skill_level__skill__name', 'skill_level__level']
         unique_together = [
             ['character', 'skill_level', 'weapon'],
