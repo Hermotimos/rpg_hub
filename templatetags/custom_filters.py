@@ -244,25 +244,25 @@ def format_conditional_modifier(conditional_modifier, color_class: str):
 
     return mark_safe(text)
 
-
-@register.filter
-def remove_special_chars(text_or_obj):
-    return "".join(
-        [ch for ch in str(text_or_obj) if ch.lower() in 'abcdefghijklmnopqrstuvwxyz']
-    )
-
-
-@register.filter
-def default_if_emptystring(string, text_if_emtystring):
-    if string == "":
-        return text_if_emtystring
-    return string
-
-
-@register.filter
-def filter_players(informables_qs, current_profile):
-    return informables_qs.filter(
-        character__in=current_profile.character.acquaintances.all())
+#
+# @register.filter
+# def remove_special_chars(text_or_obj):
+#     return "".join(
+#         [ch for ch in str(text_or_obj) if ch.lower() in 'abcdefghijklmnopqrstuvwxyz']
+#     )
+#
+#
+# @register.filter
+# def default_if_emptystring(string, text_if_emtystring):
+#     if string == "":
+#         return text_if_emtystring
+#     return string
+#
+#
+# @register.filter
+# def filter_players(informables_qs, current_profile):
+#     return informables_qs.filter(
+#         character__in=current_profile.character.acquaintances.all())
 
 
 @register.filter
