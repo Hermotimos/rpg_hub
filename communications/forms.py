@@ -90,6 +90,7 @@ class DebateCreateForm(forms.ModelForm):
         fields = ['title', 'participants', 'is_exclusive']
         
     def __init__(self, *args, **kwargs):
+        from prosoponomikon.models import AcquaintanceshipProxy
         current_profile = kwargs.pop('current_profile')
         super().__init__(*args, **kwargs)
 
@@ -105,14 +106,15 @@ class DebateCreateForm(forms.ModelForm):
         self.fields['participants'].label = "Uczestnicy"
         self.fields['title'].label = "Tytuł"
 
-        participants = Profile.living.all()
+        # Show profiles' Acquaintanceships as options (translated to Profiles in the view)
+        participants = AcquaintanceshipProxy.objects.filter(
+            knowing_character=current_profile.character
+        ).select_related('known_character')
+        self.fields['participants'].queryset = participants.order_by(
+            '-known_character__profile__status', 'known_character__fullname')
+        
         if current_profile.status != 'gm':
             self.fields['is_exclusive'].widget = HiddenInput()
-            participants = participants.filter(
-                character__in=current_profile.character.acquaintances.all()
-            ).exclude(id=current_profile.id)
-        self.fields['participants'].queryset = participants.select_related('character', 'user')
-
         self.fields['participants'].widget.attrs['size'] = min(
             len(participants), 10)
 

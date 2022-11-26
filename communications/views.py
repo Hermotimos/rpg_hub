@@ -28,6 +28,7 @@ from communications.models import (
 )
 from rpg_project.utils import auth_profile
 from users.models import Profile
+from prosoponomikon.models import Character
 
 # TODO
 #  1) main views separate? or separate templates based on 'thread_kind' param?
@@ -386,11 +387,15 @@ def create_thread_view(request, thread_kind):
         thread.save()
         
         participants = thread_form.cleaned_data['participants']
+        
+        # User-based Threads show Users as participants - translate to Profiles
         if thread_kind in USER_THREADS:
-            # USER_THREADS show users as participants - translate to Profiles
             participants = Profile.objects.filter(user__in=participants)
-        participants |= Profile.objects.filter(
-            Q(id=current_profile.id) | Q(status='gm'))
+        # Profile-based Threads show Acquaintanceships as participants - translate to Profiles
+        else:
+            participants = Profile.objects.filter(character__knowing_characters__in=participants)
+            
+        participants |= Profile.objects.filter(Q(id=current_profile.id) | Q(status='gm'))
         thread.participants.set(participants)
         thread.followers.set(participants)
 

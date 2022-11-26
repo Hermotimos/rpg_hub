@@ -445,7 +445,27 @@ class Acquaintanceship(Model):
         return f"{self.knowing_character} -> {self.known_character}"
 
 
+class AcquaintanceshipProxyManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs
 
+    
+class AcquaintanceshipProxy(Acquaintanceship):
+    """A proxy model to create another __str__ representation."""
+    # TODO this is to ensure knows_as_name in CreateDebateForm. Any better way?
+    
+    objects = AcquaintanceshipProxyManager()
+    
+    class Meta:
+        proxy = True
+    
+    def __str__(self):
+        if self.knows_as_name and self.knows_as_name != "":
+            return self.knows_as_name
+        return self.known_character.fullname
+
+    
 # -----------------------------------------------------------------------------
 
 
