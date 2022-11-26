@@ -59,13 +59,9 @@
                                     </a>
                                     <div class="d-inline-flex">
                                         {% for profile in game|game_participants %}
-                                            <a href="{% url 'prosoponomikon:character' profile.character.id %}"
-                                               data-toggle="tooltip" data-placement="top" data-html="true"
-                                               title='<span class="font-italic">Prosoponomikon:<br>"{{ profile }}"</span>'>
-                                                <div class="d-inline ml-1 align-top">
-                                                   <img class="rounded-circle portait img-xs border border-dark mb-1" src="{{ profile.image.url }}">
-                                                </div>
-                                            </a>
+                                            <div class="d-inline ml-1 align-top">
+                                               <img class="rounded-circle portait img-xs border border-dark mb-1" src="{{ profile.image.url }}">
+                                            </div>
                                         {% endfor %}
                                     </div>
                                     <div>

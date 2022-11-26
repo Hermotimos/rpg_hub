@@ -41,7 +41,7 @@ def chronicle_main_view(request):
         known_profiles = Profile.players.filter(
             Q(character__in=current_profile.character.acquaintances.all())
             | Q(id=current_profile.id)
-        ).prefetch_related('character')
+        ).select_related('character')
         
         events = GameEvent.objects.filter(
             Q(id__in=current_profile.events_participated.all())
