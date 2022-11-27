@@ -10,6 +10,7 @@ from knowledge.admin_forms import (
 )
 # from associations.models import Comment
 from knowledge.models import (
+    Reference,
     KnowledgePacket,
     MapPacket,
     BiographyPacket,
@@ -45,6 +46,20 @@ WARNING = """
 # -----------------------------------------------------------------------------
 
         
+@admin.register(Reference)
+class ReferenceAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        CharField: {'widget': TextInput(attrs={'size': 50})},
+        TextField: {'widget': Textarea(attrs={'rows': 5, 'cols': 100})},
+    }
+    list_display = ['id', 'title', 'description', 'url']
+    list_editable = ['title', 'description', 'url']
+    search_fields = ['title', 'description', 'url']
+
+
+# -----------------------------------------------------------------------------
+
+
 @admin.register(DialoguePacket)
 class DialoguePacketAdmin(admin.ModelAdmin):
     form = DialoguePacketAdminForm
@@ -80,7 +95,7 @@ class BiographyPacketAdmin(admin.ModelAdmin):
 
 @admin.register(KnowledgePacket)
 class KnowledgePacketAdmin(admin.ModelAdmin):
-    filter_horizontal = ['acquired_by', 'picture_sets', 'skills']
+    filter_horizontal = ['references', 'acquired_by', 'picture_sets', 'skills']
     form = KnowledgePacketAdminForm
     formfield_overrides = {
         CharField: {'widget': TextInput(attrs={'size': 50})},

@@ -69,6 +69,22 @@
             {% endfor %}
         </div>
     {% endfor %}
+    {% for reference in kn_packet.references.all %}
+        <div class="d-flex my-3">
+            <div class="mx-2">
+                <a href="{{ reference.url }}" class="btn btn-outline-dark" target="_blank">Pokaż</a>
+            </div>
+            <div class="container">
+                <div class="row font-24 font-weight-bold">
+                    <u>{{ reference.title }}</u>
+                </div>
+                <div class="row font-italic text-justify">
+                    {{ reference.description }}
+                </div>
+            </div>
+                
+        </div>
+    {% endfor %}
     
     <!-- Collapse button -->
     <button class="btn btn-outline-secondary float-right"

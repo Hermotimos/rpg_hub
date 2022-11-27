@@ -69,7 +69,10 @@ class KnowledgePacketAdminForm(forms.ModelForm):
     
     class Meta:
         model = KnowledgePacket
-        fields = ['title', 'text', 'author', 'acquired_by', 'skills', 'picture_sets']
+        fields = [
+            'author', 'title', 'text', 'references', 'acquired_by', 'skills',
+            'picture_sets'
+        ]
     
     primary_locs = forms.ModelMultipleChoiceField(
         queryset=PrimaryLocation.objects.all(),

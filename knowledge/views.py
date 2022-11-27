@@ -30,7 +30,8 @@ def almanac_view(request):
     skills = Skill.objects.filter(knowledge_packets__in=knowledge_packets)
     skills = skills.prefetch_related(
         Prefetch('knowledge_packets', queryset=knowledge_packets),
-        'knowledge_packets__picture_sets__pictures')
+        'knowledge_packets__picture_sets__pictures',
+        'knowledge_packets__references')
     
     if request.method == 'POST':
         handle_inform_form(request)
