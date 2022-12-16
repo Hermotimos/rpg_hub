@@ -69,6 +69,13 @@
             {% endfor %}
         </div>
     {% endfor %}
+    
+    {% if kn_packet.references.exists %}
+        <br class="mb-2">
+        <h6 class="font-18 font-italic text-justify">
+            ✧ Materiały
+        </h6>
+    {% endif %}
     {% for reference in kn_packet.references.all %}
         <div class="d-flex my-3">
             <div class="mx-2">
@@ -82,7 +89,6 @@
                     {{ reference.description }}
                 </div>
             </div>
-                
         </div>
     {% endfor %}
     
