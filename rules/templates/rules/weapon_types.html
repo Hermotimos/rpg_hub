@@ -125,9 +125,10 @@
                                 {{ weapon_type.description|linebreaksbr }}
                             </div>
                             {% if weapon_type.comparables.exists %}
-                                <small class="smaller text-justify ml-1">
+                                <small class="smaller text-muted text-justify ml-1">
+                                    PODOBNE:
                                     {% for comparable in weapon_type.comparables.all %}
-                                        <a class=text-muted" href="#weapon_type_{{ comparable.id }}">
+                                        <a class="text-muted" href="#weapon_type_{{ comparable.id }}">
                                             {{ comparable.name }}
                                         </a>
                                         {% if not forloop.last %}
