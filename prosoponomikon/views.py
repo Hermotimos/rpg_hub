@@ -87,7 +87,7 @@ def prosoponomikon_character_view(request, character_id):
     # Any Profile viewing own Character or GM viewing any Character
     if current_profile.status == 'gm':
         knowledge_packets = character.profile.knowledge_packets.prefetch_related(
-            'picture_sets__pictures').select_related('author').order_by('title')
+            'picture_sets__pictures', 'references').select_related('author').order_by('title')
         knowledge_packets = annotate_informables(knowledge_packets, current_profile)
         
         acquaintanceships = character.acquaintanceships().exclude(known_character=character)

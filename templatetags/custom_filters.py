@@ -3,6 +3,7 @@ from typing import List
 
 from django import template
 from django.conf import settings
+from django.db.models import Q
 from django.template.defaultfilters import linebreaksbr
 from django.template.defaulttags import GroupedResult
 from django.utils.html import format_html
@@ -309,4 +310,18 @@ def temp_chrono_override(chrono_info: str, profile_id: int):
         )
 
     return mark_safe(chrono_info)
+
+
+@register.filter
+def similar_weapon_types(acquisitions_qs, synergy_lvl):
+    weapon_types_with_synergy = [
+        a.weapon for a in acquisitions_qs.filter(
+            ~Q(weapon=None), skill_level__level__lte=synergy_lvl)
+    ]
+    res = "<br><br>"
+    for wt in weapon_types_with_synergy:
+        comparables = ', '.join([c.name for c in wt.comparables.all()])
+        res += f"<b>{wt.name}:</b> {comparables}\n<br>"
+    return mark_safe(res)
+
     
