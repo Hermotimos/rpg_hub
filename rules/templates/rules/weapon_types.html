@@ -93,6 +93,7 @@
                     <tr class="align-top {% if forloop.counter|divisibleby:2 %} bg-gray {% endif %}">
                         <td class="hover-blue" rowspan="{{ weapon_type.damage_types.count }}"
                             data-toggle="collapse" data-target="#{{ weapon_type|cut:' ' }}" >
+                            <a class="anchor anchor4" id="weapon_type_{{ weapon_type.id }}"></a>
                             <div class="ml-sm-1 font-weight-bold" style="letter-spacing: 0.03rem;">
                                 {{ weapon_type.name }}
                             </div>
@@ -124,8 +125,15 @@
                                 {{ weapon_type.description|linebreaksbr }}
                             </div>
                             {% if weapon_type.comparables.exists %}
-                                <small class="smaller text-justify text-muted ml-1">
-                                    Podobne: {{ weapon_type.comparables.all|join:' | ' }}
+                                <small class="smaller text-justify ml-1">
+                                    {% for comparable in weapon_type.comparables.all %}
+                                        <a class=text-muted" href="#weapon_type_{{ comparable.id }}">
+                                            {{ comparable.name }}
+                                        </a>
+                                        {% if not forloop.last %}
+                                            <span>|</span>
+                                        {% endif %}
+                                    {% endfor %}
                                 </small>
                             {% endif %}
                             {% if weapon_type.picture_set %}
