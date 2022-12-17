@@ -157,7 +157,7 @@ class RegularSkillLevelInline(admin.TabularInline):
 @admin.register(Skill, RegularSkill, MentalSkill)
 class SkillAdmin(admin.ModelAdmin):
     fields = [
-        'name', 'weapon', 'tested_trait', 'image', 'group', 'types',
+        'name', 'weapon_type', 'tested_trait', 'image', 'group', 'types',
         'allowees',
     ]
     filter_horizontal = ['allowees', 'types']

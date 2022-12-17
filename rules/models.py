@@ -363,7 +363,7 @@ class Skill(Model):
         blank=True)
     # ------------------------------------------
     # For RegularSkills for weapon masteries
-    weapon = One2One(to=WeaponType, on_delete=CASCADE, blank=True, null=True)
+    weapon_type = One2One(to=WeaponType, on_delete=CASCADE, blank=True, null=True)
 
     class Meta:
         ordering = [OrderByPolish('name')]

@@ -13,7 +13,7 @@
         ">
     
     <div class="d-flex flex-nowrap hover-pointer" data-toggle="collapse"
-         data-target="#{{ acquisition.skill_level.skill|cut:' ' }}{{ skill_type|cut:' ' }}{{ acquisition.weapon.id }}{{ acquisition.sphragis.id }}">
+         data-target="#{{ acquisition.skill_level.skill|cut:' ' }}{{ skill_type|cut:' ' }}{{ acquisition.weapon_type.id }}{{ acquisition.sphragis.id }}">
         {% if skilltype_kinds in 'Moce Kapłańskie,Zaklęcia,Moce Teurgiczne' %}
             <img class="img-skill" src="{% static 'img/'|add:acquisition.skill_level.level|add:'_no_background.png' %}"
                  style="background-color: {% firstof acquisition.sphragis.color 'black' %}; background-clip: content-box;">

@@ -249,11 +249,13 @@ class AcquisitionAdminForm(forms.ModelForm):
         
 @admin.register(Acquisition)
 class AcquisitionAdmin(admin.ModelAdmin):
-    fields = ['character', 'skill_level', 'weapon', 'sphragis']
+    fields = ['character', 'skill_level', 'weapon_type', 'sphragis']
     form = AcquisitionAdminForm
-    list_display = ['get_img', 'character', 'skill_level', 'weapon', 'sphragis']
-    list_filter = ['sphragis', 'character', 'skill_level__skill', 'weapon']
-    search_fields = ['skill_level', 'character', 'weapon', 'sphragis']
+    list_display = [
+        'get_img', 'character', 'skill_level', 'weapon_type', 'sphragis'
+    ]
+    list_filter = ['sphragis', 'character', 'skill_level__skill', 'weapon_type']
+    search_fields = ['skill_level', 'character', 'weapon_type', 'sphragis']
     
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -262,7 +264,7 @@ class AcquisitionAdmin(admin.ModelAdmin):
             'character__first_name',
             'character__family_name',
             'character__profile',
-            'weapon',
+            'weapon_type',
             'sphragis',
         )
         return qs
@@ -282,7 +284,7 @@ class AcquisitionInline(admin.TabularInline):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
             'sphragis',
-            'weapon',
+            'weapon_type',
         ]:
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
@@ -297,7 +299,7 @@ class AcquisitionInline(admin.TabularInline):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.select_related(
-            'character', 'skill_level__skill', 'sphragis', 'weapon')
+            'character', 'skill_level__skill', 'sphragis', 'weapon_type')
 
 
 # -----------------------------------------------------------------------------

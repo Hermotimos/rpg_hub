@@ -18,8 +18,8 @@
                 
                 {{ acquisition.skill_level.skill.name }}
                 
-                {% if acquisition.weapon %}
-                    : {{ acquisition.weapon.name }}
+                {% if acquisition.weapon_type %}
+                    : {{ acquisition.weapon_type.name }}
                 {% endif %}
                 
                 {% if "Powszechne" in skilltype_kinds %}
@@ -37,7 +37,7 @@
                 </small>
             </div>
             
-            <div class="row collapse" id="{{ acquisition.skill_level.skill|cut:' ' }}{{ skill_type|cut:' ' }}{{ acquisition.weapon.id }}{{ acquisition.sphragis.id }}">
+            <div class="row collapse" id="{{ acquisition.skill_level.skill|cut:' ' }}{{ skill_type|cut:' ' }}{{ acquisition.weapon_type.id }}{{ acquisition.sphragis.id }}">
                 {% with level_img='img/'|add:acquisition.skill_level.level|add:'.png' %}
                     {% with skill_or_synergy_level=acquisition.skill_level type='skill_level' %}
                         {% include 'rules/_skill_or_synergy_level.html' %}

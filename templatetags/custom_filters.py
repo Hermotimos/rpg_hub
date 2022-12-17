@@ -315,8 +315,8 @@ def temp_chrono_override(chrono_info: str, profile_id: int):
 @register.filter
 def similar_weapon_types(acquisitions_qs, synergy_lvl):
     weapon_types_with_synergy = [
-        a.weapon for a in acquisitions_qs.filter(
-            ~Q(weapon=None), skill_level__level__lte=synergy_lvl)
+        a.weapon_type for a in acquisitions_qs.filter(
+            ~Q(weapon_type=None), skill_level__level__lte=synergy_lvl)
     ]
     res = "<br><br>"
     for wt in weapon_types_with_synergy:
