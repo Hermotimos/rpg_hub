@@ -15,6 +15,7 @@ from django.db.models import (
     TextField,
 )
 from django.db.models.signals import post_save, m2m_changed
+from django.utils.text import Truncator
 
 from communications.models import Thread
 from imaginarion.models import Audio, PictureSet
@@ -339,7 +340,7 @@ class Event(TimeUnit):
         proxy = True
 
     def __str__(self):
-        return self.description_short or str(self.pk)
+        return Truncator(self.description_short).words(15) or str(self.pk)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

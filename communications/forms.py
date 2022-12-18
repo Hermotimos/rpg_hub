@@ -2,16 +2,21 @@ import re
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit
-from django import forms
 from django.db.models import Q
-from django.forms.widgets import HiddenInput, TextInput
+from django.forms import (
+    ModelChoiceField,
+    ModelForm,
+    HiddenInput,
+    TextInput,
+    modelformset_factory
+)
 
 from communications.models import ThreadTag, Statement, Option, \
     Announcement, Debate, Thread
 from users.models import Profile, User
 
 
-class ThreadTagEditForm(forms.ModelForm):
+class ThreadTagEditForm(ModelForm):
     """A form for editing a Tag for formset ThreadTagEditFormSet."""
 
     class Meta:
@@ -24,8 +29,8 @@ class ThreadTagEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['author'].widget = forms.HiddenInput()
-        self.fields['kind'].widget = forms.HiddenInput()
+        self.fields['author'].widget = HiddenInput()
+        self.fields['kind'].widget = HiddenInput()
         
 
 class ThreadTagEditFormSetHelper(FormHelper):
@@ -49,14 +54,14 @@ class ThreadTagEditFormSetHelper(FormHelper):
             ))
         
 
-ThreadTagEditFormSet = forms.modelformset_factory(
+ThreadTagEditFormSet = modelformset_factory(
     model=ThreadTag, form=ThreadTagEditForm, exclude=[], extra=2, can_delete=True)
 
 
 # ===========================================================================
 
 
-class AnnouncementCreateForm(forms.ModelForm):
+class AnnouncementCreateForm(ModelForm):
     
     class Meta:
         model = Announcement
@@ -83,11 +88,17 @@ class AnnouncementCreateForm(forms.ModelForm):
         self.fields['participants'].widget.attrs['size'] = min(len(participants), 10)
         
 
-class DebateCreateForm(forms.ModelForm):
+class DebateCreateForm(ModelForm):
+    from chronicles.models import GameEvent
+    game_event = ModelChoiceField(
+        queryset=GameEvent.objects.order_by('-id'),
+        required=False,
+        label='Wydarzenie',
+    )
     
     class Meta:
         model = Debate
-        fields = ['title', 'participants', 'is_exclusive']
+        fields = ['title', 'game_event', 'participants', 'is_exclusive']
         
     def __init__(self, *args, **kwargs):
         from prosoponomikon.models import AcquaintanceshipProxy
@@ -115,11 +126,12 @@ class DebateCreateForm(forms.ModelForm):
         
         if current_profile.status != 'gm':
             self.fields['is_exclusive'].widget = HiddenInput()
+            self.fields['game_event'].widget = HiddenInput()
         self.fields['participants'].widget.attrs['size'] = min(
             len(participants), 10)
 
 
-class ThreadEditTagsForm(forms.ModelForm):
+class ThreadEditTagsForm(ModelForm):
     """A form for editing Tags within a single Thread."""
     
     class Meta:
@@ -142,7 +154,7 @@ class ThreadEditTagsForm(forms.ModelForm):
                 css_class='btn-dark d-block mx-auto mt-3 mb-n3'))
 
 
-class StatementCreateForm(forms.ModelForm):
+class StatementCreateForm(ModelForm):
     
     class Meta:
         model = Statement
@@ -192,7 +204,7 @@ class StatementCreateForm(forms.ModelForm):
             return super().save()
         
     
-class OptionCreateForm(forms.ModelForm):
+class OptionCreateForm(ModelForm):
     # TODO Separate view and template reached by means of a "+option" button
     
     class Meta:

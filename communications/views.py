@@ -403,6 +403,10 @@ def create_thread_view(request, thread_kind):
         statement.thread = thread
         statement.save()
         statement.seen_by.add(current_profile)
+        
+        if game_event := thread_form.cleaned_data['game_event']:
+            game_event = GameEvent.objects.get(id=game_event.id)
+            game_event.debates.add(thread.id)
 
         send_mail(
             subject=f"[RPG] {THREADS_MAP[thread_kind]['text']}: '{thread}'",
