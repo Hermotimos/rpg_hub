@@ -304,12 +304,13 @@ img.img-grayscale:hover {filter: grayscale(0%);}
 
 /* Prosoponomikon-based images, but used throughout the site */
 
-
-
 @media only screen and (min-width: 0px) {
-    img.character-detail {max-width: 100%;}
+    img.character-detail {
+        width: 50rem;
+        max-width: 100%;
+    }
 }
-@media only screen and (min-width: 500px) {
+@media only screen and (min-width: 576px) {
     img.character-detail {
         max-width: 20rem;
         margin-right: 1rem;
