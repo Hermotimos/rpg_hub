@@ -22,7 +22,7 @@
                                 <div class="col-1 p-0">
                                     <a class="btn btn-outline-light icon-parent-obj py-2 mb-1"
                                        href="{% url 'prosoponomikon:acquaintanceships' %}#character_{{ this_acquaintanceship.known_character.id }}"
-                                       data-toggle="tooltip" data-placement="bottom" title="Przejdź do Prosoponomikonu">
+                                       data-toggle="tooltip" data-placement="left" title="Przejdź do Prosoponomikonu">
                                     </a>
                                     
                                     {% if request.current_profile.can_action %}
@@ -38,28 +38,28 @@
                 
                                     {% if request.current_profile.status == 'player' and request.current_profile.character == this_acquaintanceship.known_character %}
                                         <a class="btn btn-outline-light icon-edit py-2 mb-1" href="{% url 'users:edit-profile' %}"
-                                            data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
+                                            data-toggle="tooltip" data-placement="left" title="Edytuj Postać">
                                         </a>
                                     {% elif request.current_profile.status == 'player' and this_acquaintanceship.known_character.created_by == request.current_profile %}
                                         <a class="btn btn-outline-light icon-edit py-2 mb-1"
                                            href="{% url 'prosoponomikon:acquaintanceship-create-edit' this_acquaintanceship.known_character.id %}"
-                                           data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
+                                           data-toggle="tooltip" data-placement="left" title="Edytuj Postać">
                                         </a>
                                     {% elif request.current_profile.status == 'gm' %}
                                         <a class="btn btn-outline-light icon-edit py-2 mb-1"
                                            href="{% url 'admin:prosoponomikon_character_change' this_acquaintanceship.known_character.id %}"
                                            target="_blank"
-                                           data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
+                                           data-toggle="tooltip" data-placement="left" title="Edytuj Postać">
                                         </a>
                                         <a class="btn btn-outline-light icon-edit py-2 mb-1"
                                            href="{% url 'admin:prosoponomikon_characteracquaintanceships_change' this_acquaintanceship.known_character.id %}"
                                            target="_blank"
-                                           data-toggle="tooltip" data-placement="bottom" title="Edytuj Znajomości">
+                                           data-toggle="tooltip" data-placement="left" title="Edytuj Znajomości">
                                         </a>
                                         <a class="btn btn-outline-light icon-edit py-2 mb-1"
                                            href="{% url 'admin:prosoponomikon_characteracquisitions_change' this_acquaintanceship.known_character.id %}"
                                            target="_blank"
-                                           data-toggle="tooltip" data-placement="bottom" title="Edytuj Umiejętności">
+                                           data-toggle="tooltip" data-placement="left" title="Edytuj Umiejętności">
                                         </a>
                                     {% endif %}
                                 </div>
@@ -96,17 +96,15 @@
                     
                     
                     <!-- CLASSES, TRAITS, EXPERIENCE -->
-                    <div class="ml-2 ml-sm-0">
+                    <div class="ml-3 ml-sm-0">
                         {% if request.current_profile.status == 'gm' or request.current_profile.character == this_acquaintanceship.known_character %}
-                            {% if this_acquaintanceship.known_character.subprofessions.exists %}
-                                <div class="row font-italic mt-2">
+                                <div class="row font-italic mt-2 pt-2">
                                     {% if this_acquaintanceship.known_character.subprofessions.count == 1 %}
                                         <span><b>Profesja: </b> {{ this_acquaintanceship.known_character.subprofessions.first }}</span>
                                     {% else %}
                                         <span><b>Profesje: </b> {{ this_acquaintanceship.known_character.subprofessions.all|join:", " }}</span>
                                     {% endif %}
                                 </div>
-                            {% endif %}
                             <div class="row font-italic">
                                 <span class="mr-2"><b>Sił: </b>{{ this_acquaintanceship.known_character.strength|default_if_none:"-" }}</span>
                                 <span class="mr-2"><b>Zrc: </b>{{ this_acquaintanceship.known_character.dexterity|default_if_none:"-" }}</span>
