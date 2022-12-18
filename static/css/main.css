@@ -17,7 +17,6 @@ h1, h2, h3, h4, h5, h6 {
 article.content {min-height: 700px}
 
 article.top-space {margin-top: 5rem;}
-article.top-image {margin-top: 1.5rem;}
 article.top-button {margin-top: 0.5rem;}
 
 
@@ -305,45 +304,31 @@ img.img-grayscale:hover {filter: grayscale(0%);}
 
 /* Prosoponomikon-based images, but used throughout the site */
 
+img.character-detail {max-width: 26rem;}
 
 @media only screen and (min-width: 0px) {
     span.character-name {font-size: 1.4rem;}
-    img.character-detail {max-width: 8rem;}
 }
 @media only screen and (min-width: 600px) {
     span.character-name {font-size: 1.5rem;}
-    img.character-detail {max-width: 10rem;}
 }
 @media only screen and (min-width: 1000px) {
     span.character-name {font-size: 1.6rem;}
-    img.character-detail {max-width: 13rem;}
 }
 @media only screen and (min-width: 1200px) {
     span.character-name {font-size: 1.9rem;}
-    img.character-detail {max-width: 15rem;}
 }
 
 
 @media only screen and (min-width: 320px) {
-   /* img.character-toponomikon {max-width: 5rem;}*/
     div.img-hover-zoom {margin: 0.1rem}
 }
 @media only screen and (min-width: 600px) {
-  /*  img.character-toponomikon {max-width: 6rem;}*/
     div.img-hover-zoom {margin: 0.15rem}
 }
 @media only screen and (min-width: 800px) {
-  /*  img.character-toponomikon {max-width: 7rem;}*/
     div.img-hover-zoom {margin: 0.15rem}
 }
-/*
-@media only screen and (min-width: 1000px) {
-    img.character-toponomikon {max-width: 8rem;}
-}
-@media only screen and (min-width: 1200px) {
-    img.character-toponomikon {max-width: 9rem;}
-}
-*/
 
 
 
@@ -689,4 +674,17 @@ blockquote:before {
   line-height: 1rem;
 }
 blockquote p {display: inline;}
+
+
+
+/* Buttons placed on images in Toponomikon, Prosoponomikon etc. */
+div.image-with-btns {
+  position: relative;
+  display: inline-block;
+}
+.overlay {
+  position: absolute;
+  left: 0;
+  z-index: 5;
+}
 
