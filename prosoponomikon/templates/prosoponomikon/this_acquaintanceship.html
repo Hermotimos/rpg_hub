@@ -7,80 +7,99 @@
 {% endblock head_extra %}
 
 {% block content %}
-    <article class="top-image">
-        <header class="mb-4">
-            
-            <div class="container mb-4">
-                <div class="row">
-                    <div class="col-12 px-0">
-                        
-                        <!-- CHARACTER PICTURE -->
-                        <div class="float-left mr-3">
-                            {% if request.current_profile.character == this_acquaintanceship.known_character or this_acquaintanceship.is_direct or request.current_profile.can_view_all %}
-                                <img class="character-detail {% if this_acquaintanceship.knows_if_dead and not this_acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
-                                     src="
-                                        {% if this_acquaintanceship.knows_as_image %}
-                                            {{ this_acquaintanceship.knows_as_image.url }}
-                                        {% else %}
-                                            {{ this_acquaintanceship.known_character.profile.image.url }}
-                                        {% endif %}
-                                     ">
-                            {% else %}
-                                <img class="character-detail {% if this_acquaintanceship.knows_if_dead and not this_acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
-                                     src="{% static 'img/profile_known_only_indirectly.jpg' %}">
-                            {% endif %}
-                        </div>
-                        
+
+    <header class="my-4">
+        
+        <div class="container mb-4">
+            <div class="row">
+                <div class="col-12 px-0">
+                    
+                    <div class="image-with-btns float-left">
                         
                         <!-- BUTTONS -->
-                        
-                        <div class="row mb-2">
-                            <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Przejdź do Prosoponomikonu">
-                                <a class="btn btn-outline-dark icon-parent-obj py-2" href="{% url 'prosoponomikon:acquaintanceships' %}#character_{{ this_acquaintanceship.known_character.id }}"></a>
+                        <div class="overlay container mt-2 ml-2">
+                            <div class="row">
+                                <div class="col-1 p-0">
+                                    <a class="btn btn-outline-light icon-parent-obj py-2 mb-1"
+                                       href="{% url 'prosoponomikon:acquaintanceships' %}#character_{{ this_acquaintanceship.known_character.id }}"
+                                       data-toggle="tooltip" data-placement="bottom" title="Przejdź do Prosoponomikonu">
+                                    </a>
+                                    
+                                    {% if request.current_profile.can_action %}
+                                        <span data-toggle="modal" data-target="#infoCharacterModal_{{ this_acquaintanceship.known_character.id }}">
+                                            <span class="btn btn-outline-light icon-inform py-2 mb-1"
+                                                data-toggle="tooltip" data-placement="left" title="Przekaż wiedzę o Postaci">
+                                            </span>
+                                        </span>
+                                        <a class="btn btn-outline-light icon-biography-packet py-2 mb-1" href="{% url 'prosoponomikon:bio-packet-form' this_acquaintanceship.known_character.id 0 %}"
+                                            data-toggle="tooltip" data-placement="bottom" title="Nowy Biogram">
+                                        </a>
+                                    {% endif %}
+                
+                                    {% if request.current_profile.status == 'player' and request.current_profile.character == this_acquaintanceship.known_character %}
+                                        <a class="btn btn-outline-light icon-edit py-2 mb-1" href="{% url 'users:edit-profile' %}"
+                                            data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
+                                        </a>
+                                    {% elif request.current_profile.status == 'player' and this_acquaintanceship.known_character.created_by == request.current_profile %}
+                                        <a class="btn btn-outline-light icon-edit py-2 mb-1"
+                                           href="{% url 'prosoponomikon:acquaintanceship-create-edit' this_acquaintanceship.known_character.id %}"
+                                           data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
+                                        </a>
+                                    {% elif request.current_profile.status == 'gm' %}
+                                        <a class="btn btn-outline-light icon-edit py-2 mb-1"
+                                           href="{% url 'admin:prosoponomikon_character_change' this_acquaintanceship.known_character.id %}"
+                                           target="_blank"
+                                           data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
+                                        </a>
+                                        <a class="btn btn-outline-light icon-edit py-2 mb-1"
+                                           href="{% url 'admin:prosoponomikon_characteracquaintanceships_change' this_acquaintanceship.known_character.id %}"
+                                           target="_blank"
+                                           data-toggle="tooltip" data-placement="bottom" title="Edytuj Znajomości">
+                                        </a>
+                                        <a class="btn btn-outline-light icon-edit py-2 mb-1"
+                                           href="{% url 'admin:prosoponomikon_characteracquisitions_change' this_acquaintanceship.known_character.id %}"
+                                           target="_blank"
+                                           data-toggle="tooltip" data-placement="bottom" title="Edytuj Umiejętności">
+                                        </a>
+                                    {% endif %}
+                                </div>
                             </div>
-                            {% if request.current_profile.can_action %}
-                                <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Przekaż wiedzę o Postaci">
-                                    <!-- Modal -->
-                                    <span class="btn btn-outline-dark icon-inform py-2" data-toggle="modal" data-target="#infoCharacterModal_{{ this_acquaintanceship.known_character.id }}"></span>
-                                    <div class="modal fade" id="infoCharacterModal_{{ this_acquaintanceship.known_character.id }}" tabindex="-1" role="dialog" aria-hidden="true">
-                                        {% with inform_type=this_acquaintanceship|get_model_name id_=this_acquaintanceship.id %}
-                                            {% include '_inform.html' %}
-                                        {% endwith %}
-                                    </div>
-                                </div>
-                                <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Nowy Biogram">
-                                    <a class="btn btn-outline-dark icon-biography-packet py-2" href="{% url 'prosoponomikon:bio-packet-form' this_acquaintanceship.known_character.id 0 %}"></a>
-                                </div>
-                            {% endif %}
-<!--                            <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">-->
-<!--                                <a class="btn btn-outline-dark icon-note py-2 disabled" href="#"></a>-->
-<!--                            </div>-->
-                            {% if request.current_profile.status == 'player' and request.current_profile.character == this_acquaintanceship.known_character %}
-                                <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
-                                    <a class="btn btn-outline-dark icon-edit py-2" href="{% url 'users:edit-profile' %}"></a>
-                                </div>
-                            {% elif request.current_profile.status == 'player' and this_acquaintanceship.known_character.created_by == request.current_profile %}
-                                <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
-                                    <a class="btn btn-outline-dark icon-edit py-2" href="{% url 'prosoponomikon:acquaintanceship-create-edit' this_acquaintanceship.known_character.id %}"></a>
-                                </div>
-                            {% elif request.current_profile.status == 'gm' %}
-                                <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Postać">
-                                    <a class="btn btn-outline-secondary icon-edit py-2" href="{% url 'admin:prosoponomikon_character_change' this_acquaintanceship.known_character.id %}" target="_blank"></a>
-                                </div>
-                                <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Znajomości">
-                                    <a class="btn btn-outline-danger icon-edit py-2" href="{% url 'admin:prosoponomikon_characteracquaintanceships_change' this_acquaintanceship.known_character.id %}" target="_blank"></a>
-                                </div>
-                                <div class="ml-1 mt-1" data-toggle="tooltip" data-placement="bottom" title="Edytuj Umiejętności">
-                                    <a class="btn btn-outline-info icon-edit py-2" href="{% url 'admin:prosoponomikon_characteracquisitions_change' this_acquaintanceship.known_character.id %}" target="_blank"></a>
-                                </div>
-                            {% endif %}
+                        </div>
+                        <!-- END BUTTONS -->
+                        
+                        
+                        <!-- CHARACTER PICTURE -->
+                        {% if request.current_profile.character == this_acquaintanceship.known_character or this_acquaintanceship.is_direct or request.current_profile.can_view_all %}
+                            <img class="character-detail {% if this_acquaintanceship.knows_if_dead and not this_acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
+                                 src="
+                                    {% if this_acquaintanceship.knows_as_image %}
+                                        {{ this_acquaintanceship.knows_as_image.url }}
+                                    {% else %}
+                                        {{ this_acquaintanceship.known_character.profile.image.url }}
+                                    {% endif %}
+                                 ">
+                        {% else %}
+                            <img class="character-detail {% if this_acquaintanceship.knows_if_dead and not this_acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
+                                 src="{% static 'img/profile_known_only_indirectly.jpg' %}">
+                        {% endif %}
+                        
+                        
+                        <!-- Modal -->
+                        <!-- It is placed here to avoid being covered with dimmed screen upon firing - sth to do with x-index of .overlay class? -->
+                        <div class="modal fade" id="infoCharacterModal_{{ this_acquaintanceship.known_character.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                            {% with inform_type=this_acquaintanceship|get_model_name id_=this_acquaintanceship.id %}
+                                {% include '_inform.html' %}
+                            {% endwith %}
                         </div>
                         
-                        
-                        <!-- CLASSES, TRAITS, EXPERIENCE -->
+                    </div>
+                    
+                    
+                    <!-- CLASSES, TRAITS, EXPERIENCE -->
+                    <div class="ml-2 ml-sm-0">
                         {% if request.current_profile.status == 'gm' or request.current_profile.character == this_acquaintanceship.known_character %}
                             {% if this_acquaintanceship.known_character.subprofessions.exists %}
-                                <div class="row font-italic ml-2">
+                                <div class="row font-italic mt-2">
                                     {% if this_acquaintanceship.known_character.subprofessions.count == 1 %}
                                         <span><b>Profesja: </b> {{ this_acquaintanceship.known_character.subprofessions.first }}</span>
                                     {% else %}
@@ -88,265 +107,265 @@
                                     {% endif %}
                                 </div>
                             {% endif %}
-                            <div class="row font-italic ml-2">
+                            <div class="row font-italic">
                                 <span class="mr-2"><b>Sił: </b>{{ this_acquaintanceship.known_character.strength|default_if_none:"-" }}</span>
                                 <span class="mr-2"><b>Zrc: </b>{{ this_acquaintanceship.known_character.dexterity|default_if_none:"-" }}</span>
                                 <span class="mr-2"><b>Kon: </b>{{ this_acquaintanceship.known_character.endurance|default_if_none:"-" }}</span>
                             </div>
                             {% if this_acquaintanceship.known_character.experience %}
-                                <div class="row font-italic ml-2">
+                                <div class="row font-italic">
                                     <span class="mr-2"><b>Exp: </b>{{ this_acquaintanceship.known_character.experience }}</span>
                                 </div>
                             {% endif %}
                         {% endif %}
-    
-                        <!-- CHARACTER DESCRIPTION -->
-                        <div class="font-italic text-justify my-2 font-18 {% if not this_acquaintanceship.is_direct %} text-muted {% endif %}">
-                            {% firstof this_acquaintanceship.knows_as_description this_acquaintanceship.known_character.description %}
-                        </div>
-                        
                     </div>
+                    
+                    <!-- CHARACTER DESCRIPTION -->
+                    <div class="font-italic text-justify my-2 font-18 {% if not this_acquaintanceship.is_direct %} text-muted {% endif %}">
+                        {% firstof this_acquaintanceship.knows_as_description this_acquaintanceship.known_character.description %}
+                    </div>
+                    
                 </div>
             </div>
-            
-        </header>
+        </div>
+        
+    </header>
         
         
-        <article class="tabset">
-            
-            <!-- TAB HEADERS -->
+    <div class="tabset">
+        
+        <!-- TAB HEADERS -->
+        
+        <!-- Biography packets -->
+        {% if biography_packets %}
+            <input type="radio" name="tabset" id="tab1" aria-controls="biography_packets" checked>
+            <label class="font-resp-15 resp-tab-label" for="tab1">Biografia</label>
+        {% endif %}
+        
+        <!-- Dialogue packets -->
+        {% if request.current_profile.status == 'gm' or request.current_profile.character == character %}
+            {% if dialogue_packets %}
+                {% if biography_packets %}
+                    <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets">
+                {% else %}
+                    <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets" checked>
+                {% endif %}
+                <label class="font-resp-15 resp-tab-label text-secondary" for="tab2">Dialogi</label>
+            {% endif %}
+        {% endif %}
+        
+        <!-- Skills and synergies-->
+        {% if acquisitions_regular %}
+            {% if biography_packets or dialogue_packets %}
+                <input type="radio" name="tabset" id="tab3" aria-controls="acquisitions_regular">
+            {% else %}
+                <input type="radio" name="tabset" id="tab3" aria-controls="acquisitions_regular" checked>
+            {% endif %}
+            <label class="font-resp-15 resp-tab-label" for="tab3">
+                Umiejętności
+            </label>
+        {% endif %}
+
+        <!-- Priest powers and MentalSkills -->
+        {% if acquisitions_priests %}
+            {% if biography_packets or dialogue_packets or acquisitions_regular %}
+                <input type="radio" name="tabset" id="tab4" aria-controls="acquisitions_priests">
+            {% else %}
+                <input type="radio" name="tabset" id="tab4" aria-controls="acquisitions_priests" checked>
+            {% endif %}
+            <label class="font-resp-15 resp-tab-label" for="tab4">
+                Moce kapłańskie
+            </label>
+        {% endif %}
+        
+        <!-- Sorcery and MentalSkills -->
+        {% if acquisitions_sorcerers %}
+            {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests %}
+                <input type="radio" name="tabset" id="tab5" aria-controls="acquisitions_sorcerers">
+            {% else %}
+                <input type="radio" name="tabset" id="tab5" aria-controls="acquisitions_sorcerers" checked>
+            {% endif %}
+            <label class="font-resp-15 resp-tab-label" for="tab5">
+                Zaklęcia
+            </label>
+        {% endif %}
+        
+        <!-- Theurgy and MentalSkills -->
+        {% if acquisitions_theurgists %}
+            {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers %}
+                <input type="radio" name="tabset" id="tab6" aria-controls="acquisitions_theurgists">
+            {% else %}
+                <input type="radio" name="tabset" id="tab6" aria-controls="acquisitions_theurgists" checked>
+            {% endif %}
+            <label class="font-resp-15 resp-tab-label" for="tab6">
+                Moce Teurgiczne
+            </label>
+        {% endif %}
+        
+        <!-- Item collections (Equipment) -->
+        {% if request.current_profile.status == 'gm' or request.current_profile.character == this_acquaintanceship.known_character %}
+            {% if item_collections %}
+                {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists %}
+                    <input type="radio" name="tabset" id="tab7" aria-controls="item-collections">
+                {% else %}
+                    <input type="radio" name="tabset" id="tab7" aria-controls="item-collections" checked>
+                {% endif %}
+                <label class="font-resp-15 resp-tab-label" for="tab7">
+                    Ekwipunek
+                </label>
+            {% endif %}
+        {% endif %}
+        
+        <!-- Knowledge packets -->
+        {% if knowledge_packets %}
+            {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists or item_collections %}
+                <input type="radio" name="tabset" id="tab8" aria-controls="knowledge_packets">
+            {% else %}
+                <input type="radio" name="tabset" id="tab8" aria-controls="knowledge_packets" checked>
+            {% endif %}
+            <label class="font-resp-15 resp-tab-label text-secondary" for="tab8">
+                {% if this_acquaintanceship.known_character.profile != request.current_profile and this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
+                Wiedza
+            </label>
+        {% endif %}
+        
+        <!-- Known characters -->
+        {% if acquaintanceships %}
+            {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists or item_collections or knowledge_packets %}
+                <input type="radio" name="tabset" id="tab9" aria-controls="acquaintanceships">
+            {% else %}
+                <input type="radio" name="tabset" id="tab9" aria-controls="acquaintanceships" checked>
+            {% endif %}
+            <label class="font-resp-15 resp-tab-label text-secondary" for="tab9">
+                {% if this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
+                Znajomości
+            </label>
+        {% endif %}
+        
+        <!-- Also known as -->
+        {% if also_known_as %}
+            <input type="radio" name="tabset" id="tab10" aria-controls="aka">
+            <label class="font-resp-15 resp-tab-label text-secondary" for="tab10">
+                A.K.A.
+            </label>
+        {% endif %}
+        
+        
+        <!-- TABS -->
+        <div class="tab-panels">
             
             <!-- Biography packets -->
             {% if biography_packets %}
-                <input type="radio" name="tabset" id="tab1" aria-controls="biography_packets" checked>
-                <label class="font-resp-15 resp-tab-label" for="tab1">Biografia</label>
+                <section id="biography_packets" class="tab-panel ">
+                    <!-- Biography packets are filtered in the view for the requesting profile -->
+                    {% for biography_packet in biography_packets %}
+                        {% include 'knowledge/_biography_packet.html' %}
+                    {% endfor %}
+                </section>
             {% endif %}
             
             <!-- Dialogue packets -->
             {% if request.current_profile.status == 'gm' or request.current_profile.character == character %}
                 {% if dialogue_packets %}
-                    {% if biography_packets %}
-                        <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets">
-                    {% else %}
-                        <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets" checked>
-                    {% endif %}
-                    <label class="font-resp-15 resp-tab-label text-secondary" for="tab2">Dialogi</label>
+                    <section id="dialogue_packets" class="tab-panel">
+                        {% for dialogue_packet in dialogue_packets %}
+                            {% include 'knowledge/_dialogue_packet.html' %}
+                        {% endfor %}
+                    </section>
                 {% endif %}
             {% endif %}
-            
-            <!-- Skills and synergies-->
+        
+            <!-- RegularSkills and RegularSynergies -->
             {% if acquisitions_regular %}
-                {% if biography_packets or dialogue_packets %}
-                    <input type="radio" name="tabset" id="tab3" aria-controls="acquisitions_regular">
-                {% else %}
-                    <input type="radio" name="tabset" id="tab3" aria-controls="acquisitions_regular" checked>
-                {% endif %}
-                <label class="font-resp-15 resp-tab-label" for="tab3">
-                    Umiejętności
-                </label>
+                <section id="acquisitions_regular" class="tab-panel">
+                    {% with acquisitions=acquisitions_regular synergies=synergies_regular skilltype_kinds='Powszechne,Mentalne' panel_id=1 %}
+                        {% include 'prosoponomikon/_acquisitions_by_skills_by_type.html' %}
+                        {% if synergies_regular %}
+                            {% include 'rules/_synergies.html' %}
+                        {% endif %}
+                    {% endwith %}
+                </section>
             {% endif %}
-   
-            <!-- Priest powers and MentalSkills -->
+
+            <!-- PriestsSkill and MentalSkills -->
             {% if acquisitions_priests %}
-                {% if biography_packets or dialogue_packets or acquisitions_regular %}
-                    <input type="radio" name="tabset" id="tab4" aria-controls="acquisitions_priests">
-                {% else %}
-                    <input type="radio" name="tabset" id="tab4" aria-controls="acquisitions_priests" checked>
-                {% endif %}
-                <label class="font-resp-15 resp-tab-label" for="tab4">
-                    Moce kapłańskie
-                </label>
+                <section id="acquisitions_priests" class="tab-panel">
+                    {% with acquisitions=acquisitions_priests panel_id=2 %}
+                        {% with skilltype_kinds="Moce Kapłańskie" %}
+                            {% include 'prosoponomikon/_acquisitions_by_skills_by_type.html' %}
+                        {% endwith %}
+                    {% endwith %}
+                </section>
             {% endif %}
             
-            <!-- Sorcery and MentalSkills -->
+            <!-- SorcerersSkill and MentalSkills -->
             {% if acquisitions_sorcerers %}
-                {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests %}
-                    <input type="radio" name="tabset" id="tab5" aria-controls="acquisitions_sorcerers">
-                {% else %}
-                    <input type="radio" name="tabset" id="tab5" aria-controls="acquisitions_sorcerers" checked>
-                {% endif %}
-                <label class="font-resp-15 resp-tab-label" for="tab5">
-                    Zaklęcia
-                </label>
+                <section id="acquisitions_sorcerers" class="tab-panel">
+                    {% with acquisitions=acquisitions_sorcerers panel_id=2 %}
+                        {% include 'prosoponomikon/_acquisitions_by_skills_by_type.html' %}
+                    {% endwith %}
+                </section>
             {% endif %}
             
-            <!-- Theurgy and MentalSkills -->
+            <!-- TheurgistsSkill and MentalSkills -->
             {% if acquisitions_theurgists %}
-                {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers %}
-                    <input type="radio" name="tabset" id="tab6" aria-controls="acquisitions_theurgists">
-                {% else %}
-                    <input type="radio" name="tabset" id="tab6" aria-controls="acquisitions_theurgists" checked>
-                {% endif %}
-                <label class="font-resp-15 resp-tab-label" for="tab6">
-                    Moce Teurgiczne
-                </label>
+                <section id="acquisitions_theurgists" class="tab-panel">
+                    {% with acquisitions=acquisitions_theurgists panel_id=2 %}
+                        {% include 'prosoponomikon/_acquisitions_by_skills_by_type.html' %}
+                    {% endwith %}
+                </section>
             {% endif %}
             
-            <!-- Item collections (Equipment) -->
+             <!-- Item collections (Equipment) -->
             {% if request.current_profile.status == 'gm' or request.current_profile.character == this_acquaintanceship.known_character %}
                 {% if item_collections %}
-                    {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists %}
-                        <input type="radio" name="tabset" id="tab7" aria-controls="item-collections">
-                    {% else %}
-                        <input type="radio" name="tabset" id="tab7" aria-controls="item-collections" checked>
-                    {% endif %}
-                    <label class="font-resp-15 resp-tab-label" for="tab7">
-                        Ekwipunek
-                    </label>
+                    <section id="item-collections" class="tab-panel">
+                        {% include 'items/item_collections.html' %}
+                    </section>
                 {% endif %}
             {% endif %}
             
-            <!-- Knowledge packets -->
+             <!-- Knowledge packets -->
             {% if knowledge_packets %}
-                {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists or item_collections %}
-                    <input type="radio" name="tabset" id="tab8" aria-controls="knowledge_packets">
-                {% else %}
-                    <input type="radio" name="tabset" id="tab8" aria-controls="knowledge_packets" checked>
-                {% endif %}
-                <label class="font-resp-15 resp-tab-label text-secondary" for="tab8">
-                    {% if this_acquaintanceship.known_character.profile != request.current_profile and this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
-                    Wiedza
-                </label>
+                <section id="knowledge_packets" class="tab-panel">
+                    {% for kn_packet in knowledge_packets %}
+                        {% include 'knowledge/_knowledge_packet.html' %}
+                    {% endfor %}
+                </section>
             {% endif %}
-            
+
             <!-- Known characters -->
             {% if acquaintanceships %}
-                {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists or item_collections or knowledge_packets %}
-                    <input type="radio" name="tabset" id="tab9" aria-controls="acquaintanceships">
-                {% else %}
-                    <input type="radio" name="tabset" id="tab9" aria-controls="acquaintanceships" checked>
-                {% endif %}
-                <label class="font-resp-15 resp-tab-label text-secondary" for="tab9">
-                    {% if this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
-                    Znajomości
-                </label>
+                <section id="acquaintanceships" class="tab-panel">
+                    <div class="container">
+                        <div class="row">
+                            {% for acquaintanceship in acquaintanceships %}
+                                {% with show_caption=True %}
+                                    {% include 'prosoponomikon/_acquaintance_img.html' %}
+                                {% endwith %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
             {% endif %}
             
             <!-- Also known as -->
             {% if also_known_as %}
-                <input type="radio" name="tabset" id="tab10" aria-controls="aka">
-                <label class="font-resp-15 resp-tab-label text-secondary" for="tab10">
-                    A.K.A.
-                </label>
+                <section id="aka" class="tab-panel">
+                    <div class="container">
+                        <div class="row">
+                            {% for acquaintanceship in also_known_as %}
+                                {% with show_caption=True aka=True %}
+                                    {% include 'prosoponomikon/_acquaintance_img.html' %}
+                                {% endwith %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
             {% endif %}
             
-            
-            <!-- TABS -->
-            <div class="tab-panels">
-                
-                <!-- Biography packets -->
-                {% if biography_packets %}
-                    <section id="biography_packets" class="tab-panel ">
-                        <!-- Biography packets are filtered in the view for the requesting profile -->
-                        {% for biography_packet in biography_packets %}
-                            {% include 'knowledge/_biography_packet.html' %}
-                        {% endfor %}
-                    </section>
-                {% endif %}
-                
-                <!-- Dialogue packets -->
-                {% if request.current_profile.status == 'gm' or request.current_profile.character == character %}
-                    {% if dialogue_packets %}
-                        <section id="dialogue_packets" class="tab-panel">
-                            {% for dialogue_packet in dialogue_packets %}
-                                {% include 'knowledge/_dialogue_packet.html' %}
-                            {% endfor %}
-                        </section>
-                    {% endif %}
-                {% endif %}
-            
-                <!-- RegularSkills and RegularSynergies -->
-                {% if acquisitions_regular %}
-                    <section id="acquisitions_regular" class="tab-panel">
-                        {% with acquisitions=acquisitions_regular synergies=synergies_regular skilltype_kinds='Powszechne,Mentalne' panel_id=1 %}
-                            {% include 'prosoponomikon/_acquisitions_by_skills_by_type.html' %}
-                            {% if synergies_regular %}
-                                {% include 'rules/_synergies.html' %}
-                            {% endif %}
-                        {% endwith %}
-                    </section>
-                {% endif %}
-
-                <!-- PriestsSkill and MentalSkills -->
-                {% if acquisitions_priests %}
-                    <section id="acquisitions_priests" class="tab-panel">
-                        {% with acquisitions=acquisitions_priests panel_id=2 %}
-                            {% with skilltype_kinds="Moce Kapłańskie" %}
-                                {% include 'prosoponomikon/_acquisitions_by_skills_by_type.html' %}
-                            {% endwith %}
-                        {% endwith %}
-                    </section>
-                {% endif %}    
-                
-                <!-- SorcerersSkill and MentalSkills -->
-                {% if acquisitions_sorcerers %}
-                    <section id="acquisitions_sorcerers" class="tab-panel">
-                        {% with acquisitions=acquisitions_sorcerers panel_id=2 %}
-                            {% include 'prosoponomikon/_acquisitions_by_skills_by_type.html' %}
-                        {% endwith %}
-                    </section>
-                {% endif %}
-                
-                <!-- TheurgistsSkill and MentalSkills -->
-                {% if acquisitions_theurgists %}
-                    <section id="acquisitions_theurgists" class="tab-panel">
-                        {% with acquisitions=acquisitions_theurgists panel_id=2 %}
-                            {% include 'prosoponomikon/_acquisitions_by_skills_by_type.html' %}
-                        {% endwith %}
-                    </section>
-                {% endif %}
-                
-                 <!-- Item collections (Equipment) -->
-                {% if request.current_profile.status == 'gm' or request.current_profile.character == this_acquaintanceship.known_character %}
-                    {% if item_collections %}
-                        <section id="item-collections" class="tab-panel">
-                            {% include 'items/item_collections.html' %}
-                        </section>
-                    {% endif %}
-                {% endif %}
-                
-                 <!-- Knowledge packets -->
-                {% if knowledge_packets %}
-                    <section id="knowledge_packets" class="tab-panel">
-                        {% for kn_packet in knowledge_packets %}
-                            {% include 'knowledge/_knowledge_packet.html' %}
-                        {% endfor %}
-                    </section>
-                {% endif %}
-
-                <!-- Known characters -->
-                {% if acquaintanceships %}
-                    <section id="acquaintanceships" class="tab-panel">
-                        <div class="container">
-                            <div class="row">
-                                {% for acquaintanceship in acquaintanceships %}
-                                    {% with show_caption=True %}
-                                        {% include 'prosoponomikon/_acquaintance_img.html' %}
-                                    {% endwith %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </section>
-                {% endif %}
-                
-                <!-- Also known as -->
-                {% if also_known_as %}
-                    <section id="aka" class="tab-panel">
-                        <div class="container">
-                            <div class="row">
-                                {% for acquaintanceship in also_known_as %}
-                                    {% with show_caption=True aka=True %}
-                                        {% include 'prosoponomikon/_acquaintance_img.html' %}
-                                    {% endwith %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </section>
-                {% endif %}
-                
-            </div>
-            
-        </article>
+        </div>
         
-    </article>
+    </div>
+        
 {% endblock content %}
