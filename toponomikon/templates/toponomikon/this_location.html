@@ -12,44 +12,44 @@
         <div class="image-with-btns">
             
             <!-- BUTTONS -->
-            <div class="overlay container mt-2 ml-2">
-                <div class="row">
-                    <div class="col-12 col-md-1 p-0 mb-1">
-                        
-                        <a class="btn btn-outline-light icon-parent-obj py-1 py-sm-2 mb-1"
-                           href="
-                               {% if this_location.in_location %}
-                                   {% url 'toponomikon:location' this_location.in_location.id %}#location_{{ this_location.id }}
-                               {% else %}
-                                   {% url 'toponomikon:main' %}#location_{{ this_location.id }}
-                               {% endif %}"
-                           data-toggle="tooltip" data-placement="left" title="Przejdź do lokacji nadrzędnej">
-                        </a>
-                        
-                        {% if request.current_profile.can_action %}
-                            <span data-toggle="modal" data-target="#infoLocationModal">
-                                <span class="btn btn-outline-light icon-inform py-1 py-sm-2 mb-1"
-                                    data-toggle="tooltip" data-placement="left" title="Przekaż wiedzę o lokacji">
-                                </span>
-                            </span>
-
-                        {% endif %}
-                        
-                        {% if request.current_profile.status == 'gm' %}
-                            <a class="btn btn-outline-light icon-edit py-1 py-sm-2 mb-1"
-                               href="{% url 'admin:toponomikon_location_change' this_location.id %}" target="_blank"
-                               data-toggle="tooltip" data-placement="left" title="Edytuj lokację">
-                            </a>
-                        
-                            <a class="btn btn-outline-light icon-handshake-o py-1 py-sm-2 mb-1"
-                               onclick="return confirm('Potwierdź zapoznanie ze sobą wszystkich Postaci w lokacji');"
-                               href="{% url 'prosoponomikon:acquaintances' this_location.id %}"
-                               data-toggle="tooltip" data-placement="left" title="Zapoznaj ze sobą wszystkich mieszkańców">
-                            </a>
-                        {% endif %}
-                        
-                    </div>
+            <div class="overlay mt-2 ml-2">
+                <div>
+                    <a class="btn btn-outline-light border-none icon-parent-obj px-1 py-0 mb-1"
+                       href="
+                           {% if this_location.in_location %}
+                               {% url 'toponomikon:location' this_location.in_location.id %}#location_{{ this_location.id }}
+                           {% else %}
+                               {% url 'toponomikon:main' %}#location_{{ this_location.id }}
+                           {% endif %}"
+                       data-toggle="tooltip" data-placement="left" title="Przejdź do lokacji nadrzędnej">
+                    </a>
                 </div>
+                <div>
+                    {% if request.current_profile.can_action %}
+                        <span data-toggle="modal" data-target="#infoLocationModal">
+                            <span class="btn btn-outline-light border-none icon-inform px-1 py-0 mb-1"
+                                data-toggle="tooltip" data-placement="left" title="Przekaż wiedzę o lokacji">
+                            </span>
+                        </span>
+                    {% endif %}
+                </div>
+                
+                {% if request.current_profile.status == 'gm' %}
+                    <div>
+                        <a class="btn btn-outline-light border-none icon-edit px-1 py-0 mb-1"
+                           href="{% url 'admin:toponomikon_location_change' this_location.id %}" target="_blank"
+                           data-toggle="tooltip" data-placement="left" title="Edytuj lokację">
+                        </a>
+                    </div>
+                    <div>
+                        <a class="btn btn-outline-light border-none icon-handshake-o px-1 py-0 mb-1"
+                           onclick="return confirm('Potwierdź zapoznanie ze sobą wszystkich Postaci w lokacji');"
+                           href="{% url 'prosoponomikon:acquaintances' this_location.id %}"
+                           data-toggle="tooltip" data-placement="left" title="Zapoznaj ze sobą wszystkich mieszkańców">
+                        </a>
+                    </div>
+                {% endif %}
+                
             </div>
             
             
