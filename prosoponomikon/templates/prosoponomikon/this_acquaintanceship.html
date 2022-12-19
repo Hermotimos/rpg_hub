@@ -98,13 +98,13 @@
                     <!-- CLASSES, TRAITS, EXPERIENCE -->
                     <div class="ml-3 ml-sm-0">
                         {% if request.current_profile.status == 'gm' or request.current_profile.character == this_acquaintanceship.known_character %}
-                                <div class="row font-italic mt-2 pt-2">
-                                    {% if this_acquaintanceship.known_character.subprofessions.count == 1 %}
-                                        <span><b>Profesja: </b> {{ this_acquaintanceship.known_character.subprofessions.first }}</span>
-                                    {% else %}
-                                        <span><b>Profesje: </b> {{ this_acquaintanceship.known_character.subprofessions.all|join:", " }}</span>
-                                    {% endif %}
-                                </div>
+                            <div class="row font-italic pt-2">
+                                {% if this_acquaintanceship.known_character.subprofessions.count == 1 %}
+                                    <span><b>Profesja: </b> {{ this_acquaintanceship.known_character.subprofessions.first }}</span>
+                                {% elif this_acquaintanceship.known_character.subprofessions.count > 1 %}
+                                    <span><b>Profesje: </b> {{ this_acquaintanceship.known_character.subprofessions.all|join:", " }}</span>
+                                {% endif %}
+                            </div>
                             <div class="row font-italic">
                                 <span class="mr-2"><b>Sił: </b>{{ this_acquaintanceship.known_character.strength|default_if_none:"-" }}</span>
                                 <span class="mr-2"><b>Zrc: </b>{{ this_acquaintanceship.known_character.dexterity|default_if_none:"-" }}</span>
