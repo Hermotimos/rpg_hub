@@ -32,11 +32,18 @@ class DemandsCreateForm(forms.ModelForm):
         else:
             addressees = Profile.objects.none()
 
-        # TODO temp
-        if profile.character.fullname in 'Ilen z Astinary, Alora z Astinary, Syngir':
-            addressees = Profile.objects.filter(status='gm')
+        # TODO temp 'Ilen z Astinary, Alora z Astinary, Syngir, Murkon'
+        # hide Davos from Ilen and Alora
+        if profile.id in [5, 6]:
+            addressees = addressees.exclude(id=3)
+        # vice versa
+        if profile.id == 3:
+            addressees = addressees.exclude(id__in=[5, 6])
+        # hide Syngir from Murkon and vice versa
+        if profile.id in [82, 93]:
+            addressees = addressees.exclude(id__in=[82, 93])
         # TODO end temp
-            
+        
         self.fields['addressee'].queryset = addressees.exclude(id=profile.id)
         
         self.helper = FormHelper()

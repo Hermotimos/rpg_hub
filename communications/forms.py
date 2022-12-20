@@ -84,9 +84,23 @@ class AnnouncementCreateForm(ModelForm):
             profiles__in=Profile.contactables.exclude(id=current_profile.id),
             profiles__character__in=current_profile.character.acquaintances.all(),
         )
-        self.fields['participants'].queryset = participants
-        self.fields['participants'].widget.attrs['size'] = min(len(participants), 10)
         
+        # TODO temp 'Ilen z Astinary, Alora z Astinary, Syngir, Murkon'
+        # hide Davos from Ilen and Alora
+        if current_profile.id in [5, 6]:
+            participants = participants.exclude(profiles__id=3)
+        # vice versa
+        if current_profile.id == 3:
+            participants = participants.exclude(profiles__id__in=[5, 6])
+        # hide Syngir from Murkon and vice versa
+        if current_profile.id in [82, 93]:
+            participants = participants.exclude(profiles__id__in=[82, 93])
+        # TODO end temp
+
+        self.fields['participants'].queryset = participants
+        self.fields['participants'].widget.attrs['size'] = min(
+            len(participants), 10)
+
 
 class DebateCreateForm(ModelForm):
     from chronicles.models import GameEvent
@@ -120,7 +134,22 @@ class DebateCreateForm(ModelForm):
         # Show profiles' Acquaintanceships as options (translated to Profiles in the view)
         participants = AcquaintanceshipProxy.objects.filter(
             knowing_character=current_profile.character
+        ).exclude(
+            known_character=current_profile.character
         ).select_related('known_character')
+
+        # TODO temp 'Ilen z Astinary, Alora z Astinary, Syngir, Murkon'
+        # hide Davos from Ilen and Alora
+        if current_profile.id in [5, 6]:
+            participants = participants.exclude(known_character__profile__id=3)
+        # vice versa
+        if current_profile.id == 3:
+            participants = participants.exclude(known_character__profile__id__in=[5, 6])
+        # hide Syngir from Murkon and vice versa
+        if current_profile.id in [82, 93]:
+            participants = participants.exclude(known_character__profile__id__in=[82, 93])
+        # TODO end temp
+
         self.fields['participants'].queryset = participants.order_by(
             '-known_character__profile__status', 'known_character__fullname')
         

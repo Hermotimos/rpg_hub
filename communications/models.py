@@ -82,6 +82,16 @@ class Thread(Model):
             qs = qs.filter(known_character__profile__in=Profile.living.all())
         else:
             qs = qs.none()
+            
+        # TODO temp 'Ilen z Astinary, Alora z Astinary, Syngir, Murkon'
+        # hide Davos from Ilen and Alora
+        if current_profile.id in [5, 6]:
+            qs = qs.exclude(known_character__profile__id=3)
+        # vice versa
+        if current_profile.id == 3:
+            qs = qs.exclude(known_character__profile__id__in=[5, 6])
+        # TODO end temp
+
         return qs
 
     def get_absolute_url(self):
