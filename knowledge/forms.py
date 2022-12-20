@@ -3,6 +3,7 @@ from crispy_forms.layout import Submit
 from django.forms import (
     CharField,
     FileField,
+    HiddenInput,
     ModelForm,
     ModelMultipleChoiceField,
 )
@@ -86,6 +87,7 @@ class PlayerKnPacketForm(KnPacketForm):
         self.fields['descr_3'].widget.attrs = {
             'placeholder': 'Podpis grafiki nr 3',
         }
+        self.fields['references'].widget = HiddenInput()
 
 
 class BioPacketForm(ModelForm):
