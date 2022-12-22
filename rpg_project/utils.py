@@ -1,20 +1,21 @@
+import random
 import time
 from functools import wraps
-from random import sample
 
 import delegator
+from PIL import Image
 from django.apps import apps
 from django.conf import settings
 from django.contrib import messages, auth
 from django.core.mail import send_mail
-from django.db.models import Func
+from django.db.models import Func, CharField
 from django.shortcuts import redirect
 
 
 def sample_from_qs(qs, max_size):
     objs_set = set(qs)
     size = max_size if len(objs_set) >= max_size else len(objs_set)
-    return sample(objs_set, k=size)
+    return random.sample(objs_set, k=size)
 
 
 def handle_inform_form(request):
@@ -450,5 +451,45 @@ class OrderByPolish(Func):
             function='pl-PL-x-icu',
             template='(%(expressions)s) COLLATE "%(function)s"',
             **extra_context)
+
+# -----------------------------------------------------------------------------
+
+
+class ColorSchemeChoiceField(CharField):
+    COLOR_SCHEME = [
+        ('light', 'light'),
+        ('dark', 'dark'),
+        ('info', 'info'),
+        ('warning', 'warning'),
+        ('danger', 'danger'),
+    ]
+    
+    def __init__(self, *args, **kwargs):
+        kwargs['max_length'] = 9
+        kwargs['default'] = 'light'
+        kwargs['choices'] = self.COLOR_SCHEME
+        super().__init__(*args, **kwargs)
+
+
+def determine_icons_color(profile_obj):
+    
+    def luminance(pixel):
+        return 0.299 * pixel[0] + 0.587 * pixel[1] + 0.114 * pixel[2]
+    
+    def is_similar(pixel):
+        return 1 if abs(luminance(pixel) - luminance(criterion)) < threshold else 0
+    
+    sample_size = 1000
+    criterion = (250, 250, 250)
+    threshold = 30
+    
+    im = Image.open(profile_obj.image)
+    im_part = im.crop((0, 0, round(im.width * 0.2), round(im.height * 0.6)))
+    pixels = list(im_part.getdata())
+    
+    similarity = sum(is_similar(s) for s in random.sample(pixels, sample_size)) / sample_size
+
+    return "dark" if similarity > 0.5 else "light"
+
 
 # -----------------------------------------------------------------------------

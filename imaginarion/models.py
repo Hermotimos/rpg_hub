@@ -9,6 +9,11 @@ from django.db.models import (
     PROTECT,
     TextField,
 )
+from rpg_project.utils import determine_icons_color, ColorSchemeChoiceField
+
+
+# -----------------------------------------------------------------------------
+
 
 # TODO rename app 'imaginarion' -> 'mousarion'
 
@@ -63,6 +68,9 @@ class AudioSet(Model):
         return self.title
 
 
+# -----------------------------------------------------------------------------
+
+
 # TODO osobno w każdej app odpalać pętlę, która:
 #   1) zaktualizuje 'type'
 #   2) zapisze obraz w nowej lokacji (storage.blob)
@@ -73,10 +81,11 @@ class AudioSet(Model):
 class PictureImage(Model):
     TYPES = (
         ('toponomikon-main', 'toponomikon-main'),
-        ('toponomikon-other', 'toponomikon-other'),
+        ('toponomikon-rest', 'toponomikon-rest'),
         ('prosoponomikon-main', 'prosoponomikon-main'),
-        ('prosoponomikon-other', 'prosoponomikon-other'),
-        ('therionomikon', 'therionomikon'),
+        ('prosoponomikon-rest', 'prosoponomikon-rest'),
+        ('therionomikon-main', 'therionomikon-main'),
+        ('therionomikon-rest', 'therionomikon-rest'),
         ('knowledge', 'knowledge'),
         ('realia', 'realia'),
         ('varia', 'varia'),
@@ -85,6 +94,7 @@ class PictureImage(Model):
     image = ImageField(upload_to='post_pics')
     # type = CharField(max_length=20, choices=TYPES)
     description = CharField(max_length=200, blank=True, null=True)
+    image_icons_color = ColorSchemeChoiceField()
 
     class Meta:
         ordering = ['image']
@@ -92,6 +102,11 @@ class PictureImage(Model):
     def __str__(self):
         return str(self.image.name).replace("post_pics/", "")
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.image_icons_color = determine_icons_color(self)
+        super().save(*args, **kwargs)
+        
 
 IMG_TYPES = (
     ('knowledge', 'KNOWLEDGE'),

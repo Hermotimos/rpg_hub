@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import (
     BooleanField,
     CASCADE,
@@ -8,15 +10,13 @@ from django.db.models import (
     ImageField,
     IntegerField,
     Model,
-    Prefetch,
     Q,
     Value,
     When,
 )
 
+from rpg_project.utils import determine_icons_color, ColorSchemeChoiceField
 from users import managers
-from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class Profile(Model):
@@ -43,6 +43,7 @@ class Profile(Model):
         blank=True,
         null=True,
     )
+    image_icons_color = ColorSchemeChoiceField()
 
     objects = managers.ProfileManager()
     non_gm = managers.NonGMProfileManager()
@@ -62,6 +63,11 @@ class Profile(Model):
         except ObjectDoesNotExist:
             return f"[{self.user.username}]: assign Character!"
     
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.image_icons_color = determine_icons_color(self)
+        super().save(*args, **kwargs)
+        
     @property
     def user_img_url(self):
         try:

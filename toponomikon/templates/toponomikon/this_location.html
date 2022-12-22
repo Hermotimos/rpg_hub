@@ -10,11 +10,11 @@
 
     <header class="my-4">
         <div class="image-with-btns">
-            
+
             <!-- BUTTONS -->
             <div class="overlay mt-2 ml-2">
                 <div>
-                    <a class="btn btn-outline-light border-none icon-parent-obj px-1 py-0 mb-1"
+                    <a class="btn btn-outline-{{ this_location.main_image.image.image_icons_color }} border-none icon-parent-obj px-1 py-0 mb-1"
                        href="
                            {% if this_location.in_location %}
                                {% url 'toponomikon:location' this_location.in_location.id %}#location_{{ this_location.id }}
@@ -27,7 +27,7 @@
                 <div>
                     {% if request.current_profile.can_action %}
                         <span data-toggle="modal" data-target="#infoLocationModal">
-                            <span class="btn btn-outline-light border-none icon-inform px-1 py-0 mb-1"
+                            <span class="btn btn-outline-{{ this_location.main_image.image.image_icons_color }} border-none icon-inform px-1 py-0 mb-1"
                                 data-toggle="tooltip" data-placement="left" title="Przekaż wiedzę o lokacji">
                             </span>
                         </span>
@@ -36,13 +36,13 @@
                 
                 {% if request.current_profile.status == 'gm' %}
                     <div>
-                        <a class="btn btn-outline-light border-none icon-edit px-1 py-0 mb-1"
+                        <a class="btn btn-outline-{{ this_location.main_image.image.image_icons_color }} border-none icon-edit px-1 py-0 mb-1"
                            href="{% url 'admin:toponomikon_location_change' this_location.id %}" target="_blank"
                            data-toggle="tooltip" data-placement="left" title="Edytuj lokację">
                         </a>
                     </div>
                     <div>
-                        <a class="btn btn-outline-light border-none icon-handshake-o px-1 py-0 mb-1"
+                        <a class="btn btn-outline-{{ this_location.main_image.image.image_icons_color }} border-none icon-handshake-o px-1 py-0 mb-1"
                            onclick="return confirm('Potwierdź zapoznanie ze sobą wszystkich Postaci w lokacji');"
                            href="{% url 'prosoponomikon:acquaintances' this_location.id %}"
                            data-toggle="tooltip" data-placement="left" title="Zapoznaj ze sobą wszystkich mieszkańców">
