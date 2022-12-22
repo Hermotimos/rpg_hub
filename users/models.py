@@ -65,8 +65,11 @@ class Profile(Model):
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        self.image_icons_color = determine_icons_color(self)
-        super().save(*args, **kwargs)
+        
+        # For 'image_icons_color' default, check if it applies
+        if self.image_icons_color == "light":
+            self.image_icons_color = determine_icons_color(self)
+            super().save(*args, **kwargs)
         
     @property
     def user_img_url(self):
