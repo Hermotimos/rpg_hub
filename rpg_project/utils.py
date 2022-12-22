@@ -484,7 +484,7 @@ def determine_icons_color(profile_obj):
     threshold = 30
     
     im = Image.open(profile_obj.image)
-    im_part = im.crop((0, 0, round(im.width * 0.2), round(im.height * 0.6)))
+    im_part = im.crop((0, 0, round(im.width * 0.1), round(im.height * 0.4)))
     pixels = list(im_part.getdata())
     
     similarity = sum(is_similar(s) for s in random.sample(pixels, sample_size)) / sample_size
