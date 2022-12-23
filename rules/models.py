@@ -366,7 +366,8 @@ class Skill(Model):
     weapon_type = One2One(to=WeaponType, on_delete=CASCADE, blank=True, null=True)
 
     class Meta:
-        ordering = [OrderByPolish('name')]
+        ordering = ['name']
+        # ordering = [OrderByPolish('name')]
 
     def __str__(self):
         return self.name
