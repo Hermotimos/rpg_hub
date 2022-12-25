@@ -3,8 +3,10 @@ import os
 from urllib.parse import urlparse
 
 import environ
+from django.conf.locale.pl import formats as pl_formats
 from google.cloud import secretmanager
 from google.oauth2 import service_account
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -112,6 +114,9 @@ INSTALLED_APPS = [
     'technicalities',
     'toponomikon',
     'users.apps.UsersConfig',  # just another way of doing this
+    
+    # Temp different stuff, for future redo with fastApi, aiohttp, JS frontend
+    '_todos',
 ]
 
 MIDDLEWARE = [
@@ -229,6 +234,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 LANGUAGE_CODE = 'pl'
+pl_formats.DATE_FORMAT = "Y-m-d"
 TIME_ZONE = 'Europe/Warsaw'
 USE_I18N = True
 USE_L10N = True
