@@ -1,0 +1,74 @@
+
+div.text a {
+    padding: 0.2rem !important;
+}
+
+td[class^='field'] {
+    padding: 0.2rem !important;
+
+}
+td.field-res {text-align: center;}
+
+select, textarea {margin-right: -0.8rem;}
+
+textarea {font-size: 0.7rem;}
+
+
+th div a {
+    writing-mode: vertical-rl;
+}
+
+th.column-SUNWALK .text a,
+th.column-MED .text a,
+th.column-TETRIS .text a,
+th.column-RELAX .text a {
+    color: #7927ca !important;
+}
+
+th.column-sleep .text a,
+th.column-IForKETO .text a,
+th.column-drinkfood .text a {
+    color: #f00 !important;
+}
+
+th.column-flaxseed .text a,
+th.column-spirulina .text a,
+th.column-lionsmane .text a,
+th.column-pickles .text a,
+th.column-fishoilord3 .text a,
+th.column-water .text a {
+    color: #fb2929 !important;
+}
+
+th.column-coffeex2 .text a,
+th.column-noA .text a {
+    color: #f26161 !important;
+}
+
+th.column-warmup .text a,
+th.column-stretching .text a,
+th.column-workout .text a {
+    color: #ca2727 !important;
+}
+
+th.column-CODE .text a,
+th.column-ENG .text a,
+th.column-DE .text a,
+th.column-FR .text a,
+th.column-UKR .text a {
+    color: #0398b0 !important;
+}
+
+td.field-awareness select,
+td.field-happiness select,
+td.field-openness select,
+td.field-focus select {
+    background-color: #8b8a9f !important;
+}
+
+td.field-anger select,
+td.field-fear select,
+td.field-emptiness select,
+td.field-chaos select {
+    background-color: #999 !important;
+}
