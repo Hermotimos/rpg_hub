@@ -13,9 +13,9 @@ from django.shortcuts import redirect
 
 
 def sample_from_qs(qs, max_size):
-    objs_set = set(qs)
-    size = max_size if len(objs_set) >= max_size else len(objs_set)
-    return random.sample(objs_set, k=size)
+    objs = list(qs)
+    size = max_size if len(objs) >= max_size else len(objs)
+    return random.sample(objs, k=size)
 
 
 def handle_inform_form(request):

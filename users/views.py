@@ -221,14 +221,20 @@ def home_view(request):
     # print(first.image.path) # C:\Users\Lukasz\PycharmProjects\rpg_hub\media\post_pics\knowledge_Struktura organizacyjna Szarej Gwardii.jpg
     
     rand_acquaintanceships = sample_from_qs(
-        qs=current_profile.character.acquaintanceships().filter(is_direct=True),
+        qs=current_profile.character.acquaintanceships().filter(is_direct=True).distinct(),
         max_size=4)
     rand_locations = sample_from_qs(
-        qs=current_profile.locations_known_annotated().filter(only_indirectly=0),
+        qs=current_profile.locations_known_annotated().filter(only_indirectly=0).distinct(),
         max_size=2)
     rand_gameevent = game_event_with_caption(
         game_events_qs=current_profile.gameevents_known_annotated.filter(
-            only_indirectly=0).annotate(text_len=Length('description_long')).filter(text_len__gt=400))
+            only_indirectly=0
+        ).annotate(
+            text_len=Length('description_long')
+        ).filter(
+            text_len__gt=400
+        ).distinct()
+    )
     
     context = {
         'page_title': 'Hyllemath',
