@@ -44,7 +44,7 @@
                 {% endif %}
                 {% if skill_or_synergy_level.description %}
                     <div class="mt-1">
-                        {% if "Biegłość w broni + Obycie z bronią" in synergy.name %}
+                        {% if acquisitions and "Biegłość w broni + Obycie z bronią" in synergy.name %}
                             Bonusy wynikające z Biegłości w broni [{{ skill_or_synergy_level.skill_levels.first.level }}] automatycznie rozciągają się na wszystkie Bronie Podobne:
                             {{ acquisitions|similar_weapon_types:skill_or_synergy_level.skill_levels.first.level|custom_linebreaksbr:1 }}
                         {% else %}
