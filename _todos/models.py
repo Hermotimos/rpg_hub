@@ -1,7 +1,7 @@
 import datetime
 
 from django.db.models import Model, DateField, BooleanField, DecimalField, \
-    TextField, PositiveSmallIntegerField
+    TextField, PositiveSmallIntegerField, CharField
 
 
 class TODOList(Model):
@@ -66,3 +66,15 @@ class TODOList(Model):
     def completion(self):
         # TODO
         pass
+    
+
+class Food(Model):
+    name = CharField(max_length=100, unique=True)
+    fat = DecimalField(max_digits=5, decimal_places=2, default=0)
+    protein = DecimalField(max_digits=5, decimal_places=2, default=0)
+    carbs = DecimalField(max_digits=5, decimal_places=2, default=0)
+    fiber = DecimalField(max_digits=5, decimal_places=2, default=0)
+    
+    class Meta:
+        ordering = ['name']
+

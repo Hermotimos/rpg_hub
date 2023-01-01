@@ -4,8 +4,12 @@ from django import forms
 from django.contrib import admin
 from django.db import models
 
-from _todos.models import TODOList
+from _todos.models import TODOList, Food
 
+
+# TODO separate conditions for separate years
+#   achieve years via proxies: 2020 filter on daydate
+#   each year can have different list_display (TODOList) and completion criteria
 
 @admin.register(TODOList)
 class TODOListAdmin(admin.ModelAdmin):
@@ -58,3 +62,11 @@ class TODOListAdmin(admin.ModelAdmin):
         
         except TypeError:
             return "-"
+        
+        
+@admin.register(Food)
+class FoodAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'fat', 'protein', 'carbs', 'fiber']
+    list_editable = ['name', 'fat', 'protein', 'carbs', 'fiber']
+    list_per_page = 1000
+    
