@@ -13,8 +13,9 @@ from django.db.models import (
     Prefetch,
     PROTECT,
     TextField,
+    Value,
 )
-from django.db.models.functions import Substr, Lower, Coalesce
+from django.db.models.functions import Substr, Lower, Coalesce, Replace
 from django.db.models.signals import post_save
 
 from knowledge.models import BiographyPacket, DialoguePacket
@@ -276,14 +277,14 @@ class Character(Model):
         qs = self.known_characters.select_related(
             'known_character__profile',
         ).annotate(
-            known_name=Lower(Coalesce('knows_as_name', 'known_character__fullname'))
-        ).annotate(
-            initial=Lower(Substr('known_name', 1, 1))
+            known_name=Lower(Coalesce('knows_as_name', 'known_character__fullname')),
+            cleaned_name=Replace('known_name', Value('"'), Value('')),
+            initial=Lower(Substr('cleaned_name', 1, 1))
         ).exclude(
             known_character=self
         )
         return qs
-
+    
     def acquisitions_for_character_sheet(self):
         return self.acquisitions.annotate(
             type=F('skill_level__skill__types__name'),
