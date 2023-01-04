@@ -1,10 +1,9 @@
 import datetime
 
-from django.db.models import Model, DateField, BooleanField, DecimalField, \
-    TextField, PositiveSmallIntegerField, CharField
+from django.db import models
 
 
-class TODOList(Model):
+class TODOList(models.Model):
     MARKS = [
         (0, '0'),
         (1, '1'),
@@ -13,68 +12,90 @@ class TODOList(Model):
         (4, '4'),
         (5, '5'),
     ]
-    
-    # technical
-    daydate = DateField(default=datetime.date.today, unique=True)
+
+    daydate = models.DateField(default=datetime.date.today, unique=True)
+
     # PSYCHE
-    SUNWALK = BooleanField(default=False)
-    MED = BooleanField(default=False)
-    TETRIS = BooleanField(default=False)
-    RELAX = BooleanField(default=False)
+    SUNWALK = models.BooleanField(default=False)
+    MED = models.BooleanField(default=False)
+    TETRIS = models.BooleanField(default=False)
+    RELAX = models.BooleanField(default=False)
+
     # SOMA
-    sleep = DecimalField(max_digits=4, decimal_places=2, default=0)
-    IForKETO = DecimalField(max_digits=4, decimal_places=2, default=0)
-    drinkfood = BooleanField(default=False)
+    sleep = models.DecimalField(max_digits=4, decimal_places=2, default=0)
+    IForKETO = models.DecimalField(max_digits=4, decimal_places=2, default=0)
+    drinkfood = models.BooleanField(default=False)
     # --
-    flaxseed = BooleanField(default=False)
-    spirulina = BooleanField(default=False)
-    lionsmane = BooleanField(default=False)
-    pickles = BooleanField(default=False)
-    fishoilord3 = BooleanField(default=False)
-    water = BooleanField(default=False)
+    flaxseed = models.BooleanField(default=False)
+    spirulina = models.BooleanField(default=False)
+    lionsmane = models.BooleanField(default=False)
+    pickles = models.BooleanField(default=False)
+    fishoilord3 = models.BooleanField(default=False)
+    water = models.BooleanField(default=False)
     # --
-    coffeex2 = BooleanField(default=False)
-    noA = DecimalField(max_digits=4, decimal_places=2, default=0)
+    coffeex2 = models.BooleanField(default=False)
+    # noA = models.DecimalField(max_digits=4, decimal_places=2, default=0)
+    noA = models.PositiveSmallIntegerField(default=0)
     # --
-    warmup = BooleanField(default=False)
-    stretching = BooleanField(default=False)
-    workout = TextField(blank=True, null=True)
+    warmup = models.BooleanField(default=False)
+    stretching = models.BooleanField(default=False)
+    workout = models.TextField(blank=True, null=True)
+
     # NOOS
-    CODE = BooleanField(default=False)
-    ENG = BooleanField(default=False)
-    DE = BooleanField(default=False)
-    FR = BooleanField(default=False)
-    UKR = BooleanField(default=False)
-    
+    CODE = models.BooleanField(default=False)
+    ENG = models.BooleanField(default=False)
+    DE = models.BooleanField(default=False)
+    FR = models.BooleanField(default=False)
+    UKR = models.BooleanField(default=False)
+
     # marks
-    awareness = PositiveSmallIntegerField(choices=MARKS, null=True, blank=True)
-    happiness = PositiveSmallIntegerField(choices=MARKS, null=True, blank=True)
-    openness = PositiveSmallIntegerField(choices=MARKS, null=True, blank=True)
-    focus = PositiveSmallIntegerField(choices=MARKS, null=True, blank=True)
-    anger = PositiveSmallIntegerField(choices=MARKS, null=True, blank=True)
-    fear = PositiveSmallIntegerField(choices=MARKS, null=True, blank=True)
-    emptiness = PositiveSmallIntegerField(choices=MARKS, null=True, blank=True)
-    chaos = PositiveSmallIntegerField(choices=MARKS, null=True, blank=True)
-    
+    awareness = models.PositiveSmallIntegerField(choices=MARKS, null=True, blank=True)
+    happiness = models.PositiveSmallIntegerField(choices=MARKS, null=True, blank=True)
+    openness = models.PositiveSmallIntegerField(choices=MARKS, null=True, blank=True)
+    focus = models.PositiveSmallIntegerField(choices=MARKS, null=True, blank=True)
+    anger = models.PositiveSmallIntegerField(choices=MARKS, null=True, blank=True)
+    fear = models.PositiveSmallIntegerField(choices=MARKS, null=True, blank=True)
+    emptiness = models.PositiveSmallIntegerField(choices=MARKS, null=True, blank=True)
+    chaos = models.PositiveSmallIntegerField(choices=MARKS, null=True, blank=True)
+
     # comments
-    comments = TextField(blank=True, null=True)
-    
+    comments = models.TextField(blank=True, null=True)
+
     class Meta:
         ordering = ['-daydate']
-    
+
     @property
     def completion(self):
         # TODO
         pass
-    
 
-class Food(Model):
-    name = CharField(max_length=100, unique=True)
-    fat = DecimalField(max_digits=5, decimal_places=2, default=0)
-    protein = DecimalField(max_digits=5, decimal_places=2, default=0)
-    carbs = DecimalField(max_digits=5, decimal_places=2, default=0)
-    fiber = DecimalField(max_digits=5, decimal_places=2, default=0)
-    
+
+class Food(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    fat = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    protein = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    carbs = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    fiber = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+
     class Meta:
         ordering = ['name']
 
+
+# class Serving(models.Model):
+#     food = models.ForeignKey(to=Food, on_delete=models.PROTECT)
+#     size = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+
+#     class Meta:
+#         ordering = ['id']
+
+
+# class DailyServings(models.Model):
+#     daydate = models.DateField(default=datetime.date.today, unique=True)
+#     servings = models.ManyToManyField(to=Serving)
+
+#     class Meta:
+#         ordering = ['-daydate']
+
+# from django.contrib.contenttypes.models import ContentType
+# content_type = ContentType.objects.filter(model=c_type)
+# print(content_type)
