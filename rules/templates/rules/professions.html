@@ -10,8 +10,6 @@
 
 
 {% block content %}
-{% cache 30000 professions request.current_profile.user.username %}
-
     <div class="rules-styling">
         <div class="mt-5" id="professions">
             {% for profession in professions %}
@@ -41,6 +39,4 @@
             {% endfor %}
         </div>
     </div>
-
-{% endcache %}
 {% endblock content %}
