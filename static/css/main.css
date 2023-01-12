@@ -14,6 +14,13 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.5;
 }
 
+/* For Django linebreaksbr template tag */
+br {
+    content: " ";       /* for Chrome to avoid too big spaces */
+    margin-top: 0.4rem;
+    display: block;
+}
+
 article.content {min-height: 700px}
 
 article.top-space {margin-top: 5rem;}

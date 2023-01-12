@@ -59,7 +59,7 @@
 
     <!-- Content -->
     <h6 class="font-18 font-italic text-justify">
-        {{ kn_packet.text|custom_linebreaksbr:2 }}
+        {{ kn_packet.text|linebreaksbr }}
     </h6>
     
     {% for picture_set in kn_packet.picture_sets.all %}

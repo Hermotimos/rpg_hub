@@ -37,9 +37,9 @@
             <!-- DESCRIPTION -->
             <p class="font-18 font-italic p-1 mb-0 text-justify">
                 {% if request.current_profile not in event.participants.all and not request.current_profile.can_view_all %}
-                    <span class="text-muted">(Znasz z opowieści) {{ event.description_long|custom_linebreaksbr:2 }}</span>
+                    <span class="text-muted">(Znasz z opowieści) {{ event.description_long|linebreaksbr }}</span>
                 {% else %}
-                    {{ event.description_long|custom_linebreaksbr:2 }}
+                    {{ event.description_long|linebreaksbr }}
                 {% endif %}
             </p>
             

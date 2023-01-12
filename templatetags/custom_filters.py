@@ -88,23 +88,6 @@ def replace(obj_as_text, from_to):
 
 
 @register.filter
-def custom_linebreaksbr(value, margin_bottom: int):
-    if not (0 < margin_bottom < 5):
-        msg = """
-            Wrong value for custom_linebreaksbr filter won't have any effect.
-            Provide value from 1 through 5 for Bootstrap class="mb-?"
-        """
-        raise ValueError(msg)
-    else:
-        value = linebreaksbr(value)
-        if '<br><br>' in value:
-            value = value.replace('<br><br>', f'<br class="mb-{margin_bottom}">')
-        else:
-            value = value.replace('<br>', f'<br class="mb-{margin_bottom}">')
-        return mark_safe(value)
-
-
-@register.filter
 def brackets_br(text):
     """Add <br> before "(" to move text in brackets to next line."""
     if "(" in text:

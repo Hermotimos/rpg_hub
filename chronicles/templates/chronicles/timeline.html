@@ -230,7 +230,7 @@
                         data-toggle="modal" data-target="#event_{{ event.id }}">
                         <span class="{% if request.current_profile not in event.participants.all and request.current_profile.status != 'gm' %} text-muted {% endif %}"
                               data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic">Pokaż pełny opis wydarzenia</span>'>
-                            {{ event.description_short|custom_linebreaksbr:1 }}
+                            {{ event.description_short|linebreaksbr }}
                         </span>
                         <!-- Modal -->
                         <div class="modal fade" id="event_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -248,7 +248,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body font-15 mb-3">
-                                        {{ event.description_long|custom_linebreaksbr:2 }}
+                                        {{ event.description_long|linebreaksbr }}
                                     </div>
                                 </div>
                             </div>

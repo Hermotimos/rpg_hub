@@ -17,7 +17,7 @@
                     {{ profession.name }}
                 </h4>
                 <p>
-                    {{ profession.description|custom_linebreaksbr:2 }}
+                    {{ profession.description|linebreaksbr }}
                 </p>
                 <ul class="bullets-1 bullets-lg ml-4 mb-5">
                     {% for subprofession in profession.subprofessions.all %}
@@ -27,7 +27,7 @@
                             </h5>
                             <div id="{{ subprofession|cut:' ' }}" class="collapse">
                                 <p class="pb-0 mb-1">
-                                    {{ subprofession.description|custom_linebreaksbr:2 }}
+                                    {{ subprofession.description|linebreaksbr }}
                                 </p>
                                 <div class="mb-3 small font-italic text-muted">
                                     <b>Podstawowe Umiejętności:</b> {{ subprofession.essential_skills.all|join:", " }}.
