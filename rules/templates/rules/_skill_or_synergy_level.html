@@ -4,7 +4,7 @@
 
 <div class="container align-top pl-1 pr-md-4 text-justify font-14">
     <div class="d-flex flex-row">
-        <div class="pl-1 pt-01">
+        <div class="pl-1 pt-01 mt-1">
             {% if request.current_profile.status == 'gm' %}
                 {% if type == 'skill_level' %}
                     {% if "Moce Kapłańskie" in skilltype_kinds %}
@@ -38,12 +38,12 @@
         <div>
             <div class="ml-1">
                 {% if skill_or_synergy_level.skill_levels.exists %}
-                    <div class="mt-1">
+                    <div class="mt-2">
                         {{ skill_or_synergy_level.skill_levels.all|join:" + " }}
                     </div>
                 {% endif %}
                 {% if skill_or_synergy_level.description %}
-                    <div class="mt-1">
+                    <div class="mt-2">
                         {% if acquisitions and "Biegłość w broni + Obycie z bronią" in synergy.name %}
                             Bonusy wynikające z Biegłości w broni [{{ skill_or_synergy_level.skill_levels.first.level }}] automatycznie rozciągają się na wszystkie Bronie Podobne:
                             {{ acquisitions|similar_weapon_types:skill_or_synergy_level.skill_levels.first.level|linebreaksbr }}
@@ -93,11 +93,10 @@
                         </span>
                     </div>
                 {% endif %}
-                
-                
             </div>
+            
             {% for perk in skill_or_synergy_level.perks.all %}
-                <div class="ml-1 mt-1">
+                <div class="ml-1 mt-2">
                     <div class="font-weight-bold">
                         {% if request.current_profile.status == 'gm' %}
                             <a href="{% url 'admin:rules_perk_change' perk.id %}" target="_blank"
