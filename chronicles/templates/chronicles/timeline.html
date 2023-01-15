@@ -261,7 +261,7 @@
                                 {% for profile in event.participants.all %}
                                 
                                     <!-- TODO temp Syngir, Murkon - temp is only this "if-else block", the nested one should stay -->
-                                    {% if profile.id == 18 and request.current_profile.id == 82 or request.current_profile.id == 93 %}
+                                    {% if profile.id == 18 and request.current_profile.id == 82 or profile.id == 18 and request.current_profile.id == 93 %}
                                         <!-- SKIP -->
                                     {% else %}
                                 
