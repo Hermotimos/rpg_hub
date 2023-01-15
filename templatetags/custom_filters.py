@@ -139,13 +139,14 @@ def pictureset_pictures_in_custom_order(picture_set):
 
 
 @register.filter
-def players_names_bold(django_filter_html):
+def players_names_bold(django_filter_html, current_profile):
     from users.models import Profile
     html = str(django_filter_html)
     for pid in Profile.players.values_list('id', flat=True):
-        html = html.replace(
-            f'option value="{pid}"',
-            f'option value="{pid}" style="font-weight: 600;"')
+        if not (current_profile.id in [82, 93] and pid == 18):
+            html = html.replace(
+                f'option value="{pid}"',
+                f'option value="{pid}" style="font-weight: 600;"')
     return mark_safe(html)
 
 

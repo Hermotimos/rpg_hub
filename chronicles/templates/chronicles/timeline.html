@@ -130,7 +130,7 @@
                                             </div>
                                             <div class="row" data-toggle="tooltip" data-placement="top" data-html="true"
                                                  title='<span class="font-italic">Wciśnij CTRL, aby zaznaczyć wiele albo odznaczyć wybór.</span>'>
-                                                {{ events_filter.form.participants|players_names_bold }}
+                                                {{ events_filter.form.participants|players_names_bold:request.current_profile }}
                                             </div>
                                         </div>
                                     </div>
@@ -259,17 +259,27 @@
                         {% if event.participants.exists %}
                             <div class="pb-1">
                                 {% for profile in event.participants.all %}
-                                    {% if not profile.only_indirectly %}
-                                        {% if profile.status == 'player' or profile == request.current_profile %}
-                                            <a href="{% url 'prosoponomikon:character' profile.character.id %}"
-                                               data-toggle="tooltip" data-placement="top" data-html="true"
-                                               title='<span class="font-italic">Prosoponomikon<br>"{{ profile }}"</span>'>
-                                                <div class="d-inline">
-                                                   <img class="rounded-circle portait img-xs border border-dark mt-1" src="{{ profile.image.url }}">
-                                                </div>
-                                            </a>
+                                
+                                    <!-- TODO temp Syngir, Murkon - temp is only this "if-else block", the nested one should stay -->
+                                    {% if profile.id == 18 and request.current_profile.id == 82 or request.current_profile.id == 93 %}
+                                        <!-- SKIP -->
+                                    {% else %}
+                                
+                                        {% if not profile.only_indirectly %}
+                                            {% if profile.status == 'player' or profile == request.current_profile %}
+                                                <a href="{% url 'prosoponomikon:character' profile.character.id %}"
+                                                   data-toggle="tooltip" data-placement="top" data-html="true"
+                                                   title='<span class="font-italic">Prosoponomikon<br>"{{ profile }}"</span>'>
+                                                    <div class="d-inline">
+                                                       <img class="rounded-circle portait img-xs border border-dark mt-1" src="{{ profile.image.url }}">
+                                                    </div>
+                                                </a>
+                                            {% endif %}
                                         {% endif %}
+                                
                                     {% endif %}
+                                    <!-- TODO END temp Syngir, Murkon -->
+                                
                                     {% if forloop.counter|divisibleby:2 and not forloop.last and profile.status == 'player' %}<br>{% endif %}
                                 {% endfor %}
                             </div>
