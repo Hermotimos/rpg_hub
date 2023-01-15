@@ -3,5 +3,17 @@
 {% if thread_kind == 'Announcement' %}
      <img class="portait img-lg rounded" src="{{ profile.user_img_url }}">
 {% elif thread_kind == 'Debate' %}
-     <img class="portait img-lg rounded-circle" src="{{ profile.image.url }}">
+
+     <!-- TODO temp Syngir, Murkon - temp is only this "if-else block", the nested one should stay -->
+     {% if profile.id == 18 and request.current_profile.id == 82 or profile.id == 18 and request.current_profile.id == 93 %}
+          <img class="portait img-lg rounded-circle" src="media/profile_pics/profile_Dalamar_Szarogwardzista_2.jpg">
+     {% else%}
+
+          <img class="portait img-lg rounded-circle" src="{{ profile.image.url }}">
+
+     {% endif %}
+     <!-- TODO END temp Syngir, Murkon -->
+
 {% endif %}
+
+

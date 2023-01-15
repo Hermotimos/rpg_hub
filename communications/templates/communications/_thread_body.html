@@ -47,7 +47,7 @@
                     
                     for (var num in response.statements)
                     {
-                    
+                        
                         var threadKind = response.statements[num].thread_obj.kind;
                         var isGmAndDebate = ( response.statements[num].author_obj.status == 'gm' && threadKind == 'Debate' );
                         var isLastStatement = ( num == response.statements.length - 1 );
@@ -64,6 +64,7 @@
                         };
                         
                         
+                        // TODO TEMP replace above Syngir, Murkon with this when they meet Dalamar
                         var authorImg;
                         if ( threadKind == 'Announcement' ) {
 
@@ -74,15 +75,24 @@
                                 </figcaption>
                             `
                         } else if ( threadKind == 'Debate' ) {
-
-                            authorImg = `
-                                 <img class="img-fluid rounded-circle" src="${response.statements[num].author_obj.image.url}">
-                                 <figcaption class="font-12 font-italic text-center pt-1">
-                                    ${response.statements[num].author_obj.character.fullname}
-                                 </figcaption>
-                            `
+                            
+                            if ( response.statements[num].author_obj.id == 18 && [82,93].includes(response.currentProfileId) ) {
+                                authorImg = `
+                                     <img class="img-fluid rounded-circle" src="media/profile_pics/profile_Dalamar_Szarogwardzista_2.jpg">
+                                     <figcaption class="font-12 font-italic text-center pt-1">
+                                        Dalamar Szarogwardzista
+                                     </figcaption>
+                                `
+                            } else {
+                                authorImg = `
+                                     <img class="img-fluid rounded-circle" src="${response.statements[num].author_obj.image.url}">
+                                     <figcaption class="font-12 font-italic text-center pt-1">
+                                        ${response.statements[num].author_obj.character.fullname}
+                                     </figcaption>
+                                `
+                            };
                         };
-                        
+                        // TODO TEMP END replace above Syngir, Murkon with this when they meet Dalamar
 
 
                         if ( !response.statements[num].thread_obj.is_ended ) {
@@ -230,3 +240,25 @@
     </script>
 
 {% endblock javascript %}
+
+
+
+<!-- TODO TEMP replace above Syngir, Murkon with this when they meet Dalamar -->
+<!--var authorImg;-->
+<!--if ( threadKind == 'Announcement' ) {-->
+
+<!--    authorImg = `-->
+<!--        <img class="img-fluid rounded" src="${response.statements[num].author_obj.user.image.url}">-->
+<!--        <figcaption class="font-12 font-italic text-center pt-1">-->
+<!--            ${response.statements[num].author_obj.user.username}-->
+<!--        </figcaption>-->
+<!--    `-->
+<!--} else if ( threadKind == 'Debate' ) {-->
+
+<!--    authorImg = `-->
+<!--         <img class="img-fluid rounded-circle" src="${response.statements[num].author_obj.image.url}">-->
+<!--         <figcaption class="font-12 font-italic text-center pt-1">-->
+<!--            ${response.statements[num].author_obj.character.fullname}-->
+<!--         </figcaption>-->
+<!--    `-->
+<!--};-->

@@ -28,7 +28,7 @@ from communications.models import (
 )
 from rpg_project.utils import auth_profile
 from users.models import Profile
-from prosoponomikon.models import Character
+
 
 # TODO
 #  1) main views separate? or separate templates based on 'thread_kind' param?
@@ -257,6 +257,7 @@ def statements(request, thread_id):
     statements = statements.values(
         'thread_id', 'text', 'author_id', 'created_at',
         author_obj=JSONObject(
+            id='author__id',
             status='author__status',
             image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'author__image')),
             character=JSONObject(fullname='author__character__fullname'),
@@ -269,7 +270,8 @@ def statements(request, thread_id):
         image_obj=JSONObject(
             url=Case(
                 When(~Q(image=''), then=Concat(Value(settings.MEDIA_URL), 'image')),
-                default='image', output_field=ImageField())
+                default='image', output_field=ImageField()
+            )
         ),
         created_datetime=Func(
             F('created_at'),
@@ -288,7 +290,12 @@ def statements(request, thread_id):
             )
         )
     )
-    return JsonResponse({"statements": list(statements.values())})
+    return JsonResponse(
+        {
+            "statements": list(statements.values()),
+            "currentProfileId": current_profile.id      # TODO temp Syngir, Murkon
+        }
+    )
 
 
 @login_required
