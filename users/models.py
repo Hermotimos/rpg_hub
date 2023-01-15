@@ -200,8 +200,6 @@ class Profile(Model):
     
     @property
     def can_action(self):
-        # TODO temp Syngir, Murkon
-        return self.status in ['gm', 'player'] and self.is_active and self.id not in [82, 93]
         return self.status in ['gm', 'player'] and self.is_active
 
 

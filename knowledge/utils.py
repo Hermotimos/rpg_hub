@@ -16,7 +16,7 @@ def annotate_informables(info_packets, current_profile):
     else:
         return info_packets
     
-    # TODO temp 'Ilen z Astinary, Alora z Astinary, Syngir, Murkon'
+    # TODO temp 'Ilen z Astinary, Alora z Astinary'
     # hide Davos from Ilen and Alora
     if current_profile.id in [5, 6]:
         acquaintanceships = acquaintanceships.exclude(known_character__profile__id=3)
