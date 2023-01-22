@@ -30,9 +30,9 @@ def thismonth():
 
         
 class TODOList(models.Model):
-    # Placeholders
-    CONDITIONS = {}
     TODO_FIELDS = []
+    INFO_FIELDS = []
+    CONDITIONS = {}
     
     MARKS = [
         (0, '0'),
@@ -106,6 +106,17 @@ class TODOList2023Manager(models.Manager):
 class TODOList2023(TODOList):
     objects = TODOList2023Manager()
 
+    INFO_FIELDS = [
+        'comments',
+        'awareness', 'happiness', 'openness', 'focus',
+        'anger', 'fear', 'emptiness', 'chaos',
+    ]
+    TODO_FIELDS = [
+        'SUNWALK', 'MED', 'TETRIS', 'RELAX', 'sleep', 'IForKETO',
+        'drinkfood', 'flaxseed', 'spirulina', 'lionsmane', 'pickles',
+        'fishoilord3', 'water', 'coffeex2', 'noA', 'warmup', 'stretching',
+        'workout', 'CODE', 'ENG', 'DE', 'FR', 'UKR',
+    ]
     CONDITIONS = {
         'TRUE': [
             'SUNWALK', 'MED', 'TETRIS', 'RELAX',
@@ -123,13 +134,7 @@ class TODOList2023(TODOList):
             'workout',
         ],
     }
-    TODO_FIELDS = [
-        'SUNWALK', 'MED', 'TETRIS', 'RELAX', 'sleep', 'IForKETO',
-        'drinkfood', 'flaxseed', 'spirulina', 'lionsmane', 'pickles',
-        'fishoilord3', 'water', 'coffeex2', 'noA', 'warmup', 'stretching',
-        'workout', 'CODE', 'ENG', 'DE', 'FR', 'UKR',
-    ]
-    
+
     class Meta:
         proxy = True
         verbose_name = "TODO 2023"
@@ -146,29 +151,34 @@ class TODOList2022Manager(models.Manager):
 class TODOList2022(TODOList):
     objects = TODOList2023Manager()
 
-    CONDITIONS = {
-        # 'TRUE': [
-        #     'SUNWALK', 'MED', 'TETRIS', 'RELAX',
-        #     'drinkfood', 'flaxseed', 'spirulina', 'lionsmane', 'pickles',
-        #     'fishoilord3', 'water', 'coffeex2', 'warmup', 'stretching',
-        #     'CODE', 'ENG', 'DE', 'FR', 'UKR',
-        # ],
-        # 'ZERO': [
-        #     'noA',
-        # ],
-        # 'MINIMUM': {
-        #     'sleep': 7, 'IForKETO': 14,
-        # },
-        # 'NONEMPTYSTR': [
-        #     'workout',
-        # ],
-    }
-    TODO_FIELDS = [
-        # 'SUNWALK', 'MED', 'TETRIS', 'RELAX', 'sleep', 'IForKETO',
-        # 'drinkfood', 'flaxseed', 'spirulina', 'lionsmane', 'pickles',
-        # 'fishoilord3', 'water', 'coffeex2', 'noA', 'warmup', 'stretching',
-        # 'workout', 'CODE', 'ENG', 'DE', 'FR', 'UKR',
-    ]
+    # INFO_FIELDS = [
+    #     'comments',
+    #     'awareness', 'happiness', 'openness', 'focus',
+    #     'anger', 'fear', 'emptiness', 'chaos',
+    # ]
+    # TODO_FIELDS = [
+    #     'SUNWALK', 'MED', 'TETRIS', 'RELAX', 'sleep', 'IForKETO',
+    #     'drinkfood', 'flaxseed', 'spirulina', 'lionsmane', 'pickles',
+    #     'fishoilord3', 'water', 'coffeex2', 'noA', 'warmup', 'stretching',
+    #     'workout', 'CODE', 'ENG', 'DE', 'FR', 'UKR',
+    # ]
+    # CONDITIONS = {
+    #     'TRUE': [
+    #         'SUNWALK', 'MED', 'TETRIS', 'RELAX',
+    #         'drinkfood', 'flaxseed', 'spirulina', 'lionsmane', 'pickles',
+    #         'fishoilord3', 'water', 'coffeex2', 'warmup', 'stretching',
+    #         'CODE', 'ENG', 'DE', 'FR', 'UKR',
+    #     ],
+    #     'ZERO': [
+    #         'noA',
+    #     ],
+    #     'MINIMUM': {
+    #         'sleep': 7, 'IForKETO': 14,
+    #     },
+    #     'NONEMPTYSTR': [
+    #         'workout',
+    #     ],
+    # }
     
     class Meta:
         proxy = True

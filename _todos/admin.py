@@ -21,14 +21,9 @@ class MonthAdmin(admin.ModelAdmin):
            
     
 class TODOListAdmin(admin.ModelAdmin):
-    CONDITIONS = {}
-    ADMIN_FIELDS = ['daydate']
-    SUMMARY_FIELDS = [
-        'awareness', 'happiness', 'openness', 'focus',
-        'anger', 'fear', 'emptiness', 'chaos',
-        'comments',
-    ]
-    
+    """An abstract ModelAdmin that serves as template via subclassing."""
+    ADMIN_FIELDS_1 = ['daydate']
+    ADMIN_FIELDS_2 = ['res', 'completion']
     formfield_overrides = {
         models.DecimalField: {'widget': forms.NumberInput(attrs={'style': 'width:55px'})},
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 2, 'cols': 25})},
@@ -67,8 +62,16 @@ class TODOListAdmin(admin.ModelAdmin):
         
 @admin.register(TODOList2023)
 class TODOList2023Admin(TODOListAdmin):
-    list_display = TODOListAdmin.ADMIN_FIELDS + TODOList2023.TODO_FIELDS + TODOListAdmin.SUMMARY_FIELDS + ['completion']
-    list_editable = TODOList2023.TODO_FIELDS + TODOListAdmin.SUMMARY_FIELDS
+    list_display = [
+        *TODOListAdmin.ADMIN_FIELDS_1,
+        *TODOList2023.TODO_FIELDS,
+        *TODOList2023.INFO_FIELDS,
+        *TODOListAdmin.ADMIN_FIELDS_2,
+    ]
+    list_editable = [
+        *TODOList2023.TODO_FIELDS,
+        *TODOList2023.INFO_FIELDS,
+    ]
 
     
 @admin.register(Food)
