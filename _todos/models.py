@@ -3,7 +3,37 @@ import datetime
 from django.db import models
 
 
+# =============================================================================
+
+
+def monthdate():
+    y, m, _ = str(datetime.date.today()).split('-')
+    return datetime.datetime.strptime(f"{y}-{m}-01", '%Y-%m-%d')
+
+
+class Month(models.Model):
+    monthdate = models.DateField(default=monthdate, unique=True)
+    
+    def __str__(self):
+        return self.monthdate.strftime('%B %Y')
+        
+    class Meta:
+        ordering = ['-monthdate']
+        
+
+# =============================================================================
+
+
+def thismonth():
+    obj, _ = Month.objects.get_or_create(monthdate=monthdate())
+    return obj.id
+
+        
 class TODOList(models.Model):
+    # Placeholders
+    CONDITIONS = {}
+    TODO_FIELDS = []
+    
     MARKS = [
         (0, '0'),
         (1, '1'),
@@ -13,6 +43,7 @@ class TODOList(models.Model):
         (5, '5'),
     ]
 
+    month = models.ForeignKey(to=Month, on_delete=models.PROTECT, related_name="days", default=thismonth)
     daydate = models.DateField(default=datetime.date.today, unique=True)
 
     # PSYCHE
@@ -74,11 +105,78 @@ class TODOList2023Manager(models.Manager):
     
 class TODOList2023(TODOList):
     objects = TODOList2023Manager()
+
+    CONDITIONS = {
+        'TRUE': [
+            'SUNWALK', 'MED', 'TETRIS', 'RELAX',
+            'drinkfood', 'flaxseed', 'spirulina', 'lionsmane', 'pickles',
+            'fishoilord3', 'water', 'coffeex2', 'warmup', 'stretching',
+            'CODE', 'ENG', 'DE', 'FR', 'UKR',
+        ],
+        'ZERO': [
+            'noA',
+        ],
+        'MINIMUM': {
+            'sleep': 7, 'IForKETO': 14,
+        },
+        'NONEMPTYSTR': [
+            'workout',
+        ],
+    }
+    TODO_FIELDS = [
+        'SUNWALK', 'MED', 'TETRIS', 'RELAX', 'sleep', 'IForKETO',
+        'drinkfood', 'flaxseed', 'spirulina', 'lionsmane', 'pickles',
+        'fishoilord3', 'water', 'coffeex2', 'noA', 'warmup', 'stretching',
+        'workout', 'CODE', 'ENG', 'DE', 'FR', 'UKR',
+    ]
     
     class Meta:
         proxy = True
         verbose_name = "TODO 2023"
         verbose_name_plural = "TODOs 2023"
+
+
+class TODOList2022Manager(models.Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(daydate__year="2022")
+        return qs
+
+
+class TODOList2022(TODOList):
+    objects = TODOList2023Manager()
+
+    CONDITIONS = {
+        # 'TRUE': [
+        #     'SUNWALK', 'MED', 'TETRIS', 'RELAX',
+        #     'drinkfood', 'flaxseed', 'spirulina', 'lionsmane', 'pickles',
+        #     'fishoilord3', 'water', 'coffeex2', 'warmup', 'stretching',
+        #     'CODE', 'ENG', 'DE', 'FR', 'UKR',
+        # ],
+        # 'ZERO': [
+        #     'noA',
+        # ],
+        # 'MINIMUM': {
+        #     'sleep': 7, 'IForKETO': 14,
+        # },
+        # 'NONEMPTYSTR': [
+        #     'workout',
+        # ],
+    }
+    TODO_FIELDS = [
+        # 'SUNWALK', 'MED', 'TETRIS', 'RELAX', 'sleep', 'IForKETO',
+        # 'drinkfood', 'flaxseed', 'spirulina', 'lionsmane', 'pickles',
+        # 'fishoilord3', 'water', 'coffeex2', 'noA', 'warmup', 'stretching',
+        # 'workout', 'CODE', 'ENG', 'DE', 'FR', 'UKR',
+    ]
+    
+    class Meta:
+        proxy = True
+        verbose_name = "TODO 2022"
+        verbose_name_plural = "TODOs 2022"
+
+
+# =============================================================================
 
 
 class Food(models.Model):
