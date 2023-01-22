@@ -64,10 +64,21 @@ class TODOList(models.Model):
     class Meta:
         ordering = ['-daydate']
 
-    @property
-    def completion(self):
-        # TODO
-        pass
+    
+class TODOList2023Manager(models.Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(daydate__year="2023")
+        return qs
+    
+    
+class TODOList2023(TODOList):
+    objects = TODOList2023Manager()
+    
+    class Meta:
+        proxy = True
+        verbose_name = "TODO 2023"
+        verbose_name_plural = "TODOs 2023"
 
 
 class Food(models.Model):
