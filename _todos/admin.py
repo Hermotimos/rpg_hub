@@ -25,6 +25,7 @@ class TODOListAdmin(admin.ModelAdmin):
     ADMIN_FIELDS_1 = ['daydate']
     ADMIN_FIELDS_2 = ['res', 'completion']
     formfield_overrides = {
+        models.PositiveSmallIntegerField: {'widget': forms.NumberInput(attrs={'style': 'width:35px'})},
         models.DecimalField: {'widget': forms.NumberInput(attrs={'style': 'width:55px'})},
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 2, 'cols': 25})},
     }
