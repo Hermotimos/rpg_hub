@@ -47,6 +47,7 @@ class TODOList(models.Model):
     daydate = models.DateField(default=datetime.date.today, primary_key=True)
 
     # PSYCHE
+    DREAMS = models.TextField(blank=True, null=True)
     SUNWALK = models.BooleanField(default=False)
     MED = models.BooleanField(default=False)
     MED2 = models.BooleanField(default=False)
@@ -67,7 +68,6 @@ class TODOList(models.Model):
     water = models.BooleanField(default=False)
     # --
     coffeex2 = models.BooleanField(default=False)
-    # noA = models.DecimalField(max_digits=4, decimal_places=2, default=0)
     noA = models.PositiveSmallIntegerField(default=0)
     # --
     warmup = models.BooleanField(default=False)
@@ -102,63 +102,16 @@ class TODOList(models.Model):
     class Meta:
         ordering = ['-daydate']
 
-    
-class TODOList2023Manager(models.Manager):
+
+class TODOList2021Manager(models.Manager):
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.filter(daydate__year="2023")
-        return qs
-    
-    
-class TODOList2023(TODOList):
-    objects = TODOList2023Manager()
-
-    INFO_FIELDS = [
-        'comments',
-        'awareness', 'happiness', 'openness', 'focus',
-        'anger', 'fear', 'emptiness', 'chaos',
-    ]
-    TODO_FIELDS = [
-        'SUNWALK', 'MED', 'TETRIS', 'RELAX', 'sleep', 'IForKETO',
-        'drinkfood', 'flaxseed', 'spirulina', 'lionsmane', 'pickles',
-        'fishoilord3', 'water', 'coffeex2', 'noA', 'warmup', 'stretching',
-        'workout', 'CODE', 'ENG', 'DE', 'FR', 'UKR',
-    ]
-    CONDITIONS = {
-        'TRUE': [
-            'SUNWALK', 'MED', 'TETRIS', 'RELAX',
-            'drinkfood', 'flaxseed', 'spirulina', 'lionsmane', 'pickles',
-            'fishoilord3', 'water', 'coffeex2', 'warmup', 'stretching',
-            'CODE', 'ENG', 'DE', 'FR', 'UKR',
-        ],
-        'ZERO': [
-            'noA',
-        ],
-        'MINIMUM': {
-            'sleep': 7, 'IForKETO': 14,
-        },
-        'NONEMPTYSTR': [
-            'workout',
-        ],
-        'ONEOF': [],
-    }
-
-    class Meta:
-        ordering = ['-daydate']
-        proxy = True
-        verbose_name = "TODO 2023"
-        verbose_name_plural = "TODOs 2023"
-
-
-class TODOList2022Manager(models.Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(daydate__year="2022")
+        qs = qs.filter(daydate__year="2021")
         return qs
 
 
-class TODOList2022(TODOList):
-    objects = TODOList2022Manager()
+class TODOList2021(TODOList):
+    objects = TODOList2021Manager()
    
     INFO_FIELDS = [
         'comments',
@@ -191,10 +144,78 @@ class TODOList2022(TODOList):
     }
     
     class Meta:
-        ordering = ['-daydate']
+        proxy = True
+        verbose_name = "TODO 2021"
+        verbose_name_plural = "TODOs 2021"
+
+
+# ----------------------------------------------------
+
+
+class TODOList2022Manager(models.Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(daydate__year="2022")
+        return qs
+
+
+class TODOList2022(TODOList2021):
+    objects = TODOList2022Manager()
+   
+    class Meta:
         proxy = True
         verbose_name = "TODO 2022"
         verbose_name_plural = "TODOs 2022"
+
+
+# ----------------------------------------------------
+
+
+class TODOList2023Manager(models.Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(daydate__year="2023")
+        return qs
+
+
+class TODOList2023(TODOList):
+    objects = TODOList2023Manager()
+    
+    INFO_FIELDS = [
+        'comments',
+        'awareness', 'happiness', 'openness', 'focus',
+        'anger', 'fear', 'emptiness', 'chaos',
+    ]
+    TODO_FIELDS = [
+        'SUNWALK', 'MED', 'TETRIS', 'RELAX', 'sleep', 'IForKETO',
+        'drinkfood', 'flaxseed', 'spirulina', 'lionsmane', 'pickles',
+        'fishoilord3', 'water', 'coffeex2', 'noA', 'warmup', 'stretching',
+        'workout', 'CODE', 'ENG', 'DE', 'FR', 'UKR',
+    ]
+    CONDITIONS = {
+        'TRUE': [
+            'SUNWALK', 'MED', 'TETRIS', 'RELAX',
+            'drinkfood', 'flaxseed', 'spirulina', 'lionsmane', 'pickles',
+            'fishoilord3', 'water', 'coffeex2', 'warmup', 'stretching',
+            'CODE', 'ENG', 'DE', 'FR', 'UKR',
+        ],
+        'ZERO': [
+            'noA',
+        ],
+        'MINIMUM': {
+            'sleep': 7, 'IForKETO': 14,
+        },
+        'NONEMPTYSTR': [
+            'workout',
+        ],
+        'ONEOF': [],
+    }
+    
+    class Meta:
+        ordering = ['-daydate']
+        proxy = True
+        verbose_name = "TODO 2023"
+        verbose_name_plural = "TODOs 2023"
 
 
 # =============================================================================

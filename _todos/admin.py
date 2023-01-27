@@ -6,7 +6,7 @@ from django.db import models
 from django.utils.safestring import mark_safe, SafeString
 
 from _todos.admin_utils import compl_daily, format_compl, compl_monthly
-from _todos.models import TODOList2023, TODOList2022, Food, Month
+from _todos.models import TODOList2021, TODOList2022, TODOList2023, Food, Month
 
 
 @admin.register(Month)
@@ -75,8 +75,8 @@ class TODOList2023Admin(TODOListAdmin):
     ]
 
 
-@admin.register(TODOList2022)
-class TODOList2023Admin(TODOListAdmin):
+@admin.register(TODOList2021)
+class TODOList2021Admin(TODOListAdmin):
     formfield_overrides = {
         models.PositiveSmallIntegerField: {'widget': forms.NumberInput(attrs={'style': 'width:35px'})},
         models.DecimalField: {'widget': forms.NumberInput(attrs={'style': 'width:55px'})},
@@ -84,14 +84,19 @@ class TODOList2023Admin(TODOListAdmin):
     }
     list_display = [
         *TODOListAdmin.ADMIN_FIELDS_1,
-        *TODOList2022.TODO_FIELDS,
-        *TODOList2022.INFO_FIELDS,
+        *TODOList2021.TODO_FIELDS,
+        *TODOList2021.INFO_FIELDS,
         *TODOListAdmin.ADMIN_FIELDS_2,
     ]
     list_editable = [
-        *TODOList2022.TODO_FIELDS,
-        *TODOList2022.INFO_FIELDS,
+        *TODOList2021.TODO_FIELDS,
+        *TODOList2021.INFO_FIELDS,
     ]
+
+
+@admin.register(TODOList2022)
+class TODOList2022Admin(TODOList2021Admin):
+    pass
 
 
 @admin.register(Food)
