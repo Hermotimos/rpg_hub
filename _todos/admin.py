@@ -23,7 +23,7 @@ class MonthAdmin(admin.ModelAdmin):
 class TODOListAdmin(admin.ModelAdmin):
     """An abstract ModelAdmin that serves as template via subclassing."""
     ADMIN_FIELDS_1 = ['daydate']
-    ADMIN_FIELDS_2 = ['res', 'completion']
+    ADMIN_FIELDS_2 = ['res', 'compl']
     formfield_overrides = {
         models.PositiveSmallIntegerField: {'widget': forms.NumberInput(attrs={'style': 'width:35px'})},
         models.DecimalField: {'widget': forms.NumberInput(attrs={'style': 'width:55px'})},
@@ -57,7 +57,7 @@ class TODOListAdmin(admin.ModelAdmin):
         except TypeError:
             return "-"
 
-    def completion(self, obj) -> SafeString:
+    def compl(self, obj) -> SafeString:
         return format_compl(compl_daily(obj))
         
         
