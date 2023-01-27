@@ -8,14 +8,14 @@ from django.db import models
 
 def monthdate():
     y, m, _ = str(datetime.date.today()).split('-')
-    return datetime.datetime.strptime(f"{y}-{m}-01", '%Y-%m-%d')
+    return f"{y}-{m}"
 
 
 class Month(models.Model):
-    monthdate = models.DateField(default=monthdate, unique=True)
+    monthdate = models.TextField(default=monthdate, primary_key=True)
     
     def __str__(self):
-        return self.monthdate.strftime('%B %Y')
+        return self.monthdate
         
     class Meta:
         ordering = ['-monthdate']
@@ -26,7 +26,7 @@ class Month(models.Model):
 
 def thismonth():
     obj, _ = Month.objects.get_or_create(monthdate=monthdate())
-    return obj.id
+    return obj.monthdate
 
         
 class TODOList(models.Model):
@@ -44,11 +44,13 @@ class TODOList(models.Model):
     ]
 
     month = models.ForeignKey(to=Month, on_delete=models.PROTECT, related_name="days", default=thismonth)
-    daydate = models.DateField(default=datetime.date.today, unique=True)
+    daydate = models.DateField(default=datetime.date.today, primary_key=True)
 
     # PSYCHE
     SUNWALK = models.BooleanField(default=False)
     MED = models.BooleanField(default=False)
+    MED2 = models.BooleanField(default=False)
+    MED3 = models.BooleanField(default=False)
     TETRIS = models.BooleanField(default=False)
     RELAX = models.BooleanField(default=False)
 
@@ -71,8 +73,13 @@ class TODOList(models.Model):
     warmup = models.BooleanField(default=False)
     stretching = models.BooleanField(default=False)
     workout = models.TextField(blank=True, null=True)
+    MicroW = models.TextField(blank=True, null=True)
+    Mass = models.TextField(blank=True, null=True)
+    ISO = models.TextField(blank=True, null=True)
+    Cardio = models.TextField(blank=True, null=True)
 
     # NOOS
+    RPG = models.BooleanField(default=False)
     CODE = models.BooleanField(default=False)
     ENG = models.BooleanField(default=False)
     DE = models.BooleanField(default=False)
@@ -133,9 +140,11 @@ class TODOList2023(TODOList):
         'NONEMPTYSTR': [
             'workout',
         ],
+        'ONEOF': [],
     }
 
     class Meta:
+        ordering = ['-daydate']
         proxy = True
         verbose_name = "TODO 2023"
         verbose_name_plural = "TODOs 2023"
@@ -149,38 +158,40 @@ class TODOList2022Manager(models.Manager):
 
 
 class TODOList2022(TODOList):
-    objects = TODOList2023Manager()
-
-    # INFO_FIELDS = [
-    #     'comments',
-    #     'awareness', 'happiness', 'openness', 'focus',
-    #     'anger', 'fear', 'emptiness', 'chaos',
-    # ]
-    # TODO_FIELDS = [
-    #     'SUNWALK', 'MED', 'TETRIS', 'RELAX', 'sleep', 'IForKETO',
-    #     'drinkfood', 'flaxseed', 'spirulina', 'lionsmane', 'pickles',
-    #     'fishoilord3', 'water', 'coffeex2', 'noA', 'warmup', 'stretching',
-    #     'workout', 'CODE', 'ENG', 'DE', 'FR', 'UKR',
-    # ]
-    # CONDITIONS = {
-    #     'TRUE': [
-    #         'SUNWALK', 'MED', 'TETRIS', 'RELAX',
-    #         'drinkfood', 'flaxseed', 'spirulina', 'lionsmane', 'pickles',
-    #         'fishoilord3', 'water', 'coffeex2', 'warmup', 'stretching',
-    #         'CODE', 'ENG', 'DE', 'FR', 'UKR',
-    #     ],
-    #     'ZERO': [
-    #         'noA',
-    #     ],
-    #     'MINIMUM': {
-    #         'sleep': 7, 'IForKETO': 14,
-    #     },
-    #     'NONEMPTYSTR': [
-    #         'workout',
-    #     ],
-    # }
+    objects = TODOList2022Manager()
+   
+    INFO_FIELDS = [
+        'comments',
+        'awareness', 'happiness', 'openness', 'focus',
+        'anger', 'fear', 'emptiness', 'chaos',
+    ]
+    TODO_FIELDS = [
+        "MED", "MED2", "MED3", "TETRIS", "RELAX", "sleep", "IForKETO",
+        "flaxseed", "spirulina", "fishoilord3", "water", "drinkfood", "coffeex2", "noA",
+        "warmup", "MicroW", "Mass", "ISO", "Cardio", "stretching",
+        "RPG", "CODE", "ENG", "DE", "FR", "UKR",
+    ]
+    CONDITIONS = {
+        'TRUE': [
+            "MED", "MED2", "MED3", "TETRIS", "RELAX",
+            "flaxseed", "spirulina", "fishoilord3", "water", "drinkfood",
+            "coffeex2", "warmup", "stretching",
+            "RPG", "CODE", "ENG", "DE", "FR", "UKR",
+        ],
+        'ZERO': [
+            'noA',
+        ],
+        'MINIMUM': {
+            'sleep': 7, 'IForKETO': 14,
+        },
+        'NONEMPTYSTR': [],
+        'ONEOF': [
+             "MicroW", "Mass", "ISO", "Cardio",
+        ],
+    }
     
     class Meta:
+        ordering = ['-daydate']
         proxy = True
         verbose_name = "TODO 2022"
         verbose_name_plural = "TODOs 2022"
@@ -218,3 +229,5 @@ class Food(models.Model):
 # from django.contrib.contenttypes.models import ContentType
 # content_type = ContentType.objects.filter(model=c_type)
 # print(content_type)
+
+
