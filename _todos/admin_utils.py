@@ -54,6 +54,9 @@ def compl_daily(obj):
     except AttributeError:
         return 0
     
+    
+# -----------------------------------------------------------------------------
+
 
 def compl_monthly(obj):
     sum_days = sum(compl_daily(day) for day in obj.days.all())
@@ -61,20 +64,45 @@ def compl_monthly(obj):
     return int(sum_days / num_days)
     
 
+def a_monthly(obj):
+    return sum(day.noA for day in obj.days.all())
+    
+
+# -----------------------------------------------------------------------------
+
+
+COLORS_HIGHER_BETTER = {
+    range(0, 26): "#ff0000",
+    range(26, 51): "#ffa700",
+    range(51, 76): "#2cba00",
+    range(76, 100): "#007000",
+}
+
+COLORS_LOWER_BETTER = {
+    range(0, 26): "#007000",
+    range(26, 51): "#2cba00",
+    range(51, 76): "#ffa700",
+    range(76, 100): "#ff0000",
+}
+
+
+def get_color(val, colors):
+    for val_range, code in colors.items():
+        if val in val_range:
+            return code
+    
+    
 def format_compl(value) -> SafeString:
-    colors = {
-        range(0, 26): "#ff0000",
-        range(26, 51): "#ffa700",
-        range(51, 76): "#2cba00",
-        range(76, 100): "#007000",
-    }
-    
-    def get_color(val):
-        for val_range, code in colors.items():
-            if val in val_range:
-                return code
-    
-    return format_html(f'<b style="color: {get_color(value)}">{value} %</b>')
+    return format_html(
+        f'<b style="color: {get_color(value, COLORS_HIGHER_BETTER)}">{value} %</b>')
+
+
+def format_a(value) -> SafeString:
+    return format_html(
+        f'<b style="color: {get_color(value, COLORS_LOWER_BETTER)}">{value}</b>')
+
+
+# -----------------------------------------------------------------------------
 
 
 

@@ -5,17 +5,23 @@ from django.contrib import admin
 from django.db import models
 from django.utils.safestring import mark_safe, SafeString
 
-from _todos.admin_utils import compl_daily, format_compl, compl_monthly
+from _todos.admin_utils import compl_daily, format_compl, format_a, compl_monthly, a_monthly
 from _todos.models import TODOList2021, TODOList2022, TODOList2023, Food, Month
 
 
 @admin.register(Month)
 class MonthAdmin(admin.ModelAdmin):
-    list_display = ['monthdate', 'completion']
+    list_display = ['monthdate', 'completion', 'noA']
     
     def completion(self, obj):
         try:
             return format_compl(compl_monthly(obj))
+        except ZeroDivisionError:
+            pass
+           
+    def noA(self, obj):
+        try:
+            return format_a(a_monthly(obj))
         except ZeroDivisionError:
             pass
            
