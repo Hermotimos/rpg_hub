@@ -71,19 +71,20 @@ def a_monthly(obj):
 # -----------------------------------------------------------------------------
 
 
-COLORS_HIGHER_BETTER = {
-    range(0, 26): "#ff0000",
-    range(26, 51): "#ffa700",
-    range(51, 76): "#2cba00",
-    range(76, 100): "#007000",
-}
+DOS = ["#ff0000", "#ffa700", "#2cba00", "#007000"]
 
-COLORS_LOWER_BETTER = {
-    range(0, 26): "#007000",
-    range(26, 51): "#2cba00",
-    range(51, 76): "#ffa700",
-    range(76, 100): "#ff0000",
-}
+
+def color_ranges(colors: list):
+    step = int(100 / len(colors))
+    res = {}
+    lower, upper = 0, step
+    for color in colors:
+        if upper + step > 100:
+            res[range(lower+1, 100)] = color
+            break
+        res[range(0 if lower == 0 else lower+1, upper+1)] = color
+        lower, upper = lower + step, upper + step
+    return res
 
 
 def get_color(val, colors):
@@ -94,12 +95,14 @@ def get_color(val, colors):
     
 def format_compl(value) -> SafeString:
     return format_html(
-        f'<b style="color: {get_color(value, COLORS_HIGHER_BETTER)}">{value} %</b>')
+        f'<b style="color: {get_color(value, color_ranges(DOS))}">{value} %</b>')
 
 
 def format_a(value) -> SafeString:
+    donts = ["#2596be", "#2cba00", "#ECF126", "#ffa700", "#ff0000", "#21130d"]
     return format_html(
-        f'<b style="color: {get_color(value, COLORS_LOWER_BETTER)}">{value}</b>')
+        f'<b style="color: {get_color(value, color_ranges(donts))}">{value}</b>')
+
 
 
 # -----------------------------------------------------------------------------

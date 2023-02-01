@@ -25,6 +25,11 @@ class MonthAdmin(admin.ModelAdmin):
         except ZeroDivisionError:
             pass
            
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.prefetch_related('days')
+        return qs
+    
     
 class TODOListAdmin(admin.ModelAdmin):
     """An abstract ModelAdmin that serves as template via subclassing."""
