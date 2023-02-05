@@ -542,12 +542,11 @@ def update_acquantanceships_for_informees(sender, instance, **kwargs):
     
     for knowing_character in informed_characters:
         for known_character in participating_characters:
-            obj, created = Acquaintanceship.objects.get_or_create(
+            Acquaintanceship.objects.get_or_create(
                 knowing_character=knowing_character,
                 known_character=known_character,
                 defaults={'is_direct': False},
             )
-            print(obj, created)
             
             
 # This signal also fires on GameEvent object creation
