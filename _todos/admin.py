@@ -30,7 +30,10 @@ class MonthAdmin(admin.ModelAdmin):
         qs = qs.prefetch_related('days')
         return qs
     
-    
+
+# ----------------------------------------------------
+
+
 class TODOListAdmin(admin.ModelAdmin):
     """An abstract ModelAdmin that serves as template via subclassing."""
     ADMIN_FIELDS_1 = ['daydate']
@@ -70,20 +73,6 @@ class TODOListAdmin(admin.ModelAdmin):
 
     def compl(self, obj) -> SafeString:
         return format_compl(compl_daily(obj))
-        
-        
-@admin.register(TODOList2023)
-class TODOList2023Admin(TODOListAdmin):
-    list_display = [
-        *TODOListAdmin.ADMIN_FIELDS_1,
-        *TODOList2023.TODO_FIELDS,
-        *TODOList2023.INFO_FIELDS,
-        *TODOListAdmin.ADMIN_FIELDS_2,
-    ]
-    list_editable = [
-        *TODOList2023.TODO_FIELDS,
-        *TODOList2023.INFO_FIELDS,
-    ]
 
 
 @admin.register(TODOList2021)
@@ -99,15 +88,32 @@ class TODOList2021Admin(TODOListAdmin):
         *TODOList2021.INFO_FIELDS,
         *TODOListAdmin.ADMIN_FIELDS_2,
     ]
-    list_editable = [
-        *TODOList2021.TODO_FIELDS,
-        *TODOList2021.INFO_FIELDS,
-    ]
 
 
 @admin.register(TODOList2022)
 class TODOList2022Admin(TODOList2021Admin):
     pass
+
+
+@admin.register(TODOList2023)
+class TODOList2023Admin(TODOListAdmin):
+    list_display = [
+        *TODOListAdmin.ADMIN_FIELDS_1,
+        *TODOList2023.TODO_FIELDS,
+        *TODOList2023.INFO_FIELDS,
+        *TODOListAdmin.ADMIN_FIELDS_2,
+    ]
+    list_editable = [
+        *TODOList2023.TODO_FIELDS,
+        *TODOList2023.INFO_FIELDS,
+    ]
+    fields = ['month', 'daydate'] + [
+        *TODOList2023.TODO_FIELDS,
+        *TODOList2023.INFO_FIELDS,
+    ]
+
+
+# ----------------------------------------------------
 
 
 @admin.register(Food)
