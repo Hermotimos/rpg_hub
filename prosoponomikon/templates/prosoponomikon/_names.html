@@ -19,16 +19,13 @@
                                         data-toggle="tooltip" data-placement="right" data-html="true"
                                         title='
                                             <span class="font-italic">
-                                            {% if name.auxiliary_group %}
-                                                {{ name.auxiliary_group }}
-                                            {% else %}
-                                                -
-                                            {% endif %}
-                                            {% if name.info %}
-                                                <br>✧<br>{{ name.info|linebreaks }}
-                                            {% endif %}
+                                                {% if name.auxiliary_group %}
+                                                    {{ name.auxiliary_group }}
+                                                {% else %}
+                                                    -
+                                                {% endif %}
                                             </span>'>
-                                        
+
                                         {{ name }}
                                         {% if name.form_2 %}
                                             <span class="text-muted-more text-nowrap">
@@ -36,6 +33,11 @@
                                             </span>
                                         {% endif %}
                                     </a>
+                                    {% if name.info %}
+                                        <span class="mb-n4" data-toggle="tooltip" data-placement="right" data-html="true" title='{{ name.info }}'>
+                                            🛈
+                                        </span>
+                                    {% endif %}
                                 </li>
                             </ul>
                         </div>
