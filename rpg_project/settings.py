@@ -56,10 +56,10 @@ if APPENGINE_URL := env("APPENGINE_URL", default=None):
     # ALLOWED_HOSTS = [urlparse(APPENGINE_URL).netloc]
     # For enabling older app versions to host site
     ALLOWED_HOSTS = ['*']
-    
+
     CSRF_TRUSTED_ORIGINS = [APPENGINE_URL]
     SECURE_SSL_REDIRECT = True
-    
+
     # For get_absolute_url methods
     SERVER_ADDRESS = "https://hyllemath.lm.r.appspot.com"
 
@@ -73,7 +73,7 @@ else:
         'burkelt.pythonanywhere.com',
         'hyllemath.lm.r.appspot.com',
     ]
-    
+
     # For get_absolute_url methods
     SERVER_ADDRESS = '127.0.0.1:8000'
 
@@ -114,7 +114,7 @@ INSTALLED_APPS = [
     'technicalities',
     'toponomikon',
     'users.apps.UsersConfig',  # just another way of doing this
-    
+
     # Temp different stuff, for future redo with fastApi, aiohttp, JS frontend
     '_todos',
 ]
@@ -130,7 +130,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-    
+
 ROOT_URLCONF = 'rpg_project.urls'
 
 TEMPLATES = [
@@ -144,7 +144,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'technicalities.utils.gcp_project_url',
+                'rpg_project.tech.gcp_project_url',
             ],
             'libraries': {
                 'custom_filters': 'templatetags.custom_filters',
@@ -189,8 +189,8 @@ if os.getenv("TRAMPOLINE_CI", None):
             "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
         }
     }
-    
-    
+
+
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Used in backup_db and update_local_db
@@ -254,11 +254,11 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     # This might be needed to access Cloud Storage without credentials,
     # which should by possible from App Engine
     # https://pnote.eu/notes/django-app-engine-user-uploaded-files/
-    
+
     GS_DEFAULT_ACL = 'publicRead'
-    
+
     # TODO check if only one is needed: GS_CREDENTIALS or GS_DEFAULT_ACL
-    
+
     DEFAULT_FILE_STORAGE = 'rpg_project.storages.GoogleCloudMediaFileStorage'
     STATICFILES_STORAGE = 'rpg_project.storages.GoogleCloudStaticFileStorage'
 
@@ -284,7 +284,7 @@ else:
 
     # For custom context manager (needed in development)
     MY_GCP_PROJECT_URL = env("MY_GCP_PROJECT_URL")
-    
+
 # -----------------------------------------------------------------------------
 
 
@@ -335,6 +335,6 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'full',
         'width': 'auto',
         'toolbarCanCollapse': True,
-    
+
     },
 }
