@@ -42,3 +42,5 @@ sandbox*
 rpg_project/secret.json
 
 
+.htmlhintrc
+requirements_old.txt
