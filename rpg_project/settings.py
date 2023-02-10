@@ -144,7 +144,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'rpg_project.tech.gcp_project_url',
             ],
             'libraries': {
                 'custom_filters': 'templatetags.custom_filters',
@@ -271,9 +270,6 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
     MEDIA_ROOT = "media/"
 
-    # For custom context manager (needed in development)
-    MY_GCP_PROJECT_URL = None
-
 else:
     # STATIC_ROOT needed only in production
     STATIC_URL = 'static/'
@@ -282,8 +278,6 @@ else:
     MEDIA_ROOT = 'media'
     MEDIA_URL = 'media/'
 
-    # For custom context manager (needed in development)
-    MY_GCP_PROJECT_URL = env("MY_GCP_PROJECT_URL")
 
 # -----------------------------------------------------------------------------
 
