@@ -117,8 +117,6 @@ INSTALLED_APPS = [
     'toponomikon',
     'users.apps.UsersConfig',  # just another way of doing this
 
-    # Temp different stuff, for future redo with fastApi, aiohttp, JS frontend
-    '_todos',
 ]
 
 MIDDLEWARE = [
