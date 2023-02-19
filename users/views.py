@@ -6,14 +6,16 @@ from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import LoginView, LogoutView
-from django.http import HttpResponseRedirect
 from django.db.models.functions import Length
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 
 from prosoponomikon.forms import CharacterForm
 from prosoponomikon.models import Character, FirstName
-from rpg_project.utils import sample_from_qs, auth_profile
-from users.forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm, UserImageUpdateForm
+from rpg_project.utils import auth_profile, sample_from_qs
+from users.forms import (
+    ProfileUpdateForm, UserImageUpdateForm, UserRegistrationForm, UserUpdateForm,
+)
 from users.models import Profile
 
 
@@ -22,7 +24,7 @@ class CustomLoginView(LoginView):
     # settings.py
     # LOGIN_REDIRECT_URL = 'users:home'
     # LOGIN_URL = 'users:login'
-    
+
     def form_valid(self, form):
         user = form.get_user()
         login(self.request, user)
@@ -102,11 +104,11 @@ def change_password_view(request):
 def edit_user_view(request):
     current_profile = request.current_profile
     user_profiles = current_profile.user.profiles.all()
-    
+
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
         user_image_form = UserImageUpdateForm(request.POST, request.FILES)
-        
+
         if user_form.is_valid() and user_image_form.is_valid():
             user_form.save()
             user_image = user_image_form.cleaned_data.get('user_image')
@@ -133,7 +135,7 @@ def edit_user_view(request):
 @auth_profile(['all'])
 def edit_profile_view(request):
     current_profile = request.current_profile
-    
+
     if request.method == 'POST':
         profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=current_profile)
         character_form = CharacterForm(request.POST, instance=current_profile.character)
@@ -159,10 +161,10 @@ def edit_profile_view(request):
 def switch_profile(request, profile_id):
     request.session['profile_id'] = profile_id
     chosen_profile = Profile.objects.get(id=profile_id)
-    
+
     msg = f"Zmieniono Postać na {chosen_profile.character.fullname}!"
     messages.info(request, msg)
-    
+
     response = redirect(request.META.get('HTTP_REFERER'))
     if '/dupa/' in response['Location']:
         msg = """
@@ -191,16 +193,16 @@ def game_event_with_caption(game_events_qs):
     """
     if len(game_events_qs) == 0:
         return None
-    
+
     words_min = 40
     words_limit = 70
     game_event = sample_from_qs(qs=game_events_qs, max_size=1)[0]
-    
+
     paragraphs = game_event.description_long.split('\n')
     paragraphs = [p for p in paragraphs if len(p.split(' ')) >= words_min]
     if not paragraphs:
         return game_event_with_caption(game_events_qs)
-    
+
     paragraph = random.choice(paragraphs)
     caption = paragraph.strip().split(' ')[:words_limit]
     caption = " ".join(caption).strip().rstrip(";,:.")
@@ -214,12 +216,12 @@ def game_event_with_caption(game_events_qs):
 @auth_profile(['all'])
 def home_view(request):
     current_profile = request.current_profile
-    
+
     # from imaginarion.models import PictureImage
     # first = PictureImage.objects.first()
     # print(first.image.url)  # /media/post_pics/knowledge_Struktura%20organizacyjna%20Szarej%20Gwardii.jpg
     # print(first.image.path) # C:\Users\Lukasz\PycharmProjects\rpg_hub\media\post_pics\knowledge_Struktura organizacyjna Szarej Gwardii.jpg
-    
+
     rand_acquaintanceships = sample_from_qs(
         qs=current_profile.character.acquaintanceships().filter(is_direct=True).distinct(),
         max_size=4)
@@ -235,7 +237,7 @@ def home_view(request):
             text_len__gt=400
         ).distinct()
     )
-    
+
     context = {
         'page_title': 'Hyllemath',
         'rand_acquaintanceships': rand_acquaintanceships,

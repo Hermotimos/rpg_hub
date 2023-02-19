@@ -18,12 +18,12 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-    
+
         <div class="collapse navbar-collapse float-left" id="mainmenu">
-    
+
             <!-- Navbar Left Side -->
             <ul class="navbar-nav mr-auto">
-                
+
                 {% with undone_demands=request.current_profile.undone_demands unseen_announcements=request.current_profile.unseen_announcements %}
                     <li class="dropdown pr-4 mr-auto">
                         <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
@@ -70,8 +70,8 @@
                         </div>
                     </li>
                 {% endwith %}
-                
-                
+
+
                 {% with unseen_debates=request.current_profile.unseen_debates %}
                     <li class="dropdown pr-4 mr-auto">
                         <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
@@ -102,7 +102,7 @@
                         </div>
                     </li>
                 {% endwith %}
-    
+
                 <li class="dropdown pr-4">
                     <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Wiedza</button>
                     <div class="dropdown-content">
@@ -121,7 +121,7 @@
                         </ul>
                     </div>
                 </li>
-    
+
                 {% if request.current_profile.status == 'gm' %}
                     <li class="dropdown pr-4">
                         <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Postacie</button>
@@ -153,20 +153,18 @@
                         </div>
                     </li>
                 {% endif %}
-    
-                
+
+
             </ul>
             <!-- End Navbar Left Side -->
-    
+
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
                 {% if user.is_authenticated %}
-                    {% if request.current_profile.status == 'gm' %}
-                        <a class="btn btn-outline-light btn-space" href="{% url 'technicalities:clear-cache' %}"
-                            data-toggle="tooltip" data-placement="bottom" title="Opróżnij Cache">
-                            <i class="icon-clear-cache"></i>
-                        </a>
-                    {% endif %}
+                    <a class="btn btn-outline-light btn-space" href="{% url 'technicalities:clear-cache' %}"
+                        data-toggle="tooltip" data-placement="bottom" title="Opróżnij Cache">
+                        <i class="icon-clear-cache"></i>
+                    </a>
                     <a class="btn btn-outline-light btn-space" href="{% url 'contact:demands-create' %}"
                         data-toggle="tooltip" data-placement="bottom" title="Dezyderat">
                         <i class="icon-demand"></i>
@@ -183,5 +181,5 @@
             <!-- End Navbar Right Side -->
         </div>
     </div>
-    
+
 </nav>
