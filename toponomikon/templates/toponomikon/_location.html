@@ -17,7 +17,7 @@
                 </small>
             </h2>
             <h6 class="font-italic text-justify {% if location.only_indirectly %} text-muted {% endif %}">
-                {% if location.description %} {{ location.description|custom_linebreaksbr:1 }} {% endif %}
+                {% if location.description %} {{ location.description|linebreaksbr }} {% endif %}
             </h6>
             <p class="text-justify">
                 {% for location in location.locations.all %}

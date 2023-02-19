@@ -1,47 +1,55 @@
 from statistics import mean
-from django.utils.safestring import mark_safe
+
 from django import forms
 from django.contrib import admin
 from django.db import models
+from django.utils.safestring import mark_safe, SafeString
 
-from _todos.models import TODOList, Food
+from _todos.admin_utils import compl_daily, format_compl, format_a, compl_monthly, a_monthly
+from _todos.models import TODOList2021, TODOList2022, TODOList2023, Food, Month
 
 
-# TODO separate conditions for separate years
-#   achieve years via proxies: 2020 filter on daydate
-#   each year can have different list_display (TODOList) and completion criteria
+@admin.register(Month)
+class MonthAdmin(admin.ModelAdmin):
+    list_display = ['monthdate', 'completion', 'noA']
+    
+    def completion(self, obj):
+        try:
+            return format_compl(compl_monthly(obj))
+        except ZeroDivisionError:
+            pass
+           
+    def noA(self, obj):
+        try:
+            return format_a(a_monthly(obj))
+        except ZeroDivisionError:
+            pass
+           
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.prefetch_related('days')
+        return qs
+    
 
-@admin.register(TODOList)
+# ----------------------------------------------------
+
+
 class TODOListAdmin(admin.ModelAdmin):
+    """An abstract ModelAdmin that serves as template via subclassing."""
+    ADMIN_FIELDS_1 = ['daydate']
+    ADMIN_FIELDS_2 = ['res', 'compl']
     formfield_overrides = {
-        models.DecimalField: {'widget': forms.NumberInput(attrs={'size': 5})},
-        models.TextField: {'widget': forms.Textarea(attrs={'rows': 2, 'cols': 20})},
+        models.PositiveSmallIntegerField: {'widget': forms.NumberInput(attrs={'style': 'width:35px'})},
+        models.DecimalField: {'widget': forms.NumberInput(attrs={'style': 'width:55px'})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 2, 'cols': 25})},
     }
-    list_display = [
-        'daydate', 'SUNWALK', 'MED', 'TETRIS', 'RELAX', 'sleep', 'IForKETO',
-        'drinkfood', 'flaxseed', 'spirulina', 'lionsmane', 'pickles',
-        'fishoilord3', 'water', 'coffeex2', 'noA', 'warmup', 'stretching',
-        'workout', 'CODE', 'ENG', 'DE', 'FR', 'UKR',
-        'awareness', 'happiness', 'openness', 'focus',
-        'anger', 'fear', 'emptiness', 'chaos', 'res',
-        'comments',
-    ]
-    list_editable = [
-        'SUNWALK', 'MED', 'TETRIS', 'RELAX', 'sleep', 'IForKETO',
-        'drinkfood', 'flaxseed', 'spirulina', 'lionsmane', 'pickles',
-        'fishoilord3', 'water', 'coffeex2', 'noA', 'warmup', 'stretching',
-        'workout', 'CODE', 'ENG', 'DE', 'FR', 'UKR',
-        'awareness', 'happiness', 'openness', 'focus',
-        'anger', 'fear', 'emptiness', 'chaos',
-        'comments',
-    ]
 
     class Media:
         css = {
             'all': ('/static/css/todos_admin.css',)
         }
 
-    def res(self, obj):
+    def res(self, obj) -> str:
         try:
             sum_plus = mean([obj.awareness, obj.happiness, obj.openness, obj.focus])
             sum_minus = mean([obj.anger, obj.fear, obj.emptiness, obj.chaos])
@@ -62,8 +70,52 @@ class TODOListAdmin(admin.ModelAdmin):
         
         except TypeError:
             return "-"
-        
-        
+
+    def compl(self, obj) -> SafeString:
+        return format_compl(compl_daily(obj))
+
+
+@admin.register(TODOList2021)
+class TODOList2021Admin(TODOListAdmin):
+    formfield_overrides = {
+        models.PositiveSmallIntegerField: {'widget': forms.NumberInput(attrs={'style': 'width:35px'})},
+        models.DecimalField: {'widget': forms.NumberInput(attrs={'style': 'width:55px'})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 2, 'cols': 15})},
+    }
+    list_display = [
+        *TODOListAdmin.ADMIN_FIELDS_1,
+        *TODOList2021.TODO_FIELDS,
+        *TODOList2021.INFO_FIELDS,
+        *TODOListAdmin.ADMIN_FIELDS_2,
+    ]
+
+
+@admin.register(TODOList2022)
+class TODOList2022Admin(TODOList2021Admin):
+    pass
+
+
+@admin.register(TODOList2023)
+class TODOList2023Admin(TODOListAdmin):
+    list_display = [
+        *TODOListAdmin.ADMIN_FIELDS_1,
+        *TODOList2023.TODO_FIELDS,
+        *TODOList2023.INFO_FIELDS,
+        *TODOListAdmin.ADMIN_FIELDS_2,
+    ]
+    list_editable = [
+        *TODOList2023.TODO_FIELDS,
+        *TODOList2023.INFO_FIELDS,
+    ]
+    fields = ['month', 'daydate'] + [
+        *TODOList2023.TODO_FIELDS,
+        *TODOList2023.INFO_FIELDS,
+    ]
+
+
+# ----------------------------------------------------
+
+
 @admin.register(Food)
 class FoodAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'fat', 'protein', 'carbs', 'fiber']

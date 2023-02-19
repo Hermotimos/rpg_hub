@@ -42,13 +42,21 @@ else:
 
 
 # -----------------------------------------------------------------------------
+
+
+SECRET_KEY = env("SECRET_KEY")
+DEBUG = env("DEBUG")
+
+
+# -----------------------------------------------------------------------------
 #  gaestd_py_django_csrf
 
 # SECURITY WARNING: It's recommended that you use this when running in production.
 # The URL will be known once you first deploy to App Engine.
 # This code takes the URL and converts it to both these settings formats.
 
-if APPENGINE_URL := env("APPENGINE_URL", default=None):
+APPENGINE_URL = env("APPENGINE_URL", default=None)
+if APPENGINE_URL:
     # Ensure a scheme is present in the URL before it's processed.
     if not urlparse(APPENGINE_URL).scheme:
         APPENGINE_URL = f"https://{APPENGINE_URL}"
@@ -56,10 +64,10 @@ if APPENGINE_URL := env("APPENGINE_URL", default=None):
     # ALLOWED_HOSTS = [urlparse(APPENGINE_URL).netloc]
     # For enabling older app versions to host site
     ALLOWED_HOSTS = ['*']
-    
+
     CSRF_TRUSTED_ORIGINS = [APPENGINE_URL]
     SECURE_SSL_REDIRECT = True
-    
+
     # For get_absolute_url methods
     SERVER_ADDRESS = "https://hyllemath.lm.r.appspot.com"
 
@@ -73,15 +81,9 @@ else:
         'burkelt.pythonanywhere.com',
         'hyllemath.lm.r.appspot.com',
     ]
-    
+
     # For get_absolute_url methods
     SERVER_ADDRESS = '127.0.0.1:8000'
-
-# -----------------------------------------------------------------------------
-
-
-SECRET_KEY = env("SECRET_KEY")
-DEBUG = env("DEBUG")
 
 
 # -----------------------------------------------------------------------------
@@ -114,13 +116,14 @@ INSTALLED_APPS = [
     'technicalities',
     'toponomikon',
     'users.apps.UsersConfig',  # just another way of doing this
-    
+
     # Temp different stuff, for future redo with fastApi, aiohttp, JS frontend
     '_todos',
 ]
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -130,7 +133,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-    
+
 ROOT_URLCONF = 'rpg_project.urls'
 
 TEMPLATES = [
@@ -144,7 +147,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'technicalities.utils.gcp_project_url',
             ],
             'libraries': {
                 'custom_filters': 'templatetags.custom_filters',
@@ -161,7 +163,9 @@ WSGI_APPLICATION = 'rpg_project.wsgi.application'
 
 if os.getenv('GAE_ENV', '').startswith('standard'):
     # Requires DATABASE_URL environmental variable to be set
-    DATABASES = {"default": env.db()}
+    DATABASES = {
+        "default": env.db()
+    }
 elif IS_LOCAL_ENVIRON:
     DATABASES = {
         'default': {
@@ -181,22 +185,13 @@ else:
         }
     }
 
-# Use a in-memory sqlite3 database when testing in CI systems
-if os.getenv("TRAMPOLINE_CI", None):
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-        }
-    }
-    
-    
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Used in backup_db and update_local_db
 GCP_DATABASE_DNS = env('GCP_DATABASE_DNS')
 if IS_LOCAL_ENVIRON:
     DEV_DATABASE_DNS = env('DEV_DATABASE_DNS')
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 # -----------------------------------------------------------------------------
@@ -254,11 +249,11 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     # This might be needed to access Cloud Storage without credentials,
     # which should by possible from App Engine
     # https://pnote.eu/notes/django-app-engine-user-uploaded-files/
-    
+
     GS_DEFAULT_ACL = 'publicRead'
-    
+
     # TODO check if only one is needed: GS_CREDENTIALS or GS_DEFAULT_ACL
-    
+
     DEFAULT_FILE_STORAGE = 'rpg_project.storages.GoogleCloudMediaFileStorage'
     STATICFILES_STORAGE = 'rpg_project.storages.GoogleCloudStaticFileStorage'
 
@@ -271,20 +266,20 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
     MEDIA_ROOT = "media/"
 
-    # For custom context manager (needed in development)
-    MY_GCP_PROJECT_URL = None
-
 else:
-    # STATIC_ROOT needed only in production
+    # Use these settings to run "python manage.py collectstatic"
+    # STATIC_ROOT = "static"
+    # STATIC_URL = "/static/"
+    # STATICFILES_DIRS = []
+
+    # STATIC_ROOT necessary oly in production (but also neede for collectstatic)
     STATIC_URL = 'static/'
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
     MEDIA_ROOT = 'media'
     MEDIA_URL = 'media/'
 
-    # For custom context manager (needed in development)
-    MY_GCP_PROJECT_URL = env("MY_GCP_PROJECT_URL")
-    
+
 # -----------------------------------------------------------------------------
 
 
@@ -335,6 +330,6 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'full',
         'width': 'auto',
         'toolbarCanCollapse': True,
-    
+
     },
 }

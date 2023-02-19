@@ -21,8 +21,7 @@ def rules_main_view(request):
     current_profile = request.current_profile
     
     # Only Characters with specific Professions or a GM/Spectator can access some rules
-    elite_professions = [
-        p.name for p in Profession.objects.filter(type='Elitarne')]
+    elite_professions = [p.name for p in Profession.objects.filter(type='Elitarne')]
     
     if current_profile.status in ['gm', 'spectator']:
         visible_professions = elite_professions

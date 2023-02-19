@@ -77,7 +77,7 @@ def handle_inform_form(request):
             Acquaintanceship.objects.create(
                 knowing_character=character,
                 known_character=obj.known_character,
-                is_direct=obj.is_direct,
+                is_direct=False,
                 knows_if_dead=obj.knows_if_dead,
                 knows_as_name=obj.knows_as_name,
                 knows_as_description=obj.knows_as_description,

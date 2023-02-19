@@ -195,7 +195,7 @@ def game_event_inform_view(request, game_event_id):
     #     '2': ['on'],
     #     'chronicle_event': ['122']
     # } >
-    if request.method == 'POST' and 'game_event' in request.POST:
+    if request.method == 'POST':
         data = dict(request.POST)
         informed_ids = [k for k, v_list in data.items() if 'on' in v_list]
         game_event.informees.add(*informed_ids)

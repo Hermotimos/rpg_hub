@@ -5,6 +5,8 @@ div.text a {
 
 td[class^='field'] {
     padding: 0.2rem !important;
+    vertical-align: middle !important;
+    text-align: center;
 
 }
 td.field-res {text-align: center;}

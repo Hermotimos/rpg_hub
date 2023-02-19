@@ -266,7 +266,7 @@ class TimeUnit(Model):
         ).filter(
             known_character__profile__in=Profile.active_players.all())
         
-        # TODO temp 'Ilen z Astinary, Alora z Astinary, Syngir, Murkon'
+        # TODO temp 'Ilen z Astinary, Alora z Astinary'
         # hide Davos from Ilen and Alora
         if current_profile.id in [5, 6]:
             qs = qs.exclude(known_character__profile__id=3)
@@ -513,10 +513,15 @@ def update_acquantanceships_for_participants(sender, instance, **kwargs):
     
     for knowing_character in participating_characters:
         for known_character in participating_characters.exclude(id=knowing_character.id):
-            Acquaintanceship.objects.get_or_create(
+            
+            existing, created = Acquaintanceship.objects.get_or_create(
                 knowing_character=knowing_character,
                 known_character=known_character,
-                is_direct=True)
+                defaults={"is_direct": True})
+            
+            if not existing.is_direct:
+                existing.is_direct = True
+                existing.save()
     
 
 # This signal also fires on GameEvent object creation
@@ -537,7 +542,7 @@ def update_acquantanceships_for_informees(sender, instance, **kwargs):
     
     for knowing_character in informed_characters:
         for known_character in participating_characters:
-            Acquaintanceship.objects.update_or_create(
+            Acquaintanceship.objects.get_or_create(
                 knowing_character=knowing_character,
                 known_character=known_character,
                 defaults={'is_direct': False},

@@ -88,23 +88,6 @@ def replace(obj_as_text, from_to):
 
 
 @register.filter
-def custom_linebreaksbr(value, margin_bottom: int):
-    if not (0 < margin_bottom < 5):
-        msg = """
-            Wrong value for custom_linebreaksbr filter won't have any effect.
-            Provide value from 1 through 5 for Bootstrap class="mb-?"
-        """
-        raise ValueError(msg)
-    else:
-        value = linebreaksbr(value)
-        if '<br><br>' in value:
-            value = value.replace('<br><br>', f'<br class="mb-{margin_bottom}">')
-        else:
-            value = value.replace('<br>', f'<br class="mb-{margin_bottom}">')
-        return mark_safe(value)
-
-
-@register.filter
 def brackets_br(text):
     """Add <br> before "(" to move text in brackets to next line."""
     if "(" in text:
@@ -156,13 +139,14 @@ def pictureset_pictures_in_custom_order(picture_set):
 
 
 @register.filter
-def players_names_bold(django_filter_html):
+def players_names_bold(django_filter_html, current_profile):
     from users.models import Profile
     html = str(django_filter_html)
     for pid in Profile.players.values_list('id', flat=True):
-        html = html.replace(
-            f'option value="{pid}"',
-            f'option value="{pid}" style="font-weight: 600;"')
+        if not (current_profile.id in [82, 93] and pid == 18):
+            html = html.replace(
+                f'option value="{pid}"',
+                f'option value="{pid}" style="font-weight: 600;"')
     return mark_safe(html)
 
 

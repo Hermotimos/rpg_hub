@@ -4,6 +4,19 @@
      <img class="img-fluid rounded" src="{{ statement.author.user_img_url }}">
      <figcaption class="font-12 font-italic text-center pt-1">{{ profile.user.username }}</figcaption>
 {% elif thread.kind == 'Debate' %}
-     <img class="img-fluid rounded-circle" src="{{ statement.author.image.url }}">
-     <figcaption class="font-12 font-italic text-center pt-1">{{ profile.character.fullname }}</figcaption>
+
+     <!-- TODO temp Syngir, Murkon - temp is only this "if-else block", the nested one should stay -->
+     {% if profile.id == 18 and request.current_profile.id == 82 or profile.id == 18 and request.current_profile.id == 93 %}
+          <img class="img-fluid rounded-circle" src="media/profile_pics/profile_Dalamar_Szarogwardzista_2.jpg">
+          <figcaption class="font-12 font-italic text-center pt-1">Dalamar Szarogwardzista</figcaption>
+     {% else%}
+
+          <img class="img-fluid rounded-circle" src="{{ statement.author.image.url }}">
+          <figcaption class="font-12 font-italic text-center pt-1">{{ profile.character.fullname }}</figcaption>
+
+     {% endif %}
+     <!-- TODO END temp Syngir, Murkon -->
+
+     
 {% endif %}
+

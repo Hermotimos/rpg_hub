@@ -85,16 +85,13 @@ class AnnouncementCreateForm(ModelForm):
             profiles__character__in=current_profile.character.acquaintances.all(),
         )
         
-        # TODO temp 'Ilen z Astinary, Alora z Astinary, Syngir, Murkon'
+        # TODO temp 'Ilen z Astinary, Alora z Astinary'
         # hide Davos from Ilen and Alora
         if current_profile.id in [5, 6]:
             participants = participants.exclude(profiles__id=3)
         # vice versa
         if current_profile.id == 3:
             participants = participants.exclude(profiles__id__in=[5, 6])
-        # hide Syngir from Murkon and vice versa
-        if current_profile.id in [82, 93]:
-            participants = participants.exclude(profiles__id__in=[82, 93])
         # TODO end temp
 
         self.fields['participants'].queryset = participants
@@ -138,16 +135,13 @@ class DebateCreateForm(ModelForm):
             known_character=current_profile.character
         ).select_related('known_character')
 
-        # TODO temp 'Ilen z Astinary, Alora z Astinary, Syngir, Murkon'
+        # TODO temp 'Ilen z Astinary, Alora z Astinary'
         # hide Davos from Ilen and Alora
         if current_profile.id in [5, 6]:
             participants = participants.exclude(known_character__profile__id=3)
         # vice versa
         if current_profile.id == 3:
             participants = participants.exclude(known_character__profile__id__in=[5, 6])
-        # hide Syngir from Murkon and vice versa
-        if current_profile.id in [82, 93]:
-            participants = participants.exclude(known_character__profile__id__in=[82, 93])
         # TODO end temp
 
         self.fields['participants'].queryset = participants.order_by(

@@ -30,23 +30,23 @@ from users.models import Profile
 @auth_profile(['gm'])
 def todos_view(request):
     characters = NonGMCharacter.objects.all()
-    
+
     characters_no_frequented_location = characters.filter(
         frequented_locations=None)
     characters_no_description = characters.filter(description__exact="")
-    
+
     profiles_no_image = Profile.objects.filter(
         Q(image__icontains="square") | Q(image__exact=""))
-    
+
     locations_no_image = Location.objects.filter(main_image=None)
     locations_no_description = Location.objects.filter(description__exact="")
-    
+
     game_event_no_known = GameEvent.objects.filter(
         participants=None).filter(informees=None)
-    
+
     skills_no_skill_type = Skill.objects.filter(types=None)
     skills_no_allowed_profile = Skill.objects.filter(allowees=None)
-    
+
     context = {
         'page_title': 'TODOs',
         'characters_no_frequented_location': characters_no_frequented_location,
@@ -67,12 +67,12 @@ def backup_db_view(request):
     if not os.environ.get('COMPUTERNAME'):
         messages.warning(request, 'Funkcja dostępna tylko w developmencie!')
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-    
+
     backup_db()
-    
+
     messages.info(request, 'Wykonano lokalny backup bazy produkcyjnej!')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-    
+
 
 @login_required
 @auth_profile(['gm'])
@@ -85,7 +85,7 @@ def update_local_db_view(request):
         reason="dev",
         src=settings.GCP_DATABASE_DNS,
         dst=settings.DEV_DATABASE_DNS)
-    
+
     messages.info(request, 'Wykonano lokalny backup bazy dev!')
     messages.info(request, 'Nadpisano lokalną bazę danymi z bazy GCP!')
     logout(request)
@@ -131,12 +131,12 @@ def allow_game_masters_to_all(request):
 @auth_profile(['gm'])
 def cleanup_rules_objects(request):
     from rules.models import Factor, Modifier, ConditionalModifier, DamageType
-    
+
     for factor in Factor.objects.all():
         if not factor.modifiers.exists():
             print('Factor:', factor)
             factor.delete()
-            
+
     for modifier in Modifier.objects.all():
         if not modifier.conditional_modifiers.exists():
             print('Modifier:', modifier)
@@ -174,7 +174,9 @@ def refresh_content_types(request):
 @auth_profile(['gm'])
 def clear_cache(request):
     cache.clear()
-    messages.info(request, 'Opróżniono cache!')
+    messages.info(
+        request,
+        "Zawartość strony została odświeżona! Niektóre elementy mogą działać wolniej przy pierwszym ładowaniu.")
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
@@ -237,7 +239,7 @@ def reload_rules(request):
 
     for obj in WeaponType.objects.all():
         obj.save()
-    
+
     messages.info(request, 'Przeładowano modele dla "rules"!')
     return redirect('technicalities:reload-main')
 

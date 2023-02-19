@@ -12,7 +12,7 @@
                {{ request.current_profile.character.fullname }}
             </a>
         </h3>
-        
+
         <!-- For game master -->
         {% if request.current_profile.status == 'gm' %}
             <ul class="list-group hover-pointer">
@@ -43,7 +43,7 @@
                 </li>
             </ul>
         {% endif %}
-        
+
         <ul class="list-group hover-pointer">
             <li class="list-group-item list-group-item-light small-caps" data-toggle="collapse" data-target="#profiles"><h6 class="mb-0">Postacie</h6></li>
             <li id="profiles" class="list-group collapse">
@@ -56,7 +56,7 @@
                 </div>
             </li>
         </ul>
-        
+
         {% if request.current_profile.status == 'gm' and '127.0.0.1' in request.get_host%}
             <div class="mt-2 ml-1 mr-n1 d-flex flex-wrap">
                 <div class="mr-md-auto py-1 px-1 px-md-0">
@@ -77,13 +77,13 @@
                     </a>
                 </div>
                 <div class="mr-md-auto py-1 px-1 px-md-0">
-                    <a class="btn btn-outline-secondary icon-cloud py-2" href="{{ MY_GCP_PROJECT_URL }}"
+                    <a class="btn btn-outline-secondary icon-cloud py-2" href="#"
                        data-toggle="tooltip" data-placement="bottom" title="Idź do konsoli GCP">
                     </a>
                 </div>
             </div>
         {% endif %}
-        
+
         <br>
     </aside>
 </div>

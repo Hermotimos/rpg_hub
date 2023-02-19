@@ -64,12 +64,10 @@ class Profile(Model):
             return f"[{self.user.username}]: assign Character!"
     
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        
         # For 'image_icons_color' default, check if it applies
         if self.image_icons_color == "light":
             self.image_icons_color = determine_icons_color(self)
-            super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
         
     @property
     def user_img_url(self):
@@ -200,8 +198,6 @@ class Profile(Model):
     
     @property
     def can_action(self):
-        # TODO temp Syngir, Murkon
-        return self.status in ['gm', 'player'] and self.is_active and self.id not in [82, 93]
         return self.status in ['gm', 'player'] and self.is_active
 
 

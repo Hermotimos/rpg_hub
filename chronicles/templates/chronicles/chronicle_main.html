@@ -59,9 +59,19 @@
                                     </a>
                                     <div class="d-inline-flex">
                                         {% for profile in game|game_participants %}
-                                            <div class="d-inline ml-1 align-top">
-                                               <img class="rounded-circle portait img-xs border border-dark mb-1" src="{{ profile.image.url }}">
-                                            </div>
+                                        
+                                            <!-- TODO temp Syngir, Murkon - temp is only this "if-else block", the nested one should stay -->
+                                            {% if profile.id == 18 and request.current_profile.id == 82 or profile.id == 18 and request.current_profile.id == 93 %}
+                                                <!-- SKIP -->
+                                            {% else %}
+                                            
+                                                <div class="d-inline ml-1 align-top">
+                                                   <img class="rounded-circle portait img-xs border border-dark mb-1" src="{{ profile.image.url }}">
+                                                </div>
+
+                                            {% endif %}
+                                            <!-- TODO END temp Syngir, Murkon -->
+                                        
                                         {% endfor %}
                                     </div>
                                     <div>
@@ -77,7 +87,15 @@
                                                                         <div class="m-1">
                                                                             {% for profile in debate.participants.all %}
                                                                                 {% if profile.status != "gm" %}
-                                                                                    <img class="img-md rounded-circle" src="{{ profile.image.url }}">
+                                                                                
+                                                                                    <!-- TODO temp Syngir, Murkon - temp is only this "if-else block", the nested one should stay -->
+                                                                                    {% if profile.id == 18 and request.current_profile.id == 82 or profile.id == 18 and request.current_profile.id == 93 %}
+                                                                                        <img class="img-md rounded-circle" src="media/profile_pics/profile_Dalamar_Szarogwardzista_2.jpg">
+                                                                                    {% else %}
+                                                                                
+                                                                                        <img class="img-md rounded-circle" src="{{ profile.image.url }}">
+                                                                                    {% endif %}
+                                                                                    
                                                                                 {% endif %}
                                                                             {% endfor %}
                                                                         </div>'>
