@@ -5,7 +5,7 @@ from django.db.models import (
     DecimalField,
     ForeignKey as FK,
     Model,
-    PROTECT, SET_NULL,
+    CASCADE, SET_NULL,
     TextField,
 
 )
@@ -14,7 +14,7 @@ from prosoponomikon.models import Character
 
 class ItemCollection(Model):
     name = CharField(max_length=255)
-    owner = FK(to=Character, related_name='collections', on_delete=PROTECT)
+    owner = FK(to=Character, related_name='collections', on_delete=CASCADE)
 
     class Meta:
         ordering = ['owner__fullname', 'name']
