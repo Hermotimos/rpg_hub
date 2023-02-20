@@ -17,6 +17,7 @@ from django.db.models import (
     PROTECT,
 )
 from django.db.models.signals import post_save
+from django.urls import reverse
 
 from users.models import Profile
 
@@ -47,7 +48,7 @@ class ThreadTag(Model):
 
 
 class ThreadManager(Manager):
-    
+
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.annotate(last_activity=Max(F('statements__created_at')))
@@ -57,7 +58,7 @@ class ThreadManager(Manager):
 
 class Thread(Model):
     objects = ThreadManager()
-    
+
     title = CharField(max_length=100, unique=True)
     kind = CharField(max_length=15, choices=THREAD_KINDS)
     participants = M2M(to=Profile, related_name='threads_participated')     # participants also use instead of inform_gm in Plans
@@ -69,10 +70,10 @@ class Thread(Model):
 
     class Meta:
         ordering = ['created_at']
-    
+
     def __str__(self):
         return self.title
-    
+
     def informables(self, current_profile):
         qs = current_profile.character.acquaintanceships().exclude(
             known_character__profile__in=self.participants.all())
@@ -82,7 +83,7 @@ class Thread(Model):
             qs = qs.filter(known_character__profile__in=Profile.living.all())
         else:
             qs = qs.none()
-            
+
         # TODO temp 'Ilen z Astinary, Alora z Astinary'
         # hide Davos from Ilen and Alora
         if current_profile.id in [5, 6]:
@@ -95,11 +96,11 @@ class Thread(Model):
         return qs
 
     def get_absolute_url(self):
-        return f'{settings.SERVER_ADDRESS}/communications/thread/{self.pk}/None/#page-bottom'
+        return reverse('communications:thread', kwargs={'thread_id' : self.id, 'tag_title': None})
 
 
 class AnnouncementManager(Manager):
-    
+
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(kind='Announcement')
@@ -110,7 +111,7 @@ class AnnouncementManager(Manager):
 
 class Announcement(Thread):
     objects = AnnouncementManager()
-    
+
     class Meta:
         proxy = True
         verbose_name = 'ANNOUNCEMENT'
@@ -118,7 +119,7 @@ class Announcement(Thread):
 
 
 class DebateManager(Manager):
-    
+
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(kind='Debate')
@@ -127,7 +128,7 @@ class DebateManager(Manager):
 
 class Debate(Thread):
     objects = DebateManager()
-    
+
     class Meta:
         ordering = ['created_at']
         proxy = True
@@ -143,15 +144,15 @@ class Option(Model):
     text = CharField(max_length=50)
     voters_yes = M2M(to=Profile, related_name='options_votes_yes', blank=True)
     voters_no = M2M(to=Profile, related_name='options_votes_no', blank=True)
-    
+
     class Meta:
         ordering = ['text']
-    
+
     def __str__(self):
         text = self.text
         return f'{text[:100]}...' if len(str(text)) > 100 else text
-    
-    
+
+
 #  ==========================================================================
 
 
@@ -174,7 +175,7 @@ class Statement(Model):
 
 
 class AnnouncementStatementManager(Manager):
-    
+
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(thread__kind='Announcement')
@@ -183,7 +184,7 @@ class AnnouncementStatementManager(Manager):
 
 class AnnouncementStatement(Statement):
     objects = AnnouncementStatementManager()
-    
+
     class Meta:
         ordering = ['created_at']
         proxy = True
@@ -192,7 +193,7 @@ class AnnouncementStatement(Statement):
 
 
 class DebateStatementManager(Manager):
-    
+
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(thread__kind='Debate')
@@ -201,7 +202,7 @@ class DebateStatementManager(Manager):
 
 class DebateStatement(Statement):
     objects = DebateStatementManager()
-    
+
     class Meta:
         ordering = ['created_at']
         proxy = True

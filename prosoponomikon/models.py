@@ -17,6 +17,7 @@ from django.db.models import (
 )
 from django.db.models.functions import Substr, Lower, Coalesce, Replace
 from django.db.models.signals import post_save
+from django.urls import reverse
 
 from knowledge.models import BiographyPacket, DialoguePacket
 from rpg_project.utils import OrderByPolish
@@ -59,18 +60,18 @@ class AffixGroupManager(Manager):
 
 class AffixGroup(Model):
     objects = AffixGroupManager()
-    
+
     affix = CharField(max_length=100)
     type = CharField(max_length=20, choices=NAME_TYPES, default='MALE')
     name_group = FK(to=FirstNameGroup, related_name='affix_groups', on_delete=PROTECT)
-    
+
     class Meta:
         ordering = ['name_group', 'type', 'affix']
         unique_together = ('affix', 'type', 'name_group')
-        
+
     def __str__(self):
         return f"[{self.name_group}] | {self.type} | {self.affix}"
-    
+
 
 class AuxiliaryNameGroupManager(Manager):
     def get_queryset(self):
@@ -113,11 +114,11 @@ class FirstNameManager(Manager):
         qs = super().get_queryset()
         qs = qs.select_related('affix_group', 'auxiliary_group')
         return qs
-    
-    
+
+
 class FirstName(Model):
     objects = FirstNameManager()
-    
+
     form = CharField(max_length=50, unique=True)
     form_2 = CharField(max_length=50, blank=True, null=True)
     info = TextField(blank=True, null=True)
@@ -129,7 +130,7 @@ class FirstName(Model):
         blank=True, null=True)
     auxiliary_group = FK(
         to=AuxiliaryNameGroup, on_delete=PROTECT, blank=True, null=True)
-    
+
     class Meta:
         ordering = [
             OrderByPolish('auxiliary_group__social_info'),
@@ -144,7 +145,7 @@ class FirstName(Model):
         super().save(*args, **kwargs)
         for character in Character.objects.filter(first_name=self):
             character.save()
-        
+
 
 # -----------------------------------------------------------------------------
 
@@ -158,8 +159,8 @@ class FamilyNameGroup(Model):
 
     def __str__(self):
         return self.title
-    
-    
+
+
 class FamilyName(Model):
     form = CharField(max_length=50, unique=True)
     info = TextField(blank=True, null=True)
@@ -168,7 +169,7 @@ class FamilyName(Model):
 
     class Meta:
         ordering = ['group', 'form']
-    
+
     def __str__(self):
         return self.form
 
@@ -187,11 +188,11 @@ class CharacterManager(Manager):
         qs = qs.exclude(profile__status='spectator')
         qs = qs.select_related('first_name', 'family_name', 'profile')
         return qs
-    
-    
+
+
 class Character(Model):
     objects = CharacterManager()
-    
+
     profile = One2One(to=Profile, on_delete=CASCADE)
     first_name = FK(
         to=FirstName, related_name='characters', on_delete=PROTECT,
@@ -201,7 +202,7 @@ class Character(Model):
         blank=True, null=True)
     cognomen = CharField(max_length=50, blank=True, null=True)
     fullname = CharField(max_length=150)
-    
+
     strength = PositiveSmallIntegerField(blank=True, null=True)
     dexterity = PositiveSmallIntegerField(blank=True, null=True)
     endurance = PositiveSmallIntegerField(blank=True, null=True)
@@ -224,12 +225,12 @@ class Character(Model):
     created_by = FK(
         to=Profile, related_name='characters_created', on_delete=CASCADE,
         blank=True, null=True)
-    
+
     class Meta:
         ordering = [OrderByPolish('fullname')]
         verbose_name = '*Character'
         verbose_name_plural = '*Characters (ALL)'
-    
+
     def __str__(self):
         return self.fullname
 
@@ -243,7 +244,7 @@ class Character(Model):
         from items.models import ItemCollection
         if not ItemCollection.objects.filter(owner=self):
             ItemCollection.objects.create(owner=self, name="Osobisty")
-        
+
         for character in Character.objects.filter(profile__status__in=['gm', 'spectator']):
             if not Acquaintanceship.objects.filter(knowing_character=character, known_character=self,).exists():
                 Acquaintanceship.objects.create(
@@ -253,15 +254,15 @@ class Character(Model):
                     knows_if_dead=True)
 
     def get_absolute_url(self):
-        return f'{settings.SERVER_ADDRESS}/prosoponomikon/character/{self.pk}/'
-    
+        return reverse('prosoponomikon:character', kwargs={'character_id' : self.id})
+
     def informables(self, current_profile):
         qs = current_profile.character.acquaintanceships()
         qs = qs.exclude(
             known_character__in=self.acquaintaned_to.all()
         ).filter(
             known_character__profile__in=Profile.active_players.all())
-        
+
         # TODO temp 'Ilen z Astinary, Alora z Astinary'
         # hide Davos from Ilen and Alora
         if current_profile.id in [5, 6]:
@@ -272,7 +273,7 @@ class Character(Model):
         # TODO end temp
 
         return qs
-    
+
     def acquaintanceships(self):
         qs = self.known_characters.select_related(
             'known_character__profile',
@@ -284,7 +285,7 @@ class Character(Model):
             known_character=self
         )
         return qs
-    
+
     def acquisitions_for_character_sheet(self):
         return self.acquisitions.annotate(
             type=F('skill_level__skill__types__name'),
@@ -310,7 +311,7 @@ class Character(Model):
             'weapon_type__name',
             'sphragis__name',
         )
-        
+
     def synergies_for_character_sheet(self):
         from rules.models import Synergy, SynergyLevel
         skill_levels = self.skill_levels.all()
@@ -338,15 +339,15 @@ class Character(Model):
         ).distinct(
             'synergy__name',
         )
-        
+
         synergies = Synergy.objects.filter(
             synergy_levels__in=synergy_levels
         ).prefetch_related(
             Prefetch('synergy_levels', queryset=synergy_levels)
         ).distinct()
-        
+
         return synergies
-    
+
     def skill_types_for_character_sheet(self):
         skills = Skill.objects.filter(
             skill_levels__acquiring_characters=self
@@ -366,28 +367,28 @@ class Character(Model):
             'skill_groups',
             'kinds',
         ).distinct()
-        
+
         return skill_types
-    
-        
+
+
 class CharacterAcquaintanceships(Character):
     """A class to enable a separate AdminModel-s."""
-    
+
     class Meta:
         proxy = True
         verbose_name = '*Character (ACQUAINTANCESHIPS)'
         verbose_name_plural = '*Characters (ACQUAINTANCESHIPS)'
 
-        
+
 class CharacterAcquisitions(Character):
     """A class to enable a separate AdminModel-s."""
-    
+
     class Meta:
         proxy = True
         verbose_name = '*Character (ACQUISITIONS)'
         verbose_name_plural = '*Characters (ACQUISITIONS)'
 
-        
+
 class PlayerCharacterManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
@@ -397,7 +398,7 @@ class PlayerCharacterManager(Manager):
 
 class PlayerCharacter(Character):
     objects = PlayerCharacterManager()
-    
+
     class Meta:
         proxy = True
         verbose_name = '- Player'
@@ -413,7 +414,7 @@ class NPCCharacterManager(Manager):
 
 class NPCCharacter(Character):
     objects = NPCCharacterManager()
-    
+
     class Meta:
         proxy = True
         verbose_name = '- NPC'
@@ -429,7 +430,7 @@ class NonGMCharacterManager(Manager):
 
 class NonGMCharacter(Character):
     objects = NonGMCharacterManager()
-    
+
     class Meta:
         proxy = True
         verbose_name = '--- Player or NPC'
@@ -447,7 +448,7 @@ class Acquaintanceship(Model):
     knows_as_name = CharField(max_length=100, blank=True, null=True)
     knows_as_description = TextField(blank=True, null=True)
     knows_as_image = ImageField(upload_to='profile_pics', blank=True)
-    
+
     class Meta:
         ordering = [OrderByPolish('known_character__fullname')]
         unique_together = ['known_character', 'knowing_character']
@@ -461,22 +462,22 @@ class AcquaintanceshipProxyManager(Manager):
         qs = super().get_queryset()
         return qs
 
-    
+
 class AcquaintanceshipProxy(Acquaintanceship):
     """A proxy model to create another __str__ representation."""
     # TODO this is to ensure knows_as_name in CreateDebateForm. Any better way?
-    
+
     objects = AcquaintanceshipProxyManager()
-    
+
     class Meta:
         proxy = True
-    
+
     def __str__(self):
         if self.knows_as_name and self.knows_as_name != "":
             return self.knows_as_name
         return self.known_character.fullname
 
-    
+
 # -----------------------------------------------------------------------------
 
 

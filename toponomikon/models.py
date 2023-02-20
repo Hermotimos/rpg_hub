@@ -12,6 +12,7 @@ from django.db.models import (
     TextField,
 )
 from django.db.models.signals import post_save, m2m_changed
+from django.urls import reverse
 
 from imaginarion.models import AudioSet, Picture, PictureSet
 from knowledge.models import KnowledgePacket, MapPacket
@@ -29,7 +30,7 @@ class LocationType(Model):
         null=True,
     )
     order_no = PositiveSmallIntegerField()
-    
+
     class Meta:
         ordering = ['order_no']
         verbose_name = '* LOCATION TYPE'
@@ -59,7 +60,7 @@ class Location(Model):
     )
     knowledge_packets = M2M(to=KnowledgePacket, related_name='locations', blank=True)
     map_packets = M2M(to=MapPacket, related_name='locations', blank=True)
-    
+
     location_type = FK(
         to=LocationType,
         related_name='locations',
@@ -96,7 +97,7 @@ class Location(Model):
         return self.name
 
     def get_absolute_url(self):
-        return f'{settings.SERVER_ADDRESS}/toponomikon/{self.pk}/'
+        return reverse('toponomikon:location', kwargs={'location_id' : self.id})
 
     def informables(self, current_profile):
         qs = current_profile.character.acquaintanceships()
@@ -104,7 +105,7 @@ class Location(Model):
             known_character__profile__in=(self.participants.all() | self.informees.all())
         ).filter(
             known_character__profile__in=Profile.active_players.all())
-        
+
         # TODO temp 'Ilen z Astinary, Alora z Astinary'
         # hide Davos from Ilen and Alora
         if current_profile.id in [5, 6]:
@@ -115,7 +116,7 @@ class Location(Model):
         # TODO end temp
 
         return qs
-    
+
     def with_sublocations(self):
         with_sublocs = Location.objects.raw(f"""
             WITH RECURSIVE sublocations AS (
@@ -139,13 +140,13 @@ class PrimaryLocationManager(Manager):
 
 class PrimaryLocation(Location):
     objects = PrimaryLocationManager()
-    
+
     class Meta:
         proxy = True
         verbose_name = '--- Primary Location'
         verbose_name_plural = '--- Primary Locations'
 
-        
+
 class SecondaryLocationManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
@@ -155,7 +156,7 @@ class SecondaryLocationManager(Manager):
 
 class SecondaryLocation(Location):
     objects = SecondaryLocationManager()
-    
+
     class Meta:
         proxy = True
         verbose_name = '--- Secondary Location'

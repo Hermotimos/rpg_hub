@@ -68,9 +68,6 @@ if APPENGINE_URL:
     CSRF_TRUSTED_ORIGINS = [APPENGINE_URL]
     SECURE_SSL_REDIRECT = True
 
-    # For get_absolute_url methods
-    SERVER_ADDRESS = "https://hyllemath.lm.r.appspot.com"
-
 else:
     CSRF_TRUSTED_ORIGINS = [
         'https://8000-cs-570532252862-default.cs-europe-west4-fycr.cloudshell.dev'
@@ -81,9 +78,6 @@ else:
         'burkelt.pythonanywhere.com',
         'hyllemath.lm.r.appspot.com',
     ]
-
-    # For get_absolute_url methods
-    SERVER_ADDRESS = '127.0.0.1:8000'
 
 
 # -----------------------------------------------------------------------------

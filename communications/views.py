@@ -91,7 +91,7 @@ def get_threads(current_profile, thread_kind):
     whether it's a per-profile or per-user ThreadKind.
     """
     threads = Thread.objects.filter(kind=thread_kind)
-    
+
     if current_profile.can_view_all:
         threads = threads
     elif thread_kind in PROFILE_THREADS:
@@ -100,12 +100,12 @@ def get_threads(current_profile, thread_kind):
         threads = threads.filter(participants__in=current_profile.user.profiles.all())
     else:
         raise ValueError("Podany thread_kind nie występuje!")
-    
+
     if current_profile.status == 'gm':
         game_events = GameEvent.objects.all()
     else:
         game_events = GameEvent.objects.filter(participants=current_profile)
-    
+
     threads = threads.prefetch_related(
         'statements__author__character',
         'tags__author',
@@ -113,7 +113,7 @@ def get_threads(current_profile, thread_kind):
         'followers',
         Prefetch('events', queryset=game_events.prefetch_related('game')),
     )
-    
+
     return threads
 
 
@@ -147,11 +147,11 @@ def threads_view(request, thread_kind, tag_title):
     formset = ThreadTagEditFormSet(
         data=request.POST or None,
         queryset=tags)
-    
+
     for form in formset:
         form.initial['kind'] = thread_kind
         form.initial['author'] = current_profile
-        
+
     if request.method == 'GET':
         if tag_id := request.GET.get('tag', []):
             tag = ThreadTag.objects.get(id=tag_id)
@@ -171,7 +171,7 @@ def threads_view(request, thread_kind, tag_title):
                     # Ignore empty extra forms
                     if not form.cleaned_data:
                         continue
-                        
+
                     # Deletion
                     elif form.cleaned_data.get('DELETE'):
                         tag = form.cleaned_data.get('id')
@@ -213,9 +213,9 @@ def threads_view(request, thread_kind, tag_title):
 @auth_profile(['all'])
 def statement_create_view(request):
     current_profile = request.current_profile
-    
+
     thread = Thread.objects.get(id=request.POST['thread_id'])
-    
+
     new_statement = Statement.objects.create(
         text=request.POST['ckeditortext'],
         thread=thread,
@@ -223,7 +223,7 @@ def statement_create_view(request):
         image=request.FILES.get('file'))
     new_statement.seen_by.add(request.current_profile)
     new_statement.save()
-    
+
     send_mail(
         subject=f"[RPG] Nowa wypowiedź: '{thread.title}'",
         message=f"{thread.get_absolute_url()}",
@@ -235,14 +235,14 @@ def statement_create_view(request):
     )
     return HttpResponse('Message sent successfully')
 
-    
+
 @login_required
 @auth_profile(['all'])
 def statements(request, thread_id):
     current_profile = request.current_profile
-    
+
     statements = Statement.objects.filter(thread=thread_id).order_by('created_at')
-    
+
     # Update all statements to be seen by the profile
     if (
         current_profile in Thread.objects.get(id=thread_id).participants.all()
@@ -253,7 +253,7 @@ def statements(request, thread_id):
         for statement in statements.exclude(seen_by=current_profile):
             relations.append(SeenBy(statement_id=statement.id, profile_id=current_profile.id))
         SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
-    
+
     statements = statements.values(
         'thread_id', 'text', 'author_id', 'created_at',
         author_obj=JSONObject(
@@ -302,7 +302,7 @@ def statements(request, thread_id):
 @auth_profile(['all'])
 def thread_view(request, thread_id, tag_title):
     current_profile = request.current_profile
-    
+
     tags = ThreadTag.objects.filter(
         author=current_profile,
         kind=Thread.objects.get(id=thread_id).kind).select_related('author')
@@ -321,7 +321,7 @@ def thread_view(request, thread_id, tag_title):
         'followers',
         'participants'
     ).get(id=thread_id)
-    
+
     # Create ThreadEditTagsForm and StatementCreateForm
     # Check if custom inform form is activated, if not then StatementCreateForm,
     # if not then ThreadEditTagsForm: this order ensures correct handling, as
@@ -330,7 +330,7 @@ def thread_view(request, thread_id, tag_title):
         data=request.POST or None,
         instance=thread,
         tags=tags)
-    
+
     # StatementForm is handled via JS/Ajax in _thread_body.html and statement_create_view()
     statement_form = StatementCreateForm(
         data=request.POST or None,
@@ -339,7 +339,7 @@ def thread_view(request, thread_id, tag_title):
         thread_kind=thread.kind,
         participants=thread.participants.all(),
         initial={'author': current_profile})
-    
+
     # Enters only when request.POST has 'Debate', 'Announcement' etc. key
     # <QueryDict: {'csrfmiddlewaretoken': [...], '145': ['on'], 'Debate': ['56']}>
     if request.method == 'POST' and any(
@@ -347,12 +347,12 @@ def thread_view(request, thread_id, tag_title):
     ):
         thread_inform(current_profile, request, thread, tag_title)
         return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
-    
+
     if thread_tags_form.is_valid():
         thread_tags_form.save()
         messages.success(request, "Zapisano zmiany!")
         return redirect('communications:thread', thread_id=thread.id, tag_title=tag_title)
-    
+
     context = {
         'page_title': thread.title,
         'thread': thread,
@@ -379,7 +379,7 @@ def create_thread_view(request, thread_kind):
         data=request.POST or None,
         files=request.FILES or None,
         current_profile=current_profile)
-    
+
     statement_form = StatementCreateForm(
         data=request.POST or None,
         files=request.FILES or None,
@@ -392,16 +392,16 @@ def create_thread_view(request, thread_kind):
         thread = thread_form.save(commit=False)
         thread.kind = thread_kind
         thread.save()
-        
+
         participants = thread_form.cleaned_data['participants']
-        
+
         # User-based Threads show Users as participants - translate to Profiles
         if thread_kind in USER_THREADS:
             participants = Profile.objects.filter(user__in=participants)
         # Profile-based Threads show Acquaintanceships as participants - translate to Profiles
         else:
             participants = Profile.objects.filter(character__knowing_characters__in=participants)
-            
+
         participants |= Profile.objects.filter(Q(id=current_profile.id) | Q(status='gm'))
         thread.participants.set(participants)
         thread.followers.set(participants)
@@ -410,7 +410,7 @@ def create_thread_view(request, thread_kind):
         statement.thread = thread
         statement.save()
         statement.seen_by.add(current_profile)
-        
+
         if thread_kind == "Debate":
             if game_event := thread_form.cleaned_data['game_event']:
                 game_event = GameEvent.objects.get(id=game_event.id)
@@ -440,7 +440,7 @@ def create_thread_view(request, thread_kind):
 @auth_profile(['all'])
 def unfollow_thread_view(request, thread_id):
     current_profile = request.current_profile
-    
+
     thread = get_object_or_404(Thread, id=thread_id)
     if current_profile in thread.participants.all() or current_profile.can_view_all:
         thread.followers.remove(current_profile)
@@ -454,7 +454,7 @@ def unfollow_thread_view(request, thread_id):
 @auth_profile(['all'])
 def follow_thread_view(request, thread_id):
     current_profile = request.current_profile
-    
+
     thread = get_object_or_404(Thread, id=thread_id)
     if current_profile in thread.participants.all() or current_profile.can_view_all:
         thread.followers.add(current_profile)
