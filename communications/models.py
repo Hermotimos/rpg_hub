@@ -1,7 +1,6 @@
 import datetime
 
 from ckeditor.fields import RichTextField
-from django.conf import settings
 from django.db.models import (
     BooleanField,
     CharField,
