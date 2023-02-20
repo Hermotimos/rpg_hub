@@ -28,7 +28,7 @@ from toponomikon.models import Location
 @auth_profile(['all'])
 def chronicle_main_view(request):
     current_profile = request.current_profile
-    
+
     if current_profile.can_view_all:
         games = GameSession.objects.prefetch_related(
             'game_events__participants__character',
@@ -37,26 +37,26 @@ def chronicle_main_view(request):
     else:
         debates = current_profile.threads_participated.filter(kind='Debate')
         debates = debates.prefetch_related('participants__character')
-        
+
         known_profiles = Profile.players.filter(
             Q(character__in=current_profile.character.acquaintances.all())
             | Q(id=current_profile.id)
         ).select_related('character')
-        
+
         events = GameEvent.objects.filter(
             Q(id__in=current_profile.events_participated.all())
             | Q(id__in=current_profile.events_informed.all()))
         events = events.prefetch_related(
             Prefetch('debates', queryset=debates),
             Prefetch('participants', queryset=known_profiles))
-        
+
         games = GameSession.objects.filter(game_events__in=events)
         games = games.prefetch_related(Prefetch('game_events', queryset=events))
         games = games.annotate(
             any_participants=Count(
                 'game_events',
                 filter=Q(game_events__in=current_profile.events_participated.all())))
-           
+
     games = games.order_by('game_no').select_related('chapter').exclude(game_no=0)
     chapters = Chapter.objects.filter(game_sessions__in=games).distinct()
 
@@ -74,7 +74,7 @@ def chronicle_main_view(request):
 @auth_profile(['all'])
 def chronicle_game_view(request, game_id):
     current_profile = request.current_profile
-    
+
     game = get_object_or_404(GameSession, id=game_id)
     events = GameEvent.objects.filter(game=game)
     events = events.prefetch_related(
@@ -100,13 +100,13 @@ def chronicle_game_view(request, game_id):
         return redirect('users:dupa')
 
 
-@cache_page(60 * 60)
+@cache_page(60 * 1)
 @vary_on_cookie
 @login_required
 @auth_profile(['all'])
 def chronicle_chapter_view(request, chapter_id):
     current_profile = request.current_profile
-    
+
     chapter = get_object_or_404(Chapter, id=chapter_id)
     events = GameEvent.objects.filter(game__chapter=chapter)
     events = events.prefetch_related(
@@ -121,7 +121,7 @@ def chronicle_chapter_view(request, chapter_id):
         events = events.filter(
             Q(participants=current_profile) | Q(informees=current_profile))
         events = events.distinct()
-        
+
     games = GameSession.objects.filter(game_events__in=events)
     games = games.prefetch_related(Prefetch('game_events', queryset=events))
     games = games.distinct()
@@ -142,7 +142,7 @@ def chronicle_chapter_view(request, chapter_id):
 @auth_profile(['all'])
 def chronicle_all_view(request):
     current_profile = request.current_profile
-    
+
     events = GameEvent.objects.prefetch_related(
         'participants',
         'informees',
@@ -155,17 +155,17 @@ def chronicle_all_view(request):
         events = events.filter(
             Q(participants=current_profile) | Q(informees=current_profile))
         events = events.distinct()
-    
+
     games = GameSession.objects.filter(game_events__in=events)
     games = games.prefetch_related(Prefetch('game_events', queryset=events))
     games = games.distinct()
-    
+
     chapters = Chapter.objects.filter(game_sessions__in=games)
     chapters = chapters.prefetch_related(
         Prefetch('game_sessions', queryset=games)
     )
     chapters = chapters.distinct()
-    
+
     context = {
         'page_title': 'Pełna kronika',
         'chapters': chapters,
@@ -174,7 +174,7 @@ def chronicle_all_view(request):
         return render(request, 'chronicles/chronicle_all.html', context)
     else:
         return redirect('users:dupa')
-    
+
 
 #  TODO another view for HistoryEvent ?
 #  TODO or maybe just check if id in GameEvent or HistoryEvent
@@ -182,13 +182,13 @@ def chronicle_all_view(request):
 @auth_profile(['all'])
 def game_event_inform_view(request, game_event_id):
     current_profile = request.current_profile
-    
+
     game_event = get_object_or_404(TimeUnit, id=game_event_id)
     allowed = (
         game_event.participants.all() | game_event.informees.all()
     )
     allowed = allowed.filter(status='player')
-    
+
     # INFORM FORM
     # dict(request.POST).items() == < QueryDict: {
     #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
@@ -227,7 +227,7 @@ def chronologies_view(request):
         'timeunits__timeunits__timeunits__date_start',
         'timeunits__timeunits__timeunits__date_end',
     ).select_related('in_timeunit')
-    
+
     context = {
         'page_title': 'Chronologie',
         'chronologies': chronologies,
@@ -254,7 +254,7 @@ def timeline_view(request):
     known_profiles = Profile.players.select_related('character', 'user')
     plot_threads = PlotThread.objects.all()
     locations = Location.objects.all()
-    
+
     if not current_profile.can_view_all:
         events = events.filter(
             Q(id__in=current_profile.events_participated.all())
@@ -267,7 +267,7 @@ def timeline_view(request):
         ]
         known_profiles = known_profiles.filter(
             Q(character__id__in=known_characters_ids) | Q(id=current_profile.id))
-    
+
     events = events.prefetch_related(
         Prefetch('participants', queryset=known_profiles),
         Prefetch('informees', queryset=known_profiles),
@@ -287,11 +287,11 @@ def timeline_view(request):
         'game',     # No -game: later game's events are usually later
         'event_no_in_game',
     )
-    
+
     request = add_sublocations(request)
     events_filter = GameEventFilter(
         request.GET, queryset=events, request=request)
-   
+
     context = {
         'page_title': 'Pełne Kalendarium',
         # TODO the use of filter rises query cnt from 8 to 13, somehow causing
