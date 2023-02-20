@@ -100,7 +100,7 @@ def chronicle_game_view(request, game_id):
         return redirect('users:dupa')
 
 
-@cache_page(60 * 1)
+@cache_page(60 * 60)
 @vary_on_cookie
 @login_required
 @auth_profile(['all'])
