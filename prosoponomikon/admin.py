@@ -44,12 +44,12 @@ class FamilyNameAdmin(admin.ModelAdmin):
         ]:
             form_field.widget.attrs = {'style': 'height:400px'}
         return form_field
-    
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         qs = qs.prefetch_related('locations', 'group')
         return qs
-    
+
     def locs(self, obj):
         return " | ".join([loc.name for loc in obj.locations.all()])
 
@@ -90,15 +90,15 @@ class FirstNameAdmin(admin.ModelAdmin):
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
-       
-    
+
+
 class FirstNameInline(admin.TabularInline):
     model = FirstName
     extra = 10
     formfield_overrides = {
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 3, 'cols': 50})},
     }
-    
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
@@ -127,13 +127,13 @@ class AffixGroupAdmin(admin.ModelAdmin):
 
 
 class AuxiliaryNameGroupAdminForm(forms.ModelForm):
-    
+
     class Meta:
         model = AuxiliaryNameGroup
         exclude = []
         widgets = {'color': forms.TextInput(attrs={'type': 'color'})}
-        
-        
+
+
 @admin.register(AuxiliaryNameGroup)
 class AuxiliaryNameGroupAdmin(admin.ModelAdmin):
     form = AuxiliaryNameGroupAdminForm
@@ -143,7 +143,7 @@ class AuxiliaryNameGroupAdmin(admin.ModelAdmin):
 
     list_display = ['id', 'color', 'location', 'social_info']
     list_editable = ['color', 'location', 'social_info']
-    
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
@@ -176,7 +176,7 @@ class AcquaintanceshipAdmin(admin.ModelAdmin):
     search_fields = [
         'knowing_character__fullname', 'known_character__fullname'
     ]
-    
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
@@ -224,12 +224,12 @@ class AcquisitionAdminForm(forms.ModelForm):
     class Meta:
         model = Acquisition
         exclude = []
-        
+
     def __init__(self, *args, **kwargs):
         from rules.models import SkillLevel
         super().__init__(*args, **kwargs)
         self.fields['skill_level'].queryset = SkillLevel.objects.select_related('skill')
-    
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
@@ -238,15 +238,15 @@ class AcquisitionAdminForm(forms.ModelForm):
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
-    
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         qs = qs.select_related(
             'skill_level__skill',
         )
         return qs
-        
-        
+
+
 @admin.register(Acquisition)
 class AcquisitionAdmin(admin.ModelAdmin):
     fields = ['character', 'skill_level', 'weapon_type', 'sphragis']
@@ -256,7 +256,7 @@ class AcquisitionAdmin(admin.ModelAdmin):
     ]
     list_filter = ['sphragis', 'character', 'skill_level__skill', 'weapon_type']
     search_fields = ['skill_level', 'character', 'weapon_type', 'sphragis']
-    
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         qs = qs.select_related(
@@ -268,7 +268,7 @@ class AcquisitionAdmin(admin.ModelAdmin):
             'sphragis',
         )
         return qs
-    
+
     def get_img(self, obj):
         if obj.character.profile.image:
             return format_html(
@@ -295,7 +295,7 @@ class AcquisitionInline(admin.TabularInline):
         formset.form.base_fields["skill_level"].queryset = \
             formset.form.base_fields["skill_level"].queryset.select_related("skill")
         return formset
-    
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.select_related(
@@ -337,7 +337,7 @@ class CharacterAdmin(admin.ModelAdmin):
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
-    
+
     def get_img(self, obj):
         if obj.profile.image:
             img = f'<img src="{obj.profile.image.url}" width="70" height="70">'
