@@ -28,7 +28,7 @@ AUDIO_TYPES = (
 class Audio(Model):
     """A model to store paths to externally stored audio files."""
     LINK_BLUEPRINT = 'https://docs.google.com/uc?export=download&id=[ID HERE]'
-    
+
     # This doesn't work on PythonAnywhere... do they really handle Django 3.1?
     # class AudioType(models.TextChoices):
     #     domeny = 'DOMENY'
@@ -36,31 +36,31 @@ class Audio(Model):
     #     topoi = 'TOPOI'
     #     varia = 'VARIA'
     # type = models.CharField(max_length=5, choices=AudioType.choices)
-    
+
     title = CharField(max_length=200)
     description = TextField(max_length=500, blank=True, null=True)
     type = CharField(max_length=10, choices=AUDIO_TYPES)
     path = TextField(default=LINK_BLUEPRINT)
-    
+
     # For Google Drive construct path by:
     # https://docs.google.com/uc?export=download&id=XXXXXXXX
     # where XXXXXXXX equals file id take from the share link:
     # https://drive.google.com/file/d/XXXXXXXX/view?usp=sharing ==> XXXXXXXX
     # RESULT: https://docs.google.com/uc?export=download&id=XXXXXXXX
-    
+
     class Meta:
         ordering = ['type', 'title']
 
     def __str__(self):
         return self.title
 
-        
+
 class AudioSet(Model):
     title = CharField(max_length=200)
     description = TextField(max_length=500, blank=True, null=True)
     main_audio = FK(to=Audio, on_delete=PROTECT)
     audios = M2M(to=Audio, related_name='audio_sets', blank=True)
-    
+
     class Meta:
         ordering = ['title']
 
@@ -98,18 +98,18 @@ class PictureImage(Model):
 
     class Meta:
         ordering = ['image']
-        
+
     def __str__(self):
         return str(self.image.name).replace("post_pics/", "")
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        
+
         # For 'image_icons_color' default, check if it applies
         if self.image_icons_color == "light":
             self.image_icons_color = determine_icons_color(self)
             super().save(*args, **kwargs)
-        
+
 
 IMG_TYPES = (
     ('knowledge', 'KNOWLEDGE'),
@@ -138,7 +138,7 @@ class Picture(Model):
         ordering = ['type', 'image']
 
     def __str__(self):
-        return f"[{self.type.upper()}] {self.description}"
+        return f"[{self.type.upper()}] {self.description} [{self.image.description}]"
 
 
 class PictureSetManager(Manager):
@@ -150,7 +150,7 @@ class PictureSetManager(Manager):
 
 class PictureSet(Model):
     objects = PictureSetManager()
-    
+
     title = CharField(max_length=200)
     pictures = M2M(to=Picture, related_name='picture_sets', blank=True)
 

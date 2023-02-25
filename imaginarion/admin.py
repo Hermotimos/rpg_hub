@@ -19,11 +19,11 @@ class AudioAdmin(admin.ModelAdmin):
     list_editable = ['type', 'description', 'path']
     list_filter = ['type']
     search_fields = ['title', 'description']
-    
+
     def admin_title(self, obj):
         return obj.__str__()
-    
-    
+
+
 @admin.register(AudioSet)
 class AudioSetAdmin(admin.ModelAdmin):
     filter_horizontal = ['audios']
@@ -33,7 +33,7 @@ class AudioSetAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'description', 'main_audio']
     list_editable = ['title', 'description', 'main_audio']
     search_fields = ['title', 'description', 'main_audio']
-    
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
@@ -43,13 +43,13 @@ class AudioSetAdmin(admin.ModelAdmin):
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
 
-    
+
 # -----------------------------------------------------------------------------
 
 
 @admin.register(Picture)
 class PictureAdmin(admin.ModelAdmin):
-    list_display = ['id', 'type', 'description', 'get_image']
+    list_display = ['id', 'type', 'description', 'get_picture_image_descr', 'get_image']
     list_editable = ['type', 'description']
     list_filter = ['type']
     search_fields = ['description']
@@ -58,12 +58,15 @@ class PictureAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         qs = qs.select_related('image')
         return qs
-    
+
     def get_image(self, obj):
         html = f'<img height="60" src="{obj.image.image.url}">&nbsp;'
         return format_html(html)
 
-    
+    def get_picture_image_descr(self, obj):
+        return obj.image.description
+
+
 @admin.register(PictureImage)
 class PictureImageAdmin(admin.ModelAdmin):
     list_display = ['get_img', 'description', 'image_icons_color', 'image']
@@ -94,3 +97,8 @@ class PictureSetAdmin(admin.ModelAdmin):
         else:
             html = '<h1><font color="red">BRAK OBRAZÓW</font></h1>'
         return format_html(html)
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name in ["pictures"]:
+            kwargs["queryset"] = Picture.objects.select_related('image')
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
