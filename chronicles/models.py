@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import (
     BooleanField,
@@ -16,7 +17,7 @@ from django.db.models import (
 )
 from django.db.models.signals import post_save, m2m_changed
 from django.utils.text import Truncator
-
+from django.contrib.postgres.fields import ArrayField
 from communications.models import Thread
 from imaginarion.models import Audio, PictureSet
 from rpg_project.utils import OrderByPolish
@@ -36,17 +37,17 @@ class Chapter(Model):
     chapter_no = IntegerField(blank=True, null=True)
     title = CharField(max_length=200, unique=True)
     image = ImageField(upload_to='chronicles', blank=True, null=True)
-    
+
     class Meta:
         ordering = ['chapter_no']
         verbose_name = 'I. Chapter'
-    
+
     def __str__(self):
         return self.title
 
 
 class GameSession(Model):
-    game_no = IntegerField(null=True)
+    order_no = IntegerField(null=True)
     title = CharField(max_length=200)
     chapter = FK(
         to=Chapter,
@@ -55,22 +56,23 @@ class GameSession(Model):
         blank=True,
         null=True,
     )
+    game_no = IntegerField(null=True)
     date = DateField(blank=True, null=True)
-    
+
     class Meta:
-        ordering = ['game_no']
+        ordering = ['order_no']
         verbose_name = 'II. Game session'
-    
+
     def __str__(self):
         return self.title
-    
+
 
 class PlotThreadManager(Manager):
     pass
 
 
 class PlotThreadEndedManager(Manager):
-    
+
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(is_ended=True)
@@ -78,7 +80,7 @@ class PlotThreadEndedManager(Manager):
 
 
 class PlotThreadActiveManager(Manager):
-    
+
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(is_ended=False)
@@ -88,14 +90,14 @@ class PlotThreadActiveManager(Manager):
 class PlotThread(Model):
     name = CharField(max_length=100, unique=True)
     is_ended = BooleanField(default=False)
-    
+
     objects = PlotThreadManager()
     plot_threads_ended = PlotThreadEndedManager()
     plot_threads_active = PlotThreadActiveManager()
-    
+
     def __str__(self):
         return self.name
-    
+
     class Meta:
         ordering = [OrderByPolish('name')]
         verbose_name = '- PlotThread'
@@ -108,7 +110,7 @@ class Date(Model):
         ('3', 'Jesieni'),
         ('4', 'Zimy')
     )
-    
+
     year = IntegerField()
     season = CharField(max_length=6, choices=SEASONS, blank=True, null=True)
     day = PositiveSmallIntegerField(
@@ -116,22 +118,22 @@ class Date(Model):
         blank=True,
         null=True,
     )
-    
+
     class Meta:
         unique_together = ['year', 'season', 'day']
         verbose_name = '- Date'
         ordering = ['year', 'day']
-    
+
     def __str__(self):
         if self.season and self.day:
             return f'{self.day} dnia {SEASONS[self.season]} {self.year} roku'
         elif self.season:
             return f'{SEASONS[self.season]} {self.year} roku'
         return f'{self.year} roku'
-    
+
 
 class TimeUnitManager(Manager):
-    
+
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related(
@@ -153,7 +155,7 @@ def non_GM():
 
 class TimeUnit(Model):
     objects = TimeUnitManager()
-    
+
     # Fields for all proxies
     date_start = FK(
         to=Date,
@@ -184,7 +186,7 @@ class TimeUnit(Model):
     date_in_chronology = CharField(max_length=99, blank=True, null=True)
     description_short = TextField(blank=True, null=True)
     description_long = TextField(blank=True, null=True)
-    
+
     # Fields for TimeSpan & HistoryEvent proxies
     known_short_desc = M2M(
         to=Profile,
@@ -243,7 +245,7 @@ class TimeUnit(Model):
         related_name='events',
         limit_choices_to={'kind': 'Debate'},
         blank=True)
-    
+
     class Meta:
         ordering = ['date_start']
         verbose_name_plural = '* Time Units (Time spans, History events, Game events)'
@@ -265,7 +267,7 @@ class TimeUnit(Model):
             known_character__profile__in=(self.participants.all() | self.informees.all())
         ).filter(
             known_character__profile__in=Profile.active_players.all())
-        
+
         # TODO temp 'Ilen z Astinary, Alora z Astinary'
         # hide Davos from Ilen and Alora
         if current_profile.id in [5, 6]:
@@ -274,7 +276,7 @@ class TimeUnit(Model):
         if current_profile.id == 3:
             qs = qs.exclude(known_character__profile__id__in=[5, 6])
         # TODO end temp
-        
+
         return qs
 
 
@@ -284,7 +286,7 @@ class TimeUnit(Model):
 
 
 class ChronologyManager(Manager):
-    
+
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related('in_timeunit', 'date_start', 'date_end')
@@ -295,14 +297,14 @@ class ChronologyManager(Manager):
 
 class Chronology(TimeUnit):
     objects = ChronologyManager()
-    
+
     class Meta:
         proxy = True
         verbose_name_plural = '1 - Chronologies'
 
 
 class EraManager(Manager):
-    
+
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related('in_timeunit', 'date_start', 'date_end')
@@ -313,7 +315,7 @@ class EraManager(Manager):
 
 class Era(TimeUnit):
     objects = EraManager()
-    
+
     class Meta:
         proxy = True
         ordering = ['in_timeunit']
@@ -321,7 +323,7 @@ class Era(TimeUnit):
 
 
 class PeriodManager(Manager):
-    
+
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related('in_timeunit', 'date_start', 'date_end')
@@ -337,7 +339,7 @@ class PeriodManager(Manager):
 
 class Period(TimeUnit):
     objects = PeriodManager()
-    
+
     class Meta:
         proxy = True
         ordering = ['in_timeunit']
@@ -354,13 +356,13 @@ class Event(TimeUnit):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        
+
         start = self.date_start
         end = self.date_end
         start_day = end_day = 0
         start_season = end_season = 0
         start_year_in_period = end_year_in_period = 0
-        
+
         if start:
             start_day = f'{start.day}' if start.day else ''
             start_season = f'{SEASONS[start.season]}' if start.season else ''
@@ -369,7 +371,7 @@ class Event(TimeUnit):
             end_day = f'{end.day}' if end.day else ''
             end_season = f'{SEASONS[end.season]}' if end.season else ''
             end_year_in_period = f'{end.year}'
-            
+
         # Date in period
         period = self.in_timeunit
         if not end:
@@ -396,7 +398,7 @@ class Event(TimeUnit):
         era = self.in_timeunit.in_timeunit
         period_begin_in_era = period.date_start.year
         start_year_in_era = int(period_begin_in_era) + int(start_year_in_period)
-        
+
         if not end:
             date_in_era = f'{prefix} {start_year_in_era} roku {era.name_genetive}'
         else:
@@ -409,12 +411,12 @@ class Event(TimeUnit):
             else:
                 date_in_era = f'{prefix} {start_year_in_era} roku '
             date_in_era += f'{era.name_genetive}'
-            
+
         # Date in chronology
         chronology = self.in_timeunit.in_timeunit.in_timeunit
         era_begin_in_chronology = era.date_start.year
         start_year_in_chronology = int(era_begin_in_chronology) + int(period_begin_in_era) + int(start_year_in_period)
-        
+
         if not end:
             date_in_chronology = f'{prefix} {start_year_in_chronology} roku {chronology.name_genetive}'
         else:
@@ -427,7 +429,7 @@ class Event(TimeUnit):
             else:
                 date_in_chronology = f'{prefix} {start_year_in_chronology} roku '
             date_in_chronology += f'{chronology.name_genetive}'
-            
+
         self.date_in_period = str(date_in_period)
         self.date_in_era = str(date_in_era)
         self.date_in_chronology = str(date_in_chronology)
@@ -435,7 +437,7 @@ class Event(TimeUnit):
 
 
 class HistoryEventManager(Manager):
-    
+
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related(
@@ -446,14 +448,14 @@ class HistoryEventManager(Manager):
 
 class HistoryEvent(Event):
     objects = HistoryEventManager()
-    
+
     class Meta:
         proxy = True
         verbose_name = '4 - History Event'
-    
+
 
 class GameEventManager(Manager):
-    
+
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.select_related(
@@ -464,12 +466,12 @@ class GameEventManager(Manager):
 
 class GameEvent(Event):
     objects = GameEventManager()
-    
+
     class Meta:
         proxy = True
         ordering = ['game', 'event_no_in_game']
         verbose_name = 'III. Game event'
-    
+
 
 def update_known_locations(sender, instance, **kwargs):
     """Whenever a profile becomes 'participant' or 'informed' of an event in
@@ -507,22 +509,22 @@ def update_acquantanceships_for_participants(sender, instance, **kwargs):
     objects for all participants, in both directions.
     """
     from prosoponomikon.models import Acquaintanceship, Character
-    
+
     participating_characters = Character.objects.filter(
         profile__in=instance.participants.all())
-    
+
     for knowing_character in participating_characters:
         for known_character in participating_characters.exclude(id=knowing_character.id):
-            
+
             existing, created = Acquaintanceship.objects.get_or_create(
                 knowing_character=knowing_character,
                 known_character=known_character,
                 defaults={"is_direct": True})
-            
+
             if not existing.is_direct:
                 existing.is_direct = True
                 existing.save()
-    
+
 
 # This signal also fires on GameEvent object creation
 m2m_changed.connect(
@@ -535,11 +537,11 @@ def update_acquantanceships_for_informees(sender, instance, **kwargs):
     objects for all informees, so that they know all participants indirectly.
     """
     from prosoponomikon.models import Acquaintanceship, Character
-    
+
     characters = Character.objects.all()
     participating_characters = characters.filter(profile__in=instance.participants.all())
     informed_characters = characters.filter(profile__in=instance.informees.all())
-    
+
     for knowing_character in informed_characters:
         for known_character in participating_characters:
             Acquaintanceship.objects.get_or_create(
@@ -547,8 +549,8 @@ def update_acquantanceships_for_informees(sender, instance, **kwargs):
                 known_character=known_character,
                 defaults={'is_direct': False},
             )
-            
-            
+
+
 # This signal also fires on GameEvent object creation
 m2m_changed.connect(
     receiver=update_acquantanceships_for_informees,

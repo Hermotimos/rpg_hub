@@ -43,7 +43,7 @@ class HistoryEventAdmin(admin.ModelAdmin):
     ]
     list_editable = ['description_short', 'description_long', 'audio']
     search_fields = ['description_short', 'description_long']
-    
+
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name in ["known_short_desc", "known_long_desc"]:
             kwargs["queryset"] = Profile.non_gm.all()
@@ -77,14 +77,14 @@ class GameEventAdmin(admin.ModelAdmin):
     ]
     list_filter = ['game']
     search_fields = ['description_short', 'description_long']
-    
+
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name in ["participants", "informees"]:
             kwargs["queryset"] = Profile.non_gm.select_related('character')
         if db_field.name == "debates":
             kwargs["queryset"] = Thread.objects.filter(kind='Debate')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
-        
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
@@ -150,7 +150,7 @@ class GameEventInline(admin.TabularInline):
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
-    
+
 
 # -----------------------------------------------------------------------------
 
@@ -161,10 +161,10 @@ class GameSessionAdmin(admin.ModelAdmin):
         models.CharField: {'widget': forms.TextInput(attrs={'size': 70})},
     }
     inlines = [GameEventInline]
-    list_display = ['game_no', 'title', 'chapter', 'date']
-    list_editable = ['title', 'chapter', 'date']
+    list_display = ['id', 'order_no', 'title', 'chapter', 'game_no', 'date']
+    list_editable = ['order_no', 'title', 'chapter', 'game_no', 'date']
     list_select_related = ['chapter']
-    ordering = ['-game_no']
+    ordering = ['-order_no']
     search_fields = ['title']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -200,7 +200,7 @@ class PlotThreadAdmin(admin.ModelAdmin):
 # class TimeUnitAdmin(admin.ModelAdmin):
 #     list_display = ['id', 'description_short', 'description_long']
 #     search_fields = ['description_short', 'description_long']
-    
+
 
 @admin.register(Chronology)
 class ChronologyAdmin(admin.ModelAdmin):
