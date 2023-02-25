@@ -171,7 +171,7 @@ def refresh_content_types(request):
 
 
 @login_required
-@auth_profile(['gm'])
+@auth_profile(['all'])
 def clear_cache(request):
     cache.clear()
     messages.info(
