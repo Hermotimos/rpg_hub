@@ -57,7 +57,7 @@ def chronicle_main_view(request):
                 'game_events',
                 filter=Q(game_events__in=current_profile.events_participated.all())))
 
-    games = games.order_by('game_no').select_related('chapter').exclude(game_no=0)
+    games = games.order_by('order_no').select_related('chapter').exclude(game_no=0)
     chapters = Chapter.objects.filter(game_sessions__in=games).distinct()
 
     context = {
