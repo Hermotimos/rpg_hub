@@ -279,6 +279,18 @@
       "src": "elusive"
     },
     {
+      "uid": "d5fabfa46384953ae055fceacb2229a7",
+      "css": "arrows-cw",
+      "code": 59412,
+      "src": "elusive"
+    },
+    {
+      "uid": "3d39c828009c04ddb6764c0b04cd2439",
+      "css": "forward",
+      "code": 59413,
+      "src": "fontawesome"
+    },
+    {
       "uid": "40e6373161a67528a2871603605e279d",
       "css": "share",
       "code": 59394,
