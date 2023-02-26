@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db.models import (
     CharField,
     ForeignKey as FK,
@@ -96,7 +97,7 @@ class Location(Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('toponomikon:location', kwargs={'location_id' : self.id})
+        return settings.BASE_URL + reverse('toponomikon:location', kwargs={'location_id' : self.id})
 
     def informables(self, current_profile):
         qs = current_profile.character.acquaintanceships()

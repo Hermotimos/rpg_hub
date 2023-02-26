@@ -1,6 +1,7 @@
 import datetime
 
 from ckeditor.fields import RichTextField
+from django.conf import settings
 from django.db.models import (
     BooleanField,
     CharField,
@@ -95,7 +96,7 @@ class Thread(Model):
         return qs
 
     def get_absolute_url(self):
-        return reverse('communications:thread', kwargs={'thread_id' : self.id, 'tag_title': None})
+        return settings.BASE_URL + reverse('communications:thread', kwargs={'thread_id' : self.id, 'tag_title': None})
 
 
 class AnnouncementManager(Manager):

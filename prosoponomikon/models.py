@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db.models import (
     BooleanField,
     CASCADE,
@@ -253,7 +254,7 @@ class Character(Model):
                     knows_if_dead=True)
 
     def get_absolute_url(self):
-        return reverse('prosoponomikon:character', kwargs={'character_id' : self.id})
+        return settings.BASE_URL + reverse('prosoponomikon:character', kwargs={'character_id' : self.id})
 
     def informables(self, current_profile):
         qs = current_profile.character.acquaintanceships()

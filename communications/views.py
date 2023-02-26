@@ -415,7 +415,7 @@ def create_thread_view(request, thread_kind):
             if game_event := thread_form.cleaned_data['game_event']:
                 game_event = GameEvent.objects.get(id=game_event.id)
                 game_event.debates.add(thread.id)
-
+    
         send_mail(
             subject=f"[RPG] {THREADS_MAP[thread_kind]['text']}: '{thread}'",
             message=f"{thread.get_absolute_url()}",

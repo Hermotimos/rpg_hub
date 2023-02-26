@@ -284,6 +284,7 @@ LOGOUT_REDIRECT_URL = 'users:login'
 # Default 1000 is too low for large inlines in admin
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
+
 # -----------------------------------------------------------------------------
 # email backend
 
@@ -296,6 +297,7 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD_TWO_STEP')
 
 EMAIL_SEND_ALLOWED = env('EMAIL_SEND_ALLOWED').lower() == "true"
+
 
 # -----------------------------------------------------------------------------
 # debug-toolbar
@@ -312,6 +314,7 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
         'SHOW_TOOLBAR_CALLBACK': lambda r: False,
     }
 
+
 # -----------------------------------------------------------------------------
 # django-ckeditor
 
@@ -325,3 +328,13 @@ CKEDITOR_CONFIGS = {
 
     },
 }
+
+
+# -----------------------------------------------------------------------------
+# Varia
+
+# For get_absolute_url methods
+if os.getenv('GAE_ENV', '').startswith('standard'):
+    BASE_URL = "https://hyllemath.lm.r.appspot.com"
+else:
+    BASE_URL = '127.0.0.1:8000'
