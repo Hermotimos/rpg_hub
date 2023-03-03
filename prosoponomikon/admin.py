@@ -14,10 +14,10 @@ from rpg_project.utils import formfield_with_cache
 # -----------------------------------------------------------------------------
 
 
-@admin.register(FirstNameGroup)
-class FirstNameGroupAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'type', 'description']
-    list_editable = ['title', 'type', 'description']
+@admin.register(FamilyNameGroup)
+class FamilyNameGroupAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title', 'description']
+    list_editable = ['title', 'description']
 
 
 @admin.register(FamilyName)
@@ -57,10 +57,10 @@ class FamilyNameAdmin(admin.ModelAdmin):
 # -----------------------------------------------------------------------------
 
 
-@admin.register(FamilyNameGroup)
-class FamilyNameGroupAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'description']
-    list_editable = ['title', 'description']
+@admin.register(FirstNameGroup)
+class FirstNameGroupAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title', 'type', 'description']
+    list_editable = ['title', 'type', 'description']
 
 
 @admin.register(FirstName)

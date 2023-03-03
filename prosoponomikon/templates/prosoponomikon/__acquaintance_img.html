@@ -13,7 +13,7 @@
             {% endif %}
         </span>'>
     {% if acquaintanceship.is_direct %}
-        <img class="character {% if acquaintanceship.knows_if_dead and not acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
+        <img class="{% if acquaintanceship.knows_if_dead and not acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
              src="
                 {% if acquaintanceship.knows_as_image %}
                     {{ acquaintanceship.knows_as_image.url }}
@@ -22,7 +22,7 @@
                 {% endif %}
              ">
     {% else %}
-        <img class="character {% if acquaintanceship.knows_if_dead and not acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
+        <img class="{% if acquaintanceship.knows_if_dead and not acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
              src="{% static 'img/profile_known_only_indirectly.jpg' %}">
     {% endif %}
 
