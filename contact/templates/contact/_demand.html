@@ -24,7 +24,7 @@
             </div>
         </div>
     </header>
-    
+
     <article>
         <div class="row">
             <div class="col-2 text-nowrap">
@@ -35,10 +35,10 @@
             <div class="col-12 font-18 font-italic text-justify">
                 <a data-toggle="collapse" data-target="#demand{{ demand.id }}">{{ demand.text|capfirst|linebreaks }}</a>
                 {% if demand.image %}
-                    <img src="{{ demand.image.url }}">
+                    <img class="img-fluid mx-auto d-block" src="{{ demand.image.url }}">
                 {% endif %}
             </div>
-            
+
             <div class="collapse container mb-5" id="demand{{ demand.id }}">
                 <div class="row">
                     <div class="col-1"></div>
@@ -70,7 +70,7 @@
                                 </form>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
