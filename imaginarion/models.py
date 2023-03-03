@@ -103,13 +103,11 @@ class PictureImage(Model):
         return str(self.image.name).replace("post_pics/", "")
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
         # For 'image_icons_color' default, check if it applies
         if self.image_icons_color == "light":
             self.image_icons_color = determine_icons_color(self)
-            super().save(*args, **kwargs)
-
+        super().save(*args, **kwargs)
+        
 
 IMG_TYPES = (
     ('knowledge', 'KNOWLEDGE'),
