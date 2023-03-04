@@ -65,6 +65,7 @@ class FirstNameGroupAdmin(admin.ModelAdmin):
 
 @admin.register(FirstName)
 class FirstNameAdmin(admin.ModelAdmin):
+    filter_horizontal = ['equivalents']
     formfield_overrides = {
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 3, 'cols': 15})},
         models.CharField: {'widget': forms.TextInput(attrs={'size': 8})},
