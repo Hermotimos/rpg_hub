@@ -131,6 +131,15 @@ class FirstName(Model):
     auxiliary_group = FK(
         to=AuxiliaryNameGroup, on_delete=PROTECT, blank=True, null=True)
 
+    # for Hyllemath 2.0
+    isarchaic = BooleanField(default=False)
+    origin = FK(
+        "self", related_name='originatedfirstnames',
+        null=True, blank=True, on_delete=PROTECT)
+    equivalents = M2M('self', symmetrical=True, blank=True)
+    meaning = TextField(max_length=10000, blank=True, null=True)
+    comments = TextField(max_length=10000, blank=True, null=True)
+
     class Meta:
         ordering = [
             OrderByPolish('auxiliary_group__social_info'),
