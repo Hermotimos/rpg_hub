@@ -8,7 +8,7 @@
 {% endblock head_extra %}
 
 
-<nav class="navbar navbar-expand-md navbar-dark {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} bg-navbar-dev {% else %} bg-navbar {% endif %} fixed-top">
+<nav class="navbar navbar-expand-md navbar-dark {% if '127.0.0.1' in request.META.HTTP_HOST %} bg-navbar-dev {% else %} bg-navbar {% endif %} fixed-top">
 
     <div class="container px-3 px-sm-1">
         <span class="navbar-brand navbar-nav mr-5">
@@ -26,7 +26,7 @@
 
                 {% with undone_demands=request.current_profile.undone_demands unseen_announcements=request.current_profile.unseen_announcements %}
                     <li class="dropdown pr-4 mr-auto">
-                        <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
+                        <button class="font-18 nav-item nav-link {% if '127.0.0.1' in request.META.HTTP_HOST %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
                             Organizacyjne
                         </button>
                         <div class="dropdown-content">
@@ -74,7 +74,7 @@
 
                 {% with unseen_debates=request.current_profile.unseen_debates %}
                     <li class="dropdown pr-4 mr-auto">
-                        <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
+                        <button class="font-18 nav-item nav-link {% if '127.0.0.1' in request.META.HTTP_HOST %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
                             Przygody
                         </button>
                         <div class="dropdown-content">
@@ -104,7 +104,7 @@
                 {% endwith %}
 
                 <li class="dropdown pr-4">
-                    <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Wiedza</button>
+                    <button class="font-18 nav-item nav-link {% if '127.0.0.1' in request.META.HTTP_HOST %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Wiedza</button>
                     <div class="dropdown-content">
                         <ul class="bullets-1 pl-4">
                             <li><a class="font-14 nav-link small-caps" href="{% url 'knowledge:almanac' %}">Almanach</a></li>
@@ -124,7 +124,7 @@
 
                 {% if request.current_profile.status == 'gm' %}
                     <li class="dropdown pr-4">
-                        <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Postacie</button>
+                        <button class="font-18 nav-item nav-link {% if '127.0.0.1' in request.META.HTTP_HOST %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Postacie</button>
                         <div class="dropdown-content">
                             <ul class="bullets-1 pl-4">
             <!--                            <li><a class="font-14 nav-link small-caps" href="#">Cechy i walka</a></li>-->
@@ -139,7 +139,7 @@
                     <!-- Nothing -->
                 {% else %}
                     <li class="dropdown pr-4">
-                        <button class="font-18 nav-item nav-link {% if request.META.HTTP_HOST == '127.0.0.1:8000' %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Postać</button>
+                        <button class="font-18 nav-item nav-link {% if '127.0.0.1' in request.META.HTTP_HOST %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Postać</button>
                         <div class="dropdown-content">
                             <ul class="bullets-1 pl-4">
             <!--                            <li><a class="font-14 nav-link small-caps" href="#">Cechy i walka</a></li>-->
