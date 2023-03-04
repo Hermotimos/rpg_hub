@@ -25,17 +25,29 @@
                                                     -
                                                 {% endif %}
                                             </span>'>
-
-                                        {{ name }}
+                                            {{ name }}
+                                            {% if name.isarchaic %}
+                                                <span class="text-muted font-italic">(arch.)</span>
+                                            {% endif %}
                                         {% if name.form_2 %}
                                             <span class="text-muted-more text-nowrap">
                                                 &nbsp;{{ name.form_2 }}
                                             </span>
                                         {% endif %}
                                     </a>
-                                    {% if name.info %}
-                                        <span class="mb-n4" data-toggle="tooltip" data-placement="right" data-html="true" title="{{ name.info }}">
-                                            🛈
+                                    {% if name.meaning %}
+                                        <span class="mb-n4 font" data-toggle="tooltip" data-placement="right" data-html="true" title="{{ name.meaning }}">
+                                            ⓜ
+                                        </span>
+                                    {% endif %}
+                                    {% if name.comments %}
+                                        <span class="mb-n4" data-toggle="tooltip" data-placement="right" data-html="true" title="{{ name.comments }}">
+                                            ⓒ
+                                        </span>
+                                    {% endif %}
+                                    {% if name.origin %}
+                                        <span class="mb-n4" data-toggle="tooltip" data-placement="right" data-html="true" title="{{ name.origin }}">
+                                            ⓞ
                                         </span>
                                     {% endif %}
                                 </li>

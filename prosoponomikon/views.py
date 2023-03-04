@@ -30,10 +30,10 @@ from users.models import Profile, User
 @auth_profile(['all'])
 def prosoponomikon_acquaintanceships_view(request):
     current_profile = request.current_profile
-    
+
     acquaintanceships = current_profile.character.acquaintanceships().exclude(
         known_character=current_profile.character)
-    
+
     context = {
         'page_title': 'Prosoponomikon',
         'acquaintanceships': acquaintanceships,
@@ -77,19 +77,19 @@ def prosoponomikon_character_view(request, character_id):
         biography_packets = character.biography_packets.filter(
             Q(acquired_by=current_profile) | Q(author=current_profile))
         dialogue_packets = None
-        
+
     biography_packets = biography_packets.prefetch_related(
         'picture_sets__pictures').select_related('author')
     biography_packets = annotate_informables(biography_packets, current_profile)
     item_collections = character.collections.annotate(total_weight=Sum(
         Case(When(items__is_deleted=False, then=F('items__weight')))))
-    
+
     # Any Profile viewing own Character or GM viewing any Character
     if current_profile.status == 'gm':
         knowledge_packets = character.profile.knowledge_packets.prefetch_related(
             'picture_sets__pictures', 'references').select_related('author').order_by('title')
         knowledge_packets = annotate_informables(knowledge_packets, current_profile)
-        
+
         acquaintanceships = character.acquaintanceships().exclude(known_character=character)
         also_known_as = character.knowing_characters.filter(
             (~Q(knows_as_description=None) & ~Q(knows_as_description=''))
@@ -103,7 +103,7 @@ def prosoponomikon_character_view(request, character_id):
         acquisitions_priests = acquisitions.filter(skill_level__skill__types__kinds__name="Moce Kapłańskie")
         acquisitions_sorcerers = acquisitions.filter(skill_level__skill__types__kinds__name="Zaklęcia")
         acquisitions_theurgists = acquisitions.filter(skill_level__skill__types__kinds__name="Moce Teurgiczne")
-        
+
         skill_types = character.skill_types_for_character_sheet()
 
         synergies = character.synergies_for_character_sheet()
@@ -111,13 +111,13 @@ def prosoponomikon_character_view(request, character_id):
             skills__types__kinds__name__in=["Moce Kapłańskie",  "Zaklęcia", "Moce Teurgiczne"])
 
         items = Item.objects.filter(collection__in=item_collections, is_deleted=False)
-     
+
         # Equipment
         item_formset = ItemFormSet(
             request.POST or None,
             queryset=items,
             item_collections=item_collections)
-    
+
     if request.POST.get('formset-1'):
         if item_formset.is_valid():
             item_formset.save(commit=False)
@@ -129,7 +129,7 @@ def prosoponomikon_character_view(request, character_id):
             return redirect('prosoponomikon:character', character_id=character_id)
         else:
             messages.warning(request, "Popraw wskazane błędy, aby zaktualizować Ekwipunek!")
-            
+
     # INFORM FORM
     elif request.POST.get('Acquaintanceship'):
         handle_inform_form(request)
@@ -185,7 +185,7 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
             data=request.POST or None,
             files=request.FILES or None,
             instance=bio_packet)
-    
+
     if form.is_valid():
         if current_profile.status == 'gm':
             bio_packet = form.save()
@@ -194,7 +194,7 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
             bio_packet.author = current_profile
             bio_packet.save()
             bio_packet.acquired_by.add(current_profile)
-            
+
             pictures = [
                 v for k, v in form.cleaned_data.items()
                 if 'picture' in k and v is not None
@@ -224,7 +224,7 @@ def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0
                 bio_packet.picture_sets.add(new_picture_set)
 
         character.biography_packets.add(bio_packet)
-        
+
         messages.success(request, "Zapisano Biogram!")
         return redirect('prosoponomikon:character', character_id)
 
@@ -253,12 +253,12 @@ def prosoponomikon_acquaintanceship_create_edit_view(request, character_id=None)
         files=request.FILES or None,
         current_profile=current_profile,
         instance=Character.objects.get(id=character_id) if character_id else Character())
-    
+
     if form.is_valid():
         is_direct = form.cleaned_data['is_direct']
         is_alive = form.cleaned_data['is_alive']
         character = form.save(commit=False)
-        
+
         if not character_id:
             character.profile = Profile.objects.create(
                 user=User.objects.filter(profiles__status='gm').first(),
@@ -269,7 +269,7 @@ def prosoponomikon_acquaintanceship_create_edit_view(request, character_id=None)
             profile.is_alive = is_alive
             profile.save()
         form.save()
-        
+
         if not character_id:
             Acquaintanceship.objects.create(
                 known_character=character,
@@ -288,7 +288,7 @@ def prosoponomikon_acquaintanceship_create_edit_view(request, character_id=None)
         if character.profile.image == "profile_pics/profile_default.jpg" and is_direct:
             messages.info(request, f"Wyślij Dezyderat do MG, żeby dodał jej obraz, jeśli znasz Postać z widzenia!")
         return redirect('prosoponomikon:character', character.id)
-    
+
     context = {
         'page_title': "Edytuj Postać" if character_id else "Nowa Postać",
         'form': form,
@@ -302,7 +302,7 @@ def prosoponomikon_character_create_view(request):
     """Handle CharacterCreateForm intended for GM."""
     form = CharacterCreateForm(
         data=request.POST or None, files=request.FILES or None)
-    
+
     if form.is_valid():
         character = form.save(commit=False)
         character.profile = Profile.objects.create(
@@ -312,7 +312,7 @@ def prosoponomikon_character_create_view(request):
         form.save()
         messages.success(request, f"Utworzono Postać {character}!")
         return redirect('prosoponomikon:character-create')
-    
+
     context = {
         'page_title': "Nowa Postać",
         'form': form,
@@ -326,6 +326,7 @@ def prosoponomikon_first_names_view(request):
     name_groups = FirstNameGroup.objects.prefetch_related(
         'affix_groups__first_names__characters__profile',
         'affix_groups__first_names__auxiliary_group__location',
+        'affix_groups__first_names__origin',
     )
     context = {
         'page_title': "Imiona",
@@ -357,10 +358,10 @@ def prosoponomikon_acquaintances_view(request, location_id):
     """Make everybody know directly everybody in a given Location."""
 
     # TODO update this view
-    
+
     location = Location.objects.get(id=location_id)
     backup_db(reason=f"acquaintances_{location.name}")
-    
+
     inhabitants = Character.objects.filter(
         frequented_locations__in=location.with_sublocations()).distinct()
 
