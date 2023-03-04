@@ -128,8 +128,6 @@ class FirstName(Model):
         blank=True, null=True)
     auxiliary_group = FK(
         to=AuxiliaryNameGroup, on_delete=PROTECT, blank=True, null=True)
-
-    # for Hyllemath 2.0
     isarchaic = BooleanField(default=False)
     origin = FK(
         "self", related_name='originatedfirstnames',
