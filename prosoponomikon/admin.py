@@ -66,15 +66,17 @@ class FirstNameGroupAdmin(admin.ModelAdmin):
 @admin.register(FirstName)
 class FirstNameAdmin(admin.ModelAdmin):
     formfield_overrides = {
-        models.TextField: {'widget': forms.Textarea(attrs={'rows': 3, 'cols': 40})},
-        models.CharField: {'widget': forms.TextInput(attrs={'size': 20})},
-        models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 3, 'cols': 15})},
+        models.CharField: {'widget': forms.TextInput(attrs={'size': 8})},
+        models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:100px'})},
     }
     list_display = [
-        'id', 'form', 'form_2', 'info', 'affix_group', 'auxiliary_group'
+        'id', 'form', 'form_2', 'info', 'affix_group', 'auxiliary_group',
+        'isarchaic', 'origin', 'meaning', 'comments',
     ]
     list_editable = [
-        'form', 'form_2', 'info', 'affix_group', 'auxiliary_group'
+        'form', 'form_2', 'info', 'affix_group', 'auxiliary_group',
+        'isarchaic', 'origin', 'meaning', 'comments',
     ]
     list_filter = ['auxiliary_group']
     ordering = ['form']
@@ -86,6 +88,7 @@ class FirstNameAdmin(admin.ModelAdmin):
         for field in [
             'affix_group',
             'auxiliary_group',
+            'origin',
         ]:
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
