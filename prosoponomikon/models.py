@@ -120,8 +120,6 @@ class FirstName(Model):
     objects = FirstNameManager()
 
     form = CharField(max_length=50, unique=True)
-    form_2 = CharField(max_length=50, blank=True, null=True)
-    info = TextField(blank=True, null=True)
     # FK fields nullable to allow creation of Character via registration form
     affix_group = FK(
         to=AffixGroup,

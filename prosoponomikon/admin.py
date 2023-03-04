@@ -72,16 +72,16 @@ class FirstNameAdmin(admin.ModelAdmin):
         models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:100px'})},
     }
     list_display = [
-        'id', 'form', 'form_2', 'info', 'affix_group', 'auxiliary_group',
+        'id', 'form','affix_group', 'auxiliary_group',
         'isarchaic', 'origin', 'meaning', 'comments',
     ]
     list_editable = [
-        'form', 'form_2', 'info', 'affix_group', 'auxiliary_group',
+        'form', 'affix_group', 'auxiliary_group',
         'isarchaic', 'origin', 'meaning', 'comments',
     ]
     list_filter = ['auxiliary_group']
     ordering = ['form']
-    search_fields = ['form', 'form_2']
+    search_fields = ['form']
     list_select_related = True
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -328,8 +328,7 @@ class CharacterAdmin(admin.ModelAdmin):
     list_editable = ['first_name', 'family_name', 'cognomen', 'description']
     readonly_fields = ['fullname']
     search_fields = [
-        'first_name__form', 'first_name__form_2', 'family_name__form',
-        'cognomen', 'description'
+        'first_name__form', 'family_name__form', 'cognomen', 'description'
     ]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
