@@ -20,21 +20,21 @@
             {% endif %}
         </p>
     </section>
-    
+
     <div class="text-center my-5">
         <input class="btn btn-dark" type="submit" value="Filtruj Kalendarium" data-toggle="modal" data-target="#filterModal">
     </div>
-    
+
     <!-- Filters Modal-->
     <div class="modal fade filters-modal" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <form method="get">
-                    
+
                     <div class="modal-body font-15 mb-3 ml-4">
-                    
+
                         <div class="container m-auto">
-                            
+
                             <div class="row pl-0 pl-sm-2">
                                 <!-- Description short -->
                                 <div class="col-12 col-lg-6 my-3 container px-0">
@@ -73,7 +73,7 @@
                                     </div>
                                 </div>
                             </div>
-                
+
                             <div class="row pl-0 pl-sm-2">
                                 <!-- PlotThreads -->
                                 <div class="col-12 col-lg-6 my-3 container px-0">
@@ -114,7 +114,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="row pl-0 pl-sm-2">
                                 <!-- Participants = event.participants -->
                                 <div class="col-12 col-lg-6 my-3 container px-0">
@@ -155,9 +155,9 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
-                        
+
                         <h5 class="text-center text-danger">
                             <small class="smaller">
                                 1. Wybór wielu opcji w ramach jednego filtru - pokazuje wszystkie wyniki należące do którejś z opcji.<br>
@@ -166,20 +166,20 @@
                                 Uczestnicy(Gracz1 + Gracz2) + Lokacje(Lokacja1) ==> (Gracz1 AND Lokacja1) OR (Gracz2 AND Lokacja1)
                             </small>
                         </h5>
-                        
+
                     </div>
-                
+
                     <div class="modal-footer">
                         <input class="btn btn-dark mx-auto" type="submit" value="Zastosuj">
                     </div>
-                
+
                 </form>
-                
+
             </div>
         </div>
     </div>
     <!-- Filters Modal End -->
-    
+
 
     {% if not events_filter.qs %}
         <div class="font-italic text-center h4 mt-4">Brak wydarzeń spełniających podane kryteria!</div>
@@ -203,17 +203,15 @@
                     <th class="py-5 py-sm-3 timeline">Sesja Akcja</th>
                 </tr>
             </thead>
-            
+
             <tbody>
             {% for event in events_filter.qs %}
                 <tr>
                     <!-- DATES -->
-                    <td class="align-center align-top font-weight-bold timeline">
-                        <a class="d-block w-100 h-100 hover-pointer-black" href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">
-                            <span  data-toggle="tooltip" data-placement="top" data-html="true" title='Kronika Wydarzenia'>
-                                {{ event.date_in_period|add_season_img|temp_chrono_override:request.current_profile.id }}
-                            </span>
-                        </a>
+                    <td class="align-center align-top font-weight-bold timeline"
+                        data-toggle="tooltip" data-placement="top" data-html="true"
+                        title='<span class="font-italic">{{ event.date_in_period|temp_chrono_override:request.current_profile.id }}</span>'>
+                            {{ event.date_in_period|temp_chrono_override:request.current_profile.id|style_date }}
                     </td>
                     <!-- PLOT THREADS -->
                     <td class="align-top pl-2 timeline">
@@ -242,6 +240,11 @@
                                                 data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic">Poinformuj o wydarzeniu</span>'>
                                                 <i class="icon-inform icon-medium"></i>
                                             </a>
+                                            <a class="btn btn-outline-dark btn-sm mt-1 py-1"
+                                                href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}" target="_blank"
+                                                data-toggle="tooltip" data-placement="top" data-html="true" title='<span class="font-italic">Idź do Kroniki</span>'>
+                                                <i class="icon-forward icon-medium"></i>
+                                            </a>
                                         </h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
@@ -259,12 +262,12 @@
                         {% if event.participants.exists %}
                             <div class="pb-1">
                                 {% for profile in event.participants.all %}
-                                
+
                                     <!-- TODO temp Syngir, Murkon - temp is only this "if-else block", the nested one should stay -->
                                     {% if profile.id == 18 and request.current_profile.id == 82 or profile.id == 18 and request.current_profile.id == 93 %}
                                         <!-- SKIP -->
                                     {% else %}
-                                
+
                                         {% if not profile.only_indirectly %}
                                             {% if profile.status == 'player' or profile == request.current_profile %}
                                                 <a href="{% url 'prosoponomikon:character' profile.character.id %}"
@@ -276,10 +279,10 @@
                                                 </a>
                                             {% endif %}
                                         {% endif %}
-                                
+
                                     {% endif %}
                                     <!-- TODO END temp Syngir, Murkon -->
-                                
+
                                     {% if forloop.counter|divisibleby:2 and not forloop.last and profile.status == 'player' %}<br>{% endif %}
                                 {% endfor %}
                             </div>
@@ -354,7 +357,7 @@
                 </tr>
             {% endfor %}
             </tbody>
-    
+
         </table>
     {% endif %}
 
