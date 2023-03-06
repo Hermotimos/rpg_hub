@@ -16,7 +16,7 @@ class ProfileAdminForm(forms.ModelForm):
         WYPEŁNIJ JE W DRUGIEJ TURZE !!!
     </b>
     """
-    
+
     skills = forms.ModelMultipleChoiceField(
         queryset=RegularSkill.objects.all(),
         required=False,
@@ -62,7 +62,7 @@ class ProfileAdminForm(forms.ModelForm):
         'shields': Shield,
         'weapon_types': WeaponType,
     }
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         id_ = self.instance.id
@@ -111,7 +111,7 @@ class ProfileAdmin(admin.ModelAdmin):
                 f'<img src="{obj.image.url}" width="70" height="70">')
         default_img = "media/profile_pics/profile_default.jpg"
         return format_html(f'<img src={default_img} width="70" height="70">')
-   
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         fields = [
             'user',

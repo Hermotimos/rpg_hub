@@ -33,9 +33,14 @@ urlpatterns = [
     path('rules/', include('rules.urls')),
     path('toponomikon/', include('toponomikon.urls')),
     path('prosoponomikon/', include('prosoponomikon.urls')),
-    
+
     path('__debug__/', include(debug_toolbar.urls)),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+admin.site.index_title = "Hyllemath CMS"
+admin.site.site_header = "Hyllemath"
+admin.site.site_title = "1.0"
