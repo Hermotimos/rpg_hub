@@ -37,17 +37,17 @@
 
     <script>
         function reloadStatements(){
-        
+
             $.ajax({
                 type: 'GET',
                 url : "/communications/statements/{{thread_id}}/",
                 success: function(response){
                     console.log(response);
                     $("#display").empty();
-                    
+
                     for (var num in response.statements)
                     {
-                        
+
                         var threadKind = response.statements[num].thread_obj.kind;
                         var isGmAndDebate = ( response.statements[num].author_obj.status == 'gm' && threadKind == 'Debate' );
                         var isLastStatement = ( num == response.statements.length - 1 );
@@ -62,8 +62,8 @@
                         } else {
                             var stmtImage = ``
                         };
-                        
-                        
+
+
                         // TODO TEMP replace above Syngir, Murkon with this when they meet Dalamar
                         var authorImg;
                         if ( threadKind == 'Announcement' ) {
@@ -75,7 +75,7 @@
                                 </figcaption>
                             `
                         } else if ( threadKind == 'Debate' ) {
-                            
+
                             if ( response.statements[num].author_obj.id == 18 && [82,93].includes(response.currentProfileId) ) {
                                 authorImg = `
                                      <img class="img-fluid rounded-circle" src="media/profile_pics/profile_Dalamar_Szarogwardzista_2.jpg">
@@ -109,11 +109,11 @@
                             catch(err) {
                                 var seenByProfilesNextStatementIds = [];
                             }
-                            
+
                             for (var cnt in seenByProfiles) {
                                 var imgSmall = ``;
                                 if ( !seenByProfilesNextStatementIds.includes(seenByProfiles[cnt].id) && !(seenByProfiles[cnt].id == response.statements[num].author_id)) {
-                                    
+
                                     if ( threadKind == 'Debate' ) {
                                         imgSmall = `<img class="portait img-sm border border-dark rounded-circle mr-1" src="${seenByProfiles[cnt].image.url}">`;
                                     } else if ( threadKind == 'Announcement' ) {
@@ -122,8 +122,8 @@
                                 };
                                 seenByImgs += imgSmall;
                             };
-                            
-                            
+
+
                             var seenByRow = `
                                 <div class="row mt-2 ml-1">
                                     <div>
@@ -134,11 +134,11 @@
                         } else {
                             var seenByRow = ``
                         };
-                        
-                        
+
+
                         var stmtText = `<div class="statement">${response.statements[num].text}</div>`
                         var createdAt = response.statements[num].created_datetime;
-                        
+
                         if ( isGmAndDebate ) {
 
                             var stmtRow = `
@@ -152,7 +152,7 @@
 
                             var stmtRow = `
                                 <div class="col-2 pr-0">
-                                    <figure class="figure align-top mx-auto mb-0 px-lg-3 pt-1">
+                                    <figure class="align-top mx-auto mb-0 px-lg-3 pt-1">
                                         ${authorImg}
                                     </figure>
                                 </div>
@@ -166,18 +166,18 @@
                                 </div>
                             `
                         };
-                        
-                        
+
+
                         var stmt = `
                             ${anchor}
-                            <div class="container px-0 mt-4">
+                            <div class="container-fluid px-0 mt-4">
                                 <div class="row">
                                     ${stmtRow}
                                 </div>
                             </div>
-                            
+
                             `
-                        
+
                         $("#display").append(stmt);
                     }
                 }
@@ -188,13 +188,13 @@
                     // console.log('ggggggg', response);
                 }
                 */
-                
+
             });
         }
-        
+
         // first call before page is ready
         reloadStatements();
-        
+
         // subsequent calls with interval
         $(document).ready(function(){
             setInterval(reloadStatements,3000);
@@ -207,35 +207,35 @@
             // Event.preventDefault() prevents default handling of click action
             // (stops page from reloading)
             e.preventDefault();
-            
+
             frames = document.getElementsByClassName('cke_wysiwyg_frame');
             ckeditortext = frames[0].contentDocument.activeElement.innerHTML;
-            
+
             var formData = new FormData();
             formData.append('thread_id', $('#thread_id').val());
             formData.append('author_id', $('#id_author').val());
             formData.append('ckeditortext', ckeditortext);
             formData.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
             formData.append('file', document.getElementById('id_image').files[0]);
-            
+
             $.ajax({
                 type:'POST',
                 url:'/communications/statement-create',
-                
+
                 // processData and contentType required to use FormData
                 processData: false,
                 contentType: false,
                 data: formData,
-                
+
                 success: function(data){
                  //alert(data)
                 }
             });
-            
+
             document.getElementsByClassName('cke_wysiwyg_frame ')[0].contentDocument.activeElement.innerText = null;
             document.getElementById('id_image').value = null;
         }
-        
+
         $(document).on('submit','#post-form',newStatement);
     </script>
 

@@ -1,7 +1,13 @@
 
 
-.statement > p {margin-bottom: 0.5rem;}
+.statement > p {
+   margin-bottom: 0.5rem;
+}
 
 .statement img:not([alt=""]) {
    border: none;
+}
+
+figcaption.font-12.font-italic {
+   overflow-wrap: break-word;
 }
