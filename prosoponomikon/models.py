@@ -148,7 +148,7 @@ class FirstName(Model):
     def save(self, *args, **kwargs):
         """Save Character-s on their FirstName update."""
         super().save(*args, **kwargs)
-        for character in Character.objects.filter(first_name=self):
+        for character in self.characters.all():
             character.save()
 
 
@@ -181,7 +181,7 @@ class FamilyName(Model):
     def save(self, *args, **kwargs):
         """Save Character-s on their FamilyName update."""
         super().save(*args, **kwargs)
-        for character in Character.objects.filter(family_name=self):
+        for character in self.characters.all():
             character.save()
 
 # -----------------------------------------------------------------------------
