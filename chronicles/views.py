@@ -50,7 +50,7 @@ def chronicle_main_view(request):
             Prefetch('debates', queryset=debates),
             Prefetch('participants', queryset=known_profiles))
 
-        games = GameSession.objects.filter(game_events__in=events)
+        games = GameSession.objects.filter(ispublished=True, game_events__in=events)
         games = games.prefetch_related(Prefetch('game_events', queryset=events))
         games = games.annotate(
             any_participants=Count(
@@ -119,9 +119,9 @@ def chronicle_chapter_view(request, chapter_id):
     )
     if not current_profile.can_view_all:
         events = events.filter(
-            Q(participants=current_profile) | Q(informees=current_profile))
-        events = events.distinct()
-
+            Q(participants=current_profile) | Q(informees=current_profile)
+        ).filter(game__ispublished=True).distinct()
+        
     games = GameSession.objects.filter(game_events__in=events)
     games = games.prefetch_related(Prefetch('game_events', queryset=events))
     games = games.distinct()
@@ -153,8 +153,8 @@ def chronicle_all_view(request):
     )
     if not current_profile.can_view_all:
         events = events.filter(
-            Q(participants=current_profile) | Q(informees=current_profile))
-        events = events.distinct()
+            Q(participants=current_profile) | Q(informees=current_profile)
+        ).filter(game__ispublished=True).distinct()
 
     games = GameSession.objects.filter(game_events__in=events)
     games = games.prefetch_related(Prefetch('game_events', queryset=events))

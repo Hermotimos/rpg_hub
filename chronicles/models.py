@@ -57,6 +57,7 @@ class GameSession(Model):
         null=True,
     )
     game_no = IntegerField(null=True)
+    ispublished = BooleanField(default=False)
     date = DateField(blank=True, null=True)
 
     class Meta:

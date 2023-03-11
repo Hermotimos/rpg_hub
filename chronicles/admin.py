@@ -161,8 +161,12 @@ class GameSessionAdmin(admin.ModelAdmin):
         models.CharField: {'widget': forms.TextInput(attrs={'size': 70})},
     }
     inlines = [GameEventInline]
-    list_display = ['id', 'order_no', 'title', 'chapter', 'game_no', 'date']
-    list_editable = ['order_no', 'title', 'chapter', 'game_no', 'date']
+    list_display = [
+        'id', 'order_no', 'title', 'chapter', 'game_no', 'ispublished', 'date',
+    ]
+    list_editable = [
+        'order_no', 'title', 'chapter', 'game_no', 'ispublished', 'date',
+    ]
     list_select_related = ['chapter']
     ordering = ['-order_no']
     search_fields = ['title']
