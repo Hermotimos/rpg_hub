@@ -9,13 +9,13 @@
 {% block content %}
 
     <header class="my-4">
-        
+
         <div class="container mb-4">
             <div class="row">
                 <div class="col-12 px-0">
-                    
+
                     <div class="image-with-btns float-left">
-                        
+
                         <!-- BUTTONS -->
                         <div class="overlay container mt-2 ml-1 pl-3">
                             <div class="row">
@@ -24,7 +24,7 @@
                                        href="{% url 'prosoponomikon:acquaintanceships' %}#character_{{ this_acquaintanceship.known_character.id }}"
                                        data-toggle="tooltip" data-placement="left" title="Przejdź do Prosoponomikonu">
                                     </a>
-                                    
+
                                     {% if request.current_profile.can_action %}
                                         <span data-toggle="modal" data-target="#infoCharacterModal_{{ this_acquaintanceship.known_character.id }}">
                                             <span class="btn btn-outline-{{ this_acquaintanceship.known_character.profile.image_icons_color }} border-none icon-inform px-1 py-0 mb-1"
@@ -33,7 +33,7 @@
                                         </span>
                                         <a class="btn btn-outline-{{ this_acquaintanceship.known_character.profile.image_icons_color }} border-none icon-biography-packet px-1 py-0 mb-1"
                                            href="{% url 'prosoponomikon:bio-packet-form' this_acquaintanceship.known_character.id 0 %}"
-                                           data-toggle="tooltip" data-placement="bottom" title="Nowy Biogram">
+                                           data-toggle="tooltip" data-placement="left" title="Nowy Biogram">
                                         </a>
                                     {% endif %}
                 
@@ -68,8 +68,8 @@
                             </div>
                         </div>
                         <!-- END BUTTONS -->
-                        
-                        
+
+
                         <!-- CHARACTER PICTURE -->
                         {% if request.current_profile.character == this_acquaintanceship.known_character or this_acquaintanceship.is_direct or request.current_profile.can_view_all %}
                             <img class="character-detail {% if this_acquaintanceship.knows_if_dead and not this_acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
@@ -84,8 +84,8 @@
                             <img class="character-detail {% if this_acquaintanceship.knows_if_dead and not this_acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"
                                  src="{% static 'img/profile_known_only_indirectly.jpg' %}">
                         {% endif %}
-                        
-                        
+
+
                         <!-- Modal -->
                         <!-- It is placed here to avoid being covered with dimmed screen upon firing - sth to do with x-index of .overlay class? -->
                         <div class="modal fade" id="infoCharacterModal_{{ this_acquaintanceship.known_character.id }}" tabindex="-1" role="dialog" aria-hidden="true">
@@ -93,10 +93,10 @@
                                 {% include '_inform.html' %}
                             {% endwith %}
                         </div>
-                        
+
                     </div>
-                    
-                    
+
+
                     <!-- CLASSES, TRAITS, EXPERIENCE -->
                     <div class="ml-3 ml-sm-0">
                         {% if request.current_profile.status == 'gm' or request.current_profile.character == this_acquaintanceship.known_character %}
@@ -119,29 +119,29 @@
                             {% endif %}
                         {% endif %}
                     </div>
-                    
+
                     <!-- CHARACTER DESCRIPTION -->
                     <div class="font-italic text-justify my-2 font-18 {% if not this_acquaintanceship.is_direct %} text-muted {% endif %}">
                         {% firstof this_acquaintanceship.knows_as_description this_acquaintanceship.known_character.description %}
                     </div>
-                    
+
                 </div>
             </div>
         </div>
-        
+
     </header>
-        
-        
+
+
     <div class="tabset">
-        
+
         <!-- TAB HEADERS -->
-        
+
         <!-- Biography packets -->
         {% if biography_packets %}
             <input type="radio" name="tabset" id="tab1" aria-controls="biography_packets" checked>
             <label class="font-resp-15 resp-tab-label" for="tab1">Biografia</label>
         {% endif %}
-        
+
         <!-- Dialogue packets -->
         {% if request.current_profile.status == 'gm' or request.current_profile.character == character %}
             {% if dialogue_packets %}
@@ -153,7 +153,7 @@
                 <label class="font-resp-15 resp-tab-label text-secondary" for="tab2">Dialogi</label>
             {% endif %}
         {% endif %}
-        
+
         <!-- Skills and synergies-->
         {% if acquisitions_regular %}
             {% if biography_packets or dialogue_packets %}
@@ -177,7 +177,7 @@
                 Moce kapłańskie
             </label>
         {% endif %}
-        
+
         <!-- Sorcery and MentalSkills -->
         {% if acquisitions_sorcerers %}
             {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests %}
@@ -189,7 +189,7 @@
                 Zaklęcia
             </label>
         {% endif %}
-        
+
         <!-- Theurgy and MentalSkills -->
         {% if acquisitions_theurgists %}
             {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers %}
@@ -201,7 +201,7 @@
                 Moce Teurgiczne
             </label>
         {% endif %}
-        
+
         <!-- Item collections (Equipment) -->
         {% if request.current_profile.status == 'gm' or request.current_profile.character == this_acquaintanceship.known_character %}
             {% if item_collections %}
@@ -215,7 +215,7 @@
                 </label>
             {% endif %}
         {% endif %}
-        
+
         <!-- Knowledge packets -->
         {% if knowledge_packets %}
             {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists or item_collections %}
@@ -228,7 +228,7 @@
                 Wiedza
             </label>
         {% endif %}
-        
+
         <!-- Known characters -->
         {% if acquaintanceships %}
             {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists or item_collections or knowledge_packets %}
@@ -241,7 +241,7 @@
                 Znajomości
             </label>
         {% endif %}
-        
+
         <!-- Also known as -->
         {% if also_known_as %}
             <input type="radio" name="tabset" id="tab10" aria-controls="aka">
@@ -249,11 +249,11 @@
                 A.K.A.
             </label>
         {% endif %}
-        
-        
+
+
         <!-- TABS -->
         <div class="tab-panels">
-            
+
             <!-- Biography packets -->
             {% if biography_packets %}
                 <section id="biography_packets" class="tab-panel ">
@@ -263,7 +263,7 @@
                     {% endfor %}
                 </section>
             {% endif %}
-            
+
             <!-- Dialogue packets -->
             {% if request.current_profile.status == 'gm' or request.current_profile.character == character %}
                 {% if dialogue_packets %}
@@ -274,7 +274,7 @@
                     </section>
                 {% endif %}
             {% endif %}
-        
+
             <!-- RegularSkills and RegularSynergies -->
             {% if acquisitions_regular %}
                 <section id="acquisitions_regular" class="tab-panel">
@@ -297,7 +297,7 @@
                     {% endwith %}
                 </section>
             {% endif %}
-            
+
             <!-- SorcerersSkill and MentalSkills -->
             {% if acquisitions_sorcerers %}
                 <section id="acquisitions_sorcerers" class="tab-panel">
@@ -306,7 +306,7 @@
                     {% endwith %}
                 </section>
             {% endif %}
-            
+
             <!-- TheurgistsSkill and MentalSkills -->
             {% if acquisitions_theurgists %}
                 <section id="acquisitions_theurgists" class="tab-panel">
@@ -315,7 +315,7 @@
                     {% endwith %}
                 </section>
             {% endif %}
-            
+
              <!-- Item collections (Equipment) -->
             {% if request.current_profile.status == 'gm' or request.current_profile.character == this_acquaintanceship.known_character %}
                 {% if item_collections %}
@@ -324,7 +324,7 @@
                     </section>
                 {% endif %}
             {% endif %}
-            
+
              <!-- Knowledge packets -->
             {% if knowledge_packets %}
                 <section id="knowledge_packets" class="tab-panel">
@@ -348,7 +348,7 @@
                     </div>
                 </section>
             {% endif %}
-            
+
             <!-- Also known as -->
             {% if also_known_as %}
                 <section id="aka" class="tab-panel">
@@ -363,9 +363,9 @@
                     </div>
                 </section>
             {% endif %}
-            
+
         </div>
-        
+
     </div>
-        
+
 {% endblock content %}

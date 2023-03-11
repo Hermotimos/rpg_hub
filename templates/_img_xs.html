@@ -3,7 +3,7 @@
 {% if thread_kind == 'Announcement' %}
      <img class="portait img-xs ml-1 border border-dark rounded" src="{{ author.grouper.user_img_url }}">
 {% elif thread_kind == 'Debate' %}
-     
+
 
      <!-- TODO temp Syngir, Murkon - temp is only this "if-else block", the nested one should stay -->
      {% if profile.id == 18 and request.current_profile.id == 82 or profile.id == 18 and request.current_profile.id == 93 %}
@@ -16,8 +16,4 @@
      <!-- TODO END temp Syngir, Murkon -->
 
 
-
-<!-- Prosoponomikon -->
-{% else %}
-     <img class="portait img-xs ml-1 border border-dark rounded-circle" style="z-index: 2; position: absolute; top: 0.5rem; left: 0.7rem;" src="{{ acquaintanceship.knowing_character.profile.image.url }}">
 {% endif %}
