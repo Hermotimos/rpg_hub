@@ -9,7 +9,8 @@
         <meta name="author" content="Łukasz Kozicki" />
         <meta name="description"
             content="A website to support an ongoing RPG campaign with lists of locations, NPCs,
-                    packets of knowledge, as well as rules for the game and features enabling communication between Players and GMs." />
+                    packets of knowledge, as well as rules for the game and features enabling communication
+                    between Players and GMs." />
         <meta property="og:image" content="{% static 'img/favicon.ico' %}" />
 
         <!-- Bootstrap CSS -->
@@ -28,19 +29,22 @@
         <link rel="stylesheet" href="{% static 'css/fontello.css' %}" />
         <link rel="stylesheet" href="https://nagoshiashumari.github.io/Rpg-Awesome/stylesheets/rpg-awesome.min.css" />
 
-        <title>
-            {% firstof page_title 'Hyllemath' %}
-        </title>
 
 
         <!-- Deferred JavaScript -->
 
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <!-- AJAX replaces regular jQuery -> ajax needed for Scrolling features; cannot load both because it causes conflicts like "Uncaught TypeError: $(…).tooltip is not a function" -->
+        <!-- AJAX replaces regular jQuery -> ajax needed for Scrolling features;
+            cannot load both because it causes conflicts like "Uncaught TypeError: $(…).tooltip is not a function" -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" defer></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous" defer></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous" defer></script>
-
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"
+            defer></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"
+            defer></script>
         <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js" defer></script>
 
         <!-- Scrolling -->
@@ -51,11 +55,19 @@
         <script src="{% static 'js/tooltips.js' %}" defer></script>
         <script src="{% static 'js/popovers.js' %}" defer></script>
 
+        <!-- CK Editor -->
         <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}" defer></script>
         <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}" defer></script>
 
+
+
+        <title>
+            {% firstof page_title 'Hyllemath' %}
+        </title>
+
         {% block head_extra %}
         {% endblock head_extra %}
+
     </head>
 
 
