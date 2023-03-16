@@ -13,13 +13,12 @@ cors.json
 .env
 
 
-static
-!static/css
-!static/files
-!static/fonts
-!static/img
-!static/js
-!static/Fontello ADD ICONS.txt
+static/admin
+static/ckeditor
+static/debug_toolbar
+static/files
+static/img
+
 
 media
 _local_snippets/
