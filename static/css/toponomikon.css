@@ -10,11 +10,16 @@ table.toponomikon {
 }
 
 
+p span.sublocation {
+    background: radial-gradient(#2b2a29, #eff1f1);
+    /* background: linear-gradient(to right, #00ffff, #ff00ff); */
+}
 
-/* ------------------------------------------------------------------------------------------------------------------ */
-/* ----------------------------------------- */
-/* ---------- AUDIO ------- */
-/* --------------------------------------- */
+.sublocation a {color: white;}
+
+
+
+/* ------- AUDIO ------- */
 
 audio.toponomikon-audio-main {
     height: 2rem;
@@ -30,3 +35,5 @@ audio.toponomikon-audio-small {
     margin-top: 0.2rem;
     border-radius: 2rem;
 }
+
+/* ------- END AUDIO ------- */

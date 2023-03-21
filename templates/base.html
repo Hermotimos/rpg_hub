@@ -72,11 +72,9 @@
 
 
     <body>
-        <!--  NAVBAR  -->
+        <!--  HEADER - NAVBAR  -->
         {% if user.is_authenticated %}
-            <header class="site-header">
-                {% include 'navbar.html' %}
-            </header>
+            {% include 'navbar.html' %}
         {% endif %}
 
         <main class="container px-sm-2 pt-2">

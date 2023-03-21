@@ -28,7 +28,7 @@
                                     {% if request.current_profile.can_action %}
                                         <span data-toggle="modal" data-target="#infoCharacterModal_{{ this_acquaintanceship.known_character.id }}">
                                             <span class="btn btn-outline-{{ this_acquaintanceship.known_character.profile.image_icons_color }} border-none icon-inform px-1 py-0 mb-1"
-                                                data-toggle="tooltip" data-placement="left" title="Przekaż wiedzę o Postaci">
+                                                data-toggle="tooltip" data-placement="left" title="Poinformuj o Postaci">
                                             </span>
                                         </span>
                                         <a class="btn btn-outline-{{ this_acquaintanceship.known_character.profile.image_icons_color }} border-none icon-biography-packet px-1 py-0 mb-1"
@@ -36,7 +36,7 @@
                                            data-toggle="tooltip" data-placement="left" title="Nowy Biogram">
                                         </a>
                                     {% endif %}
-                
+
                                     {% if request.current_profile.status == 'player' and request.current_profile.character == this_acquaintanceship.known_character %}
                                         <a class="btn btn-outline-{{ this_acquaintanceship.known_character.profile.image_icons_color }} border-none icon-edit px-1 py-0 mb-1"
                                            href="{% url 'users:edit-profile' %}"

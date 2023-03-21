@@ -21,10 +21,13 @@
             </h6>
             <p class="text-justify">
                 {% for location in location.locations.all %}
-                    <small class="smaller">
-                        <a class="text-muted" href="{% url 'toponomikon:location' location.id %}">{{ location }}</a>
-                        {% if not forloop.last %} |{% endif %}
-                    </small>
+                    <div class="d-inline">
+                        <a class="btn btn-dark border-none font-12 px-1 py-0 m-0"
+                            href="{% url 'toponomikon:location' location.id %}"
+                            data-toggle="tooltip" data-placement="top" title="Przejdź do lokacji">
+                        {{ location }}
+                        </a>
+                    </div>
                 {% endfor %}
             </p>
         </div>

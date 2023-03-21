@@ -1,8 +1,11 @@
 
 
 /*****************************************************************************/
-/***************************** TIMELINE filters ******************************/
+/******************************** TIMELINE **** ******************************/
 /*****************************************************************************/
+
+
+/* ------- FILTERS ------- */
 
 select option {font-size: 0.85rem; padding-left: 0.3rem;}
 
@@ -35,14 +38,12 @@ select {height: 13rem;}
     .input-18 input[type="text"] {width: 21rem;}
 }
 
+/* ------- END FILTERS ------- */
 
 
 
 
-
-/*****************************************************************************/
-/****************************** TIMELINE Table *******************************/
-/*****************************************************************************/
+/* ------- TABLE ------- */
 
 table.timeline {border: double;}
 
@@ -52,7 +53,6 @@ table.timeline {border: double;}
 .timeline .participants {width: 6.5%;}
 .timeline .locations {width: 12%;}
 .timeline .actions {width: 3%;}
-
 
 .timeline tr:nth-child(even) {background-color: #f2f2f2;}
 
@@ -68,7 +68,6 @@ table.timeline {border: double;}
     border: 1px solid black;
     padding: 5px;
 }
-
 
 @media only screen and (max-width: 400px) {
     td.timeline {
@@ -94,11 +93,27 @@ table.timeline {border: double;}
     }
 }
 
+/* ------- END TABLE ------- */
+
+
+
+.img-season {
+    height: 25px;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    border: 0;
+}
+
+
 
 
 /*****************************************************************************/
-/****************************** CHRONICLE imgs *******************************/
+/********************************* CHRONICLE *********************************/
 /*****************************************************************************/
+
+
+/* ------- IMAGES ------- */
 .img-chapter {
     float: left;
     height: 45px;
@@ -137,12 +152,11 @@ table.timeline {border: double;}
     height: 30px;
     width: auto;
 }
+/* ------- END IMAGES ------- */
 
 
-/*****************************************************************************/
-/***************************** CHRONICLE Audio *******************************/
-/*****************************************************************************/
 
+/* ------- AUDIO ------- */
 audio.chronicle-audio-main {
     height: 1.6rem;
     width: 100%;
@@ -152,6 +166,7 @@ audio.chronicle-audio-main {
     background-color: none;
     border-radius: 1rem;
 }
+/* ------- END AUDIO ------- */
 
 
 

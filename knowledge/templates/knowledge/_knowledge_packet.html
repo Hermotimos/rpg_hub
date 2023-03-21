@@ -20,11 +20,11 @@
 
 
 <div id="kn_packet{{ kn_packet.id }}_in_{{ skill.id }}" class="collapse container bg-light border ml-sm-5 mb-3 p-2 pb-5">
-    
+
     <!-- BUTTONS -->
     <div class="row pl-2">
         {% if request.current_profile.can_action %}
-            <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Przekaż wiedzę">
+            <div class="ml-1" data-toggle="tooltip" data-placement="bottom" title="Poinformuj o pakiecie wiedzy">
                 <!-- Modal -->
                 <p class="btn btn-outline-dark icon-inform py-2" data-toggle="modal" data-target="#infoKnPacketModal_{{ kn_packet.id }}"></p>
                 <div class="modal fade" id="infoKnPacketModal_{{ kn_packet.id }}" tabindex="-1" role="dialog" aria-hidden="true">
@@ -47,7 +47,7 @@
             </div>
         {% endif %}
     </div>
-    
+
     <!-- Title -->
     <p class="mt-3 mb-0 text-center">✧</p>
     <p class="mb-0 text-center">✧ ✦ ✧</p>
@@ -61,7 +61,7 @@
     <h6 class="font-18 font-italic text-justify">
         {{ kn_packet.text|linebreaksbr }}
     </h6>
-    
+
     {% for picture_set in kn_packet.picture_sets.all %}
         <div class="d-flex justify-content-center my-3">
             {% for picture in picture_set|pictureset_pictures_in_custom_order %}
@@ -69,7 +69,7 @@
             {% endfor %}
         </div>
     {% endfor %}
-    
+
     {% if kn_packet.references.exists %}
         <br class="mb-2">
         <h6 class="font-18 font-italic text-justify">
@@ -91,7 +91,7 @@
             </div>
         </div>
     {% endfor %}
-    
+
     <!-- Collapse button -->
     <button class="btn btn-outline-secondary float-right"
             data-toggle="collapse" data-target="#kn_packet{{ kn_packet.id }}_in_{{ skill.id }}">

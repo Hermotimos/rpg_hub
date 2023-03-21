@@ -28,12 +28,12 @@
                     {% if request.current_profile.can_action %}
                         <span data-toggle="modal" data-target="#infoLocationModal">
                             <span class="btn btn-outline-{{ this_location.main_image.image.image_icons_color }} border-none icon-inform px-1 py-0 mb-1"
-                                data-toggle="tooltip" data-placement="left" title="Przekaż wiedzę o lokacji">
+                                data-toggle="tooltip" data-placement="left" title="Poinformuj o lokacji">
                             </span>
                         </span>
                     {% endif %}
                 </div>
-                
+
                 {% if request.current_profile.status == 'gm' %}
                     <div>
                         <a class="btn btn-outline-{{ this_location.main_image.image.image_icons_color }} border-none icon-edit px-1 py-0 mb-1"
@@ -49,10 +49,10 @@
                         </a>
                     </div>
                 {% endif %}
-                
+
             </div>
-            
-            
+
+
             <!-- The Modal -->
             <!-- It is placed here to avoid being covered with dimmed screen upon firing - sth to do with x-index of .overlay class? -->
             <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -60,8 +60,8 @@
                     {% include '_inform.html' %}
                 {% endwith %}
             </div>
-            
-            
+
+
             <img class="toponomikon {% if this_location.only_indirectly %} img-grayscale {% endif %}"
                  src="{% if this_location.main_image %} {{ this_location.main_image.image.image.url }} {% else %} {{ this_location.location_type.default_img.image.image.url }} {% endif %}">
             {% with audio_set=this_location|get_audio_set %}
@@ -85,10 +85,10 @@
         </div>
 
     </header>
-    
+
 
     <div class="tabset">
-        
+
         <!-- TAB HEADER: Locations -->
         {% if location_types %}
             <input type="radio" name="tabset" id="tab1" aria-controls="locations" checked>
@@ -114,7 +114,7 @@
             {% endif %}
             <label class="font-resp-15 resp-tab-label" for="tab3">Wiedza</label>
         {% endif %}
-        
+
         <!-- TAB HEADER: Map packets -->
         {% if this_location.map_packets.all %}
             {% if location_types or acquaintanceships or this_location.knowledge_packets.all %}
@@ -124,7 +124,7 @@
             {% endif %}
             <label class="font-resp-15 resp-tab-label" for="tab4">Mapy</label>
         {% endif %}
-        
+
         <!-- TAB HEADER: Picture Sets -->
         {% if this_location.picture_sets.all %}
             {% if location_types or acquaintanceships or this_location.knowledge_packets.all or this_location.map_packets.all %}
@@ -145,9 +145,9 @@
             <label class="font-resp-15 resp-tab-label" for="tab6">Audio</label>
         {% endif %}
 
-        
+
         <div class="tab-panels">
-            
+
             <!-- TAB CONTENT: Locations -->
             {% if location_types %}
                 <section id="locations" class="tab-panel">
@@ -189,7 +189,7 @@
                     </div>
                 </section>
             {% endif %}
-            
+
             <!-- TAB CONTENT: Knowledge packets -->
             {% if this_location.knowledge_packets.all %}
                 <section id="knowledge" class="tab-panel">
@@ -205,7 +205,7 @@
                     </div>
                 </section>
             {% endif %}
-            
+
             <!-- TAB CONTENT: Map packets -->
             {% if this_location.map_packets.all %}
                 <section id="maps" class="tab-panel py-5">
@@ -214,7 +214,7 @@
                     {% endfor %}
                 </section>
             {% endif %}
-            
+
             <!-- TAB CONTENT: Picture Sets -->
             {% if this_location.picture_sets.all %}
                 <section id="picture_sets" class="tab-panel">
@@ -227,7 +227,7 @@
                     {% endfor %}
                 </section>
             {% endif %}
-            
+
             <!-- TAB CONTENT: Audio -->
             {% if request.current_profile.status == 'gm' and audio_set %}
                 <section id="audios" class="tab-panel">
@@ -249,7 +249,7 @@
                                 {{ audio_set.main_audio }}
                             </div>
                         </div>
-                        
+
                         <!-- Location's other audios -->
                         {% for audio in audio_set.audios.all %}
                             <div class="row">
@@ -263,12 +263,12 @@
                                 </div>
                             </div>
                         {% endfor %}
-                        
+
                     </div>
                 </section>
             {% endif %}
-            
+
         </div>
     </div>
-    
+
 {% endblock content %}
