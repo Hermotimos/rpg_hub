@@ -19,17 +19,15 @@
             <h6 class="font-italic text-justify {% if location.only_indirectly %} text-muted {% endif %}">
                 {% if location.description %} {{ location.description|linebreaksbr }} {% endif %}
             </h6>
-            <p class="text-justify">
-                {% for location in location.locations.all %}
-                    <div class="d-inline">
-                        <a class="btn btn-dark border-none font-12 px-1 py-0 m-0"
-                            href="{% url 'toponomikon:location' location.id %}"
-                            data-toggle="tooltip" data-placement="top" title="Przejdź do lokacji">
-                        {{ location }}
-                        </a>
-                    </div>
-                {% endfor %}
-            </p>
+            {% for location in location.locations.all %}
+                <div class="d-inline">
+                    <a class="btn btn-dark border-none font-12 px-1 py-0 m-0"
+                        href="{% url 'toponomikon:location' location.id %}"
+                        data-toggle="tooltip" data-placement="top" title="Przejdź do lokacji">
+                    {{ location }}
+                    </a>
+                </div>
+            {% endfor %}
         </div>
     </div>
 </div>
