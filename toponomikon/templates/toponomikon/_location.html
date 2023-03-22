@@ -16,9 +16,9 @@
                     {{ location.name }}
                 </small>
             </h2>
-            <h6 class="font-italic text-justify {% if location.only_indirectly %} text-muted {% endif %}">
+            <div class="font-italic text-justify {% if location.only_indirectly %} text-muted {% endif %}">
                 {% if location.description %} {{ location.description|linebreaksbr }} {% endif %}
-            </h6>
+            </div>
             {% for location in location.locations.all %}
                 <div class="d-inline">
                     <a class="btn btn-dark border-none font-12 px-1 py-0 m-0"

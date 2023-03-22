@@ -34,7 +34,7 @@
                 <img class="img-xs" src="{% static level_img %}">
             {% endif %}
         </div>
-        
+
         <div>
             <div class="ml-1">
                 {% if skill_or_synergy_level.skill_levels.exists %}
@@ -94,7 +94,7 @@
                     </div>
                 {% endif %}
             </div>
-            
+
             {% for perk in skill_or_synergy_level.perks.all %}
                 <div class="ml-1 mt-2">
                     <div class="font-weight-bold">
@@ -131,13 +131,13 @@
                     {% endfor %}
                     <ul class="ml-4 pl-1 bullets-2 mb-1">
                         {% for comment in perk.comments.all %}
-                            <li class="pl-1 text-warning-2">{{ comment }}</li>
+                            <li class="pl-1 text-orange">{{ comment }}</li>
                         {% endfor %}
                     </ul>
                 </div>
             {% endfor %}
         </div>
-        
+
     </div>
 </div>
 

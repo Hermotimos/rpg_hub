@@ -13,7 +13,7 @@
 {% cache 30000 armor request.current_profile.user.username %}
 
     <div class="rules-styling">
-        
+
         <h2>
             Zbroja
         </h2>
@@ -37,8 +37,8 @@
                 {% for plate in plates %}
                     <tr>
                         <td class="{% if plate.description %} hover-blue {% endif %} align-left" data-toggle="collapse" data-target="#{{ plate|cut:' ' }}">{{ plate.name }}</td>
-                        <td class="rules-green">{% if plate.armor_class_bonus %} +{{ plate.armor_class_bonus }} {% endif %}</td>
-                        <td class="rules-green">{{ plate.parrying }}</td>
+                        <td class="text-green">{% if plate.armor_class_bonus %} +{{ plate.armor_class_bonus }} {% endif %}</td>
+                        <td class="text-green">{{ plate.parrying }}</td>
                         <td>{{ plate.endurance }}</td>
                         <td>{{ plate.weight.normalize }}</td>
                         <td>{% if plate.comment %} {{ plate.comment }} {% endif %}</td>
@@ -65,9 +65,9 @@
             </tbody>
         </table>
 
-        <h5 class="mt-4">
+        <div class="h5 font-weight-bold mt-4">
             Wyparowania i Wytrzymałość zbroi
-        </h5>
+        </div>
         <p>
             Oprócz poprawy Klasy Pancerza (KP) każda zbroja posiada współczynnik Wyparowań, który decyduje o tym, ile Obrażeń ulegnie wyhamowaniu i zamiast zranić Postać - uszkodzi jej pancerz.
             Pozwala to na uchronienie się przed częścią, a czasem nawet całością Obrażeń.
@@ -91,10 +91,10 @@
             W większości przypadków Mistrz Gry informuje Gracza o zadanych Obrażeniach oraz ewentualnie o zakresie Przebicia.
             W przypadku, gdy zachodzi Przebicie, Gracz jest zobowiązany do zaliczenia objętych nim Obrażeń zarówno do Ran Postaci, jak i Uszkodzeń zbroi.
         </p>
-        
-        <h5 class="mt-4">
+
+        <div class="h5 font-weight-bold mt-4">
             Ograniczenia wynikające z noszenia zbroi
-        </h5>
+        </div>
         <p>
             Poza walką zbroja nie pozostaje bez wpływu na powodzenie działań wymagających wyjątkowej precyzji i dobrego czasu reakcji.
             W związku z tym każda zbroja powoduje malusy do Podstępów.
@@ -122,18 +122,18 @@
                 {% for plate in plates %}
                     <tr>
                         <td class="align-left">{{ plate.name }}</td>
-                        <td class="rules-red">{% if plate.mod_running %} {{ plate.mod_running }} {% endif %}</td>
-                        <td class="rules-red">{% if plate.mod_swimming %} {{ plate.mod_swimming }} {% endif %}</td>
-                        <td class="rules-red">{% if plate.mod_climbing %} {{ plate.mod_climbing }} {% endif %}</td>
-                        <td class="rules-red">{% if plate.mod_listening %} {{ plate.mod_listening }} {% endif %}</td>
-                        <td class="rules-red">{% if plate.mod_lookout %} {{ plate.mod_lookout }} {% endif %}</td>
-                        <td class="rules-red">{% if plate.mod_trailing %} {{ plate.mod_trailing }} {% endif %}</td>
-                        <td class="rules-red">{% if plate.mod_sneaking %} {{ plate.mod_sneaking }} {% endif %}</td>
-                        <td class="rules-red">{% if plate.mod_hiding %} {{ plate.mod_hiding }} {% endif %}</td>
-                        <td class="rules-red">{% if plate.mod_traps %} {{ plate.mod_traps }} {% endif %}</td>
-                        <td class="rules-red">{% if plate.mod_lockpicking %} {{ plate.mod_lockpicking }} {% endif %}</td>
-                        <td class="rules-red">{% if plate.mod_pickpocketing %} {{ plate.mod_pickpocketing }} {% endif %}</td>
-                        <td class="rules-red">{% if plate.mod_conning %} {{ plate.mod_conning }} {% endif %}</td>
+                        <td class="text-red1">{% if plate.mod_running %} {{ plate.mod_running }} {% endif %}</td>
+                        <td class="text-red1">{% if plate.mod_swimming %} {{ plate.mod_swimming }} {% endif %}</td>
+                        <td class="text-red1">{% if plate.mod_climbing %} {{ plate.mod_climbing }} {% endif %}</td>
+                        <td class="text-red1">{% if plate.mod_listening %} {{ plate.mod_listening }} {% endif %}</td>
+                        <td class="text-red1">{% if plate.mod_lookout %} {{ plate.mod_lookout }} {% endif %}</td>
+                        <td class="text-red1">{% if plate.mod_trailing %} {{ plate.mod_trailing }} {% endif %}</td>
+                        <td class="text-red1">{% if plate.mod_sneaking %} {{ plate.mod_sneaking }} {% endif %}</td>
+                        <td class="text-red1">{% if plate.mod_hiding %} {{ plate.mod_hiding }} {% endif %}</td>
+                        <td class="text-red1">{% if plate.mod_traps %} {{ plate.mod_traps }} {% endif %}</td>
+                        <td class="text-red1">{% if plate.mod_lockpicking %} {{ plate.mod_lockpicking }} {% endif %}</td>
+                        <td class="text-red1">{% if plate.mod_pickpocketing %} {{ plate.mod_pickpocketing }} {% endif %}</td>
+                        <td class="text-red1">{% if plate.mod_conning %} {{ plate.mod_conning }} {% endif %}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -164,7 +164,7 @@
                         <td class="align-left {% if shield.description %} hover-blue {% endif %}" data-toggle="collapse" data-target="#{{ shield.name }}">
                             {{ shield.name }}
                         </td>
-                        <td class="rules-green">+{{ shield.armor_class_bonus }}</td>
+                        <td class="text-green">+{{ shield.armor_class_bonus }}</td>
                         <td>{{ shield.weight.normalize }}</td>
                         <td>{{ shield.comment }}</td>
                     </tr>
@@ -189,7 +189,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        
+
 
         <h2>
             Hełm i nagolenniki
@@ -213,12 +213,12 @@
                 </tr>
             </thead>
             <tbody class="align-center">
-                <tr><td class="align-left">Skóra</td>               <td class="rules-green">+1</td>    <td>-</td>                         <td>2</td>  <td>1</td>    <td class="rules-red">-2</td>   </tr>
-                <tr><td class="align-left">Metal</td>               <td class="rules-green">+2</td>    <td class="rules-green">+1</td>    <td>4</td>  <td>2</td>    <td class="rules-red">-6</td>   </tr>
-                <tr><td class="align-left">Krasnoludzka stal</td>   <td class="rules-green">+3</td>    <td class="rules-green">+1</td>    <td>6</td>  <td>3</td>    <td class="rules-red">-8</td>   </tr>
+                <tr><td class="align-left">Skóra</td>               <td class="text-green">+1</td>    <td>-</td>                         <td>2</td>  <td>1</td>    <td class="text-red1">-2</td>   </tr>
+                <tr><td class="align-left">Metal</td>               <td class="text-green">+2</td>    <td class="text-green">+1</td>    <td>4</td>  <td>2</td>    <td class="text-red1">-6</td>   </tr>
+                <tr><td class="align-left">Krasnoludzka stal</td>   <td class="text-green">+3</td>    <td class="text-green">+1</td>    <td>6</td>  <td>3</td>    <td class="text-red1">-8</td>   </tr>
             </tbody>
         </table>
-        
+
     </div>
 
 {% endcache %}

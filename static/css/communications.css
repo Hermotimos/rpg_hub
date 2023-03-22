@@ -11,3 +11,11 @@
 figcaption.font-12.font-italic {
    overflow-wrap: break-word;
 }
+
+
+
+/* Modal for Thread tag */
+.tags-modal .modal-dialog {
+   max-width: 15rem;       /* provided that ThreadTag.title max_lenght=20 */
+   margin: 1rem auto auto auto
+}

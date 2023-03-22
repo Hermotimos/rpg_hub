@@ -1,13 +1,6 @@
 
 div.rules-styling {padding-top: 1rem;}
 
-.rules-styling h1,
-.rules-styling h2,
-.rules-styling h3,
-.rules-styling h4,
-.rules-styling h5,
-.rules-styling h6 {font-weight: bold;}
-
 .rules-styling h2 {
     margin-top: 3rem;
     margin-bottom: 1rem;
@@ -55,24 +48,6 @@ div.rules-styling {padding-top: 1rem;}
 
 
 
-.no-bullets {list-style: none;}
-
-.resp-container {
-    position: relative;
-    overflow: hidden;
-    padding-top: 100%;
-}
-
-.resp-iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 820px;
-    height: 100%;
-    border: 0;
-}
-
-
 
 table.weapon-types {
     border: double;
@@ -103,30 +78,15 @@ table.weapon-types .weight {width: 6%;}
 .no-border th,
 .no-border td {border-style: none !important;}
 
-/*
-.armor-table th,
-.armor-table td,
-.shields-table th,
-.shields-table td {
-    padding: 0.25rem 0rem 0rem 0rem !important;
-}
-*/
 
-td .nowrap { white-space: nowrap;}
+
+td .nowrap {white-space: nowrap;}
 
 
 
 .table th,
 .table td {color: #444444;}
 
-.rules-red {color: #993300 !important;}
-.rules-green {color: #008000 !important;}
-
-.rules-blue1 {color: #b3cde0 !important;}
-.rules-blue2 {color: #6497b1 !important;}
-.rules-blue3 {color: #005b96 !important;}
-.rules-blue4 {color: #03396c !important;}
-.rules-blue5 {color: #011f4b !important;}
 
 .border-custom-right {border-right: 1px solid #363636;}
 

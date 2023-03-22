@@ -11,6 +11,10 @@
     padding: 0;
 }
 
+.btn-space {margin: 2px;}
+
+
+
 
 /* NAVBAR DROPDOWNS */
 
@@ -44,6 +48,7 @@
     text-align: left;
     outline: none;
 }
+
 
 
 

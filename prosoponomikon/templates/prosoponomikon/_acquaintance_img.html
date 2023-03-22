@@ -7,13 +7,13 @@
             src="{{ acquaintanceship.knowing_character.profile.image.url }}">
     {% endif %}
     {% if show_caption and request.current_profile.status == 'gm' %}
-        <a class="btn btn-outline-{{ this_acquaintanceship.known_character.profile.image_icons_color }} border-none icon-edit px-1 py-0 mb-1"
+        <a class="btn btn-outline-{{ acquaintanceship.known_character.profile.image_icons_color }} border-none icon-edit px-1 py-0 mb-1"
             style="z-index: 2; position: absolute; top: 0.4rem; left: 0.75rem;"
             href="{% url 'admin:prosoponomikon_acquaintanceship_change' acquaintanceship.id %}"
             data-toggle="tooltip" data-placement="left" data-html="true" title="Edytuj Znajomość<br> {{ acquaintanceship }}">
         </a>
     {% endif %}
-    <a class="img-link" href="{% url 'prosoponomikon:character' acquaintanceship.known_character.id %}">
+    <a href="{% url 'prosoponomikon:character' acquaintanceship.known_character.id %}">
         {% include 'prosoponomikon/__acquaintance_img.html' %}
     </a>
     {% if show_caption %}

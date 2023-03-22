@@ -1,7 +1,28 @@
+
+
 /*****************************************************************************/
-/******************************* SITE LAYOUT *********************************/
+/************************* SITE LAYOUT, TEXT & FONT **************************/
 /*****************************************************************************/
 
+@import "normalize.css";
+
+
+/* Ensure fonts are available independently from those installed on user's machine */
+@font-face {
+    font-family: 'IM Fell Great Primer';
+    src: url("../font/IMFellGreatPrimer-Regular.ttf");
+}
+
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+    font-family: 'IM Fell Great Primer';
+    line-height: 1.5;
+}
 
 body {
     background: #fafafa;
@@ -10,97 +31,54 @@ body {
 }
 
 
-/* For Django linebreaksbr template tag */
-br {
-    content: " ";       /* for Chrome to avoid too big spaces */
-    margin-top: 0.4rem;
-    display: block;
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+    margin-bottom: 0.5rem;
+    font-weight: 800;
 }
 
-article.content {min-height: 700px}
-article.top-space {margin-top: 5rem;}
-article.top-button {margin-top: 0.5rem;}
-
-
-.bg-gray {background-color: #f2f2f2;}
-
-.gray1 {color: #acadad !important;}
-
-
-
-.pt-01 {padding-top: 0.1rem}
-
-
-
-/*****************************************************************************/
-/********************************* GENERAL ***********************************/
-/*****************************************************************************/
-
-
-.border-bottom-dark {border-bottom: 1px solid #444444;}
-
-.btn-space {margin: 2px;}
-
-/* .errorlist {color: red;} */
-
-/* .hide tr {display: none;} */
-
-.pt-6, .py-6 {padding-top: 5rem !important;}
-.pr-6, .px-6 {padding-right: 5rem !important;}
-.pb-6, .py-6 {padding-bottom: 5rem !important;}
-.pl-6, .px-6 {padding-left: 5rem !important;}
-
-.pt-7, .py-7 {padding-top: 6rem !important;}
-.pr-7, .px-7 {padding-right: 6rem !important;}
-.pb-7, .py-7 {padding-bottom: 6rem !important;}
-.pl-7, .px-7 {padding-left: 6rem !important;}
-
-.pt-3_9rem, .py-3_9rem {padding-top: 3.9rem !important;}
-.pr-3_9rem, .px-3_9rem {padding-right: 3.9rem !important;}
-.pb-3_9rem, .py-3_9rem {padding-bottom: 3.9rem !important;}
-.pl-3_9rem, .px-3_9rem {padding-left: 3.9rem !important;}
-
-.pt-4_7rem, .py-3_9rem {padding-top: 4.7rem !important;}
-.pr-4_7rem, .px-3_9rem {padding-right: 4.7rem !important;}
-.pb-4_7rem, .py-3_9rem {padding-bottom: 4.7rem !important;}
-.pl-4_7rem, .px-3_9rem {padding-left: 4.7rem !important;}
-
-
-td.align-center {text-align: center;}
-td.align-right {text-align: right;}
-
-.scrollup {
-    width: 64px;
-    height: 64px;
-    text-decoration: none;
-    background: url('/static/img/up.png') 0px 0px;
-    background-size: cover;
-    position: fixed;
-    right: 10px;
-    bottom: 10px;
-    display: none;
-}
-
-.border-double {
-    border: double #444444;
-}
-
-.text-warning-2 {
-  color: #d7a40c !important;
+.small-caps {
+    font-variant: small-caps;
 }
 
 
-/*****************************************************************************/
-/******************************* TEXT & FONT *********************************/
-/*****************************************************************************/
+/* Fontello font-icons */
+.icon-medium {font-size: 0.8rem;}
+.icon-small {font-size: 0.6rem;}
 
-@font-face {
-    font-family: 'IM Fell Great Primer';
-    src: url("../font/IMFellGreatPrimer-Regular.ttf");
+
+
+.text-orange {color: #d7a40c;}
+.text-green {color: #008000;}
+.text-red1 {color: #993300;}
+.text-red2 {color: #C70039;}
+.text-blue1 {color: #b3cde0;}
+.text-blue2 {color: #6497b1;}
+.text-blue3 {color: #005b96;}
+.text-blue4 {color: #03396c;}
+.text-blue5 {color: #011f4b;}
+
+
+
+
+@media only screen and (min-width: 600px) {
+    .sm-nowrap {white-space: nowrap;}
 }
 
-* {font-family: 'IM Fell Great Primer';}
 
+th.orientation-rl-tb {
+    writing-mode: vertical-rl;
+    transform:scale(-1);
+    vertical-align: top !important;
+}
+
+
+
+
+/* TODO replace .smaller with font-N classes */
+small.smaller {font-size: 12px;}
+/* END TODO */
 
 .font-10 {font-size: 0.625rem;}
 .font-11 {font-size: 0.7rem;}   /* not exactly, but this is desirable */
@@ -142,12 +120,11 @@ td.align-right {text-align: right;}
 }
 
 
-h1, h2, h3, h4, h5, h6 {
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-}
 
-body * {line-height: 1.5;}
+
+
+/* Page title */
+
 .page-title {line-height: 1;}
 
 @media only screen and (max-width: 600px) {
@@ -174,52 +151,72 @@ body * {line-height: 1.5;}
         font-size: 1.5rem;
     }
 }
+/* END Page title */
 
 
 
-.deep-red {color: #C70039;}
 
-small.red {color: red;}
-
-small.smaller {font-size: 12px;}
-
-.small-caps {font-variant: small-caps;}
+.border-bottom-dark {border-bottom: 1px solid #444444;}
 
 
-@media only screen and (min-width: 600px) {
-    .sm-nowrap {white-space: nowrap;}
+.pt-6, .py-6 {padding-top: 5rem !important;}
+.pr-6, .px-6 {padding-right: 5rem !important;}
+.pb-6, .py-6 {padding-bottom: 5rem !important;}
+.pl-6, .px-6 {padding-left: 5rem !important;}
+
+.pt-7, .py-7 {padding-top: 6rem !important;}
+.pr-7, .px-7 {padding-right: 6rem !important;}
+.pb-7, .py-7 {padding-bottom: 6rem !important;}
+.pl-7, .px-7 {padding-left: 6rem !important;}
+
+.pt-3_9rem, .py-3_9rem {padding-top: 3.9rem !important;}
+.pr-3_9rem, .px-3_9rem {padding-right: 3.9rem !important;}
+.pb-3_9rem, .py-3_9rem {padding-bottom: 3.9rem !important;}
+.pl-3_9rem, .px-3_9rem {padding-left: 3.9rem !important;}
+
+.pt-4_7rem, .py-3_9rem {padding-top: 4.7rem !important;}
+.pr-4_7rem, .px-3_9rem {padding-right: 4.7rem !important;}
+.pb-4_7rem, .py-3_9rem {padding-bottom: 4.7rem !important;}
+.pl-4_7rem, .px-3_9rem {padding-left: 4.7rem !important;}
+
+
+td.align-center {text-align: center;}
+td.align-right {text-align: right;}
+
+
+
+.border-double {
+    border: double #444444;
 }
 
-/* .text-muted-more {color: #bfbfbf;} */
 
 
-/* Classes for Fontello font-icons */
-.icon-medium {font-size: 0.8rem;}
-.icon-small {font-size: 0.6rem;}
 
 
-th.orientation-rl-tb {
-    writing-mode: vertical-rl;
-    transform:scale(-1);
-    vertical-align: top !important;
+/* For Django linebreaksbr template tag */
+br {
+    content: " ";       /* for Chrome to avoid too big spaces */
+    margin-top: 0.4rem;
+    display: block;
 }
 
 
-.fading-bottom {
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
-}
-.fading-top {
-  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0));
-}
-.fading-right {
-  -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0));
-}
-.fading-left {
-  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0));
-}
-.fading-top-bottom {
-  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0), rgba(0,0,0,1), rgba(0,0,0,0));
-}
+
+article.content {min-height: 700px}
+article.top-space {margin-top: 5rem;}
+article.top-button {margin-top: 0.5rem;}
+
+
+.bg-gray {background-color: #f2f2f2;}
+
+.gray1 {color: #acadad !important;}
+
+
+
+.pt-01 {padding-top: 0.1rem}
+
+
+
 
 
 
@@ -230,15 +227,15 @@ th.orientation-rl-tb {
 img {border: double #444444;}
 
 /*
-    Make all imgs unclickable. Disables "Pokaż obraz" feature that would enable
-    site users to view the original form of pictures that are presented to them
-    in modified way (ex. grayscale for "known only indirectly").
+Exclude image inspection to prevent viewing of their original files.
+Needed for grayscaled images.
 */
 img {pointer-events: none;}
 
+
 /*
-    Make figure with class .pointer show pointer on hover. This allows pointer
-    over img tags (that have pointer-events: none).
+    Make figure with class .pointer show pointer on hover.
+    This allows pointer over img tags (that have pointer-events: none).
 */
 figure.pointer,
 div.pointer,
@@ -261,26 +258,10 @@ span.pointer {cursor: pointer;}
 }
 
 
-
-a.img-link {
-    opacity: 1;
-    filter: grayscale(0%);
-}
-a.img-link:hover {color: #444444;}
-
-
 img.img-grayscale {filter: grayscale(100%) !important;}
 img.img-grayscale:hover {filter: grayscale(0%);}
 
 /* Image zoom on hover */
-* {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
 .img-hover-zoom {
     position: relative;
     /*margin: auto;*/
@@ -295,11 +276,19 @@ img.img-grayscale:hover {filter: grayscale(0%);}
     transform: scale(1);
     border-style: none;
 }
-
-.img-hover-zoom:hover img {transform: scale(1.2);}
-
-
+.img-hover-zoom:hover img {
+    transform: scale(1.2);
+}
 /* END Image zoom on hover */
+
+
+@media only screen and (min-width: 320px) {
+    div.img-hover-zoom {margin: 0.1rem}
+}
+@media only screen and (min-width: 600px) {
+    div.img-hover-zoom {margin: 0.15rem}
+}
+
 
 
 
@@ -333,16 +322,6 @@ img.img-grayscale:hover {filter: grayscale(0%);}
 }
 
 
-@media only screen and (min-width: 320px) {
-    div.img-hover-zoom {margin: 0.1rem}
-}
-@media only screen and (min-width: 600px) {
-    div.img-hover-zoom {margin: 0.15rem}
-}
-@media only screen and (min-width: 800px) {
-    div.img-hover-zoom {margin: 0.15rem}
-}
-
 
 
 /* Required for img modal to show only imgs and center them on the screen */
@@ -372,25 +351,14 @@ img.img-grayscale:hover {filter: grayscale(0%);}
 .modal-backdrop {opacity:0.9 !important;}
 
 
-
-/* Modal for Chronicle filters */
-.filters-modal .modal-dialog {
-    max-width: 70rem;
-    margin: 1rem auto auto auto
-}
-
-/* Modal for Thread tag */
-.tags-modal .modal-dialog {
-    max-width: 15rem;       /* provided that ThreadTag.title max_lenght=20 */
-    margin: 1rem auto auto auto
-}
-
-
 /* Image in modal */
 .modal-img img {
     max-width: 100%;
     max-height: 330px;
 }
+
+
+
 
 
 
@@ -410,10 +378,6 @@ a:hover {
 
 td.hover-pointer:hover {cursor: pointer;}
 
-.hover-pointer-black:hover {
-    cursor: pointer;
-    color: #444444;
-}
 
 .hover-blue:hover {
     color: #3366cc;
@@ -472,8 +436,7 @@ nav ul.bullets-1 li {color: #cbd5db;}
 
 .bullets-sm li::marker {font-size: 70%;}
 .bullets-lg li::marker {font-size: 120%;}
-.bullets-lg2 li::marker {font-size: 140%;}
-.bullets-xl li::marker {font-size: 170%;}
+.bullets-xl li::marker {font-size: 140%;}
 
 .pl-0-05  {padding-left: 0.05rem;}
 .pl-0-10  {padding-left: 0.10rem;}
@@ -483,6 +446,7 @@ nav ul.bullets-1 li {color: #cbd5db;}
 
 li a {vertical-align: middle;}
 
+li.index a {vertical-align: bottom;}
 
 
 /*****************************************************************************/
@@ -674,23 +638,6 @@ a.anchor12-resp {top: -12rem;}
 
 
 
-blockquote {
-  background:  #fafafa;;
-  border-left: 5px solid #ccc;
-  margin: 0.5rem 0 0 0;
-  padding: 0.5rem 0.5rem;
-  quotes: "\201C""\201D""\2018""\2019";
-}
-blockquote:before {
-  color: #ccc;
-  content: open-quote;
-  font-size: 2.5rem;
-  line-height: 1rem;
-}
-blockquote p {display: inline;}
-
-
-
 /* Buttons placed on images in Toponomikon, Prosoponomikon etc. */
 div.image-with-btns {
   position: relative;
@@ -702,3 +649,16 @@ div.image-with-btns {
   z-index: 5;
 }
 
+
+/* Scrollup feature */
+.scrollup {
+    width: 64px;
+    height: 64px;
+    text-decoration: none;
+    background: url('/static/img/up.png') 0px 0px;
+    background-size: cover;
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    display: none;
+}

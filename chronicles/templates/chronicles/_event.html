@@ -4,7 +4,7 @@
 <a class="anchor anchor4" id="event_{{ event.id }}"></a>
 <div class="container my-3">
     <div class="row border-top">
-        
+
         <!-- ACTIONS -->
         {% if request.current_profile.can_action %}
             <div class="col-12 col-sm-1 p-0">
@@ -21,8 +21,8 @@
                 {% endif %}
             </div>
         {% endif %}
-        
-        
+
+
         <!-- EVENT -->
         <div class="col-12 col-sm-11 mt-2 p-0 pl-sm-2 pl-lg-0">
             <!-- AUDIO -->
@@ -33,7 +33,7 @@
                     </audio>
                 {% endif %}
             {% endif %}
-            
+
             <!-- DESCRIPTION -->
             <p class="font-18 font-italic p-1 mb-0 text-justify">
                 {% if request.current_profile not in event.participants.all and not request.current_profile.can_view_all %}
@@ -42,7 +42,7 @@
                     {{ event.description_long|linebreaksbr }}
                 {% endif %}
             </p>
-            
+
             <!-- PICTURE SETS -->
             {% if request.current_profile not in event.informees.all %}
                 {% for picture_set in event.picture_sets.all %}
@@ -53,7 +53,7 @@
                     </div>
                 {% endfor %}
             {% endif %}
-            
+
             <!-- DEBATES -->
             {% if event.debates and request.current_profile not in event.informees.all %}
                 <div>
@@ -64,7 +64,7 @@
                                     <span class="font-18 font-italic hover-blue text-justify" data-toggle="collapse" data-target="#debate_{{ debate.id }}">
                                         <span class="small-caps">Narada:</span> {{ debate.title }}
                                     </span>
-        
+
                                     <div id="debate_{{ debate.id }}" class="collapse show">
                                         <div class="mt-2">
                                             <a href="{% url 'communications:thread' debate.id None %}" class="btn btn-outline-dark">Idź do narady</a>
@@ -85,13 +85,13 @@
                     {% endfor %}
                 </div>
             {% endif %}
-            
+
             <!-- NOTES -->
 <!--        {% for note in event.notes.all %}-->
 <!--            {% if request.user == note.author %}-->
 <!--                {% if note.text != '' %}-->
 <!--                    <div class="font-italic text-justify px-1 py-1" style="color:{{ note.color }}">-->
-<!--                        <h5>Przemyślenia:</h5>-->
+<!--                        <div>Przemyślenia:</div>-->
 <!--                        <p>{{ note.text|linebreaksbr }}</p>-->
 <!--                    </div>-->
 <!--                {% endif %}-->

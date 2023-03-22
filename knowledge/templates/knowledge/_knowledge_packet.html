@@ -58,9 +58,9 @@
     <p class="mb-5 mt-0 text-center">✧</p>
 
     <!-- Content -->
-    <h6 class="font-18 font-italic text-justify">
+    <div class="font-18 font-italic text-justify">
         {{ kn_packet.text|linebreaksbr }}
-    </h6>
+    </div>
 
     {% for picture_set in kn_packet.picture_sets.all %}
         <div class="d-flex justify-content-center my-3">
@@ -72,9 +72,9 @@
 
     {% if kn_packet.references.exists %}
         <br class="mb-2">
-        <h6 class="font-18 font-italic text-justify">
+        <div class="font-18 font-italic text-justify">
             ✧ Materiały
-        </h6>
+        </div>
     {% endif %}
     {% for reference in kn_packet.references.all %}
         <div class="d-flex my-3">

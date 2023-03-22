@@ -20,7 +20,7 @@
                 {% endif %}">
         </a>
     </div>
-    
+
     {% if not thread.is_ended and not thread.is_exclusive %}
         <div>
             <p data-toggle="tooltip" data-placement="bottom" title="Udostępnij">
@@ -34,7 +34,7 @@
             {% endwith %}
         </div>
     {% endif %}
-    
+
     {% if not thread.is_ended %}
         <div>
             {% if request.current_profile in thread.followers.all %}
@@ -48,7 +48,7 @@
             {% endif %}
         </div>
     {% endif %}
-    
+
     <div>
         <p data-toggle="tooltip" data-placement="bottom" title="Edytuj tagi">
             <span class="btn btn-outline-dark icon-hash py-2 ml-1 mt-1" data-toggle="modal" data-target="#tagsModal{{ thread.id }}"></span>
@@ -82,7 +82,7 @@
         </div>
     </div>
 
-    
+
     <div data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">
         <a class="btn btn-outline-dark icon-note py-2 ml-1 mt-1 disabled" href="#"></a>
     </div>
@@ -100,22 +100,22 @@
 
 <!-- INFO -->
 <div class="col mt-3 p-0">
-    
+
     {% if thread.kind == 'Debate' %}
         <div class="row">
             <div class="col-2 pl-0 h5">
                 Kronika:
             </div>
             <div class="col-10 col-sm-10 pl-5 pl-lg-0">
-                <h5 class="mr-2 mr-sm-3 font-italic">
+                <div class="h5 mr-2 mr-sm-3 font-italic">
                 {% for event in thread.events.all %}
                     <a class="font-italic" href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">{{ event.game.title }}</a>
                 {% endfor %}
-                </h5>
+                </div>
             </div>
         </div>
     {% endif %}
-    
+
     {% if thread.tags.first %}
         <div class="row">
             <div class="col-2 pl-0 h5">
@@ -128,7 +128,7 @@
             </div>
         </div>
     {% endif %}
-    
+
     <div class="row">
         <div class="col-2 pl-0 h5 my-1">
             Uczestnicy:
@@ -141,7 +141,7 @@
             {% endfor %}
         </div>
     </div>
-    
+
     {% if not thread.is_ended %}
         <div class="row">
             <div class="col-2 pl-0 h5 my-1">
@@ -156,5 +156,5 @@
             </div>
         </div>
     {% endif %}
-    
+
 </div>

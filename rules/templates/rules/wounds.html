@@ -30,7 +30,7 @@
             <tbody class="align-center">
                 {% for wounds_range_set in wounds_range_sets %}
                     <tr>
-                        <td class="p-0 rules-green">{{ wounds_range_set.health }}</td>
+                        <td class="p-0 text-green">{{ wounds_range_set.health }}</td>
                         <td class="p-0">{{ wounds_range_set.light_wounds }}</td>
                         <td class="p-0">{{ wounds_range_set.medium_wounds }}</td>
                         <td class="p-0">{{ wounds_range_set.heavy_wounds }}</td>
@@ -97,9 +97,9 @@
             W takich przypadkach trwałe okaleczenie sprowadza się do wszelkich skutków niemożności posługiwania się utraconą kończyną lub organem,
             co zazwyczaj jest znacznie bardziej dojmujące niż utrata jednego czy dwóch punktów Cech.
         </p>
-        <h6 class="font-weight-bold font-italic">
+        <div class="font-weight-bold font-italic">
             Rzut za Trwałe Okaleczenia:
-        </h6>
+        </div>
         <ul class="ml-4 font-italic">
             <li>1-20: -1 SIŁ</li>
             <li>21-40: -1 ZRC</li>
@@ -112,7 +112,7 @@
         </ul>
         <p>
             Postać, która doznała Trwałego Okaleczenia, dopisuje wynikający z niego Malus do wynikającej z rzutu Cechy lub Cech.
-            
+
         </p>
 
         <h2>Gojenie Ran</h2>
@@ -158,6 +158,6 @@
             a jeśli Rana Śmiertelna zbiegła się z zapaścią spowodowaną utrawą Zdrowia, to rzut należy wykonać dwukrotnie, a Malusy zsumować.
         </p>
 
-        
+
     </div>
 {% endblock content %}
