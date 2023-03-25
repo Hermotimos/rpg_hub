@@ -309,6 +309,12 @@
       "src": "fontawesome"
     },
     {
+      "uid": "74b2f1d1ee541715b3f389f7cdf63d1c",
+      "css": "logout",
+      "code": 59417,
+      "src": "websymbols"
+    },
+    {
       "uid": "40e6373161a67528a2871603605e279d",
       "css": "share",
       "code": 59394,

@@ -8,7 +8,8 @@
 {% endblock head_extra %}
 
 <header class="site-header">
-    <nav class="navbar navbar-expand-md fixed-top {% if '127.0.0.1' in request.META.HTTP_HOST %} bg-navbar-dev {% else %} bg-navbar {% endif %}">
+    <nav class="navbar navbar-expand-md fixed-top
+        {% if '127.0.0.1' in request.META.HTTP_HOST %} bg-navbar-dev {% else %} bg-navbar {% endif %}">
 
         <div class="container px-3 px-sm-1">
             <span class="navbar-brand navbar-nav mr-2 mr-md-3 mr-lg-4 mr-xl-5">
@@ -22,7 +23,7 @@
             <div class="collapse navbar-collapse float-left" id="mainmenu">
 
                 <!-- Navbar Left Side -->
-                <ul class="navbar-nav mr-auto font-resp-1_2 small-caps">
+                <ul class="navbar-nav  font-resp-1_2 small-caps">
 
                     {% with undone_demands=request.current_profile.undone_demands unseen_announcements=request.current_profile.unseen_announcements %}
                         <li>
@@ -61,36 +62,45 @@
 
 
                     {% if request.current_profile.status == 'gm' %}
-                        <li class="dropdown pr-4">
-                            <button class="nav-link font-18 nav-item {% if '127.0.0.1' in request.META.HTTP_HOST %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
+
+                        <li class="dropdown">
+                            <span class="nav-link mr-2 hover-pointer">
                                 Postacie
-                            </button>
+                            </span>
                             <div class="dropdown-content">
-                                <ul class="bullets-1 pl-4">
-                                    <li><a class="nav-link font-14 small-caps" href="{% url 'contact:plans-for-gm' %}">Plany graczy</a></li>
+                                <ul class="bullets-1 pl-4 font-14">
+                                    <li><a class="nav-link " href="{% url 'contact:plans-for-gm' %}">Plany graczy</a></li>
                                 </ul>
                             </div>
                         </li>
 
-                        <li class="dropdown pr-4">
-                            <button class="nav-link font-18 nav-item {% if '127.0.0.1' in request.META.HTTP_HOST %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
-                                Postać
-                            </button>
+                        <li class="dropdown">
+                            <span class="nav-link mr-2 hover-pointer">
+                                Świat
+                            </span>
                             <div class="dropdown-content">
-                                <ul class="bullets-1 pl-4">
-                                    <li>
-                                        <a class="nav-link font-14 small-caps" href="{% url 'prosoponomikon:character' request.current_profile.character.id %}">
-                                            Postać
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="nav-link font-14 small-caps" href="{% url 'contact:plans-main' %}">
-                                            Plany
-                                        </a>
-                                    </li>
+                                <ul class="bullets-1 pl-4 font-14">
+                                    <li><a class="nav-link" href="{% url 'prosoponomikon:first-names' %}">Imiona</a></li>
+                                    <li><a class="nav-link" href="{% url 'prosoponomikon:family-names' %}">Nazwiska</a></li>
+                                    <li><a class="nav-link" href="{% url 'chronicles:chronologies' %}">Chronologie</a></li>
                                 </ul>
                             </div>
                         </li>
+
+                        <li class="dropdown">
+                            <span class="nav-link mr-2 hover-pointer">
+                                Techniczne
+                            </span>
+                            <div class="dropdown-content">
+                                <ul class="bullets-1 pl-4 font-14">
+                                    <li><a class="nav-link" href="{% url 'admin:index' %}" target="_blank" rel="noopener noreferrer">Admin</a></li>
+                                    <li><a class="nav-link" href="{% url 'contact:plans-main' %}">Plany MG</a></li>
+                                    <li><a class="nav-link" href="{% url 'technicalities:todos' %}">TODOs</a></li>
+                                    <li><a class="nav-link" href="{% url 'technicalities:reload-main' %}">Przeładowanie modeli w aplikacjach</a></li>
+                                </ul>
+                            </div>
+                        </li>
+
                     {% endif %}
 
 
@@ -98,7 +108,7 @@
                 <!-- End Navbar Left Side -->
 
                 <!-- Navbar Right Side -->
-                <div class="navbar-nav">
+                <div class="navbar-nav ml-auto">
                     {% if user.is_authenticated %}
                         <a class="btn btn-outline-light btn-space" href="{% url 'technicalities:clear-cache' %}"
                             data-toggle="tooltip" data-placement="bottom" title="Opróżnij Cache">
@@ -112,7 +122,10 @@
                             data-toggle="tooltip" data-placement="bottom" title="Konto Użytkownika">
                             <i class="icon-user"></i>
                         </a>
-                        <a class="btn btn-outline-light btn-space" href="{% url 'users:logout' %}">Wyloguj</a>
+                        <a class="btn btn-outline-light btn-space" href="{% url 'users:logout' %}"
+                            data-toggle="tooltip" data-placement="bottom" title="Wyloguj">
+                            <i class="icon-logout"></i>
+                        </a>
                     {% else %}
                         <a class="btn btn-outline-light btn-space" href="{% url 'users:register' %}">Nowa Postać</a>
                     {% endif %}
