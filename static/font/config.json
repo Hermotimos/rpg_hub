@@ -291,6 +291,12 @@
       "src": "fontawesome"
     },
     {
+      "uid": "84d19120538dd143b9cf5433f2417f48",
+      "css": "navbar-toggler",
+      "code": 59414,
+      "src": "websymbols"
+    },
+    {
       "uid": "40e6373161a67528a2871603605e279d",
       "css": "share",
       "code": 59394,

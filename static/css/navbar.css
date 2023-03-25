@@ -1,14 +1,19 @@
 
+.navbar {
+    border: double;
+    border-color: white;
+    padding: 0;
+}
+
 .bg-navbar {background-color: #363636;}
 .bg-navbar-dev {background-color: #3d0e09;}
 
 .nav-link {color: #cbd5db;}
 .nav-link:hover {color: #ffffff;}
 
-.navbar {
-    border: double;
-    border-color: white;
-    padding: 0;
+
+.navbar button.navbar-toggler {
+    border-color: rgba(255,255,255,.5);
 }
 
 .btn-space {margin: 2px;}
