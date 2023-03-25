@@ -20,7 +20,7 @@
                         <div class="overlay container mt-2 ml-1 pl-3">
                             <div class="row">
                                 <div class="col-1 p-0">
-                                    <a class="btn btn-outline-{{ this_acquaintanceship.known_character.profile.image_icons_color }} border-none icon-parent-obj px-1 py-0 mb-1"
+                                    <a class="btn btn-outline-{{ this_acquaintanceship.known_character.profile.image_icons_color }} border-none icon-up px-1 py-0 mb-1"
                                        href="{% url 'prosoponomikon:acquaintanceships' %}#character_{{ this_acquaintanceship.known_character.id }}"
                                        data-toggle="tooltip" data-placement="left" title="Przejdź do Prosoponomikonu">
                                     </a>
@@ -139,7 +139,7 @@
         <!-- Biography packets -->
         {% if biography_packets %}
             <input type="radio" name="tabset" id="tab1" aria-controls="biography_packets" checked>
-            <label class="font-resp-15 resp-tab-label" for="tab1">Biografia</label>
+            <label class="font-resp-1_5 resp-tab-label" for="tab1">Biografia</label>
         {% endif %}
 
         <!-- Dialogue packets -->
@@ -150,7 +150,7 @@
                 {% else %}
                     <input type="radio" name="tabset" id="tab2" aria-controls="dialogue_packets" checked>
                 {% endif %}
-                <label class="font-resp-15 resp-tab-label text-secondary" for="tab2">Dialogi</label>
+                <label class="font-resp-1_5 resp-tab-label text-secondary" for="tab2">Dialogi</label>
             {% endif %}
         {% endif %}
 
@@ -161,7 +161,7 @@
             {% else %}
                 <input type="radio" name="tabset" id="tab3" aria-controls="acquisitions_regular" checked>
             {% endif %}
-            <label class="font-resp-15 resp-tab-label" for="tab3">
+            <label class="font-resp-1_5 resp-tab-label" for="tab3">
                 Umiejętności
             </label>
         {% endif %}
@@ -173,7 +173,7 @@
             {% else %}
                 <input type="radio" name="tabset" id="tab4" aria-controls="acquisitions_priests" checked>
             {% endif %}
-            <label class="font-resp-15 resp-tab-label" for="tab4">
+            <label class="font-resp-1_5 resp-tab-label" for="tab4">
                 Moce kapłańskie
             </label>
         {% endif %}
@@ -185,7 +185,7 @@
             {% else %}
                 <input type="radio" name="tabset" id="tab5" aria-controls="acquisitions_sorcerers" checked>
             {% endif %}
-            <label class="font-resp-15 resp-tab-label" for="tab5">
+            <label class="font-resp-1_5 resp-tab-label" for="tab5">
                 Zaklęcia
             </label>
         {% endif %}
@@ -197,7 +197,7 @@
             {% else %}
                 <input type="radio" name="tabset" id="tab6" aria-controls="acquisitions_theurgists" checked>
             {% endif %}
-            <label class="font-resp-15 resp-tab-label" for="tab6">
+            <label class="font-resp-1_5 resp-tab-label" for="tab6">
                 Moce Teurgiczne
             </label>
         {% endif %}
@@ -210,7 +210,7 @@
                 {% else %}
                     <input type="radio" name="tabset" id="tab7" aria-controls="item-collections" checked>
                 {% endif %}
-                <label class="font-resp-15 resp-tab-label" for="tab7">
+                <label class="font-resp-1_5 resp-tab-label" for="tab7">
                     Ekwipunek
                 </label>
             {% endif %}
@@ -223,7 +223,7 @@
             {% else %}
                 <input type="radio" name="tabset" id="tab8" aria-controls="knowledge_packets" checked>
             {% endif %}
-            <label class="font-resp-15 resp-tab-label text-secondary" for="tab8">
+            <label class="font-resp-1_5 resp-tab-label text-secondary" for="tab8">
                 {% if this_acquaintanceship.known_character.profile != request.current_profile and this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
                 Wiedza
             </label>
@@ -236,7 +236,7 @@
             {% else %}
                 <input type="radio" name="tabset" id="tab9" aria-controls="acquaintanceships" checked>
             {% endif %}
-            <label class="font-resp-15 resp-tab-label text-secondary" for="tab9">
+            <label class="font-resp-1_5 resp-tab-label text-secondary" for="tab9">
                 {% if this_acquaintanceship.known_character.profile.status != 'player' %} ~ {% endif %}
                 Znajomości
             </label>
@@ -245,7 +245,7 @@
         <!-- Also known as -->
         {% if also_known_as %}
             <input type="radio" name="tabset" id="tab10" aria-controls="aka">
-            <label class="font-resp-15 resp-tab-label text-secondary" for="tab10">
+            <label class="font-resp-1_5 resp-tab-label text-secondary" for="tab10">
                 A.K.A.
             </label>
         {% endif %}

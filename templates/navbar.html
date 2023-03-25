@@ -11,7 +11,7 @@
     <nav class="navbar navbar-expand-md fixed-top {% if '127.0.0.1' in request.META.HTTP_HOST %} bg-navbar-dev {% else %} bg-navbar {% endif %}">
 
         <div class="container px-3 px-sm-1">
-            <span class="navbar-brand navbar-nav mr-5">
+            <span class="navbar-brand navbar-nav mr-2 mr-md-3 mr-lg-4 mr-xl-5">
                 <a class="nav-link pl-0" href="{% url 'users:home' %}">Hyllemath</a>
             </span>
             <!--  Collapsible menu button when content of navbar overflows screen  -->
@@ -22,97 +22,43 @@
             <div class="collapse navbar-collapse float-left" id="mainmenu">
 
                 <!-- Navbar Left Side -->
-                <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav mr-auto font-resp-1_2 small-caps">
 
                     {% with undone_demands=request.current_profile.undone_demands unseen_announcements=request.current_profile.unseen_announcements %}
-                        <li class="dropdown pr-4 mr-auto">
-                            <button class="nav-link font-18 nav-item {% if '127.0.0.1' in request.META.HTTP_HOST %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
-                                Organizacyjne
-                            </button>
-                            <div class="dropdown-content">
-                                <ul class="bullets-1 pl-4">
-                                    <li>
-                                        <a class="nav-link font-14 small-caps" href="{% url 'contact:demands-main' %}">Dezyderaty</a>
-                                        {% if undone_demands %}
-                                            <div class="info-row-sub demands-bubble float-right">
-                                                <div class="number-circle-sub bg-red d-flex align-items-center">
-                                                    <span class="mx-auto number-circle-main-inner">{{ undone_demands.count }}</span>
-                                                </div>
-                                            </div>
-                                        {% endif %}
-                                    </li>
-                                    {% if request.current_profile.status != 'spectator' %}
-                                        <li>
-                                            <a class="nav-link font-14 small-caps" href="{% url 'communications:threads' 'Announcement' None %}">Ogłoszenia</a>
-                                            <div class="row info-row-sub news-bubble float-right">
-                                                {% if unseen_announcements %}
-                                                    <div class="number-circle-sub bg-blue d-flex align-items-center">
-                                                        <span class="mx-auto number-circle-main-inner">{{ unseen_announcements.count }}</span>
-                                                    </div>
-                                                {% endif %}
-                                            </div>
-                                        </li>
-                                    {% endif %}
-                                    <li><a class="nav-link font-14 small-caps" href="{% url 'rules:main' %}">Zasady</a></li>
-                                </ul>
-                            </div>
-                            <div class="row info-row float-right mr-n2">
-                                {% if undone_demands %}
-                                    <div class="number-circle-main bg-red d-flex align-items-center">
+                        <li>
+                            <a class="nav-link mr-2" href="{% url 'rules:main' %}">
+                                Zasady
+                            </a>
+                        </li>
+                        {% if request.current_profile.status != 'spectator' %}
+                            <li>
+                                <a class="nav-link mr-2" href="{% url 'communications:threads' 'Announcement' None %}">
+                                    Ogłoszenia
+                                </a>
+                                {% if unseen_announcements %}
+                                    <div class="row info-row-sub news-bubble float-right">
+                                        <div class="number-circle-sub bg-blue d-flex align-items-center">
+                                            <span class="mx-auto number-circle-main-inner">{{ unseen_announcements.count }}</span>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                        <li>
+                            <a class="nav-link mr-2" href="{% url 'contact:demands-main' %}">
+                                Dezyderaty
+                            </a>
+                            {% if undone_demands %}
+                                <div class="info-row-sub demands-bubble float-right">
+                                    <div class="number-circle-sub bg-red d-flex align-items-center">
                                         <span class="mx-auto number-circle-main-inner">{{ undone_demands.count }}</span>
                                     </div>
-                                {% endif %}
-                                {% if unseen_announcements %}
-                                    <div class="number-circle-main bg-blue d-flex align-items-center">
-                                        <span class="mx-auto number-circle-main-inner">{{ unseen_announcements.count }}</span>
-                                    </div>
-                                {% endif %}
-                            </div>
+                                </div>
+                            {% endif %}
                         </li>
                     {% endwith %}
 
 
-                    {% with unseen_debates=request.current_profile.unseen_debates %}
-                        <li class="dropdown pr-4 mr-auto">
-                            <button class="nav-link font-18 nav-item {% if '127.0.0.1' in request.META.HTTP_HOST %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
-                                Przygody
-                            </button>
-                            <div class="dropdown-content">
-                                <ul class="bullets-1 pl-4">
-                                    <li><a class="nav-link font-14 small-caps" href="{% url 'chronicles:timeline' %}">Kalendarium</a></li>
-                                    <li><a class="nav-link font-14 small-caps" href="{% url 'chronicles:chronicle-main' %}">Kronika</a></li>
-                                    <li>
-                                        <a class="nav-link font-14 small-caps" href="{% url 'communications:threads' 'Debate' None %}">Narady</a>
-                                        <div class="row info-row-sub debates-bubble float-right">
-                                            {% if unseen_debates %}
-                                                <div class="number-circle-sub bg-greengray d-flex align-items-center">
-                                                    <span class="mx-auto number-circle-main-inner">{{ unseen_debates.count }}</span>
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="row info-row float-right mr-n2">
-                                {% if unseen_debates %}
-                                    <div class="number-circle-main bg-greengray d-flex align-items-center">
-                                        <span class="mx-auto number-circle-main-inner">{{ unseen_debates.count }}</span>
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </li>
-                    {% endwith %}
-
-                    <li class="dropdown pr-4">
-                        <button class="nav-link font-18 nav-item {% if '127.0.0.1' in request.META.HTTP_HOST %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Wiedza</button>
-                        <div class="dropdown-content">
-                            <ul class="bullets-1 pl-4">
-                                <li><a class="nav-link font-14 small-caps" href="{% url 'knowledge:almanac' %}">Almanach</a></li>
-                                <li><a class="nav-link font-14 small-caps" href="{% url 'prosoponomikon:acquaintanceships' %}">Prosoponomikon</a></li>
-                                <li><a class="nav-link font-14 small-caps" href="{% url 'toponomikon:main' %}">Toponomikon</a></li>
-                            </ul>
-                        </div>
-                    </li>
 
                     {% if request.current_profile.status == 'gm' %}
                         <li class="dropdown pr-4">
@@ -125,15 +71,23 @@
                                 </ul>
                             </div>
                         </li>
-                    {% elif request.current_profile.status == 'spectator' %}
-                        <!-- Nothing -->
-                    {% else %}
+
                         <li class="dropdown pr-4">
-                            <button class="nav-link font-18 nav-item {% if '127.0.0.1' in request.META.HTTP_HOST %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">Postać</button>
+                            <button class="nav-link font-18 nav-item {% if '127.0.0.1' in request.META.HTTP_HOST %} dropbtn-dev {% else %} dropbtn {% endif %} small-caps">
+                                Postać
+                            </button>
                             <div class="dropdown-content">
                                 <ul class="bullets-1 pl-4">
-                                    <li><a class="nav-link font-14 small-caps" href="{% url 'prosoponomikon:character' request.current_profile.character.id %}">Postać</a></li>
-                                    <li><a class="nav-link font-14 small-caps" href="{% url 'contact:plans-main' %}">Plany</a></li>
+                                    <li>
+                                        <a class="nav-link font-14 small-caps" href="{% url 'prosoponomikon:character' request.current_profile.character.id %}">
+                                            Postać
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link font-14 small-caps" href="{% url 'contact:plans-main' %}">
+                                            Plany
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>
@@ -168,4 +122,36 @@
         </div>
 
     </nav>
+
+
+    <nav class="sidebar-mobile mr-2 mt-2">
+
+        <!-- Toggable sidebar menu -->
+        <div data-toggle="collapse" data-target="#menu">
+            <img class="sidebar-mobile-img" src="{{ request.current_profile.image.url }}">
+        </div>
+        <div id="menu" class="collapse">
+            {% include 'sidebar_menu.html' %}
+
+            <ul class="list-group-item hover-pointer">
+                <div class="text-center p-0 mt-n2" data-toggle="collapse" data-target="#characters">
+                    <i class="icon-down-open icon-medium ml-auto"></i>
+                </div>
+                <li id="characters" class="list-group collapse">
+                    <div class="overflow-auto border" style="max-height: 15rem;">
+                        {% for profile in user.get_profiles %}
+                            <a class="list-group-item list-group-item-sm list-group-item-light" href="{% url 'users:switch-profile' profile.id %}">
+                                <small>{{ profile.character.fullname }}</small>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+
+    </nav>
+
+
 </header>
+

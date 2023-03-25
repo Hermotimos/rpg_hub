@@ -5,7 +5,7 @@
 <div class="row">
 
     <div>
-        <a class="btn btn-outline-dark icon-parent-obj py-2 mt-1" href="{% url 'communications:threads' thread.kind tag_title %}#thread_{{ thread.id }}"
+        <a class="btn btn-outline-dark icon-up py-2 mt-1" href="{% url 'communications:threads' thread.kind tag_title %}#thread_{{ thread.id }}"
             data-toggle="tooltip" data-placement="bottom" title="
                 {% if thread.kind == 'Announcement' %}
                      Ogłoszenia

@@ -9,22 +9,22 @@
 
 {% block content %}
     <article class="top-button">
-        
+
         <header class="mb-5">
             <a href="{% url 'contact:demands-create' %}" class="btn btn-outline-dark">Nowy dezyderat</a>
         </header>
-        
+
         <article class="pt-5 tabset">
             <!-- Tabs -->
             <input type="radio" name="tabset" id="tab1" aria-controls="received" checked>
-            <label class="font-resp-15 resp-tab-label" for="tab1">OTRZYMANE</label>
-            
+            <label class="font-resp-1_5 resp-tab-label" for="tab1">OTRZYMANE</label>
+
             <input type="radio" name="tabset" id="tab2" aria-controls="sent">
-            <label class="font-resp-15 resp-tab-label" for="tab2">WYSŁANE</label>
-            
+            <label class="font-resp-1_5 resp-tab-label" for="tab2">WYSŁANE</label>
+
             <!-- Tabs content -->
             <div class="tab-panels pt-1">
-                
+
                 <section id="received" class="tab-panel">
                     <div class="container">
                         {% if received_undone %}
@@ -37,7 +37,7 @@
                             <h3>BRAK OCZEKUJĄCYCH!</h3>
                         {% endif %}
                         <br><br><br>
-                        
+
                         {% if received_done %}
                             <h3 class="border-top pt-4 pb-5">ARCHIWUM:</h3>
                             {% for demand in received_done %}
@@ -49,7 +49,7 @@
                         {% endif %}
                     </div>
                 </section>
-                
+
                 <section id="sent" class="tab-panel">
                     <div class="container">
                         {% if sent_undone %}
@@ -62,7 +62,7 @@
                             <h3>BRAK OCZEKUJĄCYCH!</h3>
                         {% endif %}
                         <br><br><br>
-                        
+
                         {% if sent_done %}
                             <h3 class="border-top pt-4 pb-5">ARCHIWUM:</h3>
                             {% for demand in sent_done %}
@@ -74,7 +74,7 @@
                         {% endif %}
                     </div>
                 </section>
-                
+
             </div>
         </article>
 

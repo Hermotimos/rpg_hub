@@ -14,27 +14,27 @@
 
     <div class="pt-3 mt-5">
         <div class="rules-styling" id="accordion{{ panel_id }}">
-        
+
             <!-- SKILLS PER SKILL TYPES-->
             {% for skill_type in skill_types %}
                 <div class="card mb-1">
                     <div class="card-header card-header-resp hover-blue" id="{{ skill_type.name|cut:' ' }}"
                          data-toggle="collapse" data-target="#collapse{{ skill_type.name|cut:' ' }}" aria-expanded="true" aria-controls="collapse{{ skill_type.name|cut:' ' }}">
-                        <label class="h4 font-weight-bold m-0 hover-blue font-resp-15">
+                        <label class="h4 font-weight-bold m-0 hover-blue font-resp-1_5">
                             {{ skill_type.name }}
                         </label>
                     </div>
                     <div id="collapse{{ skill_type.name|cut:' ' }}" class="collapse" aria-labelledby="{{ skill_type.name|cut:' ' }}" data-parent="#accordion{{ panel_id }}">
                         <div class="card-body container">
                             {% with skills=skill_type.skills.all %}
-                            
+
                             <!-- This conditional is necessary to avoid regrouping of skills that have multiple SkillTypes within each SkillType
                                 In some cases it would result in leaving most of the skills ungrouped while some of them grouped. -->
                                 {% if skill_type.skill_groups.exists %}
                                     {% regroup skills|dictsort:"group.name" by group as skillgroup_list %}
                                     {% for skillgroup in skillgroup_list %}
                                         {% if skillgroup.grouper.name %}
-                                            <h4 class="mt-4 mb-2 border-bottom text-center font-resp-15">
+                                            <h4 class="mt-4 mb-2 border-bottom text-center font-resp-1_5">
                                                 {{ skillgroup.grouper.name }}
                                             </h4>
                                         {% endif %}
@@ -47,18 +47,18 @@
                                         {% include 'rules/_skill.html' %}
                                     {% endfor %}
                                 {% endif %}
-                            
+
                             {% endwith %}
                         </div>
                     </div>
                 </div>
             {% endfor %}
-            
+
             <!-- ALL SKILLS -->
             <div class="card mb-2">
                 <div class="card-header card-header-resp hover-blue" id="all-skills"
                      data-toggle="collapse" data-target="#collapse{{ panel_id }}" aria-expanded="true" aria-controls="collapse{{ panel_id }}">
-                    <label class="h4 font-weight-bold mb-0 hover-blue small-caps font-resp-15">
+                    <label class="h4 font-weight-bold mb-0 hover-blue small-caps font-resp-1_5">
                         Wszystkie
                     </label>
                 </div>
@@ -70,7 +70,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
 

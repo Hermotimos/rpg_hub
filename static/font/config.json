@@ -49,20 +49,6 @@
       ]
     },
     {
-      "uid": "a6c18105ddc3e42718d81ef8e59603da",
-      "css": "parent-obj",
-      "code": 59397,
-      "src": "custom_icons",
-      "selected": true,
-      "svg": {
-        "path": "M911 834L799 947 409 555 241 723 18 53 688 276 521 443Z",
-        "width": 928
-      },
-      "search": [
-        "cursor"
-      ]
-    },
-    {
       "uid": "4d2dfc45d8176b1f26aed973fa84a91e",
       "css": "biography-packet",
       "code": 59398,
@@ -295,6 +281,32 @@
       "css": "navbar-toggler",
       "code": 59414,
       "src": "websymbols"
+    },
+    {
+      "uid": "a6c18105ddc3e42718d81ef8e59603da",
+      "css": "parent-obj",
+      "code": 59397,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M911 834L799 947 409 555 241 723 18 53 688 276 521 443Z",
+        "width": 928
+      },
+      "search": [
+        "cursor"
+      ]
+    },
+    {
+      "uid": "98edd99a41fbdc5633151cd21b7e56f8",
+      "css": "up",
+      "code": 59415,
+      "src": "iconic"
+    },
+    {
+      "uid": "ccddff8e8670dcd130e3cb55fdfc2fd0",
+      "css": "down-open",
+      "code": 59416,
+      "src": "fontawesome"
     },
     {
       "uid": "40e6373161a67528a2871603605e279d",

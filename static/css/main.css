@@ -105,18 +105,22 @@ small.smaller {font-size: 12px;}
 24px 	1.5rem
 */
 
-/* Responsive font: font-resp-15 ending for font with 1.5rem for full screen */
+/* Responsive font: font-resp-1_5 ending for font with 1.5rem for full screen */
 @media only screen and (max-width: 600px) {
-    .font-resp-15 {font-size: 0.9rem !important;}
+    .font-resp-1_2 {font-size: 0.75rem !important;}
+    .font-resp-1_5 {font-size: 0.9rem !important;}
 }
 @media only screen and (min-width: 601px) {
-    .font-resp-15 {font-size: 1.1rem !important;}
+    .font-resp-1_2 {font-size: 0.85rem !important;}
+    .font-resp-1_5 {font-size: 1.1rem !important;}
 }
 @media only screen and (min-width: 900px) {
-    .font-resp-15 {font-size: 1.3rem !important;}
+    .font-resp-1_2 {font-size: 1rem !important;}
+    .font-resp-1_5 {font-size: 1.3rem !important;}
 }
 @media only screen and (min-width: 1200px) {
-    .font-resp-15 {font-size: 1.5rem !important;}
+    .font-resp-1_2 {font-size: 1.2rem !important;}
+    .font-resp-1_5 {font-size: 1.5rem !important;}
 }
 
 
