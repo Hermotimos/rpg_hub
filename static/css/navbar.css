@@ -91,6 +91,13 @@ div.info-row-sub  {margin-top: -2rem;}
     div.debates-bubble  {margin-right: 4.2rem;}
 }
 
+.demands-bubble {
+    margin-top: -2.5rem;
+    margin-left: -0.3rem;
+}
+
+
+
 .number-circle-sub {
     border-radius: 50%;
     width: 14px;

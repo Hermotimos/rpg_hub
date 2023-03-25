@@ -2,7 +2,7 @@
 
 
 {% block head_extra %}
-    <link rel="stylesheet" href="{% static 'css/sidebar-nonmobile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 {% endblock head_extra %}
 
 
@@ -15,23 +15,20 @@
                 <img src="{{ request.current_profile.image.url }}">
             </div>
         </a>
+        <div class="hover-pointer text-center p-0 mb-2 " data-toggle="collapse" data-target="#characters">
+            <p class="font-resp-1_5 text-center mb-n2">
+                {{ request.current_profile.character.fullname }}
+            </p>
+            <i class="icon-down-open icon-medium ml-auto"></i>
+            <li id="characters" class="list-group collapse overflow-auto border" style="max-height: 15rem;">
+                {% for profile in user.get_profiles %}
+                    <a class="list-group-item list-group-item-sm" href="{% url 'users:switch-profile' profile.id %}">
+                        <small>{{ profile.character.fullname }}</small>
+                    </a>
+                {% endfor %}
+            </li>
+        </div>
 
-        <p class="font-resp-1_5 text-center mb-0">
-            <a href="{% url 'prosoponomikon:character' request.current_profile.character.id %}">
-               {{ request.current_profile.character.fullname }}
-            </a>
-            <div class="btn-light text-center p-0 mb-2 mt-n2"
-                data-toggle="collapse" data-target="#characters">
-                <i class="icon-down-open icon-medium ml-auto"></i>
-                <li id="characters" class="list-group collapse overflow-auto border" style="max-height: 15rem;"">
-                    {% for profile in user.get_profiles %}
-                        <a class="list-group-item list-group-item-sm" href="{% url 'users:switch-profile' profile.id %}">
-                            <small>{{ profile.character.fullname }}</small>
-                        </a>
-                    {% endfor %}
-                </li>
-            </div>
-        </p>
 
         {% include 'sidebar_menu.html' %}
 

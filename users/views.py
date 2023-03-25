@@ -124,7 +124,7 @@ def edit_user_view(request):
         user_image_form = UserImageUpdateForm()
 
     context = {
-        'page_title': 'Konto Użytkownika',
+        'page_title': 'Konto Gracza',
         'user_form': user_form,
         'user_image_form': user_image_form,
     }

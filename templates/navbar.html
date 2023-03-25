@@ -37,11 +37,11 @@
                                     Ogłoszenia
                                 </a>
                                 {% if unseen_announcements %}
-                                    <div class="row info-row-sub news-bubble float-right">
-                                        <div class="number-circle-sub bg-blue d-flex align-items-center">
+                                    <span class="row info-row-sub news-bubble float-right">
+                                        <span class="number-circle-sub bg-blue d-flex align-items-center">
                                             <span class="mx-auto number-circle-main-inner">{{ unseen_announcements.count }}</span>
-                                        </div>
-                                    </div>
+                                        </span>
+                                    </span>
                                 {% endif %}
                             </li>
                         {% endif %}
@@ -50,11 +50,11 @@
                                 Dezyderaty
                             </a>
                             {% if undone_demands %}
-                                <div class="info-row-sub demands-bubble float-right">
-                                    <div class="number-circle-sub bg-red d-flex align-items-center">
+                                <span class="info-row-sub demands-bubble float-right">
+                                    <span class="number-circle-sub bg-red d-flex align-items-center">
                                         <span class="mx-auto number-circle-main-inner">{{ undone_demands.count }}</span>
-                                    </div>
-                                </div>
+                                    </span>
+                                </span>
                             {% endif %}
                         </li>
                     {% endwith %}
@@ -119,7 +119,7 @@
                             <i class="icon-demand"></i>
                         </a>
                         <a class="btn btn-outline-light btn-space" href="{% url 'users:edit-user' %}"
-                            data-toggle="tooltip" data-placement="bottom" title="Konto Użytkownika">
+                            data-toggle="tooltip" data-placement="bottom" title="Konto Gracza">
                             <i class="icon-user"></i>
                         </a>
                         <a class="btn btn-outline-light btn-space" href="{% url 'users:logout' %}"
