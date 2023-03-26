@@ -60,7 +60,6 @@
         <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}" defer></script>
 
 
-
         <title>
             {% firstof page_title 'Hyllemath' %}
         </title>
@@ -77,16 +76,16 @@
             {% include 'navbar.html' %}
         {% endif %}
 
-        <main class="container px-sm-2 pt-2">
+        <main class="container">
             <div class="row">
-                <div class="col-md-9 pl-2 pr-3 px-sm-2">
+                <div class="col-md-9 pl-2 pr-3">
 
                     <header>
                         <div class="d-flex text-break border-bottom-dark">
                             <img class="header-img" src="{% static 'img/skadia.png' %}">
-                            <p class="small-caps font-weight-bold page-title my-1 mt-auto pl-2 pr-4">
+                            <span class="small-caps font-weight-bold page-title mt-auto mb-1 pl-2">
                                 {{ page_title }}
-                            </p>
+                            </span>
                         </div>
                     </header>
 
