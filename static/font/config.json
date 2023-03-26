@@ -260,13 +260,13 @@
     },
     {
       "uid": "3ab2abf6f936d3e53ee8c184cedaed82",
-      "css": "clear-cache",
+      "css": "delete",
       "code": 59411,
       "src": "elusive"
     },
     {
       "uid": "d5fabfa46384953ae055fceacb2229a7",
-      "css": "arrows-cw",
+      "css": "clear-cache",
       "code": 59412,
       "src": "elusive"
     },
@@ -313,6 +313,42 @@
       "css": "logout",
       "code": 59417,
       "src": "websymbols"
+    },
+    {
+      "uid": "dbd39eb5a1d67beb54cfcb535e840e0f",
+      "css": "plus",
+      "code": 59418,
+      "src": "iconic"
+    },
+    {
+      "uid": "f0eac0958921fe45b85d01b79d76e86b",
+      "css": "switch",
+      "code": 59419,
+      "src": "entypo"
+    },
+    {
+      "uid": "aa0d9175a3919a260a4012d560e9f01e",
+      "css": "right-hand",
+      "code": 59420,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "3d99d345645f43e31e9e0fd48be37e9c",
+      "css": "left-hand",
+      "code": 59421,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "034e645aa3bad56ce68389a816547c87",
+      "css": "up-hand",
+      "code": 59422,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "beb43b8df442eac4b8d35f528d5ed5af",
+      "css": "down-hand",
+      "code": 59423,
+      "src": "fontawesome"
     },
     {
       "uid": "40e6373161a67528a2871603605e279d",

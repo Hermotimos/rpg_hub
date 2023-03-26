@@ -136,19 +136,10 @@
             {% include 'sidebar_menu.html' %}
 
             <ul class="list-group-item hover-pointer p-0 pt-2">
-                <div class="text-center p-0 mt-n2" data-toggle="collapse" data-target="#characters">
+                <div class="text-center " data-toggle="collapse" data-target="#characters">
                     <i class="icon-down-open icon-medium ml-auto"></i>
                 </div>
-                <li id="characters" class="list-group collapse">
-                    <div class="overflow-auto border" style="max-height: 15rem;">
-                        {% for profile in user.get_profiles %}
-                            <a class="list-group-item sidebar-text-sm"
-                                href="{% url 'users:switch-profile' profile.id %}">
-                                <small>{{ profile.character.fullname }}</small>
-                            </a>
-                        {% endfor %}
-                    </div>
-                </li>
+                {% include '_nav_characters.html' %}
             </ul>
 
         </div>
