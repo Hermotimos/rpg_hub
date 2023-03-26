@@ -1,0 +1,11 @@
+{% load static %}
+
+
+
+<li id="characters" class="list-group collapse overflow-auto text-left">
+    {% for profile in user.get_profiles %}
+        <a class="list-group-item sidebar-text-sm" href="{% url 'users:switch-profile' profile.id %}">
+            <small>{{ profile.character.fullname }}</small>
+        </a>
+    {% endfor %}
+</li>
