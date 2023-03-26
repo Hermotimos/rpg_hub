@@ -14,7 +14,7 @@ from users.models import Profile
 
 
 class ThreadTagAdminForm(forms.ModelForm):
-    
+
     class Meta:
         model = ThreadTag
         exclude = []
@@ -41,9 +41,10 @@ class AnnouncementAdmin(admin.ModelAdmin):
     filter_horizontal = ['participants', 'followers', 'tags']
     list_display = ['title', 'created_at']
     search_fields = ['title']
-    
+
     def formfield_for_manytomany(self, db_field, request, **kwargs):
-        profiles = Profile.objects.exclude(status='npc').select_related('character')
+        profiles = Profile.objects.exclude(
+            status='npc').select_related('character')
         if db_field.name == "participants":
             kwargs["queryset"] = profiles
         if db_field.name == "followers":
@@ -98,7 +99,8 @@ class AnnouncementStatementAdmin(StatementAdmin):
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "seen_by":
-            kwargs["queryset"] = Profile.objects.exclude(status='npc').select_related('character')
+            kwargs["queryset"] = Profile.objects.exclude(
+                status='npc').select_related('character')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
@@ -109,7 +111,7 @@ class DebateStatementAdmin(StatementAdmin):
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "seen_by":
             kwargs["queryset"] = (
-                    Profile.living.all() | Profile.objects.filter(status='gm')
+                Profile.living.all() | Profile.objects.filter(status='gm')
             ).select_related('character')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 

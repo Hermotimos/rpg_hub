@@ -52,7 +52,7 @@ class Plan(Model):
     inform_gm = BooleanField(default=False)
     date_created = DateTimeField(auto_now_add=True)
     image = ImageField(upload_to='contact_pics', blank=True, null=True)
-    
+
     class Meta:
         ordering = ['-date_created']
 
@@ -76,4 +76,3 @@ def delete_if_doubled(sender, instance, **kwargs):
 
 
 post_save.connect(delete_if_doubled, sender=DemandAnswer)
-
