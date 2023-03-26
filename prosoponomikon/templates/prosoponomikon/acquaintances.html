@@ -46,11 +46,15 @@
 
     <article class="top-button">
         <header class="mb-5">
-            {% if request.current_profile.status == 'gm' %}
-                <a href="{% url 'prosoponomikon:character-create' %}" class="btn btn-outline-dark" target="_blank" rel="noopener noreferrer">Nowa Postać</a>
-            {% else %}
-                <a href="{% url 'prosoponomikon:acquaintanceship-create-edit' %}" class="btn btn-outline-dark">Nowa Postać</a>
-            {% endif %}
+            <a class="btn btn-outline-dark"
+                {% if request.current_profile.status == 'gm' %}
+                    href="{% url 'admin:prosoponomikon_character_add' %}" target="_blank" rel="noopener noreferrer"
+                {% else %}
+                    href="{% url 'prosoponomikon:acquaintanceship-create-edit' %}"
+                {% endif %}
+                data-toggle="tooltip" data-placement="bottom" title="Nowa Postać">
+                <i class="icon-plus"></i>
+            </a>
         </header>
     </article>
 

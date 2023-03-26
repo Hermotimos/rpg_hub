@@ -11,14 +11,31 @@
                     <img class="rounded-circle portait img-sm border border-dark {% if is_done %} img-grayscale {% endif %}" src="{{ demand.addressee.image.url }}">
                 </div>
                 <div class="d-inline ml-3">
-                    <a class="btn btn-dark px-2" href="{% url 'contact:demands-detail' demand.id %}">&nbsp;☷&nbsp;</a>
+                    <a class="btn btn-darkblue"
+                        href="{% url 'contact:demands-detail' demand.id %}"
+                        data-toggle="tooltip" data-placement="bottom" title="Szczegóły">
+                        <i class="icon-details"></i>
+                    </a>
                     {% if is_done %}
-                        <a href="{% url 'contact:demand-undone' demand.id %}" class="btn btn-dark">&nbsp;☝&nbsp;</a>
+                        <a class="btn btn-darkyellow"
+                            href="{% url 'contact:demand-undone' demand.id %}"
+                            data-toggle="tooltip" data-placement="bottom" title="Niezrobiony">
+                            <i class="icon-up-hand"></i>
+                        </a>
                         {% if request.user == demand.author.user %}
-                            <a href="{% url 'contact:demands-delete' demand.id %}" class="btn btn-danger">✘</a>
+                            <a class="btn btn-darkred"
+                                href="{% url 'contact:demands-delete' demand.id %}"
+                                data-toggle="tooltip" data-placement="bottom" title="Usuń"
+                                onclick="return confirm('Czy na pewno chcesz usunąć Dezyderat?');">
+                                <i class="icon-delete"></i>
+                            </a>
                         {% endif %}
                     {% else %}
-                        <a href="{% url 'contact:demand-done' demand.id %}" class="btn btn-dark">✔</a>
+                        <a class="btn btn-darkgreen"
+                            href="{% url 'contact:demand-done' demand.id %}"
+                            data-toggle="tooltip" data-placement="bottom" title="Zrobiony">
+                            <i class="icon-done"></i>
+                        </a>
                     {% endif %}
                 </div>
             </div>

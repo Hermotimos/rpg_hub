@@ -43,16 +43,42 @@ h1, h2, h3, h4, h5, h6,
 }
 
 
-/* Fontello font-icons */
+
+/* Fontello font-icons as buttons */
+
 .icon-medium {font-size: 0.8rem;}
 .icon-small {font-size: 0.6rem;}
+
+a.btn {padding: 0.5rem 0.6rem}
+
+a[class*="btn-dark"] > i::before {color: white;}
+
+a.btn-darkred {
+    background-color: #8b0909;
+    border-color: #8b0909;
+}
+a.btn-darkgreen {
+    background-color: #023f08d5;
+    border-color: #023f08d5;
+}
+a.btn-darkyellow {
+    background-color: #e49605;
+    border-color: #e49605;
+}
+a.btn-darkblue {
+    background-color: #011f4b;
+    border-color: #011f4b;
+}
+
+
+/* END Fontello font-icons as buttons */
 
 
 
 .text-orange {color: #d7a40c;}
 .text-green {color: #008000;}
 .text-red1 {color: #993300;}
-.text-red2 {color: #C70039;}
+.text-red2 {color: #ad0a0a;}
 .text-blue1 {color: #b3cde0;}
 .text-blue2 {color: #6497b1;}
 .text-blue3 {color: #005b96;}

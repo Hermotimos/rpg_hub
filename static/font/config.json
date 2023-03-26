@@ -259,12 +259,6 @@
       "src": "fontawesome"
     },
     {
-      "uid": "3ab2abf6f936d3e53ee8c184cedaed82",
-      "css": "delete",
-      "code": 59411,
-      "src": "elusive"
-    },
-    {
       "uid": "d5fabfa46384953ae055fceacb2229a7",
       "css": "clear-cache",
       "code": 59412,
@@ -349,6 +343,30 @@
       "css": "down-hand",
       "code": 59423,
       "src": "fontawesome"
+    },
+    {
+      "uid": "d35a1d35efeb784d1dc9ac18b9b6c2b6",
+      "css": "pencil",
+      "code": 59424,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "25a81737628d1e654a30ad412d7d6dd7",
+      "css": "details",
+      "code": 59425,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "7b16b22168e762c88333f465da862098",
+      "css": "done",
+      "code": 59426,
+      "src": "websymbols"
+    },
+    {
+      "uid": "2cc73cc335f054682c04fe63439c4dcb",
+      "css": "delete",
+      "code": 59427,
+      "src": "linecons"
     },
     {
       "uid": "40e6373161a67528a2871603605e279d",

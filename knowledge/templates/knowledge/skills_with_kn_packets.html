@@ -9,23 +9,27 @@
 
 {% block content %}
     <article class="top-button">
-        
+
         <header class="mb-5">
-            {% if request.current_profile.status == 'gm' %}
-                <a href="{% url 'admin:knowledge_knowledgepacket_add' %}" class="btn btn-outline-dark">Nowy pakiet wiedzy</a>
-            {% else %}
-                <a href="{% url 'knowledge:kn-packet-form' 0 %}" class="btn btn-outline-dark">Nowy pakiet wiedzy</a>
-            {% endif %}
+            <a class="btn btn-outline-dark"
+                {% if request.current_profile.status == 'gm' %}
+                    href="{% url 'admin:knowledge_knowledgepacket_add' %}"
+                {% else %}
+                    href="{% url 'knowledge:kn-packet-form' 0 %}"
+                {% endif %}
+                data-toggle="tooltip" data-placement="bottom" title="Nowy pakiet wiedzy">
+                <i class="icon-plus"></i>
+            </a>
         </header>
-    
+
         <div class="pt-5">
             {% for skill in skills %}
                 <div class="container">
-                    
+
                     <div class="d-flex flex-row mb-2">
-                        
+
                         {% include 'rules/_skill_img.html' %}
-                        
+
                         <div class="skill-or-synergy-name ml-2 mt-2" data-toggle="collapse" data-target="#{{ skill|cut:' ' }}">
                             {% if request.current_profile.status == 'gm' %}
                                 <a class="hover-blue font-weight-bold" href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja">
@@ -38,7 +42,7 @@
                             {% endif %}
                         </div>
                     </div>
-                    
+
                     <div class="d-flex flex-row">
                         <div class="col-1"></div>
                         <div class="col-11 p-0">
@@ -49,10 +53,10 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             {% endfor  %}
         </div>
-        
+
     </article>
 {% endblock content %}

@@ -3,39 +3,61 @@
 {% load crispy_forms_tags %}
 {% load custom_filters %}
 
+
+
 {% block head_extra %}
     <link rel="stylesheet" href="{% static 'css/contact.css' %}">
 {% endblock head_extra %}
 
+
 {% block content %}
+
     <article class="top-button">
+
         <header class="mb-5">
-            <a href="{% url 'contact:plans-create' %}" class="btn btn-outline-dark">Nowy plan</a>
+            <a class="btn btn-outline-dark"
+                href="{% url 'contact:plans-create' %}"
+                data-toggle="tooltip" data-placement="bottom" title="Nowy Plan">
+                <i class="icon-plus"></i>
+            </a>
         </header>
+
+        {% for plan in plans %}
+            <table>
+                <tr>
+                    <td class="align-top">
+                        <img class="rounded-circle portait img-xl" src="{{ plan.author.image.url }}">
+                        <br>
+                        <small class="font-italic text-muted text-nowrap">{{ plan.date_created|date:'d-M-Y' }}</small>
+                    </td>
+                    <td class="font-18 font-italic px-2 py-2 text-justify">{{ plan.text|capfirst|linebreaks }}</td>
+                    <td class="align-top">
+                        <a class="btn btn-darkblue"
+                            href="{% url 'contact:plans-modify' plan.id %}"
+                            data-toggle="tooltip" data-placement="bottom" title="Edytuj">
+                            <i class="icon-pencil"></i>
+                        </a>
+                    </td>
+                    <td class="align-top">
+                        <a class="btn btn-darkred"
+                            href="{% url 'contact:plans-delete' plan.id %}"
+                            data-toggle="tooltip" data-placement="bottom" title="Usuń"
+                            onclick="return confirm('Czy na pewno chcesz usunąć Plan?');">
+                            <i class="icon-delete"></i>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="3">
+                        {% if plan.image %}
+                            <img src="{{ plan.image.url }}">
+                        {% endif %}
+                        <br><br>
+                    </td>
+                </tr>
+            </table>
+        {% endfor %}
     </article>
 
-    {% for plan in plans %}
-        <table>
-            <tr>
-                <td class="align-top">
-                    <img class="rounded-circle portait img-xl" src="{{ plan.author.image.url }}">
-                    <br>
-                    <small class="font-italic text-muted text-nowrap">{{ plan.date_created|date:'d-M-Y' }}</small>
-                </td>
-                <td class="font-18 font-italic px-2 py-2 text-justify">{{ plan.text|capfirst|linebreaks }}</td>
-                <td class="align-top"><a href="{% url 'contact:plans-modify' plan.id %}" class="btn btn-dark">&#9998;</a></td>
-                <td class="align-top"><a href="{% url 'contact:plans-delete' plan.id %}" class="btn btn-danger"
-                    onclick="return confirm('Potwierdź usunięcie Planu');">&#10008;</a></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td colspan="3">
-                    {% if plan.image %}
-                        <img src="{{ plan.image.url }}">
-                    {% endif %}
-                    <br><br>
-                </td>
-            </tr>
-        </table>
-    {% endfor %}
 {% endblock content %}

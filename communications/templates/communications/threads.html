@@ -3,23 +3,42 @@
 {% load crispy_forms_tags %}
 {% load custom_filters %}
 
+
 {% block head_extra %}
     <link rel="stylesheet" href="{% static 'css/communications.css' %}">
 {% endblock head_extra %}
 
+
+
 {% block content %}
     <article class="top-button">
         <header class="mb-5">
-            <a href="{% url 'communications:create-thread' thread_kind %}" class="btn btn-outline-dark">
+
+
+            <!-- Add -->
+            <a class="btn btn-outline-dark"
+                href="{% url 'communications:create-thread' thread_kind %}"
+                data-toggle="tooltip" data-placement="bottom"
                 {% if thread_kind == 'Announcement' %}
-                    Nowe Ogłoszenie
+                    title="Nowe Ogłoszenie"
                 {% elif thread_kind == 'Debate' %}
-                    Nowa Narada
+                    title="Nowa Narada"
                 {% endif %}
+                >
+                <i class="icon-plus"></i>
             </a>
-            <a data-toggle="tooltip" data-placement="bottom" title="Edytuj tagi">
-                <span class="btn btn-outline-dark" data-toggle="modal" data-target="#tagsModal">Edytuj Tagi</span>
-            </a>
+
+
+            <!-- Edit tags -->
+            <span data-toggle="tooltip" data-placement="bottom" title="Edytuj tagi">
+                <a class="btn btn-outline-dark"
+                    href="{% url 'communications:threads' thread_kind None %}"
+                    data-toggle="modal" data-target="#tagsModal">
+                    <i class="icon-filter ml-n1"></i>
+                    <i class="icon-details ml-n2 icon-small"></i>
+                </a>
+            </span>
+
             <div class="modal fade" id="tagsModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -39,24 +58,32 @@
                     </div>
                 </div>
             </div>
+
+
+            <!-- Filter by tag -->
             {% if tag_title == 'None' %}
                 <span data-toggle="tooltip" data-placement="bottom" title="Filtruj po tagu">
-                    <span class="btn btn-outline-dark icon-filter" data-toggle="modal" data-target="#tagFilterModal">
-                    </span>
+                    <a class="btn btn-outline-dark"
+                        href="{% url 'admin:prosoponomikon_character_add' %}" target="_blank" rel="noopener noreferrer"
+                        data-toggle="modal" data-target="#tagFilterModal">
+                        <i class="icon-filter"></i>
+                    </a>
                 </span>
                 <div class="modal fade tags-modal" id="tagFilterModal" tabindex="-1" role="dialog" aria-hidden="true">
                     {% include 'communications/_tag_filter_modal.html' %}
                 </div>
             {% else %}
-                <a class="btn btn-warning icon-filter border border-dark text-dark"
-                   data-toggle="tooltip" data-placement="bottom" title="Wyczyść filtr"
-                   href="{% url 'communications:threads' thread_kind None %}">
-                    <span class="font-italic">#{{ tag_title }}</span>
-                </a>
+                <span data-toggle="tooltip" data-placement="bottom" title="Wyczyść filtr">
+                    <a class="btn btn-warning border border-dark text-dark"
+                        href="{% url 'communications:threads' thread_kind None %}">
+                        <i class="icon-filter font-italic">#{{ tag_title }}</i>
+                    </a>
+                </span>
             {% endif %}
-            
+
         </header>
-        
+
+
         <div>
             <div id="unseen" class="mb-5">
                 {% for thread in unseen %}
@@ -69,7 +96,7 @@
                 {% endfor %}
             </div>
         </div>
-        
+
     </article>
 
 {% endblock content %}

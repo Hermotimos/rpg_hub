@@ -11,7 +11,11 @@
     <article class="top-button">
 
         <header class="mb-5">
-            <a href="{% url 'contact:demands-create' %}" class="btn btn-outline-dark">Nowy dezyderat</a>
+            <a class="btn btn-outline-dark"
+                href="{% url 'contact:demands-create' %}"
+                data-toggle="tooltip" data-placement="bottom" title="Nowy Dezyderat">
+                <i class="icon-plus"></i>
+            </a>
         </header>
 
         <article class="pt-5 tabset">

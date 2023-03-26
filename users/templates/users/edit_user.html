@@ -17,8 +17,12 @@
                         {{ user.username }}
                         <small class="text-secondary d-block smaller">{{ user.email }}</small>
                     </div>
-                    <div class="float-right">
-                        <a href="{% url 'users:change-password' %}" class="btn btn-outline-dark float-right mb-1 mr-1">Zmiana hasła</a>
+                    <div>
+                        <a class="btn btn-outline-dark float-right mb-1"
+                            href="{% url 'users:change-password' %}"
+                            data-toggle="tooltip" data-placement="bottom" title="Zmiana hasła">
+                            <i class="icon-key"></i>
+                        </a>
                     </div>
                 </div>
             </div>
