@@ -6,9 +6,10 @@
 {% endblock head_extra %}
 
 
-<div class="sidebar-nonmobile">
-    <aside>
+<aside class="sidebar-nonmobile">
 
+    <!-- Character image and menu for changing Character -->
+    <section>
         <a href="{% url 'prosoponomikon:character' request.current_profile.character.id %}"
             data-toggle="tooltip" data-placement="bottom" title="Pokaż Kartę Postaci">
             <div class="img-hover-zoom border-double">
@@ -28,12 +29,16 @@
                 {% endfor %}
             </li>
         </div>
+    </section>
 
-
+    <!-- Navigation -->
+    <section>
         {% include 'sidebar_menu.html' %}
+    </section>
 
 
-        <!-- Row of Development Administration Buttons underneath -->
+    <!-- Row of Development Administration Buttons underneath -->
+    <section>
         {% if request.current_profile.status == 'gm' and '127.0.0.1' in request.get_host%}
             <div class="mt-2 ml-1 mr-n1 d-flex flex-wrap">
                 <div class="mr-md-auto py-1 px-1 px-md-0">
@@ -60,8 +65,8 @@
                 </div>
             </div>
         {% endif %}
-
         <br>
+    </section>
 
-    </aside>
-</div>
+
+</aside>

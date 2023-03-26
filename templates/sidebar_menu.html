@@ -6,18 +6,11 @@
 {% endblock head_extra %}
 
 
+<nav class="sidebar-text small-caps">
 
-
-
-<!-- Links to  -->
-<div>
-    <a class="list-group-item small-caps" href="{% url 'chronicles:timeline' %}">
-        Kalendarium
-    </a>
-    <a class="list-group-item small-caps" href="{% url 'chronicles:chronicle-main' %}">
-        Kronika
-    </a>
-    <a class="list-group-item small-caps d-flex" href="{% url 'communications:threads' 'Debate' None %}">
+    <a class="list-group-item" href="{% url 'chronicles:timeline' %}">Kalendarium</a>
+    <a class="list-group-item" href="{% url 'chronicles:chronicle-main' %}">Kronika</a>
+    <a class="list-group-item" href="{% url 'communications:threads' 'Debate' None %}">
         Narady
         {% with unseen_debates=request.current_profile.unseen_debates %}
             {% if unseen_debates %}
@@ -30,32 +23,19 @@
         {% endwith %}
     </a>
 
+    <hr class="show-nonmobile">
+
+    <a class="list-group-item" href="{% url 'knowledge:almanac' %}">Almanach</a>
+    <a class="list-group-item" href="{% url 'prosoponomikon:acquaintanceships' %}">Prosoponomikon</a>
+    <a class="list-group-item" href="{% url 'toponomikon:main' %}">Toponomikon</a>
 
     <hr class="show-nonmobile">
 
-
-    <a class="list-group-item small-caps" href="{% url 'knowledge:almanac' %}">
-        Almanach
-    </a>
-    <a class="list-group-item small-caps" href="{% url 'prosoponomikon:acquaintanceships' %}">
-        Prosoponomikon
-    </a>
-    <a class="list-group-item small-caps" href="{% url 'toponomikon:main' %}">
-        Toponomikon
-    </a>
-
-
-    {% if request.current_profile.status != 'gm' %}
-
-        <hr class="show-nonmobile">
-
-        <a class="list-group-item small-caps" href="{% url 'contact:plans-main' %}">
-            Plany
-        </a>
-
+    {% if request.current_profile.status == 'gm' %}
+        <a class="list-group-item" href="{% url 'contact:plans-for-gm' %}">Plany Graczy</a>
+    {% else %}
+        <a class="list-group-item" href="{% url 'contact:plans-main' %}">Plany</a>
     {% endif %}
 
-
-
-</div>
+</nav>
 

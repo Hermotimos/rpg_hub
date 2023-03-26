@@ -114,9 +114,16 @@ div.info-row-sub  {margin-top: -2rem;}
 
 
 
-
 /* Redo reset of styling for empty links, i.e. <a> without href property */
 a.nav-link:not([href]) {
     color: revert;
     text-decoration: revert;
 }
+
+
+
+/* For sidebar as navbar on mobile */
+li#characters a {
+    max-height: 15rem;
+}
+

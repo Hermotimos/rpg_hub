@@ -65,17 +65,6 @@
 
                         <li class="dropdown">
                             <span class="nav-link mr-2 hover-pointer">
-                                Postacie
-                            </span>
-                            <div class="dropdown-content">
-                                <ul class="bullets-1 pl-4 font-14">
-                                    <li><a class="nav-link " href="{% url 'contact:plans-for-gm' %}">Plany graczy</a></li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <li class="dropdown">
-                            <span class="nav-link mr-2 hover-pointer">
                                 Świat
                             </span>
                             <div class="dropdown-content">
@@ -137,7 +126,7 @@
     </nav>
 
 
-    <nav class="sidebar-mobile mr-2 mt-2">
+    <nav class="sidebar-mobile sidebar-text mr-2 mt-2">
 
         <!-- Toggable sidebar menu -->
         <div data-toggle="collapse" data-target="#menu">
@@ -146,14 +135,15 @@
         <div id="menu" class="collapse">
             {% include 'sidebar_menu.html' %}
 
-            <ul class="list-group-item hover-pointer">
+            <ul class="list-group-item hover-pointer p-0 pt-2">
                 <div class="text-center p-0 mt-n2" data-toggle="collapse" data-target="#characters">
                     <i class="icon-down-open icon-medium ml-auto"></i>
                 </div>
                 <li id="characters" class="list-group collapse">
                     <div class="overflow-auto border" style="max-height: 15rem;">
                         {% for profile in user.get_profiles %}
-                            <a class="list-group-item list-group-item-sm list-group-item-light" href="{% url 'users:switch-profile' profile.id %}">
+                            <a class="list-group-item sidebar-text-sm"
+                                href="{% url 'users:switch-profile' profile.id %}">
                                 <small>{{ profile.character.fullname }}</small>
                             </a>
                         {% endfor %}

@@ -46,20 +46,17 @@ nav.sidebar-mobile > div.list-group {
 
 
 @media only screen and (max-width: 767px) {
-    .list-group-item {
-        font-size: 0.75rem;
-        padding: 0.5rem 0.5rem;
-    }
+    .sidebar-text {font-size: 0.9rem;}
 }
 @media only screen and (min-width: 768px) {
-    .list-group-item {font-size: 0.75rem;}
+    .sidebar-text {font-size: 0.75rem;}
 }
 @media only screen and (min-width: 1000px) {
-    .list-group-item {font-size: 0.9rem;}
+    .sidebar-text {font-size: 0.9rem;}
 }
 @media only screen and (min-width: 1200px) {
-    .list-group-item {font-size: 1rem;}
+    .sidebar-text {font-size: 1rem;}
 }
 
 
-.list-group-item-sm {padding: 0.5rem 0.5rem;}
+.sidebar-text-sm {padding: 0.5rem 0.5rem;}
