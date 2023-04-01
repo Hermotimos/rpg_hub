@@ -22,7 +22,7 @@
         </p>
         <p>
             Sam termin "Umiejętności" używany jest w specyficznym znaczeniu, pod którym kryją się różnorodne zdolności
-            – z jednej strony takie, które bez wahania określilibyśmy mianem umiejętności (np. Czytanie i pisanie, Wspinaczka),
+            - z jednej strony takie, które bez wahania określilibyśmy mianem umiejętności (np. Czytanie i pisanie, Wspinaczka),
             jak i różnorodne właściwości fizyczne i psychiczne (np. Wytrzymałość, Wola życia, Spostrzegawczość, Zwiększona Siła)
             czy wiedza (Doktryna bóstwa, Historia, Księgi).
         </p>
@@ -106,8 +106,8 @@
                 </td>
             </tr>
         </table>
-       
-        
+
+
         <h2 class="mt-5 mb-3 hover-blue" data-toggle="collapse" data-target="#skills">Synergie</h2>
         <p>
             ☞<mark><a href="{% url 'rules:synergies' 'Powszechne' %}">Lista Synergii</a></mark>
@@ -128,20 +128,22 @@
         <p>
             Zapełnienie Paska Postępu jest warunkiem koniecznym do nabycia Umiejętności za Doświadczenie,
             ale z drugiej strony nie zobowiązuje do niego, tzn. nie „więzi” Doświadczenia.
-            Pula Doświadczenia jest jedna i niepodzielna, a decyzja, żeby rozwijać jakąś Umiejętność nie zobowiązuje do tego,
-            żeby przeznaczyć na nią choćby 1 punkt doświadczenia.
+            Pula Doświadczenia jest jedna i niepodzielna, a decyzja, żeby rozwijać jakąś Umiejętność w ramach Paska Postępu
+            nie zobowiązuje do przeznaczenia na nią jakiegokolwiek doświadczenia.
             Oznacza to, że Postać może zapełnić Paski Postępu dla kilku Umiejętności, których wcale nie ma zamiaru wykupić w najbliższym czasie<sup>✵</sup>,
             a być może w ogóle, ponieważ rozwijała je wyłącznie z braku dostępu do doświadczeń pozwalających na rozwijanie o wiele bardziej pożądanych Umiejętności.
             Odpowiada to nauce różnych głupot z nudów, która prowadzi do sytuacji bliskiej nabyciu nowych kompetencji przy odrobinie dalszego wysiłku.
             Jedyne ograniczenie jest tu takie, że aby rozwijać w ramach Paska Postępu Umiejętność wyższego poziomu, trzeba już posiadać jej niższy poziom
             (wybrany na początku gry, uzyskany fabularnie lub wykupiony za Doświadczenie).
         </p>
-        <ul class="bullets-2 ml-4 mt-2 font-italic text-justify">
-            <li>
-                Jednakże, w przypadku, gdyby po zapełnieniu Paska Postępu Postać na długi czas całkowicie zaprzestała działań związanych z daną Umiejętnością,
-                które odświeżałyby jej obycie w danej materii, Mistrz Gry może zdecydować o przedłużeniu Paska Postępu dla danego poziomu Umiejętności u tej Postaci o kilka kratek.
-            </li>
-        </ul>
+        <p>
+            Raz usyskane punkty na Pasku Postępu nie ulegają utracie z powodu upływu czasu.
+            Postać może przez długi czas "przechowywać" potencjał do natychmiastowego uzyskania danego poziomu Umiejętności,
+            i w dowolnym czasie pomiędzy Sesjami wykupić Umiejętności w zamian za Punkty Doświadczenia,
+            nawet w przypadku gdyby w międzyczasie Postać na długi czas całkowicie zaprzestała działań
+            związanych z daną Umiejętnością.
+            Natomiast niewykupiony poziom Umiejętności blokuje możliwość zapełniania Paska Postępu dla jej wyższego poziomu.
+        </p>
         <p>
             Każdy Poziom Umiejętności ma osobny Pasek Postępu, o pewnej liczbie kratek.
             Każda z kratek odpowiada jednemu doświadczeniu w życiu Postaci o wystarczającym stopniu złożoności, aby przyczynić się do rozwoju danej Umiejętności.
@@ -150,7 +152,7 @@
             który przebiją tylko najbardziej zdeterminowani i wytrwali.
             Odpowiada to następującemu schematowi Pasków Postępu dla poziomów Umiejętności, gdzie poszczególne „kratki" odpowiadają jednemu doświadczeniu:
         </p>
-        
+
         <div class="ml-3 mb-3">
             <p>
                 <img class="img-xs" src="{% static 'img/1.png' %}">
@@ -165,7 +167,7 @@
                 <b>15 Trudnych:</b> tylko nieliczni i naprawdę zdeterminowani są w stanie wspiąć się na ten pułap.
             </p>
         </div>
-        
+
 
         <p>
             Uzupełnianie kratek Paska Postępu następuje przy okazji przydzielenia Doświadczenia po zakończeniu Sesji.
@@ -174,7 +176,7 @@
             Mistrz Gry może dopuścić na zapełnienie większej ich liczby.
             Rozwiązania typu zapełnienie pół kratki czy kropka w kratce są również dopuszczalne, kiedy danemu doświadczeniu ciężko przyporządkować poziom trudności.
         </p>
-        
+
         <h2>Tryb "fabularny" nabywania Umiejętności</h2>
         <p>
             Mistrz Gry może przyznać Postaci Umiejętność w całości lub w części bez potrzeby wydawania Punktów Doświadczenia i realizacji Paska Postępu.
