@@ -324,8 +324,8 @@ CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
         'width': 'auto',
+        'entities': False,  # no conversion of special chars to HTML entities
         'toolbarCanCollapse': True,
-
     },
 }
 
