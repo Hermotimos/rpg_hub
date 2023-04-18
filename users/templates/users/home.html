@@ -31,10 +31,10 @@
 
         <!--   Random pictures from Prosoponomikon    -->
         <section>
-            <div class="container px-2 pb-3 mb-4">
+            <div class="container px-2">
                 <div class="row">
                     {% for acquaintanceship in rand_acquaintanceships %}
-                        {% with show_caption=False %}
+                        {% with show_caption=True %}
                             {% include 'prosoponomikon/_acquaintance_img.html' %}
                         {% endwith %}
                     {% endfor %}
@@ -44,11 +44,11 @@
 
         <!--   Random pictures from Toponomikon    -->
         <section>
-            <div class="container px-2 pb-3 mb-4">
+            <div class="container px-2">
                 <div class="row">
                     {% for location in rand_locations %}
                         <div class="col-sm-12 col-lg-6 px-2">
-                            {% with show_caption=False %}
+                            {% with show_caption=True %}
                                 {% include 'toponomikon/_loc_img.html' %}
                             {% endwith %}
                         </div>
