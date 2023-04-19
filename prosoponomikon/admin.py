@@ -97,20 +97,32 @@ class FirstNameAdmin(admin.ModelAdmin):
 
 
 class FirstNameInline(admin.TabularInline):
+    filter_horizontal = ['equivalents']
     model = FirstName
     extra = 10
     formfield_overrides = {
-        models.TextField: {'widget': forms.Textarea(attrs={'rows': 3, 'cols': 50})},
+        models.CharField: {'widget': forms.TextInput(attrs={'size': 8})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 3, 'cols': 25})},
     }
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
             'auxiliary_group',
+            'origin',
         ]:
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        form_field = super().formfield_for_manytomany(db_field, request, **kwargs)
+        for field in [
+            'equivalents',
+        ]:
+            if db_field.name == field:
+                form_field = formfield_with_cache(field, form_field, request)
+        return form_field
 
 
 @admin.register(AffixGroup)
