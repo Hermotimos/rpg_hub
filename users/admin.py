@@ -96,7 +96,7 @@ class ProfileAdminForm(forms.ModelForm):
 class ProfileAdmin(admin.ModelAdmin):
     form = ProfileAdminForm
     list_display = [
-        'get_img', 'user', 'status', 'is_alive', 'is_active',
+        'get_img', '__str__', 'user', 'status', 'is_alive', 'is_active',
         'image_icons_color', 'image'
     ]
     list_editable = [

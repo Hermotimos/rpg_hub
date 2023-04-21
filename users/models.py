@@ -26,7 +26,7 @@ class Profile(Model):
         ('player', 'GRACZ'),
         ('spectator', 'WIDZ'),
     ]
-    
+
     user = FK(to=User, related_name='profiles', on_delete=CASCADE, default=1)
     status = CharField(max_length=50, choices=STATUS, default='npc')
     is_alive = BooleanField(default=True)
@@ -56,26 +56,26 @@ class Profile(Model):
 
     class Meta:
         ordering = ['-status', '-is_active', 'character__fullname']
-    
+
     def __str__(self):
         try:
             return str(self.character.fullname)
         except ObjectDoesNotExist:
-            return f"[{self.user.username}]: assign Character!"
-    
+            return f"[{self.user.username}]: NO CHARACTER ASSIGNED!"
+
     def save(self, *args, **kwargs):
         # For 'image_icons_color' default, check if it applies
         if self.image_icons_color == "light":
             self.image_icons_color = determine_icons_color(self)
         super().save(*args, **kwargs)
-        
+
     @property
     def user_img_url(self):
         try:
             return self.user_image.url
         except ValueError:
             return f"{settings.STATIC_URL}img/profile_default.jpg"
-        
+
     @property
     def gameevents_known_annotated(self):
         """Get GameEvent set known to the profile, annotate if GameEvent
@@ -119,7 +119,7 @@ class Profile(Model):
         qs = qs.select_related('profile')
         qs = qs.exclude(id=self.character.id)
         return qs
-    
+
     def locations_known_annotated(self):
         """Get Location set known to the profile, annotate if Location
         is known only indirectly.
@@ -145,7 +145,7 @@ class Profile(Model):
     def synergies_allowed(self, skilltype_kind):
         """Get synergies whose all composing skills are allowed to any od user's profiles."""
         from rules.models import Synergy, RegularSynergy, MentalSynergy, Skill
-        
+
         skills = Skill.objects.filter(types__kinds__name=skilltype_kind)
         skills = skills.exclude(~Q(allowees__in=self.user.profiles.all()))
 
@@ -195,7 +195,7 @@ class Profile(Model):
     @property
     def can_view_all(self):
         return self.status in ['gm', 'spectator']
-    
+
     @property
     def can_action(self):
         return self.status in ['gm', 'player'] and self.is_active
