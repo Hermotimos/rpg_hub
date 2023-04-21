@@ -109,7 +109,11 @@
             <div class="col-10 col-sm-10 pl-5 pl-lg-0">
                 <div class="h5 mr-2 mr-sm-3 font-italic">
                 {% for event in thread.events.all %}
-                    <a class="font-italic" href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">{{ event.game.title }}</a>
+                    {% if even.game.sspublished %}
+                        <a class="font-italic" href="{% url 'chronicles:chronicle-game' event.game.id %}#event_{{ event.id }}">
+                            {{ event.game.title }}
+                        </a>
+                    {% endif %}
                 {% endfor %}
                 </div>
             </div>
