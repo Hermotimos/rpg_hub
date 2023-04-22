@@ -35,7 +35,7 @@
             Początkowa wartość Mocy dla Kapłanów, Magów i Teurgów to 1, co ze względu na wysoki koszt podbicia Cech na tak niskim poziomie
             skutkuje dość powolnym wzrostem siły i możliwej częstotliwości wykorzystania Mocy/Zaklęć na początku drogi.
         </p>
-        <table class="mt-4">
+        <!-- <table class="mt-4">
             <thead class="align-center dark">
                 <tr class="border-bottom-dark">
                     <th class="border-custom-right small-caps">
@@ -72,36 +72,104 @@
                 <tr><td class="border-custom-right">20</td>    <td class="text-blue5">10</td>   <td class="text-blue5">100</td>    </tr>
             </tbody>
         </table>
-        <br>
+        <br> -->
+
+        <p>
+            Wartość Mocy ma wpływ na szereg współczynników istotnych dla Kapłana, Maga i Teurga.
+        </p>
         <p>
             <b>§ Amplifikacja.</b>
             Współczynnik ten służy jako mnożnik przy efektach Mocy i Zaklęć (Trwałość, Odległość, Obszar, Obrażenia, Malus Rzutu Obronnego).
             Rzut Obronny (RO) to Test Cechy, którego Poziom Trudności to "Prozaiczny".
             Malus RO to współczynnik, o jaki należy pogorszyć wynik RO.
             Zasady danej Mocy czy Zaklęcia precyzują Cechę lub Cechy, które należy poddać Testowi RO.
+            Wartość Amplifikacji jest równa wartości Mocy.
         </p>
         <p>
             <b>§ Energia.</b>
-            Każde sięgnięcie po Moc czy rzucenie Zaklęcia uszczupla aktualną Energię dostępną dla Kapłana i Maga.
+            Każde sięgnięcie po Moc czy rzucenie Zaklęcia uszczupla aktualną Energię dostępną dla Kapłana, Maga i Teurga.
             Ilość Energii pozostającej do dyspozycji Postaci nie wynika bezpośrednio z Mocy.
-            Szczegółowe zasady określania dostępnej Energii są omówione osobno dla Kapłana i Maga.
+            Szczegółowe zasady określania dostępnej Energii są omówione osobno dla Kapłana, Maga i Teurga.
         </p>
         <p>
             <b>§ Próg Energii.</b>
-            Próg Energii określa bezpieczną granicę wytrzymałości organizmu Maga lub Kapłana na przepływ Energii.
-            Jeśli jednak została ona wyczerpana, ale Mag czy Kapłan nadal dysponuje Energią, to może w dalszym ciągu korzystać z Mocy i Zaklęć,
+            Próg Energii określa bezpieczną granicę wytrzymałości organizmu Kapłana, Maga i Teurga na przepływ Energii.
+            Jeśli jednak została ona wyczerpana, ale Postać nadal dysponuje Energią, to może w dalszym ciągu korzystać z Mocy i Zaklęć,
             jednak ryzykuje trwały ubytek swoich sił witalnych.
             Ryzyko wynosi 10% na każdy Punkt Energii, jaki zużywa ponad wartość swojego Progu Energii.
-            Np. Kapłan o całkowicie wyczerpanym Progu Energii sięgając po Moc wymagającą 1 Punktu Energii podejmuje ryzyko trwałego uszczerbku wynoszące 10%.
-            W przypadku Mocy wymagającej 9 Punktów Energii ryzyko wynosi aż 90%.
-            Ponadto ryzyko to kumuluje się, to znaczy, że jeśli Kapłan najpierw sięgnął po Moc wymagającą 1 Punktu Energii, a następnie 9, to uszczerbek na zdrowiu jest nieunikniony.
-            Próg Energii wskazany w tabeli Mocy wskazuje górny limit, jakim Kapłan i Mag dysponują po pełnej regeneracji.
+            Np. Mag o całkowicie wyczerpanym Progu Energii sięgając po Zaklęcie wymagające 1 Punktu Energii podejmuje ryzyko trwałego uszczerbku wynoszące 10%.
+            W przypadku Zaklęcia wymagającego 9 Punktów Energii ryzyko wynosi aż 90%.
+            Ponadto ryzyko to kumuluje się, to znaczy, że jeśli Mag najpierw sięgnął po Zaklęcie wymagające 1 Punktu Energii,
+            a następnie 9, to uszczerbek na zdrowiu jest nieunikniony.
+            Próg Energii wskazuje górny limit, jakim Postać dysponuje po pełnej regeneracji.
             Brak wypoczynku albo niepełny wypoczynek może powodować obniżenie aktualnego Progu Energii.
         </p>
         <p>
-            Nie stanowi tajemnicy, że Mag i Kapłan korzystają z Mocy w odmienny sposób.
-            Bardziej szczegółowe informacje i zasady zawarte są w osobnych rozdziałach poświęconych każdej z tych Profesji.
+            Nie stanowi tajemnicy, że Mag, Kapłan i Teurg korzystają z Mocy w odmienny sposób.
+            Bardziej szczegółowe informacje i zasady dotyczące nabywania nowych Zaklęć i Mocy, korzystania z nich,
+            jak i ustalania Progu Energii zawarte są w osobnych rozdziałach poświęconych każdej z tych Profesji.
         </p>
+
+
+        <p>
+            Rozwój Mocy podlega tym samym zasadom co rozwój Cech Fizycznych.
+            Cena w Punktach Doświadczenia jest identyczna, a przesłanką do wypełnienia Paska Postępu również jest akt użycia Mocy,
+            o ile nie jest on doświadczeniem całkowicie banalnym z punktu widzenia jej aktualnego poziomu.
+        </p>
+        <div class="overflow-auto">
+            <table class="table table-sm mb-0 mt-2 table-striped">
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th class="mx-auto">Wartość</th>
+                        <th>1</th>
+                        <th>2</th>
+                        <th>3</th>
+                        <th>4</th>
+                        <th>5</th>
+                        <th>6</th>
+                        <th>7</th>
+                        <th>8</th>
+                        <th>9</th>
+                        <th>10</th>
+                        <th>11</th>
+                        <th>12</th>
+                        <th>13</th>
+                        <th>14</th>
+                        <th>15</th>
+                        <th>16</th>
+                        <th>17</th>
+                        <th>18</th>
+                        <th>19</th>
+                        <th>20</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="font-14">
+                        <th>Koszt</th>
+                        <td>n/a</td>
+                        <td>800</td>
+                        <td>600</td>
+                        <td>400</td>
+                        <td>300</td>
+                        <td>300</td>
+                        <td>300</td>
+                        <td>300</td>
+                        <td>300</td>
+                        <td>500</td>
+                        <td>500</td>
+                        <td>500</td>
+                        <td>500</td>
+                        <td>1000</td>
+                        <td>1200</td>
+                        <td>1600</td>
+                        <td>2000</td>
+                        <td>4000</td>
+                        <td>6000</td>
+                        <td>8000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
     </div>
 

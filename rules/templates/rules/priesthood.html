@@ -17,21 +17,22 @@
             <a href="{% url 'rules:skills' 'Moce Kapłańskie' %}">Lista Mocy Kapłańskich</a>
         </p>
         <p>
-            Każda Moc Kapłańska należy do jednego z Poziomów Sfragis. W zależności od Poziomu koszt nabycia Mocy to 400, 800 lub 2000.
+            Każda Moc Kapłańska należy do jednego z Poziomów Sfragis (Pieczęci).
+            W zależności od Poziomu koszt nabycia Mocy to 400, 800 lub 2000.
             Koszt Energii przy wykorzystaniu Mocy to kwadrat Poziomu Sfragis, czyli 1, 4 lub 9.
             Poziom decyduje również o czasochłonności sięgania po Moc i wynosi dokładnie tyle rund co Poziom (1, 2, 3);
             w tym czasie Koncentracja Kapłana może zostać przerwana, skutkiem czego przerwaniu ulega również przepływ Mocy pochodzącej od bóstwa.
             Przerwanie użycia Mocy nie uszczupla ani Progu Energii Kapłana, ani Energii pozostającej do jego dyspozycji.
         </p>
 
-        
+
         <h2>
             Nabywanie Mocy
         </h2>
         <p>
             Nabycie nowych Mocy przez Kapłana polega na otrzymaniu ich sfragionu (nie stosują się tu zasady Paska Postępu).
             Podobnie jak w przypadku Sfragis bóstwa jest to przeżycie wycieńczające fizycznie,
-            gdyż odbywa się poprzez odciśnięcie pieczęci Mocy (sfragion) bezpośrednio na pieczęci bóstwa (Sfragis).
+            gdyż odbywa się poprzez odciśnięcie pieczęci Mocy (sfragion, znak) bezpośrednio na pieczęci bóstwa (Sfragis).
             Kapłan zazwyczaj doświadcza osłabienia, a w przypadku osób starszych i schorowanych – nawet zapaści.
         </p>
         <p>
@@ -42,8 +43,8 @@
             W przypadku przyjęcia kolejnego sfragionu przed upływem tego czasu kapłan wykonuje Test KON z kumulatywnym Malusem -1 za każdy dzień brakujący do pełnego tygodnia.
             Fiasko oznacza trwałą utratę 1 KON.
         </p>
-        
-        
+
+
         <h2>
             Korzystanie z Mocy
         </h2>
@@ -70,7 +71,23 @@
             Nie jest natomiast możliwe wyzwolenie Mocy z ograniczoną siłą, a następnie jej zwiększenie.
             Użycie Mocy z pełną siłą wymaga ponownego sięgnięcia po nią i wyzwolenia przepływu Energii.
         </p>
-        
+
+        <h2>
+            Ustalanie Progu Energii
+        </h2>
+        <p>
+            Próg Energii Kapłana ustala się przez iloraz jego Mocy oraz najwyższego posiadanego przezeń poziomu Sfragis (Pieczęci),
+            zsumowanego z poziomami wszystkich posiadanych sfragionów (znaków).
+            Jak widać Kapłan powinien na nowo obliczyć swój Próg Energii za każdym razem, gdy zmianie ulega wartość jego Mocy
+            albo gdy uzyskuje bądź traci Sfragi (Pieczęć) albo sfragion (znak).
+        </p>
+        <ul class="bullets-2 ml-4 mt-2 font-italic text-justify">
+            <li>
+                Próg Energii = Moc * max. Sfragis + (poz. sfragionu 1 + poziom sfragionu 2 + ...)
+            </li>
+        </ul>
+
+
     </div>
 
 {% endblock content %}
