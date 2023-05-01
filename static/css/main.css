@@ -38,14 +38,6 @@
 }
 
 
-.site-logo {
-    font-size: 1.5rem;
-    padding: 0;
-    font-family: 'Darkenstone';
-    margin-right: -0.3rem;
-}
-
-
 
 * {
     -moz-box-sizing: border-box;
@@ -178,19 +170,15 @@ small.smaller {font-size: 12px;}
 
 /* Responsive font: font-resp-1_5 ending for font with 1.5rem for full screen */
 @media only screen and (max-width: 600px) {
-    .font-resp-1_2 {font-size: 0.75rem !important;}
     .font-resp-1_5 {font-size: 0.9rem !important;}
 }
 @media only screen and (min-width: 601px) {
-    .font-resp-1_2 {font-size: 0.85rem !important;}
     .font-resp-1_5 {font-size: 1.1rem !important;}
 }
 @media only screen and (min-width: 900px) {
-    .font-resp-1_2 {font-size: 1rem !important;}
     .font-resp-1_5 {font-size: 1.3rem !important;}
 }
 @media only screen and (min-width: 1200px) {
-    .font-resp-1_2 {font-size: 1.2rem !important;}
     .font-resp-1_5 {font-size: 1.5rem !important;}
 }
 

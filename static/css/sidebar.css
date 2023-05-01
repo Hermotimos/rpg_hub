@@ -21,7 +21,7 @@
 .sidebar-mobile {
     position: fixed;
     right: 10px;
-    z-index: 1030;
+    z-index: 1;
 }
 
 .sidebar-mobile .dropdown-content {
@@ -29,9 +29,9 @@
     top: 19;
 }
 
-.sidebar-mobile-img {
-    width: 50px;
-    height: 50px;
+div.sidebar-mobile-img  img {
+    width: 45px;
+    height: 45px;
     margin-left: 10rem;
 }
 

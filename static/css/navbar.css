@@ -4,6 +4,10 @@
     border-color: white;
     padding: 0;
 }
+.navbar-toggler {
+    font-size: inherit;
+    border-color: #f8f9fa;
+}
 
 .bg-navbar {background-color: #363636;}
 .bg-navbar-dev {background-color: #3d0e09;}
@@ -12,12 +16,26 @@
 .nav-link:hover {color: #ffffff;}
 
 
-.navbar button.navbar-toggler {
-    border-color: rgba(255,255,255,.5);
+.navbar-row {
+    flex-direction: row !important;
 }
 
 .btn-space {margin: 2px;}
 
+
+
+
+.logo-first {
+    font-size: 2rem;
+    padding: 0;
+    font-family: 'The Centurion';
+    margin-right: -0.3rem;
+    margin-bottom: -1rem;
+}
+
+@media only screen and (max-width: 767px) {
+    .logo-rest {display: none;}
+}
 
 
 
