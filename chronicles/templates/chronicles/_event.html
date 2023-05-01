@@ -3,25 +3,7 @@
 
 <a class="anchor anchor4" id="event_{{ event.id }}"></a>
 <div class="container my-3">
-    <div class="row border-top">
-
-        <!-- ACTIONS -->
-        {% if request.current_profile.can_action %}
-            <div class="col-12 col-sm-1 p-0">
-                <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Poinformuj o wydarzeniu">
-                    <a class="btn btn-outline-dark icon-inform mt-1 py-2" href="{% url 'chronicles:game-event-inform' event.id %}" target="_blank"></a>
-                </div>
-    <!--            <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">-->
-    <!--                <a class="btn btn-outline-dark icon-note mt-1 py-2 disabled" href="#"></a>-->
-    <!--            </div>-->
-                {% if request.current_profile.status == 'gm' %}
-                    <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Edytuj wydarzenie">
-                        <a class="btn btn-outline-secondary icon-edit mt-1 py-2" href="{% url 'admin:chronicles_gameevent_change' event.id %}" target="_blank"></a>
-                    </div>
-                {% endif %}
-            </div>
-        {% endif %}
-
+    <div class="row">
 
         <!-- EVENT -->
         <div class="col-12 col-sm-11 mt-2 p-0 pl-sm-2 pl-lg-0">
@@ -35,7 +17,7 @@
             {% endif %}
 
             <!-- DESCRIPTION -->
-            <p class="font-18 font-italic p-1 mb-0 text-justify">
+            <p class="capital-first font-18 font-italic p-1 mb-0 text-justify">
                 {% if request.current_profile not in event.participants.all and not request.current_profile.can_view_all %}
                     <span class="text-muted">(Znasz z opowieści) {{ event.description_long|linebreaksbr }}</span>
                 {% else %}
@@ -85,6 +67,26 @@
                     {% endfor %}
                 </div>
             {% endif %}
+        </div>
+
+        <!-- ACTIONS -->
+        {% if request.current_profile.can_action %}
+            <div class="col-12 col-sm-1 p-0 mt-sm-5 pl-2 ">
+                <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Poinformuj o wydarzeniu">
+                    <a class="btn btn-outline-dark icon-inform mt-1 py-2" href="{% url 'chronicles:game-event-inform' event.id %}" target="_blank"></a>
+                </div>
+    <!--            <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Notatki (w budowie)">-->
+    <!--                <a class="btn btn-outline-dark icon-note mt-1 py-2 disabled" href="#"></a>-->
+    <!--            </div>-->
+                {% if request.current_profile.status == 'gm' %}
+                    <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Edytuj wydarzenie">
+                        <a class="btn btn-outline-secondary icon-edit mt-1 py-2" href="{% url 'admin:chronicles_gameevent_change' event.id %}" target="_blank"></a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+
 
             <!-- NOTES -->
 <!--        {% for note in event.notes.all %}-->
@@ -97,7 +99,7 @@
 <!--                {% endif %}-->
 <!--            {% endif %}-->
 <!--        {% endfor %}-->
-        </div>
+
     </div>
 </div>
 
