@@ -43,8 +43,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
     search_fields = ['title']
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
-        profiles = Profile.objects.exclude(
-            status='npc').select_related('character')
+        profiles = Profile.objects.exclude(status='npc').select_related('character')
         if db_field.name == "participants":
             kwargs["queryset"] = profiles
         if db_field.name == "followers":
@@ -64,7 +63,7 @@ class DebateAdmin(admin.ModelAdmin):
     search_fields = ['title']
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
-        profiles = Profile.living.select_related('character')
+        profiles = Profile.objects.exclude(is_alive=False).select_related('character')
         if db_field.name == "participants":
             kwargs["queryset"] = profiles
         if db_field.name == "followers":
