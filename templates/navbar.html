@@ -36,22 +36,21 @@
                 <!-- Navbar Left Side -->
                 <ul class="navbar-nav small-caps">
 
-                    {% with undone_demands=request.current_profile.undone_demands unseen_announcements=request.current_profile.unseen_announcements %}
+                    {% with undone_demands=request.current_profile.undone_demands
+                            unseen_announcements=request.current_profile.unseen_announcements %}
                         <li>
                             <a class="nav-link d-inline align-middle ml-lg-3" href="{% url 'rules:main' %}">
                                 Zasady
                             </a>
                         </li>
-                        {% if request.current_profile.status != 'spectator' %}
-                            <li>
-                                <a class="nav-link d-inline align-middle ml-lg-3" href="{% url 'communications:threads' 'Announcement' None %}">
-                                    Ogłoszenia
-                                </a>
-                                {% if unseen_announcements %}
-                                    <span class="info-bubble bg-blue">{{ unseen_announcements.count }}</span>
-                                {% endif %}
-                            </li>
-                        {% endif %}
+                        <li>
+                            <a class="nav-link d-inline align-middle ml-lg-3" href="{% url 'communications:threads' 'Announcement' None %}">
+                                Ogłoszenia
+                            </a>
+                            {% if unseen_announcements %}
+                                <span class="info-bubble bg-blue">{{ unseen_announcements.count }}</span>
+                            {% endif %}
+                        </li>
                         <li>
                             <a class="nav-link d-inline align-middle ml-lg-3" href="{% url 'contact:demands-main' %}">
                                 Dezyderaty
