@@ -75,7 +75,6 @@
 
 
 
-
 /* Info bubbles */
 
 span.info-bubble {
@@ -90,12 +89,10 @@ span.info-bubble {
     align-items: center;
     color: #f8f9faec;
 
-    left: -1rem;
-    top: -0.5rem;
     position: relative;
-    z-index: 1030;
     margin-right: -1rem;
 }
+
 span.info-bubble:hover {cursor: none; pointer-events: none !important;}
 
 
@@ -105,16 +102,12 @@ span.info-bubble:hover {cursor: none; pointer-events: none !important;}
         top: -0.5rem;
     }
 }
-/* @media (max-width: 991px) {
+@media (min-width: 768px) {
     span.info-bubble {
-        left: 7.5rem;
-        top: -1.5rem;
+        left: -1rem;
+        top: -0.5rem;
     }
-} */
-
-
-
-
+}
 
 .bg-blue {background: #006699;}
 .bg-bluish {background: #c6dfec;}
@@ -124,45 +117,9 @@ span.info-bubble:hover {cursor: none; pointer-events: none !important;}
 .bg-inner {background: #f2f2f2;}
 
 
-.number-circle-main {
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
-    margin-left: -0.3rem;
-}
 
 
 
-/* @media only screen and (min-width: 0px) {
-    div.demands-bubble  {margin-right: 2.8rem;}
-    div.news-bubble     {margin-right: 3rem;}
-    div.debates-bubble  {margin-right: 4.6rem;}
-}
-@media only screen and (min-width: 600px) {
-    div.demands-bubble  {margin-right: 2.4rem;}
-    div.news-bubble     {margin-right: 2.6rem;}
-    div.debates-bubble  {margin-right: 4.2rem;}
-} */
-
-/* .demands-bubble {
-    margin-top: -2.5rem;
-    margin-left: -0.3rem;
-} */
-
-
-
-.number-circle-sub {
-    border-radius: 50%;
-    width: 14px;
-    height: 14px;
-    margin-left: -0.3rem;
-}
-
-.number-circle-main-inner {
-    margin-bottom: 0.1rem;
-    font-size: 0.7rem;
-    color: #cbd5db;
-}
 
 
 
