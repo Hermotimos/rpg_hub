@@ -13,8 +13,14 @@ from knowledge.models import KnowledgePacket, BiographyPacket
 from toponomikon.models import Location
 
 
-class KnPacketForm(ModelForm):
-    """Form to create KnowledgePackets by 'gm' status profiles."""
+class PlayerKnPacketForm(ModelForm):
+    """Form to create KnowledgePackets by 'player' status profiles."""
+    picture_1 = FileField(required=False, label='')
+    picture_2 = FileField(required=False, label='')
+    picture_3 = FileField(required=False, label='')
+    descr_1 = CharField(required=False, label='')
+    descr_2 = CharField(required=False, label='')
+    descr_3 = CharField(required=False, label='')
     locations = ModelMultipleChoiceField(
         queryset=Location.objects.all(),
         required=False,
@@ -23,14 +29,15 @@ class KnPacketForm(ModelForm):
 
     class Meta:
         model = KnowledgePacket
-        fields = ['title', 'text', 'skills', 'picture_sets']
-        widgets = {
-            'picture_sets': SelectMultiple(attrs={'size': 15}),
-        }
-        
+        fields = [
+            'title', 'text', 'skills', 'locations',
+            'picture_1', 'descr_1', 'picture_2', 'descr_2', 'picture_3', 'descr_3',
+        ]
+
     def __init__(self, *args, **kwargs):
+        current_profile = kwargs.pop('current_profile')
         super().__init__(*args, **kwargs)
-        
+
         instance = kwargs.pop('instance')
         if instance:
             self.fields['locations'].initial = Location.objects.filter(
@@ -39,41 +46,6 @@ class KnPacketForm(ModelForm):
         self.fields['text'].label = "Tekst"
         self.fields['title'].label = "Tytuł"
         self.fields['skills'].label = "Umiejętności powiązane"
-        
-        self.fields['locations'].widget.attrs['size'] = 10
-        self.fields['skills'].widget.attrs['size'] = 10
-        self.fields['text'].widget.attrs = {
-            'cols': 60,
-            'rows': 10,
-        }
-        
-        self.helper = FormHelper()
-        self.helper.add_input(
-            Submit('submit', 'Zapisz pakiet wiedzy', css_class='btn-dark'))
-
-
-class PlayerKnPacketForm(KnPacketForm):
-    """Form to create KnowledgePackets by 'player' status profiles."""
-    
-    class Meta:
-        model = KnowledgePacket
-        exclude = ['acquired_by', 'picture_sets', 'author']
-    
-    picture_1 = FileField(required=False, label='')
-    descr_1 = CharField(required=False, label='')
-    
-    picture_2 = FileField(required=False, label='')
-    descr_2 = CharField(required=False, label='')
-    
-    picture_3 = FileField(required=False, label='')
-    descr_3 = CharField(required=False, label='')
-
-    def __init__(self, *args, **kwargs):
-        current_profile = kwargs.pop('current_profile')
-        super().__init__(*args, **kwargs)
-        
-        self.fields['text'].label = "Tekst"
-        self.fields['title'].label = "Tytuł"
 
         self.fields['locations'].queryset = current_profile.locations_known_annotated()
         self.fields['skills'].queryset = current_profile.allowed_skills.distinct()
@@ -87,30 +59,41 @@ class PlayerKnPacketForm(KnPacketForm):
         self.fields['descr_3'].widget.attrs = {
             'placeholder': 'Podpis grafiki nr 3',
         }
-        self.fields['references'].widget = HiddenInput()
+        self.fields['locations'].widget.attrs['size'] = 10
+        self.fields['skills'].widget.attrs['size'] = 10
+        self.fields['text'].widget.attrs = {
+            'cols': 60,
+            'rows': 10,
+        }
+
+        # self.fields['references'].widget = HiddenInput()
+
+        self.helper = FormHelper()
+        self.helper.add_input(
+            Submit('submit', 'Zapisz pakiet wiedzy', css_class='btn-dark'))
 
 
 class BioPacketForm(ModelForm):
     """Form to create BiographyPackets by 'gm' status profiles."""
-    
+
     class Meta:
         model = BiographyPacket
         fields = ['title', 'text', 'picture_sets', 'order_no']
         widgets = {
             'picture_sets': SelectMultiple(attrs={'size': 15}),
         }
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
         self.fields['order_no'].label = """
             Nr porządkowy (równe numery są sortowane alfabetycznie)"""
-        
+
         self.fields['text'].widget.attrs = {
             'cols': 60,
             'rows': 10,
         }
-        
+
         self.helper = FormHelper()
         self.helper.add_input(
             Submit('submit', 'Zapisz Biogram', css_class='btn-dark'))
@@ -118,23 +101,23 @@ class BioPacketForm(ModelForm):
 
 class PlayerBioPacketForm(BioPacketForm):
     """Form to create BiographyPackets by 'player' status profiles."""
-    
+
     class Meta:
         model = BiographyPacket
         exclude = ['acquired_by', 'picture_sets', 'author']
-    
+
     picture_1 = FileField(required=False, label='')
     descr_1 = CharField(required=False, label='')
-    
+
     picture_2 = FileField(required=False, label='')
     descr_2 = CharField(required=False, label='')
-    
+
     picture_3 = FileField(required=False, label='')
     descr_3 = CharField(required=False, label='')
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
         self.fields['descr_1'].widget.attrs = {
             'placeholder': 'Podpis grafiki nr 1',
         }
