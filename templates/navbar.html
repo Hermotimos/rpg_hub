@@ -16,12 +16,13 @@
             <!-- LOGO -->
             <div class="navbar-brand navbar-nav mr-3">
                 <a class="nav-link py-0" href="{% url 'users:home' %}">
-                    <span class="logo-first">H</span>
-                    <span class="logo-rest">yllemath</span>
+                    <span class="logo-first">H</span>yllemath
                 </a>
             </div>
-            <div class="navbar-nav">
-                <!--  Collapsible menu button when content of navbar overflows screen  -->
+
+
+            <!--  Collapsible menu button when content of navbar overflows screen  -->
+            <div class="navbar-nav ml-auto">
                 <a class="navbar-toggler btn btn-outline-light btn-space" href="{% url 'technicalities:clear-cache' %}"
                     data-toggle="collapse"
                     data-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,30 +99,30 @@
                     {% endif %}
                 </ul>
                 <!-- End Navbar Left Side -->
+
+
+                <!-- Navbar Right Side -->
+                <div class="navbar-nav navbar-row ml-auto justify-content-center">
+                    <a class="btn btn-outline-light btn-space" href="{% url 'technicalities:clear-cache' %}"
+                        data-toggle="tooltip" data-placement="bottom" title="Opróżnij Cache">
+                        <i class="icon-clear-cache"></i>
+                    </a>
+                    <a class="btn btn-outline-light btn-space" href="{% url 'contact:demands-create' %}"
+                        data-toggle="tooltip" data-placement="bottom" title="Dezyderat">
+                        <i class="icon-demand"></i>
+                    </a>
+                    <a class="btn btn-outline-light btn-space" href="{% url 'users:edit-user' %}"
+                        data-toggle="tooltip" data-placement="bottom" title="Konto Gracza">
+                        <i class="icon-user"></i>
+                    </a>
+                    <a class="btn btn-outline-light btn-space" href="{% url 'users:logout' %}"
+                        data-toggle="tooltip" data-placement="bottom" title="Wyloguj">
+                        <i class="icon-logout"></i>
+                    </a>
+                </div>
+                <!-- End Navbar Right Side -->
+
             </div>
-
-
-            <!-- Navbar Right Side -->
-            <div class="navbar-nav ml-auto navbar-row">
-                <a class="btn btn-outline-light btn-space" href="{% url 'technicalities:clear-cache' %}"
-                    data-toggle="tooltip" data-placement="bottom" title="Opróżnij Cache">
-                    <i class="icon-clear-cache"></i>
-                </a>
-                <a class="btn btn-outline-light btn-space" href="{% url 'contact:demands-create' %}"
-                    data-toggle="tooltip" data-placement="bottom" title="Dezyderat">
-                    <i class="icon-demand"></i>
-                </a>
-                <a class="btn btn-outline-light btn-space" href="{% url 'users:edit-user' %}"
-                    data-toggle="tooltip" data-placement="bottom" title="Konto Gracza">
-                    <i class="icon-user"></i>
-                </a>
-                <a class="btn btn-outline-light btn-space" href="{% url 'users:logout' %}"
-                    data-toggle="tooltip" data-placement="bottom" title="Wyloguj">
-                    <i class="icon-logout"></i>
-                </a>
-            </div>
-            <!-- End Navbar Right Side -->
-
         </div>
 
     </nav>
