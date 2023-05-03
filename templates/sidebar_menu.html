@@ -8,15 +8,6 @@
 
 <nav class="sidebar-text small-caps">
 
-    <a class="list-group-item" href="{% url 'prosoponomikon:character' request.current_profile.character.id %}">Postać</a>
-    {% if request.current_profile.status == 'gm' %}
-        <a class="list-group-item" href="{% url 'contact:plans-for-gm' %}">Plany Graczy</a>
-    {% else %}
-        <a class="list-group-item" href="{% url 'contact:plans-main' %}">Plany</a>
-    {% endif %}
-
-    <hr class="show-nonmobile">
-
     <a class="list-group-item" href="{% url 'chronicles:timeline' %}">Kalendarium</a>
     <a class="list-group-item" href="{% url 'chronicles:chronicle-main' %}">Kronika</a>
     <a class="list-group-item" href="{% url 'communications:threads' 'Debate' None %}">
@@ -27,12 +18,23 @@
             {% endif %}
         {% endwith %}
     </a>
+    {% if request.current_profile.status != 'gm' %}
+        <a class="list-group-item" href="{% url 'contact:plans-main' %}">Plany</a>
+    {% endif %}
 
-    <hr class="show-nonmobile">
+    <br class="show-nonmobile">
 
     <a class="list-group-item" href="{% url 'knowledge:almanac' %}">Almanach</a>
     <a class="list-group-item" href="{% url 'prosoponomikon:acquaintanceships' %}">Prosoponomikon</a>
     <a class="list-group-item" href="{% url 'toponomikon:main' %}">Toponomikon</a>
+
+    <br class="show-nonmobile">
+
+    {% if request.current_profile.status == 'gm' %}
+        <a class="list-group-item" href="{% url 'contact:plans-for-gm' %}">Plany Graczy</a>
+    {% else %}
+        <a class="list-group-item" href="{% url 'prosoponomikon:character' request.current_profile.character.id %}">Postać</a>
+    {% endif %}
 
 </nav>
 
