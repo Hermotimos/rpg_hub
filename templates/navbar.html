@@ -14,7 +14,7 @@
         <div class="container px-3 px-sm-1">
 
             <!-- LOGO -->
-            <div class="navbar-brand navbar-nav mr-3 mr-lg-5">
+            <div class="navbar-brand navbar-nav mr-0 mr-lg-5">
                 <a class="nav-link py-0" href="{% url 'users:home' %}">
                     <span class="logo-first">H</span>yllemath
                 </a>
@@ -31,51 +31,40 @@
             </div>
 
 
-            <div class="collapse navbar-collapse" id="mainmenu">
+            <div class="collapse navbar-collapse font-17" id="mainmenu">
 
                 <!-- Navbar Left Side -->
                 <ul class="navbar-nav small-caps">
 
                     {% with undone_demands=request.current_profile.undone_demands unseen_announcements=request.current_profile.unseen_announcements %}
                         <li>
-                            <a class="nav-link mr-2 py-1 pb-md-1" href="{% url 'rules:main' %}">
+                            <a class="nav-link d-inline align-middle ml-lg-3" href="{% url 'rules:main' %}">
                                 Zasady
                             </a>
                         </li>
                         {% if request.current_profile.status != 'spectator' %}
                             <li>
-                                <a class="nav-link mr-2 py-1 pb-md-1" href="{% url 'communications:threads' 'Announcement' None %}">
+                                <a class="nav-link d-inline align-middle ml-lg-3" href="{% url 'communications:threads' 'Announcement' None %}">
                                     Ogłoszenia
                                 </a>
-                                <!-- {% if unseen_announcements %}
-                                    <span class="mx-auto number-circle-main-inner">{{ unseen_announcements.count }}</span>
-                                {% endif %} -->
-                                <!-- {% if unseen_announcements %}
-                                    <span class="info-row-sub news-bubble float-right">
-                                        <span class="number-circle-sub bg-blue d-flex align-items-center">
-                                            <span class="mx-auto number-circle-main-inner">{{ unseen_announcements.count }}</span>
-                                        </span>
-                                    </span>
-                                {% endif %} -->
+                                {% if unseen_announcements %}
+                                    <span class="info-bubble bg-blue">{{ unseen_announcements.count }}</span>
+                                {% endif %}
                             </li>
                         {% endif %}
                         <li>
-                            <a class="nav-link mr-2 py-1 pb-md-1" href="{% url 'contact:demands-main' %}">
+                            <a class="nav-link d-inline align-middle ml-lg-3" href="{% url 'contact:demands-main' %}">
                                 Dezyderaty
                             </a>
                             {% if undone_demands %}
-                                <span class="info-row-sub demands-bubble float-right">
-                                    <span class="number-circle-sub bg-red d-flex align-items-center">
-                                        <span class="mx-auto number-circle-main-inner">{{ undone_demands.count }}</span>
-                                    </span>
-                                </span>
+                                <span class="info-bubble bg-red">{{ undone_demands.count }}</span>
                             {% endif %}
                         </li>
                     {% endwith %}
 
                     {% if request.current_profile.status == 'gm' %}
                         <li class="dropdown">
-                            <span class="nav-link mr-2 py-1 pb-md-1 hover-pointer">
+                            <span class="nav-link d-inline hover-pointer align-middle ml-lg-3">
                                 Świat
                             </span>
                             <div class="dropdown-content">
@@ -87,8 +76,8 @@
                             </div>
                         </li>
                         <li class="dropdown">
-                            <span class="nav-link mr-2 py-1 pb-md-1 hover-pointer">
-                                Techniczne
+                            <span class="nav-link d-inline hover-pointer align-middle ml-lg-3">
+                                Tech
                             </span>
                             <div class="dropdown-content">
                                 <ul class="bullets-1 pl-4 font-14">
