@@ -36,8 +36,7 @@
                 <!-- Navbar Left Side -->
                 <ul class="navbar-nav small-caps">
 
-                    {% with undone_demands=request.current_profile.undone_demands
-                            unseen_announcements=request.current_profile.unseen_announcements %}
+                    {% with undone_demands=request.current_profile.undone_demands unseen_announcements=request.current_profile.unseen_announcements %}
                         <li>
                             <a class="nav-link d-inline align-middle ml-lg-3" href="{% url 'rules:main' %}">
                                 Zasady
