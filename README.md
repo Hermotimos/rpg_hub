@@ -1,16 +1,18 @@
 # rpg_hub
 
+[THIS HAS NOT BEEN UPDATED SINCE 2020]
+
 ## Table of contents
-* [General info](#general-info)  
-* [Technologies](#technologies)  
-* [Setup](#setup)  
+* [General info](#general-info)
+* [Technologies](#technologies)
+* [Setup](#setup)
 * [Features](#features)
-* [Content](#content)  
-* [Status](#status)  
+* [Content](#content)
+* [Status](#status)
 
 
 ## General info
-This project started as a tutorial-based blog app and developed into a forum for a group of RPG (role playing games) players. 
+This project started as a tutorial-based blog app and developed into a forum for a group of RPG (role playing games) players.
 Site features include authorization and blog/forum like stuff; and in terms of RPG inner logic: timeline of events, biographies of players and discussions among them, as well as an ever growing mass of knowledge (places, people, historical events) accessible to players based on their participation in events unfolding in our live RPG games.
 
 The project has been put into production as a web site, however its content is only accessible upon login due to demand for a highly customized content rendering for individual players, which corresponds to their biographies and game event participation in the live RPG game. Therefore, although it's possible for an outsider to create an account and view the site, it would be rendered to them almost entirely empty, as they wouldn't be participants of any live game events. This may seem unfortunate, but remains necessary in order to prevent unsupervised access to site content by the actual players.
@@ -36,7 +38,7 @@ CSS 3
 
 Bootstrap 4
 
-JavaScript 
+JavaScript
 
 
 ## Setup
@@ -44,10 +46,10 @@ Requires creation of virtualenv.
 
 Requires creation and customization of settings.py.
 
-Requires creation of SQLite database. 
+Requires creation of SQLite database.
 
    Note: Project was created using SQLite, so some model fields and indexes may not meet standards of MySQL (particularly the sum of max_length of model fields combined within indexes).
-   
+
 Requires creation of 'media' directory with following subdirectories:
 - contact_pics
 - news_pics
@@ -78,7 +80,7 @@ Contains set of rules for the live RPG games. Some of which are accessible based
 ### chronicles app
 Contains timeline and chronicle sections serving as quest-logs and ongoing biographies for individual players.
 ### knowledge app
-Contains knowledge units (packets) attributed to individual players based on their biographies and skillsets. 
+Contains knowledge units (packets) attributed to individual players based on their biographies and skillsets.
 ### prosoponomikon app
 [In development] Contains set of player & non-player characters known to individual players as per biographies and participated game events.
 ### toponomikon app
