@@ -14,7 +14,7 @@
         <div class="container px-3 px-sm-1">
 
             <!-- LOGO -->
-            <div class="navbar-brand navbar-nav mr-3">
+            <div class="navbar-brand navbar-nav mr-3 mr-lg-5">
                 <a class="nav-link py-0" href="{% url 'users:home' %}">
                     <span class="logo-first">H</span>yllemath
                 </a>
@@ -38,26 +38,29 @@
 
                     {% with undone_demands=request.current_profile.undone_demands unseen_announcements=request.current_profile.unseen_announcements %}
                         <li>
-                            <a class="nav-link mr-2" href="{% url 'rules:main' %}">
+                            <a class="nav-link mr-2 py-1 pb-md-1" href="{% url 'rules:main' %}">
                                 Zasady
                             </a>
                         </li>
                         {% if request.current_profile.status != 'spectator' %}
                             <li>
-                                <a class="nav-link mr-2" href="{% url 'communications:threads' 'Announcement' None %}">
+                                <a class="nav-link mr-2 py-1 pb-md-1" href="{% url 'communications:threads' 'Announcement' None %}">
                                     Ogłoszenia
                                 </a>
-                                {% if unseen_announcements %}
-                                    <span class="row info-row-sub news-bubble float-right">
+                                <!-- {% if unseen_announcements %}
+                                    <span class="mx-auto number-circle-main-inner">{{ unseen_announcements.count }}</span>
+                                {% endif %} -->
+                                <!-- {% if unseen_announcements %}
+                                    <span class="info-row-sub news-bubble float-right">
                                         <span class="number-circle-sub bg-blue d-flex align-items-center">
                                             <span class="mx-auto number-circle-main-inner">{{ unseen_announcements.count }}</span>
                                         </span>
                                     </span>
-                                {% endif %}
+                                {% endif %} -->
                             </li>
                         {% endif %}
                         <li>
-                            <a class="nav-link mr-2" href="{% url 'contact:demands-main' %}">
+                            <a class="nav-link mr-2 py-1 pb-md-1" href="{% url 'contact:demands-main' %}">
                                 Dezyderaty
                             </a>
                             {% if undone_demands %}
@@ -72,7 +75,7 @@
 
                     {% if request.current_profile.status == 'gm' %}
                         <li class="dropdown">
-                            <span class="nav-link mr-2 hover-pointer">
+                            <span class="nav-link mr-2 py-1 pb-md-1 hover-pointer">
                                 Świat
                             </span>
                             <div class="dropdown-content">
@@ -84,7 +87,7 @@
                             </div>
                         </li>
                         <li class="dropdown">
-                            <span class="nav-link mr-2 hover-pointer">
+                            <span class="nav-link mr-2 py-1 pb-md-1 hover-pointer">
                                 Techniczne
                             </span>
                             <div class="dropdown-content">
