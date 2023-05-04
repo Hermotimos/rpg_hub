@@ -87,6 +87,7 @@ span.info-bubble {
     display: inline-flex;
     justify-content: center;
     align-items: center;
+    font-size: 0.8rem;
     color: #f8f9faec;
 
     position: relative;
