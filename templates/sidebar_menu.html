@@ -8,9 +8,9 @@
 
 <nav class="sidebar-text small-caps">
 
-    <a class="list-group-item" href="{% url 'chronicles:timeline' %}">Kalendarium</a>
-    <a class="list-group-item" href="{% url 'chronicles:chronicle-main' %}">Kronika</a>
-    <a class="list-group-item" href="{% url 'communications:threads' 'Debate' None %}">
+    <a class="list-group-item py-05" href="{% url 'chronicles:timeline' %}">Kalendarium</a>
+    <a class="list-group-item py-05" href="{% url 'chronicles:chronicle-main' %}">Kronika</a>
+    <a class="list-group-item py-05" href="{% url 'communications:threads' 'Debate' None %}">
         Narady
         {% with unseen_debates=request.current_profile.unseen_debates %}
             {% if unseen_debates %}
@@ -19,21 +19,21 @@
         {% endwith %}
     </a>
     {% if request.current_profile.status != 'gm' %}
-        <a class="list-group-item" href="{% url 'contact:plans-main' %}">Plany</a>
+        <a class="list-group-item py-05" href="{% url 'contact:plans-main' %}">Plany</a>
     {% endif %}
 
     <br class="show-nonmobile">
 
-    <a class="list-group-item" href="{% url 'knowledge:almanac' %}">Almanach</a>
-    <a class="list-group-item" href="{% url 'prosoponomikon:acquaintanceships' %}">Prosoponomikon</a>
-    <a class="list-group-item" href="{% url 'toponomikon:main' %}">Toponomikon</a>
+    <a class="list-group-item py-05" href="{% url 'knowledge:almanac' %}">Almanach</a>
+    <a class="list-group-item py-05" href="{% url 'prosoponomikon:acquaintanceships' %}">Prosoponomikon</a>
+    <a class="list-group-item py-05" href="{% url 'toponomikon:main' %}">Toponomikon</a>
 
     <br class="show-nonmobile">
 
     {% if request.current_profile.status == 'gm' %}
-        <a class="list-group-item" href="{% url 'contact:plans-for-gm' %}">Plany Graczy</a>
+        <a class="list-group-item py-05" href="{% url 'contact:plans-for-gm' %}">Plany Graczy</a>
     {% else %}
-        <a class="list-group-item" href="{% url 'prosoponomikon:character' request.current_profile.character.id %}">Postać</a>
+        <a class="list-group-item py-05" href="{% url 'prosoponomikon:character' request.current_profile.character.id %}">Postać</a>
     {% endif %}
 
 </nav>

@@ -242,6 +242,12 @@ small.smaller {font-size: 12px;}
 .pb-4_7rem, .py-3_9rem {padding-bottom: 4.7rem !important;}
 .pl-4_7rem, .px-3_9rem {padding-left: 4.7rem !important;}
 
+.pt-01 {padding-top: 0.1rem;}
+
+.py-05 {
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+}
 
 td.align-center {text-align: center;}
 td.align-right {text-align: right;}
@@ -275,8 +281,6 @@ article.top-button {margin-top: 0.5rem;}
 .gray1 {color: #acadad !important;}
 
 
-
-.pt-01 {padding-top: 0.1rem}
 
 
 

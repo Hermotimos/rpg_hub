@@ -16,12 +16,12 @@
                 <img src="{{ request.current_profile.image.url }}">
             </div>
         </a>
-        <div class="hover-pointer text-center p-0 mb-2 " data-toggle="collapse" data-target="#characters">
-            <p class="font-resp-1_5 mb-n2">
-                {{ request.current_profile.character.fullname }}
-            </p>
-            <i class="icon-down-open icon-medium ml-auto"></i>
-            {% include '_nav_characters.html' %}
+        <div class="hover-pointer text-center p-0 mb-2" data-toggle="collapse" data-target="#characters">
+            <div class="mb-0">
+                <span class="font-resp-1_5">{{ request.current_profile.character.fullname }}</span>
+                <i class="icon-down-open icon-medium mt-n2"></i>
+                {% include '_nav_characters.html' %}
+            </div>
         </div>
     </section>
 
