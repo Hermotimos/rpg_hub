@@ -55,8 +55,8 @@ table.timeline {border: double;}
 
 .timeline .date {width: 8%;}
 .timeline .plot_thread {width: 17%;}
-.timeline .description {width: 55%;}
-.timeline .participants {width: 6.5%;}
+.timeline .description {width: 52%;}
+.timeline .participants {width: 8%;}
 .timeline .locations {width: 12%;}
 .timeline .actions {width: 3%;}
 
