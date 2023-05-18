@@ -40,18 +40,8 @@
 
 /* NAVBAR DROPDOWNS */
 
-.dropdown .dropbtn {
-    border: none;
-    background-color: #363636;
-    outline: none;
-}
-.dropdown .dropbtn-dev {
-    border: none;
-    background-color: #3d0e09;
-    outline: none;
-}
 
-.dropdown:hover .dropdown-content {display: inline;}
+.dropdown:hover .dropdown-content {display: block;}
 
 .dropbtn:hover {cursor: default;}
 
