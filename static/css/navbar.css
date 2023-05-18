@@ -40,11 +40,6 @@
 
 /* NAVBAR DROPDOWNS */
 
-
-.dropdown:hover .dropdown-content {display: block;}
-
-.dropbtn:hover {cursor: default;}
-
 .dropdown-content {
     display: none;
     position: absolute;
@@ -61,6 +56,7 @@
     outline: none;
 }
 
+.dropdown:hover .dropdown-content {display: block;}
 
 
 
