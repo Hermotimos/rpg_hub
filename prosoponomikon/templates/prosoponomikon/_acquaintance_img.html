@@ -9,7 +9,7 @@
 
     {% if show_caption and request.current_profile.status == 'gm' %}
         <div class="overlay mt-2 ml-3">
-            <div class="p-0 rounded d-flex flex-column bg-light border">
+            <div class="p-0 rounded d-flex flex-column bg-light border border-dark">
                 <a class="btn-overlay btn-outline-dark border-none icon-edit rounded"
                     href="{% url 'admin:prosoponomikon_acquaintanceship_change' acquaintanceship.id %}" target="_"
                     data-toggle="tooltip" data-placement="left" data-html="true" title="Edytuj Znajomość<br> {{ acquaintanceship }}">
