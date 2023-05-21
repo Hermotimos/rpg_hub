@@ -15,7 +15,6 @@ from django.db.models import (
     When,
 )
 
-from rpg_project.utils import determine_icons_color, ColorSchemeChoiceField
 from users import managers
 
 
@@ -43,7 +42,6 @@ class Profile(Model):
         blank=True,
         null=True,
     )
-    image_icons_color = ColorSchemeChoiceField()
 
     objects = managers.ProfileManager()
     non_gm = managers.NonGMProfileManager()
@@ -62,12 +60,6 @@ class Profile(Model):
             return str(self.character.fullname)
         except ObjectDoesNotExist:
             return f"[{self.user.username}]: NO CHARACTER ASSIGNED!"
-
-    def save(self, *args, **kwargs):
-        # For 'image_icons_color' default, check if it applies
-        if self.image_icons_color == "light":
-            self.image_icons_color = determine_icons_color(self)
-        super().save(*args, **kwargs)
 
     @property
     def user_img_url(self):

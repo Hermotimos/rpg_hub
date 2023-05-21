@@ -9,25 +9,25 @@
 {% block content %}
 
     <header class="my-4">
-        <div class="image-with-btns">
 
-            <!-- BUTTONS -->
-            <div class="overlay mt-2 ml-2">
-                <div>
-                    <a class="btn btn-outline-{{ this_location.main_image.image.image_icons_color }} border-none icon-up px-1 py-0 mb-1"
-                       href="
-                           {% if this_location.in_location %}
-                               {% url 'toponomikon:location' this_location.in_location.id %}#location_{{ this_location.id }}
-                           {% else %}
-                               {% url 'toponomikon:main' %}#location_{{ this_location.id }}
-                           {% endif %}"
-                       data-toggle="tooltip" data-placement="left" title="Przejdź do lokacji nadrzędnej">
-                    </a>
-                </div>
+        <!-- BUTTONS -->
+        <div class="overlay mt-2 ml-3">
+            <div class="p-0 rounded d-flex flex-column bg-light border">
+
+                <a class="btn-overlay btn-outline-dark border-none icon-up rounded"
+                    href="
+                        {% if this_location.in_location %}
+                            {% url 'toponomikon:location' this_location.in_location.id %}#location_{{ this_location.id }}
+                        {% else %}
+                            {% url 'toponomikon:main' %}#location_{{ this_location.id }}
+                        {% endif %}"
+                    data-toggle="tooltip" data-placement="left" title="Przejdź do lokacji nadrzędnej">
+                </a>
+
                 <div>
                     {% if request.current_profile.can_action %}
                         <span data-toggle="modal" data-target="#infoLocationModal">
-                            <span class="btn btn-outline-{{ this_location.main_image.image.image_icons_color }} border-none icon-inform px-1 py-0 mb-1"
+                            <span class="btn-overlay btn-outline-dark border-none icon-inform rounded"
                                 data-toggle="tooltip" data-placement="left" title="Poinformuj o lokacji">
                             </span>
                         </span>
@@ -35,47 +35,44 @@
                 </div>
 
                 {% if request.current_profile.status == 'gm' %}
-                    <div>
-                        <a class="btn btn-outline-{{ this_location.main_image.image.image_icons_color }} border-none icon-edit px-1 py-0 mb-1"
-                           href="{% url 'admin:toponomikon_location_change' this_location.id %}" target="_blank"
-                           data-toggle="tooltip" data-placement="left" title="Edytuj lokację">
-                        </a>
-                    </div>
-                    <div>
-                        <a class="btn btn-outline-{{ this_location.main_image.image.image_icons_color }} border-none icon-handshake-o px-1 py-0 mb-1"
-                           onclick="return confirm('Potwierdź zapoznanie ze sobą wszystkich Postaci w lokacji');"
-                           href="{% url 'prosoponomikon:acquaintances' this_location.id %}"
-                           data-toggle="tooltip" data-placement="left" title="Zapoznaj ze sobą wszystkich mieszkańców">
-                        </a>
-                    </div>
+                    <a class="btn-overlay btn-outline-dark border-none icon-edit rounded"
+                        href="{% url 'admin:toponomikon_location_change' this_location.id %}" target="_blank"
+                        data-toggle="tooltip" data-placement="left" title="Edytuj lokację">
+                    </a>
+                    <a class="btn-overlay btn-outline-dark border-none icon-handshake-o rounded"
+                        onclick="return confirm('Potwierdź zapoznanie ze sobą wszystkich Postaci w lokacji');"
+                        href="{% url 'prosoponomikon:acquaintances' this_location.id %}"
+                        data-toggle="tooltip" data-placement="left" title="Zapoznaj ze sobą wszystkich mieszkańców">
+                    </a>
                 {% endif %}
 
             </div>
+        </div>
 
 
-            <!-- The Modal -->
-            <!-- It is placed here to avoid being covered with dimmed screen upon firing - sth to do with x-index of .overlay class? -->
-            <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
-                {% with inform_type=this_location|get_model_name id_=this_location.id %}
-                    {% include '_inform.html' %}
-                {% endwith %}
-            </div>
-
-
-            <img class="toponomikon {% if this_location.only_indirectly %} img-grayscale {% endif %}"
-                 src="{% if this_location.main_image %} {{ this_location.main_image.image.image.url }} {% else %} {{ this_location.location_type.default_img.image.image.url }} {% endif %}">
-            {% with audio_set=this_location|get_audio_set %}
-                {% if audio_set %}
-                    <audio class="toponomikon-audio-main mb-4" controls loop>
-                        <!-- For Google Drive construct path by: https://docs.google.com/uc?export=download&id=XXXXXXXX
-                         where XXXXXXXX equals file id take from the share link:
-                         https://drive.google.com/file/d/XXXXXXXX/view?usp=sharing ==> XXXXXXXX
-                         RESULT: https://docs.google.com/uc?export=download&id=XXXXXXXX -->
-                        <source src="{{ audio_set.main_audio.path }}" type="audio/mpeg">
-                    </audio>
-                {% endif %}
+        <!-- The Modal -->
+        <!-- It is placed here to avoid being covered with dimmed screen upon firing - sth to do with x-index of .overlay class? -->
+        <div class="modal fade" id="infoLocationModal" tabindex="-1" role="dialog" aria-hidden="true">
+            {% with inform_type=this_location|get_model_name id_=this_location.id %}
+                {% include '_inform.html' %}
             {% endwith %}
         </div>
+
+
+        <img class="toponomikon {% if this_location.only_indirectly %} img-grayscale {% endif %}"
+                src="{% if this_location.main_image %} {{ this_location.main_image.image.image.url }} {% else %} {{ this_location.location_type.default_img.image.image.url }} {% endif %}">
+
+        {% with audio_set=this_location|get_audio_set %}
+            {% if audio_set %}
+                <audio class="toponomikon-audio-main mb-4" controls loop>
+                    <!-- For Google Drive construct path by: https://docs.google.com/uc?export=download&id=XXXXXXXX
+                        where XXXXXXXX equals file id take from the share link:
+                        https://drive.google.com/file/d/XXXXXXXX/view?usp=sharing ==> XXXXXXXX
+                        RESULT: https://docs.google.com/uc?export=download&id=XXXXXXXX -->
+                    <source src="{{ audio_set.main_audio.path }}" type="audio/mpeg">
+                </audio>
+            {% endif %}
+        {% endwith %}
 
         <!-- DESCRIPTION -->
         <div class="m-1 mt-3">

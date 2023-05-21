@@ -729,15 +729,16 @@ a.anchor12-resp {top: -12rem;}
 
 
 /* Buttons placed on images in Toponomikon, Prosoponomikon etc. */
-div.image-with-btns {
-  position: relative;
-  display: inline-block;
-}
 .overlay {
   position: absolute;
   left: 0;
   z-index: 5;
 }
+.btn-overlay {
+    padding: 0rem;
+    margin: 0.1rem 0.1rem 0.1rem 0.15rem;
+}
+
 
 
 /* Scrollup feature */

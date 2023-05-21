@@ -9,7 +9,7 @@ from django.db.models import (
     PROTECT,
     TextField,
 )
-from rpg_project.utils import determine_icons_color, ColorSchemeChoiceField
+from rpg_project.utils import determine_icons_color
 
 
 # -----------------------------------------------------------------------------
@@ -94,7 +94,6 @@ class PictureImage(Model):
     image = ImageField(upload_to='post_pics')
     # type = CharField(max_length=20, choices=TYPES)
     description = CharField(max_length=200, blank=True, null=True)
-    image_icons_color = ColorSchemeChoiceField()
 
     class Meta:
         ordering = ['image']
@@ -102,12 +101,7 @@ class PictureImage(Model):
     def __str__(self):
         return str(self.image.name).replace("post_pics/", "")
 
-    def save(self, *args, **kwargs):
-        # For 'image_icons_color' default, check if it applies
-        if self.image_icons_color == "light":
-            self.image_icons_color = determine_icons_color(self)
-        super().save(*args, **kwargs)
-        
+
 
 IMG_TYPES = (
     ('knowledge', 'KNOWLEDGE'),

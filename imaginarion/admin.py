@@ -69,8 +69,8 @@ class PictureAdmin(admin.ModelAdmin):
 
 @admin.register(PictureImage)
 class PictureImageAdmin(admin.ModelAdmin):
-    list_display = ['get_img', 'description', 'image_icons_color', 'image']
-    list_editable = ['description', 'image_icons_color', 'image']
+    list_display = ['get_img', 'description', 'image']
+    list_editable = ['description', 'image']
     search_fields = ['description']
 
     def get_img(self, obj):
