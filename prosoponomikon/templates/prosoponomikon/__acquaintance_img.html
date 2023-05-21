@@ -1,5 +1,6 @@
 {% load static %}
 
+
 <div class="img-hover-zoom border-double m-0" data-toggle="tooltip" data-placement="bottom" data-html="true"
      title='
         <span class="font-italic">
@@ -12,17 +13,6 @@
                 <div>{{ acquaintanceship.knows_as_description }}</div>
             {% endif %}
         </span>'>
-
-    {% if show_caption and request.current_profile.status == 'gm' %}
-        <div class="overlay mt-1 ml-1">
-            <div class="p-0 rounded d-flex flex-column bg-light border">
-                <a class="btn-overlay btn-outline-dark border-none icon-edit rounded"
-                    href="{% url 'admin:prosoponomikon_acquaintanceship_change' acquaintanceship.id %}" target="_"
-                    data-toggle="tooltip" data-placement="left" data-html="true" title="Edytuj Znajomość<br> {{ acquaintanceship }}">
-                </a>
-            </div>
-        </div>
-    {% endif %}
 
     {% if acquaintanceship.is_direct %}
         <img class="{% if acquaintanceship.knows_if_dead and not acquaintanceship.known_character.profile.is_alive %} img-grayscale {% endif %}"

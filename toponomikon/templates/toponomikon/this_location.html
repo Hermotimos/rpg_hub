@@ -12,7 +12,7 @@
 
         <!-- BUTTONS -->
         <div class="overlay mt-2 ml-3">
-            <div class="p-0 rounded d-flex flex-column bg-light border">
+            <div class="p-0 rounded d-flex flex-column bg-light border border-dark">
 
                 <a class="btn-overlay btn-outline-dark border-none icon-up rounded"
                     href="
@@ -24,15 +24,13 @@
                     data-toggle="tooltip" data-placement="left" title="Przejdź do lokacji nadrzędnej">
                 </a>
 
-                <div>
-                    {% if request.current_profile.can_action %}
-                        <span data-toggle="modal" data-target="#infoLocationModal">
-                            <span class="btn-overlay btn-outline-dark border-none icon-inform rounded"
-                                data-toggle="tooltip" data-placement="left" title="Poinformuj o lokacji">
-                            </span>
+                {% if request.current_profile.can_action %}
+                    <a data-toggle="modal" data-target="#infoLocationModal">
+                        <span class="btn-overlay btn-outline-dark border-none icon-inform rounded"
+                            data-toggle="tooltip" data-placement="left" title="Poinformuj o lokacji">
                         </span>
-                    {% endif %}
-                </div>
+                    </a>
+                {% endif %}
 
                 {% if request.current_profile.status == 'gm' %}
                     <a class="btn-overlay btn-outline-dark border-none icon-edit rounded"
