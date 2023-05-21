@@ -69,13 +69,14 @@ h1, h2, h3, h4, h5, h6,
 }
 
 
-p.capital-first {margin-top: 2rem;}
+/* p.capital-first {margin-top: 2rem;} */
 p.capital-first::first-letter {
     font-family: 'The Centurion';
     font-size: 4rem;
     float: left;
-    margin-top: -3.5rem;
-    margin-bottom: -2rem;
+    margin-top: -1.5rem;
+    margin-bottom: -1.5rem;
+    margin-right: 0.5rem;
 }
 
 

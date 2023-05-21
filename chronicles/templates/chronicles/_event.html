@@ -2,7 +2,7 @@
 {% load custom_filters %}
 
 <a class="anchor anchor4" id="event_{{ event.id }}"></a>
-<div class="container my-3">
+<div class="container my-2">
     <div class="row">
 
         <!-- EVENT -->
@@ -71,7 +71,7 @@
 
         <!-- ACTIONS -->
         {% if request.current_profile.can_action %}
-            <div class="col-12 col-sm-1 p-0 mt-sm-5 pl-2 ">
+            <div class="col-12 col-sm-1 p-0 mt-sm-3 pl-2">
                 <div class="d-inline" data-toggle="tooltip" data-placement="bottom" title="Poinformuj o wydarzeniu">
                     <a class="btn btn-outline-dark icon-inform mt-1 py-2" href="{% url 'chronicles:game-event-inform' event.id %}" target="_blank"></a>
                 </div>
