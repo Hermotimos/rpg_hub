@@ -1,0 +1,56 @@
+{% load static %}
+{% load custom_filters %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/rules.css' %}">
+{% endblock head_extra %}
+
+
+
+<div id="accordion{{ panel_id }}">
+
+    <!-- SPELL ACQUISITIONS PER SPHERE -->
+    {% for sphere in spheres %}
+        <div class="card mb-1">
+            <div class="card-header card-header-resp hover-blue" id="{{ sphere.name|cut:' ' }}"
+                    data-toggle="collapse" data-target="#collapse{{ sphere.name|cut:' ' }}"
+                    aria-expanded="true" aria-controls="collapse{{ sphere.name|cut:' ' }}">
+                <label class="h4 font-weight-bold m-0 hover-blue font-resp-1_5">
+                    {{ sphere.name }}
+                </label>
+            </div>
+            <div id="collapse{{ sphere.name|cut:' ' }}" class="collapse"
+                aria-labelledby="{{ sphere.name|cut:' ' }}" data-parent="#accordion{{ panel_id }}">
+                <div class="card-body container">
+                    {% with spells=sphere.spells.all %}
+                        {% for acquisition in acquisitions %}
+                            {% if acquisition.spell in spells  %}
+                                {% include 'prosoponomikon/_spell_acquisition.html' %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <!-- ALL SPELL ACQUISITIONS -->
+    <div class="card mb-2">
+        <div class="card-header card-header-resp hover-blue" id="all-acquisitions"
+             data-toggle="collapse" data-target="#collapse{{ panel_id }}"
+             aria-expanded="true" aria-controls="collapse{{ panel_id }}">
+            <label class="h4 font-weight-bold mb-0 hover-blue small-caps font-resp-1_5">
+                Wszystkie
+            </label>
+        </div>
+        <div id="collapse{{ panel_id }}" class="collapse show"
+            aria-labelledby="all-acquisitions" data-parent="#accordion{{ panel_id }}">
+            <div class="card-body container">
+                {% for acquisition in acquisitions %}
+                    {% include 'prosoponomikon/_spell_acquisition.html' %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>

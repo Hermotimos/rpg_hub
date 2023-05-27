@@ -22,7 +22,7 @@ from django.urls import reverse
 from knowledge.models import BiographyPacket, DialoguePacket
 from rpg_project.utils import OrderByPolish
 from rules.models import SubProfession, Skill, SkillLevel, WeaponType, \
-    Sphragis, SkillType
+    Sphragis, SkillType, Spell, Domain, Sphere
 from toponomikon.models import Location
 from users.models import Profile
 
@@ -227,6 +227,11 @@ class Character(Model):
         through='Acquisition',
         related_name='acquiring_characters',
         blank=True)
+    spells = M2M(
+        to=Spell,
+        through='SpellAcquisition',
+        related_name='acquiring_characters',
+        blank=True)
     # -------------------------------------------------------------------------
     created_by = FK(
         to=Profile, related_name='characters_created', on_delete=CASCADE,
@@ -376,6 +381,11 @@ class Character(Model):
 
         return skill_types
 
+    def spheres_for_character_sheet(self):
+        return Sphere.objects.filter(
+            spells__acquiring_characters=self
+        ).prefetch_related('spells').distinct()
+
 
 class CharacterAcquaintanceships(Character):
     """A class to enable a separate AdminModel-s."""
@@ -393,6 +403,15 @@ class CharacterAcquisitions(Character):
         proxy = True
         verbose_name = '*Character (ACQUISITIONS)'
         verbose_name_plural = '*Characters (ACQUISITIONS)'
+
+
+class CharacterSpellAcquisitions(Character):
+    """A class to enable a separate AdminModel-s."""
+
+    class Meta:
+        proxy = True
+        verbose_name = '*Character (Spell Acquisitions)'
+        verbose_name_plural = '*Characters (Spell Acquisitions)'
 
 
 class PlayerCharacterManager(Manager):
@@ -509,6 +528,29 @@ class Acquisition(Model):
         weapon_type = f" {self.weapon_type}" if self.weapon_type else ""
         sphragis = f" ({self.sphragis})" if self.sphragis else ""
         return f"{self.character}: {self.skill_level}{weapon_type}{sphragis}"
+
+
+# -----------------------------------------------------------------------------
+
+
+class SpellAcquisition(Model):
+    character = FK(Character, related_name='spellacquisitions', on_delete=CASCADE)
+    spell = FK(Spell, related_name='spellacquisitions', on_delete=CASCADE)
+    sphragis = FK(Domain, on_delete=CASCADE, blank=True, null=True)
+
+    class Meta:
+        ordering = [
+            OrderByPolish('character__fullname'),
+            'spell__level',
+            OrderByPolish('spell__name'),
+        ]
+        unique_together = [
+            ['character', 'spell', 'sphragis'],
+        ]
+
+    def __str__(self):
+        sphragis = f" ({self.sphragis})" if self.sphragis else ""
+        return f"{self.character}: {self.spell}{sphragis}"
 
 
 # -----------------------------------------------------------------------------

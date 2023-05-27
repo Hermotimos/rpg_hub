@@ -3,11 +3,13 @@ from django.contrib import admin
 from django.db import models
 from django.utils.html import format_html
 
-from prosoponomikon.models import Acquaintanceship, Acquisition, \
-    Character, NPCCharacter, PlayerCharacter, \
-    CharacterAcquaintanceships, CharacterAcquisitions, \
-    FirstName, FirstNameGroup, FamilyName, \
-    AffixGroup, AuxiliaryNameGroup, FamilyNameGroup
+from prosoponomikon.models import (
+    Acquaintanceship, Acquisition, SpellAcquisition,
+    Character, NPCCharacter, PlayerCharacter,
+    CharacterAcquaintanceships, CharacterAcquisitions,
+    CharacterSpellAcquisitions,
+    FirstName, FirstNameGroup, FamilyName,
+    AffixGroup, AuxiliaryNameGroup, FamilyNameGroup)
 from rpg_project.utils import formfield_with_cache
 
 
@@ -321,6 +323,42 @@ class AcquisitionInline(admin.TabularInline):
 # -----------------------------------------------------------------------------
 
 
+@admin.register(SpellAcquisition)
+class SpellAcquisitionAdmin(admin.ModelAdmin):
+    fields = ['character', 'spell', 'sphragis']
+    list_display = ['get_img', 'character', 'spell',  'sphragis']
+    list_filter = ['sphragis', 'character']
+    search_fields = ['spell', 'character',  'sphragis']
+
+    def get_img(self, obj):
+        if obj.character.profile.image:
+            return format_html(
+                f'<img src="{obj.character.profile.image.url}" width="70" height="70">')
+        default_img = "media/profile_pics/profile_default.jpg"
+        return format_html(f'<img src={default_img} width="70" height="70">')
+
+
+class SpellAcquisitionInline(admin.TabularInline):
+    model = Character.spells.through
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in [
+            'sphragis',
+            'spell',
+        ]:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related('character', 'spell', 'sphragis')
+
+
+# -----------------------------------------------------------------------------
+
+
 @admin.register(Character, PlayerCharacter, NPCCharacter)
 class CharacterAdmin(admin.ModelAdmin):
     fields = [
@@ -378,4 +416,17 @@ class CharacterAcquisitionsAdmin(CharacterAdmin):
         'fullname',
         ('strength', 'dexterity', 'endurance', 'power', 'experience'),
     ]
+    list_display = ['get_img', 'first_name', 'family_name', 'cognomen']
+    list_editable = []
     inlines = [AcquisitionInline]
+
+
+@admin.register(CharacterSpellAcquisitions)
+class CharacterSpellAcquisitionsAdmin(CharacterAdmin):
+    fields = [
+        'fullname',
+        ('strength', 'dexterity', 'endurance', 'power', 'experience'),
+    ]
+    list_display = ['get_img', 'first_name', 'family_name', 'cognomen']
+    list_editable = []
+    inlines = [SpellAcquisitionInline]

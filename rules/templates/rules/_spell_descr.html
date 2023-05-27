@@ -1,0 +1,57 @@
+{% load static %}
+{% load custom_filters %}
+
+
+<div class="container align-top pl-1 pr-md-4 text-justify font-14">
+    <div class="d-flex flex-column ml-3">
+
+        {{ spell.description|linebreaksbr }}
+
+        {% if spell.range is not None %}
+            <div class="mt-1">
+                <span data-toggle="tooltip" data-placement="right" title="Zasięg">
+                    <i class="ra ra-focused-lightning pr-1"></i>:
+                    {{ spell.range }} m
+                </span>
+            </div>
+        {% endif %}
+
+        {% if spell.radius is not None %}
+            <div class="mt-1">
+                <span data-toggle="tooltip" data-placement="right" title="Promień">
+                    <i class="ra ra-radial-balance pr-1"></i>:
+                    {{ spell.radius }} m
+                </span>
+            </div>
+        {% endif %}
+
+        {% if spell.duration is not None %}
+            <div class="mt-1">
+                <span data-toggle="tooltip" data-placement="right" title="Czas działania">
+                    <i class="ra ra-hourglass pr-1"></i>:
+                    {{ spell.duration }} min
+                </span>
+            </div>
+        {% endif %}
+
+        {% if spell.saving_throw_trait is not None %}
+            <div class="mt-1">
+                <span data-toggle="tooltip" data-placement="right" title="Malus RO">
+                    <i class="ra ra-perspective-dice-random pr-1"></i>:
+                    {{ spell.saving_throw_trait }} -{{ spell.saving_throw_malus }}
+                </span>
+            </div>
+        {% endif %}
+
+        {% if spell.damage is not None %}
+            <div class="mt-1">
+                <span data-toggle="tooltip" data-placement="right" title="Obrażenia">
+                    <i class="ra ra-cut-palm  pr-1"></i>:
+                    {{ spell.damage }}
+                </span>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+

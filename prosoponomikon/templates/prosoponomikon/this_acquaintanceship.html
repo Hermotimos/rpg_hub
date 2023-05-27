@@ -169,36 +169,36 @@
             </label>
         {% endif %}
 
-        <!-- Priest powers and MentalSkills -->
-        {% if acquisitions_priests %}
+        <!-- Priest powers -->
+        {% if acquisitions_priestspells %}
             {% if biography_packets or dialogue_packets or acquisitions_regular %}
-                <input type="radio" name="tabset" id="tab4" aria-controls="acquisitions_priests">
+                <input type="radio" name="tabset" id="tab4" aria-controls="acquisitions_priestspells">
             {% else %}
-                <input type="radio" name="tabset" id="tab4" aria-controls="acquisitions_priests" checked>
+                <input type="radio" name="tabset" id="tab4" aria-controls="acquisitions_priestspells" checked>
             {% endif %}
             <label class="font-resp-1_5 resp-tab-label" for="tab4">
                 Moce kapłańskie
             </label>
         {% endif %}
 
-        <!-- Sorcery and MentalSkills -->
-        {% if acquisitions_sorcerers %}
-            {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests %}
-                <input type="radio" name="tabset" id="tab5" aria-controls="acquisitions_sorcerers">
+        <!-- Sorcery spells -->
+        {% if acquisitions_sorcererspells %}
+            {% if biography_packets or dialogue_packets or acquisitions_regular or acquisitions_priestspells %}
+                <input type="radio" name="tabset" id="tab5" aria-controls="acquisitions_sorcererspells">
             {% else %}
-                <input type="radio" name="tabset" id="tab5" aria-controls="acquisitions_sorcerers" checked>
+                <input type="radio" name="tabset" id="tab5" aria-controls="acquisitions_sorcererspells" checked>
             {% endif %}
             <label class="font-resp-1_5 resp-tab-label" for="tab5">
                 Zaklęcia
             </label>
         {% endif %}
 
-        <!-- Theurgy and MentalSkills -->
-        {% if acquisitions_theurgists %}
-            {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers %}
-                <input type="radio" name="tabset" id="tab6" aria-controls="acquisitions_theurgists">
+        <!-- Theurgy -->
+        {% if acquisitions_theurgistspells %}
+            {% if biography_packets or dialogue_packets or acquisitions_regular or acquisitions_priestspells or acquisitions_sorcererspells %}
+                <input type="radio" name="tabset" id="tab6" aria-controls="acquisitions_theurgistspells">
             {% else %}
-                <input type="radio" name="tabset" id="tab6" aria-controls="acquisitions_theurgists" checked>
+                <input type="radio" name="tabset" id="tab6" aria-controls="acquisitions_theurgistspells" checked>
             {% endif %}
             <label class="font-resp-1_5 resp-tab-label" for="tab6">
                 Moce Teurgiczne
@@ -208,7 +208,7 @@
         <!-- Item collections (Equipment) -->
         {% if request.current_profile.status == 'gm' or request.current_profile.character == this_acquaintanceship.known_character %}
             {% if item_collections %}
-                {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists %}
+                {% if biography_packets or dialogue_packets or acquisitions_regular or acquisitions_priestspells or acquisitions_sorcererspells or acquisitions_theurgistspells %}
                     <input type="radio" name="tabset" id="tab7" aria-controls="item-collections">
                 {% else %}
                     <input type="radio" name="tabset" id="tab7" aria-controls="item-collections" checked>
@@ -221,7 +221,7 @@
 
         <!-- Knowledge packets -->
         {% if knowledge_packets %}
-            {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists or item_collections %}
+            {% if biography_packets or dialogue_packets or acquisitions_regular or acquisitions_priestspells or acquisitions_sorcererspells or acquisitions_theurgistspells or item_collections %}
                 <input type="radio" name="tabset" id="tab8" aria-controls="knowledge_packets">
             {% else %}
                 <input type="radio" name="tabset" id="tab8" aria-controls="knowledge_packets" checked>
@@ -234,7 +234,7 @@
 
         <!-- Known characters -->
         {% if acquaintanceships %}
-            {% if biography_packets or dialogue_packets or acquisitions_regular or skills_priests or skills_sorcerers or acquisitions_theurgists or item_collections or knowledge_packets %}
+            {% if biography_packets or dialogue_packets or acquisitions_regular or acquisitions_priestspells or acquisitions_sorcererspells or acquisitions_theurgistspells or item_collections or knowledge_packets %}
                 <input type="radio" name="tabset" id="tab9" aria-controls="acquaintanceships">
             {% else %}
                 <input type="radio" name="tabset" id="tab9" aria-controls="acquaintanceships" checked>
@@ -290,31 +290,31 @@
                 </section>
             {% endif %}
 
-            <!-- PriestsSkill and MentalSkills -->
-            {% if acquisitions_priests %}
-                <section id="acquisitions_priests" class="tab-panel">
-                    {% with acquisitions=acquisitions_priests panel_id=2 %}
+            <!-- PriestsSkill  -->
+            {% if acquisitions_priestspells %}
+                <section id="acquisitions_priestspells" class="tab-panel">
+                    {% with acquisitions=acquisitions_priestspells panel_id=2 %}
                         {% with skilltype_kinds="Moce Kapłańskie" %}
-                            {% include 'prosoponomikon/_acquisitions_by_skills_by_type.html' %}
+                            {% include 'prosoponomikon/_spell_acquisitions_by_sphere.html' %}
                         {% endwith %}
                     {% endwith %}
                 </section>
             {% endif %}
 
-            <!-- SorcerersSkill and MentalSkills -->
-            {% if acquisitions_sorcerers %}
-                <section id="acquisitions_sorcerers" class="tab-panel">
-                    {% with acquisitions=acquisitions_sorcerers panel_id=2 %}
-                        {% include 'prosoponomikon/_acquisitions_by_skills_by_type.html' %}
+            <!-- SorcerersSkill -->
+            {% if acquisitions_sorcererspells %}
+                <section id="acquisitions_sorcererspells" class="tab-panel">
+                    {% with acquisitions=acquisitions_sorcererspells panel_id=2 %}
+                        {% include 'prosoponomikon/_spell_acquisitions_by_sphere.html' %}
                     {% endwith %}
                 </section>
             {% endif %}
 
-            <!-- TheurgistsSkill and MentalSkills -->
-            {% if acquisitions_theurgists %}
-                <section id="acquisitions_theurgists" class="tab-panel">
-                    {% with acquisitions=acquisitions_theurgists panel_id=2 %}
-                        {% include 'prosoponomikon/_acquisitions_by_skills_by_type.html' %}
+            <!-- TheurgistsSkill  -->
+            {% if acquisitions_theurgistspells %}
+                <section id="acquisitions_theurgistspells" class="tab-panel">
+                    {% with acquisitions=acquisitions_theurgistspells panel_id=2 %}
+                        {% include 'prosoponomikon/_spell_acquisitions_by_sphere.html' %}
                     {% endwith %}
                 </section>
             {% endif %}

@@ -1,0 +1,53 @@
+{% load static %}
+{% load custom_filters %}
+
+
+<div class="container my-1 p-0">
+    <div class="d-flex flex-row">
+
+        <!-- IMAGE -->
+        <div data-toggle="tooltip" data-placement="top" data-html="true"
+            title="
+                {% if request.current_profile.can_view_all %}
+                    [Sfragis {{ acquisition.sphragis.name_genitive }}]
+                    <br>{{ acquisition.spell.name_second }}<br>{{ acquisition.spell.name_origin }}
+                {% else %}
+                    Sfragis {{ acquisition.sphragis.name_genitive }}
+                {% endif %}
+            ">
+            <div class="d-flex flex-nowrap hover-pointer" data-toggle="collapse"
+                data-target="#{{ acquisition.spell.name|cut:' ' }}{{ sphere.name|cut:' ' }}{{ acquisition.sphragis.id }}">
+                {% with spell_level=acquisition.spell.level|stringformat:'s' %}
+                    <img class="img-skill" src="{% static 'img/'|add:spell_level|add:'_no_background.png' %}"
+                        style="background-color: {% firstof acquisition.sphragis.color 'black' %}; background-clip: content-box;">
+                {% endwith %}
+            </div>
+        </div>
+        <!-- END IMAGE -->
+
+        <!-- DESCRIPTION -->
+        <div class="skill-or-synergy-name ml-2 mt-1 mt-lg-2">
+
+            <div>
+                {% if request.current_profile.status == 'gm' %}
+                    <a class="hover-blue" href="{% url 'admin:prosoponomikon_spellacquisition_change' acquisition.id %}" target="_blank"
+                       data-toggle="tooltip" data-placement="right" title="Edytuj Akwizycję Umiejętności">
+                       {{ acquisition.spell.name }}
+                    </a>
+                {% else %}
+                    {{ acquisition.spell.name }}
+                {% endif %}
+            </div>
+
+            <div class="row collapse" id="{{ acquisition.spell.name|cut:' ' }}{{ sphere.name|cut:' ' }}{{ acquisition.sphragis.id }}">
+                {% with spell=acquisition.spell %}
+                    {% include 'rules/_spell_descr.html' %}
+                {% endwith %}
+            </div>
+
+        </div>
+        <!-- END DESCRIPTION -->
+
+    </div>
+</div>
+

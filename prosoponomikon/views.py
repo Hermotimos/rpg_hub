@@ -68,7 +68,11 @@ def prosoponomikon_character_view(request, character_id):
 
     page_title = this_acquaintanceship.knows_as_name or this_acquaintanceship.known_character.fullname
     character = Character.objects.prefetch_related(
-        'collections').get(id=this_acquaintanceship.known_character.id)
+        # 'spellacquisitions__sphragis',
+        # 'spellacquisitions__spell',
+        # 'spellacquisitions__spell__spheres',
+        'collections'
+    ).get(id=this_acquaintanceship.known_character.id)
 
     if current_profile.can_view_all:
         biography_packets = BiographyPacket.objects.filter(characters=character)
@@ -100,11 +104,15 @@ def prosoponomikon_character_view(request, character_id):
     if current_profile.character.id == character_id or current_profile.status == 'gm':
         acquisitions = character.acquisitions_for_character_sheet()
         acquisitions_regular = acquisitions.filter(skill_level__skill__types__kinds__name__in=["Powszechne", "Mentalne"])
-        acquisitions_priests = acquisitions.filter(skill_level__skill__types__kinds__name="Moce Kapłańskie")
-        acquisitions_sorcerers = acquisitions.filter(skill_level__skill__types__kinds__name="Zaklęcia")
-        acquisitions_theurgists = acquisitions.filter(skill_level__skill__types__kinds__name="Moce Teurgiczne")
+
+        acquisitions_spells = character.spellacquisitions.prefetch_related('sphragis', 'spell__spheres')
+        acquisitions_priestspells = acquisitions_spells.filter(spell__spheres__type="Kapłańskie")
+        acquisitions_sorcererspells = acquisitions_spells.filter(spell__spheres__type="Magiczne")
+        acquisitions_theurgistspells = acquisitions_spells.filter(spell__spheres__type="Teurgiczne")
 
         skill_types = character.skill_types_for_character_sheet()
+        spheres = character.spheres_for_character_sheet()
+        print(spheres)
 
         synergies = character.synergies_for_character_sheet()
         synergies_regular = synergies.exclude(
@@ -139,10 +147,12 @@ def prosoponomikon_character_view(request, character_id):
         'page_title': page_title,
         'this_acquaintanceship': this_acquaintanceship,
         'acquisitions_regular': acquisitions_regular,
-        'acquisitions_priests': acquisitions_priests,
-        'acquisitions_sorcerers': acquisitions_sorcerers,
-        'acquisitions_theurgists': acquisitions_theurgists,
+        # 'acquisitions_priests': acquisitions_priests,
+        'acquisitions_priestspells': acquisitions_priestspells,
+        'acquisitions_sorcererspells': acquisitions_sorcererspells,
+        'acquisitions_theurgistspells': acquisitions_theurgistspells,
         'skill_types': skill_types,
+        'spheres': spheres,
         'synergies_regular': synergies_regular,
         'knowledge_packets': knowledge_packets,
         'biography_packets': biography_packets,
