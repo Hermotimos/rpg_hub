@@ -8,13 +8,9 @@ from rules.admin_filters import SkillLevelFilter, SynergyLevelFilter
 from rules.admin_forms import DomainAdminAdminForm, ConditionalModifierAdminForm
 from rules.models import (
     SkillGroup, SkillKind, SkillType,
-    Sphragis,
     Skill, SkillLevel, Synergy, SynergyLevel,
     RegularSkill, RegularSkillLevel, RegularSynergy, RegularSynergyLevel,
     MentalSkill, MentalSkillLevel, MentalSynergy, MentalSynergyLevel,
-    PriestsSkill, PriestsSkillLevel,
-    SorcerersSkill, SorcerersSkillLevel,
-    TheurgistsSkill, TheurgistsSkillLevel,
 
     Perk, Modifier, Factor, RulesComment, Condition, CombatType,
     ConditionalModifier,
@@ -169,30 +165,6 @@ class SkillAdmin(admin.ModelAdmin):
         return formfield
 
 
-class PowerSkillLevelInline(admin.StackedInline):
-    fields = [
-        (
-            'skill', 'level', 'distance', 'radius', 'duration',
-            'saving_throw_trait', 'saving_throw_malus', 'damage',
-        ),
-        'description',
-    ]
-    formfield_overrides = {
-        models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
-        models.TextField: {'widget': forms.Textarea(attrs={'rows': 30, 'cols': 80})},
-    }
-    model = PriestsSkillLevel
-    extra = 0
-
-
-@admin.register(PriestsSkill, SorcerersSkill, TheurgistsSkill)
-class PowerSkillAdmin(SkillAdmin):
-    fields = ['name', 'name_second', 'name_origin', 'types', 'allowees']
-    inlines = [PowerSkillLevelInline]
-    list_display = ['id', 'name', 'tested_trait']
-    list_editable = ['name', 'tested_trait']
-
-
 # -----------------------------------------------------------------------------
 
 class SynergyLevelInline(admin.TabularInline):
@@ -256,13 +228,6 @@ class SkillLevelAdmin(admin.ModelAdmin):
     def name(self, obj):
         return f'{str(obj.skill.name)} [{obj.level}]'
 
-
-@admin.register(PriestsSkillLevel, SorcerersSkillLevel, TheurgistsSkillLevel)
-class PowerSkillLevelAdmin(admin.ModelAdmin):
-    fields = [
-        'skill', 'level', 'distance', 'radius', 'damage', 'saving_throw_trait',
-        'saving_throw_malus', 'duration', 'description',
-    ]
 
 # -----------------------------------------------------------------------------
 
@@ -343,31 +308,6 @@ class SubProfessionAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         qs = qs.select_related('profession')
         return qs
-
-
-# -----------------------------------------------------------------------------
-
-
-class SphragisAdminAdminForm(forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['color'].help_text = """
-            <a href="https://www.w3schools.com/colors/colors_picker.asp" target="_blank">
-                https://www.w3schools.com/colors/colors_picker.asp
-            </a>"""
-
-    class Meta:
-        model = Sphragis
-        exclude = []
-        widgets = {'color': forms.TextInput(attrs={'type': 'color'})}
-
-
-@admin.register(Sphragis)
-class SphragisAdmin(admin.ModelAdmin):
-    form = SphragisAdminAdminForm
-    list_display = ['id', 'name', 'name_genitive', 'color']
-    list_editable = ['name', 'name_genitive', 'color']
 
 
 # -----------------------------------------------------------------------------

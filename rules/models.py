@@ -404,55 +404,6 @@ class MentalSkill(Skill):
         verbose_name_plural = 'Skills - MENTALNE'
 
 
-class PriestsSkillManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(types__kinds__name="Moce Kapłańskie")
-        qs = qs.prefetch_related('types__kinds')
-        return qs.distinct()
-
-
-class PriestsSkill(Skill):
-    objects = PriestsSkillManager()
-
-    class Meta:
-        proxy = True
-        verbose_name = 'Skill - MOCE KAPŁAŃSKIE'
-        verbose_name_plural = 'Skills - MOCE KAPŁAŃSKIE'
-
-
-class SorcerersSkillManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(types__kinds__name="Zaklęcia")
-        return qs.distinct()
-
-
-class SorcerersSkill(Skill):
-    objects = SorcerersSkillManager()
-
-    class Meta:
-        proxy = True
-        verbose_name = 'Skill - ZAKLĘCIA'
-        verbose_name_plural = 'Skills - ZAKLĘCIA'
-
-
-class TheurgistsSkillManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(types__kinds__name="Moce Teurgiczne")
-        return qs.distinct()
-
-
-class TheurgistsSkill(Skill):
-    objects = TheurgistsSkillManager()
-
-    class Meta:
-        proxy = True
-        verbose_name = 'Skill - MOCE TEURGICZNE'
-        verbose_name_plural = 'Skills - MOCE TEURGICZNE'
-
-
 # -----------------------------------------------------------------------------
 
 
@@ -523,54 +474,6 @@ class MentalSkillLevel(SkillLevel):
         proxy = True
         verbose_name = 'Skill Level - MENTALNE'
         verbose_name_plural = 'Skill Levels - MENTALNE'
-
-
-class PriestsSkillLevelManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(skill__in=PriestsSkill.objects.all())
-        return qs.distinct()
-
-
-class PriestsSkillLevel(SkillLevel):
-    objects = PriestsSkillLevelManager()
-
-    class Meta:
-        proxy = True
-        verbose_name = 'Skill Level - MOCE KAPŁAŃSKIE'
-        verbose_name_plural = 'Skill Levels - MOCE KAPŁAŃSKIE'
-
-
-class SorcerersSkillLevelManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(skill__in=SorcerersSkill.objects.all())
-        return qs.distinct()
-
-
-class SorcerersSkillLevel(SkillLevel):
-    objects = SorcerersSkillLevelManager()
-
-    class Meta:
-        proxy = True
-        verbose_name = 'Skill Level - ZAKLĘCIA'
-        verbose_name_plural = 'Skill Levels - ZAKLĘCIA'
-
-
-class TheurgistsSkillLevelManager(Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(skill__in=TheurgistsSkill.objects.all())
-        return qs.distinct()
-
-
-class TheurgistsSkillLevel(SkillLevel):
-    objects = TheurgistsSkillLevelManager()
-
-    class Meta:
-        proxy = True
-        verbose_name = 'Skill Level - MOCE TEURGICZNE'
-        verbose_name_plural = 'Skill Levels - MOCE TEURGICZNE'
 
 
 # -----------------------------------------------------------------------------
@@ -711,18 +614,6 @@ class SubProfession(Model):
         ordering = [OrderByPolish('name')]
         verbose_name = 'SubProfession'
         verbose_name_plural = '--- SUBPROFESSIONS'
-
-    def __str__(self):
-        return self.name
-
-
-class Sphragis(Model):
-    name = CharField(max_length=100, unique=True)
-    name_genitive = CharField(max_length=100, unique=True)
-    color = CharField(max_length=7, default='#000000')
-
-    class Meta:
-        ordering = [OrderByPolish('name')]
 
     def __str__(self):
         return self.name

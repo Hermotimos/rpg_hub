@@ -22,7 +22,7 @@ from django.urls import reverse
 from knowledge.models import BiographyPacket, DialoguePacket
 from rpg_project.utils import OrderByPolish
 from rules.models import SubProfession, Skill, SkillLevel, WeaponType, \
-    Sphragis, SkillType, Spell, Domain, Sphere
+    SkillType, Spell, Domain, Sphere
 from toponomikon.models import Location
 from users.models import Profile
 
@@ -308,19 +308,16 @@ class Character(Model):
             'skill_level__perks__conditional_modifiers__modifier__factor',
             'skill_level__perks__comments',
             'weapon_type__comparables',
-            'sphragis',
         ).order_by(
             # order_by combined with distinct for "DISTINCT ON" query:
             # This filters out all SkillLevel-s apart from the highest one
             # https://docs.djangoproject.com/en/4.0/ref/models/querysets/#distinct
             'skill_level__skill__name',
             'weapon_type__name',
-            'sphragis__name',
             '-skill_level__level'
         ).distinct(
             'skill_level__skill__name',
             'weapon_type__name',
-            'sphragis__name',
         )
 
     def synergies_for_character_sheet(self):
@@ -510,7 +507,6 @@ class Acquisition(Model):
     character = FK(to=Character, related_name='acquisitions', on_delete=CASCADE)
     skill_level = FK(to=SkillLevel, related_name='acquisitions', on_delete=CASCADE)
     weapon_type = FK(to=WeaponType, on_delete=CASCADE, blank=True, null=True)
-    sphragis = FK(to=Sphragis, on_delete=CASCADE, blank=True, null=True)
 
     class Meta:
         ordering = [
@@ -521,13 +517,11 @@ class Acquisition(Model):
         # ordering = ['character__fullname', 'skill_level__skill__name', 'skill_level__level']
         unique_together = [
             ['character', 'skill_level', 'weapon_type'],
-            ['character', 'skill_level', 'sphragis'],
         ]
 
     def __str__(self):
         weapon_type = f" {self.weapon_type}" if self.weapon_type else ""
-        sphragis = f" ({self.sphragis})" if self.sphragis else ""
-        return f"{self.character}: {self.skill_level}{weapon_type}{sphragis}"
+        return f"{self.character}: {self.skill_level}{weapon_type}"
 
 
 # -----------------------------------------------------------------------------

@@ -267,13 +267,11 @@ class AcquisitionAdminForm(forms.ModelForm):
 
 @admin.register(Acquisition)
 class AcquisitionAdmin(admin.ModelAdmin):
-    fields = ['character', 'skill_level', 'weapon_type', 'sphragis']
+    fields = ['character', 'skill_level', 'weapon_type']
     form = AcquisitionAdminForm
-    list_display = [
-        'get_img', 'character', 'skill_level', 'weapon_type', 'sphragis'
-    ]
-    list_filter = ['sphragis', 'character', 'skill_level__skill', 'weapon_type']
-    search_fields = ['skill_level', 'character', 'weapon_type', 'sphragis']
+    list_display = ['get_img', 'character', 'skill_level', 'weapon_type']
+    list_filter = ['character', 'skill_level__skill', 'weapon_type']
+    search_fields = ['skill_level', 'character', 'weapon_type']
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -283,7 +281,6 @@ class AcquisitionAdmin(admin.ModelAdmin):
             'character__family_name',
             'character__profile',
             'weapon_type',
-            'sphragis',
         )
         return qs
 
@@ -301,7 +298,6 @@ class AcquisitionInline(admin.TabularInline):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
-            'sphragis',
             'weapon_type',
         ]:
             if db_field.name == field:
@@ -316,8 +312,7 @@ class AcquisitionInline(admin.TabularInline):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.select_related(
-            'character', 'skill_level__skill', 'sphragis', 'weapon_type')
+        return qs.select_related('character', 'skill_level__skill', 'weapon_type')
 
 
 # -----------------------------------------------------------------------------

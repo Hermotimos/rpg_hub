@@ -4,49 +4,60 @@
 
 <div class="container my-1 p-0">
     <div class="d-flex flex-row">
-        
-        {% include 'prosoponomikon/_acquisition_img.html' %}
-        
+
+        <!-- IMAGE -->
+        <div class="d-flex flex-nowrap hover-pointer" data-toggle="collapse"
+                data-target="#{{ acquisition.skill_level.skill|cut:' ' }}{{ skill_type|cut:' ' }}{{ acquisition.weapon_type.id }}">
+            {% if acquisition.skill_level.skill.image %}
+                <img class="img-skill mr-sm-1" src="{{ acquisition.skill_level.skill.image.url }}">
+            {% else %}
+                <img class="img-skill mr-sm-1" src="{% static 'img/skill-default.png' %}">
+            {% endif %}
+        </div>
+        <!-- END IMAGE -->
+
+        <!-- DESCRIPTION -->
         <div class="skill-or-synergy-name ml-2 mt-1 mt-lg-2">
-            
+
             <div>
                 <!-- For GM make skill name into a link to admin change form -->
                 {% if request.current_profile.status == 'gm' %}
                     <a class="hover-blue" href="{% url 'admin:prosoponomikon_acquisition_change' acquisition.id %}" target="_blank"
                        data-toggle="tooltip" data-placement="right" title="Edytuj Akwizycję Umiejętności">
                 {% endif %}
-                
+
                 {{ acquisition.skill_level.skill.name }}
-                
+
                 {% if acquisition.weapon_type %}
                     : {{ acquisition.weapon_type.name }}
                 {% endif %}
-                
+
                 {% if "Powszechne" in skilltype_kinds %}
                     [{{ acquisition.skill_level.level }}]
                 {% endif %}
-                
+
                 {% if request.current_profile.status == 'gm' %}
                     </a>
                 {% endif %}
-                
+
                 <small class="gray1 smaller">
                     {% if acquisition.skill_level.skill.tested_trait %}
                         ({{ acquisition.skill_level.skill.tested_trait }})
                     {% endif %}
                 </small>
             </div>
-            
-            <div class="row collapse" id="{{ acquisition.skill_level.skill|cut:' ' }}{{ skill_type|cut:' ' }}{{ acquisition.weapon_type.id }}{{ acquisition.sphragis.id }}">
+
+            <div class="row collapse" id="{{ acquisition.skill_level.skill|cut:' ' }}{{ skill_type|cut:' ' }}{{ acquisition.weapon_type.id }}">
                 {% with level_img='img/'|add:acquisition.skill_level.level|add:'.png' %}
                     {% with skill_or_synergy_level=acquisition.skill_level type='skill_level' %}
                         {% include 'rules/_skill_or_synergy_level.html' %}
                     {% endwith %}
                 {% endwith %}
             </div>
-            
+
         </div>
-        
+        <!-- END DESCRIPTION -->
+
     </div>
 </div>
 

@@ -4,34 +4,17 @@
 
 <div class="container my-1 p-0">
     <div class="d-flex flex-row">
-        
+
         {% include 'rules/_skill_img.html' %}
-        
+
         <div class="skill-or-synergy-name ml-2 mt-1 mt-lg-2">
-            
+
             <div>
                 {% if request.current_profile.status == 'gm' %}
-                    {% if skilltype_kind == 'Powszechne' %}
-                        <a class="hover-blue" href="{% url 'admin:rules_skill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja Umiejętności">
-                            {{ skill.name }}
-                        </a>
-                    {% elif skilltype_kind == 'Mentalne' %}
-                        <a class="hover-blue" href="{% url 'admin:rules_mentalskill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja Umiejętności">
-                            {{ skill.name }}
-                        </a>
-                    {% elif skilltype_kind == 'Moce Kapłańskie' %}
-                        <a class="hover-blue" href="{% url 'admin:rules_priestsskill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja Umiejętności">
-                            {{ skill.name }}
-                        </a>
-                    {% elif skilltype_kind == 'Zaklęcia' %}
-                        <a class="hover-blue" href="{% url 'admin:rules_sorcerersskill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja Umiejętności">
-                            {{ skill.name }}
-                        </a>
-                    {% elif skilltype_kind == 'Moce Teurgiczne' %}
-                        <a class="hover-blue" href="{% url 'admin:rules_theurgistsskill_change' skill.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja Umiejętności">
-                            {{ skill.name }}
-                        </a>
-                    {% endif %}
+                    <a class="hover-blue" href="{% url 'admin:rules_skill_change' skill.id %}"
+                        target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja Umiejętności">
+                        {{ skill.name }}
+                    </a>
                 {% else %}
                     {{ skill.name }}
                 {% endif %}
@@ -41,7 +24,7 @@
                     {% endif %}
                 </small>
             </div>
-            
+
             <div class="row collapse" id="{{ skill|cut:' ' }}{{ skill_type|cut:' ' }}">
                 {% for skill_level in skill.skill_levels.all %}
                     {% if not forloop.last and max_level_only %}
@@ -55,9 +38,9 @@
                     {% endif %}
                 {% endfor %}
             </div>
-            
+
         </div>
-        
+
     </div>
 </div>
 

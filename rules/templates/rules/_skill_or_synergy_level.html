@@ -7,25 +7,13 @@
         <div class="pl-1 pt-01 mt-1">
             {% if request.current_profile.status == 'gm' %}
                 {% if type == 'skill_level' %}
-                    {% if "Moce Kapłańskie" in skilltype_kinds %}
-                        <a href="{% url 'admin:rules_priestsskilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edytuj Poziom Umiejętności">
-                            <img class="img-xs" src="{% static level_img %}">
-                        </a>
-                    {% elif "Zaklęcia" in skilltype_kinds %}
-                        <a href="{% url 'admin:rules_sorcerersskilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edytuj Poziom Umiejętności">
-                            <img class="img-xs" src="{% static level_img %}">
-                        </a>
-                    {% elif "Moce Teurgiczne" in skilltype_kinds %}
-                        <a href="{% url 'admin:rules_theurgistsskilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edytuj Poziom Umiejętności">
-                            <img class="img-xs" src="{% static level_img %}">
-                        </a>
-                    {% else %}
-                        <a href="{% url 'admin:rules_skilllevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edytuj Poziom Umiejętności">
-                            <img class="img-xs" src="{% static level_img %}">
-                        </a>
-                    {% endif %}
+                    <a href="{% url 'admin:rules_skilllevel_change' skill_or_synergy_level.id %}"
+                        target="_blank" data-toggle="tooltip" data-placement="right" title="Edytuj Poziom Umiejętności">
+                        <img class="img-xs" src="{% static level_img %}">
+                    </a>
                 {% elif type == 'synergy_level' %}
-                    <a href="{% url 'admin:rules_synergylevel_change' skill_or_synergy_level.id %}" target="_blank" data-toggle="tooltip" data-placement="right" title="Edytuj Poziom Synergii">
+                    <a href="{% url 'admin:rules_synergylevel_change' skill_or_synergy_level.id %}"
+                        target="_blank" data-toggle="tooltip" data-placement="right" title="Edytuj Poziom Synergii">
                         <img class="img-xs" src="{% static level_img %}">
                     </a>
                 {% endif %}
@@ -45,52 +33,17 @@
                 {% if skill_or_synergy_level.description %}
                     <div class="mt-2">
                         {% if acquisitions and "Biegłość w broni + Obycie z bronią" in synergy.name %}
-                            Bonusy wynikające z Biegłości w broni [{{ skill_or_synergy_level.skill_levels.first.level }}] automatycznie rozciągają się na wszystkie Bronie Podobne:
+                            Bonusy wynikające z Biegłości w broni
+                            {% if skill_or_synergy_level.skill_levels.first.level != '1' %}
+                                [1-{{ skill_or_synergy_level.skill_levels.first.level }}]
+                            {% else %}
+                                [{{ skill_or_synergy_level.skill_levels.first.level }}]
+                            {% endif %}
+                            automatycznie rozciągają się na wszystkie Bronie Podobne:
                             {{ acquisitions|similar_weapon_types:skill_or_synergy_level.skill_levels.first.level|linebreaksbr }}
                         {% else %}
                             {{ skill_or_synergy_level.description|linebreaksbr }}
                         {% endif %}
-                    </div>
-                {% endif %}
-
-                {% if skill_or_synergy_level.distance is not None %}
-                    <div class="mt-1">
-                        <span data-toggle="tooltip" data-placement="right" title="Zasięg">
-                            <i class="ra ra-focused-lightning pr-1"></i>:
-                            {{ skill_or_synergy_level.distance }} m
-                        </span>
-                    </div>
-                {% endif %}
-                {% if skill_or_synergy_level.radius is not None %}
-                    <div class="mt-1">
-                        <span data-toggle="tooltip" data-placement="right" title="Promień">
-                            <i class="ra ra-radial-balance pr-1"></i>:
-                            {{ skill_or_synergy_level.radius }} m
-                        </span>
-                    </div>
-                {% endif %}
-                {% if skill_or_synergy_level.duration is not None %}
-                    <div class="mt-1">
-                        <span data-toggle="tooltip" data-placement="right" title="Czas działania">
-                            <i class="ra ra-hourglass pr-1"></i>:
-                            {{ skill_or_synergy_level.duration }} min
-                        </span>
-                    </div>
-                {% endif %}
-                {% if skill_or_synergy_level.saving_throw_trait is not None %}
-                    <div class="mt-1">
-                        <span data-toggle="tooltip" data-placement="right" title="Malus RO">
-                            <i class="ra ra-perspective-dice-random pr-1"></i>:
-                            {{ skill_or_synergy_level.saving_throw_trait }} -{{ skill_or_synergy_level.saving_throw_malus }}
-                        </span>
-                    </div>
-                {% endif %}
-                {% if skill_or_synergy_level.damage is not None %}
-                    <div class="mt-1">
-                        <span data-toggle="tooltip" data-placement="right" title="Obrażenia">
-                            <i class="ra ra-cut-palm  pr-1"></i>:
-                            {{ skill_or_synergy_level.damage }}
-                        </span>
                     </div>
                 {% endif %}
             </div>
