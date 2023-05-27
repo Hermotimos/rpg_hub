@@ -798,6 +798,9 @@ class Spell(Model):
         return f'{str(self.name)} [{self.level}]'
 
 
+# --------------------
+
+
 class PriestSpellManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
@@ -811,5 +814,42 @@ class PriestSpell(Spell):
 
     class Meta:
         proxy = True
+
+
+# --------------------
+
+
+class TheurgistSpellManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.prefetch_related('spheres')
+        qs = qs.filter(spheres__type__in=['Teurgiczne'])
+        return qs.distinct()
+
+
+class TheurgistSpell(Spell):
+    objects = TheurgistSpellManager()
+
+    class Meta:
+        proxy = True
+
+
+# --------------------
+
+
+class SorcererSpellManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.prefetch_related('spheres')
+        qs = qs.filter(spheres__type__in=['Magiczne'])
+        return qs.distinct()
+
+
+class SorcererSpell(Spell):
+    objects = SorcererSpellManager()
+
+    class Meta:
+        proxy = True
+
 
 # -----------------------------------------------------------------------------

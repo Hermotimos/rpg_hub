@@ -10,7 +10,7 @@ from rules.models import (
     Shield,
     Skill, SkillType,
     WeaponType,
-    Spell, PriestsSkill, PriestSpell, Sphere
+    Sphere, PriestSpell, TheurgistSpell, SorcererSpell,
 )
 from rules.utils import get_overload_ranges, get_visible_professions, \
     can_view_special_rules, get_wounds_range_sets
@@ -322,33 +322,10 @@ def rules_spells_view(request, spells_kind):
     current_profile = request.current_profile
     user_profiles = current_profile.user.profiles.all()
 
-    # Sphere.objects.create(name='Kairon', type='Kapłańskie')
-    # Sphere.objects.create(name='Chairon', type='Kapłańskie')
-
-    # sphere = Sphere.objects.create(name='Chton', type='Kapłańskie')
-    # for skill in PriestsSkill.objects.all():
-    #     skill_level = skill.skill_levels.first()
-    #     priest_spell = PriestSpell.objects.create(
-    #         name=skill.name,
-    #         name_second=skill.name_second,
-    #         name_origin=skill.name_origin,
-    #         level=str(skill_level.level),
-    #         description=skill_level.description,
-    #         range=skill_level.distance,
-    #         radius=skill_level.radius,
-    #         duration=skill_level.duration,
-    #         damage=skill_level.damage,
-    #         saving_throw_malus=skill_level.saving_throw_malus,
-    #         saving_throw_trait=skill_level.saving_throw_trait,
-    #     )
-    #     priest_spell.allowees.set(skill.allowees.all())
-    #     priest_spell.spheres.add(sphere)
-    #     print(priest_spell)
-
     models = {
         'Moce Kapłańskie': PriestSpell,
-        # 'Moce Teurgiczne': TheurgistSpell,
-        # 'Zaklęcia': SorcererSpell,
+        'Moce Teurgiczne': TheurgistSpell,
+        'Zaklęcia': SorcererSpell,
     }
     SpellModel = models.get(spells_kind)
 
@@ -358,8 +335,7 @@ def rules_spells_view(request, spells_kind):
 
     spheres = Sphere.objects.prefetch_related(
         Prefetch('spells', queryset=spells)
-    ).filter(
-        spells__in=spells).distinct()
+    ).filter(spells__in=spells).distinct()
 
     context = {
         'page_title': spells_kind,
