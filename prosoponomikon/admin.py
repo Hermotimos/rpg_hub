@@ -326,7 +326,7 @@ class CharacterAdmin(admin.ModelAdmin):
     fields = [
         'profile',
         ('first_name', 'family_name', 'cognomen', 'fullname'),
-        ('strength', 'dexterity', 'endurance', 'experience'),
+        ('strength', 'dexterity', 'endurance', 'power', 'experience'),
         'description', 'frequented_locations', 'biography_packets',
         'dialogue_packets', 'subprofessions',
     ]
@@ -376,6 +376,6 @@ class CharacterAcquaintanceshipsAdmin(CharacterAdmin):
 class CharacterAcquisitionsAdmin(CharacterAdmin):
     fields = [
         'fullname',
-        ('strength', 'dexterity', 'endurance', 'experience'),
+        ('strength', 'dexterity', 'endurance', 'power', 'experience'),
     ]
     inlines = [AcquisitionInline]

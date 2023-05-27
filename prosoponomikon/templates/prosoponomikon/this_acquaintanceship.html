@@ -111,6 +111,9 @@
                                 <span class="mr-2"><b>Sił: </b>{{ this_acquaintanceship.known_character.strength|default_if_none:"-" }}</span>
                                 <span class="mr-2"><b>Zrc: </b>{{ this_acquaintanceship.known_character.dexterity|default_if_none:"-" }}</span>
                                 <span class="mr-2"><b>Kon: </b>{{ this_acquaintanceship.known_character.endurance|default_if_none:"-" }}</span>
+                                {% if this_acquaintanceship.known_character.power > 0 %}
+                                    <span class="mr-2"><b>Moc: </b>{{ this_acquaintanceship.known_character.power }}</span>
+                                {% endif %}
                             </div>
                             {% if this_acquaintanceship.known_character.experience %}
                                 <div class="row font-italic">

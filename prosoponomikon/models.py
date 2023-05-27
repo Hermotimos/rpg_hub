@@ -211,6 +211,7 @@ class Character(Model):
     strength = PositiveSmallIntegerField(blank=True, null=True)
     dexterity = PositiveSmallIntegerField(blank=True, null=True)
     endurance = PositiveSmallIntegerField(blank=True, null=True)
+    power = PositiveSmallIntegerField(blank=True, null=True)
     experience = PositiveSmallIntegerField(blank=True, null=True)
 
     description = TextField(blank=True, null=True)
