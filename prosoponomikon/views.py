@@ -106,10 +106,14 @@ def prosoponomikon_character_view(request, character_id):
         synergies_regular = synergies.exclude(
             skills__types__kinds__name__in=["Moce Kapłańskie",  "Zaklęcia", "Moce Teurgiczne"])
 
-        acquisitions_spells = character.spellacquisitions.prefetch_related('sphragis', 'spell__spheres')
-        acquisitions_priestspells = acquisitions_spells.filter(spell__spheres__type="Kapłańskie")
-        acquisitions_sorcererspells = acquisitions_spells.filter(spell__spheres__type="Magiczne")
-        acquisitions_theurgistspells = acquisitions_spells.filter(spell__spheres__type="Teurgiczne")
+        acquisitions_spells = character.spellacquisitions.prefetch_related(
+            'sphragis', 'spell__spheres')
+        acquisitions_priestspells = acquisitions_spells.filter(
+            spell__spheres__type="Kapłańskie").distinct()
+        acquisitions_sorcererspells = acquisitions_spells.filter(
+            spell__spheres__type="Magiczne").distinct()
+        acquisitions_theurgistspells = acquisitions_spells.filter(
+            spell__spheres__type="Teurgiczne").distinct()
         spheres = character.spheres_for_character_sheet()
 
         items = Item.objects.filter(collection__in=item_collections, is_deleted=False)
