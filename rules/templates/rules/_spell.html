@@ -1,0 +1,100 @@
+{% load static %}
+{% load custom_filters %}
+
+
+<div class="container my-1 p-0">
+    <div class="d-flex flex-row">
+
+        <!-- IMAGE -->
+        <div data-toggle="tooltip" data-placement="top" data-html="true" title="{{ spell.name_second }}<br>{{ spell.name_origin }}">
+            {% with spell_level=spell.level|stringformat:'s' %}
+                <div class="d-flex flex-nowrap hover-pointer" data-toggle="collapse"
+                    data-target="#{{ spell.name|cut:' ' }}{{ sphere.name|cut:' ' }}">
+                    <img class="img-skill" src="{% static 'img/'|add:spell_level|add:'.png' %}">
+                </div>
+            {% endwith %}
+        </div>
+        <!-- END IMAGE -->
+
+        <!-- DESCRIPTION -->
+        <div class="skill-or-synergy-name ml-2 mt-1 mt-lg-2">
+
+            <div>
+                {% if request.current_profile.status == 'gm' %}
+                    <a class="hover-blue" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja"
+                        {% if spells_kind == 'Moce Kapłańskie' %}
+                            href="{% url 'admin:rules_priestspell_change' spell.id %}"
+                        {% elif spells_kind == 'Moce Teurgiczne' %}
+                            href="{% url 'admin:rules_theurgistspell_change' spell.id %}"
+                        {% elif spells_kind == 'Zaklęcia' %}
+                            href="{% url 'admin:rules_sorcererspell_change' spell.id %}"
+                        {% endif %}>
+                        {{ spell.name }}
+                        <span class="text-muted font-18">| {{ spell.name_second }}</span>
+                    </a>
+                {% else %}
+                    {{ spell.name }}
+                {% endif %}
+            </div>
+
+            <div class="row collapse" id="{{ spell.name|cut:' ' }}{{ sphere.name|cut:' ' }}">
+                <div class="container align-top pl-1 pr-md-4 text-justify font-14">
+                    <div class="d-flex flex-column ml-3">
+
+                            {{ spell.description|linebreaksbr }}
+
+                            {% if spell.range is not None %}
+                                <div class="mt-1">
+                                    <span data-toggle="tooltip" data-placement="right" title="Zasięg">
+                                        <i class="ra ra-focused-lightning pr-1"></i>:
+                                        {{ spell.range }} m
+                                    </span>
+                                </div>
+                            {% endif %}
+
+                            {% if spell.radius is not None %}
+                                <div class="mt-1">
+                                    <span data-toggle="tooltip" data-placement="right" title="Promień">
+                                        <i class="ra ra-radial-balance pr-1"></i>:
+                                        {{ spell.radius }} m
+                                    </span>
+                                </div>
+                            {% endif %}
+
+                            {% if spell.duration is not None %}
+                                <div class="mt-1">
+                                    <span data-toggle="tooltip" data-placement="right" title="Czas działania">
+                                        <i class="ra ra-hourglass pr-1"></i>:
+                                        {{ spell.duration }} min
+                                    </span>
+                                </div>
+                            {% endif %}
+
+                            {% if spell.saving_throw_trait is not None %}
+                                <div class="mt-1">
+                                    <span data-toggle="tooltip" data-placement="right" title="Malus RO">
+                                        <i class="ra ra-perspective-dice-random pr-1"></i>:
+                                        {{ spell.saving_throw_trait }} -{{ spell.saving_throw_malus }}
+                                    </span>
+                                </div>
+                            {% endif %}
+
+                            {% if spell.damage is not None %}
+                                <div class="mt-1">
+                                    <span data-toggle="tooltip" data-placement="right" title="Obrażenia">
+                                        <i class="ra ra-cut-palm  pr-1"></i>:
+                                        {{ spell.damage }}
+                                    </span>
+                                </div>
+                            {% endif %}
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- END DESCRIPTION -->
+
+    </div>
+</div>
+

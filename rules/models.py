@@ -81,8 +81,8 @@ class RulesComment(Model):
 
     def __str__(self):
         return self.text
-        
-        
+
+
 class Condition(Model):
     """A model for specifying Modifier usage conditions."""
     text = CharField(max_length=200, unique=True)
@@ -121,7 +121,7 @@ class ConditionalModifier(Model):
         combat_types = "".join(["/" + str(ct) for ct in combat_types])
         return f"{self.modifier}{conditions} {combat_types}"
 
-        
+
 class Perk(Model):
     """A class describing a special ability of an item or a skill level."""
     name = CharField(max_length=50, unique=True)
@@ -178,7 +178,7 @@ class Plate(Model):
         limit_choices_to=Q(status='player'),
         related_name='allowed_plates',
         blank=True)
-    
+
     armor_class_bonus = PositiveSmallIntegerField(blank=True, null=True)
     parrying = PositiveSmallIntegerField(blank=True, null=True)
     endurance = PositiveSmallIntegerField()
@@ -196,12 +196,12 @@ class Plate(Model):
     mod_lockpicking = SmallIntegerField(blank=True, null=True)
     mod_pickpocketing = SmallIntegerField(blank=True, null=True)
     mod_conning = SmallIntegerField(blank=True, null=True)
-    
+
     sorting_number = DecimalField(max_digits=3, decimal_places=2)
-    
+
     class Meta:
         ordering = ['sorting_number']
-    
+
     def __str__(self):
         return self.name
 
@@ -224,10 +224,10 @@ class Shield(Model):
     weight = DecimalField(max_digits=10, decimal_places=1)
     comment = TextField(max_length=200, blank=True, null=True)
     sorting_number = DecimalField(max_digits=3, decimal_places=2)
-    
+
     class Meta:
         ordering = ['sorting_number']
-    
+
     def __str__(self):
         return self.name
 
@@ -273,7 +273,7 @@ class DamageType(Model):
         description = f" {self.description}" if self.description else ""
         special = f" {self.special}" if self.special else ""
         return f"{self.damage} [{self.type}]{description}{special}"
-    
+
     @property
     def short(self):
         description = f" {self.description}" if self.description else ""
@@ -305,7 +305,7 @@ class WeaponType(Model):
 
     class Meta:
         ordering = [OrderByPolish('name')]
-    
+
     def __str__(self):
         return self.name
 
@@ -319,11 +319,11 @@ class SkillKind(Model):
 
     class Meta:
         ordering = [OrderByPolish('name')]
-    
+
     def __str__(self):
         return self.name
-    
-        
+
+
 class SkillType(Model):
     """A classification category for Skills."""
     name = CharField(max_length=100, unique=True)
@@ -331,11 +331,11 @@ class SkillType(Model):
 
     class Meta:
         ordering = [OrderByPolish('name')]
-        
+
     def __str__(self):
         return self.name
 
-        
+
 class SkillGroup(Model):
     """A loose grouping category for Skills."""
     name = CharField(max_length=100, unique=True)
@@ -346,8 +346,8 @@ class SkillGroup(Model):
 
     def __str__(self):
         return self.name
-   
-    
+
+
 class Skill(Model):
     name = CharField(max_length=100, unique=True)
     name_second = CharField(max_length=100, blank=True, null=True)
@@ -371,7 +371,7 @@ class Skill(Model):
     def __str__(self):
         return self.name
 
-       
+
 class RegularSkillManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
@@ -386,8 +386,8 @@ class RegularSkill(Skill):
         proxy = True
         verbose_name = 'Skill - POWSZECHNE'
         verbose_name_plural = 'Skills - POWSZECHNE'
-        
-        
+
+
 class MentalSkillManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
@@ -402,8 +402,8 @@ class MentalSkill(Skill):
         proxy = True
         verbose_name = 'Skill - MENTALNE'
         verbose_name_plural = 'Skills - MENTALNE'
-        
-        
+
+
 class PriestsSkillManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
@@ -419,7 +419,7 @@ class PriestsSkill(Skill):
         proxy = True
         verbose_name = 'Skill - MOCE KAPŁAŃSKIE'
         verbose_name_plural = 'Skills - MOCE KAPŁAŃSKIE'
-        
+
 
 class SorcerersSkillManager(Manager):
     def get_queryset(self):
@@ -435,8 +435,8 @@ class SorcerersSkill(Skill):
         proxy = True
         verbose_name = 'Skill - ZAKLĘCIA'
         verbose_name_plural = 'Skills - ZAKLĘCIA'
-       
-        
+
+
 class TheurgistsSkillManager(Manager):
     def get_queryset(self):
         qs = super().get_queryset()
@@ -451,7 +451,7 @@ class TheurgistsSkill(Skill):
         proxy = True
         verbose_name = 'Skill - MOCE TEURGICZNE'
         verbose_name_plural = 'Skills - MOCE TEURGICZNE'
-        
+
 
 # -----------------------------------------------------------------------------
 
@@ -472,7 +472,7 @@ class SkillLevel(Model):
         ('Zrc/Kon', 'Zrc/Kon'),
         ('Sił/Zrc/Kon', 'Sił/Zrc/Kon'),
     ]
-    
+
     skill = FK(to=Skill, related_name='skill_levels', on_delete=CASCADE)
     level = CharField(max_length=10, choices=LEVELS)
     description = TextField(blank=True, null=True)
@@ -507,7 +507,7 @@ class RegularSkillLevel(SkillLevel):
         proxy = True
         verbose_name = 'Skill Level - POWSZECHNE'
         verbose_name_plural = 'Skill Levels - POWSZECHNE'
-        
+
 
 class MentalSkillLevelManager(Manager):
     def get_queryset(self):
@@ -523,7 +523,7 @@ class MentalSkillLevel(SkillLevel):
         proxy = True
         verbose_name = 'Skill Level - MENTALNE'
         verbose_name_plural = 'Skill Levels - MENTALNE'
-        
+
 
 class PriestsSkillLevelManager(Manager):
     def get_queryset(self):
@@ -539,7 +539,7 @@ class PriestsSkillLevel(SkillLevel):
         proxy = True
         verbose_name = 'Skill Level - MOCE KAPŁAŃSKIE'
         verbose_name_plural = 'Skill Levels - MOCE KAPŁAŃSKIE'
-        
+
 
 class SorcerersSkillLevelManager(Manager):
     def get_queryset(self):
@@ -555,7 +555,7 @@ class SorcerersSkillLevel(SkillLevel):
         proxy = True
         verbose_name = 'Skill Level - ZAKLĘCIA'
         verbose_name_plural = 'Skill Levels - ZAKLĘCIA'
-        
+
 
 class TheurgistsSkillLevelManager(Manager):
     def get_queryset(self):
@@ -571,7 +571,7 @@ class TheurgistsSkillLevel(SkillLevel):
         proxy = True
         verbose_name = 'Skill Level - MOCE TEURGICZNE'
         verbose_name_plural = 'Skill Levels - MOCE TEURGICZNE'
-        
+
 
 # -----------------------------------------------------------------------------
 
@@ -638,7 +638,7 @@ class SynergyLevel(Model):
 
     class Meta:
         ordering = [OrderByPolish('synergy__name'), 'level']
-        
+
     def __str__(self):
         return f'{str(self.synergy.name)} [{self.level}]'
 
@@ -684,7 +684,7 @@ class Profession(Model):
         ('Elitarne', 'Elitarne'),
         ('Hermetyczne', 'Hermetyczne'),
     ]
-    
+
     name = CharField(max_length=100, unique=True)
     type = CharField(max_length=50, choices=TYPES)
     description = TextField(max_length=4000, blank=True, null=True)
@@ -706,7 +706,7 @@ class SubProfession(Model):
     description = TextField(max_length=4000, blank=True, null=True)
     essential_skills = M2M(to=Skill, blank=True)
     allowees = M2M(to=Profile, related_name='subprofessions_allowed', blank=True)
-    
+
     class Meta:
         ordering = [OrderByPolish('name')]
         verbose_name = 'SubProfession'
@@ -720,9 +720,96 @@ class Sphragis(Model):
     name = CharField(max_length=100, unique=True)
     name_genitive = CharField(max_length=100, unique=True)
     color = CharField(max_length=7, default='#000000')
-    
+
     class Meta:
         ordering = [OrderByPolish('name')]
 
     def __str__(self):
         return self.name
+
+
+# =============================================================================
+
+
+class Sphere(Model):
+    SPHERE_KINDS = [
+        ('Kapłańskie', 'Kapłańskie'),
+        ('Teurgiczne', 'Teurgiczne'),
+        ('Magiczne', 'Magiczne'),
+    ]
+    name = CharField(max_length=100, unique=True)
+    type = CharField(max_length=20, choices=SPHERE_KINDS)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
+class Domain(Model):
+    name = CharField(max_length=100, unique=True)
+    name_genitive = CharField(max_length=100, unique=True)
+    color = CharField(max_length=7, default='#000000')
+
+    class Meta:
+        ordering = [OrderByPolish('name')]
+
+    def __str__(self):
+        return self.name
+
+
+class Spell(Model):
+    TRAITS = [
+        ('Moc', 'Moc'),
+        ('Sił', 'Sił'),
+        ('Zrc', 'Zrc'),
+        ('Kon', 'Kon'),
+        ('Sił/Zrc', 'Sił/Zrc'),
+        ('Sił/Kon', 'Sił/Kon'),
+        ('Zrc/Kon', 'Zrc/Kon'),
+        ('Sił/Zrc/Kon', 'Sił/Zrc/Kon'),
+    ]
+    name = CharField(max_length=100, unique=True)
+    name_second = CharField(max_length=100, blank=True, null=True)
+    name_origin = TextField(blank=True, null=True)
+    description = TextField(blank=True, null=True)
+    level = PositiveSmallIntegerField()
+    spheres = M2M(Sphere, related_name='spells')
+    domains = M2M(Domain, related_name='spells')
+
+    range = PositiveSmallIntegerField(blank=True, null=True)
+    radius = PositiveSmallIntegerField(blank=True, null=True)
+    duration = PositiveSmallIntegerField(blank=True, null=True)
+    damage = CharField(max_length=20, blank=True, null=True)
+    saving_throw_malus = PositiveSmallIntegerField(blank=True, null=True)
+    saving_throw_trait = CharField(max_length=20, choices=TRAITS, blank=True, null=True)
+
+    allowees = M2M(
+        Profile,
+        limit_choices_to=Q(status='player'),
+        related_name='allowed_spells',
+        blank=True)
+
+    class Meta:
+        ordering = ['level', OrderByPolish('name')]
+
+    def __str__(self):
+        return f'{str(self.name)} [{self.level}]'
+
+
+class PriestSpellManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.prefetch_related('spheres')
+        qs = qs.filter(spheres__type__in=['Kapłańskie'])
+        return qs.distinct()
+
+
+class PriestSpell(Spell):
+    objects = PriestSpellManager()
+
+    class Meta:
+        proxy = True
+
+# -----------------------------------------------------------------------------

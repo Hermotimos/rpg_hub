@@ -10,6 +10,7 @@ from rules.models import (
     Shield,
     Skill, SkillType,
     WeaponType,
+    Spell, PriestsSkill, PriestSpell, Sphere
 )
 from rules.utils import get_overload_ranges, get_visible_professions, \
     can_view_special_rules, get_wounds_range_sets
@@ -19,10 +20,10 @@ from rules.utils import get_overload_ranges, get_visible_professions, \
 @auth_profile(['all'])
 def rules_main_view(request):
     current_profile = request.current_profile
-    
+
     # Only Characters with specific Professions or a GM/Spectator can access some rules
     elite_professions = [p.name for p in Profession.objects.filter(type='Elitarne')]
-    
+
     if current_profile.status in ['gm', 'spectator']:
         visible_professions = elite_professions
         can_view_power_rules = True
@@ -43,14 +44,14 @@ def rules_main_view(request):
 def rules_armor_view(request):
     current_profile = request.current_profile
     user_profiles = current_profile.user.profiles.all()
-    
+
     plates = Plate.objects.prefetch_related('picture_set__pictures__image')
     shields = Shield.objects.prefetch_related('picture_set__pictures__image')
-    
+
     if not current_profile.can_view_all:
         plates = plates.filter(allowees__in=user_profiles)
         shields = shields.filter(allowees__in=user_profiles)
-    
+
     context = {
         'page_title': 'Pancerz',
         'plates': plates.distinct(),
@@ -95,7 +96,7 @@ def rules_professions_view(request, profession_type):
     subprofessions = subprofessions.prefetch_related(
         Prefetch('essential_skills', queryset=essential_skills)
     ).distinct()
-    
+
     professions = professions.prefetch_related(
         Prefetch('subprofessions', queryset=subprofessions)
     ).distinct()
@@ -121,7 +122,7 @@ def rules_character_development_view(request):
 def rules_skills_view(request, skilltype_kind):
     current_profile = request.current_profile
     user_profiles = current_profile.user.profiles.all()
-    
+
     skills = Skill.objects.filter(
         types__kinds__name=skilltype_kind
     ).prefetch_related(
@@ -146,7 +147,7 @@ def rules_skills_view(request, skilltype_kind):
         page_title = f"Umiejętności {skilltype_kind}"
     else:
         page_title = skilltype_kind
-        
+
     context = {
         'page_title': page_title,
         'skilltype_kind': skilltype_kind,
@@ -160,11 +161,11 @@ def rules_skills_view(request, skilltype_kind):
 @auth_profile(['all'])
 def rules_synergies_view(request, skilltype_kind):
     current_profile = request.current_profile
-    
+
     synergies = current_profile.synergies_allowed(
         skilltype_kind=skilltype_kind
     ).distinct()
-    
+
     context = {
         'page_title': f"Synergie {skilltype_kind}",
         'synergies': synergies,
@@ -192,8 +193,8 @@ def rules_power_trait_view(request):
         return render(request, 'rules/power_trait.html', context)
     else:
         return redirect('users:dupa')
-    
-    
+
+
 @login_required
 @auth_profile(['all'])
 def rules_priesthood_view(request):
@@ -205,8 +206,8 @@ def rules_priesthood_view(request):
         return render(request, 'rules/priesthood.html', context)
     else:
         return redirect('users:dupa')
-     
-     
+
+
 @login_required
 @auth_profile(['all'])
 def rules_sorcery_view(request):
@@ -218,8 +219,8 @@ def rules_sorcery_view(request):
         return render(request, 'rules/sorcery.html', context)
     else:
         return redirect('users:dupa')
-    
-     
+
+
 @login_required
 @auth_profile(['all'])
 def rules_theurgy_view(request):
@@ -257,17 +258,17 @@ def rules_fitness_and_tricks_view(request):
 def rules_weapon_types_view(request):
     current_profile = request.current_profile
     user_profiles = current_profile.user.profiles.all()
-    
+
     weapon_types = WeaponType.objects.all()
     if not current_profile.can_view_all:
         weapon_types = weapon_types.filter(allowees__in=user_profiles).distinct()
-        
+
     weapon_types = weapon_types.prefetch_related(
         Prefetch('comparables', queryset=weapon_types),  # filter out unknown
         'picture_set__pictures__image',
         'damage_types'
     ).distinct()
-    
+
     context = {
         'page_title': 'Broń',
         'weapon_types': weapon_types,
@@ -310,3 +311,60 @@ def rules_player_responsibilities_view(request):
         'page_title': 'Obowiązki Gracza'
     }
     return render(request, 'rules/player_responsibilities.html', context)
+
+
+# =============================================================================
+
+
+@login_required
+@auth_profile(['all'])
+def rules_spells_view(request, spells_kind):
+    current_profile = request.current_profile
+    user_profiles = current_profile.user.profiles.all()
+
+    # Sphere.objects.create(name='Kairon', type='Kapłańskie')
+    # Sphere.objects.create(name='Chairon', type='Kapłańskie')
+
+    # sphere = Sphere.objects.create(name='Chton', type='Kapłańskie')
+    # for skill in PriestsSkill.objects.all():
+    #     skill_level = skill.skill_levels.first()
+    #     priest_spell = PriestSpell.objects.create(
+    #         name=skill.name,
+    #         name_second=skill.name_second,
+    #         name_origin=skill.name_origin,
+    #         level=str(skill_level.level),
+    #         description=skill_level.description,
+    #         range=skill_level.distance,
+    #         radius=skill_level.radius,
+    #         duration=skill_level.duration,
+    #         damage=skill_level.damage,
+    #         saving_throw_malus=skill_level.saving_throw_malus,
+    #         saving_throw_trait=skill_level.saving_throw_trait,
+    #     )
+    #     priest_spell.allowees.set(skill.allowees.all())
+    #     priest_spell.spheres.add(sphere)
+    #     print(priest_spell)
+
+    models = {
+        'Moce Kapłańskie': PriestSpell,
+        # 'Moce Teurgiczne': TheurgistSpell,
+        # 'Zaklęcia': SorcererSpell,
+    }
+    SpellModel = models.get(spells_kind)
+
+    spells = SpellModel.objects.prefetch_related('spheres', 'domains', 'allowees')
+    if not current_profile.can_view_all:
+        spells = spells.filter(allowees__in=user_profiles)
+
+    spheres = Sphere.objects.prefetch_related(
+        Prefetch('spells', queryset=spells)
+    ).filter(
+        spells__in=spells).distinct()
+
+    context = {
+        'page_title': spells_kind,
+        'spells_kind': spells_kind,
+        'spheres': spheres,
+        'spells': spells,
+    }
+    return render(request, 'rules/spells.html', context)

@@ -5,6 +5,7 @@ from django.utils.html import format_html
 
 from rpg_project.utils import formfield_with_cache
 from rules.admin_filters import SkillLevelFilter, SynergyLevelFilter
+from rules.admin_forms import DomainAdminAdminForm, ConditionalModifierAdminForm
 from rules.models import (
     SkillGroup, SkillKind, SkillType,
     Sphragis,
@@ -14,11 +15,13 @@ from rules.models import (
     PriestsSkill, PriestsSkillLevel,
     SorcerersSkill, SorcerersSkillLevel,
     TheurgistsSkill, TheurgistsSkillLevel,
-    
+
     Perk, Modifier, Factor, RulesComment, Condition, CombatType,
     ConditionalModifier,
     Profession, SubProfession,
     DamageType, WeaponType, Plate, Shield,
+
+    Sphere, Domain, PriestSpell,
 )
 
 
@@ -85,26 +88,15 @@ class PerkAdmin(admin.ModelAdmin):
         if db_field.name == "conditional_modifiers":
             kwargs["queryset"] = ConditionalModifier.objects.prefetch_related('combat_types')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
-    
 
-class ConditionalModifierAdminForm(forms.ModelForm):
-    """Custom form for query optimization."""
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['modifier'].queryset = Modifier.objects.select_related('factor')
 
-    class Meta:
-        model = ConditionalModifier
-        exclude = []
 
-        
 @admin.register(ConditionalModifier)
 class ConditionalModifierAdmin(admin.ModelAdmin):
     filter_horizontal = ['combat_types', 'conditions']
     form = ConditionalModifierAdminForm
     list_display = ['__str__', '_perks']
-    
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         qs = qs.select_related('modifier__factor')
@@ -115,7 +107,7 @@ class ConditionalModifierAdmin(admin.ModelAdmin):
         perks = " | ".join([p.name for p in obj.perks.all()])
         return format_html(f'<span>{perks}</span>')
 
-    
+
 # -----------------------------------------------------------------------------
 
 
@@ -153,7 +145,7 @@ class RegularSkillLevelInline(admin.TabularInline):
         qs = super().get_queryset(request)
         return qs.prefetch_related('perks')
 
-    
+
 @admin.register(Skill, RegularSkill, MentalSkill)
 class SkillAdmin(admin.ModelAdmin):
     fields = [
@@ -166,7 +158,7 @@ class SkillAdmin(admin.ModelAdmin):
     list_editable = ['name', 'tested_trait', 'image', 'group']
     list_select_related = ['group']
     search_fields = ['name']
-    
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
@@ -175,7 +167,7 @@ class SkillAdmin(admin.ModelAdmin):
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
-    
+
 
 class PowerSkillLevelInline(admin.StackedInline):
     fields = [
@@ -191,8 +183,8 @@ class PowerSkillLevelInline(admin.StackedInline):
     }
     model = PriestsSkillLevel
     extra = 0
-    
-    
+
+
 @admin.register(PriestsSkill, SorcerersSkill, TheurgistsSkill)
 class PowerSkillAdmin(SkillAdmin):
     fields = ['name', 'name_second', 'name_origin', 'types', 'allowees']
@@ -264,7 +256,7 @@ class SkillLevelAdmin(admin.ModelAdmin):
     def name(self, obj):
         return f'{str(obj.skill.name)} [{obj.level}]'
 
-    
+
 @admin.register(PriestsSkillLevel, SorcerersSkillLevel, TheurgistsSkillLevel)
 class PowerSkillLevelAdmin(admin.ModelAdmin):
     fields = [
@@ -319,8 +311,8 @@ class ProfessionAdmin(admin.ModelAdmin):
     list_editable = ['type', 'description']
     list_filter = ['type']
     search_fields = ['name', 'description']
-    
-    
+
+
 @admin.register(SubProfession)
 class SubProfessionAdmin(admin.ModelAdmin):
     fields = [
@@ -331,7 +323,7 @@ class SubProfessionAdmin(admin.ModelAdmin):
     list_filter = ['profession', 'profession__type']
     search_fields = ['name', 'description']
     list_select_related = True
-    
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
@@ -340,7 +332,7 @@ class SubProfessionAdmin(admin.ModelAdmin):
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
-    
+
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "essential_skills":
             kwargs["queryset"] = Skill.objects.filter(
@@ -357,14 +349,14 @@ class SubProfessionAdmin(admin.ModelAdmin):
 
 
 class SphragisAdminAdminForm(forms.ModelForm):
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['color'].help_text = """
             <a href="https://www.w3schools.com/colors/colors_picker.asp" target="_blank">
                 https://www.w3schools.com/colors/colors_picker.asp
             </a>"""
-        
+
     class Meta:
         model = Sphragis
         exclude = []
@@ -448,7 +440,7 @@ class ShieldAdmin(admin.ModelAdmin):
         'comment'
     ]
     search_fields = ['name', 'description', 'comment']
-    
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
         for field in [
@@ -457,4 +449,52 @@ class ShieldAdmin(admin.ModelAdmin):
             if db_field.name == field:
                 formfield = formfield_with_cache(field, formfield, request)
         return formfield
+
+
+
+# =============================================================================
+
+
+@admin.register(Sphere)
+class SphereAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'type']
+    list_editable = ['name', 'type']
+
+
+@admin.register(Domain)
+class DomainAdmin(admin.ModelAdmin):
+    form = DomainAdminAdminForm
+    list_display = ['id', 'name', 'name_genitive', 'color']
+    list_editable = ['name', 'name_genitive', 'color']
+
+
+@admin.register(PriestSpell)
+class PriestSpellAdmin(admin.ModelAdmin):
+    fields = [
+        ('name', 'name_second', 'name_origin'),
+        'level',
+        ('spheres', 'domains'),
+        'description',
+        ('range', 'radius', 'duration', 'damage'),
+        ('saving_throw_trait', 'saving_throw_malus'),
+        'allowees',
+    ]
+    filter_horizontal = ['spheres', 'domains', 'allowees']
+    formfield_overrides = {
+        models.CharField: {'widget': forms.TextInput(attrs={'size': 18})},
+        models.TextField: {'widget': forms.Textarea(attrs={'rows': 6, 'cols': 50})},
+        models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
+    }
+    list_display = [
+        'id', 'name', 'name_second', 'level', 'description',
+        'range', 'radius', 'duration', 'saving_throw_trait',
+        'saving_throw_malus', 'damage',
+    ]
+    list_editable = [
+        'name', 'name_second', 'level', 'description',
+        'range', 'radius', 'duration', 'saving_throw_trait',
+        'saving_throw_malus', 'damage',
+    ]
+    list_filter = ['spheres__name', 'spheres__type']
+    search_fields = ['name', 'name_second', 'name_origin', 'description']
 

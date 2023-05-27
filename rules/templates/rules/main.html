@@ -10,7 +10,7 @@
 
 {% block content %}
     <div class="pt-5">
-        
+
         <h2 class="mt-4 mb-2">
             <img class="img-rules" src="{% static 'img/rules_POSTAĆ.jpg' %}">
             <strong class="align-middle small-caps border-bottom-dark">Tworzenie i rozwój Postaci</strong>
@@ -35,7 +35,7 @@
                 </ul>
             </li>
         </ol>
-        
+
         <h2 class="mt-4">
             <img class="img-rules" src="{% static 'img/rules_WALKA.jpg' %}">
             <strong class="align-middle small-caps border-bottom-dark">Walka i obrażenia</strong>
@@ -46,7 +46,7 @@
             <li><a href="{% url 'rules:wounds' %}">Progi i skutki ran</a></li>
             <li><a href="{% url 'rules:combat' %}">Przebieg walki</a></li>
         </ol>
-    
+
         {% if can_view_power_rules %}
             <h2 class="mt-4">
                 <img class="img-rules" src="{% static 'img/rules_MOC.jpg' %}">
@@ -64,7 +64,8 @@
                     <li>
                         <a href="{% url 'rules:priesthood' %}">Kapłaństwo</a>
                         <ul class="ml-3">
-                            <li><a href="{% url 'rules:skills' 'Moce Kapłańskie' %}">Moce Kapłańskie</a></li>
+                            <li><a href="{% url 'rules:spells' 'Moce Kapłańskie' %}">Moce Kapłańskie</a></li>
+                            <!-- <li><a href="{% url 'rules:skills' 'Moce Kapłańskie' %}">Moce Kapłańskie</a></li> -->
                         </ul>
                     </li>
                 {% endif %}
@@ -86,7 +87,7 @@
                 {% endif %}
             </ol>
         {% endif %}
-        
+
         <h2 class="mt-4">
             <img class="img-rules" src="{% static 'img/rules_VARIA.jpg' %}">
             <strong class="align-middle small-caps border-bottom-dark">Varia</strong>
@@ -96,6 +97,6 @@
             <li><a href="{% url 'rules:player-responsibilities' %}">Obowiązki Gracza</a></li>
             <li><a href="{% url 'rules:character-sheet' %}">Karta Postaci</a></li>
         </ol>
-    
+
     </div>
 {% endblock content %}

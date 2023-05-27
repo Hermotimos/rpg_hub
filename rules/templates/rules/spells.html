@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% load cache %}
+
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'css/rules.css' %}">
+{% endblock head_extra %}
+
+
+{% block content %}
+{% cache 30000 spells spells_kind request.current_profile.user.username %}
+
+    <div class="pt-3 mt-5">
+        <div class="rules-styling" id="accordion{{ panel_id }}">
+
+            <!-- SPELLS PER SPHERE -->
+            {% for sphere in spheres %}
+                <div class="card mb-1">
+                    <div class="card-header card-header-resp hover-blue" id="{{ sphere.name|cut:' ' }}"
+                         data-toggle="collapse" data-target="#collapse{{ sphere.name|cut:' ' }}"
+                         aria-expanded="true" aria-controls="collapse{{ sphere.name|cut:' ' }}">
+                        <label class="h4 font-weight-bold m-0 hover-blue font-resp-1_5">
+                            {{ sphere.name }}
+                        </label>
+                    </div>
+                    <div id="collapse{{ sphere.name }}" class="collapse"
+                        aria-labelledby="{{ sphere.name|cut:' ' }}" data-parent="#accordion{{ panel_id }}">
+                        <div class="card-body container">
+                            {% for spell in sphere.spells.all %}
+                                {% include 'rules/_spell.html' %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <!-- ALL SPELLS -->
+            <div class="card mb-2">
+                <div class="card-header card-header-resp hover-blue" id="all-spells"
+                     data-toggle="collapse" data-target="#collapse{{ panel_id }}"
+                     aria-expanded="true" aria-controls="collapse{{ panel_id }}">
+                    <label class="h4 font-weight-bold mb-0 hover-blue small-caps font-resp-1_5">
+                        Wszystkie
+                    </label>
+                </div>
+                <div id="collapse{{ panel_id }}" class="collapse show"
+                    aria-labelledby="all-spells" data-parent="#accordion{{ panel_id }}">
+                    <div class="card-body container">
+                        {% for spell in spells %}
+                            {% include 'rules/_spell.html' %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endcache %}
+{% endblock content %}
