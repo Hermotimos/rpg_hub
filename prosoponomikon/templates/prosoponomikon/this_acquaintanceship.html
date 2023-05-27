@@ -66,6 +66,11 @@
                                         target="_blank"
                                         data-toggle="tooltip" data-placement="left" title="Edytuj Umiejętności">
                                     </a>
+                                    <a class="btn-overlay  btn-outline-dark border-none icon-edit rounded"
+                                        href="{% url 'admin:prosoponomikon_characterspellacquisitions_change' this_acquaintanceship.known_character.id %}"
+                                        target="_blank"
+                                        data-toggle="tooltip" data-placement="left" title="Edytuj Moce/Zaklęcia">
+                                    </a>
                                 {% endif %}
 
                             </div>
