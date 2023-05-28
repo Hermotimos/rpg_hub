@@ -18,11 +18,10 @@
         <!-- END IMAGE -->
 
         <!-- DESCRIPTION -->
-        <div class="skill-or-synergy-name ml-2 mt-1 mt-lg-2">
-
-            <div>
-                {% if request.current_profile.status == 'gm' %}
-                    <a class="hover-blue" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja"
+        <div class="skill-or-synergy-name ml-2">
+            {% if request.current_profile.status == 'gm' %}
+                <div>
+                    <a class="hover-blue mb-2" target="_blank" data-toggle="tooltip" data-placement="right" title="Edycja"
                         {% if spells_kind == 'Moce Kapłańskie' %}
                             href="{% url 'admin:rules_priestspell_change' spell.id %}"
                         {% elif spells_kind == 'Moce Teurgiczne' %}
@@ -33,10 +32,16 @@
                         {{ spell.name }}
                         <span class="text-muted font-18">| {{ spell.name_second }}</span>
                     </a>
-                {% else %}
-                    {{ spell.name }}
-                {% endif %}
-            </div>
+                </div>
+                <div class="mt-n2 font-12">
+                    {% for domain in spell.domains.all %}
+                        <span style="color: {{domain.color}};">{{ domain.name }}</span>
+                        {% if not forloop.last %} | {% endif %}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="mt-1 mt-lg-2">{{ spell.name }}</div>
+            {% endif %}
 
             <div class="row collapse" id="{{ spell.name|cut:' ' }}{{ sphere.name|cut:' ' }}">
                 {% include 'rules/_spell_descr.html' %}
