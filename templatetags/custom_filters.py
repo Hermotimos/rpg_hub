@@ -1,14 +1,13 @@
 import re
+from datetime import timedelta
 from typing import List
 
 from django import template
 from django.conf import settings
 from django.db.models import Q
-from django.template.defaultfilters import linebreaksbr
 from django.template.defaulttags import GroupedResult
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-
 
 register = template.Library()
 
@@ -311,3 +310,59 @@ def similar_weapon_types(acquisitions_qs, synergy_lvl):
         res += f"<b>{wt.name}:</b> {comparables}\n<br>"
     return mark_safe(res)
 
+
+@register.filter
+def amplify(value: int, amplification: int) -> str:
+    return value * amplification
+
+
+@register.filter
+def amplify_and_format_time(seconds: int, amplification: int) -> str:
+    td = timedelta(seconds=seconds*amplification)
+    days = td.days
+    hours, remainder = divmod(td.seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+
+    res = ""
+    if days > 0:
+        res += f"{days} dni "
+    if hours > 0:
+        res += f"{hours} godz "
+    if minutes > 0:
+        res += f"{minutes} min "
+    if seconds > 0 or not res:
+        res += f"{seconds} sek"
+
+    return res.strip()
+
+
+@register.filter
+def amplify_and_format_distance(meters: float, amplification: int) -> str:
+    distance = meters * amplification
+    kilometers, meters = divmod(distance, 1000)
+
+    res = ''
+    if kilometers > 0:
+        res += f"{kilometers} km "
+    if meters > 0:
+        res += f"{meters} m "
+
+    return res.strip()
+
+
+@register.filter
+def amplify_and_format_damage(damage: str, amplification: int) -> str:
+    if '+' in damage:
+        # ex. "2k4+1"
+        dices, addition = damage.split('+')
+        throws, dice = dices.split('k')
+        res = f"{int(throws) * amplification}k{dice}+{int(addition) * amplification}"
+    elif 'k' in damage:
+        # ex. "2k4"
+        throws, dice = damage.split('k')
+        res = f"{int(throws) * amplification}k{dice}"
+    else:
+        # ex. 2
+        res = {int(damage) * amplification}
+
+    return res.strip()

@@ -1,6 +1,6 @@
 from django import forms
 
-from rules.models import ConditionalModifier, Domain, Modifier
+from rules.models import ConditionalModifier, Domain, Modifier, Spell
 
 
 class ConditionalModifierAdminForm(forms.ModelForm):
@@ -32,3 +32,18 @@ class DomainAdminAdminForm(forms.ModelForm):
         model = Domain
         exclude = []
         widgets = {'color': forms.TextInput(attrs={'type': 'color'})}
+
+
+# -----------------------------------------------------------------------------
+
+
+class SpellForm(forms.ModelForm):
+
+    class Meta:
+        model = Spell
+        help_texts = {
+            'range': "Zasięg w metrach",
+            'radius': "Promień w metrach",
+            'duration': "Czas w sekundach (360 s = 1 m, 3600 s = 1 h)",
+        }
+        exclude = ()

@@ -11,7 +11,11 @@
             <div class="mt-1">
                 <span data-toggle="tooltip" data-placement="right" title="Zasięg">
                     <i class="ra ra-focused-lightning pr-1"></i>:
-                    {{ spell.range }} m
+                    {% if this_acquaintanceship %}
+                        {{ spell.range|amplify_and_format_distance:this_acquaintanceship.known_character.power }}
+                    {% else %}
+                        {{ spell.range|amplify_and_format_distance:1 }}
+                    {% endif %}
                 </span>
             </div>
         {% endif %}
@@ -20,7 +24,11 @@
             <div class="mt-1">
                 <span data-toggle="tooltip" data-placement="right" title="Promień">
                     <i class="ra ra-radial-balance pr-1"></i>:
-                    {{ spell.radius }} m
+                    {% if this_acquaintanceship %}
+                        {{ spell.radius|amplify_and_format_distance:this_acquaintanceship.known_character.power }}
+                    {% else %}
+                        {{ spell.radius|amplify_and_format_distance:1 }}
+                    {% endif %}
                 </span>
             </div>
         {% endif %}
@@ -29,7 +37,11 @@
             <div class="mt-1">
                 <span data-toggle="tooltip" data-placement="right" title="Czas działania">
                     <i class="ra ra-hourglass pr-1"></i>:
-                    {{ spell.duration }} min
+                    {% if this_acquaintanceship %}
+                        {{ spell.duration|amplify_and_format_time:this_acquaintanceship.known_character.power }}
+                    {% else %}
+                        {{ spell.duration|amplify_and_format_time:1 }}
+                    {% endif %}
                 </span>
             </div>
         {% endif %}
@@ -38,7 +50,14 @@
             <div class="mt-1">
                 <span data-toggle="tooltip" data-placement="right" title="Malus RO">
                     <i class="ra ra-perspective-dice-random pr-1"></i>:
-                    {{ spell.saving_throw_trait }} -{{ spell.saving_throw_malus }}
+                    {{ spell.saving_throw_trait }}
+                    {% if spell.saving_throw_malus %}
+                        {% if this_acquaintanceship %}
+                            -{{ spell.saving_throw_malus|amplify:this_acquaintanceship.known_character.power }}
+                        {% else %}
+                            -{{ spell.saving_throw_malus|amplify:1 }}
+                        {% endif %}
+                    {% endif %}
                 </span>
             </div>
         {% endif %}
@@ -47,7 +66,11 @@
             <div class="mt-1">
                 <span data-toggle="tooltip" data-placement="right" title="Obrażenia">
                     <i class="ra ra-cut-palm  pr-1"></i>:
-                    {{ spell.damage }}
+                    {% if this_acquaintanceship %}
+                        {{ spell.damage|amplify_and_format_damage:this_acquaintanceship.known_character.power }}
+                    {% else %}
+                        {{ spell.damage|amplify_and_format_damage:1 }}
+                    {% endif %}
                 </span>
             </div>
         {% endif %}

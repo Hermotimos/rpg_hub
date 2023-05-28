@@ -5,7 +5,9 @@ from django.utils.html import format_html
 
 from rpg_project.utils import formfield_with_cache
 from rules.admin_filters import SkillLevelFilter, SynergyLevelFilter
-from rules.admin_forms import DomainAdminAdminForm, ConditionalModifierAdminForm
+from rules.admin_forms import (
+    DomainAdminAdminForm, ConditionalModifierAdminForm, SpellForm,
+)
 from rules.models import (
     SkillGroup, SkillKind, SkillType,
     Skill, SkillLevel, Synergy, SynergyLevel,
@@ -17,7 +19,7 @@ from rules.models import (
     Profession, SubProfession,
     DamageType, WeaponType, Plate, Shield,
 
-    Sphere, Domain, PriestSpell,
+    Sphere, Domain, Spell, PriestSpell,
 )
 
 
@@ -408,7 +410,7 @@ class DomainAdmin(admin.ModelAdmin):
     list_editable = ['name', 'name_genitive', 'color']
 
 
-@admin.register(PriestSpell)
+@admin.register(Spell, PriestSpell)
 class PriestSpellAdmin(admin.ModelAdmin):
     fields = [
         ('name', 'name_second', 'name_origin'),
@@ -420,6 +422,7 @@ class PriestSpellAdmin(admin.ModelAdmin):
         'allowees',
     ]
     filter_horizontal = ['spheres', 'domains', 'allowees']
+    form = SpellForm
     formfield_overrides = {
         models.CharField: {'widget': forms.TextInput(attrs={'size': 18})},
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 6, 'cols': 50})},
