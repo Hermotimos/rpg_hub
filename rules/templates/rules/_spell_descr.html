@@ -66,7 +66,7 @@
             {% if spell.effect_description is not None %}
                 <div class="mt-1">
                     <span data-toggle="tooltip" data-placement="right" title="Obrażenia">
-                        <i class="ra ra-cut-palm  pr-1"></i>
+                        <i class="ra ra-player-dodge  pr-1"></i>
                         {% if this_acquaintanceship %}
                             {{ spell.effect_description|amplify_and_format_effect_description:this_acquaintanceship.known_character.power }}
                         {% else %}
