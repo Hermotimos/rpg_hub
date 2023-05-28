@@ -10,7 +10,7 @@
             <!-- AUDIO -->
             {% if event.audio %}
                 {% if request.current_profile in event.participants.all or request.current_profile.can_view_all %}
-                    <audio class="chronicle-audio-main" controls loop>
+                    <audio class="chronicle-audio-main mb-3" controls loop>
                         <source src="{{ event.audio.path }}" type="audio/mpeg">
                     </audio>
                 {% endif %}
