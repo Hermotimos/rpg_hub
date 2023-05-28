@@ -266,7 +266,7 @@ td.align-right {text-align: right;}
 /* For Django linebreaksbr template tag */
 br {
     content: " ";       /* for Chrome to avoid too big spaces */
-    margin-top: 0.4rem;
+    margin-top: 0.3rem;
     display: block;
 }
 
