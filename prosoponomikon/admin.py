@@ -320,7 +320,7 @@ class AcquisitionInline(admin.TabularInline):
 
 @admin.register(SpellAcquisition)
 class SpellAcquisitionAdmin(admin.ModelAdmin):
-    fields = ['character', 'spell', 'sphragis']
+    fields = ['character', 'spell', 'sphragis', 'sphere']
     list_display = ['get_img', 'character', 'spell',  'sphragis', 'sphere']
     list_editable = ['spell',  'sphragis', 'sphere']
     list_filter = ['sphragis', 'character']

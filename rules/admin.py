@@ -417,7 +417,7 @@ class PriestSpellAdmin(admin.ModelAdmin):
         'level',
         ('spheres', 'domains'),
         'description',
-        ('range', 'radius', 'duration', 'damage'),
+        ('range', 'radius', 'duration', 'effect_description'),
         ('saving_throw_trait', 'saving_throw_malus'),
         'allowees',
     ]
@@ -431,12 +431,12 @@ class PriestSpellAdmin(admin.ModelAdmin):
     list_display = [
         'id', 'name', 'name_second', 'level', 'description',
         'range', 'radius', 'duration', 'saving_throw_trait',
-        'saving_throw_malus', 'damage',
+        'saving_throw_malus', 'effect_description',
     ]
     list_editable = [
         'name', 'name_second', 'level', 'description',
         'range', 'radius', 'duration', 'saving_throw_trait',
-        'saving_throw_malus', 'damage',
+        'saving_throw_malus', 'effect_description',
     ]
     list_filter = ['spheres__name', 'spheres__type']
     search_fields = ['name', 'name_second', 'name_origin', 'description']

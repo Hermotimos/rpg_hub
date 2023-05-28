@@ -351,18 +351,23 @@ def amplify_and_format_distance(meters: float, amplification: int) -> str:
 
 
 @register.filter
-def amplify_and_format_damage(damage: str, amplification: int) -> str:
-    if '+' in damage:
-        # ex. "2k4+1"
-        dices, addition = damage.split('+')
-        throws, dice = dices.split('k')
-        res = f"{int(throws) * amplification}k{dice}+{int(addition) * amplification}"
-    elif 'k' in damage:
-        # ex. "2k4"
-        throws, dice = damage.split('k')
-        res = f"{int(throws) * amplification}k{dice}"
-    else:
-        # ex. 2
-        res = {int(damage) * amplification}
+def amplify_and_format_effect_description(effect_description: str, amplification: int) -> str:
 
-    return res.strip()
+    def format_effect(effect: str):
+        if '+' in effect:
+            # ex. "2k4+1"
+            dices, addition = effect.split('+')
+            throws, dice = dices.split('k')
+            return f"{int(throws) * amplification}k{dice}+{int(addition) * amplification}"
+        elif 'k' in effect:
+            # ex. "2k4"
+            throws, dice = effect.split('k')
+            return f"{int(throws) * amplification}k{dice}"
+        else:
+            # ex. 2
+            return f"{int(effect) * amplification}"
+
+    for e in re.findall(r"\{(.*?)\}", effect_description):
+        effect_description = effect_description.replace("{" + e + "}", format_effect(e))
+
+    return effect_description.strip()

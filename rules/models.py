@@ -672,7 +672,7 @@ class Spell(Model):
     range = PositiveSmallIntegerField(blank=True, null=True)
     radius = PositiveSmallIntegerField(blank=True, null=True)
     duration = PositiveSmallIntegerField(blank=True, null=True)
-    damage = CharField(max_length=20, blank=True, null=True)
+    effect_description = CharField(max_length=200, blank=True, null=True)
     saving_throw_malus = PositiveSmallIntegerField(blank=True, null=True)
     saving_throw_trait = CharField(max_length=20, choices=TRAITS, blank=True, null=True)
 

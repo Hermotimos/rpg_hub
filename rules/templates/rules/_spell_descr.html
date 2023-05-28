@@ -49,7 +49,7 @@
 
             {% if spell.saving_throw_trait is not None %}
                 <div class="mt-1">
-                    <span data-toggle="tooltip" data-placement="right" title="Malus RO">
+                    <span data-toggle="tooltip" data-placement="right" title="Rzut Obronny">
                         <i class="ra ra-perspective-dice-random pr-1"></i>
                         {{ spell.saving_throw_trait }}
                         {% if spell.saving_throw_malus %}
@@ -63,14 +63,14 @@
                 </div>
             {% endif %}
 
-            {% if spell.damage is not None %}
+            {% if spell.effect_description is not None %}
                 <div class="mt-1">
                     <span data-toggle="tooltip" data-placement="right" title="Obrażenia">
                         <i class="ra ra-cut-palm  pr-1"></i>
                         {% if this_acquaintanceship %}
-                            {{ spell.damage|amplify_and_format_damage:this_acquaintanceship.known_character.power }}
+                            {{ spell.effect_description|amplify_and_format_effect_description:this_acquaintanceship.known_character.power }}
                         {% else %}
-                            {{ spell.damage|amplify_and_format_damage:1 }}
+                            {{ spell.effect_description|amplify_and_format_effect_description:1 }}
                         {% endif %}
                     </span>
                 </div>

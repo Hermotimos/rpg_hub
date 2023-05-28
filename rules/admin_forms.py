@@ -45,5 +45,6 @@ class SpellForm(forms.ModelForm):
             'range': "Zasięg w metrach",
             'radius': "Promień w metrach",
             'duration': "Czas w sekundach (360 s = 1 m, 3600 s = 1 h)",
+            'effect_description': "Efekty do amplifikacji w klamrze {...}!",
         }
         exclude = ()
