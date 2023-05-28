@@ -378,11 +378,6 @@ class Character(Model):
 
         return skill_types
 
-    def spheres_for_character_sheet(self):
-        return Sphere.objects.filter(
-            spells__acquiring_characters=self
-        ).prefetch_related('spells').distinct()
-
 
 class CharacterAcquaintanceships(Character):
     """A class to enable a separate AdminModel-s."""
@@ -530,7 +525,8 @@ class Acquisition(Model):
 class SpellAcquisition(Model):
     character = FK(Character, related_name='spellacquisitions', on_delete=CASCADE)
     spell = FK(Spell, related_name='spellacquisitions', on_delete=CASCADE)
-    sphragis = FK(Domain, on_delete=CASCADE, blank=True, null=True)
+    sphragis = FK(Domain, related_name='spellacquisitions', on_delete=PROTECT, blank=True, null=True)
+    sphere = FK(Sphere, related_name='spellacquisitions', on_delete=PROTECT, blank=True, null=True)
 
     class Meta:
         ordering = [

@@ -22,13 +22,11 @@
             <div id="collapse{{ sphere.name|cut:' ' }}" class="collapse"
                 aria-labelledby="{{ sphere.name|cut:' ' }}" data-parent="#accordion{{ panel_id }}">
                 <div class="card-body container">
-                    {% with spells=sphere.spells.all %}
-                        {% for acquisition in acquisitions %}
-                            {% if acquisition.spell in spells  %}
-                                {% include 'prosoponomikon/_spell_acquisition.html' %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endwith %}
+                    {% for acquisition in acquisitions %}
+                        {% if acquisition.sphere == sphere %}
+                            {% include 'prosoponomikon/_spell_acquisition.html' %}
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
         </div>

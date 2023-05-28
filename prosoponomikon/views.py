@@ -2,9 +2,9 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q, Sum, Case, When, F
+from django.db.models import Case, F, Q, Sum, When
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
 
@@ -18,9 +18,10 @@ from prosoponomikon.forms import (
     CharacterCreateForm, ForPlayerAcquaintanceshipCreateForm
 )
 from prosoponomikon.models import (
-    Character, FirstNameGroup, FamilyName, Acquaintanceship
+    Acquaintanceship, Character, FamilyName, FirstNameGroup
 )
-from rpg_project.utils import handle_inform_form, auth_profile, backup_db
+from rpg_project.utils import auth_profile, backup_db, handle_inform_form
+from rules.models import Sphere
 from toponomikon.models import Location
 from users.models import Profile, User
 
@@ -100,7 +101,8 @@ def prosoponomikon_character_view(request, character_id):
 
     if current_profile.character.id == character_id or current_profile.status == 'gm':
         acquisitions = character.acquisitions_for_character_sheet()
-        acquisitions_regular = acquisitions.filter(skill_level__skill__types__kinds__name__in=["Powszechne", "Mentalne"])
+        acquisitions_regular = acquisitions.filter(
+            skill_level__skill__types__kinds__name__in=["Powszechne", "Mentalne"])
         skill_types = character.skill_types_for_character_sheet()
         synergies = character.synergies_for_character_sheet()
         synergies_regular = synergies.exclude(
@@ -114,7 +116,8 @@ def prosoponomikon_character_view(request, character_id):
             spell__spheres__type="Magiczne").distinct()
         acquisitions_theurgistspells = acquisitions_spells.filter(
             spell__spheres__type="Teurgiczne").distinct()
-        spheres = character.spheres_for_character_sheet()
+        spheres = Sphere.objects.filter(
+            spellacquisitions__in=acquisitions_spells).distinct()
 
         items = Item.objects.filter(collection__in=item_collections, is_deleted=False)
 

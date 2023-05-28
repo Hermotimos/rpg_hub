@@ -321,9 +321,21 @@ class AcquisitionInline(admin.TabularInline):
 @admin.register(SpellAcquisition)
 class SpellAcquisitionAdmin(admin.ModelAdmin):
     fields = ['character', 'spell', 'sphragis']
-    list_display = ['get_img', 'character', 'spell',  'sphragis']
+    list_display = ['get_img', 'character', 'spell',  'sphragis', 'sphere']
+    list_editable = ['spell',  'sphragis', 'sphere']
     list_filter = ['sphragis', 'character']
     search_fields = ['spell', 'character',  'sphragis']
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        for field in [
+            'spell',
+            'sphragis',
+            'sphere',
+        ]:
+            if db_field.name == field:
+                formfield = formfield_with_cache(field, formfield, request)
+        return formfield
 
     def get_img(self, obj):
         if obj.character.profile.image:
