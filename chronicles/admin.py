@@ -157,15 +157,18 @@ class GameEventInline(admin.TabularInline):
 
 @admin.register(GameSession)
 class GameSessionAdmin(admin.ModelAdmin):
+    filter_horizontal = ['users']
     formfield_overrides = {
         models.CharField: {'widget': forms.TextInput(attrs={'size': 70})},
     }
     inlines = [GameEventInline]
     list_display = [
-        'id', 'order_no', 'title', 'chapter', 'game_no', 'ispublished', 'date',
+        'id', 'order_no', 'title', 'chapter', 'game_no', 'ispublished',
+        'dates', 'duration',
     ]
     list_editable = [
-        'order_no', 'title', 'chapter', 'game_no', 'ispublished', 'date',
+        'order_no', 'title', 'chapter', 'game_no', 'ispublished',
+        'dates', 'duration',
     ]
     list_select_related = ['chapter']
     ordering = ['-order_no']

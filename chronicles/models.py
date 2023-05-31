@@ -4,6 +4,7 @@ from django.db.models import (
     BooleanField,
     CharField,
     DateField,
+    DurationField,
     ForeignKey as FK,
     ImageField,
     IntegerField,
@@ -22,7 +23,7 @@ from communications.models import Thread
 from imaginarion.models import Audio, PictureSet
 from rpg_project.utils import OrderByPolish
 from toponomikon.models import Location
-from users.models import Profile
+from users.models import Profile, User
 
 
 SEASONS = {
@@ -58,7 +59,9 @@ class GameSession(Model):
     )
     game_no = IntegerField(null=True)
     ispublished = BooleanField(default=False)
-    date = DateField(blank=True, null=True)
+    dates = ArrayField(DateField(), blank=True, null=True, size=5)
+    duration = DurationField(blank=True, null=True)
+    users = M2M(User, related_name="gamesessions", blank=True)
 
     class Meta:
         ordering = ['order_no']
