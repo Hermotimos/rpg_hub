@@ -6,16 +6,17 @@ from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import LoginView, LogoutView
+from django.db.models import Sum
 from django.db.models.functions import Length
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.utils.safestring import mark_safe
 
 from prosoponomikon.forms import CharacterForm
 from prosoponomikon.models import Character, FirstName
 from rpg_project.utils import auth_profile, sample_from_qs
-from users.forms import (
-    ProfileUpdateForm, UserImageUpdateForm, UserRegistrationForm, UserUpdateForm,
-)
+from users.forms import (ProfileUpdateForm, UserImageUpdateForm,
+                         UserRegistrationForm, UserUpdateForm)
 from users.models import Profile
 
 
@@ -105,6 +106,16 @@ def edit_user_view(request):
     current_profile = request.current_profile
     user_profiles = current_profile.user.profiles.all()
 
+    if gamesessions := current_profile.user.gamesessions.all():
+        games_cnt_str =  mark_safe(f"<b>{len(gamesessions)}")
+        total_time = gamesessions.aggregate(Sum('duration'))
+        total_minutes = total_time['duration__sum'].total_seconds() // 60
+        hours = int(total_minutes // 60)
+        minutes = int(total_minutes % 60)
+        total_time_str = mark_safe(f"<b>{hours}</b> godz <b>{minutes}</b> min")
+    else:
+        games_cnt_str, total_time_str = 0, "0"
+
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
         user_image_form = UserImageUpdateForm(request.POST, request.FILES)
@@ -127,6 +138,8 @@ def edit_user_view(request):
         'page_title': 'Konto Gracza',
         'user_form': user_form,
         'user_image_form': user_image_form,
+        'games_cnt_str': games_cnt_str,
+        'total_time_str': total_time_str,
     }
     return render(request, 'users/edit_user.html', context)
 

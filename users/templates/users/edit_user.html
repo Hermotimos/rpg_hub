@@ -39,4 +39,13 @@
             </div>
         </form>
     </div>
+
+    <div class="content-section">
+        <div class="account-heading h4 d-flex justify-content-between">Statystyki:</div>
+        <ul class="ml-3">
+            <li>Sesje: {{ games_cnt_str }}</li>
+            <li>Łączny czas gry: {{ total_time_str }}</li>
+
+        </ul>
+    </div>
 {% endblock content %}
