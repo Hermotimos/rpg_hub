@@ -107,7 +107,7 @@ def edit_user_view(request):
     user_profiles = current_profile.user.profiles.all()
 
     if gamesessions := current_profile.user.gamesessions.all():
-        games_cnt_str =  mark_safe(f"<b>{len(gamesessions)}")
+        games_cnt_str =  mark_safe(f"<b>{len(gamesessions)}</b>")
         total_time = gamesessions.aggregate(Sum('duration'))
         total_minutes = total_time['duration__sum'].total_seconds() // 60
         hours = int(total_minutes // 60)
