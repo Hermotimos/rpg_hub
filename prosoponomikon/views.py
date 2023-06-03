@@ -50,10 +50,10 @@ def prosoponomikon_character_view(request, character_id):
     # Declare empty variables
     [
         knowledge_packets, acquaintanceships, also_known_as, skill_types,
-        acquisitions_regular, acquisitions_priests, acquisitions_sorcerers,
-        acquisitions_theurgists, item_formset,
+        acquisitions_regular, acquisitions_priestspells, acquisitions_sorcererspells,
+        acquisitions_theurgistspells, spheres, item_formset,
         synergies_regular, items
-    ] = [list() for _ in range(11)]
+    ] = [list() for _ in range(12)]
 
     try:
         this_acquaintanceship = Acquaintanceship.objects.get(
