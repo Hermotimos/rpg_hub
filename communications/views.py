@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.mail import send_mail
 from django.db.models import (
-    Prefetch, Value, Q, When, Case, ImageField, F, Func
+    Prefetch, Value, Q, When, Case, ImageField, F, Func, Max,
 )
 from django.db.models.functions import Concat, JSONObject
 from django.http import HttpResponse, JsonResponse
@@ -90,7 +90,11 @@ def get_threads(current_profile, thread_kind):
     """Get threads with prefetched related objects. Filter threads depending
     whether it's a per-profile or per-user ThreadKind.
     """
-    threads = Thread.objects.filter(kind=thread_kind)
+    threads = Thread.objects.filter(
+        kind=thread_kind
+    ).annotate(
+        last_activity=Max(F('statements__created_at'))
+    ).order_by('-last_activity')
 
     if current_profile.can_view_all:
         threads = threads
@@ -415,7 +419,7 @@ def create_thread_view(request, thread_kind):
             if game_event := thread_form.cleaned_data['game_event']:
                 game_event = GameEvent.objects.get(id=game_event.id)
                 game_event.debates.add(thread.id)
-    
+
         send_mail(
             subject=f"[RPG] {THREADS_MAP[thread_kind]['text']}: '{thread}'",
             message=f"{thread.get_absolute_url()}",
