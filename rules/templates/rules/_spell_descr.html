@@ -36,7 +36,7 @@
 
             {% if spell.duration is not None %}
                 <div class="mt-1">
-                    <span data-toggle="tooltip" data-placement="right" title="Czas działania">
+                    <span data-toggle="tooltip" data-placement="right" title="Trwanie">
                         <i class="ra ra-hourglass pr-1"></i>
                         {% if this_acquaintanceship %}
                             {{ spell.duration|amplify_and_format_time:this_acquaintanceship.known_character.power }}
