@@ -18,7 +18,7 @@ class GoogleCloudStaticFileStorage(GoogleCloudStorage):
 
     def url(self, name):
         """Gives correct STATIC_URL and not google generated url."""
-        print('STATIC',  settings.STATIC_URL, name, '//', urljoin(settings.STATIC_URL, name))
+        # print('STATIC',  settings.STATIC_URL, name, '//', urljoin(settings.STATIC_URL, name))
         return urljoin(settings.STATIC_URL, name)
 
 
@@ -31,7 +31,7 @@ class GoogleCloudMediaFileStorage(GoogleCloudStorage):
 
     def url(self, name):
         """Gives correct MEDIA_URL and not google generated url."""
-        print('MEDIA', settings.MEDIA_URL, name, '//', urljoin(settings.MEDIA_URL, name))
+        # print('MEDIA', settings.MEDIA_URL, name, '//', urljoin(settings.MEDIA_URL, name))
         return urljoin(settings.MEDIA_URL, name)
 
 
@@ -40,10 +40,10 @@ def upload_to_bucket(destination_path, source_path, bucket_name):
     storage_client = storage.Client.from_service_account_json(
         settings.GOOGLE_APPLICATION_CREDENTIALS)
     bucket = storage_client.get_bucket(bucket_name)
-    
+
     blob = bucket.blob(destination_path)
     blob.upload_from_filename(source_path)
-    
+
     return blob.public_url
 
 

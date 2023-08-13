@@ -1,15 +1,17 @@
+import os
 import random
 import time
+import uuid
 from functools import wraps
 
 import delegator
-from PIL import Image
 from django.apps import apps
 from django.conf import settings
-from django.contrib import messages, auth
+from django.contrib import auth, messages
 from django.core.mail import send_mail
-from django.db.models import Func, CharField
+from django.db.models import CharField, Func
 from django.shortcuts import redirect
+from PIL import Image
 
 
 def sample_from_qs(qs, max_size):
@@ -20,7 +22,7 @@ def sample_from_qs(qs, max_size):
 
 def handle_inform_form(request):
     from prosoponomikon.models import Acquaintanceship, Character
-    
+
     # Example post data from form
     # dict(request.POST).items() == < QueryDict: {
     #     'csrfmiddlewaretoken': ['KcoYDwb7r86Ll2SdQUNrDCKs...'],
@@ -28,10 +30,10 @@ def handle_inform_form(request):
     #     'Location': ['77']
     # } >
     # print(request.POST)
-    
+
     post_data = dict(request.POST)
     all_models = {model.__name__: model for model in apps.get_models()}
-    
+
     informed_ids = [k for k, v_list in post_data.items() if 'on' in v_list]
 
     if 'Location' in post_data.keys():
@@ -69,7 +71,7 @@ def handle_inform_form(request):
         obj = model.objects.get(id=post_data['HistoryEvent'][0])
         obj.informees.add(*informed_ids)
         send_emails(request, informed_ids, history_event=obj)
-    
+
     elif 'Acquaintanceship' in post_data.keys():
         model = all_models['Acquaintanceship']
         obj = model.objects.get(id=post_data['Acquaintanceship'][0])
@@ -96,7 +98,7 @@ def send_emails(request, profile_ids=None, **kwargs):
     profile = Profile.objects.get(id=request.session['profile_id'])
     sender = settings.EMAIL_HOST_USER
     receivers = []
-    
+
     # Send emails only in production
     if settings.EMAIL_SEND_ALLOWED:
         receivers = [
@@ -107,7 +109,7 @@ def send_emails(request, profile_ids=None, **kwargs):
             p.user.email
             for p in Profile.objects.filter(status='gm').select_related()]
         receivers.extend(gms)
-        
+
     # DEBATES
     if 'remark' in kwargs:
         remark = kwargs['remark']
@@ -115,7 +117,7 @@ def send_emails(request, profile_ids=None, **kwargs):
         url = f"{request.get_host()}/debates/debate:{debate.id}/" \
               f"#remark-{remark.id}\n"
         new = kwargs['new']
-        
+
         if new == 'topic':
             subject = '[RPG] Nowa narada w nowym temacie!'
             message = f"{profile} włączył/a Cię do nowej narady '{debate}'" \
@@ -133,10 +135,10 @@ def send_emails(request, profile_ids=None, **kwargs):
             message = f"{profile} zabrał/a głos w naradzie '{debate}'" \
                       f" w temacie '{debate.topic}'." \
                       f"\nWeź udział w naradzie:\n{url}\n"
-    
+
     # DEMANDS
     elif 'demand' in kwargs:
-        
+
         # Demand done/undone
         if 'is_done' in kwargs:
             demand = kwargs['demand']
@@ -147,7 +149,7 @@ def send_emails(request, profile_ids=None, **kwargs):
                       f"Dezyderat:\n" \
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             messages.info(request, f"Oznaczono jako {status}!")
-            
+
         # Demand create
         else:
             demand = kwargs['demand']
@@ -155,7 +157,7 @@ def send_emails(request, profile_ids=None, **kwargs):
             message = f"Nowy Dezyderat od: {demand.author}\n" \
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             messages.info(request, 'Dezyderat został wysłany!')
-        
+
     # DEMAND ANSWER
     elif 'demand_answer' in kwargs:
         demand_answer = kwargs['demand_answer']
@@ -163,7 +165,7 @@ def send_emails(request, profile_ids=None, **kwargs):
         message = f"Odpowiedź od {demand_answer.author}:\n" \
                   f"{request.get_host()}/contact/demands/detail:{demand_answer.demand.id}/#page-bottom\n"
         messages.info(request, 'Dodano odpowiedź!')
-   
+
     # PLAN (created)
     elif 'plan_created' in kwargs:
         plan = kwargs['plan_created']
@@ -257,7 +259,7 @@ def send_emails(request, profile_ids=None, **kwargs):
         subject = 'Błąd'
         message = f"URL: {request.build_absolute_uri()}\n" \
                   f"kwargs: {kwargs}"
-    
+
     send_mail(subject, message, sender, receivers)
 
 
@@ -297,7 +299,7 @@ def backup_db():
 
 def update_db(reason: str, src: str, dst: str):
     date = time.strftime("%Y-%m-%d_%H-%M")
-    
+
     # Backup dst db
     if reason == "prod":
         backup_name = f"_db_saves/prod_hyllemath_{date}.json"
@@ -310,7 +312,7 @@ def update_db(reason: str, src: str, dst: str):
     filename = f"tmp_hyllemath_{date}.json"
     delegator.run(
         f"pg_dump --dbname={src} --format=c --no-owner --no-acl > {filename}")
-    
+
     # Clean-up dst db ("pg_restore --clean" sometimes fails to drop tables):
     reset_db_sql = """
         DROP SCHEMA public CASCADE;
@@ -319,12 +321,12 @@ def update_db(reason: str, src: str, dst: str):
         GRANT ALL ON SCHEMA public TO public;
     """
     delegator.run(f"psql --dbname={dst} {reset_db_sql}")
-    
+
     # Update dst db
     delegator.run(
         f"pg_restore --dbname={dst} --no-owner --no-acl --clean {filename}",
         block=False)
-    
+
     # Remove tmp_hyllemath file
     delegator.run(f"rm {filename}")
 
@@ -341,7 +343,7 @@ def only_game_masters(function):
             return function(request, *args, **kwargs)
         else:
             return redirect('users:dupa')
-        
+
     return wrap
 
 
@@ -354,7 +356,7 @@ def only_game_masters_and_spectators(function):
             return function(request, *args, **kwargs)
         else:
             return redirect('users:dupa')
-        
+
     return wrap
 
 
@@ -366,33 +368,33 @@ def auth_profile(allowed_status: list):
     'current_profile' attribute that can be accessed in vies and templates.
     """
     from users.models import Profile
-    
+
     def wrapper(view_func):
-        
+
         def wrapped(request, *args, **kwargs):
             try:
                 current_profile = Profile.objects.get(id=request.session.get('profile_id'))
             except Profile.DoesNotExist:
                 current_profile = None
-            
+
             if not current_profile or not current_profile.character.id:
                 auth.logout(request)
                 messages.warning(request, 'Wystąpił problem z uwierzytelnieniem sesji użytkownika. Zaloguj się ponownie!')
                 return redirect('users:logout')
-    
+
             request.current_profile = current_profile
-            
+
             if 'all' in allowed_status or current_profile.status in allowed_status:
                 return view_func(request, *args, **kwargs)
             return redirect('users:dupa')
-            
+
         return wrapped
-    
+
     return wrapper
 
 
 # -----------------------------------------------------------------------------
-        
+
 COLORS_LIST = [
     '#000000',
     '#FF0000',
@@ -463,7 +465,7 @@ class ColorSchemeChoiceField(CharField):
         ('warning', 'warning'),
         ('danger', 'danger'),
     ]
-    
+
     def __init__(self, *args, **kwargs):
         kwargs['max_length'] = 9
         kwargs['default'] = 'light'
@@ -472,24 +474,36 @@ class ColorSchemeChoiceField(CharField):
 
 
 def determine_icons_color(profile_obj):
-    
+
     def luminance(pixel):
         return 0.299 * pixel[0] + 0.587 * pixel[1] + 0.114 * pixel[2]
-    
+
     def is_similar(pixel):
         return 1 if abs(luminance(pixel) - luminance(criterion)) < threshold else 0
-    
+
     sample_size = 1000
     criterion = (250, 250, 250)
     threshold = 30
-    
+
     im = Image.open(profile_obj.image)
     im_part = im.crop((0, 0, round(im.width * 0.1), round(im.height * 0.4)))
     pixels = list(im_part.getdata())
-    
+
     similarity = sum(is_similar(s) for s in random.sample(pixels, sample_size)) / sample_size
 
     return "dark" if similarity > 0.5 else "light"
+
+
+# -----------------------------------------------------------------------------
+
+
+def ensure_unique_filename(filename: str):
+    uuid_postfix = str(uuid.uuid4())
+    fname, extension = os.path.splitext(filename)
+    return f"{fname}-{uuid_postfix}{extension}"
+
+
+
 
 
 # -----------------------------------------------------------------------------

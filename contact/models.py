@@ -1,4 +1,6 @@
 import datetime
+import os
+import uuid
 
 from django.db.models import (
     BooleanField,
@@ -12,6 +14,7 @@ from django.db.models import (
 from django.db.models.signals import post_save
 
 from users.models import Profile
+from rpg_project.utils import ensure_unique_filename
 
 
 class Demand(Model):
@@ -30,6 +33,11 @@ class Demand(Model):
         text = self.text
         return f'{text[0:50] + "..." if len(str(text)) > 50 else text}'
 
+    def save(self, *args, **kwargs):
+        if self.image:
+            self.image.name = ensure_unique_filename(self.image.name)
+        super().save(*args, **kwargs)
+
 
 class DemandAnswer(Model):
     demand = FK(to=Demand, related_name='demand_answers', on_delete=CASCADE)
@@ -45,6 +53,11 @@ class DemandAnswer(Model):
         text = self.text
         return f'{text[0:100] + "..." if len(str(text)) > 100 else text}'
 
+    def save(self, *args, **kwargs):
+        if self.image:
+            self.image.name = ensure_unique_filename(self.image.name)
+        super().save(*args, **kwargs)
+
 
 class Plan(Model):
     author = FK(to=Profile, related_name='plans', on_delete=CASCADE)
@@ -59,6 +72,11 @@ class Plan(Model):
     def __str__(self):
         text = self.text
         return f'{text[0:100] + "..." if len(str(text)) > 100 else text}'
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            self.image.name = ensure_unique_filename(self.image.name)
+        super().save(*args, **kwargs)
 
 
 # -----------------------------------------------------------------------------

@@ -19,7 +19,9 @@ from django.db.models import (
 from django.db.models.signals import post_save
 from django.urls import reverse
 
+from rpg_project.utils import ensure_unique_filename
 from users.models import Profile
+
 
 #  ==========================================================================
 
@@ -172,6 +174,11 @@ class Statement(Model):
     def __str__(self):
         text = self.text
         return f'{text[:100]}...' if len(str(text)) > 100 else text
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            self.image.name = ensure_unique_filename(self.image.name)
+        super().save(*args, **kwargs)
 
 
 class AnnouncementStatementManager(Manager):

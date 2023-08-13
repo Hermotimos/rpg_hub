@@ -45,7 +45,7 @@ class Chapter(Model):
 
     def __str__(self):
         return self.title
-
+    
 
 class GameSession(Model):
     order_no = IntegerField(null=True)
