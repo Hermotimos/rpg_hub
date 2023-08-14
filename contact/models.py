@@ -1,6 +1,4 @@
 import datetime
-import os
-import uuid
 
 from django.db.models import (
     BooleanField,

@@ -263,7 +263,7 @@ else:
     # Use these settings to run "python manage.py collectstatic"
     # STATIC_ROOT = "static"
     # STATIC_URL = "/static/"
-    # STATICFILES_DIRS = []
+    STATICFILES_DIRS = []
 
     # STATIC_ROOT necessary oly in production (but also neede for collectstatic)
     STATIC_URL = 'static/'
@@ -271,30 +271,6 @@ else:
 
     MEDIA_ROOT = 'media'
     MEDIA_URL = 'media/'
-    # For media storage in the bucket
-    GOOGLE_APPLICATION_CREDENTIALS = env("GOOGLE_APPLICATION_CREDENTIALS")
-    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-        GOOGLE_APPLICATION_CREDENTIALS)
-    # This might be needed to access Cloud Storage without credentials,
-    # which should by possible from App Engine
-    # https://pnote.eu/notes/django-app-engine-user-uploaded-files/
-
-    GS_FILE_OVERWRITE = True    # same-named files are overriden by upload
-    GS_DEFAULT_ACL = 'publicRead'
-
-    # TODO check if only one is needed: GS_CREDENTIALS or GS_DEFAULT_ACL
-
-    DEFAULT_FILE_STORAGE = 'rpg_project.storages.GoogleCloudMediaFileStorage'
-    STATICFILES_STORAGE = 'rpg_project.storages.GoogleCloudStaticFileStorage'
-
-    GS_PROJECT_ID = 'hyllemath'
-    GS_BUCKET_NAME = env("GS_BUCKET_NAME")
-
-    STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/static/"
-    STATIC_ROOT = "static/"
-
-    MEDIA_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/media/"
-    MEDIA_ROOT = "media/"
 
 
 # -----------------------------------------------------------------------------
