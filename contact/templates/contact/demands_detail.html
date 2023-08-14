@@ -18,7 +18,7 @@
                 <small class="font-italic text-nowrap text-muted">{{ demand.date_created|date:'d-M-Y | H:i' }}</small>
                 <p>{{ demand.text|capfirst|linebreaksbr }}</p>
                 {% if demand.image %}
-                    <img src="{{ demand.image.url }}">
+                    <img class="img-fluid" src="{{ demand.image.url }}">
                 {% endif %}
                 <br><br>
             </td>
