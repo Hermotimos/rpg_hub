@@ -89,16 +89,18 @@
 
 
             <!-- NOTES -->
-<!--        {% for note in event.notes.all %}-->
-<!--            {% if request.user == note.author %}-->
-<!--                {% if note.text != '' %}-->
-<!--                    <div class="font-italic text-justify px-1 py-1" style="color:{{ note.color }}">-->
-<!--                        <div>Przemyślenia:</div>-->
-<!--                        <p>{{ note.text|linebreaksbr }}</p>-->
-<!--                    </div>-->
-<!--                {% endif %}-->
-<!--            {% endif %}-->
-<!--        {% endfor %}-->
+{#
+        {% for note in event.notes.all %}-->
+            {% if request.user == note.author %}-->
+                {% if note.text != '' %}-->
+                    <div class="font-italic text-justify px-1 py-1" style="color:{{ note.color }}">-->
+                        <div>Przemyślenia:</div>-->
+                        <p>{{ note.text|linebreaksbr }}</p>-->
+                    </div>-->
+                {% endif %}-->
+            {% endif %}-->
+        {% endfor %}
+#}
 
     </div>
 </div>
