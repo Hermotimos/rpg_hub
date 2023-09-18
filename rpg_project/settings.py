@@ -261,13 +261,12 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
 
 else:
     # Use these settings to run "python manage.py collectstatic"
-    # STATIC_ROOT = "static"
+    # STATIC_ROOT = "static"    # needed in production and for collectstatic
     # STATIC_URL = "/static/"
-    STATICFILES_DIRS = []
+    # STATICFILES_DIRS = []
 
-    # STATIC_ROOT necessary oly in production (but also neede for collectstatic)
     STATIC_URL = 'static/'
-    # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
     MEDIA_ROOT = 'media'
     MEDIA_URL = 'media/'
