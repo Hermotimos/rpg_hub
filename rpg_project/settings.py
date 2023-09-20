@@ -48,7 +48,7 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG")
 
 ADMINS = [
-    ("Łukasz", env('EMAIL_HOST_USER')),
+    ("Łukasz", env('ADMIN_EMAIL')),
 ]
 
 
