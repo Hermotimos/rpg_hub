@@ -19,7 +19,7 @@ urlpatterns = [
                     name='demand-done'),
                 path('done-undone:<int:demand_id>/undone',
                     views.demand_done_undone_view, {'is_done': False},
-                    name='demand-undone'),
+                    name='demand-undoned'),
             ]
         )
 
