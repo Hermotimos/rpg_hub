@@ -47,6 +47,10 @@ else:
 SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG")
 
+ADMINS = [
+    ("Łukasz", env('EMAIL_HOST_USER')),
+]
+
 
 # -----------------------------------------------------------------------------
 #  gaestd_py_django_csrf
@@ -74,8 +78,6 @@ else:
     ]
     ALLOWED_HOSTS = [
         '127.0.0.1',
-        'hyllemath.pythonanywhere.com',
-        'burkelt.pythonanywhere.com',
         'hyllemath.lm.r.appspot.com',
     ]
 
