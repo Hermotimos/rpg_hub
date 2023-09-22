@@ -173,6 +173,22 @@ def refresh_content_types(request):
 @login_required
 @auth_profile(['all'])
 def clear_cache(request):
+
+    # -----------------------
+    # def print_all_cache_entries():
+    #     locmem_cache = cache._cache
+    #     print(locmem_cache)
+    #     for key, value in locmem_cache.items():
+    #         print(key)
+    #     print('ggggggggg')
+
+    # print_all_cache_entries()
+    # # -----------------------
+
+    # print(request.META.get('HTTP_REFERER', '/'))
+    # print(request.current_profile.user.username)
+
+
     cache.clear()
     messages.info(
         request,

@@ -26,7 +26,6 @@ from toponomikon.models import Location
 from users.models import Profile, User
 
 
-@vary_on_cookie
 @login_required
 @auth_profile(['all'])
 def prosoponomikon_acquaintanceships_view(request):
