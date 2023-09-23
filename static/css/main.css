@@ -738,17 +738,3 @@ a.anchor12-resp {top: -12rem;}
     padding: 0rem;
     margin: 0.1rem 0.1rem 0.1rem 0.15rem;
 }
-
-
-
-/* Scrollup feature */
-.scrollup {
-    width: 64px;
-    height: 64px;
-    text-decoration: none;
-    background-size: cover;
-    position: fixed;
-    right: 10px;
-    bottom: 10px;
-    display: none;
-}
