@@ -109,9 +109,18 @@
                 {% endif %}
 
                 <!--   SCROLL-UP BUTTON   -->
-                <a class="scrollup col-md-0" style="background: {% static 'img/up.png' %};"></a>
-                {% static 'img/up.png' %}
-                {% static 'js/popovers.js' %}
+                <!-- inline style necessary to get static route in production -->
+                <a class="scrollup col-md-0"
+                    style="
+                        background: url({% static 'img/up.png' %}) 0px 0px;
+                        width: 64px;
+                        height: 64px;
+                        background-size: cover;
+                        position: fixed;
+                        right: 10px;
+                        bottom: 10px;
+                        display: none;
+                    "></a>
             </div>
 
             {% if user.is_authenticated %}
