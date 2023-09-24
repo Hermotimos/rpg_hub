@@ -1,3 +1,4 @@
+{% load cache %}
 {% load static %}
 
 
@@ -6,61 +7,64 @@
 {% endblock head_extra %}
 
 
-<aside class="sidebar-nonmobile">
+{% cache 30000 sidebar request.current_profile.user.username %}
 
-    <!-- Character image and menu for changing Character -->
-    <section>
-        <a href="{% url 'prosoponomikon:character' request.current_profile.character.id %}"
-            data-toggle="tooltip" data-placement="bottom" title="Pokaż Kartę Postaci">
-            <div class="img-hover-zoom border-double">
-                <img src="{{ request.current_profile.image.url }}">
-            </div>
-        </a>
-        <div class="hover-pointer text-center p-0 mb-2" data-toggle="collapse" data-target="#characters">
-            <div class="mb-0">
-                <span class="font-resp-1_5">{{ request.current_profile.character.fullname }}</span>
-                <i class="icon-down-open icon-medium mt-n2"></i>
-                {% include '_nav_characters.html' %}
-            </div>
-        </div>
-    </section>
+    <aside class="sidebar-nonmobile">
 
-    <!-- Navigation -->
-    <section>
-        {% include 'sidebar_menu.html' %}
-    </section>
-
-
-    <!-- Row of Development Administration Buttons underneath -->
-    <section>
-        {% if request.current_profile.status == 'gm' and '127.0.0.1' in request.get_host%}
-            <div class="mt-2 ml-1 mr-n1 d-flex flex-wrap">
-                <div class="mr-md-auto py-1 px-1 px-md-0">
-                    <a class="btn btn-outline-secondary icon-database-backup py-2" href="{% url 'technicalities:backup-db' %}"
-                        data-toggle="tooltip" data-placement="bottom" title="Wykonaj lokalny backup bazy GCP">
-                    </a>
+        <!-- Character image and menu for changing Character -->
+        <section>
+            <a href="{% url 'prosoponomikon:character' request.current_profile.character.id %}"
+                data-toggle="tooltip" data-placement="bottom" title="Pokaż Kartę Postaci">
+                <div class="img-hover-zoom border-double">
+                    <img src="{{ request.current_profile.image.url }}">
                 </div>
-                <div class="mr-md-auto py-1 px-1 px-md-0">
-                    <a class="btn btn-outline-info icon-download-cloud py-2" href="{% url 'technicalities:update-local-db' %}"
-                        onclick="return confirm('Potwierdź nadpisanie bazy lokalnej przez bazę produkcyjną!');"
-                        data-toggle="tooltip" data-placement="bottom" title="GCP --> LOCAL">
-                    </a>
-                </div>
-                <div class="mr-md-auto py-1 px-1 px-md-0">
-                    <a class="btn btn-outline-danger icon-upload-cloud py-2" href="{% url 'technicalities:update-prod-db' %}"
-                        onclick="return confirm('Potwierdź nadpisanie bazy PRODUKCYJNEJ przez bazę lokalną!');"
-                        data-toggle="tooltip" data-placement="bottom" title="LOCAL --> GCP">
-                    </a>
-                </div>
-                <div class="mr-md-auto py-1 px-1 px-md-0">
-                    <a class="btn btn-outline-secondary icon-cloud py-2" href="#"
-                        data-toggle="tooltip" data-placement="bottom" title="Idź do konsoli GCP">
-                    </a>
+            </a>
+            <div class="hover-pointer text-center p-0 mb-2" data-toggle="collapse" data-target="#characters">
+                <div class="mb-0">
+                    <span class="font-resp-1_5">{{ request.current_profile.character.fullname }}</span>
+                    <i class="icon-down-open icon-medium mt-n2"></i>
+                    {% include '_nav_characters.html' %}
                 </div>
             </div>
-        {% endif %}
-        <br>
-    </section>
+        </section>
+
+        <!-- Navigation -->
+        <section>
+            {% include 'sidebar_menu.html' %}
+        </section>
 
 
-</aside>
+        <!-- Row of Development Administration Buttons underneath -->
+        <section>
+            {% if request.current_profile.status == 'gm' and '127.0.0.1' in request.get_host%}
+                <div class="mt-2 ml-1 mr-n1 d-flex flex-wrap">
+                    <div class="mr-md-auto py-1 px-1 px-md-0">
+                        <a class="btn btn-outline-secondary icon-database-backup py-2" href="{% url 'technicalities:backup-db' %}"
+                            data-toggle="tooltip" data-placement="bottom" title="Wykonaj lokalny backup bazy GCP">
+                        </a>
+                    </div>
+                    <div class="mr-md-auto py-1 px-1 px-md-0">
+                        <a class="btn btn-outline-info icon-download-cloud py-2" href="{% url 'technicalities:update-local-db' %}"
+                            onclick="return confirm('Potwierdź nadpisanie bazy lokalnej przez bazę produkcyjną!');"
+                            data-toggle="tooltip" data-placement="bottom" title="GCP --> LOCAL">
+                        </a>
+                    </div>
+                    <div class="mr-md-auto py-1 px-1 px-md-0">
+                        <a class="btn btn-outline-danger icon-upload-cloud py-2" href="{% url 'technicalities:update-prod-db' %}"
+                            onclick="return confirm('Potwierdź nadpisanie bazy PRODUKCYJNEJ przez bazę lokalną!');"
+                            data-toggle="tooltip" data-placement="bottom" title="LOCAL --> GCP">
+                        </a>
+                    </div>
+                    <div class="mr-md-auto py-1 px-1 px-md-0">
+                        <a class="btn btn-outline-secondary icon-cloud py-2" href="#"
+                            data-toggle="tooltip" data-placement="bottom" title="Idź do konsoli GCP">
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+            <br>
+        </section>
+
+    </aside>
+
+{% endcache %}

@@ -17,9 +17,10 @@ from django.db.models import (
     PROTECT,
 )
 from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.urls import reverse
 
-from rpg_project.utils import ensure_unique_filename
+from rpg_project.utils import ensure_unique_filename, clear_cache
 from users.models import Profile
 
 
@@ -222,6 +223,7 @@ class DebateStatement(Statement):
 # -----------------------------------------------------------------------------
 
 
+@receiver(post_save, sender=Statement)
 def delete_if_doubled(sender, instance, **kwargs):
     start = instance.created_at - datetime.timedelta(minutes=2)
     end = instance.created_at
@@ -235,4 +237,32 @@ def delete_if_doubled(sender, instance, **kwargs):
         instance.delete()
 
 
-post_save.connect(delete_if_doubled, sender=Statement)
+
+@receiver(post_save, sender=Statement)
+@receiver(post_save, sender=DebateStatement)
+@receiver(post_save, sender=AnnouncementStatement)
+@receiver(post_save, sender=Statement.seen_by.through)
+@receiver(post_save, sender=DebateStatement.seen_by.through)
+@receiver(post_save, sender=AnnouncementStatement.seen_by.through)
+def remove_cache(sender, instance, **kwargs):
+    """
+    Remove navbar cache on Statement save (creation or 'is_done' change)
+    for all Thread participants.
+    """
+    print('signal')
+    print(instance.seen_by.through)
+    print(kwargs)
+    usernames = list(set(
+        [p.user.username for p in instance.thread.participants.all()]
+    ))
+
+    match instance.thread.kind:
+        case 'Announcement':
+            cachename='navbar'
+        case 'Debate':
+            cachename='sidebar'
+        case _:
+            raise Exception('Unimplemented Thread kind!')
+
+    clear_cache(cachename=cachename, vary_on_list=usernames)
+

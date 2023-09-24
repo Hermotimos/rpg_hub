@@ -12,9 +12,7 @@ from django.db.models import (
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from rpg_project.utils import (
-    ensure_unique_filename, clear_cache_for_all_users_by_cachename,
-)
+from rpg_project.utils import ensure_unique_filename, clear_cache
 from users.models import Profile
 
 
@@ -91,19 +89,18 @@ def delete_if_doubled(sender, instance, **kwargs):
     doubled = DemandAnswer.objects.filter(
         text=instance.text,
         author=instance.author,
-        date_posted__gte=time_span)
-
+        date_posted__gte=time_span,
+    )
     if doubled.count() > 1:
         instance.delete()
 
 
-# post_save.connect(delete_if_doubled, sender=DemandAnswer)
-
-
 @receiver(post_save, sender=Demand)
 def remove_cache(sender, instance, **kwargs):
-    """Remove navbar cache on Demand save (creation or 'is_done' change)."""
-    clear_cache_for_all_users_by_cachename(cachename='navbar')
-
-
-# post_save.connect(remove_cache, sender=Demand)
+    """
+    Remove navbar cache on Demand save (creation or 'is_done' change)
+    for all participants.
+    """
+    usernames = [
+        instance.author.user.username, instance.addressee.user.username]
+    clear_cache(cachename='navbar', vary_on_list=usernames)

@@ -7,137 +7,137 @@
     <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
 {% endblock head_extra %}
 
+
 {% cache 30000 navbar request.current_profile.user.username %}
 
-<header class="site-header">
-    <nav class="navbar navbar-expand-md fixed-top
-        {% if '127.0.0.1' in request.META.HTTP_HOST %} bg-navbar-dev {% else %} bg-navbar {% endif %}">
+    <header class="site-header">
+        <nav class="navbar navbar-expand-md fixed-top
+            {% if '127.0.0.1' in request.META.HTTP_HOST %} bg-navbar-dev {% else %} bg-navbar {% endif %}">
 
-        <div class="container px-3 px-sm-1">
+            <div class="container px-3 px-sm-1">
 
-            <!-- LOGO -->
-            <div class="navbar-brand navbar-nav mr-0 mr-lg-5">
-                <a class="nav-link py-0 pl-0" href="{% url 'users:home' %}">
-                    <span class="logo-first">H</span>yllemath
-                </a>
+                <!-- LOGO -->
+                <div class="navbar-brand navbar-nav mr-0 mr-lg-5">
+                    <a class="nav-link py-0 pl-0" href="{% url 'users:home' %}">
+                        <span class="logo-first">H</span>yllemath
+                    </a>
+                </div>
+
+
+                <!--  Collapsible menu button when content of navbar overflows screen  -->
+                <div class="navbar-nav ml-auto">
+                    <a class="navbar-toggler btn btn-outline-light btn-space" href="{% url 'technicalities:clear-cache-all' %}"
+                        data-toggle="collapse"
+                        data-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="icon-navbar-toggler"></i>
+                    </a>
+                </div>
+
+
+                <div class="collapse navbar-collapse font-17" id="mainmenu">
+
+                    <!-- Navbar Left Side -->
+                    <ul class="navbar-nav small-caps">
+
+                        {% with undone_demands=request.current_profile.undone_demands unseen_announcements=request.current_profile.unseen_announcements %}
+                            <li>
+                                <a class="nav-link d-inline align-middle ml-lg-3" href="{% url 'rules:main' %}">
+                                    Zasady
+                                </a>
+                            </li>
+                            <li>
+                                <a class="nav-link d-inline align-middle ml-lg-3" href="{% url 'communications:threads' 'Announcement' None %}">
+                                    Ogłoszenia
+                                </a>
+                                {% if unseen_announcements %}
+                                    <span class="info-bubble bg-blue">{{ unseen_announcements.count }}</span>
+                                {% endif %}
+                            </li>
+                            <li>
+                                <a class="nav-link d-inline align-middle ml-lg-3" href="{% url 'contact:demands-main' %}">
+                                    Dezyderaty
+                                </a>
+                                {% if undone_demands %}
+                                    <span class="info-bubble bg-red">{{ undone_demands.count }}</span>
+                                {% endif %}
+                            </li>
+                        {% endwith %}
+
+                        {% if request.current_profile.status == 'gm' %}
+                            <li class="dropdown">
+                                <span class="nav-link d-inline hover-pointer align-middle ml-lg-3">
+                                    Świat
+                                </span>
+                                <div class="dropdown-content">
+                                    <ul class="bullets-1 pl-4 font-14">
+                                        <li><a class="nav-link" href="{% url 'prosoponomikon:first-names' %}">Imiona</a></li>
+                                        <li><a class="nav-link" href="{% url 'prosoponomikon:family-names' %}">Nazwiska</a></li>
+                                        <li><a class="nav-link" href="{% url 'chronicles:chronologies' %}">Chronologie</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="dropdown">
+                                <span class="nav-link d-inline hover-pointer align-middle ml-lg-3">
+                                    Tech
+                                </span>
+                                <div class="dropdown-content">
+                                    <ul class="bullets-1 pl-4 font-14">
+                                        <li><a class="nav-link" href="{% url 'admin:index' %}" target="_blank" rel="noopener noreferrer">Admin</a></li>
+                                        <li><a class="nav-link" href="{% url 'contact:plans-main' %}">Plany MG</a></li>
+                                        <li><a class="nav-link" href="{% url 'technicalities:todos' %}">TODOs</a></li>
+                                        <li><a class="nav-link" href="{% url 'technicalities:reload-main' %}">Przeładowanie modeli w aplikacjach</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        {% endif %}
+                    </ul>
+                    <!-- End Navbar Left Side -->
+
+
+                    <!-- Navbar Right Side -->
+                    <div class="navbar-nav navbar-row ml-auto justify-content-center mb-1 mb-sm-0">
+                        <a class="btn btn-outline-light btn-space" href="{% url 'technicalities:clear-cache-all' %}"
+                            data-toggle="tooltip" data-placement="bottom" title="Opróżnij Cache">
+                            <i class="icon-clear-cache"></i>
+                        </a>
+                        <a class="btn btn-outline-light btn-space" href="{% url 'contact:demands-create' %}"
+                            data-toggle="tooltip" data-placement="bottom" title="Dezyderat">
+                            <i class="icon-demand"></i>
+                        </a>
+                        <a class="btn btn-outline-light btn-space" href="{% url 'users:edit-user' %}"
+                            data-toggle="tooltip" data-placement="bottom" title="Konto Gracza">
+                            <i class="icon-user"></i>
+                        </a>
+                        <a class="btn btn-outline-light btn-space" href="{% url 'users:logout' %}"
+                            data-toggle="tooltip" data-placement="bottom" title="Wyloguj">
+                            <i class="icon-logout"></i>
+                        </a>
+                    </div>
+                    <!-- End Navbar Right Side -->
+
+                </div>
             </div>
 
+        </nav>
 
-            <!--  Collapsible menu button when content of navbar overflows screen  -->
-            <div class="navbar-nav ml-auto">
-                <a class="navbar-toggler btn btn-outline-light btn-space" href="{% url 'technicalities:clear-cache-all' %}"
-                    data-toggle="collapse"
-                    data-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="icon-navbar-toggler"></i>
-                </a>
+
+        <nav class="sidebar-mobile sidebar-text mr-2 mt-2">
+            <!-- Toggable sidebar menu -->
+            <div class="sidebar-mobile-img d-block" data-toggle="collapse" data-target="#sidebar-menu">
+                <img  src="{{ request.current_profile.image.url }}">
             </div>
-
-
-            <div class="collapse navbar-collapse font-17" id="mainmenu">
-
-                <!-- Navbar Left Side -->
-                <ul class="navbar-nav small-caps">
-
-                    {% with undone_demands=request.current_profile.undone_demands unseen_announcements=request.current_profile.unseen_announcements %}
-                        <li>
-                            <a class="nav-link d-inline align-middle ml-lg-3" href="{% url 'rules:main' %}">
-                                Zasady
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link d-inline align-middle ml-lg-3" href="{% url 'communications:threads' 'Announcement' None %}">
-                                Ogłoszenia
-                            </a>
-                            {% if unseen_announcements %}
-                                <span class="info-bubble bg-blue">{{ unseen_announcements.count }}</span>
-                            {% endif %}
-                        </li>
-                        <li>
-                            <a class="nav-link d-inline align-middle ml-lg-3" href="{% url 'contact:demands-main' %}">
-                                Dezyderaty
-                            </a>
-                            {% if undone_demands %}
-                                <span class="info-bubble bg-red">{{ undone_demands.count }}</span>
-                            {% endif %}
-                        </li>
-                    {% endwith %}
-
-                    {% if request.current_profile.status == 'gm' %}
-                        <li class="dropdown">
-                            <span class="nav-link d-inline hover-pointer align-middle ml-lg-3">
-                                Świat
-                            </span>
-                            <div class="dropdown-content">
-                                <ul class="bullets-1 pl-4 font-14">
-                                    <li><a class="nav-link" href="{% url 'prosoponomikon:first-names' %}">Imiona</a></li>
-                                    <li><a class="nav-link" href="{% url 'prosoponomikon:family-names' %}">Nazwiska</a></li>
-                                    <li><a class="nav-link" href="{% url 'chronicles:chronologies' %}">Chronologie</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="dropdown">
-                            <span class="nav-link d-inline hover-pointer align-middle ml-lg-3">
-                                Tech
-                            </span>
-                            <div class="dropdown-content">
-                                <ul class="bullets-1 pl-4 font-14">
-                                    <li><a class="nav-link" href="{% url 'admin:index' %}" target="_blank" rel="noopener noreferrer">Admin</a></li>
-                                    <li><a class="nav-link" href="{% url 'contact:plans-main' %}">Plany MG</a></li>
-                                    <li><a class="nav-link" href="{% url 'technicalities:todos' %}">TODOs</a></li>
-                                    <li><a class="nav-link" href="{% url 'technicalities:reload-main' %}">Przeładowanie modeli w aplikacjach</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                    {% endif %}
+            <br>
+            <div id="sidebar-menu" class="collapse">
+                {% include 'sidebar_menu.html' %}
+                <ul class="list-group-item hover-pointer p-0 pt-2">
+                    <div class="text-center " data-toggle="collapse" data-target="#characters">
+                        <i class="icon-down-open icon-medium ml-auto"></i>
+                    </div>
+                    {% include '_nav_characters.html' %}
                 </ul>
-                <!-- End Navbar Left Side -->
-
-
-                <!-- Navbar Right Side -->
-                <div class="navbar-nav navbar-row ml-auto justify-content-center mb-1 mb-sm-0">
-                    <a class="btn btn-outline-light btn-space" href="{% url 'technicalities:clear-cache-all' %}"
-                        data-toggle="tooltip" data-placement="bottom" title="Opróżnij Cache">
-                        <i class="icon-clear-cache"></i>
-                    </a>
-                    <a class="btn btn-outline-light btn-space" href="{% url 'contact:demands-create' %}"
-                        data-toggle="tooltip" data-placement="bottom" title="Dezyderat">
-                        <i class="icon-demand"></i>
-                    </a>
-                    <a class="btn btn-outline-light btn-space" href="{% url 'users:edit-user' %}"
-                        data-toggle="tooltip" data-placement="bottom" title="Konto Gracza">
-                        <i class="icon-user"></i>
-                    </a>
-                    <a class="btn btn-outline-light btn-space" href="{% url 'users:logout' %}"
-                        data-toggle="tooltip" data-placement="bottom" title="Wyloguj">
-                        <i class="icon-logout"></i>
-                    </a>
-                </div>
-                <!-- End Navbar Right Side -->
-
             </div>
-        </div>
+        </nav>
 
-    </nav>
-
-
-    <nav class="sidebar-mobile sidebar-text mr-2 mt-2">
-        <!-- Toggable sidebar menu -->
-        <div class="sidebar-mobile-img d-block" data-toggle="collapse" data-target="#sidebar-menu">
-            <img  src="{{ request.current_profile.image.url }}">
-        </div>
-        <br>
-        <div id="sidebar-menu" class="collapse">
-            {% include 'sidebar_menu.html' %}
-            <ul class="list-group-item hover-pointer p-0 pt-2">
-                <div class="text-center " data-toggle="collapse" data-target="#characters">
-                    <i class="icon-down-open icon-medium ml-auto"></i>
-                </div>
-                {% include '_nav_characters.html' %}
-            </ul>
-        </div>
-    </nav>
-
-</header>
-
+    </header>
 
 {% endcache %}
