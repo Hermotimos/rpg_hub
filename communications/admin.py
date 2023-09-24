@@ -37,7 +37,7 @@ class ThreadAdmin(admin.ModelAdmin):
 
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
-    fields = ['title', 'kind', 'participants', 'followers', 'tags']
+    fields = ['title', 'kind', 'is_ended', 'participants', 'followers', 'tags']
     filter_horizontal = ['participants', 'followers', 'tags']
     list_display = ['title', 'created_at']
     search_fields = ['title']

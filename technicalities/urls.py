@@ -12,12 +12,12 @@ urlpatterns = [
     path('allow-game-masters-to-all/', views.allow_game_masters_to_all, name='allow-game-masters-to-all'),
     path('refresh-contenttypes/', views.refresh_content_types, name='refresh-contenttypes'),
     path('cleanup-rules-objects/', views.cleanup_rules_objects, name='cleanup-rules-objects'),
-    path('clear-cache/', views.clear_cache, name='clear-cache'),
+    path('clear-cache-all/', views.clear_cache_all_view, name='clear-cache-all'),
 
     path('reload-chronicles/', views.reload_chronicles, name='reload-chronicles'),
     path('reload-imaginarion/', views.reload_imaginarion, name='reload-imaginarion'),
     path('reload-rules/', views.reload_rules, name='reload-rules'),
     path('reload-toponomikon/', views.reload_toponomikon, name='reload-toponomikon'),
     path('reload-prosoponomikon/', views.reload_prosoponomikon, name='reload-prosoponomikon'),
-    
+
 ]

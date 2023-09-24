@@ -10,9 +10,12 @@ from django.db.models import (
     TextField,
 )
 from django.db.models.signals import post_save
+from django.dispatch import receiver
 
+from rpg_project.utils import (
+    ensure_unique_filename, clear_cache_for_all_users_by_cachename,
+)
 from users.models import Profile
-from rpg_project.utils import ensure_unique_filename
 
 
 class Demand(Model):
@@ -82,13 +85,25 @@ class Plan(Model):
 # -----------------------------------------------------------------------------
 
 
+@receiver(post_save, sender=DemandAnswer)
 def delete_if_doubled(sender, instance, **kwargs):
     time_span = datetime.datetime.now() - datetime.timedelta(minutes=2)
-    doubled = DemandAnswer.objects.filter(text=instance.text,
-                                          author=instance.author,
-                                          date_posted__gte=time_span)
+    doubled = DemandAnswer.objects.filter(
+        text=instance.text,
+        author=instance.author,
+        date_posted__gte=time_span)
+
     if doubled.count() > 1:
         instance.delete()
 
 
-post_save.connect(delete_if_doubled, sender=DemandAnswer)
+# post_save.connect(delete_if_doubled, sender=DemandAnswer)
+
+
+@receiver(post_save, sender=Demand)
+def remove_cache(sender, instance, **kwargs):
+    """Remove navbar cache on Demand save (creation or 'is_done' change)."""
+    clear_cache_for_all_users_by_cachename(cachename='navbar')
+
+
+# post_save.connect(remove_cache, sender=Demand)

@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
 {% endblock head_extra %}
 
+{% cache 30000 navbar request.current_profile.user.username %}
+
 <header class="site-header">
     <nav class="navbar navbar-expand-md fixed-top
         {% if '127.0.0.1' in request.META.HTTP_HOST %} bg-navbar-dev {% else %} bg-navbar {% endif %}">
@@ -23,7 +25,7 @@
 
             <!--  Collapsible menu button when content of navbar overflows screen  -->
             <div class="navbar-nav ml-auto">
-                <a class="navbar-toggler btn btn-outline-light btn-space" href="{% url 'technicalities:clear-cache' %}"
+                <a class="navbar-toggler btn btn-outline-light btn-space" href="{% url 'technicalities:clear-cache-all' %}"
                     data-toggle="collapse"
                     data-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="icon-navbar-toggler"></i>
@@ -93,7 +95,7 @@
 
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav navbar-row ml-auto justify-content-center mb-1 mb-sm-0">
-                    <a class="btn btn-outline-light btn-space" href="{% url 'technicalities:clear-cache' %}"
+                    <a class="btn btn-outline-light btn-space" href="{% url 'technicalities:clear-cache-all' %}"
                         data-toggle="tooltip" data-placement="bottom" title="Opróżnij Cache">
                         <i class="icon-clear-cache"></i>
                     </a>
@@ -137,3 +139,5 @@
 
 </header>
 
+
+{% endcache %}

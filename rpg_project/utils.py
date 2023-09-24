@@ -8,6 +8,8 @@ import delegator
 from django.apps import apps
 from django.conf import settings
 from django.contrib import auth, messages
+from django.core.cache import cache
+from django.core.cache.utils import make_template_fragment_key
 from django.core.mail import send_mail
 from django.db.models import CharField, Func
 from django.shortcuts import redirect
@@ -504,6 +506,31 @@ def ensure_unique_filename(filename: str):
 
 
 
+
+
+# -----------------------------------------------------------------------------
+
+
+def clear_cache_for_all_users_by_cachename(cachename: str):
+    """
+    Remove cache by its name for all Users.
+
+    Ex.
+    {% cache 30000 navbar request.current_profile.user.username %}
+    cache name = 'navbar'
+    cache vary = request.current_profile.user.username
+
+    This cache named 'navbar' uses User.username as Vary parameter.
+    Thus User.username has to be provided to find cache keys.
+
+    """
+    from users.models import User
+
+    usernames = [val[0] for val in User.objects.values_list('username')]
+    for username in usernames:
+        cache_key = make_template_fragment_key(cachename, [username])
+        # print(cache_key, '---', cache.delete(cache_key))
+        cache.delete(cache_key)
 
 
 # -----------------------------------------------------------------------------
