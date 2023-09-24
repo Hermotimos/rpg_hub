@@ -10,7 +10,7 @@
 
 
 {% block content %}
-{% cache 30000 synergies skilltype_kind request.current_profile.user.username %}
+{% cache 30000 synergies skilltype_kind request.current_profile.user.id %}
     <div class="rules-styling">
         <div class="mt-5">
             {% with show_levels=False %}

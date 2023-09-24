@@ -24,7 +24,7 @@ from communications.models import (
     Thread,
     ThreadTag,
 )
-from rpg_project.utils import auth_profile
+from rpg_project.utils import auth_profile, clear_cache
 from users.models import Profile
 
 
@@ -245,9 +245,12 @@ def statements(request, thread_id):
 
     statements = Statement.objects.filter(thread=thread_id).order_by('created_at')
 
+    thread = Thread.objects.get(id=thread_id)
+
+
     # Update all statements to be seen by the profile
     if (
-        current_profile in Thread.objects.get(id=thread_id).participants.all()
+        current_profile in thread.participants.all()
         or current_profile.status == 'gm'
     ):
         SeenBy = Statement.seen_by.through
@@ -255,6 +258,13 @@ def statements(request, thread_id):
         for statement in statements.exclude(seen_by=current_profile):
             relations.append(SeenBy(statement_id=statement.id, profile_id=current_profile.id))
         SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
+
+        # If SeenBy has been changed, clear appropriate cache for the user
+        if relations:
+            if thread.kind == 'Announcement':
+                clear_cache(cachename='navbar', vary_on_list=[current_profile.user.id])
+            elif thread.kind == 'Debate':
+                clear_cache(cachename='sidebar', vary_on_list=[current_profile.user.id])
 
     statements = statements.values(
         'thread_id', 'text', 'author_id', 'created_at',

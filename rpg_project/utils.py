@@ -516,12 +516,12 @@ def clear_cache(cachename: str, vary_on_list: list):
     Remove cache by its name for all Users.
 
     Ex.
-    {% cache 30000 navbar request.current_profile.user.username %}
+    {% cache 30000 navbar request.current_profile.user.id %}
     cache name = 'navbar'
-    cache vary = request.current_profile.user.username
+    cache vary = request.current_profile.user.id
 
-    This cache named 'navbar' uses User.username as Vary parameter.
-    Thus User.username has to be provided to find cache keys.
+    This cache named 'navbar' uses User.id as Vary parameter.
+    Thus User.id has to be provided to find cache keys.
 
     """
     print(vary_on_list)

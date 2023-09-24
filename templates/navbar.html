@@ -8,7 +8,7 @@
 {% endblock head_extra %}
 
 
-{% cache 30000 navbar request.current_profile.user.username %}
+{% cache 30000 navbar request.current_profile.user.id %}
 
     <header class="site-header">
         <nav class="navbar navbar-expand-md fixed-top
