@@ -9,8 +9,6 @@ from django.db.models import (
 from django.db.models.functions import Concat, JSONObject
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.decorators.cache import cache_page
-from django.views.decorators.vary import vary_on_cookie
 
 from chronicles.models import GameEvent
 from communications.forms import (
@@ -372,8 +370,6 @@ def thread_view(request, thread_id, tag_title):
         return redirect('users:dupa')
 
 
-@cache_page(60 * 60 * 24)
-@vary_on_cookie
 @login_required
 @auth_profile(['all'])
 def create_thread_view(request, thread_kind):

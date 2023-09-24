@@ -31,13 +31,13 @@ class ThreadTagEditForm(ModelForm):
 
         self.fields['author'].widget = HiddenInput()
         self.fields['kind'].widget = HiddenInput()
-        
+
 
 class ThreadTagEditFormSetHelper(FormHelper):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
         self.add_input(Submit('submit', 'Zapisz', css_class='btn-dark d-block mx-auto'))
         self.form_show_labels = False
         self.layout = Layout(
@@ -52,7 +52,7 @@ class ThreadTagEditFormSetHelper(FormHelper):
                     'DELETE', css_class='form-group col-sm-1 mb-0 mt-2',
                     title="Usunąć tag?"),
             ))
-        
+
 
 ThreadTagEditFormSet = modelformset_factory(
     model=ThreadTag, form=ThreadTagEditForm, exclude=[], extra=2, can_delete=True)
@@ -62,11 +62,11 @@ ThreadTagEditFormSet = modelformset_factory(
 
 
 class AnnouncementCreateForm(ModelForm):
-    
+
     class Meta:
         model = Announcement
         fields = ['title', 'participants']
-        
+
     def __init__(self, *args, **kwargs):
         current_profile = kwargs.pop('current_profile')
         super().__init__(*args, **kwargs)
@@ -75,24 +75,15 @@ class AnnouncementCreateForm(ModelForm):
             ✧ Aby zaznaczyć wiele Postaci - użyj CTRL albo SHIFT.<br>
             ✧ MG jest dołączany automatycznie do wszystkich Ogłoszeń.<br><br>
         """
-        
+
         self.fields['participants'].label = "Adresaci"
         self.fields['title'].label = "Tytuł"
-        
+
         # Show profiles' Users as options (translated to Profiles in the view)
         participants = User.objects.filter(
             profiles__in=Profile.contactables.exclude(id=current_profile.id),
             profiles__character__in=current_profile.character.acquaintances.all(),
-        )
-        
-        # TODO temp 'Ilen z Astinary, Alora z Astinary'
-        # hide Davos from Ilen and Alora
-        if current_profile.id in [5, 6]:
-            participants = participants.exclude(profiles__id=3)
-        # vice versa
-        if current_profile.id == 3:
-            participants = participants.exclude(profiles__id__in=[5, 6])
-        # TODO end temp
+        ).distinct()
 
         self.fields['participants'].queryset = participants
         self.fields['participants'].widget.attrs['size'] = min(
@@ -106,11 +97,11 @@ class DebateCreateForm(ModelForm):
         required=False,
         label='Wydarzenie',
     )
-    
+
     class Meta:
         model = Debate
         fields = ['title', 'game_event', 'participants', 'is_exclusive']
-        
+
     def __init__(self, *args, **kwargs):
         from prosoponomikon.models import AcquaintanceshipProxy
         current_profile = kwargs.pop('current_profile')
@@ -146,7 +137,7 @@ class DebateCreateForm(ModelForm):
 
         self.fields['participants'].queryset = participants.order_by(
             '-known_character__profile__status', 'known_character__fullname')
-        
+
         if current_profile.status != 'gm':
             self.fields['is_exclusive'].widget = HiddenInput()
             self.fields['game_event'].widget = HiddenInput()
@@ -156,20 +147,20 @@ class DebateCreateForm(ModelForm):
 
 class ThreadEditTagsForm(ModelForm):
     """A form for editing Tags within a single Thread."""
-    
+
     class Meta:
         model = Thread
         fields = ['tags']
-    
+
     def __init__(self, *args, **kwargs):
         tags = kwargs.pop('tags')
         super().__init__(*args, **kwargs)
-        
+
         self.fields['tags'].label = ""
         self.fields['tags'].queryset = tags
         self.fields['tags'].widget.attrs['size'] = \
             len(tags) if len(tags) < 15 else 15
-        
+
         self.helper = FormHelper()
         self.helper.add_input(
             Submit(
@@ -178,21 +169,21 @@ class ThreadEditTagsForm(ModelForm):
 
 
 class StatementCreateForm(ModelForm):
-    
+
     class Meta:
         model = Statement
         fields = ['author', 'text', 'image']
-    
+
     def __init__(self, *args, **kwargs):
         current_profile = kwargs.pop('current_profile')
         thread_kind = kwargs.pop('thread_kind')
         participants = kwargs.pop('participants')
         super().__init__(*args, **kwargs)
-        
+
         self.fields['author'].label = "Autor"
         self.fields['image'].label = "Załącz obraz"
         self.fields['text'].label = ""
-        
+
         if thread_kind != "Debate" or current_profile.status != 'gm':
             self.fields['author'].widget = HiddenInput()
         else:
@@ -225,18 +216,18 @@ class StatementCreateForm(ModelForm):
             return instance
         else:
             return super().save()
-        
-    
+
+
 class OptionCreateForm(ModelForm):
     # TODO Separate view and template reached by means of a "+option" button
-    
+
     class Meta:
         model = Option
         fields = ['text']
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
         self.fields['text'].label = ""
         self.fields['text'].max_length = 50
         self.fields['text'].widget.attrs = {
