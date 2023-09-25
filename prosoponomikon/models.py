@@ -543,7 +543,9 @@ class SpellAcquisition(Model):
         return f"{self.character}: {self.spell}{sphragis}"
 
 
-# -----------------------------------------------------------------------------
+# ---------------------------------------
+
+# Signals
 
 
 def update_acquaintanceships(sender, instance, created, **kwargs):

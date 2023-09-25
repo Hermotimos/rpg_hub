@@ -45,7 +45,7 @@ class Chapter(Model):
 
     def __str__(self):
         return self.title
-    
+
 
 class GameSession(Model):
     order_no = IntegerField(null=True)
@@ -475,6 +475,11 @@ class GameEvent(Event):
         proxy = True
         ordering = ['game', 'event_no_in_game']
         verbose_name = 'III. Game event'
+
+
+# ---------------------------------------
+
+# Signals
 
 
 def update_known_locations(sender, instance, **kwargs):
