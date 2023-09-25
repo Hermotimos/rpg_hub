@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
+{% load cache %}
 {% load static %}
 {% load custom_filters %}
+
 
 {% block head_extra %}
     <link rel="stylesheet" href="{% static 'css/toponomikon.css' %}">
 {% endblock head_extra %}
 
+
 {% block content %}
+{% cache 30000 toponomikon-secondary request.current_profile.user.id this_location.id %}
 
     <header class="my-4">
 
@@ -266,4 +270,5 @@
         </div>
     </div>
 
+{% endcache %}
 {% endblock content %}

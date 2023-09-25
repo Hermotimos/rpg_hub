@@ -12,11 +12,13 @@ from django.db.models import (
     TextField,
 )
 from django.db.models.signals import post_save, m2m_changed
+from django.dispatch import receiver
 from django.urls import reverse
 
 from imaginarion.models import AudioSet, Picture, PictureSet
 from knowledge.models import KnowledgePacket, MapPacket
-from rpg_project.utils import OrderByPolish
+from rpg_project.utils import OrderByPolish, clear_cache
+
 from users.models import Profile
 
 
@@ -97,6 +99,7 @@ class Location(Model):
         return self.name
 
     def get_absolute_url(self):
+        print(settings.BASE_URL + reverse('toponomikon:location', kwargs={'location_id' : self.id}))
         return settings.BASE_URL + reverse('toponomikon:location', kwargs={'location_id' : self.id})
 
     def informables(self, current_profile):
@@ -109,7 +112,7 @@ class Location(Model):
         # TODO temp 'Ilen z Astinary, Alora z Astinary'
         # hide Davos from Ilen and Alora
         if current_profile.id in [5, 6]:
-            qs = qs.exclude(known_character__profile__id=3) 
+            qs = qs.exclude(known_character__profile__id=3)
         # vice versa
         if current_profile.id == 3:
             qs = qs.exclude(known_character__profile__id__in=[5, 6])
@@ -163,21 +166,44 @@ class SecondaryLocation(Location):
         verbose_name_plural = '--- Secondary Locations'
 
 
+# ---------------------------------------
+
+# Signals
+
+
+@receiver(post_save, sender=Location)
+@receiver(m2m_changed, sender=Location.participants.through)
+@receiver(m2m_changed, sender=Location.informees.through)
 def update_known_locations(sender, instance, **kwargs):
-    """Whenever a location becomes 'participants' or 'informees' to
-    a profile, add this location's 'in_location' (i.e. more general location)
-    to profile's 'participants' or 'informees', respectively.
+    """
+    Whenever a Location gets new 'participants'/'informees' propagate to parent
+    Location's (instance.in_location) 'participants'/'informees', respectively.
     """
     participants = instance.participants.all()
     informees = instance.informees.all()
-    in_location = instance.in_location
-    if in_location:
+    if in_location := instance.in_location:
         in_location.participants.add(*participants)
         in_location.informees.add(*informees)
 
 
-post_save.connect(update_known_locations, sender=Location)
-m2m_changed.connect(update_known_locations,
-                    sender=Location.participants.through)
-m2m_changed.connect(update_known_locations,
-                    sender=Location.informees.through)
+@receiver(post_save, sender=Location)
+@receiver(post_save, sender=PrimaryLocation)
+@receiver(post_save, sender=SecondaryLocation)
+def remove_cache(sender, instance, **kwargs):
+    """
+    Remove relevant toponomikon cache on Location save.
+    """
+    profiles = set(
+        Profile.objects.filter(status='gm')
+        | instance.participants.all()
+        | instance.informees.all()
+    )
+
+    if instance.in_location is None:
+        cachename = 'toponomikon-primary'
+        vary_on_list = [[p.user.id] for p in profiles]
+    else:
+        cachename = 'toponomikon-secondary'
+        vary_on_list = [[p.user.id, instance.id] for p in profiles]
+
+    clear_cache(cachename=cachename, vary_on_list=vary_on_list)

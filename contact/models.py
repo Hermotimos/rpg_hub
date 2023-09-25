@@ -78,9 +78,9 @@ class Plan(Model):
         super().save(*args, **kwargs)
 
 
-# -----------------------------------------------------------------------------
-# ----------------------------------- SIGNALS ---------------------------------
-# -----------------------------------------------------------------------------
+# ---------------------------------------
+
+# Signals
 
 
 @receiver(post_save, sender=DemandAnswer)
@@ -102,4 +102,4 @@ def remove_cache(sender, instance, **kwargs):
     for all participants.
     """
     userids = [instance.author.user.id, instance.addressee.user.id]
-    clear_cache(cachename='navbar', vary_on_list=userids)
+    clear_cache(cachename='navbar', vary_on_list=[userids])

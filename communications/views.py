@@ -262,9 +262,9 @@ def statements(request, thread_id):
         # If SeenBy has been changed, clear appropriate cache for the user
         if relations:
             if thread.kind == 'Announcement':
-                clear_cache(cachename='navbar', vary_on_list=[current_profile.user.id])
+                clear_cache(cachename='navbar', vary_on_list=[[current_profile.user.id]])
             elif thread.kind == 'Debate':
-                clear_cache(cachename='sidebar', vary_on_list=[current_profile.user.id])
+                clear_cache(cachename='sidebar', vary_on_list=[[current_profile.user.id]])
 
     statements = statements.values(
         'thread_id', 'text', 'author_id', 'created_at',

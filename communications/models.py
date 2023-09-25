@@ -218,9 +218,9 @@ class DebateStatement(Statement):
         verbose_name_plural = 'DEBATE STATEMENTS'
 
 
-# -----------------------------------------------------------------------------
-# ---------------------------------------- SIGNALS ----------------------------
-# -----------------------------------------------------------------------------
+# ---------------------------------------
+
+# Signals
 
 
 @receiver(post_save, sender=Statement)
@@ -248,10 +248,12 @@ def remove_cache(sender, instance, **kwargs):
     Remove navbar cache on Statement save (creation or 'is_done' change)
     for all Thread participants.
     """
-    userids = list(set(
-        [p.user.id for p in instance.thread.participants.all()]
-    ))
-
+    # get distinct ids of User-s for all participants Profile-s
+    userids = [
+        list(set(
+            [p.user.id for p in instance.thread.participants.all()]
+        ))
+    ]
     match instance.thread.kind:
         case 'Announcement':
             cachename='navbar'

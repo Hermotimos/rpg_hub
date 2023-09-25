@@ -511,7 +511,7 @@ def ensure_unique_filename(filename: str):
 # -----------------------------------------------------------------------------
 
 
-def clear_cache(cachename: str, vary_on_list: list):
+def clear_cache(cachename: str, vary_on_list: list[list]):
     """
     Remove cache by its name for all Users.
 
@@ -526,7 +526,7 @@ def clear_cache(cachename: str, vary_on_list: list):
     """
     print(vary_on_list)
     for vary_on in vary_on_list:
-        cache_key = make_template_fragment_key(cachename, [vary_on])
+        cache_key = make_template_fragment_key(cachename, vary_on)
         print(cache_key, '---', cache.delete(cache_key))
         cache.delete(cache_key)
 
