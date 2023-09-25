@@ -27,7 +27,7 @@ function reloadStatements(){
                 };
 
 
-                // TODO TEMP replace above Syngir, Murkon with this when they meet Dalamar
+                // TODO TEMP replace this with the code at the bottom of the file when Syngir, Murkon meet Dalamar
                 var authorImg;
                 if ( threadKind == 'Announcement' ) {
 
@@ -55,7 +55,7 @@ function reloadStatements(){
                         `
                     };
                 };
-                // TODO TEMP END replace above Syngir, Murkon with this when they meet Dalamar
+                // TODO TEMP END replace
 
 
                 if ( !response.statements[num].thread_obj.is_ended ) {
