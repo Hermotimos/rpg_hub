@@ -101,5 +101,5 @@ def remove_cache(sender, instance, **kwargs):
     Remove navbar cache on Demand save (creation or 'is_done' change)
     for all participants.
     """
-    userids = [instance.author.user.id, instance.addressee.user.id]
-    clear_cache(cachename='navbar', vary_on_list=[userids])
+    vary_on_list = [[instance.author.user.id, instance.addressee.user.id]]
+    clear_cache(cachename='navbar', vary_on_list=vary_on_list)

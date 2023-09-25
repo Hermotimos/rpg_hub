@@ -260,6 +260,8 @@ def statements(request, thread_id):
         SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
 
         # If SeenBy has been changed, clear appropriate cache for the user
+        # bulk_create() doesn't use model's save()  so no signals are fired
+        # https://docs.djangoproject.com/en/4.2/ref/models/querysets/#bulk-create
         if relations:
             if thread.kind == 'Announcement':
                 clear_cache(cachename='navbar', vary_on_list=[[current_profile.user.id]])

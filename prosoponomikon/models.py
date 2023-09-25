@@ -9,6 +9,7 @@ from django.db.models import (
     ManyToManyField as M2M,
     Model,
     OneToOneField as One2One,
+    Q,
     PositiveSmallIntegerField,
     Prefetch,
     PROTECT,
@@ -16,11 +17,12 @@ from django.db.models import (
     Value,
 )
 from django.db.models.functions import Substr, Lower, Coalesce, Replace
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, m2m_changed
+from django.dispatch import receiver
 from django.urls import reverse
 
 from knowledge.models import BiographyPacket, DialoguePacket
-from rpg_project.utils import OrderByPolish
+from rpg_project.utils import OrderByPolish, clear_cache
 from rules.models import SubProfession, Skill, SkillLevel, WeaponType, \
     SkillType, Spell, Domain, Sphere
 from toponomikon.models import Location
@@ -548,6 +550,7 @@ class SpellAcquisition(Model):
 # Signals
 
 
+@receiver(post_save, sender=Character)
 def update_acquaintanceships(sender, instance, created, **kwargs):
     """Make an Acquaintance for GMs -> new Character."""
     if created:
@@ -559,6 +562,23 @@ def update_acquaintanceships(sender, instance, created, **kwargs):
                 knows_if_dead=True)
 
 
-post_save.connect(
-    receiver=update_acquaintanceships,
-    sender=Character)
+
+@receiver(post_save, sender=Acquaintanceship)
+def remove_cache(sender, instance, **kwargs):
+    """
+    Remove relevant toponomikon cache on Location save.
+    """
+    profiles = Profile.objects.filter(
+        Q(status='gm') | Q(id=instance.knowing_character.profile.id))
+    users = set(p.user.id for p in profiles)
+    vary_on_list = [list(users)]
+
+    clear_cache(cachename='prosoponomikon-acquaintances', vary_on_list=vary_on_list)
+
+# TODO dwie osobne funckje dla 2 przypadków:
+#  1) zmieniła się znajomość (pośredniość, wiedza o imieniu, o tym czy żyje)
+#       -> Acquanitanceship jest pkt wyjścia ()
+#       -> 'prosoponomikon-acquaintances-header' cachename
+#  2) zmienił się opis postaci
+#       -> Character jest punktem wyjścia
+#       -> 'prosoponomikon-acquaintances-detail' cachname

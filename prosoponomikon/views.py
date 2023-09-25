@@ -5,8 +5,6 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Case, F, Q, Sum, When
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
-from django.views.decorators.cache import cache_page
-from django.views.decorators.vary import vary_on_cookie
 
 from imaginarion.models import Picture, PictureImage, PictureSet
 from items.forms import ItemFormSet
@@ -174,8 +172,6 @@ def prosoponomikon_character_view(request, character_id):
         return redirect('users:dupa')
 
 
-@cache_page(60 * 60)
-@vary_on_cookie
 @login_required
 @auth_profile(['all'])
 def prosoponomikon_bio_packet_form_view(request, bio_packet_id=0, character_id=0):

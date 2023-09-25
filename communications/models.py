@@ -16,7 +16,7 @@ from django.db.models import (
     Model,
     PROTECT,
 )
-from django.db.models.signals import post_save, m2m_changed
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 
@@ -240,20 +240,16 @@ def delete_if_doubled(sender, instance, **kwargs):
 @receiver(post_save, sender=Statement)
 @receiver(post_save, sender=DebateStatement)
 @receiver(post_save, sender=AnnouncementStatement)
-@receiver(m2m_changed, sender=Statement.seen_by.through)
-@receiver(m2m_changed, sender=DebateStatement.seen_by.through)
-@receiver(m2m_changed, sender=AnnouncementStatement.seen_by.through)
 def remove_cache(sender, instance, **kwargs):
     """
     Remove navbar cache on Statement save (creation or 'is_done' change)
     for all Thread participants.
     """
     # get distinct ids of User-s for all participants Profile-s
-    userids = [
-        list(set(
-            [p.user.id for p in instance.thread.participants.all()]
-        ))
-    ]
+    profiles = instance.thread.participants.all()
+    users = set(p.user.id for p in profiles)
+    vary_on_list = [list(users)]
+
     match instance.thread.kind:
         case 'Announcement':
             cachename='navbar'
@@ -262,5 +258,5 @@ def remove_cache(sender, instance, **kwargs):
         case _:
             raise Exception('Unimplemented Thread kind!')
 
-    clear_cache(cachename=cachename, vary_on_list=userids)
+    clear_cache(cachename=cachename, vary_on_list=vary_on_list)
 

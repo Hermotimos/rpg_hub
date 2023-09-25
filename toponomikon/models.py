@@ -193,17 +193,18 @@ def remove_cache(sender, instance, **kwargs):
     """
     Remove relevant toponomikon cache on Location save.
     """
-    profiles = set(
+    profiles = (
         Profile.objects.filter(status='gm')
         | instance.participants.all()
         | instance.informees.all()
     )
+    usersids = set(p.user.id for p in profiles)
 
     if instance.in_location is None:
         cachename = 'toponomikon-primary'
-        vary_on_list = [[p.user.id] for p in profiles]
+        vary_on_list = [list(usersids)]
     else:
         cachename = 'toponomikon-secondary'
-        vary_on_list = [[p.user.id, instance.id] for p in profiles]
+        vary_on_list = list([userid, instance.id] for userid in usersids)
 
     clear_cache(cachename=cachename, vary_on_list=vary_on_list)
