@@ -116,12 +116,21 @@ IMG_TYPES = (
 )
 
 
+class PictureManager(Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.select_related('image')
+        return qs
+
+
 class Picture(Model):
     """An overlay model to create contextual descriptions for Image objects.
     One Image object may have multiple descriptions depending on the context
     in which it was seen and to whom it is known. This allows to create
     multiple overlays for one image with varying descriptions and types.
     """
+    objects = PictureManager()
+
     image = FK(to=PictureImage, related_name='pictures', on_delete=CASCADE)
     type = CharField(max_length=20, choices=IMG_TYPES)
     description = CharField(max_length=200, blank=True, null=True)
