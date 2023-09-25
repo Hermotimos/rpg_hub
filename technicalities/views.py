@@ -180,6 +180,37 @@ def clear_cache_all_view(request):
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
+@login_required
+@auth_profile(['gm'])
+def example_json_view(request):
+    """
+    Example view returning JSON for playing with AJAX.
+
+    function loadDoc() {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText)
+            }
+        };
+        xhttp.open("GET", "http://127.0.0.1:8000/technicalities/example-json/");
+        xhttp.send();
+    }
+
+    loadDoc()
+
+    """
+    from django.http import JsonResponse
+    return JsonResponse(
+        {"first": 1, "second": "temp Syngir, Murkon", "third": [1, 2, 3, 4]}
+    )
+
+"""
+AJAX
+
+
+"""
+
 # ============================================================================
 
 

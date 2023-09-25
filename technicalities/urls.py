@@ -13,6 +13,7 @@ urlpatterns = [
     path('refresh-contenttypes/', views.refresh_content_types, name='refresh-contenttypes'),
     path('cleanup-rules-objects/', views.cleanup_rules_objects, name='cleanup-rules-objects'),
     path('clear-cache-all/', views.clear_cache_all_view, name='clear-cache-all'),
+    path('example-json/', views.example_json_view, name='example-json'),
 
     path('reload-chronicles/', views.reload_chronicles, name='reload-chronicles'),
     path('reload-imaginarion/', views.reload_imaginarion, name='reload-imaginarion'),
