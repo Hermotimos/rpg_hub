@@ -98,7 +98,7 @@ def delete_if_doubled(sender, instance, **kwargs):
 @receiver(post_save, sender=Demand)
 def remove_cache(sender, instance, **kwargs):
     """
-    Remove navbar cache on Demand save (creation or 'is_done' change)
+    Clear navbar cache on Demand save (creation or 'is_done' change)
     for all participants.
     """
     vary_on_list = [[instance.author.user.id, instance.addressee.user.id]]

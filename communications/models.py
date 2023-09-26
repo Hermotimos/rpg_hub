@@ -247,8 +247,8 @@ def remove_cache(sender, instance, **kwargs):
     """
     # get distinct ids of User-s for all participants Profile-s
     profiles = instance.thread.participants.all()
-    users = set(p.user.id for p in profiles)
-    vary_on_list = [list(users)]
+    usersids = set(p.user.id for p in profiles)
+    vary_on_list = [list(usersids)]
 
     match instance.thread.kind:
         case 'Announcement':

@@ -562,18 +562,67 @@ def update_acquaintanceships(sender, instance, created, **kwargs):
                 knows_if_dead=True)
 
 
+# @receiver(post_save, sender=Character)
+# @receiver(post_save, sender=Acquaintanceship)
+# def remove_cache(sender, instance, **kwargs):
+#     """
+#     Remove relevant propoponomikon cache on Acquaintanceship save.
 
+#     Clear cache for main proposonomikon page for the user whose Acquaintanceship
+#     has changed.
+#     Clear cache for the Acquaintanceship fragment and detail view based on
+#     'known_character'. This is more efficient than searching for
+#     Acquaintanceship based on current_profile.user.
+#     """
+#     if isinstance(instance, Acquaintanceship):
+#         known_character = instance.knowing_character
+#     elif isinstance(instance, Character):
+#         known_character = instance.id
+#     else:
+#         raise Exception('Unimplemented Prosoponomikon signal!')
+
+#     profiles = Profile.objects.filter(
+#         Q(status='gm') | Q(id=known_character.profile.id))
+#     usersids = set(p.user.id for p in profiles)
+#     vary_on_list_header = [list(usersids)]
+#     vary_on_list_detail = [[instance.known_character.id]]
+
+#     clear_cache(
+#         cachename='prosoponomikon-acquaintances-header',
+#         vary_on_list=vary_on_list_header)
+#     clear_cache(
+#         cachename='prosoponomikon-acquaintances-detail',
+#         vary_on_list=vary_on_list_detail)
+#     clear_cache(
+#         cachename='prosoponomikon-this-acquaintanceship',
+#         vary_on_list=vary_on_list_detail)
+
+
+@receiver(post_save, sender=Character)
 @receiver(post_save, sender=Acquaintanceship)
-def remove_cache(sender, instance, **kwargs):
+def remove_cache_acquaintanceships(sender, instance, **kwargs):
     """
-    Remove relevant toponomikon cache on Location save.
+    Clear relevant Acquantainceship fragment cache on
+    Character/Acquaintanceship save.
     """
-    profiles = Profile.objects.filter(
-        Q(status='gm') | Q(id=instance.knowing_character.profile.id))
-    users = set(p.user.id for p in profiles)
-    vary_on_list = [list(users)]
+    if isinstance(instance, Acquaintanceship):
+        character = instance.known_character
+        userids = [instance.knowing_character.profile.user.id]
+    elif isinstance(instance, Character):
+        character = instance
+        userids = set(
+            acq.knowing_character.profile.user.id
+            for acq in Acquaintanceship.objects.filter(known_character=character)
+        )
+        print(userids)
+    else:
+        raise Exception('Unimplemented Prosoponomikon signal!')
 
-    clear_cache(cachename='prosoponomikon-acquaintances', vary_on_list=vary_on_list)
+    vary_on_list = [[userid, character.id] for userid in userids]
+
+    clear_cache(cachename='prosoponomikon-acquaintanceships', vary_on_list=vary_on_list)
+    clear_cache(cachename='prosoponomikon-acquaintanceship', vary_on_list=vary_on_list)
+
 
 # TODO dwie osobne funckje dla 2 przypadków:
 #  1) zmieniła się znajomość (pośredniość, wiedza o imieniu, o tym czy żyje)

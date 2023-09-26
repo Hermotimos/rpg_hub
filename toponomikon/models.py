@@ -191,7 +191,7 @@ def update_known_locations(sender, instance, **kwargs):
 @receiver(post_save, sender=SecondaryLocation)
 def remove_cache(sender, instance, **kwargs):
     """
-    Remove relevant toponomikon cache on Location save.
+    Clear relevant toponomikon cache on Location save.
     """
     profiles = (
         Profile.objects.filter(status='gm')
