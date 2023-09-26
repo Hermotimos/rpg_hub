@@ -72,16 +72,19 @@ if APPENGINE_URL:
     CSRF_TRUSTED_ORIGINS = [APPENGINE_URL]
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_AGE = 86400*7     # 7 days in seconds
     SECURE_SSL_REDIRECT = True
 
+
 else:
-    CSRF_TRUSTED_ORIGINS = [
-        'https://8000-cs-570532252862-default.cs-europe-west4-fycr.cloudshell.dev'
-    ]
     ALLOWED_HOSTS = [
         '127.0.0.1',
         'hyllemath.lm.r.appspot.com',
     ]
+    CSRF_TRUSTED_ORIGINS = [
+        'https://8000-cs-570532252862-default.cs-europe-west4-fycr.cloudshell.dev'
+    ]
+    SESSION_COOKIE_AGE = 86400*30   # 30 days in seconds
 
 
 # -----------------------------------------------------------------------------
