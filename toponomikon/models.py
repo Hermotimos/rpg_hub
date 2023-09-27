@@ -202,9 +202,9 @@ def remove_cache(sender, instance, **kwargs):
 
     if instance.in_location is None:
         cachename = 'toponomikon-primary'
-        vary_on_list = [list(usersids)]
+        vary_on_list = [[userid] for userid in set(p.user.id for p in profiles)]
     else:
         cachename = 'toponomikon-secondary'
-        vary_on_list = list([userid, instance.id] for userid in usersids)
+        vary_on_list = [[userid, instance.id] for userid in usersids]
 
     clear_cache(cachename=cachename, vary_on_list=vary_on_list)
