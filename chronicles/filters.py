@@ -10,45 +10,45 @@ from users.models import Profile
 
 
 def plot_threads(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     objects = PlotThread.objects.all()
-    if not profile.can_view_all:
+    if not current_profile.can_view_all:
         objects = objects.filter(
-            Q(events__participants=profile)
-            | Q(events__informees=profile)
+            Q(events__participants=current_profile)
+            | Q(events__informees=current_profile)
         )
     return objects.distinct()
 
 
 def locations(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     objects = Location.objects.all()
-    if not profile.can_view_all:
+    if not current_profile.can_view_all:
         objects = objects.filter(
-            Q(events__participants=profile)
-            | Q(events__informees=profile)
+            Q(events__participants=current_profile)
+            | Q(events__informees=current_profile)
         )
     return objects.distinct()
 
 
 def participants(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     objects = Profile.non_gm.all()
-    if not profile.can_view_all:
+    if not current_profile.can_view_all:
         # Get profiles that know directly the same events as the current one
         objects = objects.filter(
-            events_participated__in=profile.events_participated.all()
+            events_participated__in=current_profile.events_participated.all()
         )
     return objects.distinct().select_related().prefetch_related('character', 'user')
 
 
 def games(request):
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = request.current_profile
     objects = GameSession.objects.all()
-    if not profile.can_view_all:
+    if not current_profile.can_view_all:
         objects = objects.filter(
-            Q(game_events__participants=profile)
-            | Q(game_events__informees=profile)
+            Q(game_events__participants=current_profile)
+            | Q(game_events__informees=current_profile)
         )
     return objects.distinct().select_related()
 
@@ -91,7 +91,7 @@ def add_sublocations(request):
     for loc_id in request.GET.getlist('locations'):
         sublocations = Location.objects.get(id=loc_id).with_sublocations()
         all_locs_ids.extend([s.id for s in sublocations])
-    
+
     request.GET = request.GET.copy()
     request.GET.setlist('locations', all_locs_ids)
     return request
