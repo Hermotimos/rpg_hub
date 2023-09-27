@@ -17,10 +17,10 @@ from rules.models import Skill, WeaponType, Plate
 @auth_profile(['all'])
 def demands_main_view(request):
     current_profile = request.current_profile
-    
+
     demands = Demand.objects.select_related('author__user', 'addressee__user')
     demands = demands.prefetch_related('demand_answers__author')
-    
+
     # excludes necessery to filter out plans (Demands sent to oneself)
     received_u = demands.filter(is_done=False, addressee=current_profile).exclude(author=current_profile)
     received_d = demands.filter(is_done=True, addressee=current_profile).exclude(author=current_profile)
@@ -36,7 +36,7 @@ def demands_main_view(request):
             answer.demand = demand
             answer.author = current_profile
             answer.save()
-    
+
             if current_profile == demand.author:
                 informed_ids = [demand.addressee.id]
             else:
@@ -45,7 +45,7 @@ def demands_main_view(request):
             return redirect('contact:demands-main')
     else:
         form = DemandAnswerForm()
-    
+
     context = {
         'page_title': 'Dezyderaty',
         'received_undone': received_u,
@@ -61,11 +61,11 @@ def demands_main_view(request):
 @auth_profile(['all'])
 def demands_create_view(request):
     current_profile = request.current_profile
-    
+
     if request.method == 'POST':
         form = DemandsCreateForm(
-            profile=current_profile, data=request.POST, files=request.FILES)
-        
+            current_profile=current_profile, data=request.POST, files=request.FILES)
+
         if form.is_valid():
             demand = form.save(commit=False)
             demand.author = current_profile
@@ -75,7 +75,7 @@ def demands_create_view(request):
             send_emails(request, informed_ids, demand=demand)
             return redirect('contact:demands-main')
     else:
-        form = DemandsCreateForm(profile=current_profile)
+        form = DemandsCreateForm(current_profile=current_profile)
 
     context = {
         'page_title': 'Nowy dezyderat',
@@ -101,13 +101,13 @@ def demands_delete_view(request, demand_id):
 @auth_profile(['all'])
 def demands_detail_view(request, demand_id):
     current_profile = request.current_profile
-    
+
     demand = get_object_or_404(Demand, id=demand_id)
     answers = DemandAnswer.objects.filter(demand=demand).select_related('author').order_by('date_posted')
 
     if request.method == 'POST':
         form = DemandAnswerForm(request.POST, request.FILES)
-        
+
         if form.is_valid():
             answer = form.save(commit=False)
             answer.demand = demand
@@ -139,9 +139,9 @@ def demands_detail_view(request, demand_id):
 @auth_profile(['all'])
 def demand_done_undone_view(request, demand_id, is_done):
     current_profile = request.current_profile
-    
+
     demand = get_object_or_404(Demand, id=demand_id)
-    
+
     if current_profile in [demand.author, demand.addressee]:
         demand.is_done = is_done
         if is_done:
@@ -177,7 +177,7 @@ def plans_main_view(request):
         todos = {}
         for m in models:
             todos[f'{m._meta.verbose_name_plural}'] = m.objects.annotate(cnt=Count('allowees')).filter(cnt=0)
-    
+
         text = '=>Do uzupełnienia:\n\n '
         create_todo = False
         for cnt, (model_name, objs) in enumerate(todos.items()):
@@ -185,7 +185,7 @@ def plans_main_view(request):
                     f'{[str(o) for o in objs] if objs else ""}\n\n'
             if objs:
                 create_todo = True
-                
+
         if create_todo:
             Plan.objects.update_or_create(
                 text__contains='=>Do uzupełnienia:',
@@ -196,7 +196,7 @@ def plans_main_view(request):
                 Plan.objects.get(text__contains='=>Do uzupełnienia:').delete()
             except Plan.DoesNotExist:
                 pass
-    
+
     context = {
         'page_title': 'Plany',
         'plans': plans,
@@ -218,10 +218,10 @@ def plans_for_gm_view(request):
 @auth_profile(['all'])
 def plans_create_view(request):
     profile = request.current_profile
-    
+
     if request.method == 'POST':
         form = PlanForm(request.POST, request.FILES)
-        
+
         if form.is_valid():
             plan = form.save(commit=False)
             plan.author = profile
@@ -258,15 +258,15 @@ def plans_delete_view(request, plan_id):
 @auth_profile(['all'])
 def plans_modify_view(request, plan_id):
     profile = request.current_profile
-    
+
     plan = get_object_or_404(Plan, id=plan_id)
-    
+
     if request.method == 'POST':
         form = PlanForm(instance=plan, data=request.POST, files=request.FILES)
-        
+
         if form.is_valid():
             plan = form.save()
-            
+
             if plan.inform_gm:
                 send_emails(request, plan_modified=plan)
             return redirect('contact:plans-main')

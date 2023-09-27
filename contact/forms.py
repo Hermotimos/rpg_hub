@@ -11,45 +11,45 @@ from users.models import Profile
 
 
 class DemandsCreateForm(forms.ModelForm):
-    
+
     class Meta:
         model = Demand
         fields = ['addressee', 'text', 'image']
 
     def __init__(self, *args, **kwargs):
-        profile = kwargs.pop('profile')
+        current_profile = kwargs.pop('current_profile')
         super().__init__(*args, **kwargs)
 
         self.fields['addressee'].label = "Adresat"
         self.fields['image'].label = "Załącz obraz"
         self.fields['text'].label = "Tekst"
 
-        if profile.status == 'gm':
+        if current_profile.status == 'gm':
             addressees = Profile.players.all()   # TODO change to active when moved to communications
-        elif profile.status == 'player':
+        elif current_profile.status == 'player':
             addressees = Profile.contactables.filter(
-                Q(character__in=profile.character.acquaintances.all()) | Q(status='gm'))
+                Q(character__in=current_profile.character.acquaintances.all()) | Q(status='gm'))
         else:
             addressees = Profile.objects.none()
 
         # TODO temp 'Ilen z Astinary, Alora z Astinary'
         # hide Davos from Ilen and Alora
-        if profile.id in [5, 6]:
+        if current_profile.id in [5, 6]:
             addressees = addressees.exclude(id=3)
         # vice versa
-        if profile.id == 3:
+        if current_profile.id == 3:
             addressees = addressees.exclude(id__in=[5, 6])
         # TODO end temp
-        
-        self.fields['addressee'].queryset = addressees.exclude(id=profile.id)
-        
+
+        self.fields['addressee'].queryset = addressees.exclude(id=current_profile.id)
+
         self.helper = FormHelper()
         self.helper.add_input(
             Submit('submit', 'Wyślij dezyderat', css_class='btn-dark'))
 
 
 class DemandAnswerForm(forms.ModelForm):
-    
+
     class Meta:
         model = DemandAnswer
         fields = ['text', 'image']
@@ -63,7 +63,7 @@ class DemandAnswerForm(forms.ModelForm):
 
 
 class PlanForm(forms.ModelForm):
-    
+
     class Meta:
         model = Plan
         fields = ['inform_gm', 'text', 'image']
@@ -78,7 +78,7 @@ class PlanForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
         self.fields['image'].label = "Załącz obraz"
         self.fields['inform_gm'].label = "Poinformuj MG?"
         self.fields['text'].label = "Tekst"
