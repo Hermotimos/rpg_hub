@@ -789,14 +789,68 @@ def remove_cache(sender, instance, **kwargs):
 # --------------------------
 
 
+@receiver(post_save, sender=Skill)
+@receiver(post_save, sender=RegularSkill)
+@receiver(post_save, sender=MentalSkill)
+@receiver(m2m_changed, sender=Skill.allowees.through)
+@receiver(m2m_changed, sender=RegularSkill.allowees.through)
+@receiver(m2m_changed, sender=MentalSkill.allowees.through)
+@receiver(post_save, sender=SkillLevel)
+@receiver(post_save, sender=RegularSkillLevel)
+@receiver(post_save, sender=MentalSkillLevel)
+@receiver(m2m_changed, sender=SkillLevel.perks.through)
+@receiver(m2m_changed, sender=RegularSkillLevel.perks.through)
+@receiver(m2m_changed, sender=MentalSkillLevel.perks.through)
+def remove_cache(sender, instance, **kwargs):
+    """
+    Clear 'skills' and 'synergies' caches for all kinds of Skill-s
+    (regular, mental etc.).
+    Perform on Skill or its SkillLevel save,
+    as well as on thier M2M lists change.
+    """
+    if issubclass(type(instance), Skill):
+        skill = instance
+    elif issubclass(type(instance), SkillLevel):
+        skill = instance.skill
+
+    profiles = skill.allowees.all() | Profile.objects.filter(status='gm')
+
+    vary_on_list = []
+    for p in set(profiles):
+        for sk in SkillKind.objects.all():
+            vary_on_list.append([p.user.id, sk.name])
+
+    clear_cache(cachename='skills', vary_on_list=vary_on_list)
+    clear_cache(cachename='synergies', vary_on_list=vary_on_list)
+
+
 @receiver(post_save, sender=Synergy)
+@receiver(post_save, sender=RegularSynergy)
+@receiver(post_save, sender=MentalSynergy)
 @receiver(m2m_changed, sender=Synergy.skills.through)
+@receiver(m2m_changed, sender=RegularSynergy.skills.through)
+@receiver(m2m_changed, sender=MentalSynergy.skills.through)
+@receiver(post_save, sender=SynergyLevel)
+@receiver(post_save, sender=RegularSynergyLevel)
+@receiver(post_save, sender=MentalSynergyLevel)
+@receiver(m2m_changed, sender=SynergyLevel.perks.through)
+@receiver(m2m_changed, sender=RegularSynergyLevel.perks.through)
+@receiver(m2m_changed, sender=MentalSynergyLevel.perks.through)
+@receiver(m2m_changed, sender=SynergyLevel.skill_levels.through)
+@receiver(m2m_changed, sender=RegularSynergyLevel.skill_levels.through)
+@receiver(m2m_changed, sender=MentalSynergyLevel.skill_levels.through)
 def remove_cache(sender, instance, **kwargs):
     """
     Clear 'synergies' cache for all kinds of Synergy-s (regular, mental etc.).
+    Perform on Synergy ot its SynergyLevel save, as well as on M2M list change.
     """
+    if issubclass(type(instance), Synergy):
+        synergy = instance
+    elif issubclass(type(instance), SynergyLevel):
+        synergy = instance.synergy
+
     profiles = Profile.objects.filter(status='gm')
-    for skill in instance.skills.all():
+    for skill in synergy.skills.all():
         profiles |= skill.allowees.all()
 
     vary_on_list = []
@@ -805,3 +859,6 @@ def remove_cache(sender, instance, **kwargs):
             vary_on_list.append([p.user.id, sk.name])
 
     clear_cache(cachename='synergies', vary_on_list=vary_on_list)
+
+
+# --------------------------

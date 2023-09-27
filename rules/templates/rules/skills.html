@@ -10,7 +10,7 @@
 
 
 {% block content %}
-{% cache 604800 skills skilltype_kind request.current_profile.user.id %}
+{% cache 604800 skills request.current_profile.user.id skilltype_kind %}
 
     <div class="pt-3 mt-5">
         <div class="rules-styling" id="accordion{{ panel_id }}">
