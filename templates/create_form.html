@@ -11,7 +11,7 @@
 
 {% block content %}
 
-    {% cache 30000 create_form request.resolver_match.route request.resolver_match.kwargs request.current_profile.user.username  %}
+    {% cache 604800 create_form request.resolver_match.route request.resolver_match.kwargs request.current_profile.user.username  %}
         {% include '_create_form.html' %}
     {% endcache %}
 

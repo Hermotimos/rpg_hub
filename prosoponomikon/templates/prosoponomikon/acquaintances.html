@@ -76,7 +76,7 @@
                         </span>
                     </p>
                     {% for acquaintanceship in acquaintanceships_group.list %}
-                        {% cache 30000 prosoponomikon-acquaintanceships request.current_profile.user.id acquaintanceship.known_character.id %}
+                        {% cache 604800 prosoponomikon-acquaintanceships request.current_profile.user.id acquaintanceship.known_character.id %}
                             {% include 'prosoponomikon/_acquaintance_info.html' %}
                         {% endcache %}
                     {% endfor %}
