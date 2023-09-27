@@ -17,7 +17,7 @@ from django.urls import reverse
 
 from imaginarion.models import AudioSet, Picture, PictureSet
 from knowledge.models import KnowledgePacket, MapPacket
-from rpg_project.utils import OrderByPolish, clear_cache
+from rpg_project.utils import OrderByPolish, clear_cache, profiles_to_userids
 
 from users.models import Profile
 
@@ -193,7 +193,7 @@ def remove_cache(sender, instance, **kwargs):
     """
     Clear relevant toponomikon cache on Location save.
     """
-    profiles = (
+    userids = profiles_to_userids(
         Profile.objects.filter(status='gm')
         | instance.participants.all()
         | instance.informees.all()
@@ -201,13 +201,9 @@ def remove_cache(sender, instance, **kwargs):
 
     if instance.in_location is None:
         cachename = 'toponomikon-primary'
-        vary_on_list = [
-            [userid] for userid in set(p.user.id for p in profiles)
-        ]
+        vary_on_list = [[userid] for userid in userids]
     else:
         cachename = 'toponomikon-secondary'
-        vary_on_list = [
-            [userid, instance.id] for userid in set(p.user.id for p in profiles)
-        ]
+        vary_on_list = [[userid, instance.id] for userid in userids]
 
     clear_cache(cachename=cachename, vary_on_list=vary_on_list)

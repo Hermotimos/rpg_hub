@@ -16,7 +16,7 @@ from django.dispatch import receiver
 from imaginarion.models import PictureSet
 from rules.models import Skill
 from users.models import Profile
-from rpg_project.utils import OrderByPolish, clear_cache
+from rpg_project.utils import OrderByPolish, clear_cache, profiles_to_userids
 
 
 # -----------------------------------------------------------------------------
@@ -104,10 +104,10 @@ def remove_cache(sender, instance, **kwargs):
     Clear almanac cache on KnowledgePacket save or when there's a change in any
     of its M2M fields' list.
     """
-    profiles = (
+    userids = profiles_to_userids(
         Profile.objects.filter(status='gm') | instance.acquired_by.all()
     )
-    vary_on_list = [[userid] for userid in set(p.user.id for p in profiles)]
+    vary_on_list = [[userid] for userid in userids]
 
     clear_cache(cachename='almanac', vary_on_list=vary_on_list)
 
@@ -123,7 +123,7 @@ def remove_cache(sender, instance, **kwargs):
     profiles = Profile.objects.filter(status='gm')
     for knowledge_packet in instance.knowledge_packets.all():
         profiles |= knowledge_packet.acquired_by.all()
-
-    vary_on_list = [[userid] for userid in set(p.user.id for p in profiles)]
+    userids = profiles_to_userids(profiles)
+    vary_on_list = [[userid] for userid in userids]
 
     clear_cache(cachename='almanac', vary_on_list=vary_on_list)

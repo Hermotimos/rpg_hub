@@ -24,7 +24,7 @@ from communications.models import (
     Thread,
     ThreadTag,
 )
-from rpg_project.utils import auth_profile, clear_cache
+from rpg_project.utils import auth_profile, clear_cache, profiles_to_userids
 from users.models import Profile
 
 

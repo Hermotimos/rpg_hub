@@ -19,7 +19,7 @@ from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 
 from imaginarion.models import PictureSet
-from rpg_project.utils import OrderByPolish, clear_cache
+from rpg_project.utils import OrderByPolish, clear_cache, profiles_to_userids
 from users.models import Profile
 
 
@@ -752,8 +752,10 @@ class SorcererSpell(Spell):
 
 def _clear_cache_helper(instance, cachename: str):
     """A helper function for clearing cache in 'rules' app tempaltes."""
-    profiles = instance.allowees.all() | Profile.objects.filter(status='gm')
-    vary_on_list = [[userid] for userid in set(p.user.id for p in profiles)]
+    userids = profiles_to_userids(
+        instance.allowees.all() | Profile.objects.filter(status='gm')
+    )
+    vary_on_list = [[userid] for userid in userids]
     clear_cache(cachename=cachename, vary_on_list=vary_on_list)
 
 
@@ -813,12 +815,13 @@ def remove_cache(sender, instance, **kwargs):
     elif issubclass(type(instance), SkillLevel):
         skill = instance.skill
 
-    profiles = skill.allowees.all() | Profile.objects.filter(status='gm')
-
+    userids = profiles_to_userids(
+        skill.allowees.all() | Profile.objects.filter(status='gm')
+    )
     vary_on_list = []
-    for p in set(profiles):
+    for userid in userids:
         for sk in SkillKind.objects.all():
-            vary_on_list.append([p.user.id, sk.name])
+            vary_on_list.append([userid, sk.name])
 
     clear_cache(cachename='skills', vary_on_list=vary_on_list)
     clear_cache(cachename='synergies', vary_on_list=vary_on_list)
@@ -853,12 +856,35 @@ def remove_cache(sender, instance, **kwargs):
     for skill in synergy.skills.all():
         profiles |= skill.allowees.all()
 
+    userids = profiles_to_userids(profiles)
     vary_on_list = []
-    for p in set(profiles):
+    for userid in userids:
         for sk in SkillKind.objects.all():
-            vary_on_list.append([p.user.id, sk.name])
+            vary_on_list.append([userid, sk.name])
 
     clear_cache(cachename='synergies', vary_on_list=vary_on_list)
 
 
 # --------------------------
+
+
+
+@receiver(post_save, sender=Perk)
+@receiver(post_save, sender=ConditionalModifier)
+@receiver(post_save, sender=Modifier)
+@receiver(post_save, sender=Condition)
+@receiver(post_save, sender=CombatType)
+@receiver(post_save, sender=RulesComment)
+def remove_cache(sender, instance, **kwargs):
+    """
+    Clear 'skills' and 'synergies' caches for all users whenever
+    the basic building blocks change.
+    """
+    userids = profiles_to_userids(Profile.objects.all())
+    vary_on_list = []
+    for userid in userids:
+        for sk in SkillKind.objects.all():
+            vary_on_list.append([userid, sk.name])
+
+    clear_cache(cachename='skills', vary_on_list=vary_on_list)
+    clear_cache(cachename='synergies', vary_on_list=vary_on_list)

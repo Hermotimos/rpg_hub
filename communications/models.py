@@ -20,7 +20,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 
-from rpg_project.utils import ensure_unique_filename, clear_cache
+from rpg_project.utils import ensure_unique_filename, clear_cache, profiles_to_userids
 from users.models import Profile
 
 
@@ -246,8 +246,8 @@ def remove_cache(sender, instance, **kwargs):
     for all Thread participants.
     """
     # get distinct ids of User-s for all participants Profile-s
-    profiles = instance.thread.participants.all()
-    vary_on_list = [[userid] for userid in set(p.user.id for p in profiles)]
+    userids = profiles_to_userids(instance.thread.participants.all())
+    vary_on_list = [[userid] for userid in userids]
 
     match instance.thread.kind:
         case 'Announcement':

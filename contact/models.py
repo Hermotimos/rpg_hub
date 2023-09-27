@@ -12,7 +12,7 @@ from django.db.models import (
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from rpg_project.utils import ensure_unique_filename, clear_cache
+from rpg_project.utils import ensure_unique_filename, clear_cache, profiles_to_userids
 from users.models import Profile
 
 

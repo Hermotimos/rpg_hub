@@ -505,9 +505,6 @@ def ensure_unique_filename(filename: str):
     return f"{fname}-{uuid_postfix}{extension}"
 
 
-
-
-
 # -----------------------------------------------------------------------------
 
 
@@ -536,6 +533,13 @@ def clear_cache(cachename: str, vary_on_list: list[list]):
         cache_key = make_template_fragment_key(cachename, vary_on)
         print(cache_key, '---', cache.delete(cache_key))
         cache.delete(cache_key)
+
+
+def profiles_to_userids(profiles) -> list[int]:
+    """Get distinct User.id-s for the list of profiles."""
+    return list(
+        profiles.order_by('user').distinct('user').values_list('user', flat=True)
+    )
 
 
 # -----------------------------------------------------------------------------
