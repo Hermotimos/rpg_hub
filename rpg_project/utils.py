@@ -524,6 +524,13 @@ def clear_cache(cachename: str, vary_on_list: list[list]):
     Thus User.id has to be provided to find cache keys.
 
     """
+
+    def _print_cache_keys():
+        mycache = cache._cache
+        for key in mycache.keys():
+            print(key)
+
+    # _print_cache_keys()
     print(vary_on_list)
     for vary_on in vary_on_list:
         cache_key = make_template_fragment_key(cachename, vary_on)
