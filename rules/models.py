@@ -785,3 +785,23 @@ def remove_cache(sender, instance, **kwargs):
     """
     _clear_cache_helper(instance=instance, cachename='plates')
 
+
+# --------------------------
+
+
+@receiver(post_save, sender=Synergy)
+@receiver(m2m_changed, sender=Synergy.skills.through)
+def remove_cache(sender, instance, **kwargs):
+    """
+    Clear 'synergies' cache for all kinds of Synergy-s (regular, mental etc.).
+    """
+    profiles = Profile.objects.filter(status='gm')
+    for skill in instance.skills.all():
+        profiles |= skill.allowees.all()
+
+    vary_on_list = []
+    for p in set(profiles):
+        for sk in SkillKind.objects.all():
+            vary_on_list.append([p.user.id, sk.name])
+
+    clear_cache(cachename='synergies', vary_on_list=vary_on_list)

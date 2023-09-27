@@ -168,6 +168,7 @@ def rules_synergies_view(request, skilltype_kind):
 
     context = {
         'page_title': f"Synergie {skilltype_kind}",
+        'skilltype_kind': skilltype_kind,
         'synergies': synergies,
     }
     return render(request, 'rules/synergies.html', context)
