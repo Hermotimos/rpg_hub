@@ -562,45 +562,9 @@ def update_acquaintanceships(sender, instance, created, **kwargs):
                 knows_if_dead=True)
 
 
-# @receiver(post_save, sender=Character)
-# @receiver(post_save, sender=Acquaintanceship)
-# def remove_cache(sender, instance, **kwargs):
-#     """
-#     Remove relevant propoponomikon cache on Acquaintanceship save.
-
-#     Clear cache for main proposonomikon page for the user whose Acquaintanceship
-#     has changed.
-#     Clear cache for the Acquaintanceship fragment and detail view based on
-#     'known_character'. This is more efficient than searching for
-#     Acquaintanceship based on current_profile.user.
-#     """
-#     if isinstance(instance, Acquaintanceship):
-#         known_character = instance.knowing_character
-#     elif isinstance(instance, Character):
-#         known_character = instance.id
-#     else:
-#         raise Exception('Unimplemented Prosoponomikon signal!')
-
-#     profiles = Profile.objects.filter(
-#         Q(status='gm') | Q(id=known_character.profile.id))
-#     usersids = set(p.user.id for p in profiles)
-#     vary_on_list_header = [list(usersids)]
-#     vary_on_list_detail = [[instance.known_character.id]]
-
-#     clear_cache(
-#         cachename='prosoponomikon-acquaintances-header',
-#         vary_on_list=vary_on_list_header)
-#     clear_cache(
-#         cachename='prosoponomikon-acquaintances-detail',
-#         vary_on_list=vary_on_list_detail)
-#     clear_cache(
-#         cachename='prosoponomikon-this-acquaintanceship',
-#         vary_on_list=vary_on_list_detail)
-
-
 @receiver(post_save, sender=Character)
 @receiver(post_save, sender=Acquaintanceship)
-def remove_cache_acquaintanceships(sender, instance, **kwargs):
+def remove_cache(sender, instance, **kwargs):
     """
     Clear relevant Acquantainceship fragment cache on
     Character/Acquaintanceship save.
@@ -614,7 +578,6 @@ def remove_cache_acquaintanceships(sender, instance, **kwargs):
             acq.knowing_character.profile.user.id
             for acq in Acquaintanceship.objects.filter(known_character=character)
         )
-        print(userids)
     else:
         raise Exception('Unimplemented Prosoponomikon signal!')
 
@@ -622,12 +585,3 @@ def remove_cache_acquaintanceships(sender, instance, **kwargs):
 
     clear_cache(cachename='prosoponomikon-acquaintanceships', vary_on_list=vary_on_list)
     clear_cache(cachename='prosoponomikon-acquaintanceship', vary_on_list=vary_on_list)
-
-
-# TODO dwie osobne funckje dla 2 przypadków:
-#  1) zmieniła się znajomość (pośredniość, wiedza o imieniu, o tym czy żyje)
-#       -> Acquanitanceship jest pkt wyjścia ()
-#       -> 'prosoponomikon-acquaintances-header' cachename
-#  2) zmienił się opis postaci
-#       -> Character jest punktem wyjścia
-#       -> 'prosoponomikon-acquaintances-detail' cachname
