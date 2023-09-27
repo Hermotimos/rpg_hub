@@ -137,7 +137,7 @@ class RegularSkillLevelInline(admin.TabularInline):
         models.ForeignKey: {'widget': forms.Select(attrs={'style': 'width:180px'})},
     }
     model = SkillLevel
-    extra = 2
+    extra = 1
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -260,7 +260,7 @@ class SynergyLevelAdmin(admin.ModelAdmin):
 
 class SubProfessionInline(admin.TabularInline):
     model = SubProfession
-    extra = 2
+    extra = 1
     fields = ['name', 'description', 'allowees', 'essential_skills']
     filter_horizontal = ['allowees', 'essential_skills']
     formfield_overrides = {
