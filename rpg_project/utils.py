@@ -97,7 +97,7 @@ def handle_inform_form(request):
 
 def send_emails(request, profile_ids=None, **kwargs):
     from users.models import Profile
-    profile = Profile.objects.get(id=request.session['profile_id'])
+    current_profile = Profile.objects.get(id=request.session['profile_id'])
     sender = settings.EMAIL_HOST_USER
     receivers = []
 
@@ -106,7 +106,7 @@ def send_emails(request, profile_ids=None, **kwargs):
         receivers = [
             p.user.email
             for p in Profile.players.filter(id__in=profile_ids or []).select_related()]
-    if profile.status != 'gm':
+    if current_profile.status != 'gm':
         gms = [
             p.user.email
             for p in Profile.objects.filter(status='gm').select_related()]
@@ -122,19 +122,19 @@ def send_emails(request, profile_ids=None, **kwargs):
 
         if new == 'topic':
             subject = '[RPG] Nowa narada w nowym temacie!'
-            message = f"{profile} włączył/a Cię do nowej narady '{debate}'" \
+            message = f"{current_profile} włączył/a Cię do nowej narady '{debate}'" \
                       f" w nowym temacie '{debate.topic}'." \
                       f"\nWeź udział w naradzie:\n{url}\n"
 
         elif new == 'debate':
             subject = '[RPG] Nowa narada!'
-            message = f"{profile} włączył/a Cię do nowej narady '{debate}'" \
+            message = f"{current_profile} włączył/a Cię do nowej narady '{debate}'" \
                       f" w temacie '{debate.topic}'." \
                       f"\nWeź udział w naradzie:\n{url}\n"
 
         else:  # new == 'remark'
             subject = '[RPG] Wypowiedź w naradzie!'
-            message = f"{profile} zabrał/a głos w naradzie '{debate}'" \
+            message = f"{current_profile} zabrał/a głos w naradzie '{debate}'" \
                       f" w temacie '{debate.topic}'." \
                       f"\nWeź udział w naradzie:\n{url}\n"
 
@@ -147,7 +147,7 @@ def send_emails(request, profile_ids=None, **kwargs):
             is_done = kwargs['is_done']
             status = "zrobiony" if is_done else "NIE-zrobiony!"
             subject = f"[RPG] Dezyderat nr {demand.id} [{status}]"
-            message = f"{profile} oznaczył dezyderat jako '{status}'.\n" \
+            message = f"{current_profile} oznaczył dezyderat jako '{status}'.\n" \
                       f"Dezyderat:\n" \
                       f"{request.get_host()}/contact/demands/detail:{demand.id}/\n\n"
             messages.info(request, f"Oznaczono jako {status}!")
@@ -171,16 +171,16 @@ def send_emails(request, profile_ids=None, **kwargs):
     # PLAN (created)
     elif 'plan_created' in kwargs:
         plan = kwargs['plan_created']
-        subject = f"[RPG] Info o planach od {profile}"
-        message = f"{profile} informuje o swoich planach:\n\n{plan.text}\n" \
+        subject = f"[RPG] Info o planach od {current_profile}"
+        message = f"{current_profile} informuje o swoich planach:\n\n{plan.text}\n" \
                   f"{request.get_host()}/contact/plans/for-gm/\n\n"
         messages.info(request, f'Plan został zapisany!')
 
     # PLAN (modified)
     elif 'plan_modified' in kwargs:
         plan = kwargs['plan_modified']
-        subject = f"[RPG] Info o zmianie planów od {profile}"
-        message = f"{profile} informuje o zmianie planów:\n\n{plan.text}\n" \
+        subject = f"[RPG] Info o zmianie planów od {current_profile}"
+        message = f"{current_profile} informuje o zmianie planów:\n\n{plan.text}\n" \
                   f"{request.get_host()}/contact/plans/for-gm/\n\n"
         messages.info(request, 'Zmodyfikowano plan!')
 
@@ -192,7 +192,7 @@ def send_emails(request, profile_ids=None, **kwargs):
     elif 'location' in kwargs:
         location = kwargs['location']
         subject = '[RPG] Transfer wiedzy!'
-        message = f"{profile} opowiedział/a Ci o miejscu zwanym" \
+        message = f"{current_profile} opowiedział/a Ci o miejscu zwanym" \
                   f" '{location.name}'." \
                   f"\nInformacje zostały zapisane w Twoim Toponomikonie: " \
                   f"\n{request.build_absolute_uri()}\n"
@@ -202,7 +202,7 @@ def send_emails(request, profile_ids=None, **kwargs):
     elif 'kn_packet' in kwargs:
         kn_packet = kwargs['kn_packet']
         subject = '[RPG] Transfer wiedzy!'
-        message = f"{profile} przekazał/a Ci wiedzę nt. '{kn_packet.title}'." \
+        message = f"{current_profile} przekazał/a Ci wiedzę nt. '{kn_packet.title}'." \
                   f"\nWiędzę tę możesz odnaleźć w Almanachu pod:" \
                   f" {', '.join(s.name for s in kn_packet.skills.all())}:" \
                   f"\n{request.get_host()}/knowledge/almanac/\n"
@@ -212,7 +212,7 @@ def send_emails(request, profile_ids=None, **kwargs):
     elif 'bio_packet' in kwargs:
         bio_packet = kwargs['bio_packet']
         subject = '[RPG] Transfer wiedzy!'
-        message = f"{profile} przekazał/a Ci wiedzę nt. '{bio_packet.title}'." \
+        message = f"{current_profile} przekazał/a Ci wiedzę nt. '{bio_packet.title}'." \
                   f"\nWiędzę tę możesz odnaleźć w Prosoponomikonie pod:" \
                   f" {bio_packet.characters.first().fullname}:" \
                   f"\n{request.get_host()}/prosoponomikon/character/{bio_packet.characters.all().first().id}/\n"
@@ -222,7 +222,7 @@ def send_emails(request, profile_ids=None, **kwargs):
     elif 'debate' in kwargs:
         debate = kwargs['debate']
         subject = '[RPG] Dołączenie do narady!'
-        message = f"{profile} dołączył/a Cię do narady '{debate.title}' " \
+        message = f"{current_profile} dołączył/a Cię do narady '{debate.title}' " \
                   f"w temacie '{debate.topic}'." \
                   f"\nWeź udział w naradzie:" \
                   f"\n{request.build_absolute_uri()}\n"
@@ -232,7 +232,7 @@ def send_emails(request, profile_ids=None, **kwargs):
     elif 'game_event' in kwargs:
         game_event = kwargs['game_event']
         subject = "[RPG] Nowa opowieść o wydarzeniach!"
-        message = f"{profile} rozprawia o przygodzie '{game_event.game.title}'.\n" \
+        message = f"{current_profile} rozprawia o przygodzie '{game_event.game.title}'.\n" \
                   f"Wydarzenie zostało zapisane w Twojej Kronice: " \
                   f"{request.get_host()}/chronicles/chronicle/game:{game_event.game.id}/\n"
         messages.info(request, f'Poinformowano wybrane Postacie!')
@@ -241,7 +241,7 @@ def send_emails(request, profile_ids=None, **kwargs):
     elif 'history_event' in kwargs:
         history_event = kwargs['history_event']
         subject = "[RPG] Nowa opowieść o wydarzeniach historycznych!"
-        message = f"{profile} rozprawia o dawnych dziejach.\n" \
+        message = f"{current_profile} rozprawia o dawnych dziejach.\n" \
                   f"Było to w czasach...\n" \
                   # f"Wydarzenie zostało zapisane w Twojej Kronice: " \
                   # f"{request.get_host()}/chronicles/XXXXXXXX/\n"
@@ -251,7 +251,7 @@ def send_emails(request, profile_ids=None, **kwargs):
     elif 'acquaintanceship' in kwargs:
         acquaintanceship = kwargs['acquaintanceship']
         subject = "[RPG] Nowa opowieść o Postaci!"
-        message = f"{profile} rozprawia o Postaci " \
+        message = f"{current_profile} rozprawia o Postaci " \
                   f"'{acquaintanceship.knows_as_name or acquaintanceship.known_character.fullname}'.\n" \
                   f"Postać została dodana do Twojego Prosoponomikonu: " \
                   f"{acquaintanceship.known_character.get_absolute_url()}\n"
@@ -340,8 +340,8 @@ def only_game_masters(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):
         from users.models import Profile
-        profile = Profile.objects.get(id=request.session['profile_id'])
-        if profile.status == 'gm':
+        current_profile = Profile.objects.get(id=request.session['profile_id'])
+        if current_profile.status == 'gm':
             return function(request, *args, **kwargs)
         else:
             return redirect('users:dupa')
@@ -353,8 +353,8 @@ def only_game_masters_and_spectators(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):
         from users.models import Profile
-        profile = Profile.objects.get(id=request.session['profile_id'])
-        if profile.status in ['gm', 'spectator']:
+        current_profile = Profile.objects.get(id=request.session['profile_id'])
+        if current_profile.status in ['gm', 'spectator']:
             return function(request, *args, **kwargs)
         else:
             return redirect('users:dupa')
