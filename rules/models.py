@@ -15,9 +15,11 @@ from django.db.models import (
     SmallIntegerField,
     TextField,
 )
+from django.db.models.signals import post_save, m2m_changed
+from django.dispatch import receiver
 
 from imaginarion.models import PictureSet
-from rpg_project.utils import OrderByPolish
+from rpg_project.utils import OrderByPolish, clear_cache
 from users.models import Profile
 
 
@@ -743,4 +745,43 @@ class SorcererSpell(Spell):
         proxy = True
 
 
-# -----------------------------------------------------------------------------
+# ---------------------------------------
+
+# Signals
+
+
+def _clear_cache_helper(instance, cachename: str):
+    """A helper function for clearing cache in 'rules' app tempaltes."""
+    profiles = instance.allowees.all() | Profile.objects.filter(status='gm')
+    vary_on_list = [[userid] for userid in set(p.user.id for p in profiles)]
+    clear_cache(cachename=cachename, vary_on_list=vary_on_list)
+
+
+@receiver(post_save, sender=WeaponType)
+@receiver(m2m_changed, sender=WeaponType.allowees.through)
+@receiver(m2m_changed, sender=WeaponType.comparables.through)
+@receiver(m2m_changed, sender=WeaponType.damage_types.through)
+def remove_cache(sender, instance, **kwargs):
+    """
+    Clear 'weapon-types' cache on WeaponType save or its M2M list change.
+    """
+    _clear_cache_helper(instance=instance, cachename='weapon-types')
+
+
+@receiver(post_save, sender=Shield)
+@receiver(m2m_changed, sender=Shield.allowees.through)
+def remove_cache(sender, instance, **kwargs):
+    """
+    Clear 'shield' cache on Shield save or its M2M list change.
+    """
+    _clear_cache_helper(instance=instance, cachename='shields')
+
+
+@receiver(post_save, sender=Plate)
+@receiver(m2m_changed, sender=Plate.allowees.through)
+def remove_cache(sender, instance, **kwargs):
+    """
+    Clear 'plate' cache on Plate save or its M2M list change.
+    """
+    _clear_cache_helper(instance=instance, cachename='plates')
+

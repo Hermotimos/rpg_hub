@@ -10,216 +10,223 @@
 
 
 {% block content %}
-{% cache 604800 armor request.current_profile.user.id %}
 
     <div class="rules-styling">
 
-        <h2>
-            Zbroja
-        </h2>
-        <p>
-            Zbroja chroni ciało wojownika przed Trafieniem i Obrażeniami, jednak ze względu na swoją sztywność oraz wagę ogranicza jego ruchy i zmysły.
-            Ta prawidłowość ujęta jest w ramach Malusów do Sprawności i Podstępów, omówionych poniżej, oraz Malusów wynikających z osiągnięcia
-            <a href="{% url 'rules:tests' %}#Przeciążenie"><mark>Progów Przeciążenia</mark></a>.
-        </p>
-        <table class="table table-sm mt-3 rules-table no-border striped-4n-1 armor-table">
-            <thead class="align-center dark">
-                <tr class="border-bottom-dark">
-                    <th class="small-caps align-left">ZBROJA</th>
-                    <th class="small-caps">KP</th>
-                    <th class="small-caps">Wyparowania</th>
-                    <th class="small-caps">Wytrzymałość</th>
-                    <th class="small-caps">Waga</th>
-                    <th class="small-caps">Specjalne</th>
-                </tr>
-            </thead>
-            <tbody class="align-center dark">
-                {% for plate in plates %}
-                    <tr>
-                        <td class="{% if plate.description %} hover-blue {% endif %} align-left" data-toggle="collapse" data-target="#{{ plate|cut:' ' }}">{{ plate.name }}</td>
-                        <td class="text-green">{% if plate.armor_class_bonus %} +{{ plate.armor_class_bonus }} {% endif %}</td>
-                        <td class="text-green">{{ plate.parrying }}</td>
-                        <td>{{ plate.endurance }}</td>
-                        <td>{{ plate.weight.normalize }}</td>
-                        <td>{% if plate.comment %} {{ plate.comment }} {% endif %}</td>
+        {% cache 604800 plates request.current_profile.user.id %}
+
+            <h2>
+                Zbroja
+            </h2>
+            <p>
+                Zbroja chroni ciało wojownika przed Trafieniem i Obrażeniami, jednak ze względu na swoją sztywność oraz wagę ogranicza jego ruchy i zmysły.
+                Ta prawidłowość ujęta jest w ramach Malusów do Sprawności i Podstępów, omówionych poniżej, oraz Malusów wynikających z osiągnięcia
+                <a href="{% url 'rules:tests' %}#Przeciążenie"><mark>Progów Przeciążenia</mark></a>.
+            </p>
+            <table class="table table-sm mt-3 rules-table no-border striped-4n-1 armor-table">
+                <thead class="align-center dark">
+                    <tr class="border-bottom-dark">
+                        <th class="small-caps align-left">ZBROJA</th>
+                        <th class="small-caps">KP</th>
+                        <th class="small-caps">Wyparowania</th>
+                        <th class="small-caps">Wytrzymałość</th>
+                        <th class="small-caps">Waga</th>
+                        <th class="small-caps">Specjalne</th>
                     </tr>
-                    {% if plate.description %}
-                        <tr id="{{ plate|cut:' ' }}" class="collapse">
-                            <td colspan="10" class="px-2 align-left">
-                                <br>
-                                    {{ plate.description|linebreaksbr }}
-                                <br>
-                                {% if plate.picture_set %}
-                                    <div class="mb-1">
-                                        <div class="d-flex justify-content-center my-3">
-                                            {% for picture in plate.picture_set|pictureset_pictures_in_custom_order %}
-                                                {% include '_pic_with_modal.html' %}
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            </td>
+                </thead>
+                <tbody class="align-center dark">
+                    {% for plate in plates %}
+                        <tr>
+                            <td class="{% if plate.description %} hover-blue {% endif %} align-left" data-toggle="collapse" data-target="#{{ plate|cut:' ' }}">{{ plate.name }}</td>
+                            <td class="text-green">{% if plate.armor_class_bonus %} +{{ plate.armor_class_bonus }} {% endif %}</td>
+                            <td class="text-green">{{ plate.parrying }}</td>
+                            <td>{{ plate.endurance }}</td>
+                            <td>{{ plate.weight.normalize }}</td>
+                            <td>{% if plate.comment %} {{ plate.comment }} {% endif %}</td>
                         </tr>
-                    {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <div class="h5 font-weight-bold mt-4">
-            Wyparowania i Wytrzymałość zbroi
-        </div>
-        <p>
-            Oprócz poprawy Klasy Pancerza (KP) każda zbroja posiada współczynnik Wyparowań, który decyduje o tym, ile Obrażeń ulegnie wyhamowaniu i zamiast zranić Postać - uszkodzi jej pancerz.
-            Pozwala to na uchronienie się przed częścią, a czasem nawet całością Obrażeń.
-            Innymi słowy, Obrażenia można rozdzielić pomiędzy Wytrzymałość Zbroi a Zdrowie Postaci,
-            przy czym Zbroja jest w stanie przejąć tylko tyle Obrażeń z jednego ciosu, ile wynosi jej współczynnik Wyparowań.
-            Oznacza to konieczność prowadzenia dwóch tabeli Obrażeń: jednej dla Postaci (Obrażenia uszczuplające Zdrowie i podlegające leczeniu)
-            oraz dla zbroi (Obrażenia uszczuplające Wytrzymałość i poddające się parokrotnej naprawie u specjalisty).
-        </p>
-        <p>
-            Uszkodzenia zbroi powodują jej stopniową dezintegrację, co zmniejsza jej skuteczność.
-            Zbroja, której Wytrzymałość sięgnie 0 jest całkowicie pozbawiona Wyparowań, a jej Bonus KP zostaje zredukowany o "większą" połowę.
-            Doprowadzenie zbroi do takiego stanu powoduje także trwałe obniżenie jej Wytrzymałości, Wyparowań i KP o 50% (zaokrąglając w górę).
-            Sytuacje bliskie Wytrzymałości 0 również skutkują nieodwracalnym uszkodzeniem zbroi, jednak o mniejszym zakresie.
-        </p>
-        <p>
-            Część broni oraz niektóre Umiejętności dysponują współczynnikiem Przebicia (PRZEB), który pozwala na zignorowanie części lub całości Wyparowań zbroi.
-            Np. Przeciwnik zadaje 10 OBR; Postać nosi Kolczugę o Wyparowaniu 3, co pozwalałoby na zmniejszenie OBR do 7;
-            jednakże przeciwnik atakował buzdyganem, który ma PRZEB +2;
-            ostatecznie więc Kolczuga pozwala na Wyparowanie 3 – 2 = 1 OBR; w efekcie Kolczuga otrzymuje -1 Wytrzymałości, a Postać -9 Zdrowia.
-            Przebicie powoduje zarówno uszkodzenie pancerza, jak i Obrażenia po stronie Postaci!
-            W większości przypadków Mistrz Gry informuje Gracza o zadanych Obrażeniach oraz ewentualnie o zakresie Przebicia.
-            W przypadku, gdy zachodzi Przebicie, Gracz jest zobowiązany do zaliczenia objętych nim Obrażeń zarówno do Ran Postaci, jak i Uszkodzeń zbroi.
-        </p>
-
-        <div class="h5 font-weight-bold mt-4">
-            Ograniczenia wynikające z noszenia zbroi
-        </div>
-        <p>
-            Poza walką zbroja nie pozostaje bez wpływu na powodzenie działań wymagających wyjątkowej precyzji i dobrego czasu reakcji.
-            W związku z tym każda zbroja powoduje malusy do Podstępów.
-            Są one ujęte w osobnej tabeli, dlatego nie należy uwzględniać w tym przypadku ograniczeń premii ze ZRC. Byłby to podwójny malus.
-        </p>
-        <table class="table table-sm mt-3 plate-tricks-table rules-table no-border striped-2n">
-            <thead class="align-center">
-                <tr class="border-bottom-dark orientation-rl-tb">
-                    <th class="align-left">ZBROJA</th>
-                    <th class="orientation-rl-tb">Bieganie</th>
-                    <th class="orientation-rl-tb">Pływanie</th>
-                    <th class="orientation-rl-tb">Wspinaczka</th>
-                    <th class="orientation-rl-tb">Nasłuchiwanie</th>
-                    <th class="orientation-rl-tb">Wypatrywanie</th>
-                    <th class="orientation-rl-tb">Tropienie/zacieranie śladów</th>
-                    <th class="orientation-rl-tb">Skradanie</th>
-                    <th class="orientation-rl-tb">Ukrywanie</th>
-                    <th class="orientation-rl-tb">Pułapki</th>
-                    <th class="orientation-rl-tb">Otwieranie zamków</th>
-                    <th class="orientation-rl-tb">Kradzież kieszonkowa</th>
-                    <th class="orientation-rl-tb">Szulerka</th>
-                </tr>
-            </thead>
-            <tbody class="align-center">
-                {% for plate in plates %}
-                    <tr>
-                        <td class="align-left">{{ plate.name }}</td>
-                        <td class="text-red1">{% if plate.mod_running %} {{ plate.mod_running }} {% endif %}</td>
-                        <td class="text-red1">{% if plate.mod_swimming %} {{ plate.mod_swimming }} {% endif %}</td>
-                        <td class="text-red1">{% if plate.mod_climbing %} {{ plate.mod_climbing }} {% endif %}</td>
-                        <td class="text-red1">{% if plate.mod_listening %} {{ plate.mod_listening }} {% endif %}</td>
-                        <td class="text-red1">{% if plate.mod_lookout %} {{ plate.mod_lookout }} {% endif %}</td>
-                        <td class="text-red1">{% if plate.mod_trailing %} {{ plate.mod_trailing }} {% endif %}</td>
-                        <td class="text-red1">{% if plate.mod_sneaking %} {{ plate.mod_sneaking }} {% endif %}</td>
-                        <td class="text-red1">{% if plate.mod_hiding %} {{ plate.mod_hiding }} {% endif %}</td>
-                        <td class="text-red1">{% if plate.mod_traps %} {{ plate.mod_traps }} {% endif %}</td>
-                        <td class="text-red1">{% if plate.mod_lockpicking %} {{ plate.mod_lockpicking }} {% endif %}</td>
-                        <td class="text-red1">{% if plate.mod_pickpocketing %} {{ plate.mod_pickpocketing }} {% endif %}</td>
-                        <td class="text-red1">{% if plate.mod_conning %} {{ plate.mod_conning }} {% endif %}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-
-        <h2>
-            Tarcza
-        </h2>
-        <p>
-            Poprzez przyjęcie ciosu na tarczę wojownik może uniknąć trafienia przez przeciwnika.
-            Liczba przeciwników, przeciwko którym można użyć tarczy jest zależna od jej rodzaju i waha się między 1 a 3.
-            Liczba ta wskazuje również, wobec ilu przeciwników można zastosować premie do KP (parowanie) z KON, Walki z tarczą lub inne.
-            Postać nie jest w stanie parować ciosów większej liczby przeciwników niż wynika to z opisu danego typu tarczy.
-        </p>
-        <table class="table table-sm mt-3 shields-table rules-table no-border striped-2n">
-            <thead class="align-center">
-                <tr class="border-bottom-dark">
-                    <th class="small-caps align-left">Rodzaj</th>
-                    <th class="small-caps">KP</th>
-                    <th class="small-caps">Waga</th>
-                    <th class="small-caps">Specjalne</th>
-                </tr>
-            </thead>
-            <tbody class="align-center">
-                {% for shield in shields %}
-                    <tr class="">
-                        <td class="align-left {% if shield.description %} hover-blue {% endif %}" data-toggle="collapse" data-target="#{{ shield.name }}">
-                            {{ shield.name }}
-                        </td>
-                        <td class="text-green">+{{ shield.armor_class_bonus }}</td>
-                        <td>{{ shield.weight.normalize }}</td>
-                        <td>{{ shield.comment }}</td>
-                    </tr>
-                    {% if shield.description %}
-                        <tr id="{{ shield.name }}" class="collapse">
-                            <td colspan="10" class="px-2 align-left">
-                                <br>
-                                {{ shield.description|linebreaksbr }}
-                                <br><br>
-                                <div class="mb-1">
-                                    {% if shield.picture_set %}
-                                        <div class="d-flex justify-content-center my-3">
-                                            {% for picture in shield.picture_set|pictureset_pictures_in_custom_order %}
-                                                {% include '_pic_with_modal.html' %}
-                                            {% endfor %}
+                        {% if plate.description %}
+                            <tr id="{{ plate|cut:' ' }}" class="collapse">
+                                <td colspan="10" class="px-2 align-left">
+                                    <br>
+                                        {{ plate.description|linebreaksbr }}
+                                    <br>
+                                    {% if plate.picture_set %}
+                                        <div class="mb-1">
+                                            <div class="d-flex justify-content-center my-3">
+                                                {% for picture in plate.picture_set|pictureset_pictures_in_custom_order %}
+                                                    {% include '_pic_with_modal.html' %}
+                                                {% endfor %}
+                                            </div>
                                         </div>
                                     {% endif %}
-                                </div>
-                            </td>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="h5 font-weight-bold mt-4">
+                Wyparowania i Wytrzymałość zbroi
+            </div>
+            <p>
+                Oprócz poprawy Klasy Pancerza (KP) każda zbroja posiada współczynnik Wyparowań, który decyduje o tym, ile Obrażeń ulegnie wyhamowaniu i zamiast zranić Postać - uszkodzi jej pancerz.
+                Pozwala to na uchronienie się przed częścią, a czasem nawet całością Obrażeń.
+                Innymi słowy, Obrażenia można rozdzielić pomiędzy Wytrzymałość Zbroi a Zdrowie Postaci,
+                przy czym Zbroja jest w stanie przejąć tylko tyle Obrażeń z jednego ciosu, ile wynosi jej współczynnik Wyparowań.
+                Oznacza to konieczność prowadzenia dwóch tabeli Obrażeń: jednej dla Postaci (Obrażenia uszczuplające Zdrowie i podlegające leczeniu)
+                oraz dla zbroi (Obrażenia uszczuplające Wytrzymałość i poddające się parokrotnej naprawie u specjalisty).
+            </p>
+            <p>
+                Uszkodzenia zbroi powodują jej stopniową dezintegrację, co zmniejsza jej skuteczność.
+                Zbroja, której Wytrzymałość sięgnie 0 jest całkowicie pozbawiona Wyparowań, a jej Bonus KP zostaje zredukowany o "większą" połowę.
+                Doprowadzenie zbroi do takiego stanu powoduje także trwałe obniżenie jej Wytrzymałości, Wyparowań i KP o 50% (zaokrąglając w górę).
+                Sytuacje bliskie Wytrzymałości 0 również skutkują nieodwracalnym uszkodzeniem zbroi, jednak o mniejszym zakresie.
+            </p>
+            <p>
+                Część broni oraz niektóre Umiejętności dysponują współczynnikiem Przebicia (PRZEB), który pozwala na zignorowanie części lub całości Wyparowań zbroi.
+                Np. Przeciwnik zadaje 10 OBR; Postać nosi Kolczugę o Wyparowaniu 3, co pozwalałoby na zmniejszenie OBR do 7;
+                jednakże przeciwnik atakował buzdyganem, który ma PRZEB +2;
+                ostatecznie więc Kolczuga pozwala na Wyparowanie 3 – 2 = 1 OBR; w efekcie Kolczuga otrzymuje -1 Wytrzymałości, a Postać -9 Zdrowia.
+                Przebicie powoduje zarówno uszkodzenie pancerza, jak i Obrażenia po stronie Postaci!
+                W większości przypadków Mistrz Gry informuje Gracza o zadanych Obrażeniach oraz ewentualnie o zakresie Przebicia.
+                W przypadku, gdy zachodzi Przebicie, Gracz jest zobowiązany do zaliczenia objętych nim Obrażeń zarówno do Ran Postaci, jak i Uszkodzeń zbroi.
+            </p>
+
+            <div class="h5 font-weight-bold mt-4">
+                Ograniczenia wynikające z noszenia zbroi
+            </div>
+            <p>
+                Poza walką zbroja nie pozostaje bez wpływu na powodzenie działań wymagających wyjątkowej precyzji i dobrego czasu reakcji.
+                W związku z tym każda zbroja powoduje malusy do Podstępów.
+                Są one ujęte w osobnej tabeli, dlatego nie należy uwzględniać w tym przypadku ograniczeń premii ze ZRC. Byłby to podwójny malus.
+            </p>
+            <table class="table table-sm mt-3 plate-tricks-table rules-table no-border striped-2n">
+                <thead class="align-center">
+                    <tr class="border-bottom-dark orientation-rl-tb">
+                        <th class="align-left">ZBROJA</th>
+                        <th class="orientation-rl-tb">Bieganie</th>
+                        <th class="orientation-rl-tb">Pływanie</th>
+                        <th class="orientation-rl-tb">Wspinaczka</th>
+                        <th class="orientation-rl-tb">Nasłuchiwanie</th>
+                        <th class="orientation-rl-tb">Wypatrywanie</th>
+                        <th class="orientation-rl-tb">Tropienie/zacieranie śladów</th>
+                        <th class="orientation-rl-tb">Skradanie</th>
+                        <th class="orientation-rl-tb">Ukrywanie</th>
+                        <th class="orientation-rl-tb">Pułapki</th>
+                        <th class="orientation-rl-tb">Otwieranie zamków</th>
+                        <th class="orientation-rl-tb">Kradzież kieszonkowa</th>
+                        <th class="orientation-rl-tb">Szulerka</th>
+                    </tr>
+                </thead>
+                <tbody class="align-center">
+                    {% for plate in plates %}
+                        <tr>
+                            <td class="align-left">{{ plate.name }}</td>
+                            <td class="text-red1">{% if plate.mod_running %} {{ plate.mod_running }} {% endif %}</td>
+                            <td class="text-red1">{% if plate.mod_swimming %} {{ plate.mod_swimming }} {% endif %}</td>
+                            <td class="text-red1">{% if plate.mod_climbing %} {{ plate.mod_climbing }} {% endif %}</td>
+                            <td class="text-red1">{% if plate.mod_listening %} {{ plate.mod_listening }} {% endif %}</td>
+                            <td class="text-red1">{% if plate.mod_lookout %} {{ plate.mod_lookout }} {% endif %}</td>
+                            <td class="text-red1">{% if plate.mod_trailing %} {{ plate.mod_trailing }} {% endif %}</td>
+                            <td class="text-red1">{% if plate.mod_sneaking %} {{ plate.mod_sneaking }} {% endif %}</td>
+                            <td class="text-red1">{% if plate.mod_hiding %} {{ plate.mod_hiding }} {% endif %}</td>
+                            <td class="text-red1">{% if plate.mod_traps %} {{ plate.mod_traps }} {% endif %}</td>
+                            <td class="text-red1">{% if plate.mod_lockpicking %} {{ plate.mod_lockpicking }} {% endif %}</td>
+                            <td class="text-red1">{% if plate.mod_pickpocketing %} {{ plate.mod_pickpocketing }} {% endif %}</td>
+                            <td class="text-red1">{% if plate.mod_conning %} {{ plate.mod_conning }} {% endif %}</td>
                         </tr>
-                    {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        {% endcache %}
 
 
-        <h2>
-            Hełm i nagolenniki
-        </h2>
-        <p>
-            Hełm i nagolenniki (nagolenice) dostarczają dodatkowej ochrony przeciwko Trafieniu przez przeciwnika.
-            Zakres ochrony zależy od tego, czy Postać dysponuje kompletem (hełm + nagolenniki), czy tylko jednym z dwojga.
-            Jednakże skutkiem noszenia hełmu jest ograniczenie zdolności percepcyjnych Postaci takich jak Nasłuchiwanie czy Wypatrywanie;
-            wszelkie Testy Zręczności związane ze zmysłami wzroku i słuchu, a także z refleksem (np. Zaskoczenie) otrzymują odpowiedni Malus zgodnie z poniższą tabelą.
-            Oczywiście Malus ten nie występuje w sytuacji, gdy Postać używa jedynie nagolenników.
-        </p>
-        <table class="table table-sm mt-3 striped-even rules-table no-border striped-2n">
-            <thead class="align-center">
-                <tr class="border-bottom-dark small-caps">
-                    <th class="align-left">Rodzaj</th>
-                    <th>Komplet<br>KP</th>
-                    <th>Brak Kompletu<br>KP</th>
-                    <th>Komplet<br>Waga</th>
-                    <th>Brak Kompletu<br>Waga</th>
-                    <th>Malus Percepcyjny</th>
-                </tr>
-            </thead>
-            <tbody class="align-center">
-                <tr><td class="align-left">Skóra</td>               <td class="text-green">+1</td>    <td>-</td>                         <td>2</td>  <td>1</td>    <td class="text-red1">-2</td>   </tr>
-                <tr><td class="align-left">Metal</td>               <td class="text-green">+2</td>    <td class="text-green">+1</td>    <td>4</td>  <td>2</td>    <td class="text-red1">-6</td>   </tr>
-                <tr><td class="align-left">Krasnoludzka stal</td>   <td class="text-green">+3</td>    <td class="text-green">+1</td>    <td>6</td>  <td>3</td>    <td class="text-red1">-8</td>   </tr>
-            </tbody>
-        </table>
+        {% cache 604800 shields request.current_profile.user.id %}
+        
+            <h2>
+                Tarcza
+            </h2>
+            <p>
+                Poprzez przyjęcie ciosu na tarczę wojownik może uniknąć trafienia przez przeciwnika.
+                Liczba przeciwników, przeciwko którym można użyć tarczy jest zależna od jej rodzaju i waha się między 1 a 3.
+                Liczba ta wskazuje również, wobec ilu przeciwników można zastosować premie do KP (parowanie) z KON, Walki z tarczą lub inne.
+                Postać nie jest w stanie parować ciosów większej liczby przeciwników niż wynika to z opisu danego typu tarczy.
+            </p>
+            <table class="table table-sm mt-3 shields-table rules-table no-border striped-2n">
+                <thead class="align-center">
+                    <tr class="border-bottom-dark">
+                        <th class="small-caps align-left">Rodzaj</th>
+                        <th class="small-caps">KP</th>
+                        <th class="small-caps">Waga</th>
+                        <th class="small-caps">Specjalne</th>
+                    </tr>
+                </thead>
+                <tbody class="align-center">
+                    {% for shield in shields %}
+                        <tr class="">
+                            <td class="align-left {% if shield.description %} hover-blue {% endif %}" data-toggle="collapse" data-target="#{{ shield.name }}">
+                                {{ shield.name }}
+                            </td>
+                            <td class="text-green">+{{ shield.armor_class_bonus }}</td>
+                            <td>{{ shield.weight.normalize }}</td>
+                            <td>{{ shield.comment }}</td>
+                        </tr>
+                        {% if shield.description %}
+                            <tr id="{{ shield.name }}" class="collapse">
+                                <td colspan="10" class="px-2 align-left">
+                                    <br>
+                                    {{ shield.description|linebreaksbr }}
+                                    <br><br>
+                                    <div class="mb-1">
+                                        {% if shield.picture_set %}
+                                            <div class="d-flex justify-content-center my-3">
+                                                {% for picture in shield.picture_set|pictureset_pictures_in_custom_order %}
+                                                    {% include '_pic_with_modal.html' %}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+
+
+            <h2>
+                Hełm i nagolenniki
+            </h2>
+            <p>
+                Hełm i nagolenniki (nagolenice) dostarczają dodatkowej ochrony przeciwko Trafieniu przez przeciwnika.
+                Zakres ochrony zależy od tego, czy Postać dysponuje kompletem (hełm + nagolenniki), czy tylko jednym z dwojga.
+                Jednakże skutkiem noszenia hełmu jest ograniczenie zdolności percepcyjnych Postaci takich jak Nasłuchiwanie czy Wypatrywanie;
+                wszelkie Testy Zręczności związane ze zmysłami wzroku i słuchu, a także z refleksem (np. Zaskoczenie) otrzymują odpowiedni Malus zgodnie z poniższą tabelą.
+                Oczywiście Malus ten nie występuje w sytuacji, gdy Postać używa jedynie nagolenników.
+            </p>
+            <table class="table table-sm mt-3 striped-even rules-table no-border striped-2n">
+                <thead class="align-center">
+                    <tr class="border-bottom-dark small-caps">
+                        <th class="align-left">Rodzaj</th>
+                        <th>Komplet<br>KP</th>
+                        <th>Brak Kompletu<br>KP</th>
+                        <th>Komplet<br>Waga</th>
+                        <th>Brak Kompletu<br>Waga</th>
+                        <th>Malus Percepcyjny</th>
+                    </tr>
+                </thead>
+                <tbody class="align-center">
+                    <tr><td class="align-left">Skóra</td>               <td class="text-green">+1</td>    <td>-</td>                         <td>2</td>  <td>1</td>    <td class="text-red1">-2</td>   </tr>
+                    <tr><td class="align-left">Metal</td>               <td class="text-green">+2</td>    <td class="text-green">+1</td>    <td>4</td>  <td>2</td>    <td class="text-red1">-6</td>   </tr>
+                    <tr><td class="align-left">Krasnoludzka stal</td>   <td class="text-green">+3</td>    <td class="text-green">+1</td>    <td>6</td>  <td>3</td>    <td class="text-red1">-8</td>   </tr>
+                </tbody>
+            </table>
+
+        {% endcache %}
+
 
     </div>
 
-{% endcache %}
 {% endblock content %}
