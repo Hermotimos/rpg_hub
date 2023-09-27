@@ -9,12 +9,14 @@ from django.db.models import (
     TextField,
     URLField,
 )
+from django.db.models.signals import post_save, m2m_changed
+from django.dispatch import receiver
 
 # from associations.models import Comment
 from imaginarion.models import PictureSet
 from rules.models import Skill
 from users.models import Profile
-from rpg_project.utils import OrderByPolish
+from rpg_project.utils import OrderByPolish, clear_cache
 
 
 # -----------------------------------------------------------------------------
@@ -24,7 +26,7 @@ class Reference(Model):
     title = CharField(max_length=100, unique=True)
     description = TextField()
     url = URLField(max_length=500)
-    
+
     class Meta:
         ordering = ['title']
 
@@ -43,10 +45,10 @@ class InfoPacket(Model):
     class Meta:
         abstract = True
         ordering = [OrderByPolish('title')]
-        
+
     def __str__(self):
         return self.title
-        
+
 
 class DialoguePacket(InfoPacket):
     """A class for per-Persona dialogue notes for Game Master."""
@@ -67,7 +69,7 @@ class BiographyPacket(InfoPacket):
 
     class Meta:
         ordering = ['order_no', OrderByPolish('title')]
-   
+
 
 class KnowledgePacket(InfoPacket):
     """A class for info packets that might be shared among multiple Skills."""
@@ -81,8 +83,47 @@ class KnowledgePacket(InfoPacket):
     skills = M2M(to=Skill, related_name='knowledge_packets')
     picture_sets = M2M(to=PictureSet, related_name='knowledge_packets', blank=True)
     references = M2M(to=Reference, related_name='knowledge_packets', blank=True)
-    
-    
+
+
 class MapPacket(InfoPacket):
     acquired_by = M2M(to=Profile, related_name='map_packets', blank=True)
     picture_sets = M2M(to=PictureSet, related_name='map_packets')
+
+
+# ---------------------------------------
+
+# Signals
+
+
+@receiver(post_save, sender=KnowledgePacket)
+@receiver(m2m_changed, sender=KnowledgePacket.skills.through)
+@receiver(m2m_changed, sender=KnowledgePacket.references.through)
+@receiver(m2m_changed, sender=KnowledgePacket.picture_sets.through)
+def remove_cache(sender, instance, **kwargs):
+    """
+    Clear almanac cache on KnowledgePacket save or when there's a change in any
+    of its M2M fields' list.
+    """
+    profiles = (
+        Profile.objects.filter(status='gm') | instance.acquired_by.all()
+    )
+    vary_on_list = [[userid] for userid in set(p.user.id for p in profiles)]
+
+    clear_cache(cachename='almanac', vary_on_list=vary_on_list)
+
+
+@receiver(post_save, sender=Skill)
+@receiver(post_save, sender=Reference)
+@receiver(post_save, sender=PictureSet)
+def remove_cache(sender, instance, **kwargs):
+    """
+    Clear almanac cache whenever a Skill, a Reference or a PictureSet related
+    to a KnowledgePacket is saved.
+    """
+    profiles = Profile.objects.filter(status='gm')
+    for knowledge_packet in instance.knowledge_packets.all():
+        profiles |= knowledge_packet.acquired_by.all()
+
+    vary_on_list = [[userid] for userid in set(p.user.id for p in profiles)]
+
+    clear_cache(cachename='almanac', vary_on_list=vary_on_list)

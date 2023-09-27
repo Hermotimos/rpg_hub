@@ -101,7 +101,7 @@ class FirstNameAdmin(admin.ModelAdmin):
 class FirstNameInline(admin.TabularInline):
     filter_horizontal = ['equivalents']
     model = FirstName
-    extra = 10
+    extra = 5
     formfield_overrides = {
         models.CharField: {'widget': forms.TextInput(attrs={'size': 8})},
         models.TextField: {'widget': forms.Textarea(attrs={'rows': 3, 'cols': 25})},

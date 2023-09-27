@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load cache %}
 {% load static %}
 {% load custom_filters %}
 
@@ -7,7 +8,10 @@
     <link rel="stylesheet" href="{% static 'css/knowledge.css' %}">
 {% endblock head_extra %}
 
+
 {% block content %}
+{% cache 30000 almanac request.current_profile.user.id %}
+
     <article class="top-button">
 
         <header class="mb-5">
@@ -59,4 +63,6 @@
         </div>
 
     </article>
+
+{% endcache %}
 {% endblock content %}
