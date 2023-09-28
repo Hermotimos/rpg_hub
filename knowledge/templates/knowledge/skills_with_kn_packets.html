@@ -66,3 +66,32 @@
 
 {% endcache %}
 {% endblock content %}
+
+
+
+{% block javascript %}
+
+    <script>
+        var informButtons = document.getElementsByClassName('icon-inform');
+        for (let item of informButtons) {
+            item.addEventListener("click", getInformables);
+        }
+
+        function getInformables() {
+            var knowledgePacketId = this.getAttribute('id').split('_')[1]
+            var currentProfileId = this.getAttribute('id').split('_')[2]
+
+            const xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.responseText)
+                }
+            };
+            console.log(`http://127.0.0.1:8000/knowledge/almanac/informables/${knowledgePacketId}/${currentProfileId}/`);
+            xhttp.open("GET", `http://127.0.0.1:8000/knowledge/almanac/informables/${knowledgePacketId}/${currentProfileId}/`);
+            xhttp.send();
+        }
+
+    </script>
+
+{% endblock javascript %}
