@@ -865,10 +865,6 @@ def remove_cache(sender, instance, **kwargs):
     clear_cache(cachename='synergies', vary_on_list=vary_on_list)
 
 
-# --------------------------
-
-
-
 @receiver(post_save, sender=Perk)
 @receiver(post_save, sender=ConditionalModifier)
 @receiver(post_save, sender=Modifier)
@@ -888,3 +884,52 @@ def remove_cache(sender, instance, **kwargs):
 
     clear_cache(cachename='skills', vary_on_list=vary_on_list)
     clear_cache(cachename='synergies', vary_on_list=vary_on_list)
+
+
+# --------------------------
+
+
+@receiver(post_save, sender=Spell)
+@receiver(post_save, sender=PriestSpell)
+@receiver(post_save, sender=TheurgistSpell)
+@receiver(post_save, sender=SorcererSpell)
+@receiver(m2m_changed, sender=Spell.allowees.through)
+@receiver(m2m_changed, sender=Spell.spheres.through)
+@receiver(m2m_changed, sender=Spell.domains.through)
+@receiver(m2m_changed, sender=PriestSpell.allowees.through)
+@receiver(m2m_changed, sender=PriestSpell.spheres.through)
+@receiver(m2m_changed, sender=PriestSpell.domains.through)
+@receiver(m2m_changed, sender=TheurgistSpell.allowees.through)
+@receiver(m2m_changed, sender=TheurgistSpell.spheres.through)
+@receiver(m2m_changed, sender=TheurgistSpell.domains.through)
+@receiver(m2m_changed, sender=SorcererSpell.allowees.through)
+@receiver(m2m_changed, sender=SorcererSpell.spheres.through)
+@receiver(m2m_changed, sender=SorcererSpell.domains.through)
+def remove_cache(sender, instance, **kwargs):
+    """
+    Clear 'spells' cache on Spell save or its M2M list change.
+    """
+    userids = profiles_to_userids(
+        instance.allowees.all() | Profile.objects.filter(status='gm')
+    )
+    vary_on_list = []
+    for userid in userids:
+        for sk in  ['Moce Kapłańskie', 'Moce Teurgiczne', 'Zaklęcia']:
+            vary_on_list.append([userid, sk])
+
+    clear_cache(cachename='spells', vary_on_list=vary_on_list)
+
+
+@receiver(post_save, sender=Sphere)
+@receiver(post_save, sender=Domain)
+def remove_cache(sender, instance, **kwargs):
+    """
+    Clear 'spells' cache for all users on Sphere and domain save.
+    """
+    userids = profiles_to_userids(Profile.objects.all())
+    vary_on_list = []
+    for userid in userids:
+        for sk in  ['Moce Kapłańskie', 'Moce Teurgiczne', 'Zaklęcia']:
+            vary_on_list.append([userid, sk])
+
+    clear_cache(cachename='spells', vary_on_list=vary_on_list)

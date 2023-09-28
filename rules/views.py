@@ -329,6 +329,7 @@ def rules_spells_view(request, spells_kind):
         'Zaklęcia': SorcererSpell,
     }
     SpellModel = models.get(spells_kind)
+    print(1111, SpellModel.__name__)
 
     spells = SpellModel.objects.prefetch_related('spheres', 'domains', 'allowees')
     if not current_profile.can_view_all:

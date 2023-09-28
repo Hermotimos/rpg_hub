@@ -105,7 +105,7 @@ def remove_cache(sender, instance, **kwargs):
     of its M2M fields' list.
     """
     userids = profiles_to_userids(
-        Profile.objects.filter(status='gm') | instance.acquired_by.all()
+        instance.acquired_by.all() | Profile.objects.filter(status='gm')
     )
     vary_on_list = [[userid] for userid in userids]
 

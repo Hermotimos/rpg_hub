@@ -10,7 +10,7 @@
 
 
 {% block content %}
-{% cache 604800 spells spells_kind request.current_profile.user.id %}
+{% cache 604800 spells request.current_profile.user.id spells_kind %}
 
     <div class="pt-3 mt-5">
         <div class="rules-styling" id="accordion{{ panel_id }}">
