@@ -51,6 +51,7 @@ ADMINS = [
     ("Łukasz", env('ADMIN_EMAIL')),
 ]
 
+GCP_PROJECT_ID = env("GCP_PROJECT_ID")
 
 # -----------------------------------------------------------------------------
 #  gaestd_py_django_csrf
@@ -79,10 +80,10 @@ if APPENGINE_URL:
 else:
     ALLOWED_HOSTS = [
         '127.0.0.1',
-        'hyllemath.lm.r.appspot.com',
+        f'{GCP_PROJECT_ID}.lm.r.appspot.com',
     ]
     CSRF_TRUSTED_ORIGINS = [
-        'https://8000-cs-570532252862-default.cs-europe-west4-fycr.cloudshell.dev'
+       env("CSRF_TRUSTED_ORIGIN_1")
     ]
     SESSION_COOKIE_AGE = 86400*30   # 30 days in seconds
 
@@ -257,7 +258,7 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     DEFAULT_FILE_STORAGE = 'rpg_project.storages.GoogleCloudMediaFileStorage'
     STATICFILES_STORAGE = 'rpg_project.storages.GoogleCloudStaticFileStorage'
 
-    GS_PROJECT_ID = 'hyllemath'
+    GS_PROJECT_ID = GCP_PROJECT_ID
     GS_BUCKET_NAME = env("GS_BUCKET_NAME")
 
     STATIC_URL = f"https://storage.googleapis.com/{GS_BUCKET_NAME}/static/"
@@ -342,6 +343,6 @@ CKEDITOR_CONFIGS = {
 
 # For get_absolute_url methods
 if os.getenv('GAE_ENV', '').startswith('standard'):
-    BASE_URL = "https://hyllemath.lm.r.appspot.com"
+    BASE_URL = APPENGINE_URL
 else:
     BASE_URL = '127.0.0.1:8000'
