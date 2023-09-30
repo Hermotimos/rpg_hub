@@ -111,30 +111,27 @@ def kn_packet_form_view(request, kn_packet_id):
         return redirect('users:dupa')
 
 
-
-def knowledge_packet_informables(request, knowledge_packet_id: int, current_profile_id: int):
-    current_profile = Profile.objects.get(id=current_profile_id)
+@login_required
+@auth_profile(['all'])
+def knowledge_packet_informables(request, knowledge_packet_id: int):
+    current_profile = request.current_profile
 
     knowledge_packet = KnowledgePacket.objects.get(id=knowledge_packet_id)
-
-    acquaintanceships = current_profile.character.acquaintanceships().filter(
+    acquaintanceships = current_profile.character.acquaintanceships()
+    acquaintanceships = acquaintanceships.filter(
         known_character__profile__in=Profile.active_players.all()
     ).exclude(
-        known_character__profile__knowledge_packets=OuterRef('id')      # TODO co to ????
+        known_character__profile__id__in=knowledge_packet.acquired_by.all()
     )
 
     # TODO temp 'Ilen z Astinary, Alora z Astinary'
     # hide Davos from Ilen and Alora
-    if current_profile_id in [5, 6]:
+    if current_profile.id in [5, 6]:
         acquaintanceships = acquaintanceships.exclude(known_character__profile__id=3)
     # vice versa
-    if current_profile_id == 3:
+    if current_profile.id == 3:
         acquaintanceships = acquaintanceships.exclude(known_character__profile__id__in=[5, 6])
     # TODO end temp
-
-    # Exclude Acquaintanceship-s leading to Profiles who have already acquired
-    acquaintanceships = acquaintanceships.exclude(
-        known_character__profile__id__in=knowledge_packet.acquired_by.all())
 
     informables = acquaintanceships.values(
         json=JSONObject(
