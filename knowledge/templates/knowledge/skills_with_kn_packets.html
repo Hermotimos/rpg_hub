@@ -79,7 +79,6 @@
 
         function getInformables() {
             var knowledgePacketId = this.getAttribute('id').split('_')[1]
-            var currentProfileId = this.getAttribute('id').split('_')[2]
 
             const xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
@@ -87,8 +86,8 @@
                     console.log(this.responseText)
                 }
             };
-            console.log(`http://127.0.0.1:8000/knowledge/almanac/informables/${knowledgePacketId}/${currentProfileId}/`);
-            xhttp.open("GET", `http://127.0.0.1:8000/knowledge/almanac/informables/${knowledgePacketId}/${currentProfileId}/`);
+            console.log(`http://127.0.0.1:8000/knowledge/almanac/informables/${knowledgePacketId}/`);
+            xhttp.open("GET", `http://127.0.0.1:8000/knowledge/almanac/informables/${knowledgePacketId}/`);
             xhttp.send();
         }
 
