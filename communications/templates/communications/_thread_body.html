@@ -25,11 +25,9 @@
 
 {% block javascript %}
 
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-
-    <script src="{% static 'js/thread/threadFocusOnCKEditor.js' %}"></script>
-    <script src="{% static 'js/thread/threadReloadStatements.js' %}"></script>
-    <script src="{% static 'js/thread/threadNewStatement.js' %}"></script>
+    <script src="{% static 'js/thread/threadFocusOnCKEditor.js' %}" defer></script>
+    <script src="{% static 'js/thread/threadReloadStatements.js' %}" defer></script>
+    <script src="{% static 'js/thread/threadNewStatement.js' %}" defer></script>
 
 {% endblock javascript %}
 
