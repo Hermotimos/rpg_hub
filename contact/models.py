@@ -12,7 +12,7 @@ from django.db.models import (
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from rpg_project.utils import ensure_unique_filename, clear_cache, profiles_to_userids
+from rpg_project.utils import ensure_unique_filename, clear_cache
 from users.models import Profile
 
 
@@ -33,7 +33,7 @@ class Demand(Model):
         return f'{text[0:50] + "..." if len(str(text)) > 50 else text}'
 
     def save(self, *args, **kwargs):
-        if self.image:
+        if self.pk is None and self.image:
             self.image.name = ensure_unique_filename(self.image.name)
         super().save(*args, **kwargs)
 
@@ -98,8 +98,24 @@ def delete_if_doubled(sender, instance, **kwargs):
 @receiver(post_save, sender=Demand)
 def remove_cache(sender, instance, **kwargs):
     """
-    Clear navbar cache on Demand save (creation or 'is_done' change)
-    for all participants.
+    Clear navbar cache on Demand save (creation or 'is_done' change).
     """
-    vary_on_list = [[instance.author.user.id, instance.addressee.user.id]]
+    vary_on_list = [[instance.author.user.id], [instance.addressee.user.id]]
     clear_cache(cachename='navbar', vary_on_list=vary_on_list)
+
+
+@receiver(post_save, sender=Demand)
+@receiver(post_save, sender=DemandAnswer)
+def remove_cache(sender, instance, **kwargs):
+    """
+    Clear navbar cache on Demand save (creation or 'is_done' change),
+    as well as on DemandAnswer creation.
+    """
+    if isinstance(instance, Demand):
+        vary_on_list = [[instance.author.user.id], [instance.addressee.user.id]]
+    elif isinstance(instance, DemandAnswer):
+        vary_on_list = [[instance.demand.author.user.id], [instance.demand.addressee.user.id]]
+    else:
+        raise Exception('Unimplemented Prosoponomikon signal!')
+
+    clear_cache(cachename='demands', vary_on_list=vary_on_list)
