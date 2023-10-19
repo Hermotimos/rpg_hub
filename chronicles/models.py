@@ -17,11 +17,12 @@ from django.db.models import (
     TextField,
 )
 from django.db.models.signals import post_save, m2m_changed
+from django.dispatch import receiver
 from django.utils.text import Truncator
 from django.contrib.postgres.fields import ArrayField
 from communications.models import Thread
 from imaginarion.models import Audio, PictureSet
-from rpg_project.utils import OrderByPolish
+from rpg_project.utils import OrderByPolish, clear_cache, profiles_to_userids
 from toponomikon.models import Location
 from users.models import Profile, User
 
@@ -482,6 +483,11 @@ class GameEvent(Event):
 # Signals
 
 
+@receiver(post_save, sender=GameEvent)
+# Run by each change of 'participants', 'informees' or 'locations'
+@receiver(m2m_changed, sender=GameEvent.participants.through)
+@receiver(m2m_changed, sender=GameEvent.informees.through)
+@receiver(m2m_changed, sender=GameEvent.locations.through)
 def update_known_locations(sender, instance, **kwargs):
     """Whenever a profile becomes 'participant' or 'informed' of an event in
     specific location add this location to profile's 'participants'
@@ -495,24 +501,26 @@ def update_known_locations(sender, instance, **kwargs):
         location.informees.add(*informees)
 
 
-post_save.connect(
-    receiver=update_known_locations,
-    sender=GameEvent)
+# post_save.connect(
+#     receiver=update_known_locations,
+#     sender=GameEvent)
 
-# Run by each change of 'participants', 'informees' or 'locations':
-m2m_changed.connect(
-    receiver=update_known_locations,
-    sender=GameEvent.participants.through)
+# # Run by each change of 'participants', 'informees' or 'locations':
+# m2m_changed.connect(
+#     receiver=update_known_locations,
+#     sender=GameEvent.participants.through)
 
-m2m_changed.connect(
-    receiver=update_known_locations,
-    sender=GameEvent.informees.through)
+# m2m_changed.connect(
+#     receiver=update_known_locations,
+#     sender=GameEvent.informees.through)
 
-m2m_changed.connect(
-    receiver=update_known_locations,
-    sender=GameEvent.locations.through)
+# m2m_changed.connect(
+#     receiver=update_known_locations,
+#     sender=GameEvent.locations.through)
 
 
+# This signal also fires on GameEvent object creation
+@receiver(m2m_changed, sender=GameEvent.participants.through)
 def update_acquantanceships_for_participants(sender, instance, **kwargs):
     """Whenever GameEvent is saved (create & update), create Acquaintanceship
     objects for all participants, in both directions.
@@ -536,11 +544,13 @@ def update_acquantanceships_for_participants(sender, instance, **kwargs):
 
 
 # This signal also fires on GameEvent object creation
-m2m_changed.connect(
-    receiver=update_acquantanceships_for_participants,
-    sender=GameEvent.participants.through)
+# m2m_changed.connect(
+#     receiver=update_acquantanceships_for_participants,
+#     sender=GameEvent.participants.through)
 
 
+# This signal also fires on GameEvent object creation
+@receiver(m2m_changed, sender=GameEvent.informees.through)
 def update_acquantanceships_for_informees(sender, instance, **kwargs):
     """Whenever GameEvent is saved (create & update), create Acquaintanceship
     objects for all informees, so that they know all participants indirectly.
@@ -561,6 +571,27 @@ def update_acquantanceships_for_informees(sender, instance, **kwargs):
 
 
 # This signal also fires on GameEvent object creation
-m2m_changed.connect(
-    receiver=update_acquantanceships_for_informees,
-    sender=GameEvent.informees.through)
+# m2m_changed.connect(
+#     receiver=update_acquantanceships_for_informees,
+#     sender=GameEvent.informees.through)
+
+
+
+@receiver(post_save, sender=GameEvent)
+# Run by each change of 'participants', 'informees' or 'locations'
+@receiver(m2m_changed, sender=GameEvent.participants.through)
+@receiver(m2m_changed, sender=GameEvent.informees.through)
+@receiver(m2m_changed, sender=GameEvent.locations.through)
+def remove_cache(sender, instance, **kwargs):
+    """
+    Whenever a GameEvent gets new 'participants'/'informees'/'locations,
+    Clear cache for 'participants' and 'infromees' User-s.
+    """
+    userids = profiles_to_userids(
+        Profile.objects.filter(status='gm')
+        | instance.participants.all()
+        | instance.informees.all()
+    )
+    vary_on_list = [[userid] for userid in userids]
+
+    clear_cache(cachename='timeline', vary_on_list=vary_on_list)
