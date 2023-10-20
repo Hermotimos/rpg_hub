@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load cache %}
 {% load static %}
 {% load custom_filters %}
 
@@ -6,13 +7,16 @@
     <link rel="stylesheet" href="{% static 'css/chronicles.css' %}">
 {% endblock head_extra %}
 
+
 {% block content %}
-    <section class="mt-5 pt-4">
+{% cache 604800 chronicle request.current_profile.user.id  %}
+
+<section class="mt-5 pt-4">
         <div class="container mb-5">
             {% include 'chronicles/_chapters_list.html' %}
         </div>
     </section>
- 
+
     {% for chapter in chapters %}
         <div class="container">
             <div id="{{chapter.id}}" class="pt-5 row">
@@ -31,4 +35,5 @@
         </div>
     {% endfor %}
 
+{% endcache %}
 {% endblock content %}

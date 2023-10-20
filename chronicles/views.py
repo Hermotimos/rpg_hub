@@ -2,8 +2,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch, Q, Count
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.decorators.cache import cache_page
-from django.views.decorators.vary import vary_on_cookie
 
 from chronicles.filters import GameEventFilter, add_sublocations
 from chronicles.models import (
@@ -22,8 +20,6 @@ from toponomikon.models import Location
 # #################### CHRONICLE ####################
 
 
-@cache_page(60 * 5)
-@vary_on_cookie
 @login_required
 @auth_profile(['all'])
 def chronicle_main_view(request):
@@ -68,8 +64,6 @@ def chronicle_main_view(request):
     return render(request, 'chronicles/chronicle_main.html', context)
 
 
-@cache_page(60 * 60)
-@vary_on_cookie
 @login_required
 @auth_profile(['all'])
 def chronicle_game_view(request, game_id):
@@ -100,8 +94,6 @@ def chronicle_game_view(request, game_id):
         return redirect('users:dupa')
 
 
-@cache_page(60 * 60)
-@vary_on_cookie
 @login_required
 @auth_profile(['all'])
 def chronicle_chapter_view(request, chapter_id):
@@ -121,13 +113,14 @@ def chronicle_chapter_view(request, chapter_id):
         events = events.filter(
             Q(participants=current_profile) | Q(informees=current_profile)
         ).filter(game__ispublished=True).distinct()
-        
+
     games = GameSession.objects.filter(game_events__in=events)
     games = games.prefetch_related(Prefetch('game_events', queryset=events))
     games = games.distinct()
 
     context = {
         'page_title': chapter.title,
+        'chapter': chapter,
         'games': games,
     }
     if games:
@@ -136,8 +129,6 @@ def chronicle_chapter_view(request, chapter_id):
         return redirect('users:dupa')
 
 
-@cache_page(60 * 60)
-@vary_on_cookie
 @login_required
 @auth_profile(['all'])
 def chronicle_all_view(request):
@@ -243,8 +234,6 @@ def chronologies_view(request):
 # -----------------------------------------------------------------------------
 
 
-@cache_page(60 * 60)
-@vary_on_cookie
 @login_required
 @auth_profile(['all'])
 def timeline_view(request):

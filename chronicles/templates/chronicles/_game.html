@@ -1,20 +1,26 @@
+{% load cache %}
 
-<div class="text-center h5 mt-5 pt-5 pb-2">
-    <p class="mb-0 text-center">✧</p>
-    <p class="mb-0 text-center">✧ ✦ ✧</p>
-    <p class="h2 font-weight-bold py-1">
-        {% if forloop.counter %}{{ forloop.counter }}. {% endif %}
-        {% if game.title %}
-            {{ game.title }}
-        {% else %}
-            {{ page_title }}
-        {% endif %}
-    </p>
-    <p class="mb-0 text-center">✧ ✦ ✧</p>
-    <p class="mb-0 text-center">✧</p>
-</div>
-<div class="mt-2">
-    {% for event in events %}
-        {% include 'chronicles/_event.html' %}
-    {% endfor %}
-</div>
+
+{% cache 604800 game request.current_profile.user.id game.id %}
+
+    <div class="text-center h5 mt-5 pt-5 pb-2">
+        <p class="mb-0 text-center">✧</p>
+        <p class="mb-0 text-center">✧ ✦ ✧</p>
+        <p class="h2 font-weight-bold py-1">
+            {% if forloop.counter %}{{ forloop.counter }}. {% endif %}
+            {% if game.title %}
+                {{ game.title }}
+            {% else %}
+                {{ page_title }}
+            {% endif %}
+        </p>
+        <p class="mb-0 text-center">✧ ✦ ✧</p>
+        <p class="mb-0 text-center">✧</p>
+    </div>
+    <div class="mt-2">
+        {% for event in events %}
+            {% include 'chronicles/_event.html' %}
+        {% endfor %}
+    </div>
+
+{% endcache %}

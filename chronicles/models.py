@@ -579,9 +579,9 @@ def update_acquantanceships_for_informees(sender, instance, **kwargs):
 
 @receiver(post_save, sender=GameEvent)
 # Run by each change of 'participants', 'informees' or 'locations'
-@receiver(m2m_changed, sender=GameEvent.participants.through)
-@receiver(m2m_changed, sender=GameEvent.informees.through)
-@receiver(m2m_changed, sender=GameEvent.locations.through)
+# @receiver(m2m_changed, sender=GameEvent.participants.through)
+# @receiver(m2m_changed, sender=GameEvent.informees.through)
+# @receiver(m2m_changed, sender=GameEvent.locations.through)
 def remove_cache(sender, instance, **kwargs):
     """
     Whenever a GameEvent gets new 'participants'/'informees'/'locations,
@@ -592,6 +592,12 @@ def remove_cache(sender, instance, **kwargs):
         | instance.participants.all()
         | instance.informees.all()
     )
-    vary_on_list = [[userid] for userid in userids]
+    vary_on_list_all = [[userid] for userid in userids]
+    vary_on_list_chapter = [sub + [instance.game.chapter.id] for sub in vary_on_list_all]
+    vary_on_list_game = [sub + [instance.game.id] for sub in vary_on_list_all]
 
-    clear_cache(cachename='timeline', vary_on_list=vary_on_list)
+    clear_cache(cachename='timeline', vary_on_list=vary_on_list_all)
+    clear_cache(cachename='chronicle', vary_on_list=vary_on_list_all)
+
+    clear_cache(cachename='game', vary_on_list=vary_on_list_game)
+    clear_cache(cachename='chapter', vary_on_list=vary_on_list_chapter)

@@ -1,11 +1,17 @@
+{% load cache %}
 
-{% for game in games %}
-    {% with events=game.game_events.all %}
-        {% include 'chronicles/_game.html' %}
-    {% endwith %}
-{% endfor %}
-<div class="text-center mt-5">
-    <p class="mb-0 text-center">✧</p>
-    <p class="mb-0 text-center">✧ ✦ ✧</p>
-    <p class="mb-0 text-center">✧</p>
-</div>
+
+{% cache 604800 chapter request.current_profile.user.id chapter.id %}
+
+    {% for game in games %}
+        {% with events=game.game_events.all %}
+            {% include 'chronicles/_game.html' %}
+        {% endwith %}
+    {% endfor %}
+    <div class="text-center mt-5">
+        <p class="mb-0 text-center">✧</p>
+        <p class="mb-0 text-center">✧ ✦ ✧</p>
+        <p class="mb-0 text-center">✧</p>
+    </div>
+
+{% endcache %}
