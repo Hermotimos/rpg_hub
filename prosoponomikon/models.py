@@ -587,6 +587,20 @@ def remove_cache(sender, instance, **kwargs):
     clear_cache(cachename='prosoponomikon-acquaintanceship', vary_on_list=vary_on_list)
 
 
+@receiver(post_save, sender=Character.skill_levels.through)
+@receiver(post_save, sender=Character.spells.through)
+def remove_cache(sender, instance, **kwargs):
+    """
+    Clear relevant Acquantainceship fragment cache on
+    Acquisition (skill_levels) change.
+    """
+    userids = profiles_to_userids(
+        Profile.objects.filter(Q(status='gm') | Q(id=instance.character.profile.id))
+    )
+    vary_on_list = [[userid, instance.character.id] for userid in userids]
+
+    clear_cache(cachename='prosoponomikon-acquaintanceship', vary_on_list=vary_on_list)
+
 
 @receiver(post_save, sender='items.Item')
 def remove_cache(sender, instance, **kwargs):
@@ -598,20 +612,6 @@ def remove_cache(sender, instance, **kwargs):
             Q(status='gm') | Q(id=instance.collection.owner.profile.id))
     )
     vary_on_list = [[userid, instance.collection.owner.id] for userid in userids]
-
-    clear_cache(cachename='prosoponomikon-acquaintanceship', vary_on_list=vary_on_list)
-
-
-@receiver(post_save, sender=Character.skill_levels.through)
-def remove_cache(sender, instance, **kwargs):
-    """
-    Clear relevant Acquantainceship fragment cache on
-    Acquisition (skill_levels) change.
-    """
-    userids = profiles_to_userids(
-        Profile.objects.filter(Q(status='gm') | Q(id=instance.character.profile.id))
-    )
-    vary_on_list = [[userid, instance.character.id] for userid in userids]
 
     clear_cache(cachename='prosoponomikon-acquaintanceship', vary_on_list=vary_on_list)
 
