@@ -19,9 +19,9 @@ ul.dropdown-menu {
 
 .sticky-menu {
     background-color: #fafafa;
-    position:sticky;
-    top:60px;
-    width:auto;
-    z-index:100;
+    position: sticky;
+    top: 60px;
+    width: auto;
+    z-index: 100;
 }
 
