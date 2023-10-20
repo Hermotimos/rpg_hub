@@ -22,7 +22,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 
 from knowledge.models import BiographyPacket, DialoguePacket
-from rpg_project.utils import OrderByPolish, clear_cache, profiles_to_userids
+from rpg_project.utils import OrderByPolish, clear_cache
 from rules.models import SubProfession, Skill, SkillLevel, WeaponType, \
     SkillType, Spell, Domain, Sphere
 from toponomikon.models import Location

@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
+{% load cache %}
 {% load static %}
 {% load custom_filters %}
+
 
 {% block head_extra %}
     <link rel="stylesheet" href="{% static 'css/chronicles.css' %}">
 {% endblock head_extra %}
 
+
 {% block content %}
+{% cache 604800 timeline request.current_profile.user.id %}
+
     <section class="mt-3">
         <p class="font-18 font-italic text-justify">
             <!-- Syngir, Murkon, Dalamar -->
@@ -361,4 +366,5 @@
         </table>
     {% endif %}
 
+{% endcache %}
 {% endblock content %}

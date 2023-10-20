@@ -1,16 +1,20 @@
 from datetime import datetime
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch
-from django.shortcuts import render, redirect
+from django.db.models import Case, OuterRef, Prefetch, Q, Value, When
+from django.db.models.functions import Concat, JSONObject
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
 
 from imaginarion.models import Picture, PictureImage, PictureSet
 from knowledge.forms import PlayerKnPacketForm
 from knowledge.models import KnowledgePacket
 from knowledge.utils import annotate_informables
-from rpg_project.utils import handle_inform_form, auth_profile
+from rpg_project.utils import auth_profile, handle_inform_form
 from rules.models import Skill
+from users.models import Profile
 
 
 @login_required
@@ -105,3 +109,55 @@ def kn_packet_form_view(request, kn_packet_id):
         return render(request, '_form.html', context)
     else:
         return redirect('users:dupa')
+
+
+@login_required
+@auth_profile(['all'])
+def knowledge_packet_informables(request, knowledge_packet_id: int):
+    current_profile = request.current_profile
+
+    knowledge_packet = KnowledgePacket.objects.get(id=knowledge_packet_id)
+    acquaintanceships = current_profile.character.acquaintanceships()
+    acquaintanceships = acquaintanceships.filter(
+        known_character__profile__in=Profile.active_players.all()
+    ).exclude(
+        known_character__profile__id__in=knowledge_packet.acquired_by.all()
+    )
+
+    # TODO temp 'Ilen z Astinary, Alora z Astinary'
+    # hide Davos from Ilen and Alora
+    if current_profile.id in [5, 6]:
+        acquaintanceships = acquaintanceships.exclude(known_character__profile__id=3)
+    # vice versa
+    if current_profile.id == 3:
+        acquaintanceships = acquaintanceships.exclude(known_character__profile__id__in=[5, 6])
+    # TODO end temp
+
+    informables = acquaintanceships.values(
+        json=JSONObject(
+            id='known_character__profile__id',
+            status='known_character__profile__status',
+            known_character=JSONObject(
+                fullname='known_character__fullname',
+                profile=JSONObject(
+                    id='known_character__profile__id',
+                    is_alive='known_character__profile__is_alive',
+                    image=JSONObject(
+                        url=Concat(Value(settings.MEDIA_URL), 'known_character__profile__image')
+                    ),
+                )
+            ),
+            is_direct='is_direct',
+            knows_if_dead='knows_if_dead',
+            knows_as_name='knows_as_name',
+            knows_as_image=Case(
+                When(~Q(knows_as_image=''), then=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'knows_as_image'))),
+                default=None,
+            ),
+        )
+    )
+    return JsonResponse(
+        {
+            "informables": list(informables.values()),
+        }
+    )
