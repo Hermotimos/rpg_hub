@@ -17,12 +17,12 @@ from django.db.models import (
     Value,
 )
 from django.db.models.functions import Substr, Lower, Coalesce, Replace
-from django.db.models.signals import post_save, m2m_changed
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 
 from knowledge.models import BiographyPacket, DialoguePacket
-from rpg_project.utils import OrderByPolish, clear_cache
+from rpg_project.utils import OrderByPolish, clear_cache, profiles_to_userids
 from rules.models import SubProfession, Skill, SkillLevel, WeaponType, \
     SkillType, Spell, Domain, Sphere
 from toponomikon.models import Location
@@ -585,3 +585,33 @@ def remove_cache(sender, instance, **kwargs):
 
     clear_cache(cachename='prosoponomikon-acquaintanceships', vary_on_list=vary_on_list)
     clear_cache(cachename='prosoponomikon-acquaintanceship', vary_on_list=vary_on_list)
+
+
+
+@receiver(post_save, sender='items.Item')
+def remove_cache(sender, instance, **kwargs):
+    """
+    Clear relevant Acquantainceship fragment cache on Item save.
+    """
+    userids = profiles_to_userids(
+        Profile.objects.filter(
+            Q(status='gm') | Q(id=instance.collection.owner.profile.id))
+    )
+    vary_on_list = [[userid, instance.collection.owner.id] for userid in userids]
+
+    clear_cache(cachename='prosoponomikon-acquaintanceship', vary_on_list=vary_on_list)
+
+
+@receiver(post_save, sender=Character.skill_levels.through)
+def remove_cache(sender, instance, **kwargs):
+    """
+    Clear relevant Acquantainceship fragment cache on
+    Acquisition (skill_levels) change.
+    """
+    userids = profiles_to_userids(
+        Profile.objects.filter(Q(status='gm') | Q(id=instance.character.profile.id))
+    )
+    vary_on_list = [[userid, instance.character.id] for userid in userids]
+
+    clear_cache(cachename='prosoponomikon-acquaintanceship', vary_on_list=vary_on_list)
+
