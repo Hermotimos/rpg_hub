@@ -6,6 +6,7 @@ from django.urls import include, path
 from rest_framework import routers  # TODO why import error
 
 from users.drf import UserViewSet, ProfileViewSet
+from communications.drf import StatementViewSet, ThreadViewSet
 
 
 admin.site.enable_nav_sidebar = False
@@ -40,6 +41,8 @@ if settings.DEBUG:
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'profiles', ProfileViewSet)
+router.register(r'statements', StatementViewSet)
+router.register(r'threads', ThreadViewSet)
 
 urlpatterns += [
     path('', include(router.urls)),
