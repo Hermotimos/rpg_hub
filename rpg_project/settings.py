@@ -269,7 +269,7 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
 
 else:
     # Use these settings to run "python manage.py collectstatic"
-    # STATIC_ROOT = "static"    # needed in production and for collectstatic
+    # STATIC_ROOT = "static"    # needed in production and for local collectstatic
     # STATIC_URL = "/static/"
     # STATICFILES_DIRS = []
 

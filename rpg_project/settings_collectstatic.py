@@ -3,16 +3,18 @@ from rpg_project.settings import *
 
 """
 This file is for "collecting" static files from the local machine to Storage bucket
-In manage.py temporarily replace:
+
+    1)
+    In manage.py temporarily replace:
 
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'rpg_project.settings')
-
     with
-
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'rpg_project.settings_collectstatic')
 
-    Then run python manage.py collectstatic.
-    Revert changes in manage.py
+    2) python manage.py collectstatic
+
+    3) Revert changes in manage.py and settings.py
+
 """
 
 GS_BUCKET_NAME = env("GS_BUCKET_NAME")
