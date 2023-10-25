@@ -25,3 +25,6 @@ class ThreadSerializer(serializers.HyperlinkedModelSerializer):
 class ThreadViewSet(viewsets.ModelViewSet):
     queryset = Thread.objects.all()
     serializer_class = ThreadSerializer
+
+
+# -----------------------------------------------------------------------------

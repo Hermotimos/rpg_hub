@@ -3,7 +3,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from rest_framework import routers  # TODO why import error
+from rest_framework import routers
 
 from users.drf import UserViewSet, ProfileViewSet
 from communications.drf import StatementViewSet, ThreadViewSet
