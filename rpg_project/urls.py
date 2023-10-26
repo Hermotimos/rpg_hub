@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 
-from users.drf import UserViewSet, ProfileViewSet
+from users.drf import GroupViewSet, UserViewSet, ProfileViewSet
 from communications.drf import StatementViewSet, ThreadViewSet
 
 
@@ -39,6 +39,7 @@ if settings.DEBUG:
 # Django REST Framework URLs
 
 router = routers.DefaultRouter()
+router.register(r'groups', GroupViewSet)
 router.register(r'users', UserViewSet)
 router.register(r'profiles', ProfileViewSet)
 router.register(r'statements', StatementViewSet)
