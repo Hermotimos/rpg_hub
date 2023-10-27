@@ -46,6 +46,6 @@ router.register(r'statements', StatementViewSet)
 router.register(r'threads', ThreadViewSet)
 
 urlpatterns += [
-    path('', include(router.urls)),
+    path('api/', include(router.urls)), # REST API root: http://127.0.0.1:8000/api/
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

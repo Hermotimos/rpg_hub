@@ -80,6 +80,7 @@ if APPENGINE_URL:
 else:
     ALLOWED_HOSTS = [
         '127.0.0.1',
+        'localhost',
         f'{GCP_PROJECT_ID}.lm.r.appspot.com',
     ]
     CSRF_TRUSTED_ORIGINS = [
