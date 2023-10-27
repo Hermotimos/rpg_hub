@@ -124,7 +124,6 @@ def remove_cache(sender, instance, **kwargs):
     for knowledge_packet in instance.knowledge_packets.all():
         profiles |= knowledge_packet.acquired_by.all()
     userids = profiles_to_userids(profiles)
-    print(userids)
     vary_on_list = [[userid] for userid in userids]
 
     clear_cache(cachename='almanac', vary_on_list=vary_on_list)
