@@ -1,5 +1,6 @@
 import os
 import random
+import re
 import time
 import uuid
 from functools import wraps
@@ -500,6 +501,12 @@ def determine_icons_color(profile_obj):
 
 
 def ensure_unique_filename(filename: str):
+    """If filename doesn't contain UUID, add it as postfix."""
+    uuid_pattern = r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}"
+    match = re.search(uuid_pattern, filename)
+    if match:
+        return filename
+
     uuid_postfix = str(uuid.uuid4())
     fname, extension = os.path.splitext(filename)
     return f"{fname}-{uuid_postfix}{extension}"
