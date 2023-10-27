@@ -2,11 +2,11 @@ import debug_toolbar
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from rest_framework import routers
 
 from users.drf import GroupViewSet, UserViewSet, ProfileViewSet
-from communications.drf import StatementViewSet, ThreadViewSet
+from communications.drf import StatementViewSet, ThreadViewSet, StatementByThreadList
 
 
 admin.site.enable_nav_sidebar = False
@@ -46,6 +46,10 @@ router.register(r'statements', StatementViewSet)
 router.register(r'threads', ThreadViewSet)
 
 urlpatterns += [
-    path('api/', include(router.urls)), # REST API root: http://127.0.0.1:8000/api/
+    # REST API root: http://127.0.0.1:8000/api/
+    path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
+    # communications
+    re_path('^api/statements/thread/(?P<thread_id>\d+)/$', StatementByThreadList.as_view()),
 ]

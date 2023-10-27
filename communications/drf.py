@@ -1,5 +1,6 @@
 from rest_framework import serializers, viewsets
 from communications.models import Statement, Thread
+from rest_framework import generics
 
 
 class StatementSerializer(serializers.HyperlinkedModelSerializer):
@@ -11,6 +12,15 @@ class StatementSerializer(serializers.HyperlinkedModelSerializer):
 class StatementViewSet(viewsets.ModelViewSet):
     queryset = Statement.objects.prefetch_related('seen_by', 'options')
     serializer_class = StatementSerializer
+
+
+class StatementByThreadList(generics.ListAPIView):
+    """A custom DRF view for filtering Statements by their Thread."""
+    serializer_class = StatementSerializer
+
+    def get_queryset(self):
+        thread_id = self.kwargs['thread_id']
+        return Statement.objects.filter(thread_id=thread_id)
 
 
 # -----------------------------------------------------------------------------
