@@ -13,6 +13,7 @@ class UserType:
     is_superuser: bool
     is_staff: bool
     is_active: bool
+    profiles: list['ProfileType']
 
 
 @strawberry.django.type(models.Profile)

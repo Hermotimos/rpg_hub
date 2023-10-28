@@ -22,6 +22,7 @@ class IsAuthenticated(strawberry.BasePermission):
 class Query:
     # unfilterable query
     users1: list[UserType] = strawberry_django.field(permission_classes=[IsAuthenticated])
+    profiles: list[ProfileType] = strawberry_django.field(permission_classes=[IsAuthenticated])
 
     # filterable query
     @strawberry.field(permission_classes=[IsAuthenticated])
@@ -31,8 +32,29 @@ class Query:
         return User.objects.all()
 
     @strawberry.field(permission_classes=[IsAuthenticated])
-    def profiles_by_user(self, info: "Info") -> list[ProfileType]:
+    def profiles_by_request_user(self, info: "Info") -> list[ProfileType]:
         return Profile.objects.filter(user=info.context.request.user)
+
+    @strawberry.field(permission_classes=[IsAuthenticated])
+    def profiles_by_user_id(self, user_id: int) -> list[ProfileType]:
+        return Profile.objects.filter(user__id=user_id)
+
+    @strawberry.field(permission_classes=[IsAuthenticated])
+    def profile_user_profiles(self, profile_id: int) -> list[ProfileType]:
+        """
+        This query achieves current_profile.user.get_all_user_profiles()
+        query MyQuery {
+            profileUserProfiles(profileId: 11) {
+                image
+                status
+                user {
+                    username
+                }
+            }
+        }
+        """
+        profile = Profile.objects.get(id=profile_id)
+        return Profile.objects.filter(user__id=profile.user.id).order_by('status')
 
 
 @strawberry.type
