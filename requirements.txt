@@ -23,6 +23,7 @@ google-cloud-storage==2.7.0
 google-crc32c==1.5.0
 google-resumable-media==2.4.0
 googleapis-common-protos==1.57.0
+graphql-core==3.2.3
 grpc-google-iam-v1==0.12.4
 grpcio==1.51.1
 grpcio-status==1.51.1
@@ -36,11 +37,15 @@ psycopg2==2.9.5
 ptyprocess==0.7.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
+python-dateutil==2.8.2
 pytz==2021.3
 requests==2.28.1
 rsa==4.9
 six==1.16.0
 sqlparse==0.4.3
+strawberry-graphql==0.211.1
+strawberry-graphql-django==0.21.0
+typing_extensions==4.8.0
 tzdata==2022.7
 urllib3==1.26.14
 virtualenv==20.17.1

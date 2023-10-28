@@ -8,6 +8,8 @@ from rest_framework import routers
 from users.drf import GroupViewSet, UserViewSet, ProfileViewSet
 from communications.drf import StatementViewSet, ThreadViewSet, StatementByThreadList
 
+from strawberry.django.views import GraphQLView
+from rpg_project.schema import schema
 
 admin.site.enable_nav_sidebar = False
 admin.site.index_title = "Hyllemath CMS"
@@ -52,4 +54,13 @@ urlpatterns += [
 
     # communications
     re_path('^api/statements/thread/(?P<thread_id>\d+)/$', StatementByThreadList.as_view()),
+]
+
+
+# ----------------------------------------------------------------------------
+# Strawberry Django URLs
+
+urlpatterns += [
+    # GraphQL API root:
+    path('graphql/', GraphQLView.as_view(schema=schema)),
 ]
