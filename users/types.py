@@ -1,5 +1,3 @@
-from typing import List
-
 import strawberry
 
 from users import models
@@ -25,4 +23,3 @@ class ProfileType:
     is_alive: bool
     is_active: bool
     image: str
-  

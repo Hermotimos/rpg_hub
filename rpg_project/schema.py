@@ -6,7 +6,7 @@ from users.types import UserType, ProfileType
 
 # if typing.TYPE_CHECKING:  # pragma: no cover
 from typing import Any, List
-from django.http import HttpRequest, JsonResponse
+from django.http import HttpRequest
 from strawberry.types import Info
 
 
