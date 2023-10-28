@@ -80,6 +80,7 @@ if APPENGINE_URL:
 else:
     ALLOWED_HOSTS = [
         '127.0.0.1',
+        'localhost',
         f'{GCP_PROJECT_ID}.lm.r.appspot.com',
     ]
     CSRF_TRUSTED_ORIGINS = [
@@ -104,6 +105,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'debug_toolbar',
     'django_filters',
+    'rest_framework',
 
     # own
     # 'associations',
@@ -346,3 +348,16 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
     BASE_URL = APPENGINE_URL
 else:
     BASE_URL = '127.0.0.1:8000'
+
+
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+}
