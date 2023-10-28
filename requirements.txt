@@ -13,6 +13,7 @@ django-filter==22.1
 django-js-asset==2.0.0
 django-storages==1.13.2
 django_debug_toolbar==3.8.1
+djangorestframework==3.14.0
 filelock==3.8.2
 google-api-core==2.11.0
 google-auth==2.15.0
