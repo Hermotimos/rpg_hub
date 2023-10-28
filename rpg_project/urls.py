@@ -4,12 +4,13 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
 from rest_framework import routers
-
-from users.drf import GroupViewSet, UserViewSet, ProfileViewSet
-from communications.drf import StatementViewSet, ThreadViewSet, StatementByThreadList
-
 from strawberry.django.views import GraphQLView
+
+from communications.drf import (
+    StatementByThreadList, StatementViewSet, ThreadViewSet,
+)
 from rpg_project.schema import schema
+from users.drf import GroupViewSet, ProfileViewSet, UserViewSet
 
 admin.site.enable_nav_sidebar = False
 admin.site.index_title = "Hyllemath CMS"
@@ -51,7 +52,6 @@ urlpatterns += [
     # REST API root: http://127.0.0.1:8000/api/
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-
     # communications
     re_path('^api/statements/thread/(?P<thread_id>\d+)/$', StatementByThreadList.as_view()),
 ]
@@ -61,6 +61,8 @@ urlpatterns += [
 # Strawberry Django URLs
 
 urlpatterns += [
-    # GraphQL API root:
-    path('graphql/', GraphQLView.as_view(schema=schema)),
+    # GraphQL API root: http://127.0.0.1:8000/graphql/
+    path('graphql/', GraphQLView.as_view(
+        graphiql=settings.DEBUG,    # turn off Graphiql when DEBUG=False
+        schema=schema)),
 ]

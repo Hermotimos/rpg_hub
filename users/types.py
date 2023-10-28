@@ -15,3 +15,14 @@ class UserType:
     is_superuser: bool
     is_staff: bool
     is_active: bool
+
+
+@strawberry.django.type(models.Profile)
+class ProfileType:
+    id: int
+    user: UserType
+    status: str
+    is_alive: bool
+    is_active: bool
+    image: str
+  
