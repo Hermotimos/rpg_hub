@@ -3,6 +3,8 @@ import strawberry_django
 
 from users.models import User, Profile
 from users.types import UserType, ProfileType
+from communications.models import Statement
+from communications.types import StatementType, ThreadType
 
 # if typing.TYPE_CHECKING:  # pragma: no cover
 from typing import Any, List
@@ -28,6 +30,7 @@ class Query:
     # unfilterable query
     users1: list[UserType] = strawberry_django.field(permission_classes=permissions)
     profiles: list[ProfileType] = strawberry_django.field(permission_classes=permissions)
+    statements_all: list[StatementType] = strawberry_django.field(permission_classes=permissions)
 
     # filterable query
     @strawberry.field(permission_classes=permissions)
@@ -60,6 +63,10 @@ class Query:
         """
         profile = Profile.objects.get(id=profile_id)
         return Profile.objects.filter(user__id=profile.user.id).order_by('status')
+
+    @strawberry.field(permission_classes=permissions)
+    def statements_by_thread_id(self, thread_id: int) -> list[StatementType]:
+        return Statement.objects.filter(thread__id=thread_id)
 
 
 @strawberry.type
