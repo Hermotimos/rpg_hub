@@ -4,12 +4,19 @@ function reloadStatements(){
     $.ajax({
         type: 'GET',
         url: `/communications/statements/${document.getElementById('thread_id').getAttribute('value')}/`,
+
         success: function(response){
-            console.log(response);
-            $("#display").empty();
+
+            var allStatements = $("#display");
 
             for (var num in response.statements)
             {
+                var stmtText = `<div class="statement">${response.statements[num].text}</div>`
+                var createdAt = response.statements[num].created_datetime;
+
+                if (allStatements.has(stmtText).length || allStatements.has(createdAt).length) {
+                    continue; // Skip iteration when Statement is already present
+                }
 
                 var threadKind = response.statements[num].thread_obj.kind;
                 var isGmAndDebate = ( response.statements[num].author_obj.status == 'gm' && threadKind == 'Debate' );
@@ -99,9 +106,6 @@ function reloadStatements(){
                 };
 
 
-                var stmtText = `<div class="statement">${response.statements[num].text}</div>`
-                var createdAt = response.statements[num].created_datetime;
-
                 if ( isGmAndDebate ) {
 
                     var stmtRow = `
@@ -144,21 +148,14 @@ function reloadStatements(){
                 $("#display").append(stmt);
             }
         }
-        /*
-        ,
-        error: function(response){
-            alert('An error occured');
-            // console.log('ggggggg', response);
-        }
-        */
 
     });
 }
 
-// first call before page is ready
+// call before page is ready
 reloadStatements();
 
-// subsequent calls with interval
+// subsequently call with interval
 $(document).ready(function(){
     setInterval(reloadStatements,3000);
 })
