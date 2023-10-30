@@ -1,34 +1,38 @@
 
+var uniqueStatementIds = [];
+
 function reloadStatements(){
 
     $.ajax({
         type: 'GET',
         url: `/communications/statements/${document.getElementById('thread_id').getAttribute('value')}/`,
+        // url: `/api/statements/thread/${document.getElementById('thread_id').getAttribute('value')}/`,
+        // http://127.0.0.1:8000/api/statements/thread/48/
 
         success: function(response){
+            // console.log(response);
+            var statements = response.statements;
 
-            var allStatements = $("#display");
-
-            for (var num in response.statements)
+            for (var num in statements)
             {
-                var stmtText = `<div class="statement">${response.statements[num].text}</div>`
-                var createdAt = response.statements[num].created_datetime;
+                var statement = statements[num];
 
-                if (allStatements.has(stmtText).length || allStatements.has(createdAt).length) {
-                    continue; // Skip iteration when Statement is already present
+                // Skip iteration when Statement is already present
+                if (uniqueStatementIds.includes(statement.id)) {
+                    continue;
                 }
 
-                var threadKind = response.statements[num].thread_obj.kind;
-                var isGmAndDebate = ( response.statements[num].author_obj.status == 'gm' && threadKind == 'Debate' );
-                var isLastStatement = ( num == response.statements.length - 1 );
+                var threadKind = statements[num].thread_obj.kind;
+                var isGmAndDebate = ( statements[num].author_obj.status == 'gm' && threadKind == 'Debate' );
+                var isLastStatement = ( num == statements.length - 1 );
 
                 var anchor = ``;
                 if (isLastStatement) {
                     anchor = `<a class="anchor anchor3" id="page-bottom"></a>`
                 };
 
-                if ( response.statements[num].image_obj.url !== '' ) {
-                    var stmtImage = `<p><img class="img-fluid mx-auto d-block" src="${response.statements[num].image_obj.url}"></p>`
+                if ( statements[num].image_obj.url !== '' ) {
+                    var stmtImage = `<p><img class="img-fluid mx-auto d-block" src="${statements[num].image_obj.url}"></p>`
                 } else {
                     var stmtImage = ``
                 };
@@ -39,14 +43,14 @@ function reloadStatements(){
                 if ( threadKind == 'Announcement' ) {
 
                     authorImg = `
-                        <img class="img-fluid rounded" src="${response.statements[num].author_obj.user.image.url}">
+                        <img class="img-fluid rounded" src="${statements[num].author_obj.user.image.url}">
                         <figcaption class="font-12 font-italic text-center pt-1">
-                            ${response.statements[num].author_obj.user.username}
+                            ${statements[num].author_obj.user.username}
                         </figcaption>
                     `
                 } else if ( threadKind == 'Debate' ) {
 
-                    if ( response.statements[num].author_obj.id == 18 && [82,93].includes(response.currentProfileId) ) {
+                    if ( statements[num].author_obj.id == 18 && [82,93].includes(response.currentProfileId) ) {
                         authorImg = `
                              <img class="img-fluid rounded-circle" src="media/profile_pics/profile_Dalamar_Szarogwardzista_2.jpg">
                              <figcaption class="font-12 font-italic text-center pt-1">
@@ -55,9 +59,9 @@ function reloadStatements(){
                         `
                     } else {
                         authorImg = `
-                             <img class="img-fluid rounded-circle" src="${response.statements[num].author_obj.image.url}">
+                             <img class="img-fluid rounded-circle" src="${statements[num].author_obj.image.url}">
                              <figcaption class="font-12 font-italic text-center pt-1">
-                                ${response.statements[num].author_obj.character.fullname}
+                                ${statements[num].author_obj.character.fullname}
                              </figcaption>
                         `
                     };
@@ -65,15 +69,15 @@ function reloadStatements(){
                 // TODO TEMP END replace
 
 
-                if ( !response.statements[num].thread_obj.is_ended ) {
+                if ( !statements[num].thread_obj.is_ended ) {
 
                     var seenByImgs = ``;
-                    var seenByProfiles = response.statements[num].seen_by_objs;
+                    var seenByProfiles = statements[num].seen_by_objs;
                     try {
                         var nextnum = parseInt(num) + 1;
                         var seenByProfilesNextStatementIds = [];
-                        for ( var idx in response.statements[nextnum].seen_by_objs ) {
-                            seenByProfilesNextStatementIds.push(response.statements[nextnum].seen_by_objs[idx].id);
+                        for ( var idx in statements[nextnum].seen_by_objs ) {
+                            seenByProfilesNextStatementIds.push(statements[nextnum].seen_by_objs[idx].id);
                         };
                     }
                     catch(err) {
@@ -82,7 +86,7 @@ function reloadStatements(){
 
                     for (var cnt in seenByProfiles) {
                         var imgSmall = ``;
-                        if ( !seenByProfilesNextStatementIds.includes(seenByProfiles[cnt].id) && !(seenByProfiles[cnt].id == response.statements[num].author_id)) {
+                        if ( !seenByProfilesNextStatementIds.includes(seenByProfiles[cnt].id) && !(seenByProfiles[cnt].id == statements[num].author_id)) {
 
                             if ( threadKind == 'Debate' ) {
                                 imgSmall = `<img class="portait img-sm border border-dark rounded-circle mr-1" src="${seenByProfiles[cnt].image.url}">`;
@@ -105,6 +109,9 @@ function reloadStatements(){
                     var seenByRow = ``
                 };
 
+
+                var stmtText = `<div class="statement">${statements[num].text}</div>`;
+                var createdAt = statements[num].created_datetime;
 
                 if ( isGmAndDebate ) {
 
@@ -146,6 +153,9 @@ function reloadStatements(){
                     `
 
                 $("#display").append(stmt);
+
+                // After processing, add the statement's ID to the uniqueStatementIds array
+                uniqueStatementIds.push(statement.id);
             }
         }
 
@@ -167,17 +177,17 @@ $(document).ready(function(){
 // if ( threadKind == 'Announcement' ) {
 
 //    authorImg = `
-//        <img class="img-fluid rounded" src="${response.statements[num].author_obj.user.image.url}">
+//        <img class="img-fluid rounded" src="${statements[num].author_obj.user.image.url}">
 //        <figcaption class="font-12 font-italic text-center pt-1">
-//            ${response.statements[num].author_obj.user.username}
+//            ${statements[num].author_obj.user.username}
 //        </figcaption>
 //    `
 // } else if ( threadKind == 'Debate' ) {
 
 //    authorImg = `
-//         <img class="img-fluid rounded-circle" src="${response.statements[num].author_obj.image.url}">
+//         <img class="img-fluid rounded-circle" src="${statements[num].author_obj.image.url}">
 //         <figcaption class="font-12 font-italic text-center pt-1">
-//            ${response.statements[num].author_obj.character.fullname}
+//            ${statements[num].author_obj.character.fullname}
 //         </figcaption>
 //    `
 // };
