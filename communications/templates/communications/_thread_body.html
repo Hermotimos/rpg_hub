@@ -6,8 +6,8 @@
 <!-- this is necessary to provide a way for JS to get thread_id value -->
 <input type="hidden" name="thread_id" id="thread_id" value="{{thread.id}}"/>
 
-<!-- Used as container for statements -->
-<div id="display"></div>
+<!-- Used as container for statements; also enables JS to access current_profile.id - but this is a temp: TODO temp Syngir, Murkon -->
+<div id="display" current-profile-data="{{ request.current_profile.id }}"></div>
 
 {% if thread.is_ended %}
     <div class="row">

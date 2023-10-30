@@ -7,7 +7,7 @@ from rest_framework import routers
 from strawberry.django.views import GraphQLView
 
 from communications.drf import (
-    StatementByThreadList, StatementViewSet, ThreadViewSet,
+    StatementByThreadList, StatementViewSet, ThreadViewSet, ThreadTagViewSet,
 )
 from rpg_project.schema import schema
 from users.drf import GroupViewSet, ProfileViewSet, UserViewSet
@@ -47,6 +47,7 @@ router.register(r'users', UserViewSet)
 router.register(r'profiles', ProfileViewSet)
 router.register(r'statements', StatementViewSet)
 router.register(r'threads', ThreadViewSet)
+router.register(r'threadtags', ThreadTagViewSet)
 
 urlpatterns += [
     # REST API root: http://127.0.0.1:8000/api/

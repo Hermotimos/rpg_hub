@@ -244,9 +244,7 @@ def statements(request, thread_id):
     current_profile = request.current_profile
 
     statements = Statement.objects.filter(thread=thread_id).order_by('created_at')
-
     thread = Thread.objects.get(id=thread_id)
-
 
     # Update all statements to be seen by the profile
     if (
@@ -306,8 +304,7 @@ def statements(request, thread_id):
     )
     return JsonResponse(
         {
-            "statements": list(statements.values()),
-            "currentProfileId": current_profile.id      # TODO temp Syngir, Murkon
+            "results": list(statements.values()),
         }
     )
 

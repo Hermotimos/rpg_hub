@@ -1,17 +1,25 @@
 
 var uniqueStatementIds = [];
 
+
+// TODO TEMP Syngir, Murkon
+var currentProfileId = document.getElementById('display').getAttribute('current-profile-data');
+// END TEMP Syngir, Murkon
+
+
 function reloadStatements(){
 
     $.ajax({
         type: 'GET',
-        url: `/communications/statements/${document.getElementById('thread_id').getAttribute('value')}/`,
-        // url: `/api/statements/thread/${document.getElementById('thread_id').getAttribute('value')}/`,
-        // http://127.0.0.1:8000/api/statements/thread/48/
+        // Django view endpoint
+        // url: `/communications/statements/${document.getElementById('thread_id').getAttribute('value')}/`,
+
+        // Django REST Framework view endpoint
+        url: `/api/statements/thread/${document.getElementById('thread_id').getAttribute('value')}/`,
 
         success: function(response){
             // console.log(response);
-            var statements = response.statements;
+            var statements = response.results;
 
             for (var num in statements)
             {
@@ -50,7 +58,7 @@ function reloadStatements(){
                     `
                 } else if ( threadKind == 'Debate' ) {
 
-                    if ( statements[num].author_obj.id == 18 && [82,93].includes(response.currentProfileId) ) {
+                    if ( statements[num].author_obj.id == 18 && [82,93].includes(currentProfileId) ) {
                         authorImg = `
                              <img class="img-fluid rounded-circle" src="media/profile_pics/profile_Dalamar_Szarogwardzista_2.jpg">
                              <figcaption class="font-12 font-italic text-center pt-1">
