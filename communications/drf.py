@@ -38,7 +38,6 @@ class StatementByThreadListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Statement
         exclude = []
-        paginate_queryset = None
 
     def to_representation(self, instance):
         """Include some of the related objects' data as nested data."""
@@ -95,7 +94,7 @@ class StatementByThreadList(generics.ListAPIView):
 
     """
     serializer_class = StatementByThreadListSerializer
-    pagination_class = LargeResultsSetPagination   
+    pagination_class = LargeResultsSetPagination
 
     def get_queryset(self):
         thread_id = self.kwargs['thread_id']
