@@ -39,7 +39,7 @@ if settings.DEBUG:
 
 
 # ----------------------------------------------------------------------------
-# Django REST Framework URLs
+# REST API URLs (DRF)
 
 router = routers.DefaultRouter()
 router.register(r'groups', GroupViewSet)
@@ -59,7 +59,7 @@ urlpatterns += [
 
 
 # ----------------------------------------------------------------------------
-# Strawberry Django URLs
+# GraphQL API URLs (Strawberry Django)
 
 urlpatterns += [
     # GraphQL API root: http://127.0.0.1:8000/graphql/

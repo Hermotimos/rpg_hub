@@ -16,6 +16,16 @@ class UserType:
     profiles: list['ProfileType']
 
 
+@strawberry.type
+class ImageField:
+    """
+    A custom type to reflect some of the Django's ImageField functionalities.
+    """
+    url: str
+    width: int
+    height: int
+
+
 @strawberry.django.type(models.Profile)
 class ProfileType:
     id: int
@@ -23,4 +33,13 @@ class ProfileType:
     status: str
     is_alive: bool
     is_active: bool
-    image: str
+    image: ImageField
+    user_image: ImageField
+
+
+    def resolve_user_image(self, info):
+        return ImageField(
+            url=self.url,
+            width=self.width,
+            height=self.height,
+        )
