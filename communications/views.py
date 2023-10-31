@@ -267,7 +267,7 @@ def statements(request, thread_id):
                 clear_cache(cachename='sidebar', vary_on_list=[[current_profile.user.id]])
 
     statements = statements.values(
-        'thread_id', 'text', 'author_id', 'created_at',
+        'text',
         author_obj=JSONObject(
             id='author__id',
             status='author__status',

@@ -1,24 +1,28 @@
 
 var uniqueStatementIds = [];
-
-
-// TODO TEMP Syngir, Murkon
 var currentProfileId = document.getElementById('display').getAttribute('current-profile-data');
-// END TEMP Syngir, Murkon
 
 
 function reloadStatements(){
 
+    var formData = new FormData();
+    formData.append('currentProfileId', currentProfileId);
+    formData.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val()); // required for POST requests
+
     $.ajax({
-        type: 'GET',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+
         // Django view endpoint
-        // url: `/communications/statements/${document.getElementById('thread_id').getAttribute('value')}/`,
+        url: `/communications/statements/${document.getElementById('thread_id').getAttribute('value')}/`,
 
         // Django REST Framework view endpoint
-        url: `/api/statements/thread/${document.getElementById('thread_id').getAttribute('value')}/`,
+        // url: `/api/statements/thread/${document.getElementById('thread_id').getAttribute('value')}/`,
 
         success: function(response){
-            // console.log(response);
+            console.log(response);
             var statements = response.results;
 
             for (var num in statements)
@@ -94,7 +98,7 @@ function reloadStatements(){
 
                     for (var cnt in seenByProfiles) {
                         var imgSmall = ``;
-                        if ( !seenByProfilesNextStatementIds.includes(seenByProfiles[cnt].id) && !(seenByProfiles[cnt].id == statements[num].author_id)) {
+                        if ( !seenByProfilesNextStatementIds.includes(seenByProfiles[cnt].id) && !(seenByProfiles[cnt].id == statements[num].author_obj.id)) {
 
                             if ( threadKind == 'Debate' ) {
                                 imgSmall = `<img class="portait img-sm border border-dark rounded-circle mr-1" src="${seenByProfiles[cnt].image.url}">`;
