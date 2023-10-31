@@ -1,7 +1,6 @@
 
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers, viewsets
-from rest_framework import permissions
 from users.models import Profile
 
 

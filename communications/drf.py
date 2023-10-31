@@ -1,7 +1,9 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics, serializers, viewsets, pagination
+from rest_framework import generics, pagination, serializers, viewsets
 
 from communications.models import Statement, Thread, ThreadTag
+from rpg_project.utils import clear_cache
+from users.models import Profile
 
 
 class StatementSerializer(serializers.ModelSerializer):
@@ -37,7 +39,7 @@ class StatementByThreadListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Statement
-        exclude = []
+        fields = ['text']
 
     def to_representation(self, instance):
         """Include some of the related objects' data as nested data."""
@@ -110,6 +112,33 @@ class StatementByThreadList(generics.ListAPIView):
             'author__user',
             'author__character',
         )
+
+    def post(self, request, *args, **kwargs):
+        current_profile = Profile.objects.get(id=request.data['currentProfileId'])
+        thread = Thread.objects.get(id=request.data['threadId'])
+        statements = Statement.objects.filter(thread=thread.id).order_by('created_at')
+
+        # # Update all statements to be seen by the profile
+        if (
+            current_profile in thread.participants.all()
+            or current_profile.status == 'gm'
+        ):
+            SeenBy = Statement.seen_by.through
+            relations = []
+            for statement in statements.exclude(seen_by=current_profile):
+                relations.append(SeenBy(statement_id=statement.id, profile_id=current_profile.id))
+            SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
+
+            # If SeenBy has been changed, clear appropriate cache for the user
+            # bulk_create() doesn't use model's save()  so no signals are fired
+            # https://docs.djangoproject.com/en/4.2/ref/models/querysets/#bulk-create
+            if relations:
+                if thread.kind == 'Announcement':
+                    clear_cache(cachename='navbar', vary_on_list=[[current_profile.user.id]])
+                elif thread.kind == 'Debate':
+                    clear_cache(cachename='sidebar', vary_on_list=[[current_profile.user.id]])
+
+        return self.list(request, *args, **kwargs)
 
 
 # -----------------------------------------------------------------------------

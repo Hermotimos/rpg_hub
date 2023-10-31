@@ -7,8 +7,8 @@ function reloadStatements(){
 
     var formData = new FormData();
     // CSRF token required for POST requests
-    console.log($('input[name=csrfmiddlewaretoken]').val());
     formData.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
+    formData.append('threadId', document.getElementById('thread_id').getAttribute('value'));
     formData.append('currentProfileId', currentProfileId);
 
     $.ajax({

@@ -25,6 +25,7 @@ if settings.IS_LOCAL_ENVIRON:
 else:
     permissions = [IsAuthenticated]
 
+
 @strawberry.type
 class Query:
     # unfilterable query
