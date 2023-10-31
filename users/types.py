@@ -1,9 +1,10 @@
 import strawberry
 
-from users import models
+from users.models import User, Profile
+from prosoponomikon.models import Character
 
 
-@strawberry.django.type(models.User)
+@strawberry.django.type(User)
 class UserType:
     id: int
     username: str
@@ -26,7 +27,7 @@ class ImageField:
     height: int
 
 
-@strawberry.django.type(models.Profile)
+@strawberry.django.type(Profile)
 class ProfileType:
     id: int
     user: UserType
@@ -35,11 +36,18 @@ class ProfileType:
     is_active: bool
     image: ImageField
     user_image: ImageField
+    character: 'CharacterType'
+
+    # def resolve_user_image(self, info):
+    #     return ImageField(
+    #         url=self.url,
+    #         width=self.width,
+    #         height=self.height,
+    #     )
 
 
-    def resolve_user_image(self, info):
-        return ImageField(
-            url=self.url,
-            width=self.width,
-            height=self.height,
-        )
+@strawberry.django.type(Character)
+class CharacterType:
+    id: int
+    fullname: str
+    profile: ProfileType
