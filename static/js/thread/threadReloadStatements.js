@@ -6,8 +6,10 @@ var currentProfileId = document.getElementById('display').getAttribute('current-
 function reloadStatements(){
 
     var formData = new FormData();
+    // CSRF token required for POST requests
+    console.log($('input[name=csrfmiddlewaretoken]').val());
+    formData.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
     formData.append('currentProfileId', currentProfileId);
-    formData.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val()); // required for POST requests
 
     $.ajax({
         type: 'POST',
@@ -16,10 +18,10 @@ function reloadStatements(){
         contentType: false,
 
         // Django view endpoint
-        url: `/communications/statements/${document.getElementById('thread_id').getAttribute('value')}/`,
+        // url: `/communications/statements/${document.getElementById('thread_id').getAttribute('value')}/`,
 
         // Django REST Framework view endpoint
-        // url: `/api/statements/thread/${document.getElementById('thread_id').getAttribute('value')}/`,
+        url: `/api/statements/thread/${document.getElementById('thread_id').getAttribute('value')}/`,
 
         success: function(response){
             console.log(response);

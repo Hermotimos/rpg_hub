@@ -14,7 +14,6 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 
 # -----------------------------------------------------------------------------
@@ -31,7 +30,6 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 
 # -----------------------------------------------------------------------------
@@ -51,7 +49,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 
 # -----------------------------------------------------------------------------
