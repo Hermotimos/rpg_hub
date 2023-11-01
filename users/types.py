@@ -24,7 +24,7 @@ class ImageFieldType:
     """
     A custom type to reflect some of the Django's ImageField functionalities.
     """
-    url: Optional[str]
+    url: str
     width: Optional[int]
     height: Optional[int]
 
@@ -37,7 +37,7 @@ class ImageFieldType:
         try:
             return self.url
         except ValueError:
-            return None
+            return ''
 
 
 @strawberry.django.type(Profile)
