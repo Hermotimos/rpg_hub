@@ -1,7 +1,7 @@
 import strawberry
 
 from communications import models
-from users.types import ProfileType
+from users.types import ProfileType, ImageFieldType
 
 
 @strawberry.django.type(models.Thread)
@@ -23,6 +23,11 @@ class StatementType:
     text: str
     thread: ThreadType
     author: ProfileType
-    image: str
+    image: ImageFieldType
     seen_by: list[ProfileType]
     created_at: str
+
+    @strawberry.field
+    def created_datetime(self) -> str:
+        """Additional field for formatted value of 'created_at' field."""
+        return self.created_at.strftime('%Y-%m-%d | %H:%M')

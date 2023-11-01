@@ -1,7 +1,9 @@
+from typing import Optional
+
 import strawberry
 
-from users.models import User, Profile
 from prosoponomikon.models import Character
+from users.models import Profile, User
 
 
 @strawberry.django.type(User)
@@ -18,13 +20,24 @@ class UserType:
 
 
 @strawberry.type
-class ImageField:
+class ImageFieldType:
     """
     A custom type to reflect some of the Django's ImageField functionalities.
     """
-    url: str
-    width: int
-    height: int
+    url: Optional[str]
+    width: Optional[int]
+    height: Optional[int]
+
+    @strawberry.field
+    def url(self, info) -> Optional[str]:
+        """
+        In case of null image file return None to prevent exceptions:
+        "ValueError: The 'image' attribute has no file associated with it".
+        """
+        try:
+            return self.url
+        except ValueError:
+            return None
 
 
 @strawberry.django.type(Profile)
@@ -34,12 +47,12 @@ class ProfileType:
     status: str
     is_alive: bool
     is_active: bool
-    image: ImageField
-    user_image: ImageField
-    character: 'CharacterType'
+    image: ImageFieldType
+    user_image: ImageFieldType
+    character: Optional['CharacterType']
 
     # def resolve_user_image(self, info):
-    #     return ImageField(
+    #     return ImageFieldType(
     #         url=self.url,
     #         width=self.width,
     #         height=self.height,
