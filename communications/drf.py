@@ -52,23 +52,19 @@ class StatementByThreadListSerializer(serializers.ModelSerializer):
         representation['author_obj'] = {
             'id': instance.author.id,
             'status': instance.author.status,
-            'image': {'url': instance.author.image.url},
-            'character': {'fullname': instance.author.character.fullname},
-            'user': {
-                'username': instance.author.user.username,
-                'image': {'url': instance.author.user_image.url}
-            },
+            'image_obj': {'url': instance.author.image.url},
+            'user_image_obj': {'url': instance.author.user_image.url},
+            'character_obj': {'fullname': instance.author.character.fullname},
+            'user_obj': {'username': instance.author.user.username},
         }
         representation['created_datetime'] = instance.created_at.strftime('%Y-%m-%d | %H:%M'),
         representation['seen_by_objs'] = [
             {
                 'id': seen_by.id,
-                'character': {'fullname': seen_by.character.fullname},
-                'image': {'url': seen_by.image.url},
-                'user': {
-                    'username': seen_by.user.username,
-                    'image': {'url': seen_by.user_image.url}
-                },
+                'character_obj': {'fullname': seen_by.character.fullname},
+                'image_obj': {'url': seen_by.image.url},
+                'user_image_obj': {'url': seen_by.user_image.url},
+                'user_obj': {'username': seen_by.user.username},
             }
             for seen_by in instance.seen_by.all()
         ]

@@ -271,12 +271,10 @@ def statements(request, thread_id):
         author_obj=JSONObject(
             id='author__id',
             status='author__status',
-            image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'author__image')),
-            character=JSONObject(fullname='author__character__fullname'),
-            user=JSONObject(
-                username='author__user__username',
-                image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'author__user_image'))
-            ),
+            image_obj=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'author__image')),
+            user_image_obj=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'author__user_image')),
+            character_obj=JSONObject(fullname='author__character__fullname'),
+            user_obj=JSONObject(username='author__user__username'),
         ),
         thread_obj=JSONObject(kind='thread__kind', is_ended='thread__is_ended'),
         image_obj=JSONObject(
@@ -293,12 +291,10 @@ def statements(request, thread_id):
         seen_by_objs=ArrayAgg(
             JSONObject(
                 id='seen_by__id',
-                character=JSONObject(fullname='seen_by__character__fullname'),
-                image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'seen_by__image')),
-                user=JSONObject(
-                    username='seen_by__user__username',
-                    image=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'seen_by__user_image'))
-                ),
+                character_obj=JSONObject(fullname='seen_by__character__fullname'),
+                image_obj=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'seen_by__image')),
+                user_image_obj=JSONObject(url=Concat(Value(settings.MEDIA_URL), 'seen_by__user_image')),
+                user=JSONObject(username='seen_by__user__username'),
             )
         )
     )

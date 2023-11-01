@@ -18,10 +18,10 @@ function reloadStatements(){
         contentType: false,
 
         // Django view endpoint
-        // url: `/communications/statements/${document.getElementById('thread_id').getAttribute('value')}/`,
+        url: `/communications/statements/${document.getElementById('thread_id').getAttribute('value')}/`,
 
         // Django REST Framework view endpoint
-        url: `/api/statements/thread/${document.getElementById('thread_id').getAttribute('value')}/`,
+        // url: `/api/statements/thread/${document.getElementById('thread_id').getAttribute('value')}/`,
 
         success: function(response){
             console.log(response);
@@ -57,9 +57,9 @@ function reloadStatements(){
                 if ( threadKind == 'Announcement' ) {
 
                     authorImg = `
-                        <img class="img-fluid rounded" src="${statements[num].author_obj.user.image.url}">
+                        <img class="img-fluid rounded" src="${statements[num].author_obj.user_image_obj.url}">
                         <figcaption class="font-12 font-italic text-center pt-1">
-                            ${statements[num].author_obj.user.username}
+                            ${statements[num].author_obj.user_obj.username}
                         </figcaption>
                     `
                 } else if ( threadKind == 'Debate' ) {
@@ -73,9 +73,9 @@ function reloadStatements(){
                         `
                     } else {
                         authorImg = `
-                             <img class="img-fluid rounded-circle" src="${statements[num].author_obj.image.url}">
+                             <img class="img-fluid rounded-circle" src="${statements[num].author_obj.image_obj.url}">
                              <figcaption class="font-12 font-italic text-center pt-1">
-                                ${statements[num].author_obj.character.fullname}
+                                ${statements[num].author_obj.character_obj.fullname}
                              </figcaption>
                         `
                     };
@@ -103,9 +103,9 @@ function reloadStatements(){
                         if ( !seenByProfilesNextStatementIds.includes(seenByProfiles[cnt].id) && !(seenByProfiles[cnt].id == statements[num].author_obj.id)) {
 
                             if ( threadKind == 'Debate' ) {
-                                imgSmall = `<img class="portait img-sm border border-dark rounded-circle mr-1" src="${seenByProfiles[cnt].image.url}">`;
+                                imgSmall = `<img class="portait img-sm border border-dark rounded-circle mr-1" src="${seenByProfiles[cnt].image_obj.url}">`;
                             } else if ( threadKind == 'Announcement' ) {
-                                imgSmall = `<img class="portait img-sm border border-dark rounded mr-1" src="${seenByProfiles[cnt].user.image.url}">`;
+                                imgSmall = `<img class="portait img-sm border border-dark rounded mr-1" src="${seenByProfiles[cnt].user_image_obj.url}">`;
                             };
                         };
                         seenByImgs += imgSmall;
@@ -191,17 +191,17 @@ $(document).ready(function(){
 // if ( threadKind == 'Announcement' ) {
 
 //    authorImg = `
-//        <img class="img-fluid rounded" src="${statements[num].author_obj.user.image.url}">
+//        <img class="img-fluid rounded" src="${statements[num].author_obj.user_image_obj.url}">
 //        <figcaption class="font-12 font-italic text-center pt-1">
-//            ${statements[num].author_obj.user.username}
+//            ${statements[num].author_obj.user_obj.username}
 //        </figcaption>
 //    `
 // } else if ( threadKind == 'Debate' ) {
 
 //    authorImg = `
-//         <img class="img-fluid rounded-circle" src="${statements[num].author_obj.image.url}">
+//         <img class="img-fluid rounded-circle" src="${statements[num].author_obj.image_obj.url}">
 //         <figcaption class="font-12 font-italic text-center pt-1">
-//            ${statements[num].author_obj.character.fullname}
+//            ${statements[num].author_obj.character_obj.fullname}
 //         </figcaption>
 //    `
 // };
