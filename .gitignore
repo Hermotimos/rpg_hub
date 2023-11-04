@@ -37,7 +37,8 @@ __pycache__
 
 hyllemath_db*
 hyllemat*
-sandbox*
+# sandbox*
+# notes*
 
 rpg_project/secret.json
 
