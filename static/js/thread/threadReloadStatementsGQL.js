@@ -1,6 +1,7 @@
 
 var uniqueStatementIds = [];
 var currentProfileId = document.getElementById('display').getAttribute('current-profile-data');
+var firstLoad = true;
 
 
 function reloadStatements(){
@@ -201,11 +202,26 @@ function reloadStatements(){
 
                 // After processing, add the statement's ID to the uniqueStatementIds array
                 uniqueStatementIds.push(statement.id);
+
+                setTimeout(function() {
+                    scrollToCKEditor();
+                }, 500);
             }
         }
 
     });
 }
+
+
+function scrollToCKEditor() {
+    // If statements are loaded for the first time, scroll down to CKEditor
+    // after 1 sec delay to allow for visual display of statements
+    if (firstLoad && document.getElementById('display').hasChildNodes()) {
+        document.getElementById('div_id_text').scrollIntoView({ behavior: 'smooth' });
+        firstLoad = false;
+    };
+};
+
 
 // call before page is ready
 reloadStatements();
