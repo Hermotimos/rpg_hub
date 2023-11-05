@@ -1,6 +1,7 @@
 
-function reloadStatements(){
+var firstLoad = true;
 
+function reloadStatements(){
     $.ajax({
         type: 'GET',
         url: `/communications/statements/${document.getElementById('thread_id').getAttribute('value')}/`,
@@ -142,6 +143,11 @@ function reloadStatements(){
                     `
 
                 $("#display").append(stmt);
+
+                setTimeout(function() {
+                    scrollToCKEditor();
+                }, 1000);
+
             }
         }
         /*
@@ -154,6 +160,17 @@ function reloadStatements(){
 
     });
 }
+
+
+function scrollToCKEditor() {
+    // If statements are loaded for the first time, scroll down to CKEditor
+    // after 1 sec delay to allow for visual display of statements
+    if (firstLoad && document.getElementById('display').hasChildNodes()) {
+        document.getElementById('div_id_text').scrollIntoView({ behavior: 'smooth' });
+        firstLoad = false;
+    };
+};
+
 
 // first call before page is ready
 reloadStatements();
