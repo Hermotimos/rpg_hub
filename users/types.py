@@ -16,7 +16,7 @@ class UserType:
     is_superuser: bool
     is_staff: bool
     is_active: bool
-    profiles: list['ProfileType']
+    profiles: list['ProfileType']   # this is for free, no further code needed
 
 
 @strawberry.type
@@ -50,13 +50,6 @@ class ProfileType:
     image: ImageFieldType
     user_image: ImageFieldType
     character: Optional['CharacterType']
-
-    # def resolve_user_image(self, info):
-    #     return ImageFieldType(
-    #         url=self.url,
-    #         width=self.width,
-    #         height=self.height,
-    #     )
 
 
 @strawberry.django.type(Character)

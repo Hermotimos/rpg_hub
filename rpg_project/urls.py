@@ -64,7 +64,6 @@ urlpatterns += [
 
 urlpatterns += [
     # GraphQL API root: http://127.0.0.1:8000/graphql/
-    path('graphql/', GraphQLView.as_view(
-        graphiql=settings.DEBUG,    # turn off Graphiql when DEBUG=False
-        schema=schema)),
+    # graphiql=settings.DEBUG: turn on Grahuql only when DEBUG=True
+    path('graphql/', GraphQLView.as_view(graphiql=settings.DEBUG, schema=schema)),
 ]

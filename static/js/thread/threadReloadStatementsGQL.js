@@ -6,12 +6,6 @@ var firstLoad = true;
 
 function reloadStatements(){
 
-    // var formData = new FormData();
-    // // CSRF token required for POST requests
-    // formData.append('csrfmiddlewaretoken', $('input[name=csrfmiddlewaretoken]').val());
-    // formData.append('threadId', document.getElementById('thread_id').getAttribute('value'));
-    // formData.append('currentProfileId', currentProfileId);
-
     $.ajax({
         type: 'POST',
         data: JSON.stringify({
@@ -44,11 +38,13 @@ function reloadStatements(){
                 }
             `
         }),
-        variables: { "threadId": $(document.getElementById('thread_id').getAttribute('value')) },
+        variables: {
+            "threadId": $(document.getElementById('thread_id').getAttribute('value'))
+        },
         // processData: false,
         // contentType: false,
 
-        // GraphQL endpoint  ??? "https://api.github.com/graphql",
+        // GraphQL endpoint
         url: `/graphql/`,
         contentType: "application/json",
         // headers: {
