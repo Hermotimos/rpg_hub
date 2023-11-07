@@ -54,6 +54,7 @@ urlpatterns += [
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     # communications
+    # http://127.0.0.1:8000/api/statements/thread/48/
     re_path('^api/statements/thread/(?P<thread_id>\d+)/$', StatementByThreadList.as_view()),
 ]
 

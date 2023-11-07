@@ -19,10 +19,10 @@ function reloadStatements(){
         contentType: false,
 
         // Django view endpoint
-        url: `/communications/statements/${document.getElementById('thread_id').getAttribute('value')}/`,
+        // url: `/communications/statements/${document.getElementById('thread_id').getAttribute('value')}/`,
 
         // Django REST Framework view endpoint
-        // url: `/api/statements/thread/${document.getElementById('thread_id').getAttribute('value')}/`,
+        url: `/api/statements/thread/${document.getElementById('thread_id').getAttribute('value')}/`,
 
         success: function(response){
             console.log(response);

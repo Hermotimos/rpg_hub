@@ -14,16 +14,7 @@ class StatementSerializer(serializers.ModelSerializer):
 
 
 class StatementViewSet(viewsets.ModelViewSet):
-    queryset = Statement.objects.prefetch_related(
-        'seen_by__character',
-        'seen_by__user',
-        'options',
-        'thread__participants',
-        'thread__followers',
-        'thread__tags',
-        'author__user',
-        'author__character',
-    )
+    queryset = Statement.objects.prefetch_related('seen_by', 'options')
     serializer_class = StatementSerializer
     # DEFAULT_FILTER_BACKENDS in settings.py together with
     # 'filter_backends' and 'filterset_fields' enable filtering by:
@@ -39,12 +30,11 @@ class StatementByThreadListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Statement
-        fields = ['text']
+        fields = ['id', 'text']
 
     def to_representation(self, instance):
         """Include some of the related objects' data as nested data."""
         representation = super().to_representation(instance)
-        representation['id'] = instance.id
         representation['thread_obj'] = {
             'kind': instance.thread.kind,
             'is_ended': instance.thread.is_ended,
@@ -75,7 +65,7 @@ class StatementByThreadListSerializer(serializers.ModelSerializer):
 
 
 class LargeResultsSetPagination(pagination.PageNumberPagination):
-    """A custom Pagination class to ensure retrieval of all data"""
+    """A custom Pagination class to ensure retrieval of all data."""
     page_size = 10000
     page_size_query_param = 'page_size'
     max_page_size = 10000
@@ -110,11 +100,15 @@ class StatementByThreadList(generics.ListAPIView):
         )
 
     def post(self, request, *args, **kwargs):
+        """
+        Handle POST request to update all Statement-s as seen_by the request
+        User's Profile.
+        """
         current_profile = Profile.objects.get(id=request.data['currentProfileId'])
         thread = Thread.objects.get(id=request.data['threadId'])
         statements = Statement.objects.filter(thread=thread.id).order_by('created_at')
 
-        # # Update all statements to be seen by the profile
+        # Update all statements to be seen by the profile
         if (
             current_profile in thread.participants.all()
             or current_profile.status == 'gm'
@@ -167,6 +161,7 @@ class ThreadViewSet(viewsets.ModelViewSet):
 
 
 class ThreadTagSerializer(serializers.HyperlinkedModelSerializer):
+    
     class Meta:
         model = ThreadTag
         exclude = []
