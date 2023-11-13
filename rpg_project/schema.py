@@ -73,36 +73,49 @@ class Query:
 
     @strawberry.field(permission_classes=permissions)
     def statements_by_thread_id(self, info: "Info", thread_id: int) -> list[StatementType]:
+        statements = Statement.objects.filter(
+            thread=thread_id
+        ).order_by(
+            'created_at'
+        ).prefetch_related(
+            'seen_by__character',
+            'seen_by__user',
+            'options',
+            'thread__participants',
+            'thread__followers',
+            'thread__tags',
+            'author__user',
+            'author__character',
+        )
+
         # A surrgoate solution for using request.current_profile, for learning.
         # This only works from within site; requests from Insomnia lack 'user'
         # which is ok, as they don't need to update seen_by field.
         user_id = info.context.request.user.id
-        if user_id:
-            current_profile = Profile.objects.filter(user__id=user_id).order_by('status').first()
-            thread = Thread.objects.get(id=thread_id)
-            statements = Statement.objects.filter(thread=thread.id).order_by('created_at')
+        current_profile = Profile.objects.filter(user__id=user_id).order_by('status').first()
+        thread = Thread.objects.get(id=thread_id)
 
-            # Update all statements to be seen by the profile
-            if (
-                current_profile in thread.participants.all()
-                or current_profile.status == 'gm'
-            ):
-                SeenBy = Statement.seen_by.through
-                relations = []
-                for statement in statements.exclude(seen_by=current_profile):
-                    relations.append(SeenBy(statement_id=statement.id, profile_id=current_profile.id))
-                SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
+        # Update all statements to be seen by the profile
+        if (
+            current_profile in thread.participants.all()
+            or current_profile.status == 'gm'
+        ):
+            SeenBy = Statement.seen_by.through
+            relations = []
+            for statement in statements.exclude(seen_by=current_profile):
+                relations.append(SeenBy(statement_id=statement.id, profile_id=current_profile.id))
+            SeenBy.objects.bulk_create(relations, ignore_conflicts=True)
 
-                # If SeenBy has been changed, clear appropriate cache for the user
-                # bulk_create() doesn't use model's save()  so no signals are fired
-                # https://docs.djangoproject.com/en/4.2/ref/models/querysets/#bulk-create
-                if relations:
-                    if thread.kind == 'Announcement':
-                        clear_cache(cachename='navbar', vary_on_list=[[current_profile.user.id]])
-                    elif thread.kind == 'Debate':
-                        clear_cache(cachename='sidebar', vary_on_list=[[current_profile.user.id]])
+            # If SeenBy has been changed, clear appropriate cache for the user
+            # bulk_create() doesn't use model's save()  so no signals are fired
+            # https://docs.djangoproject.com/en/4.2/ref/models/querysets/#bulk-create
+            if relations:
+                if thread.kind == 'Announcement':
+                    clear_cache(cachename='navbar', vary_on_list=[[current_profile.user.id]])
+                elif thread.kind == 'Debate':
+                    clear_cache(cachename='sidebar', vary_on_list=[[current_profile.user.id]])
 
-        return Statement.objects.filter(thread__id=thread_id)
+        return statements
 
 
 # -----------------------------------------------------------------------------
