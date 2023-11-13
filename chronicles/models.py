@@ -596,8 +596,6 @@ def remove_cache(sender, instance, **kwargs):
     vary_on_list_chapter = [sub + [instance.game.chapter.id] for sub in vary_on_list_all]
     vary_on_list_game = [sub + [instance.game.id] for sub in vary_on_list_all]
 
-    clear_cache(cachename='timeline', vary_on_list=vary_on_list_all)
     clear_cache(cachename='chronicle', vary_on_list=vary_on_list_all)
-
     clear_cache(cachename='game', vary_on_list=vary_on_list_game)
     clear_cache(cachename='chapter', vary_on_list=vary_on_list_chapter)

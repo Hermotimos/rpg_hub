@@ -10,7 +10,7 @@
 
 
 {% block content %}
-{% cache 604800 timeline request.current_profile.user.id %}
+<!-- Don't cache!!! Cache prevents filtering -->
 
     <section class="mt-3">
         <p class="font-18 font-italic text-justify">
@@ -366,5 +366,4 @@
         </table>
     {% endif %}
 
-{% endcache %}
 {% endblock content %}
