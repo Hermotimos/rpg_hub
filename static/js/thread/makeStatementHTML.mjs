@@ -40,37 +40,36 @@ export function makeStatementHTML(response) {
             var stmtImage = ``
         };
 
-        var threadKind = statements[num].thread.kind;
 
-        var authorImg;
+        let threadKind = statements[num].thread.kind;
+        let authorImgShape;
+        let authorImgSrc;
+        let authorImgFigcaption;
+
         if ( threadKind == 'Announcement' ) {
+            authorImgShape = "rounded";
+            authorImgSrc = statements[num].author.userImage.url;
+            authorImgFigcaption = statements[num].author.user.username;
 
-            authorImg = `
-                <img class="img-fluid rounded" src="${statements[num].author.userImage.url}">
-                <figcaption class="font-12 font-italic text-center pt-1">
-                    ${statements[num].author.user.username}
-                </figcaption>
-            `
         } else if ( threadKind == 'Debate' ) {
+            authorImgShape = "rounded-circle";
 
             // TODO TEMP when Syngir, Murkon meet Dalamar, then remove the block with hardcoded id-s
             if ( statements[num].author.id == 18 && [82,93].includes(currentProfileId) ) {
-                authorImg = `
-                    <img class="img-fluid rounded-circle" src="media/profile_pics/profile_Dalamar_Szarogwardzista_2.jpg">
-                    <figcaption class="font-12 font-italic text-center pt-1">
-                    Dalamar Szarogwardzista
-                    </figcaption>
-                `
+                authorImgSrc = "media/profile_pics/profile_Dalamar_Szarogwardzista_2.jpg";
+                authorImgFigcaption = "Dalamar Szarogwardzista";
             } else {
-                authorImg = `
-                    <img class="img-fluid rounded-circle" src="${statements[num].author.image.url}">
-                    <figcaption class="font-12 font-italic text-center pt-1">
-                    ${statements[num].author.character.fullname}
-                    </figcaption>
-                `
+                authorImgSrc = statements[num].author.image.url;
+                authorImgFigcaption = statements[num].author.character.fullname;
             };
-            // TODO TEMP END 
+            // TODO TEMP END
         };
+        let authorImg = `
+            <img class="img-fluid ${authorImgShape}" src="${authorImgSrc}">
+            <figcaption class="font-12 font-italic text-center pt-1">
+                ${authorImgFigcaption}
+            </figcaption>
+        `
 
 
 
@@ -162,7 +161,7 @@ export function makeStatementHTML(response) {
         // After processing, add the statement's ID to the uniqueStatementIds array
         uniqueStatementIds.push(statement.id);
 
-        setTimeout(function() {
+        setTimeout(() => {
             scrollToCKEditor();
         }, 500);
     }

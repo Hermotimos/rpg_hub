@@ -2,9 +2,7 @@ import { makeStatementHTML } from './makeStatementHTML.mjs';
 
 
 
-
 function reloadStatements(){
-
     $.ajax({
         type: 'POST',
         url: `/graphql/`,   // GraphQL endpoint
@@ -43,11 +41,9 @@ function reloadStatements(){
         variables: {
             "threadId": $(document.getElementById('thread_id').getAttribute('value'))
         },
-
         success: function(response) {
             makeStatementHTML(response);
         },
-
     });
 }
 

@@ -30,15 +30,12 @@ function reloadStatements(){
 
             for (var num in statements)
             {
-                var statement = statements[num];
-
                 // Skip iteration when Statement is already present
+                var statement = statements[num];
                 if (uniqueStatementIds.includes(statement.id)) {
                     continue;
                 }
 
-                var threadKind = statements[num].thread_obj.kind;
-                var isGmAndDebate = ( statements[num].author_obj.status == 'gm' && threadKind == 'Debate' );
 
                 if ( statements[num].image_obj.url !== '' ) {
                     var stmtImage = `<p><img class="img-fluid mx-auto d-block" src="${statements[num].image_obj.url}"></p>`
@@ -47,7 +44,7 @@ function reloadStatements(){
                 };
 
 
-                // TODO TEMP replace this with the code at the bottom of the file when Syngir, Murkon meet Dalamar
+                var threadKind = statements[num].thread_obj.kind;
                 var authorImg;
                 if ( threadKind == 'Announcement' ) {
 
@@ -75,7 +72,7 @@ function reloadStatements(){
                              </figcaption>
                         `
                     };
-                    // TODO TEMP END 
+                    // TODO TEMP END
                 };
 
 
@@ -121,6 +118,7 @@ function reloadStatements(){
                 };
 
 
+                var isGmAndDebate = ( statements[num].author_obj.status == 'gm' && threadKind == 'Debate' );
                 var stmtText = `<div class="statement">${statements[num].text}</div>`;
                 var createdAt = statements[num].created_datetime;
 
@@ -167,7 +165,7 @@ function reloadStatements(){
                 // After processing, add the statement's ID to the uniqueStatementIds array
                 uniqueStatementIds.push(statement.id);
 
-                setTimeout(function() {
+                setTimeout(() => {
                     scrollToCKEditor();
                 }, 500);
 
