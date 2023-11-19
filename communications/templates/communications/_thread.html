@@ -54,7 +54,7 @@
                 <div class="row mt-n1">
                     <div class="col pr-0">
                         <div>
-                            <a class="border-bottom align-top font-17" href="{% url 'communications:thread' thread.id tag_title %}{% if not thread.is_ended %}#page-bottom{% endif %}">
+                            <a class="border-bottom align-top font-17" href="{% url 'communications:thread' thread.id tag_title %}">
                                 {{ thread.title|capfirst }}
                             </a>
                         </div>

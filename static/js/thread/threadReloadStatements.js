@@ -39,12 +39,6 @@ function reloadStatements(){
 
                 var threadKind = statements[num].thread_obj.kind;
                 var isGmAndDebate = ( statements[num].author_obj.status == 'gm' && threadKind == 'Debate' );
-                var isLastStatement = ( num == statements.length - 1 );
-
-                var anchor = ``;
-                if (isLastStatement) {
-                    anchor = `<a class="anchor anchor3" id="page-bottom"></a>`
-                };
 
                 if ( statements[num].image_obj.url !== '' ) {
                     var stmtImage = `<p><img class="img-fluid mx-auto d-block" src="${statements[num].image_obj.url}"></p>`
@@ -158,7 +152,6 @@ function reloadStatements(){
 
 
                 var stmt = `
-                    ${anchor}
                     <div class="container-fluid px-0 mt-4">
                         <div class="row">
                             ${stmtRow}

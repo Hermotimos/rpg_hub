@@ -1,11 +1,13 @@
 
 var firstLoad = true;
 
+
 function scrollToCKEditor() {
-    // If statements are loaded for the first time, scroll down to CKEditor
-    // after 1 sec delay to allow for visual display of statements
-    if (firstLoad && document.getElementById('display').hasChildNodes()) {
-        document.getElementById('div_id_text').scrollIntoView({ behavior: 'smooth' });
+    let CKEditorDiv = document.getElementById('div_id_text');
+    // If CKEditor is displayed and statements are loaded for the first time,
+    // scroll down to CKEditor after 1 sec delay to allow for visual display of statements
+    if (CKEditorDiv && firstLoad && document.getElementById('display').hasChildNodes()) {
+        CKEditorDiv.scrollIntoView({ behavior: 'smooth' });
         firstLoad = false;
     };
 };
@@ -34,12 +36,6 @@ export function makeStatementHTML(response) {
 
         var threadKind = statements[num].thread.kind;
         var isGmAndDebate = ( statements[num].author.status == 'gm' && threadKind == 'Debate' );
-        var isLastStatement = ( num == statements.length - 1 );
-
-        var anchor = ``;
-        if (isLastStatement) {
-            anchor = `<a class="anchor anchor3" id="page-bottom"></a>`
-        };
 
         if ( statements[num].image.url !== '' ) {
             var stmtImage = `<p><img class="img-fluid mx-auto d-block" src="${statements[num].image.url}"></p>`
@@ -47,7 +43,7 @@ export function makeStatementHTML(response) {
             var stmtImage = ``
         };
 
-
+        console.log(statements[num].author.user.url);
         // TODO TEMP replace this with the code at the bottom of the file when Syngir, Murkon meet Dalamar
         var authorImg;
         if ( threadKind == 'Announcement' ) {
@@ -62,17 +58,17 @@ export function makeStatementHTML(response) {
 
             if ( statements[num].author.id == 18 && [82,93].includes(currentProfileId) ) {
                 authorImg = `
-                        <img class="img-fluid rounded-circle" src="media/profile_pics/profile_Dalamar_Szarogwardzista_2.jpg">
-                        <figcaption class="font-12 font-italic text-center pt-1">
-                        Dalamar Szarogwardzista
-                        </figcaption>
+                    <img class="img-fluid rounded-circle" src="media/profile_pics/profile_Dalamar_Szarogwardzista_2.jpg">
+                    <figcaption class="font-12 font-italic text-center pt-1">
+                    Dalamar Szarogwardzista
+                    </figcaption>
                 `
             } else {
                 authorImg = `
-                        <img class="img-fluid rounded-circle" src="${statements[num].author.image.url}">
-                        <figcaption class="font-12 font-italic text-center pt-1">
-                        ${statements[num].author.character.fullname}
-                        </figcaption>
+                    <img class="img-fluid rounded-circle" src="${statements[num].author.image.url}">
+                    <figcaption class="font-12 font-italic text-center pt-1">
+                    ${statements[num].author.character.fullname}
+                    </figcaption>
                 `
             };
         };
@@ -153,7 +149,6 @@ export function makeStatementHTML(response) {
 
 
         var stmt = `
-            ${anchor}
             <div class="container-fluid px-0 mt-4">
                 <div class="row">
                     ${stmtRow}

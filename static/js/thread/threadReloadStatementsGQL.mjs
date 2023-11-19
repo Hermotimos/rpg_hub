@@ -18,6 +18,7 @@ function reloadStatements(){
                         author {
                             id
                             status
+                            image {url}
                             userImage {url}
                             character {fullname}
                             user {username}
