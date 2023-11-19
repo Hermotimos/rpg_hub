@@ -421,9 +421,9 @@ img.img-grayscale:hover {filter: grayscale(0%);}
     margin-top:5rem;
 }
 .img-modal .modal-content {
-    display:inline-block;
-    width:auto;
-    max-width:100rem;
+    display: inline-block;
+    width: auto;
+    max-width: 100rem;
 }
 .img-modal .modal-body {
     background-color: none;

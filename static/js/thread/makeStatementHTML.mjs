@@ -1,7 +1,5 @@
 
-var uniqueStatementIds = [];
-var currentProfileId = document.getElementById('display').getAttribute('current-profile-data');
-
+var firstLoad = true;
 
 function scrollToCKEditor() {
     // If statements are loaded for the first time, scroll down to CKEditor
@@ -12,6 +10,12 @@ function scrollToCKEditor() {
     };
 };
 
+
+
+
+
+var uniqueStatementIds = [];
+var currentProfileId = document.getElementById('display').getAttribute('current-profile-data');
 
 
 export function makeStatementHTML(response) {

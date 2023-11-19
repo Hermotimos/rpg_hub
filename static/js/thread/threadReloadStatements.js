@@ -24,7 +24,7 @@ function reloadStatements(){
         // Django REST Framework view endpoint
         url: `/api/statements/thread/${document.getElementById('thread_id').getAttribute('value')}/`,
 
-        success: function(response){
+        success: function(response) {
             console.log(response);
             var statements = response.results;
 
