@@ -43,7 +43,7 @@ export function makeStatementHTML(response) {
             var stmtImage = ``
         };
 
-        console.log(statements[num].author.user.url);
+
         // TODO TEMP replace this with the code at the bottom of the file when Syngir, Murkon meet Dalamar
         var authorImg;
         if ( threadKind == 'Announcement' ) {
