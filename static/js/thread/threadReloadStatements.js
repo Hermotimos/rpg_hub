@@ -59,6 +59,7 @@ function reloadStatements(){
                     `
                 } else if ( threadKind == 'Debate' ) {
 
+                    // TODO TEMP when Syngir, Murkon meet Dalamar, then remove the block with hardcoded id-s
                     if ( statements[num].author_obj.id == 18 && [82,93].includes(currentProfileId) ) {
                         authorImg = `
                              <img class="img-fluid rounded-circle" src="media/profile_pics/profile_Dalamar_Szarogwardzista_2.jpg">
@@ -74,8 +75,9 @@ function reloadStatements(){
                              </figcaption>
                         `
                     };
+                    // TODO TEMP END 
                 };
-                // TODO TEMP END replace
+
 
 
                 if ( !statements[num].thread_obj.is_ended ) {
@@ -194,24 +196,3 @@ $(document).ready(function(){
     setInterval(reloadStatements,3000);
 })
 
-
-
-// TODO TEMP replace above Syngir, Murkon with this when they meet Dalamar
-// var authorImg;
-// if ( threadKind == 'Announcement' ) {
-
-//    authorImg = `
-//        <img class="img-fluid rounded" src="${statements[num].author_obj.user_image_obj.url}">
-//        <figcaption class="font-12 font-italic text-center pt-1">
-//            ${statements[num].author_obj.user_obj.username}
-//        </figcaption>
-//    `
-// } else if ( threadKind == 'Debate' ) {
-
-//    authorImg = `
-//         <img class="img-fluid rounded-circle" src="${statements[num].author_obj.image_obj.url}">
-//         <figcaption class="font-12 font-italic text-center pt-1">
-//            ${statements[num].author_obj.character_obj.fullname}
-//         </figcaption>
-//    `
-// };

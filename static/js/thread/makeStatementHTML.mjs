@@ -27,15 +27,12 @@ export function makeStatementHTML(response) {
 
     for (var num in statements)
     {
-        var statement = statements[num];
-
         // Skip iteration when Statement is already present
+        var statement = statements[num];
         if (uniqueStatementIds.includes(statement.id)) {
             continue;
         }
 
-        var threadKind = statements[num].thread.kind;
-        var isGmAndDebate = ( statements[num].author.status == 'gm' && threadKind == 'Debate' );
 
         if ( statements[num].image.url !== '' ) {
             var stmtImage = `<p><img class="img-fluid mx-auto d-block" src="${statements[num].image.url}"></p>`
@@ -43,8 +40,8 @@ export function makeStatementHTML(response) {
             var stmtImage = ``
         };
 
+        var threadKind = statements[num].thread.kind;
 
-        // TODO TEMP replace this with the code at the bottom of the file when Syngir, Murkon meet Dalamar
         var authorImg;
         if ( threadKind == 'Announcement' ) {
 
@@ -56,6 +53,7 @@ export function makeStatementHTML(response) {
             `
         } else if ( threadKind == 'Debate' ) {
 
+            // TODO TEMP when Syngir, Murkon meet Dalamar, then remove the block with hardcoded id-s
             if ( statements[num].author.id == 18 && [82,93].includes(currentProfileId) ) {
                 authorImg = `
                     <img class="img-fluid rounded-circle" src="media/profile_pics/profile_Dalamar_Szarogwardzista_2.jpg">
@@ -71,8 +69,9 @@ export function makeStatementHTML(response) {
                     </figcaption>
                 `
             };
+            // TODO TEMP END 
         };
-        // TODO TEMP END replace
+
 
 
         if ( !statements[num].thread.isEnded ) {
@@ -116,6 +115,7 @@ export function makeStatementHTML(response) {
         };
 
 
+        var isGmAndDebate = ( statements[num].author.status == 'gm' && threadKind == 'Debate' );
         var stmtText = `<div class="statement">${statements[num].text}</div>`;
         var createdAt = statements[num].createdDatetime;
 
