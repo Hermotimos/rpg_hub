@@ -5,13 +5,14 @@ myenv
 myvenv
 myvirtualenv
 
+.env*
+
 # for GCP authentication
 gcp-service-account-key.json
 
 # for setting GCP bucket CORS conf
 cors.json
 
-.env
 
 
 static/admin
