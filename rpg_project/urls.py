@@ -7,7 +7,7 @@ from rest_framework import routers
 from strawberry.django.views import GraphQLView
 
 from communications.drf import (
-    StatementByThreadList, StatementViewSet, ThreadViewSet, ThreadTagViewSet,
+    StatementByThreadView, StatementViewSet, ThreadViewSet, ThreadTagViewSet,
 )
 from rpg_project.schema import schema
 from users.drf import GroupViewSet, ProfileViewSet, UserViewSet
@@ -55,7 +55,7 @@ urlpatterns += [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     # communications
     # http://127.0.0.1:8000/api/statements/thread/48/
-    re_path('^api/statements/thread/(?P<thread_id>\d+)/$', StatementByThreadList.as_view()),
+    re_path('^api/statements/thread/(?P<thread_id>\d+)/$', StatementByThreadView.as_view()),
 ]
 
 
@@ -64,6 +64,6 @@ urlpatterns += [
 
 urlpatterns += [
     # GraphQL API root: http://127.0.0.1:8000/graphql/
-    # graphiql=settings.DEBUG: turn on Grahuql only when DEBUG=True
+    # graphiql=settings.DEBUG: turns on Grahiql only when DEBUG=True
     path('graphql/', GraphQLView.as_view(graphiql=settings.DEBUG, schema=schema)),
 ]
