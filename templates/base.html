@@ -64,6 +64,11 @@
         <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}" defer></script>
         <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}" defer></script>
 
+        <!-- Additional JS in Django templates -->
+        <!-- Use 'defer' attribute in templates for smooth loading experience -->
+        {% block javascript %}
+        {% endblock javascript %}
+
 
         <title>
             {% firstof page_title 'Hyllemath' %}
@@ -106,6 +111,7 @@
                     {% endblock content %}
                 </div>
 
+                <!-- SIDEBAR -->
                 {% if user.is_authenticated %}
                     <div class="col-md-3 pl-sm-5">
                         {% include 'sidebar.html' %}
@@ -118,6 +124,7 @@
 
             </div>
 
+            <!-- FOOTER -->
             {% if user.is_authenticated %}
                 <footer class="container mt-5 pt-5 text-muted">
                     <div class="row">
@@ -129,10 +136,6 @@
             {% endif %}
 
         </main>
-
-
-        {% block javascript %}
-        {% endblock javascript %}
 
     </body>
 </html>
