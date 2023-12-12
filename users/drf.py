@@ -6,7 +6,7 @@ from users.models import Profile
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
-    
+
     class Meta:
         model = Group
         fields = ['url', 'name']
@@ -24,8 +24,11 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Profile
-        # fields = ['user', 'status', 'is_alive', 'is_active', 'image', 'user_image']
-        exclude = []
+        fields = [
+            'id', 'url', 'image', 'status', 'is_alive', 'is_active',
+            'user', 'user_image',
+        ]
+        # exclude = []
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
