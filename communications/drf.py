@@ -1,5 +1,9 @@
+from collections import OrderedDict
+
+from django.db.models import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, pagination, serializers, viewsets
+from rest_framework.response import Response
 
 from communications.models import Statement, Thread, ThreadTag
 from rpg_project.utils import clear_cache
@@ -32,7 +36,7 @@ class StatementByThreadSerializer(serializers.ModelSerializer):
         model = Statement
         fields = ['id', 'text']
 
-    def to_representation(self, instance):
+    def to_representation(self, instance) -> OrderedDict:
         """Include some of the related objects' data as nested data."""
         representation = super().to_representation(instance)
         representation['thread_obj'] = {
@@ -84,7 +88,7 @@ class StatementByThreadView(generics.ListAPIView):
     serializer_class = StatementByThreadSerializer
     pagination_class = LargeResultsSetPagination
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         return Statement.objects.filter(
             thread_id=self.kwargs['thread_id']
         ).prefetch_related(
@@ -98,7 +102,7 @@ class StatementByThreadView(generics.ListAPIView):
             'author__character',
         )
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs) -> Response:
         """
         Handle POST request to update all Statement's seen_by with User's Profile.
         This is used by threadReloadStatements.js where Ajax POST is necessary
