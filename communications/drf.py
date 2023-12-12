@@ -100,8 +100,9 @@ class StatementByThreadView(generics.ListAPIView):
 
     def post(self, request, *args, **kwargs):
         """
-        Handle POST request to update all Statement-s as seen_by the request
-        User's Profile.
+        Handle POST request to update all Statement's seen_by with User's Profile.
+        This is used by threadReloadStatements.js where Ajax POST is necessary
+        to send data like 'currentProfileId' and 'threadId'.
         """
         current_profile = Profile.objects.get(id=request.data['currentProfileId'])
         thread = Thread.objects.get(id=request.data['threadId'])
