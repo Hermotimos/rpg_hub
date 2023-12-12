@@ -26,7 +26,7 @@ class StatementViewSet(viewsets.ModelViewSet):
 # -----------------------------------------------------------------------------
 
 
-class StatementByThreadListSerializer(serializers.ModelSerializer):
+class StatementByThreadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Statement
@@ -71,7 +71,7 @@ class LargeResultsSetPagination(pagination.PageNumberPagination):
     max_page_size = 10000
 
 
-class StatementByThreadList(generics.ListAPIView):
+class StatementByThreadView(generics.ListAPIView):
     """
     A custom DRF view for filtering Statements by their Thread.
     This also requires a path registered in project URLs:
@@ -81,13 +81,12 @@ class StatementByThreadList(generics.ListAPIView):
     http://127.0.0.1:8000/api/statements/thread/48/
 
     """
-    serializer_class = StatementByThreadListSerializer
+    serializer_class = StatementByThreadSerializer
     pagination_class = LargeResultsSetPagination
 
     def get_queryset(self):
-        thread_id = self.kwargs['thread_id']
         return Statement.objects.filter(
-            thread_id=thread_id
+            thread_id=self.kwargs['thread_id']
         ).prefetch_related(
             'seen_by__character',
             'seen_by__user',
@@ -151,7 +150,6 @@ class ThreadViewSet(viewsets.ModelViewSet):
         'statements__author',
         'statements__thread',
         'statements__options',
-        'statements__options',
         'tags',
     )
     serializer_class = ThreadSerializer
@@ -161,7 +159,7 @@ class ThreadViewSet(viewsets.ModelViewSet):
 
 
 class ThreadTagSerializer(serializers.HyperlinkedModelSerializer):
-    
+
     class Meta:
         model = ThreadTag
         exclude = []
