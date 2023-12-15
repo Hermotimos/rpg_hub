@@ -12,9 +12,9 @@
 {% cache 604800 chronicle request.current_profile.user.id  %}
 
 <section class="mt-5 pt-4">
-        <div class="container mb-5">
-            {% include 'chronicles/_chapters_list.html' %}
-        </div>
+    <div class="container mb-5">
+        {% include 'chronicles/_chapters_list.html' %}
+    </div>
     </section>
 
     {% for chapter in chapters %}
