@@ -1,0 +1,52 @@
+
+SECRET_KEY="n^08***b8lkqy+^)!8i-ft*+1h4b9&h&?/mr*n7ym#!3cwp6=^(ex/pj"
+
+EMAIL_HOST_PASSWORD="traegharon7777"
+EMAIL_HOST_PASSWORD_TWO_STEP="nqlpinbmptrmntje"
+EMAIL_HOST_USER="hyllemath@gmail.com"
+EMAIL_SEND_ALLOWED=false
+
+# Don't set it false in development: https://stackoverflow.com/a/64189061
+DEBUG=true
+
+# DEFAULT_PASS="astinara123"
+# LOCALHOST="192.168.0.5"
+
+
+# DEV
+
+POSTGRES_DBNAME="hyllemath"
+POSTGRES_USER="postgres"
+POSTGRES_PASSWORD="postgres"
+POSTGRES_HOST="localhost"
+POSTGRES_PORT="5432"
+
+
+# Used in update_local_db DEV
+DEV_DATABASE_DNS="postgres://postgres:postgres@127.0.0.1:5432/hyllemath"
+
+
+# PROD
+
+GCP_DB_NAME="hyllemath"
+GCP_DB_USER="hyllemath"
+GCP_DB_PASSWORD="aspyrtax"
+GCP_DB_HOST="34.118.104.136"
+GCP_DB_PORT="5432"
+
+# Required in GCP
+DATABASE_URL="postgres://hyllemath:aspyrtax@//cloudsql/hyllemath:europe-central2:hyllemath-postgres-db/hyllemath"
+
+# Used in db_backup DEV & PROD
+GCP_DATABASE_DNS="postgres://hyllemath:aspyrtax@34.118.104.136:5432/hyllemath"
+
+GS_BUCKET_NAME="hyllemath.appspot.com"
+
+GOOGLE_APPLICATION_CREDENTIALS="./gcp-service-account-key.json"
+
+
+# ---------------------
+# GitHub access token: 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
+
+# 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
+

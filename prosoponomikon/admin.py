@@ -377,7 +377,7 @@ class CharacterAdmin(admin.ModelAdmin):
     ]
     filter_horizontal = [
         'frequented_locations', 'biography_packets', 'dialogue_packets',
-        'subprofessions', 'acquaintances',
+        'subprofessions', 
     ]
     list_display = [
         'get_img', 'first_name', 'family_name', 'cognomen', 'description'

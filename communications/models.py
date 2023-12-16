@@ -177,7 +177,6 @@ class Statement(Model):
         return f'{text[:100]}...' if len(str(text)) > 100 else text
 
     def save(self, *args, **kwargs):
-        print('saves')
         if self.image:
             self.image.name = ensure_unique_filename(self.image.name)
         super().save(*args, **kwargs)

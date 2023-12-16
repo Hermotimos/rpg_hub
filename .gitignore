@@ -13,12 +13,15 @@ cors.json
 
 .env
 
-
 static/admin
 static/ckeditor
 static/debug_toolbar
+static/rest_framework
 static/files
 static/img
+static/apollo-sandbox.html
+static/graphiql.html
+static/pathfinder.html
 
 
 media

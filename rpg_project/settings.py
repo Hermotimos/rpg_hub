@@ -4,14 +4,19 @@ from urllib.parse import urlparse
 
 import environ
 from django.conf.locale.pl import formats as pl_formats
-from google.cloud import secretmanager
-from google.oauth2 import service_account
+
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+IS_GAE_ENVIRON = True if os.getenv('GAE_ENV', '').startswith('standard') else False
 IS_LOCAL_ENVIRON = True if os.environ.get('COMPUTERNAME') else False
+
+
+if IS_GAE_ENVIRON:
+    from google.cloud import secretmanager      # type: ignore
+    from google.oauth2 import service_account   # type: ignore
 
 
 # -----------------------------------------------------------------------------
@@ -103,6 +108,7 @@ INSTALLED_APPS = [
     # imported
     'ckeditor',
     'crispy_forms',
+    'crispy_bootstrap4',
     'debug_toolbar',
     'django_filters',
     'rest_framework',
@@ -164,7 +170,7 @@ WSGI_APPLICATION = 'rpg_project.wsgi.application'
 # -----------------------------------------------------------------------------
 # Database
 
-if os.getenv('GAE_ENV', '').startswith('standard'):
+if IS_GAE_ENVIRON:
     # Requires DATABASE_URL environmental variable to be set
     DATABASES = {
         "default": env.db()
@@ -172,7 +178,7 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
 elif IS_LOCAL_ENVIRON:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'ENGINE': 'django.db.backends.postgresql',
             'NAME': env('POSTGRES_DBNAME'),
             'USER': env('POSTGRES_USER'),
             'PASSWORD': env('POSTGRES_PASSWORD'),
@@ -242,7 +248,7 @@ USE_TZ = True
 # -----------------------------------------------------------------------------
 # Static files (CSS, JavaScript, Images)
 
-if os.getenv('GAE_ENV', '').startswith('standard'):
+if IS_GAE_ENVIRON:
     # https://medium.com/@umeshsaruk/upload-to-google-cloud-storage-using-django-storages-72ddec2f0d05
 
     # For media storage in the bucket
@@ -272,7 +278,7 @@ if os.getenv('GAE_ENV', '').startswith('standard'):
 
 else:
     # Use these settings to run "python manage.py collectstatic"
-    # STATIC_ROOT = "static"    # needed in production and for local collectstatic
+    # STATIC_ROOT = "static"    # needed local collectstatic
     # STATIC_URL = "/static/"
     # STATICFILES_DIRS = []
 
@@ -320,7 +326,7 @@ INTERNAL_IPS = ['127.0.0.1', ]
 # After editing registry - restart local server for changes to take effect
 
 # Disable in production (even if DEBUG is set to true)
-if os.getenv('GAE_ENV', '').startswith('standard'):
+if IS_GAE_ENVIRON:
     DEBUG_TOOLBAR_CONFIG = {
         'SHOW_TOOLBAR_CALLBACK': lambda r: False,
     }
@@ -345,7 +351,7 @@ CKEDITOR_CONFIGS = {
 # Varia
 
 # For get_absolute_url methods
-if os.getenv('GAE_ENV', '').startswith('standard'):
+if IS_GAE_ENVIRON:
     BASE_URL = APPENGINE_URL
 else:
     BASE_URL = '127.0.0.1:8000'
