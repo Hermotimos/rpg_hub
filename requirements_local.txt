@@ -18,7 +18,7 @@ strawberry-graphql-django==0.28.2
 typing_extensions==4.9.0
 
 # INSTALLED_APPS
-crispy-bootstrap4-2023.1    # for Crispy forms
+crispy-bootstrap4==2023.1    # for Crispy forms
 django-ckeditor==6.7.0
 django-crispy-forms==2.1
 django-debug-toolbar==4.2.0
